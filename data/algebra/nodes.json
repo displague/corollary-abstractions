@@ -1,0 +1,166 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "algebra.foundations.v1",
+  "discipline": "algebra",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "title": "Quadratic Formula",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "algebra"
+        ],
+        "subfield": "elementary_algebra",
+        "topic": "polynomial_equations"
+      },
+      "formal_statement": {
+        "canonical_ascii": "x = (-b ± sqrt(b^2 - 4ac)) / (2a)",
+        "canonical_latex": "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+        "equivalent_forms": [
+          {
+            "form_id": "standard",
+            "notation_system": "ascii",
+            "expression": "x = (-b ± sqrt(b^2 - 4ac)) / (2a)",
+            "scope_note": "Solution to ax^2 + bx + c = 0"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "quadratic_solution",
+        "anonymized_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+        "slot_schema": [
+          {
+            "slot_id": "VAR",
+            "syntactic_category": "variable",
+            "semantic_role": "unknown"
+          },
+          {
+            "slot_id": "COEFF0",
+            "syntactic_category": "parameter",
+            "semantic_role": "quadratic_coefficient"
+          },
+          {
+            "slot_id": "COEFF1",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_coefficient"
+          },
+          {
+            "slot_id": "DISC",
+            "syntactic_category": "parameter",
+            "semantic_role": "discriminant"
+          }
+        ],
+        "invariants": [
+          "Applies to quadratic equations",
+          "Discriminant determines number of real solutions"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "unknown",
+            "mathematical_order": 0,
+            "description": "Variable to solve for"
+          },
+          {
+            "symbol": "a",
+            "syntactic_category": "parameter",
+            "semantic_role": "quadratic_coefficient",
+            "mathematical_order": 0,
+            "description": "Coefficient of x^2 term"
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_coefficient",
+            "mathematical_order": 0,
+            "description": "Coefficient of x term"
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "parameter",
+            "semantic_role": "constant_term",
+            "mathematical_order": 0,
+            "description": "Constant term"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "±",
+            "name": "plus_minus",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "sqrt(·)",
+            "name": "square_root",
+            "input_arity": 1,
+            "codomain": "complex",
+            "description": "Square root function"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "description": "Constant 2",
+            "value": 2
+          },
+          {
+            "symbol": "4",
+            "description": "Constant 4",
+            "value": 4
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Formula for solving quadratic equations of the form ax^2 + bx + c = 0",
+        "statistical_significance": "Fundamental algebraic formula with applications throughout mathematics",
+        "regularity_conditions": [
+          "a ≠ 0 (otherwise not quadratic)",
+          "Discriminant b^2 - 4ac determines solution type"
+        ],
+        "failure_modes": [
+          "Undefined when a = 0",
+          "Complex solutions when discriminant < 0"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "al_khwarizmi_820",
+          "bibliographic_entry": "Al-Khwarizmi, Muhammad ibn Musa. The Compendious Book on Calculation by Completion and Balancing. ~820 CE.",
+          "url": "https://en.wikipedia.org/wiki/Quadratic_formula"
+        }
+      ],
+      "keywords": [
+        "quadratic",
+        "formula",
+        "polynomial",
+        "roots",
+        "algebra"
+      ],
+      "statement_id": "algebra.polynomial_equations.quadratic_formula"
+    }
+  ]
+}
