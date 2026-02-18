@@ -911,6 +911,140 @@
         "corollary",
         "normal_approximation"
       ]
+    },
+    {
+      "title": "Law of Large Numbers",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "statistics",
+          "probability_theory"
+        ],
+        "subfield": "limit_theorems",
+        "topic": "convergence"
+      },
+      "formal_statement": {
+        "canonical_ascii": "lim(n->inf) (1/n * sum(X_i)) = E[X]",
+        "canonical_latex": "\\lim_{n \\to \\infty} \\frac{1}{n} \\sum_{i=1}^{n} X_i = E[X]",
+        "equivalent_forms": [
+          {
+            "form_id": "sample_mean_convergence",
+            "notation_system": "ascii",
+            "expression": "X_bar_n -> E[X] as n -> inf",
+            "scope_note": "Sample mean converges to expectation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "limit_convergence",
+        "anonymized_template": "LIM(AGGREGATE(SEQUENCE)) = EXPECTED_VALUE",
+        "slot_schema": [
+          {
+            "slot_id": "SEQUENCE",
+            "syntactic_category": "sequence",
+            "semantic_role": "iid_random_variables"
+          },
+          {
+            "slot_id": "AGGREGATE",
+            "syntactic_category": "functional",
+            "semantic_role": "sample_mean"
+          },
+          {
+            "slot_id": "EXPECTED_VALUE",
+            "syntactic_category": "parameter",
+            "semantic_role": "population_mean"
+          }
+        ],
+        "invariants": [
+          "Random variables must be i.i.d.",
+          "Finite expectation required"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "X_i",
+            "syntactic_category": "random_variable",
+            "semantic_role": "sample_observation",
+            "mathematical_order": 0,
+            "description": "i-th random variable in sequence"
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "index",
+            "semantic_role": "sample_size",
+            "mathematical_order": 0,
+            "description": "Number of observations"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "E[·]",
+            "name": "expectation",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Expected value operator"
+          },
+          {
+            "notation": "lim",
+            "name": "limit",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Limit operator"
+          }
+        ],
+        "index_sets": [
+          {
+            "notation": "i=1..n",
+            "domain": "natural_numbers",
+            "description": "Summation index from 1 to n"
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The sample mean of i.i.d. random variables converges to the population mean as sample size increases",
+        "statistical_significance": "Justifies using sample averages to estimate population parameters",
+        "regularity_conditions": [
+          "Random variables must be independent and identically distributed",
+          "Finite expectation E[X] must exist"
+        ],
+        "failure_modes": [
+          "Does not hold for dependent observations",
+          "Fails for distributions with undefined expectation"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "kolmogorov1933",
+          "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung.",
+          "url": "https://en.wikipedia.org/wiki/Law_of_large_numbers"
+        }
+      ],
+      "keywords": [
+        "law of large numbers",
+        "LLN",
+        "convergence",
+        "sample mean"
+      ],
+      "statement_id": "statistics.convergence.law_of_large"
     }
   ]
 }
