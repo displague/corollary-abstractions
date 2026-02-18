@@ -43,7 +43,9 @@ Current seed nodes cover:
 
 ## Adding New Formulae
 
-To add formulae from any discipline **without directly editing JSON files**, use the `add_node.py` tool:
+To add formulae from any discipline **without directly editing JSON files**, use the `add_node.py` tool.
+
+**📖 See the [complete guide](docs/ADDING_FORMULAE.md) for detailed instructions.**
 
 ### Quick Start
 
