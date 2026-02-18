@@ -104,7 +104,9 @@
       },
       "inferential_links": {
         "entailed_by": [],
-        "entails": [],
+        "entails": [
+          "geometry.metric_geometry.euclidean_distance_formula"
+        ],
         "equivalent_to": [],
         "special_case_of": [],
         "generalizes": [],
@@ -226,7 +228,9 @@
         "entailed_by": [],
         "entails": [],
         "equivalent_to": [],
-        "special_case_of": [],
+        "special_case_of": [
+          "geometry.area_formulas.trapezoid_area_formula"
+        ],
         "generalizes": [
           "geometry.area_formulas.square_area_formula"
         ],
@@ -1676,6 +1680,335 @@
         "corollary"
       ],
       "statement_id": "geometry.circle_formulas.circle_area_from"
+    },
+    {
+      "title": "Euclidean Distance Formula",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry",
+          "statistics"
+        ],
+        "subfield": "metric_geometry",
+        "topic": "distance_measures"
+      },
+      "formal_statement": {
+        "canonical_ascii": "d = sqrt((x2-x1)^2 + (y2-y1)^2)",
+        "canonical_latex": "d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}",
+        "equivalent_forms": [
+          {
+            "form_id": "squared_form",
+            "notation_system": "ascii",
+            "expression": "d^2 = (x2-x1)^2 + (y2-y1)^2",
+            "scope_note": "Squared distance avoids square root"
+          },
+          {
+            "form_id": "n_dimensional",
+            "notation_system": "ascii",
+            "expression": "d = sqrt(sum((xi - yi)^2))",
+            "scope_note": "Generalizes to n dimensions"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "euclidean_metric",
+        "anonymized_template": "DISTANCE = SQRT(SUM(DELTA^2))",
+        "slot_schema": [
+          {
+            "slot_id": "DISTANCE",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_value"
+          },
+          {
+            "slot_id": "DELTA",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_difference"
+          }
+        ],
+        "invariants": [
+          "Square root of sum of squared differences",
+          "Satisfies triangle inequality"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "d",
+            "syntactic_category": "variable",
+            "semantic_role": "distance",
+            "mathematical_order": 0,
+            "description": "Euclidean distance between two points"
+          },
+          {
+            "symbol": "x1",
+            "syntactic_category": "variable",
+            "semantic_role": "x_coordinate_1",
+            "mathematical_order": 0,
+            "description": "x-coordinate of first point"
+          },
+          {
+            "symbol": "x2",
+            "syntactic_category": "variable",
+            "semantic_role": "x_coordinate_2",
+            "mathematical_order": 0,
+            "description": "x-coordinate of second point"
+          },
+          {
+            "symbol": "y1",
+            "syntactic_category": "variable",
+            "semantic_role": "y_coordinate_1",
+            "mathematical_order": 0,
+            "description": "y-coordinate of first point"
+          },
+          {
+            "symbol": "y2",
+            "syntactic_category": "variable",
+            "semantic_role": "y_coordinate_2",
+            "mathematical_order": 0,
+            "description": "y-coordinate of second point"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "sqrt(·)",
+            "name": "square_root",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Square root function"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Power of two"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The Euclidean distance between two points is the square root of the sum of squared coordinate differences",
+        "statistical_significance": "Fundamental metric for measuring similarity in statistics, machine learning, and data analysis. Used in k-means clustering, nearest neighbor algorithms, and multivariate analysis",
+        "regularity_conditions": [
+          "Coordinates must be in Euclidean space",
+          "Generalizes to n dimensions"
+        ],
+        "failure_modes": [
+          "Not appropriate for non-Euclidean spaces",
+          "Sensitive to scale differences across dimensions"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "geometry.right_triangles.pythagorean_theorem"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "distance",
+        "euclidean",
+        "metric",
+        "pythagorean",
+        "statistics",
+        "machine learning"
+      ],
+      "statement_id": "geometry.metric_geometry.euclidean_distance_formula"
+    },
+    {
+      "title": "Trapezoid Area Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = (1/2) * (b1 + b2) * h",
+        "canonical_latex": "A = \\frac{1}{2}(b_1 + b_2)h",
+        "equivalent_forms": [
+          {
+            "form_id": "average_base",
+            "notation_system": "ascii",
+            "expression": "A = ((b1 + b2)/2) * h",
+            "scope_note": "Average of bases times height"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_sum_product",
+        "anonymized_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "BASE1",
+            "syntactic_category": "variable",
+            "semantic_role": "base_dimension_1"
+          },
+          {
+            "slot_id": "BASE2",
+            "syntactic_category": "variable",
+            "semantic_role": "base_dimension_2"
+          },
+          {
+            "slot_id": "HEIGHT",
+            "syntactic_category": "variable",
+            "semantic_role": "height_dimension"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "scaling_factor"
+          }
+        ],
+        "invariants": [
+          "Average of parallel sides times perpendicular height"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of trapezoid"
+          },
+          {
+            "symbol": "b1",
+            "syntactic_category": "variable",
+            "semantic_role": "base",
+            "mathematical_order": 0,
+            "description": "Length of first parallel side"
+          },
+          {
+            "symbol": "b2",
+            "syntactic_category": "variable",
+            "semantic_role": "base",
+            "mathematical_order": 0,
+            "description": "Length of second parallel side"
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "height",
+            "mathematical_order": 0,
+            "description": "Perpendicular distance between parallel sides"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1/2",
+            "value": 0.5,
+            "description": "One half"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area of a trapezoid is half the sum of its parallel sides multiplied by the perpendicular height",
+        "statistical_significance": "Generalizes rectangle and parallelogram area formulas",
+        "regularity_conditions": [
+          "Must have exactly two parallel sides",
+          "Height measured perpendicular to parallel sides"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "geometry.area_formulas.rectangle_area_formula"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "trapezoid",
+        "area",
+        "plane geometry"
+      ],
+      "statement_id": "geometry.area_formulas.trapezoid_area_formula"
     }
   ]
 }
