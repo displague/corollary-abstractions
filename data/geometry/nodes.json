@@ -476,7 +476,9 @@
       },
       "inferential_links": {
         "entailed_by": [],
-        "entails": [],
+        "entails": [
+          "geometry.circle_formulas.circle_area_from"
+        ],
         "equivalent_to": [],
         "special_case_of": [],
         "generalizes": [],
@@ -607,7 +609,9 @@
       },
       "inferential_links": {
         "entailed_by": [],
-        "entails": [],
+        "entails": [
+          "geometry.circle_formulas.circle_area_from"
+        ],
         "equivalent_to": [],
         "special_case_of": [],
         "generalizes": [],
@@ -1543,6 +1547,135 @@
         "plane geometry"
       ],
       "statement_id": "geometry.area_formulas.triangle_area_formula"
+    },
+    {
+      "title": "Circle Area from Circumference Corollary",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "circle_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = C^2 / (4*pi)",
+        "canonical_latex": "A = \\frac{C^2}{4\\pi}",
+        "equivalent_forms": [
+          {
+            "form_id": "from_radius",
+            "notation_system": "ascii",
+            "expression": "A = pi*r^2, C = 2*pi*r => A = C^2/(4*pi)",
+            "scope_note": "Derived from both circle formulas"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "quadratic_scaling",
+        "anonymized_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "CIRCUMFERENCE",
+            "syntactic_category": "variable",
+            "semantic_role": "perimeter_measure"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "geometric_constant"
+          }
+        ],
+        "invariants": [
+          "Area proportional to square of circumference"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of circle"
+          },
+          {
+            "symbol": "C",
+            "syntactic_category": "variable",
+            "semantic_role": "circumference",
+            "mathematical_order": 0,
+            "description": "Circumference of circle"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "4*pi",
+            "value": 12.56637061436,
+            "description": "Constant 4π"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Circle area can be expressed in terms of its circumference, showing the quadratic relationship",
+        "statistical_significance": "Demonstrates the interdependence of circle properties",
+        "regularity_conditions": [
+          "Circle must exist",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "geometry.area_formulas.circle_area_formula",
+          "geometry.circle_formulas.circle_circumference_formula"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "archimedes_measurement",
+          "bibliographic_entry": "Archimedes. Measurement of a Circle.",
+          "url": "https://en.wikipedia.org/wiki/Measurement_of_a_Circle"
+        }
+      ],
+      "keywords": [
+        "circle",
+        "area",
+        "circumference",
+        "corollary"
+      ],
+      "statement_id": "geometry.circle_formulas.circle_area_from"
     }
   ]
 }
