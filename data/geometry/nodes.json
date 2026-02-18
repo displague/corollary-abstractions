@@ -123,6 +123,1426 @@
         "geometry"
       ],
       "statement_id": "geometry.right_triangles.pythagorean_theorem"
+    },
+    {
+      "title": "Rectangle Area Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = l * w",
+        "canonical_latex": "A = l \\cdot w",
+        "equivalent_forms": [
+          {
+            "form_id": "standard",
+            "notation_system": "ascii",
+            "expression": "A = length * width",
+            "scope_note": "Area of rectangle"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "bilinear_product",
+        "anonymized_template": "AREA = DIM1 * DIM2",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "DIM1",
+            "syntactic_category": "variable",
+            "semantic_role": "length_dimension"
+          },
+          {
+            "slot_id": "DIM2",
+            "syntactic_category": "variable",
+            "semantic_role": "width_dimension"
+          }
+        ],
+        "invariants": [
+          "Product of perpendicular dimensions"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of rectangle"
+          },
+          {
+            "symbol": "l",
+            "syntactic_category": "variable",
+            "semantic_role": "length",
+            "mathematical_order": 0,
+            "description": "Length of rectangle"
+          },
+          {
+            "symbol": "w",
+            "syntactic_category": "variable",
+            "semantic_role": "width",
+            "mathematical_order": 0,
+            "description": "Width of rectangle"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area of a rectangle is the product of its length and width",
+        "statistical_significance": "Fundamental formula for planar area measurement",
+        "regularity_conditions": [
+          "Length and width must be positive",
+          "Rectangle has four right angles"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "geometry.area_formulas.square_area_formula"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "rectangle",
+        "area",
+        "plane geometry"
+      ],
+      "statement_id": "geometry.area_formulas.rectangle_area_formula"
+    },
+    {
+      "title": "Rectangle Perimeter Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "perimeter_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "P = 2(l + w)",
+        "canonical_latex": "P = 2(l + w)",
+        "equivalent_forms": [
+          {
+            "form_id": "expanded",
+            "notation_system": "ascii",
+            "expression": "P = 2l + 2w",
+            "scope_note": "Expanded form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_sum",
+        "anonymized_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+        "slot_schema": [
+          {
+            "slot_id": "PERIMETER",
+            "syntactic_category": "variable",
+            "semantic_role": "perimeter_measure"
+          },
+          {
+            "slot_id": "DIM1",
+            "syntactic_category": "variable",
+            "semantic_role": "length_dimension"
+          },
+          {
+            "slot_id": "DIM2",
+            "syntactic_category": "variable",
+            "semantic_role": "width_dimension"
+          }
+        ],
+        "invariants": [
+          "Sum of all four sides"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "perimeter",
+            "mathematical_order": 0,
+            "description": "Perimeter of rectangle"
+          },
+          {
+            "symbol": "l",
+            "syntactic_category": "variable",
+            "semantic_role": "length",
+            "mathematical_order": 0,
+            "description": "Length of rectangle"
+          },
+          {
+            "symbol": "w",
+            "syntactic_category": "variable",
+            "semantic_role": "width",
+            "mathematical_order": 0,
+            "description": "Width of rectangle"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Factor for opposite sides"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The perimeter of a rectangle is twice the sum of its length and width",
+        "statistical_significance": "Fundamental formula for boundary measurement",
+        "regularity_conditions": [
+          "Length and width must be positive",
+          "Rectangle has two pairs of equal sides"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "rectangle",
+        "perimeter",
+        "plane geometry"
+      ],
+      "statement_id": "geometry.perimeter_formulas.rectangle_perimeter_formula"
+    },
+    {
+      "title": "Circle Circumference Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "circle_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "C = 2*pi*r",
+        "canonical_latex": "C = 2\\pi r",
+        "equivalent_forms": [
+          {
+            "form_id": "diameter_form",
+            "notation_system": "ascii",
+            "expression": "C = pi*d",
+            "scope_note": "Using diameter d = 2r"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_linear",
+        "anonymized_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+        "slot_schema": [
+          {
+            "slot_id": "CIRCUMFERENCE",
+            "syntactic_category": "variable",
+            "semantic_role": "perimeter_measure"
+          },
+          {
+            "slot_id": "RADIUS",
+            "syntactic_category": "variable",
+            "semantic_role": "radius_length"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "geometric_constant"
+          }
+        ],
+        "invariants": [
+          "Proportional to radius with constant 2π"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "C",
+            "syntactic_category": "variable",
+            "semantic_role": "circumference",
+            "mathematical_order": 0,
+            "description": "Circumference of circle"
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "radius",
+            "mathematical_order": 0,
+            "description": "Radius of circle"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "pi",
+            "value": 3.14159265359,
+            "description": "The mathematical constant π"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Multiplier constant"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The circumference of a circle is 2π times its radius",
+        "statistical_significance": "Fundamental relationship between circle boundary and radius",
+        "regularity_conditions": [
+          "Radius must be positive",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book III.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookIII/bookIII.html"
+        }
+      ],
+      "keywords": [
+        "circle",
+        "circumference",
+        "plane geometry",
+        "pi"
+      ],
+      "statement_id": "geometry.circle_formulas.circle_circumference_formula"
+    },
+    {
+      "title": "Circle Area Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = pi*r^2",
+        "canonical_latex": "A = \\pi r^2",
+        "equivalent_forms": [
+          {
+            "form_id": "diameter_form",
+            "notation_system": "ascii",
+            "expression": "A = pi*d^2/4",
+            "scope_note": "Using diameter d = 2r"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_quadratic",
+        "anonymized_template": "AREA = CONSTANT * RADIUS^2",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "RADIUS",
+            "syntactic_category": "variable",
+            "semantic_role": "radius_length"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "geometric_constant"
+          }
+        ],
+        "invariants": [
+          "Proportional to square of radius with constant π"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of circle"
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "radius",
+            "mathematical_order": 0,
+            "description": "Radius of circle"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "pi",
+            "value": 3.14159265359,
+            "description": "The mathematical constant π"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Power of two"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area of a circle is π times the square of its radius",
+        "statistical_significance": "Fundamental relationship for circular area measurement",
+        "regularity_conditions": [
+          "Radius must be positive",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "archimedes_measurement",
+          "bibliographic_entry": "Archimedes. Measurement of a Circle.",
+          "url": "https://en.wikipedia.org/wiki/Measurement_of_a_Circle"
+        }
+      ],
+      "keywords": [
+        "circle",
+        "area",
+        "plane geometry",
+        "pi"
+      ],
+      "statement_id": "geometry.area_formulas.circle_area_formula"
+    },
+    {
+      "title": "Sphere Volume Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "solid_geometry",
+        "topic": "volume_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = (4/3)*pi*r^3",
+        "canonical_latex": "V = \\frac{4}{3}\\pi r^3",
+        "equivalent_forms": [
+          {
+            "form_id": "diameter_form",
+            "notation_system": "ascii",
+            "expression": "V = pi*d^3/6",
+            "scope_note": "Using diameter d = 2r"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_cubic",
+        "anonymized_template": "VOLUME = CONSTANT * RADIUS^3",
+        "slot_schema": [
+          {
+            "slot_id": "VOLUME",
+            "syntactic_category": "variable",
+            "semantic_role": "volume_measure"
+          },
+          {
+            "slot_id": "RADIUS",
+            "syntactic_category": "variable",
+            "semantic_role": "radius_length"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "geometric_constant"
+          }
+        ],
+        "invariants": [
+          "Proportional to cube of radius with constant 4π/3"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "volume",
+            "mathematical_order": 0,
+            "description": "Volume of sphere"
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "radius",
+            "mathematical_order": 0,
+            "description": "Radius of sphere"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "pi",
+            "value": 3.14159265359,
+            "description": "The mathematical constant π"
+          },
+          {
+            "symbol": "4/3",
+            "value": 1.33333333333,
+            "description": "Constant factor 4/3"
+          },
+          {
+            "symbol": "3",
+            "value": 3,
+            "description": "Power of three"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The volume of a sphere is four-thirds π times the cube of its radius",
+        "statistical_significance": "Fundamental relationship for spherical volume measurement",
+        "regularity_conditions": [
+          "Radius must be positive",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "archimedes_sphere_cylinder",
+          "bibliographic_entry": "Archimedes. On the Sphere and Cylinder.",
+          "url": "https://en.wikipedia.org/wiki/On_the_Sphere_and_Cylinder"
+        }
+      ],
+      "keywords": [
+        "sphere",
+        "volume",
+        "solid geometry",
+        "pi"
+      ],
+      "statement_id": "geometry.volume_formulas.sphere_volume_formula"
+    },
+    {
+      "title": "Rectangular Prism Volume Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "solid_geometry",
+        "topic": "volume_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = l * w * h",
+        "canonical_latex": "V = l \\cdot w \\cdot h",
+        "equivalent_forms": [
+          {
+            "form_id": "standard",
+            "notation_system": "ascii",
+            "expression": "V = length * width * height",
+            "scope_note": "Volume of rectangular prism"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "trilinear_product",
+        "anonymized_template": "VOLUME = DIM1 * DIM2 * DIM3",
+        "slot_schema": [
+          {
+            "slot_id": "VOLUME",
+            "syntactic_category": "variable",
+            "semantic_role": "volume_measure"
+          },
+          {
+            "slot_id": "DIM1",
+            "syntactic_category": "variable",
+            "semantic_role": "length_dimension"
+          },
+          {
+            "slot_id": "DIM2",
+            "syntactic_category": "variable",
+            "semantic_role": "width_dimension"
+          },
+          {
+            "slot_id": "DIM3",
+            "syntactic_category": "variable",
+            "semantic_role": "height_dimension"
+          }
+        ],
+        "invariants": [
+          "Product of three perpendicular dimensions"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "volume",
+            "mathematical_order": 0,
+            "description": "Volume of rectangular prism"
+          },
+          {
+            "symbol": "l",
+            "syntactic_category": "variable",
+            "semantic_role": "length",
+            "mathematical_order": 0,
+            "description": "Length of prism"
+          },
+          {
+            "symbol": "w",
+            "syntactic_category": "variable",
+            "semantic_role": "width",
+            "mathematical_order": 0,
+            "description": "Width of prism"
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "height",
+            "mathematical_order": 0,
+            "description": "Height of prism"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The volume of a rectangular prism is the product of its length, width, and height",
+        "statistical_significance": "Fundamental formula for 3D volume measurement",
+        "regularity_conditions": [
+          "All dimensions must be positive",
+          "Prism has rectangular faces"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "geometry.volume_formulas.cube_volume_formula"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book XI.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookXI/bookXI.html"
+        }
+      ],
+      "keywords": [
+        "rectangular prism",
+        "box",
+        "volume",
+        "solid geometry"
+      ],
+      "statement_id": "geometry.volume_formulas.rectangular_prism_volume"
+    },
+    {
+      "title": "Cube Volume Formula",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "solid_geometry",
+        "topic": "volume_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = s^3",
+        "canonical_latex": "V = s^3",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit",
+            "notation_system": "ascii",
+            "expression": "V = s * s * s",
+            "scope_note": "Explicit product form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "cubic_function",
+        "anonymized_template": "VOLUME = SIDE^3",
+        "slot_schema": [
+          {
+            "slot_id": "VOLUME",
+            "syntactic_category": "variable",
+            "semantic_role": "volume_measure"
+          },
+          {
+            "slot_id": "SIDE",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_length"
+          }
+        ],
+        "invariants": [
+          "Special case of box where all edges are equal"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "volume",
+            "mathematical_order": 0,
+            "description": "Volume of cube"
+          },
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_length",
+            "mathematical_order": 0,
+            "description": "Edge length of cube"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "3",
+            "value": 3,
+            "description": "Power of three"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The volume of a cube is the cube of its edge length",
+        "statistical_significance": "Special case of rectangular prism formula where all edges are equal",
+        "regularity_conditions": [
+          "All edges must be equal",
+          "All angles are right angles"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "geometry.volume_formulas.rectangular_prism_volume"
+        ],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book XI.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookXI/bookXI.html"
+        }
+      ],
+      "keywords": [
+        "cube",
+        "volume",
+        "solid geometry"
+      ],
+      "statement_id": "geometry.volume_formulas.cube_volume_formula"
+    },
+    {
+      "title": "Square Area Formula",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = s^2",
+        "canonical_latex": "A = s^2",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit",
+            "notation_system": "ascii",
+            "expression": "A = s * s",
+            "scope_note": "Explicit product form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "square_function",
+        "anonymized_template": "AREA = SIDE^2",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "SIDE",
+            "syntactic_category": "variable",
+            "semantic_role": "side_length"
+          }
+        ],
+        "invariants": [
+          "Special case where length equals width"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of square"
+          },
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "side_length",
+            "mathematical_order": 0,
+            "description": "Side length of square"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Power of two"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area of a square is the square of its side length",
+        "statistical_significance": "Special case of rectangle formula where all sides are equal",
+        "regularity_conditions": [
+          "All sides must be equal",
+          "All angles are right angles"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "geometry.area_formulas.rectangle_area_formula"
+        ],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "square",
+        "area",
+        "plane geometry"
+      ],
+      "statement_id": "geometry.area_formulas.square_area_formula"
+    },
+    {
+      "title": "Cube Surface Area Formula",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "solid_geometry",
+        "topic": "surface_area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = 6*s^2",
+        "canonical_latex": "A = 6s^2",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit",
+            "notation_system": "ascii",
+            "expression": "A = 6 * s * s",
+            "scope_note": "Sum of six square faces"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_quadratic",
+        "anonymized_template": "AREA = CONSTANT * SIDE^2",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_area_measure"
+          },
+          {
+            "slot_id": "SIDE",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_length"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "face_count"
+          }
+        ],
+        "invariants": [
+          "Sum of areas of six equal square faces"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_area",
+            "mathematical_order": 0,
+            "description": "Surface area of cube"
+          },
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_length",
+            "mathematical_order": 0,
+            "description": "Edge length of cube"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "6",
+            "value": 6,
+            "description": "Number of faces"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Power of two"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The surface area of a cube is six times the square of its edge length",
+        "statistical_significance": "Sum of areas of all six square faces",
+        "regularity_conditions": [
+          "All edges must be equal",
+          "All faces are squares"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geometry.area_formulas.square_area_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book XI.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookXI/bookXI.html"
+        }
+      ],
+      "keywords": [
+        "cube",
+        "surface area",
+        "solid geometry"
+      ],
+      "statement_id": "geometry.surface_area_formulas.cube_surface_area"
+    },
+    {
+      "title": "Sphere Surface Area Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "solid_geometry",
+        "topic": "surface_area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = 4*pi*r^2",
+        "canonical_latex": "A = 4\\pi r^2",
+        "equivalent_forms": [
+          {
+            "form_id": "diameter_form",
+            "notation_system": "ascii",
+            "expression": "A = pi*d^2",
+            "scope_note": "Using diameter d = 2r"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_quadratic",
+        "anonymized_template": "AREA = CONSTANT * RADIUS^2",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_area_measure"
+          },
+          {
+            "slot_id": "RADIUS",
+            "syntactic_category": "variable",
+            "semantic_role": "radius_length"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "geometric_constant"
+          }
+        ],
+        "invariants": [
+          "Proportional to square of radius with constant 4π"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_area",
+            "mathematical_order": 0,
+            "description": "Surface area of sphere"
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "radius",
+            "mathematical_order": 0,
+            "description": "Radius of sphere"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "pi",
+            "value": 3.14159265359,
+            "description": "The mathematical constant π"
+          },
+          {
+            "symbol": "4",
+            "value": 4,
+            "description": "Multiplier constant"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "Power of two"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The surface area of a sphere is 4π times the square of its radius",
+        "statistical_significance": "Fundamental relationship for spherical surface measurement",
+        "regularity_conditions": [
+          "Radius must be positive",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geometry.area_formulas.circle_area_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "archimedes_sphere_cylinder",
+          "bibliographic_entry": "Archimedes. On the Sphere and Cylinder.",
+          "url": "https://en.wikipedia.org/wiki/On_the_Sphere_and_Cylinder"
+        }
+      ],
+      "keywords": [
+        "sphere",
+        "surface area",
+        "solid geometry",
+        "pi"
+      ],
+      "statement_id": "geometry.surface_area_formulas.sphere_surface_area"
+    },
+    {
+      "title": "Triangle Area Formula",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "plane_geometry",
+        "topic": "area_formulas"
+      },
+      "formal_statement": {
+        "canonical_ascii": "A = (1/2) * b * h",
+        "canonical_latex": "A = \\frac{1}{2} b h",
+        "equivalent_forms": [
+          {
+            "form_id": "standard",
+            "notation_system": "ascii",
+            "expression": "A = 0.5 * base * height",
+            "scope_note": "Area of triangle"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_bilinear_product",
+        "anonymized_template": "AREA = CONSTANT * BASE * HEIGHT",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "area_measure"
+          },
+          {
+            "slot_id": "BASE",
+            "syntactic_category": "variable",
+            "semantic_role": "base_dimension"
+          },
+          {
+            "slot_id": "HEIGHT",
+            "syntactic_category": "variable",
+            "semantic_role": "height_dimension"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "scaling_factor"
+          }
+        ],
+        "invariants": [
+          "Half the product of base and height"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "area",
+            "mathematical_order": 0,
+            "description": "Area of triangle"
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "base",
+            "mathematical_order": 0,
+            "description": "Base of triangle"
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "height",
+            "mathematical_order": 0,
+            "description": "Height of triangle perpendicular to base"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1/2",
+            "value": 0.5,
+            "description": "One half"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area of a triangle is half the product of its base and height",
+        "statistical_significance": "Fundamental formula for triangular area measurement",
+        "regularity_conditions": [
+          "Base and height must be positive",
+          "Height must be perpendicular to base"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/bookI.html"
+        }
+      ],
+      "keywords": [
+        "triangle",
+        "area",
+        "plane geometry"
+      ],
+      "statement_id": "geometry.area_formulas.triangle_area_formula"
     }
   ]
 }
