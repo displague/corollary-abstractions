@@ -1,0 +1,128 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "geometry.foundations.v1",
+  "discipline": "geometry",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "title": "Pythagorean Theorem",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "mathematics",
+          "geometry"
+        ],
+        "subfield": "euclidean_geometry",
+        "topic": "right_triangles"
+      },
+      "formal_statement": {
+        "canonical_ascii": "a^2 + b^2 = c^2",
+        "canonical_latex": "a^2 + b^2 = c^2",
+        "equivalent_forms": [
+          {
+            "form_id": "standard",
+            "notation_system": "ascii",
+            "expression": "a^2 + b^2 = c^2",
+            "scope_note": "Standard form for right triangles"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "sum_of_squares",
+        "anonymized_template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2",
+        "slot_schema": [
+          {
+            "slot_id": "SIDE1",
+            "syntactic_category": "variable",
+            "semantic_role": "leg_one"
+          },
+          {
+            "slot_id": "SIDE2",
+            "syntactic_category": "variable",
+            "semantic_role": "leg_two"
+          },
+          {
+            "slot_id": "HYPOTENUSE",
+            "syntactic_category": "variable",
+            "semantic_role": "hypotenuse"
+          }
+        ],
+        "invariants": [
+          "Applies to right triangles only"
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "leg_length",
+            "mathematical_order": 0,
+            "description": "Length of first leg"
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "leg_length",
+            "mathematical_order": 0,
+            "description": "Length of second leg"
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "variable",
+            "semantic_role": "hypotenuse_length",
+            "mathematical_order": 0,
+            "description": "Length of hypotenuse"
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "In a right triangle, the square of the hypotenuse equals the sum of squares of the other two sides",
+        "statistical_significance": "This is a fundamental geometric relationship with applications across mathematics and physics",
+        "regularity_conditions": [
+          "Triangle must have a right angle (90 degrees)",
+          "Euclidean geometry applies"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "euclid_elements",
+          "bibliographic_entry": "Euclid. Elements. Book I, Proposition 47.",
+          "url": "https://mathcs.clarku.edu/~djoyce/java/elements/bookI/propI47.html"
+        }
+      ],
+      "keywords": [
+        "pythagorean",
+        "right triangle",
+        "geometry"
+      ],
+      "statement_id": "geometry.right_triangles.pythagorean_theorem"
+    }
+  ]
+}

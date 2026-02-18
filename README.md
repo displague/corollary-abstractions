@@ -41,8 +41,70 @@ Current seed nodes cover:
 - variance definition and computational identity corollary
 - IID CLT and large-sample normal approximation corollary
 
+## Adding New Formulae
+
+To add formulae from any discipline **without directly editing JSON files**, use the `add_node.py` tool:
+
+### Quick Start
+
+1. **Create a template file:**
+   ```bash
+   python scripts/add_node.py --create-template my_formula.json
+   ```
+   
+   This creates a template with all required fields and documentation. You can also create YAML templates:
+   ```bash
+   python scripts/add_node.py --create-template my_formula.yaml
+   ```
+
+2. **Edit the template file** with your formula's details using any text editor.
+
+3. **Add the formula to the corpus:**
+   ```bash
+   python scripts/add_node.py --template my_formula.json --discipline <discipline_name>
+   ```
+   
+   The tool will:
+   - Automatically generate a unique `statement_id` if not provided
+   - Create the discipline directory if it doesn't exist
+   - Validate the node structure
+   - Add it to the appropriate corpus
+   - Run full validation before committing
+
+### Example Workflow
+
+```bash
+# Create a template for a new calculus theorem
+python scripts/add_node.py --create-template /tmp/fundamental_theorem.json
+
+# Edit the template with your theorem details
+# (use your favorite editor)
+
+# Add to the calculus discipline
+python scripts/add_node.py --template /tmp/fundamental_theorem.json --discipline calculus
+
+# Output:
+# ✓ Template structure validated
+# ✓ Node added to data/calculus/nodes.json
+# ✓ Validation passed
+# ✓ Successfully added node 'calculus.integration.fundamental_theorem'!
+```
+
+### Validate Without Adding
+
+To check if your template is valid before adding it:
+
+```bash
+python scripts/add_node.py --template my_formula.json --validate-only
+```
+
 ## Validation
+
+Validate existing corpus files:
 
 ```bash
 python scripts/validate_nodes.py
+
+# Or validate a specific corpus:
+python scripts/validate_nodes.py --nodes data/geometry/nodes.json
 ```
