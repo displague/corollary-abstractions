@@ -17,11 +17,23 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 
 from tokenizers import SERIALIZERS, Vocab, build_vocab
+from train_span import MAX_LEVELS, MAX_SIB, tree_paths
 
 
 def load_jsonl(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as f:
         return [json.loads(line) for line in f]
+
+
+def pair_coords(tokens: list[str]) -> list[list[int]]:
+    zero = [0] * MAX_LEVELS
+    if "<sep>" in tokens:
+        cut = tokens.index("<sep>")
+        return ([[0] + zero]
+                + [[0] + p for p in tree_paths(tokens[:cut])]
+                + [[1] + zero]
+                + [[1] + p for p in tree_paths(tokens[cut + 1:])])
+    return [[0] + zero] + [[0] + p for p in tree_paths(tokens)]
 
 
 class PairDataset(Dataset):
@@ -30,11 +42,16 @@ class PairDataset(Dataset):
         self.items = []
         self.n_truncated = 0
         for r in rows:
-            ids = vocab.encode(serialize(r))
+            toks = serialize(r)
+            ids = vocab.encode(toks)
+            coords = pair_coords(toks)  # aligns with CLS via leading origin row
             if len(ids) > max_len:
                 ids = ids[:max_len]
+                coords = coords[:max_len]
                 self.n_truncated += 1
-            self.items.append((torch.tensor(ids, dtype=torch.long), r["label"]))
+            self.items.append((torch.tensor(ids, dtype=torch.long),
+                               torch.tensor(coords, dtype=torch.long),
+                               r["label"]))
 
     def __len__(self):
         return len(self.items)
@@ -44,22 +61,31 @@ class PairDataset(Dataset):
 
 
 def collate(batch):
-    seqs, labels = zip(*batch)
+    seqs, coords, labels = zip(*batch)
     max_len = max(len(s) for s in seqs)
     out = torch.zeros(len(seqs), max_len, dtype=torch.long)
+    crd = torch.zeros(len(seqs), max_len, 1 + MAX_LEVELS, dtype=torch.long)
     mask = torch.zeros(len(seqs), max_len, dtype=torch.bool)
-    for i, s in enumerate(seqs):
+    for i, (s, c) in enumerate(zip(seqs, coords)):
         out[i, : len(s)] = s
+        crd[i, : len(c)] = c
         mask[i, : len(s)] = True
-    return out, mask, torch.tensor(labels, dtype=torch.float32)
+    return out, crd, mask, torch.tensor(labels, dtype=torch.float32)
 
 
 class TinyTransformer(nn.Module):
     def __init__(self, vocab_size: int, d_model: int = 128, n_layers: int = 4,
-                 n_heads: int = 4, max_len: int = 1024):
+                 n_heads: int = 4, max_len: int = 1024, positions: str = "abs"):
         super().__init__()
+        self.positions = positions
         self.embed = nn.Embedding(vocab_size, d_model, padding_idx=0)
-        self.pos = nn.Embedding(max_len, d_model)
+        if positions == "abs":
+            self.pos = nn.Embedding(max_len, d_model)
+        else:
+            self.seg_emb = nn.Embedding(2, d_model)
+            self.path_emb = nn.Embedding(MAX_LEVELS * (MAX_SIB + 1), d_model)
+            self.register_buffer("level_offsets",
+                                 torch.arange(MAX_LEVELS) * (MAX_SIB + 1))
         layer = nn.TransformerEncoderLayer(
             d_model, n_heads, dim_feedforward=4 * d_model,
             dropout=0.1, batch_first=True, norm_first=True)
@@ -68,9 +94,16 @@ class TinyTransformer(nn.Module):
             nn.LayerNorm(d_model), nn.Linear(d_model, d_model), nn.GELU(),
             nn.Linear(d_model, 1))
 
-    def forward(self, x, mask):
-        pos = torch.arange(x.size(1), device=x.device).unsqueeze(0)
-        h = self.embed(x) + self.pos(pos)
+    def forward(self, x, coords, mask):
+        h = self.embed(x)
+        if self.positions == "abs":
+            pos = torch.arange(x.size(1), device=x.device).unsqueeze(0)
+            h = h + self.pos(pos)
+        else:
+            paths = coords[..., 1:]
+            emb = self.path_emb(paths + self.level_offsets)
+            emb = emb * (paths > 0).unsqueeze(-1)
+            h = h + emb.sum(dim=-2) + self.seg_emb(coords[..., 0])
         h = self.encoder(h, src_key_padding_mask=~mask)
         cls = h[:, 0]
         return self.head(cls).squeeze(-1)
@@ -80,9 +113,9 @@ def evaluate(model, loader, device) -> float:
     model.eval()
     correct = total = 0
     with torch.no_grad():
-        for x, mask, y in loader:
-            x, mask, y = x.to(device), mask.to(device), y.to(device)
-            logits = model(x, mask)
+        for x, crd, mask, y in loader:
+            x, crd, mask, y = x.to(device), crd.to(device), mask.to(device), y.to(device)
+            logits = model(x, crd, mask)
             correct += ((logits > 0) == (y > 0.5)).sum().item()
             total += len(y)
     return correct / max(total, 1)
@@ -100,6 +133,7 @@ def main() -> None:
     ap.add_argument("--d-model", type=int, default=128)
     ap.add_argument("--n-layers", type=int, default=4)
     ap.add_argument("--max-len", type=int, default=512)
+    ap.add_argument("--positions", choices=["abs", "tree"], default="abs")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--save-model", type=Path, default=None)
     args = ap.parse_args()
@@ -120,7 +154,8 @@ def main() -> None:
     mean_len = sum(len(it[0]) for it in datasets["train"].items) / len(datasets["train"])
 
     model = TinyTransformer(len(vocab), args.d_model, args.n_layers,
-                            max_len=args.max_len).to(device)
+                            max_len=args.max_len,
+                            positions=args.positions).to(device)
     n_params = sum(p.numel() for p in model.parameters())
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     total_steps = args.epochs * math.ceil(len(datasets["train"]) / args.batch_size)
@@ -137,10 +172,11 @@ def main() -> None:
     for epoch in range(args.epochs):
         model.train()
         running = 0.0
-        for x, mask, y in loaders["train"]:
-            x, mask, y = x.to(device), mask.to(device), y.to(device)
+        for x, crd, mask, y in loaders["train"]:
+            x, crd, mask, y = (x.to(device), crd.to(device), mask.to(device),
+                               y.to(device))
             opt.zero_grad()
-            loss = loss_fn(model(x, mask), y)
+            loss = loss_fn(model(x, crd, mask), y)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
@@ -161,7 +197,8 @@ def main() -> None:
     elapsed = time.time() - t0
 
     result = {
-        "task": args.task, "arm": args.arm, "vocab_size": len(vocab),
+        "task": args.task, "arm": args.arm, "positions": args.positions,
+        "vocab_size": len(vocab),
         "params": n_params, "mean_train_seq_len": round(mean_len, 1),
         "truncated_train": datasets["train"].n_truncated,
         "val_acc_best": best_val, "test_acc": test_acc, "ood_acc": ood_acc,

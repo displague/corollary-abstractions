@@ -282,9 +282,22 @@ features (hybrid bit), lexicon (extrinsic), and now *addresses*.
 Implication for the model design: positional encoding is not a
 hyperparameter here, it is part of the symbolic/learned interface.
 "Discrete infinity" behavior appears when the addressing scheme is
-recursion-aware. Follow-up: port path positions to the classifier tasks
-(xlang/syn OOD collapses used absolute positions) and expect the same
-recovery.
+recursion-aware.
+
+Ported to the classifiers (2 seeds each):
+
+| task+treepos | test | OOD | abs-position baseline |
+|---|---|---|---|
+| xlang struct | 0.897 | 0.724 | 0.674 / 0.560 (canon: 0.708 / 0.553) |
+| syn hybrid | 0.726 | 0.791 | 0.746 / 0.805 |
+
+Tree addressing transforms tasks whose difficulty is structural
+alignment (xlang: +22 test, +16 OOD, beating even gold-interlingua
+canon -- related constituents in the two languages get related
+coordinates, so comparison is aligned rather than learned) and is
+neutral where the residual is lexical (syn unchanged). The interface
+contributes exactly what it encodes; the division of labor stays
+clean.
 
 ## Next
 
