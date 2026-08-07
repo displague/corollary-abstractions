@@ -152,12 +152,38 @@ not for operations that have closed forms.
   test spread across seeds for struct — tiny models are seed-sensitive
   here, so no single-seed claim from this suite should be trusted.
 
+## syn task (thesaurus induction under unification), 2 seeds/arm
+
+Language B has 2-3 interchangeable words per concept; the synonym clusters
+appear nowhere in the input. The struct-canon gap directly measures how
+much thesaurus the weights learned.
+
+| arm | test acc | OOD acc |
+|---|---|---|
+| char | 0.506 | 0.513 |
+| struct (must induce thesaurus) | 0.600 | **0.508** |
+| canon (gold thesaurus) | 0.660 | 0.587 |
+
+- canon reproduces qa/canon (0.660/0.587 vs 0.661/0.587) almost exactly —
+  as it must, since gold concept ids make the tasks identical. A free
+  internal-consistency check on the whole pipeline, passed.
+- struct learned *some* thesaurus in-distribution (0.600 vs the 0.660
+  ceiling: roughly two-thirds of the achievable signal) — but **collapses
+  to chance OOD (0.508)** while gold-lexicon canon holds 0.587. The
+  weight-learned lexicon is partial AND brittle: it does not survive
+  deeper recursion.
+- This is the extrinsic-lexicon thesis measured, and it upgrades the
+  claim: externalizing the lexicon is not only a size play (the embedding
+  table finding) but a **robustness** play. A lexicon in weights at this
+  scale is worse in-distribution and worthless out-of-distribution
+  compared to the same lexicon supplied symbolically.
+
 ## Next
 
-1. Hybrid head: symbolic-equality/unification bit + learned residual as
-   model input; measure the lift over either alone.
-2. Grow the family-level concept vocabulary from the corpus; measure
-   milestone 2 compression on real statement nodes.
-3. More disciplines (economics: compound interest should family-twin
-   exponential growth/decay).
-4. Multi-seed reruns before claiming struct/canon orderings on qa.
+1. Specialization matcher v2 (corpus side): slot-to-subtree subsumption +
+   identity-element reasoning, closing the recorded arity misses
+   (quantity theory <-> ideal gas, Cobb-Douglas <-> power-law rate,
+   simple interest <-> compounding truncation, circumference <-> affine).
+2. Milestone 2 compression measured on the real 67-node corpus.
+3. Hybrid head (symbolic bit + learned scoring) — now informed by syn:
+   the symbolic side should carry the lexicon, weights the soft residual.

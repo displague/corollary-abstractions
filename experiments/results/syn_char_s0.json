@@ -1,0 +1,77 @@
+{
+  "task": "syn",
+  "arm": "char",
+  "vocab_size": 32,
+  "params": 879617,
+  "mean_train_seq_len": 119.1,
+  "truncated_train": 0,
+  "val_acc_best": 0.5106,
+  "test_acc": 0.5086,
+  "ood_acc": 0.5123333333333333,
+  "epochs": 12,
+  "seconds": 276.4,
+  "d_model": 128,
+  "n_layers": 4,
+  "history": [
+    {
+      "epoch": 0,
+      "loss": 0.6934222235363356,
+      "val_acc": 0.5028
+    },
+    {
+      "epoch": 1,
+      "loss": 0.6938228461207175,
+      "val_acc": 0.5068
+    },
+    {
+      "epoch": 2,
+      "loss": 0.6937126705841142,
+      "val_acc": 0.5
+    },
+    {
+      "epoch": 3,
+      "loss": 0.6933699061675948,
+      "val_acc": 0.5
+    },
+    {
+      "epoch": 4,
+      "loss": 0.6933082892578475,
+      "val_acc": 0.5
+    },
+    {
+      "epoch": 5,
+      "loss": 0.6933739951678685,
+      "val_acc": 0.5
+    },
+    {
+      "epoch": 6,
+      "loss": 0.6929290793379959,
+      "val_acc": 0.5054
+    },
+    {
+      "epoch": 7,
+      "loss": 0.6923689729705149,
+      "val_acc": 0.5106
+    },
+    {
+      "epoch": 8,
+      "loss": 0.6914036097575207,
+      "val_acc": 0.5042
+    },
+    {
+      "epoch": 9,
+      "loss": 0.689963949578149,
+      "val_acc": 0.497
+    },
+    {
+      "epoch": 10,
+      "loss": 0.687865383771001,
+      "val_acc": 0.5022
+    },
+    {
+      "epoch": 11,
+      "loss": 0.686864432935812,
+      "val_acc": 0.5036
+    }
+  ]
+}
