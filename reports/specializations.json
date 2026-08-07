@@ -1,0 +1,3204 @@
+{
+  "specialization_edges": [
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.area_formulas.rectangle_area_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = DIM1 * DIM2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "DIM2",
+        "PATHLENGTH": "DIM1"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.circle_formulas.circle_circumference_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "CIRCUMFERENCE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "RADIUS",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.mechanics.newton_second_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "FORCE = INERTIA * RESPONSE",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "FORCE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "RESPONSE",
+        "PATHLENGTH": "INERTIA"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.circuits.ohms_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "POTENTIAL = FLOW * RESISTANCE",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "POTENTIAL",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "RESISTANCE",
+        "PATHLENGTH": "FLOW"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "PERIMETER",
+        "BASE1": "DIM1",
+        "BASE2": "DIM2",
+        "CONSTANT": "1",
+        "HEIGHT": "2"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.area_formulas.rectangle_area_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = DIM1 * DIM2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "DIM1",
+        "CONSTANT": "1",
+        "HEIGHT": "DIM2"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.circle_formulas.circle_circumference_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "via": "identity",
+      "bindings": {
+        "AREA": "CIRCUMFERENCE",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "RADIUS"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.mechanics.newton_second_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "FORCE = INERTIA * RESPONSE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "FORCE",
+        "BASE": "INERTIA",
+        "CONSTANT": "1",
+        "HEIGHT": "RESPONSE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.circuits.ohms_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "POTENTIAL = FLOW * RESISTANCE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "POTENTIAL",
+        "BASE": "FLOW",
+        "CONSTANT": "1",
+        "HEIGHT": "RESISTANCE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.mechanics.kinetic_energy",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "CONSTANT": "1",
+        "ENERGY": "AREA",
+        "MASS": "CONSTANT",
+        "SPEED": "RADIUS"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.mechanics.kinetic_energy",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "identity",
+      "bindings": {
+        "CONSTANT": "1",
+        "ENERGY": "AREA",
+        "MASS": "CONSTANT",
+        "SPEED": "SIDE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.mechanics.kinetic_energy",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "CONSTANT": "1",
+        "ENERGY": "AREA",
+        "MASS": "CONSTANT",
+        "SPEED": "RADIUS"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.mechanics.kinetic_energy",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "identity",
+      "bindings": {
+        "CONSTANT": "1",
+        "ENERGY": "ENERGY",
+        "MASS": "MASS",
+        "SPEED": "SPEEDLIMIT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "NORMALIZER",
+        "QUANTITY": "*(LIKELIHOOD, PRIOR)",
+        "RATE": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "CONSTANT": "*(LIKELIHOOD, PRIOR)",
+        "HALFLIFE": "POSTERIOR",
+        "RATECONST": "NORMALIZER"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "CONCENTRATION": "SPEED",
+        "ORDER": "2",
+        "RATE": "ENERGY",
+        "RATECONST": "*(CONSTANT, MASS)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "AMOUNT": "*(LIKELIHOOD, PRIOR)",
+        "CONCENTRATION": "POSTERIOR",
+        "VOLUME": "NORMALIZER"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "calculus.differentiation.average_rate_of_change",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(INTERVAL)",
+        "PATHLENGTH": "QUANTITY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "chemistry.kinetics.rate_law_power",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(CONCENTRATION, ORDER)",
+        "PATHLENGTH": "RATECONST"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "chemistry.kinetics.half_life_first_order",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "HALFLIFE = CONSTANT / RATECONST",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "HALFLIFE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(RATECONST)",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "chemistry.solutions.molarity_definition",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "CONCENTRATION",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(VOLUME)",
+        "PATHLENGTH": "AMOUNT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.microeconomics.price_elasticity_of_demand",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "ELASTICITY",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(PCT_PRICE)",
+        "PATHLENGTH": "PCT_QUANTITY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "*(MONEY, VELOCITY)",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "OUTPUT",
+        "PATHLENGTH": "PRICE_LEVEL"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "PERIMETER",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "+(DIM1, DIM2)",
+        "PATHLENGTH": "2"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(RADIUS, 2)",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.volume_formulas.sphere_volume_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "VOLUME = CONSTANT * RADIUS^3",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "VOLUME",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(RADIUS, 3)",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(SIDE, 2)",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(RADIUS, 2)",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "ENERGY",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(SPEEDLIMIT, 2)",
+        "PATHLENGTH": "MASS"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.kinematics.average_speed",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(INTERVAL)",
+        "PATHLENGTH": "QUANTITY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.materials.mass_density",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(INTERVAL)",
+        "PATHLENGTH": "QUANTITY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "ELASTICITY": "POSTERIOR",
+        "PCT_PRICE": "NORMALIZER",
+        "PCT_QUANTITY": "*(LIKELIHOOD, PRIOR)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "economics.monetary.equation_of_exchange",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption",
+      "bindings": {
+        "MONEY": "PRESSURE",
+        "OUTPUT": "*(CONSTANT, TEMPERATURE)",
+        "PRICE_LEVEL": "AMOUNT",
+        "VELOCITY": "VOLUME"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.circle_area_formula",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "AREA = CONSTANT * RADIUS^2",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "ENERGY",
+        "CONSTANT": "*(CONSTANT, MASS)",
+        "RADIUS": "SPEED"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "chemistry.spectroscopy.beer_lambert_law",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "ABSORBANCE",
+        "DIM1": "ABSORPTIVITY",
+        "DIM2": "*(PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "geometry.volume_formulas.rectangular_prism_volume",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "VOLUME",
+        "DIM1": "DIM1",
+        "DIM2": "*(DIM2, DIM3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "geometry.area_formulas.triangle_area_formula",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "AREA",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VALUE",
+        "BASE1": "1",
+        "BASE2": "*(RATE, TIME)",
+        "CONSTANT": "1",
+        "HEIGHT": "PRINCIPAL"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "calculus.differentiation.average_rate_of_change",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATE",
+        "BASE": "QUANTITY",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(INTERVAL)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "chemistry.kinetics.rate_law_power",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATE",
+        "BASE": "RATECONST",
+        "CONSTANT": "1",
+        "HEIGHT": "^(CONCENTRATION, ORDER)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "chemistry.kinetics.half_life_first_order",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "HALFLIFE = CONSTANT / RATECONST",
+      "via": "identity",
+      "bindings": {
+        "AREA": "HALFLIFE",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(RATECONST)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "chemistry.solutions.molarity_definition",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "via": "identity",
+      "bindings": {
+        "AREA": "CONCENTRATION",
+        "BASE": "AMOUNT",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(VOLUME)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.microeconomics.price_elasticity_of_demand",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "ELASTICITY",
+        "BASE": "PCT_QUANTITY",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(PCT_PRICE)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "identity",
+      "bindings": {
+        "AREA": "*(MONEY, VELOCITY)",
+        "BASE": "PRICE_LEVEL",
+        "CONSTANT": "1",
+        "HEIGHT": "OUTPUT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "PERIMETER",
+        "BASE": "2",
+        "CONSTANT": "1",
+        "HEIGHT": "+(DIM1, DIM2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "^(RADIUS, 2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.volume_formulas.sphere_volume_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "VOLUME = CONSTANT * RADIUS^3",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VOLUME",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "^(RADIUS, 3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "^(SIDE, 2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "^(RADIUS, 2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "ENERGY",
+        "BASE": "MASS",
+        "CONSTANT": "1",
+        "HEIGHT": "^(SPEEDLIMIT, 2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.kinematics.average_speed",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATE",
+        "BASE": "QUANTITY",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(INTERVAL)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.materials.mass_density",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATE",
+        "BASE": "QUANTITY",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(INTERVAL)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.spectroscopy.beer_lambert_law",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "ABSORBANCE",
+        "CONSTANT": "1",
+        "RADIUS": "*(ABSORPTIVITY, PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.volume_formulas.rectangular_prism_volume",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VOLUME",
+        "CONSTANT": "1",
+        "RADIUS": "*(DIM1, DIM2, DIM3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.area_formulas.triangle_area_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.surface_area_formulas.cube_surface_area",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "AREA = CONSTANT * SIDE^2",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "ENERGY",
+        "CONSTANT": "*(CONSTANT, MASS)",
+        "SIDE": "SPEED"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.surface_area_formulas.sphere_surface_area",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "AREA = CONSTANT * RADIUS^2",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "ENERGY",
+        "CONSTANT": "*(CONSTANT, MASS)",
+        "RADIUS": "SPEED"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "chemistry.spectroscopy.beer_lambert_law",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "ABSORPTIVITY",
+        "POTENTIAL": "ABSORBANCE",
+        "RESISTANCE": "*(PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "geometry.volume_formulas.rectangular_prism_volume",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "DIM1",
+        "POTENTIAL": "VOLUME",
+        "RESISTANCE": "*(DIM2, DIM3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "geometry.area_formulas.triangle_area_formula",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "AREA",
+        "RESISTANCE": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "NORMALIZER",
+        "QUANTITY": "*(LIKELIHOOD, PRIOR)",
+        "RATE": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "NORMALIZER",
+        "QUANTITY": "*(LIKELIHOOD, PRIOR)",
+        "RATE": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.mechanics.kinetic_energy",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "identity",
+      "bindings": {
+        "CONSTANT": "1",
+        "ENERGY": "AREA",
+        "MASS": "inv(CONSTANT)",
+        "SPEED": "CIRCUMFERENCE"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.spectroscopy.beer_lambert_law",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "ABSORBANCE",
+        "INERTIA": "1",
+        "RESPONSE": "*(ABSORPTIVITY, PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.volume_formulas.rectangular_prism_volume",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VOLUME",
+        "INERTIA": "1",
+        "RESPONSE": "*(DIM1, DIM2, DIM3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.area_formulas.triangle_area_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.relativity.mass_energy_equivalence",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "ENERGY": "ENERGY",
+        "MASS": "*(CONSTANT, MASS)",
+        "SPEEDLIMIT": "SPEED"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.thermodynamics.ideal_gas_law",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "AMOUNT": "1",
+        "CONSTANT": "1",
+        "PRESSURE": "MONEY",
+        "TEMPERATURE": "*(PRICE_LEVEL, OUTPUT)",
+        "VOLUME": "VELOCITY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "calculus.approximation.tangent_line_linearization",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "BASEVALUE",
+        "PRED_i": "*(SLOPE, DISPLACEMENT)",
+        "RV_i": "LINEARIZED",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "economics.finance.capm_expected_return",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "RISKFREE",
+        "PRED_i": "*(SENSITIVITY, PREMIUM)",
+        "RV_i": "EXPECTED",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "economics.macroeconomics.keynesian_consumption_function",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "AUTONOMOUS",
+        "PRED_i": "*(PROPENSITY, DISPOSABLE_INCOME)",
+        "RV_i": "CONSUMPTION",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "probstat.transform.affine_location_scale",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "OUT = SCALE*IN + SHIFT",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "SHIFT",
+        "PRED_i": "*(SCALE, IN)",
+        "RV_i": "OUT",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "+(INTERCEPT, NOISE_i)",
+        "DISPLACEMENT": "*(SLOPE, PRED_i)",
+        "LINEARIZED": "RV_i",
+        "SLOPE": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "INTERCEPT",
+        "DISPLACEMENT": "*(SLOPE, INPUT)",
+        "LINEARIZED": "E[](RV, COND)",
+        "SLOPE": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "CONSTANT": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "HALFLIFE": "COUPLING",
+        "RATECONST": "^(SEPARATION, 2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "CONSTANT": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "HALFLIFE": "COUPLING",
+        "RATECONST": "^(SEPARATION, 2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption",
+      "bindings": {
+        "CONCENTRATION": "LABOR",
+        "ORDER": "LABOR_SHARE",
+        "RATE": "OUTPUT",
+        "RATECONST": "*(PRODUCTIVITY, ^(CAPITAL, CAPITAL_SHARE))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "AMOUNT": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "CONCENTRATION": "COUPLING",
+        "VOLUME": "^(SEPARATION, 2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "AMOUNT": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "CONCENTRATION": "COUPLING",
+        "VOLUME": "^(SEPARATION, 2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "calculus.growth.exponential_growth_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AMOUNT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(*(RATE, TIME))",
+        "PATHLENGTH": "INITIAL"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.finance.continuous_compounding",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "VALUE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(*(RATE, TIME))",
+        "PATHLENGTH": "PRINCIPAL"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "VALUE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "+(1, *(RATE, TIME))",
+        "PATHLENGTH": "PRINCIPAL"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.finance.compound_interest_discrete",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "VALUE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(+(1, RATE), PERIODS)",
+        "PATHLENGTH": "PRINCIPAL"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(CONSTANT)",
+        "PATHLENGTH": "^(CIRCUMFERENCE, 2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(HEIGHT, +(BASE1, BASE2))",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "ENERGY",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(MASS, ^(SPEED, 2))",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "*(PRESSURE, VOLUME)",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(CONSTANT, TEMPERATURE)",
+        "PATHLENGTH": "AMOUNT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "POSTERIOR",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(PRIOR, inv(NORMALIZER))",
+        "PATHLENGTH": "LIKELIHOOD"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "RV_i",
+        "PREMIUM": "*(SLOPE, PRED_i)",
+        "RISKFREE": "+(INTERCEPT, NOISE_i)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "E[](RV, COND)",
+        "PREMIUM": "*(SLOPE, INPUT)",
+        "RISKFREE": "INTERCEPT",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "+(INTERCEPT, NOISE_i)",
+        "CONSUMPTION": "RV_i",
+        "DISPOSABLE_INCOME": "*(SLOPE, PRED_i)",
+        "PROPENSITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "INTERCEPT",
+        "CONSUMPTION": "E[](RV, COND)",
+        "DISPOSABLE_INCOME": "*(SLOPE, INPUT)",
+        "PROPENSITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "ELASTICITY": "COUPLING",
+        "PCT_PRICE": "^(SEPARATION, 2)",
+        "PCT_QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "ELASTICITY": "COUPLING",
+        "PCT_PRICE": "^(SEPARATION, 2)",
+        "PCT_QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "AREA",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "ENERGY",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "*(PRESSURE, VOLUME)",
+        "DIM1": "AMOUNT",
+        "DIM2": "*(CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "POSTERIOR",
+        "DIM1": "LIKELIHOOD",
+        "DIM2": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "STD",
+        "BASE1": "RAW",
+        "BASE2": "neg(CENTER)",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(SCALE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "calculus.growth.exponential_growth_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AMOUNT",
+        "BASE": "INITIAL",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(*(RATE, TIME))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.finance.continuous_compounding",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VALUE",
+        "BASE": "PRINCIPAL",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(*(RATE, TIME))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VALUE",
+        "BASE": "PRINCIPAL",
+        "CONSTANT": "1",
+        "HEIGHT": "+(1, *(RATE, TIME))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.finance.compound_interest_discrete",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VALUE",
+        "BASE": "PRINCIPAL",
+        "CONSTANT": "1",
+        "HEIGHT": "^(+(1, RATE), PERIODS)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "^(CIRCUMFERENCE, 2)",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(CONSTANT)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "ENERGY",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "*(PRESSURE, VOLUME)",
+        "BASE": "AMOUNT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "POSTERIOR",
+        "BASE": "LIKELIHOOD",
+        "CONSTANT": "1",
+        "HEIGHT": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "calculus.differentiation.average_rate_of_change",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATE",
+        "CONSTANT": "1",
+        "RADIUS": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.kinetics.rate_law_power",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATE",
+        "CONSTANT": "1",
+        "RADIUS": "*(RATECONST, ^(CONCENTRATION, ORDER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.kinetics.half_life_first_order",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "HALFLIFE = CONSTANT / RATECONST",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "HALFLIFE",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, inv(RATECONST))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.solutions.molarity_definition",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "CONCENTRATION",
+        "CONSTANT": "1",
+        "RADIUS": "*(AMOUNT, inv(VOLUME))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.microeconomics.price_elasticity_of_demand",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "ELASTICITY",
+        "CONSTANT": "1",
+        "RADIUS": "*(PCT_QUANTITY, inv(PCT_PRICE))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "*(MONEY, VELOCITY)",
+        "CONSTANT": "1",
+        "RADIUS": "*(PRICE_LEVEL, OUTPUT)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "PERIMETER",
+        "CONSTANT": "1",
+        "RADIUS": "*(2, +(DIM1, DIM2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, ^(RADIUS, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.volume_formulas.sphere_volume_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VOLUME = CONSTANT * RADIUS^3",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VOLUME",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, ^(RADIUS, 3))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, ^(SIDE, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, ^(RADIUS, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "ENERGY",
+        "CONSTANT": "1",
+        "RADIUS": "*(MASS, ^(SPEEDLIMIT, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "ENERGY",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "*(PRESSURE, VOLUME)",
+        "CONSTANT": "1",
+        "RADIUS": "*(AMOUNT, CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.kinematics.average_speed",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATE",
+        "CONSTANT": "1",
+        "RADIUS": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.materials.mass_density",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATE",
+        "CONSTANT": "1",
+        "RADIUS": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "POSTERIOR",
+        "CONSTANT": "1",
+        "RADIUS": "*(LIKELIHOOD, PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "AREA",
+        "RESISTANCE": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "ENERGY",
+        "RESISTANCE": "*(MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "AMOUNT",
+        "POTENTIAL": "*(PRESSURE, VOLUME)",
+        "RESISTANCE": "*(CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "LIKELIHOOD",
+        "POTENTIAL": "POSTERIOR",
+        "RESISTANCE": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "^(SEPARATION, 2)",
+        "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "RATE": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "calculus.differentiation.average_rate_of_change",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATE",
+        "INERTIA": "1",
+        "RESPONSE": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.kinetics.rate_law_power",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATE",
+        "INERTIA": "1",
+        "RESPONSE": "*(RATECONST, ^(CONCENTRATION, ORDER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.kinetics.half_life_first_order",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "HALFLIFE = CONSTANT / RATECONST",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "HALFLIFE",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, inv(RATECONST))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.solutions.molarity_definition",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "CONCENTRATION",
+        "INERTIA": "1",
+        "RESPONSE": "*(AMOUNT, inv(VOLUME))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.microeconomics.price_elasticity_of_demand",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "ELASTICITY",
+        "INERTIA": "1",
+        "RESPONSE": "*(PCT_QUANTITY, inv(PCT_PRICE))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "*(MONEY, VELOCITY)",
+        "INERTIA": "1",
+        "RESPONSE": "*(PRICE_LEVEL, OUTPUT)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "PERIMETER",
+        "INERTIA": "1",
+        "RESPONSE": "*(2, +(DIM1, DIM2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, ^(RADIUS, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.volume_formulas.sphere_volume_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VOLUME = CONSTANT * RADIUS^3",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VOLUME",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, ^(RADIUS, 3))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, ^(SIDE, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, ^(RADIUS, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "ENERGY",
+        "INERTIA": "1",
+        "RESPONSE": "*(MASS, ^(SPEEDLIMIT, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "ENERGY",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "*(PRESSURE, VOLUME)",
+        "INERTIA": "1",
+        "RESPONSE": "*(AMOUNT, CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.kinematics.average_speed",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATE",
+        "INERTIA": "1",
+        "RESPONSE": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.materials.mass_density",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATE = QUANTITY / INTERVAL",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATE",
+        "INERTIA": "1",
+        "RESPONSE": "*(QUANTITY, inv(INTERVAL))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "POSTERIOR",
+        "INERTIA": "1",
+        "RESPONSE": "*(LIKELIHOOD, PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.probability.bayes_rule",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "LIKELIHOOD": "CONSTANT",
+        "NORMALIZER": "^(SEPARATION, 2)",
+        "POSTERIOR": "COUPLING",
+        "PRIOR": "*(SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.probability.bayes_rule",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "LIKELIHOOD": "CONSTANT",
+        "NORMALIZER": "^(SEPARATION, 2)",
+        "POSTERIOR": "COUPLING",
+        "PRIOR": "*(SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "INTERCEPT",
+        "PRED_i": "*(SLOPE, INPUT)",
+        "RV_i": "E[](RV, COND)",
+        "SLOPE": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(SLOPE, PRED_i)",
+        "OUT": "RV_i",
+        "SCALE": "1",
+        "SHIFT": "+(INTERCEPT, NOISE_i)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(SLOPE, INPUT)",
+        "OUT": "E[](RV, COND)",
+        "SCALE": "1",
+        "SHIFT": "INTERCEPT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.kinetics.first_order_integrated_rate_law",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "absorption+identity",
+      "bindings": {
+        "AMOUNT": "RATECONST",
+        "INITIAL": "PREFACTOR",
+        "RATECONST": "1",
+        "TIME": "*(BARRIER, inv(*(GASCONST, TEMPERATURE)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "chemistry.kinetics.first_order_integrated_rate_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "AMOUNT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(neg(*(RATECONST, TIME)))",
+        "PATHLENGTH": "INITIAL"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.finance.present_value_continuous",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "PRESENT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(neg(*(RATE, HORIZON)))",
+        "PATHLENGTH": "FUTURE"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "OUTPUT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))",
+        "PATHLENGTH": "PRODUCTIVITY"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "COUPLING",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "COUPLING",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "STD",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(SCALE)",
+        "PATHLENGTH": "+(RAW, neg(CENTER))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "economics.finance.present_value_continuous",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "absorption+identity",
+      "bindings": {
+        "FUTURE": "PREFACTOR",
+        "HORIZON": "*(BARRIER, inv(*(GASCONST, TEMPERATURE)))",
+        "PRESENT": "RATECONST",
+        "RATE": "1"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "OUTPUT",
+        "DIM1": "PRODUCTIVITY",
+        "DIM2": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "COUPLING",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "COUPLING",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "chemistry.kinetics.first_order_integrated_rate_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
+      "via": "identity",
+      "bindings": {
+        "AREA": "AMOUNT",
+        "BASE": "INITIAL",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(neg(*(RATECONST, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.finance.present_value_continuous",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+      "via": "identity",
+      "bindings": {
+        "AREA": "PRESENT",
+        "BASE": "FUTURE",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(neg(*(RATE, HORIZON)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "OUTPUT",
+        "BASE": "PRODUCTIVITY",
+        "CONSTANT": "1",
+        "HEIGHT": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "COUPLING",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "COUPLING",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "STD",
+        "BASE": "+(RAW, neg(CENTER))",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(SCALE)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "calculus.growth.exponential_growth_law",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AMOUNT",
+        "CONSTANT": "1",
+        "RADIUS": "*(INITIAL, EXP(*(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.finance.continuous_compounding",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VALUE",
+        "CONSTANT": "1",
+        "RADIUS": "*(PRINCIPAL, EXP(*(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VALUE",
+        "CONSTANT": "1",
+        "RADIUS": "*(PRINCIPAL, +(1, *(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.finance.compound_interest_discrete",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VALUE",
+        "CONSTANT": "1",
+        "RADIUS": "*(PRINCIPAL, ^(+(1, RATE), PERIODS))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "OUTPUT",
+        "CONSTANT": "1",
+        "RADIUS": "*(PRODUCTIVITY, ^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(^(CIRCUMFERENCE, 2), inv(CONSTANT))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "COUPLING",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "COUPLING",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.volume_formulas.rectangular_prism_volume",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "DIM1": "CONSTANT",
+        "DIM2": "SOURCE1",
+        "DIM3": "*(SOURCE2, inv(^(SEPARATION, 2)))",
+        "VOLUME": "COUPLING"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.volume_formulas.rectangular_prism_volume",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "DIM1": "CONSTANT",
+        "DIM2": "SOURCE1",
+        "DIM3": "*(SOURCE2, inv(^(SEPARATION, 2)))",
+        "VOLUME": "COUPLING"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "PRODUCTIVITY",
+        "POTENTIAL": "OUTPUT",
+        "RESISTANCE": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "COUPLING",
+        "RESISTANCE": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "COUPLING",
+        "RESISTANCE": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "calculus.growth.exponential_growth_law",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AMOUNT",
+        "INERTIA": "1",
+        "RESPONSE": "*(INITIAL, EXP(*(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.finance.continuous_compounding",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VALUE",
+        "INERTIA": "1",
+        "RESPONSE": "*(PRINCIPAL, EXP(*(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VALUE",
+        "INERTIA": "1",
+        "RESPONSE": "*(PRINCIPAL, +(1, *(RATE, TIME)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.finance.compound_interest_discrete",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VALUE",
+        "INERTIA": "1",
+        "RESPONSE": "*(PRINCIPAL, ^(+(1, RATE), PERIODS))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "OUTPUT",
+        "INERTIA": "1",
+        "RESPONSE": "*(PRODUCTIVITY, ^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(^(CIRCUMFERENCE, 2), inv(CONSTANT))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "COUPLING",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "COUPLING",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "calculus.growth.exponential_growth_law",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "absorption+identity",
+      "bindings": {
+        "AMOUNT": "D(EXP(*(RATE, VAR)))",
+        "INITIAL": "RATE",
+        "RATE": "1",
+        "TIME": "*(RATE, VAR)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.finance.continuous_compounding",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "absorption+identity",
+      "bindings": {
+        "PRINCIPAL": "RATE",
+        "RATE": "1",
+        "TIME": "*(RATE, VAR)",
+        "VALUE": "D(EXP(*(RATE, VAR)))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.kinetics.first_order_integrated_rate_law",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AMOUNT",
+        "CONSTANT": "1",
+        "RADIUS": "*(INITIAL, EXP(neg(*(RATECONST, TIME))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "economics.finance.present_value_continuous",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "PRESENT",
+        "CONSTANT": "1",
+        "RADIUS": "*(FUTURE, EXP(neg(*(RATE, HORIZON))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "STD",
+        "CONSTANT": "1",
+        "RADIUS": "*(+(RAW, neg(CENTER)), inv(SCALE))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.kinetics.first_order_integrated_rate_law",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AMOUNT",
+        "INERTIA": "1",
+        "RESPONSE": "*(INITIAL, EXP(neg(*(RATECONST, TIME))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "economics.finance.present_value_continuous",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "PRESENT",
+        "INERTIA": "1",
+        "RESPONSE": "*(FUTURE, EXP(neg(*(RATE, HORIZON))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "STD",
+        "INERTIA": "1",
+        "RESPONSE": "*(+(RAW, neg(CENTER)), inv(SCALE))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "D(^(VAR, EXPONENT))",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "^(VAR, +(EXPONENT, neg(1)))",
+        "PATHLENGTH": "EXPONENT"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "D(COMPOSE(OUTER, INNER))",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "D(INNER)",
+        "PATHLENGTH": "COMPOSE(D(OUTER), INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "D(EXP(*(RATE, VAR)))",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(*(RATE, VAR))",
+        "PATHLENGTH": "RATE"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATECONST",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE)))))",
+        "PATHLENGTH": "PREFACTOR"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VAR",
+        "BASE1": "neg(COEFF1)",
+        "BASE2": "pm(SQRT(DISC))",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(*(2, COEFF0))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "D(^(VAR, EXPONENT))",
+        "BASE": "EXPONENT",
+        "CONSTANT": "1",
+        "HEIGHT": "^(VAR, +(EXPONENT, neg(1)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "D(COMPOSE(OUTER, INNER))",
+        "BASE": "COMPOSE(D(OUTER), INNER)",
+        "CONSTANT": "1",
+        "HEIGHT": "D(INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "D(EXP(*(RATE, VAR)))",
+        "BASE": "RATE",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(*(RATE, VAR))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATECONST",
+        "BASE": "PREFACTOR",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE)))))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(FUNC2, D(FUNC1))",
+        "DISPLACEMENT": "*(FUNC1, D(FUNC2))",
+        "LINEARIZED": "D(*(FUNC1, FUNC2))",
+        "SLOPE": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "VAR",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(*(2, COEFF0))",
+        "PATHLENGTH": "+(neg(COEFF1), pm(SQRT(DISC)))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "D(*(FUNC1, FUNC2))",
+        "PREMIUM": "*(FUNC1, D(FUNC2))",
+        "RISKFREE": "*(FUNC2, D(FUNC1))",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(FUNC2, D(FUNC1))",
+        "CONSUMPTION": "D(*(FUNC1, FUNC2))",
+        "DISPOSABLE_INCOME": "*(FUNC1, D(FUNC2))",
+        "PROPENSITY": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VAR",
+        "BASE": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(*(2, COEFF0))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "D(^(VAR, EXPONENT))",
+        "CONSTANT": "1",
+        "RADIUS": "*(EXPONENT, ^(VAR, +(EXPONENT, neg(1))))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "D(COMPOSE(OUTER, INNER))",
+        "CONSTANT": "1",
+        "RADIUS": "*(COMPOSE(D(OUTER), INNER), D(INNER))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "D(EXP(*(RATE, VAR)))",
+        "CONSTANT": "1",
+        "RADIUS": "*(RATE, EXP(*(RATE, VAR)))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATECONST",
+        "CONSTANT": "1",
+        "RADIUS": "*(PREFACTOR, EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE))))))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "D(^(VAR, EXPONENT))",
+        "INERTIA": "1",
+        "RESPONSE": "*(EXPONENT, ^(VAR, +(EXPONENT, neg(1))))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "D(COMPOSE(OUTER, INNER))",
+        "INERTIA": "1",
+        "RESPONSE": "*(COMPOSE(D(OUTER), INNER), D(INNER))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "D(EXP(*(RATE, VAR)))",
+        "INERTIA": "1",
+        "RESPONSE": "*(RATE, EXP(*(RATE, VAR)))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATECONST",
+        "INERTIA": "1",
+        "RESPONSE": "*(PREFACTOR, EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE))))))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(FUNC2, D(FUNC1))",
+        "PRED_i": "*(FUNC1, D(FUNC2))",
+        "RV_i": "D(*(FUNC1, FUNC2))",
+        "SLOPE": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(FUNC1, D(FUNC2))",
+        "OUT": "D(*(FUNC1, FUNC2))",
+        "SCALE": "1",
+        "SHIFT": "*(FUNC2, D(FUNC1))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "VAR",
+        "CONSTANT": "1",
+        "RADIUS": "*(+(neg(COEFF1), pm(SQRT(DISC))), inv(*(2, COEFF0)))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "VAR",
+        "INERTIA": "1",
+        "RESPONSE": "*(+(neg(COEFF1), pm(SQRT(DISC))), inv(*(2, COEFF0)))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(SCALAR1, D(FUNC1))",
+        "DISPLACEMENT": "*(SCALAR2, D(FUNC2))",
+        "LINEARIZED": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "SLOPE": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "PREMIUM": "*(SCALAR2, D(FUNC2))",
+        "RISKFREE": "*(SCALAR1, D(FUNC1))",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(SCALAR1, D(FUNC1))",
+        "CONSUMPTION": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "DISPOSABLE_INCOME": "*(SCALAR2, D(FUNC2))",
+        "PROPENSITY": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(SCALAR1, D(FUNC1))",
+        "PRED_i": "*(SCALAR2, D(FUNC2))",
+        "RV_i": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "SLOPE": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(SCALAR2, D(FUNC2))",
+        "OUT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "SCALE": "1",
+        "SHIFT": "*(SCALAR1, D(FUNC1))"
+      },
+      "looseness": 8
+    }
+  ]
+}

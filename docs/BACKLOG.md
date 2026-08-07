@@ -14,20 +14,19 @@ or commit history. Each item names the evidence that motivated it.
   `LIM(...)` (plain call) produce different skeleton heads that can never
   twin. Normalize: lower-case the big-op head AND fold `LIM(` calls into the
   same head, or lint templates for the ambiguity.
-- **Specialization matching (v2).** Current matcher only groups exact
-  skeletons. Slot-to-subtree subsumption (`OUT = SCALE*IN + SHIFT` subsumes
-  `Y = M*X + 0`-style instances) and identity-element reasoning (SHIFT=0)
-  would connect e.g. circumference to the affine family.
-  Further evidence from the economics corpus, all arity mismatches an
-  identity-element rule would close: the equation of exchange
-  `MONEY*VELOCITY = PRICE_LEVEL*OUTPUT` (2x2) misses the ideal gas law
-  `PRESSURE*VOLUME = AMOUNT*CONSTANT*TEMPERATURE` (2x3) only because the gas
-  law carries an explicit dimensional constant; Cobb-Douglas
-  `OUTPUT = PRODUCTIVITY*CAPITAL^A*LABOR^B` misses the chemistry power-law
-  rate law `RATE = RATECONST*CONCENTRATION^ORDER` only by one extra power
-  factor; and simple interest `VALUE = PRINCIPAL*(1 + RATE*TIME)` is the
-  first-order truncation of continuous compounding
-  `VALUE = PRINCIPAL*EXP(RATE*TIME)` with no relation between them recorded.
+- **Specialization matching (v2): SHIPPED** as `scripts/specialize.py`
+  (slot-to-subtree absorption + identity-element binding for parameter
+  slots, looseness-ranked). The recorded misses now fire: equation of
+  exchange >= ideal gas law (absorption over the dimensional constant),
+  Cobb-Douglas <= power-law rate (absorption), circumference <= affine
+  family (identity). Remaining out of scope: *series-truncation* relations
+  (simple interest as the first-order truncation of continuous
+  compounding) need rewrite-based reasoning, not matching.
+- **Specialization noise control.** 236 edges among 67 nodes; looseness
+  ranking surfaces tight ones, but variable slots can still bind numeric
+  literals (trapezoid >= rectangle-perimeter binds HEIGHT->2). Consider
+  category-compatibility constraints on bindings (V slots should not bind
+  nums; P slots should not bind V-rooted subtrees).
 
 ## Schema
 
