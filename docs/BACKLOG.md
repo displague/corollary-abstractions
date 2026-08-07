@@ -76,6 +76,64 @@ or commit history. Each item names the evidence that motivated it.
   De Morgan >= the degenerate one-operand case fire, and would give the
   Boolean corpora any specialization structure at all.
 
+- **Call heads are literal at every match level, so a new discipline's
+  vocabulary is structurally quarantined.** `data/morphology` (10 nodes) fires
+  **zero** twin groups at shape, typed *and* family level, and **zero**
+  specialization edges (247 edges among 106 nodes, none touching it) — yet four
+  of its skeletons are character-for-character an existing skeleton apart from
+  one head string:
+
+  | morphology | existing / predicted |
+  |---|---|
+  | `?0:V = CONCAT⟨?0:V, ?1:P⟩` (zero morpheme) | `?0:V = MEET⟨?0:V, ?1:P⟩` (logic + set identity laws) |
+  | `?0:V = CONCAT⟨CONCAT⟨?1:V, ?2:V⟩, ?3:V⟩` (iterated affixation) | `?0:V = MOD⟨MOD⟨?1:V, ?2:V⟩, ?3:V⟩` (intensifier nesting, `docs/DESIGN-linguistic-twins.md`, not yet authored) |
+  | `CATEGORY⟨?0:V⟩ = CATEGORY⟨CONCAT⟨?1:V, ?0:V⟩⟩` | `FEAT⟨?0:V⟩ = FEAT⟨CONCAT⟨?1:V, ?0:V⟩⟩` (both morphology; one theorem, Williams's Righthand Head Rule) |
+  | `?0:V = CONCAT⟨?1:V, ?2:V⟩` (affixation) | `?0:V = REALIZE⟨?1:V, ?2:V⟩`, `?0:V = CAPMAX⟨?1:V, ?2:V⟩` |
+
+  `seed_infotheory.py` escaped this by *adopting* the CARD/MEET/JOIN heads.
+  Morphology cannot: adopting `MEET` for concatenation would assert
+  commutativity and idempotence, which are false of words (`re-do` is not
+  `do-re`). So faithful authoring alone cannot produce a twin, and the corpus
+  most likely to need a new vocabulary is the one least able to match. Fix: a
+  declared head-alias table (`CONCAT ~ MEET ~ MOD` as "opaque binary
+  composition"), or a fourth match level below `shape` that erases call-head
+  identity the way `shape` erases slot identity — reported separately so it
+  cannot be mistaken for a typed twin.
+- **`archetype_id` is currently the only cross-head channel, and it is filed as
+  a lint.** `archetype_label_drift` now reports `identity_element_law` spanning
+  `logic.boolean_laws.identity_laws`,
+  `settheory.boolean_laws.identity_laws` and
+  `morphology.wordformation.zero_morpheme_identity` — the hand-assigned label
+  says one law, the skeletons say three, and the label is right.
+  `morphology.derivation.category_from_affix` and
+  `morphology.agreement.feature_percolation` share
+  `right_hand_head_projection` for the same reason. Both entries are
+  deliberate. Fix: promote "same archetype_id, skeletons differing only by call
+  heads" from a drift warning to a *proposed head alias* output, which turns
+  the lint into the discovery channel the previous item asks for.
+- **Per-head identity elements: third motivated head, and a new wrinkle.**
+  `IDENTITY = {"+": 0, "*": 1}` in `specialize.py` is still arithmetic-only
+  (recorded above for logic/set_theory). `morphology.wordformation.zero_morpheme_identity`
+  states `CONCAT(STEM, EMPTY) = STEM`, so CONCAT is a third head declaring its
+  own identity and getting nothing for it. The wrinkle morphology adds: the
+  slot that should bind the identity is **variable-like**, not parameter-like —
+  a zero morph *is* a morph, filling an affix slot with the empty string
+  (`sheep` = sheep + ∅). The current rule ("variable-like slots may not
+  vanish: a law does not lose its variables") is exactly what blocks the one
+  edge worth having here, `iterated_affixation >= affixation` via
+  `SUFFIX2 -> EMPTY`. Fix needs both parts: a per-head identity table sourced
+  from identity-law nodes, and permission for a variable slot to bind an
+  identity element *for a head whose identity the corpus has declared*.
+- **Associativity and commutativity are one package in the canonicalizer.**
+  `COMMUTATIVE = {+, *}` gets flattening (associativity) and sorting
+  (commutativity) together, and call heads get neither.
+  `morphology.wordformation.concat_associativity` is the corpus's first
+  associative-but-not-commutative operation, so `CONCAT(CONCAT(A,B),C)` and
+  `CONCAT(A,CONCAT(B,C))` are different skeletons even though the node asserts
+  they are the same string. Fix: let a template declare a call head associative
+  (flatten only) independently of commutative (flatten and sort). CONCAT must
+  never be added to `COMMUTATIVE`.
+
 ## Schema
 
 - **`symbolToken.syntactic_category` lacks `functional`/`operator`** (unlike
