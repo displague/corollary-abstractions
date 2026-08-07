@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 46,
+  "nodes_analyzed": 56,
   "typed_twin_groups": [
     {
       "skeleton": "?0:V = *(?1:P, ?2:V)",
@@ -25,6 +25,28 @@
           "statement_id": "physics.circuits.ohms_law",
           "discipline": "physics",
           "template": "POTENTIAL = FLOW * RESISTANCE"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "disciplines": [
+        "chemistry",
+        "geometry"
+      ],
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "members": [
+        {
+          "statement_id": "chemistry.spectroscopy.beer_lambert_law",
+          "discipline": "chemistry",
+          "template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION"
+        },
+        {
+          "statement_id": "geometry.area_formulas.triangle_area_formula",
+          "discipline": "geometry",
+          "template": "AREA = CONSTANT * BASE * HEIGHT"
         }
       ]
     },
@@ -79,6 +101,7 @@
       "skeleton": "?0:V = *(?1:V, inv(?2:V))",
       "disciplines": [
         "calculus",
+        "chemistry",
         "physics"
       ],
       "archetypes": [
@@ -89,6 +112,11 @@
           "statement_id": "calculus.differentiation.average_rate_of_change",
           "discipline": "calculus",
           "template": "RATE = QUANTITY / INTERVAL"
+        },
+        {
+          "statement_id": "chemistry.solutions.molarity_definition",
+          "discipline": "chemistry",
+          "template": "CONCENTRATION = AMOUNT / VOLUME"
         },
         {
           "statement_id": "physics.kinematics.average_speed",
@@ -121,6 +149,27 @@
           "statement_id": "probstat.transform.affine_location_scale",
           "discipline": "statistics",
           "template": "OUT = SCALE*IN + SHIFT"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, neg(*(?2:V, ?3:V)))",
+      "disciplines": [
+        "chemistry"
+      ],
+      "archetypes": [
+        "signed_affine_combination"
+      ],
+      "members": [
+        {
+          "statement_id": "chemistry.thermodynamics.gibbs_free_energy",
+          "discipline": "chemistry",
+          "template": "FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY"
+        },
+        {
+          "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
+          "discipline": "chemistry",
+          "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY"
         }
       ]
     }
@@ -162,6 +211,7 @@
     {
       "skeleton": "?0 = *(?1, ?2, ?3)",
       "disciplines": [
+        "chemistry",
         "geometry"
       ],
       "archetypes": [
@@ -169,6 +219,11 @@
         "trilinear_product"
       ],
       "members": [
+        {
+          "statement_id": "chemistry.spectroscopy.beer_lambert_law",
+          "discipline": "chemistry",
+          "template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION"
+        },
         {
           "statement_id": "geometry.volume_formulas.rectangular_prism_volume",
           "discipline": "geometry",
@@ -239,6 +294,7 @@
       "skeleton": "?0 = *(?1, inv(?2))",
       "disciplines": [
         "calculus",
+        "chemistry",
         "physics"
       ],
       "archetypes": [
@@ -249,6 +305,16 @@
           "statement_id": "calculus.differentiation.average_rate_of_change",
           "discipline": "calculus",
           "template": "RATE = QUANTITY / INTERVAL"
+        },
+        {
+          "statement_id": "chemistry.kinetics.half_life_first_order",
+          "discipline": "chemistry",
+          "template": "HALFLIFE = CONSTANT / RATECONST"
+        },
+        {
+          "statement_id": "chemistry.solutions.molarity_definition",
+          "discipline": "chemistry",
+          "template": "CONCENTRATION = AMOUNT / VOLUME"
         },
         {
           "statement_id": "physics.kinematics.average_speed",
@@ -281,6 +347,27 @@
           "statement_id": "probstat.transform.affine_location_scale",
           "discipline": "statistics",
           "template": "OUT = SCALE*IN + SHIFT"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
+      "disciplines": [
+        "chemistry"
+      ],
+      "archetypes": [
+        "signed_affine_combination"
+      ],
+      "members": [
+        {
+          "statement_id": "chemistry.thermodynamics.gibbs_free_energy",
+          "discipline": "chemistry",
+          "template": "FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY"
+        },
+        {
+          "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
+          "discipline": "chemistry",
+          "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY"
         }
       ]
     }
@@ -321,6 +408,7 @@
         "trilinear_product"
       ],
       "members": [
+        "chemistry.spectroscopy.beer_lambert_law",
         "geometry.volume_formulas.rectangular_prism_volume",
         "geometry.area_formulas.triangle_area_formula"
       ]

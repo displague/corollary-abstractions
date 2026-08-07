@@ -1,0 +1,16 @@
+[project]
+name = "corollary-experiments"
+version = "0.1.0"
+description = "Concept-token vs subword tokenization experiments for corollary-abstractions"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.9",
+  "numpy>=1.26",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = []
