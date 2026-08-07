@@ -90,7 +90,18 @@ inference-rule nodes (found by probe); groundedness pathologies
 pattern); no schema scope construct for frames; single-seed scaling
 cells remain trend-only claims.
 
-## Assets
+## Assets (13 checkpoints — every claim-bearing trained model)
 
-`span-pointer-solvex2-treepos.pt` — the demo checkpoint behind the
-1.000/0.69 extractive-answering result and `demo_answer.py`.
+- `solvex2_demo.pt` — the span pointer behind the 1.000/0.69 extractive-
+  answering result and `demo_answer.py` (embeds vocab + config; the repo's
+  committed seeds supply the data).
+- `twins_{char,struct,canon}.pt`, `equiv_{char,struct,canon}.pt` — the
+  milestone-3 A/B/C suite; `twins_canon.pt` and `equiv_struct.pt` are also
+  the quantization ladder's inputs (fp16-free / int8 results).
+- `xlang_{char,struct,canon}.pt`, `qa_{char,struct,canon}.pt` — the
+  cross-language twin and QA-as-unification classifiers.
+
+Seed-reproducible only (no checkpoint was saved — trainers predated
+`--save-model`): the analogy 1.000 composition result and the syn/hybrid
+runs. Regenerate via the committed generators and trainers; saving
+checkpoints by default is on ROADMAP-v0.4's tooling list.

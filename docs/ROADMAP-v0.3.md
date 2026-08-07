@@ -1,5 +1,11 @@
 # v0.3 roadmap — grounded composition
 
+> **CLOSED at v0.3.0** — historical plan-of-record. Triage:
+> item 2 shipped ([RELEASE-v0.3.0.md](RELEASE-v0.3.0.md)); item 3 shipped
+> as a measured negative; items 1, 4, 5 and item 2's model-in-the-loop
+> half carried to [ROADMAP-v0.4.md](ROADMAP-v0.4.md) (#1–#5). Corpus
+> growth and release mechanics shipped. Nothing dropped.
+
 Theme (user's framing): support the composition of sentences — including
 sentences with mathematical grounding and accuracy — as the expression of
 abstract reasoning, verifiable and emergent from the measured strengths:

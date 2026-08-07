@@ -46,4 +46,6 @@ multi-step derivation are the same milestone in two costumes.
     groundedness v2 (pattern-membership through instantiated heads;
     recursive-definition handling); statistics seed script + the
     sum-to-one node that unblocks two twin groups; discrete↔continuous
-    (sum/INTEGRAL) bridge; schema scope construct and past modality.
+    (sum/INTEGRAL) bridge; schema scope construct and past modality;
+    trainers save checkpoints by default (two v0.3 claims are seed-
+    reproducible only because --save-model postdated them).

@@ -49,7 +49,10 @@ rotates the documents:
    now live in the release doc); keep or migrate the rest; confirm new
    friction from the cycle is filed.
 5. The old roadmap file stays in place as the historical plan-of-record —
-   do not delete it; the release doc references it.
+   do not delete it; the release doc references it. **Mark it closed**:
+   prepend a banner stating the version it closed at and where each item
+   went (shipped -> release doc; carried -> next roadmap, by number), so
+   the file itself answers "what happened to this plan?".
 
 ## 2b. The other living docs (each one, every release)
 
