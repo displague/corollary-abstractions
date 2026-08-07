@@ -25,17 +25,17 @@ from train_span import SpanDataset, SpanPointer, collate
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from langgen import LEX_A, LEX_B, render, render_np  # noqa: E402
-from tokenizers import tree_from_json  # noqa: E402
 
 GLOSS_LEX = {**LEX_A, "WH": "who"}
+INV_B = {w: c for c, w in LEX_B.items()}  # injective: pseudo-words are unique
 from match_signatures import canonicalize  # noqa: E402
 
 INV_SPAN = {w: c for c, w in LEX_A.items() if c[0] in "nai" or c == "WH"}
 
 
-def span_to_tree(tokens: list[str]) -> tuple:
-    """Parse a serialized NP span back to a tree with concept-id leaves —
-    exact code, the symbolic half of generation."""
+def tokens_to_tree(tokens: list[str], leaf_map: dict[str, str]) -> tuple:
+    """Parse a serialized token stream back to a tree, mapping leaf surface
+    words to concept ids — exact code, the symbolic half of generation."""
     pos = 0
 
     def parse() -> tuple:
@@ -50,11 +50,15 @@ def span_to_tree(tokens: list[str]) -> tuple:
             pos += 1
             return ("op", "+", tuple(args)) if head == "+" else \
                 ("call", head, tuple(args))
-        return ("slot", INV_SPAN[t])
+        return ("slot", leaf_map[t])
 
     tree = parse()
     assert pos == len(tokens)
     return tree
+
+
+def span_to_tree(tokens: list[str]) -> tuple:
+    return tokens_to_tree(tokens, INV_SPAN)
 
 
 def main() -> None:
@@ -107,7 +111,8 @@ def main() -> None:
 
     for i, r in enumerate(picks):
         print("=" * 70)
-        gloss = render(tree_from_json(r["tree1"]), "A", rng, lex=GLOSS_LEX)
+        q_toks = r["tokens_struct"][: r["tokens_struct"].index("<sep>")]
+        gloss = render(tokens_to_tree(q_toks, INV_B), "A", rng, lex=GLOSS_LEX)
         print(f"QUESTION (language B): {r['expr1']}")
         print(f"          (in English: {gloss})")
         print(f"KNOWLEDGE (language A):")
