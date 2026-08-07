@@ -1,0 +1,1302 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "graph_theory.counting_and_structure.v1",
+  "discipline": "graph_theory",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "graphtheory.degree.handshake_lemma",
+      "title": "Handshake Lemma (Degree-Sum Formula)",
+      "statement_class": "lemma",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "degree_theory",
+        "topic": "counting",
+        "canonical_objects": [
+          "vertex",
+          "edge",
+          "degree"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "sum over v in V of deg(v) = 2*|E|",
+        "canonical_latex": "\\sum_{v \\in V} \\deg(v) = 2\\lvert E\\rvert",
+        "equivalent_forms": [
+          {
+            "form_id": "parity_corollary",
+            "notation_system": "ascii",
+            "expression": "|{v : deg(v) is odd}| is even",
+            "scope_note": "The corollary everyone remembers: a graph has an even number of odd-degree vertices, immediate from the left side being even"
+          },
+          {
+            "form_id": "incidence_double_count",
+            "notation_system": "ascii",
+            "expression": "|{(v, e) : v incident to e}| = 2*|E|",
+            "scope_note": "The proof made explicit: count incident vertex-edge pairs two ways. The sum of degrees IS that count"
+          },
+          {
+            "form_id": "directed",
+            "notation_system": "ascii",
+            "expression": "sum_v indeg(v) = sum_v outdeg(v) = |E|",
+            "scope_note": "Digraph version, where the factor two disappears because each arc is counted once at each end for a different statistic"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "degree_sum_double_count",
+        "anonymized_template": "sum_i DEGREE_i = 2*EDGES",
+        "slot_schema": [
+          {
+            "slot_id": "DEGREE_i",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_degree"
+          },
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          }
+        ],
+        "invariants": [
+          "The literal 2 is not a scale factor, it is an ARITY: every edge has exactly two ends. Replacing it with a slot would make the statement about hypergraphs, where it becomes sum of degrees = sum of edge sizes and the constant disappears entirely.",
+          "This is the archetypal double count: one set (the incident vertex-edge pairs) enumerated two ways, once per vertex and once per edge. The template records the equality and cannot record that both sides count the same set, which is where the proof lives.",
+          "The sum is over vertices and the right-hand side counts edges, so the two sides range over different index sets. Nothing in the grammar marks that, and it is the only reason the statement is not trivial.",
+          "Euler stated it in 1736 in the Koenigsberg paper, as the obstruction to an Eulerian walk. It is the oldest theorem in graph theory and the first result in the subject to be proved by counting a set two ways."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "deg_v",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_degree",
+            "mathematical_order": 0,
+            "description": "Number of edge-ends incident with a vertex; loops count twice."
+          },
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges in the graph."
+          },
+          {
+            "symbol": "v",
+            "syntactic_category": "index",
+            "semantic_role": "vertex_index",
+            "mathematical_order": 0,
+            "description": "Index over the vertex set."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [
+          {
+            "notation": "v in V",
+            "domain": "the vertex set of a finite graph",
+            "description": "Index running over every vertex of the graph, each counted once."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Adding up how many edges touch each vertex counts every edge exactly twice, once at each end.",
+        "statistical_significance": "A singleton at every level: `sum⟨?0:V⟩ = *(2, ?1:V)`. The nearest structures in the graph are the weighted-sum family `?0:V = sum⟨*(?1:P, ?2:V)⟩` (four members after this seeding pass) and `algtop.invariants.euler_characteristic_complex`, and neither is reachable: the summand here is a BARE slot with no weight, and the aggregate sits on the left of the relation with a literal-scaled count on the right. The interesting reading is that an unweighted sum is the weighted sum with every weight equal to one -- the same collapse-a-sum-under-a-constant rewrite docs/BACKLOG.md records as the missing relation between uniform and Shannon entropy, and as the missing series truncation. Three independent occurrences of one rewrite class, in three unrelated corpora, is the strongest available case for it being the next thing built.",
+        "regularity_conditions": [
+          "A finite graph",
+          "Loops contribute two to their vertex's degree; this convention is what makes the statement true rather than approximately true",
+          "Multi-edges permitted and counted with multiplicity"
+        ],
+        "failure_modes": [
+          "Applied to a digraph without adjustment the factor two is wrong; in-degree and out-degree each sum to |E|, not to 2|E|.",
+          "For infinite graphs both sides can be infinite and the equality carries no information, so the finiteness hypothesis is not decoration.",
+          "The parity corollary is often quoted as if it were the lemma; it is strictly weaker, and the double-counting content is lost in the retelling."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "graphtheory.degree.average_degree_from_edge_count",
+          "graphtheory.enumeration.complete_graph_edge_count"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.polyhedra.euler_polyhedron_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1736",
+          "bibliographic_entry": "Euler, L. (1736). Solutio problematis ad geometriam situs pertinentis. Commentarii Academiae Scientiarum Imperialis Petropolitanae, 8, 128-140."
+        },
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        },
+        {
+          "citation_key": "bondy2008",
+          "bibliographic_entry": "Bondy, J. A., Murty, U. S. R. (2008). Graph Theory. London: Springer. Graduate Texts in Mathematics 244."
+        }
+      ],
+      "keywords": [
+        "handshake lemma",
+        "degree sum",
+        "double counting",
+        "Euler 1736",
+        "Koenigsberg",
+        "parity"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.degree.average_degree_from_edge_count",
+      "title": "Average Degree of a Finite Graph",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "degree_theory",
+        "topic": "density",
+        "canonical_objects": [
+          "vertex set",
+          "edge set",
+          "degree distribution"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "dbar = 2*|E| / |V|",
+        "canonical_latex": "\\bar{d} = \\frac{2\\lvert E\\rvert}{\\lvert V\\rvert}",
+        "equivalent_forms": [
+          {
+            "form_id": "from_handshake",
+            "notation_system": "ascii",
+            "expression": "dbar = (sum_v deg(v)) / |V|",
+            "scope_note": "The definition before the handshake lemma is applied; substituting the lemma is the whole derivation"
+          },
+          {
+            "form_id": "edge_density",
+            "notation_system": "ascii",
+            "expression": "|E| = dbar*|V| / 2",
+            "scope_note": "Solved for the edge count: a graph on n vertices with average degree d has dn/2 edges, the form used in random-graph arguments"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_ratio_rate",
+        "anonymized_template": "AVGDEGREE = 2*EDGES/VERTICES",
+        "slot_schema": [
+          {
+            "slot_id": "AVGDEGREE",
+            "syntactic_category": "variable",
+            "semantic_role": "average_degree"
+          },
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count"
+          }
+        ],
+        "invariants": [
+          "Structurally a density -- a count divided by an extent -- with a literal 2 in front that comes from the handshake lemma and from nowhere else. The 2 is the arity of an edge, inherited.",
+          "Both counts are variable-like: this is a measurement of a given graph, not a model with tunable constants.",
+          "The average is over vertices, so it is a per-vertex quantity, while the numerator counts edges. Densities in the graph's rate family all share that mismatch of units between numerator and denominator; it is what makes them informative.",
+          "Sparse and dense are defined by how this quantity behaves as the vertex count grows -- bounded average degree is sparse, average degree growing like the vertex count is dense -- and the template cannot express an asymptotic regime."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "dbar",
+            "syntactic_category": "variable",
+            "semantic_role": "average_degree",
+            "mathematical_order": 0,
+            "description": "Mean degree over all vertices."
+          },
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The average number of neighbours a vertex has is twice the edge count divided by the vertex count.",
+        "statistical_significance": "The corpus's cleanest near miss, and the second in this seeding pass. Its skeleton is `?0:V = *(2, ?1:V, inv(?2:V))`; the rate/density family is `?0:V = *(?1:V, inv(?2:V))` with seven members across six disciplines, including this pass's own condition number. The ONLY difference is one numeric literal in a multiplicative position, and the semantics agree perfectly -- average degree is edge density per vertex, with a factor two for edge arity, exactly as a molarity is amount per volume. docs/BACKLOG.md records the same blocker from the other direction for `diffgeo.curves.circle_curvature`, where a literal 1 in the numerator keeps a curvature out of the same family, and `numanalysis.rootfinding.bisection_interval_halving` hits it a third time with a literal 2 in the denominator. Three independent instances, all of them 'a family member with an unparameterized constant attached', argue that the wanted match level (a numeric literal may bind a parameter-like slot) should be reported as its own strictly-looser level.",
+        "regularity_conditions": [
+          "A finite graph with at least one vertex",
+          "Simple or multigraph alike, provided the degree convention for loops is the handshake lemma's",
+          "The quantity is a mean, so it says nothing about the degree distribution, which in real networks is usually heavy-tailed"
+        ],
+        "failure_modes": [
+          "In a scale-free network the mean degree is finite while the variance diverges, so the average is a poor summary of exactly the graphs it is most often quoted for.",
+          "Reading it as 'a typical vertex has dbar neighbours' fails whenever the degree distribution is skewed; the friendship paradox is precisely the gap between this mean and the mean degree of a neighbour."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "graphtheory.degree.handshake_lemma"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "physics.materials.mass_density",
+          "calculus.differentiation.average_rate_of_change"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "bondy2008",
+          "bibliographic_entry": "Bondy, J. A., Murty, U. S. R. (2008). Graph Theory. London: Springer. Graduate Texts in Mathematics 244."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        }
+      ],
+      "keywords": [
+        "average degree",
+        "edge density",
+        "sparse graph",
+        "handshake lemma",
+        "numeric literal blocker"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.enumeration.complete_graph_edge_count",
+      "title": "Edge Count of the Complete Graph",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "enumerative_graph_theory",
+        "topic": "counting",
+        "canonical_objects": [
+          "complete graph",
+          "vertex pair",
+          "edge set"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "|E(K_n)| = n*(n - 1)/2",
+        "canonical_latex": "\\lvert E(K_n)\\rvert = \\binom{n}{2} = \\frac{n(n-1)}{2}",
+        "equivalent_forms": [
+          {
+            "form_id": "binomial",
+            "notation_system": "ascii",
+            "expression": "|E(K_n)| = C(n, 2)",
+            "scope_note": "As a binomial coefficient: the number of unordered pairs. The grammar has no binomial form, which is why the template is the expanded product"
+          },
+          {
+            "form_id": "from_handshake",
+            "notation_system": "ascii",
+            "expression": "2*|E| = n*(n-1)",
+            "scope_note": "The handshake lemma with every degree equal to n-1; this is the derivation, and it is also the form without the division"
+          },
+          {
+            "form_id": "triangular",
+            "notation_system": "ascii",
+            "expression": "|E(K_n)| = sum_(k=1)^(n-1) k",
+            "scope_note": "The (n-1)-st triangular number: add a vertex, and it joins to every vertex already present"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unordered_pair_count",
+        "anonymized_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+        "slot_schema": [
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count"
+          }
+        ],
+        "invariants": [
+          "The vertex-count slot occurs TWICE. That repetition is the whole combinatorial content -- both members of the pair are drawn from the same set -- and it is what makes the statement unreachable from every product-shaped node in the graph, all of which have two independent extents.",
+          "Two numeric literals, and they mean different things: the 1 removes the self-pair, the 2 divides out the ordering. A generalization to k-subsets replaces both, so neither is a scale factor.",
+          "Contrast graphtheory.enumeration.complete_bipartite_edge_count, `EDGES = PARTONE*PARTTWO`, which counts pairs drawn from two different sets and consequently DOES twin rectangle area. The two nodes are the same act of counting -- choose one endpoint, then the other -- and they differ exactly in whether the two choices are independent. The graph can see the independent case and cannot see the dependent one.",
+          "The statement is an equality about a specific family of graphs, not a bound; it is the maximum edge count for a simple graph on n vertices, and that maximality is a separate claim."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges of the complete graph."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A complete graph has one edge for every unordered pair of distinct vertices, and there are n(n-1)/2 such pairs.",
+        "statistical_significance": "Prediction 4 asked what, if anything, this meets among pair-coupling and combination structures. The answer is NOTHING, at shape, typed or family level, and both reasons are worth having on the record. (1) SLOT RECURRENCE: the skeleton is `?0:V = *(?1:V, +(?1:V, neg(1)), inv(2))`, where `?1` appears twice. The graph's product-shaped families -- rectangle area, Gaussian curvature as a product of principal curvatures, Beer-Lambert, Newton's second law -- all have distinct slots in each factor, because they multiply independent quantities. Choosing two things from one set is structurally a different act from multiplying two extents, and the matcher is right to say so. (2) LITERALS: even if slot recurrence were handled, the two numeric literals sit where a matchable statement would have slots. The honest summary is that the graph has no combinatorial-counting family yet; this node and `graphtheory.enumeration.cayley_formula` are its first two members and they do not match each other either, since one is a product and the other a power. Both, however, have the recurrent-slot property, and a structural query facility of the kind docs/BACKLOG.md wants would collect them together with the fixed-point and idempotence nodes on the strength of it.",
+        "regularity_conditions": [
+          "A simple graph: no loops and no multi-edges",
+          "n at least one; the formula gives zero at n = 1, correctly",
+          "Undirected; the directed complete graph has n(n-1) arcs, the same count without the division"
+        ],
+        "failure_modes": [
+          "Quoted as an upper bound for arbitrary graphs it is correct only for simple graphs; multigraphs have no such bound.",
+          "The quadratic growth is the whole reason dense-graph algorithms are quoted in terms of |E| rather than |V|, and reading the formula as 'about n^2' loses the exactness that makes it a counting statement rather than an estimate."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "graphtheory.degree.handshake_lemma"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "graphtheory.enumeration.complete_bipartite_edge_count"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        },
+        {
+          "citation_key": "bondy2008",
+          "bibliographic_entry": "Bondy, J. A., Murty, U. S. R. (2008). Graph Theory. London: Springer. Graduate Texts in Mathematics 244."
+        }
+      ],
+      "keywords": [
+        "complete graph",
+        "K_n",
+        "edge count",
+        "binomial coefficient",
+        "unordered pairs",
+        "slot recurrence"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "title": "Edge Count of the Complete Bipartite Graph",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "enumerative_graph_theory",
+        "topic": "counting",
+        "canonical_objects": [
+          "bipartition",
+          "cross pair",
+          "biadjacency matrix"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "|E(K_(m,n))| = m*n",
+        "canonical_latex": "\\lvert E(K_{m,n})\\rvert = mn",
+        "equivalent_forms": [
+          {
+            "form_id": "as_matrix",
+            "notation_system": "matrix_notation",
+            "expression": "|E| = ONES(m, n) counted entrywise",
+            "scope_note": "The biadjacency matrix is the all-ones m-by-n matrix, so the edge count is its number of entries"
+          },
+          {
+            "form_id": "from_handshake",
+            "notation_system": "ascii",
+            "expression": "2*|E| = m*n + n*m",
+            "scope_note": "Handshake applied to the bipartition: every vertex on one side has degree equal to the other side's size"
+          },
+          {
+            "form_id": "turan_extremal",
+            "notation_system": "ascii",
+            "expression": "|E| <= FLOOR(N^2/4) with equality for m = n = N/2",
+            "scope_note": "The extremal reading: among complete bipartite graphs on N vertices the balanced one is largest, which is the base case of Turan's theorem"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "bilinear_product",
+        "anonymized_template": "EDGES = PARTONE*PARTTWO",
+        "slot_schema": [
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          },
+          {
+            "slot_id": "PARTONE",
+            "syntactic_category": "variable",
+            "semantic_role": "first_part_size"
+          },
+          {
+            "slot_id": "PARTTWO",
+            "syntactic_category": "variable",
+            "semantic_role": "second_part_size"
+          }
+        ],
+        "invariants": [
+          "Two independent extents multiplied. Unlike the complete graph, the two endpoint choices come from different sets, so the slots are distinct and the statement joins the graph's product family immediately.",
+          "Both slots are variable-like and enter symmetrically, which the commutative `*` of the grammar represents faithfully here: K_(m,n) and K_(n,m) are the same graph.",
+          "The pair (this node, complete_graph_edge_count) is a controlled experiment on slot recurrence held inside one corpus: same subject, same act of counting, one with independent choices and one with dependent ones, one twinning three disciplines and one twinning nothing.",
+          "Bipartiteness is a hypothesis about the graph, not a term in the formula; the template says only that a count factors as a product."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "first_part_size",
+            "mathematical_order": 0,
+            "description": "Number of vertices in the first part."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "second_part_size",
+            "mathematical_order": 0,
+            "description": "Number of vertices in the second part."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Joining every vertex of one part to every vertex of the other produces exactly one edge per pair, so the edge count is the product of the part sizes.",
+        "statistical_significance": "FIRED, and across a gap nobody would have looked for. `?0:V = *(?1:V, ?2:V)` is shared with `geometry.area_formulas.rectangle_area_formula` and `diffgeo.surfaces.gaussian_curvature_principal_product`: a combinatorial count, a mensuration formula and a curvature invariant, in three disciplines. The shared content is real -- each is a quantity determined by two independent extents, and in each case the product is exactly the count of a grid of pairs. The biadjacency matrix of K_(m,n) IS an m-by-n rectangle of ones, and its edge count IS that rectangle's area. Set beside `graphtheory.enumeration.complete_graph_edge_count`, which twins nothing, this is the sharpest illustration available of what slot recurrence costs: the two nodes are one page apart in every textbook and they land in different worlds.",
+        "regularity_conditions": [
+          "A complete bipartite graph, so every cross pair is present exactly once",
+          "Simple and undirected",
+          "The two parts disjoint; overlapping parts are not a bipartition"
+        ],
+        "failure_modes": [
+          "The formula counts edges of the COMPLETE bipartite graph; an arbitrary bipartite graph only satisfies it as an upper bound.",
+          "Reading the product as 'area' is a genuine structural analogy and not a metric one: there is no length in a graph, and the twin the matcher reports is a statement about the arithmetic, which is all it claims to be."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "graphtheory.enumeration.complete_graph_edge_count",
+          "geometry.area_formulas.rectangle_area_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "konig1936",
+          "bibliographic_entry": "Koenig, D. (1936). Theorie der endlichen und unendlichen Graphen. Leipzig: Akademische Verlagsgesellschaft."
+        },
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        }
+      ],
+      "keywords": [
+        "complete bipartite graph",
+        "K_{m,n}",
+        "edge count",
+        "biadjacency matrix",
+        "product",
+        "Turan"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.trees.tree_edge_count",
+      "title": "A Tree on n Vertices Has n - 1 Edges",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "trees",
+        "topic": "counting",
+        "canonical_objects": [
+          "tree",
+          "vertex",
+          "edge"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "|E| = |V| - 1",
+        "canonical_latex": "\\lvert E\\rvert = \\lvert V\\rvert - 1",
+        "equivalent_forms": [
+          {
+            "form_id": "euler_planar",
+            "notation_system": "ascii",
+            "expression": "|V| - |E| + 1 = 2",
+            "scope_note": "Euler's polyhedron formula for a plane tree, which has exactly one face. This is geotop.polyhedra.euler_polyhedron_formula with FACES bound to 1 -- the same theorem, and the two templates cannot see it"
+          },
+          {
+            "form_id": "forest",
+            "notation_system": "ascii",
+            "expression": "|E| = |V| - c",
+            "scope_note": "A forest with c components; the tree is the case c = 1, and the general statement replaces the literal with a slot"
+          },
+          {
+            "form_id": "characterization",
+            "notation_system": "ascii",
+            "expression": "connected AND |E| = |V| - 1 implies acyclic",
+            "scope_note": "Any two of {connected, acyclic, |E| = |V| - 1} imply the third; the grammar has no conjunction, so this stays in prose"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "count_minus_unit",
+        "anonymized_template": "EDGES = VERTICES - 1",
+        "slot_schema": [
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count"
+          }
+        ],
+        "invariants": [
+          "The literal 1 is the number of components. Writing it as a slot would state the forest version, which is strictly more general and is a different theorem; keeping it literal is the choice to state the tree case.",
+          "The statement is an equality between two counts of different kinds of object, which is the same double-counting genre as the handshake lemma -- here realized by the bijection sending each non-root vertex to the edge above it.",
+          "It is Euler's polyhedron formula for a plane tree: one face, so V - E + 1 = 2. The graph carries that formula (geotop.polyhedra.euler_polyhedron_formula) and the connection is recorded here by hand, because a literal bound into a slot is exactly the specialization `specialize.py` suppresses by design.",
+          "Minimality and maximality are corollaries, not the statement: a tree is the sparsest connected graph and the densest acyclic one, and neither claim is in the template."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges of the tree."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every tree has exactly one fewer edge than it has vertices.",
+        "statistical_significance": "A singleton: `?0:V = +(?1:V, neg(1))` matches nothing. The near relation worth naming is not a twin but a specialization the tooling cannot report. `geotop.polyhedra.euler_polyhedron_formula` (`VERTICES - EDGES + FACES = 2`) covers this node by binding FACES to the literal 1 -- a plane tree has one face -- and that binding is a plain slot-to-literal substitution with no absorption and no identity element, which is precisely the class `specialize.py` filters out. docs/BACKLOG.md already records two instances of that filter dropping a corpus's headline specialization (Euler characteristic covering the polyhedron formula; DE-9IM disjointness covering the complement law) and one more from machine learning. This is the fourth, and it is the same pair of nodes as the first: `euler_polyhedron_formula` is now the target of two suppressed specializations from two different corpora. The edge is asserted by hand as a one-sided `composed_with`.",
+        "regularity_conditions": [
+          "A tree: connected and acyclic",
+          "Finite",
+          "Undirected; the rooted/directed version counts the same edges"
+        ],
+        "failure_modes": [
+          "The equality alone does not characterize a tree: a disjoint union of a cycle and an isolated vertex satisfies it. Connectivity is not optional.",
+          "Applied to a forest without adjusting the constant it overestimates the edge count by one per extra component."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.polyhedra.euler_polyhedron_formula",
+          "graphtheory.enumeration.cayley_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1758",
+          "bibliographic_entry": "Euler, L. (1758). Elementa doctrinae solidorum. Novi Commentarii Academiae Scientiarum Imperialis Petropolitanae, 4, 109-140."
+        },
+        {
+          "citation_key": "cayley1889",
+          "bibliographic_entry": "Cayley, A. (1889). A theorem on trees. Quarterly Journal of Pure and Applied Mathematics, 23, 376-378."
+        },
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        }
+      ],
+      "keywords": [
+        "tree",
+        "spanning tree",
+        "acyclic",
+        "Euler formula",
+        "edge count",
+        "suppressed specialization"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.enumeration.cayley_formula",
+      "title": "Cayley's Formula for Labelled Trees",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "combinatorics"
+        ],
+        "subfield": "enumerative_graph_theory",
+        "topic": "tree_counting",
+        "canonical_objects": [
+          "labelled tree",
+          "label set",
+          "Pruefer sequence"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "t(n) = n^(n - 2)",
+        "canonical_latex": "t(n) = n^{n-2}",
+        "equivalent_forms": [
+          {
+            "form_id": "prufer",
+            "notation_system": "ascii",
+            "expression": "t(n) = |{sequences of length n-2 over an n-letter alphabet}|",
+            "scope_note": "Pruefer's bijection: the count is a word count, which is what makes the power the natural form"
+          },
+          {
+            "form_id": "matrix_tree",
+            "notation_system": "matrix_notation",
+            "expression": "t(G) = DET(reduced Laplacian of G)",
+            "scope_note": "Kirchhoff's matrix-tree theorem; Cayley's formula is the case G = K_n, where the determinant evaluates to n^(n-2)"
+          },
+          {
+            "form_id": "rooted",
+            "notation_system": "ascii",
+            "expression": "|{rooted labelled trees}| = n^(n-1)",
+            "scope_note": "One factor of n for the choice of root; the exponent's off-by-one is where the formula's difficulty is concentrated"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "self_indexed_power",
+        "anonymized_template": "TREES = VERTICES^(VERTICES - 2)",
+        "slot_schema": [
+          {
+            "slot_id": "TREES",
+            "syntactic_category": "variable",
+            "semantic_role": "tree_count"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count"
+          }
+        ],
+        "invariants": [
+          "The vertex-count slot appears in the base AND in the exponent. That self-reference is what makes the growth super-exponential and is the structural signature of a count of labelled objects on the very set being counted over.",
+          "The literal 2 in the exponent is the reason the formula is famous: n^n would be sequences, n^(n-1) rooted trees, and the two lost factors correspond to the root and the last Pruefer letter. Making the 2 a slot would state a family of formulas nobody needs.",
+          "Labelled, not unlabelled. The count of unlabelled trees has no closed form at all, and nothing in the template marks which is meant -- the entire distinction lives in the prose.",
+          "Shares the recurrent-slot property with graphtheory.enumeration.complete_graph_edge_count, and shares nothing else: one is a product, one a power, so the two members of this corpus's counting family cannot see each other."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "t_n",
+            "syntactic_category": "variable",
+            "semantic_role": "tree_count",
+            "mathematical_order": 0,
+            "description": "Number of labelled trees on n vertices."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices, equivalently the size of the label set."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "There are exactly n^(n-2) different trees on a fixed set of n labelled vertices.",
+        "statistical_significance": "A singleton at every level, and the honest report on prediction 4's wider question. The graph contains no other statement in which a slot occurs both as a base and as an exponent; the closest structures are the exponential family (`?0 = *(?1, EXP⟨*(?2, ?3)⟩)`, five members) and the power laws in geometry (`?0:V = *(?1:P, ^(?2:V, 2))`), and both keep base and exponent independent. That independence is exactly what a labelled-object count does not have. Attributed to Cayley (1889), proved earlier by Borchardt (1860) and stated by Sylvester (1857), which is itself a small lesson about provenance in a graph that records citation keys.",
+        "regularity_conditions": [
+          "A fixed label set of size n at least one; the formula reads 1 at n = 1 and n = 2 by the usual conventions",
+          "Labelled trees: two trees differing by a relabelling are counted separately",
+          "Unrooted and undirected"
+        ],
+        "failure_modes": [
+          "Read as a count of tree SHAPES it is wildly wrong; unlabelled trees grow like C*alpha^n/n^(5/2) with no closed form.",
+          "The n = 1 and n = 2 cases require the convention 1^(-1) = 1 and 0^0-style edge handling; the formula is stated for n >= 1 by fiat rather than derived there.",
+          "Kirchhoff's matrix-tree theorem is the real generalization, and reading Cayley's formula as the fundamental fact inverts the logical order."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "graphtheory.trees.tree_edge_count",
+          "graphtheory.walks.adjacency_power_walk_count"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cayley1889",
+          "bibliographic_entry": "Cayley, A. (1889). A theorem on trees. Quarterly Journal of Pure and Applied Mathematics, 23, 376-378."
+        },
+        {
+          "citation_key": "borchardt1860",
+          "bibliographic_entry": "Borchardt, C. W. (1860). Ueber eine der Interpolation entsprechende Darstellung der Eliminations-Resultante. Journal fuer die reine und angewandte Mathematik, 57, 111-121."
+        },
+        {
+          "citation_key": "sylvester1857",
+          "bibliographic_entry": "Sylvester, J. J. (1857). On the change of systems of independent variables. Quarterly Journal of Pure and Applied Mathematics, 1, 42-56."
+        },
+        {
+          "citation_key": "kirchhoff1847",
+          "bibliographic_entry": "Kirchhoff, G. (1847). Ueber die Aufloesung der Gleichungen, auf welche man bei der Untersuchung der linearen Vertheilung galvanischer Stroeme gefuehrt wird. Annalen der Physik und Chemie, 72(12), 497-508."
+        },
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        }
+      ],
+      "keywords": [
+        "Cayley's formula",
+        "labelled trees",
+        "Pruefer sequence",
+        "matrix-tree theorem",
+        "enumeration"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.walks.adjacency_power_walk_count",
+      "title": "Walks Counted by Powers of the Adjacency Matrix",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "linear_algebra"
+        ],
+        "subfield": "algebraic_graph_theory",
+        "topic": "spectral",
+        "canonical_objects": [
+          "adjacency matrix",
+          "walk",
+          "matrix power"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "W = A^k,  W_ij = number of walks of length k from i to j",
+        "canonical_latex": "(A^k)_{ij} = \\#\\{\\text{walks of length } k \\text{ from } i \\text{ to } j\\}",
+        "equivalent_forms": [
+          {
+            "form_id": "entrywise",
+            "notation_system": "matrix_notation",
+            "expression": "(A^k)_ij = sum over paths of prod of A entries",
+            "scope_note": "The proof by induction made explicit: matrix multiplication IS the concatenation of walks, one term per intermediate vertex"
+          },
+          {
+            "form_id": "closed_walks",
+            "notation_system": "ascii",
+            "expression": "TRACE(A^k) = sum_i EIGENVALUE_i^k",
+            "scope_note": "Closed walks counted spectrally; this is where walk counting becomes the spectral theory of graphs"
+          },
+          {
+            "form_id": "triangles",
+            "notation_system": "ascii",
+            "expression": "|{triangles}| = TRACE(A^3)/6",
+            "scope_note": "The most-used instance: each triangle contributes six closed walks of length three"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "opaque_binary_power",
+        "anonymized_template": "WALKS = MATRIXPOWER(ADJACENCY, LENGTH)",
+        "slot_schema": [
+          {
+            "slot_id": "WALKS",
+            "syntactic_category": "variable",
+            "semantic_role": "walk_count_matrix"
+          },
+          {
+            "slot_id": "ADJACENCY",
+            "syntactic_category": "variable",
+            "semantic_role": "adjacency_matrix"
+          },
+          {
+            "slot_id": "LENGTH",
+            "syntactic_category": "index",
+            "semantic_role": "walk_length"
+          },
+          {
+            "slot_id": "MATRIXPOWER",
+            "syntactic_category": "functional",
+            "semantic_role": "matrix_power"
+          }
+        ],
+        "invariants": [
+          "MATRIXPOWER is an opaque call and the node says so. `^` in this grammar is scalar exponentiation over a base the canonicalizer may treat as a commutative factor; matrix multiplication is not commutative, so writing `ADJACENCY^LENGTH` would assert something false about the algebra.",
+          "The price is total: the mechanism -- that the (i,j) entry accumulates exactly one term per walk, because matrix multiplication sums over intermediate vertices -- is invisible. What survives in the template is only the dependency of the walk count on the adjacency structure and the length.",
+          "The statement is an identification of two objects (a matrix power and a table of counts), not a numeric identity, which is why every slot is a matrix or an index and none is a scalar.",
+          "The length slot is an index, not a parameter: it ranges over non-negative integers and indexes a family of statements rather than tuning one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "adjacency_matrix",
+            "mathematical_order": 2,
+            "description": "Adjacency matrix of the graph."
+          },
+          {
+            "symbol": "W",
+            "syntactic_category": "variable",
+            "semantic_role": "walk_count_matrix",
+            "mathematical_order": 2,
+            "description": "Matrix whose (i,j) entry counts walks of the given length."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "index",
+            "semantic_role": "walk_length",
+            "mathematical_order": 0,
+            "description": "Walk length; a non-negative integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MATRIXPOWER(matrix, exponent)",
+            "name": "matrix power",
+            "input_arity": 2,
+            "codomain": "square matrices over the same ring",
+            "description": "The exponent-fold matrix product A^k. Written as an opaque two-argument call rather than with `^` because `^` in this grammar is scalar exponentiation and the canonicalizer would treat the base as a commutative factor; matrix multiplication is not commutative and A^k is not a pointwise power. The consequence is that the entire mechanism -- that the (i,j) entry accumulates one term per walk -- is invisible to the matcher. Argument order is fixed: matrix first, exponent second."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The k-th power of a graph's adjacency matrix has, in each entry, the number of walks of length k between the corresponding vertices.",
+        "statistical_significance": "The sixth head in the graph carrying the two-argument opaque-composition shape `?0 = HEAD⟨?1, ?2⟩`, after morphology's CONCAT and REALIZE, information theory's CAPMAX, geospatial topology's MEET and machine learning's UPDATE. Six nodes, six heads, zero groups at shape, typed or family level. docs/BACKLOG.md proposed that count as the cheapest available measurement of what head literalism costs; it grows by one every time a corpus needs a vocabulary the graph does not have, and this seeding pass adds a seventh independently (`geomodel.surfaces.surface_normal_cross_product`, CROSS). The other half of the cost is specific to this node: because the head is opaque, the statement's relationship to `graphtheory.degree.handshake_lemma` -- walks of length one are edges, counted twice -- and to the whole weighted-sum family (a matrix product IS a sum of products) cannot be seen. An honest opaque call records a dependency and hides a derivation.",
+        "regularity_conditions": [
+          "A finite graph with a fixed vertex ordering, so that the adjacency matrix is defined",
+          "Walks, not paths: repeated vertices and repeated edges are allowed, and this is what makes the count multiplicative",
+          "Non-negative integer length; A^0 is the identity, correctly counting the empty walk",
+          "Works verbatim for digraphs and for weighted graphs, where the entries become path weights rather than counts"
+        ],
+        "failure_modes": [
+          "Walk counts are not path counts; using A^k to count simple paths overcounts badly, and counting simple paths is #P-hard.",
+          "Entries grow like the spectral radius to the k, so direct computation overflows quickly and the practical route is spectral.",
+          "For a weighted graph the entries are sums of products of weights, not counts, and the theorem's name misleads."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "graphtheory.degree.handshake_lemma",
+          "graphtheory.enumeration.cayley_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "biggs1993",
+          "bibliographic_entry": "Biggs, N. (1993). Algebraic Graph Theory (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "cvetkovic1980",
+          "bibliographic_entry": "Cvetkovic, D. M., Doob, M., Sachs, H. (1980). Spectra of Graphs: Theory and Application. New York: Academic Press."
+        },
+        {
+          "citation_key": "west2001",
+          "bibliographic_entry": "West, D. B. (2001). Introduction to Graph Theory (2nd ed.). Upper Saddle River: Prentice Hall."
+        }
+      ],
+      "keywords": [
+        "adjacency matrix",
+        "walk counting",
+        "matrix power",
+        "algebraic graph theory",
+        "spectral graph theory",
+        "opaque head"
+      ]
+    },
+    {
+      "statement_id": "graphtheory.planarity.planar_edge_bound",
+      "title": "Edge Bound for Simple Planar Graphs",
+      "statement_class": "corollary",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "graph_theory",
+          "mathematics",
+          "topology"
+        ],
+        "subfield": "planarity",
+        "topic": "extremal",
+        "canonical_objects": [
+          "planar embedding",
+          "face",
+          "edge set"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "|E| <= 3*|V| - 6",
+        "canonical_latex": "\\lvert E\\rvert \\le 3\\lvert V\\rvert - 6",
+        "equivalent_forms": [
+          {
+            "form_id": "from_euler",
+            "notation_system": "ascii",
+            "expression": "|V| - |E| + |F| = 2  AND  2*|E| >= 3*|F|",
+            "scope_note": "The derivation in two steps: Euler's formula, plus the face-degree count (every face is bounded by at least three edges, every edge borders at most two faces)"
+          },
+          {
+            "form_id": "triangle_free",
+            "notation_system": "ascii",
+            "expression": "|E| <= 2*|V| - 4",
+            "scope_note": "Bipartite or triangle-free planar graphs: every face has at least four sides, and the constants change accordingly"
+          },
+          {
+            "form_id": "nonplanarity_certificate",
+            "notation_system": "ascii",
+            "expression": "K_5 has |E| = 10 > 9 = 3*5 - 6",
+            "scope_note": "What the bound is for: violating it certifies non-planarity, and K_5 is the smallest witness"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "linear_extremal_bound",
+        "anonymized_template": "EDGES <= 3*VERTICES - 6",
+        "slot_schema": [
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count"
+          }
+        ],
+        "invariants": [
+          "Both literals descend from geometry: the 3 is the minimum number of sides of a face, the 6 is twice the Euler characteristic of the sphere. Neither is a fitted constant, and the triangle-free variant (2 and 4) shows exactly how they move when the face-degree hypothesis changes.",
+          "The relation is `<=`, and it is one of only three inequalities in the graph. Unlike numanalysis.floatingpoint.machine_epsilon_bound this one is EXTREMAL rather than approximate: equality holds for every maximal planar graph, so the bound is attained rather than merely respected.",
+          "The bound is linear in the vertex count while graphtheory.enumeration.complete_graph_edge_count is quadratic. Placing the two side by side is the proof that K_n is non-planar for n at least five, and the graph holds both statements without being able to combine them.",
+          "Derived from Euler's polyhedron formula, which the graph already carries as geotop.polyhedra.euler_polyhedron_formula. The link is a one-sided composed_with, since the derivation needs an inequality about face degrees that has no node."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "edge_count",
+            "mathematical_order": 0,
+            "description": "Number of edges."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "vertex_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<=",
+            "name": "less than or equal",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A simple graph that can be drawn in the plane without crossings has at most 3n - 6 edges, so planar graphs are sparse.",
+        "statistical_significance": "A singleton, expected. Recorded for two reasons beyond its own content. First, it is this seeding pass's second inequality, and both are isolated for the same mechanical reason -- the relation symbol is part of the skeleton -- while being completely different kinds of claim: a rounding bound that is never attained and an extremal bound that is attained by a whole family. The graph cannot distinguish them. Second, it carries the corpus's link to `geotop.polyhedra.euler_polyhedron_formula`, the node this seeding pass was explicitly instructed not to duplicate. Two of the eight graph-theory nodes point at it (`tree_edge_count` is Euler's formula with one face, this one is derived from it), and in both cases the relationship is real and unrepresentable: one is a suppressed specialization, the other needs a premise that is not in the graph.",
+        "regularity_conditions": [
+          "A simple graph: no loops, no multi-edges",
+          "At least three vertices; the bound is false for n = 1, 2",
+          "Planar, i.e. embeddable in the sphere or the plane without crossings",
+          "Equality exactly for maximal planar graphs, whose faces are all triangles"
+        ],
+        "failure_modes": [
+          "The converse fails: satisfying the bound does not make a graph planar, and K_(3,3) with 9 edges on 6 vertices is the standard counterexample (9 <= 12).",
+          "Multi-edges and loops break it immediately, which is why the simplicity hypothesis is doing more work than it appears to.",
+          "Applied to a graph on one or two vertices the right-hand side is negative, so the small cases must be excluded by hand rather than being degenerate instances."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.polyhedra.euler_polyhedron_formula",
+          "graphtheory.enumeration.complete_graph_edge_count",
+          "graphtheory.degree.handshake_lemma"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1758",
+          "bibliographic_entry": "Euler, L. (1758). Elementa doctrinae solidorum. Novi Commentarii Academiae Scientiarum Imperialis Petropolitanae, 4, 109-140."
+        },
+        {
+          "citation_key": "kuratowski1930",
+          "bibliographic_entry": "Kuratowski, K. (1930). Sur le probleme des courbes gauches en topologie. Fundamenta Mathematicae, 15, 271-283.",
+          "url": "https://doi.org/10.4064/fm-15-1-271-283"
+        },
+        {
+          "citation_key": "diestel2017",
+          "bibliographic_entry": "Diestel, R. (2017). Graph Theory (5th ed.). Berlin: Springer. Graduate Texts in Mathematics 173."
+        },
+        {
+          "citation_key": "bondy2008",
+          "bibliographic_entry": "Bondy, J. A., Murty, U. S. R. (2008). Graph Theory. London: Springer. Graduate Texts in Mathematics 244."
+        }
+      ],
+      "keywords": [
+        "planar graph",
+        "Euler formula",
+        "edge bound",
+        "K_5",
+        "Kuratowski",
+        "extremal",
+        "sparsity"
+      ]
+    }
+  ]
+}

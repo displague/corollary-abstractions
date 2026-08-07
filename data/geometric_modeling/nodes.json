@@ -1,0 +1,1462 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "geometric_modeling.curves_and_transforms.v1",
+  "discipline": "geometric_modeling",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
+      "title": "Bezier Curve as a Bernstein-Weighted Sum of Control Points",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics"
+        ],
+        "subfield": "curves_and_surfaces",
+        "topic": "bezier_representation",
+        "canonical_objects": [
+          "control polygon",
+          "basis polynomial",
+          "curve point"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P(t) = sum_(i=0)^(n) B_i(t) * C_i",
+        "canonical_latex": "P(t) = \\sum_{i=0}^{n} B_i^n(t)\\, C_i",
+        "equivalent_forms": [
+          {
+            "form_id": "bernstein_basis",
+            "notation_system": "ascii",
+            "expression": "B_i(t) = C(n,i) * t^i * (1-t)^(n-i)",
+            "scope_note": "What the weight slot stands for. The grammar has no binomial coefficient, so the basis is a parameter slot and this expansion lives here"
+          },
+          {
+            "form_id": "partition_of_unity",
+            "notation_system": "ascii",
+            "expression": "sum_i B_i(t) = 1,  B_i(t) >= 0 on [0,1]",
+            "scope_note": "The two properties that make the sum an affine and in fact convex combination: the curve lies in the convex hull of its control polygon"
+          },
+          {
+            "form_id": "matrix_form",
+            "notation_system": "matrix_notation",
+            "expression": "P(t) = TVEC(t) * M * CVEC",
+            "scope_note": "The power-basis factorization used in graphics pipelines; numerically worse and computationally cheaper"
+          },
+          {
+            "form_id": "degree_one",
+            "notation_system": "vector_notation",
+            "expression": "P(t) = (1-t)*C_0 + t*C_1",
+            "scope_note": "The n = 1 case, which is geomodel.bezier.de_casteljau_step and numanalysis.interpolation.linear_interpolation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "weighted_accumulation",
+        "anonymized_template": "POINT = sum_i BASIS_i*CONTROL_i",
+        "slot_schema": [
+          {
+            "slot_id": "POINT",
+            "syntactic_category": "variable",
+            "semantic_role": "curve_point"
+          },
+          {
+            "slot_id": "BASIS_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "basis_weight"
+          },
+          {
+            "slot_id": "CONTROL_i",
+            "syntactic_category": "variable",
+            "semantic_role": "control_point"
+          }
+        ],
+        "invariants": [
+          "The Bernstein basis is a PARAMETER slot, not an expanded polynomial. That is a deliberate authoring choice: the grammar has no binomial coefficient, and more importantly the statement being made is 'a curve point is a weighted accumulation of control points', with the identity of the weights a separate matter. Expanding the basis would have produced a singleton and lost the statement.",
+          "The weights sum to one and are non-negative on [0,1]. Neither fact is in the template -- the first is a companion node (geomodel.barycentric.barycentric_partition_of_unity has the same shape for a different family), the second has no expressible form -- and together they are what make the curve lie inside its control polygon's convex hull.",
+          "Control points are variable-like, weights parameter-like: the designer moves the points, the parameterization supplies the weights. That split is the entire user interface of computer-aided design, and it is visible in the slot categories.",
+          "Affine invariance follows from the weights summing to one: transforming the control points and then evaluating gives the same curve as evaluating and then transforming. This is why geomodel.transforms.homogeneous_rigid_transform can be applied to control polygons rather than to sampled curves, and it is the same translation-invariance property that numanalysis.interpolation.linear_interpolation records."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "curve_point",
+            "mathematical_order": 1,
+            "description": "Point on the curve at parameter t."
+          },
+          {
+            "symbol": "C_i",
+            "syntactic_category": "variable",
+            "semantic_role": "control_point",
+            "mathematical_order": 1,
+            "description": "The i-th control point of the curve."
+          },
+          {
+            "symbol": "B_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "basis_weight",
+            "mathematical_order": 0,
+            "description": "Value of the i-th Bernstein basis polynomial at t."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "curve_parameter",
+            "mathematical_order": 0,
+            "description": "Curve parameter, conventionally in [0,1]."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "index",
+            "semantic_role": "curve_degree",
+            "mathematical_order": 0,
+            "description": "Degree of the curve."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [
+          {
+            "notation": "i in 0..n",
+            "domain": "the control-point indices of a degree-n curve",
+            "description": "Index running over the n+1 control points; the sum is over the whole control polygon."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A Bezier curve's point at a given parameter is a weighted average of its control points, the weights being the Bernstein polynomials.",
+        "statistical_significance": "Prediction 3, and it FIRED -- the best result of this seeding pass. `?0:V = sum⟨*(?1:P, ?2:V)⟩` previously held two members and now holds FOUR, in four disciplines: this node (geometric modeling), `geomodel.barycentric.barycentric_point_reconstruction` (also geometric modeling, and a genuinely different statement), `probstat.probability.total_probability_partition` (statistics) and `algtop.homology.betti_alternating_sum` (algebraic topology). What they share is exact and not superficial: a variable quantity is read off as a parameter-weighted accumulation of variable parts, and in three of the four the weights sum to one -- Bernstein basis polynomials, barycentric coordinates, and the probabilities of a partition. The topology member is the informative exception: its weights are the alternating signs, which sum to zero or one depending on parity, and that is why an Euler characteristic can be negative while a probability cannot. Bernstein's own 1912 proof of the Weierstrass approximation theorem was probabilistic -- the basis polynomials ARE binomial probabilities -- so the twin with the law of total probability is not an analogy the matcher stumbled into; it is the theorem's original derivation, recovered from structure alone.",
+        "regularity_conditions": [
+          "Parameter conventionally in [0,1]; outside it the same formula extrapolates and loses the convex-hull property",
+          "A fixed number of control points, one per basis function",
+          "Control points in an affine space, so that weighted combinations with weights summing to one are well defined",
+          "The weights are the degree-n Bernstein polynomials; other weight families give B-splines, NURBS and box splines, with the same template"
+        ],
+        "failure_modes": [
+          "Every control point influences every parameter value, so Bezier curves have no local control; moving one point changes the whole curve, which is the defect B-splines exist to fix.",
+          "Evaluating the basis directly from the binomial formula loses accuracy for high degree; de Casteljau's recursive scheme is backward stable and the closed form is not.",
+          "The curve interpolates only its first and last control points. Reading the control polygon as data the curve passes through is the commonest beginner error and is wrong for every interior point."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "geomodel.bezier.de_casteljau_step"
+        ],
+        "composed_with": [
+          "probstat.probability.total_probability_partition",
+          "algtop.homology.betti_alternating_sum",
+          "geomodel.barycentric.barycentric_partition_of_unity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "bernstein1912",
+          "bibliographic_entry": "Bernstein, S. N. (1912). Demonstration du theoreme de Weierstrass fondee sur le calcul des probabilites. Communications de la Societe Mathematique de Kharkow, 13(1), 1-2."
+        },
+        {
+          "citation_key": "bezier1972",
+          "bibliographic_entry": "Bezier, P. (1972). Numerical Control: Mathematics and Applications. London: Wiley."
+        },
+        {
+          "citation_key": "decasteljau1963",
+          "bibliographic_entry": "de Casteljau, P. de F. (1963). Courbes et surfaces a poles. Internal technical report, Andre Citroen Automobiles SA, Paris (work carried out from 1959)."
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "prautzsch2002",
+          "bibliographic_entry": "Prautzsch, H., Boehm, W., Paluszny, M. (2002). Bezier and B-Spline Techniques. Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "Bezier curve",
+        "Bernstein polynomial",
+        "control point",
+        "weighted sum",
+        "convex hull",
+        "CAGD"
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.de_casteljau_step",
+      "title": "de Casteljau Interpolation Step",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics"
+        ],
+        "subfield": "curves_and_surfaces",
+        "topic": "subdivision",
+        "canonical_objects": [
+          "control polygon",
+          "interpolation step",
+          "triangular scheme"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P_i^(r) = (1 - t)*P_i^(r-1) + t*P_(i+1)^(r-1)",
+        "canonical_latex": "P_i^{(r)} = (1-t)\\,P_i^{(r-1)} + t\\,P_{i+1}^{(r-1)}",
+        "equivalent_forms": [
+          {
+            "form_id": "one_level",
+            "notation_system": "vector_notation",
+            "expression": "Q = (1 - t)*A + t*B",
+            "scope_note": "One step stripped of indices: the point a fraction t along the segment AB. This is the template"
+          },
+          {
+            "form_id": "recursive_scheme",
+            "notation_system": "ascii",
+            "expression": "apply the step to every adjacent pair, n times; the single survivor is P(t)",
+            "scope_note": "The full algorithm. Repeated affine interpolation on the control polygon evaluates the Bernstein sum, which is the theorem the step exists for"
+          },
+          {
+            "form_id": "subdivision",
+            "notation_system": "ascii",
+            "expression": "the two outer edges of the triangular scheme are the control polygons of the two halves",
+            "scope_note": "Why the algorithm matters beyond evaluation: it splits a curve at t for free, which is the basis of rendering by recursive subdivision"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "two_point_convex_combination",
+        "anonymized_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+        "slot_schema": [
+          {
+            "slot_id": "INTERMEDIATE",
+            "syntactic_category": "variable",
+            "semantic_role": "interpolated_point"
+          },
+          {
+            "slot_id": "PARAM",
+            "syntactic_category": "parameter",
+            "semantic_role": "curve_parameter"
+          },
+          {
+            "slot_id": "LEFT",
+            "syntactic_category": "variable",
+            "semantic_role": "left_point"
+          },
+          {
+            "slot_id": "RIGHT",
+            "syntactic_category": "variable",
+            "semantic_role": "right_point"
+          }
+        ],
+        "invariants": [
+          "This IS linear interpolation, and the corpus records it as such rather than pretending otherwise: reciprocal `equivalent_to` edges join it to numanalysis.interpolation.linear_interpolation and the two templates are identical up to slot naming. The de Casteljau algorithm's content is not this step, it is that ITERATING this step on a control polygon evaluates a degree-n Bernstein sum -- and that content is not in the template, because the grammar has no recursion.",
+          "It is also the degree-one case of geomodel.bezier.bernstein_bezier_evaluation, since the degree-one Bernstein polynomials are exactly (1-t) and t. Recorded as a reciprocal special_case_of / generalizes pair; the matcher cannot derive it, because collapsing an indexed sum to two explicit terms is a rewrite rather than a slot binding -- the same class docs/BACKLOG.md records for uniform versus Shannon entropy.",
+          "Every point produced lies on the segment between its two inputs, so the whole scheme stays inside the convex hull of the control polygon. That is the geometric fact the algorithm's numerical stability rests on, and it follows from the weights being non-negative and summing to one.",
+          "The parameter slot occurs twice, once bare and once inside `1 - PARAM`. Same structure, and same consequence, as the interpolation node: it cannot reach the affine family."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "interpolated_point",
+            "mathematical_order": 1,
+            "description": "Point produced by one interpolation step."
+          },
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "left_point",
+            "mathematical_order": 1,
+            "description": "First input point of the step."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "variable",
+            "semantic_role": "right_point",
+            "mathematical_order": 1,
+            "description": "Second input point of the step."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "parameter",
+            "semantic_role": "curve_parameter",
+            "mathematical_order": 0,
+            "description": "Curve parameter at which the curve is being evaluated."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "index",
+            "semantic_role": "level_index",
+            "mathematical_order": 0,
+            "description": "Level of the triangular scheme."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "One step of de Casteljau's algorithm takes two neighbouring points and returns the point a fraction t of the way between them.",
+        "statistical_significance": "Authored as an honest duplicate, which is a claim worth defending. The instruction that produced this corpus asked for de Casteljau to be recorded as a special case or an equivalent of linear interpolation rather than dressed up as something new, and both edges turned out to be true simultaneously: it is EQUIVALENT to `numanalysis.interpolation.linear_interpolation` (same statement, different discipline's name for it) and a SPECIAL CASE OF `geomodel.bezier.bernstein_bezier_evaluation` (the degree-one instance). The matcher confirms only the first -- the two interpolation nodes typed-twin each other, forming this pass's one wholly internal twin group -- and cannot confirm the second. That asymmetry is the finding: a twin group and a suppressed specialization can attach to the same node, and only one of them is machine-checkable. Both remain isolated from the affine family for the reason recorded on the interpolation node.",
+        "regularity_conditions": [
+          "Points in an affine space",
+          "Parameter in [0,1] for the convex-hull guarantee; outside it the step still computes but leaves the segment",
+          "The full algorithm requires the step applied n levels deep for a degree-n curve"
+        ],
+        "failure_modes": [
+          "Quadratic in the degree, where the matrix form is linear; the stability is bought with work, and for low degrees in graphics the trade often goes the other way.",
+          "Naming the step after the algorithm invites the reading that something curve-specific happens in it. Nothing does: the step is a straight-line interpolation, and the curve emerges only from the repetition."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "numanalysis.interpolation.linear_interpolation"
+        ],
+        "special_case_of": [
+          "geomodel.bezier.bernstein_bezier_evaluation"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.barycentric.barycentric_point_reconstruction"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "decasteljau1963",
+          "bibliographic_entry": "de Casteljau, P. de F. (1963). Courbes et surfaces a poles. Internal technical report, Andre Citroen Automobiles SA, Paris (work carried out from 1959)."
+        },
+        {
+          "citation_key": "bezier1972",
+          "bibliographic_entry": "Bezier, P. (1972). Numerical Control: Mathematics and Applications. London: Wiley."
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "prautzsch2002",
+          "bibliographic_entry": "Prautzsch, H., Boehm, W., Paluszny, M. (2002). Bezier and B-Spline Techniques. Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "de Casteljau",
+        "subdivision",
+        "linear interpolation",
+        "Bezier",
+        "convex hull",
+        "numerical stability"
+      ]
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
+      "title": "Barycentric Coordinates Sum to One",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics"
+        ],
+        "subfield": "affine_geometry",
+        "topic": "barycentric_coordinates",
+        "canonical_objects": [
+          "simplex",
+          "barycentric coordinate",
+          "affine hull"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "sum_(i=0)^(d) lambda_i = 1",
+        "canonical_latex": "\\sum_{i=0}^{d} \\lambda_i = 1",
+        "equivalent_forms": [
+          {
+            "form_id": "with_positivity",
+            "notation_system": "ascii",
+            "expression": "sum_i lambda_i = 1  AND  lambda_i >= 0",
+            "scope_note": "Adding non-negativity restricts the point to the closed simplex; without it the coordinates describe the whole affine hull"
+          },
+          {
+            "form_id": "areal",
+            "notation_system": "ascii",
+            "expression": "lambda_i = AREA(subtriangle_i)/AREA(triangle)",
+            "scope_note": "Moebius's original reading in the plane: the coordinates are area ratios, which is why they sum to one"
+          },
+          {
+            "form_id": "probability_analogue",
+            "notation_system": "event_probability",
+            "expression": "sum_i p_i = 1",
+            "scope_note": "The discrete normalization axiom. Identical structure, different subject; the graph carries no node for it, so no twin exists to find"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "normalized_weight_sum",
+        "anonymized_template": "sum_i BARY_i = 1",
+        "slot_schema": [
+          {
+            "slot_id": "BARY_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "barycentric_coordinate"
+          }
+        ],
+        "invariants": [
+          "A one-slot template, and the smallest statement in the three corpora. Everything it says is in the relation: an indexed family of weights accumulates to the multiplicative unit.",
+          "The coordinates are parameter-like because they describe WHERE in the simplex a point lies -- they are the coordinates, not the geometry. Making them variable-like would state something about a moving family rather than about a coordinate system.",
+          "This is the affine-ness condition. Together with geomodel.barycentric.barycentric_point_reconstruction it says the point is an affine combination of the vertices, which is exactly what makes barycentric coordinates independent of any origin -- Moebius's point in introducing them in 1827.",
+          "Non-negativity is a separate condition and is not here; with it the point is in the simplex, without it merely in its affine hull. The grammar has no way to attach a sign constraint to an indexed family."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "lambda_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "barycentric_coordinate",
+            "mathematical_order": 0,
+            "description": "The i-th barycentric coordinate of a point with respect to a simplex."
+          },
+          {
+            "symbol": "d",
+            "syntactic_category": "index",
+            "semantic_role": "simplex_dimension",
+            "mathematical_order": 0,
+            "description": "Dimension of the simplex; there are d+1 coordinates."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [
+          {
+            "notation": "i in 0..d",
+            "domain": "the vertices of a d-simplex",
+            "description": "Index running over the vertices of the simplex whose barycentric coordinates are being stated."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The barycentric coordinates of a point with respect to a simplex add up to one.",
+        "statistical_significance": "A singleton, and the interesting part is what it ALMOST meets. Its skeleton is `1 = sum⟨?0:P⟩`. The discrete probability normalization axiom `sum_i p_i = 1` is character for character the same statement about a different subject, and the graph does not contain it -- `data/statistics` carries the law of total probability, Bayes's rule and the CLT, but not normalization. So this node's most natural twin is absent for the same reason prediction 2's mixture comparison could not be run: a gap in the corpus, not a limit of the matcher. docs/BACKLOG.md separately records that probability normalization has a continuous form (`INTEGRAL(density) = 1`) that could never twin the discrete one anyway, so the missing node would arrive already split in two. Recorded as a concrete, cheap, high-value corpus addition: one node in `data/statistics` would create a cross-discipline twin with this one and, with a two-component mixture, a second with linear interpolation.",
+        "regularity_conditions": [
+          "A non-degenerate simplex, so that the coordinates are unique",
+          "Coordinates taken with respect to a fixed vertex ordering",
+          "Non-negativity is NOT assumed here; it is the extra condition that confines the point to the simplex"
+        ],
+        "failure_modes": [
+          "For a degenerate simplex the coordinates are not unique and the constraint no longer pins a point; interpolation code that does not check for degeneracy divides by a vanishing area.",
+          "In floating point the computed coordinates sum to one only to within rounding, so tests of the form 'is the point inside' must use a tolerance -- the constraint that defines the object cannot be checked exactly on the machine that uses it."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.barycentric.barycentric_point_reconstruction",
+          "geomodel.bezier.bernstein_bezier_evaluation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "mobius1827",
+          "bibliographic_entry": "Moebius, A. F. (1827). Der barycentrische Calcul: ein neues Huelfsmittel zur analytischen Behandlung der Geometrie. Leipzig: Johann Ambrosius Barth."
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        }
+      ],
+      "keywords": [
+        "barycentric coordinates",
+        "partition of unity",
+        "simplex",
+        "affine combination",
+        "Moebius",
+        "normalization"
+      ]
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
+      "title": "Point Recovered from Barycentric Coordinates",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics"
+        ],
+        "subfield": "affine_geometry",
+        "topic": "barycentric_coordinates",
+        "canonical_objects": [
+          "simplex",
+          "vertex",
+          "interior point"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P = sum_(i=0)^(d) lambda_i * V_i",
+        "canonical_latex": "P = \\sum_{i=0}^{d} \\lambda_i V_i",
+        "equivalent_forms": [
+          {
+            "form_id": "triangle",
+            "notation_system": "vector_notation",
+            "expression": "P = lambda_0*V_0 + lambda_1*V_1 + lambda_2*V_2",
+            "scope_note": "The planar case used in every rasterizer and every finite-element shape function"
+          },
+          {
+            "form_id": "centroid",
+            "notation_system": "ascii",
+            "expression": "P = (1/(d+1)) * sum_i V_i",
+            "scope_note": "Equal coordinates give the centroid -- the barycentre the coordinates are named for"
+          },
+          {
+            "form_id": "interpolant",
+            "notation_system": "ascii",
+            "expression": "f(P) = sum_i lambda_i * f(V_i)",
+            "scope_note": "The same weights applied to sampled values rather than positions: linear interpolation over a triangle, the P1 finite element"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "weighted_accumulation",
+        "anonymized_template": "POINT = sum_i BARY_i*VERTEX_i",
+        "slot_schema": [
+          {
+            "slot_id": "POINT",
+            "syntactic_category": "variable",
+            "semantic_role": "reconstructed_point"
+          },
+          {
+            "slot_id": "BARY_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "barycentric_coordinate"
+          },
+          {
+            "slot_id": "VERTEX_i",
+            "syntactic_category": "variable",
+            "semantic_role": "simplex_vertex"
+          }
+        ],
+        "invariants": [
+          "Same template as geomodel.bezier.bernstein_bezier_evaluation and a different statement: there the weights are polynomials in a curve parameter and the summands are designer-chosen control points, here the weights are a point's coordinates and the summands are the vertices of a fixed simplex. Two statements can share a skeleton and not be the same claim, which docs/BACKLOG.md notes the archetype-drift lint cannot currently distinguish; both nodes deliberately carry the archetype `weighted_accumulation` because in this case the shared structure is the point.",
+          "The weights are exactly the family constrained by geomodel.barycentric.barycentric_partition_of_unity. Split across two nodes because they are two statements, and the grammar has no conjunction to join them; together they define an affine combination.",
+          "Vertices are variable-like, coordinates parameter-like -- the same split as the Bezier node, and the reason both land in the same typed group rather than only in the untyped one.",
+          "Because the coordinates sum to one, the reconstruction commutes with any affine map of the ambient space. That is what makes barycentric coordinates coordinates: they are attached to the simplex, not to the space."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "reconstructed_point",
+            "mathematical_order": 1,
+            "description": "The point described by the coordinates."
+          },
+          {
+            "symbol": "V_i",
+            "syntactic_category": "variable",
+            "semantic_role": "simplex_vertex",
+            "mathematical_order": 1,
+            "description": "The i-th vertex of the simplex."
+          },
+          {
+            "symbol": "lambda_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "barycentric_coordinate",
+            "mathematical_order": 0,
+            "description": "The i-th barycentric coordinate."
+          },
+          {
+            "symbol": "d",
+            "syntactic_category": "index",
+            "semantic_role": "simplex_dimension",
+            "mathematical_order": 0,
+            "description": "Dimension of the simplex."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [
+          {
+            "notation": "i in 0..d",
+            "domain": "the vertices of a d-simplex",
+            "description": "Index running over the vertices of the simplex whose barycentric coordinates are being stated."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A point is recovered from its barycentric coordinates as the coordinate-weighted sum of the simplex's vertices.",
+        "statistical_significance": "The fourth member of the weighted-sum family, and the one that makes the group cross four disciplines: with `geomodel.bezier.bernstein_bezier_evaluation`, `probstat.probability.total_probability_partition` and `algtop.homology.betti_alternating_sum` it shares `?0:V = sum⟨*(?1:P, ?2:V)⟩` exactly. The four-way group is the strongest result of this seeding pass and it is also the one most exposed to the objection that shared structure is not shared meaning -- so the objection is worth answering here rather than deflecting. The four statements agree on this much and no more: a quantity is DEFINED as an accumulation over an index set, of parts weighted by numbers the statement does not otherwise constrain. What differs is what constrains the weights, and that constraint lives in a separate node (partition of unity here, the Bernstein basis in Bezier, a probability distribution in statistics, alternating signs in topology). The matcher is therefore reporting the accumulation and silently dropping the normalization, which is exactly why this corpus authors the partition-of-unity constraint as its own node instead of trusting the group to imply it.",
+        "regularity_conditions": [
+          "A non-degenerate simplex with a fixed vertex ordering",
+          "Coordinates summing to one, which is the companion node's statement",
+          "An affine space; no origin is needed and none may be assumed",
+          "Non-negative coordinates if the point is required to lie inside"
+        ],
+        "failure_modes": [
+          "Without the sum-to-one constraint the same expression is an arbitrary linear combination and depends on the choice of origin; the two nodes are only jointly meaningful.",
+          "Perspective-correct interpolation in a rasterizer requires dividing by the interpolated reciprocal depth; applying this formula directly in screen space is the classic affine-texturing artefact.",
+          "Coordinates computed from areas lose precision for slivers, so the reconstruction is least accurate exactly where triangles are worst conditioned."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.barycentric.barycentric_partition_of_unity",
+          "geomodel.bezier.bernstein_bezier_evaluation",
+          "geomodel.bezier.de_casteljau_step"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "mobius1827",
+          "bibliographic_entry": "Moebius, A. F. (1827). Der barycentrische Calcul: ein neues Huelfsmittel zur analytischen Behandlung der Geometrie. Leipzig: Johann Ambrosius Barth."
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "prautzsch2002",
+          "bibliographic_entry": "Prautzsch, H., Boehm, W., Paluszny, M. (2002). Bezier and B-Spline Techniques. Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "barycentric coordinates",
+        "simplex",
+        "affine combination",
+        "weighted sum",
+        "shape function",
+        "rasterization"
+      ]
+    },
+    {
+      "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
+      "title": "Rigid Transform of a Point (Rotation then Translation)",
+      "statement_class": "transformation",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "robotics",
+          "computer_graphics"
+        ],
+        "subfield": "transformations",
+        "topic": "rigid_motion",
+        "canonical_objects": [
+          "rotation matrix",
+          "translation vector",
+          "point"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "p' = R*p + t",
+        "canonical_latex": "p' = R\\,p + t",
+        "equivalent_forms": [
+          {
+            "form_id": "homogeneous",
+            "notation_system": "matrix_notation",
+            "expression": "PHOM' = M * PHOM,  M = [[R, t],[0, 1]]",
+            "scope_note": "The homogeneous 4x4 form: the whole point of homogeneous coordinates is that this turns an affine map into a linear one, so transforms compose by matrix multiplication"
+          },
+          {
+            "form_id": "per_coordinate",
+            "notation_system": "ascii",
+            "expression": "p'_j = sum_k R_jk * p_k + t_j",
+            "scope_note": "Coordinatewise. In this form every product is a product of scalars, which is the reading under which the template's commutative `*` is literally true"
+          },
+          {
+            "form_id": "composition",
+            "notation_system": "matrix_notation",
+            "expression": "(R_2, t_2) o (R_1, t_1) = (R_2*R_1, R_2*t_1 + t_2)",
+            "scope_note": "The group law of SE(3). Composition is where non-commutativity becomes unavoidable, and no template in this grammar can state it"
+          },
+          {
+            "form_id": "inverse",
+            "notation_system": "matrix_notation",
+            "expression": "p = TRANSPOSE(R)*(p' - t)",
+            "scope_note": "The inverse motion; the transpose stands in for the inverse because R is orthogonal, which the template cannot record"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_operator",
+        "anonymized_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+        "slot_schema": [
+          {
+            "slot_id": "POINTNEW",
+            "syntactic_category": "variable",
+            "semantic_role": "transformed_point"
+          },
+          {
+            "slot_id": "ROTATION",
+            "syntactic_category": "parameter",
+            "semantic_role": "rotation_operator"
+          },
+          {
+            "slot_id": "POINT",
+            "syntactic_category": "variable",
+            "semantic_role": "source_point"
+          },
+          {
+            "slot_id": "TRANSLATION",
+            "syntactic_category": "parameter",
+            "semantic_role": "translation_vector"
+          }
+        ],
+        "invariants": [
+          "The `*` here is matrix-vector application, which does not commute, while the canonicalizer flattens and SORTS `*` -- i.e. asserts commutativity. The node is written anyway, with the escape declared: in the per-coordinate form (see equivalent_forms) every factor is a scalar and the template is literally true. This is the same escape `ml.recurrence.linear_ssm_state_update` takes via a diagonal state matrix, and it is not available to `ml.recurrence.mlstm_matrix_memory_update`, which had to introduce an OUTER head instead. Recorded so the reader knows the choice was made and why.",
+          "Rotation and translation are both PARAMETER-like: they describe the motion, which is fixed while it is applied to many points. The point is variable-like. That split is what puts this node in the affine family rather than in the state-recurrence family.",
+          "Orthogonality of the rotation (six constraints on nine numbers, plus a determinant of +1) is the entire difference between a rigid motion and a general affine map, and none of it is expressible. The template describes the affine map; the constraint lives in regularity_conditions, and in geomodel.quaternions.unit_quaternion_constraint, which states the unit-norm condition for the three-dimensional rotation case only.",
+          "Order matters: rotate, then translate. The reverse order is a different motion with translation R*t, and the template cannot record that either, since `+` is commutative here."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "source_point",
+            "mathematical_order": 1,
+            "description": "Point in the source frame."
+          },
+          {
+            "symbol": "pprime",
+            "syntactic_category": "variable",
+            "semantic_role": "transformed_point",
+            "mathematical_order": 1,
+            "description": "Its image in the target frame."
+          },
+          {
+            "symbol": "R",
+            "syntactic_category": "parameter",
+            "semantic_role": "rotation_operator",
+            "mathematical_order": 2,
+            "description": "Rotation matrix; orthogonal with determinant one."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "parameter",
+            "semantic_role": "translation_vector",
+            "mathematical_order": 1,
+            "description": "Translation vector of the motion."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A rigid motion sends a point to its rotated image displaced by a fixed translation.",
+        "statistical_significance": "Prediction 6 said this would typed-twin `ml.recurrence.linear_ssm_state_update`, 'both P*V + P*V shapes'. The matcher says the premise was wrong, and it is right. A rigid transform is P*V + P: the translation is a bare parameter, not a parameter times a variable, because a translation does not scale anything. So the SSM comparison MISSES -- `?0:V = +(*(?1:P, ?2:V), *(?3:P, ?4:V))` has one more product node than this statement has -- and what FIRES instead is the AFFINE FAMILY: `?0:V = +(?1:P, *(?2:P, ?3:V))`, joining `calculus.approximation.tangent_line_linearization`, `economics.finance.capm_expected_return`, `economics.macroeconomics.keynesian_consumption_function` and `probstat.transform.affine_location_scale`, making a five-member group across five disciplines. That is the correct answer and a better one than the prediction: a rigid motion is the canonical affine map, the object the affine family is named after, and the graph's four existing members are all one-dimensional shadows of it. Worth recording as the pass's clearest case of the tool correcting the author rather than confirming him -- the registered prediction named the right neighbourhood and the wrong neighbour.",
+        "regularity_conditions": [
+          "R orthogonal with determinant +1, so the motion preserves distances and orientation",
+          "Point and translation in the same coordinate frame",
+          "Rotate first, then translate; the opposite convention is a different map",
+          "The per-coordinate reading is the one under which the commutative `*` of the template is exact"
+        ],
+        "failure_modes": [
+          "Repeated composition of floating-point rotation matrices drifts off the orthogonal group; without periodic re-orthonormalization the 'rigid' motion starts shearing.",
+          "Interpolating rotation matrices entrywise leaves SO(3) entirely, which is the practical reason quaternions and their unit-norm constraint are used instead.",
+          "The template's `+` invites reading rotation and translation as independent contributions; they are not, since composing two motions mixes them (see the group law)."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.transform.affine_location_scale",
+          "ml.recurrence.linear_ssm_state_update",
+          "geomodel.quaternions.unit_quaternion_constraint",
+          "geomodel.bezier.bernstein_bezier_evaluation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "denavit1955",
+          "bibliographic_entry": "Denavit, J., Hartenberg, R. S. (1955). A Kinematic Notation for Lower-Pair Mechanisms Based on Matrices. Journal of Applied Mechanics, 22(2), 215-221.",
+          "url": "https://doi.org/10.1115/1.4011045"
+        },
+        {
+          "citation_key": "roberts1965",
+          "bibliographic_entry": "Roberts, L. G. (1965). Homogeneous matrix representation and manipulation of N-dimensional constructs. MS-1505, Lincoln Laboratory, Massachusetts Institute of Technology."
+        },
+        {
+          "citation_key": "foley1990",
+          "bibliographic_entry": "Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1990). Computer Graphics: Principles and Practice (2nd ed.). Reading: Addison-Wesley."
+        },
+        {
+          "citation_key": "shoemake1985",
+          "bibliographic_entry": "Shoemake, K. (1985). Animating rotation with quaternion curves. ACM SIGGRAPH Computer Graphics, 19(3), 245-254.",
+          "url": "https://doi.org/10.1145/325165.325242"
+        }
+      ],
+      "keywords": [
+        "rigid transform",
+        "SE(3)",
+        "homogeneous coordinates",
+        "rotation matrix",
+        "affine map",
+        "robotics"
+      ]
+    },
+    {
+      "statement_id": "geomodel.surfaces.surface_normal_cross_product",
+      "title": "Surface Normal from the Tangent Cross Product",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "differential_geometry",
+          "computer_graphics"
+        ],
+        "subfield": "surfaces",
+        "topic": "differential_geometry",
+        "canonical_objects": [
+          "parameterized surface",
+          "tangent plane",
+          "normal vector"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "N = CROSS(dS/du, dS/dv)",
+        "canonical_latex": "N = \\frac{\\partial S}{\\partial u} \\times \\frac{\\partial S}{\\partial v}",
+        "equivalent_forms": [
+          {
+            "form_id": "unit_normal",
+            "notation_system": "vector_notation",
+            "expression": "nhat = CROSS(Su, Sv) / NORM(CROSS(Su, Sv))",
+            "scope_note": "Normalized; the direction is the content, the magnitude is the area element"
+          },
+          {
+            "form_id": "area_element",
+            "notation_system": "ascii",
+            "expression": "dA = NORM(CROSS(Su, Sv)) * du * dv",
+            "scope_note": "The magnitude's meaning: the cross product's length is the area of the parallelogram the tangents span, which is how surface integrals are computed"
+          },
+          {
+            "form_id": "triangle_mesh",
+            "notation_system": "vector_notation",
+            "expression": "N = CROSS(V1 - V0, V2 - V0)",
+            "scope_note": "The discrete case used in every renderer; two edge vectors of a triangle stand in for the tangent vectors"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "opaque_binary_composition",
+        "anonymized_template": "NORMAL = CROSS(TANGENTU, TANGENTV)",
+        "slot_schema": [
+          {
+            "slot_id": "NORMAL",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_normal"
+          },
+          {
+            "slot_id": "TANGENTU",
+            "syntactic_category": "variable",
+            "semantic_role": "first_tangent"
+          },
+          {
+            "slot_id": "TANGENTV",
+            "syntactic_category": "variable",
+            "semantic_role": "second_tangent"
+          },
+          {
+            "slot_id": "CROSS",
+            "syntactic_category": "functional",
+            "semantic_role": "cross_product"
+          }
+        ],
+        "invariants": [
+          "CROSS is an opaque call because the grammar has no antisymmetric binary operator. Using `*` would be worse than imprecise: the canonicalizer sorts the arguments of `*`, which would assert CROSS(a,b) = CROSS(b,a), and the truth is CROSS(a,b) = -CROSS(b,a). Argument order here is not a convention to be fixed for the matcher's convenience, it is the surface's orientation, and swapping it turns the object inside out.",
+          "The seventh head in the graph carrying `?0 = HEAD⟨?1, ?2⟩` -- after CONCAT, REALIZE, CAPMAX, MEET, UPDATE and this pass's own MATRIXPOWER -- and, like the other six, it twins none of them. Two of the seven arrived in this single seeding pass.",
+          "The result is a vector orthogonal to both inputs, which is a statement about the codomain that the template cannot make. So is the fact that the construction only exists in three dimensions.",
+          "Both tangent slots are variable-like: they vary over the surface, and so does the normal. Nothing here is chosen."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "surface_normal",
+            "mathematical_order": 1,
+            "description": "Normal vector at a point of the surface."
+          },
+          {
+            "symbol": "Su",
+            "syntactic_category": "variable",
+            "semantic_role": "first_tangent",
+            "mathematical_order": 1,
+            "description": "Partial derivative of the parameterization in the first parameter."
+          },
+          {
+            "symbol": "Sv",
+            "syntactic_category": "variable",
+            "semantic_role": "second_tangent",
+            "mathematical_order": 1,
+            "description": "Partial derivative in the second parameter."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "CROSS(first, second)",
+            "name": "vector cross product",
+            "input_arity": 2,
+            "codomain": "vectors in three-space",
+            "description": "The three-dimensional cross product. An opaque call: the grammar has no antisymmetric binary operator, and using `*` would assert commutativity, which is the exact opposite of the truth (CROSS(a,b) = -CROSS(b,a)). Argument order is fixed and load-bearing -- swapping it flips the surface's orientation -- and the matcher cannot see that."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The normal direction at a point of a parameterized surface is the cross product of the two coordinate tangent vectors there.",
+        "statistical_significance": "An honest opaque call, and the second one this pass contributes to docs/BACKLOG.md's running count of two-argument heads that cannot see each other. What is lost here is unusually concrete. The cross product's magnitude is the area of the parallelogram the tangents span -- which is `geometry.area_formulas.rectangle_area_formula`'s content for orthogonal tangents, and the graph holds that node, and this pass just added a third member to its typed group (`graphtheory.enumeration.complete_bipartite_edge_count`). None of that is reachable from behind an opaque head. The parallel with `ml.recurrence.mlstm_matrix_memory_update`'s OUTER is exact: both are bilinear constructions on two vectors that had to become calls because `*` in this grammar means 'commutative product' and nothing else, and in both cases the wrapper quarantines a subterm that would otherwise join a well-populated family. A per-head commutativity/antisymmetry table is the fix both nodes want.",
+        "regularity_conditions": [
+          "A regular parameterization: the two tangents linearly independent, so the cross product is nonzero",
+          "Three dimensions; the construction has no analogue in other dimensions without exterior algebra",
+          "A consistent choice of parameter order across the surface, which is what an orientation is"
+        ],
+        "failure_modes": [
+          "At a parametric singularity (a pole of a sphere's standard parameterization) the tangents become dependent and the normal vanishes, though the surface is perfectly smooth there.",
+          "A non-orientable surface admits no consistent global choice, so the pointwise definition cannot be extended and the failure is topological rather than numerical.",
+          "For meshes, averaging face normals to get vertex normals is a convention with no unique right answer; weighting by area, by angle or not at all gives visibly different shading."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.transforms.homogeneous_rigid_transform",
+          "geometry.area_formulas.rectangle_area_formula"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "foley1990",
+          "bibliographic_entry": "Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1990). Computer Graphics: Principles and Practice (2nd ed.). Reading: Addison-Wesley."
+        },
+        {
+          "citation_key": "phong1975",
+          "bibliographic_entry": "Phong, B. T. (1975). Illumination for computer generated pictures. Communications of the ACM, 18(6), 311-317.",
+          "url": "https://doi.org/10.1145/360825.360839"
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        }
+      ],
+      "keywords": [
+        "surface normal",
+        "cross product",
+        "tangent vector",
+        "orientation",
+        "area element",
+        "opaque head"
+      ]
+    },
+    {
+      "statement_id": "geomodel.quaternions.unit_quaternion_constraint",
+      "title": "Unit-Norm Constraint on a Rotation Quaternion",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics",
+          "robotics"
+        ],
+        "subfield": "rotations",
+        "topic": "quaternion_representation",
+        "canonical_objects": [
+          "quaternion",
+          "rotation",
+          "unit sphere"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "w^2 + x^2 + y^2 + z^2 = 1",
+        "canonical_latex": "w^2 + x^2 + y^2 + z^2 = 1",
+        "equivalent_forms": [
+          {
+            "form_id": "norm_form",
+            "notation_system": "ascii",
+            "expression": "NORM(q)^2 = 1",
+            "scope_note": "The same constraint as a norm condition; the expanded form is kept in the template because the grammar has no norm"
+          },
+          {
+            "form_id": "axis_angle",
+            "notation_system": "ascii",
+            "expression": "q = (COS(theta/2), SIN(theta/2)*axis)",
+            "scope_note": "The parameterization that satisfies the constraint identically, by the Pythagorean identity. The half-angle is why q and -q give the same rotation"
+          },
+          {
+            "form_id": "double_cover",
+            "notation_system": "ascii",
+            "expression": "q and -q represent the same rotation",
+            "scope_note": "The unit quaternions form a double cover of SO(3); this is a statement about the map, not about the constraint, and has no template here"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unit_sphere_constraint",
+        "anonymized_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+        "slot_schema": [
+          {
+            "slot_id": "REALPART",
+            "syntactic_category": "variable",
+            "semantic_role": "scalar_component"
+          },
+          {
+            "slot_id": "IMAGI",
+            "syntactic_category": "variable",
+            "semantic_role": "first_vector_component"
+          },
+          {
+            "slot_id": "IMAGJ",
+            "syntactic_category": "variable",
+            "semantic_role": "second_vector_component"
+          },
+          {
+            "slot_id": "IMAGK",
+            "syntactic_category": "variable",
+            "semantic_role": "third_vector_component"
+          }
+        ],
+        "invariants": [
+          "Four squares summing to one: the equation of the unit sphere in four dimensions, S^3. That the rotations of three-space are parameterized by a three-sphere -- doubly, since q and -q agree -- is the whole content of the quaternion representation, and the template states only the sphere.",
+          "All four slots are variable-like and enter symmetrically. The commutative `+` of the grammar is faithful here, and the symmetry is real: no component is distinguished BY THE CONSTRAINT, even though the real part is distinguished by the algebra.",
+          "A constraint, not an assignment. It is one of the few statements in the three corpora with no designated output slot, which is what a constraint is: the relation holds among the four, and none is computed from the others.",
+          "This is the quaternion counterpart of the orthogonality condition that geomodel.transforms.homogeneous_rigid_transform cannot express. Four numbers and one equation, versus nine numbers and six equations, is the practical argument for quaternions."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "w",
+            "syntactic_category": "variable",
+            "semantic_role": "scalar_component",
+            "mathematical_order": 0,
+            "description": "Real (scalar) part of the quaternion."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "first_vector_component",
+            "mathematical_order": 0,
+            "description": "Coefficient of i."
+          },
+          {
+            "symbol": "y",
+            "syntactic_category": "variable",
+            "semantic_role": "second_vector_component",
+            "mathematical_order": 0,
+            "description": "Coefficient of j."
+          },
+          {
+            "symbol": "z",
+            "syntactic_category": "variable",
+            "semantic_role": "third_vector_component",
+            "mathematical_order": 0,
+            "description": "Coefficient of k."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A quaternion represents a rotation exactly when its four components' squares sum to one.",
+        "statistical_significance": "A singleton, and the miss is arity alone. `geometry.right_triangles.pythagorean_theorem` and `diffgeo.surfaces.euclidean_line_element` share `+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)`; this node is `1 = +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), ^(?3:V, 2))`. Two differences, and both are structural rather than notational: four squares instead of two, and a literal on the right where the Pythagorean pair has a third square. The second difference is the more interesting one -- the Pythagorean form says 'this length equals that combination' and the unit-sphere form says 'this combination is pinned', which is the difference between a measurement and a constraint. The graph has no machinery for the sum-of-squares family as such (a variadic accumulation of squared slots), and it now has three members of it in three disciplines. That is a better case for an associativity-aware `+` family query than any single pair.",
+        "regularity_conditions": [
+          "Unit norm, which is what makes the quaternion a rotation rather than a rotation-and-scaling",
+          "q and -q denote the same rotation, so the representation is two-to-one",
+          "Renormalization required after numerical composition; the constraint is not preserved by floating-point multiplication"
+        ],
+        "failure_modes": [
+          "Linear interpolation between two unit quaternions leaves the sphere and must be renormalized, and even then does not interpolate at constant angular velocity -- which is what spherical linear interpolation exists to fix.",
+          "The double cover means naive interpolation between q and -q takes the long way round the sphere for the same rotation; sign canonicalization is a real step, not a nicety.",
+          "Reading the four components as a point in R^4 with Euclidean structure is right for the constraint and wrong for the rotation metric, which is the angular one."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.transforms.homogeneous_rigid_transform",
+          "geometry.right_triangles.pythagorean_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hamilton1844",
+          "bibliographic_entry": "Hamilton, W. R. (1844). On quaternions; or on a new system of imaginaries in algebra. Philosophical Magazine, 25(163), 10-13.",
+          "url": "https://doi.org/10.1080/14786444408644923"
+        },
+        {
+          "citation_key": "shoemake1985",
+          "bibliographic_entry": "Shoemake, K. (1985). Animating rotation with quaternion curves. ACM SIGGRAPH Computer Graphics, 19(3), 245-254.",
+          "url": "https://doi.org/10.1145/325165.325242"
+        },
+        {
+          "citation_key": "foley1990",
+          "bibliographic_entry": "Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1990). Computer Graphics: Principles and Practice (2nd ed.). Reading: Addison-Wesley."
+        }
+      ],
+      "keywords": [
+        "quaternion",
+        "unit norm",
+        "rotation",
+        "SO(3)",
+        "three-sphere",
+        "Hamilton",
+        "slerp"
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.endpoint_tangent",
+      "title": "Bezier Endpoint Tangent",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "geometric_modeling",
+          "mathematics",
+          "computer_graphics"
+        ],
+        "subfield": "curves_and_surfaces",
+        "topic": "derivatives",
+        "canonical_objects": [
+          "control polygon",
+          "tangent vector",
+          "curve degree"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P'(0) = n*(C_1 - C_0)",
+        "canonical_latex": "P'(0) = n\\left(C_1 - C_0\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "other_end",
+            "notation_system": "vector_notation",
+            "expression": "P'(1) = n*(C_n - C_(n-1))",
+            "scope_note": "The same statement at the far end; the curve leaves along the last leg of the control polygon as it entered along the first"
+          },
+          {
+            "form_id": "hodograph",
+            "notation_system": "ascii",
+            "expression": "P'(t) = n * sum_i BASIS_i(t) * (C_(i+1) - C_i)",
+            "scope_note": "The derivative curve: a degree n-1 Bezier over the forward differences. The endpoint statement is this evaluated at t = 0"
+          },
+          {
+            "form_id": "g1_continuity",
+            "notation_system": "ascii",
+            "expression": "C_n - C_(n-1) parallel to D_1 - D_0",
+            "scope_note": "Why the fact is used: joining two Bezier segments smoothly is a condition on the two adjacent control legs, not on the curves"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_difference",
+        "anonymized_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+        "slot_schema": [
+          {
+            "slot_id": "TANGENT",
+            "syntactic_category": "variable",
+            "semantic_role": "endpoint_tangent"
+          },
+          {
+            "slot_id": "DEGREE",
+            "syntactic_category": "parameter",
+            "semantic_role": "curve_degree"
+          },
+          {
+            "slot_id": "CONTROLONE",
+            "syntactic_category": "variable",
+            "semantic_role": "second_control_point"
+          },
+          {
+            "slot_id": "CONTROLZERO",
+            "syntactic_category": "variable",
+            "semantic_role": "first_control_point"
+          }
+        ],
+        "invariants": [
+          "A scaled difference of two variables. The degree is parameter-like -- it is fixed when the curve is chosen -- and the control points are variable-like, so the structure is 'a chosen number times a displacement'.",
+          "The difference is translation-invariant while the individual points are not, which is the algebraic reason a tangent is a vector and a position is a point. The template shows the difference and cannot show that the two live in different spaces.",
+          "The degree multiplies the whole displacement. That factor is what makes degree elevation change the control polygon while leaving the curve alone: adding a control point shortens the first leg by exactly the factor that keeps this product fixed.",
+          "One endpoint only. The companion statement at t = 1 is the same template with different slots filled, which is a fact about the curve's symmetry that the graph records as an equivalent form."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Pprime0",
+            "syntactic_category": "variable",
+            "semantic_role": "endpoint_tangent",
+            "mathematical_order": 1,
+            "description": "Derivative of the curve at the start parameter."
+          },
+          {
+            "symbol": "C_0",
+            "syntactic_category": "variable",
+            "semantic_role": "first_control_point",
+            "mathematical_order": 1,
+            "description": "First control point."
+          },
+          {
+            "symbol": "C_1",
+            "syntactic_category": "variable",
+            "semantic_role": "second_control_point",
+            "mathematical_order": 1,
+            "description": "Second control point."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "parameter",
+            "semantic_role": "curve_degree",
+            "mathematical_order": 0,
+            "description": "Degree of the curve."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A Bezier curve leaves its first control point in the direction of the second, at a speed of the degree times the distance between them.",
+        "statistical_significance": "A singleton at typed and family level (`?0:V = *(?1:P, +(?2:V, neg(?3:V)))`), with one instructive near-neighbour. The shape-level skeleton `?0 = *(?1, +(?2, neg(?3)))` is what you get by factoring `probstat.transform.z_standardization`'s `?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))` differently -- both are 'a scale factor times a difference' -- but z-standardization divides where this multiplies, so the `inv` separates them, in the same way it separates Newton's method from gradient descent in this pass's first prediction. Two independent misses in three corpora caused by the same one-node difference between multiplying by a scale and dividing by one is worth noting: the graph treats `k*x` and `x/k` as unrelated, and a normalization convention decides which a discipline writes.",
+        "regularity_conditions": [
+          "A Bezier curve of degree at least one",
+          "Distinct first two control points, or the tangent vanishes and the direction is undefined",
+          "Parameterization over [0,1]; a different interval rescales the derivative"
+        ],
+        "failure_modes": [
+          "A vanishing tangent at a coincident control pair is a parameterization cusp, not a geometric one; the curve is still smooth as a set, and code that reads the derivative as a direction will divide by zero anyway.",
+          "Matching tangent DIRECTIONS gives geometric continuity, matching tangent VECTORS gives parametric continuity, and confusing the two is the standard source of visible creases in joined surfaces."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geomodel.bezier.bernstein_bezier_evaluation",
+          "geomodel.bezier.de_casteljau_step"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "bezier1972",
+          "bibliographic_entry": "Bezier, P. (1972). Numerical Control: Mathematics and Applications. London: Wiley."
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "prautzsch2002",
+          "bibliographic_entry": "Prautzsch, H., Boehm, W., Paluszny, M. (2002). Bezier and B-Spline Techniques. Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "Bezier",
+        "tangent",
+        "hodograph",
+        "control polygon",
+        "degree elevation",
+        "G1 continuity"
+      ]
+    }
+  ]
+}
