@@ -1,0 +1,1150 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "differential_topology.degree_index_morse.v1",
+  "discipline": "differential_topology",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+      "title": "Diffeomorphism Invariance of the Euler Characteristic",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "invariants",
+        "topic": "diffeomorphism_invariance",
+        "canonical_objects": [
+          "smooth compact manifold",
+          "diffeomorphism",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi(M) = chi(N) whenever M and N are diffeomorphic",
+        "canonical_latex": "M \\cong N \\;\\Longrightarrow\\; \\chi(M) = \\chi(N)",
+        "equivalent_forms": [
+          {
+            "form_id": "homotopy",
+            "notation_system": "ascii",
+            "expression": "chi(M) = chi(N) whenever M and N are homotopy equivalent",
+            "scope_note": "The stronger statement: chi is a homotopy invariant, so diffeomorphism invariance is a corollary"
+          },
+          {
+            "form_id": "triangulation",
+            "notation_system": "ascii",
+            "expression": "chi = V - E + F, independent of the triangulation chosen",
+            "scope_note": "The combinatorial definition; independence of triangulation is the same theorem in another dress"
+          },
+          {
+            "form_id": "betti",
+            "notation_system": "ascii",
+            "expression": "chi(M) = sum_i (-1)^i * b_i(M)",
+            "scope_note": "Alternating sum of Betti numbers, which is where the algebraic-topology corpus takes over"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "invariant_under_equivalence",
+        "anonymized_template": "EULERCHAR(SOURCE) = EULERCHAR(TARGET)",
+        "slot_schema": [
+          {
+            "slot_id": "SOURCE",
+            "syntactic_category": "set",
+            "semantic_role": "equivalent_object_first"
+          },
+          {
+            "slot_id": "TARGET",
+            "syntactic_category": "set",
+            "semantic_role": "equivalent_object_second"
+          }
+        ],
+        "invariants": [
+          "The equivalence hypothesis -- that the two spaces are diffeomorphic -- is nowhere in the template. The grammar has no implication connective usable at top level with these operands, so the statement reduces to its conclusion and the hypothesis lives in regularity_conditions. Any invariance statement anyone adds later will lose its hypothesis the same way.",
+          "The same functional head applied to both operands, which is what makes this the shape of *every* invariance claim: F(x) = F(y) whenever x ~ y. It is a template worth having even though it currently twins with nothing.",
+          "Euler characteristic is held as a call here and as a bare slot in diffgeo.surfaces.gauss_bonnet_theorem, which is why the two corpora cannot see that they are talking about the same integer.",
+          "Multiplicative under products and additive under disjoint union, neither of which this template records; those would be separate nodes."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "invariant_value",
+            "mathematical_order": 0,
+            "description": "Euler characteristic: an integer attached to the space."
+          },
+          {
+            "symbol": "M",
+            "syntactic_category": "set",
+            "semantic_role": "equivalent_object_first",
+            "mathematical_order": 0,
+            "description": "First smooth manifold."
+          },
+          {
+            "symbol": "N",
+            "syntactic_category": "set",
+            "semantic_role": "equivalent_object_second",
+            "mathematical_order": 0,
+            "description": "Second smooth manifold, diffeomorphic to the first."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EULERCHAR(.)",
+            "name": "Euler characteristic",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Euler characteristic of a manifold. Held as a *call* throughout data/differential_topology because there it is an invariant applied to a space, and as a *slot* in Gauss-Bonnet because there it is the number appearing on the right-hand side. The corpus-wide consequence of that split is recorded in docs/BACKLOG.md."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Diffeomorphic manifolds have the same Euler characteristic, so the number is a property of the space rather than of any description of it.",
+        "statistical_significance": "The node that licenses every other appearance of the Euler characteristic in these two corpora. Without it, the chi on the right of Gauss-Bonnet would be a number attached to a particular smooth structure and the theorem would say much less. Structurally it is a singleton -- `EULERCHAR⟨?0:V⟩ = EULERCHAR⟨?1:V⟩` matches nothing -- and the reason is instructive: the corpus has plenty of invariance claims (entropy under relabelling, arc length under reparameterization, Gaussian curvature under isometry) but every one of them is stated in prose inside an `invariants` array rather than as a template. This is the first node to put an invariance claim in the template itself, and if others follow the shape F(x) = F(y) it will stop being a singleton. The algebraic-topology corpus being authored in parallel will own the computational nodes for chi (planned `algtop.invariants.euler_characteristic_surface`); this node is the differential-topology half, asserting that the invariant is well defined on diffeomorphism classes.",
+        "regularity_conditions": [
+          "M and N smooth compact manifolds, possibly with boundary",
+          "A diffeomorphism between them exists -- the hypothesis the template cannot carry",
+          "Both admit finite triangulations, so the combinatorial definition applies"
+        ],
+        "failure_modes": [
+          "The converse is false and badly so: equal Euler characteristics do not imply diffeomorphism, or even homotopy equivalence. The torus and the Klein bottle both have chi = 0.",
+          "In odd dimensions the Euler characteristic of a closed manifold is always zero, so the invariant carries no information there and arguments that rely on it silently do nothing."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.vectorfields.poincare_hopf_index_theorem",
+          "difftop.morse.weak_morse_inequality"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "Euler characteristic",
+        "diffeomorphism invariance",
+        "topological invariant",
+        "well-definedness"
+      ]
+    },
+    {
+      "statement_id": "difftop.degree.degree_regular_value_count",
+      "title": "Degree of a Smooth Map as a Signed Preimage Count",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "mapping_degree",
+        "topic": "degree",
+        "canonical_objects": [
+          "smooth map",
+          "compact oriented manifold",
+          "regular value"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "deg(f) = sum_i sign(det(Df(x_i)))",
+        "canonical_latex": "\\deg(f) = \\sum_{x \\in f^{-1}(y)} \\operatorname{sign}\\det(Df_x)",
+        "equivalent_forms": [
+          {
+            "form_id": "homology",
+            "notation_system": "ascii",
+            "expression": "f_* : H_n(M) -> H_n(N) is multiplication by deg(f)",
+            "scope_note": "The homological definition, which the algebraic-topology corpus will own"
+          },
+          {
+            "form_id": "form_integral",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(f^*(omega)) = deg(f) * INTEGRAL(omega) for any top form omega",
+            "scope_note": "De Rham version: degree is the factor by which pullback scales total integrals"
+          },
+          {
+            "form_id": "circle",
+            "notation_system": "ascii",
+            "expression": "deg(z -> z^n) = n on the unit circle",
+            "scope_note": "The winding-number case, where the signed count is visibly a count"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "signed_index_sum",
+        "anonymized_template": "DEGREE(SMOOTHMAP) = sum_i SIGN_i",
+        "slot_schema": [
+          {
+            "slot_id": "SMOOTHMAP",
+            "syntactic_category": "functional",
+            "semantic_role": "map_between_manifolds"
+          },
+          {
+            "slot_id": "SIGN_i",
+            "syntactic_category": "variable",
+            "semantic_role": "local_orientation_sign"
+          }
+        ],
+        "invariants": [
+          "A local-to-global statement: a global invariant of the map is a finite sum of purely local data, one term per preimage point. The same shape as difftop.vectorfields.poincare_hopf_index_theorem, but with a different left-hand head, which is why the two do not twin even though they are the same idea.",
+          "Independent of the regular value chosen, which is the substance of the definition and is invisible in the template -- the value y appears nowhere, and the grammar has no binder that could introduce it.",
+          "Each summand is +1 or -1. The template declares SIGN_i a `variable` because it varies over the index set, but it takes only two values, and that quantization is what makes the total an integer.",
+          "Homotopy invariant, so degree descends to homotopy classes of maps -- the property that turns it into a tool rather than a computation.",
+          "The index suffix is a suffix by necessity: an identifier beginning `sum_` would be parsed as a prefix big-operator (docs/BACKLOG.md), so indexed slots in this corpus are named `SIGN_i`, never `SUM_SIGN`."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "map_between_manifolds",
+            "mathematical_order": 0,
+            "description": "Smooth map between compact oriented manifolds of equal dimension."
+          },
+          {
+            "symbol": "y",
+            "syntactic_category": "variable",
+            "semantic_role": "regular_value",
+            "mathematical_order": 0,
+            "description": "Regular value of f, whose preimage is finite."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "preimage_point",
+            "mathematical_order": 0,
+            "description": "A point of the preimage, at which the Jacobian determinant is nonzero."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "DEGREE(.)",
+            "name": "Brouwer degree",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Degree of a smooth map between compact oriented manifolds of the same dimension: the signed count of preimages of a regular value, independent of which regular value is chosen and invariant under smooth homotopy."
+          }
+        ],
+        "index_sets": [
+          {
+            "notation": "i in f^{-1}(y)",
+            "domain": "finite preimage of a regular value",
+            "description": "Index running over the finitely many preimages of a regular value under a smooth map of compact manifolds."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The degree of a map is what you get by counting the preimages of a typical point with a plus or minus depending on whether the map preserves or reverses orientation there.",
+        "statistical_significance": "A singleton at `DEGREE⟨?0:V⟩ = sum⟨?1:V⟩`, and its nearest neighbour is in its own corpus: difftop.vectorfields.poincare_hopf_index_theorem is `EULERCHAR⟨?0:V⟩ = sum⟨?1:V⟩`, identical except for the left-hand call head. That is not a coincidence the matcher is missing -- the two theorems are the same theorem, since the index of a vector field at a zero is the local degree of the associated Gauss map -- but the matcher compares heads literally and DEGREE is not EULERCHAR. The pair is the cheapest available demonstration that head-level literalness is the binding constraint on this corpus: two nodes that differ in exactly one identifier, written by the same author on the same afternoon, do not meet.",
+        "regularity_conditions": [
+          "f smooth, M and N compact oriented of the same dimension, N connected",
+          "y a regular value of f, which exists for almost every y by Sard's theorem",
+          "The preimage is finite, which follows from compactness and regularity",
+          "Orientations fixed on both manifolds; reversing either flips the sign"
+        ],
+        "failure_modes": [
+          "Degree is defined only between manifolds of equal dimension and only when both are oriented; for non-orientable targets there is a mod-2 degree instead, which loses the sign and most of the power.",
+          "Computing the sum at a critical value is meaningless. The count is unstable there, and Sard's theorem is what guarantees a legal value exists rather than what finds one."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "difftop.degree.degree_multiplicativity"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.degree.brouwer_fixed_point",
+          "difftop.vectorfields.poincare_hopf_index_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "bott1982",
+          "bibliographic_entry": "Bott, R., Tu, L. W. (1982). Differential Forms in Algebraic Topology. Graduate Texts in Mathematics 82. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "degree",
+        "regular value",
+        "Sard's theorem",
+        "winding number",
+        "signed count",
+        "local to global"
+      ]
+    },
+    {
+      "statement_id": "difftop.degree.degree_multiplicativity",
+      "title": "Multiplicativity of Degree Under Composition",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "mapping_degree",
+        "topic": "degree",
+        "canonical_objects": [
+          "smooth map",
+          "composition",
+          "mapping degree"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "deg(g o f) = deg(g) * deg(f)",
+        "canonical_latex": "\\deg(g \\circ f) = \\deg(g)\\,\\deg(f)",
+        "equivalent_forms": [
+          {
+            "form_id": "functorial",
+            "notation_system": "ascii",
+            "expression": "deg is a monoid homomorphism from self-maps under composition to integers under multiplication"
+          },
+          {
+            "form_id": "diffeomorphism",
+            "notation_system": "ascii",
+            "expression": "deg(f) = +1 or -1 for a diffeomorphism, and deg(f^-1) = deg(f)",
+            "scope_note": "The invertible case, obtained by composing with the inverse"
+          },
+          {
+            "form_id": "circle_powers",
+            "notation_system": "ascii",
+            "expression": "deg((z -> z^m) o (z -> z^n)) = m*n",
+            "scope_note": "The winding-number case, where multiplicativity is visible by inspection"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "composition_factorization",
+        "anonymized_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
+        "slot_schema": [
+          {
+            "slot_id": "OUTER",
+            "syntactic_category": "functional",
+            "semantic_role": "outer_map"
+          },
+          {
+            "slot_id": "INNER",
+            "syntactic_category": "functional",
+            "semantic_role": "inner_map"
+          }
+        ],
+        "invariants": [
+          "Both slots appear twice: once inside the composition on the left and once alone on the right. That repetition is the whole content of a homomorphism law, and it is what distinguishes this from a statement that merely relates three unrelated degrees.",
+          "The argument order of COMPOSE is fixed to outer-then-inner, matching the convention scripts/seed_calculus.py established for the chain rule. Call arguments are ordered for the matcher (docs/BACKLOG.md), so this is a convention that has to be stated and kept.",
+          "Multiplication is commutative but composition is not, so the right-hand side is symmetric while the left-hand side is not. The matcher's canonical sort will reorder the product but never the composition, which is correct and is the reason the template is not self-twinning under argument swap.",
+          "Degree of the identity is 1 and degree of a constant map is 0, which together with this law makes the degree a monoid homomorphism onto the integers under multiplication."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "inner_map",
+            "mathematical_order": 0,
+            "description": "Inner smooth map."
+          },
+          {
+            "symbol": "g",
+            "syntactic_category": "variable",
+            "semantic_role": "outer_map",
+            "mathematical_order": 0,
+            "description": "Outer smooth map."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "degree_value",
+            "mathematical_order": 0,
+            "description": "Integer degree; the codomain of the homomorphism."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "DEGREE(.)",
+            "name": "Brouwer degree",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Degree of a smooth map between compact oriented manifolds of the same dimension: the signed count of preimages of a regular value, independent of which regular value is chosen and invariant under smooth homotopy."
+          },
+          {
+            "notation": "COMPOSE(.,.)",
+            "name": "map composition",
+            "input_arity": 2,
+            "codomain": "smooth map",
+            "description": "Composition of an outer map with an inner map, argument order fixed to match calculus.differentiation.chain_rule. Call arguments are ordered for the matcher, so this convention has to be stated rather than assumed."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Composing two maps multiplies their degrees, so degree turns composition into multiplication.",
+        "statistical_significance": "The near-miss this corpus most wanted to land, and did not. calculus.differentiation.chain_rule is `D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)`; this node is `DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)`. Both say that an invariant of a composite factorizes into a product of invariants of the factors, both use the same COMPOSE head with the same argument order, and both were written to be compared. They do not twin, and the reason is mathematically real rather than a notational accident: the chain rule's right-hand side has to *transport* the outer derivative along the inner map -- the extra `COMPOSE(D(OUTER), INNER)` -- because the derivative at a point lives in a tangent space that depends on the point. Degree has no such dependence; it is a single integer for the whole map, so no transport is needed and the factorization is bare. So the structural difference between the two templates is exactly the difference between a pointwise invariant and a global one. That is the most satisfying negative result in these two corpora: the matcher found no twin, and the missing subterm is the content. Both nodes share the archetype id `composition_factorization`, which makes the matcher report them under 'archetype ids spanning multiple structures' -- an intentional use of that diagnostic to record a hand-asserted kinship the skeletons do not carry.",
+        "regularity_conditions": [
+          "All three maps between compact oriented manifolds of the same dimension",
+          "Target manifolds connected, so degree is well defined",
+          "Orientations fixed and consistent; the composite inherits them",
+          "Smoothness of both factors, or continuity plus the homological definition"
+        ],
+        "failure_modes": [
+          "Multiplicativity needs the middle manifold connected. Through a disconnected intermediate the degrees can fail to multiply because 'the' degree is not well defined there.",
+          "Read as a statement about winding numbers of plane curves it is true only for maps of the circle to itself; the winding number of a composite of curves in the plane is not a product."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "difftop.degree.degree_regular_value_count"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.degree.brouwer_fixed_point"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "bott1982",
+          "bibliographic_entry": "Bott, R., Tu, L. W. (1982). Differential Forms in Algebraic Topology. Graduate Texts in Mathematics 82. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "degree",
+        "composition",
+        "homomorphism",
+        "chain rule",
+        "multiplicativity",
+        "honest miss"
+      ]
+    },
+    {
+      "statement_id": "difftop.degree.brouwer_fixed_point",
+      "title": "Brouwer Fixed-Point Theorem",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "mapping_degree",
+        "topic": "fixed_points",
+        "canonical_objects": [
+          "closed ball",
+          "continuous self-map",
+          "retraction"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "there exists x with f(x) = x",
+        "canonical_latex": "\\exists\\, x \\in D^n : f(x) = x",
+        "equivalent_forms": [
+          {
+            "form_id": "no_retraction",
+            "notation_system": "ascii",
+            "expression": "there is no smooth retraction of the disk onto its boundary sphere",
+            "scope_note": "The equivalent statement the degree argument actually proves; a retraction would need degree 1 and 0 at once"
+          },
+          {
+            "form_id": "degree_argument",
+            "notation_system": "ascii",
+            "expression": "if f had no fixed point, DEGREE(r) would be both 0 and 1",
+            "scope_note": "The contradiction: a fixed-point-free self-map builds a retraction, whose degree is forced two ways"
+          },
+          {
+            "form_id": "one_dimensional",
+            "notation_system": "ascii",
+            "expression": "a continuous f from [a,b] to [a,b] has a fixed point",
+            "scope_note": "The case n = 1, which is the intermediate value theorem applied to f(x) - x"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "fixed_point_equation",
+        "anonymized_template": "FIXEDPOINT = SELFMAP(FIXEDPOINT)",
+        "slot_schema": [
+          {
+            "slot_id": "FIXEDPOINT",
+            "syntactic_category": "variable",
+            "semantic_role": "invariant_point"
+          },
+          {
+            "slot_id": "SELFMAP",
+            "syntactic_category": "functional",
+            "semantic_role": "self_map"
+          }
+        ],
+        "invariants": [
+          "One slot appearing on both sides of the equality, once bare and once under the map. That self-reference is the definition of a fixed point and is the only structure the template carries.",
+          "The existential quantifier is not in the template. The theorem asserts that a solution exists; the template states only the equation to be solved. The grammar has identifiers, arithmetic, calls and relations and no quantifier at all, so this is the same class of loss as infotheory.channel.channel_capacity's missing binder -- the statement parses, the logical force does not survive.",
+          "Non-constructive. The degree argument proves that no fixed-point-free self-map exists without exhibiting a fixed point, and Sperner's lemma and Scarf's algorithm are separate work.",
+          "Requires the domain to be its own codomain, which is why SELFMAP is a distinct head from the general smooth maps in difftop.degree.degree_regular_value_count."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "invariant_point",
+            "mathematical_order": 0,
+            "description": "Point fixed by the map, whose existence is asserted."
+          },
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "self_map",
+            "mathematical_order": 0,
+            "description": "Continuous map of the closed ball to itself."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "dimension",
+            "mathematical_order": 0,
+            "description": "Dimension of the ball; the theorem holds for every n >= 0."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SELFMAP(.)",
+            "name": "continuous self-map",
+            "input_arity": 1,
+            "codomain": "point of the same space",
+            "description": "A continuous map of a space to itself, evaluated at a point. Distinguished from a general smooth map because the fixed-point statement needs the domain and codomain to be the same object."
+          },
+          {
+            "notation": "DEGREE(.)",
+            "name": "Brouwer degree",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Degree of a smooth map between compact oriented manifolds of the same dimension: the signed count of preimages of a regular value, independent of which regular value is chosen and invariant under smooth homotopy."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every continuous map of a closed ball to itself leaves at least one point where it started.",
+        "statistical_significance": "Included as the fixed-point end of the degree machinery, and it is a structural singleton -- `?0:V = SELFMAP⟨?0:V⟩` matches nothing. The near neighbours are worth naming because they are near in the way that matters: logic.boolean_laws.double_negation is `?0 = NEG⟨NEG⟨?0⟩⟩`, settheory.boolean_laws.idempotence is `?0 = MEET⟨?0, ?0⟩`, and calculus.integration.ftc_differentiation_part is `?0 = D⟨INTEGRAL⟨?0⟩⟩`. All four are 'an operation that returns its argument', and all four have different arities or nesting depths, so no two of them meet. There is a real family here -- fixed points of operators, idempotents, involutions, left inverses -- and the matcher as built cannot see it, because it works on exact skeletons and the family is defined by a *property* of the skeleton (the argument slot recurring at the root) rather than by its shape. That would need a different query than twin detection: something like 'find templates where one slot occurs on both sides of the relation at different depths'. Recorded in docs/BACKLOG.md as a wanted match level.",
+        "regularity_conditions": [
+          "Domain homeomorphic to a closed finite-dimensional ball: compact, convex, non-empty",
+          "Map continuous; smoothness is not needed and the smooth case implies the general one by approximation",
+          "Fails for open balls, for spheres, and in infinite dimensions without extra compactness"
+        ],
+        "failure_modes": [
+          "Convexity or its topological equivalent is essential. A rotation of the annulus and an irrational rotation of the circle are fixed-point free, and the disk's contractibility is what rules that out.",
+          "In infinite dimensions the theorem is false as stated; Schauder's version needs compactness of the map, and Kakutani's set-valued version needs upper hemicontinuity. Economists citing 'Brouwer' for an equilibrium existence proof almost always mean Kakutani.",
+          "Non-constructive: knowing a fixed point exists gives no bound on how hard it is to find, and computing one is PPAD-complete."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.degree.degree_regular_value_count",
+          "difftop.degree.degree_multiplicativity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "brouwer1911",
+          "bibliographic_entry": "Brouwer, L. E. J. (1911). Ueber Abbildung von Mannigfaltigkeiten. Mathematische Annalen, 71(1), 97-115."
+        },
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        }
+      ],
+      "keywords": [
+        "Brouwer",
+        "fixed point",
+        "degree",
+        "retraction",
+        "non-constructive",
+        "missing quantifier"
+      ]
+    },
+    {
+      "statement_id": "difftop.morse.weak_morse_inequality",
+      "title": "Weak Morse Inequality",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "morse_theory",
+        "topic": "critical_points",
+        "canonical_objects": [
+          "Morse function",
+          "critical point",
+          "Betti number"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "c_k >= b_k",
+        "canonical_latex": "c_k \\ge b_k",
+        "equivalent_forms": [
+          {
+            "form_id": "strong",
+            "notation_system": "ascii",
+            "expression": "c_k - c_(k-1) + ... ± c_0 >= b_k - b_(k-1) + ... ± b_0",
+            "scope_note": "The strong Morse inequalities: alternating partial sums, of which the weak form is the leading consequence"
+          },
+          {
+            "form_id": "morse_equality",
+            "notation_system": "ascii",
+            "expression": "sum_k (-1)^k * c_k = sum_k (-1)^k * b_k = chi(M)",
+            "scope_note": "The alternating sums are equal and both compute the Euler characteristic"
+          },
+          {
+            "form_id": "existence",
+            "notation_system": "ascii",
+            "expression": "a Morse function on a compact M has at least sum_k b_k critical points",
+            "scope_note": "Summing the weak inequalities: topology forces critical points to exist"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "componentwise_lower_bound",
+        "anonymized_template": "CRITICALCOUNT_k >= BETTINUMBER_k",
+        "slot_schema": [
+          {
+            "slot_id": "CRITICALCOUNT_k",
+            "syntactic_category": "variable",
+            "semantic_role": "analytic_count"
+          },
+          {
+            "slot_id": "BETTINUMBER_k",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_count"
+          }
+        ],
+        "invariants": [
+          "A relational statement with no output slot and no operator between the operands: the entire content is that one integer bounds another, and the template is as thin as a template can be while still saying something.",
+          "Analytic on the left, topological on the right. Critical points depend on the choice of Morse function; Betti numbers do not. The inequality is therefore a bound that holds for every choice, and the interesting question -- whether it is attained, i.e. whether a perfect Morse function exists -- is a separate and often hard problem.",
+          "Index-matched: the bound holds degree by degree, which is strictly stronger than bounding the total number of critical points, and it is why the strong form with alternating sums exists at all.",
+          "Both slot ids carry the degree index as a *suffix*. A slot named `MIN_COUNT` or `MAX_COUNT` would be eaten by the prefix big-operator rule (docs/BACKLOG.md), so suffix indexing is the convention here as in the information-theory corpus."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "c_k",
+            "syntactic_category": "variable",
+            "semantic_role": "analytic_count",
+            "mathematical_order": 0,
+            "description": "Number of critical points of index k of a Morse function on M."
+          },
+          {
+            "symbol": "b_k",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_count",
+            "mathematical_order": 0,
+            "description": "k-th Betti number of M: the rank of its k-th homology group."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "index",
+            "semantic_role": "degree",
+            "mathematical_order": 0,
+            "description": "Index, or degree, running from 0 to dim M."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": ">=",
+            "name": "greater than or equal",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A Morse function on a compact manifold must have at least as many critical points of each index as the manifold has independent cycles in that dimension.",
+        "statistical_significance": "Structurally the thinnest node in either corpus -- `?0:V >= ?1:V` -- and kept anyway, because a corpus that only admitted structurally rich statements would be evidence of selection rather than of structure. The closest thing to a relative is infotheory.divergence.gibbs_inequality, which is a `>=` against the numeral 0 rather than against a second slot, so it does not twin. What the node contributes is not a skeleton but a *direction*: it is the only statement in these two corpora where topology constrains analysis rather than the other way round. Gauss-Bonnet computes a topological invariant from an analytic integral; Poincare-Hopf computes it from a count of zeros; this one runs backwards, using the topology as a floor under what any smooth function can do. The Morse equality in the equivalent_forms list closes the loop by recovering the Euler characteristic from the same counts.",
+        "regularity_conditions": [
+          "M compact smooth manifold without boundary",
+          "f a Morse function: all critical points non-degenerate, hence isolated",
+          "Betti numbers taken over a field, so that ranks add correctly",
+          "The inequality holds for every k independently, and for every Morse function"
+        ],
+        "failure_modes": [
+          "Degenerate critical points invalidate the count. A function with a single monkey-saddle can have fewer critical points than the inequality allows, which is why non-degeneracy is a hypothesis and not a convenience.",
+          "Betti numbers over Z rather than a field bring torsion into the count and the inequality can fail; the standard statement is over a field.",
+          "Attainment is not asserted. Manifolds admitting a perfect Morse function are special, and assuming the bound is tight is a common error in low-dimensional arguments."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+          "difftop.vectorfields.poincare_hopf_index_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "morse1925",
+          "bibliographic_entry": "Morse, M. (1925). Relations between the Critical Points of a Real Function of n Independent Variables. Transactions of the American Mathematical Society, 27(3), 345-396."
+        },
+        {
+          "citation_key": "milnor1963",
+          "bibliographic_entry": "Milnor, J. W. (1963). Morse Theory. Annals of Mathematics Studies 51. Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        }
+      ],
+      "keywords": [
+        "Morse theory",
+        "critical points",
+        "Betti number",
+        "inequality",
+        "index"
+      ]
+    },
+    {
+      "statement_id": "difftop.vectorfields.poincare_hopf_index_theorem",
+      "title": "Poincare-Hopf Index Theorem",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "vector_fields",
+        "topic": "index_theory",
+        "canonical_objects": [
+          "compact manifold",
+          "vector field",
+          "isolated zero",
+          "index"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi(M) = sum_i index(V, x_i)",
+        "canonical_latex": "\\chi(M) = \\sum_{x \\in \\mathrm{Zero}(V)} \\mathrm{ind}_x(V)",
+        "equivalent_forms": [
+          {
+            "form_id": "morse_gradient",
+            "notation_system": "ascii",
+            "expression": "chi(M) = sum_k (-1)^k * c_k",
+            "scope_note": "For the gradient of a Morse function the index at a critical point is (-1)^k, and the theorem becomes the Morse equality"
+          },
+          {
+            "form_id": "boundary",
+            "notation_system": "ascii",
+            "expression": "chi(M) = sum_i index(V, x_i) for V pointing outward along the boundary",
+            "scope_note": "Version for manifolds with boundary, with an outward-pointing condition"
+          },
+          {
+            "form_id": "gauss_bonnet",
+            "notation_system": "ascii",
+            "expression": "2*pi*chi(M) = INTEGRAL(K)",
+            "scope_note": "The differential-geometric half of the same statement; Chern's proof passes between them"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "invariant_from_local_indices",
+        "anonymized_template": "EULERCHAR(MANIFOLD) = sum_i INDEX_i",
+        "slot_schema": [
+          {
+            "slot_id": "MANIFOLD",
+            "syntactic_category": "set",
+            "semantic_role": "ambient_space"
+          },
+          {
+            "slot_id": "INDEX_i",
+            "syntactic_category": "variable",
+            "semantic_role": "local_index"
+          }
+        ],
+        "invariants": [
+          "Local data summed to a global invariant, with the striking feature that the left side does not mention the vector field at all: any field with isolated zeros gives the same total, so the sum is a property of the manifold.",
+          "The indices are integers of either sign, and a field can be modified to move zeros around or merge them, which changes the individual terms and never the sum. That invariance is the theorem.",
+          "Same skeleton shape as difftop.degree.degree_regular_value_count except for the left-hand call head, and the resemblance is genuine: the index of a field at an isolated zero is the local degree of the normalized field on a small sphere around it.",
+          "The right-hand side uses the prefix big-operator `sum_i`, which parses to the head `sum`. diffgeo.surfaces.gauss_bonnet_theorem states the same fact with `INTEGRAL(.)`, a call. The heads are unrelated strings and the two nodes cannot meet; see that node's significance field."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "invariant_value",
+            "mathematical_order": 0,
+            "description": "Euler characteristic of the manifold."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "vector_field",
+            "mathematical_order": 0,
+            "description": "Smooth tangent vector field with isolated zeros."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "zero_point",
+            "mathematical_order": 0,
+            "description": "An isolated zero of the field."
+          },
+          {
+            "symbol": "M",
+            "syntactic_category": "set",
+            "semantic_role": "ambient_space",
+            "mathematical_order": 0,
+            "description": "Compact smooth manifold, without boundary in the basic form."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EULERCHAR(.)",
+            "name": "Euler characteristic",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Euler characteristic of a manifold. Held as a *call* throughout data/differential_topology because there it is an invariant applied to a space, and as a *slot* in Gauss-Bonnet because there it is the number appearing on the right-hand side. The corpus-wide consequence of that split is recorded in docs/BACKLOG.md."
+          }
+        ],
+        "index_sets": [
+          {
+            "notation": "i in Zero(V)",
+            "domain": "finite zero set of a vector field",
+            "description": "Index running over the isolated zeros of a smooth vector field on a compact manifold."
+          }
+        ],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "For any smooth vector field with isolated zeros on a compact manifold, the signed count of its zeros equals the Euler characteristic -- so the field cannot avoid having them unless the characteristic is zero.",
+        "statistical_significance": "One half of Chern's theorem, standing next to the other half in the sibling corpus and structurally invisible to it. This node is `EULERCHAR⟨?0:V⟩ = sum⟨?1:V⟩`; diffgeo.surfaces.gauss_bonnet_theorem is `INTEGRAL⟨?0:V⟩ = *(?1:P, ?2:V)`. They are the same theorem in the discrete and continuous registers -- the index sum is what the curvature integral becomes when the metric degenerates onto a triangulation -- and the matcher relates them not at all. Three independent obstacles were counted while authoring the pair: the `sum`/`INTEGRAL` head split, the Euler characteristic being a call here and a slot there, and the explicit 2*pi normalization on the Gauss-Bonnet side that the integer index sum does not need. Removing any one of them would not be enough. This is recorded in docs/BACKLOG.md as the corpus's clearest evidence that discrete and continuous statements of one fact are systematically unmatchable, which is a much larger problem than any single pair: every conservation law, every normalization, and every expectation in the graph has both forms.",
+        "regularity_conditions": [
+          "M compact smooth manifold, without boundary in this form",
+          "Vector field smooth with only isolated zeros; a field with a zero curve is excluded",
+          "Indices computed with a consistent orientation convention",
+          "For manifolds with boundary the field must point outward everywhere along it"
+        ],
+        "failure_modes": [
+          "The theorem counts zeros with sign, so a field with many zeros can have index sum zero; 'no zeros' and 'indices cancel' are different situations that the total cannot distinguish.",
+          "For manifolds with boundary the outward-pointing hypothesis is not cosmetic: an inward-pointing field gives chi of the manifold relative to its boundary instead, which differs by the boundary's own characteristic."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "difftop.vectorfields.hairy_ball_theorem"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.degree.degree_regular_value_count",
+          "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+          "difftop.morse.weak_morse_inequality"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "poincare1885",
+          "bibliographic_entry": "Poincare, H. (1885). Sur les courbes definies par les equations differentielles. Journal de Mathematiques Pures et Appliquees, 4e serie, 1, 167-244."
+        },
+        {
+          "citation_key": "hopf1927",
+          "bibliographic_entry": "Hopf, H. (1927). Vektorfelder in n-dimensionalen Mannigfaltigkeiten. Mathematische Annalen, 96(1), 225-249."
+        },
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "chern1944",
+          "bibliographic_entry": "Chern, S.-S. (1944). A Simple Intrinsic Proof of the Gauss-Bonnet Formula for Closed Riemannian Manifolds. Annals of Mathematics, 45(4), 747-752.",
+          "url": "https://doi.org/10.2307/1969302"
+        }
+      ],
+      "keywords": [
+        "Poincare-Hopf",
+        "index",
+        "vector field",
+        "Euler characteristic",
+        "local to global",
+        "Gauss-Bonnet",
+        "honest miss"
+      ]
+    },
+    {
+      "statement_id": "difftop.vectorfields.hairy_ball_theorem",
+      "title": "Hairy Ball Theorem (Vanishing Characteristic is Necessary)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_topology"
+        ],
+        "subfield": "vector_fields",
+        "topic": "index_theory",
+        "canonical_objects": [
+          "even-dimensional sphere",
+          "tangent vector field"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi(M) = 0 whenever M carries a nowhere-vanishing vector field",
+        "canonical_latex": "\\text{$V$ nowhere zero on $M$} \\;\\Longrightarrow\\; \\chi(M) = 0",
+        "equivalent_forms": [
+          {
+            "form_id": "sphere",
+            "notation_system": "ascii",
+            "expression": "every continuous tangent vector field on an even-dimensional sphere vanishes somewhere",
+            "scope_note": "The classical statement: chi(S^2n) = 2, so no nowhere-zero field exists -- you cannot comb a hairy ball flat"
+          },
+          {
+            "form_id": "converse",
+            "notation_system": "ascii",
+            "expression": "a compact manifold with chi(M) = 0 admits a nowhere-vanishing vector field",
+            "scope_note": "Hopf's converse: for connected compact manifolds the condition is sufficient as well as necessary"
+          },
+          {
+            "form_id": "odd_sphere",
+            "notation_system": "ascii",
+            "expression": "S^(2n+1) carries the nowhere-zero field V(x) = (-x_2, x_1, -x_4, x_3, ...)",
+            "scope_note": "Odd spheres have chi = 0 and an explicit field, which shows the parity is the whole story"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "vanishing_invariant",
+        "anonymized_template": "EULERCHAR(MANIFOLD) = 0",
+        "slot_schema": [
+          {
+            "slot_id": "MANIFOLD",
+            "syntactic_category": "set",
+            "semantic_role": "ambient_space"
+          }
+        ],
+        "invariants": [
+          "A single slot against a numeric literal: the thinnest possible template that still names its subject. The hypothesis -- that a nowhere-vanishing field exists -- is absent, as in every conditional statement in these corpora, and lives in regularity_conditions.",
+          "An immediate corollary of difftop.vectorfields.poincare_hopf_index_theorem: an empty sum is zero, so a field with no zeros forces the characteristic to vanish. The derivation is one line and the `entails` edge records it.",
+          "The literal 0 on the right is not a slot, which places this node in the same structural category as infotheory.divergence.gibbs_inequality (`... >= 0`) without twinning with it, since the relation differs.",
+          "Parity is the operative fact in the classical case: chi(S^n) is 2 for even n and 0 for odd n, so the obstruction appears exactly on even-dimensional spheres."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "invariant_value",
+            "mathematical_order": 0,
+            "description": "Euler characteristic, asserted to vanish."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "vector_field",
+            "mathematical_order": 0,
+            "description": "Nowhere-vanishing smooth tangent vector field, whose existence is the hypothesis."
+          },
+          {
+            "symbol": "M",
+            "syntactic_category": "set",
+            "semantic_role": "ambient_space",
+            "mathematical_order": 0,
+            "description": "Compact smooth manifold."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EULERCHAR(.)",
+            "name": "Euler characteristic",
+            "input_arity": 1,
+            "codomain": "integer",
+            "description": "Euler characteristic of a manifold. Held as a *call* throughout data/differential_topology because there it is an invariant applied to a space, and as a *slot* in Gauss-Bonnet because there it is the number appearing on the right-hand side. The corpus-wide consequence of that split is recorded in docs/BACKLOG.md."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A compact manifold can carry a vector field that vanishes nowhere only if its Euler characteristic is zero -- which is why the hair on a sphere cannot be combed flat, and why there is always a point of zero horizontal wind speed somewhere on Earth.",
+        "statistical_significance": "The corpus's smallest theorem and a useful control. Its skeleton `0 = EULERCHAR⟨?0:V⟩` twins with nothing, which is expected, but the node earns its place by being the one statement here whose *content* is entirely in its hypothesis: the template says an integer is zero, and the theorem is that a geometric condition forces it. Every conditional statement in these two corpora loses its antecedent the same way, and counting them gives a number worth having -- of sixteen nodes across the two files, four (this one, the Euler-characteristic invariance node, Brouwer, and the weak Morse inequality) are conditionals or quantified statements whose logical form the grammar cannot carry. That is a quarter of the corpus reduced to its conclusion. The matcher is not wrong to compare only what it is given; the observation is that what it is given is systematically weaker for theorems than for definitions, so twin density is not comparable across statement classes.",
+        "regularity_conditions": [
+          "M compact smooth manifold",
+          "The hypothesis the template cannot carry: M admits a smooth tangent vector field vanishing nowhere",
+          "Tangent field, not an arbitrary map to R^n; the tangency is what makes the index defined",
+          "For the classical sphere case, M = S^n with n even"
+        ],
+        "failure_modes": [
+          "The theorem gives no bound on how many zeros there are or where they sit -- only that the signed count cannot be avoided. A field on S^2 can have one zero of index 2 or two of index 1.",
+          "It is about tangent fields. A nowhere-zero field of *normal* vectors, or a nowhere-zero map to R^3 that is not tangent, exists on the sphere and is not a counterexample.",
+          "Odd-dimensional spheres are not exceptions to a rule; they satisfy the hypothesis because their characteristic is zero, and Hopf's converse says every such manifold does."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "difftop.vectorfields.poincare_hopf_index_theorem"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.invariants.euler_characteristic_diffeomorphism_invariance"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hopf1927",
+          "bibliographic_entry": "Hopf, H. (1927). Vektorfelder in n-dimensionalen Mannigfaltigkeiten. Mathematische Annalen, 96(1), 225-249."
+        },
+        {
+          "citation_key": "poincare1885",
+          "bibliographic_entry": "Poincare, H. (1885). Sur les courbes definies par les equations differentielles. Journal de Mathematiques Pures et Appliquees, 4e serie, 1, 167-244."
+        },
+        {
+          "citation_key": "milnor1965",
+          "bibliographic_entry": "Milnor, J. W. (1965). Topology from the Differentiable Viewpoint. Charlottesville: University Press of Virginia."
+        },
+        {
+          "citation_key": "guillemin1974",
+          "bibliographic_entry": "Guillemin, V., Pollack, A. (1974). Differential Topology. Englewood Cliffs: Prentice-Hall."
+        }
+      ],
+      "keywords": [
+        "hairy ball",
+        "vector field",
+        "Euler characteristic",
+        "obstruction",
+        "Poincare-Hopf",
+        "missing hypothesis"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1571 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "differential_geometry.curves_surfaces_forms.v1",
+  "discipline": "differential_geometry",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "diffgeo.curves.arc_length_functional",
+      "title": "Arc Length of a Parameterized Curve",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "curves",
+        "topic": "length_functional",
+        "canonical_objects": [
+          "parameterized curve",
+          "Riemannian metric"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "L = INTEGRAL(|c'(t)|)",
+        "canonical_latex": "L(c) = \\int_a^b \\lVert c'(t) \\rVert \\, dt",
+        "equivalent_forms": [
+          {
+            "form_id": "riemannian",
+            "notation_system": "ascii",
+            "expression": "L(c) = INTEGRAL(sqrt(g(c'(t), c'(t))))",
+            "scope_note": "On a Riemannian manifold the speed is measured by the metric tensor g"
+          },
+          {
+            "form_id": "first_fundamental_form",
+            "notation_system": "ascii",
+            "expression": "L = INTEGRAL(sqrt(E*u'^2 + 2*F*u'*v' + G*v'^2))",
+            "scope_note": "For a curve on a surface, the integrand is the first fundamental form evaluated on the velocity"
+          },
+          {
+            "form_id": "reparameterization",
+            "notation_system": "ascii",
+            "expression": "L(c o phi) = L(c) for every orientation-preserving reparameterization phi",
+            "scope_note": "The invariance that makes length a property of the image, not of the parameterization"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "accumulated_density",
+        "anonymized_template": "LENGTH = INTEGRAL(SPEED)",
+        "slot_schema": [
+          {
+            "slot_id": "LENGTH",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "SPEED",
+            "syntactic_category": "variable",
+            "semantic_role": "integrand_density"
+          }
+        ],
+        "invariants": [
+          "Length is an accumulation of a pointwise density along a one-dimensional domain. Nothing in the template names the domain: the grammar has no binder, so `INTEGRAL(.)` is an opaque call and the interval, the measure and the orientation are all invisible to the matcher.",
+          "Invariant under reparameterization, which is the property that distinguishes this functional from diffgeo.curves.geodesic_energy_functional and is the reason length has no distinguished minimizing parameterization.",
+          "Homogeneous of degree one in the velocity, so the integrand carries an absolute value or a square root and the functional is not smooth at velocities that vanish.",
+          "Additive over concatenation of curves, which is the property that makes it a *measure* on paths rather than merely a number attached to them."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "L",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Arc length of the curve."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "curve_parameter",
+            "mathematical_order": 0,
+            "description": "Parameter along the curve, ranging over a compact interval."
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "variable",
+            "semantic_role": "curve",
+            "mathematical_order": 0,
+            "description": "Smooth parameterized curve into the ambient manifold."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the region fixed by the statement's context -- a curve, a surface, or an oriented manifold with boundary. Written as an opaque call because the template grammar has no binder, so neither the domain nor the measure is visible to the matcher; the same head scripts/seed_calculus.py uses, deliberately, so the operator identities line up."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The length of a curve is the accumulated speed of any parameterization of it.",
+        "statistical_significance": "The first of two length-like functionals authored here to test whether the matcher can see the discrete/continuous divide. It cannot. The typed skeleton `?0:V = INTEGRAL⟨?1:V⟩` is a singleton in the whole graph, and the near-miss worth naming is with probability normalization: `sum_i p_i = 1` and `INTEGRAL(density) = 1` are the same statement in the discrete and continuous cases, but `sum_i` parses to the head `sum` while `INTEGRAL(.)` parses to the head `INTEGRAL`, so they can never meet. (No sum-to-one node exists in data/statistics today; the closest is probstat.probability.total_probability_partition, `MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i`, whose skeleton `?0:V = sum⟨*(?1:P, ?2:V)⟩` differs from this one in head *and* in summand shape. So the miss here is structural, not an accident of which nodes happen to exist.) Recorded in docs/BACKLOG.md.",
+        "regularity_conditions": [
+          "Curve piecewise smooth on a compact parameter interval",
+          "Ambient space carries a metric, so that speed is defined",
+          "Orientation is irrelevant: length is unsigned"
+        ],
+        "failure_modes": [
+          "Arc length is not defined for merely continuous curves; rectifiability is an extra hypothesis and fails for typical Brownian paths and for the graph of x*sin(1/x) near zero.",
+          "The functional is not smooth where the velocity vanishes, so variational arguments about length routinely switch to the energy functional and transfer the conclusion back."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.curves.geodesic_energy_functional",
+          "diffgeo.surfaces.first_fundamental_form"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "docarmo1992",
+          "bibliographic_entry": "do Carmo, M. P. (1992). Riemannian Geometry. Boston: Birkhauser."
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "arc length",
+        "functional",
+        "reparameterization invariance",
+        "accumulation",
+        "curve"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.curves.geodesic_energy_functional",
+      "title": "Geodesic Energy of a Curve",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "curves",
+        "topic": "energy_functional",
+        "canonical_objects": [
+          "parameterized curve",
+          "Riemannian metric",
+          "geodesic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "E = (1/2) * INTEGRAL(|c'(t)|^2)",
+        "canonical_latex": "E(c) = \\tfrac{1}{2}\\int_a^b \\lVert c'(t)\\rVert^2 \\, dt",
+        "equivalent_forms": [
+          {
+            "form_id": "riemannian",
+            "notation_system": "ascii",
+            "expression": "E(c) = (1/2)*INTEGRAL(g(c'(t), c'(t)))",
+            "scope_note": "Metric form; the integrand is a quadratic form in the velocity"
+          },
+          {
+            "form_id": "cauchy_schwarz",
+            "notation_system": "ascii",
+            "expression": "L(c)^2 <= 2*(b - a)*E(c)",
+            "scope_note": "Cauchy-Schwarz, with equality exactly for constant-speed parameterizations -- the inequality that lets energy stand in for length"
+          },
+          {
+            "form_id": "euler_lagrange",
+            "notation_system": "ascii",
+            "expression": "first variation of E vanishes iff the covariant acceleration of c vanishes",
+            "scope_note": "Critical points of E are exactly the geodesics, parameterized proportionally to arc length"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_accumulated_square",
+        "anonymized_template": "ENERGY = CONSTANT * INTEGRAL(SPEED^2)",
+        "slot_schema": [
+          {
+            "slot_id": "ENERGY",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "normalizing_factor"
+          },
+          {
+            "slot_id": "SPEED",
+            "syntactic_category": "variable",
+            "semantic_role": "integrand_density"
+          }
+        ],
+        "invariants": [
+          "Quadratic where diffgeo.curves.arc_length_functional is homogeneous of degree one, and that single difference is the whole of why energy is the functional one actually varies: it is smooth at zero velocity and its critical points are parameterized, whereas length's are not.",
+          "NOT reparameterization invariant. Energy sees how fast the curve is traversed; length does not. Minimizing energy therefore selects constant-speed representatives, which is a feature and not a defect.",
+          "The leading factor is a fixed convention, declared `constant` so that the typed skeleton carries a P there. It exists only to make the first variation come out without a factor of two.",
+          "Critical points coincide with those of length among constant-speed curves (Cauchy-Schwarz), which is what licenses the standard bait-and-switch in the proof of the existence of geodesics."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Energy of the curve."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "curve_parameter",
+            "mathematical_order": 0,
+            "description": "Parameter along the curve."
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "variable",
+            "semantic_role": "curve",
+            "mathematical_order": 0,
+            "description": "Smooth parameterized curve."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the region fixed by the statement's context -- a curve, a surface, or an oriented manifold with boundary. Written as an opaque call because the template grammar has no binder, so neither the domain nor the measure is visible to the matcher; the same head scripts/seed_calculus.py uses, deliberately, so the operator identities line up."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1/2",
+            "value": 0.5,
+            "description": "The conventional factor in the energy functional. It exists to make the first variation of energy the geodesic equation without a stray 2; nothing geometric depends on it."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The energy of a curve is half the accumulated squared speed of a particular parameterization of it.",
+        "statistical_significance": "A deliberate near-miss with geometry.area_formulas.circle_area_formula. That node is `AREA = CONSTANT * RADIUS^2`, typed skeleton `?0:V = *(?1:P, ^(?2:V, 2))`; this one is `?0:V = *(?1:P, INTEGRAL⟨^(?2:V, 2)⟩)`. The two differ by exactly one call wrapper, and the wrapper is doing real work -- the difference between a scaled square and an accumulated scaled square is the difference between a formula and a functional. The matcher's specialization pass (scripts/specialize.py) will not bridge it either, since absorbing an INTEGRAL into a variable slot is a rewrite rather than a slot-to-subtree binding. Worth keeping as a calibration point: one wrapper is enough to separate two skeletons, and that is the correct behaviour.",
+        "regularity_conditions": [
+          "Curve piecewise smooth on a compact parameter interval",
+          "Ambient space carries a Riemannian metric",
+          "The parameter interval is fixed: energy depends on it, unlike length"
+        ],
+        "failure_modes": [
+          "Energy is not a geometric invariant of the image of the curve. Comparing the energies of two curves parameterized over different intervals compares parameterizations, not shapes.",
+          "In Lorentzian signature the integrand is not positive and the functional is not bounded below, so the direct method of the calculus of variations does not apply and geodesics have to be found some other way."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.curves.arc_length_functional",
+          "diffgeo.surfaces.first_fundamental_form"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1992",
+          "bibliographic_entry": "do Carmo, M. P. (1992). Riemannian Geometry. Boston: Birkhauser."
+        },
+        {
+          "citation_key": "milnor1963",
+          "bibliographic_entry": "Milnor, J. W. (1963). Morse Theory. Annals of Mathematics Studies 51. Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "energy functional",
+        "geodesic",
+        "calculus of variations",
+        "constant speed",
+        "Cauchy-Schwarz"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.curves.circle_curvature",
+      "title": "Curvature of a Circle",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "curves",
+        "topic": "curvature",
+        "canonical_objects": [
+          "plane curve",
+          "circle",
+          "Frenet frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "K = 1 / R",
+        "canonical_latex": "\\kappa = \\frac{1}{R}",
+        "equivalent_forms": [
+          {
+            "form_id": "radius_of_curvature",
+            "notation_system": "ascii",
+            "expression": "R = 1 / K",
+            "scope_note": "The inverse reading: the osculating circle of a general curve has radius 1/K"
+          },
+          {
+            "form_id": "frenet",
+            "notation_system": "ascii",
+            "expression": "|T'(s)| = K for a unit-speed parameterization",
+            "scope_note": "Curvature as the rate of turning of the unit tangent with respect to arc length"
+          },
+          {
+            "form_id": "total_turning",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(K) = 2*pi over one full circle of any radius",
+            "scope_note": "Total curvature is radius-independent -- the one-dimensional shadow of Gauss-Bonnet"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "reciprocal_of_scale",
+        "anonymized_template": "CURVATURE = 1 / RADIUS",
+        "slot_schema": [
+          {
+            "slot_id": "CURVATURE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "RADIUS",
+            "syntactic_category": "variable",
+            "semantic_role": "scale"
+          }
+        ],
+        "invariants": [
+          "A reciprocal, not a ratio. The numerator is the literal 1 -- there is no quantity being divided by an extent -- which is exactly why this node does not join the rate/density family; see the significance field.",
+          "Scale-antivariant: doubling the radius halves the curvature, so curvature carries dimension 1/length and is the natural quantity to integrate against length.",
+          "Constant along the curve, which characterizes circles and lines among plane curves up to rigid motion; the limit R -> infinity gives the straight line with curvature 0.",
+          "Independent of parameterization and of orientation up to sign, so the unsigned version stated here is a property of the point set."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "K",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Curvature of the circle."
+          },
+          {
+            "symbol": "R",
+            "syntactic_category": "variable",
+            "semantic_role": "scale",
+            "mathematical_order": 0,
+            "description": "Radius of the circle, strictly positive."
+          },
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "arc_length_parameter",
+            "mathematical_order": 0,
+            "description": "Arc length parameter, in which curvature is the turning rate."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly.",
+        "statistical_significance": "The corpus's cleanest example of a predicted twin that correctly does *not* fire. The rate/density family -- calculus.differentiation.average_rate_of_change, physics.kinematics.average_speed, physics.materials.mass_density, chemistry.solutions.molarity_definition -- all sit on `?0:V = *(?1:V, inv(?2:V))`, a three-slot skeleton. This node is `?0:V = *(1, inv(?1:V))`: two slots and a numeric literal. The arities differ on the right-hand side, so no twin fires at shape, typed or family level, and none should. Forcing it would mean inventing a `UNITLENGTH` slot for the numerator, and there is no unit length in K = 1/R -- the 1 is a genuine constant of the reciprocal, not an elided quantity. The honest reading is that curvature is a *density* (turning per unit length) whose numerator has been normalized away, and that the matcher is right to treat a normalized density and a general ratio as different structures.",
+        "regularity_conditions": [
+          "Circle of strictly positive radius in the Euclidean plane",
+          "Unsigned curvature; the signed version depends on a choice of normal",
+          "Curvature measured with respect to arc length, not an arbitrary parameter"
+        ],
+        "failure_modes": [
+          "Read as a definition of curvature it is circular: curvature is defined by the Frenet equations and this is the computed value for one family of curves.",
+          "The formula is Euclidean. On a sphere a geodesic circle of the same intrinsic radius has a different geodesic curvature, which is the whole content of Gauss-Bonnet's boundary term."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.curves.arc_length_functional",
+          "diffgeo.surfaces.gauss_bonnet_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "spivak1999",
+          "bibliographic_entry": "Spivak, M. (1999). A Comprehensive Introduction to Differential Geometry, Volume 1 (3rd ed.). Houston: Publish or Perish."
+        }
+      ],
+      "keywords": [
+        "curvature",
+        "circle",
+        "reciprocal",
+        "osculating circle",
+        "honest miss"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.surfaces.first_fundamental_form",
+      "title": "First Fundamental Form (Metric Line Element)",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "surfaces",
+        "topic": "metric",
+        "canonical_objects": [
+          "regular surface",
+          "coordinate chart",
+          "metric tensor"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "ds^2 = E*du^2 + 2*F*du*dv + G*dv^2",
+        "canonical_latex": "ds^2 = E\\,du^2 + 2F\\,du\\,dv + G\\,dv^2",
+        "equivalent_forms": [
+          {
+            "form_id": "matrix",
+            "notation_system": "matrix_notation",
+            "expression": "ds^2 = [du dv] * [[E, F], [F, G]] * [du dv]^T",
+            "scope_note": "The symmetric matrix of the metric in the coordinate frame; E*G - F^2 > 0 is positive-definiteness"
+          },
+          {
+            "form_id": "inner_products",
+            "notation_system": "ascii",
+            "expression": "E = <x_u, x_u>, F = <x_u, x_v>, G = <x_v, x_v>",
+            "scope_note": "Coefficients as inner products of the coordinate tangent vectors"
+          },
+          {
+            "form_id": "tensor",
+            "notation_system": "ascii",
+            "expression": "ds^2 = g_ij * dx^i * dx^j",
+            "scope_note": "Index notation; the two-dimensional case written out is the classical form above"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "quadratic_form_in_two_differentials",
+        "anonymized_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+        "slot_schema": [
+          {
+            "slot_id": "LINEELEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "infinitesimal_distance"
+          },
+          {
+            "slot_id": "COEFFE",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_uu"
+          },
+          {
+            "slot_id": "COEFFF",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_uv"
+          },
+          {
+            "slot_id": "COEFFG",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_vv"
+          },
+          {
+            "slot_id": "DU",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_differential_first"
+          },
+          {
+            "slot_id": "DV",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_differential_second"
+          }
+        ],
+        "invariants": [
+          "A general quadratic form in two differentials. The cross term carries a literal 2 because the form is symmetric and F is counted twice; that 2 is a genuine numeral, not a slot, and it is what keeps this skeleton apart from any three-term sum with free coefficients.",
+          "The coefficients are declared `variable`, not `constant`: they are functions of position on the surface, and treating them as parameters would falsely make the metric flat.",
+          "Positive-definite exactly when E > 0 and E*G - F^2 > 0. The template cannot express that side condition, so it lives in regularity_conditions -- the grammar has relations but no way to attach a constraint to a definition.",
+          "Everything intrinsic to the surface -- lengths, angles, areas, geodesics, and by Gauss's Theorema Egregium the Gaussian curvature itself -- is a function of these three coefficients and their derivatives alone."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "infinitesimal_distance",
+            "mathematical_order": 0,
+            "description": "Element of arc length on the surface."
+          },
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_uu",
+            "mathematical_order": 0,
+            "description": "Coefficient of du^2; the squared length of the first coordinate tangent."
+          },
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_uv",
+            "mathematical_order": 0,
+            "description": "Coefficient of the cross term; the inner product of the two coordinate tangents."
+          },
+          {
+            "symbol": "G",
+            "syntactic_category": "variable",
+            "semantic_role": "metric_coefficient_vv",
+            "mathematical_order": 0,
+            "description": "Coefficient of dv^2; the squared length of the second coordinate tangent."
+          },
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_first",
+            "mathematical_order": 0,
+            "description": "First surface coordinate."
+          },
+          {
+            "symbol": "v",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_second",
+            "mathematical_order": 0,
+            "description": "Second surface coordinate."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The squared length of an infinitesimal displacement on a surface is a quadratic form in the coordinate increments, with three position-dependent coefficients.",
+        "statistical_significance": "The general form of which geometry's Pythagorean theorem is the constant-coefficient case. That relationship is real but is not visible to the matcher at this node: the typed skeleton here is `+(*(2, ?0:V, ?1:V, ?2:V), *(?3:V, ^(?1:V, 2)), *(?4:V, ^(?2:V, 2))) = ^(?5:V, 2)`, a three-term sum, against Pythagoras' two-term `+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)`. Specializing one to the other requires setting E = G = 1 and F = 0 and then *deleting* the vanishing term, which is an algebraic rewrite rather than a slot binding, and scripts/specialize.py does slot bindings. That is the same class of miss docs/BACKLOG.md already records for uniform entropy against Shannon entropy. The corpus therefore carries diffgeo.surfaces.euclidean_line_element as a separate node, where the twin does fire -- the specialization is asserted by hand via special_case_of and the twin is checked by machine only at the specialized end.",
+        "regularity_conditions": [
+          "Regular parameterized surface patch, so the coordinate tangents are independent",
+          "E > 0 and E*G - F^2 > 0 (positive-definiteness)",
+          "Coefficients smooth functions of the coordinates"
+        ],
+        "failure_modes": [
+          "The coefficients are coordinate-dependent; comparing E, F, G across two parameterizations of the same surface compares charts, not geometry. Only invariants built from them (curvature, area) are meaningful.",
+          "Positive-definiteness fails on the coordinate singularities of common charts -- the poles in spherical coordinates -- where the form degenerates without the surface doing anything."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "diffgeo.surfaces.euclidean_line_element"
+        ],
+        "composed_with": [
+          "diffgeo.curves.arc_length_functional",
+          "diffgeo.surfaces.gaussian_curvature_principal_product"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "gauss1827",
+          "bibliographic_entry": "Gauss, C. F. (1828). Disquisitiones generales circa superficies curvas. Commentationes Societatis Regiae Scientiarum Gottingensis Recentiores, 6, 99-146."
+        },
+        {
+          "citation_key": "spivak1999",
+          "bibliographic_entry": "Spivak, M. (1999). A Comprehensive Introduction to Differential Geometry, Volume 1 (3rd ed.). Houston: Publish or Perish."
+        }
+      ],
+      "keywords": [
+        "first fundamental form",
+        "line element",
+        "metric tensor",
+        "quadratic form",
+        "Theorema Egregium"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.surfaces.euclidean_line_element",
+      "title": "Euclidean Line Element (Flat Metric)",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "surfaces",
+        "topic": "metric",
+        "canonical_objects": [
+          "Euclidean plane",
+          "Cartesian chart"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "ds^2 = du^2 + dv^2",
+        "canonical_latex": "ds^2 = du^2 + dv^2",
+        "equivalent_forms": [
+          {
+            "form_id": "cartesian",
+            "notation_system": "ascii",
+            "expression": "ds^2 = dx^2 + dy^2",
+            "scope_note": "The plane in Cartesian coordinates: E = G = 1, F = 0"
+          },
+          {
+            "form_id": "finite_difference",
+            "notation_system": "ascii",
+            "expression": "(delta_s)^2 = (delta_x)^2 + (delta_y)^2",
+            "scope_note": "The finite version is the Pythagorean theorem; the differential version is the same statement in the limit"
+          },
+          {
+            "form_id": "polar",
+            "notation_system": "ascii",
+            "expression": "ds^2 = dr^2 + r^2*dtheta^2",
+            "scope_note": "The same flat metric in polar coordinates -- E = 1, F = 0, G = r^2 -- showing the coefficients are chart artifacts"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "sum_of_squares",
+        "anonymized_template": "LINEELEMENT^2 = DU^2 + DV^2",
+        "slot_schema": [
+          {
+            "slot_id": "LINEELEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "infinitesimal_distance"
+          },
+          {
+            "slot_id": "DU",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_differential_first"
+          },
+          {
+            "slot_id": "DV",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_differential_second"
+          }
+        ],
+        "invariants": [
+          "The metric coefficients have disappeared: E = G = 1 and F = 0, so the quadratic form is the identity form and the statement is a bare sum of squares.",
+          "The left slot is squared rather than being a bare output slot. That is the load-bearing authoring choice: `DS2 = DU^2 + DV^2` would put a plain slot on the left and could never meet a statement whose left side is a square, whereas `LINEELEMENT^2 = ...` meets geometry.right_triangles.pythagorean_theorem exactly.",
+          "Flat: the Gaussian curvature computed from these coefficients is identically zero, which is why the same coefficients hold in every Cartesian chart and why no chart of the sphere can achieve them.",
+          "Symmetric in the two differentials, an isotropy the general first fundamental form does not have."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "infinitesimal_distance",
+            "mathematical_order": 0,
+            "description": "Element of arc length."
+          },
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_first",
+            "mathematical_order": 0,
+            "description": "First Cartesian coordinate."
+          },
+          {
+            "symbol": "v",
+            "syntactic_category": "variable",
+            "semantic_role": "coordinate_second",
+            "mathematical_order": 0,
+            "description": "Second Cartesian coordinate."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "In a flat chart, the squared length of an infinitesimal displacement is the sum of the squares of the coordinate increments.",
+        "statistical_significance": "The corpus's cleanest cross-discipline typed twin and the one this corpus was partly built to produce. Its typed skeleton `+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)` is shared character for character with geometry.right_triangles.pythagorean_theorem, and it carries the same archetype id, `sum_of_squares`, so no label drift is reported. The claim the twin encodes is not an analogy: the Euclidean line element *is* the Pythagorean theorem, applied to an infinitesimal right triangle and integrated. Every other node in this corpus is downstream of that identification -- the first fundamental form is what you get when the right triangle is allowed to be skew and to vary from point to point, and Gaussian curvature is the obstruction to making these coefficients hold in any chart at all. The twin is also a small argument for the corpus's method: the connection is obvious once written this way, and completely invisible if the left-hand side is named `DS2`.",
+        "regularity_conditions": [
+          "Flat chart on a Euclidean plane, or a Cartesian chart on any flat surface",
+          "Coordinates orthonormal at the point in question",
+          "Statement is pointwise; it holds in a chart, not on a curved surface globally"
+        ],
+        "failure_modes": [
+          "No chart of a curved surface has this line element on an open set; assuming it locally is the flat-earth error and it is detectable precisely by the Gaussian curvature.",
+          "In polar or any non-Cartesian coordinates the same flat metric looks different, so the form of the line element is not by itself evidence of curvature."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "diffgeo.surfaces.first_fundamental_form"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.curves.arc_length_functional"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "spivak1999",
+          "bibliographic_entry": "Spivak, M. (1999). A Comprehensive Introduction to Differential Geometry, Volume 1 (3rd ed.). Houston: Publish or Perish."
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "line element",
+        "flat metric",
+        "Pythagorean theorem",
+        "sum of squares",
+        "typed twin"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "title": "Gaussian Curvature as the Product of Principal Curvatures",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "surfaces",
+        "topic": "curvature",
+        "canonical_objects": [
+          "regular surface",
+          "shape operator",
+          "Gauss map"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "K = k1 * k2",
+        "canonical_latex": "K = \\kappa_1 \\kappa_2",
+        "equivalent_forms": [
+          {
+            "form_id": "shape_operator",
+            "notation_system": "ascii",
+            "expression": "K = det(S)",
+            "scope_note": "Determinant of the shape operator, whose eigenvalues are the principal curvatures"
+          },
+          {
+            "form_id": "fundamental_forms",
+            "notation_system": "ascii",
+            "expression": "K = (L*N - M^2) / (E*G - F^2)",
+            "scope_note": "Ratio of the determinants of the second and first fundamental forms"
+          },
+          {
+            "form_id": "theorema_egregium",
+            "notation_system": "ascii",
+            "expression": "K is a function of E, F, G and their first two derivatives alone",
+            "scope_note": "Gauss's Theorema Egregium: the extrinsic definition above computes an intrinsic quantity"
+          },
+          {
+            "form_id": "sphere",
+            "notation_system": "ascii",
+            "expression": "K = 1/R^2 on a sphere of radius R",
+            "scope_note": "Both principal curvatures equal 1/R; the product is the square"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "bilinear_product",
+        "anonymized_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+        "slot_schema": [
+          {
+            "slot_id": "GAUSSCURVATURE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PRINCIPAL1",
+            "syntactic_category": "variable",
+            "semantic_role": "extremal_curvature_first"
+          },
+          {
+            "slot_id": "PRINCIPAL2",
+            "syntactic_category": "variable",
+            "semantic_role": "extremal_curvature_second"
+          }
+        ],
+        "invariants": [
+          "A product of two free variables, not a scaled variable: both factors are declared `variable`, which is what puts this node in the `?0:V = *(?1:V, ?2:V)` group rather than the much larger `*(?:P, ?:V)` group that Newton's second law and Ohm's law occupy.",
+          "The product is symmetric in the two factors, and so is the geometry: there is no ordering of principal curvatures that the definition depends on.",
+          "Sign-carrying in a way a product of lengths is not. Both curvatures negative gives K > 0 (a sphere-like point), opposite signs gives K < 0 (a saddle), and one vanishing gives K = 0 (a cylinder), so the sign of the product classifies the local shape.",
+          "Invariant under isometry by the Theorema Egregium, even though both factors individually are not -- bending a plane into a cylinder changes k1 and k2 while their product stays zero. The twin with rectangle area is structural only; area is a product of two independent quantities, curvature a product of two constrained ones."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "K",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Gaussian curvature at a point."
+          },
+          {
+            "symbol": "k1",
+            "syntactic_category": "variable",
+            "semantic_role": "extremal_curvature_first",
+            "mathematical_order": 0,
+            "description": "First principal curvature: maximal normal curvature at the point."
+          },
+          {
+            "symbol": "k2",
+            "syntactic_category": "variable",
+            "semantic_role": "extremal_curvature_second",
+            "mathematical_order": 0,
+            "description": "Second principal curvature: minimal normal curvature at the point."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The Gaussian curvature at a point is the product of the two extreme normal curvatures there.",
+        "statistical_significance": "An unsought twin, which makes it more interesting than the sought ones. Its typed skeleton `?0:V = *(?1:V, ?2:V)` is shared with geometry.area_formulas.rectangle_area_formula (`AREA = DIM1 * DIM2`), and with nothing else in the graph -- most products in the corpus have a parameter-like factor (`FORCE = INERTIA * RESPONSE`, `POTENTIAL = FLOW * RESISTANCE`) and land on a different typed skeleton. So the group is exactly 'the product of two quantities both free to vary', and the two members are area and curvature. That is not a coincidence dressed up: Gaussian curvature is the area distortion of the Gauss map, the limiting ratio of the area of the spherical image to the area of the patch, so a product of two orthogonal rates is precisely the right shape for it. This node adopts the existing archetype id `bilinear_product` so the matcher's split-archetype check stays quiet.",
+        "regularity_conditions": [
+          "Regular surface with a chosen unit normal field, so the shape operator is defined",
+          "Point at which the surface is twice differentiable",
+          "Sign convention: K is independent of the normal's orientation even though k1 and k2 are not"
+        ],
+        "failure_modes": [
+          "The principal curvatures are extrinsic and change under bending; only their product is intrinsic, so reading either factor as a property of the surface's own geometry is wrong.",
+          "At umbilic points the principal directions are undefined even though the curvatures are equal, so formulas that pick a principal frame break there while this product does not."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.surfaces.first_fundamental_form",
+          "diffgeo.surfaces.gauss_bonnet_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "gauss1827",
+          "bibliographic_entry": "Gauss, C. F. (1828). Disquisitiones generales circa superficies curvas. Commentationes Societatis Regiae Scientiarum Gottingensis Recentiores, 6, 99-146."
+        },
+        {
+          "citation_key": "spivak1999",
+          "bibliographic_entry": "Spivak, M. (1999). A Comprehensive Introduction to Differential Geometry, Volume 1 (3rd ed.). Houston: Publish or Perish."
+        }
+      ],
+      "keywords": [
+        "Gaussian curvature",
+        "principal curvature",
+        "shape operator",
+        "Theorema Egregium",
+        "bilinear product"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "title": "Gauss-Bonnet Theorem (Closed Surface)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry",
+          "differential_topology"
+        ],
+        "subfield": "surfaces",
+        "topic": "curvature_topology_bridge",
+        "canonical_objects": [
+          "compact oriented surface",
+          "Gaussian curvature",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "INTEGRAL(K) = 2*pi*chi",
+        "canonical_latex": "\\int_M K \\, dA = 2\\pi \\chi(M)",
+        "equivalent_forms": [
+          {
+            "form_id": "with_boundary",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(K) + BOUNDARYINTEGRAL(k_g) = 2*pi*chi(M)",
+            "scope_note": "Version for a compact surface with boundary; the geodesic curvature of the boundary makes up the difference"
+          },
+          {
+            "form_id": "genus",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(K) = 4*pi*(1 - g)",
+            "scope_note": "For an orientable closed surface of genus g, using chi = 2 - 2g"
+          },
+          {
+            "form_id": "sphere",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(1/R^2) over a sphere of radius R = (1/R^2)*(4*pi*R^2) = 4*pi = 2*pi*2",
+            "scope_note": "The radius cancels: every round sphere has the same total curvature, which is the theorem in one line"
+          },
+          {
+            "form_id": "triangle",
+            "notation_system": "ascii",
+            "expression": "angle sum of a geodesic triangle - pi = INTEGRAL(K) over the triangle",
+            "scope_note": "The local form; the excess of the angle sum over pi is the enclosed curvature"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "normalized_topological_invariant",
+        "anonymized_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+        "slot_schema": [
+          {
+            "slot_id": "CURVATURE",
+            "syntactic_category": "variable",
+            "semantic_role": "integrand_density"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "normalizing_factor"
+          },
+          {
+            "slot_id": "EULERCHAR",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant"
+          }
+        ],
+        "invariants": [
+          "The left side is analytic and depends on the metric at every point; the right side is an integer times a fixed constant and depends on nothing but the homeomorphism type. The whole content of the theorem is that the two sides are equal, and the template makes that asymmetry visible as `call = constant * slot`.",
+          "The normalizing constant is declared `constant`, not `parameter`: it is 2*pi and nothing else. That declaration is what puts a P in the typed skeleton and, as noted in the significance field, is one of the two reasons this node cannot twin with its own combinatorial half.",
+          "Deforming the metric moves curvature around the surface but cannot change the integral, so the statement is a conservation law for total curvature under smooth deformation.",
+          "The Euler characteristic slot is held as a bare slot here and as a call `EULERCHAR(.)` throughout data/differential_topology, because here it is a number on the right-hand side and there it is an invariant applied to a space. The matcher cannot relate a slot to a call head, so the same invariant is structurally invisible across the two corpora; recorded in docs/BACKLOG.md."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "K",
+            "syntactic_category": "variable",
+            "semantic_role": "integrand_density",
+            "mathematical_order": 0,
+            "description": "Gaussian curvature, integrated against the area element."
+          },
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant",
+            "mathematical_order": 0,
+            "description": "Euler characteristic of the surface: an integer, 2 for the sphere, 0 for the torus, 2 - 2g in general."
+          },
+          {
+            "symbol": "M",
+            "syntactic_category": "set",
+            "semantic_role": "domain",
+            "mathematical_order": 0,
+            "description": "Compact oriented surface without boundary."
+          },
+          {
+            "symbol": "pi",
+            "syntactic_category": "constant",
+            "semantic_role": "normalizing_factor",
+            "mathematical_order": 0,
+            "description": "Half the normalizing constant; the factor is 2*pi."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the region fixed by the statement's context -- a curve, a surface, or an oriented manifold with boundary. Written as an opaque call because the template grammar has no binder, so neither the domain nor the measure is visible to the matcher; the same head scripts/seed_calculus.py uses, deliberately, so the operator identities line up."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2*pi",
+            "value": 6.283185307179586,
+            "description": "The normalizing constant in Gauss-Bonnet. It is a genuine fixed constant, not a free parameter, which is why the slot is declared `constant` and the typed skeleton carries a P there. Its presence is also why Gauss-Bonnet cannot twin with Poincare-Hopf, whose index sum is already normalized."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The total Gaussian curvature of a closed surface equals 2*pi times its Euler characteristic: bending the surface redistributes curvature but never changes the total, which is fixed by how many holes it has.",
+        "statistical_significance": "The bridge node this corpus was built around, and the one that twins with nothing. Its typed skeleton `INTEGRAL⟨?0:V⟩ = *(?1:P, ?2:V)` is a singleton across all twelve corpora, and the interesting part is that it is a singleton *next to its own other half*. difftop.vectorfields.poincare_hopf_index_theorem says the same thing with a sum of integer indices where this says an integral of a smooth density -- Chern's proof derives one from the other -- yet its skeleton is `EULERCHAR⟨?0:V⟩ = sum⟨?1:V⟩` and the two share not one node. Three separate features of the matcher each independently block the match: `sum_i` becomes the head `sum` while `INTEGRAL(.)` becomes the head `INTEGRAL`, and the two are unrelated strings; the Euler characteristic is a slot here and a call head there; and Gauss-Bonnet carries an explicit normalizing constant that the already-integer index sum does not. None of the three is a bug exactly, but together they mean the corpus's single most famous curvature-to-topology identity produces no machine-visible structure at all. That is the most useful negative result in this corpus and it is recorded in docs/BACKLOG.md rather than papered over. (A parallel branch is authoring algebraic topology and will own `algtop.invariants.euler_characteristic_surface`; the `composed_with` edge to it is a one-line addition to this node once that corpus lands -- see the module docstring for why it is not written yet.)",
+        "regularity_conditions": [
+          "Compact surface without boundary; with boundary an extra geodesic-curvature term appears",
+          "Orientable, or the statement is read on the orientation double cover",
+          "Metric smooth enough for the curvature to be integrable",
+          "Curvature integrated against the Riemannian area element, not the coordinate measure"
+        ],
+        "failure_modes": [
+          "The theorem constrains the total, not the distribution. A surface with chi = 0 may be wildly curved everywhere as long as the positive and negative curvature cancel; concluding 'flat' from 'total curvature zero' is the standard error.",
+          "For surfaces with boundary the equality fails without the geodesic curvature term, and quoting the closed-surface form for a disk gives 0 = 2*pi.",
+          "The higher-dimensional generalization is not the same statement: Chern-Gauss-Bonnet integrates the Pfaffian of the curvature form, which reduces to K only in dimension two, and there is no version in odd dimensions because the Euler characteristic vanishes there."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "difftop.vectorfields.poincare_hopf_index_theorem",
+          "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+          "diffgeo.surfaces.gaussian_curvature_principal_product"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "gauss1827",
+          "bibliographic_entry": "Gauss, C. F. (1828). Disquisitiones generales circa superficies curvas. Commentationes Societatis Regiae Scientiarum Gottingensis Recentiores, 6, 99-146."
+        },
+        {
+          "citation_key": "bonnet1848",
+          "bibliographic_entry": "Bonnet, O. (1848). Memoire sur la theorie generale des surfaces. Journal de l'Ecole Polytechnique, 19(32), 1-146."
+        },
+        {
+          "citation_key": "chern1944",
+          "bibliographic_entry": "Chern, S.-S. (1944). A Simple Intrinsic Proof of the Gauss-Bonnet Formula for Closed Riemannian Manifolds. Annals of Mathematics, 45(4), 747-752.",
+          "url": "https://doi.org/10.2307/1969302"
+        },
+        {
+          "citation_key": "docarmo1976",
+          "bibliographic_entry": "do Carmo, M. P. (1976). Differential Geometry of Curves and Surfaces. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "spivak1999",
+          "bibliographic_entry": "Spivak, M. (1999). A Comprehensive Introduction to Differential Geometry, Volume 1 (3rd ed.). Houston: Publish or Perish."
+        }
+      ],
+      "keywords": [
+        "Gauss-Bonnet",
+        "total curvature",
+        "Euler characteristic",
+        "topological invariant",
+        "bridge node",
+        "honest miss"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.stokes.stokes_theorem",
+      "title": "Stokes' Theorem for Differential Forms",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "exterior_calculus",
+        "topic": "integration_by_parts",
+        "canonical_objects": [
+          "oriented manifold with boundary",
+          "differential form",
+          "exterior derivative"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "INTEGRAL(d(omega)) = BOUNDARYINTEGRAL(omega)",
+        "canonical_latex": "\\int_M d\\omega = \\int_{\\partial M} \\omega",
+        "equivalent_forms": [
+          {
+            "form_id": "divergence_theorem",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(div(V)) = BOUNDARYINTEGRAL(<V, n>)",
+            "scope_note": "The (n-1)-form case in R^n: Gauss's divergence theorem"
+          },
+          {
+            "form_id": "classical_stokes",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(<curl(V), n>) = BOUNDARYINTEGRAL(<V, T>)",
+            "scope_note": "The 1-form case on a surface in R^3: the Kelvin-Stokes curl theorem"
+          },
+          {
+            "form_id": "greens_theorem",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(D(Q)/D(x) - D(P)/D(y)) = BOUNDARYINTEGRAL(P*dx + Q*dy)",
+            "scope_note": "The 1-form case in the plane: Green's theorem"
+          },
+          {
+            "form_id": "ftc",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(D(F)) = F(b) - F(a)",
+            "scope_note": "The 0-form case on an interval: the fundamental theorem of calculus, stated as a node of its own"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "boundary_transfer_operator",
+        "anonymized_template": "INTEGRAL(D(FORM)) = BOUNDARYINTEGRAL(FORM)",
+        "slot_schema": [
+          {
+            "slot_id": "FORM",
+            "syntactic_category": "functional",
+            "semantic_role": "integrand_form"
+          }
+        ],
+        "invariants": [
+          "One slot, appearing twice. The whole statement is that differentiating inside the region and restricting to the boundary are the same operation, and the single repeated slot is what says so.",
+          "Duality between the exterior derivative and the boundary operator: d is adjoint to the boundary map under integration, which is why d o d = 0 and boundary o boundary = 0 are the same fact seen from two sides.",
+          "Dimension-free. The same template covers the fundamental theorem of calculus, Green's theorem, the Kelvin-Stokes curl theorem and the divergence theorem; every classical vector-calculus integral theorem is an instance with a different form degree.",
+          "The region is not a slot. Neither `INTEGRAL(.)` nor `BOUNDARYINTEGRAL(.)` names its domain, because the grammar has no binder, so the fact that the two domains are related by 'boundary of' lives entirely in the head names and cannot be checked."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "omega",
+            "syntactic_category": "variable",
+            "semantic_role": "integrand_form",
+            "mathematical_order": 1,
+            "description": "Smooth (k-1)-form with compact support on an oriented k-manifold with boundary."
+          },
+          {
+            "symbol": "M",
+            "syntactic_category": "set",
+            "semantic_role": "domain",
+            "mathematical_order": 0,
+            "description": "Oriented smooth manifold with boundary over which the exterior derivative is integrated."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the region fixed by the statement's context -- a curve, a surface, or an oriented manifold with boundary. Written as an opaque call because the template grammar has no binder, so neither the domain nor the measure is visible to the matcher; the same head scripts/seed_calculus.py uses, deliberately, so the operator identities line up."
+          },
+          {
+            "notation": "BOUNDARYINTEGRAL(.)",
+            "name": "boundary integration operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the induced-orientation boundary of the region INTEGRAL runs over. A separate head rather than INTEGRAL with a second argument, because the region is not a slot anywhere in this grammar; the price is recorded in the Stokes node's significance field."
+          },
+          {
+            "notation": "D(.)",
+            "name": "exterior derivative",
+            "input_arity": 1,
+            "codomain": "differential form",
+            "description": "Exterior derivative, taking a k-form to a (k+1)-form. Shares a head with scripts/seed_calculus.py's differentiation operator on purpose: on a 0-form in one variable the two are the same operator, which is what makes the FTC twin more than a pun."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The integral of a derivative over a region equals the integral of the original object over that region's boundary.",
+        "statistical_significance": "Authored as the honest general statement, with the knowledge that it would not twin with anything -- and it does not. Its typed skeleton is `BOUNDARYINTEGRAL⟨?0:V⟩ = INTEGRAL⟨D⟨?0:V⟩⟩` while calculus.integration.ftc_evaluation_part sits on `INTEGRAL⟨D⟨?0:V⟩⟩ = +(F⟨?1:V⟩, neg(F⟨?2:V⟩))`. The left-hand sides are identical; the right-hand sides are not, because FTC spells the boundary integral out as a signed two-point evaluation and this node keeps it as one opaque call. Both spellings are correct: integrating a 0-form over the oriented 0-manifold {a, b} *is* F(b) - F(a). But the matcher compares call heads literally, so a statement that names its boundary operator can never meet one that expands it. Rather than distort either node, the corpus carries diffgeo.stokes.stokes_zero_form_case, which states the k = 0 case in FTC's own vocabulary and does twin exactly. The pair measures something worth measuring: the gap between 'the same theorem' and 'the same template' is one act of notational translation, and somebody has to perform it by hand.",
+        "regularity_conditions": [
+          "Oriented smooth manifold with boundary, boundary given the induced orientation",
+          "The form is smooth and compactly supported, or the manifold is compact",
+          "Degree of the form is one less than the dimension of the manifold",
+          "Both integrals taken with respect to the orientation, so signs are not free"
+        ],
+        "failure_modes": [
+          "Orientation is not optional. Reversing the induced orientation on the boundary flips the sign of the right-hand side, and most sign errors in applied vector calculus are exactly this.",
+          "Compact support or compactness is needed. On a non-compact manifold with a form that does not decay, both sides can be infinite or the equality can fail outright.",
+          "Corners and non-smooth boundaries need a separate argument; the theorem as stated assumes a smooth boundary, and the standard extension to manifolds with corners is a theorem, not a remark."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "diffgeo.stokes.stokes_zero_form_case"
+        ],
+        "composed_with": [
+          "diffgeo.surfaces.gauss_bonnet_theorem"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "spivak1965",
+          "bibliographic_entry": "Spivak, M. (1965). Calculus on Manifolds: A Modern Approach to Classical Theorems of Advanced Calculus. New York: W. A. Benjamin."
+        },
+        {
+          "citation_key": "cartan1899",
+          "bibliographic_entry": "Cartan, E. (1899). Sur certaines expressions differentielles et le probleme de Pfaff. Annales Scientifiques de l'Ecole Normale Superieure, 3e serie, 16, 239-332."
+        },
+        {
+          "citation_key": "stokes1854",
+          "bibliographic_entry": "Stokes, G. G. (1854). Smith's Prize Examination Paper, Question 8. Cambridge. (The theorem first appeared in an 1850 letter from Kelvin to Stokes.)"
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        },
+        {
+          "citation_key": "bott1982",
+          "bibliographic_entry": "Bott, R., Tu, L. W. (1982). Differential Forms in Algebraic Topology. Graduate Texts in Mathematics 82. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "Stokes theorem",
+        "exterior derivative",
+        "boundary",
+        "differential form",
+        "duality",
+        "honest miss"
+      ]
+    },
+    {
+      "statement_id": "diffgeo.stokes.stokes_zero_form_case",
+      "title": "Stokes' Theorem for a 0-Form (Gradient Theorem for Line Integrals)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "differential_geometry"
+        ],
+        "subfield": "exterior_calculus",
+        "topic": "integration_by_parts",
+        "canonical_objects": [
+          "oriented curve",
+          "0-form",
+          "exterior derivative"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "INTEGRAL(d(f)) = f(q) - f(p)",
+        "canonical_latex": "\\int_c df = f(q) - f(p)",
+        "equivalent_forms": [
+          {
+            "form_id": "gradient",
+            "notation_system": "vector_notation",
+            "expression": "INTEGRAL(<grad(f), dr>) = f(q) - f(p)",
+            "scope_note": "Classical gradient theorem: the line integral of a gradient depends only on the endpoints"
+          },
+          {
+            "form_id": "boundary_chain",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(d(f)) = BOUNDARYINTEGRAL(f), with boundary(c) = q - p as an oriented 0-chain",
+            "scope_note": "The general Stokes form; the right side unpacks to a signed sum over the two boundary points"
+          },
+          {
+            "form_id": "conservative_field",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(d(f)) = 0 around any closed curve",
+            "scope_note": "Path independence: the reason a conservative force field has a potential"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "boundary_difference_evaluation",
+        "anonymized_template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
+        "slot_schema": [
+          {
+            "slot_id": "F",
+            "syntactic_category": "functional",
+            "semantic_role": "potential_zero_form"
+          },
+          {
+            "slot_id": "ENDPOINT",
+            "syntactic_category": "variable",
+            "semantic_role": "terminal_boundary_point"
+          },
+          {
+            "slot_id": "STARTPOINT",
+            "syntactic_category": "variable",
+            "semantic_role": "initial_boundary_point"
+          }
+        ],
+        "invariants": [
+          "An integral over a one-dimensional domain collapses to a signed difference of two boundary values: the interior of the path is irrelevant to the total. This is the invariant calculus.integration.ftc_evaluation_part states in the same words, because it is the same invariant.",
+          "The two boundary points carry opposite signs, which is the induced orientation on a 0-manifold. A signed count of points is what a 0-dimensional integral is, and the minus sign in the template is that orientation and not an arithmetic accident.",
+          "The potential is determined only up to an additive constant, which cancels in the difference -- the same reason the antiderivative in FTC is not unique and the same reason it does not matter.",
+          "The call head is spelled `F` deliberately, matching the head scripts/seed_calculus.py uses for the antiderivative. The matcher compares heads literally, so this spelling is what makes the twin fire; it is a translation into an existing vocabulary, exactly as scripts/seed_infotheory.py adopted CARD/MEET/JOIN from the set-theory corpus."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "potential_zero_form",
+            "mathematical_order": 0,
+            "description": "Smooth real-valued function on the manifold: a 0-form."
+          },
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "initial_boundary_point",
+            "mathematical_order": 0,
+            "description": "Initial point of the oriented curve."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "terminal_boundary_point",
+            "mathematical_order": 0,
+            "description": "Terminal point of the oriented curve."
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "variable",
+            "semantic_role": "path",
+            "mathematical_order": 0,
+            "description": "Piecewise smooth oriented curve from p to q."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Integral of the argument over the region fixed by the statement's context -- a curve, a surface, or an oriented manifold with boundary. Written as an opaque call because the template grammar has no binder, so neither the domain nor the measure is visible to the matcher; the same head scripts/seed_calculus.py uses, deliberately, so the operator identities line up."
+          },
+          {
+            "notation": "D(.)",
+            "name": "exterior derivative",
+            "input_arity": 1,
+            "codomain": "differential form",
+            "description": "Exterior derivative, taking a k-form to a (k+1)-form. Shares a head with scripts/seed_calculus.py's differentiation operator on purpose: on a 0-form in one variable the two are the same operator, which is what makes the FTC twin more than a pun."
+          },
+          {
+            "notation": "f(.)",
+            "name": "potential function",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "A smooth real-valued function -- a 0-form -- evaluated at a point. The head is spelled `F` to match calculus.integration.ftc_evaluation_part's antiderivative head exactly; call heads are compared literally, so the spelling is what lets the twin fire."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The integral of the differential of a function along a path is the function's value at the far end minus its value at the near end, whatever route the path takes.",
+        "statistical_significance": "The corpus's second sought cross-discipline typed twin, and the one that required an act of translation to obtain. Its typed skeleton `INTEGRAL⟨D⟨?0:V⟩⟩ = +(F⟨?1:V⟩, neg(F⟨?2:V⟩))` is shared character for character with calculus.integration.ftc_evaluation_part, and it carries that node's archetype id, `boundary_difference_evaluation`, so no label drift is reported. The claim is identity, not resemblance: the fundamental theorem of calculus is Stokes' theorem for a 0-form on a compact oriented 1-manifold with boundary, and the only differences between the two nodes are that this one lives on a manifold rather than an interval and calls `D` the exterior derivative rather than the derivative -- on a 0-form in one variable those are the same operator. What the pair demonstrates about the tooling is less flattering than what it demonstrates about mathematics. The general statement, diffgeo.stokes.stokes_theorem, is the one a geometer would write, and it twins with nothing; this node twins only because it was written in the target's vocabulary by an author who already knew the answer. Structural matching over anonymized templates finds analogies between *notations*, and a shared abstraction has to be adopted into notation before it becomes visible.",
+        "regularity_conditions": [
+          "Piecewise smooth oriented curve with two endpoints, lying in the domain of f",
+          "f continuously differentiable on a neighbourhood of the curve",
+          "Endpoints distinct and ordered by the orientation; for a closed curve both sides are zero",
+          "The manifold need not be simply connected: this is about exact forms, not closed ones"
+        ],
+        "failure_modes": [
+          "The converse needs topology. A closed 1-form has vanishing line integrals around contractible loops but not around all loops, so 'path independent implies gradient' requires simple connectedness -- the failure is measured by de Rham cohomology.",
+          "The form must actually be exact. Applying the formula to d(theta) on the punctured plane gives 2*pi around the origin instead of 0, and that discrepancy is the generator of H^1."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "diffgeo.stokes.stokes_theorem"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "diffgeo.curves.arc_length_functional"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "spivak1965",
+          "bibliographic_entry": "Spivak, M. (1965). Calculus on Manifolds: A Modern Approach to Classical Theorems of Advanced Calculus. New York: W. A. Benjamin."
+        },
+        {
+          "citation_key": "lee2013",
+          "bibliographic_entry": "Lee, J. M. (2013). Introduction to Smooth Manifolds (2nd ed.). Graduate Texts in Mathematics 218. New York: Springer."
+        },
+        {
+          "citation_key": "docarmo1992",
+          "bibliographic_entry": "do Carmo, M. P. (1992). Riemannian Geometry. Boston: Birkhauser."
+        }
+      ],
+      "keywords": [
+        "gradient theorem",
+        "line integral",
+        "fundamental theorem of calculus",
+        "exact form",
+        "path independence",
+        "typed twin"
+      ]
+    }
+  ]
+}
