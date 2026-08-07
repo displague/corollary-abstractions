@@ -1044,7 +1044,7 @@
         "convergence",
         "sample mean"
       ],
-      "statement_id": "statistics.convergence.law_of_large"
+      "statement_id": "probstat.limit.law_of_large_numbers"
     }
   ]
 }

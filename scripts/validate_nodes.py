@@ -42,7 +42,9 @@ def minimal_schema_errors(schema: dict, nodes: list[dict]) -> list[str]:
     return errors
 
 
-def inferential_link_errors(schema: dict, nodes: list[dict]) -> list[str]:
+def inferential_link_errors(
+    schema: dict, nodes: list[dict], known_ids: set[str] | None = None
+) -> list[str]:
     errors: list[str] = []
     ids = [n.get("statement_id") for n in nodes]
     id_set = set(ids)
@@ -52,6 +54,9 @@ def inferential_link_errors(schema: dict, nodes: list[dict]) -> list[str]:
 
     if len(ids) != len(id_set):
         errors.append("Duplicate statement_id values found.")
+
+    # Links may resolve to nodes in other corpora when a global id set is given.
+    resolvable = id_set | (known_ids or set())
 
     link_fields = (
         schema.get("properties", {})
@@ -77,7 +82,7 @@ def inferential_link_errors(schema: dict, nodes: list[dict]) -> list[str]:
             if not isinstance(refs, list):
                 continue
             for ref in refs:
-                if ref not in id_set:
+                if ref not in resolvable:
                     errors.append(
                         f"{node_id}: inferential link `{field}` references missing node `{ref}`"
                     )
@@ -86,31 +91,41 @@ def inferential_link_errors(schema: dict, nodes: list[dict]) -> list[str]:
                         f"{node_id}: inferential link `{field}` should not self-reference"
                     )
 
-    # Reciprocity checks for directed/symmetric relations.
+    # Reciprocity checks for directed/symmetric relations. Targets outside
+    # this node list (cross-corpus refs in single-file mode) are skipped here;
+    # the default all-corpora run checks reciprocity over the merged graph.
+    def _links_of(target: str) -> dict | None:
+        return by_id[target]["inferential_links"] if target in by_id else None
+
     for node_id, node in by_id.items():
         links = node.get("inferential_links", {})
         for target in links.get("entails", []):
-            if node_id not in by_id[target]["inferential_links"].get("entailed_by", []):
+            t = _links_of(target)
+            if t is not None and node_id not in t.get("entailed_by", []):
                 errors.append(
                     f"{node_id}: `entails` -> `{target}` lacks reciprocal `entailed_by`"
                 )
         for target in links.get("entailed_by", []):
-            if node_id not in by_id[target]["inferential_links"].get("entails", []):
+            t = _links_of(target)
+            if t is not None and node_id not in t.get("entails", []):
                 errors.append(
                     f"{node_id}: `entailed_by` -> `{target}` lacks reciprocal `entails`"
                 )
         for target in links.get("equivalent_to", []):
-            if node_id not in by_id[target]["inferential_links"].get("equivalent_to", []):
+            t = _links_of(target)
+            if t is not None and node_id not in t.get("equivalent_to", []):
                 errors.append(
                     f"{node_id}: `equivalent_to` -> `{target}` lacks reciprocal equivalence"
                 )
         for target in links.get("special_case_of", []):
-            if node_id not in by_id[target]["inferential_links"].get("generalizes", []):
+            t = _links_of(target)
+            if t is not None and node_id not in t.get("generalizes", []):
                 errors.append(
                     f"{node_id}: `special_case_of` -> `{target}` lacks reciprocal `generalizes`"
                 )
         for target in links.get("generalizes", []):
-            if node_id not in by_id[target]["inferential_links"].get("special_case_of", []):
+            t = _links_of(target)
+            if t is not None and node_id not in t.get("special_case_of", []):
                 errors.append(
                     f"{node_id}: `generalizes` -> `{target}` lacks reciprocal `special_case_of`"
                 )
@@ -142,24 +157,43 @@ def main() -> int:
     )
     parser.add_argument(
         "--nodes",
-        default="data/statistics/nodes.json",
-        help="Path to corpus JSON file containing `statement_nodes`.",
+        default=None,
+        help=(
+            "Path to a single corpus JSON file containing `statement_nodes`. "
+            "Default: validate every data/*/nodes.json as one merged graph."
+        ),
+    )
+    parser.add_argument(
+        "--data-dir",
+        default="data",
+        help="Base data directory scanned when --nodes is not given.",
     )
     args = parser.parse_args()
 
     schema = load_json(Path(args.schema))
-    data = load_json(Path(args.nodes))
-    nodes = data.get("statement_nodes")
 
-    if not isinstance(nodes, list):
-        print("Validation failed:")
-        print("- Corpus must contain `statement_nodes` as a list.")
-        return 1
+    if args.nodes:
+        corpus_paths = [Path(args.nodes)]
+    else:
+        corpus_paths = sorted(Path(args.data_dir).glob("*/nodes.json"))
+        if not corpus_paths:
+            print(f"Validation failed:\n- No */nodes.json files under `{args.data_dir}`.")
+            return 1
 
+    all_nodes: list[dict] = []
     errors: list[str] = []
-    errors.extend(minimal_schema_errors(schema, nodes))
-    errors.extend(inferential_link_errors(schema, nodes))
-    errors.extend(jsonschema_errors(schema, nodes))
+    for path in corpus_paths:
+        data = load_json(path)
+        nodes = data.get("statement_nodes")
+        if not isinstance(nodes, list):
+            errors.append(f"{path}: corpus must contain `statement_nodes` as a list.")
+            continue
+        errors.extend(minimal_schema_errors(schema, nodes))
+        errors.extend(jsonschema_errors(schema, nodes))
+        all_nodes.extend(nodes)
+
+    # Link integrity and reciprocity over the merged cross-discipline graph.
+    errors.extend(inferential_link_errors(schema, all_nodes))
 
     if errors:
         print("Validation failed:")
@@ -167,7 +201,11 @@ def main() -> int:
             print(f"- {err}")
         return 1
 
-    print(f"Validation passed for {len(nodes)} statement nodes.")
+    corpus_word = "corpus" if len(corpus_paths) == 1 else "corpora"
+    print(
+        f"Validation passed for {len(all_nodes)} statement nodes "
+        f"across {len(corpus_paths)} {corpus_word}."
+    )
     return 0
 
 
