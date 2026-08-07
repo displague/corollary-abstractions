@@ -1240,6 +1240,202 @@
           "bibliographic_entry": "Halliday, D., Resnick, R., Walker, J. (2013). Fundamentals of Physics (10th ed.). Wiley."
         }
       ]
+    },
+    {
+      "statement_id": "physics.thermodynamics.gibbs_entropy",
+      "title": "Gibbs Entropy (Boltzmann-Gibbs Statistical Entropy)",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "thermodynamics",
+        "topic": "statistical_mechanics"
+      },
+      "formal_statement": {
+        "canonical_ascii": "S = -(kB * sum_i p_i*ln(p_i))",
+        "canonical_latex": "S = -k_B \\sum_i p_i \\ln p_i",
+        "equivalent_forms": [
+          {
+            "form_id": "boltzmann",
+            "notation_system": "ascii",
+            "expression": "S = kB*ln(W)",
+            "scope_note": "Boltzmann's form for W equally likely microstates; the uniform special case"
+          },
+          {
+            "form_id": "von_neumann",
+            "notation_system": "measure_theoretic",
+            "expression": "S = -kB*Tr(rho*ln(rho))",
+            "scope_note": "Quantum form; reduces to the Gibbs sum in the eigenbasis of the density matrix"
+          },
+          {
+            "form_id": "canonical_ensemble",
+            "notation_system": "ascii",
+            "expression": "S = (U - F)/T",
+            "scope_note": "Thermodynamic identity recovered when the p_i are the Boltzmann weights"
+          },
+          {
+            "form_id": "shannon_units",
+            "notation_system": "ascii",
+            "expression": "S = kB * ln(2) * H(X)",
+            "scope_note": "Conversion to bits; the whole content of the information-theory twin"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "negated_scaled_expected_log",
+        "anonymized_template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
+        "slot_schema": [
+          {
+            "slot_id": "ENTROPY",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "SCALE",
+            "syntactic_category": "constant",
+            "semantic_role": "unit_scale_constant"
+          },
+          {
+            "slot_id": "PROBABILITY_i",
+            "syntactic_category": "variable",
+            "semantic_role": "distribution_weight"
+          }
+        ],
+        "invariants": [
+          "The microstate-probability slot occurs twice inside the summand -- as the weight and inside the logarithm -- which is what makes the quantity an expected log-probability rather than a sum of independent contributions.",
+          "kB is a fixed constant, not a fitted parameter: it converts between the dimensionless count of states and thermodynamic units of J/K, and occupies the same parameter-like slot that information theory fills with 1/ln 2.",
+          "Extensive: for independent subsystems the joint distribution factors and the entropies add, which is the property the logarithm is there to supply.",
+          "Maximized, at fixed constraints, by the distribution that maximizes it subject to those constraints -- the canonical ensemble is that maximizer under fixed mean energy, which is Jaynes' derivation.",
+          "Zero for a pure state (a single microstate with probability 1), the third-law reference point."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "S",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Statistical (Gibbs) entropy of the ensemble."
+          },
+          {
+            "symbol": "p_i",
+            "syntactic_category": "distribution",
+            "semantic_role": "distribution_weight",
+            "mathematical_order": 0,
+            "description": "Probability of microstate i in the ensemble."
+          },
+          {
+            "symbol": "T",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Absolute temperature, which converts entropy to energy in the thermodynamic identities."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "sum",
+            "name": "summation over microstates",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LOG(.)",
+            "name": "logarithm",
+            "input_arity": 1,
+            "codomain": "extended reals",
+            "description": "Logarithm of a positive argument; natural log in the thermodynamic convention. The base is absorbed into the scale constant, which is why that constant is an explicit slot here."
+          }
+        ],
+        "index_sets": [
+          {
+            "notation": "i in Omega",
+            "domain": "the set of accessible microstates",
+            "description": "Index running over the microstates of the ensemble."
+          }
+        ],
+        "constants": [
+          {
+            "symbol": "kB",
+            "value": 1.380649e-23,
+            "description": "Boltzmann constant in J/K. Fixes the units of entropy; the information-theoretic reading replaces it by 1/ln 2 to count bits, and Landauer's bound kB*T*ln 2 is the exchange rate between the two."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The entropy of an ensemble is the negated, kB-scaled average of the logarithm of its own microstate probabilities.",
+        "statistical_significance": "The corpus's information/thermodynamics bridge, and the node added specifically to test whether the twin thesis survives contact with a case where the identity is claimed to be literal rather than analogical. It does: the typed skeleton `?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?2:V⟩)⟩))` is shared character for character with infotheory.entropy.shannon_entropy, and the two templates are authored identically modulo slot names because the underlying claim -- Shannon's, sharpened by Jaynes and priced by Landauer -- is that thermodynamic entropy *is* missing information about the microstate, in units of kB instead of bits. The reciprocal `equivalent_to` edge between the two nodes is therefore meant literally, with the base-conversion constant as the exchange rate. Within physics the node also supplies the statistical foundation the chemistry corpus's Gibbs free energy leans on: the ENTROPY slot in `FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY` is this quantity.",
+        "regularity_conditions": [
+          "A well-defined ensemble with normalized microstate probabilities",
+          "Terms with p_i = 0 read as 0 via the limit x*ln(x) -> 0",
+          "Discrete (or suitably coarse-grained) microstates; the continuous phase-space version needs a reference measure to be well defined"
+        ],
+        "failure_modes": [
+          "For continuous phase spaces the sum becomes an integral that is not invariant under change of variables; a reference measure (h^3N per cell) must be supplied, which is where the classical entropy's additive constant and the Gibbs paradox come from.",
+          "Gibbs entropy of an isolated system under Hamiltonian evolution is constant, so the second law needs coarse-graining or an open system; deriving increase from this formula alone is circular.",
+          "Reading kB as a free parameter invites nonsense: it is a fixed conversion factor, and since the 2019 SI redefinition it is exact."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "infotheory.entropy.shannon_entropy"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "gibbs1902",
+          "bibliographic_entry": "Gibbs, J. W. (1902). Elementary Principles in Statistical Mechanics. New York: Charles Scribner's Sons."
+        },
+        {
+          "citation_key": "boltzmann1877",
+          "bibliographic_entry": "Boltzmann, L. (1877). Ueber die Beziehung zwischen dem zweiten Hauptsatze der mechanischen Waermetheorie und der Wahrscheinlichkeitsrechnung. Sitzungsberichte der Kaiserlichen Akademie der Wissenschaften, Wien, 76, 373-435."
+        },
+        {
+          "citation_key": "jaynes1957",
+          "bibliographic_entry": "Jaynes, E. T. (1957). Information Theory and Statistical Mechanics. Physical Review, 106(4), 620-630."
+        },
+        {
+          "citation_key": "landauer1961",
+          "bibliographic_entry": "Landauer, R. (1961). Irreversibility and Heat Generation in the Computing Process. IBM Journal of Research and Development, 5(3), 183-191."
+        }
+      ],
+      "keywords": [
+        "entropy",
+        "Gibbs",
+        "Boltzmann",
+        "statistical mechanics",
+        "microstates",
+        "information",
+        "Landauer"
+      ]
     }
   ]
 }

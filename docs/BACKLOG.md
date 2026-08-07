@@ -36,6 +36,37 @@ or commit history. Each item names the evidence that motivated it.
   format string and fixes the order (distinguished operand first, special
   element second). Fix: let a template declare commutative call heads, or
   lint for the same head appearing with permuted argument categories.
+- **No binder syntax, so optimizations cannot be compared.** Channel capacity
+  is `C = max over p(x) of I(X;Y)`: a maximization over a *family*, with a
+  constraint set (the probability simplex). The grammar has identifiers,
+  arithmetic, calls, prefix big-ops and relations — no binder — and the one
+  spelling that looks natural, `max_p I(X;Y)`, collides with the `max_`
+  big-operator namespace above and would silently drop the constraint set
+  anyway. `infotheory.channel.channel_capacity` therefore uses an opaque
+  `CAPMAX(objective, argument)` call: it parses, it records the dependency,
+  and it makes the internal structure of the optimization invisible to the
+  matcher. Every argmax/argmin/sup statement anyone adds later will hit this.
+  Fix: a `MAX(body, binder, domain)` form (or a real binder node) that the
+  canonicalizer treats as a scoped construct.
+- **Specialization noise swamps big-op nodes.** All 11 specialization edges
+  touching the new information-theory nodes are of the degenerate kind already
+  noted under "Specialization noise control": a P slot binds the literal `1`
+  and a V slot swallows an entire `sum⟨...⟩` subtree, producing e.g.
+  `physics.mechanics.hookes_law >= infotheory.entropy.shannon_entropy` (Hooke's
+  law "generalizes" Gibbs/Shannon entropy because `-(k*x)` matches
+  `-(anything)`). Zero of the 11 is informative. Category-compatibility
+  constraints on bindings, plus a rule that a variable slot may not absorb a
+  big-operator subtree, would remove essentially all of them.
+- **The genuine specialization we wanted does not fire.**
+  `infotheory.entropy.uniform_entropy` (`H = k*LOG(N)`) really is
+  `infotheory.entropy.shannon_entropy` (`H = -(k * sum_i p_i*LOG(p_i))`) with
+  `p_i = 1/N`, and the same substitution takes Gibbs to Boltzmann's
+  `S = kB ln W`. `specialize.py` cannot see it: collapsing a sum under a
+  constant summand is a *rewrite* (algebraic simplification), not slot-to-
+  subtree absorption. Same class as the recorded series-truncation miss. The
+  edge is asserted by hand via `special_case_of`/`generalizes`, which means the
+  most pedagogically important specialization in the corpus is the one the
+  tooling cannot check.
 - **Specialization matcher is arithmetic-only.** `COMMUTATIVE = {+, *}` and
   `IDENTITY = {+: 0, *: 1}` are hardcoded, so `specialize.py` finds *zero*
   edges touching the 18 logic/set_theory nodes even though those nodes
@@ -60,6 +91,13 @@ or commit history. Each item names the evidence that motivated it.
   now disagree, which is a trap for anything that derives one from the other.
   Fix: allow `[a-z0-9_]+` in the first segment too (there is no reason for the
   asymmetry), or document the prefix-vs-directory mapping in the schema.
+- **Slot ids may not start with a big-op prefix either.** The hazard recorded
+  above for templates extends to `slot_schema`: a slot literally named
+  `SUM_TERM` or `MAX_RATE` would be eaten by the prefix big-operator rule
+  before it was ever looked up, so a whole class of natural slot names is
+  quietly unusable. The information-theory corpus works around it by naming
+  indexed slots `WEIGHT_i`, `PROBABILITY_i`, `CODELENGTH_i` (suffix, not
+  prefix). Worth a lint rather than folklore.
 - **Cross-corpus entailment is blocked by reciprocity.** `entails` /
   `special_case_of` / `generalizes` require the reciprocal edge in the other
   corpus's file, so genuine cross-discipline entailments (physics average

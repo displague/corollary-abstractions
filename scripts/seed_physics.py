@@ -5,6 +5,26 @@ Chosen so structural twins fire across disciplines: scaled-linear laws
 (Newton II, Ohm), scaled-quadratic energy (kinetic energy vs geometric areas),
 inverse-square pair couplings (gravitation vs Coulomb), and ratio definitions
 (speed vs density).
+
+`physics.thermodynamics.gibbs_entropy` was added later and for a different
+reason. It is not here to survey thermodynamics -- it is here because
+information theory's Shannon entropy is the *same functional*, and the corpus
+should be able to say so mechanically rather than in prose. Its template
+
+    ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))
+
+is authored identically, modulo slot names, to
+infotheory.entropy.shannon_entropy's in scripts/seed_infotheory.py, so both
+land on the typed skeleton
+
+    ?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?2:V⟩)⟩))
+
+with kB and 1/ln 2 occupying the same parameter-like (P) slot. The pair also
+carries a reciprocal `equivalent_to` edge, which the two files can do only
+because one branch owns both of them; see docs/BACKLOG.md on cross-corpus
+reciprocity. Do not "simplify" either template without editing the other --
+folding the constant into the logarithm's base on one side alone silently
+breaks the twin.
 """
 
 from __future__ import annotations
@@ -33,11 +53,26 @@ def slot(sid, cat, role):
     return {"slot_id": sid, "syntactic_category": cat, "semantic_role": role}
 
 
+def links(entailed_by=None, entails=None, equivalent_to=None,
+          special_case_of=None, generalizes=None, composed_with=None):
+    return {"entailed_by": entailed_by or [], "entails": entails or [],
+            "equivalent_to": equivalent_to or [],
+            "special_case_of": special_case_of or [],
+            "generalizes": generalizes or [],
+            "composed_with": composed_with or []}
+
+
 def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
          archetype, template, slots, invariants, symbols, operators,
          meaning, significance, conditions, provenance, disciplines=None,
-         functionals=None, constants=None):
-    return {
+         functionals=None, constants=None, index_sets=None, failure_modes=None,
+         inferential_links=None, keywords=None):
+    interpretation = {"statement_meaning": meaning,
+                      "statistical_significance": significance,
+                      "regularity_conditions": conditions}
+    if failure_modes:
+        interpretation["failure_modes"] = failure_modes
+    out = {
         "statement_id": sid, "title": title, "statement_class": cls,
         "epistemic_status": status,
         "theory_context": {"disciplines": disciplines or ["physics"],
@@ -48,16 +83,16 @@ def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
                                  "anonymized_template": template,
                                  "slot_schema": slots, "invariants": invariants},
         "symbol_lexicon": {"symbols": symbols, "operators": operators,
-                           "functionals": functionals or [], "index_sets": [],
+                           "functionals": functionals or [],
+                           "index_sets": index_sets or [],
                            "constants": constants or []},
-        "semantic_interpretation": {"statement_meaning": meaning,
-                                    "statistical_significance": significance,
-                                    "regularity_conditions": conditions},
-        "inferential_links": {"entailed_by": [], "entails": [], "equivalent_to": [],
-                              "special_case_of": [], "generalizes": [],
-                              "composed_with": []},
+        "semantic_interpretation": interpretation,
+        "inferential_links": inferential_links or links(),
         "provenance": provenance,
     }
+    if keywords:
+        out["keywords"] = keywords
+    return out
 
 
 NODES = [
@@ -284,6 +319,113 @@ NODES = [
          ["Homogeneous material or local limit"],
          [{"citation_key": "halliday2013",
            "bibliographic_entry": "Halliday, D., Resnick, R., Walker, J. (2013). Fundamentals of Physics (10th ed.). Wiley."}]),
+
+    node("physics.thermodynamics.gibbs_entropy",
+         "Gibbs Entropy (Boltzmann-Gibbs Statistical Entropy)",
+         "definition", "formal", "thermodynamics", "statistical_mechanics",
+         "S = -(kB * sum_i p_i*ln(p_i))",
+         "S = -k_B \\sum_i p_i \\ln p_i",
+         [{"form_id": "boltzmann", "notation_system": "ascii",
+           "expression": "S = kB*ln(W)",
+           "scope_note": "Boltzmann's form for W equally likely microstates; the uniform special case"},
+          {"form_id": "von_neumann", "notation_system": "measure_theoretic",
+           "expression": "S = -kB*Tr(rho*ln(rho))",
+           "scope_note": "Quantum form; reduces to the Gibbs sum in the eigenbasis of the density matrix"},
+          {"form_id": "canonical_ensemble", "notation_system": "ascii",
+           "expression": "S = (U - F)/T",
+           "scope_note": "Thermodynamic identity recovered when the p_i are the Boltzmann weights"},
+          {"form_id": "shannon_units", "notation_system": "ascii",
+           "expression": "S = kB * ln(2) * H(X)",
+           "scope_note": "Conversion to bits; the whole content of the information-theory twin"}],
+         "negated_scaled_expected_log",
+         "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
+         [slot("ENTROPY", "variable", "output"),
+          slot("SCALE", "constant", "unit_scale_constant"),
+          slot("PROBABILITY_i", "variable", "distribution_weight")],
+         ["The microstate-probability slot occurs twice inside the summand -- as "
+          "the weight and inside the logarithm -- which is what makes the "
+          "quantity an expected log-probability rather than a sum of independent "
+          "contributions.",
+          "kB is a fixed constant, not a fitted parameter: it converts between "
+          "the dimensionless count of states and thermodynamic units of J/K, and "
+          "occupies the same parameter-like slot that information theory fills "
+          "with 1/ln 2.",
+          "Extensive: for independent subsystems the joint distribution factors "
+          "and the entropies add, which is the property the logarithm is there to "
+          "supply.",
+          "Maximized, at fixed constraints, by the distribution that maximizes it "
+          "subject to those constraints -- the canonical ensemble is that "
+          "maximizer under fixed mean energy, which is Jaynes' derivation.",
+          "Zero for a pure state (a single microstate with probability 1), the "
+          "third-law reference point."],
+         [sym("S", "variable", "output", "Statistical (Gibbs) entropy of the ensemble."),
+          sym("p_i", "distribution", "distribution_weight",
+              "Probability of microstate i in the ensemble."),
+          sym("T", "variable", "state_variable",
+              "Absolute temperature, which converts entropy to energy in the "
+              "thermodynamic identities.")],
+         [EQ, MUL, NEG,
+          op("sum", "summation over microstates", 1, "arithmetic")],
+         "The entropy of an ensemble is the negated, kB-scaled average of the "
+         "logarithm of its own microstate probabilities.",
+         "The corpus's information/thermodynamics bridge, and the node added "
+         "specifically to test whether the twin thesis survives contact with a "
+         "case where the identity is claimed to be literal rather than "
+         "analogical. It does: the typed skeleton "
+         "`?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?2:V⟩)⟩))` is shared character for "
+         "character with infotheory.entropy.shannon_entropy, and the two "
+         "templates are authored identically modulo slot names because the "
+         "underlying claim -- Shannon's, sharpened by Jaynes and priced by "
+         "Landauer -- is that thermodynamic entropy *is* missing information "
+         "about the microstate, in units of kB instead of bits. The reciprocal "
+         "`equivalent_to` edge between the two nodes is therefore meant "
+         "literally, with the base-conversion constant as the exchange rate. "
+         "Within physics the node also supplies the statistical foundation the "
+         "chemistry corpus's Gibbs free energy leans on: the ENTROPY slot in "
+         "`FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY` is this quantity.",
+         ["A well-defined ensemble with normalized microstate probabilities",
+          "Terms with p_i = 0 read as 0 via the limit x*ln(x) -> 0",
+          "Discrete (or suitably coarse-grained) microstates; the continuous "
+          "phase-space version needs a reference measure to be well defined"],
+         [{"citation_key": "gibbs1902",
+           "bibliographic_entry": "Gibbs, J. W. (1902). Elementary Principles in Statistical Mechanics. New York: Charles Scribner's Sons."},
+          {"citation_key": "boltzmann1877",
+           "bibliographic_entry": "Boltzmann, L. (1877). Ueber die Beziehung zwischen dem zweiten Hauptsatze der mechanischen Waermetheorie und der Wahrscheinlichkeitsrechnung. Sitzungsberichte der Kaiserlichen Akademie der Wissenschaften, Wien, 76, 373-435."},
+          {"citation_key": "jaynes1957",
+           "bibliographic_entry": "Jaynes, E. T. (1957). Information Theory and Statistical Mechanics. Physical Review, 106(4), 620-630."},
+          {"citation_key": "landauer1961",
+           "bibliographic_entry": "Landauer, R. (1961). Irreversibility and Heat Generation in the Computing Process. IBM Journal of Research and Development, 5(3), 183-191."}],
+         functionals=[{"notation": "LOG(.)", "name": "logarithm", "input_arity": 1,
+                       "codomain": "extended reals",
+                       "description": "Logarithm of a positive argument; natural "
+                                      "log in the thermodynamic convention. The "
+                                      "base is absorbed into the scale constant, "
+                                      "which is why that constant is an explicit "
+                                      "slot here."}],
+         constants=[{"symbol": "kB", "value": 1.380649e-23,
+                     "description": "Boltzmann constant in J/K. Fixes the units of "
+                                    "entropy; the information-theoretic reading "
+                                    "replaces it by 1/ln 2 to count bits, and "
+                                    "Landauer's bound kB*T*ln 2 is the exchange "
+                                    "rate between the two."}],
+         index_sets=[{"notation": "i in Omega",
+                      "domain": "the set of accessible microstates",
+                      "description": "Index running over the microstates of the "
+                                     "ensemble."}],
+         failure_modes=[
+             "For continuous phase spaces the sum becomes an integral that is not "
+             "invariant under change of variables; a reference measure (h^3N per "
+             "cell) must be supplied, which is where the classical entropy's "
+             "additive constant and the Gibbs paradox come from.",
+             "Gibbs entropy of an isolated system under Hamiltonian evolution is "
+             "constant, so the second law needs coarse-graining or an open "
+             "system; deriving increase from this formula alone is circular.",
+             "Reading kB as a free parameter invites nonsense: it is a fixed "
+             "conversion factor, and since the 2019 SI redefinition it is exact."],
+         inferential_links=links(
+             equivalent_to=["infotheory.entropy.shannon_entropy"]),
+         keywords=["entropy", "Gibbs", "Boltzmann", "statistical mechanics",
+                   "microstates", "information", "Landauer"]),
 ]
 
 
