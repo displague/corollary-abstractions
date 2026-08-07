@@ -173,6 +173,11 @@
             "slot_id": "PRED_i",
             "syntactic_category": "variable",
             "semantic_role": "predictor"
+          },
+          {
+            "slot_id": "NOISE_i",
+            "syntactic_category": "random_variable",
+            "semantic_role": "error_term"
           }
         ],
         "invariants": [
@@ -289,6 +294,16 @@
             "slot_id": "INPUT",
             "syntactic_category": "variable",
             "semantic_role": "predictor_value"
+          },
+          {
+            "slot_id": "INTERCEPT",
+            "syntactic_category": "parameter",
+            "semantic_role": "baseline_level"
+          },
+          {
+            "slot_id": "SLOPE",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
           }
         ],
         "invariants": [
@@ -402,6 +417,11 @@
             "slot_id": "SCALE",
             "syntactic_category": "parameter",
             "semantic_role": "positive_scale"
+          },
+          {
+            "slot_id": "CENTER",
+            "syntactic_category": "parameter",
+            "semantic_role": "location"
           }
         ],
         "invariants": [
@@ -510,6 +530,11 @@
             "slot_id": "CONDITIONAL_i",
             "syntactic_category": "functional",
             "semantic_role": "conditional_component"
+          },
+          {
+            "slot_id": "WEIGHT_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "partition_probability"
           }
         ],
         "invariants": [
@@ -616,6 +641,16 @@
             "slot_id": "LIKELIHOOD",
             "syntactic_category": "functional",
             "semantic_role": "data_weight"
+          },
+          {
+            "slot_id": "PRIOR",
+            "syntactic_category": "functional",
+            "semantic_role": "initial_belief"
+          },
+          {
+            "slot_id": "NORMALIZER",
+            "syntactic_category": "functional",
+            "semantic_role": "evidence_marginal"
           }
         ],
         "invariants": [
@@ -730,6 +765,11 @@
             "slot_id": "REFERENCE_LAW",
             "syntactic_category": "distribution",
             "semantic_role": "limit_distribution"
+          },
+          {
+            "slot_id": "DATA_n",
+            "syntactic_category": "sequence",
+            "semantic_role": "sample_sequence"
           }
         ],
         "invariants": [
@@ -845,6 +885,21 @@
             "slot_id": "REF_LAW",
             "syntactic_category": "distribution",
             "semantic_role": "reference_distribution"
+          },
+          {
+            "slot_id": "DATA",
+            "syntactic_category": "sequence",
+            "semantic_role": "sample_sequence"
+          },
+          {
+            "slot_id": "LOC",
+            "syntactic_category": "parameter",
+            "semantic_role": "location"
+          },
+          {
+            "slot_id": "n",
+            "syntactic_category": "index",
+            "semantic_role": "sample_size"
           }
         ],
         "invariants": [
