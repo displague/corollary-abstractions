@@ -178,12 +178,34 @@ much thesaurus the weights learned.
   scale is worse in-distribution and worthless out-of-distribution
   compared to the same lexicon supplied symbolically.
 
+## Milestone 2 on the real corpus (67 nodes, 7 disciplines)
+
+Mean tokens per statement (scripts/measure_compression.py):
+
+| encoding | tokens | vs char |
+|---|---|---|
+| char | 37.5 | 1x |
+| struct (parse tokens) | 13.6 | 2.77x |
+| concept (family-skeleton id + slot fillers) | 4.4 | **8.44x** |
+
+The synthetic-world 2.7x reproduced almost exactly at the struct level
+(2.77x) on real statements — and the full concept encoding adds another
+3x on top. Honest accounting: concept decoding requires the skeleton
+vocabulary (49 skeletons for 67 nodes, 1.37 nodes/skeleton, 8 reused),
+which is precisely the extrinsic structure lexicon — the cost lives in
+the reference store, not the stream, and amortizes as reuse grows. The
+most-reused skeletons are exactly the cross-discipline families (ratio
+5, exponential 4, affine 4, scaled-linear 4, scaled-quadratic 3): reuse
+concentration and cross-discipline generality are the same phenomenon.
+
+Specialization matcher v2 shipped corpus-side (scripts/specialize.py):
+the recorded arity misses now fire (equation of exchange >= ideal gas;
+Cobb-Douglas <= power-law rate; Beer-Lambert generalizes the
+scaled-linear family) — see reports/specializations.json.
+
 ## Next
 
-1. Specialization matcher v2 (corpus side): slot-to-subtree subsumption +
-   identity-element reasoning, closing the recorded arity misses
-   (quantity theory <-> ideal gas, Cobb-Douglas <-> power-law rate,
-   simple interest <-> compounding truncation, circumference <-> affine).
-2. Milestone 2 compression measured on the real 67-node corpus.
-3. Hybrid head (symbolic bit + learned scoring) — now informed by syn:
-   the symbolic side should carry the lexicon, weights the soft residual.
+1. Hybrid head (symbolic bit + learned scoring) — informed by syn: the
+   symbolic side carries the lexicon, weights score the soft residual.
+2. Binding category-compatibility constraints for specialize.py noise.
+3. Prover phase 1 (LeanDojo extraction) when a Linux/WSL2 window opens.
