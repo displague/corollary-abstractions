@@ -28,7 +28,11 @@ Model mathematical statements as reusable, cross-disciplinary structures with ex
 - Keep canonical expressions mathematically standard and discipline-accurate.
 - Treat corollaries as derived statements with explicit `entailed_by` references.
 - Require provenance for new nodes where possible.
-- Run `python scripts/validate_nodes.py` after edits to corpus or schema.
+- Run `python scripts/validate_nodes.py` after edits to corpus or schema
+  (validates every `data/*/nodes.json` as one merged graph by default).
+- Ensure every slot used in `anonymized_template` is declared in
+  `slot_schema`; `python scripts/match_signatures.py` reports gaps, label
+  drift, and structural twin candidates.
 
 ## Copilot and VS Code Integration
 

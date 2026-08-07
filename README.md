@@ -1,6 +1,7 @@
 # corollary-abstractions
 
-Statistics-first ontology for mathematical statements and their inferential descendants.
+Cross-discipline ontology of mathematical statements, with a symbolic engine
+that detects structurally isomorphic formulas ("twins") across disciplines.
 
 ## Research Intent
 
@@ -9,6 +10,26 @@ The project models equations, inequalities, definitions, theorems, and corollari
 - structurally isomorphic forms can be detected across disciplines
 - corollaries can be re-evaluated in alternate theoretical contexts
 - symbolic form, semantic role, and inferential lineage are captured separately
+
+Longer term, the discovered structures are candidate *concept tokens* for an
+extremely small model whose lexicon lives outside its weights — see
+`docs/DESIGN-concept-tokens.md` for the design and `prover/README.md` for the
+verifier-coupled sub-project that will test it.
+
+## Structural Twin Detection
+
+`scripts/match_signatures.py` parses every node's
+`structural_signature.anonymized_template` into an expression tree,
+canonicalizes it, and groups nodes by structural skeleton:
+
+```bash
+python scripts/match_signatures.py --write-report reports/signature_matches.json
+```
+
+It reports typed twins (slot categories respected), shape twins (categories
+ignored), archetype-label drift, and `slot_schema` gaps. Twin proposals stay
+in `reports/` — structural isomorphism is analogy, not the logical
+`equivalent_to` of `inferential_links`.
 
 ## Ontology Design
 
@@ -27,8 +48,12 @@ Each statement node is represented as a `Mathematical Statement Node` with the f
 ## Project Files
 
 - Schema: `schema/equation-node.schema.json`
-- Statistics corpus: `data/statistics/nodes.json`
+- Corpora: `data/<discipline>/nodes.json` (statistics, geometry, algebra)
 - Validator: `scripts/validate_nodes.py`
+- Twin detection: `scripts/match_signatures.py`
+- Formula entry CLI: `scripts/add_node.py`
+- Model design: `docs/DESIGN-concept-tokens.md`
+- Prover sub-project: `prover/README.md`
 
 ## Statistics Seed Corpus
 
@@ -102,7 +127,7 @@ python scripts/add_node.py --template my_formula.json --validate-only
 
 ## Validation
 
-Validate existing corpus files:
+Validate all corpora as one merged cross-discipline graph (default):
 
 ```bash
 python scripts/validate_nodes.py
@@ -110,3 +135,6 @@ python scripts/validate_nodes.py
 # Or validate a specific corpus:
 python scripts/validate_nodes.py --nodes data/geometry/nodes.json
 ```
+
+Install `jsonschema` (`pip install jsonschema`) to enable full schema
+validation; without it only the minimal structural checks run.
