@@ -1,6 +1,28 @@
 {
-  "nodes_analyzed": 67,
+  "nodes_analyzed": 85,
   "typed_twin_groups": [
+    {
+      "skeleton": "?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "complement_annihilation"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.complement_laws",
+          "discipline": "logic",
+          "template": "MEET(PROP1, NEG(PROP1)) = FALSITY"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.complement_laws",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, NEG(SETA)) = EMPTYSET"
+        }
+      ]
+    },
     {
       "skeleton": "?0:V = *(?1:P, ?2:V)",
       "disciplines": [
@@ -231,6 +253,138 @@
           "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
           "discipline": "chemistry",
           "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET⟨?0:V, ?0:V⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "idempotent_operation"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.idempotence",
+          "discipline": "logic",
+          "template": "MEET(PROP1, PROP1) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.idempotence",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, SETA) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET⟨?0:V, ?1:P⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.identity_laws",
+          "discipline": "logic",
+          "template": "MEET(PROP1, TRUTH) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.identity_laws",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, UNIVERSE) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "lattice_absorption"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.absorption",
+          "discipline": "logic",
+          "template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.absorption",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, JOIN(SETA, SETB)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = NEG⟨NEG⟨?0:V⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "complement_involution"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.double_negation",
+          "discipline": "logic",
+          "template": "NEG(NEG(PROP1)) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.double_negation",
+          "discipline": "set_theory",
+          "template": "NEG(NEG(SETA)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩ = MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+          "discipline": "logic",
+          "template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.distributivity_meet_over_join",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, JOIN(SETB, SETC)) = JOIN(MEET(SETA, SETB), MEET(SETA, SETC))"
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.de_morgan_laws",
+          "discipline": "logic",
+          "template": "NEG(MEET(PROP1, PROP2)) = JOIN(NEG(PROP1), NEG(PROP2))"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.de_morgan_laws",
+          "discipline": "set_theory",
+          "template": "NEG(MEET(SETA, SETB)) = JOIN(NEG(SETA), NEG(SETB))"
         }
       ]
     }
@@ -559,6 +713,160 @@
           "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
           "discipline": "chemistry",
           "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = MEET⟨?0, ?0⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "idempotent_operation"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.idempotence",
+          "discipline": "logic",
+          "template": "MEET(PROP1, PROP1) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.idempotence",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, SETA) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = MEET⟨?0, ?1⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.identity_laws",
+          "discipline": "logic",
+          "template": "MEET(PROP1, TRUTH) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.identity_laws",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, UNIVERSE) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = MEET⟨?0, JOIN⟨?0, ?1⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "lattice_absorption"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.absorption",
+          "discipline": "logic",
+          "template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.absorption",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, JOIN(SETA, SETB)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = MEET⟨?1, NEG⟨?1⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "complement_annihilation"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.complement_laws",
+          "discipline": "logic",
+          "template": "MEET(PROP1, NEG(PROP1)) = FALSITY"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.complement_laws",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, NEG(SETA)) = EMPTYSET"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = NEG⟨NEG⟨?0⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "complement_involution"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.double_negation",
+          "discipline": "logic",
+          "template": "NEG(NEG(PROP1)) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.double_negation",
+          "discipline": "set_theory",
+          "template": "NEG(NEG(SETA)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN⟨MEET⟨?0, ?1⟩, MEET⟨?0, ?2⟩⟩ = MEET⟨?0, JOIN⟨?1, ?2⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+          "discipline": "logic",
+          "template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.distributivity_meet_over_join",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, JOIN(SETB, SETC)) = JOIN(MEET(SETA, SETB), MEET(SETA, SETC))"
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN⟨NEG⟨?0⟩, NEG⟨?1⟩⟩ = NEG⟨MEET⟨?0, ?1⟩⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.de_morgan_laws",
+          "discipline": "logic",
+          "template": "NEG(MEET(PROP1, PROP2)) = JOIN(NEG(PROP1), NEG(PROP2))"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.de_morgan_laws",
+          "discipline": "set_theory",
+          "template": "NEG(MEET(SETA, SETB)) = JOIN(NEG(SETA), NEG(SETB))"
         }
       ]
     }
