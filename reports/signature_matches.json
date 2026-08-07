@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 122,
+  "nodes_analyzed": 137,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -433,8 +433,33 @@
       ]
     },
     {
+      "skeleton": "?0:V = sum⟨*(?1:P, ?2:V)⟩",
+      "disciplines": [
+        "algebraic_topology",
+        "statistics"
+      ],
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization"
+      ],
+      "members": [
+        {
+          "statement_id": "algtop.homology.betti_alternating_sum",
+          "discipline": "algebraic_topology",
+          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+        },
+        {
+          "statement_id": "probstat.probability.total_probability_partition",
+          "discipline": "statistics",
+          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i"
+        }
+      ]
+    },
+    {
       "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩ = +(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
       "disciplines": [
+        "algebraic_topology",
+        "geospatial_topology",
         "information_theory",
         "set_theory"
       ],
@@ -442,6 +467,16 @@
         "inclusion_exclusion_correction"
       ],
       "members": [
+        {
+          "statement_id": "algtop.invariants.euler_characteristic_valuation",
+          "discipline": "algebraic_topology",
+          "template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))"
+        },
+        {
+          "statement_id": "geotop.measure.area_inclusion_exclusion",
+          "discipline": "geospatial_topology",
+          "template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))"
+        },
         {
           "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
           "discipline": "information_theory",
@@ -451,6 +486,28 @@
           "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
           "discipline": "set_theory",
           "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
+        }
+      ]
+    },
+    {
+      "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩",
+      "disciplines": [
+        "geospatial_topology",
+        "set_theory"
+      ],
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "members": [
+        {
+          "statement_id": "geotop.predicates.containment_transitivity",
+          "discipline": "geospatial_topology",
+          "template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))"
+        },
+        {
+          "statement_id": "settheory.order.subset_transitivity",
+          "discipline": "set_theory",
+          "template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))"
         }
       ]
     },
@@ -586,6 +643,45 @@
           "statement_id": "economics.finance.present_value_continuous",
           "discipline": "economics",
           "template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "disciplines": [
+        "algebraic_topology",
+        "calculus",
+        "economics",
+        "statistics"
+      ],
+      "archetypes": [
+        "affine_operator"
+      ],
+      "members": [
+        {
+          "statement_id": "algtop.invariants.euler_characteristic_surface",
+          "discipline": "algebraic_topology",
+          "template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS"
+        },
+        {
+          "statement_id": "calculus.approximation.tangent_line_linearization",
+          "discipline": "calculus",
+          "template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT"
+        },
+        {
+          "statement_id": "economics.finance.capm_expected_return",
+          "discipline": "economics",
+          "template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM"
+        },
+        {
+          "statement_id": "economics.macroeconomics.keynesian_consumption_function",
+          "discipline": "economics",
+          "template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME"
+        },
+        {
+          "statement_id": "probstat.transform.affine_location_scale",
+          "discipline": "statistics",
+          "template": "OUT = SCALE*IN + SHIFT"
         }
       ]
     }
@@ -858,12 +954,19 @@
     {
       "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
       "disciplines": [
+        "algebraic_topology",
         "chemistry"
       ],
       "archetypes": [
+        "affine_operator",
         "signed_affine_combination"
       ],
       "members": [
+        {
+          "statement_id": "algtop.invariants.euler_characteristic_surface",
+          "discipline": "algebraic_topology",
+          "template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS"
+        },
         {
           "statement_id": "chemistry.thermodynamics.gibbs_free_energy",
           "discipline": "chemistry",
@@ -1031,8 +1134,33 @@
       ]
     },
     {
+      "skeleton": "?0 = sum⟨*(?1, ?2)⟩",
+      "disciplines": [
+        "algebraic_topology",
+        "statistics"
+      ],
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization"
+      ],
+      "members": [
+        {
+          "statement_id": "algtop.homology.betti_alternating_sum",
+          "discipline": "algebraic_topology",
+          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+        },
+        {
+          "statement_id": "probstat.probability.total_probability_partition",
+          "discipline": "statistics",
+          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i"
+        }
+      ]
+    },
+    {
       "skeleton": "CARD⟨JOIN⟨?0, ?1⟩⟩ = +(CARD⟨?0⟩, CARD⟨?1⟩, neg(CARD⟨MEET⟨?0, ?1⟩⟩))",
       "disciplines": [
+        "algebraic_topology",
+        "geospatial_topology",
         "information_theory",
         "set_theory"
       ],
@@ -1040,6 +1168,16 @@
         "inclusion_exclusion_correction"
       ],
       "members": [
+        {
+          "statement_id": "algtop.invariants.euler_characteristic_valuation",
+          "discipline": "algebraic_topology",
+          "template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))"
+        },
+        {
+          "statement_id": "geotop.measure.area_inclusion_exclusion",
+          "discipline": "geospatial_topology",
+          "template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))"
+        },
         {
           "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
           "discipline": "information_theory",
@@ -1049,6 +1187,28 @@
           "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
           "discipline": "set_theory",
           "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
+        }
+      ]
+    },
+    {
+      "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0, ?1⟩, LEQ⟨?1, ?2⟩⟩, LEQ⟨?0, ?2⟩⟩",
+      "disciplines": [
+        "geospatial_topology",
+        "set_theory"
+      ],
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "members": [
+        {
+          "statement_id": "geotop.predicates.containment_transitivity",
+          "discipline": "geospatial_topology",
+          "template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))"
+        },
+        {
+          "statement_id": "settheory.order.subset_transitivity",
+          "discipline": "set_theory",
+          "template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))"
         }
       ]
     },
@@ -1120,6 +1280,20 @@
     }
   ],
   "archetype_label_drift": [
+    {
+      "archetype_id": "affine_operator",
+      "distinct_shapes": [
+        "?0 = +(?1, *(?2, ?3))",
+        "?0 = +(?1, neg(*(?2, ?3)))"
+      ],
+      "members": [
+        "algtop.invariants.euler_characteristic_surface",
+        "calculus.approximation.tangent_line_linearization",
+        "economics.finance.capm_expected_return",
+        "economics.macroeconomics.keynesian_consumption_function",
+        "probstat.transform.affine_location_scale"
+      ]
+    },
     {
       "archetype_id": "composition_factorization",
       "distinct_shapes": [
@@ -1206,6 +1380,29 @@
         "geometry.surface_area_formulas.cube_surface_area",
         "geometry.surface_area_formulas.sphere_surface_area",
         "physics.relativity.mass_energy_equivalence"
+      ]
+    },
+    {
+      "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
+      "archetype_ids": [
+        "affine_operator",
+        "signed_affine_combination"
+      ],
+      "members": [
+        "algtop.invariants.euler_characteristic_surface",
+        "chemistry.thermodynamics.gibbs_free_energy",
+        "chemistry.thermodynamics.helmholtz_free_energy"
+      ]
+    },
+    {
+      "skeleton": "?0 = sum⟨*(?1, ?2)⟩",
+      "archetype_ids": [
+        "alternating_rank_sum",
+        "conditional_marginalization"
+      ],
+      "members": [
+        "algtop.homology.betti_alternating_sum",
+        "probstat.probability.total_probability_partition"
       ]
     }
   ],

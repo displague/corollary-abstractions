@@ -111,3 +111,39 @@ bindings), **near-miss** (informative failure, kept deliberately).
   authoring the MOD node makes the discrete-infinity-at-every-level
   claim mechanically checkable, pending head aliasing. *prediction*
   (2026-08-07)
+
+- **Counting, entropy, Euler characteristic, and area are one law.** The
+  inclusion-exclusion skeleton `CARD(JOIN(A,B)) = CARD(A)+CARD(B)−CARD(MEET(A,B))`
+  fires as a typed twin across set theory, information theory, algebraic
+  topology, and geospatial topology — four valuations on lattices,
+  differing only in what they count; modularity is the only property the
+  identity uses. *exact, 4 disciplines* (2026-08-07)
+
+- **The Fundamental Theorem of Calculus is Stokes' theorem in dimension
+  1** — the 0-form Stokes case and FTC's evaluation part share one typed
+  skeleton, found by the matcher rather than asserted. *exact* (2026-08-07)
+
+- **The flat metric line element is the Pythagorean theorem.**
+  `ds² = du² + dv²` typed-twins `a² + b² = c²` — differential geometry's
+  local statement is the school theorem. *exact* (2026-08-07)
+
+- **Betti alternating sums are total-probability decompositions** (with
+  a caveat: the (−1)^i signs collapse into the same parameter slot that
+  holds probability weights — structural kinship, semantic distance
+  recorded). *exact-with-caveat* (2026-08-07)
+
+- **χ = 2−2g shape-twins the thermodynamic free energies** and joins the
+  affine family only after sign absorption — correctly, since
+  χ-decreasing-in-genus is a convention. *family/shape* (2026-08-07)
+
+- **A prediction formally cashed:** seed_logic fixed the LEQ head so
+  future transitivity statements would twin for free; geospatial
+  containment transitivity fired against subset transitivity with the
+  target defined before the source existed. *exact, predicted*
+  (2026-08-07)
+
+- **The plainest specializations are provably invisible to specialize.py**
+  (near-miss upgraded to load-bearing): Euler's polyhedron formula IS
+  combinatorial χ at χ=2, and DE-9IM disjointness IS the complement law —
+  match() succeeds on both, the requires-absorption filter drops both.
+  Direct probes on record. (2026-08-07)

@@ -354,7 +354,8 @@ GAUSS_BONNET_LINKS = links(
     # id `algtop.invariants.euler_characteristic_surface` belongs here too and
     # is omitted solely because the validator requires targets to resolve and
     # that corpus is authored on a parallel branch; see the module docstring.
-    composed_with=["difftop.vectorfields.poincare_hopf_index_theorem",
+    composed_with=["algtop.invariants.euler_characteristic_surface",
+                   "difftop.vectorfields.poincare_hopf_index_theorem",
                    "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
                    "diffgeo.surfaces.gaussian_curvature_principal_product"])
 

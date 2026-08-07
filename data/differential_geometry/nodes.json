@@ -1169,6 +1169,7 @@
         "special_case_of": [],
         "generalizes": [],
         "composed_with": [
+          "algtop.invariants.euler_characteristic_surface",
           "difftop.vectorfields.poincare_hopf_index_theorem",
           "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
           "diffgeo.surfaces.gaussian_curvature_principal_product"
