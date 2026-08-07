@@ -1,0 +1,1925 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "temporal_logic.linear_time.v1",
+  "discipline": "temporal_logic",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "temporal.modality.temporal_duality",
+      "title": "Temporal Duality (Always as Not-Eventually-Not)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "modal_duality",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "always(p) = not(eventually(not p))",
+        "canonical_latex": "\\Box p \\equiv \\lnot \\Diamond \\lnot p",
+        "equivalent_forms": [
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "eventually(p) = not(always(not p))",
+            "scope_note": "The mirror half; either direction defines one modality from the other"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "G p ≡ ¬F¬p",
+            "scope_note": "Model-checking notation, G for globally and F for finally"
+          },
+          {
+            "form_id": "quantifier",
+            "notation_system": "ascii",
+            "expression": "not(forall i >= now. p at i) = exists i >= now. not(p at i)",
+            "scope_note": "Unfolded over trace positions; this is the first-order De Morgan law of logic.boolean_laws.de_morgan_laws, restricted to the future"
+          },
+          {
+            "form_id": "safety_liveness",
+            "notation_system": "ascii",
+            "expression": "the complement of a safety property is a liveness property",
+            "scope_note": "The reading that makes the duality operationally useful: a counterexample to G p is a witness for F not-p, which is why finite counterexamples exist for safety and not for liveness"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "de_morgan_duality",
+        "anonymized_template": "ALWAYS(PROP) = NEG(EVENTUALLY(NEG(PROP)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "ALWAYS is the infinitary MEET over trace suffixes and EVENTUALLY the infinitary JOIN, so this statement is De Morgan's law taken to the limit -- the same law logic.boolean_laws.de_morgan_laws already carries in its `quantifier` equivalent form.",
+          "Only one free operand appears, twice, so the law constrains the operators and says nothing about any relation between operands. That is precisely why it cannot twin the binary De Morgan law: the arities differ before the heads are even compared.",
+          "NEG appears on both sides at different depths; the law holds because NEG is an involution (logic.boolean_laws.double_negation), which is what lets each modality be eliminated in favour of the other.",
+          "Self-dual as a pair: swapping ALWAYS with EVENTUALLY maps the stated form onto its mirror, so one half proves the other.",
+          "The archetype_id `de_morgan_duality` is adopted from the Boolean corpora on purpose. The skeletons differ and the label does not, which is the drift entry docs/BACKLOG.md proposes promoting into a head-alias discovery channel."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Saying a property holds at every future moment is exactly denying that it ever fails; the two modalities are each other's negation sandwiched between negations.",
+        "statistical_significance": "The corpus's test of whether the archetype channel can carry a relationship the skeleton channel structurally cannot. It cannot twin logic.boolean_laws.de_morgan_laws -- head literalism blocks ALWAYS/EVENTUALLY against MEET/JOIN, and the arity blocks it a second time -- so the node adopts the `de_morgan_duality` archetype instead, and the matcher's `archetype_label_drift` section reports the three-way spread. The relationship is not an analogy: an infinite Boolean algebra's De Morgan law for arbitrary meets and joins, restricted to the suffixes of one trace, IS this statement. Operationally the duality is why model checkers report safety violations as finite counterexamples and liveness violations as lassos.",
+        "regularity_conditions": [
+          "Linear time: each state has exactly one successor, so 'the future' is a single trace rather than a branching tree",
+          "Classical two-valued semantics, with NEG an involution",
+          "Traces are infinite, so every suffix is non-empty and both modalities are total"
+        ],
+        "failure_modes": [
+          "Fails in branching time as stated: CTL's AG p is dual to EF not-p, not to AF not-p, so the path quantifier must flip along with the modality. Transplanting the LTL duality to CTL is the standard error.",
+          "Fails over finite traces unless the semantics is fixed: on a finite word, weak and strong readings of the modalities diverge, and LTLf has to choose which of G and F is the dual of which.",
+          "Intuitionistically the elimination direction fails for the same reason double negation does; constructive temporal logics keep one implication only."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "temporal.modality.eventually_unfolding"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.always_idempotence",
+          "temporal.monotonicity.eventually_monotonicity",
+          "logic.boolean_laws.de_morgan_laws",
+          "logic.boolean_laws.double_negation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        },
+        {
+          "citation_key": "kripke1963",
+          "bibliographic_entry": "Kripke, S. A. (1963). Semantical Considerations on Modal Logic. Acta Philosophica Fennica, 16, 83-94."
+        }
+      ],
+      "keywords": [
+        "temporal duality",
+        "De Morgan",
+        "always",
+        "eventually",
+        "modal logic",
+        "safety",
+        "liveness"
+      ]
+    },
+    {
+      "statement_id": "temporal.recurrence.until_unfolding",
+      "title": "Expansion Law for Until",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "fixpoint_expansion",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(p until q) = q or (p and next(p until q))",
+        "canonical_latex": "p \\mathbin{\\mathcal{U}} q \\equiv q \\lor (p \\land \\mathrm{X}(p \\mathbin{\\mathcal{U}} q))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "p U q ≡ q ∨ (p ∧ X(p U q))",
+            "scope_note": "The standard infix spelling"
+          },
+          {
+            "form_id": "fixpoint",
+            "notation_system": "ascii",
+            "expression": "p U q = least fixpoint of Z. (q or (p and next Z))",
+            "scope_note": "Mu-calculus reading: until is the LEAST fixpoint, which is what forces q to actually occur"
+          },
+          {
+            "form_id": "weak_until",
+            "notation_system": "ascii",
+            "expression": "p W q = q or (p and next(p W q)), taken as the GREATEST fixpoint",
+            "scope_note": "Weak until satisfies the same expansion equation; only the choice of fixpoint distinguishes them, which is why the equation alone does not define the operator"
+          },
+          {
+            "form_id": "automaton",
+            "notation_system": "ascii",
+            "expression": "one state, one self-loop guarded by p, one exit guarded by q",
+            "scope_note": "The expansion law read as the transition relation of the Buechi automaton that Vardi-Wolper construction builds"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "fixpoint_expansion_law",
+        "anonymized_template": "UNTIL(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, NEXT(UNTIL(PROPA, PROPB))))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPA",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "PROPB",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "The defined head UNTIL occurs on both sides, once at the root and once under NEXT inside its own definition. That self-reference is the recurrence, and it is the one thing neither match_signatures.py nor decompose.py can see: the matcher compares whole skeletons and decompose compares expression sides, so a subterm that repeats the statement's own head is just another subterm to both.",
+          "The equation is satisfied by two operators, strong and weak until; only the side condition 'least fixpoint' picks out the strong one. The template therefore under-determines the node, and the missing content lives in regularity_conditions -- the same loss docs/BACKLOG.md records for quantifiers in differential topology.",
+          "Argument order is doubly load-bearing: UNTIL is hold-first, and the JOIN puts the goal disjunct first because that is the order the operator is read in and the order the automaton takes its exit.",
+          "One step of the recurrence is one step of the trace, so iterating the equation generates the unrolling q, p and X q, p and X(p and XX q), ... -- the same relationship an SSM state update has to its impulse response.",
+          "Every other LTL operator is a special case of this one (F q = true U q, G p = not(true U not p)), so the corpus keeps the expansion law as an axiom and derives the eventually-unfolding from it."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "A second arbitrary temporal property, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "X",
+            "name": "next-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "U",
+            "name": "strong until",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "UNTIL(hold, goal)",
+            "name": "strong until",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "phi U psi: psi holds at some future position and phi holds at every position strictly before it. Argument order is fixed hold-first, goal-second, matching the usual infix reading. 'Strong' means psi is required to occur; the weak variant (which permits phi forever) is recorded as an equivalent form, not as a separate head."
+          },
+          {
+            "notation": "NEXT(.)",
+            "name": "next state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "X phi: phi holds at the immediately following position. The only modality that is a *function* on positions rather than a quantifier over them, which is why it distributes over every Boolean connective, including NEG -- ALWAYS and EVENTUALLY distribute over only one each."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Least upper bound in the Boolean lattice: disjunction, union, and here the union of trace sets. Argument order follows scripts/seed_logic.py's convention, distinguished operand first."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Waiting for a goal while a condition holds means either the goal is already met, or the condition holds now and the same wait continues from the next moment.",
+        "statistical_significance": "Registered as a prediction against the state-update family (ml.recurrence.belief_state_update, ml.recurrence.linear_ssm_state_update) and it misses, as expected: those are arithmetic and flat, this is lattice-algebraic and self-referential. What the miss exposes is more useful than a hit would have been. scripts/decompose.py scores this node's groundedness at 0.000 -- the lowest of the seventeen nodes added with it, on a statement that is an axiom of a fifty-year-old logic -- because all five of its non-trivial constituents contain UNTIL, the head being defined, and a form inventory built from other statements can never match them. Its plainly Boolean neighbour temporal.modality.next_distributes_over_meet scores 0.600 by comparison, its MEET constituent recognized as recurring in ten statements. So self-reference does not merely go unnoticed; it drives the epistemic ladder's one graded rung to the value it reserves for near-gibberish. Every recursive definition anyone adds -- factorial, Fibonacci, a grammar production, the mu-calculus fragment -- will be graded the same way, and the fix is small: score a statement's own root head as a known form while decomposing it.",
+        "regularity_conditions": [
+          "Infinite traces, so 'some future position' is well defined",
+          "Least-fixpoint reading: the goal must eventually hold. Under the greatest-fixpoint reading the same equation defines weak until, and the template cannot distinguish them",
+          "Monotonicity of the unfolding functional in Z, which Tarski's theorem needs for the fixpoints to exist"
+        ],
+        "failure_modes": [
+          "Read as a definition, it is wrong: the equation has two solutions and picks neither. Implementations that translate the expansion law directly into a transition relation without a fairness or acceptance condition silently implement weak until.",
+          "The recursion is guarded by NEXT; dropping the NEXT gives an unguarded equation with no unique solution and a non-terminating tableau.",
+          "Over finite traces the last position has no successor, so NEXT must be split into weak and strong variants before the law can be stated at all."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "temporal.modality.eventually_unfolding"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.next_distributes_over_meet",
+          "temporal.modality.temporal_duality",
+          "ml.recurrence.belief_state_update",
+          "ml.recurrence.linear_ssm_state_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        },
+        {
+          "citation_key": "vardi1986",
+          "bibliographic_entry": "Vardi, M. Y., Wolper, P. (1986). An Automata-Theoretic Approach to Automatic Program Verification. Proceedings of the 1st IEEE Symposium on Logic in Computer Science (LICS), 332-344."
+        },
+        {
+          "citation_key": "tarski1955",
+          "bibliographic_entry": "Tarski, A. (1955). A Lattice-Theoretical Fixpoint Theorem and its Applications. Pacific Journal of Mathematics, 5(2), 285-309."
+        }
+      ],
+      "keywords": [
+        "until",
+        "expansion law",
+        "fixpoint",
+        "recurrence",
+        "Buechi automaton",
+        "linear temporal logic"
+      ]
+    },
+    {
+      "statement_id": "temporal.modality.eventually_unfolding",
+      "title": "Expansion Law for Eventually",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "fixpoint_expansion",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "eventually(p) = p or next(eventually(p))",
+        "canonical_latex": "\\Diamond p \\equiv p \\lor \\mathrm{X}\\Diamond p",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "F p ≡ p ∨ XF p"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "always(p) = p and next(always(p))",
+            "scope_note": "The dual unfolding, obtained by applying temporal.modality.temporal_duality to both sides; it is a GREATEST fixpoint where this one is a least fixpoint"
+          },
+          {
+            "form_id": "from_until",
+            "notation_system": "ascii",
+            "expression": "eventually(p) = (true until p)",
+            "scope_note": "Why this node is derived rather than axiomatic: substitute PROPA := TRUTH in the until expansion and simplify by the identity laws"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "fixpoint_expansion_law",
+        "anonymized_template": "EVENTUALLY(PROP) = JOIN(PROP, NEXT(EVENTUALLY(PROP)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "The same expansion shape as temporal.recurrence.until_unfolding with one operand instead of two, and it does not twin it: the arity differs and the head differs, so the two halves of one axiom scheme sit in separate groups. Both carry the archetype `fixpoint_expansion_law`, which is the only channel that records the relationship.",
+          "Least fixpoint again, and again the equation alone does not say so: the greatest fixpoint of the same functional is the constant true.",
+          "The dual unfolding for ALWAYS has skeleton ALWAYS⟨?0:V⟩ = MEET⟨?0:V, NEXT⟨ALWAYS⟨?0:V⟩⟩⟩ -- identical to this one apart from two head strings -- and would be a third non-twinning member of the same family. It is recorded as an equivalent form rather than authored as a node, because a third copy would measure nothing the first two do not already measure.",
+          "Progress, not just possibility: because the fixpoint is least, iterating the unfolding must terminate, which is why liveness checking searches for an accepting cycle rather than a reachable state."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "X",
+            "name": "next-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "NEXT(.)",
+            "name": "next state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "X phi: phi holds at the immediately following position. The only modality that is a *function* on positions rather than a quantifier over them, which is why it distributes over every Boolean connective, including NEG -- ALWAYS and EVENTUALLY distribute over only one each."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Least upper bound in the Boolean lattice: disjunction, union, and here the union of trace sets. Argument order follows scripts/seed_logic.py's convention, distinguished operand first."
+          },
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Something happens eventually exactly when it happens now or it eventually happens starting from the next moment.",
+        "statistical_significance": "Authored as the one-operand case of the until expansion so that the corpus carries the pair, and the pair is what shows the cost: two instances of one axiom scheme, written by one hand in one file minutes apart, with skeletons `EVENTUALLY⟨?0:V⟩ = JOIN⟨?0:V, NEXT⟨EVENTUALLY⟨?0:V⟩⟩⟩` and `JOIN⟨?0:V, MEET⟨?1:V, NEXT⟨UNTIL⟨?1:V, ?0:V⟩⟩⟩⟩ = UNTIL⟨?1:V, ?0:V⟩`, sharing no group at shape, typed or family level. The shared archetype_id is the entire recorded relationship, which is the case docs/BACKLOG.md's head-alias proposal is meant to cover.",
+        "regularity_conditions": [
+          "Infinite traces",
+          "Least-fixpoint reading",
+          "Derived from temporal.recurrence.until_unfolding by substituting the top element for the hold condition, which needs the identity laws of the underlying Boolean algebra"
+        ],
+        "failure_modes": [
+          "Mistaking the least fixpoint for the greatest turns 'eventually' into 'possibly forever deferred'; the equation is satisfied by the constant-true property, which is not what F means.",
+          "Over finite traces the unfolding terminates at the last position and F p becomes decidable by inspection, so results about liveness checking do not transfer from infinite to finite semantics."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "temporal.recurrence.until_unfolding",
+          "temporal.modality.temporal_duality"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.next_distributes_over_meet",
+          "temporal.response.response_pattern"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "eventually",
+        "expansion law",
+        "least fixpoint",
+        "liveness",
+        "unfolding"
+      ]
+    },
+    {
+      "statement_id": "temporal.modality.next_distributes_over_meet",
+      "title": "Next Distributes over Conjunction",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "modal_homomorphism",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "next(p and q) = next(p) and next(q)",
+        "canonical_latex": "\\mathrm{X}(p \\land q) \\equiv \\mathrm{X}p \\land \\mathrm{X}q",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "X(p ∧ q) ≡ Xp ∧ Xq"
+          },
+          {
+            "form_id": "self_dual",
+            "notation_system": "ascii",
+            "expression": "next(not p) = not(next p)",
+            "scope_note": "NEXT commutes with negation too, which no other modality does; together with this law it makes NEXT a Boolean-algebra endomorphism"
+          },
+          {
+            "form_id": "join",
+            "notation_system": "ascii",
+            "expression": "next(p or q) = next(p) or next(q)",
+            "scope_note": "The join half, which follows from the meet half and the negation law"
+          },
+          {
+            "form_id": "always_half",
+            "notation_system": "ascii",
+            "expression": "always(p and q) = always(p) and always(q), but always(p or q) is strictly stronger than always(p) or always(q)",
+            "scope_note": "The contrast that makes NEXT special: G distributes over meet only, F over join only, X over both"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "modal_meet_homomorphism",
+        "anonymized_template": "NEXT(MEET(PROPA, PROPB)) = MEET(NEXT(PROPA), NEXT(PROPB))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPA",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "PROPB",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "A homomorphism statement in the exact sense of morphology.semantics.compositionality and morphology.quantity.morpheme_count_additivity: one projection applied to a composite on one side, the same projection applied to the parts and recombined on the other.",
+          "It is the *degenerate* member of that family, because the recombining operation equals the composing operation. Compositionality has three distinct heads (MEANING, CONCAT, COMPOSE), the morpheme count has two heads and an arithmetic `+`, and this has two heads with the composer used twice -- NEXT is an endomorphism of one lattice, not a homomorphism onto another. Collapsing in the direction that ought to make matching easier still produces no group, because head identity is literal at every level.",
+          "NEXT is the only LTL modality that is a function on positions rather than a quantifier over them, and that is the whole proof: the successor of a position is unique, so every Boolean connective commutes with it.",
+          "Symmetric in the two operands, since MEET is; the ordered-call problem docs/BACKLOG.md records for MEET applies here as it does everywhere else in the Boolean corpora.",
+          "This is the K axiom of normal modal logic specialized to a functional accessibility relation, plus the converse -- normal modal logics get only one direction."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "A second arbitrary temporal property, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "X",
+            "name": "next-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEXT(.)",
+            "name": "next state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "X phi: phi holds at the immediately following position. The only modality that is a *function* on positions rather than a quantifier over them, which is why it distributes over every Boolean connective, including NEG -- ALWAYS and EVENTUALLY distribute over only one each."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Whether two things hold together at the next moment is settled by whether each of them holds at the next moment: looking one step ahead does not disturb conjunction.",
+        "statistical_significance": "Registered as a prediction against morphology.semantics.compositionality, and the honest report is a miss with an informative reason. The three homomorphism statements in the graph differ in exactly how many of the three positions (projection, inner composer, outer composer) carry distinct heads: three, two-plus-an-operator, and two. Erasing call-head identity -- the fourth match level docs/BACKLOG.md proposes -- would join this node to compositionality, since both become `H⟨F⟨?0, ?1⟩⟩ = G⟨H⟨?0⟩, H⟨?1⟩⟩`. It would NOT join the morpheme-count law, whose recombiner is a commutative `+` that the canonicalizer flattens and sorts while CONCAT and MEET stay ordered. So the proposed alias table must alias heads to heads and not heads to operators, and this trio is the regression test for that distinction.",
+        "regularity_conditions": [
+          "Linear time with a total successor function: every position has exactly one next position",
+          "Infinite traces, so NEXT is total and needs no weak variant",
+          "Classical Boolean semantics for the connectives"
+        ],
+        "failure_modes": [
+          "Fails for ALWAYS over join and for EVENTUALLY over meet, and the failure is the interesting direction: F(p and q) is strictly stronger than F p and F q, because the two need not happen at the same moment. Pattern-matching this law onto the other modalities is the standard error.",
+          "Fails in branching time for the path-quantified next unless the quantifier is fixed: EX(p and q) is not EX p and EX q, since the witnesses may be different successors.",
+          "Over finite traces the last position has no successor and the weak/strong split reappears; the law survives for one variant and not the other."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "temporal.induction.temporal_induction_axiom"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.recurrence.until_unfolding",
+          "temporal.modality.eventually_unfolding",
+          "morphology.semantics.compositionality",
+          "morphology.quantity.morpheme_count_additivity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        },
+        {
+          "citation_key": "hughes1996",
+          "bibliographic_entry": "Hughes, G. E., Cresswell, M. J. (1996). A New Introduction to Modal Logic. London: Routledge."
+        },
+        {
+          "citation_key": "blackburn2001",
+          "bibliographic_entry": "Blackburn, P., de Rijke, M., Venema, Y. (2001). Modal Logic. Cambridge Tracts in Theoretical Computer Science 53. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "next",
+        "distributivity",
+        "homomorphism",
+        "K axiom",
+        "endomorphism",
+        "modal logic"
+      ]
+    },
+    {
+      "statement_id": "temporal.modality.always_idempotence",
+      "title": "Idempotence of Always",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "modal_idempotence",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "always(always(p)) = always(p)",
+        "canonical_latex": "\\Box\\Box p \\equiv \\Box p",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "GG p ≡ G p"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "eventually(eventually(p)) = eventually(p)",
+            "scope_note": "The dual, obtained through temporal.modality.temporal_duality"
+          },
+          {
+            "form_id": "axiom_four",
+            "notation_system": "ascii",
+            "expression": "always(p) implies always(always(p))",
+            "scope_note": "Axiom 4 of modal logic S4; the converse is axiom T, and LTL validates both because the suffix relation is a reflexive transitive order"
+          },
+          {
+            "form_id": "closure",
+            "notation_system": "ascii",
+            "expression": "ALWAYS is an interior operator: deflationary, monotone and idempotent",
+            "scope_note": "The topological reading; EVENTUALLY is the matching closure operator"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "idempotent_operation",
+        "anonymized_template": "ALWAYS(ALWAYS(PROP)) = ALWAYS(PROP)",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "One free operand, one head, applied once on one side and twice on the other: the law says something about the operator alone.",
+          "Idempotence, not involution, and the difference is what blocks the match with logic.boolean_laws.double_negation. NEG applied twice returns the *bare operand* (`?0 = NEG⟨NEG⟨?0⟩⟩`), while ALWAYS applied twice returns `ALWAYS⟨?0⟩`. The idempotent has a fixed point the involution lacks, the two sides differ in depth, and no equality-based grouping can relate the two shapes.",
+          "Equivalent to reflexivity plus transitivity of the suffix relation: axiom T gives one inclusion and axiom 4 the other, so LTL's frame condition is exactly what makes this an equality rather than an implication.",
+          "Fifth member of docs/BACKLOG.md's recorded 'slot recurrence, not slot shape' family (Brouwer fixed point, double negation, set idempotence, FTC part 1) and the first that is an idempotent modality rather than an idempotent operation on elements.",
+          "The archetype_id `idempotent_operation` is adopted from logic.boolean_laws.idempotence and settheory.boolean_laws.idempotence deliberately; the label is right and the skeletons are three."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Requiring that a property always hold, always, asks for nothing beyond requiring that it always hold: the modality saturates after one application.",
+        "statistical_significance": "Predicted to miss logic.boolean_laws.idempotence and it does, at every level -- `ALWAYS⟨?0:V⟩ = ALWAYS⟨ALWAYS⟨?0:V⟩⟩` against `?0:V = MEET⟨?0:V, ?0:V⟩`. Two independent blockers again: the head, and the arity (MEET is binary with a repeated operand, ALWAYS is unary and nested). Its nearer miss is double negation, and the analysis of *why* that one also fails is the node's contribution: involution and idempotence differ by exactly whether the operator has a fixed point, which is a property of the skeleton rather than a shape of it -- the structural-query facility docs/BACKLOG.md asks for. The archetype channel carries what the skeleton channel cannot.",
+        "regularity_conditions": [
+          "Reflexive and transitive suffix relation, which linear time supplies automatically",
+          "Infinite traces",
+          "Both directions valid: the S4 axioms T and 4 together"
+        ],
+        "failure_modes": [
+          "Fails for the mixed modalities: GF p (infinitely often) and FG p (eventually forever) are genuinely different properties, and GFGF p = GF p while FGFG p = FG p -- the collapse is only within a single modality, and the fairness hierarchy lives in the mixed ones.",
+          "Fails in modal logics whose accessibility relation is not transitive; axiom 4 is precisely the transitivity condition, so the law is a frame property masquerading as an algebraic one.",
+          "Fails for the temporal-past mirror in logics with both directions unless the past relation is also transitive."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "temporal.induction.temporal_induction_axiom"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.temporal_duality",
+          "temporal.monotonicity.eventually_monotonicity",
+          "logic.boolean_laws.idempotence",
+          "logic.boolean_laws.double_negation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "hughes1996",
+          "bibliographic_entry": "Hughes, G. E., Cresswell, M. J. (1996). A New Introduction to Modal Logic. London: Routledge."
+        },
+        {
+          "citation_key": "blackburn2001",
+          "bibliographic_entry": "Blackburn, P., de Rijke, M., Venema, Y. (2001). Modal Logic. Cambridge Tracts in Theoretical Computer Science 53. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "kripke1963",
+          "bibliographic_entry": "Kripke, S. A. (1963). Semantical Considerations on Modal Logic. Acta Philosophica Fennica, 16, 83-94."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        }
+      ],
+      "keywords": [
+        "idempotence",
+        "always",
+        "S4",
+        "axiom 4",
+        "interior operator",
+        "fixed point"
+      ]
+    },
+    {
+      "statement_id": "temporal.induction.temporal_induction_axiom",
+      "title": "Temporal Induction",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "induction",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "always(p implies next(p)) implies (p implies always(p))",
+        "canonical_latex": "\\Box(p \\to \\mathrm{X}p) \\to (p \\to \\Box p)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "G(p → Xp) → (p → Gp)"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "from |- p implies next(p), infer |- p implies always(p)",
+            "scope_note": "The induction rule; the axiom internalizes it, exactly as the deduction theorem relates a rule to an implication"
+          },
+          {
+            "form_id": "invariance",
+            "notation_system": "ascii",
+            "expression": "an inductive invariant is a p closed under the transition relation and true initially",
+            "scope_note": "The engineering reading: this axiom is what licenses proving a safety property by exhibiting an invariant, which is how every model checker discharges G"
+          },
+          {
+            "form_id": "arithmetic",
+            "notation_system": "ascii",
+            "expression": "(P(0) and forall n. (P(n) implies P(n+1))) implies forall n. P(n)",
+            "scope_note": "Peano induction; positions of a trace are the naturals and NEXT is the successor, so this is the same principle over a different index"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "temporal_induction",
+        "anonymized_template": "IMPLIES(ALWAYS(IMPLIES(PROP, NEXT(PROP))), IMPLIES(PROP, ALWAYS(PROP)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "One free operand occurring four times at three different depths: the whole content is the reuse, exactly as in settheory.order.subset_transitivity where the middle element's two occurrences are the law.",
+          "The only node in this corpus whose root IMPLIES is meta-level (a rule) and whose inner IMPLIES is object-level (a formula). scripts/seed_logic.py's IMPLIES head is documented as carrying both readings, so the ambiguity is inherited rather than introduced, but the matcher cannot tell the two apart and would happily group a rule with a formula.",
+          "Not reversible and not an equation, which places it structurally with logic.inference.modus_ponens rather than with the expansion laws.",
+          "The step hypothesis is guarded by ALWAYS, so the premise must hold at every position, not merely at the first. Dropping the ALWAYS gives a statement that is false on any trace where p becomes true late.",
+          "Peano induction over the positions of the trace, with NEXT as successor. The corpus carries no arithmetic induction node, so this is currently a singleton whose obvious twin does not exist yet."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "X",
+            "name": "next-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "entailment / trace inclusion",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "NEXT(.)",
+            "name": "next state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "X phi: phi holds at the immediately following position. The only modality that is a *function* on positions rather than a quantifier over them, which is why it distributes over every Boolean connective, including NEG -- ALWAYS and EVENTUALLY distribute over only one each."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If a property is preserved by every single step, then holding it once is enough to hold it forever after.",
+        "statistical_significance": "The bridge between the corpus's temporal vocabulary and the way safety properties are actually proved: not by inspecting the infinite future but by exhibiting a one-step invariant. Structurally it is a singleton at every level, and the reason is worth recording because it is a corpus gap rather than a tool limit -- the graph carries no node for mathematical induction over the naturals, so the statement this one is an instance of is simply absent. Compare the recorded case where two twin groups were blocked by one missing statistics node: the cheapest connectivity fix for this node is authoring arithmetic induction somewhere in the graph, in this template.",
+        "regularity_conditions": [
+          "Well-founded, discrete time: positions are order-isomorphic to the naturals, so there is no limit position at which the step hypothesis could fail to reach",
+          "The step hypothesis must hold at every position, not just where p does",
+          "Infinite traces"
+        ],
+        "failure_modes": [
+          "Fails over dense or continuous time: with no immediate successor there is no step for the hypothesis to be about, which is why real-time logics replace induction with well-founded ranking arguments.",
+          "The invariant one starts with is usually too weak to be inductive, and strengthening it is undecidable in general; this is the practical content of the axiom and the reason invariant generation is a research area rather than a step.",
+          "It licenses nothing about liveness: no amount of one-step reasoning establishes an EVENTUALLY, which needs a well-founded measure instead."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "temporal.modality.next_distributes_over_meet"
+        ],
+        "entails": [
+          "temporal.modality.always_idempotence"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.order.precedence_transitivity",
+          "logic.inference.modus_ponens"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "lamport1977",
+          "bibliographic_entry": "Lamport, L. (1977). Proving the Correctness of Multiprocess Programs. IEEE Transactions on Software Engineering, SE-3(2), 125-143."
+        },
+        {
+          "citation_key": "clarke1999",
+          "bibliographic_entry": "Clarke, E. M., Grumberg, O., Peled, D. A. (1999). Model Checking. Cambridge, MA: MIT Press."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "induction",
+        "invariant",
+        "safety",
+        "always",
+        "next",
+        "model checking"
+      ]
+    },
+    {
+      "statement_id": "temporal.order.precedence_transitivity",
+      "title": "Transitivity of Temporal Precedence",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "event_order",
+        "topic": "precedence_order",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (a no-later-than b) and (b no-later-than c) then (a no-later-than c)",
+        "canonical_latex": "a \\preceq b \\ \\land\\ b \\preceq c \\implies a \\preceq c",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(a ⪯ b) ∧ (b ⪯ c) → (a ⪯ c)"
+          },
+          {
+            "form_id": "timestamps",
+            "notation_system": "ascii",
+            "expression": "(t(a) <= t(b)) and (t(b) <= t(c)) implies (t(a) <= t(c))",
+            "scope_note": "Unfolded through an occurrence-time map; transitivity of precedence is transitivity of <= on the reals pulled back along t"
+          },
+          {
+            "form_id": "happens_before",
+            "notation_system": "ascii",
+            "expression": "Lamport's happens-before is the smallest transitive relation containing program order and message order",
+            "scope_note": "The distributed-systems reading: transitivity is not a theorem there but the closure condition that defines the relation"
+          },
+          {
+            "form_id": "lattice",
+            "notation_system": "ascii",
+            "expression": "(a meet b = a) and (b meet c = b) implies (a meet c = a)",
+            "scope_note": "Precedence expressed through meet, which is how LEQ is defined in the template"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "order_transitivity",
+        "anonymized_template": "IMPLIES(MEET(LEQ(EVENTA, EVENTB), LEQ(EVENTB, EVENTC)), LEQ(EVENTA, EVENTC))",
+        "slot_schema": [
+          {
+            "slot_id": "EVENTA",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          },
+          {
+            "slot_id": "EVENTB",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          },
+          {
+            "slot_id": "EVENTC",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          }
+        ],
+        "invariants": [
+          "The middle event appears twice, once as the consequent of the first premise and once as the antecedent of the second: transitivity is the chaining pattern and the repeated slot is the whole content.",
+          "The template is scripts/seed_logic.py's TPL_SUBSET_TRANSITIVITY verbatim with only slot names changed -- the same move scripts/seed_topology.py made for geotop.predicates.containment_transitivity. The three-way twin therefore holds by construction and cannot drift.",
+          "LEQ is the REFLEXIVE order 'occurs no later than'. Strict precedence is not a partial order in the lattice sense (it is irreflexive), and the corpus keeps the two apart: strictness lives in temporal.order.strict_precedence_asymmetry, whose BEFORE head buys no twins at all. The pair is the corpus's cheapest measurement of what adopting an abstract head is worth.",
+          "With reflexivity and antisymmetry this makes precedence a partial order; adding totality makes it the linear order that gives linear temporal logic its name.",
+          "Not an equation and not reversible, which puts it structurally with logic.inference.modus_ponens rather than with the expansion laws."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "An event, identified with the instant at which it occurs."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "A second event."
+          },
+          {
+            "symbol": "c",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "A third event."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<=",
+            "name": "temporal precedence or coincidence",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic, subset inclusion in data/set_theory, region containment in data/geospatial_topology, and here in two readings that the corpus keeps apart on purpose: over instants it is 'occurs no later than' (a genuine partial order, hence reflexive); over properties it is trace-set inclusion, i.e. entailment."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Order chains: if one event is no later than a second and the second no later than a third, the first is no later than the third.",
+        "statistical_significance": "The flagship prediction of this seeding pass, registered before the matcher was run and fired exactly: `IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩` now spans set inclusion, region containment and temporal precedence -- three disciplines, one theorem about one partial order, no analogy involved. The claim it supports is narrow and worth stating narrowly: all three are `authored_to_match` in docs/BACKLOG.md's sense, so this is a convention that survived three independent corpora without drifting, not a structure the matcher discovered. What it demonstrates is that the abstract-head convention scales, which is the prerequisite for time being visible to the same machinery that sees sets -- and time being visible is what docs/DESIGN-frames-and-retrieval.md needs before 'beginning precedes middle precedes end' can be checked rather than asserted.",
+        "regularity_conditions": [
+          "Events identified with the instants at which they occur",
+          "Precedence read non-strictly, so the relation is reflexive and is a genuine partial order",
+          "A single timeline: in a partial-order model of concurrency the relation stays transitive but stops being total"
+        ],
+        "failure_modes": [
+          "Strict precedence between simultaneous events is not derivable from this: a ⪯ b and b ⪯ a is consistent (they coincide), so inferring 'a before b' from the non-strict relation is the standard error.",
+          "Physical simultaneity is frame-dependent for spacelike-separated events, so the relation is only a partial order on events in relativistic settings -- transitivity survives, totality does not.",
+          "Human and narrative time routinely violates totality (flashbacks, parallel plots), which is why narrative.causality.precedence_causation_bridge uses the strict head instead."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.order.strict_precedence_asymmetry",
+          "temporal.induction.temporal_induction_axiom",
+          "settheory.order.subset_transitivity",
+          "geotop.predicates.containment_transitivity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "lamport1978",
+          "bibliographic_entry": "Lamport, L. (1978). Time, Clocks, and the Ordering of Events in a Distributed System. Communications of the ACM, 21(7), 558-565."
+        },
+        {
+          "citation_key": "allen1983",
+          "bibliographic_entry": "Allen, J. F. (1983). Maintaining Knowledge about Temporal Intervals. Communications of the ACM, 26(11), 832-843."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "transitivity",
+        "precedence",
+        "partial order",
+        "happens-before",
+        "event order"
+      ]
+    },
+    {
+      "statement_id": "temporal.order.strict_precedence_asymmetry",
+      "title": "Asymmetry of Strict Precedence",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "event_order",
+        "topic": "precedence_order",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (a before b) then not (b before a)",
+        "canonical_latex": "a \\prec b \\implies \\lnot (b \\prec a)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "a ≺ b → ¬(b ≺ a)"
+          },
+          {
+            "form_id": "irreflexivity",
+            "notation_system": "ascii",
+            "expression": "not (a before a)",
+            "scope_note": "The special case a = b; asymmetry implies irreflexivity, and with transitivity the converse also holds"
+          },
+          {
+            "form_id": "no_time_travel",
+            "notation_system": "ascii",
+            "expression": "the happens-before relation is acyclic",
+            "scope_note": "The operational reading: an event cannot be in its own causal past, which is what makes vector clocks and topological sorting of a trace possible"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "strict_order_asymmetry",
+        "anonymized_template": "IMPLIES(BEFORE(EVENTA, EVENTB), NEG(BEFORE(EVENTB, EVENTA)))",
+        "slot_schema": [
+          {
+            "slot_id": "EVENTA",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          },
+          {
+            "slot_id": "EVENTB",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          }
+        ],
+        "invariants": [
+          "The two operands swap places between premise and conclusion, so the content is the failure of symmetry -- the exact opposite of geotop.predicates.adjacency_symmetry, which exists only to assert that its head IS symmetric. The two nodes are the positive and negative answers to the same unaskable question, and the graph has no way to say either except by writing a node.",
+          "Authored with the concrete BEFORE head rather than the abstract LEQ, and the choice is forced: LEQ is the reflexive lattice order, and asymmetry is false of any reflexive relation. Spelling this with LEQ would have bought a twin by asserting something false.",
+          "Singleton at shape, typed and family level. Its neighbour temporal.order.precedence_transitivity, written with LEQ, is a three-discipline typed twin. Same corpus, same author, adjacent nodes, same subject matter -- the entire difference is which head the statement could honestly use.",
+          "BEFORE is shared with data/narrative, where narrative.causality.precedence_causation_bridge uses it in the same reading. Both corpora are authored by scripts/seed_temporal.py, so the head's argument order (earlier first) is fixed once for both.",
+          "Asymmetry plus transitivity makes BEFORE a strict partial order; the reflexive closure is the LEQ of the adjacent node, and the two nodes together are the standard strict/non-strict pair."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "An event, identified with the instant at which it occurs."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "A second event."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<",
+            "name": "strict temporal precedence",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BEFORE(earlier, later)",
+            "name": "strict precedence",
+            "input_arity": 2,
+            "description": "The strict happens-before relation between two events: irreflexive, asymmetric, transitive. Argument order is fixed earlier-first. Deliberately NOT spelled with the lattice head LEQ, because LEQ is the reflexive order and asymmetry is false of a reflexive relation -- the honest spelling costs every twin the head could have bought, which is the point the adjacent transitivity node measures."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If one event happens strictly before another, the second cannot also happen strictly before the first: time does not double back.",
+        "statistical_significance": "Authored to measure what the abstract-head convention costs when it cannot honestly be used. docs/BACKLOG.md argues head literalism from cross-corpus near misses; this node argues it from an adjacent pair inside one file, where one statement about the order of events joins a three-discipline group and the next joins nothing, purely because the second statement is about strictness and strictness is what LEQ does not have. It also supplies the corpus's second asymmetry-versus-symmetry pair (after geospatial adjacency), which is the regression case for any future declaration that a call head is symmetric: the declaration must be refusable, not merely absent.",
+        "regularity_conditions": [
+          "Events identified with instants, and distinct events with distinct instants -- simultaneity makes the relation a strict partial order rather than a strict total one",
+          "A single consistent timeline, so the relation is acyclic",
+          "Strict reading throughout: BEFORE is irreflexive"
+        ],
+        "failure_modes": [
+          "Cyclic-time models (recurrence in cosmology, modular clocks in protocols) drop it, and every algorithm that topologically sorts events breaks with them.",
+          "Closed timelike curves in general relativity are the physical counterexample; the relation stays a preorder but loses asymmetry.",
+          "Narrative discourse order routinely reverses story order (Genette's analepsis), so the relation must be stated over story time and not over telling time -- which is a distinction the template does not carry."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.order.precedence_transitivity",
+          "narrative.causality.precedence_causation_bridge",
+          "geotop.predicates.adjacency_symmetry"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "lamport1978",
+          "bibliographic_entry": "Lamport, L. (1978). Time, Clocks, and the Ordering of Events in a Distributed System. Communications of the ACM, 21(7), 558-565."
+        },
+        {
+          "citation_key": "allen1983",
+          "bibliographic_entry": "Allen, J. F. (1983). Maintaining Knowledge about Temporal Intervals. Communications of the ACM, 26(11), 832-843."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        }
+      ],
+      "keywords": [
+        "asymmetry",
+        "strict order",
+        "before",
+        "acyclicity",
+        "happens-before",
+        "head literalism"
+      ]
+    },
+    {
+      "statement_id": "temporal.monotonicity.eventually_monotonicity",
+      "title": "Monotonicity of Eventually",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "linear_temporal_logic",
+        "topic": "operator_monotonicity",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if p entails q then eventually(p) entails eventually(q)",
+        "canonical_latex": "p \\vDash q \\implies \\Diamond p \\vDash \\Diamond q",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(p ⊑ q) → (F p ⊑ F q)"
+          },
+          {
+            "form_id": "always",
+            "notation_system": "ascii",
+            "expression": "if p entails q then always(p) entails always(q)",
+            "scope_note": "Every LTL modality is monotone; the ALWAYS half follows from this one by temporal.modality.temporal_duality"
+          },
+          {
+            "form_id": "traces",
+            "notation_system": "ascii",
+            "expression": "trace-set inclusion is preserved: if [[p]] subset [[q]] then [[F p]] subset [[F q]]",
+            "scope_note": "The semantic form, which is what makes this a statement about an order-preserving map rather than about implication"
+          },
+          {
+            "form_id": "fixpoint_precondition",
+            "notation_system": "ascii",
+            "expression": "monotonicity of the unfolding functional is the hypothesis of the Knaster-Tarski theorem",
+            "scope_note": "Why the node matters: without it the least fixpoint in temporal.recurrence.until_unfolding is not guaranteed to exist"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "order_preserving_modality",
+        "anonymized_template": "IMPLIES(LEQ(PROPA, PROPB), LEQ(EVENTUALLY(PROPA), EVENTUALLY(PROPB)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPA",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "PROPB",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "An order-preservation claim: the same order relation appears in premise and conclusion, with a functional applied to both sides of the conclusion. That is the shape geotop.measure.area_monotonicity introduced, and docs/BACKLOG.md explicitly asks the next monotone-functional node to be written with *that* template.",
+          "It could not be. area_monotonicity's conclusion is `CARD(REGA) <= CARD(REGB)`, a NUMERIC comparison, because cardinality maps a lattice into the numbers. EVENTUALLY maps the lattice of temporal properties into itself, so its conclusion must be another LEQ. Writing `CARD` here would have asserted that a temporal property has a size. The backlog request presumed every monotone functional is a valuation; monotone ENDO-functions are a second kind and need a second template.",
+          "Consequently the two nodes share no group: `IMPLIES⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨EVENTUALLY⟨?0:V⟩, EVENTUALLY⟨?1:V⟩⟩⟩` against `IMPLIES⟨LEQ⟨?0:V, ?1:V⟩, CARD⟨?0:V⟩ <= CARD⟨?1:V⟩⟩`. The premises are identical and the conclusions differ in kind.",
+          "LEQ carries its second reading here: over properties it is trace-set inclusion, i.e. entailment, not the instant order the adjacent precedence node uses. One head, two readings, both honest, and nothing in the template records which is meant.",
+          "Monotonicity is the hypothesis every fixpoint in this corpus needs, so the node is load-bearing for temporal.recurrence.until_unfolding rather than decorative."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "A second arbitrary temporal property, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "|-",
+            "name": "entailment / trace inclusion",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic, subset inclusion in data/set_theory, region containment in data/geospatial_topology, and here in two readings that the corpus keeps apart on purpose: over instants it is 'occurs no later than' (a genuine partial order, hence reflexive); over properties it is trace-set inclusion, i.e. entailment."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          },
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Weakening what you ask for weakens what you ask to happen eventually: if every trace satisfying the first property satisfies the second, the same holds once both are put under 'eventually'.",
+        "statistical_significance": "The corpus's second monotone-functional node, and it records a refinement of an existing backlog item rather than satisfying it. docs/BACKLOG.md asked that future monotone statements adopt geotop.measure.area_monotonicity's template so the family could form; this one cannot, because that template hard-codes a valuation into the numbers and EVENTUALLY is an endo-function on the lattice. The generalization the graph actually wants is `IMPLIES(LEQ(x, y), LEQ(F(x), F(y)))` with the numeric case as its specialization along a valuation -- which is a relationship scripts/specialize.py cannot express either, since `<=` and `LEQ` are different relation kinds. Recorded so that the third monotone node does not repeat the choice blindly.",
+        "regularity_conditions": [
+          "Entailment read semantically, as inclusion of trace sets",
+          "Both properties interpreted over the same trace alphabet",
+          "Infinite traces, so EVENTUALLY is total"
+        ],
+        "failure_modes": [
+          "Antitone contexts break it: EVENTUALLY under a negation reverses the inclusion, so the law must not be applied inside an odd number of NEGs, which is where hand proofs usually go wrong.",
+          "Monotone does not mean continuous: a monotone functional need not commute with infinite joins, and the fixpoint characterizations that need continuity (not merely monotonicity) do not follow from this node.",
+          "The converse is false. F p entailing F q says nothing about p entailing q, since the two may hold at different positions."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.temporal_duality",
+          "temporal.recurrence.until_unfolding",
+          "temporal.modality.always_idempotence",
+          "geotop.measure.area_monotonicity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        },
+        {
+          "citation_key": "tarski1955",
+          "bibliographic_entry": "Tarski, A. (1955). A Lattice-Theoretical Fixpoint Theorem and its Applications. Pacific Journal of Mathematics, 5(2), 285-309."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "blackburn2001",
+          "bibliographic_entry": "Blackburn, P., de Rijke, M., Venema, Y. (2001). Modal Logic. Cambridge Tracts in Theoretical Computer Science 53. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "monotonicity",
+        "order preservation",
+        "eventually",
+        "Knaster-Tarski",
+        "entailment",
+        "trace inclusion"
+      ]
+    },
+    {
+      "statement_id": "temporal.response.response_pattern",
+      "title": "Response Pattern (Every Trigger Is Eventually Answered)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "specification_patterns",
+        "topic": "liveness",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "always(trigger implies eventually(response))",
+        "canonical_latex": "\\Box(t \\to \\Diamond r)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "G(t → F r)"
+          },
+          {
+            "form_id": "named",
+            "notation_system": "ascii",
+            "expression": "the Response (leads-to) pattern, global scope",
+            "scope_note": "Dwyer, Avrunin and Corbett's survey found that response and absence/universality together account for a majority of real specifications"
+          },
+          {
+            "form_id": "leadsto",
+            "notation_system": "ascii",
+            "expression": "t ~> r",
+            "scope_note": "Lamport's leads-to operator, defined as exactly this formula"
+          },
+          {
+            "form_id": "instances",
+            "notation_system": "ascii",
+            "expression": "every request is eventually served; every lock acquired is eventually released; every planted element is eventually used",
+            "scope_note": "The third instance is narrative.constraint.chekhov_gun, which is why this node carries a `generalizes` edge into data/narrative"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "liveness_response_pattern",
+        "anonymized_template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))",
+        "slot_schema": [
+          {
+            "slot_id": "TRIGGER",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "RESPONSE",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "A bare formula, not an equation: the statement IS the specification, so there is nothing on the other side of a relation. That has a mechanical consequence the corpus had not recorded -- scripts/specialize.py's `find_specializations` skips any pattern whose canonical tree is not a `rel`, so this node and every rule-shaped node in the graph can never be the GENERAL side of a specialization edge.",
+          "The strongest liveness pattern that is still monotone in both slots, which is what makes it usable as a template that other statements instantiate.",
+          "Unbounded: nothing constrains how long the response takes. Bounding it needs metric time, which this grammar has no way to write.",
+          "The two slots are independent, so the pattern says nothing about the trigger recurring; `always` on the outside is what makes it apply to every occurrence rather than the first."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "trigger_condition",
+            "mathematical_order": 0,
+            "description": "The condition whose every occurrence must be answered."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "response_condition",
+            "mathematical_order": 0,
+            "description": "The condition that must eventually follow each trigger."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Whenever the trigger holds, the response must hold at some later moment -- for every occurrence of the trigger, not merely the first.",
+        "statistical_significance": "Authored so that a narrative law can be a *special case* of a verified temporal pattern rather than an analogy to one. narrative.constraint.chekhov_gun is this formula with TRIGGER := PLANTED(ELEMENT) and RESPONSE := DISCHARGED(ELEMENT), and the pair is written with reciprocal generalizes / special_case_of edges because scripts/seed_temporal.py owns both corpora. The registered prediction was that scripts/specialize.py would confirm the edge mechanically; it does not, for two stacked reasons -- the plain-binding suppression docs/BACKLOG.md already records five times, and, before that even applies, the `rel`-only guard on patterns. So the most load-bearing edge between these two corpora is hand-asserted, which is exactly the outcome the backlog predicts.",
+        "regularity_conditions": [
+          "Infinite traces, so 'eventually' is not vacuously satisfiable by termination",
+          "Fairness assumptions must be supplied separately: without them a scheduler may starve the response forever and the specification is unimplementable rather than violated",
+          "Unbounded response time; a deadline needs a metric temporal logic"
+        ],
+        "failure_modes": [
+          "Vacuously satisfied when the trigger never occurs, which makes it a weak specification and a common source of green test suites that check nothing.",
+          "No counterexample is finite: a violation is an infinite trace where the trigger occurs and the response never does, so bounded model checking cannot refute it without a lasso.",
+          "Says nothing about *which* response answers which trigger; with repeated triggers a single response satisfies them all, which is almost never the intent."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "narrative.constraint.chekhov_gun"
+        ],
+        "composed_with": [
+          "temporal.modality.eventually_unfolding",
+          "temporal.modality.always_idempotence"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "dwyer1999",
+          "bibliographic_entry": "Dwyer, M. B., Avrunin, G. S., Corbett, J. C. (1999). Patterns in Property Specifications for Finite-State Verification. Proceedings of the 21st International Conference on Software Engineering (ICSE), 411-420."
+        },
+        {
+          "citation_key": "lamport1977",
+          "bibliographic_entry": "Lamport, L. (1977). Proving the Correctness of Multiprocess Programs. IEEE Transactions on Software Engineering, SE-3(2), 125-143."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "liveness",
+        "response pattern",
+        "specification pattern",
+        "leads-to",
+        "eventually",
+        "always",
+        "Chekhov"
+      ]
+    }
+  ]
+}

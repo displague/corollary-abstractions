@@ -1,0 +1,1245 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "narrative.story_grammar.v1",
+  "discipline": "narrative",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "narrative.structure.story_sequence",
+      "title": "Story Structure (Setup, Complication, Resolution)",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "story_grammar",
+        "topic": "macrostructure",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "story = sequence(setup, complication, resolution)",
+        "canonical_latex": "S \\to \\Sigma \\cdot \\Kappa \\cdot \\Rho",
+        "equivalent_forms": [
+          {
+            "form_id": "rewrite",
+            "notation_system": "ascii",
+            "expression": "Story -> Setting + Episode; Episode -> Event + Reaction",
+            "scope_note": "Rumelhart's original rewrite grammar, of which this template is the flattened three-part reduction"
+          },
+          {
+            "form_id": "labov",
+            "notation_system": "ascii",
+            "expression": "orientation + complicating action + resolution",
+            "scope_note": "Labov and Waletzky's clause categories, derived from oral personal narrative rather than from literature; the abstract and the coda are omitted here because they are optional"
+          },
+          {
+            "form_id": "freytag",
+            "notation_system": "ascii",
+            "expression": "exposition, rising action, climax, falling action, denouement",
+            "scope_note": "Freytag's five-part dramatic arc; the three-part form is its coarsening, with climax as the boundary between the second and third parts"
+          },
+          {
+            "form_id": "propp",
+            "notation_system": "ascii",
+            "expression": "initial situation, villainy/lack, liquidation of the lack",
+            "scope_note": "Propp's functions grouped into the same three phases; his claim is that the ORDER is invariant even where functions are absent, which is the content this template encodes"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ordered_three_part_composition",
+        "anonymized_template": "STORY = SEQUENCE(SETUP, COMPLICATION, RESOLUTION)",
+        "slot_schema": [
+          {
+            "slot_id": "STORY",
+            "syntactic_category": "variable",
+            "semantic_role": "whole_story"
+          },
+          {
+            "slot_id": "SETUP",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          },
+          {
+            "slot_id": "COMPLICATION",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          },
+          {
+            "slot_id": "RESOLUTION",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          }
+        ],
+        "invariants": [
+          "SEQUENCE is a call, so its arguments are ORDERED by the matcher, and order is the entire empirical claim: Propp's finding is not that folktales contain these phases but that they contain them in this sequence. Writing the composition with a commutative operator would have thrown away the content.",
+          "The same reason data/morphology writes CONCAT as a call rather than reusing MEET -- and, like CONCAT, SEQUENCE gets no algebra from the matcher: it is associative in every model (a three-part story grouped either way is the same story) and there is no way to say so, which is the associativity gap docs/BACKLOG.md records for morphology.wordformation.concat_associativity.",
+          "Ternary rather than nested binary, on purpose. The nested spelling SEQUENCE(SEQUENCE(SETUP, COMPLICATION), RESOLUTION) would have matched morphology.wordformation.iterated_affixation's shape modulo the head, and would have asserted a constituency the story grammars do not agree on -- Rumelhart brackets setting against episode, Labov and Waletzky do not bracket at all.",
+          "Every part is variable-like, so the typed skeleton `?0:V = SEQUENCE⟨?1:V, ?2:V, ?3:V⟩` carries no parameter positions: there is no distinguished constant in a story.",
+          "Recursion is real and unrepresented: a complication is routinely itself a story. The template is flat because the grammar has no way to declare a slot's admissible kind as the node's own output."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "s",
+            "syntactic_category": "variable",
+            "semantic_role": "whole_story",
+            "mathematical_order": 0,
+            "description": "A story: the object the grammar assigns a structure to."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part",
+            "mathematical_order": 0,
+            "description": "A story part -- a span of narrated material playing one structural role."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "ordered concatenation of story parts",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SEQUENCE(first, second, third)",
+            "name": "ordered episode sequence",
+            "input_arity": 3,
+            "codomain": "stories",
+            "description": "Ordered composition of story parts: the parts are laid out in narrated order, first argument earliest. Written as a call because call arguments are ORDERED in the matcher and narrative order is the entire content of the claim -- the same reason data/morphology writes CONCAT as a call rather than reusing MEET."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A story is its setup, its complication and its resolution, laid out in that order.",
+        "statistical_significance": "The node that makes the corpus's thesis testable on stories: a story grammar is a grammar, so its productions are statements with templates, slots and failure modes like any other. Structurally it is a singleton -- SEQUENCE is a ninth head with no relatives -- and the near miss is worth naming: morphology.wordformation.iterated_affixation is `?0:V = CONCAT⟨CONCAT⟨?1:V, ?2:V⟩, ?3:V⟩`, the same ordered three-way composition spelled with a binary head. One is a story and one is a word, both are ordered concatenations of three pieces, and the difference between them is a bracketing decision plus a head string. Neither the arity nor the head can be changed here without asserting something the sources do not support, so the miss is structural rather than authorial.",
+        "regularity_conditions": [
+          "Well-formed narrative: the sources are descriptive generalizations over corpora (Propp's 100 Afanasyev tales, Labov and Waletzky's oral interviews), not definitions of narrative",
+          "Story order, not discourse order: the sequence is the order of narrated events, and the telling may permute it",
+          "One episode. Multi-episode and multi-plot stories iterate the structure, which this flat template does not express"
+        ],
+        "failure_modes": [
+          "In medias res openings and framed narratives present the parts out of order, so the claim must be about story time and not telling time (Genette's order/discourse distinction). Applying it to the text as read misclassifies most modern fiction.",
+          "Unresolved and anti-narrative forms (much modernist short fiction, some oral genres) simply omit the third part; the grammar then either over-generates or declares real stories ill-formed, which is the standard objection to story grammars.",
+          "Story grammars were shown in the 1980s to describe recall better than they describe texts; treating the template as a claim about texts rather than about readers' schemas overstates it."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.structure.setup_introduction",
+          "narrative.structure.complication_obstruction",
+          "narrative.structure.resolution_outcome",
+          "temporal.order.precedence_transitivity",
+          "morphology.wordformation.iterated_affixation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "rumelhart1975",
+          "bibliographic_entry": "Rumelhart, D. E. (1975). Notes on a Schema for Stories. In D. G. Bobrow and A. Collins (eds.), Representation and Understanding: Studies in Cognitive Science, 211-236. New York: Academic Press."
+        },
+        {
+          "citation_key": "labov1967",
+          "bibliographic_entry": "Labov, W., Waletzky, J. (1967). Narrative Analysis: Oral Versions of Personal Experience. In J. Helm (ed.), Essays on the Verbal and Visual Arts, 12-44. Seattle: University of Washington Press."
+        },
+        {
+          "citation_key": "freytag1863",
+          "bibliographic_entry": "Freytag, G. (1863). Die Technik des Dramas. Leipzig: S. Hirzel."
+        },
+        {
+          "citation_key": "mandler1977",
+          "bibliographic_entry": "Mandler, J. M., Johnson, N. S. (1977). Remembrance of Things Parsed: Story Structure and Recall. Cognitive Psychology, 9(1), 111-151."
+        }
+      ],
+      "keywords": [
+        "story grammar",
+        "Propp",
+        "Rumelhart",
+        "narrative structure",
+        "ordered composition",
+        "macrostructure"
+      ]
+    },
+    {
+      "statement_id": "narrative.structure.setup_introduction",
+      "title": "Setup as Agent Plus Desire",
+      "statement_class": "definition",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "story_grammar",
+        "topic": "story_parts",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "setup = introduce(agent, desire)",
+        "canonical_latex": "\\Sigma = \\mathrm{intro}(A, D)",
+        "equivalent_forms": [
+          {
+            "form_id": "labov",
+            "notation_system": "ascii",
+            "expression": "orientation: who, when, where, and in what situation",
+            "scope_note": "Labov and Waletzky's orientation clauses; the desire is what distinguishes a setup from a description"
+          },
+          {
+            "form_id": "propp",
+            "notation_system": "ascii",
+            "expression": "initial situation + the lack that motivates the quest",
+            "scope_note": "Propp's functions alpha and a: the family is introduced, then something is missing"
+          },
+          {
+            "form_id": "screenwriting",
+            "notation_system": "ascii",
+            "expression": "a character who wants something",
+            "scope_note": "The standard working formulation; the desire is load-bearing because it is what the complication obstructs"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binary_composition_definition",
+        "anonymized_template": "SETUP = INTRODUCE(AGENT, DESIRE)",
+        "slot_schema": [
+          {
+            "slot_id": "SETUP",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          },
+          {
+            "slot_id": "AGENT",
+            "syntactic_category": "variable",
+            "semantic_role": "agent_operand"
+          },
+          {
+            "slot_id": "DESIRE",
+            "syntactic_category": "variable",
+            "semantic_role": "goal_operand"
+          }
+        ],
+        "invariants": [
+          "An agent alone is a description; a desire alone is an abstraction. The setup is the pair, which is why the head is binary and not two unary ones.",
+          "Argument order is fixed agent-first and is not arbitrary: the desire is predicated of the agent, so the second slot depends on the first. The matcher keeps call arguments ordered, so the convention is enforced rather than merely documented.",
+          "The DESIRE slot recurs in narrative.structure.complication_obstruction and narrative.structure.resolution_outcome. That shared slot across three nodes is the real structure of the three-part form -- one object introduced, obstructed and closed -- and it is invisible to the matcher, which compares one statement at a time and has no cross-statement variable.",
+          "The archetype_id `binary_composition_definition` is adopted from morphology.wordformation.affixation deliberately. `word = CONCAT(stem, suffix)` and `setup = INTRODUCE(agent, desire)` are the same archetype under different heads, and the drift report is where the graph says so."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part",
+            "mathematical_order": 0,
+            "description": "A story part."
+          },
+          {
+            "symbol": "g",
+            "syntactic_category": "variable",
+            "semantic_role": "goal_operand",
+            "mathematical_order": 0,
+            "description": "A desire: the state of affairs an agent is trying to bring about."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "INTRODUCE(agent, desire)",
+            "name": "setup constructor",
+            "input_arity": 2,
+            "codomain": "story parts",
+            "description": "The operation that builds a setup out of an agent and the agent's want. Argument order fixed agent-first. Propp's initial situation and Labov-Waletzky's orientation are the two sources for the pairing."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A setup introduces someone and what that someone wants.",
+        "statistical_significance": "First of three story-unit definitions that together triple the count of nodes carrying `?0 = HEAD⟨?1, ?2⟩` with a private head. docs/BACKLOG.md records seven such heads across five corpora (CONCAT, REALIZE, CAPMAX, MEET, UPDATE, MATRIXPOWER, CROSS) with zero groups between them; INTRODUCE, OBSTRUCT and RESOLVE make ten, and unlike the earlier seven these three were written in consecutive lines of one list, by one hand, with identical intent and identical shape. If any evidence could justify the proposed head-alias level, a trio that a single author produced in a single sitting and that the matcher still refuses to group is it. The archetype channel carries what the skeleton channel will not: all three adopt morphology's `binary_composition_definition`, so the drift section prints the four-way spread.",
+        "regularity_conditions": [
+          "A protagonist with a goal; agentless narratives (natural-process accounts, some experimental fiction) fall outside",
+          "The desire must be legible to the audience by the end of the setup, which is a claim about reception, not about the text",
+          "One agent per setup; ensemble stories iterate the schema"
+        ],
+        "failure_modes": [
+          "Mystery and suspense structures deliberately withhold the desire until after the complication, inverting the order; the schema then describes the reader's reconstruction rather than the text.",
+          "Character-driven literary fiction often has a desire so diffuse that the slot cannot be filled, which is the commonest objection to goal-based story models.",
+          "Confusing the agent's desire with the author's theme fills the slot with something the complication cannot obstruct, and the three-node chain silently breaks."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.structure.story_sequence",
+          "narrative.structure.complication_obstruction",
+          "narrative.structure.resolution_outcome",
+          "morphology.wordformation.affixation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "labov1967",
+          "bibliographic_entry": "Labov, W., Waletzky, J. (1967). Narrative Analysis: Oral Versions of Personal Experience. In J. Helm (ed.), Essays on the Verbal and Visual Arts, 12-44. Seattle: University of Washington Press."
+        },
+        {
+          "citation_key": "rumelhart1975",
+          "bibliographic_entry": "Rumelhart, D. E. (1975). Notes on a Schema for Stories. In D. G. Bobrow and A. Collins (eds.), Representation and Understanding: Studies in Cognitive Science, 211-236. New York: Academic Press."
+        },
+        {
+          "citation_key": "bremond1973",
+          "bibliographic_entry": "Bremond, C. (1973). Logique du recit. Paris: Editions du Seuil."
+        },
+        {
+          "citation_key": "prince1973",
+          "bibliographic_entry": "Prince, G. (1973). A Grammar of Stories: An Introduction. The Hague: Mouton."
+        }
+      ],
+      "keywords": [
+        "setup",
+        "orientation",
+        "agent",
+        "desire",
+        "story grammar",
+        "head literalism"
+      ]
+    },
+    {
+      "statement_id": "narrative.structure.complication_obstruction",
+      "title": "Complication as Obstructed Desire",
+      "statement_class": "definition",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "story_grammar",
+        "topic": "story_parts",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "complication = obstruct(desire, obstacle)",
+        "canonical_latex": "\\Kappa = \\mathrm{obstruct}(D, O)",
+        "equivalent_forms": [
+          {
+            "form_id": "labov",
+            "notation_system": "ascii",
+            "expression": "complicating action: the clauses that answer 'and then what happened?'",
+            "scope_note": "Labov and Waletzky's central category, the one whose presence they take to define narrative"
+          },
+          {
+            "form_id": "propp",
+            "notation_system": "ascii",
+            "expression": "villainy: the antagonist causes harm or the hero is dispatched",
+            "scope_note": "Propp's function A, the move that starts the tale proper"
+          },
+          {
+            "form_id": "bremond",
+            "notation_system": "ascii",
+            "expression": "a possibility opens, is actualized or not, succeeds or fails",
+            "scope_note": "Bremond's triadic sequence, which makes obstruction a branch point rather than an event"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binary_composition_definition",
+        "anonymized_template": "COMPLICATION = OBSTRUCT(DESIRE, OBSTACLE)",
+        "slot_schema": [
+          {
+            "slot_id": "COMPLICATION",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          },
+          {
+            "slot_id": "DESIRE",
+            "syntactic_category": "variable",
+            "semantic_role": "goal_operand"
+          },
+          {
+            "slot_id": "OBSTACLE",
+            "syntactic_category": "variable",
+            "semantic_role": "obstacle_operand"
+          }
+        ],
+        "invariants": [
+          "Argument order is desire-first, and the order carries a precondition: the desire must already exist for the obstacle to obstruct it. That dependency is what makes the three story parts ordered rather than a set, and it is stated here rather than in the sequence node because it is a fact about this operation.",
+          "The obstacle need not be an antagonist. Nature, institutions, and the agent's own contradictions fill the slot, which is why the head takes the obstacle as an operand rather than presupposing a character.",
+          "Same shape as narrative.structure.setup_introduction and narrative.structure.resolution_outcome and no twin with either: `?0:V = OBSTRUCT⟨?1:V, ?2:V⟩` versus `?0:V = INTRODUCE⟨?1:V, ?2:V⟩` versus `?0:V = RESOLVE⟨?1:V, ?2:V⟩`. One token apart, three times over, in one file.",
+          "Adopts `binary_composition_definition` for the same reason its two siblings do."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part",
+            "mathematical_order": 0,
+            "description": "A story part."
+          },
+          {
+            "symbol": "o",
+            "syntactic_category": "variable",
+            "semantic_role": "obstacle_operand",
+            "mathematical_order": 0,
+            "description": "An obstacle: whatever stands between the agent and the desire."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "OBSTRUCT(desire, obstacle)",
+            "name": "complication constructor",
+            "input_arity": 2,
+            "codomain": "story parts",
+            "description": "The operation that builds a complication by placing an obstacle against an existing desire. Argument order fixed desire-first: the desire must already exist, which is what makes the story parts ordered rather than a set."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A complication is what happens when something stands in the way of what the agent wants.",
+        "statistical_significance": "Second of the three story-unit definitions. Its own contribution beyond the head-literalism measurement is the DESIRE slot it shares with the setup and the resolution: the three nodes are chained through one object, and the chain is exactly the 'each proposal becomes the next step's premise' composition that docs/DESIGN-frames-and-retrieval.md names as the hard remaining gap. The corpus can state the three links; it has no way to state that they share a binding, because slot identity is local to a statement. Any chained-composition work will need a cross-statement binding notion, and this trio is the smallest test case for one.",
+        "regularity_conditions": [
+          "A desire established earlier, which the obstacle acts against",
+          "The obstruction must be consequential: an obstacle overcome without cost is not a complication, which is a judgment the template cannot encode",
+          "One complication per episode; nested and serial complications iterate the schema"
+        ],
+        "failure_modes": [
+          "Slice-of-life and lyric forms have no obstruction and are still read as narratives by most audiences, so the definition marks a prototype rather than a boundary.",
+          "Treating the obstacle as necessarily an antagonist produces the flattened villain-driven reading that Propp's own material does not support (his function A covers lack as well as villainy).",
+          "An obstacle introduced after the fact to justify a resolution is the standard failure of plotting, and the template cannot distinguish it from a planted one -- which is precisely what narrative.constraint.chekhov_gun exists to catch."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.structure.story_sequence",
+          "narrative.structure.setup_introduction",
+          "narrative.structure.resolution_outcome",
+          "narrative.causality.precedence_causation_bridge"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "labov1967",
+          "bibliographic_entry": "Labov, W., Waletzky, J. (1967). Narrative Analysis: Oral Versions of Personal Experience. In J. Helm (ed.), Essays on the Verbal and Visual Arts, 12-44. Seattle: University of Washington Press."
+        },
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "bremond1973",
+          "bibliographic_entry": "Bremond, C. (1973). Logique du recit. Paris: Editions du Seuil."
+        },
+        {
+          "citation_key": "rumelhart1975",
+          "bibliographic_entry": "Rumelhart, D. E. (1975). Notes on a Schema for Stories. In D. G. Bobrow and A. Collins (eds.), Representation and Understanding: Studies in Cognitive Science, 211-236. New York: Academic Press."
+        },
+        {
+          "citation_key": "todorov1969",
+          "bibliographic_entry": "Todorov, T. (1969). Grammaire du Decameron. Approaches to Semiotics 3. The Hague: Mouton."
+        }
+      ],
+      "keywords": [
+        "complication",
+        "obstacle",
+        "conflict",
+        "story grammar",
+        "complicating action"
+      ]
+    },
+    {
+      "statement_id": "narrative.structure.resolution_outcome",
+      "title": "Resolution as Closed Desire",
+      "statement_class": "definition",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "story_grammar",
+        "topic": "story_parts",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "resolution = resolve(desire, outcome)",
+        "canonical_latex": "\\Rho = \\mathrm{resolve}(D, W)",
+        "equivalent_forms": [
+          {
+            "form_id": "labov",
+            "notation_system": "ascii",
+            "expression": "resolution: the clauses following the last complicating action",
+            "scope_note": "Labov and Waletzky define it positionally, which is why the definition here is by role rather than by content"
+          },
+          {
+            "form_id": "propp",
+            "notation_system": "ascii",
+            "expression": "liquidation of the lack; the initial misfortune is repaired",
+            "scope_note": "Propp's function K, which closes the move opened by function A"
+          },
+          {
+            "form_id": "negative",
+            "notation_system": "ascii",
+            "expression": "resolve(desire, defeat)",
+            "scope_note": "Tragedy fills the outcome slot with the desire's defeat; the slot is an outcome, not a success"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binary_composition_definition",
+        "anonymized_template": "RESOLUTION = RESOLVE(DESIRE, OUTCOME)",
+        "slot_schema": [
+          {
+            "slot_id": "RESOLUTION",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part"
+          },
+          {
+            "slot_id": "DESIRE",
+            "syntactic_category": "variable",
+            "semantic_role": "goal_operand"
+          },
+          {
+            "slot_id": "OUTCOME",
+            "syntactic_category": "variable",
+            "semantic_role": "outcome_operand"
+          }
+        ],
+        "invariants": [
+          "The outcome slot is neutral between success and defeat. A schema that only accepted satisfaction would exclude tragedy, which is the commonest way goal-based story models are made too narrow.",
+          "Argument order desire-first, matching narrative.structure.complication_obstruction, so the two operations on a desire read the same way.",
+          "Closure is about the desire, not about the world: a resolution settles the question the setup raised, and may leave everything else open. That is what makes the third slot an outcome rather than a final state.",
+          "Third instance of `?0:V = HEAD⟨?1:V, ?2:V⟩` in this file and the tenth in the graph, adopting `binary_composition_definition` with its siblings."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "story_part",
+            "mathematical_order": 0,
+            "description": "A story part."
+          },
+          {
+            "symbol": "w",
+            "syntactic_category": "variable",
+            "semantic_role": "outcome_operand",
+            "mathematical_order": 0,
+            "description": "An outcome: how the desire is settled, favourably or not."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "RESOLVE(desire, outcome)",
+            "name": "resolution constructor",
+            "input_arity": 2,
+            "codomain": "story parts",
+            "description": "The operation that closes a desire with an outcome, satisfying or defeating it. Argument order fixed desire-first, matching OBSTRUCT."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A resolution settles the desire the story opened with, one way or the other.",
+        "statistical_significance": "Third of the three story-unit definitions, and the one that shows the trio is not a redundancy: setup, complication and resolution are three different operations on one shared object, and only the fact that the graph cannot express the sharing makes them look interchangeable. The matcher sees three unrelated binary heads; a reader sees one desire being introduced, obstructed and closed. That gap -- structure the author can state in prose and the tooling cannot see -- is the same gap the chained-composition work in docs/DESIGN-frames-and-retrieval.md has to close, and it appears here in its smallest form.",
+        "regularity_conditions": [
+          "A desire established earlier and obstructed in between",
+          "Closure judged relative to the desire, not to the story world",
+          "One resolution per episode"
+        ],
+        "failure_modes": [
+          "Deus ex machina fills the outcome slot with something the story never planted; the template accepts it, and only narrative.constraint.chekhov_gun's converse reading rules it out.",
+          "Serial and open-ended forms defer resolution indefinitely by design, so the schema describes the episode and not the work.",
+          "Reading the outcome slot as necessarily favourable turns the definition into a definition of comedy."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.structure.story_sequence",
+          "narrative.structure.setup_introduction",
+          "narrative.structure.complication_obstruction",
+          "narrative.constraint.chekhov_gun"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "labov1967",
+          "bibliographic_entry": "Labov, W., Waletzky, J. (1967). Narrative Analysis: Oral Versions of Personal Experience. In J. Helm (ed.), Essays on the Verbal and Visual Arts, 12-44. Seattle: University of Washington Press."
+        },
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "rumelhart1975",
+          "bibliographic_entry": "Rumelhart, D. E. (1975). Notes on a Schema for Stories. In D. G. Bobrow and A. Collins (eds.), Representation and Understanding: Studies in Cognitive Science, 211-236. New York: Academic Press."
+        },
+        {
+          "citation_key": "bremond1973",
+          "bibliographic_entry": "Bremond, C. (1973). Logique du recit. Paris: Editions du Seuil."
+        },
+        {
+          "citation_key": "genette1980",
+          "bibliographic_entry": "Genette, G. (1980). Narrative Discourse: An Essay in Method (trans. J. E. Lewin). Ithaca: Cornell University Press."
+        }
+      ],
+      "keywords": [
+        "resolution",
+        "outcome",
+        "closure",
+        "story grammar",
+        "denouement"
+      ]
+    },
+    {
+      "statement_id": "narrative.causality.precedence_causation_bridge",
+      "title": "Precedence Plus Enablement Reads as Causation",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "narrative_causality",
+        "topic": "causal_inference",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (a before b) and (a enables b) then (a causes b)",
+        "canonical_latex": "(a \\prec b) \\land \\mathrm{En}(a,b) \\implies \\mathrm{Ca}(a,b)",
+        "equivalent_forms": [
+          {
+            "form_id": "post_hoc",
+            "notation_system": "ascii",
+            "expression": "post hoc ergo propter hoc",
+            "scope_note": "The fallacy this node states as a LAW -- of narrative, not of the world. Readers do infer causation from succession, and story grammars have to model that"
+          },
+          {
+            "form_id": "forster",
+            "notation_system": "ascii",
+            "expression": "'The king died and then the queen died' is a story; 'the king died and then the queen died of grief' is a plot",
+            "scope_note": "Forster's distinction: plot is precedence plus a stated enablement, which is exactly the premise conjunction here"
+          },
+          {
+            "form_id": "causal_network",
+            "notation_system": "ascii",
+            "expression": "events on the causal chain from opening to outcome are recalled better and judged more important",
+            "scope_note": "Trabasso and van den Broek's empirical result, which is the evidence that this inference is real in readers"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "precedence_to_causation",
+        "anonymized_template": "IMPLIES(MEET(BEFORE(EVENTA, EVENTB), ENABLES(EVENTA, EVENTB)), CAUSES(EVENTA, EVENTB))",
+        "slot_schema": [
+          {
+            "slot_id": "EVENTA",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          },
+          {
+            "slot_id": "EVENTB",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          }
+        ],
+        "invariants": [
+          "The two-premise detachment shell `IMPLIES⟨MEET⟨_, _⟩, _⟩` now has five members in the graph -- modus ponens, subset transitivity, containment transitivity, temporal precedence transitivity and this node -- and only the three transitivity nodes form a group. The shell is shared, the slot pattern is not: transitivity chains (0,1)(1,2) to (0,2) while this conjoins two relations over the SAME pair and concludes a third over that pair. The difference is genuine, and it is why the shell alone is not a family.",
+          "BEFORE is the head temporal.order.strict_precedence_asymmetry introduces, in the same reading and the same argument order. Both corpora are authored by scripts/seed_temporal.py, so the sharing is an authoring fact rather than a coincidence, recorded with reciprocal composed_with edges.",
+          "ENABLES is strictly weaker than CAUSES: it supplies a precondition without forcing the outcome. Having both heads is what keeps the node from being the bare fallacy -- precedence alone is not enough, and the second premise is where the narrative work happens.",
+          "Stated as a model_specification and assumed, not derived. It is a claim about what readers infer, defensible from Trabasso and van den Broek's recall data, and false as a claim about the world."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "An event, identified with the instant at which it occurs."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "A second event."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<",
+            "name": "strict temporal precedence",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BEFORE(earlier, later)",
+            "name": "strict precedence",
+            "input_arity": 2,
+            "description": "The strict happens-before relation between two events: irreflexive, asymmetric, transitive. Argument order is fixed earlier-first. Deliberately NOT spelled with the lattice head LEQ, because LEQ is the reflexive order and asymmetry is false of a reflexive relation -- the honest spelling costs every twin the head could have bought, which is the point the adjacent transitivity node measures."
+          },
+          {
+            "notation": "ENABLES(earlier, later)",
+            "name": "narrative enablement",
+            "input_arity": 2,
+            "description": "The earlier event makes the later one possible: it establishes a precondition without forcing the outcome. Trabasso and van den Broek's causal-network relation, weaker than CAUSES and stronger than mere precedence."
+          },
+          {
+            "notation": "CAUSES(cause, effect)",
+            "name": "narrative causation",
+            "input_arity": 2,
+            "description": "The relation a reader posits between two story events. Deliberately a narrative head and not a physical one: the node that uses it asserts what readers infer, not what the world does."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "When one story event comes before another and makes it possible, the audience reads the first as having caused the second.",
+        "statistical_significance": "The bridge that makes data/narrative depend on data/temporal_logic rather than merely resemble it: narrative causality is defined over the precedence relation the temporal corpus axiomatizes, using that corpus's head. Structurally it is a singleton, and the near miss is instructive -- it wears the same two-premise shell as the transitivity family and cannot join it, because the shell is a shape and the family is a slot pattern. Recorded because the shell is now the graph's most-populated non-family: five nodes, one skeleton prefix, two groups.",
+        "regularity_conditions": [
+          "Story time, not discourse time: the precedence is between events as they happen, and the telling may reorder them",
+          "An enablement the story has made available to the reader; a connection only the author knows does not license the inference",
+          "Read as descriptive of narrative comprehension, not as a valid inference about events"
+        ],
+        "failure_modes": [
+          "It is the post hoc fallacy, and stating it as a law of narrative does not make it a law of anything else. A corpus that used this node to reason about the world would be wrong in the standard way.",
+          "Deliberate subversion (unreliable narration, red herrings) exploits the inference precisely because readers make it, so the law describes a default that competent authors suspend.",
+          "Enablement is not transitive in the way precedence is: a enables b and b enables c does not give a enables c once an intervening choice is involved, so chaining this node is unsound."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.order.strict_precedence_asymmetry",
+          "temporal.order.precedence_transitivity",
+          "narrative.structure.complication_obstruction",
+          "logic.inference.modus_ponens"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "trabasso1985",
+          "bibliographic_entry": "Trabasso, T., van den Broek, P. (1985). Causal Thinking and the Representation of Narrative Events. Journal of Memory and Language, 24(5), 612-630."
+        },
+        {
+          "citation_key": "bremond1973",
+          "bibliographic_entry": "Bremond, C. (1973). Logique du recit. Paris: Editions du Seuil."
+        },
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        },
+        {
+          "citation_key": "schank1977",
+          "bibliographic_entry": "Schank, R. C., Abelson, R. P. (1977). Scripts, Plans, Goals and Understanding: An Inquiry into Human Knowledge Structures. Hillsdale, NJ: Lawrence Erlbaum."
+        }
+      ],
+      "keywords": [
+        "causality",
+        "precedence",
+        "post hoc",
+        "plot",
+        "enablement",
+        "causal network"
+      ]
+    },
+    {
+      "statement_id": "narrative.constraint.chekhov_gun",
+      "title": "Chekhov's Gun (Every Planted Element Is Discharged)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "narrative_constraints",
+        "topic": "narrative_liveness",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "always(planted(e) implies eventually(discharged(e)))",
+        "canonical_latex": "\\Box(\\mathrm{Pl}(e) \\to \\Diamond\\,\\mathrm{Di}(e))",
+        "equivalent_forms": [
+          {
+            "form_id": "chekhov",
+            "notation_system": "ascii",
+            "expression": "if in the first act you have hung a pistol on the wall, then in the following one it should be fired; otherwise do not put it there",
+            "scope_note": "Chekhov's own formulation, from the 1889 letter to Lazarev"
+          },
+          {
+            "form_id": "ltl",
+            "notation_system": "ascii",
+            "expression": "G(planted -> F discharged)",
+            "scope_note": "The response pattern of temporal.response.response_pattern, instantiated; the maxim IS a liveness specification"
+          },
+          {
+            "form_id": "converse",
+            "notation_system": "ascii",
+            "expression": "always(discharged(e) implies once(planted(e)))",
+            "scope_note": "The other half of the constraint, which rules out deus ex machina; it needs a PAST modality this corpus does not carry"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "liveness_response_pattern",
+        "anonymized_template": "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))",
+        "slot_schema": [
+          {
+            "slot_id": "ELEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "story_element"
+          }
+        ],
+        "invariants": [
+          "Exactly temporal.response.response_pattern with TRIGGER := PLANTED(ELEMENT) and RESPONSE := DISCHARGED(ELEMENT). A dramaturgical maxim from 1889 is a liveness specification in the sense Pnueli defined in 1977, and the corpus can say so with an edge rather than an essay.",
+          "The single slot recurs under both unary heads, which is the whole content: it must be the SAME element that is planted and discharged. A version with two independent slots would be satisfied by any story in which anything at all happens.",
+          "The edge to the general pattern is asserted by hand. scripts/specialize.py cannot check it for two stacked reasons: its `find_specializations` skips patterns whose tree is not a relation, and the response pattern is a bare formula; and even past that guard, the binding is plain slot-to-subtree, which the absorption-or-identity filter suppresses. Both are recorded in docs/BACKLOG.md, the first newly.",
+          "A safety-shaped intuition with a liveness formula: authors read it as 'do not plant what you will not use', which is a prohibition, while the formula is an obligation. The two differ exactly in whether a counterexample is finite, and the formula's reading is the right one -- an unfired gun is only a fault once the story ends."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "e",
+            "syntactic_category": "variable",
+            "semantic_role": "story_element",
+            "mathematical_order": 0,
+            "description": "A story element -- an object, a fact, a character trait -- that the narration has presented to the audience."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          },
+          {
+            "notation": "PLANTED(.)",
+            "name": "element introduced in the setup",
+            "input_arity": 1,
+            "description": "Holds at a position when the story element has been explicitly presented to the audience. Unary so that the Chekhov constraint is a property of one element rather than a relation between two."
+          },
+          {
+            "notation": "DISCHARGED(.)",
+            "name": "element consumed by the plot",
+            "input_arity": 1,
+            "description": "Holds at a position when the planted element has done narrative work. 'The gun goes off' in Chekhov's own example; 'paid off' in screenwriting usage."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Anything the story deliberately shows the audience must eventually do narrative work; nothing is introduced for nothing.",
+        "statistical_significance": "The node that makes 'narrative laws are laws' mechanical rather than rhetorical. It is not analogous to a temporal specification -- it is one, instantiated, and carries reciprocal special_case_of / generalizes edges to temporal.response.response_pattern because scripts/seed_temporal.py owns both corpora and could write the reciprocal edge that docs/BACKLOG.md records as unaffordable across corpora authored separately. Two further things it demonstrates. First, the constraint is *falsifiable in the corpus's own terms*: a story that plants an element and never discharges it violates a formula, not a taste. Second, its most useful half -- the converse that forbids deus ex machina -- cannot be written at all, because the grammar has no past modality; the corpus therefore states one direction of a two-directional law and says so.",
+        "regularity_conditions": [
+          "Finite, completed narratives: over an unfinished story every obligation is merely outstanding, which is the standard reason serials evade the constraint",
+          "Deliberate planting. Incidental detail is not covered, and the template cannot distinguish the two -- the distinction is the author's intent",
+          "Read as a compositional norm (a model specification), not as an empirical generalization about published fiction"
+        ],
+        "failure_modes": [
+          "Red herrings in detective fiction are planted precisely so as not to be discharged in the expected way, so the genre systematically violates the letter of the constraint while obeying its spirit (the herring's discharge is misdirection).",
+          "Realist and modernist texts include unmotivated detail on purpose (Barthes's reality effect); applying the constraint to them mistakes a norm of well-made plotting for a norm of fiction.",
+          "The formula is vacuously satisfied by a story that plants nothing, and it says nothing about proportion -- a trivially discharged element satisfies it as fully as a load-bearing one."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "temporal.response.response_pattern"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.structure.setup_introduction",
+          "narrative.structure.resolution_outcome",
+          "temporal.modality.eventually_unfolding"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "chekhov1889",
+          "bibliographic_entry": "Chekhov, A. P. (1889). Letter to A. S. Lazarev (Gruzinsky), 1 November 1889. In S. Karlinsky and M. H. Heim (eds., trans., 1973), Anton Chekhov's Life and Thought: Selected Letters and Commentary. Berkeley: University of California Press."
+        },
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "dwyer1999",
+          "bibliographic_entry": "Dwyer, M. B., Avrunin, G. S., Corbett, J. C. (1999). Patterns in Property Specifications for Finite-State Verification. Proceedings of the 21st International Conference on Software Engineering (ICSE), 411-420."
+        },
+        {
+          "citation_key": "pnueli1977",
+          "bibliographic_entry": "Pnueli, A. (1977). The Temporal Logic of Programs. Proceedings of the 18th Annual Symposium on Foundations of Computer Science (FOCS), 46-57."
+        },
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        }
+      ],
+      "keywords": [
+        "Chekhov's gun",
+        "liveness",
+        "response pattern",
+        "planting",
+        "payoff",
+        "narrative constraint"
+      ]
+    },
+    {
+      "statement_id": "narrative.frame.frame_consistency",
+      "title": "Frame Consistency (A Story May Not Contradict Its Own Premises)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "fictional_frames",
+        "topic": "frame_logic",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "premise and (not premise) = inconsistency",
+        "canonical_latex": "\\varphi \\land \\lnot\\varphi \\equiv \\bot",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "φ ∧ ¬φ ≡ ⊥"
+          },
+          {
+            "form_id": "scoped",
+            "notation_system": "ascii",
+            "expression": "within frame F: if F declares phi, then any later assertion of not-phi derives bottom against F",
+            "scope_note": "The reading the node is FOR; the scope quantifier 'within frame F' is exactly what the grammar cannot express, so it lives in regularity_conditions"
+          },
+          {
+            "form_id": "ladder",
+            "notation_system": "ascii",
+            "expression": "frame premises occupy the frame's VERIFIED tier; a contradicting assertion is REFUTED-against-the-story",
+            "scope_note": "docs/DESIGN-epistemic-ladder.md's rungs applied to a local corpus, per docs/DESIGN-frames-and-retrieval.md"
+          },
+          {
+            "form_id": "possible_worlds",
+            "notation_system": "ascii",
+            "expression": "a fiction picks out a set of worlds; an inconsistent fiction picks out none",
+            "scope_note": "Lewis's and Dolezel's account; the empty set of worlds is the bottom element, which is why the constant slot is the right home for it"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "complement_annihilation",
+        "anonymized_template": "MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY",
+        "slot_schema": [
+          {
+            "slot_id": "FRAMEPREMISE",
+            "syntactic_category": "variable",
+            "semantic_role": "frame_premise"
+          },
+          {
+            "slot_id": "INCONSISTENCY",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          }
+        ],
+        "invariants": [
+          "Authored with MEET, NEG and a constant-category result slot on purpose, so that the skeleton is logic.boolean_laws.complement_laws's character for character. docs/BACKLOG.md's `authored_to_match` versus `emergent` distinction applies and the answer is authored: an author who wrote `CONTRADICTS(assertion, premise)` would have produced a singleton and an equally true statement.",
+          "INCONSISTENCY is declared `constant`, hence parameter-like, which is what puts it in the same result position that FALSITY and EMPTYSET occupy. The category, not the shape, is what completes the match.",
+          "What the template cannot say is the part that makes this a FRAME law: the scope. 'Within a frame' is a quantifier over a local corpus, the grammar has no binder and no scope construct, and so the entire distinguishing content sits in regularity_conditions as prose. Same family of loss as the missing quantifiers docs/BACKLOG.md records for differential topology, and the first time it has cost the corpus a *design document's* central mechanism.",
+          "Nothing here is special to fiction, which is the finding. The law governing what a made-up world may assert is the postulate that makes a lattice Boolean, and the matcher cannot tell them apart.",
+          "The reciprocal `equivalent_to` edge to the two Boolean nodes is NOT written: it would require editing scripts/seed_logic.py and regenerating two corpora on this branch, the cross-corpus reciprocity cost docs/BACKLOG.md prices in edits per edge. A one-sided composed_with is written instead."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "phi",
+            "syntactic_category": "variable",
+            "semantic_role": "frame_premise",
+            "mathematical_order": 0,
+            "description": "A premise declared by the fictional frame -- a proposition that is true in the story world by stipulation."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "bottom",
+            "description": "The falsum of the frame's local lattice: the property no trace and no story-state satisfies. Written as a constant slot so that the frame law lands on the same parameter-like result position that FALSITY and EMPTYSET occupy in logic.boolean_laws.complement_laws and settheory.boolean_laws.complement_laws."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Inside a story's own frame, a premise and its denial cannot both hold: asserting both empties the set of worlds the story picks out.",
+        "statistical_significance": "The second flagship prediction, and it fires: `?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩` now spans logic.boolean_laws.complement_laws, settheory.boolean_laws.complement_laws and this node. Fiction obeys logic, and the matcher demonstrates it by being unable to tell which of the three is about made-up worlds. That is the intended reading of docs/DESIGN-frames-and-retrieval.md -- inside a frame 'the epistemic ladder operates unchanged over a LOCAL corpus', and chapter three's silver chicken is 'flagged exactly as a false physics claim would be'. The design document asserts it; this node makes the graph agree. The honest limit is equally important: the twin fires on the *Boolean* content, and the frame content -- locality of scope, premises reverting to CONJECTURED-under-premise on scope exit -- is invisible to the matcher, because the grammar has no scope construct. So the corpus can now check the consistency law and cannot yet check the boundary that makes it a frame law rather than a logic law.",
+        "regularity_conditions": [
+          "A declared frame with an explicit premise set, which extends the corpus locally per docs/DESIGN-frames-and-retrieval.md",
+          "The premise and its denial evaluated in the SAME frame; comparing assertions across frames is not a contradiction, and the template cannot mark which frame it is in",
+          "Classical two-valued semantics inside the frame, which is a stipulation about the story world and not a fact about it",
+          "Frame truths do not leak: on scope exit the premises revert to conjectured-under-premise, a boundary the template cannot express"
+        ],
+        "failure_modes": [
+          "Impossible fictions are a real genre: time-travel paradoxes and Escher-style worlds assert inconsistent premises deliberately, and readers accept them locally rather than deriving everything. A frame checker that applied explosion would reject work that audiences read successfully, which argues for a paraconsistent frame logic and against this node as the last word.",
+          "Real fictions are incomplete rather than inconsistent: most questions about a story world have no answer, so the frame's local corpus is partial and the absence of a premise must not be read as its denial.",
+          "Retconning is a deliberate frame edit, not a contradiction; without a notion of frame VERSION the law flags every revised canon as inconsistent."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.constraint.chekhov_gun",
+          "narrative.structure.story_sequence",
+          "logic.boolean_laws.complement_laws",
+          "settheory.boolean_laws.complement_laws",
+          "logic.inference.reductio_ad_absurdum"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "ryan1991",
+          "bibliographic_entry": "Ryan, M.-L. (1991). Possible Worlds, Artificial Intelligence, and Narrative Theory. Bloomington: Indiana University Press."
+        },
+        {
+          "citation_key": "lewis1978",
+          "bibliographic_entry": "Lewis, D. (1978). Truth in Fiction. American Philosophical Quarterly, 15(1), 37-46."
+        },
+        {
+          "citation_key": "dolezel1998",
+          "bibliographic_entry": "Dolezel, L. (1998). Heterocosmica: Fiction and Possible Worlds. Baltimore: Johns Hopkins University Press."
+        },
+        {
+          "citation_key": "walton1990",
+          "bibliographic_entry": "Walton, K. L. (1990). Mimesis as Make-Believe: On the Foundations of the Representational Arts. Cambridge, MA: Harvard University Press."
+        },
+        {
+          "citation_key": "coleridge1817",
+          "bibliographic_entry": "Coleridge, S. T. (1817). Biographia Literaria; or, Biographical Sketches of My Literary Life and Opinions, Volume II, Chapter XIV. London: Rest Fenner."
+        }
+      ],
+      "keywords": [
+        "fictional frame",
+        "consistency",
+        "possible worlds",
+        "complement law",
+        "epistemic ladder",
+        "suspension of disbelief"
+      ]
+    }
+  ]
+}
