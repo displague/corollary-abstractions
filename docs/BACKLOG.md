@@ -255,6 +255,103 @@ or commit history. Each item names the evidence that motivated it.
   monotone under coarsening, cardinality under inclusion, measure under
   containment) is written with *this* template rather than a fresh one.
 
+- **Five heads now share the two-argument opaque-composition shape and none
+  of them twin.** `?0 = HEAD⟨?1, ?2⟩` is carried by
+  `morphology.wordformation.affixation` (CONCAT),
+  `morphology.inflection.paradigm_realization` (REALIZE),
+  `infotheory.channel.channel_capacity` (CAPMAX),
+  `geotop.predicates.de9im_disjoint` (MEET) and
+  `ml.recurrence.belief_state_update` (UPDATE). Five nodes, five heads, zero
+  groups at shape, typed or family level. This is the cheapest available
+  measurement of what head literalism costs, and it grows by one every time a
+  corpus needs a vocabulary the graph does not already have.
+- **Head literalism, now with a minimal reproducer inside one file.** The
+  morphology entry above argues from four near-misses across corpus
+  boundaries. `data/machine_learning` supplies the smallest possible case:
+  `ml.recurrence.elman_rnn_hidden_state` is
+  `?0:V = ACTIVATION⟨+(?1:P, *(?2:P, ?3:V), *(?4:P, ?5:V))⟩` and
+  `ml.recurrence.lstm_gate_activation` is
+  `?0:V = SIGMOID⟨+(?1:P, *(?2:P, ?3:V), *(?4:P, ?5:V))⟩` — the same string
+  apart from one head token, authored by one hand in one file with no intent
+  to hide the relationship — and they share no group at shape, typed *or*
+  family level. `shape` is documented as the loosest level and it still
+  cannot see a one-token difference. Any head-alias mechanism should be
+  tested against this pair before the harder morphology ones.
+- **A call head quarantines everything under it, including the corpus's
+  largest family.** The argument of that `ACTIVATION(...)` is an affine map,
+  and the affine family (`?0:V = +(?1:P, *(?2:P, ?3:V))`, five members across
+  four disciplines) is the best-populated group in the graph. Nothing
+  relates them. Worth separating from the head-alias item because *two*
+  fixes are needed and neither suffices alone: erasing head identity would
+  still leave the pre-activation as *multiple* linear regression (two
+  weighted regressors) against a corpus that carries only the simple
+  one-regressor form, so the arities differ as well.
+- **No `min`, no `clip`, no piecewise form — the PPO ceiling.** Extends the
+  "no binder syntax" entry above with a second family of missing constructs.
+  `ml.policy.ppo_clipped_surrogate` needs a binary minimum and an interval
+  clamp; the grammar has neither, and the natural spelling for the first
+  collides with the `min_` big-operator namespace already recorded. Both are
+  written as opaque calls (`MINOF`, `CLIPCALL`), which parse and record
+  dependencies while hiding the entire mechanism — the clamp's flat gradient
+  outside the trust region is what the method *is*. Consequence: the node is
+  a singleton at every level and cannot be compared with TRPO's constrained
+  form or any other trust-region method. Also: `MINOF` is commutative in
+  every model and the matcher cannot know it, the same ordered-call-args
+  problem `MEET`/`JOIN` and `TOUCHES` already have.
+- **`*` means two different operations and the canonicalizer picks one.**
+  `COMMUTATIVE = {+, *}` gets flattening *and* sorting, so `*` can only
+  denote a commutative product. Machine learning needs it for matrix-vector
+  application and for outer products, neither of which commutes.
+  `ml.recurrence.linear_ssm_state_update` escapes only because S4D and Mamba
+  use a *diagonal* state matrix, making the per-channel recurrence genuinely
+  scalar; `ml.recurrence.mlstm_matrix_memory_update` cannot escape, since
+  `v k^T` is irreducibly a rank-one matrix, and had to introduce an
+  `OUTER(.,.)` head. That extra node is one of the two reasons the two
+  state-update equations do not twin. Related to the CONCAT associativity
+  entry above but distinct: there the head had no algebra declared, here the
+  head has the *wrong* algebra declared. Fix shape: a non-commutative
+  multiplication head, or a per-head associativity/commutativity table that
+  `*` itself participates in.
+- **`specialize.py` plain-binding suppression, fourth instance, and the one
+  the node most wanted.** `infotheory.entropy.surprisal`
+  (`?0:V = neg(LOG⟨?1:V⟩)`) covers `ml.preference.dpo_preference_loss`
+  (`?0:V = neg(LOG⟨SIGMOID⟨*(?1:P, +(?2:V, neg(?3:V)))⟩⟩)`) by binding the
+  argument slot to the `SIGMOID⟨...⟩` subtree — and the relation is exact,
+  since SIGMOID's output is the Bradley-Terry probability that the annotator
+  preferred the chosen completion, so the DPO loss *is* the surprisal of the
+  observed preference. Neither absorption nor identity fires, so the filter
+  drops it, exactly as recorded for the two topology cases. Three corpora
+  have now lost their headline specialization to this one filter.
+- **Specialization noise, fourth confirmation, and now it reaches training
+  objectives.** Of 47 specialization edges touching the 14 machine-learning
+  nodes, the informative ones are three:
+  `probstat.regression.slr_stochastic_specification >= linear_ssm_state_update`
+  (intercept to 0, noise slot absorbing the autoregressive term — an AR(1)
+  process is the regression of a series on its own past),
+  `probstat.transform.affine_location_scale >= lora_low_rank_update`, and
+  `boltzmann_softmax_policy >= chemistry.kinetics.arrhenius_equation`. The
+  rest are the known degenerate kind:
+  `physics.mechanics.hookes_law >= ml.objective.token_cross_entropy_loss`
+  (Hooke's law "generalizes" the training loss of a language model, because
+  `-(k*x)` matches `-(anything)`),
+  `chemistry.spectroscopy.beer_lambert_law >= grpo_group_relative_advantage`,
+  `geometry.area_formulas.triangle_area_formula >= boltzmann_softmax_policy`,
+  `physics.mechanics.newton_second_law >= policy_probability_ratio`. Same
+  root cause, same proposed fix (category-compatibility constraints on
+  bindings, plus a rule that a variable slot may not absorb a call-rooted
+  subtree), now supported by four independent corpora.
+- **Two deliberate `skeletons_with_split_archetypes` entries.**
+  `?0 = *(?1, EXP⟨neg(*(?2, ?3))⟩)` now spans `exponential_decay` and
+  `normalized_exponential_tilt`, and `?0 = +(?1, neg(*(?2, ?3)))` spans four
+  labels including `state_minus_scaled_correction` (gradient descent) and
+  `value_minus_weighted_penalty` (the RLHF objective). Both are intentional:
+  the skeletons are shared and the statements are not the same statement.
+  `ml.policy.policy_probability_ratio` went the other way and adopted the
+  existing `ratio_rate` label rather than minting one. Recorded because the
+  lint cannot currently distinguish "same structure, genuinely different
+  claim" from "same claim, drifting label", and this corpus deliberately
+  produced both.
+
 ## Schema
 
 - **`symbolToken.syntactic_category` lacks `functional`/`operator`** (unlike
@@ -320,6 +417,42 @@ or commit history. Each item names the evidence that motivated it.
   across `statement_class`, because definitions keep their whole content in the
   template and theorems routinely do not. Same family as the missing binder
   recorded under Parser / matcher.
+
+- **Cross-corpus reciprocity, now measured in edits per edge.** The entry
+  above proposes a repair tool; `data/machine_learning` priced it.
+  `ml.objective.token_cross_entropy_loss` and
+  `infotheory.divergence.cross_entropy` are the same functional, so the
+  reciprocal `equivalent_to` was worth writing — which meant editing
+  `scripts/seed_infotheory.py`, regenerating `data/information_theory`, and
+  carrying an unrelated corpus's diff on this branch. That is affordable
+  once. It is not affordable for
+  `ml.preference.grpo_group_relative_advantage`, whose relation to
+  `probstat.transform.z_standardization` is the strongest in the corpus (an
+  exact typed twin, and GRPO's advantage really is that transform applied to
+  rewards) but which had to degrade to a one-sided `composed_with`: the
+  reciprocal `generalizes` would have to go into `data/statistics/nodes.json`,
+  and that corpus has **no seed script** — it is hand-maintained, so the edit
+  could not be made the way every other corpus is edited. So the reciprocity
+  requirement's real cost is not "write two edges", it is "be able to
+  regenerate the other corpus", and one corpus in the repo fails that test.
+  Either the repair tool lands, or reciprocity relaxes to a warning for
+  cross-corpus edges, or `data/statistics` gets a `scripts/seed_statistics.py`
+  like everything else.
+- **Side conditions that carry the whole empirical claim have nowhere to go.**
+  The differential-topology entry above records lost quantifiers. Machine
+  learning loses a different class and loses it in the most-cited node:
+  `ml.adaptation.lora_low_rank_update` is
+  `?0:V = +(?1:P, *(?2:P, ?3:V, ?4:V))`, which says the update factors
+  through a product — it does not and cannot say that the inner dimension is
+  small, which is the entire hypothesis of the paper. Same shape of loss:
+  parameter tying across time steps in the recurrence nodes (the reason RNNs
+  generalize across sequence length), and the zero-initialization of one LoRA
+  factor (the reason adaptation starts at the pretrained model). All three
+  sit in `invariants` and `regularity_conditions` as prose. Consequence for
+  the ledger, beyond the one already noted for `statement_class`: three
+  papers (LoRA, PiSSA, LoftQ) share one skeleton and differ only in how the
+  same slots are initialized, so skeleton count understates the corpus's
+  content in a way that is invisible from the reports.
 
 ## Experiments
 
