@@ -60,10 +60,26 @@ def main() -> None:
     ap.add_argument("--split", default="test")
     ap.add_argument("--checkpoint", type=Path,
                     default=Path("results/solvex2_demo.pt"))
-    ap.add_argument("--data-dir", type=Path, default=Path(
-        r"C:\Users\displ\Documents\corollary-abstractions\experiments\data"))
+    ap.add_argument("--data-dir", type=Path, default=Path("data"))
     ap.add_argument("--seed", type=int, default=13)
     args = ap.parse_args()
+
+    # Self-bootstrap: generate data and train the checkpoint if absent, so
+    # `python demo_answer.py` works from a fresh clone (GPU: ~4 minutes).
+    import subprocess
+    if not (args.data_dir / "solvex2_test.jsonl").exists():
+        print("[bootstrap] generating solvex2 data (one-time)...", flush=True)
+        subprocess.check_call([sys.executable, "solvex2.py", "--out-dir",
+                               str(args.data_dir)])
+    if not args.checkpoint.exists():
+        print("[bootstrap] training span model (one-time, ~4 min on GPU)...",
+              flush=True)
+        subprocess.check_call([
+            sys.executable, "train_span.py", "--arm", "struct",
+            "--task-prefix", "solvex2", "--positions", "tree",
+            "--data-dir", str(args.data_dir),
+            "--out", "results/solvex2_demo.json",
+            "--save-model", str(args.checkpoint)])
 
     ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     cfg = ckpt["config"]

@@ -1,140 +1,135 @@
 # corollary-abstractions
 
-Cross-discipline ontology of mathematical statements, with a symbolic engine
-that detects structurally isomorphic formulas ("twins") across disciplines.
+Cross-discipline ontology of mathematical statements, a symbolic engine that
+detects when different fields write the *same* formula ("structural twins"),
+and an experiment suite showing that a **~2 MB neural model does genuinely
+compositional language and math work** — provided everything with a closed
+form (parsing, canonicalization, equality, the lexicon, structural
+addresses) is computed *outside* the weights and handed to the model as an
+interface. Release: [v0.1.0](docs/RELEASE-v0.1.0.md).
 
-## Research Intent
+## The two headline demonstrations
 
-The project models equations, inequalities, definitions, theorems, and corollaries as typed statement nodes so that:
+**1. The matcher discovers that sciences repeat one another.** From 85
+hand-authored statement nodes across 9 disciplines, structure alone:
 
-- structurally isomorphic forms can be detected across disciplines
-- corollaries can be re-evaluated in alternate theoretical contexts
-- symbolic form, semantic role, and inferential lineage are captured separately
-
-Longer term, the discovered structures are candidate *concept tokens* for an
-extremely small model whose lexicon lives outside its weights — see
-`docs/DESIGN-concept-tokens.md` for the design and `prover/README.md` for the
-verifier-coupled sub-project that will test it.
-
-## Structural Twin Detection
-
-`scripts/match_signatures.py` parses every node's
-`structural_signature.anonymized_template` into an expression tree,
-canonicalizes it, and groups nodes by structural skeleton:
-
-```bash
-python scripts/match_signatures.py --write-report reports/signature_matches.json
+```
+$ python scripts/match_signatures.py
+  skeleton: ?0:V = *(?1:P, ?2:V, ?3:V, inv(^(?4:V, 2)))
+    - physics.gravitation.newton_universal_gravitation
+    - physics.electromagnetism.coulombs_law
+  skeleton: ?0:V = *(?1:P, EXP⟨*(?2:P, ?3:V)⟩)   [CROSS-DISCIPLINE]
+    - calculus.growth.exponential_growth_law
+    - chemistry.kinetics.first_order_integrated_rate_law
+    - economics.finance.continuous_compounding
+    - economics.finance.present_value_continuous
 ```
 
-It reports typed twins (slot categories respected), shape twins (categories
-ignored), archetype-label drift, and `slot_schema` gaps. Twin proposals stay
-in `reports/` — structural isomorphism is analogy, not the logical
-`equivalent_to` of `inferential_links`.
+Coulomb's law *is* gravitation; compound interest, population growth, and
+radioactive decay are one exponential family (the sign is a convention the
+family-level matcher absorbs); the laws of logic and of sets are one Boolean
+algebra, twin by twin. `scripts/specialize.py` goes further: the quantity
+theory of money (`M·V = P·Q`) is the ideal gas law with its dimensional
+constant suppressed — found mechanically, with the binding
+`MONEY→PRESSURE, VELOCITY→VOLUME, PRICE_LEVEL→AMOUNT`.
 
-## Ontology Design
+**2. A tiny model answers foreign-language questions — and exact code makes
+the answer fluent.** Two invented languages (different vocabularies, word
+orders, question particles). The model gets a language-B question and three
+language-A statements, and points at the answer; symbolic code parses,
+canonicalizes, and renders it in either language:
 
-Each statement node is represented as a `Mathematical Statement Node` with the following sections:
-
-- `statement_class`: definition/theorem/corollary/model specification/etc.
-- `epistemic_status`: formal, derived, assumed, asymptotic, empirical
-- `theory_context`: discipline and subfield placement
-- `formal_statement`: canonical and equivalent symbolic representations
-- `structural_signature`: anonymized template plus typed role slots
-- `symbol_lexicon`: symbols, operators, functionals, constants, index sets
-- `semantic_interpretation`: meaning, inferential role, regularity conditions
-- `inferential_links`: entailment, equivalence, specialization, composition edges
-- `provenance`: bibliographic source anchors
-
-## Project Files
-
-- Schema: `schema/equation-node.schema.json`
-- Corpora: `data/<discipline>/nodes.json` (statistics, geometry, algebra)
-- Validator: `scripts/validate_nodes.py`
-- Twin detection: `scripts/match_signatures.py`
-- Formula entry CLI: `scripts/add_node.py`
-- Model design: `docs/DESIGN-concept-tokens.md`
-- Prover sub-project: `prover/README.md`
-
-## Statistics Seed Corpus
-
-Current seed nodes cover:
-
-- affine location-scale transformation archetype
-- simple linear regression specification and conditional expectation corollary
-- z-standardization and normal-standardization corollary
-- law of total probability and Bayes rule
-- variance definition and computational identity corollary
-- IID CLT and large-sample normal approximation corollary
-
-## Adding New Formulae
-
-To add formulae from any discipline **without directly editing JSON files**, use the `add_node.py` tool.
-
-**📖 See the [complete guide](docs/ADDING_FORMULAE.md) for detailed instructions.**
-
-### Quick Start
-
-1. **Create a template file:**
-   ```bash
-   python scripts/add_node.py --create-template my_formula.json
-   ```
-   
-   This creates a template with all required fields and documentation. You can also create YAML templates:
-   ```bash
-   python scripts/add_node.py --create-template my_formula.yaml
-   ```
-
-2. **Edit the template file** with your formula's details using any text editor.
-
-3. **Add the formula to the corpus:**
-   ```bash
-   python scripts/add_node.py --template my_formula.json --discipline <discipline_name>
-   ```
-   
-   The tool will:
-   - Automatically generate a unique `statement_id` if not provided
-   - Create the discipline directory if it doesn't exist
-   - Validate the node structure
-   - Add it to the appropriate corpus
-   - Run full validation before committing
-
-### Example Workflow
-
-```bash
-# Create a template for a new calculus theorem
-python scripts/add_node.py --create-template /tmp/fundamental_theorem.json
-
-# Edit the template with your theorem details
-# (use your favorite editor)
-
-# Add to the calculus discipline
-python scripts/add_node.py --template /tmp/fundamental_theorem.json --discipline calculus
-
-# Output:
-# ✓ Template structure validated
-# ✓ Node added to data/calculus/nodes.json
-# ✓ Validation passed
-# ✓ Successfully added node 'calculus.integration.fundamental_theorem'!
+```
+$ cd experiments && python demo_answer.py
+QUESTION (language B): wo chadult renmiz ka        # "who fears the fox?"
+KNOWLEDGE (language A):
+  - the quite clever wolf fears the wolf
+  - the loud fox fears the teacher
+  - the brave teacher fears the fox
+MODEL POINTS AT: +( wolf MOD( clever quite ) )   [correct]
+REALIZED (A): the quite clever wolf
+REALIZED (B): chadult pomonb shikav
 ```
 
-### Validate Without Adding
+No learned decoder exists anywhere in that pipeline: every output word is
+either pointed-at by the model or produced by exact code, so surface
+hallucination is structurally impossible. First run self-bootstraps
+(generates data, trains the ~800k-param pointer, ~4 min on GPU).
 
-To check if your template is valid before adding it:
+## Measured findings (full narrative: `experiments/ANALYSIS.md`)
 
-```bash
-python scripts/add_node.py --template my_formula.json --validate-only
+| finding | evidence |
+|---|---|
+| Parsing is the floor | raw-character models sit at exact chance on cross-language tasks — no gradient exists below the parse |
+| Exact operations stay symbolic | learned equality tops out ~0.71 where the symbolic check is free and perfect |
+| The lexicon lives outside the weights | weight-induced lexica reach ⅔ of ceiling in-distribution and collapse to chance OOD; the same lexicon supplied symbolically loses nothing |
+| Composition needs addresses | with tree-path positions, held-out verb×noun combinations answer at 1.000 (both seeds); with learned positions the same model cannot even fit seen data |
+| Scale does not buy generalization | across 8× width and 10× data, depth-OOD under learned positions is flat (~0.05–0.19); with symbolic addresses it is ≥0.95 in every cell, including 32-wide on 5k examples |
+| Creating = pointing + realization | both learned decoders failed informatively (memorize, can't copy); pointing plus closed-form realization generates perfectly for any answer present in the input |
+
+Two retractions are part of the record (a too-easy test caught by external
+audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
+must survive a capability-blind symbolic baseline, and no single-seed
+comparison is trusted.
+
+## Repository layout
+
+```
+schema/                 Mathematical Statement Node JSON schema
+data/<discipline>/      statement corpora (9 disciplines, 85 nodes)
+scripts/
+  validate_nodes.py     schema + link-reciprocity validation (merged graph)
+  match_signatures.py   twin detection: shape / typed / family skeletons
+  specialize.py         general->specific edges (absorption + identities)
+  measure_compression.py concept-token compression on the real corpus
+  seed_<discipline>.py  corpus generators (the authoring pattern)
+experiments/
+  exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
+  train.py / train_span.py / train_gen.py / train_pgen.py   trainers
+  demo_answer.py        the end-to-end demo above (self-bootstrapping)
+  run_grid.py           scaling-curve grid
+  ANALYSIS.md           every result, prediction, and retraction
+  data_real/            (gitignored) licensed corpus samples, user-supplied
+prover/                 phase-gated Lean prover roadmap (see README there)
+docs/                   design docs, release notes, BACKLOG
+reports/                generated twin/specialization ledgers (committed)
 ```
 
-## Validation
+## Setup & reproduce
 
-Validate all corpora as one merged cross-discipline graph (default):
+Corpus tools need only Python 3.11+ (`pip install jsonschema` for full
+schema checks). Experiments need the local venv:
 
-```bash
-python scripts/validate_nodes.py
-
-# Or validate a specific corpus:
-python scripts/validate_nodes.py --nodes data/geometry/nodes.json
+```
+uv venv .venv --python 3.12
+uv pip install --python .venv/Scripts/python.exe torch numpy --index-url https://download.pytorch.org/whl/cu130
+uv pip install --python .venv/Scripts/python.exe jsonschema
 ```
 
-Install `jsonschema` (`pip install jsonschema`) to enable full schema
-validation; without it only the minimal structural checks run.
+Everything headline is deterministic from committed seeds — no external
+data required (the `experiments/data_real/` samples feed only auxiliary
+profiling and are never committed):
+
+```
+python scripts/validate_nodes.py            # 85 nodes / 9 corpora green
+python scripts/match_signatures.py          # twin ledger
+python scripts/specialize.py                # specialization edges
+cd experiments
+python demo_answer.py                       # the demo (self-bootstraps)
+python solvex2.py --out-dir data            # regenerate any dataset
+python train_span.py --arm struct --task-prefix solvex2 --positions tree \
+    --data-dir data --out results/repro.json   # re-verify the 1.000 result
+```
+
+On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
+(skeleton output uses `⟨⟩`).
+
+## Design documents
+
+- `docs/DESIGN-concept-tokens.md` — the model vision: concept vocabulary,
+  extrinsic lexicon, composite tokens; milestone status updated per results
+- `docs/DESIGN-linguistic-twins.md` — grammar as another discipline corpus:
+  modifiers as recursive operators, questions as equations, languages as
+  twins of one interlingua
+- `docs/RELEASE-v0.1.0.md` — release notes with plain-language description
+- `docs/BACKLOG.md` — recorded friction, each item with its evidence
