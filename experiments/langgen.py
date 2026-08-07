@@ -139,8 +139,10 @@ def render_np(t: tuple, lex: dict[str, str], lang: str,
     return [lex[noun[1]]] + words
 
 
-def render(t: tuple, lang: str, rng: random.Random) -> str:
-    lex = LEX_A if lang == "A" else LEX_B
+def render(t: tuple, lang: str, rng: random.Random,
+           lex: dict[str, str] | None = None) -> str:
+    if lex is None:
+        lex = LEX_A if lang == "A" else LEX_B
 
     def np_or_wh(n: tuple) -> list[str]:
         if n == ("slot", "WH"):
