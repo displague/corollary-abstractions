@@ -424,3 +424,26 @@ forms. This is the thesis's honesty check passed in the other
 direction: weights are not weak, they are for the residual, and when
 the residual genuinely lives in the surface they own it. The division
 of labor is symmetric, and both halves are now measured.
+
+## Analogy completion: non-extractive creation composes
+
+A : B :: C : D with B = f(A), C a re-skinned A, D = f(C) existing
+nowhere in the input. Pointer-only decoder (structure from B, fillers
+from C; no free-generation steps). 2 seeds:
+
+| | val | test (held-out transform x skeleton) | OOD (deeper) |
+|---|---|---|---|
+| absolute decoder positions | 1.000 | **1.000 / 0.9998** | 0.014 |
+
+- **The creating frontier is crossed at trained depth**: the model
+  produces trees that exist nowhere in its input, on combinations never
+  seen together, at ~1.5M params — because the factorization leaves
+  only the analogy itself (the A<->C correspondence across
+  vocabularies) to be learned, and closes the free-generation channel
+  that sank both prior decoders.
+- The OOD collapse is the absolute-position failure in a NEW location:
+  the decoder's target-position embedding. Deeper trees mean longer
+  action sequences into untrained positions. Fix in flight, by the
+  house pattern: decoder positions = the target's own tree coordinates,
+  computable incrementally from the emitted prefix's bracket structure
+  even at inference.
