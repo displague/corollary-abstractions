@@ -1,0 +1,932 @@
+[
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "constructor",
+  "stateBefore": "P Q : Prop\n⊢ ¬(P ∨ Q) ↔ ¬P ∧ ¬Q",
+  "stateAfter": "case mp\nP Q : Prop\n⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q\n\ncase mpr\nP Q : Prop\n⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "· intro h\n    constructor\n    · intro hp\n      exact h (Or.inl hp)\n    · intro hq\n      exact h (Or.inr hq)",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q\n\ncase mpr\nP Q : Prop\n⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\n⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q",
+  "stateAfter": "case mp\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬P ∧ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "constructor",
+  "stateBefore": "case mp\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬P ∧ ¬Q",
+  "stateAfter": "case mp.left\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬P\n\ncase mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "· intro hp\n      exact h (Or.inl hp)",
+  "stateBefore": "case mp.left\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬P\n\ncase mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬Q",
+  "stateAfter": "case mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "intro hp",
+  "stateBefore": "case mp.left\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬P",
+  "stateAfter": "case mp.left\nP Q : Prop\nh : ¬(P ∨ Q)\nhp : P\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "exact h (Or.inl hp)",
+  "stateBefore": "case mp.left\nP Q : Prop\nh : ¬(P ∨ Q)\nhp : P\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "· intro hq\n      exact h (Or.inr hq)",
+  "stateBefore": "case mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "intro hq",
+  "stateBefore": "case mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\n⊢ ¬Q",
+  "stateAfter": "case mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\nhq : Q\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "exact h (Or.inr hq)",
+  "stateBefore": "case mp.right\nP Q : Prop\nh : ¬(P ∨ Q)\nhq : Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "· intro h hpq\n    cases h with\n    | intro hnp hnq =>\n      cases hpq with\n      | inl hp => exact hnp hp\n      | inr hq => exact hnq hq",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "intro h hpq",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\nh : ¬P ∧ ¬Q\nhpq : P ∨ Q\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "cases h with\n    | intro hnp hnq =>\n      cases hpq with\n      | inl hp => exact hnp hp\n      | inr hq => exact hnq hq",
+  "stateBefore": "case mpr\nP Q : Prop\nh : ¬P ∧ ¬Q\nhpq : P ∨ Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "cases hpq with\n      | inl hp => exact hnp hp\n      | inr hq => exact hnq hq",
+  "stateBefore": "case mpr.intro\nP Q : Prop\nhpq : P ∨ Q\nhnp : ¬P\nhnq : ¬Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "exact hnp hp",
+  "stateBefore": "case mpr.intro.inl\nP Q : Prop\nhnp : ¬P\nhnq : ¬Q\nhp : P\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_or",
+  "tactic": "exact hnq hq",
+  "stateBefore": "case mpr.intro.inr\nP Q : Prop\nhnp : ¬P\nhnq : ¬Q\nhq : Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "constructor",
+  "stateBefore": "P Q : Prop\n⊢ ¬(P ∧ Q) ↔ ¬P ∨ ¬Q",
+  "stateAfter": "case mp\nP Q : Prop\n⊢ ¬(P ∧ Q) → ¬P ∨ ¬Q\n\ncase mpr\nP Q : Prop\n⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "· intro h\n    by_cases hp : P\n    · right\n      intro hq\n      exact h ⟨hp, hq⟩\n    · left\n      exact hp",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ ¬(P ∧ Q) → ¬P ∨ ¬Q\n\ncase mpr\nP Q : Prop\n⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\n⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ ¬(P ∧ Q) → ¬P ∨ ¬Q",
+  "stateAfter": "case mp\nP Q : Prop\nh : ¬(P ∧ Q)\n⊢ ¬P ∨ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "by_cases hp : P",
+  "stateBefore": "case mp\nP Q : Prop\nh : ¬(P ∧ Q)\n⊢ ¬P ∨ ¬Q",
+  "stateAfter": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\n⊢ ¬P ∨ ¬Q\n\ncase neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P ∨ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "· right\n      intro hq\n      exact h ⟨hp, hq⟩",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\n⊢ ¬P ∨ ¬Q\n\ncase neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P ∨ ¬Q",
+  "stateAfter": "case neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P ∨ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "right",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\n⊢ ¬P ∨ ¬Q",
+  "stateAfter": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\n⊢ ¬Q"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "intro hq",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\n⊢ ¬Q",
+  "stateAfter": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\nhq : Q\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "exact h ⟨hp, hq⟩",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : P\nhq : Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "· left\n      exact hp",
+  "stateBefore": "case neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P ∨ ¬Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "left",
+  "stateBefore": "case neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P ∨ ¬Q",
+  "stateAfter": "case neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "exact hp",
+  "stateBefore": "case neg\nP Q : Prop\nh : ¬(P ∧ Q)\nhp : ¬P\n⊢ ¬P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "· intro h hpq\n    cases h with\n    | inl hnp => exact hnp hpq.left\n    | inr hnq => exact hnq hpq.right",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "intro h hpq",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\nh : ¬P ∨ ¬Q\nhpq : P ∧ Q\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "cases h with\n    | inl hnp => exact hnp hpq.left\n    | inr hnq => exact hnq hpq.right",
+  "stateBefore": "case mpr\nP Q : Prop\nh : ¬P ∨ ¬Q\nhpq : P ∧ Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "exact hnp hpq.left",
+  "stateBefore": "case mpr.inl\nP Q : Prop\nhpq : P ∧ Q\nhnp : ¬P\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.de_morgan_not_and",
+  "tactic": "exact hnq hpq.right",
+  "stateBefore": "case mpr.inr\nP Q : Prop\nhpq : P ∧ Q\nhnq : ¬Q\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "constructor",
+  "stateBefore": "α : Type\nF : α → Prop\n⊢ (¬∀ (x : α), F x) ↔ ∃ x, ¬F x",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\n⊢ (¬∀ (x : α), F x) → ∃ x, ¬F x\n\ncase mpr\nα : Type\nF : α → Prop\n⊢ (∃ x, ¬F x) → ¬∀ (x : α), F x"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "· intro h\n    apply Classical.byContradiction\n    intro hc\n    apply h\n    intro x\n    apply Classical.byContradiction\n    intro hx\n    exact hc ⟨x, hx⟩",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\n⊢ (¬∀ (x : α), F x) → ∃ x, ¬F x\n\ncase mpr\nα : Type\nF : α → Prop\n⊢ (∃ x, ¬F x) → ¬∀ (x : α), F x",
+  "stateAfter": "case mpr\nα : Type\nF : α → Prop\n⊢ (∃ x, ¬F x) → ¬∀ (x : α), F x"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\n⊢ (¬∀ (x : α), F x) → ∃ x, ¬F x",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\n⊢ ∃ x, ¬F x"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "apply Classical.byContradiction",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\n⊢ ∃ x, ¬F x",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\n⊢ (¬∃ x, ¬F x) → False"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "intro hc",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\n⊢ (¬∃ x, ¬F x) → False",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "apply h",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\n⊢ False",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\n⊢ ∀ (x : α), F x"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "intro x",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\n⊢ ∀ (x : α), F x",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\n⊢ F x"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "apply Classical.byContradiction",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\n⊢ F x",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\n⊢ ¬F x → False"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "intro hx",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\n⊢ ¬F x → False",
+  "stateAfter": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\nhx : ¬F x\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "exact hc ⟨x, hx⟩",
+  "stateBefore": "case mp\nα : Type\nF : α → Prop\nh : ¬∀ (x : α), F x\nhc : ¬∃ x, ¬F x\nx : α\nhx : ¬F x\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "· intro h hall\n    cases h with\n    | intro x hx => exact hx (hall x)",
+  "stateBefore": "case mpr\nα : Type\nF : α → Prop\n⊢ (∃ x, ¬F x) → ¬∀ (x : α), F x",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "intro h hall",
+  "stateBefore": "case mpr\nα : Type\nF : α → Prop\n⊢ (∃ x, ¬F x) → ¬∀ (x : α), F x",
+  "stateAfter": "case mpr\nα : Type\nF : α → Prop\nh : ∃ x, ¬F x\nhall : ∀ (x : α), F x\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "cases h with\n    | intro x hx => exact hx (hall x)",
+  "stateBefore": "case mpr\nα : Type\nF : α → Prop\nh : ∃ x, ¬F x\nhall : ∀ (x : α), F x\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.not_forall_iff_exists_not",
+  "tactic": "exact hx (hall x)",
+  "stateBefore": "case mpr.intro\nα : Type\nF : α → Prop\nhall : ∀ (x : α), F x\nx : α\nhx : ¬F x\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "constructor",
+  "stateBefore": "P : Prop\n⊢ ¬¬P ↔ P",
+  "stateAfter": "case mp\nP : Prop\n⊢ ¬¬P → P\n\ncase mpr\nP : Prop\n⊢ P → ¬¬P"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "· intro h\n    by_cases hp : P\n    · exact hp\n    · exact absurd hp h",
+  "stateBefore": "case mp\nP : Prop\n⊢ ¬¬P → P\n\ncase mpr\nP : Prop\n⊢ P → ¬¬P",
+  "stateAfter": "case mpr\nP : Prop\n⊢ P → ¬¬P"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP : Prop\n⊢ ¬¬P → P",
+  "stateAfter": "case mp\nP : Prop\nh : ¬¬P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "by_cases hp : P",
+  "stateBefore": "case mp\nP : Prop\nh : ¬¬P\n⊢ P",
+  "stateAfter": "case pos\nP : Prop\nh : ¬¬P\nhp : P\n⊢ P\n\ncase neg\nP : Prop\nh : ¬¬P\nhp : ¬P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "· exact hp",
+  "stateBefore": "case pos\nP : Prop\nh : ¬¬P\nhp : P\n⊢ P\n\ncase neg\nP : Prop\nh : ¬¬P\nhp : ¬P\n⊢ P",
+  "stateAfter": "case neg\nP : Prop\nh : ¬¬P\nhp : ¬P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "exact hp",
+  "stateBefore": "case pos\nP : Prop\nh : ¬¬P\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "· exact absurd hp h",
+  "stateBefore": "case neg\nP : Prop\nh : ¬¬P\nhp : ¬P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "exact absurd hp h",
+  "stateBefore": "case neg\nP : Prop\nh : ¬¬P\nhp : ¬P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "· intro hp hnp\n    exact hnp hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → ¬¬P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "intro hp hnp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → ¬¬P",
+  "stateAfter": "case mpr\nP : Prop\nhp : P\nhnp : ¬P\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.double_negation",
+  "tactic": "exact hnp hp",
+  "stateBefore": "case mpr\nP : Prop\nhp : P\nhnp : ¬P\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "constructor",
+  "stateBefore": "P Q : Prop\n⊢ P ∧ (P ∨ Q) ↔ P",
+  "stateAfter": "case mp\nP Q : Prop\n⊢ P ∧ (P ∨ Q) → P\n\ncase mpr\nP Q : Prop\n⊢ P → P ∧ (P ∨ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "· intro h\n    exact h.left",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ P ∧ (P ∨ Q) → P\n\ncase mpr\nP Q : Prop\n⊢ P → P ∧ (P ∨ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\n⊢ P → P ∧ (P ∨ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ P ∧ (P ∨ Q) → P",
+  "stateAfter": "case mp\nP Q : Prop\nh : P ∧ (P ∨ Q)\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "exact h.left",
+  "stateBefore": "case mp\nP Q : Prop\nh : P ∧ (P ∨ Q)\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "· intro hp\n    refine ⟨hp, ?_⟩\n    left\n    exact hp",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ P → P ∧ (P ∨ Q)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "intro hp",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ P → P ∧ (P ∨ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∧ (P ∨ Q)"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "refine ⟨hp, ?_⟩",
+  "stateBefore": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∧ (P ∨ Q)",
+  "stateAfter": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∨ Q"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "left",
+  "stateBefore": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∨ Q",
+  "stateAfter": "case mpr\nP Q : Prop\nhp : P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_and_or",
+  "tactic": "exact hp",
+  "stateBefore": "case mpr\nP Q : Prop\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "apply Iff.intro",
+  "stateBefore": "P Q : Prop\n⊢ P ∨ P ∧ Q ↔ P",
+  "stateAfter": "case mp\nP Q : Prop\n⊢ P ∨ P ∧ Q → P\n\ncase mpr\nP Q : Prop\n⊢ P → P ∨ P ∧ Q"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "· intro h\n    cases h with\n    | inl hp => exact hp\n    | inr hpq => exact hpq.left",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ P ∨ P ∧ Q → P\n\ncase mpr\nP Q : Prop\n⊢ P → P ∨ P ∧ Q",
+  "stateAfter": "case mpr\nP Q : Prop\n⊢ P → P ∨ P ∧ Q"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ P ∨ P ∧ Q → P",
+  "stateAfter": "case mp\nP Q : Prop\nh : P ∨ P ∧ Q\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "cases h with\n    | inl hp => exact hp\n    | inr hpq => exact hpq.left",
+  "stateBefore": "case mp\nP Q : Prop\nh : P ∨ P ∧ Q\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "exact hp",
+  "stateBefore": "case mp.inl\nP Q : Prop\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "exact hpq.left",
+  "stateBefore": "case mp.inr\nP Q : Prop\nhpq : P ∧ Q\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "· intro hp\n    left\n    exact hp",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ P → P ∨ P ∧ Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "intro hp",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ P → P ∨ P ∧ Q",
+  "stateAfter": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∨ P ∧ Q"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "left",
+  "stateBefore": "case mpr\nP Q : Prop\nhp : P\n⊢ P ∨ P ∧ Q",
+  "stateAfter": "case mpr\nP Q : Prop\nhp : P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.absorption_or_and",
+  "tactic": "exact hp",
+  "stateBefore": "case mpr\nP Q : Prop\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "constructor",
+  "stateBefore": "P : Prop\n⊢ P ∧ True ↔ P",
+  "stateAfter": "case mp\nP : Prop\n⊢ P ∧ True → P\n\ncase mpr\nP : Prop\n⊢ P → P ∧ True"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "· intro h\n    exact h.1",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∧ True → P\n\ncase mpr\nP : Prop\n⊢ P → P ∧ True",
+  "stateAfter": "case mpr\nP : Prop\n⊢ P → P ∧ True"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∧ True → P",
+  "stateAfter": "case mp\nP : Prop\nh : P ∧ True\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "exact h.1",
+  "stateBefore": "case mp\nP : Prop\nh : P ∧ True\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "· intro hp\n    constructor\n    · exact hp\n    · trivial",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∧ True",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "intro hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∧ True",
+  "stateAfter": "case mpr\nP : Prop\nhp : P\n⊢ P ∧ True"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "constructor",
+  "stateBefore": "case mpr\nP : Prop\nhp : P\n⊢ P ∧ True",
+  "stateAfter": "case mpr.left\nP : Prop\nhp : P\n⊢ P\n\ncase mpr.right\nP : Prop\nhp : P\n⊢ True"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "· exact hp",
+  "stateBefore": "case mpr.left\nP : Prop\nhp : P\n⊢ P\n\ncase mpr.right\nP : Prop\nhp : P\n⊢ True",
+  "stateAfter": "case mpr.right\nP : Prop\nhp : P\n⊢ True"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "exact hp",
+  "stateBefore": "case mpr.left\nP : Prop\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "· trivial",
+  "stateBefore": "case mpr.right\nP : Prop\nhp : P\n⊢ True",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_and_true",
+  "tactic": "trivial",
+  "stateBefore": "case mpr.right\nP : Prop\nhp : P\n⊢ True",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "constructor",
+  "stateBefore": "P : Prop\n⊢ P ∨ False ↔ P",
+  "stateAfter": "case mp\nP : Prop\n⊢ P ∨ False → P\n\ncase mpr\nP : Prop\n⊢ P → P ∨ False"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "· intro h\n    cases h with\n    | inl hp => exact hp\n    | inr hf => exact False.elim hf",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∨ False → P\n\ncase mpr\nP : Prop\n⊢ P → P ∨ False",
+  "stateAfter": "case mpr\nP : Prop\n⊢ P → P ∨ False"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∨ False → P",
+  "stateAfter": "case mp\nP : Prop\nh : P ∨ False\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "cases h with\n    | inl hp => exact hp\n    | inr hf => exact False.elim hf",
+  "stateBefore": "case mp\nP : Prop\nh : P ∨ False\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "exact hp",
+  "stateBefore": "case mp.inl\nP : Prop\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "exact False.elim hf",
+  "stateBefore": "case mp.inr\nP : Prop\nhf : False\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "· intro hp\n    exact Or.inl hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∨ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "intro hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∨ False",
+  "stateAfter": "case mpr\nP : Prop\nhp : P\n⊢ P ∨ False"
+ },
+ {
+  "theorem": "BooleanLaws.identity_or_false",
+  "tactic": "exact Or.inl hp",
+  "stateBefore": "case mpr\nP : Prop\nhp : P\n⊢ P ∨ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.non_contradiction",
+  "tactic": "intro h",
+  "stateBefore": "P : Prop\n⊢ ¬(P ∧ ¬P)",
+  "stateAfter": "P : Prop\nh : P ∧ ¬P\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.non_contradiction",
+  "tactic": "have hp : P := h.left",
+  "stateBefore": "P : Prop\nh : P ∧ ¬P\n⊢ False",
+  "stateAfter": "P : Prop\nh : P ∧ ¬P\nhp : P := h.left\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.non_contradiction",
+  "tactic": "have hnp : ¬P := h.right",
+  "stateBefore": "P : Prop\nh : P ∧ ¬P\nhp : P := h.left\n⊢ False",
+  "stateAfter": "P : Prop\nh : P ∧ ¬P\nhp : P := h.left\nhnp : ¬P := h.right\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.non_contradiction",
+  "tactic": "exact hnp hp",
+  "stateBefore": "P : Prop\nh : P ∧ ¬P\nhp : P := h.left\nhnp : ¬P := h.right\n⊢ False",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.excluded_middle",
+  "tactic": "by_cases hp : P",
+  "stateBefore": "P : Prop\n⊢ P ∨ ¬P",
+  "stateAfter": "case pos\nP : Prop\nhp : P\n⊢ P ∨ ¬P\n\ncase neg\nP : Prop\nhp : ¬P\n⊢ P ∨ ¬P"
+ },
+ {
+  "theorem": "BooleanLaws.excluded_middle",
+  "tactic": "· exact Or.inl hp",
+  "stateBefore": "case pos\nP : Prop\nhp : P\n⊢ P ∨ ¬P\n\ncase neg\nP : Prop\nhp : ¬P\n⊢ P ∨ ¬P",
+  "stateAfter": "case neg\nP : Prop\nhp : ¬P\n⊢ P ∨ ¬P"
+ },
+ {
+  "theorem": "BooleanLaws.excluded_middle",
+  "tactic": "exact Or.inl hp",
+  "stateBefore": "case pos\nP : Prop\nhp : P\n⊢ P ∨ ¬P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.excluded_middle",
+  "tactic": "· exact Or.inr hp",
+  "stateBefore": "case neg\nP : Prop\nhp : ¬P\n⊢ P ∨ ¬P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.excluded_middle",
+  "tactic": "exact Or.inr hp",
+  "stateBefore": "case neg\nP : Prop\nhp : ¬P\n⊢ P ∨ ¬P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "constructor",
+  "stateBefore": "P : Prop\n⊢ P ∧ P ↔ P",
+  "stateAfter": "case mp\nP : Prop\n⊢ P ∧ P → P\n\ncase mpr\nP : Prop\n⊢ P → P ∧ P"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "· intro h\n    exact h.left",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∧ P → P\n\ncase mpr\nP : Prop\n⊢ P → P ∧ P",
+  "stateAfter": "case mpr\nP : Prop\n⊢ P → P ∧ P"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP : Prop\n⊢ P ∧ P → P",
+  "stateAfter": "case mp\nP : Prop\nh : P ∧ P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "exact h.left",
+  "stateBefore": "case mp\nP : Prop\nh : P ∧ P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "· intro hp\n    exact And.intro hp hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∧ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "intro hp",
+  "stateBefore": "case mpr\nP : Prop\n⊢ P → P ∧ P",
+  "stateAfter": "case mpr\nP : Prop\nhp : P\n⊢ P ∧ P"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_and",
+  "tactic": "exact And.intro hp hp",
+  "stateBefore": "case mpr\nP : Prop\nhp : P\n⊢ P ∧ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.idempotence_or",
+  "tactic": "simp",
+  "stateBefore": "P : Prop\n⊢ P ∨ P ↔ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "constructor",
+  "stateBefore": "P Q R : Prop\n⊢ P ∧ (Q ∨ R) ↔ P ∧ Q ∨ P ∧ R",
+  "stateAfter": "case mp\nP Q R : Prop\n⊢ P ∧ (Q ∨ R) → P ∧ Q ∨ P ∧ R\n\ncase mpr\nP Q R : Prop\n⊢ P ∧ Q ∨ P ∧ R → P ∧ (Q ∨ R)"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "· intro h\n    cases h with\n    | intro hp hqr =>\n      cases hqr with\n      | inl hq => exact Or.inl ⟨hp, hq⟩\n      | inr hr => exact Or.inr ⟨hp, hr⟩",
+  "stateBefore": "case mp\nP Q R : Prop\n⊢ P ∧ (Q ∨ R) → P ∧ Q ∨ P ∧ R\n\ncase mpr\nP Q R : Prop\n⊢ P ∧ Q ∨ P ∧ R → P ∧ (Q ∨ R)",
+  "stateAfter": "case mpr\nP Q R : Prop\n⊢ P ∧ Q ∨ P ∧ R → P ∧ (Q ∨ R)"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q R : Prop\n⊢ P ∧ (Q ∨ R) → P ∧ Q ∨ P ∧ R",
+  "stateAfter": "case mp\nP Q R : Prop\nh : P ∧ (Q ∨ R)\n⊢ P ∧ Q ∨ P ∧ R"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "cases h with\n    | intro hp hqr =>\n      cases hqr with\n      | inl hq => exact Or.inl ⟨hp, hq⟩\n      | inr hr => exact Or.inr ⟨hp, hr⟩",
+  "stateBefore": "case mp\nP Q R : Prop\nh : P ∧ (Q ∨ R)\n⊢ P ∧ Q ∨ P ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "cases hqr with\n      | inl hq => exact Or.inl ⟨hp, hq⟩\n      | inr hr => exact Or.inr ⟨hp, hr⟩",
+  "stateBefore": "case mp.intro\nP Q R : Prop\nhp : P\nhqr : Q ∨ R\n⊢ P ∧ Q ∨ P ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "exact Or.inl ⟨hp, hq⟩",
+  "stateBefore": "case mp.intro.inl\nP Q R : Prop\nhp : P\nhq : Q\n⊢ P ∧ Q ∨ P ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "exact Or.inr ⟨hp, hr⟩",
+  "stateBefore": "case mp.intro.inr\nP Q R : Prop\nhp : P\nhr : R\n⊢ P ∧ Q ∨ P ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "· intro h\n    cases h with\n    | inl hpq => exact ⟨hpq.left, Or.inl hpq.right⟩\n    | inr hpr => exact ⟨hpr.left, Or.inr hpr.right⟩",
+  "stateBefore": "case mpr\nP Q R : Prop\n⊢ P ∧ Q ∨ P ∧ R → P ∧ (Q ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "intro h",
+  "stateBefore": "case mpr\nP Q R : Prop\n⊢ P ∧ Q ∨ P ∧ R → P ∧ (Q ∨ R)",
+  "stateAfter": "case mpr\nP Q R : Prop\nh : P ∧ Q ∨ P ∧ R\n⊢ P ∧ (Q ∨ R)"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "cases h with\n    | inl hpq => exact ⟨hpq.left, Or.inl hpq.right⟩\n    | inr hpr => exact ⟨hpr.left, Or.inr hpr.right⟩",
+  "stateBefore": "case mpr\nP Q R : Prop\nh : P ∧ Q ∨ P ∧ R\n⊢ P ∧ (Q ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "exact ⟨hpq.left, Or.inl hpq.right⟩",
+  "stateBefore": "case mpr.inl\nP Q R : Prop\nhpq : P ∧ Q\n⊢ P ∧ (Q ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_and_or",
+  "tactic": "exact ⟨hpr.left, Or.inr hpr.right⟩",
+  "stateBefore": "case mpr.inr\nP Q R : Prop\nhpr : P ∧ R\n⊢ P ∧ (Q ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "constructor",
+  "stateBefore": "P Q R : Prop\n⊢ P ∨ Q ∧ R ↔ (P ∨ Q) ∧ (P ∨ R)",
+  "stateAfter": "case mp\nP Q R : Prop\n⊢ P ∨ Q ∧ R → (P ∨ Q) ∧ (P ∨ R)\n\ncase mpr\nP Q R : Prop\n⊢ (P ∨ Q) ∧ (P ∨ R) → P ∨ Q ∧ R"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "· intro h\n    cases h with\n    | inl hp => exact ⟨Or.inl hp, Or.inl hp⟩\n    | inr hqr => exact ⟨Or.inr hqr.left, Or.inr hqr.right⟩",
+  "stateBefore": "case mp\nP Q R : Prop\n⊢ P ∨ Q ∧ R → (P ∨ Q) ∧ (P ∨ R)\n\ncase mpr\nP Q R : Prop\n⊢ (P ∨ Q) ∧ (P ∨ R) → P ∨ Q ∧ R",
+  "stateAfter": "case mpr\nP Q R : Prop\n⊢ (P ∨ Q) ∧ (P ∨ R) → P ∨ Q ∧ R"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "intro h",
+  "stateBefore": "case mp\nP Q R : Prop\n⊢ P ∨ Q ∧ R → (P ∨ Q) ∧ (P ∨ R)",
+  "stateAfter": "case mp\nP Q R : Prop\nh : P ∨ Q ∧ R\n⊢ (P ∨ Q) ∧ (P ∨ R)"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "cases h with\n    | inl hp => exact ⟨Or.inl hp, Or.inl hp⟩\n    | inr hqr => exact ⟨Or.inr hqr.left, Or.inr hqr.right⟩",
+  "stateBefore": "case mp\nP Q R : Prop\nh : P ∨ Q ∧ R\n⊢ (P ∨ Q) ∧ (P ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "exact ⟨Or.inl hp, Or.inl hp⟩",
+  "stateBefore": "case mp.inl\nP Q R : Prop\nhp : P\n⊢ (P ∨ Q) ∧ (P ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "exact ⟨Or.inr hqr.left, Or.inr hqr.right⟩",
+  "stateBefore": "case mp.inr\nP Q R : Prop\nhqr : Q ∧ R\n⊢ (P ∨ Q) ∧ (P ∨ R)",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "· intro h\n    cases h.left with\n    | inl hp => exact Or.inl hp\n    | inr hq =>\n      cases h.right with\n      | inl hp => exact Or.inl hp\n      | inr hr => exact Or.inr ⟨hq, hr⟩",
+  "stateBefore": "case mpr\nP Q R : Prop\n⊢ (P ∨ Q) ∧ (P ∨ R) → P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "intro h",
+  "stateBefore": "case mpr\nP Q R : Prop\n⊢ (P ∨ Q) ∧ (P ∨ R) → P ∨ Q ∧ R",
+  "stateAfter": "case mpr\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\n⊢ P ∨ Q ∧ R"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "cases h.left with\n    | inl hp => exact Or.inl hp\n    | inr hq =>\n      cases h.right with\n      | inl hp => exact Or.inl hp\n      | inr hr => exact Or.inr ⟨hq, hr⟩",
+  "stateBefore": "case mpr\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\n⊢ P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "exact Or.inl hp",
+  "stateBefore": "case mpr.inl\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\nhp : P\n⊢ P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "cases h.right with\n      | inl hp => exact Or.inl hp\n      | inr hr => exact Or.inr ⟨hq, hr⟩",
+  "stateBefore": "case mpr.inr\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\nhq : Q\n⊢ P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "exact Or.inl hp",
+  "stateBefore": "case mpr.inr.inl\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\nhq : Q\nhp : P\n⊢ P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.distrib_or_and",
+  "tactic": "exact Or.inr ⟨hq, hr⟩",
+  "stateBefore": "case mpr.inr.inr\nP Q R : Prop\nh : (P ∨ Q) ∧ (P ∨ R)\nhq : Q\nhr : R\n⊢ P ∨ Q ∧ R",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "constructor",
+  "stateBefore": "P Q : Prop\n⊢ P → Q ↔ ¬Q → ¬P",
+  "stateAfter": "case mp\nP Q : Prop\n⊢ (P → Q) → ¬Q → ¬P\n\ncase mpr\nP Q : Prop\n⊢ (¬Q → ¬P) → P → Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "· intro hpq hnq hp\n    apply hnq\n    apply hpq\n    exact hp",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ (P → Q) → ¬Q → ¬P\n\ncase mpr\nP Q : Prop\n⊢ (¬Q → ¬P) → P → Q",
+  "stateAfter": "case mpr\nP Q : Prop\n⊢ (¬Q → ¬P) → P → Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "intro hpq hnq hp",
+  "stateBefore": "case mp\nP Q : Prop\n⊢ (P → Q) → ¬Q → ¬P",
+  "stateAfter": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ False"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "apply hnq",
+  "stateBefore": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ False",
+  "stateAfter": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "apply hpq",
+  "stateBefore": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ Q",
+  "stateAfter": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "exact hp",
+  "stateBefore": "case mp\nP Q : Prop\nhpq : P → Q\nhnq : ¬Q\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "· intro h hp\n    by_cases hq : Q\n    · exact hq\n    · exact absurd hp (h hq)",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ (¬Q → ¬P) → P → Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "intro h hp",
+  "stateBefore": "case mpr\nP Q : Prop\n⊢ (¬Q → ¬P) → P → Q",
+  "stateAfter": "case mpr\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\n⊢ Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "by_cases hq : Q",
+  "stateBefore": "case mpr\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\n⊢ Q",
+  "stateAfter": "case pos\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : Q\n⊢ Q\n\ncase neg\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : ¬Q\n⊢ Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "· exact hq",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : Q\n⊢ Q\n\ncase neg\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : ¬Q\n⊢ Q",
+  "stateAfter": "case neg\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : ¬Q\n⊢ Q"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "exact hq",
+  "stateBefore": "case pos\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : Q\n⊢ Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "· exact absurd hp (h hq)",
+  "stateBefore": "case neg\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : ¬Q\n⊢ Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.contraposition",
+  "tactic": "exact absurd hp (h hq)",
+  "stateBefore": "case neg\nP Q : Prop\nh : ¬Q → ¬P\nhp : P\nhq : ¬Q\n⊢ Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.modus_ponens",
+  "tactic": "intro h",
+  "stateBefore": "P Q : Prop\n⊢ (P → Q) ∧ P → Q",
+  "stateAfter": "P Q : Prop\nh : (P → Q) ∧ P\n⊢ Q"
+ },
+ {
+  "theorem": "BooleanLaws.modus_ponens",
+  "tactic": "cases h with\n  | intro hpq hp =>\n    apply hpq\n    exact hp",
+  "stateBefore": "P Q : Prop\nh : (P → Q) ∧ P\n⊢ Q",
+  "stateAfter": "no goals"
+ },
+ {
+  "theorem": "BooleanLaws.modus_ponens",
+  "tactic": "apply hpq",
+  "stateBefore": "case intro\nP Q : Prop\nhpq : P → Q\nhp : P\n⊢ Q",
+  "stateAfter": "case intro\nP Q : Prop\nhpq : P → Q\nhp : P\n⊢ P"
+ },
+ {
+  "theorem": "BooleanLaws.modus_ponens",
+  "tactic": "exact hp",
+  "stateBefore": "case intro\nP Q : Prop\nhpq : P → Q\nhp : P\n⊢ P",
+  "stateAfter": "no goals"
+ }
+]

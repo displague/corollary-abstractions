@@ -6,9 +6,13 @@ from a Lean 4 repo via the patched ExtractData.lean under lake -- no WSL2,
 no Python package install. PyPantograph interaction verified natively
 (goal -> intro -> exact -> solved). The lean-dojo-v2 PYTHON package is
 Windows-blocked by its deepspeed dependency, but phase 1 never needs it.
-Next: keep the patched extractor as prover/ExtractData.win.lean and run it
-over a small theorem corpus; WSL2 deferred until the training layer, if
-ever.
+Phase 1 DELIVERED (2026-08-07, see PHASE1_NOTES.md): 155 tactic steps
+extracted from 16 natively-proved theorems mirroring data/logic's Boolean
+laws -- ExtractData.win.lean (provenance-headed patched tracer) +
+sample_triples.json committed. Per the phase gate, phase 2 (baseline
+tactic-prediction policy) may begin; the extraction's premises field
+already provides the retrieval index phase 5 will want. WSL2 remains
+unnecessary.
 
 ## Thesis
 
