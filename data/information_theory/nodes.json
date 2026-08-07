@@ -1354,7 +1354,7 @@
       },
       "semantic_interpretation": {
         "statement_meaning": "Cross-entropy is the average surprisal you incur when the world follows one distribution and your code (or model) was built for another.",
-        "statistical_significance": "A near miss by design. Its skeleton `?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?3:V⟩)⟩))` differs from Shannon entropy's only in that the two inner slot positions are filled by different slots, so no twin fires -- and that is the correct answer. The pair is the sharpest demonstration in the corpus that the matcher keys on *slot reuse* and not just on operator shape: the structural difference between measuring your own uncertainty and paying for someone else's model is one repeated placeholder. It is also the point where the corpus touches machine learning, since log loss is this quantity with the empirical distribution in the first slot.",
+        "statistical_significance": "A near miss by design. Its skeleton `?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?3:V⟩)⟩))` differs from Shannon entropy's only in that the two inner slot positions are filled by different slots, so no twin fires -- and that is the correct answer. The pair is the sharpest demonstration in the corpus that the matcher keys on *slot reuse* and not just on operator shape: the structural difference between measuring your own uncertainty and paying for someone else's model is one repeated placeholder. It is also the point where the corpus touches machine learning, since log loss is this quantity with the empirical distribution in the first slot. That contact is now an edge rather than a remark: ml.objective.token_cross_entropy_loss (scripts/seed_ml.py) states the training loss of a language model with the batch average 1/N in the unit-scale slot this node reserves for 1/ln 2, lands on this typed skeleton character for character, and the two nodes carry reciprocal `equivalent_to` edges. The reciprocity had to be written into both corpora by hand, which is the cross-corpus link friction docs/BACKLOG.md records under Schema.",
         "regularity_conditions": [
           "q_i > 0 wherever p_i > 0 (absolute continuity), else the value is infinite",
           "Both arguments are distributions on the same alphabet",
@@ -1368,7 +1368,9 @@
       "inferential_links": {
         "entailed_by": [],
         "entails": [],
-        "equivalent_to": [],
+        "equivalent_to": [
+          "ml.objective.token_cross_entropy_loss"
+        ],
         "special_case_of": [],
         "generalizes": [],
         "composed_with": [

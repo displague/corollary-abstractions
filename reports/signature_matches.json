@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 137,
+  "nodes_analyzed": 151,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -42,6 +42,28 @@
           "statement_id": "settheory.boolean_laws.complement_laws",
           "discipline": "set_theory",
           "template": "MEET(SETA, NEG(SETA)) = EMPTYSET"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "disciplines": [
+        "machine_learning",
+        "statistics"
+      ],
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "members": [
+        {
+          "statement_id": "ml.preference.grpo_group_relative_advantage",
+          "discipline": "machine_learning",
+          "template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD"
+        },
+        {
+          "statement_id": "probstat.transform.z_standardization",
+          "discipline": "statistics",
+          "template": "STD = (RAW - CENTER)/SCALE"
         }
       ]
     },
@@ -141,10 +163,12 @@
       "skeleton": "?0:V = *(?1:P, EXP⟨neg(*(?2:P, ?3:V))⟩)",
       "disciplines": [
         "chemistry",
-        "economics"
+        "economics",
+        "machine_learning"
       ],
       "archetypes": [
-        "exponential_decay"
+        "exponential_decay",
+        "normalized_exponential_tilt"
       ],
       "members": [
         {
@@ -156,6 +180,11 @@
           "statement_id": "economics.finance.present_value_continuous",
           "discipline": "economics",
           "template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))"
+        },
+        {
+          "statement_id": "ml.policy.boltzmann_softmax_policy",
+          "discipline": "machine_learning",
+          "template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))"
         }
       ]
     },
@@ -213,6 +242,7 @@
         "calculus",
         "chemistry",
         "economics",
+        "machine_learning",
         "physics"
       ],
       "archetypes": [
@@ -233,6 +263,11 @@
           "statement_id": "economics.microeconomics.price_elasticity_of_demand",
           "discipline": "economics",
           "template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE"
+        },
+        {
+          "statement_id": "ml.policy.policy_probability_ratio",
+          "discipline": "machine_learning",
+          "template": "RATIO = POLICYNEW / POLICYOLD"
         },
         {
           "statement_id": "physics.kinematics.average_speed",
@@ -276,6 +311,28 @@
           "statement_id": "probstat.transform.affine_location_scale",
           "discipline": "statistics",
           "template": "OUT = SCALE*IN + SHIFT"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, neg(*(?2:P, ?3:V)))",
+      "disciplines": [
+        "machine_learning"
+      ],
+      "archetypes": [
+        "state_minus_scaled_correction",
+        "value_minus_weighted_penalty"
+      ],
+      "members": [
+        {
+          "statement_id": "ml.optimization.gradient_descent_step",
+          "discipline": "machine_learning",
+          "template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT"
+        },
+        {
+          "statement_id": "ml.objective.kl_regularized_rl_objective",
+          "discipline": "machine_learning",
+          "template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE"
         }
       ]
     },
@@ -407,6 +464,28 @@
           "statement_id": "physics.thermodynamics.gibbs_entropy",
           "discipline": "physics",
           "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?3:V⟩)⟩))",
+      "disciplines": [
+        "information_theory",
+        "machine_learning"
+      ],
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.divergence.cross_entropy",
+          "discipline": "information_theory",
+          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))"
+        },
+        {
+          "statement_id": "ml.objective.token_cross_entropy_loss",
+          "discipline": "machine_learning",
+          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))"
         }
       ]
     },
@@ -617,11 +696,13 @@
       "disciplines": [
         "calculus",
         "chemistry",
-        "economics"
+        "economics",
+        "machine_learning"
       ],
       "archetypes": [
         "exponential_decay",
-        "exponential_evolution"
+        "exponential_evolution",
+        "normalized_exponential_tilt"
       ],
       "members": [
         {
@@ -643,6 +724,11 @@
           "statement_id": "economics.finance.present_value_continuous",
           "discipline": "economics",
           "template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))"
+        },
+        {
+          "statement_id": "ml.policy.boltzmann_softmax_policy",
+          "discipline": "machine_learning",
+          "template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))"
         }
       ]
     },
@@ -706,6 +792,28 @@
           "statement_id": "geometry.right_triangles.pythagorean_theorem",
           "discipline": "geometry",
           "template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = *(+(?1, neg(?2)), inv(?3))",
+      "disciplines": [
+        "machine_learning",
+        "statistics"
+      ],
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "members": [
+        {
+          "statement_id": "ml.preference.grpo_group_relative_advantage",
+          "discipline": "machine_learning",
+          "template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD"
+        },
+        {
+          "statement_id": "probstat.transform.z_standardization",
+          "discipline": "statistics",
+          "template": "STD = (RAW - CENTER)/SCALE"
         }
       ]
     },
@@ -823,10 +931,12 @@
       "skeleton": "?0 = *(?1, EXP⟨neg(*(?2, ?3))⟩)",
       "disciplines": [
         "chemistry",
-        "economics"
+        "economics",
+        "machine_learning"
       ],
       "archetypes": [
-        "exponential_decay"
+        "exponential_decay",
+        "normalized_exponential_tilt"
       ],
       "members": [
         {
@@ -838,6 +948,11 @@
           "statement_id": "economics.finance.present_value_continuous",
           "discipline": "economics",
           "template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))"
+        },
+        {
+          "statement_id": "ml.policy.boltzmann_softmax_policy",
+          "discipline": "machine_learning",
+          "template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))"
         }
       ]
     },
@@ -880,6 +995,7 @@
         "calculus",
         "chemistry",
         "economics",
+        "machine_learning",
         "physics"
       ],
       "archetypes": [
@@ -905,6 +1021,11 @@
           "statement_id": "economics.microeconomics.price_elasticity_of_demand",
           "discipline": "economics",
           "template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE"
+        },
+        {
+          "statement_id": "ml.policy.policy_probability_ratio",
+          "discipline": "machine_learning",
+          "template": "RATIO = POLICYNEW / POLICYOLD"
         },
         {
           "statement_id": "physics.kinematics.average_speed",
@@ -955,11 +1076,14 @@
       "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
       "disciplines": [
         "algebraic_topology",
-        "chemistry"
+        "chemistry",
+        "machine_learning"
       ],
       "archetypes": [
         "affine_operator",
-        "signed_affine_combination"
+        "signed_affine_combination",
+        "state_minus_scaled_correction",
+        "value_minus_weighted_penalty"
       ],
       "members": [
         {
@@ -976,6 +1100,16 @@
           "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
           "discipline": "chemistry",
           "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY"
+        },
+        {
+          "statement_id": "ml.optimization.gradient_descent_step",
+          "discipline": "machine_learning",
+          "template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT"
+        },
+        {
+          "statement_id": "ml.objective.kl_regularized_rl_objective",
+          "discipline": "machine_learning",
+          "template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE"
         }
       ]
     },
@@ -1108,6 +1242,28 @@
           "statement_id": "physics.thermodynamics.gibbs_entropy",
           "discipline": "physics",
           "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = neg(*(?1, sum⟨*(?2, LOG⟨?3⟩)⟩))",
+      "disciplines": [
+        "information_theory",
+        "machine_learning"
+      ],
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.divergence.cross_entropy",
+          "discipline": "information_theory",
+          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))"
+        },
+        {
+          "statement_id": "ml.objective.token_cross_entropy_loss",
+          "discipline": "machine_learning",
+          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))"
         }
       ]
     },
@@ -1370,6 +1526,18 @@
       ]
     },
     {
+      "skeleton": "?0 = *(?1, EXP⟨neg(*(?2, ?3))⟩)",
+      "archetype_ids": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "members": [
+        "chemistry.kinetics.first_order_integrated_rate_law",
+        "economics.finance.present_value_continuous",
+        "ml.policy.boltzmann_softmax_policy"
+      ]
+    },
+    {
       "skeleton": "?0 = *(?1, ^(?2, 2))",
       "archetype_ids": [
         "scaled_linear_by_squared_constant",
@@ -1386,12 +1554,16 @@
       "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
       "archetype_ids": [
         "affine_operator",
-        "signed_affine_combination"
+        "signed_affine_combination",
+        "state_minus_scaled_correction",
+        "value_minus_weighted_penalty"
       ],
       "members": [
         "algtop.invariants.euler_characteristic_surface",
         "chemistry.thermodynamics.gibbs_free_energy",
-        "chemistry.thermodynamics.helmholtz_free_energy"
+        "chemistry.thermodynamics.helmholtz_free_energy",
+        "ml.optimization.gradient_descent_step",
+        "ml.objective.kl_regularized_rl_objective"
       ]
     },
     {

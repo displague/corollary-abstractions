@@ -786,7 +786,15 @@ NODES = [
          "difference between measuring your own uncertainty and paying for "
          "someone else's model is one repeated placeholder. It is also the point "
          "where the corpus touches machine learning, since log loss is this "
-         "quantity with the empirical distribution in the first slot.",
+         "quantity with the empirical distribution in the first slot. That "
+         "contact is now an edge rather than a remark: "
+         "ml.objective.token_cross_entropy_loss (scripts/seed_ml.py) states the "
+         "training loss of a language model with the batch average 1/N in the "
+         "unit-scale slot this node reserves for 1/ln 2, lands on this typed "
+         "skeleton character for character, and the two nodes carry reciprocal "
+         "`equivalent_to` edges. The reciprocity had to be written into both "
+         "corpora by hand, which is the cross-corpus link friction "
+         "docs/BACKLOG.md records under Schema.",
          ["q_i > 0 wherever p_i > 0 (absolute continuity), else the value is infinite",
           "Both arguments are distributions on the same alphabet",
           "Same logarithm base as the entropy it is compared with"],
@@ -802,6 +810,7 @@ NODES = [
              "arguments agree (it equals the entropy there), and it is not "
              "symmetric."],
          inferential_links=links(
+             equivalent_to=["ml.objective.token_cross_entropy_loss"],
              composed_with=["infotheory.entropy.shannon_entropy",
                             "infotheory.divergence.kl_divergence"]),
          keywords=["cross-entropy", "log loss", "model mismatch", "coding cost"]),

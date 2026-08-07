@@ -156,6 +156,66 @@
       "looseness": 0
     },
     {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "calculus.approximation.tangent_line_linearization",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "DISPLACEMENT",
+        "LOWRANKB": "SLOPE",
+        "SCALING": "1",
+        "WEIGHT": "LINEARIZED",
+        "WEIGHTFROZEN": "BASEVALUE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "economics.finance.capm_expected_return",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "PREMIUM",
+        "LOWRANKB": "SENSITIVITY",
+        "SCALING": "1",
+        "WEIGHT": "EXPECTED",
+        "WEIGHTFROZEN": "RISKFREE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "economics.macroeconomics.keynesian_consumption_function",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "DISPOSABLE_INCOME",
+        "LOWRANKB": "PROPENSITY",
+        "SCALING": "1",
+        "WEIGHT": "CONSUMPTION",
+        "WEIGHTFROZEN": "AUTONOMOUS"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "probstat.transform.affine_location_scale",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "OUT = SCALE*IN + SHIFT",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "IN",
+        "LOWRANKB": "SCALE",
+        "SCALING": "1",
+        "WEIGHT": "OUT",
+        "WEIGHTFROZEN": "SHIFT"
+      },
+      "looseness": 0
+    },
+    {
       "general": "physics.mechanics.kinetic_energy",
       "specific": "geometry.area_formulas.circle_area_formula",
       "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
@@ -247,6 +307,20 @@
         "CHAINRANK": "OUTPUT",
         "CYCLERANK": "CONSUMPTION",
         "IMAGERANK": "+(INVESTMENT, GOVERNMENT, NET_EXPORTS)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "WEIGHTFROZEN",
+        "DISPLACEMENT": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "LINEARIZED": "WEIGHT",
+        "SLOPE": "1"
       },
       "looseness": 1
     },
@@ -501,6 +575,20 @@
     },
     {
       "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "ml.policy.policy_probability_ratio",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "RATIO = POLICYNEW / POLICYOLD",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "RATIO",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(POLICYOLD)",
+        "PATHLENGTH": "POLICYNEW"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "physics.relativity.mass_energy_equivalence",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
@@ -577,6 +665,34 @@
         "GAUSSCURVATURE": "AREA",
         "PRINCIPAL1": "CONSTANT",
         "PRINCIPAL2": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "WEIGHT",
+        "PREMIUM": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "RISKFREE": "WEIGHTFROZEN",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "WEIGHTFROZEN",
+        "CONSUMPTION": "WEIGHT",
+        "DISPOSABLE_INCOME": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "PROPENSITY": "1"
       },
       "looseness": 1
     },
@@ -872,6 +988,20 @@
     },
     {
       "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "ml.policy.policy_probability_ratio",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "RATIO = POLICYNEW / POLICYOLD",
+      "via": "identity",
+      "bindings": {
+        "AREA": "RATIO",
+        "BASE": "POLICYNEW",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(POLICYOLD)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "physics.relativity.mass_energy_equivalence",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
@@ -974,6 +1104,64 @@
         "AREA": "ENERGY",
         "CONSTANT": "*(CONSTANT, MASS)",
         "RADIUS": "SPEED"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "DRIVE",
+        "LOWRANKB": "INPUTGAIN",
+        "SCALING": "1",
+        "WEIGHT": "STATENEXT",
+        "WEIGHTFROZEN": "*(TRANSITION, STATE)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "LOWRANKA": "PRED_i",
+        "LOWRANKB": "SLOPE",
+        "SCALING": "1",
+        "WEIGHT": "RV_i",
+        "WEIGHTFROZEN": "+(INTERCEPT, NOISE_i)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "INPUT",
+        "LOWRANKB": "SLOPE",
+        "SCALING": "1",
+        "WEIGHT": "E[](RV, COND)",
+        "WEIGHTFROZEN": "INTERCEPT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "POLICYNEW": "*(LIKELIHOOD, PRIOR)",
+        "POLICYOLD": "NORMALIZER",
+        "RATIO": "POSTERIOR"
       },
       "looseness": 1
     },
@@ -1170,6 +1358,21 @@
     },
     {
       "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "WEIGHTFROZEN",
+        "PRED_i": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "RV_i": "WEIGHT",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
       "specific": "probstat.transform.affine_location_scale",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "OUT = SCALE*IN + SHIFT",
@@ -1180,6 +1383,20 @@
         "PRED_i": "*(SCALE, IN)",
         "RV_i": "OUT",
         "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "OUT": "WEIGHT",
+        "SCALE": "1",
+        "SHIFT": "WEIGHTFROZEN"
       },
       "looseness": 1
     },
@@ -1219,6 +1436,20 @@
         "CHAINRANK": "RV_i",
         "CYCLERANK": "INTERCEPT",
         "IMAGERANK": "+(NOISE_i, *(SLOPE, PRED_i))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(TRANSITION, STATE)",
+        "DISPLACEMENT": "*(INPUTGAIN, DRIVE)",
+        "LINEARIZED": "STATENEXT",
+        "SLOPE": "1"
       },
       "looseness": 2
     },
@@ -1536,6 +1767,20 @@
     },
     {
       "general": "economics.finance.capm_expected_return",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "STATENEXT",
+        "PREMIUM": "*(INPUTGAIN, DRIVE)",
+        "RISKFREE": "*(TRANSITION, STATE)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
       "specific": "probstat.regression.slr_stochastic_specification",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
@@ -1559,6 +1804,20 @@
         "PREMIUM": "*(SLOPE, INPUT)",
         "RISKFREE": "INTERCEPT",
         "SENSITIVITY": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(TRANSITION, STATE)",
+        "CONSUMPTION": "STATENEXT",
+        "DISPOSABLE_INCOME": "*(INPUTGAIN, DRIVE)",
+        "PROPENSITY": "1"
       },
       "looseness": 2
     },
@@ -1665,6 +1924,21 @@
         "AREA": "POSTERIOR",
         "DIM1": "LIKELIHOOD",
         "DIM2": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "identity",
+      "bindings": {
+        "AREA": "ADVANTAGE",
+        "BASE1": "REWARD",
+        "BASE2": "neg(MEANREWARD)",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(STDREWARD)"
       },
       "looseness": 2
     },
@@ -2020,6 +2294,19 @@
     },
     {
       "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "ml.policy.policy_probability_ratio",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "RATIO = POLICYNEW / POLICYOLD",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "RATIO",
+        "CONSTANT": "1",
+        "RADIUS": "*(POLICYNEW, inv(POLICYOLD))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "physics.relativity.mass_energy_equivalence",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
@@ -2093,6 +2380,47 @@
         "CIRCUMFERENCE": "POSTERIOR",
         "CONSTANT": "1",
         "RADIUS": "*(LIKELIHOOD, PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "OUTER(VALUE, KEY)",
+        "LOWRANKB": "INPUTGATE",
+        "SCALING": "1",
+        "WEIGHT": "MEMORYNEXT",
+        "WEIGHTFROZEN": "*(FORGETGATE, MEMORY)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "POLICYNEW": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "POLICYOLD": "^(SEPARATION, 2)",
+        "RATIO": "COUPLING"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "POLICYNEW": "*(CONSTANT, SOURCE1, SOURCE2)",
+        "POLICYOLD": "^(SEPARATION, 2)",
+        "RATIO": "COUPLING"
       },
       "looseness": 2
     },
@@ -2397,6 +2725,19 @@
     },
     {
       "general": "physics.mechanics.newton_second_law",
+      "specific": "ml.policy.policy_probability_ratio",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "RATIO = POLICYNEW / POLICYOLD",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "RATIO",
+        "INERTIA": "1",
+        "RESPONSE": "*(POLICYNEW, inv(POLICYOLD))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
       "specific": "physics.relativity.mass_energy_equivalence",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
@@ -2503,6 +2844,21 @@
     },
     {
       "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(TRANSITION, STATE)",
+        "PRED_i": "*(INPUTGAIN, DRIVE)",
+        "RV_i": "STATENEXT",
+        "SLOPE": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
@@ -2513,6 +2869,20 @@
         "PRED_i": "*(SLOPE, INPUT)",
         "RV_i": "E[](RV, COND)",
         "SLOPE": "1"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(INPUTGAIN, DRIVE)",
+        "OUT": "STATENEXT",
+        "SCALE": "1",
+        "SHIFT": "*(TRANSITION, STATE)"
       },
       "looseness": 2
     },
@@ -2543,6 +2913,20 @@
         "SHIFT": "INTERCEPT"
       },
       "looseness": 2
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(FORGETGATE, MEMORY)",
+        "DISPLACEMENT": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "LINEARIZED": "MEMORYNEXT",
+        "SLOPE": "1"
+      },
+      "looseness": 3
     },
     {
       "general": "chemistry.kinetics.first_order_integrated_rate_law",
@@ -2597,6 +2981,34 @@
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))",
         "PATHLENGTH": "PRODUCTIVITY"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "ml.policy.boltzmann_softmax_policy",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "PROBABILITY",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EXP(neg(*(INVTEMPERATURE, ENERGY)))",
+        "PATHLENGTH": "INVPARTITION"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "ADVANTAGE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(STDREWARD)",
+        "PATHLENGTH": "+(REWARD, neg(MEANREWARD))"
       },
       "looseness": 3
     },
@@ -2682,6 +3094,20 @@
       "looseness": 3
     },
     {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "MEMORYNEXT",
+        "PREMIUM": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "RISKFREE": "*(FORGETGATE, MEMORY)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 3
+    },
+    {
       "general": "economics.finance.present_value_continuous",
       "specific": "chemistry.kinetics.arrhenius_equation",
       "general_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
@@ -2692,6 +3118,20 @@
         "HORIZON": "*(BARRIER, inv(*(GASCONST, TEMPERATURE)))",
         "PRESENT": "RATECONST",
         "RATE": "1"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(FORGETGATE, MEMORY)",
+        "CONSUMPTION": "MEMORYNEXT",
+        "DISPOSABLE_INCOME": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "PROPENSITY": "1"
       },
       "looseness": 3
     },
@@ -2773,6 +3213,34 @@
         "BASE": "PRODUCTIVITY",
         "CONSTANT": "1",
         "HEIGHT": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "ml.policy.boltzmann_softmax_policy",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+      "via": "identity",
+      "bindings": {
+        "AREA": "PROBABILITY",
+        "BASE": "INVPARTITION",
+        "CONSTANT": "1",
+        "HEIGHT": "EXP(neg(*(INVTEMPERATURE, ENERGY)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "identity",
+      "bindings": {
+        "AREA": "ADVANTAGE",
+        "BASE": "+(REWARD, neg(MEANREWARD))",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(STDREWARD)"
       },
       "looseness": 3
     },
@@ -2964,6 +3432,35 @@
       "looseness": 3
     },
     {
+      "general": "ml.policy.boltzmann_softmax_policy",
+      "specific": "chemistry.kinetics.arrhenius_equation",
+      "general_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+      "specific_template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
+      "via": "absorption+identity",
+      "bindings": {
+        "ENERGY": "*(BARRIER, inv(*(GASCONST, TEMPERATURE)))",
+        "INVPARTITION": "PREFACTOR",
+        "INVTEMPERATURE": "1",
+        "PROBABILITY": "RATECONST"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "INPUTGAIN": "1",
+        "STATE": "*(FORGETGATE, MEMORY)",
+        "STATENEXT": "MEMORYNEXT",
+        "TRANSITION": "1"
+      },
+      "looseness": 3
+    },
+    {
       "general": "physics.circuits.ohms_law",
       "specific": "economics.production.cobb_douglas_production_function",
       "general_template": "POTENTIAL = FLOW * RESISTANCE",
@@ -3120,6 +3617,35 @@
       "looseness": 3
     },
     {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(FORGETGATE, MEMORY)",
+        "PRED_i": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "RV_i": "MEMORYNEXT",
+        "SLOPE": "1"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "OUT": "MEMORYNEXT",
+        "SCALE": "1",
+        "SHIFT": "*(FORGETGATE, MEMORY)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "algtop.homology.betti_number_rank",
       "specific": "infotheory.mutualinfo.mutual_information",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
@@ -3216,6 +3742,32 @@
     },
     {
       "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "ml.policy.boltzmann_softmax_policy",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "PROBABILITY",
+        "CONSTANT": "1",
+        "RADIUS": "*(INVPARTITION, EXP(neg(*(INVTEMPERATURE, ENERGY))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "ADVANTAGE",
+        "CONSTANT": "1",
+        "RADIUS": "*(+(REWARD, neg(MEANREWARD)), inv(STDREWARD))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "probstat.transform.z_standardization",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "STD = (RAW - CENTER)/SCALE",
@@ -3249,6 +3801,19 @@
       "bindings": {
         "DISPLACEMENT": "*(BASESCALE, sum(*(WEIGHT_i, LOG(MODELWEIGHT_i))))",
         "FORCE": "CROSSINFORMATION",
+        "STIFFNESS": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.hookes_law",
+      "specific": "ml.objective.token_cross_entropy_loss",
+      "general_template": "FORCE = -(STIFFNESS * DISPLACEMENT)",
+      "specific_template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
+      "via": "absorption+identity",
+      "bindings": {
+        "DISPLACEMENT": "*(BATCHSCALE, sum(*(TARGET_i, LOG(PREDICTED_i))))",
+        "FORCE": "LOSS",
         "STIFFNESS": "1"
       },
       "looseness": 4
@@ -3289,6 +3854,32 @@
         "FORCE": "PRESENT",
         "INERTIA": "1",
         "RESPONSE": "*(FUTURE, EXP(neg(*(RATE, HORIZON))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "ml.policy.boltzmann_softmax_policy",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "PROBABILITY",
+        "INERTIA": "1",
+        "RESPONSE": "*(INVPARTITION, EXP(neg(*(INVTEMPERATURE, ENERGY))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "ADVANTAGE",
+        "INERTIA": "1",
+        "RESPONSE": "*(+(REWARD, neg(MEANREWARD)), inv(STDREWARD))"
       },
       "looseness": 4
     },
@@ -3487,6 +4078,21 @@
       "looseness": 5
     },
     {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "D(FUNC2)",
+        "LOWRANKB": "FUNC1",
+        "SCALING": "1",
+        "WEIGHT": "D(*(FUNC1, FUNC2))",
+        "WEIGHTFROZEN": "*(FUNC2, D(FUNC1))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -3631,6 +4237,36 @@
         "CIRCUMFERENCE": "DIVERGENCE",
         "CONSTANT": "1",
         "RADIUS": "*(BASESCALE, sum(*(WEIGHT_i, LOG(*(WEIGHT_i, inv(MODELWEIGHT_i))))))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "LOWRANKA": "^(DV, 2)",
+        "LOWRANKB": "COEFFG",
+        "SCALING": "1",
+        "WEIGHT": "^(LINEELEMENT, 2)",
+        "WEIGHTFROZEN": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(FUNC1, D(FUNC2))",
+        "INPUTGAIN": "1",
+        "STATE": "*(FUNC2, D(FUNC1))",
+        "STATENEXT": "D(*(FUNC1, FUNC2))",
+        "TRANSITION": "1"
       },
       "looseness": 6
     },
@@ -3849,6 +4485,21 @@
       "looseness": 7
     },
     {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "D(FUNC2)",
+        "LOWRANKB": "SCALAR2",
+        "SCALING": "1",
+        "WEIGHT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "WEIGHTFROZEN": "*(SCALAR1, D(FUNC1))"
+      },
+      "looseness": 7
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "algebra.polynomial_equations.quadratic_formula",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -3981,6 +4632,21 @@
         "CONSUMPTION": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "DISPOSABLE_INCOME": "*(SCALAR2, D(FUNC2))",
         "PROPENSITY": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(SCALAR2, D(FUNC2))",
+        "INPUTGAIN": "1",
+        "STATE": "*(SCALAR1, D(FUNC1))",
+        "STATENEXT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "TRANSITION": "1"
       },
       "looseness": 8
     },

@@ -8,6 +8,62 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "algtop.invariants.euler_characteristic_surface",
+      "char_tokens": 38,
+      "struct_tokens": 14,
+      "concept_tokens": 5,
+      "family_reuse": 5
+    },
+    {
+      "statement_id": "algtop.invariants.euler_characteristic_complex",
+      "char_tokens": 36,
+      "struct_tokens": 11,
+      "concept_tokens": 5,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "algtop.invariants.euler_characteristic_valuation",
+      "char_tokens": 85,
+      "struct_tokens": 31,
+      "concept_tokens": 3,
+      "family_reuse": 4
+    },
+    {
+      "statement_id": "algtop.homology.betti_alternating_sum",
+      "char_tokens": 33,
+      "struct_tokens": 10,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "algtop.homology.betti_number_rank",
+      "char_tokens": 32,
+      "struct_tokens": 10,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "algtop.homology.chain_rank_nullity",
+      "char_tokens": 33,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "algtop.homotopy.fundamental_group_circle",
+      "char_tokens": 28,
+      "struct_tokens": 6,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "algtop.homotopy.homotopy_invariance",
+      "char_tokens": 80,
+      "struct_tokens": 17,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "calculus.limits.derivative_definition",
       "char_tokens": 44,
       "struct_tokens": 33,
@@ -19,7 +75,7 @@
       "char_tokens": 26,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 5
+      "family_reuse": 6
     },
     {
       "statement_id": "calculus.differentiation.power_rule",
@@ -61,7 +117,7 @@
       "char_tokens": 35,
       "struct_tokens": 14,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "calculus.integration.ftc_differentiation_part",
@@ -75,14 +131,14 @@
       "char_tokens": 36,
       "struct_tokens": 22,
       "concept_tokens": 4,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "calculus.approximation.tangent_line_linearization",
       "char_tokens": 45,
       "struct_tokens": 11,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "chemistry.kinetics.rate_law_power",
@@ -96,7 +152,7 @@
       "char_tokens": 43,
       "struct_tokens": 17,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "chemistry.kinetics.half_life_first_order",
@@ -138,7 +194,7 @@
       "char_tokens": 19,
       "struct_tokens": 9,
       "concept_tokens": 3,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "chemistry.acid_base.henderson_hasselbalch",
@@ -152,21 +208,133 @@
       "char_tokens": 31,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 5
+      "family_reuse": 6
+    },
+    {
+      "statement_id": "diffgeo.curves.arc_length_functional",
+      "char_tokens": 24,
+      "struct_tokens": 6,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.curves.geodesic_energy_functional",
+      "char_tokens": 37,
+      "struct_tokens": 14,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.curves.circle_curvature",
+      "char_tokens": 22,
+      "struct_tokens": 10,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.surfaces.first_fundamental_form",
+      "char_tokens": 58,
+      "struct_tokens": 34,
+      "concept_tokens": 7,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.surfaces.euclidean_line_element",
+      "char_tokens": 27,
+      "struct_tokens": 19,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "char_tokens": 40,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "char_tokens": 42,
+      "struct_tokens": 10,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.stokes.stokes_theorem",
+      "char_tokens": 42,
+      "struct_tokens": 12,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "diffgeo.stokes.stokes_zero_form_case",
+      "char_tokens": 44,
+      "struct_tokens": 22,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+      "char_tokens": 37,
+      "struct_tokens": 9,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.degree.degree_regular_value_count",
+      "char_tokens": 32,
+      "struct_tokens": 9,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.degree.degree_multiplicativity",
+      "char_tokens": 61,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.degree.brouwer_fixed_point",
+      "char_tokens": 32,
+      "struct_tokens": 6,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.morse.weak_morse_inequality",
+      "char_tokens": 32,
+      "struct_tokens": 3,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.vectorfields.poincare_hopf_index_theorem",
+      "char_tokens": 35,
+      "struct_tokens": 9,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "difftop.vectorfields.hairy_ball_theorem",
+      "char_tokens": 23,
+      "struct_tokens": 6,
+      "concept_tokens": 2,
+      "family_reuse": 1
     },
     {
       "statement_id": "economics.finance.continuous_compounding",
       "char_tokens": 36,
       "struct_tokens": 14,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "economics.finance.present_value_continuous",
       "char_tokens": 41,
       "struct_tokens": 17,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "economics.finance.simple_interest",
@@ -187,7 +355,7 @@
       "char_tokens": 37,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 5
+      "family_reuse": 6
     },
     {
       "statement_id": "economics.macroeconomics.gdp_expenditure_identity",
@@ -215,14 +383,14 @@
       "char_tokens": 43,
       "struct_tokens": 11,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "economics.macroeconomics.keynesian_consumption_function",
       "char_tokens": 57,
       "struct_tokens": 11,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "economics.macroeconomics.fisher_equation",
@@ -236,14 +404,14 @@
       "char_tokens": 32,
       "struct_tokens": 19,
       "concept_tokens": 4,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "geometry.area_formulas.rectangle_area_formula",
       "char_tokens": 18,
       "struct_tokens": 7,
       "concept_tokens": 4,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "geometry.perimeter_formulas.rectangle_perimeter_formula",
@@ -337,6 +505,356 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "geotop.polyhedra.euler_polyhedron_formula",
+      "char_tokens": 28,
+      "struct_tokens": 11,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "geotop.point_set.interior_boundary_exterior_partition",
+      "char_tokens": 75,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "geotop.predicates.containment_transitivity",
+      "char_tokens": 64,
+      "struct_tokens": 21,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "geotop.predicates.adjacency_symmetry",
+      "char_tokens": 49,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "geotop.predicates.de9im_disjoint",
+      "char_tokens": 27,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "geotop.measure.area_inclusion_exclusion",
+      "char_tokens": 73,
+      "struct_tokens": 31,
+      "concept_tokens": 3,
+      "family_reuse": 4
+    },
+    {
+      "statement_id": "geotop.measure.area_monotonicity",
+      "char_tokens": 50,
+      "struct_tokens": 17,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.entropy.shannon_entropy",
+      "char_tokens": 59,
+      "struct_tokens": 20,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "infotheory.entropy.uniform_entropy",
+      "char_tokens": 43,
+      "struct_tokens": 10,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.entropy.surprisal",
+      "char_tokens": 26,
+      "struct_tokens": 9,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "infotheory.mutualinfo.mutual_information",
+      "char_tokens": 83,
+      "struct_tokens": 21,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+      "char_tokens": 82,
+      "struct_tokens": 31,
+      "concept_tokens": 3,
+      "family_reuse": 4
+    },
+    {
+      "statement_id": "infotheory.channel.channel_capacity",
+      "char_tokens": 55,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.coding.kraft_inequality",
+      "char_tokens": 34,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.divergence.cross_entropy",
+      "char_tokens": 69,
+      "struct_tokens": 20,
+      "concept_tokens": 5,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "infotheory.divergence.kl_divergence",
+      "char_tokens": 71,
+      "struct_tokens": 24,
+      "concept_tokens": 5,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "infotheory.divergence.gibbs_inequality",
+      "char_tokens": 63,
+      "struct_tokens": 24,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.boolean_laws.de_morgan_laws",
+      "char_tokens": 54,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+      "char_tokens": 78,
+      "struct_tokens": 23,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.double_negation",
+      "char_tokens": 23,
+      "struct_tokens": 9,
+      "concept_tokens": 2,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.absorption",
+      "char_tokens": 39,
+      "struct_tokens": 11,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.identity_laws",
+      "char_tokens": 26,
+      "struct_tokens": 7,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.complement_laws",
+      "char_tokens": 33,
+      "struct_tokens": 10,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.boolean_laws.idempotence",
+      "char_tokens": 26,
+      "struct_tokens": 7,
+      "concept_tokens": 2,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "logic.inference.modus_ponens",
+      "char_tokens": 50,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.inference.contraposition",
+      "char_tokens": 55,
+      "struct_tokens": 17,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.recurrence.elman_rnn_hidden_state",
+      "char_tokens": 65,
+      "struct_tokens": 19,
+      "concept_tokens": 7,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.recurrence.lstm_gate_activation",
+      "char_tokens": 56,
+      "struct_tokens": 19,
+      "concept_tokens": 7,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.recurrence.linear_ssm_state_update",
+      "char_tokens": 46,
+      "struct_tokens": 15,
+      "concept_tokens": 6,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.recurrence.mlstm_matrix_memory_update",
+      "char_tokens": 60,
+      "struct_tokens": 19,
+      "concept_tokens": 7,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.recurrence.belief_state_update",
+      "char_tokens": 38,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.optimization.gradient_descent_step",
+      "char_tokens": 38,
+      "struct_tokens": 14,
+      "concept_tokens": 5,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "ml.policy.boltzmann_softmax_policy",
+      "char_tokens": 60,
+      "struct_tokens": 17,
+      "concept_tokens": 5,
+      "family_reuse": 5
+    },
+    {
+      "statement_id": "ml.objective.token_cross_entropy_loss",
+      "char_tokens": 56,
+      "struct_tokens": 20,
+      "concept_tokens": 5,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "ml.objective.kl_regularized_rl_objective",
+      "char_tokens": 48,
+      "struct_tokens": 14,
+      "concept_tokens": 5,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "ml.policy.policy_probability_ratio",
+      "char_tokens": 29,
+      "struct_tokens": 10,
+      "concept_tokens": 4,
+      "family_reuse": 6
+    },
+    {
+      "statement_id": "ml.policy.ppo_clipped_surrogate",
+      "char_tokens": 85,
+      "struct_tokens": 20,
+      "concept_tokens": 6,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.preference.dpo_preference_loss",
+      "char_tokens": 66,
+      "struct_tokens": 23,
+      "concept_tokens": 5,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "ml.preference.grpo_group_relative_advantage",
+      "char_tokens": 43,
+      "struct_tokens": 17,
+      "concept_tokens": 5,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "ml.adaptation.lora_low_rank_update",
+      "char_tokens": 49,
+      "struct_tokens": 12,
+      "concept_tokens": 6,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.wordformation.affixation",
+      "char_tokens": 27,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.wordformation.iterated_affixation",
+      "char_tokens": 45,
+      "struct_tokens": 11,
+      "concept_tokens": 5,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.wordformation.concat_associativity",
+      "char_tokens": 75,
+      "struct_tokens": 19,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.wordformation.zero_morpheme_identity",
+      "char_tokens": 26,
+      "struct_tokens": 7,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.quantity.morpheme_count_additivity",
+      "char_tokens": 62,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.semantics.compositionality",
+      "char_tokens": 73,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.inflection.paradigm_realization",
+      "char_tokens": 34,
+      "struct_tokens": 7,
+      "concept_tokens": 4,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.inflection.category_preservation",
+      "char_tokens": 51,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.derivation.category_from_affix",
+      "char_tokens": 57,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "morphology.agreement.feature_percolation",
+      "char_tokens": 49,
+      "struct_tokens": 13,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "physics.mechanics.newton_second_law",
       "char_tokens": 26,
       "struct_tokens": 7,
@@ -397,21 +915,91 @@
       "char_tokens": 26,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 5
+      "family_reuse": 6
     },
     {
       "statement_id": "physics.materials.mass_density",
       "char_tokens": 26,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 5
+      "family_reuse": 6
+    },
+    {
+      "statement_id": "physics.thermodynamics.gibbs_entropy",
+      "char_tokens": 61,
+      "struct_tokens": 20,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.de_morgan_laws",
+      "char_tokens": 50,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.distributivity_meet_over_join",
+      "char_tokens": 71,
+      "struct_tokens": 23,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.double_negation",
+      "char_tokens": 21,
+      "struct_tokens": 9,
+      "concept_tokens": 2,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.absorption",
+      "char_tokens": 35,
+      "struct_tokens": 11,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.identity_laws",
+      "char_tokens": 27,
+      "struct_tokens": 7,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.complement_laws",
+      "char_tokens": 32,
+      "struct_tokens": 10,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.boolean_laws.idempotence",
+      "char_tokens": 23,
+      "struct_tokens": 7,
+      "concept_tokens": 2,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.order.subset_transitivity",
+      "char_tokens": 64,
+      "struct_tokens": 21,
+      "concept_tokens": 4,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
+      "char_tokens": 73,
+      "struct_tokens": 31,
+      "concept_tokens": 3,
+      "family_reuse": 4
     },
     {
       "statement_id": "probstat.transform.affine_location_scale",
       "char_tokens": 22,
       "struct_tokens": 11,
       "concept_tokens": 5,
-      "family_reuse": 4
+      "family_reuse": 5
     },
     {
       "statement_id": "probstat.regression.slr_stochastic_specification",
@@ -432,14 +1020,14 @@
       "char_tokens": 26,
       "struct_tokens": 17,
       "concept_tokens": 5,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "probstat.probability.total_probability_partition",
       "char_tokens": 39,
       "struct_tokens": 10,
       "concept_tokens": 4,
-      "family_reuse": 1
+      "family_reuse": 2
     },
     {
       "statement_id": "probstat.probability.bayes_rule",
@@ -470,9 +1058,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 37.52238805970149,
-  "mean_struct": 13.552238805970148,
-  "mean_concept": 4.447761194029851,
-  "n_family_skeletons": 49,
-  "skeletons_reused": 8
+  "mean_char": 43.026490066225165,
+  "mean_struct": 14.178807947019868,
+  "mean_concept": 4.072847682119205,
+  "n_family_skeletons": 110,
+  "skeletons_reused": 26
 }

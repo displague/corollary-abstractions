@@ -1,0 +1,2879 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "machine_learning.training_and_architecture.v1",
+  "discipline": "machine_learning",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "ml.recurrence.elman_rnn_hidden_state",
+      "title": "Elman Recurrent Hidden-State Update",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "sequence_models",
+        "topic": "recurrence",
+        "canonical_objects": [
+          "hidden state vector",
+          "weight matrix",
+          "input sequence"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "h_t = phi(W_h * h_(t-1) + W_x * x_t + b)",
+        "canonical_latex": "h_t = \\phi\\!\\left(W_h h_{t-1} + W_x x_t + b\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "concatenated",
+            "notation_system": "matrix_notation",
+            "expression": "h_t = phi(W * [h_(t-1); x_t] + b)",
+            "scope_note": "The two weight matrices stacked; the same map, written as one affine block"
+          },
+          {
+            "form_id": "jordan",
+            "notation_system": "ascii",
+            "expression": "h_t = phi(W_h * y_(t-1) + W_x * x_t + b)",
+            "scope_note": "Jordan's (1986) variant: the recurrent input is the previous output, not the previous hidden state"
+          },
+          {
+            "form_id": "unrolled",
+            "notation_system": "ascii",
+            "expression": "h_t = phi(W_h * phi(W_h * h_(t-2) + W_x * x_(t-1) + b) + W_x * x_t + b)",
+            "scope_note": "One step of unrolling; iterating this is what produces the vanishing/exploding gradient the LSTM was designed against"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "nonlinear_affine_recurrence",
+        "anonymized_template": "HIDDENNEXT = ACTIVATION(WEIGHTREC*HIDDEN + WEIGHTIN*INPUT + BIAS)",
+        "slot_schema": [
+          {
+            "slot_id": "HIDDENNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "output_state"
+          },
+          {
+            "slot_id": "WEIGHTREC",
+            "syntactic_category": "parameter",
+            "semantic_role": "recurrent_weight"
+          },
+          {
+            "slot_id": "HIDDEN",
+            "syntactic_category": "variable",
+            "semantic_role": "previous_state"
+          },
+          {
+            "slot_id": "WEIGHTIN",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_weight"
+          },
+          {
+            "slot_id": "INPUT",
+            "syntactic_category": "variable",
+            "semantic_role": "observation"
+          },
+          {
+            "slot_id": "BIAS",
+            "syntactic_category": "parameter",
+            "semantic_role": "offset"
+          }
+        ],
+        "invariants": [
+          "The argument of ACTIVATION is an affine map of the pair (previous state, current input): two parameter-weighted variable terms plus a parameter offset. Everything the network learns lives in the parameter-like slots; everything that changes with time lives in the variable-like ones.",
+          "The same two weight slots are reused at every time step. That sharing is not visible in a one-step template -- the template says nothing about t -- and it is the whole reason recurrent networks generalize across sequence length. Recorded here because the matcher cannot see it.",
+          "The nonlinearity is applied *outside* the affine map, not inside it. That ordering is the statement: an affine recurrence composed with a squashing function, iterated.",
+          "The composition is what makes the recurrence contractive or expansive; the Jacobian of the iterated map is a product of terms W_h * phi', and whether its spectral radius sits above or below 1 is exactly the vanishing/exploding gradient problem."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "h_t",
+            "syntactic_category": "variable",
+            "semantic_role": "output_state",
+            "mathematical_order": 1,
+            "description": "Hidden state after consuming the t-th input."
+          },
+          {
+            "symbol": "x_t",
+            "syntactic_category": "variable",
+            "semantic_role": "observation",
+            "mathematical_order": 1,
+            "description": "Input vector at step t."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "offset",
+            "mathematical_order": 1,
+            "description": "Bias vector, learned and shared across time steps."
+          },
+          {
+            "symbol": "W_h",
+            "syntactic_category": "parameter",
+            "semantic_role": "recurrent_weight",
+            "mathematical_order": 2,
+            "description": "Recurrent weight matrix, shared across time steps."
+          },
+          {
+            "symbol": "W_x",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_weight",
+            "mathematical_order": 2,
+            "description": "Input weight matrix, shared across time steps."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete time step; a scalar index over the sequence."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ACTIVATION(.)",
+            "name": "elementwise nonlinearity",
+            "input_arity": 1,
+            "codomain": "a bounded or half-bounded interval",
+            "description": "An elementwise nonlinearity, tanh in Elman's and Jordan's networks and in the original LSTM's input/output transformations, ReLU in most feedforward practice. Written as an opaque head because the identity of the nonlinearity is not what the recurrence asserts -- but see the node's significance field: writing it as a head is exactly what prevents this statement from meeting the affine family it contains."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A recurrent unit's new state is a learned affine mixture of its old state and the current input, squashed through a nonlinearity.",
+        "statistical_significance": "The corpus's clearest demonstration that a wrapper is a wall. The expression *inside* ACTIVATION is the affine family this graph is full of -- tangent-line linearization, CAPM, the Keynesian consumption function, probstat.transform.affine_location_scale -- but the node's skeleton is `?0:V = ACTIVATION⟨+(?1:P, *(?2:P, ?3:V), *(?4:P, ?5:V))⟩` and it twins with nothing at shape, typed or family level. Two independent obstacles stack, and it is worth separating them because fixing either alone changes nothing. (1) Call heads are literal at every match level, so the nonlinearity quarantines its whole argument; the same obstacle data/morphology recorded, here inside a single expression rather than between corpora. (2) Even stripped of the wrapper, the argument is *multiple* linear regression -- two regressors -- and the statistics corpus carries only the simple one-regressor form, so the arities differ. The honest reading is that this node's relationship to the affine family is real and the matcher cannot certify it; the claim sits in this prose, which is exactly the situation docs/BACKLOG.md flags as the limit on any claim that the tool *finds* structure.",
+        "regularity_conditions": [
+          "A fixed input and state dimensionality across the sequence",
+          "Parameters tied across time steps (that tying is the model, not the equation)",
+          "An initial state h_0 supplied by convention, usually zero"
+        ],
+        "failure_modes": [
+          "Iterating the map multiplies Jacobians, so gradients through long sequences vanish or explode; the equation is silent about this because the pathology is a property of the iteration, not of one step.",
+          "Reading the hidden state as 'memory' overstates it: nothing in the equation protects information across steps, which is precisely the gap ml.recurrence.lstm_gate_activation's gating was introduced to close."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "ml.recurrence.belief_state_update"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "ml.recurrence.lstm_gate_activation",
+          "ml.recurrence.linear_ssm_state_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "elman1990",
+          "bibliographic_entry": "Elman, J. L. (1990). Finding Structure in Time. Cognitive Science, 14(2), 179-211.",
+          "url": "https://doi.org/10.1207/s15516709cog1402_1"
+        },
+        {
+          "citation_key": "jordan1986",
+          "bibliographic_entry": "Jordan, M. I. (1986). Serial Order: A Parallel Distributed Processing Approach. ICS Report 8604, Institute for Cognitive Science, University of California, San Diego."
+        },
+        {
+          "citation_key": "rumelhart1986",
+          "bibliographic_entry": "Rumelhart, D. E., Hinton, G. E., Williams, R. J. (1986). Learning representations by back-propagating errors. Nature, 323(6088), 533-536.",
+          "url": "https://doi.org/10.1038/323533a0"
+        },
+        {
+          "citation_key": "goodfellow2016",
+          "bibliographic_entry": "Goodfellow, I., Bengio, Y., Courville, A. (2016). Deep Learning. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "recurrent neural network",
+        "Elman network",
+        "hidden state",
+        "affine map",
+        "nonlinearity",
+        "sequence model"
+      ]
+    },
+    {
+      "statement_id": "ml.recurrence.lstm_gate_activation",
+      "title": "LSTM Gate Activation",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "sequence_models",
+        "topic": "gating",
+        "canonical_objects": [
+          "gate vector",
+          "cell state",
+          "weight matrix"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "g_t = sigma(W_x * x_t + W_h * h_(t-1) + b)",
+        "canonical_latex": "g_t = \\sigma\\!\\left(W_x x_t + W_h h_{t-1} + b\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "forget_gate",
+            "notation_system": "ascii",
+            "expression": "f_t = sigma(W_xf * x_t + W_hf * h_(t-1) + b_f)",
+            "scope_note": "The forget gate of Gers et al. (2000); the same equation with the forget-gate parameters"
+          },
+          {
+            "form_id": "input_gate",
+            "notation_system": "ascii",
+            "expression": "i_t = sigma(W_xi * x_t + W_hi * h_(t-1) + b_i)",
+            "scope_note": "The input gate of Hochreiter and Schmidhuber (1997)"
+          },
+          {
+            "form_id": "peephole",
+            "notation_system": "ascii",
+            "expression": "g_t = sigma(W_x * x_t + W_h * h_(t-1) + W_c * c_(t-1) + b)",
+            "scope_note": "Peephole variant: the cell state joins the affine argument, adding a third regressor"
+          },
+          {
+            "form_id": "cell_update",
+            "notation_system": "ascii",
+            "expression": "c_t = f_t * c_(t-1) + i_t * ctilde_t",
+            "scope_note": "What the gates are for: the constant-error-carousel cell update they multiply"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "gated_affine_recurrence",
+        "anonymized_template": "GATE = SIGMOID(WEIGHTIN*INPUT + WEIGHTREC*HIDDEN + BIAS)",
+        "slot_schema": [
+          {
+            "slot_id": "GATE",
+            "syntactic_category": "variable",
+            "semantic_role": "gate_value"
+          },
+          {
+            "slot_id": "WEIGHTIN",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_weight"
+          },
+          {
+            "slot_id": "INPUT",
+            "syntactic_category": "variable",
+            "semantic_role": "observation"
+          },
+          {
+            "slot_id": "WEIGHTREC",
+            "syntactic_category": "parameter",
+            "semantic_role": "recurrent_weight"
+          },
+          {
+            "slot_id": "HIDDEN",
+            "syntactic_category": "variable",
+            "semantic_role": "previous_state"
+          },
+          {
+            "slot_id": "BIAS",
+            "syntactic_category": "parameter",
+            "semantic_role": "offset"
+          }
+        ],
+        "invariants": [
+          "Structurally identical to ml.recurrence.elman_rnn_hidden_state modulo the head string: the same affine argument, the same slot categories, the same arity. Only SIGMOID versus ACTIVATION differs, and that one string is enough to keep the two nodes apart at every match level.",
+          "The codomain (0,1) is load-bearing here in a way it is not for a generic activation: the output is multiplied into a memory, so it must be interpretable as a fraction retained. A ReLU here would not be a variant, it would be a different mechanism.",
+          "The bias slot is the one practitioners initialize deliberately positive for the forget gate, which starts the network in a remember-by-default regime. That is a statement about the parameter slot's initial value, not about the equation's form.",
+          "Three or four instances of this one equation, with different parameters in the same slots, constitute an LSTM cell; the cell's distinguishing feature is not this equation but what the gates multiply."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "g_t",
+            "syntactic_category": "variable",
+            "semantic_role": "gate_value",
+            "mathematical_order": 1,
+            "description": "Gate activation in (0,1), elementwise."
+          },
+          {
+            "symbol": "x_t",
+            "syntactic_category": "variable",
+            "semantic_role": "observation",
+            "mathematical_order": 1,
+            "description": "Input vector at step t."
+          },
+          {
+            "symbol": "h_t",
+            "syntactic_category": "variable",
+            "semantic_role": "previous_state",
+            "mathematical_order": 1,
+            "description": "Hidden state carried in from the previous step."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "offset",
+            "mathematical_order": 1,
+            "description": "Gate bias vector."
+          },
+          {
+            "symbol": "W_x",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_weight",
+            "mathematical_order": 2,
+            "description": "Input-to-gate weight matrix."
+          },
+          {
+            "symbol": "W_h",
+            "syntactic_category": "parameter",
+            "semantic_role": "recurrent_weight",
+            "mathematical_order": 2,
+            "description": "State-to-gate weight matrix."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete time step."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIGMOID(.)",
+            "name": "logistic function",
+            "input_arity": 1,
+            "codomain": "the open unit interval",
+            "description": "1/(1 + EXP(-x)). Used here as a *gate*: its output multiplies a memory or an input, so its codomain (0,1) is load-bearing, not incidental. A separate head from ACTIVATION on purpose, because an LSTM gate is specifically logistic while an Elman unit's nonlinearity is generic."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A gate is a logistic function of the same affine mixture a plain recurrent unit computes; its output is a per-coordinate fraction that says how much of some quantity to keep.",
+        "statistical_significance": "A controlled experiment on the matcher, run inside one corpus. This node and ml.recurrence.elman_rnn_hidden_state produce `?0:V = SIGMOID⟨+(?1:P, *(?2:P, ?3:V), *(?4:P, ?5:V))⟩` and `?0:V = ACTIVATION⟨+(?1:P, *(?2:P, ?3:V), *(?4:P, ?5:V))⟩` -- character for character the same string apart from the head -- and they do not twin at shape level, which is supposed to be the loosest level available. docs/BACKLOG.md records this obstacle from data/morphology, where four skeletons differed from existing ones by one head string across corpus boundaries; the case here is stronger, because both halves were authored by the same hand in the same file with no intent to hide the relationship, and the tool still cannot see it. Whatever head-alias mechanism the backlog eventually gets should be tested on this pair first: it is the smallest possible instance, one differing token in an otherwise identical tree.",
+        "regularity_conditions": [
+          "Elementwise application of the logistic function",
+          "Gate parameters distinct from the cell's other parameters",
+          "A supplied previous hidden state"
+        ],
+        "failure_modes": [
+          "Saturated gates have vanishing derivative, so a gate driven hard to 0 or 1 stops learning; the equation cannot express that its own trainability depends on staying off the rails.",
+          "Calling the gate 'attention' or 'a decision' reads intent into a coordinatewise scalar multiplier. It is a learned interpolation coefficient and nothing more."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.recurrence.elman_rnn_hidden_state",
+          "ml.recurrence.mlstm_matrix_memory_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hochreiter1997",
+          "bibliographic_entry": "Hochreiter, S., Schmidhuber, J. (1997). Long Short-Term Memory. Neural Computation, 9(8), 1735-1780.",
+          "url": "https://doi.org/10.1162/neco.1997.9.8.1735"
+        },
+        {
+          "citation_key": "gers2000",
+          "bibliographic_entry": "Gers, F. A., Schmidhuber, J., Cummins, F. (2000). Learning to Forget: Continual Prediction with LSTM. Neural Computation, 12(10), 2451-2471.",
+          "url": "https://doi.org/10.1162/089976600300015015"
+        },
+        {
+          "citation_key": "goodfellow2016",
+          "bibliographic_entry": "Goodfellow, I., Bengio, Y., Courville, A. (2016). Deep Learning. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "LSTM",
+        "gate",
+        "logistic",
+        "forget gate",
+        "constant error carousel",
+        "head literalism"
+      ]
+    },
+    {
+      "statement_id": "ml.recurrence.linear_ssm_state_update",
+      "title": "Linear State-Space Model State Update",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "sequence_models",
+        "topic": "state_space",
+        "canonical_objects": [
+          "state vector",
+          "transition coefficient",
+          "input sequence"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "s_(t+1) = a * s_t + b * u_t",
+        "canonical_latex": "s_{t+1} = a\\, s_t + b\\, u_t",
+        "equivalent_forms": [
+          {
+            "form_id": "matrix",
+            "notation_system": "matrix_notation",
+            "expression": "s_(t+1) = A * s_t + B * u_t",
+            "scope_note": "Full matrix form; S4D and Mamba take A diagonal, which is what makes the scalar reading above exact per channel"
+          },
+          {
+            "form_id": "continuous",
+            "notation_system": "ascii",
+            "expression": "ds/dt = A * s + B * u",
+            "scope_note": "The continuous-time system that S4 discretizes; the discrete coefficients are its zero-order hold or bilinear transform"
+          },
+          {
+            "form_id": "convolution",
+            "notation_system": "ascii",
+            "expression": "y_t = sum_k (C * A^k * B) * u_(t-k)",
+            "scope_note": "The same recurrence unrolled into a convolution with a structured kernel; the dual view that makes S4 trainable in parallel"
+          },
+          {
+            "form_id": "selective",
+            "notation_system": "ascii",
+            "expression": "s_(t+1) = a(u_t) * s_t + b(u_t) * u_t",
+            "scope_note": "Mamba's selective variant: the coefficients become functions of the input, which is the step that makes them gates"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "linear_two_term_state_recurrence",
+        "anonymized_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+        "slot_schema": [
+          {
+            "slot_id": "STATENEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_state"
+          },
+          {
+            "slot_id": "TRANSITION",
+            "syntactic_category": "parameter",
+            "semantic_role": "state_coefficient"
+          },
+          {
+            "slot_id": "STATE",
+            "syntactic_category": "variable",
+            "semantic_role": "current_state"
+          },
+          {
+            "slot_id": "INPUTGAIN",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_coefficient"
+          },
+          {
+            "slot_id": "DRIVE",
+            "syntactic_category": "variable",
+            "semantic_role": "input_signal"
+          }
+        ],
+        "invariants": [
+          "Written in the per-channel scalar form that S4D and Mamba actually use: their state matrix is diagonal, so each channel's recurrence is genuinely a scalar one and the commutative `*` of the template grammar tells no lie here. That is not true of the general matrix form, and it is not true of ml.recurrence.mlstm_matrix_memory_update.",
+          "Both coefficients are parameter-like: learned, then held fixed while the sequence is processed. This is the single property that separates a state-space model from a gated one, and it is visible in the slot categories rather than in the shape.",
+          "No nonlinearity anywhere. Linearity is what buys the convolutional form: the recurrence can be unrolled into a kernel and evaluated with an FFT, which is the entire engineering argument for the family.",
+          "Stability is a condition on the transition slot's magnitude, not a property of the equation: |a| < 1 for the discrete form. The HiPPO initialization exists to place that slot well.",
+          "Identical in form to the Kalman filter's state equation minus its process noise; the ML literature reinvented it with learned rather than physically identified coefficients."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "s_t",
+            "syntactic_category": "variable",
+            "semantic_role": "current_state",
+            "mathematical_order": 0,
+            "description": "State at step t; a scalar per channel in the diagonal form."
+          },
+          {
+            "symbol": "u_t",
+            "syntactic_category": "variable",
+            "semantic_role": "input_signal",
+            "mathematical_order": 0,
+            "description": "Input at step t."
+          },
+          {
+            "symbol": "a",
+            "syntactic_category": "parameter",
+            "semantic_role": "state_coefficient",
+            "mathematical_order": 0,
+            "description": "State transition coefficient, learned and fixed at inference."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "input_coefficient",
+            "mathematical_order": 0,
+            "description": "Input gain, learned and fixed at inference."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete time step."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The next state is a fixed linear blend of the current state and the current input: memory decays at a learned rate while new signal is injected at a learned gain.",
+        "statistical_significance": "Prediction 2, registered before running the matcher, was that this node would typed- or family-twin the noisy-affine / AR-style statistics nodes. It does not, and the reason is arity: probstat.regression.slr_stochastic_specification is `?0:V = +(?1:P, ?2:V, *(?3:P, ?4:V))` -- intercept, noise, one weighted regressor -- while this node is `?0:V = +(*(?1:P, ?2:V), *(?3:P, ?4:V))`, two weighted terms and no intercept. The prediction is not simply wrong, though: scripts/specialize.py recovers it, deriving the regression specification as the general case with the intercept bound to the additive identity and the noise slot absorbing the autoregressive term. Which is the correct relationship -- an AR(1) process is the regression of a series on its own past -- reached at the specialization level rather than the twin level.",
+        "regularity_conditions": [
+          "Time-invariant coefficients within a sequence",
+          "Diagonal (per-channel) state matrix, as in S4D and Mamba; the scalar template is exact only under that assumption",
+          "|a| < 1 for a stable discrete recurrence",
+          "A discretization step already applied if the model was specified in continuous time"
+        ],
+        "failure_modes": [
+          "Linearity is the whole computational advantage and the whole expressive limit: without input-dependent coefficients the model cannot select what to remember, which is why Mamba reintroduces them and thereby leaves this equation's typed skeleton.",
+          "The convolutional and recurrent views agree only for a linear time-invariant system; any input dependence in the coefficients voids the equivalence that the fast training path relies on.",
+          "Reading `a` as an interpretable decay rate is safe only in the diagonal parameterization; for a general A the eigenvalues, not the entries, carry that meaning."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "ml.recurrence.belief_state_update"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "ml.recurrence.elman_rnn_hidden_state",
+          "ml.recurrence.mlstm_matrix_memory_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "gu2022s4",
+          "bibliographic_entry": "Gu, A., Goel, K., Re, C. (2022). Efficiently Modeling Long Sequences with Structured State Spaces. International Conference on Learning Representations (ICLR 2022). arXiv:2111.00396.",
+          "url": "https://arxiv.org/abs/2111.00396"
+        },
+        {
+          "citation_key": "gu2022s4d",
+          "bibliographic_entry": "Gu, A., Goel, K., Gupta, A., Re, C. (2022). On the Parameterization and Initialization of Diagonal State Space Models. Advances in Neural Information Processing Systems 35 (NeurIPS 2022). arXiv:2206.11893.",
+          "url": "https://arxiv.org/abs/2206.11893"
+        },
+        {
+          "citation_key": "gu2023mamba",
+          "bibliographic_entry": "Gu, A., Dao, T. (2023). Mamba: Linear-Time Sequence Modeling with Selective State Spaces. arXiv:2312.00752.",
+          "url": "https://arxiv.org/abs/2312.00752"
+        },
+        {
+          "citation_key": "kalman1960",
+          "bibliographic_entry": "Kalman, R. E. (1960). A New Approach to Linear Filtering and Prediction Problems. Journal of Basic Engineering, 82(1), 35-45.",
+          "url": "https://doi.org/10.1115/1.3662552"
+        }
+      ],
+      "keywords": [
+        "state-space model",
+        "S4",
+        "Mamba",
+        "linear recurrence",
+        "HiPPO",
+        "Kalman",
+        "autoregression"
+      ]
+    },
+    {
+      "statement_id": "ml.recurrence.mlstm_matrix_memory_update",
+      "title": "mLSTM Matrix-Memory Covariance Update (xLSTM)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "sequence_models",
+        "topic": "associative_memory",
+        "canonical_objects": [
+          "matrix memory",
+          "key-value pair",
+          "gate"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "C_t = f_t * C_(t-1) + i_t * outer(v_t, k_t)",
+        "canonical_latex": "C_t = f_t\\, C_{t-1} + i_t\\, v_t k_t^{\\top}",
+        "equivalent_forms": [
+          {
+            "form_id": "retrieval",
+            "notation_system": "matrix_notation",
+            "expression": "htilde_t = C_t * q_t",
+            "scope_note": "What the memory is for: a query retrieves a weighted mixture of stored values"
+          },
+          {
+            "form_id": "fast_weights",
+            "notation_system": "matrix_notation",
+            "expression": "W_t = W_(t-1) + v_t * k_t^T",
+            "scope_note": "The ungated ancestor: Schlag et al.'s fast-weight programmer, equivalently the linear-attention state"
+          },
+          {
+            "form_id": "unrolled",
+            "notation_system": "ascii",
+            "expression": "C_t = sum_j (prod over l>j of f_l) * i_j * outer(v_j, k_j)",
+            "scope_note": "Unrolled: a decayed sum of rank-one writes, which is the covariance-update reading"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "gated_rank_one_memory_accumulation",
+        "anonymized_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+        "slot_schema": [
+          {
+            "slot_id": "MEMORYNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_memory"
+          },
+          {
+            "slot_id": "FORGETGATE",
+            "syntactic_category": "variable",
+            "semantic_role": "retention_coefficient"
+          },
+          {
+            "slot_id": "MEMORY",
+            "syntactic_category": "variable",
+            "semantic_role": "current_memory"
+          },
+          {
+            "slot_id": "INPUTGATE",
+            "syntactic_category": "variable",
+            "semantic_role": "write_coefficient"
+          },
+          {
+            "slot_id": "VALUE",
+            "syntactic_category": "variable",
+            "semantic_role": "stored_content"
+          },
+          {
+            "slot_id": "KEY",
+            "syntactic_category": "variable",
+            "semantic_role": "address"
+          }
+        ],
+        "invariants": [
+          "Every slot is variable-like. The two coefficients are gates computed from the current input, so unlike ml.recurrence.linear_ssm_state_update nothing here is held fixed while the sequence runs. That difference is the whole architectural argument of xLSTM against a plain linear state-space model, and it is expressed entirely in the slot categories.",
+          "The written quantity is a rank-one matrix, not a vector. OUTER is a call rather than a `*` because the canonicalizer flattens and sorts `*`, which would assert that v k^T equals k^T v -- an outer product against an inner product. The extra call node is the price of not lying, and it is one of the two reasons this node cannot twin the state-space update.",
+          "The memory is an accumulator of key-value associations, so the state is quadratic in the model width while the recurrence stays linear in sequence length. That is the trade the design is making.",
+          "Retrieval is a separate statement (see equivalent_forms): this equation only writes. Splitting write from read is what allows the chunkwise-parallel kernels in the reference implementation."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "f_t",
+            "syntactic_category": "variable",
+            "semantic_role": "retention_coefficient",
+            "mathematical_order": 0,
+            "description": "Forget gate at step t, a scalar per head in the mLSTM."
+          },
+          {
+            "symbol": "i_t",
+            "syntactic_category": "variable",
+            "semantic_role": "write_coefficient",
+            "mathematical_order": 0,
+            "description": "Input gate at step t, a scalar per head."
+          },
+          {
+            "symbol": "v_t",
+            "syntactic_category": "variable",
+            "semantic_role": "stored_content",
+            "mathematical_order": 1,
+            "description": "Value vector at step t."
+          },
+          {
+            "symbol": "k_t",
+            "syntactic_category": "variable",
+            "semantic_role": "address",
+            "mathematical_order": 1,
+            "description": "Key vector at step t."
+          },
+          {
+            "symbol": "C_t",
+            "syntactic_category": "variable",
+            "semantic_role": "next_memory",
+            "mathematical_order": 2,
+            "description": "Matrix memory after step t."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete time step."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "OUTER(left, right)",
+            "name": "rank-one outer product",
+            "input_arity": 2,
+            "codomain": "matrices",
+            "description": "The rank-one matrix v k^T built from two vectors. Written as a call rather than with `*` because the template canonicalizer flattens and SORTS `*`, which would silently assert v k^T = k^T v -- one a matrix, the other a scalar. Argument order is fixed: value (column) first, key (row) second."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A matrix memory is decayed by a forget gate and then has a fresh key-value association added to it, scaled by an input gate: a gated running covariance of the sequence.",
+        "statistical_significance": "The comparison the corpus was built to make, and it comes back negative twice over. Read informally, this equation and ml.recurrence.linear_ssm_state_update are the same statement -- state = coefficient*state + coefficient*drive -- with gates where the state-space model has learned constants. The matcher disagrees, and both of its reasons are substantive rather than notational. First, the coefficients differ in *kind*: an SSM's a and b are learned and then frozen (parameter-like), while f_t and i_t are recomputed from every token (variable-like), so the typed skeletons `?0:V = +(*(?1:P, ?2:V), *(?3:P, ?4:V))` and `?0:V = +(*(?1:V, ?2:V), *(?3:V, OUTER⟨?4:V, ?5:V⟩))` differ in their categories. Second, the drive term is not a vector but a rank-one matrix, which costs an extra call node and breaks the arity even at shape level, where categories are ignored. The honest summary is that the informal reading elides exactly the two things that distinguish the architectures, and the matcher declined to elide them.",
+        "regularity_conditions": [
+          "Scalar gates per head, as in the reference mLSTM formulation",
+          "Keys and values of matching dimensionality for the outer product",
+          "Normalization of the retrieval, omitted here, needed in practice to keep the memory's scale bounded"
+        ],
+        "failure_modes": [
+          "Without the accompanying normalizer state the memory's magnitude grows with sequence length and retrieval saturates; the write equation alone is not a complete specification.",
+          "The covariance reading suggests the memory is a statistic of the sequence, but the gates make it a *weighted* one with weights chosen by the model, so it estimates nothing in particular.",
+          "Matrix memory is quadratic in head dimension, so the constant factor that linear-in-length buys can be lost outright at realistic widths."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "ml.recurrence.belief_state_update"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "ml.recurrence.lstm_gate_activation",
+          "ml.recurrence.linear_ssm_state_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "beck2024xlstm",
+          "bibliographic_entry": "Beck, M., Poeppel, K., Spanring, M., Auer, A., Prudnikova, O., Kopp, M., Klambauer, G., Brandstetter, J., Hochreiter, S. (2024). xLSTM: Extended Long Short-Term Memory. Advances in Neural Information Processing Systems 37 (NeurIPS 2024). arXiv:2405.04517.",
+          "url": "https://arxiv.org/abs/2405.04517"
+        },
+        {
+          "citation_key": "nxai2024mlstmkernels",
+          "bibliographic_entry": "NX-AI (2024). mlstm_kernels: Tiled and chunkwise-parallel Triton/CUDA kernels for the mLSTM matrix-memory recurrence. Software repository.",
+          "url": "https://github.com/NX-AI/mlstm_kernels"
+        },
+        {
+          "citation_key": "schlag2021",
+          "bibliographic_entry": "Schlag, I., Irie, K., Schmidhuber, J. (2021). Linear Transformers Are Secretly Fast Weight Programmers. International Conference on Machine Learning (ICML 2021). arXiv:2102.11174.",
+          "url": "https://arxiv.org/abs/2102.11174"
+        },
+        {
+          "citation_key": "hochreiter1997",
+          "bibliographic_entry": "Hochreiter, S., Schmidhuber, J. (1997). Long Short-Term Memory. Neural Computation, 9(8), 1735-1780.",
+          "url": "https://doi.org/10.1162/neco.1997.9.8.1735"
+        }
+      ],
+      "keywords": [
+        "xLSTM",
+        "mLSTM",
+        "matrix memory",
+        "covariance update",
+        "fast weights",
+        "linear attention",
+        "gating"
+      ]
+    },
+    {
+      "statement_id": "ml.recurrence.belief_state_update",
+      "title": "One-Step State Update (Belief / Dialogue-State Recurrence)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "sequential_decision",
+        "topic": "state_tracking",
+        "canonical_objects": [
+          "belief state",
+          "slot-value assignment",
+          "observation"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "b_t = U(b_(t-1), o_t)",
+        "canonical_latex": "b_t = U\\!\\left(b_{t-1}, o_t\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "pomdp_belief",
+            "notation_system": "measure_theoretic",
+            "expression": "b_t(s') = eta * O(o_t | s') * sum_s T(s' | s, a) * b_(t-1)(s)",
+            "scope_note": "The POMDP belief update: the concrete U when the model is a hidden Markov decision process"
+          },
+          {
+            "form_id": "dialogue_state",
+            "notation_system": "ascii",
+            "expression": "B_t = U(B_(t-1), utterance_t)",
+            "scope_note": "Dialogue state tracking: the state is a slot-value assignment and U is the tracker"
+          },
+          {
+            "form_id": "llm_tracker",
+            "notation_system": "ascii",
+            "expression": "B_t = decode(LM(prompt(B_(t-1), utterance_t)))",
+            "scope_note": "The generative-LLM tracker of the 2024 DST literature: U is a decoder call on a prompt built from the previous state"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "opaque_binary_state_update",
+        "anonymized_template": "STATENEXT = UPDATE(STATE, OBSERVATION)",
+        "slot_schema": [
+          {
+            "slot_id": "STATENEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_state"
+          },
+          {
+            "slot_id": "STATE",
+            "syntactic_category": "variable",
+            "semantic_role": "previous_state"
+          },
+          {
+            "slot_id": "OBSERVATION",
+            "syntactic_category": "variable",
+            "semantic_role": "new_observation"
+          }
+        ],
+        "invariants": [
+          "The Markov commitment: the new state depends on the past only through the previous state. That, and not the identity of U, is the content of the statement -- and it is the one thing the template genuinely records.",
+          "U is opaque on purpose. Filling it in with an affine map plus a nonlinearity gives ml.recurrence.elman_rnn_hidden_state; with a fixed linear blend, ml.recurrence.linear_ssm_state_update; with a gated rank-one write, ml.recurrence.mlstm_matrix_memory_update; with Bayes' rule against an observation model, the POMDP belief update, which is probstat.probability.bayes_rule iterated.",
+          "Argument order is fixed as (prior state, new observation) and must stay fixed: call arguments are ordered for the matcher, and U is not symmetric in any reading.",
+          "The state space is unconstrained by the template. In dialogue state tracking it is a finite slot-value assignment; in a POMDP it is a distribution over latent states; in a neural sequence model it is a real vector. The archetype survives all three, which is the reason for having the node."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "b_t",
+            "syntactic_category": "variable",
+            "semantic_role": "next_state",
+            "mathematical_order": 1,
+            "description": "State after absorbing the t-th observation."
+          },
+          {
+            "symbol": "o_t",
+            "syntactic_category": "variable",
+            "semantic_role": "new_observation",
+            "mathematical_order": 1,
+            "description": "Observation (utterance, token, measurement) at step t."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete turn or time index."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "UPDATE(state, observation)",
+            "name": "state update operator",
+            "input_arity": 2,
+            "codomain": "the state space",
+            "description": "Opaque one-step update of a state from the previous state and a new observation: the POMDP belief update, the dialogue-state tracker's turn update, and the abstract form of every recurrence in this corpus. Argument order is fixed: prior state first, new observation second."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Tracking anything over time means carrying a state forward and revising it with each new observation.",
+        "statistical_significance": "Included to test whether the corpus can express an *archetype* rather than an equation, and the answer is: it can state one, and the matcher can do nothing with it. Dialogue state tracking and digital twin networking are the two system-level concepts this corpus was asked to cover, and neither is a single equation; what they share with every recurrence above is exactly this shape, a state revised by an observation. The skeleton `?0:V = UPDATE⟨?1:V, ?2:V⟩` is now the fifth head in the graph carrying the two-argument opaque-composition shape `?0 = HEAD⟨?1, ?2⟩`, after morphology's CONCAT and REALIZE, information theory's CAPMAX and geospatial topology's MEET (in geotop.predicates.de9im_disjoint) -- five nodes, five heads, and no two of them twin at any level. That count is the point: docs/BACKLOG.md's proposed head-alias table has been motivated three times by corpora that could not adopt an existing head truthfully, and this is the fourth. The hand-written `generalizes` edges to the three concrete recurrences below are likewise unverifiable -- specialize.py cannot bind a call head to an operator tree -- so the most useful relation in this node is one the tooling takes on trust.",
+        "regularity_conditions": [
+          "A state space fixed in advance, so that successive states are comparable objects",
+          "Markov property: the update reads only the previous state and the new observation",
+          "An initial state supplied by convention (empty slot assignment, prior belief, zero vector)"
+        ],
+        "failure_modes": [
+          "The Markov assumption is a modelling choice that dialogue routinely violates; trackers that need turn history smuggle it into the state, at which point the state is not a state but a transcript.",
+          "Digital twin networking (arXiv:2312.10631) is cited here as an instance of the same archetype -- a maintained model revised by telemetry -- and NOT as a node of its own, because the framework has no single governing equation to formalize. Writing one would have been invention, not citation.",
+          "An opaque U makes every property that matters (contractivity, information retention, calibration) unstateable; the node buys generality by giving up all of them."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "ml.recurrence.elman_rnn_hidden_state",
+          "ml.recurrence.linear_ssm_state_update",
+          "ml.recurrence.mlstm_matrix_memory_update"
+        ],
+        "composed_with": [
+          "probstat.probability.bayes_rule"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "kaelbling1998",
+          "bibliographic_entry": "Kaelbling, L. P., Littman, M. L., Cassandra, A. R. (1998). Planning and acting in partially observable stochastic domains. Artificial Intelligence, 101(1-2), 99-134.",
+          "url": "https://doi.org/10.1016/S0004-3702(98)00023-X"
+        },
+        {
+          "citation_key": "young2013",
+          "bibliographic_entry": "Young, S., Gasic, M., Thomson, B., Williams, J. D. (2013). POMDP-Based Statistical Spoken Dialog Systems: A Review. Proceedings of the IEEE, 101(5), 1160-1179.",
+          "url": "https://doi.org/10.1109/JPROC.2012.2225812"
+        },
+        {
+          "citation_key": "williams2016dstc",
+          "bibliographic_entry": "Williams, J. D., Raux, A., Henderson, M. (2016). The Dialog State Tracking Challenge Series: A Review. Dialogue & Discourse, 7(3), 4-33.",
+          "url": "https://doi.org/10.5087/dad.2016.301"
+        },
+        {
+          "citation_key": "xu2024cote",
+          "bibliographic_entry": "Xu, L., Peng, N., Zhou, D., Ng, S.-K., Fu, J. (2024). Chain of Thought Explanation for Dialogue State Tracking. arXiv:2403.04656.",
+          "url": "https://arxiv.org/abs/2403.04656"
+        },
+        {
+          "citation_key": "niu2024dst",
+          "bibliographic_entry": "Niu, C., Wang, X., Cheng, X., Song, J., Zhang, T. (2024). Enhancing Dialogue State Tracking Models through LLM-backed User-Agents Simulation. arXiv:2405.13037.",
+          "url": "https://arxiv.org/abs/2405.13037"
+        },
+        {
+          "citation_key": "hong2023llmtwin",
+          "bibliographic_entry": "Hong, Y., Wu, J., Morello, R. (2023). LLM-Twin: Mini-Giant Model-driven Beyond 5G Digital Twin Networking Framework with Semantic Secure Communication and Computation. arXiv:2312.10631.",
+          "url": "https://arxiv.org/abs/2312.10631"
+        }
+      ],
+      "keywords": [
+        "dialogue state tracking",
+        "belief update",
+        "POMDP",
+        "recurrence archetype",
+        "digital twin",
+        "head alias"
+      ]
+    },
+    {
+      "statement_id": "ml.optimization.gradient_descent_step",
+      "title": "Gradient Descent Step",
+      "statement_class": "transformation",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "optimization",
+        "topic": "first_order_methods",
+        "canonical_objects": [
+          "parameter vector",
+          "gradient",
+          "learning rate"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "theta_(k+1) = theta_k - eta * g_k",
+        "canonical_latex": "\\theta_{k+1} = \\theta_k - \\eta\\, g_k",
+        "equivalent_forms": [
+          {
+            "form_id": "full_gradient",
+            "notation_system": "ascii",
+            "expression": "theta_(k+1) = theta_k - eta * grad L(theta_k)",
+            "scope_note": "Cauchy's original: the exact gradient of the objective"
+          },
+          {
+            "form_id": "stochastic",
+            "notation_system": "ascii",
+            "expression": "theta_(k+1) = theta_k - eta_k * ghat_k",
+            "scope_note": "Robbins-Monro form: an unbiased gradient estimate and a decaying step size"
+          },
+          {
+            "form_id": "preconditioned",
+            "notation_system": "matrix_notation",
+            "expression": "theta_(k+1) = theta_k - eta * P_k * g_k",
+            "scope_note": "Adam, Newton and natural gradient all live here; they differ only in P_k"
+          },
+          {
+            "form_id": "ascent",
+            "notation_system": "ascii",
+            "expression": "theta_(k+1) = theta_k + eta * g_k",
+            "scope_note": "Gradient ascent, for objectives to be maximized; the sign convention the family match level is designed to absorb"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "state_minus_scaled_correction",
+        "anonymized_template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT",
+        "slot_schema": [
+          {
+            "slot_id": "PARAMNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "updated_parameters"
+          },
+          {
+            "slot_id": "PARAM",
+            "syntactic_category": "variable",
+            "semantic_role": "current_parameters"
+          },
+          {
+            "slot_id": "LEARNRATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "step_size"
+          },
+          {
+            "slot_id": "GRADIENT",
+            "syntactic_category": "variable",
+            "semantic_role": "descent_direction"
+          }
+        ],
+        "invariants": [
+          "The parameter vector occupies a *variable* slot on both sides. That is the honest reading -- it is the thing being changed, the state of the optimizer -- and it is exactly what keeps this node out of the affine family, whose corresponding slot is a fixed intercept.",
+          "The step size is parameter-like and its sign is a convention: descent on L is ascent on -L. The family match level absorbs that sign, which is why the family skeleton `?0:V = +(?1:V, *(?2:P, ?3:V))` no longer carries the minus.",
+          "Affine in the gradient at fixed step size, which is what makes the method's analysis tractable and what every preconditioned variant preserves: Adam, Newton and natural gradient all replace GRADIENT by a transformed direction and leave this skeleton alone.",
+          "One step only. Convergence is a statement about the iteration and its objective (convexity, smoothness, step-size schedule), none of which the template can hold."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "theta",
+            "syntactic_category": "variable",
+            "semantic_role": "current_parameters",
+            "mathematical_order": 1,
+            "description": "Parameter vector before the step."
+          },
+          {
+            "symbol": "g",
+            "syntactic_category": "variable",
+            "semantic_role": "descent_direction",
+            "mathematical_order": 1,
+            "description": "Gradient of the objective at the current parameters, or an unbiased estimate of it."
+          },
+          {
+            "symbol": "eta",
+            "syntactic_category": "parameter",
+            "semantic_role": "step_size",
+            "mathematical_order": 0,
+            "description": "Learning rate; positive, and constant within one step."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "index",
+            "semantic_role": "iteration_index",
+            "mathematical_order": 0,
+            "description": "Iteration counter."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Move the parameters a small distance in the direction that most steeply decreases the objective.",
+        "statistical_significance": "Prediction 4 was that sign absorption would place this node in the affine family, and it MISSED -- by exactly one slot category. The affine family skeleton is `?0:V = +(?1:P, *(?2:P, ?3:V))` (tangent-line linearization, CAPM, the Keynesian consumption function, probstat.transform.affine_location_scale); this node's family skeleton is `?0:V = +(?1:V, *(?2:P, ?3:V))`. The differing slot is the additive term: an affine map adds a fixed intercept, while gradient descent adds the current *state*. That is not a quibble -- it is the difference between a map and an iteration, and the matcher caught it where an informal reading ('descent is affine in the gradient') would not have. What did fire instead is more interesting: at shape level this node groups with chemistry.thermodynamics.gibbs_free_energy and helmholtz_free_energy, `?0 = +(?1, neg(*(?2, ?3)))`, and at typed level it twins ml.objective.kl_regularized_rl_objective exactly. 'Quantity minus weighted penalty' turns out to be one skeleton spanning thermodynamics, optimization and alignment.",
+        "regularity_conditions": [
+          "A differentiable objective at the current point",
+          "Positive step size, small enough for the objective's smoothness",
+          "For the stochastic form, an unbiased gradient estimate and a step-size schedule satisfying the Robbins-Monro conditions"
+        ],
+        "failure_modes": [
+          "A single step says nothing about convergence; with a step size above 2/L for an L-smooth objective the iteration diverges while every individual step remains a valid instance of this equation.",
+          "Non-convex objectives make 'the direction of steepest decrease' a local statement only, and the equation offers no warning that the point reached is a saddle.",
+          "In the stochastic form the gradient is an estimate, so the step is a random variable; treating this deterministic equation as the description of SGD hides all of its variance."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.objective.token_cross_entropy_loss",
+          "ml.objective.kl_regularized_rl_objective",
+          "ml.adaptation.lora_low_rank_update"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cauchy1847",
+          "bibliographic_entry": "Cauchy, A.-L. (1847). Methode generale pour la resolution des systemes d'equations simultanees. Comptes Rendus Hebdomadaires des Seances de l'Academie des Sciences, 25, 536-538."
+        },
+        {
+          "citation_key": "robbins1951",
+          "bibliographic_entry": "Robbins, H., Monro, S. (1951). A Stochastic Approximation Method. Annals of Mathematical Statistics, 22(3), 400-407.",
+          "url": "https://doi.org/10.1214/aoms/1177729586"
+        },
+        {
+          "citation_key": "rumelhart1986",
+          "bibliographic_entry": "Rumelhart, D. E., Hinton, G. E., Williams, R. J. (1986). Learning representations by back-propagating errors. Nature, 323(6088), 533-536.",
+          "url": "https://doi.org/10.1038/323533a0"
+        },
+        {
+          "citation_key": "kingma2015adam",
+          "bibliographic_entry": "Kingma, D. P., Ba, J. (2015). Adam: A Method for Stochastic Optimization. International Conference on Learning Representations (ICLR 2015). arXiv:1412.6980.",
+          "url": "https://arxiv.org/abs/1412.6980"
+        }
+      ],
+      "keywords": [
+        "gradient descent",
+        "SGD",
+        "learning rate",
+        "optimization",
+        "Robbins-Monro",
+        "sign absorption"
+      ]
+    },
+    {
+      "statement_id": "ml.policy.boltzmann_softmax_policy",
+      "title": "Boltzmann (Softmax) Policy",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "policy_learning",
+        "topic": "action_selection",
+        "canonical_objects": [
+          "probability distribution over tokens",
+          "logit vector",
+          "partition function"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "p_i = Z^(-1) * exp(-beta * E_i)",
+        "canonical_latex": "p_i = Z^{-1} e^{-\\beta E_i}",
+        "equivalent_forms": [
+          {
+            "form_id": "softmax_scores",
+            "notation_system": "ascii",
+            "expression": "p_i = exp(z_i / tau) / sum_j exp(z_j / tau)",
+            "scope_note": "The form written in every ML codebase; E_i = -z_i and beta = 1/tau"
+          },
+          {
+            "form_id": "boltzmann_physics",
+            "notation_system": "ascii",
+            "expression": "p_i = exp(-E_i/(kB*T)) / Z",
+            "scope_note": "The Gibbs measure; beta = 1/(kB*T) is the inverse temperature"
+          },
+          {
+            "form_id": "logit",
+            "notation_system": "ascii",
+            "expression": "log(p_i) = -beta*E_i - log(Z)",
+            "scope_note": "Log-linear form: the reason scores are called logits and the reason the normalizer is an additive constant on that scale"
+          },
+          {
+            "form_id": "rl_policy",
+            "notation_system": "ascii",
+            "expression": "pi(a) = exp(Q(a)/tau) / sum_b exp(Q(b)/tau)",
+            "scope_note": "Sutton and Barto's Boltzmann exploration policy over action values"
+          },
+          {
+            "form_id": "rlhf_optimum",
+            "notation_system": "ascii",
+            "expression": "pi*(y|x) = piref(y|x) * exp(r(x,y)/beta) / Z(x)",
+            "scope_note": "The maximizer of ml.objective.kl_regularized_rl_objective: the same measure, tilted by a reference policy"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "normalized_exponential_tilt",
+        "anonymized_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
+        "slot_schema": [
+          {
+            "slot_id": "PROBABILITY",
+            "syntactic_category": "variable",
+            "semantic_role": "outcome_probability"
+          },
+          {
+            "slot_id": "INVPARTITION",
+            "syntactic_category": "constant",
+            "semantic_role": "normalizing_prefactor"
+          },
+          {
+            "slot_id": "INVTEMPERATURE",
+            "syntactic_category": "parameter",
+            "semantic_role": "inverse_temperature"
+          },
+          {
+            "slot_id": "ENERGY",
+            "syntactic_category": "variable",
+            "semantic_role": "state_energy"
+          }
+        ],
+        "invariants": [
+          "The normalizer is a *prefactor*, not a term: it does not depend on the index the statement ranges over, which is what makes it a constant slot here even though it depends on the temperature and on the whole score vector. Writing it as Z^(-1) rather than as a division is the standard statistical-mechanics spelling and is what puts this node in the exponential family the corpus already has.",
+          "The inverse temperature is parameter-like and its sign is a convention: energies with beta > 0 and scores with beta < 0 are the same one-parameter family, which is precisely what the family match level absorbs.",
+          "Invariant to adding a constant to every energy: the shift cancels against the normalizer. Probabilities depend on energy *differences* only, which is why logits are identified up to a constant and why implementations may subtract the maximum before exponentiating.",
+          "Two limits bracket the family: beta -> infinity concentrates all mass on the lowest-energy state (greedy), beta -> 0 gives the uniform distribution (pure exploration).",
+          "Log-linear in the energy, which is the same statement as: the surprisal of an outcome is affine in its energy. That connects this node to infotheory.entropy.surprisal from the other direction."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p_i",
+            "syntactic_category": "distribution",
+            "semantic_role": "outcome_probability",
+            "mathematical_order": 0,
+            "description": "Probability assigned to outcome (token, action, microstate) i."
+          },
+          {
+            "symbol": "E_i",
+            "syntactic_category": "variable",
+            "semantic_role": "state_energy",
+            "mathematical_order": 0,
+            "description": "Energy of outcome i; the negative of its score or logit."
+          },
+          {
+            "symbol": "beta",
+            "syntactic_category": "parameter",
+            "semantic_role": "inverse_temperature",
+            "mathematical_order": 0,
+            "description": "Inverse temperature, 1/tau; controls how sharply the distribution concentrates on low-energy outcomes."
+          },
+          {
+            "symbol": "Z",
+            "syntactic_category": "constant",
+            "semantic_role": "normalizing_prefactor",
+            "mathematical_order": 0,
+            "description": "Partition function, the sum of exp(-beta*E_j) over all outcomes; constant with respect to the index i."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EXP(.)",
+            "name": "exponential",
+            "input_arity": 1,
+            "codomain": "positive reals",
+            "description": "Natural exponential. Turns the additive score scale on which models are trained into the multiplicative probability scale on which they are evaluated."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "Z",
+            "description": "Partition function: the sum of exp(-beta*E_j) over outcomes. Constant with respect to the outcome index, which is the sense in which it is a constant here; it is a function of beta and of the score vector."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The probability of an outcome falls off exponentially in its energy, at a rate set by the inverse temperature, with a constant chosen so the probabilities sum to one.",
+        "statistical_significance": "Prediction 3 was that this node would family-twin chemistry's Arrhenius factor by sign absorption. Against Arrhenius specifically it MISSED, and the reason is worth quoting: chemistry.kinetics.arrhenius_equation is `?0:V = *(?1:P, EXP⟨neg(*(?2:P, inv(*(?3:P, ?4:V))))⟩)` -- its denominator is an explicit product R*T, arity four -- while this node carries a single inverse-temperature slot, arity three. Chemistry keeps the gas constant visible; ML folds it into beta. Two spellings of one idea, and the matcher separates them. What FIRED instead is Arrhenius's sibling: this node typed-twins chemistry.kinetics.first_order_integrated_rate_law and economics.finance.present_value_continuous on `?0:V = *(?1:P, EXP⟨neg(*(?2:P, ?3:V))⟩)`, and at family level joins calculus.growth.exponential_growth_law and economics.finance.continuous_compounding as well -- a five-member, four-discipline group. The token-probability distribution of a language model, radioactive decay, discounting a cash flow and compound interest are one equation. Arrhenius is not lost either, merely demoted a level: scripts/specialize.py reports `ml.policy.boltzmann_softmax_policy >= chemistry.kinetics.arrhenius_equation` (looseness 3, via absorption+identity), the ENERGY slot absorbing the whole BARRIER/(GASCONST*TEMPERATURE) subtree and the inverse-temperature slot binding the multiplicative identity. Which is the right relationship after all -- Arrhenius is a Boltzmann factor with the energy measured in molar units -- reached at the specialization level rather than the twin level, exactly as happened to the state-space prediction. The spelling was chosen deliberately (beta rather than 1/tau, Z^(-1) rather than a division), so by docs/BACKLOG.md's proposed provenance flag this twin is `authored_to_match`, not emergent.",
+        "regularity_conditions": [
+          "A finite or countable outcome set with a summable partition function",
+          "Positive inverse temperature (a negative one reverses the preference order rather than scaling it)",
+          "Energies finite; an infinite energy is an excluded outcome by convention"
+        ],
+        "failure_modes": [
+          "Computing the normalizer requires the whole outcome set, so the equation is only cheap when that set is small; sampled softmax and noise-contrastive estimation exist because for a large vocabulary it is not.",
+          "Exponentiating raw scores overflows; the shift-invariance noted in the invariants is what implementations exploit, and forgetting it is a numerical bug rather than a modelling one.",
+          "Temperature is not a calibration: rescaling logits changes the distribution's sharpness but cannot fix a model whose energy ordering is wrong."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.objective.token_cross_entropy_loss",
+          "ml.objective.kl_regularized_rl_objective",
+          "infotheory.entropy.surprisal"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "boltzmann1877",
+          "bibliographic_entry": "Boltzmann, L. (1877). Ueber die Beziehung zwischen dem zweiten Hauptsatze der mechanischen Waermetheorie und der Wahrscheinlichkeitsrechnung. Sitzungsberichte der Kaiserlichen Akademie der Wissenschaften in Wien, 76, 373-435."
+        },
+        {
+          "citation_key": "luce1959",
+          "bibliographic_entry": "Luce, R. D. (1959). Individual Choice Behavior: A Theoretical Analysis. New York: Wiley."
+        },
+        {
+          "citation_key": "bridle1990",
+          "bibliographic_entry": "Bridle, J. S. (1990). Probabilistic Interpretation of Feedforward Classification Network Outputs, with Relationships to Statistical Pattern Recognition. In Neurocomputing: Algorithms, Architectures and Applications, NATO ASI Series F68, 227-236."
+        },
+        {
+          "citation_key": "sutton2018",
+          "bibliographic_entry": "Sutton, R. S., Barto, A. G. (2018). Reinforcement Learning: An Introduction (2nd ed.). Cambridge, MA: MIT Press."
+        },
+        {
+          "citation_key": "bengio2003",
+          "bibliographic_entry": "Bengio, Y., Ducharme, R., Vincent, P., Jauvin, C. (2003). A Neural Probabilistic Language Model. Journal of Machine Learning Research, 3, 1137-1155."
+        }
+      ],
+      "keywords": [
+        "softmax",
+        "Boltzmann distribution",
+        "temperature",
+        "logits",
+        "partition function",
+        "Gibbs measure",
+        "exploration"
+      ]
+    },
+    {
+      "statement_id": "ml.objective.token_cross_entropy_loss",
+      "title": "Token Cross-Entropy Training Loss",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "objectives",
+        "topic": "likelihood",
+        "canonical_objects": [
+          "target distribution",
+          "predicted distribution",
+          "vocabulary"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "L = -(1/N) * sum_i y_i * log(qhat_i)",
+        "canonical_latex": "\\mathcal{L} = -\\frac{1}{N}\\sum_i y_i \\log \\hat q_i",
+        "equivalent_forms": [
+          {
+            "form_id": "one_hot",
+            "notation_system": "ascii",
+            "expression": "L = -(1/N) * sum_t log(qhat(token_t))",
+            "scope_note": "With one-hot targets the inner sum collapses to the log-probability of the observed token: the standard next-token loss"
+          },
+          {
+            "form_id": "perplexity",
+            "notation_system": "ascii",
+            "expression": "PPL = exp(L)",
+            "scope_note": "Perplexity is the exponential of this loss in nats; the reporting convention, not a different quantity"
+          },
+          {
+            "form_id": "kl_decomposition",
+            "notation_system": "ascii",
+            "expression": "L = H(y) + KL(y || qhat)",
+            "scope_note": "Entropy of the data plus divergence from it; only the second term depends on the model, which is why minimizing either is the same problem"
+          },
+          {
+            "form_id": "likelihood",
+            "notation_system": "ascii",
+            "expression": "L = -(1/N) * log Pr(corpus | model)",
+            "scope_note": "Negative average log-likelihood: the loss is maximum likelihood, renamed"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "negated_scaled_cross_log",
+        "anonymized_template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
+        "slot_schema": [
+          {
+            "slot_id": "LOSS",
+            "syntactic_category": "variable",
+            "semantic_role": "objective_value"
+          },
+          {
+            "slot_id": "BATCHSCALE",
+            "syntactic_category": "constant",
+            "semantic_role": "unit_scale_constant"
+          },
+          {
+            "slot_id": "TARGET_i",
+            "syntactic_category": "variable",
+            "semantic_role": "true_weight"
+          },
+          {
+            "slot_id": "PREDICTED_i",
+            "syntactic_category": "variable",
+            "semantic_role": "model_weight"
+          }
+        ],
+        "invariants": [
+          "Two distinct distribution slots, target and prediction, where infotheory.entropy.shannon_entropy has one slot repeated. That single difference is the whole distinction between measuring your own uncertainty and paying for a model's, and the matcher keys on it directly: `LOG⟨?2:V⟩` against `LOG⟨?3:V⟩`.",
+          "The 1/N batch average occupies a constant slot and is kept explicit. In information theory the same slot carries 1/ln 2 (choosing bits) and in physics.thermodynamics.gibbs_entropy it carries kB. Folding it away, as implementations do, would break the typed twin for a reason with no mathematical content.",
+          "Linear in the target distribution, so an average over sampled positions is an unbiased estimate of the population quantity. That is why this and not KL divergence is the loss: the term KL adds does not depend on the model at all.",
+          "Bounded below by the entropy of the target distribution, with equality exactly when the model matches it. The floor is the data's irreducible uncertainty, which is why a perplexity of 1 is not a goal."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "L",
+            "syntactic_category": "statistic",
+            "semantic_role": "objective_value",
+            "mathematical_order": 0,
+            "description": "Average cross-entropy over the scored positions, in nats."
+          },
+          {
+            "symbol": "y_i",
+            "syntactic_category": "distribution",
+            "semantic_role": "true_weight",
+            "mathematical_order": 0,
+            "description": "Target probability of vocabulary entry i; one-hot in ordinary next-token training, soft under label smoothing or distillation."
+          },
+          {
+            "symbol": "qhat_i",
+            "syntactic_category": "distribution",
+            "semantic_role": "model_weight",
+            "mathematical_order": 0,
+            "description": "Model's predicted probability for vocabulary entry i; strictly positive."
+          },
+          {
+            "symbol": "N",
+            "syntactic_category": "constant",
+            "semantic_role": "count",
+            "mathematical_order": 0,
+            "description": "Number of scored positions."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over an index set",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "E",
+            "name": "expectation under the stated distribution",
+            "arity": 1,
+            "operator_family": "stochastic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LOG(.)",
+            "name": "logarithm",
+            "input_arity": 1,
+            "codomain": "extended reals",
+            "description": "Natural logarithm of a positive argument. Base is a units convention: changing it multiplies the whole expression by a constant, which is the role the BATCHSCALE slot plays in the cross-entropy node."
+          }
+        ],
+        "index_sets": [
+          {
+            "notation": "i in V",
+            "domain": "the model's token vocabulary",
+            "description": "Index running over vocabulary entries at one position; the sum is over the vocabulary, and the batch/sequence average is carried by the scale slot."
+          }
+        ],
+        "constants": [
+          {
+            "symbol": "1/N",
+            "description": "Reciprocal of the number of scored positions in the batch. Kept explicit rather than folded away because it occupies the same unit-scale slot that carries 1/ln 2 in infotheory.divergence.cross_entropy and kB in physics.thermodynamics.gibbs_entropy; dropping it would break the typed twin with information theory for a purely notational reason."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The training loss is the average surprisal the model assigns to the tokens that actually occurred.",
+        "statistical_significance": "The node that closes the loop between this corpus and data/information_theory, and it is authored to do so. Its typed skeleton `?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?3:V⟩)⟩))` is shared character for character with infotheory.divergence.cross_entropy, and the two nodes now carry reciprocal `equivalent_to` edges written into both corpora, because the claim is identity rather than resemblance: the loss minimized by every language model in production is Shannon's cross-entropy with the empirical distribution in the first argument. Two authoring decisions made the twin possible and both are declarative rather than cosmetic: keeping the 1/N average in the scale slot that information theory reserves for the base constant, and keeping the target and prediction as separate slots rather than collapsing the one-hot case. By docs/BACKLOG.md's proposed provenance flag this twin is `authored_to_match` -- it belongs with diffgeo.stokes.stokes_zero_form_case and infotheory.mutualinfo.entropy_inclusion_exclusion, not with the emergent ones, and pooling the three counts would overstate what the matcher discovered.",
+        "regularity_conditions": [
+          "Predicted probabilities strictly positive wherever the target is",
+          "Target and prediction distributions over the same vocabulary",
+          "The same logarithm base throughout an argument (nats here; perplexity conventions assume it)"
+        ],
+        "failure_modes": [
+          "A zero predicted probability on an observed token makes the loss infinite, which is why implementations clip, smooth or work in log space throughout.",
+          "The loss is an average over positions and hides its own distribution: a model can improve mean cross-entropy while getting worse on every rare token.",
+          "Cross-entropy is not a distance. It does not vanish at a perfect model -- it equals the data's entropy there -- so a nonzero training loss is not evidence of underfitting."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "infotheory.divergence.cross_entropy"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "infotheory.entropy.surprisal",
+          "ml.policy.boltzmann_softmax_policy",
+          "ml.optimization.gradient_descent_step"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "shannon1948",
+          "bibliographic_entry": "Shannon, C. E. (1948). A Mathematical Theory of Communication. Bell System Technical Journal, 27(3), 379-423 and 27(4), 623-656.",
+          "url": "https://doi.org/10.1002/j.1538-7305.1948.tb01338.x"
+        },
+        {
+          "citation_key": "good1952",
+          "bibliographic_entry": "Good, I. J. (1952). Rational Decisions. Journal of the Royal Statistical Society Series B, 14(1), 107-114."
+        },
+        {
+          "citation_key": "bridle1990",
+          "bibliographic_entry": "Bridle, J. S. (1990). Probabilistic Interpretation of Feedforward Classification Network Outputs, with Relationships to Statistical Pattern Recognition. In Neurocomputing: Algorithms, Architectures and Applications, NATO ASI Series F68, 227-236."
+        },
+        {
+          "citation_key": "bengio2003",
+          "bibliographic_entry": "Bengio, Y., Ducharme, R., Vincent, P., Jauvin, C. (2003). A Neural Probabilistic Language Model. Journal of Machine Learning Research, 3, 1137-1155."
+        },
+        {
+          "citation_key": "goodfellow2016",
+          "bibliographic_entry": "Goodfellow, I., Bengio, Y., Courville, A. (2016). Deep Learning. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "cross-entropy",
+        "log loss",
+        "perplexity",
+        "maximum likelihood",
+        "next-token prediction"
+      ]
+    },
+    {
+      "statement_id": "ml.objective.kl_regularized_rl_objective",
+      "title": "KL-Regularized Reinforcement Learning Objective",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "alignment",
+        "topic": "regularized_objectives",
+        "canonical_objects": [
+          "policy",
+          "reference policy",
+          "reward model"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "J = R - beta * D",
+        "canonical_latex": "J = \\mathbb{E}_{\\pi}[r] - \\beta\\, D_{KL}(\\pi \\,\\|\\, \\pi_{ref})",
+        "equivalent_forms": [
+          {
+            "form_id": "expanded",
+            "notation_system": "ascii",
+            "expression": "J(pi) = E_(y~pi)[r(x,y)] - beta * KL(pi(.|x) || piref(.|x))",
+            "scope_note": "The RLHF objective as written by Ziegler et al. and Ouyang et al."
+          },
+          {
+            "form_id": "per_token_penalty",
+            "notation_system": "ascii",
+            "expression": "rtilde(x,y) = r(x,y) - beta * log(pi(y|x)/piref(y|x))",
+            "scope_note": "The implementation form: the penalty folded into the reward, token by token"
+          },
+          {
+            "form_id": "optimal_policy",
+            "notation_system": "ascii",
+            "expression": "pi*(y|x) = piref(y|x) * exp(r(x,y)/beta) / Z(x)",
+            "scope_note": "The closed-form maximizer: a Boltzmann tilt of the reference policy, which is what DPO inverts"
+          },
+          {
+            "form_id": "free_energy",
+            "notation_system": "ascii",
+            "expression": "-J = F = U - T*S",
+            "scope_note": "The thermodynamic reading: beta is a temperature and the objective is (minus) a variational free energy"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "value_minus_weighted_penalty",
+        "anonymized_template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE",
+        "slot_schema": [
+          {
+            "slot_id": "OBJECTIVE",
+            "syntactic_category": "variable",
+            "semantic_role": "objective_value"
+          },
+          {
+            "slot_id": "EXPECTEDREWARD",
+            "syntactic_category": "variable",
+            "semantic_role": "utility_term"
+          },
+          {
+            "slot_id": "KLWEIGHT",
+            "syntactic_category": "parameter",
+            "semantic_role": "penalty_weight"
+          },
+          {
+            "slot_id": "DIVERGENCE",
+            "syntactic_category": "variable",
+            "semantic_role": "penalty_term"
+          }
+        ],
+        "invariants": [
+          "A scalarized two-objective problem: maximize reward, stay near the reference. The penalty weight is parameter-like and traces out the Pareto frontier as it varies, so the equation is really a family of objectives indexed by one number.",
+          "Because the penalty is a KL divergence and not an arbitrary regularizer, the maximization has a closed-form solution -- the Boltzmann tilt in the equivalent forms -- and the whole of DPO follows from inverting it. The choice of penalty is doing far more work than the shape of the objective suggests.",
+          "The penalty is non-negative and vanishes exactly at the reference policy (infotheory.divergence.gibbs_inequality), so the objective is bounded above by the best achievable reward and the reference policy is always feasible.",
+          "The direction of the divergence is fixed: KL(pi || piref), mode-seeking. Reversing it is a different objective with different optima, and nothing in this skeleton records the asymmetry -- it lives in infotheory.divergence.kl_divergence's slot reuse pattern."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "J",
+            "syntactic_category": "statistic",
+            "semantic_role": "objective_value",
+            "mathematical_order": 0,
+            "description": "Regularized objective to be maximized."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "utility_term",
+            "mathematical_order": 0,
+            "description": "Expected reward of the current policy."
+          },
+          {
+            "symbol": "D",
+            "syntactic_category": "statistic",
+            "semantic_role": "penalty_term",
+            "mathematical_order": 0,
+            "description": "KL divergence from the current policy to the reference."
+          },
+          {
+            "symbol": "beta",
+            "syntactic_category": "parameter",
+            "semantic_role": "penalty_weight",
+            "mathematical_order": 0,
+            "description": "Regularization strength; equivalently a temperature."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "E",
+            "name": "expectation under the stated distribution",
+            "arity": 1,
+            "operator_family": "stochastic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Maximize reward, but pay a price proportional to how far the policy has drifted from the model you started with.",
+        "statistical_significance": "The node where the corpus's chemistry pays off. Its shape skeleton `?0 = +(?1, neg(*(?2, ?3)))` is shared with chemistry.thermodynamics.gibbs_free_energy (G = H - T*S) and chemistry.thermodynamics.helmholtz_free_energy (A = U - T*S), and the correspondence is exact rather than decorative: this objective IS a variational free energy, its maximizer IS a Boltzmann distribution (the node ml.policy.boltzmann_softmax_policy carries), and the slot that separates it from the thermodynamic version is the one holding beta -- which in that reading *is* the temperature. The twin stops at shape rather than typed for a single reason: chemistry declares TEMPERATURE a variable, since a chemist varies it, while an alignment researcher fixes beta as a hyperparameter, so it is declared a parameter here. Both are honest about their own practice, and the one-category gap is the entire distance between the fields on this equation. At typed level the node twins ml.optimization.gradient_descent_step instead: 'quantity minus weighted penalty' and 'state minus scaled gradient' are the same skeleton, which is a fair description of what KL regularization does to a policy gradient.",
+        "regularity_conditions": [
+          "A reference policy with support covering the trained policy, else the divergence is infinite",
+          "Non-negative penalty weight; beta = 0 recovers unregularized RL",
+          "Reward defined on the same outputs the policy generates"
+        ],
+        "failure_modes": [
+          "The penalty constrains drift from the reference, not truth: a policy can satisfy it perfectly and still be optimizing a misspecified reward, which is what reward hacking looks like from inside this equation.",
+          "Estimated KL in practice is a per-token Monte Carlo estimate that can be negative for a finite sample, so the non-negativity the invariants rely on is a population statement.",
+          "Tuning beta trades alignment against capability along a frontier the equation describes but does not locate; there is no principled value and reported ones are task-specific."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "infotheory.divergence.kl_divergence",
+          "ml.policy.boltzmann_softmax_policy",
+          "ml.preference.dpo_preference_loss",
+          "ml.optimization.gradient_descent_step"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "ziegler2019",
+          "bibliographic_entry": "Ziegler, D. M., Stiennon, N., Wu, J., Brown, T. B., Radford, A., Amodei, D., Christiano, P., Irving, G. (2019). Fine-Tuning Language Models from Human Preferences. arXiv:1909.08593.",
+          "url": "https://arxiv.org/abs/1909.08593"
+        },
+        {
+          "citation_key": "stiennon2020",
+          "bibliographic_entry": "Stiennon, N., Ouyang, L., Wu, J., Ziegler, D. M., Lowe, R., Voss, C., Radford, A., Amodei, D., Christiano, P. (2020). Learning to summarize from human feedback. Advances in Neural Information Processing Systems 33 (NeurIPS 2020). arXiv:2009.01325.",
+          "url": "https://arxiv.org/abs/2009.01325"
+        },
+        {
+          "citation_key": "ouyang2022",
+          "bibliographic_entry": "Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al. (2022). Training language models to follow instructions with human feedback. Advances in Neural Information Processing Systems 35 (NeurIPS 2022). arXiv:2203.02155.",
+          "url": "https://arxiv.org/abs/2203.02155"
+        },
+        {
+          "citation_key": "levine2018",
+          "bibliographic_entry": "Levine, S. (2018). Reinforcement Learning and Control as Probabilistic Inference: Tutorial and Review. arXiv:1805.00909.",
+          "url": "https://arxiv.org/abs/1805.00909"
+        },
+        {
+          "citation_key": "todorov2007",
+          "bibliographic_entry": "Todorov, E. (2007). Linearly-solvable Markov decision problems. Advances in Neural Information Processing Systems 19 (NIPS 2006), 1369-1376."
+        }
+      ],
+      "keywords": [
+        "RLHF",
+        "KL regularization",
+        "free energy",
+        "alignment",
+        "reference policy",
+        "control as inference"
+      ]
+    },
+    {
+      "statement_id": "ml.policy.policy_probability_ratio",
+      "title": "Policy Probability Ratio (Importance Weight)",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "policy_learning",
+        "topic": "off_policy_correction",
+        "canonical_objects": [
+          "policy",
+          "action",
+          "importance weight"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "rho = pi_new / pi_old",
+        "canonical_latex": "\\rho_t(\\theta) = \\frac{\\pi_\\theta(a_t \\mid s_t)}{\\pi_{\\theta_{old}}(a_t \\mid s_t)}",
+        "equivalent_forms": [
+          {
+            "form_id": "log_form",
+            "notation_system": "ascii",
+            "expression": "log(rho) = log(pi_new) - log(pi_old)",
+            "scope_note": "The form implementations use, and the quantity DPO's loss differences are built from"
+          },
+          {
+            "form_id": "importance_sampling",
+            "notation_system": "ascii",
+            "expression": "E_(a~pi_new)[f(a)] = E_(a~pi_old)[rho * f(a)]",
+            "scope_note": "What the ratio is for: reweighting samples drawn under the old policy"
+          },
+          {
+            "form_id": "surrogate",
+            "notation_system": "ascii",
+            "expression": "L = E[rho * A]",
+            "scope_note": "The unclipped surrogate objective; PPO's contribution is what it does to this expression, not the expression itself"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "RATIO = POLICYNEW / POLICYOLD",
+        "slot_schema": [
+          {
+            "slot_id": "RATIO",
+            "syntactic_category": "variable",
+            "semantic_role": "relative_measure"
+          },
+          {
+            "slot_id": "POLICYNEW",
+            "syntactic_category": "variable",
+            "semantic_role": "numerator_measure"
+          },
+          {
+            "slot_id": "POLICYOLD",
+            "syntactic_category": "variable",
+            "semantic_role": "denominator_measure"
+          }
+        ],
+        "invariants": [
+          "Both operands are variable-like: two probabilities of the same event under two different distributions. Neither is a fixed reference constant, which is what distinguishes this from a normalization.",
+          "Equals 1 exactly when the policies agree on the sampled action, so the deviation from unity, not the value, is the signal. Every trust-region method is a statement about how far from 1 this quantity may travel.",
+          "Positive by construction, and its logarithm is the pointwise log-likelihood ratio whose expectation under the new policy is a KL divergence -- the bridge from this node to ml.objective.kl_regularized_rl_objective.",
+          "Unbounded above: a rare action under the old policy can produce an arbitrarily large weight, which is the variance problem that motivates clipping."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "rho",
+            "syntactic_category": "statistic",
+            "semantic_role": "relative_measure",
+            "mathematical_order": 0,
+            "description": "Importance weight for the sampled action."
+          },
+          {
+            "symbol": "pi_new",
+            "syntactic_category": "distribution",
+            "semantic_role": "numerator_measure",
+            "mathematical_order": 0,
+            "description": "Probability of the sampled action under the current policy."
+          },
+          {
+            "symbol": "pi_old",
+            "syntactic_category": "distribution",
+            "semantic_role": "denominator_measure",
+            "mathematical_order": 0,
+            "description": "Probability of the same action under the behaviour policy that generated the sample."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "How much more likely the updated policy is to take the action that was actually taken, relative to the policy that took it.",
+        "statistical_significance": "The most ordinary equation in the corpus and it lands in the largest cross-discipline family available. Its typed skeleton `?0:V = *(?1:V, inv(?2:V))` is shared with calculus.differentiation.average_rate_of_change, physics.kinematics.average_speed, physics.materials.mass_density, chemistry.solutions.molarity_definition and economics.microeconomics.price_elasticity_of_demand -- five disciplines, six nodes, one skeleton. Nothing was authored to make this happen; a ratio of two quantities of the same kind is a density, and the importance weight is the density of one policy with respect to another in exactly the sense that molarity is the density of solute in solvent. It is also the corpus's cleanest reminder that twin groups are cheap at the bottom of the structural hierarchy: membership in this family says the quantity is a ratio and nothing more, which is why the report should weight it far below the GRPO / z-score twin.",
+        "regularity_conditions": [
+          "Both policies assign positive probability to the sampled action",
+          "The same action and state in numerator and denominator",
+          "Samples drawn under the denominator's policy for the importance-sampling reading to be valid"
+        ],
+        "failure_modes": [
+          "Importance weights have unbounded variance when the policies diverge, so the estimator this ratio defines can be arbitrarily bad long before it looks wrong.",
+          "The ratio is per-token in language-model practice but the theory is per-trajectory; products of per-token ratios over long sequences underflow or explode, and implementations quietly differ on which they use."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.policy.ppo_clipped_surrogate",
+          "ml.preference.dpo_preference_loss",
+          "infotheory.divergence.kl_divergence"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "schulman2015trpo",
+          "bibliographic_entry": "Schulman, J., Levine, S., Moritz, P., Jordan, M. I., Abbeel, P. (2015). Trust Region Policy Optimization. International Conference on Machine Learning (ICML 2015). arXiv:1502.05477.",
+          "url": "https://arxiv.org/abs/1502.05477"
+        },
+        {
+          "citation_key": "schulman2017ppo",
+          "bibliographic_entry": "Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O. (2017). Proximal Policy Optimization Algorithms. arXiv:1707.06347.",
+          "url": "https://arxiv.org/abs/1707.06347"
+        },
+        {
+          "citation_key": "kakade2002",
+          "bibliographic_entry": "Kakade, S., Langford, J. (2002). Approximately Optimal Approximate Reinforcement Learning. International Conference on Machine Learning (ICML 2002), 267-274."
+        },
+        {
+          "citation_key": "williams1992",
+          "bibliographic_entry": "Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. Machine Learning, 8(3-4), 229-256.",
+          "url": "https://doi.org/10.1007/BF00992696"
+        }
+      ],
+      "keywords": [
+        "importance sampling",
+        "probability ratio",
+        "PPO",
+        "TRPO",
+        "off-policy",
+        "density"
+      ]
+    },
+    {
+      "statement_id": "ml.policy.ppo_clipped_surrogate",
+      "title": "PPO Clipped Surrogate Objective",
+      "statement_class": "approximation",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "policy_learning",
+        "topic": "trust_region",
+        "canonical_objects": [
+          "policy",
+          "advantage",
+          "clipping interval"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "L = MINOF(rho * A, clip(rho, 1-eps, 1+eps) * A)",
+        "canonical_latex": "L^{CLIP} = \\min\\!\\left(\\rho_t A_t,\\ \\mathrm{clip}(\\rho_t, 1-\\epsilon, 1+\\epsilon) A_t\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "expectation",
+            "notation_system": "ascii",
+            "expression": "L = E_t[min(rho_t * A_t, clip(rho_t, 1-eps, 1+eps) * A_t)]",
+            "scope_note": "Schulman et al.'s objective as published; the expectation over sampled timesteps is omitted from the template"
+          },
+          {
+            "form_id": "piecewise",
+            "notation_system": "ascii",
+            "expression": "L = rho*A if A>0 and rho<1+eps, or A<0 and rho>1-eps; else the clipped constant",
+            "scope_note": "The mechanism spelled out: the objective goes flat once the update is large in the direction the advantage favours"
+          },
+          {
+            "form_id": "trust_region",
+            "notation_system": "ascii",
+            "expression": "maximize E[rho*A] subject to KL(pi_old || pi_new) <= delta",
+            "scope_note": "TRPO's constrained problem, which this objective approximates with a first-order penalty instead of a constraint"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "clipped_pessimistic_surrogate",
+        "anonymized_template": "SURROGATE = MINOF(RATIO*ADVANTAGE, CLIPCALL(RATIO, LOWERBOUND, UPPERBOUND)*ADVANTAGE)",
+        "slot_schema": [
+          {
+            "slot_id": "SURROGATE",
+            "syntactic_category": "variable",
+            "semantic_role": "objective_value"
+          },
+          {
+            "slot_id": "RATIO",
+            "syntactic_category": "variable",
+            "semantic_role": "importance_weight"
+          },
+          {
+            "slot_id": "ADVANTAGE",
+            "syntactic_category": "variable",
+            "semantic_role": "advantage_estimate"
+          },
+          {
+            "slot_id": "LOWERBOUND",
+            "syntactic_category": "parameter",
+            "semantic_role": "clip_floor"
+          },
+          {
+            "slot_id": "UPPERBOUND",
+            "syntactic_category": "parameter",
+            "semantic_role": "clip_ceiling"
+          }
+        ],
+        "invariants": [
+          "The ratio slot occurs twice -- once bare, once inside the clamp -- and the advantage slot occurs twice, once in each branch. That double reuse is the entire mechanism: the objective compares a quantity with a clamped copy of itself and takes the pessimistic one.",
+          "MINOF is commutative in every model and the matcher cannot know it, because call arguments are ordered (docs/BACKLOG.md). The order fixed here is unclipped term first, clipped term second, and anything added later must keep it or the skeletons will not meet.",
+          "CLIPCALL is opaque, and what it hides is the whole point of the method. The clamp is the identity inside the interval and constant outside it, so the gradient of the second branch vanishes once the ratio leaves the trust region; the template records that the bounds are arguments and nothing about what happens at them. The grammar has no piecewise or conditional form, so this is the most that can honestly be written.",
+          "The bounds are symmetric around 1 in practice (1-eps, 1+eps) but are kept as two independent parameter slots, because asymmetric clipping is a live variant and nothing in the objective requires symmetry.",
+          "The minimum makes the surrogate a lower bound on the unclipped objective, which is why the method is described as pessimistic; the bound is what licenses taking several gradient steps on one batch."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "L",
+            "syntactic_category": "statistic",
+            "semantic_role": "objective_value",
+            "mathematical_order": 0,
+            "description": "Clipped surrogate objective at one sampled timestep."
+          },
+          {
+            "symbol": "rho",
+            "syntactic_category": "statistic",
+            "semantic_role": "importance_weight",
+            "mathematical_order": 0,
+            "description": "Policy probability ratio; see ml.policy.policy_probability_ratio."
+          },
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "advantage_estimate",
+            "mathematical_order": 0,
+            "description": "Advantage estimate for the sampled action."
+          },
+          {
+            "symbol": "eps",
+            "syntactic_category": "parameter",
+            "semantic_role": "clip_halfwidth",
+            "mathematical_order": 0,
+            "description": "Clipping half-width, typically 0.1 to 0.3."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MINOF(left, right)",
+            "name": "binary minimum",
+            "input_arity": 2,
+            "codomain": "reals",
+            "description": "Pointwise minimum of two expressions. Spelled as a call because the grammar has no binder and because identifiers beginning `min_` are silently parsed as prefix big-operators (docs/BACKLOG.md). Argument order is fixed: unclipped term first, clipped term second. The matcher cannot see that MINOF is commutative."
+          },
+          {
+            "notation": "CLIPCALL(value, lower, upper)",
+            "name": "interval clamp",
+            "input_arity": 3,
+            "codomain": "the closed interval [lower, upper]",
+            "description": "Clamps its first argument into the interval given by the other two. An opaque call: the grammar has no piecewise or conditional form, so the fact that the clamp is the identity on the interval and constant outside it is invisible to the matcher, and with it the entire mechanism by which PPO kills the gradient outside the trust region."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Take the smaller of the plain importance-weighted advantage and the same thing with the weight clamped near one, so that the update stops paying off once it moves the policy too far.",
+        "statistical_significance": "Where this corpus meets the grammar's ceiling, in the same way infotheory.channel.channel_capacity did. Two constructs have no form in the template language: a minimum (identifiers beginning `min_` are silently parsed as prefix big-operators, so even the natural spelling is unavailable) and a clamp (there is no piecewise or conditional syntax at all). Both are written as opaque calls, which parse cleanly and record the dependency structure while making the objective's actual mechanism -- flat gradient outside the trust region -- invisible. The cost is concrete and can be stated exactly: the node is a singleton at every match level, it cannot be compared with TRPO's constrained problem or with any other trust-region method, and the relationship to ml.policy.policy_probability_ratio (whose defined quantity fills the RATIO slot twice) is expressible only as a hand-written `composed_with` edge. Recorded rather than worked around: inventing a smooth surrogate that happened to parse would have made the node twin something and would have been a different equation.",
+        "regularity_conditions": [
+          "An advantage estimate available for the sampled action",
+          "Bounds straddling 1, so that the unclipped ratio is admissible near the old policy",
+          "Samples drawn under the old policy within the current update window"
+        ],
+        "failure_modes": [
+          "Clipping bounds the objective, not the policy update: several gradient steps on one batch can still move the policy far outside the interval the bounds name, since the clip only removes the incentive, not the ability.",
+          "The objective is not a lower bound on the true return, only on the surrogate, so its guarantees are much weaker than TRPO's monotonic-improvement statement it is often said to inherit.",
+          "With a negative advantage the two branches swap roles, and implementations that clip symmetrically without checking the sign get the pessimism backwards."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.policy.policy_probability_ratio",
+          "ml.preference.grpo_group_relative_advantage",
+          "ml.objective.kl_regularized_rl_objective"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "schulman2017ppo",
+          "bibliographic_entry": "Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O. (2017). Proximal Policy Optimization Algorithms. arXiv:1707.06347.",
+          "url": "https://arxiv.org/abs/1707.06347"
+        },
+        {
+          "citation_key": "schulman2015trpo",
+          "bibliographic_entry": "Schulman, J., Levine, S., Moritz, P., Jordan, M. I., Abbeel, P. (2015). Trust Region Policy Optimization. International Conference on Machine Learning (ICML 2015). arXiv:1502.05477.",
+          "url": "https://arxiv.org/abs/1502.05477"
+        },
+        {
+          "citation_key": "kakade2002",
+          "bibliographic_entry": "Kakade, S., Langford, J. (2002). Approximately Optimal Approximate Reinforcement Learning. International Conference on Machine Learning (ICML 2002), 267-274."
+        },
+        {
+          "citation_key": "ouyang2022",
+          "bibliographic_entry": "Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al. (2022). Training language models to follow instructions with human feedback. Advances in Neural Information Processing Systems 35 (NeurIPS 2022). arXiv:2203.02155.",
+          "url": "https://arxiv.org/abs/2203.02155"
+        }
+      ],
+      "keywords": [
+        "PPO",
+        "clipping",
+        "trust region",
+        "surrogate objective",
+        "grammar limit",
+        "opaque call"
+      ]
+    },
+    {
+      "statement_id": "ml.preference.dpo_preference_loss",
+      "title": "Direct Preference Optimization Loss",
+      "statement_class": "definition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "alignment",
+        "topic": "preference_learning",
+        "canonical_objects": [
+          "preference pair",
+          "reference policy",
+          "implicit reward"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "L = -log(sigma(beta * (d_w - d_l)))",
+        "canonical_latex": "\\mathcal{L}_{DPO} = -\\log\\sigma\\!\\left(\\beta\\left(\\log\\frac{\\pi_\\theta(y_w|x)}{\\pi_{ref}(y_w|x)} - \\log\\frac{\\pi_\\theta(y_l|x)}{\\pi_{ref}(y_l|x)}\\right)\\right)",
+        "equivalent_forms": [
+          {
+            "form_id": "expanded",
+            "notation_system": "ascii",
+            "expression": "L = -log(sigma(beta*log(pi(y_w|x)/piref(y_w|x)) - beta*log(pi(y_l|x)/piref(y_l|x))))",
+            "scope_note": "The published form: each d is a log-ratio of the trained policy to the reference on one completion"
+          },
+          {
+            "form_id": "implicit_reward",
+            "notation_system": "ascii",
+            "expression": "rhat(x,y) = beta * log(pi(y|x)/piref(y|x)) + beta*log(Z(x))",
+            "scope_note": "The reparameterization the derivation turns on: inverting the KL-regularized optimum makes the policy its own reward model"
+          },
+          {
+            "form_id": "bradley_terry",
+            "notation_system": "ascii",
+            "expression": "Pr(y_w > y_l) = sigma(rhat(x,y_w) - rhat(x,y_l))",
+            "scope_note": "Bradley-Terry: the loss is the negative log-likelihood of the observed preference under this model"
+          },
+          {
+            "form_id": "logsigmoid",
+            "notation_system": "ascii",
+            "expression": "L = -logsigmoid(beta*(d_w - d_l))",
+            "scope_note": "The numerically stable spelling used in implementations; one function, not a log of a sigmoid, to avoid underflow"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "negated_log_of_squashed_difference",
+        "anonymized_template": "LOSS = -(LOG(SIGMOID(BETA * (LOGRATIOCHOSEN - LOGRATIOREJECTED))))",
+        "slot_schema": [
+          {
+            "slot_id": "LOSS",
+            "syntactic_category": "variable",
+            "semantic_role": "objective_value"
+          },
+          {
+            "slot_id": "BETA",
+            "syntactic_category": "parameter",
+            "semantic_role": "sharpness"
+          },
+          {
+            "slot_id": "LOGRATIOCHOSEN",
+            "syntactic_category": "variable",
+            "semantic_role": "preferred_log_ratio"
+          },
+          {
+            "slot_id": "LOGRATIOREJECTED",
+            "syntactic_category": "variable",
+            "semantic_role": "rejected_log_ratio"
+          }
+        ],
+        "invariants": [
+          "The two log-ratio slots enter only through their difference, so anything added to both cancels. That is the reparameterization invariance that lets DPO dispense with the partition function Z(x) which ml.objective.kl_regularized_rl_objective's optimal policy carries -- the intractable term is common to both completions and subtracts out.",
+          "Written as LOG(SIGMOID(...)) rather than as a single LOGSIGMOID head, deliberately: the decomposition is what makes the node's relationship to infotheory.entropy.surprisal visible, since -LOG(p) with p a probability is a surprisal and SIGMOID's codomain is exactly the probabilities. Implementations use the fused form for numerical reasons only.",
+          "Beta is parameter-like and is the same beta as in the KL-regularized objective this loss is derived from; it sets how sharply a given log-ratio gap is converted into a preference probability.",
+          "The loss is the negative log-likelihood of one observed pairwise preference under a Bradley-Terry model whose latent scores are the implicit rewards. Nothing about it is specific to language: it is logistic regression on preference pairs, with the design matrix supplied by the policy itself."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "L",
+            "syntactic_category": "statistic",
+            "semantic_role": "objective_value",
+            "mathematical_order": 0,
+            "description": "Loss for one preference pair."
+          },
+          {
+            "symbol": "beta",
+            "syntactic_category": "parameter",
+            "semantic_role": "sharpness",
+            "mathematical_order": 0,
+            "description": "Inverse temperature inherited from the KL-regularized objective this loss is derived from."
+          },
+          {
+            "symbol": "d_w",
+            "syntactic_category": "variable",
+            "semantic_role": "preferred_log_ratio",
+            "mathematical_order": 0,
+            "description": "Log-ratio of trained to reference policy on the preferred completion."
+          },
+          {
+            "symbol": "d_l",
+            "syntactic_category": "variable",
+            "semantic_role": "rejected_log_ratio",
+            "mathematical_order": 0,
+            "description": "Log-ratio of trained to reference policy on the rejected completion."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LOG(.)",
+            "name": "logarithm",
+            "input_arity": 1,
+            "codomain": "extended reals",
+            "description": "Natural logarithm of a positive argument. Base is a units convention: changing it multiplies the whole expression by a constant, which is the role the BATCHSCALE slot plays in the cross-entropy node."
+          },
+          {
+            "notation": "SIGMOID(.)",
+            "name": "logistic link function",
+            "input_arity": 1,
+            "codomain": "the open unit interval",
+            "description": "1/(1 + EXP(-x)). Used here as a *link*, not a gate: it maps a latent score difference to the probability that the preferred item wins, which is the Bradley-Terry model. The same head as in ml.recurrence.lstm_gate_activation and a different job -- the corpus reuses the head deliberately, since it is one function, but the two nodes' semantics should not be read across."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Push up the policy's log-probability of the preferred completion relative to the rejected one, measured against a frozen reference, and score the result as the log-likelihood of the human's choice.",
+        "statistical_significance": "A singleton at every match level, and instructive about why. The closest thing in the graph is infotheory.entropy.surprisal, `?0:V = neg(LOG⟨?1:V⟩)`, and the reading is exact -- SIGMOID's output is the Bradley-Terry probability that the annotator prefers the chosen completion, so this loss IS the surprisal of the observed preference, and DPO is maximum likelihood on preference data. The matcher cannot see it because surprisal's argument is a bare slot while this node's is a two-level call tree, and scripts/specialize.py, which exists precisely to bind a slot to a subtree, drops the match: its filter reports only bindings that used absorption or an identity element, and this one is a plain slot binding. That is the suppression docs/BACKLOG.md already records twice from the topology corpora, hit a third time here on the relation the node most wants stated. KTO (Ethayarajh et al. 2024) and ORPO (Hong et al. 2024) belong beside this node and are cited rather than formalized: KTO's value function is a piecewise prospect-theoretic transform with a reference point, and ORPO's odds-ratio penalty is a log of a ratio of odds -- both need conditional or nested-ratio syntax the grammar does not have, and forcing either into an opaque call would have added a head and no structure.",
+        "regularity_conditions": [
+          "A pairwise preference dataset with a designated preferred completion",
+          "A frozen reference policy with positive probability on both completions",
+          "Bradley-Terry preference model, i.e. preferences depend on a latent scalar score difference only",
+          "Positive beta"
+        ],
+        "failure_modes": [
+          "Minimizing this loss can decrease the probability of the preferred completion outright, as long as the rejected one falls faster; the objective constrains the difference, not the levels.",
+          "The derivation assumes the reference policy is the KL-regularized optimum's reference and that preferences are Bradley-Terry; under noisy or intransitive human labels neither holds and the implicit reward is not identified.",
+          "Written as LOG(SIGMOID(x)) it underflows for moderately negative x; the fused logsigmoid in the equivalent forms is not an optimization but a correctness requirement in floating point."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.objective.kl_regularized_rl_objective",
+          "ml.policy.policy_probability_ratio",
+          "infotheory.entropy.surprisal"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "rafailov2023dpo",
+          "bibliographic_entry": "Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C. D., Finn, C. (2023). Direct Preference Optimization: Your Language Model is Secretly a Reward Model. Advances in Neural Information Processing Systems 36 (NeurIPS 2023). arXiv:2305.18290.",
+          "url": "https://arxiv.org/abs/2305.18290"
+        },
+        {
+          "citation_key": "bradley1952",
+          "bibliographic_entry": "Bradley, R. A., Terry, M. E. (1952). Rank Analysis of Incomplete Block Designs: I. The Method of Paired Comparisons. Biometrika, 39(3/4), 324-345.",
+          "url": "https://doi.org/10.2307/2334029"
+        },
+        {
+          "citation_key": "ziegler2019",
+          "bibliographic_entry": "Ziegler, D. M., Stiennon, N., Wu, J., Brown, T. B., Radford, A., Amodei, D., Christiano, P., Irving, G. (2019). Fine-Tuning Language Models from Human Preferences. arXiv:1909.08593.",
+          "url": "https://arxiv.org/abs/1909.08593"
+        },
+        {
+          "citation_key": "ethayarajh2024kto",
+          "bibliographic_entry": "Ethayarajh, K., Xu, W., Muennighoff, N., Jurafsky, D., Kiela, D. (2024). KTO: Model Alignment as Prospect Theoretic Optimization. International Conference on Machine Learning (ICML 2024). arXiv:2402.01306.",
+          "url": "https://arxiv.org/abs/2402.01306"
+        },
+        {
+          "citation_key": "hong2024orpo",
+          "bibliographic_entry": "Hong, J., Lee, N., Thorne, J. (2024). ORPO: Monolithic Preference Optimization without Reference Model. Conference on Empirical Methods in Natural Language Processing (EMNLP 2024). arXiv:2403.07691.",
+          "url": "https://arxiv.org/abs/2403.07691"
+        }
+      ],
+      "keywords": [
+        "DPO",
+        "preference optimization",
+        "Bradley-Terry",
+        "implicit reward",
+        "log-ratio",
+        "KTO",
+        "ORPO"
+      ]
+    },
+    {
+      "statement_id": "ml.preference.grpo_group_relative_advantage",
+      "title": "GRPO Group-Relative Advantage",
+      "statement_class": "estimator",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "alignment",
+        "topic": "advantage_estimation",
+        "canonical_objects": [
+          "reward",
+          "sampled group",
+          "advantage"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A_i = (r_i - mean(r)) / sd(r)",
+        "canonical_latex": "A_i = \\frac{r_i - \\mathrm{mean}(\\mathbf{r})}{\\mathrm{std}(\\mathbf{r})}",
+        "equivalent_forms": [
+          {
+            "form_id": "group_form",
+            "notation_system": "ascii",
+            "expression": "A_i = (r_i - (1/G)*sum_j r_j) / sqrt((1/G)*sum_j (r_j - rbar)^2)",
+            "scope_note": "Shao et al.'s definition with the group statistics written out; G is the number of sampled completions per prompt"
+          },
+          {
+            "form_id": "centered_only",
+            "notation_system": "ascii",
+            "expression": "A_i = r_i - mean(r)",
+            "scope_note": "The mean-only variant several later implementations prefer, on the grounds that dividing by the group standard deviation biases the gradient"
+          },
+          {
+            "form_id": "baseline",
+            "notation_system": "ascii",
+            "expression": "A = r - b",
+            "scope_note": "The classical variance-reduction baseline of REINFORCE; the group mean is a baseline estimated from the sample itself"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "center_scale_map",
+        "anonymized_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+        "slot_schema": [
+          {
+            "slot_id": "ADVANTAGE",
+            "syntactic_category": "variable",
+            "semantic_role": "standardized_variable"
+          },
+          {
+            "slot_id": "REWARD",
+            "syntactic_category": "variable",
+            "semantic_role": "raw_variable"
+          },
+          {
+            "slot_id": "MEANREWARD",
+            "syntactic_category": "parameter",
+            "semantic_role": "location"
+          },
+          {
+            "slot_id": "STDREWARD",
+            "syntactic_category": "parameter",
+            "semantic_role": "positive_scale"
+          }
+        ],
+        "invariants": [
+          "The location and scale slots are parameter-like: within the standardization of one group they are fixed numbers, applied identically to every member. They are also *estimated from the same group*, which makes this a studentization rather than a z-score in the strict sense -- the honest wrinkle behind the twin, recorded here rather than hidden.",
+          "The scale slot must be strictly positive, which fails exactly when the group's rewards are all equal; implementations add a small epsilon, and the degenerate case is the one where the group carries no learning signal at all.",
+          "Invariant to any affine relabelling of the reward: adding a constant to every reward or multiplying all of them leaves the advantage unchanged. That is why GRPO tolerates uncalibrated reward models, and it is the same invariance a z-score has by construction.",
+          "The advantages within a group sum to zero and have unit sample variance, so the group supplies its own baseline; no learned value network appears anywhere, which is the whole computational argument for the method.",
+          "Slot ids avoid the `sum_ prod_ lim_ max_ min_` prefixes (docs/BACKLOG.md); the natural name `MEAN_REWARD` would have been fine but `MIN_REWARD` in a sibling node would not."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A_i",
+            "syntactic_category": "statistic",
+            "semantic_role": "standardized_variable",
+            "mathematical_order": 0,
+            "description": "Advantage assigned to the i-th sampled completion."
+          },
+          {
+            "symbol": "r_i",
+            "syntactic_category": "random_variable",
+            "semantic_role": "raw_variable",
+            "mathematical_order": 0,
+            "description": "Reward of the i-th sampled completion for a given prompt."
+          },
+          {
+            "symbol": "rbar",
+            "syntactic_category": "parameter",
+            "semantic_role": "location",
+            "mathematical_order": 0,
+            "description": "Mean reward over the sampled group."
+          },
+          {
+            "symbol": "s",
+            "syntactic_category": "parameter",
+            "semantic_role": "positive_scale",
+            "mathematical_order": 0,
+            "description": "Standard deviation of the rewards over the sampled group; strictly positive."
+          },
+          {
+            "symbol": "G",
+            "syntactic_category": "constant",
+            "semantic_role": "group_size",
+            "mathematical_order": 0,
+            "description": "Number of completions sampled per prompt."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Score each sampled completion by how many group standard deviations its reward sits above the group's mean.",
+        "statistical_significance": "The flagship prediction of this corpus, registered before the matcher was run and FIRED exactly: this node and probstat.transform.z_standardization share `?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))` character for character at typed level, and no notation was adopted to arrange it -- GRPO's advantage was written the way Shao et al. write it and the statistics node was written years of corpus-time earlier for a different purpose. The claim the twin certifies is small and exact: the advantage estimator at the centre of the training recipe behind recent reasoning models is a z-score, with the population mean and standard deviation replaced by group sample statistics. Everything that follows about it follows from that -- affine invariance of the reward scale, zero-sum advantages within a group, degeneracy when the group agrees, and the known bias from estimating the scale on the same sample being standardized. It is also the one twin in this corpus that is unambiguously `emergent` rather than `authored_to_match`, which is why the report should weight it above the cross-entropy twin next door.",
+        "regularity_conditions": [
+          "Two or more sampled completions per prompt",
+          "Non-degenerate group rewards, i.e. strictly positive sample standard deviation",
+          "Rewards comparable within a group (they need not be comparable across prompts, and the standardization is what buys that)"
+        ],
+        "failure_modes": [
+          "The scale is estimated from the very sample it standardizes, so the resulting advantages are biased and the gradient is not the policy gradient of any fixed objective; the mean-only variant in the equivalent forms exists for this reason.",
+          "A group whose rewards are all equal produces a zero denominator and no signal, which for binary correctness rewards is the common case on problems that are always solved or never solved.",
+          "Standardization discards the reward's magnitude, so a group that is uniformly bad and a group that is uniformly good yield identical advantages; the method cannot express that a whole group was worthless."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.transform.z_standardization",
+          "ml.policy.ppo_clipped_surrogate",
+          "ml.objective.kl_regularized_rl_objective"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "shao2024grpo",
+          "bibliographic_entry": "Shao, Z., Wang, P., Zhu, Q., Xu, R., Song, J., Bi, X., Zhang, H., Zhang, M., Li, Y. K., Wu, Y., Guo, D. (2024). DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models. arXiv:2402.03300.",
+          "url": "https://arxiv.org/abs/2402.03300"
+        },
+        {
+          "citation_key": "deepseek2025r1",
+          "bibliographic_entry": "DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. arXiv:2501.12948.",
+          "url": "https://arxiv.org/abs/2501.12948"
+        },
+        {
+          "citation_key": "williams1992",
+          "bibliographic_entry": "Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. Machine Learning, 8(3-4), 229-256.",
+          "url": "https://doi.org/10.1007/BF00992696"
+        },
+        {
+          "citation_key": "sutton2018",
+          "bibliographic_entry": "Sutton, R. S., Barto, A. G. (2018). Reinforcement Learning: An Introduction (2nd ed.). Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "GRPO",
+        "advantage",
+        "z-score",
+        "standardization",
+        "group relative",
+        "baseline",
+        "variance reduction"
+      ]
+    },
+    {
+      "statement_id": "ml.adaptation.lora_low_rank_update",
+      "title": "LoRA Low-Rank Weight Update",
+      "statement_class": "transformation",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "machine_learning"
+        ],
+        "subfield": "adaptation",
+        "topic": "parameter_efficiency",
+        "canonical_objects": [
+          "weight matrix",
+          "adapter factors",
+          "rank budget"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "W = W0 + (alpha/r) * B * A",
+        "canonical_latex": "W = W_0 + \\frac{\\alpha}{r} B A",
+        "equivalent_forms": [
+          {
+            "form_id": "forward",
+            "notation_system": "matrix_notation",
+            "expression": "h = W0 * x + (alpha/r) * B * (A * x)",
+            "scope_note": "The form actually evaluated: the adapter is applied as two thin matrix products, never materializing the update"
+          },
+          {
+            "form_id": "delta",
+            "notation_system": "matrix_notation",
+            "expression": "dW = B * A, with rank(dW) <= r",
+            "scope_note": "The rank constraint is the whole hypothesis: adaptation lives in a low-dimensional subspace"
+          },
+          {
+            "form_id": "dora",
+            "notation_system": "matrix_notation",
+            "expression": "W = m * (W0 + B*A) / norm(W0 + B*A)",
+            "scope_note": "DoRA (Liu et al. 2024): the same update, then decomposed into magnitude and direction and rescaled"
+          },
+          {
+            "form_id": "pissa",
+            "notation_system": "matrix_notation",
+            "expression": "W = Wresidual + B*A, with B,A initialized from the principal singular vectors of W0",
+            "scope_note": "PiSSA (Meng et al. 2024): identical equation, different initialization of the same slots"
+          },
+          {
+            "form_id": "loftq",
+            "notation_system": "matrix_notation",
+            "expression": "W approx quantize(W0) + B*A, with B,A chosen to absorb the quantization error",
+            "scope_note": "LoftQ (Li et al. 2023): the frozen term is quantized and the adapter initialized to compensate"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "frozen_base_plus_scaled_factorization",
+        "anonymized_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+        "slot_schema": [
+          {
+            "slot_id": "WEIGHT",
+            "syntactic_category": "variable",
+            "semantic_role": "effective_weight"
+          },
+          {
+            "slot_id": "WEIGHTFROZEN",
+            "syntactic_category": "parameter",
+            "semantic_role": "frozen_base"
+          },
+          {
+            "slot_id": "SCALING",
+            "syntactic_category": "parameter",
+            "semantic_role": "adapter_scale"
+          },
+          {
+            "slot_id": "LOWRANKB",
+            "syntactic_category": "variable",
+            "semantic_role": "left_factor"
+          },
+          {
+            "slot_id": "LOWRANKA",
+            "syntactic_category": "variable",
+            "semantic_role": "right_factor"
+          }
+        ],
+        "invariants": [
+          "The base weight is parameter-like because it is genuinely frozen -- not merely slow-moving, but excluded from the optimizer -- while the two factors are variable-like, since they are what changes. That split is the method, and it is visible in the slot categories rather than in the shape.",
+          "The two factors are symmetric in the template and asymmetric in practice: B is initialized to zero and A to a random matrix, so the product starts at zero and the adapted model starts equal to the base. The template cannot record an initialization, so this is prose.",
+          "The rank constraint is invisible here. `LOWRANKB*LOWRANKA` says only that the update factors through a product; that the inner dimension is small is the entire hypothesis of the paper and the template has no way to say it. Compare the corpus's other missing side conditions: this is the same class of loss as the quantifiers docs/BACKLOG.md records for differential topology.",
+          "Affine in the adapter product at fixed base, and exactly linear in each factor with the other held fixed -- which is why alternating views of LoRA training are natural and why the loss is non-convex in the pair.",
+          "The scaling slot is alpha/r and is a genuine hyperparameter, kept explicit because folding it into the factors changes the effective learning rate; it is also what makes the specialization edge from the affine family fire."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "W",
+            "syntactic_category": "variable",
+            "semantic_role": "effective_weight",
+            "mathematical_order": 2,
+            "description": "Effective weight matrix used at inference."
+          },
+          {
+            "symbol": "W0",
+            "syntactic_category": "parameter",
+            "semantic_role": "frozen_base",
+            "mathematical_order": 2,
+            "description": "Pretrained weight matrix, frozen throughout adaptation."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "variable",
+            "semantic_role": "left_factor",
+            "mathematical_order": 2,
+            "description": "Left adapter factor, initialized to zero."
+          },
+          {
+            "symbol": "A",
+            "syntactic_category": "variable",
+            "semantic_role": "right_factor",
+            "mathematical_order": 2,
+            "description": "Right adapter factor, randomly initialized."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "constant",
+            "semantic_role": "adapter_rank",
+            "mathematical_order": 0,
+            "description": "Inner dimension of the factorization; the rank budget."
+          },
+          {
+            "symbol": "alpha",
+            "syntactic_category": "parameter",
+            "semantic_role": "adapter_scale",
+            "mathematical_order": 0,
+            "description": "Scaling hyperparameter; the update enters as alpha/r times the product."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Adapt a pretrained model by adding a scaled product of two thin matrices to a frozen weight, and train only those two.",
+        "statistical_significance": "Affine in the adapter, and the corpus can prove it: scripts/specialize.py derives this node from probstat.transform.affine_location_scale by absorption, the affine map's SCALE slot swallowing part of the three-factor product while SHIFT binds the frozen base. That is the correct relationship and it is one of the few in this corpus reached by machine rather than by assertion. What the structure cannot carry is the only interesting thing about the method: `?0:V = +(?1:P, *(?2:P, ?3:V, ?4:V))` says the update factors through a product, not that the inner dimension is tiny, and the low-rank hypothesis -- that fine-tuning moves weights within a subspace of dimension in the tens -- is the empirical claim the paper actually makes. DoRA, PiSSA and LoftQ are recorded as equivalent forms rather than as separate nodes for the same reason: PiSSA and LoftQ differ from this equation only in how the same slots are initialized, which the template cannot express, and DoRA's magnitude-direction rescaling needs a norm the grammar has no head for. Three papers, one skeleton, and the differences between them all live where the formalism cannot see.",
+        "regularity_conditions": [
+          "The frozen base excluded from the optimizer",
+          "Inner dimension r much smaller than the weight matrix's dimensions, which the template cannot state",
+          "Adapter product initialized to zero, so adaptation begins at the pretrained model",
+          "Compatible shapes: B is d-by-r and A is r-by-k for a d-by-k base"
+        ],
+        "failure_modes": [
+          "The rank budget is a hard ceiling on what adaptation can express; tasks that genuinely require a full-rank change fail in a way that looks like underfitting and is not.",
+          "Merging the adapter into the base is exact only for a linear layer with no intervening quantization; with a quantized base (LoftQ, QLoRA) the merged model is not the model that was trained.",
+          "alpha and r interact: changing r while holding alpha fixed changes the effective learning rate of the adapter, so reported rank ablations that do not hold alpha/r fixed are confounded."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.transform.affine_location_scale",
+          "ml.optimization.gradient_descent_step"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hu2021lora",
+          "bibliographic_entry": "Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., Chen, W. (2021). LoRA: Low-Rank Adaptation of Large Language Models. International Conference on Learning Representations (ICLR 2022). arXiv:2106.09685.",
+          "url": "https://arxiv.org/abs/2106.09685"
+        },
+        {
+          "citation_key": "aghajanyan2021",
+          "bibliographic_entry": "Aghajanyan, A., Gupta, S., Zettlemoyer, L. (2021). Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning. Annual Meeting of the Association for Computational Linguistics (ACL 2021). arXiv:2012.13255.",
+          "url": "https://arxiv.org/abs/2012.13255"
+        },
+        {
+          "citation_key": "liu2024dora",
+          "bibliographic_entry": "Liu, S.-Y., Wang, C.-Y., Yin, H., Molchanov, P., Wang, Y.-C. F., Cheng, K.-T., Chen, M.-H. (2024). DoRA: Weight-Decomposed Low-Rank Adaptation. International Conference on Machine Learning (ICML 2024). arXiv:2402.09353.",
+          "url": "https://arxiv.org/abs/2402.09353"
+        },
+        {
+          "citation_key": "meng2024pissa",
+          "bibliographic_entry": "Meng, F., Wang, Z., Zhang, M. (2024). PiSSA: Principal Singular Values and Singular Vectors Adaptation of Large Language Models. Advances in Neural Information Processing Systems 37 (NeurIPS 2024). arXiv:2404.02948.",
+          "url": "https://arxiv.org/abs/2404.02948"
+        },
+        {
+          "citation_key": "li2023loftq",
+          "bibliographic_entry": "Li, Y., Yu, Y., Liang, C., He, P., Karampatziakis, N., Chen, W., Zhao, T. (2023). LoftQ: LoRA-Fine-Tuning-Aware Quantization for Large Language Models. arXiv:2310.08659.",
+          "url": "https://arxiv.org/abs/2310.08659"
+        }
+      ],
+      "keywords": [
+        "LoRA",
+        "low-rank adaptation",
+        "parameter-efficient fine-tuning",
+        "frozen weights",
+        "DoRA",
+        "PiSSA",
+        "LoftQ"
+      ]
+    }
+  ]
+}
