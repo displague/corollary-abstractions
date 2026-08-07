@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 85,
+  "nodes_analyzed": 96,
   "typed_twin_groups": [
     {
       "skeleton": "?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
@@ -341,6 +341,72 @@
           "statement_id": "settheory.boolean_laws.double_negation",
           "discipline": "set_theory",
           "template": "NEG(NEG(SETA)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum⟨*(?2:V, LOG⟨?2:V⟩)⟩))",
+      "disciplines": [
+        "information_theory",
+        "physics"
+      ],
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.entropy.shannon_entropy",
+          "discipline": "information_theory",
+          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))"
+        },
+        {
+          "statement_id": "physics.thermodynamics.gibbs_entropy",
+          "discipline": "physics",
+          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(LOG⟨?1:V⟩)",
+      "disciplines": [
+        "chemistry",
+        "information_theory"
+      ],
+      "archetypes": [
+        "negated_logarithmic_scale"
+      ],
+      "members": [
+        {
+          "statement_id": "chemistry.acid_base.ph_definition",
+          "discipline": "chemistry",
+          "template": "PH = -LOG(ACTIVITY)"
+        },
+        {
+          "statement_id": "infotheory.entropy.surprisal",
+          "discipline": "information_theory",
+          "template": "SURPRISAL = -(LOG(WEIGHT))"
+        }
+      ]
+    },
+    {
+      "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩ = +(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
+      "disciplines": [
+        "information_theory",
+        "set_theory"
+      ],
+      "archetypes": [
+        "inclusion_exclusion_correction"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+          "discipline": "information_theory",
+          "template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))"
+        },
+        {
+          "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
+          "discipline": "set_theory",
+          "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
         }
       ]
     },
@@ -823,6 +889,72 @@
           "statement_id": "settheory.boolean_laws.double_negation",
           "discipline": "set_theory",
           "template": "NEG(NEG(SETA)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = neg(*(?1, sum⟨*(?2, LOG⟨?2⟩)⟩))",
+      "disciplines": [
+        "information_theory",
+        "physics"
+      ],
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.entropy.shannon_entropy",
+          "discipline": "information_theory",
+          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))"
+        },
+        {
+          "statement_id": "physics.thermodynamics.gibbs_entropy",
+          "discipline": "physics",
+          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = neg(LOG⟨?1⟩)",
+      "disciplines": [
+        "chemistry",
+        "information_theory"
+      ],
+      "archetypes": [
+        "negated_logarithmic_scale"
+      ],
+      "members": [
+        {
+          "statement_id": "chemistry.acid_base.ph_definition",
+          "discipline": "chemistry",
+          "template": "PH = -LOG(ACTIVITY)"
+        },
+        {
+          "statement_id": "infotheory.entropy.surprisal",
+          "discipline": "information_theory",
+          "template": "SURPRISAL = -(LOG(WEIGHT))"
+        }
+      ]
+    },
+    {
+      "skeleton": "CARD⟨JOIN⟨?0, ?1⟩⟩ = +(CARD⟨?0⟩, CARD⟨?1⟩, neg(CARD⟨MEET⟨?0, ?1⟩⟩))",
+      "disciplines": [
+        "information_theory",
+        "set_theory"
+      ],
+      "archetypes": [
+        "inclusion_exclusion_correction"
+      ],
+      "members": [
+        {
+          "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+          "discipline": "information_theory",
+          "template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))"
+        },
+        {
+          "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
+          "discipline": "set_theory",
+          "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
         }
       ]
     },
