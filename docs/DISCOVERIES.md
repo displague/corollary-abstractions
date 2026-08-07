@@ -182,3 +182,14 @@ bindings), **near-miss** (informative failure, kept deliberately).
   exactly what xLSTM added. Likewise gradient descent misses the affine
   family by one slot category: descent updates a variable, affine
   shifts by a parameter. *near-miss, load-bearing* (2026-08-07)
+
+- **Statements are now readable as constructs of named forms**
+  (derivational composition, scripts/decompose.py): 135/151 statements
+  decompose into known constituents; 117 contain a constituent that IS
+  another statement's expression side. The SSM update reads out as two
+  scaled-linear constituents (the Ohm/circumference form, recurring in
+  28 statements) joined by +; the Euler-characteristic surface formula
+  contains Hooke's law's expression side; the valuation identity's
+  constituents are the other valuation statements. Commitment #1 of the
+  concept-token design — forms as constructs of forms — is mechanical.
+  *derivational* (2026-08-07)
