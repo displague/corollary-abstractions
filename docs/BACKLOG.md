@@ -206,6 +206,54 @@ or commit history. Each item names the evidence that motivated it.
   they are the same string. Fix: let a template declare a call head associative
   (flatten only) independently of commutative (flatten and sort). CONCAT must
   never be added to `COMMUTATIVE`.
+- **`specialize.py` suppresses the plainest specializations of all.** Its
+  filter is `if match(...) and (st.used_absorption or st.used_identity)`,
+  justified in the docstring by "anything matchable without them is an exact
+  twin and already in the skeleton report". That justification is false: two
+  templates can match by *plain slot binding* and still have different
+  skeletons, so they are in neither report. The topology corpora hit it twice
+  in one seeding pass, both times on the relation the corpus most wanted:
+  - `algtop.invariants.euler_characteristic_complex`
+    (`EULERCHAR = VERTICES - EDGES + FACES`) covers
+    `geotop.polyhedra.euler_polyhedron_formula` (`VERTICES - EDGES + FACES =
+    2`) by binding `EULERCHAR -> 2`. Probed directly: `MATCHES = True,
+    used_absorption = False, used_identity = False`.
+  - `geotop.predicates.de9im_disjoint` (`MEET(REGA, REGB) = EMPTYSET`) covers
+    `settheory.boolean_laws.complement_laws` (`MEET(SETA, NEG(SETA)) =
+    FALSITY`) by binding `REGB -> NEG(SETA)`. Same probe result.
+  A slot binding a numeric literal, and a slot binding a subtree with a call
+  head, are the two commonest ways a general law becomes a special case, and
+  both are dropped. Fix: report matches whose bindings are non-trivial (any
+  slot bound to a `num`, or to a subtree of depth >= 1) even when neither
+  absorption nor identity fired, and rank them by the same looseness score.
+  Both edges are currently asserted by hand via `special_case_of` /
+  `generalizes`.
+- **Specialization noise, third confirmation.** All 16 specialization edges
+  touching the 15 topology nodes are degenerate: `betti_number_rank`
+  (`BETTI = CYCLERANK - BOUNDARYRANK`) "generalizes"
+  `settheory.cardinality.inclusion_exclusion_two_sets` because a variable slot
+  swallows a whole `CARD⟨...⟩` subtree. Zero are informative — the same
+  outcome the information-theory corpus recorded. The proposed
+  category-compatibility constraint on bindings is now supported by three
+  independent corpora and should be considered load-bearing rather than nice
+  to have.
+- **No way to declare a call head commutative, so symmetry must be a node.**
+  `geotop.predicates.adjacency_symmetry` exists only because
+  `TOUCHES(A, B)` and `TOUCHES(B, A)` are different subtrees, and the corpus
+  has no other way to say the head is symmetric. That is the same limitation
+  already recorded above for `MEET`/`JOIN`, but seen from the other side:
+  every Boolean-corpus node silently *assumes* commutativity of its head, and
+  this is the first node in `data/` that *asserts* it. If a commutative-head
+  declaration is added, this node is the test case for it.
+- **The one relation nested inside a call argument matches nothing.**
+  `geotop.measure.area_monotonicity` is
+  `IMPLIES(LEQ(REGA, REGB), CARD(REGA) <= CARD(REGB))` — an order-preservation
+  claim, with a lattice order in the premise and a numeric order in the
+  conclusion. It parses cleanly (`parse_args` calls `parse_relation`), but it
+  is the only such statement in the graph, so there is nothing to twin with.
+  Not a bug; recorded so that a future monotone-functional node (entropy is
+  monotone under coarsening, cardinality under inclusion, measure under
+  containment) is written with *this* template rather than a fresh one.
 
 ## Schema
 
