@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 96,
+  "nodes_analyzed": 106,
   "typed_twin_groups": [
     {
       "skeleton": "?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
@@ -1004,6 +1004,29 @@
     }
   ],
   "archetype_label_drift": [
+    {
+      "archetype_id": "identity_element_law",
+      "distinct_shapes": [
+        "?0 = CONCAT⟨?0, ?1⟩",
+        "?0 = MEET⟨?0, ?1⟩"
+      ],
+      "members": [
+        "logic.boolean_laws.identity_laws",
+        "morphology.wordformation.zero_morpheme_identity",
+        "settheory.boolean_laws.identity_laws"
+      ]
+    },
+    {
+      "archetype_id": "right_hand_head_projection",
+      "distinct_shapes": [
+        "CATEGORY⟨?0⟩ = CATEGORY⟨CONCAT⟨?1, ?0⟩⟩",
+        "FEAT⟨?0⟩ = FEAT⟨CONCAT⟨?1, ?0⟩⟩"
+      ],
+      "members": [
+        "morphology.derivation.category_from_affix",
+        "morphology.agreement.feature_percolation"
+      ]
+    },
     {
       "archetype_id": "scaled_quadratic",
       "distinct_shapes": [
