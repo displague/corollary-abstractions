@@ -1,0 +1,1558 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "logic.boolean_foundations.v1",
+  "discipline": "logic",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "logic.boolean_laws.de_morgan_laws",
+      "title": "De Morgan's Laws (Propositional Form)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "not(P and Q) = (not P) or (not Q)",
+        "canonical_latex": "\\lnot(P \\land Q) \\equiv \\lnot P \\lor \\lnot Q",
+        "equivalent_forms": [
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "not(P or Q) = (not P) and (not Q)",
+            "scope_note": "The dual law; the two are interderivable by double negation"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "¬(P ∧ Q) ≡ ¬P ∨ ¬Q",
+            "scope_note": "Standard connective notation"
+          },
+          {
+            "form_id": "quantifier",
+            "notation_system": "ascii",
+            "expression": "not(forall x. F(x)) = exists x. not F(x)",
+            "scope_note": "First-order form; the quantifiers are the infinitary meet and join"
+          },
+          {
+            "form_id": "nand_basis",
+            "notation_system": "ascii",
+            "expression": "P nand Q = (not P) or (not Q)",
+            "scope_note": "Reading that makes NAND functionally complete"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "de_morgan_duality",
+        "anonymized_template": "NEG(MEET(PROP1, PROP2)) = JOIN(NEG(PROP1), NEG(PROP2))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "Self-dual as a pair: swapping MEET with JOIN and TOP with BOT maps the stated form onto its dual, so one line of the pair proves the other for free.",
+          "NEG is an order-reversing bijection (an antitone involution), which is the single fact the law encodes.",
+          "Both sides are symmetric under exchanging the two operands.",
+          "Generalizes verbatim to arbitrary arities and, in a complete Boolean algebra, to infinite meets and joins."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Denying that two things hold together is exactly asserting that at least one of them fails; negation trades conjunction for disjunction and back.",
+        "statistical_significance": "The corpus's flagship cross-discipline twin. Its skeleton `JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩` is shared character for character with settheory.boolean_laws.de_morgan_laws, and unlike the exponential twins that span finance, calculus and chemistry, this one is not an analogy between unrelated subject matters: both nodes state one theorem of one Boolean algebra, read once over propositions and once over subsets. The `equivalent_to` edge between them is therefore literal, not aspirational.",
+        "regularity_conditions": [
+          "Classical two-valued semantics",
+          "Negation is an involution (see double_negation)",
+          "Connectives are truth-functional"
+        ],
+        "failure_modes": [
+          "Only one direction survives intuitionistically: not(P or Q) -> (not P) and (not Q) is constructive, while not(P and Q) -> (not P) or (not Q) is not, since it would decide which conjunct fails.",
+          "Fails in quantum logic, where the lattice of propositions is orthomodular but not distributive.",
+          "In natural language the scope of 'not' is ambiguous, so the law is routinely misapplied to sentences whose parse is not the intended one."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.distributivity_meet_over_join",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "settheory.boolean_laws.de_morgan_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "demorgan1847",
+          "bibliographic_entry": "De Morgan, A. (1847). Formal Logic: or, The Calculus of Inference, Necessary and Probable. London: Taylor and Walton."
+        },
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "De Morgan",
+        "duality",
+        "negation",
+        "Boolean lattice",
+        "propositional logic"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+      "title": "Distributivity of Conjunction over Disjunction",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P and (Q or R) = (P and Q) or (P and R)",
+        "canonical_latex": "P \\land (Q \\lor R) \\equiv (P \\land Q) \\lor (P \\land R)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "P ∧ (Q ∨ R) ≡ (P ∧ Q) ∨ (P ∧ R)"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "P or (Q and R) = (P or Q) and (P or R)",
+            "scope_note": "Disjunction over conjunction; equivalent in any lattice"
+          },
+          {
+            "form_id": "normal_form",
+            "notation_system": "ascii",
+            "expression": "any formula = or_i (and_j literal_ij)",
+            "scope_note": "Repeated application is exactly the conversion to disjunctive normal form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "meet_distributes_over_join",
+        "anonymized_template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP3",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "One operand is repeated on the right, so the law is not a rearrangement but a duplication: it is what separates distributive lattices from general ones.",
+          "Self-dual: the same statement with MEET and JOIN exchanged also holds, and in a lattice each of the two implies the other.",
+          "Fails in the smallest non-distributive lattices M3 and N5; a lattice is distributive exactly when neither embeds in it.",
+          "Symmetric in the two distributed operands but not in the distributing one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          },
+          {
+            "symbol": "R",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A third arbitrary proposition."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A conjunction with an alternative inside it can be pushed out into an alternative of conjunctions, and back.",
+        "statistical_significance": "One of Huntington's postulates, and the reason normal forms exist: DNF/CNF conversion is nothing but this law applied until it stops. Its typed twin in the set corpus is intersection over union; the exponential blow-up that makes CNF conversion expensive in SAT solving is the same duplication that makes the set form grow the number of intersection terms.",
+        "regularity_conditions": [
+          "Classical propositional semantics",
+          "The lattice of propositions is distributive"
+        ],
+        "failure_modes": [
+          "Quantum logic drops exactly this law: the lattice of closed subspaces of a Hilbert space is orthomodular, not distributive, which is Birkhoff and von Neumann's formalization of complementarity.",
+          "Naive repeated application is exponential in formula size, which is why practical CNF conversion introduces fresh variables (Tseitin) instead."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.boolean_laws.absorption",
+          "logic.boolean_laws.de_morgan_laws",
+          "logic.boolean_laws.double_negation",
+          "logic.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "settheory.boolean_laws.distributivity_meet_over_join"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "birkhoff1967",
+          "bibliographic_entry": "Birkhoff, G. (1967). Lattice Theory (3rd ed.). AMS Colloquium Publications 25. Providence: American Mathematical Society."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        }
+      ],
+      "keywords": [
+        "distributivity",
+        "normal form",
+        "Huntington postulate",
+        "distributive lattice"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.double_negation",
+      "title": "Double Negation Elimination",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "not(not P) = P",
+        "canonical_latex": "\\lnot\\lnot P \\equiv P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "¬¬P ≡ P"
+          },
+          {
+            "form_id": "introduction_only",
+            "notation_system": "ascii",
+            "expression": "P implies not(not P)",
+            "scope_note": "The half that is intuitionistically valid"
+          },
+          {
+            "form_id": "elimination_only",
+            "notation_system": "ascii",
+            "expression": "not(not P) implies P",
+            "scope_note": "The classical half; equivalent to excluded middle and to reductio"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "complement_involution",
+        "anonymized_template": "NEG(NEG(PROP1)) = PROP1",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "NEG is an involution: applying it twice is the identity map, so it is its own inverse and a bijection of the algebra onto itself.",
+          "Order-reversing, hence an anti-automorphism: it exchanges TOP with BOT and MEET with JOIN, which is the source of every duality in this corpus.",
+          "The complement of an element is unique in a distributive lattice, which is what makes the two-sided statement well posed.",
+          "Only one free element appears, twice: the law is about the operator, not about any relation between operands."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Denying a denial returns the original assertion; negation is its own inverse.",
+        "statistical_significance": "The smallest node in either corpus and one of the sharpest twins: `?0:V = NEG⟨NEG⟨?0:V⟩⟩` in logic and in set theory alike. It is also the corpus's cleanest example of a law whose *status* is discipline-dependent while its *form* is not: intuitionistically the propositional reading is exactly what fails, while the set reading survives untouched because the powerset of a set is a Boolean algebra regardless of the metatheory's logic. Same skeleton, different frontier.",
+        "regularity_conditions": [
+          "Classical (Boolean) semantics",
+          "Negation defined by the complement laws"
+        ],
+        "failure_modes": [
+          "Intuitionistic and constructive logics reject the elimination direction; assuming it is equivalent to assuming excluded middle, which is why proof assistants make `Classical.byContradiction` an explicit axiom.",
+          "In many-valued and fuzzy logics the negation need not be involutive at all."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.distributivity_meet_over_join",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [
+          "logic.inference.contraposition"
+        ],
+        "equivalent_to": [
+          "settheory.boolean_laws.double_negation"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mathlib2020",
+          "bibliographic_entry": "The mathlib Community (2020). The Lean Mathematical Library. Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381.",
+          "url": "https://doi.org/10.1145/3372885.3373824"
+        }
+      ],
+      "keywords": [
+        "double negation",
+        "involution",
+        "classical logic",
+        "intuitionism"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.absorption",
+      "title": "Absorption Law (Conjunction over Disjunction)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P and (P or Q) = P",
+        "canonical_latex": "P \\land (P \\lor Q) \\equiv P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "P ∧ (P ∨ Q) ≡ P"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "P or (P and Q) = P",
+            "scope_note": "Dual absorption"
+          },
+          {
+            "form_id": "order_form",
+            "notation_system": "ascii",
+            "expression": "P entails (P or Q)",
+            "scope_note": "The order fact absorption is an equational restatement of"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "lattice_absorption",
+        "anonymized_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "The second operand vanishes from the result entirely, so the law is a genuine simplification, not a rearrangement.",
+          "Equivalent to the order statement MEET(x, y) = x iff JOIN(x, y) = y; absorption is what ties the two operations to one partial order.",
+          "Holds in every lattice, distributive or not, and together with commutativity, associativity and idempotence it *characterizes* lattices algebraically -- the order can be recovered from the equations.",
+          "Self-dual: JOIN(x, MEET(x, y)) = x is the same law with the operations exchanged."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Adding an alternative that is already implied by P, and then requiring P as well, tells you nothing beyond P.",
+        "statistical_significance": "The law that makes the two connectives describe a single order rather than two unrelated operations, and the reason Q may be discarded outright when simplifying formulas. Its set twin `A ∩ (A ∪ B) = A` is the same equation; the skeleton `?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩` has one slot appearing three times, which is why nothing else in the corpus comes close to it structurally.",
+        "regularity_conditions": [
+          "Lattice semantics for `and`/`or`; distributivity not required"
+        ],
+        "failure_modes": [
+          "The natural-language reading invites the mistake that Q is irrelevant to the *argument*, when it is only irrelevant to the truth value.",
+          "Fails for non-idempotent 'conjunctions' such as those in linear logic or in resource-sensitive/substructural systems, where multiplicities matter."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.distributivity_meet_over_join",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "settheory.boolean_laws.absorption"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "birkhoff1967",
+          "bibliographic_entry": "Birkhoff, G. (1967). Lattice Theory (3rd ed.). AMS Colloquium Publications 25. Providence: American Mathematical Society."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "absorption",
+        "lattice",
+        "simplification",
+        "order"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.identity_laws",
+      "title": "Identity Laws (Conjunction with Truth, Disjunction with Falsity)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P and true = P",
+        "canonical_latex": "P \\land \\top \\equiv P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "P ∧ ⊤ ≡ P"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "P or false = P",
+            "scope_note": "Falsity is the identity for disjunction"
+          },
+          {
+            "form_id": "annihilators",
+            "notation_system": "ascii",
+            "expression": "P and false = false, P or true = true",
+            "scope_note": "The companion domination laws, where the constants annihilate instead"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "identity_element_law",
+        "anonymized_template": "MEET(PROP1, TRUTH) = PROP1",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "TRUTH",
+            "syntactic_category": "constant",
+            "semantic_role": "top_element"
+          }
+        ],
+        "invariants": [
+          "TOP is a two-sided identity for MEET, and dually BOT is one for JOIN; being an identity is what *defines* these two constants.",
+          "The only law here in which a constant slot (P-category) appears, which is why the typed skeleton `?0:V = MEET⟨?0:V, ?1:P⟩` differs in kind from the all-variable laws.",
+          "Identities are unique: any two elements both acting as identities for MEET are equal, so TOP is determined by the law rather than posited alongside it.",
+          "Combined with the complement laws it makes the lattice bounded and complemented, i.e. Boolean."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "true",
+            "value": true,
+            "description": "The verum: the greatest element of the propositional lattice, entailed by every formula."
+          },
+          {
+            "symbol": "false",
+            "value": false,
+            "description": "The falsum: the least element of the propositional lattice, entailing every formula."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Conjoining a tautology changes nothing, and neither does disjoining a contradiction: the constants are neutral for their own operation.",
+        "statistical_significance": "A Huntington postulate and the point where a *constant* slot first enters this corpus. That matters to the matcher: TRUTH and UNIVERSE are declared `constant`, hence parameter-like (P), so the typed skeleton `?0:V = MEET⟨?0:V, ?1:P⟩` records that the second argument is a fixed element of the algebra rather than a second free proposition. The set twin is `A ∩ U = A`, with U in the same P slot.",
+        "regularity_conditions": [
+          "The language contains the constants true and false, or definable stand-ins such as (P or not P)"
+        ],
+        "failure_modes": [
+          "In systems without truth constants the law must be stated schematically with a chosen tautology, and the choice can matter in weak metatheories.",
+          "Confusing the identity laws with the domination laws (P and false = false) is the standard slip; they are duals of each other, not the same law."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.boolean_laws.absorption",
+          "logic.boolean_laws.de_morgan_laws",
+          "logic.boolean_laws.double_negation",
+          "logic.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "identity element",
+        "tautology",
+        "neutral element",
+        "bounded lattice"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.complement_laws",
+      "title": "Complement Laws (Non-Contradiction and Excluded Middle)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P and (not P) = false",
+        "canonical_latex": "P \\land \\lnot P \\equiv \\bot",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "P ∧ ¬P ≡ ⊥"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "P or (not P) = true",
+            "scope_note": "Law of the excluded middle, the dual half"
+          },
+          {
+            "form_id": "non_contradiction",
+            "notation_system": "ascii",
+            "expression": "not(P and not P)",
+            "scope_note": "Law of non-contradiction as a theorem rather than an equation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "complement_annihilation",
+        "anonymized_template": "MEET(PROP1, NEG(PROP1)) = FALSITY",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "FALSITY",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          }
+        ],
+        "invariants": [
+          "An element and its complement meet in BOT and join in TOP; the pair of statements is what makes the bounded lattice complemented.",
+          "In a distributive lattice the complement satisfying both halves is unique, so NEG is a well-defined function rather than a relation.",
+          "The stated half fixes a constant on the right, so the typed skeleton `?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩` puts the P slot on the *result* side, unlike the identity laws where it is an argument.",
+          "Self-dual as a pair under exchanging MEET/JOIN and TOP/BOT."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "true",
+            "value": true,
+            "description": "The verum: the greatest element of the propositional lattice, entailed by every formula."
+          },
+          {
+            "symbol": "false",
+            "value": false,
+            "description": "The falsum: the least element of the propositional lattice, entailing every formula."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A proposition and its negation cannot both hold, and one of them must: negation partitions the space of cases exactly.",
+        "statistical_significance": "The postulate that makes the lattice Boolean rather than merely distributive, and the one whose two halves have very different histories: non-contradiction is accepted almost everywhere, excluded middle is the classic casualty of constructive mathematics. Structurally the two halves are one self-dual law, and its set twin `A ∩ A^c = ∅` is an exact typed match -- with the notable asymmetry that the set half corresponding to excluded middle, `A ∪ A^c = U`, is not controversial at all.",
+        "regularity_conditions": [
+          "Classical two-valued semantics",
+          "Truth constants available"
+        ],
+        "failure_modes": [
+          "Excluded middle fails intuitionistically and in topos logic; assuming it is exactly assuming double negation elimination.",
+          "Non-contradiction is dropped in paraconsistent logics, precisely so that an inconsistent theory does not entail everything.",
+          "Neither half holds in fuzzy logic under the usual min/max connectives, where P ∧ ¬P can take the value 1/2."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.boolean_laws.de_morgan_laws",
+          "logic.boolean_laws.double_negation",
+          "logic.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "settheory.boolean_laws.complement_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mathlib2020",
+          "bibliographic_entry": "The mathlib Community (2020). The Lean Mathematical Library. Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381.",
+          "url": "https://doi.org/10.1145/3372885.3373824"
+        }
+      ],
+      "keywords": [
+        "excluded middle",
+        "non-contradiction",
+        "complement",
+        "Boolean algebra"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.idempotence",
+      "title": "Idempotence of Conjunction and Disjunction",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "P and P = P",
+        "canonical_latex": "P \\land P \\equiv P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "P ∧ P ≡ P"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "P or P = P",
+            "scope_note": "Idempotence of disjunction"
+          },
+          {
+            "form_id": "contraction",
+            "notation_system": "ascii",
+            "expression": "from P, P infer P",
+            "scope_note": "The structural rule of contraction, which idempotence is the equational shadow of"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "idempotent_operation",
+        "anonymized_template": "MEET(PROP1, PROP1) = PROP1",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "A single free element occupies every position, so the law says something about the operation alone: repetition carries no information.",
+          "Self-dual: JOIN(x, x) = x is the same statement with operations exchanged.",
+          "Forced in any lattice by absorption, and derivable in a Boolean algebra from the identity, complement and distributive postulates without assuming it.",
+          "Idempotence is what makes these operations *logical* rather than arithmetic: multiplication and addition are not idempotent, which is why counting arguments need inclusion-exclusion corrections."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Asserting the same thing twice is asserting it once; repetition adds no content.",
+        "statistical_significance": "The smallest law with a free operand, and the corpus's clearest illustration of what the twin thesis does *not* claim: `?0:V = MEET⟨?0:V, ?0:V⟩` matches its set twin exactly, yet the analogous arithmetic statement x*x = x is false for all but two numbers. Structural twinning is a claim about which operations share a form, and idempotence is precisely the form that separates the lattice operations from the arithmetic ones elsewhere in data/.",
+        "regularity_conditions": [
+          "Classical propositional semantics; no distributivity needed once absorption is available"
+        ],
+        "failure_modes": [
+          "Substructural logics (linear, relevance) reject contraction, so the multiplicative conjunction there is not idempotent and this law does not hold of it.",
+          "Probabilistic readings mislead: Pr(A and A) = Pr(A) holds, but the corresponding intuition Pr(A and B) ≈ Pr(A)Pr(B) does not degrade gracefully to the repeated case."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.distributivity_meet_over_join",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "settheory.boolean_laws.idempotence"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "birkhoff1967",
+          "bibliographic_entry": "Birkhoff, G. (1967). Lattice Theory (3rd ed.). AMS Colloquium Publications 25. Providence: American Mathematical Society."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        }
+      ],
+      "keywords": [
+        "idempotence",
+        "contraction",
+        "lattice operation",
+        "repetition"
+      ]
+    },
+    {
+      "statement_id": "logic.inference.modus_ponens",
+      "title": "Modus Ponens (Rule of Detachment)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "inference_rules",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "((P implies Q) and P) implies Q",
+        "canonical_latex": "\\bigl((P \\to Q) \\land P\\bigr) \\to Q",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "((P → Q) ∧ P) → Q"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "P implies Q ; P |- Q",
+            "scope_note": "Presented as an inference rule with premises above the line"
+          },
+          {
+            "form_id": "sequent",
+            "notation_system": "ascii",
+            "expression": "Gamma |- P implies Q, Gamma |- P => Gamma |- Q",
+            "scope_note": "Sequent-calculus form; the elimination rule for implication"
+          },
+          {
+            "form_id": "lattice_order",
+            "notation_system": "ascii",
+            "expression": "if LEQ(top, implies(P,Q)) and LEQ(top, P) then LEQ(top, Q)",
+            "scope_note": "Order-theoretic reading in the Lindenbaum-Tarski algebra"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "detachment_rule",
+        "anonymized_template": "IMPLIES(MEET(IMPLIES(PROP1, PROP2), PROP1), PROP2)",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "The only inferential archetype in either corpus: the top-level node is an IMPLIES, not an equality, so the statement is a rule that licenses a move rather than an identity between two expressions.",
+          "The antecedent slot occurs twice (once inside the conditional, once alone) and the consequent slot occurs twice, so the rule is entirely determined by the reuse pattern of two operands.",
+          "Truth-preserving but not information-preserving: the conclusion is weaker than the premises, unlike every equational law here, which is reversible.",
+          "Together with a suitable axiom schema it is complete for classical propositional logic, which is why it is stated as an axiom node."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Given a conditional and its antecedent, the consequent may be asserted; this is what makes a conditional usable rather than merely true.",
+        "statistical_significance": "Deliberately the odd node out. Everything else in these two corpora is an equation between lattice expressions, which means the matcher sees a symmetric `=` at the root and can sort the two sides; modus ponens has an IMPLIES at the root and is irreversible. Its nearest structural neighbour is settheory.order.subset_transitivity, which shares the outer `IMPLIES⟨MEET⟨_, _⟩, _⟩` shell but differs inside (`IMPLIES⟨?0,?1⟩, ?0` against `LEQ⟨?0,?1⟩, LEQ⟨?1,?2⟩`), so the two do not twin. That near miss is the honest result: both are two-premise detachment rules, but only a matcher that abstracted over the premise *heads* would see it.",
+        "regularity_conditions": [
+          "A consequence relation closed under the rule",
+          "Material implication with its classical truth table, or any implication satisfying the deduction theorem"
+        ],
+        "failure_modes": [
+          "Fails for indicative conditionals in natural language under probabilistic readings (McGee's counterexamples to modus ponens for nested conditionals).",
+          "In fuzzy and many-valued logics the rule needs a graded form; chaining it degrades the truth value of the conclusion.",
+          "Affirming the consequent is the standing confusion: the rule is not symmetric and the template's asymmetric IMPLIES root records that."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "modus ponens",
+        "detachment",
+        "inference rule",
+        "implication elimination"
+      ]
+    },
+    {
+      "statement_id": "logic.inference.contraposition",
+      "title": "Contraposition (Transposition)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "inference_rules",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(P implies Q) = ((not Q) implies (not P))",
+        "canonical_latex": "(P \\to Q) \\equiv (\\lnot Q \\to \\lnot P)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(P → Q) ≡ (¬Q → ¬P)"
+          },
+          {
+            "form_id": "disjunctive",
+            "notation_system": "ascii",
+            "expression": "(P implies Q) = (not P) or Q",
+            "scope_note": "Material implication rewritten as a disjunction; contraposition is then commutativity of `or` plus double negation, which is the one-line proof"
+          },
+          {
+            "form_id": "half",
+            "notation_system": "ascii",
+            "expression": "(P implies Q) implies ((not Q) implies (not P))",
+            "scope_note": "The intuitionistically valid direction"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "contrapositive_equivalence",
+        "anonymized_template": "IMPLIES(PROP1, PROP2) = IMPLIES(NEG(PROP2), NEG(PROP1))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "Both operands appear on each side but in exchanged positions and under a negation, so the law is an order-reversal statement about IMPLIES.",
+          "An involution: applying contraposition twice returns the original conditional, which requires double negation to see.",
+          "Preserves truth in both directions, unlike the converse and the inverse, which it is routinely confused with.",
+          "Equational, hence reversible, which is why it is classed as an identity rather than a rule alongside modus ponens."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A conditional and its contrapositive say the same thing: ruling out the consequent rules out the antecedent.",
+        "statistical_significance": "The equational sibling of modus ponens, and the node that shows why NEG had to be a call head rather than the parser's arithmetic `-`. Written as `IMPLIES(NEG(PROP2), NEG(PROP1))` the negations stay visible as structure; written with a minus sign the matcher's family level would try to absorb them into a parameter, which is meaningful for a rate constant and nonsense for a truth value. The law has no set-theoretic twin here because inclusion contraposes into complements (A ⊆ B iff B^c ⊆ A^c) rather than into a conditional, a genuinely different skeleton.",
+        "regularity_conditions": [
+          "Classical semantics for implication and negation",
+          "Double negation available for the reverse direction"
+        ],
+        "failure_modes": [
+          "Only one direction is intuitionistically valid; recovering the other needs double negation elimination.",
+          "Confusion with the converse (Q implies P) and the inverse ((not P) implies (not Q)), neither of which is equivalent to the original.",
+          "Under probabilistic or default reasoning contraposition fails outright: 'birds fly' does not contrapose to 'non-flyers are non-birds'."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.double_negation"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "contraposition",
+        "transposition",
+        "implication",
+        "converse",
+        "inverse"
+      ]
+    }
+  ]
+}
