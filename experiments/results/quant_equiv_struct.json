@@ -1,0 +1,43 @@
+{
+  "task": "equiv",
+  "arm": "struct",
+  "checkpoint": "results\\equiv_struct.pt",
+  "rungs": [
+    {
+      "rung": "fp32",
+      "bytes": 3533563,
+      "test_acc": 0.742,
+      "ood_acc": 0.652
+    },
+    {
+      "rung": "fp16 (roundtrip eval)",
+      "bytes": 1776379,
+      "test_acc": 0.742,
+      "ood_acc": 0.6523333333333333
+    },
+    {
+      "rung": "int8 dynamic",
+      "bytes": 1918655,
+      "test_acc": 0.742,
+      "ood_acc": 0.652
+    },
+    {
+      "rung": "prune30 + int8",
+      "bytes": 3057531,
+      "test_acc": 0.7322,
+      "ood_acc": 0.6593333333333333
+    },
+    {
+      "rung": "prune50 + int8",
+      "bytes": 2185921,
+      "test_acc": 0.7192,
+      "ood_acc": 0.6313333333333333
+    },
+    {
+      "rung": "prune70 + int8",
+      "bytes": 1314411,
+      "test_acc": 0.6284,
+      "ood_acc": 0.6126666666666667
+    }
+  ]
+}

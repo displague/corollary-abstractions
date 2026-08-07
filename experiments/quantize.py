@@ -19,6 +19,11 @@ from pathlib import Path
 
 import torch
 
+# The TransformerEncoder fast path introspects layer.linear1.weight, which on
+# a dynamically-quantized Linear is a method, not a tensor -> AttributeError.
+# Disable the fast path so all rungs evaluate through the reference path.
+torch.backends.mha.set_fastpath_enabled(False)
+
 from tokenizers import SERIALIZERS, Vocab
 from train import PairDataset, TinyTransformer, collate, evaluate, load_jsonl
 from torch.utils.data import DataLoader

@@ -1,0 +1,43 @@
+{
+  "task": "twins",
+  "arm": "canon",
+  "checkpoint": "results\\twins_canon.pt",
+  "rungs": [
+    {
+      "rung": "fp32",
+      "bytes": 3532539,
+      "test_acc": 0.709,
+      "ood_acc": 0.5983333333333334
+    },
+    {
+      "rung": "fp16 (roundtrip eval)",
+      "bytes": 1775867,
+      "test_acc": 0.709,
+      "ood_acc": 0.5983333333333334
+    },
+    {
+      "rung": "int8 dynamic",
+      "bytes": 1917631,
+      "test_acc": 0.7092,
+      "ood_acc": 0.597
+    },
+    {
+      "rung": "prune30 + int8",
+      "bytes": 3056636,
+      "test_acc": 0.7064,
+      "ood_acc": 0.6023333333333334
+    },
+    {
+      "rung": "prune50 + int8",
+      "bytes": 2185281,
+      "test_acc": 0.7034,
+      "ood_acc": 0.5936666666666667
+    },
+    {
+      "rung": "prune70 + int8",
+      "bytes": 1314026,
+      "test_acc": 0.61,
+      "ood_acc": 0.5656666666666667
+    }
+  ]
+}
