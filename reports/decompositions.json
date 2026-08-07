@@ -3297,7 +3297,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         },
         {
           "path": [
@@ -3306,7 +3306,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         },
         {
           "path": [
@@ -3411,7 +3411,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -3480,7 +3480,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -3539,7 +3539,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         },
         {
           "path": [
@@ -3548,7 +3548,28 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.inference.ex_falso_quodlibet",
+      "template": "IMPLIES(FALSITY, PROP1)",
+      "groundedness": 0.0,
+      "constituents": []
+    },
+    {
+      "statement_id": "logic.inference.reductio_ad_absurdum",
+      "template": "IMPLIES(IMPLIES(PROP1, FALSITY), NEG(PROP1))",
+      "groundedness": 0.5,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨?0:V⟩",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -4887,7 +4908,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         },
         {
           "path": [
@@ -4896,7 +4917,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         },
         {
           "path": [
@@ -5001,7 +5022,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -5070,7 +5091,7 @@
           ],
           "skeleton": "NEG⟨?0:V⟩",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -5131,6 +5152,12 @@
           "recurs_in_n_statements": 3
         }
       ]
+    },
+    {
+      "statement_id": "settheory.order.empty_set_minimality",
+      "template": "LEQ(EMPTYSET, SETA)",
+      "groundedness": 0.0,
+      "constituents": []
     },
     {
       "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",

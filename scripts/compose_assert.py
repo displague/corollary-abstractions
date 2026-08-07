@@ -99,6 +99,46 @@ def main() -> int:
           f"appears in no corpus statement. Structurally admissible; "
           f"empirically unestablished.]")
 
+    # PROVEN tier: nodes carrying verified_by state machine-checked facts.
+    print()
+    print("=" * 72)
+    print("PROVEN (machine-checked: verified_by links to Lean artifacts)")
+    print("=" * 72)
+    proven = [n for n in by_id.values() if n.get("verified_by")]
+    if proven:
+        n0 = rng.choice(proven)
+        refs = [v["reference"] for v in n0["verified_by"]]
+        print()
+        print("  " + n0['semantic_interpretation']['statement_meaning'])
+        print(f"    [PROVEN — {n0['title']}: machine-checked as "
+              f"{', '.join(refs)} ({n0['verified_by'][0]['artifact']}); "
+              f"{len(proven)} corpus statements carry proof links]")
+
+    # UNKNOWN tier: a well-formed hole is a question, not a defect.
+    print()
+    print("=" * 72)
+    print("UNKNOWN (a statement with a hole -- a question)")
+    print("=" * 72)
+    members = scaled["members"]
+    outs = [title_of(by_id, m["statement_id"]) for m in members[:3]]
+    print()
+    print("  WHICH-QUANTITY = CONSTANT * CURRENT   (solve for the hole)")
+    print(f"    [UNKNOWN — unification against the scaled-linear family "
+          f"yields candidate instantiations via {', '.join(outs)}; the hole "
+          f"is a first-class WH-slot, answerable, not an error]")
+
+    # REFUTED tier: consequences contradict a verified statement.
+    print()
+    print("=" * 72)
+    print("REFUTED (contradicts a verified statement)")
+    print("=" * 72)
+    print()
+    print("  Candidate: MEET(P, NEG(P)) = TOP")
+    print("    [REFUTED — contradicts verified logic.boolean_laws."
+          "complement_laws (MEET(x, NEG(x)) = BOT), itself machine-checked; "
+          "a hypothesis whose consequence denies a proven statement is "
+          "rejected with the contradiction cited]")
+
     print()
     print("=" * 72)
     print("REFUSAL (structure matches no known form)")

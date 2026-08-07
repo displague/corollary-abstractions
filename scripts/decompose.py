@@ -108,8 +108,12 @@ def main() -> int:
         constituents = []
         n_considered = 0
         n_grounded = 0
+        atomic = not any(path for path, _ in subterms(t))
         for path, sub in subterms(t):
-            if not path:  # the whole side; skip self-description
+            # Atomic statements (single call over leaves) are graded by their
+            # root -- otherwise they fall off the ladder entirely (falsum
+            # agent's finding: ex falso had no groundedness rung at all).
+            if not path and not atomic:
                 continue
             skel = skeleton(sub, cls)
             named = sorted(set(side_forms.get(skel, [])) - {n.statement_id})
