@@ -45,3 +45,6 @@ experiments/data/
 experiments/data_smoke/
 experiments/results/*.pt
 experiments/*.log
+
+# Real corpus samples (licensed downloads, user-provided; never commit)
+experiments/data_real/

@@ -1,0 +1,24 @@
+{
+  "wiki-en": {
+    "file": "C:\\Users\\displ\\Documents\\corollary-abstractions\\experiments\\data_real\\wiki-en-wlp\\wordLemPoS.txt",
+    "alpha_tokens": 1634792,
+    "distinct_words": 69290,
+    "distinct_lemmas": 59051,
+    "mean_forms_per_lemma": 1.21,
+    "lemmas_with_multiple_forms": 8499,
+    "max_forms_one_lemma": 13,
+    "ambiguous_words": 2166,
+    "ambiguous_word_rate": 0.0313
+  },
+  "wiki-es": {
+    "file": "C:\\Users\\displ\\Documents\\corollary-abstractions\\experiments\\data_real\\wiki-es-wlp\\wordLemPoS.txt",
+    "alpha_tokens": 1953824,
+    "distinct_words": 85577,
+    "distinct_lemmas": 55522,
+    "mean_forms_per_lemma": 1.649,
+    "lemmas_with_multiple_forms": 12738,
+    "max_forms_one_lemma": 331,
+    "ambiguous_words": 5655,
+    "ambiguous_word_rate": 0.0661
+  }
+}
