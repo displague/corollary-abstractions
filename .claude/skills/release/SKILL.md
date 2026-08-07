@@ -26,18 +26,38 @@ shipped without its notes file.
 .venv/Scripts/python.exe scripts/measure_compression.py --write-report reports/compression.json
 ```
 
-## 2. Update the living docs (each one, every release)
+## 2. The document lifecycle (roadmap -> release notes -> next roadmap)
+
+The version's roadmap is the release notes' starting point, and releasing
+rotates the documents:
+
+1. **Start from `docs/ROADMAP-vX.Y.md`.** For each planned item, determine
+   its outcome from ANALYSIS.md / DISCOVERIES.md / commit history:
+   *shipped* (with numbers), *partial* (what landed, what didn't), or
+   *not started*.
+2. **Write `docs/RELEASE-vX.Y.Z.md` from that triage.** Shipped and
+   partial items become the release narrative — measured results, honest
+   limits, plain language first. Add anything significant that shipped
+   *outside* the roadmap. Completed BACKLOG items that shipped this cycle
+   move INTO this doc's record (a "resolved this release" list).
+3. **Create `docs/ROADMAP-v<next>.md`.** Migrate every not-started and
+   unfinished-half item there; seed it with the newly queued direction.
+   Nothing planned is silently dropped — it either ships (release doc),
+   carries (next roadmap), or is deliberately parked (BACKLOG, with the
+   reason).
+4. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
+   now live in the release doc); keep or migrate the rest; confirm new
+   friction from the cycle is filed.
+5. The old roadmap file stays in place as the historical plan-of-record —
+   do not delete it; the release doc references it.
+
+## 2b. The other living docs (each one, every release)
 
 - **README.md** — corpus counts (nodes/disciplines/cross-discipline
   markers), any new headline demonstration, results table if the suite
   grew. The README leads with what a newcomer can run.
-- **docs/RELEASE-vX.Y.Z.md** — NEW file, the release notes: what changed
-  since the previous release doc, measured results with numbers, honest
-  limits carried forward. Plain language first; skeletons second.
 - **docs/DISCOVERIES.md** — confirm all findings since the last release
   are parked (grep recent commits for twin/discovery language).
-- **docs/BACKLOG.md** — prune items that shipped; confirm new friction is
-  filed.
 - **experiments/ANALYSIS.md** — confirm every experiment since last
   release is recorded with its numbers.
 
