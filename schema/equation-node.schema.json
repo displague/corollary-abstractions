@@ -48,7 +48,8 @@
         "derived",
         "assumed",
         "asymptotic",
-        "empirical"
+        "empirical",
+        "conjectured"
       ]
     },
     "theory_context": {
@@ -260,6 +261,30 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "verified_by": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "system",
+          "artifact"
+        ],
+        "properties": {
+          "system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "$defs": {

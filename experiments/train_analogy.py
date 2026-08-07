@@ -63,9 +63,16 @@ class AnalogyDataset(Dataset):
             acts = [BOS] + [G + p + 1 for p in r["target_positions"]] + [EOS]
             if len(acts) > max_tgt:
                 continue
+            # tree coords for the target prefix: position of token t is fully
+            # determined by the bracket structure of tokens < t (computable
+            # at inference from the emitted prefix)
+            tpaths = tree_paths(r["target_tokens"])
+            tcoords = [[0] * MAX_LEVELS] + tpaths  # BOS at origin; step t
+            tcoords = tcoords[: len(acts) - 1 + 1]
             self.items.append((torch.tensor(ids, dtype=torch.long),
                                torch.tensor(coords, dtype=torch.long),
                                torch.tensor(acts, dtype=torch.long),
+                               torch.tensor(tcoords, dtype=torch.long),
                                r["target_tokens"]))
 
     def __len__(self):
@@ -76,19 +83,21 @@ class AnalogyDataset(Dataset):
 
 
 def collate(batch):
-    seqs, coords, acts, tgts = zip(*batch)
+    seqs, coords, acts, tcoords, tgts = zip(*batch)
     max_len = max(len(s) for s in seqs)
     max_t = max(len(a) for a in acts)
     x = torch.zeros(len(seqs), max_len, dtype=torch.long)
     crd = torch.zeros(len(seqs), max_len, 1 + MAX_LEVELS, dtype=torch.long)
     mask = torch.zeros(len(seqs), max_len, dtype=torch.bool)
     y = torch.zeros(len(seqs), max_t, dtype=torch.long)
-    for i, (s, c, a) in enumerate(zip(seqs, coords, acts)):
+    tc = torch.zeros(len(seqs), max_t, MAX_LEVELS, dtype=torch.long)
+    for i, (s, c, a, t) in enumerate(zip(seqs, coords, acts, tcoords)):
         x[i, : len(s)] = s
         crd[i, : len(c)] = c
         mask[i, : len(s)] = True
         y[i, : len(a)] = a
-    return x, crd, mask, y, tgts
+        tc[i, : len(t)] = t
+    return x, crd, mask, y, tc, tgts
 
 
 class AnalogyPointer(nn.Module):
@@ -107,6 +116,7 @@ class AnalogyPointer(nn.Module):
         self.act_embed = nn.Embedding(len(GEN_TOKENS), d_model)
         self.copy_proj = nn.Linear(d_model, d_model)
         self.tgt_pos = nn.Embedding(max_tgt, d_model)
+        self.tgt_path_emb = self.path_emb  # tied: path-match becomes dot-product-visible
         dec_layer = nn.TransformerDecoderLayer(
             d_model, n_heads, dim_feedforward=4 * d_model, dropout=0.1,
             batch_first=True, norm_first=True)
@@ -133,10 +143,15 @@ class AnalogyPointer(nn.Module):
                          pos.unsqueeze(-1).expand(-1, -1, memory.size(-1))))
         return torch.where(is_copy.unsqueeze(-1), copy_part, gen_part)
 
-    def decode(self, memory, mem_mask, y_in):
+    def decode(self, memory, mem_mask, y_in, tgt_coords=None):
         h = self.step_embed(y_in, memory)
-        pos = torch.arange(y_in.size(1), device=y_in.device).unsqueeze(0)
-        h = h + self.tgt_pos(pos)
+        if tgt_coords is None:
+            pos = torch.arange(y_in.size(1), device=y_in.device).unsqueeze(0)
+            h = h + self.tgt_pos(pos)
+        else:
+            emb = self.tgt_path_emb(tgt_coords + self.level_offsets)
+            emb = emb * (tgt_coords > 0).unsqueeze(-1)
+            h = h + emb.sum(dim=-2)
         causal = nn.Transformer.generate_square_subsequent_mask(
             y_in.size(1), device=y_in.device)
         h = self.decoder(h, memory, tgt_mask=causal,
@@ -154,20 +169,34 @@ def greedy_exact(model, loader, device, max_tgt: int, itos) -> float:
     G = len(GEN_TOKENS)
     correct = total = 0
     with torch.no_grad():
-        for x, crd, mask, y, tgts in loader:
+        for x, crd, mask, y, tc, tgts in loader:
             x, crd, mask = x.to(device), crd.to(device), mask.to(device)
             memory = model.encode(x, crd, mask)
             B = x.size(0)
             out = torch.full((B, 1), BOS, dtype=torch.long, device=device)
             done = torch.zeros(B, dtype=torch.bool, device=device)
+            xs = x.cpu()
+            # incremental target tree-coords from the emitted prefixes
+            emitted: list[list[str]] = [[] for _ in range(B)]
+            G = len(GEN_TOKENS)
             for _ in range(max_tgt - 1):
-                logits = model.decode(memory, mask, out)
+                tc_step = torch.zeros(B, out.size(1), MAX_LEVELS,
+                                      dtype=torch.long, device=device)
+                for i in range(B):
+                    paths = tree_paths(emitted[i])
+                    rows = [[0] * MAX_LEVELS] + paths
+                    for j, row in enumerate(rows[: out.size(1)]):
+                        tc_step[i, j] = torch.tensor(row, device=device)
+                logits = model.decode(memory, mask, out, tc_step)
                 nxt = logits[:, -1].argmax(-1, keepdim=True)
                 out = torch.cat([out, nxt], dim=1)
+                for i in range(B):
+                    a = int(nxt[i, 0])
+                    if a >= G and not bool(done[i]):
+                        emitted[i].append(itos[int(xs[i, a - G])])
                 done |= nxt.squeeze(1) == EOS
                 if done.all():
                     break
-            xs = x.cpu()
             for i in range(B):
                 acts = out[i].tolist()[1:]
                 if EOS in acts:
@@ -230,12 +259,13 @@ def main() -> None:
     for epoch in range(args.epochs):
         model.train()
         running = 0.0
-        for x, crd, mask, y, _ in loaders["train"]:
-            x, crd, mask, y = (x.to(device), crd.to(device), mask.to(device),
-                               y.to(device))
+        for x, crd, mask, y, tc, _ in loaders["train"]:
+            x, crd, mask, y, tc = (x.to(device), crd.to(device),
+                                   mask.to(device), y.to(device),
+                                   tc.to(device))
             opt.zero_grad()
             memory = model.encode(x, crd, mask)
-            logits = model.decode(memory, mask, y[:, :-1])
+            logits = model.decode(memory, mask, y[:, :-1], tc[:, : y.size(1) - 1])
             loss = loss_fn(logits.reshape(-1, logits.size(-1)),
                            y[:, 1:].reshape(-1))
             loss.backward()

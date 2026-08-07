@@ -106,13 +106,19 @@ def main() -> int:
             continue
         cls = classes[n.statement_id]
         constituents = []
+        n_considered = 0
+        n_grounded = 0
         for path, sub in subterms(t):
             if not path:  # the whole side; skip self-description
                 continue
             skel = skeleton(sub, cls)
             named = sorted(set(side_forms.get(skel, [])) - {n.statement_id})
             hosts = subterm_hosts.get(skel, set())
-            if not named and len(hosts) < args.min_family:
+            n_considered += 1
+            grounded = bool(named) or len(hosts) >= args.min_family
+            if grounded:
+                n_grounded += 1
+            if not grounded:
                 continue
             constituents.append({
                 "path": list(path),
@@ -120,19 +126,31 @@ def main() -> int:
                 "instance_of_statements": named[:8],
                 "recurs_in_n_statements": len(hosts),
             })
-        if constituents:
+        # Groundedness: the epistemic-ladder grade for "disorder" — fraction
+        # of non-trivial constituents matching known forms. 1.0 = every
+        # piece is a named/recurring form; low values shade toward gibberish.
+        score = round(n_grounded / n_considered, 3) if n_considered else 1.0
+        if constituents or n_considered:
             decompositions.append({
                 "statement_id": n.statement_id,
                 "template": n.template,
+                "groundedness": score,
                 "constituents": constituents,
             })
 
-    n_with = len(decompositions)
+    n_with = sum(1 for d in decompositions if d["constituents"])
     n_named = sum(1 for d in decompositions
                   if any(c["instance_of_statements"] for c in d["constituents"]))
+    scores = [d["groundedness"] for d in decompositions]
+    mean_score = sum(scores) / len(scores) if scores else 0.0
+    lowest = sorted(decompositions, key=lambda d: d["groundedness"])[:3]
     print(f"{n_with} of {len(nodes)} statements decompose into known forms; "
           f"{n_named} contain a constituent that IS another statement's "
-          f"expression side.\n")
+          f"expression side.")
+    print("Corpus mean groundedness: "
+          f"{mean_score:.3f}; least grounded: "
+          + ", ".join(f"{d['statement_id']} ({d['groundedness']})"
+                      for d in lowest) + "\n")
 
     # Show the ones whose constituents are named statements — the
     # 'built from lemmas' readout.

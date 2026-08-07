@@ -447,3 +447,17 @@ from C; no free-generation steps). 2 seeds:
   house pattern: decoder positions = the target's own tree coordinates,
   computable incrementally from the emitted prefix's bracket structure
   even at inference.
+
+### Analogy depth wall: three probes, one identical failure set
+
+Absolute positions, decoder tree-coordinates, and tied encoder/decoder
+path embeddings all yield OOD = 0.0139 — the SAME 34/2450 examples
+succeed under every mechanism and seed. A bit-identical failure set
+across architectures means the wall is not positional encoding: the
+determinant lives in the data-model relationship (suspects: a shared
+structural constraint making most deep examples unlearnable as encoded,
+or cross-segment correspondence breaking at scale). Next step is a
+diagnostic, not a fourth mechanism: per-step teacher-forced error
+localization on OOD (structure vs leaf steps, early vs late). Queued
+for v0.3's experiment 3; length was already ruled out (95.4% of kept
+OOD targets are within trained length range).
