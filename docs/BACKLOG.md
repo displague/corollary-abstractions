@@ -749,10 +749,6 @@ or commit history. Each item names the evidence that motivated it.
   its strict/reflexive variants as one declared family), which would also cover
   `⊆`/`⊂` and `<=`/`<`.
 
-## Experiments
-
-- **Buffered subprocess logging.** train.py prints don't flush through
-  run_all.py's redirect until process exit; add flush/`-u` for live tailing.
 
 ## Real-data lanes
 

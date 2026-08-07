@@ -6,12 +6,12 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Release: [v0.1.0](docs/RELEASE-v0.1.0.md).
+interface. Latest release: [v0.3.0](docs/RELEASE-v0.3.0.md).
 
 ## The two headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 85
-hand-authored statement nodes across 9 disciplines, structure alone:
+**1. The matcher discovers that sciences repeat one another.** From 195
+hand-authored statement nodes across 21 disciplines, structure alone:
 
 ```
 $ python scripts/match_signatures.py
@@ -76,12 +76,14 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (9 disciplines, 85 nodes)
+data/<discipline>/      statement corpora (21 disciplines, 195 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twin detection: shape / typed / family skeletons
   specialize.py         general->specific edges (absorption + identities)
-  measure_compression.py concept-token compression on the real corpus
+  decompose.py          statements as constructs of named forms + groundedness
+  compose_assert.py     grounded assertions: the six-tier epistemic ladder demo
+  measure_compression.py concept-token compression (10.7x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
@@ -111,7 +113,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 85 nodes / 9 corpora green
+python scripts/validate_nodes.py            # 195 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 cd experiments
@@ -131,5 +133,10 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
 - `docs/DESIGN-linguistic-twins.md` — grammar as another discipline corpus:
   modifiers as recursive operators, questions as equations, languages as
   twins of one interlingua
-- `docs/RELEASE-v0.1.0.md` — release notes with plain-language description
+- `docs/DESIGN-epistemic-ladder.md` — seven epistemic rungs, each with a
+  closed form; status is symbolic, never learned
+- `docs/DESIGN-frames-and-retrieval.md` — fiction as scoped premises;
+  retrieval as an UNKNOWN-triggered action
+- `docs/RELEASE-v0.3.0.md` — current release notes (v0.1.0, v0.2.0 kept)
+- `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence
