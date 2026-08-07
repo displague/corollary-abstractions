@@ -72,3 +72,17 @@ or commit history. Each item names the evidence that motivated it.
 
 - **Buffered subprocess logging.** train.py prints don't flush through
   run_all.py's redirect until process exit; add flush/`-u` for live tailing.
+
+## Real-data lanes
+
+- **Wikisem (LREC2020 logical forms) ingestion.** Corpus located and
+  downloaded (43MB, 839 article-level lambda forms + 5,953 CG trees; see
+  experiments/data_real/lrec2020-logical-forms/INGEST_NOTES.md for source
+  URLs, format, and a prototyped mapping onto the matcher AST). Before the
+  lane runs: (1) add `^` to COMMUTATIVE for conjunction chains, (2) fix the
+  atom-classification wart (bound vars -> slots, `CATEGORY:lemma` atoms ->
+  named leaves) so skeletons stop half-lexicalizing, (3) subterm mining is
+  the granularity — sentence segmentation via variable indices fails on
+  806/839 articles. LICENSE: data files carry no license statement (paper
+  CC-BY covers the paper only); local research use only, no redistribution
+  of derivatives without written confirmation from the maintainer.
