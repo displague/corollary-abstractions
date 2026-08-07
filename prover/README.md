@@ -1,7 +1,14 @@
 # prover/ — tiny verifier-coupled prover (sub-project)
 
-Status: roadmap only. No training code yet — this file exists so the goal is
-concrete and the phases are checkable.
+Status: phase 1 feasibility PROVEN NATIVE on Windows (2026-08-07, see
+FEASIBILITY.md): real (stateBefore, tactic, stateAfter) triples extracted
+from a Lean 4 repo via the patched ExtractData.lean under lake -- no WSL2,
+no Python package install. PyPantograph interaction verified natively
+(goal -> intro -> exact -> solved). The lean-dojo-v2 PYTHON package is
+Windows-blocked by its deepspeed dependency, but phase 1 never needs it.
+Next: keep the patched extractor as prover/ExtractData.win.lean and run it
+over a small theorem corpus; WSL2 deferred until the training layer, if
+ever.
 
 ## Thesis
 
