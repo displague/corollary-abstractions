@@ -44,6 +44,20 @@
     },
     {
       "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "EDGES = PARTONE*PARTTWO",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "EDGES",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "PARTTWO",
+        "PATHLENGTH": "PARTONE"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "physics.mechanics.newton_second_law",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "FORCE = INERTIA * RESPONSE",
@@ -129,6 +143,20 @@
     },
     {
       "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "EDGES = PARTONE*PARTTWO",
+      "via": "identity",
+      "bindings": {
+        "AREA": "EDGES",
+        "BASE": "PARTONE",
+        "CONSTANT": "1",
+        "HEIGHT": "PARTTWO"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "physics.mechanics.newton_second_law",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "FORCE = INERTIA * RESPONSE",
@@ -202,6 +230,36 @@
     },
     {
       "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "geomodel.transforms.homogeneous_rigid_transform",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "POINT",
+        "LOWRANKB": "ROTATION",
+        "SCALING": "1",
+        "WEIGHT": "POINTNEW",
+        "WEIGHTFROZEN": "TRANSLATION"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "numanalysis.ode.euler_method_step",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "SLOPE",
+        "LOWRANKB": "STEPSIZE",
+        "SCALING": "1",
+        "WEIGHT": "YNEXT",
+        "WEIGHTFROZEN": "Y"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
       "specific": "probstat.transform.affine_location_scale",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "specific_template": "OUT = SCALE*IN + SHIFT",
@@ -212,6 +270,21 @@
         "SCALING": "1",
         "WEIGHT": "OUT",
         "WEIGHTFROZEN": "SHIFT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "PERIMETER = 2 * (DIM1 + DIM2)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "PERIMETER",
+        "CONSTANT": "1",
+        "STEPWIDTH": "2",
+        "VALUELEFT": "DIM1",
+        "VALUERIGHT": "DIM2"
       },
       "looseness": 0
     },
@@ -326,6 +399,19 @@
     },
     {
       "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "VERTICES",
+        "QUANTITY": "*(2, EDGES)",
+        "RATE": "AVGDEGREE"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "calculus.differentiation.average_rate_of_change",
       "specific": "probstat.probability.bayes_rule",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
@@ -334,6 +420,19 @@
         "INTERVAL": "NORMALIZER",
         "QUANTITY": "*(LIKELIHOOD, PRIOR)",
         "RATE": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "CONSTANT": "*(2, EDGES)",
+        "HALFLIFE": "AVGDEGREE",
+        "RATECONST": "VERTICES"
       },
       "looseness": 1
     },
@@ -361,6 +460,19 @@
         "ORDER": "2",
         "RATE": "ENERGY",
         "RATECONST": "*(CONSTANT, MASS)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "AMOUNT": "*(2, EDGES)",
+        "CONCENTRATION": "AVGDEGREE",
+        "VOLUME": "VERTICES"
       },
       "looseness": 1
     },
@@ -561,6 +673,20 @@
     },
     {
       "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "sum(DEGREE_i)",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "EDGES",
+        "PATHLENGTH": "2"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "infotheory.entropy.uniform_entropy",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "INFORMATION = BASESCALE * LOG(ALPHABETSIZE)",
@@ -584,6 +710,34 @@
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "inv(POLICYOLD)",
         "PATHLENGTH": "POLICYNEW"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "WIDTHNEXT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(2)",
+        "PATHLENGTH": "WIDTH"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "numanalysis.error.relative_condition_number",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "CONDITION",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(INPUTPERTURB)",
+        "PATHLENGTH": "OUTPUTPERTURB"
       },
       "looseness": 1
     },
@@ -698,6 +852,19 @@
     },
     {
       "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "ELASTICITY": "AVGDEGREE",
+        "PCT_PRICE": "VERTICES",
+        "PCT_QUANTITY": "*(2, EDGES)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
       "specific": "probstat.probability.bayes_rule",
       "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
       "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
@@ -787,6 +954,21 @@
         "BASE2": "*(RATE, TIME)",
         "CONSTANT": "1",
         "HEIGHT": "PRINCIPAL"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "TANGENT",
+        "BASE1": "CONTROLONE",
+        "BASE2": "neg(CONTROLZERO)",
+        "CONSTANT": "1",
+        "HEIGHT": "DEGREE"
       },
       "looseness": 1
     },
@@ -974,6 +1156,20 @@
     },
     {
       "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "identity",
+      "bindings": {
+        "AREA": "sum(DEGREE_i)",
+        "BASE": "2",
+        "CONSTANT": "1",
+        "HEIGHT": "EDGES"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "infotheory.entropy.uniform_entropy",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "INFORMATION = BASESCALE * LOG(ALPHABETSIZE)",
@@ -997,6 +1193,34 @@
         "BASE": "POLICYNEW",
         "CONSTANT": "1",
         "HEIGHT": "inv(POLICYOLD)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "identity",
+      "bindings": {
+        "AREA": "WIDTHNEXT",
+        "BASE": "WIDTH",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "numanalysis.error.relative_condition_number",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "via": "identity",
+      "bindings": {
+        "AREA": "CONDITION",
+        "BASE": "OUTPUTPERTURB",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(INPUTPERTURB)"
       },
       "looseness": 1
     },
@@ -1108,6 +1332,59 @@
       "looseness": 1
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "POINTNEW": "WEIGHT",
+        "ROTATION": "1",
+        "TRANSLATION": "WEIGHTFROZEN"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "chemistry.spectroscopy.beer_lambert_law",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "ABSORBANCE",
+        "PARTONE": "ABSORPTIVITY",
+        "PARTTWO": "*(PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "geometry.volume_formulas.rectangular_prism_volume",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "VOLUME",
+        "PARTONE": "DIM1",
+        "PARTTWO": "*(DIM2, DIM3)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "geometry.area_formulas.triangle_area_formula",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "AREA",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "ml.recurrence.linear_ssm_state_update",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -1154,6 +1431,19 @@
     },
     {
       "general": "ml.policy.policy_probability_ratio",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "POLICYNEW": "*(2, EDGES)",
+        "POLICYOLD": "VERTICES",
+        "RATIO": "AVGDEGREE"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
       "specific": "probstat.probability.bayes_rule",
       "general_template": "RATIO = POLICYNEW / POLICYOLD",
       "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
@@ -1162,6 +1452,76 @@
         "POLICYNEW": "*(LIKELIHOOD, PRIOR)",
         "POLICYOLD": "NORMALIZER",
         "RATIO": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "CONDITION": "AVGDEGREE",
+        "INPUTPERTURB": "VERTICES",
+        "OUTPUTPERTURB": "*(2, EDGES)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "CONDITION": "POSTERIOR",
+        "INPUTPERTURB": "NORMALIZER",
+        "OUTPUTPERTURB": "*(LIKELIHOOD, PRIOR)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "economics.finance.simple_interest",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VALUE",
+        "CONSTANT": "1",
+        "STEPWIDTH": "PRINCIPAL",
+        "VALUELEFT": "1",
+        "VALUERIGHT": "*(RATE, TIME)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "TANGENT",
+        "CONSTANT": "1",
+        "STEPWIDTH": "DEGREE",
+        "VALUELEFT": "CONTROLONE",
+        "VALUERIGHT": "neg(CONTROLZERO)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "ml.adaptation.lora_low_rank_update",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(SCALING, LOWRANKB, LOWRANKA)",
+        "STEPSIZE": "1",
+        "Y": "WEIGHTFROZEN",
+        "YNEXT": "WEIGHT"
       },
       "looseness": 1
     },
@@ -1206,6 +1566,19 @@
     },
     {
       "general": "physics.kinematics.average_speed",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "VERTICES",
+        "QUANTITY": "*(2, EDGES)",
+        "RATE": "AVGDEGREE"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.kinematics.average_speed",
       "specific": "probstat.probability.bayes_rule",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
@@ -1214,6 +1587,19 @@
         "INTERVAL": "NORMALIZER",
         "QUANTITY": "*(LIKELIHOOD, PRIOR)",
         "RATE": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "VERTICES",
+        "QUANTITY": "*(2, EDGES)",
+        "RATE": "AVGDEGREE"
       },
       "looseness": 1
     },
@@ -1358,6 +1744,21 @@
     },
     {
       "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "geomodel.transforms.homogeneous_rigid_transform",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "TRANSLATION",
+        "PRED_i": "*(ROTATION, POINT)",
+        "RV_i": "POINTNEW",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
       "specific": "ml.adaptation.lora_low_rank_update",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -1367,6 +1768,21 @@
         "NOISE_i": "WEIGHTFROZEN",
         "PRED_i": "*(SCALING, LOWRANKB, LOWRANKA)",
         "RV_i": "WEIGHT",
+        "SLOPE": "1"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "numanalysis.ode.euler_method_step",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "Y",
+        "PRED_i": "*(STEPSIZE, SLOPE)",
+        "RV_i": "YNEXT",
         "SLOPE": "1"
       },
       "looseness": 1
@@ -1436,6 +1852,20 @@
         "CHAINRANK": "RV_i",
         "CYCLERANK": "INTERCEPT",
         "IMAGERANK": "+(NOISE_i, *(SLOPE, PRED_i))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_surface",
+      "specific": "numanalysis.rootfinding.newton_iteration",
+      "general_template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS",
+      "specific_template": "XNEXT = X - FVALUE/FDERIV",
+      "via": "absorption+identity",
+      "bindings": {
+        "CONSTANT": "X",
+        "CONSTANT2": "1",
+        "EULERCHAR": "XNEXT",
+        "GENUS": "*(FVALUE, inv(FDERIV))"
       },
       "looseness": 2
     },
@@ -1645,6 +2075,20 @@
     },
     {
       "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "identity",
+      "bindings": {
+        "ABSORBANCE": "TANGENT",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "+(CONTROLONE, neg(CONTROLZERO))",
+        "PATHLENGTH": "DEGREE"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "geometry.circle_formulas.circle_area_from",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
@@ -1667,6 +2111,34 @@
         "ABSORBANCE": "AREA",
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "*(HEIGHT, +(BASE1, BASE2))",
+        "PATHLENGTH": "CONSTANT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "AVGDEGREE",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(EDGES, inv(VERTICES))",
+        "PATHLENGTH": "2"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "AREA",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))",
         "PATHLENGTH": "CONSTANT"
       },
       "looseness": 2
@@ -1723,6 +2195,32 @@
         "GAUSSCURVATURE": "AREA",
         "PRINCIPAL1": "CONSTANT",
         "PRINCIPAL2": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "GAUSSCURVATURE": "AVGDEGREE",
+        "PRINCIPAL1": "2",
+        "PRINCIPAL2": "*(EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption",
+      "bindings": {
+        "GAUSSCURVATURE": "AREA",
+        "PRINCIPAL1": "CONSTANT",
+        "PRINCIPAL2": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
       },
       "looseness": 2
     },
@@ -1890,6 +2388,32 @@
     },
     {
       "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "AVGDEGREE",
+        "DIM1": "2",
+        "DIM2": "*(EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "AREA",
+        "DIM1": "CONSTANT",
+        "DIM2": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
       "specific": "physics.mechanics.kinetic_energy",
       "general_template": "AREA = DIM1 * DIM2",
       "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
@@ -2029,6 +2553,20 @@
     },
     {
       "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "TANGENT",
+        "BASE": "DEGREE",
+        "CONSTANT": "1",
+        "HEIGHT": "+(CONTROLONE, neg(CONTROLZERO))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "geometry.circle_formulas.circle_area_from",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
@@ -2052,6 +2590,34 @@
         "BASE": "CONSTANT",
         "CONSTANT": "1",
         "HEIGHT": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "AVGDEGREE",
+        "BASE": "2",
+        "CONSTANT": "1",
+        "HEIGHT": "*(EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "AREA",
+        "BASE": "CONSTANT",
+        "CONSTANT": "1",
+        "HEIGHT": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
       },
       "looseness": 2
     },
@@ -2281,6 +2847,32 @@
     },
     {
       "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "sum(DEGREE_i)",
+        "CONSTANT": "1",
+        "RADIUS": "*(2, EDGES)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AVGDEGREE",
+        "CONSTANT": "1",
+        "RADIUS": "*(2, EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "infotheory.entropy.uniform_entropy",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "INFORMATION = BASESCALE * LOG(ALPHABETSIZE)",
@@ -2302,6 +2894,45 @@
         "CIRCUMFERENCE": "RATIO",
         "CONSTANT": "1",
         "RADIUS": "*(POLICYNEW, inv(POLICYOLD))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "WIDTHNEXT",
+        "CONSTANT": "1",
+        "RADIUS": "*(WIDTH, inv(2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "AREA",
+        "CONSTANT": "1",
+        "RADIUS": "*(CONSTANT, STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "numanalysis.error.relative_condition_number",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "CONDITION",
+        "CONSTANT": "1",
+        "RADIUS": "*(OUTPUTPERTURB, inv(INPUTPERTURB))"
       },
       "looseness": 2
     },
@@ -2384,6 +3015,140 @@
       "looseness": 2
     },
     {
+      "general": "geomodel.bezier.endpoint_tangent",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "CONTROLONE": "VERTICES",
+        "CONTROLZERO": "1",
+        "DEGREE": "*(VERTICES, inv(2))",
+        "TANGENT": "EDGES"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(INPUTGAIN, DRIVE)",
+        "POINTNEW": "STATENEXT",
+        "ROTATION": "1",
+        "TRANSLATION": "*(TRANSITION, STATE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(SLOPE, PRED_i)",
+        "POINTNEW": "RV_i",
+        "ROTATION": "1",
+        "TRANSLATION": "+(INTERCEPT, NOISE_i)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(SLOPE, INPUT)",
+        "POINTNEW": "E[](RV, COND)",
+        "ROTATION": "1",
+        "TRANSLATION": "INTERCEPT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "geometry.area_formulas.trapezoid_area_formula",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "AREA",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "AVGDEGREE",
+        "PARTONE": "2",
+        "PARTTWO": "*(EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "AREA",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "physics.mechanics.kinetic_energy",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "ENERGY",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(MASS, ^(SPEED, 2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "*(PRESSURE, VOLUME)",
+        "PARTONE": "AMOUNT",
+        "PARTTWO": "*(CONSTANT, TEMPERATURE)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "probstat.probability.bayes_rule",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "POSTERIOR",
+        "PARTONE": "LIKELIHOOD",
+        "PARTTWO": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "ml.recurrence.mlstm_matrix_memory_update",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -2395,6 +3160,34 @@
         "SCALING": "1",
         "WEIGHT": "MEMORYNEXT",
         "WEIGHTFROZEN": "*(FORGETGATE, MEMORY)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "ml.objective.kl_regularized_rl_objective",
+      "specific": "numanalysis.rootfinding.newton_iteration",
+      "general_template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE",
+      "specific_template": "XNEXT = X - FVALUE/FDERIV",
+      "via": "absorption+identity",
+      "bindings": {
+        "DIVERGENCE": "*(FVALUE, inv(FDERIV))",
+        "EXPECTEDREWARD": "X",
+        "KLWEIGHT": "1",
+        "OBJECTIVE": "XNEXT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "ml.optimization.gradient_descent_step",
+      "specific": "numanalysis.rootfinding.newton_iteration",
+      "general_template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT",
+      "specific_template": "XNEXT = X - FVALUE/FDERIV",
+      "via": "absorption+identity",
+      "bindings": {
+        "GRADIENT": "*(FVALUE, inv(FDERIV))",
+        "LEARNRATE": "1",
+        "PARAM": "X",
+        "PARAMNEXT": "XNEXT"
       },
       "looseness": 2
     },
@@ -2425,6 +3218,104 @@
       "looseness": 2
     },
     {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "CONDITION": "COUPLING",
+        "INPUTPERTURB": "^(SEPARATION, 2)",
+        "OUTPUTPERTURB": "*(CONSTANT, SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "CONDITION": "COUPLING",
+        "INPUTPERTURB": "^(SEPARATION, 2)",
+        "OUTPUTPERTURB": "*(CONSTANT, SOURCE1, SOURCE2)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "ml.preference.grpo_group_relative_advantage",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "via": "identity",
+      "bindings": {
+        "AREA": "ADVANTAGE",
+        "CONSTANT": "1",
+        "STEPWIDTH": "inv(STDREWARD)",
+        "VALUELEFT": "REWARD",
+        "VALUERIGHT": "neg(MEANREWARD)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "probstat.transform.z_standardization",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "STD = (RAW - CENTER)/SCALE",
+      "via": "identity",
+      "bindings": {
+        "AREA": "STD",
+        "CONSTANT": "1",
+        "STEPWIDTH": "inv(SCALE)",
+        "VALUELEFT": "RAW",
+        "VALUERIGHT": "neg(CENTER)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "ml.recurrence.linear_ssm_state_update",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(INPUTGAIN, DRIVE)",
+        "STEPSIZE": "1",
+        "Y": "*(TRANSITION, STATE)",
+        "YNEXT": "STATENEXT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(SLOPE, PRED_i)",
+        "STEPSIZE": "1",
+        "Y": "+(INTERCEPT, NOISE_i)",
+        "YNEXT": "RV_i"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(SLOPE, INPUT)",
+        "STEPSIZE": "1",
+        "Y": "INTERCEPT",
+        "YNEXT": "E[](RV, COND)"
+      },
+      "looseness": 2
+    },
+    {
       "general": "physics.circuits.ohms_law",
       "specific": "geometry.area_formulas.trapezoid_area_formula",
       "general_template": "POTENTIAL = FLOW * RESISTANCE",
@@ -2434,6 +3325,32 @@
         "FLOW": "CONSTANT",
         "POTENTIAL": "AREA",
         "RESISTANCE": "*(HEIGHT, +(BASE1, BASE2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "2",
+        "POTENTIAL": "AVGDEGREE",
+        "RESISTANCE": "*(EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "AREA",
+        "RESISTANCE": "*(STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
       },
       "looseness": 2
     },
@@ -2712,6 +3629,32 @@
     },
     {
       "general": "physics.mechanics.newton_second_law",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "sum(DEGREE_i)",
+        "INERTIA": "1",
+        "RESPONSE": "*(2, EDGES)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "graphtheory.degree.average_degree_from_edge_count",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AVGDEGREE",
+        "INERTIA": "1",
+        "RESPONSE": "*(2, EDGES, inv(VERTICES))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
       "specific": "infotheory.entropy.uniform_entropy",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "INFORMATION = BASESCALE * LOG(ALPHABETSIZE)",
@@ -2733,6 +3676,45 @@
         "FORCE": "RATIO",
         "INERTIA": "1",
         "RESPONSE": "*(POLICYNEW, inv(POLICYOLD))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "WIDTHNEXT",
+        "INERTIA": "1",
+        "RESPONSE": "*(WIDTH, inv(2))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "numanalysis.integration.trapezoidal_rule",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "AREA",
+        "INERTIA": "1",
+        "RESPONSE": "*(CONSTANT, STEPWIDTH, +(VALUELEFT, VALUERIGHT))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "numanalysis.error.relative_condition_number",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "CONDITION",
+        "INERTIA": "1",
+        "RESPONSE": "*(OUTPUTPERTURB, inv(INPUTPERTURB))"
       },
       "looseness": 2
     },
@@ -2929,6 +3911,19 @@
       "looseness": 3
     },
     {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
+        "RATE": "EDGES"
+      },
+      "looseness": 3
+    },
+    {
       "general": "chemistry.kinetics.first_order_integrated_rate_law",
       "specific": "chemistry.kinetics.arrhenius_equation",
       "general_template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
@@ -2939,6 +3934,32 @@
         "INITIAL": "PREFACTOR",
         "RATECONST": "1",
         "TIME": "*(BARRIER, inv(*(GASCONST, TEMPERATURE)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "CONSTANT": "*(VERTICES, +(VERTICES, neg(1)))",
+        "HALFLIFE": "EDGES",
+        "RATECONST": "2"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "AMOUNT": "*(VERTICES, +(VERTICES, neg(1)))",
+        "CONCENTRATION": "EDGES",
+        "VOLUME": "2"
       },
       "looseness": 3
     },
@@ -3136,6 +4157,19 @@
       "looseness": 3
     },
     {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "ELASTICITY": "EDGES",
+        "PCT_PRICE": "2",
+        "PCT_QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))"
+      },
+      "looseness": 3
+    },
+    {
       "general": "geometry.area_formulas.rectangle_area_formula",
       "specific": "economics.production.cobb_douglas_production_function",
       "general_template": "AREA = DIM1 * DIM2",
@@ -3171,6 +4205,21 @@
         "AREA": "COUPLING",
         "DIM1": "CONSTANT",
         "DIM2": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.trapezoid_area_formula",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "EDGES",
+        "BASE1": "VERTICES",
+        "BASE2": "neg(1)",
+        "CONSTANT": "1",
+        "HEIGHT": "*(VERTICES, inv(2))"
       },
       "looseness": 3
     },
@@ -3366,6 +4415,19 @@
     },
     {
       "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "TANGENT",
+        "CONSTANT": "1",
+        "RADIUS": "*(DEGREE, +(CONTROLONE, neg(CONTROLZERO)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "geometry.circle_formulas.circle_area_from",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
@@ -3432,6 +4494,89 @@
       "looseness": 3
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "POINTNEW": "MEMORYNEXT",
+        "ROTATION": "1",
+        "TRANSLATION": "*(FORGETGATE, MEMORY)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "economics.production.cobb_douglas_production_function",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "OUTPUT",
+        "PARTONE": "PRODUCTIVITY",
+        "PARTTWO": "*(^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "physics.gravitation.newton_universal_gravitation",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "COUPLING",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "physics.electromagnetism.coulombs_law",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "COUPLING",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "+(1, neg(PARAM))",
+        "LOWRANKB": "LEFT",
+        "SCALING": "1",
+        "WEIGHT": "INTERMEDIATE",
+        "WEIGHTFROZEN": "*(PARAM, RIGHT)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "+(1, neg(PARAM))",
+        "LOWRANKB": "START",
+        "SCALING": "1",
+        "WEIGHT": "RESULT",
+        "WEIGHTFROZEN": "*(PARAM, FINISH)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "ml.policy.boltzmann_softmax_policy",
       "specific": "chemistry.kinetics.arrhenius_equation",
       "general_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
@@ -3442,6 +4587,19 @@
         "INVPARTITION": "PREFACTOR",
         "INVTEMPERATURE": "1",
         "PROBABILITY": "RATECONST"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "POLICYNEW": "*(VERTICES, +(VERTICES, neg(1)))",
+        "POLICYOLD": "2",
+        "RATIO": "EDGES"
       },
       "looseness": 3
     },
@@ -3457,6 +4615,60 @@
         "STATE": "*(FORGETGATE, MEMORY)",
         "STATENEXT": "MEMORYNEXT",
         "TRANSITION": "1"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "CONDITION": "EDGES",
+        "INPUTPERTURB": "2",
+        "OUTPUTPERTURB": "*(VERTICES, +(VERTICES, neg(1)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "EDGES",
+        "CONSTANT": "1",
+        "STEPWIDTH": "*(VERTICES, inv(2))",
+        "VALUELEFT": "VERTICES",
+        "VALUERIGHT": "neg(1)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "ml.recurrence.mlstm_matrix_memory_update",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(INPUTGATE, OUTER(VALUE, KEY))",
+        "STEPSIZE": "1",
+        "Y": "*(FORGETGATE, MEMORY)",
+        "YNEXT": "MEMORYNEXT"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "numanalysis.rootfinding.bisection_interval_halving",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "WIDTHNEXT = WIDTH/2",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "WIDTH": "*(VERTICES, +(VERTICES, neg(1)))",
+        "WIDTHNEXT": "EDGES"
       },
       "looseness": 3
     },
@@ -3496,6 +4708,32 @@
         "FLOW": "CONSTANT",
         "POTENTIAL": "COUPLING",
         "RESISTANCE": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
+        "RATE": "EDGES"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
+        "RATE": "EDGES"
       },
       "looseness": 3
     },
@@ -3574,6 +4812,19 @@
         "FORCE": "OUTPUT",
         "INERTIA": "1",
         "RESPONSE": "*(PRODUCTIVITY, ^(CAPITAL, CAPITAL_SHARE), ^(LABOR, LABOR_SHARE))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "geomodel.bezier.endpoint_tangent",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "TANGENT",
+        "INERTIA": "1",
+        "RESPONSE": "*(DEGREE, +(CONTROLONE, neg(CONTROLZERO)))"
       },
       "looseness": 3
     },
@@ -3659,6 +4910,34 @@
       "looseness": 4
     },
     {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(PARAM, RIGHT)",
+        "DISPLACEMENT": "*(LEFT, +(1, neg(PARAM)))",
+        "LINEARIZED": "INTERMEDIATE",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(PARAM, FINISH)",
+        "DISPLACEMENT": "*(START, +(1, neg(PARAM)))",
+        "LINEARIZED": "RESULT",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "calculus.growth.exponential_growth_law",
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
@@ -3687,6 +4966,61 @@
       "looseness": 4
     },
     {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "ABSORBANCE": "EDGES",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "*(+(VERTICES, neg(1)), inv(2))",
+        "PATHLENGTH": "VERTICES"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "GAUSSCURVATURE": "EDGES",
+        "PRINCIPAL1": "VERTICES",
+        "PRINCIPAL2": "*(+(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "INTERMEDIATE",
+        "PREMIUM": "*(LEFT, +(1, neg(PARAM)))",
+        "RISKFREE": "*(PARAM, RIGHT)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "RESULT",
+        "PREMIUM": "*(START, +(1, neg(PARAM)))",
+        "RISKFREE": "*(PARAM, FINISH)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "economics.finance.continuous_compounding",
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
@@ -3701,6 +5035,47 @@
       "looseness": 4
     },
     {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(PARAM, RIGHT)",
+        "CONSUMPTION": "INTERMEDIATE",
+        "DISPOSABLE_INCOME": "*(LEFT, +(1, neg(PARAM)))",
+        "PROPENSITY": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(PARAM, FINISH)",
+        "CONSUMPTION": "RESULT",
+        "DISPOSABLE_INCOME": "*(START, +(1, neg(PARAM)))",
+        "PROPENSITY": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "AREA": "EDGES",
+        "DIM1": "VERTICES",
+        "DIM2": "*(+(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
       "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
@@ -3711,6 +5086,20 @@
         "BASE": "DEGREE(OUTER)",
         "CONSTANT": "1",
         "HEIGHT": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AREA": "EDGES",
+        "BASE": "VERTICES",
+        "CONSTANT": "1",
+        "HEIGHT": "*(+(VERTICES, neg(1)), inv(2))"
       },
       "looseness": 4
     },
@@ -3737,6 +5126,19 @@
         "CIRCUMFERENCE": "PRESENT",
         "CONSTANT": "1",
         "RADIUS": "*(FUTURE, EXP(neg(*(RATE, HORIZON))))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "CIRCUMFERENCE": "EDGES",
+        "CONSTANT": "1",
+        "RADIUS": "*(VERTICES, +(VERTICES, neg(1)), inv(2))"
       },
       "looseness": 4
     },
@@ -3776,6 +5178,118 @@
         "CIRCUMFERENCE": "STD",
         "CONSTANT": "1",
         "RADIUS": "*(+(RAW, neg(CENTER)), inv(SCALE))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(LEFT, +(1, neg(PARAM)))",
+        "POINTNEW": "INTERMEDIATE",
+        "ROTATION": "1",
+        "TRANSLATION": "*(PARAM, RIGHT)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(START, +(1, neg(PARAM)))",
+        "POINTNEW": "RESULT",
+        "ROTATION": "1",
+        "TRANSLATION": "*(PARAM, FINISH)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "EDGES": "EDGES",
+        "PARTONE": "VERTICES",
+        "PARTTWO": "*(+(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(LEFT, +(1, neg(PARAM)))",
+        "INPUTGAIN": "1",
+        "STATE": "*(PARAM, RIGHT)",
+        "STATENEXT": "INTERMEDIATE",
+        "TRANSITION": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(START, +(1, neg(PARAM)))",
+        "INPUTGAIN": "1",
+        "STATE": "*(PARAM, FINISH)",
+        "STATENEXT": "RESULT",
+        "TRANSITION": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(LEFT, +(1, neg(PARAM)))",
+        "STEPSIZE": "1",
+        "Y": "*(PARAM, RIGHT)",
+        "YNEXT": "INTERMEDIATE"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(START, +(1, neg(PARAM)))",
+        "STEPSIZE": "1",
+        "Y": "*(PARAM, FINISH)",
+        "YNEXT": "RESULT"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption",
+      "bindings": {
+        "FLOW": "VERTICES",
+        "POTENTIAL": "EDGES",
+        "RESISTANCE": "*(+(VERTICES, neg(1)), inv(2))"
       },
       "looseness": 4
     },
@@ -3859,6 +5373,19 @@
     },
     {
       "general": "physics.mechanics.newton_second_law",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "absorption+identity",
+      "bindings": {
+        "FORCE": "EDGES",
+        "INERTIA": "1",
+        "RESPONSE": "*(VERTICES, +(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
       "specific": "ml.policy.boltzmann_softmax_policy",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
@@ -3895,6 +5422,77 @@
         "RESPONSE": "*(+(RAW, neg(CENTER)), inv(SCALE))"
       },
       "looseness": 4
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(PARAM, RIGHT)",
+        "PRED_i": "*(LEFT, +(1, neg(PARAM)))",
+        "RV_i": "INTERMEDIATE",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(PARAM, FINISH)",
+        "PRED_i": "*(START, +(1, neg(PARAM)))",
+        "RV_i": "RESULT",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "geomodel.bezier.de_casteljau_step",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(LEFT, +(1, neg(PARAM)))",
+        "OUT": "INTERMEDIATE",
+        "SCALE": "1",
+        "SHIFT": "*(PARAM, RIGHT)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "numanalysis.interpolation.linear_interpolation",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(START, +(1, neg(PARAM)))",
+        "OUT": "RESULT",
+        "SCALE": "1",
+        "SHIFT": "*(PARAM, FINISH)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "geomodel.quaternions.unit_quaternion_constraint",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+      "via": "absorption",
+      "bindings": {
+        "CHAINRANK": "1",
+        "CYCLERANK": "^(REALPART, 2)",
+        "IMAGERANK": "+(^(IMAGI, 2), ^(IMAGJ, 2), ^(IMAGK, 2))"
+      },
+      "looseness": 5
     },
     {
       "general": "algtop.homology.chain_rank_nullity",
@@ -4093,6 +5691,21 @@
       "looseness": 5
     },
     {
+      "general": "numanalysis.integration.trapezoidal_rule",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "identity",
+      "bindings": {
+        "AREA": "VAR",
+        "CONSTANT": "1",
+        "STEPWIDTH": "inv(*(2, COEFF0))",
+        "VALUELEFT": "neg(COEFF1)",
+        "VALUERIGHT": "pm(SQRT(DISC))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -4241,6 +5854,20 @@
       "looseness": 6
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(FUNC1, D(FUNC2))",
+        "POINTNEW": "D(*(FUNC1, FUNC2))",
+        "ROTATION": "1",
+        "TRANSLATION": "*(FUNC2, D(FUNC1))"
+      },
+      "looseness": 6
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -4267,6 +5894,20 @@
         "STATE": "*(FUNC2, D(FUNC1))",
         "STATENEXT": "D(*(FUNC1, FUNC2))",
         "TRANSITION": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(FUNC1, D(FUNC2))",
+        "STEPSIZE": "1",
+        "Y": "*(FUNC2, D(FUNC1))",
+        "YNEXT": "D(*(FUNC1, FUNC2))"
       },
       "looseness": 6
     },
@@ -4485,6 +6126,20 @@
       "looseness": 7
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(COEFFG, ^(DV, 2))",
+        "POINTNEW": "^(LINEELEMENT, 2)",
+        "ROTATION": "1",
+        "TRANSLATION": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))"
+      },
+      "looseness": 7
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -4496,6 +6151,20 @@
         "SCALING": "1",
         "WEIGHT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "WEIGHTFROZEN": "*(SCALAR1, D(FUNC1))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(COEFFG, ^(DV, 2))",
+        "STEPSIZE": "1",
+        "Y": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))",
+        "YNEXT": "^(LINEELEMENT, 2)"
       },
       "looseness": 7
     },
@@ -4636,6 +6305,20 @@
       "looseness": 8
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(SCALAR2, D(FUNC2))",
+        "POINTNEW": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "ROTATION": "1",
+        "TRANSLATION": "*(SCALAR1, D(FUNC1))"
+      },
+      "looseness": 8
+    },
+    {
       "general": "ml.recurrence.linear_ssm_state_update",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
@@ -4647,6 +6330,20 @@
         "STATE": "*(SCALAR1, D(FUNC1))",
         "STATENEXT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "TRANSITION": "1"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(SCALAR2, D(FUNC2))",
+        "STEPSIZE": "1",
+        "Y": "*(SCALAR1, D(FUNC1))",
+        "YNEXT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))"
       },
       "looseness": 8
     },
