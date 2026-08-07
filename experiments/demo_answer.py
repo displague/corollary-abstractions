@@ -24,7 +24,10 @@ from train_span import SpanDataset, SpanPointer, collate
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from langgen import LEX_A, LEX_B, render_np  # noqa: E402
+from langgen import LEX_A, LEX_B, render, render_np  # noqa: E402
+from tokenizers import tree_from_json  # noqa: E402
+
+GLOSS_LEX = {**LEX_A, "WH": "who"}
 from match_signatures import canonicalize  # noqa: E402
 
 INV_SPAN = {w: c for c, w in LEX_A.items() if c[0] in "nai" or c == "WH"}
@@ -104,7 +107,9 @@ def main() -> None:
 
     for i, r in enumerate(picks):
         print("=" * 70)
+        gloss = render(tree_from_json(r["tree1"]), "A", rng, lex=GLOSS_LEX)
         print(f"QUESTION (language B): {r['expr1']}")
+        print(f"          (in English: {gloss})")
         print(f"KNOWLEDGE (language A):")
         for stmt in r["expr2"].split(" | "):
             print(f"  - {stmt}")
