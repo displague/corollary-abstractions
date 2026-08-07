@@ -409,3 +409,18 @@ input — non-extractive synthesis (analogy completion: emit F = m*a
 given Ohm : circuits :: ? : mechanics, verifiable against
 specialize.py bindings). Both decoder failures say that frontier will
 need its own mechanism, not a bigger decoder.
+
+
+## realsyn (first real-data task): the prediction that favors char, confirmed
+
+Same-lemma detection on real Spanish Wikipedia morphology (9,208 lemmas,
+lemma-disjoint splits, hard prefix-sharing negatives), char arm, 2 seeds:
+test 0.959 / OOD 0.811 (OOD = the 460 highest-fanout paradigms).
+
+The same encoding that sits at exact chance on every structural task
+learns real morphology well -- because here the signal is surface-
+visible and the repo has no closed form for lemmatization of unseen
+forms. This is the thesis's honesty check passed in the other
+direction: weights are not weak, they are for the residual, and when
+the residual genuinely lives in the surface they own it. The division
+of labor is symmetric, and both halves are now measured.
