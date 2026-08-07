@@ -1,0 +1,1370 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "geospatial_topology.point_set_relations.v1",
+  "discipline": "geospatial_topology",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "geotop.polyhedra.euler_polyhedron_formula",
+      "title": "Euler's Polyhedron Formula",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "planar_subdivision",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "V - E + F = 2",
+        "canonical_latex": "V - E + F = 2",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "V − E + F = 2"
+          },
+          {
+            "form_id": "planar_graph",
+            "notation_system": "ascii",
+            "expression": "V - E + F = 2 with F counting the unbounded face",
+            "scope_note": "Planar-graph form; the outer face must be counted, which is the commonest implementation bug in a topology-aware GIS"
+          },
+          {
+            "form_id": "subdivision",
+            "notation_system": "ascii",
+            "expression": "NODES - EDGES + FACES = 1 + COMPONENTS",
+            "scope_note": "Planar subdivision with several connected components, the form an actual coverage-validation routine needs"
+          },
+          {
+            "form_id": "genus",
+            "notation_system": "ascii",
+            "expression": "V - E + F = 2 - 2*GENUS",
+            "scope_note": "Polyhedra of higher genus; the constant 2 is chi(S^2) and nothing more"
+          },
+          {
+            "form_id": "descartes",
+            "notation_system": "ascii",
+            "expression": "sum of angular defects = 4*pi",
+            "scope_note": "Descartes' theorem on the total angular defect, equivalent to the formula and roughly a century earlier"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "alternating_cell_count_fixed",
+        "anonymized_template": "VERTICES - EDGES + FACES = 2",
+        "slot_schema": [
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "zero_cell_count"
+          },
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "one_cell_count"
+          },
+          {
+            "slot_id": "FACES",
+            "syntactic_category": "variable",
+            "semantic_role": "two_cell_count"
+          }
+        ],
+        "invariants": [
+          "The right-hand side is a fixed number, not a slot: the theorem's whole force is that the alternating count is *always* 2, for every subdivision of a topological sphere.",
+          "Invariant under refinement: adding a vertex on an edge adds one vertex and one edge, adding a diagonal adds one edge and one face. Every legal local move preserves the alternating sum, which is both the proof and the reason a GIS can subdivide a coverage freely.",
+          "The value 2 is chi(S^2). Sphere-topology is the hypothesis, not convexity: any subdivision of any surface homeomorphic to a sphere works, and toroidal ones give 0.",
+          "Constrains realizable planar graphs: with V >= 3 it forces E <= 3V - 6, which is why planar-graph spatial indexes have linear-size edge counts."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "zero_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices (nodes) of the subdivision."
+          },
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "one_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of edges (arcs) of the subdivision."
+          },
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "two_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of faces, including the unbounded exterior face for a planar drawing."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "The Euler characteristic of the sphere; the value the alternating count is pinned to."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "For any subdivision of a sphere -- equivalently any connected planar drawing counted with its outer face -- vertices minus edges plus faces is always two.",
+        "statistical_significance": "The oldest node in either topology corpus and the one that produced the most instructive tooling failure. It is exactly `algtop.invariants.euler_characteristic_complex` with the invariant slot bound to the literal 2, and *neither* matcher reports the relation. match_signatures.py compares skeletons: `2 = +(?0:V, ?1:V, neg(?2:V))` against `?0:V = +(?1:V, ?2:V, neg(?3:V))`, and a numeric literal is not a slot, so no twin at typed, family or shape level. specialize.py *does* find the match -- the pattern slot EULERCHAR binds the term 2 and the three counts bind one-to-one -- but discards it, because it reports only matches that used argument absorption or identity-element binding, and this used neither. A plain slot-to-literal bind is the single most common way a general law becomes a special case, and it is precisely the case both tools drop. The edge is asserted by hand via special_case_of/generalizes and the gap is filed in docs/BACKLOG.md.",
+        "regularity_conditions": [
+          "The polyhedron's surface is homeomorphic to a sphere",
+          "The subdivision is connected and every face is a topological disc",
+          "For a planar drawing, the unbounded face is counted"
+        ],
+        "failure_modes": [
+          "Fails for toroidal and higher-genus polyhedra, where the count is 2 - 2g; a GIS coverage on a torus-like topology (a road network on a sphere with tunnels) breaks validation routines that hard-code 2.",
+          "Fails for disconnected subdivisions, which give 1 + (number of components); real-world coverages with islands hit this constantly.",
+          "Fails for faces that are not discs -- a face with a hole (a polygon with an interior ring) must be cut before the count applies, which is why OGC simple features distinguish shells from holes.",
+          "Lakatos's Proofs and Refutations is a book-length catalogue of the monsters that arise when 'polyhedron' is left informal; the history is a warning about stating this node's hypotheses casually."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "algtop.invariants.euler_characteristic_complex"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.point_set.interior_boundary_exterior_partition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1758",
+          "bibliographic_entry": "Euler, L. (1758). Elementa doctrinae solidorum. Novi Commentarii Academiae Scientiarum Petropolitanae, 4, 109-140."
+        },
+        {
+          "citation_key": "lakatos1976",
+          "bibliographic_entry": "Lakatos, I. (1976). Proofs and Refutations: The Logic of Mathematical Discovery. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "richeson2008",
+          "bibliographic_entry": "Richeson, D. S. (2008). Euler's Gem: The Polyhedron Formula and the Birth of Topology. Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "worboys2004",
+          "bibliographic_entry": "Worboys, M. F., Duckham, M. (2004). GIS: A Computing Perspective (2nd ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "Euler formula",
+        "polyhedron",
+        "planar graph",
+        "planar subdivision",
+        "coverage validation",
+        "topological invariant"
+      ]
+    },
+    {
+      "statement_id": "geotop.point_set.interior_boundary_exterior_partition",
+      "title": "Interior-Boundary-Exterior Partition of a Region",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "point_set_relations",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "interior(A) union boundary(A) union exterior(A) = U",
+        "canonical_latex": "A^{\\circ} \\cup \\partial A \\cup A^{e} = U",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A° ∪ ∂A ∪ Aᵉ = U"
+          },
+          {
+            "form_id": "disjointness",
+            "notation_system": "ascii",
+            "expression": "interior(A) inter boundary(A) = emptyset, and both are disjoint from exterior(A)",
+            "scope_note": "The other half of the partition: the three parts are pairwise disjoint, so together with exhaustiveness they partition the plane"
+          },
+          {
+            "form_id": "closure",
+            "notation_system": "ascii",
+            "expression": "closure(A) = interior(A) union boundary(A)",
+            "scope_note": "Equivalent packaging; the exterior is then the complement of the closure"
+          },
+          {
+            "form_id": "nine_intersection",
+            "notation_system": "ascii",
+            "expression": "M(A,B)[i][j] = emptiness of (part_i(A) inter part_j(B)) for i, j in {interior, boundary, exterior}",
+            "scope_note": "The DE-9IM matrix this partition makes possible: three parts each side gives nine cells, and the eight realizable patterns for two regions are the OGC named predicates"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "exhaustive_partition",
+        "anonymized_template": "JOIN(INTERIOR(REGION), JOIN(BOUNDARY(REGION), EXTERIOR(REGION))) = UNIVERSE",
+        "slot_schema": [
+          {
+            "slot_id": "REGION",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "UNIVERSE",
+            "syntactic_category": "constant",
+            "semantic_role": "top_element"
+          }
+        ],
+        "invariants": [
+          "Exhaustive: every point of the ambient space lies in exactly one of the three parts, so the decomposition is a partition and not merely a cover.",
+          "The single region slot occurs three times, once under each part operator. That repetition is the content: the three parts are three views of one object, which is what lets DE-9IM index them by name.",
+          "The top element sits in a constant (parameter-like) slot, exactly as TRUTH and UNIVERSE do in data/logic and data/set_theory, so this node shares its treatment of the ambient universe with the Boolean corpora.",
+          "Purely topological: it uses only interior, closure and complement, so it survives any homeomorphism of the plane. That invariance is the reason GIS calls these relations topological in the first place.",
+          "The three-part split is what separates the nine-intersection model from the earlier four-intersection model; without the exterior, 'disjoint' and 'meets' cannot be told apart."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A region: a closed, regular subset of the plane, in OGC terms a simple feature geometry."
+          },
+          {
+            "symbol": "U",
+            "syntactic_category": "constant",
+            "semantic_role": "top_element",
+            "mathematical_order": 0,
+            "description": "The ambient space, normally the plane or the sphere."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "^c",
+            "name": "complement relative to the ambient space",
+            "arity": 1,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound. Realized as union of subspaces/regions here, as disjunction in data/logic and as set union in data/set_theory."
+          },
+          {
+            "notation": "INTERIOR(.)",
+            "name": "topological interior",
+            "input_arity": 1,
+            "codomain": "open regions",
+            "description": "Largest open set contained in the region; DE-9IM writes it I(A) and it supplies the first row and column of the nine-intersection matrix."
+          },
+          {
+            "notation": "BOUNDARY(.)",
+            "name": "topological boundary",
+            "input_arity": 1,
+            "codomain": "regions",
+            "description": "Closure minus interior; DE-9IM writes it B(A). For a simple polygon it is the ring, which is what a GIS actually stores."
+          },
+          {
+            "notation": "EXTERIOR(.)",
+            "name": "topological exterior",
+            "input_arity": 1,
+            "codomain": "open regions",
+            "description": "Complement of the closure; DE-9IM writes it E(A). Its presence is what makes the nine-intersection model able to distinguish 'disjoint' from 'meets', which the four-intersection model could not."
+          },
+          {
+            "notation": "CLOSURE(.)",
+            "name": "topological closure",
+            "input_arity": 1,
+            "codomain": "closed regions",
+            "description": "Interior joined with boundary; the smallest closed set containing the region."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "U",
+            "description": "The ambient embedding space; every DE-9IM statement is relative to a fixed choice of it, just as every complement in data/set_theory is."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every point of the plane is either inside a region, on its boundary, or outside it; those three parts cover the plane and overlap nowhere.",
+        "statistical_significance": "The vocabulary node for the DE-9IM predicates: the nine-intersection matrix is exactly the table of MEET(part_i(A), part_j(B)) values, so this partition is what makes the whole predicate algebra well posed. Structurally it is a reported miss and expected to be one. Its skeleton `?0:P = JOIN⟨INTERIOR⟨?1:V⟩, JOIN⟨BOUNDARY⟨?1:V⟩, EXTERIOR⟨?1:V⟩⟩⟩` is one functional layer away from `settheory.boolean_laws.complement_laws` (`?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩`) -- both say a thing and its opposite exhaust the universe -- but the resemblance is conceptual, not mechanical: the two templates differ in head (JOIN against MEET), in arity and in the functional layer interposed on each operand, so no reasonable matcher should relate them and none does. It is recorded as a miss rather than quietly dropped because the temptation to rewrite the partition into a two-part `MEET(CLOSURE(R), NEG(CLOSURE(R))) = EMPTYSET` purely to manufacture a match was real, and taking it would have replaced the statement DE-9IM actually needs -- three parts, nine cells -- with one that twins.",
+        "regularity_conditions": [
+          "A fixed ambient space U, normally the plane R^2 or the sphere",
+          "Regions are regular closed sets, so that boundary and interior behave as intended",
+          "The parts are taken with respect to the same topology throughout"
+        ],
+        "failure_modes": [
+          "Non-regular geometries break it in practice: a polygon with a dangling edge or a zero-width sliver has interior points that a naive implementation places on the boundary, which is why OGC requires simple features to be valid before predicates are evaluated.",
+          "Floating-point coordinates make boundary membership undecidable in practice; every production GIS carries a tolerance, and with a tolerance the three parts genuinely overlap.",
+          "The partition is relative to the chosen ambient space: a curve in R^3 has empty interior, so a 'region' embedded one dimension too high collapses into its own boundary."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "geotop.predicates.de9im_disjoint"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.predicates.adjacency_symmetry",
+          "geotop.polyhedra.euler_polyhedron_formula",
+          "settheory.boolean_laws.complement_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "egenhofer1991",
+          "bibliographic_entry": "Egenhofer, M. J., Franzosa, R. D. (1991). Point-set topological spatial relations. International Journal of Geographical Information Systems, 5(2), 161-174.",
+          "url": "https://doi.org/10.1080/02693799108927841"
+        },
+        {
+          "citation_key": "egenhofer1990",
+          "bibliographic_entry": "Egenhofer, M. J., Herring, J. R. (1990). A Mathematical Framework for the Definition of Topological Relationships. Proceedings of the 4th International Symposium on Spatial Data Handling, 803-813."
+        },
+        {
+          "citation_key": "munkres2000",
+          "bibliographic_entry": "Munkres, J. R. (2000). Topology (2nd ed.). Upper Saddle River: Prentice Hall."
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        }
+      ],
+      "keywords": [
+        "interior",
+        "boundary",
+        "exterior",
+        "DE-9IM",
+        "nine-intersection model",
+        "point-set topology",
+        "partition"
+      ]
+    },
+    {
+      "statement_id": "geotop.predicates.containment_transitivity",
+      "title": "Transitivity of Spatial Containment",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "predicate_algebra",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (A within B) and (B within C) then (A within C)",
+        "canonical_latex": "A \\sqsubseteq B \\ \\land\\ B \\sqsubseteq C \\implies A \\sqsubseteq C",
+        "equivalent_forms": [
+          {
+            "form_id": "ogc",
+            "notation_system": "ascii",
+            "expression": "ST_Within(A, B) and ST_Within(B, C) implies ST_Within(A, C)",
+            "scope_note": "OGC Simple Features spelling; the rule a spatial index uses to prune containment queries"
+          },
+          {
+            "form_id": "point_set",
+            "notation_system": "ascii",
+            "expression": "(forall p. p in A implies p in B) and (forall p. p in B implies p in C) implies (forall p. p in A implies p in C)",
+            "scope_note": "Unfolded to point membership, where the proof is hypothetical syllogism applied pointwise"
+          },
+          {
+            "form_id": "de9im",
+            "notation_system": "ascii",
+            "expression": "within(A, B) iff I(A) inter I(B) non-empty and I(A) inter E(B) empty and B(A) inter E(B) empty",
+            "scope_note": "The DE-9IM cell pattern defining `within`, which is what makes the relation a partial order"
+          },
+          {
+            "form_id": "lattice",
+            "notation_system": "ascii",
+            "expression": "(A inter B = A) and (B inter C = B) implies (A inter C = A)",
+            "scope_note": "Containment expressed through meet, which is how LEQ is defined in the shared template"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "order_transitivity",
+        "anonymized_template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))",
+        "slot_schema": [
+          {
+            "slot_id": "REGA",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGB",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGC",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          }
+        ],
+        "invariants": [
+          "The middle region appears twice, as the consequent of the first premise and the antecedent of the second: transitivity is the chaining pattern and the repeated slot is the whole content.",
+          "With reflexivity and antisymmetry it makes containment a partial order, which is the order underlying every MEET/JOIN statement in this corpus.",
+          "Not an equation and not reversible, which puts it in the same structural family as modus ponens rather than with the additive identities.",
+          "The template is scripts/seed_logic.py's TPL_SUBSET_TRANSITIVITY verbatim, with only the slot names changed. The twin therefore holds by construction and cannot drift."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A region (simple feature geometry)."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A second region."
+          },
+          {
+            "symbol": "C",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A third region."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "subset",
+            "name": "subset inclusion",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction of premises",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication at the meta level",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Meta-level 'if ... then' joining the premises of a rule to its conclusion. Same head and same argument order as data/logic and data/set_theory use for their inference nodes."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound. Realized as intersection of subspaces/regions here, as conjunction in data/logic, as set intersection in data/set_theory, and as the atom of a shared information content in data/information_theory."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as spatial containment (OGC ST_Within / ST_Contains) here, as entailment in data/logic and as subset inclusion in data/set_theory."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Containment chains: a parcel inside a block inside a district is inside that district.",
+        "statistical_significance": "A prediction from another corpus, cashed. scripts/seed_logic.py's commentary on `settheory.order.subset_transitivity` says the lattice-abstract LEQ head was chosen 'precisely so that a future node ... would twin with this one exactly, without either corpus being rewritten'. This is that node, written months later in an unrelated subject, and it twins exactly: `IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩`, same archetype id, no edits to data/set_theory. That is the strongest available evidence that the abstract-head convention is doing real work rather than being a way to manufacture matches after the fact -- the target was fixed before the source existed. Practically, this is also the rule an R-tree relies on to prune containment queries, so the abstract order and the production index are the same fact.",
+        "regularity_conditions": [
+          "A, B, C are valid simple-feature geometries in one coordinate reference system",
+          "Containment is the OGC `within` relation, taken in its non-strict sense"
+        ],
+        "failure_modes": [
+          "Fails under mixed coordinate reference systems: 'within' computed after two different projections is not transitive, and this is a routine production bug rather than a theoretical curiosity.",
+          "Tolerance-based implementations break transitivity: A within B and B within C each by a hair can leave A outside C by two hairs.",
+          "The strict relation `properly within` is transitive but not reflexive, so results stated for `within` do not transfer verbatim -- the same trap as proper subset inclusion in data/set_theory."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.measure.area_monotonicity",
+          "settheory.order.subset_transitivity",
+          "logic.inference.modus_ponens"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "egenhofer1991",
+          "bibliographic_entry": "Egenhofer, M. J., Franzosa, R. D. (1991). Point-set topological spatial relations. International Journal of Geographical Information Systems, 5(2), 161-174.",
+          "url": "https://doi.org/10.1080/02693799108927841"
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        },
+        {
+          "citation_key": "clementini1993",
+          "bibliographic_entry": "Clementini, E., Di Felice, P., van Oosterom, P. (1993). A small set of formal topological relationships suitable for end-user interaction. In Advances in Spatial Databases (SSD '93), LNCS 692, 277-295. Berlin: Springer."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "containment",
+        "transitivity",
+        "partial order",
+        "within",
+        "DE-9IM",
+        "spatial predicate",
+        "lattice order"
+      ]
+    },
+    {
+      "statement_id": "geotop.predicates.adjacency_symmetry",
+      "title": "Symmetry of Spatial Adjacency",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "predicate_algebra",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if A touches B then B touches A",
+        "canonical_latex": "A \\mathrel{\\mathsf{touches}} B \\implies B \\mathrel{\\mathsf{touches}} A",
+        "equivalent_forms": [
+          {
+            "form_id": "ogc",
+            "notation_system": "ascii",
+            "expression": "ST_Touches(A, B) = ST_Touches(B, A)",
+            "scope_note": "OGC spelling; the equality form, which is the implication plus its converse"
+          },
+          {
+            "form_id": "de9im",
+            "notation_system": "ascii",
+            "expression": "touches(A, B) iff I(A) inter I(B) empty and (B(A) inter B(B) non-empty or I(A) inter B(B) non-empty or B(A) inter I(B) non-empty)",
+            "scope_note": "DE-9IM definition; symmetry is visible as invariance of the pattern under transposing the matrix"
+          },
+          {
+            "form_id": "matrix_transpose",
+            "notation_system": "ascii",
+            "expression": "M(A, B) = transpose(M(B, A))",
+            "scope_note": "The general fact: swapping the arguments transposes the nine-intersection matrix, so a predicate is symmetric exactly when its pattern is transpose-invariant"
+          },
+          {
+            "form_id": "adjacency_graph",
+            "notation_system": "ascii",
+            "expression": "the region adjacency graph is undirected",
+            "scope_note": "The data-structure consequence: a topological coverage stores each shared edge once"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "relation_symmetry",
+        "anonymized_template": "IMPLIES(TOUCHES(REGA, REGB), TOUCHES(REGB, REGA))",
+        "slot_schema": [
+          {
+            "slot_id": "REGA",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGB",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          }
+        ],
+        "invariants": [
+          "The two slots swap positions between premise and conclusion and appear nowhere else: argument exchange is the entire content of the statement.",
+          "It is stated as an implication rather than an equality because the matcher treats call arguments as ordered, so the swap must be written out to be visible as structure. Recording symmetry this way is the corpus's only current means of saying that a head is commutative -- the limitation is on record in docs/BACKLOG.md.",
+          "Symmetry plus irreflexivity makes adjacency a graph relation rather than an order, which is what separates it from containment.",
+          "Follows from the transpose identity for the nine-intersection matrix: the touches pattern is invariant under transposition, and every symmetric DE-9IM predicate is symmetric for that reason."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A region."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A second region."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication at the meta level",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Meta-level 'if ... then' joining the premises of a rule to its conclusion. Same head and same argument order as data/logic and data/set_theory use for their inference nodes."
+          },
+          {
+            "notation": "TOUCHES(.,.)",
+            "name": "adjacency predicate",
+            "input_arity": 2,
+            "codomain": "truth values",
+            "description": "The OGC 'touches' relation: the two regions' closures meet but their interiors do not. Argument order is written explicitly on both sides of the statement precisely because the matcher treats call arguments as ordered, which is what lets the symmetry claim be visible as structure."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If one region touches another along their shared boundary, the second touches the first: adjacency does not have a direction.",
+        "statistical_significance": "Included to probe whether the corpus can express commutativity of a call head at all, and the answer is: only by writing the swap out by hand. The matcher flattens and sorts only the `+` and `*` operators; a call keeps its argument order, so TOUCHES(A, B) and TOUCHES(B, A) are different subtrees and this node's whole point is to state that they are interchangeable. It twins with nothing -- `IMPLIES⟨TOUCHES⟨?0:V, ?1:V⟩, TOUCHES⟨?1:V, ?0:V⟩⟩` is the only symmetry statement in the graph -- but it is the first node anywhere in data/ that would let a future commutative-head declaration be checked against something. Every MEET and JOIN in the Boolean corpora quietly assumes exactly this property of its head and none of them says so.",
+        "regularity_conditions": [
+          "A and B are valid simple-feature geometries with non-empty interiors",
+          "Both are taken in the same coordinate reference system"
+        ],
+        "failure_modes": [
+          "Undefined in the OGC sense when both arguments are points: two points cannot touch, since the relation requires a boundary intersection.",
+          "Tolerance-based implementations can break symmetry when the two geometries have different vertex densities, so ST_Touches(A, B) and ST_Touches(B, A) genuinely disagree in production systems.",
+          "Adjacency is not transitive, and the habit of reading 'related' relations as orders leads to treating an adjacency graph as a hierarchy."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.point_set.interior_boundary_exterior_partition",
+          "geotop.predicates.de9im_disjoint"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "egenhofer1991",
+          "bibliographic_entry": "Egenhofer, M. J., Franzosa, R. D. (1991). Point-set topological spatial relations. International Journal of Geographical Information Systems, 5(2), 161-174.",
+          "url": "https://doi.org/10.1080/02693799108927841"
+        },
+        {
+          "citation_key": "clementini1993",
+          "bibliographic_entry": "Clementini, E., Di Felice, P., van Oosterom, P. (1993). A small set of formal topological relationships suitable for end-user interaction. In Advances in Spatial Databases (SSD '93), LNCS 692, 277-295. Berlin: Springer."
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        },
+        {
+          "citation_key": "worboys2004",
+          "bibliographic_entry": "Worboys, M. F., Duckham, M. (2004). GIS: A Computing Perspective (2nd ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "adjacency",
+        "touches",
+        "symmetry",
+        "DE-9IM",
+        "region adjacency graph",
+        "spatial predicate"
+      ]
+    },
+    {
+      "statement_id": "geotop.predicates.de9im_disjoint",
+      "title": "DE-9IM Disjointness Predicate",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "predicate_algebra",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "disjoint(A, B) iff A inter B = emptyset",
+        "canonical_latex": "\\mathsf{disjoint}(A,B) \\iff A \\cap B = \\emptyset",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ B = ∅"
+          },
+          {
+            "form_id": "de9im_pattern",
+            "notation_system": "ascii",
+            "expression": "M(A, B) matches FF*FF****",
+            "scope_note": "The DE-9IM pattern for disjoint: interiors and boundaries all miss each other, exterior cells unconstrained"
+          },
+          {
+            "form_id": "negation",
+            "notation_system": "ascii",
+            "expression": "disjoint(A, B) iff not intersects(A, B)",
+            "scope_note": "Disjoint and intersects are complementary predicates; OGC defines one as the negation of the other"
+          },
+          {
+            "form_id": "interiors",
+            "notation_system": "ascii",
+            "expression": "interior(A) inter interior(B) = emptyset",
+            "scope_note": "The weaker interior-only condition, which permits touching; this is what distinguishes `disjoint` from `not overlaps`"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "empty_meet_predicate",
+        "anonymized_template": "MEET(REGA, REGB) = EMPTYSET",
+        "slot_schema": [
+          {
+            "slot_id": "REGA",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGB",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "EMPTYSET",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          }
+        ],
+        "invariants": [
+          "The meet lands on the bottom element of the lattice: disjointness is the statement that two regions have nothing below them in common.",
+          "Symmetric in the two operands as a mathematical fact; the shared argument-order convention from scripts/seed_logic.py is followed so that the written form is the canonical one.",
+          "The bottom element sits in a constant (parameter-like) slot, matching the treatment of FALSITY and EMPTYSET in the Boolean corpora.",
+          "This is precisely the hypothesis under which the correction term of geotop.measure.area_inclusion_exclusion vanishes, so the two nodes are the general case and its degenerate one.",
+          "Strictly stronger than 'the interiors are disjoint': two regions sharing only a boundary edge are adjacent, not disjoint, and the difference is one DE-9IM cell."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A region."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A second region."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound. Realized as intersection of subspaces/regions here, as conjunction in data/logic, as set intersection in data/set_theory, and as the atom of a shared information content in data/information_theory."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "emptyset",
+            "description": "The empty geometry: the least element of the lattice of regions, the same bottom element data/set_theory and data/logic use."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Two regions are disjoint when they share no point at all -- not even a boundary point.",
+        "statistical_significance": "The second instance of the corpus's newly identified tooling gap, and the reason it is worth a backlog entry rather than a shrug. This template *generalizes* `settheory.boolean_laws.complement_laws` (`MEET(SETA, NEG(SETA)) = EMPTYSET`) by the single substitution REGB -> NEG(REGA): a set and its complement are the extreme case of two disjoint sets. specialize.py performs exactly that match internally and then throws it away, because the match used neither argument absorption nor identity-element binding -- it was a plain slot-to-subtree bind, and the tool's filter ('anything matchable without them is an exact twin and already in the skeleton report') is false for patterns whose shapes differ for other reasons. Two independent instances of the same false assumption, in one seeding pass, from a corpus written without knowledge of the filter.",
+        "regularity_conditions": [
+          "A and B are valid simple-feature geometries in one coordinate reference system",
+          "Emptiness is exact, not up to tolerance"
+        ],
+        "failure_modes": [
+          "Floating-point geometry makes exact emptiness undecidable; every production implementation is really testing 'disjoint up to a snapping tolerance', which is not a topological relation and is not transitive in any useful sense.",
+          "Bounding-box prefilters answer a different question: box-disjoint implies disjoint, but not conversely, and treating the prefilter as the predicate is the classic spatial-index bug.",
+          "The empty geometry is disjoint from everything including itself, which makes several OGC predicates degenerate and is normally excluded by hand."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "geotop.point_set.interior_boundary_exterior_partition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.measure.area_inclusion_exclusion",
+          "geotop.predicates.adjacency_symmetry",
+          "settheory.boolean_laws.complement_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "egenhofer1991",
+          "bibliographic_entry": "Egenhofer, M. J., Franzosa, R. D. (1991). Point-set topological spatial relations. International Journal of Geographical Information Systems, 5(2), 161-174.",
+          "url": "https://doi.org/10.1080/02693799108927841"
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        },
+        {
+          "citation_key": "clementini1993",
+          "bibliographic_entry": "Clementini, E., Di Felice, P., van Oosterom, P. (1993). A small set of formal topological relationships suitable for end-user interaction. In Advances in Spatial Databases (SSD '93), LNCS 692, 277-295. Berlin: Springer."
+        },
+        {
+          "citation_key": "halmos1950",
+          "bibliographic_entry": "Halmos, P. R. (1950). Measure Theory. New York: D. Van Nostrand."
+        }
+      ],
+      "keywords": [
+        "disjoint",
+        "DE-9IM",
+        "intersection",
+        "empty geometry",
+        "spatial predicate",
+        "lattice meet"
+      ]
+    },
+    {
+      "statement_id": "geotop.measure.area_inclusion_exclusion",
+      "title": "Area of a Union (Inclusion-Exclusion for Overlapping Regions)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "measure_on_regions",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "area(A union B) = area(A) + area(B) - area(A inter B)",
+        "canonical_latex": "\\mu(A \\cup B) = \\mu(A) + \\mu(B) - \\mu(A \\cap B)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "μ(A ∪ B) = μ(A) + μ(B) − μ(A ∩ B)"
+          },
+          {
+            "form_id": "disjoint_case",
+            "notation_system": "ascii",
+            "expression": "area(A union B) = area(A) + area(B) when A inter B = emptyset",
+            "scope_note": "Finite additivity for disjoint regions, the degenerate case and the one a tessellated coverage relies on"
+          },
+          {
+            "form_id": "ogc",
+            "notation_system": "ascii",
+            "expression": "ST_Area(ST_Union(A, B)) = ST_Area(A) + ST_Area(B) - ST_Area(ST_Intersection(A, B))",
+            "scope_note": "The identity as a SQL/MM invariant; a useful regression test for a geometry engine"
+          },
+          {
+            "form_id": "buffer",
+            "notation_system": "ascii",
+            "expression": "area(buffer(A, r) union buffer(B, r)) <= area(buffer(A, r)) + area(buffer(B, r))",
+            "scope_note": "Subadditivity for buffers, which is this identity with the correction term dropped to an inequality"
+          },
+          {
+            "form_id": "n_regions",
+            "notation_system": "ascii",
+            "expression": "area(union_i A_i) = sum over non-empty S of (-1)^(|S|+1) * area(inter_{i in S} A_i)",
+            "scope_note": "General form; the signs are the Moebius function of the Boolean lattice, exactly as in the counting case"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "inclusion_exclusion_correction",
+        "anonymized_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
+        "slot_schema": [
+          {
+            "slot_id": "REGA",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGB",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          }
+        ],
+        "invariants": [
+          "Additive with a single correction term: the overlap is counted twice by the naive sum and subtracted once, so the identity is exact and not a bound.",
+          "Reduces to plain additivity exactly when MEET(A, B) = EMPTYSET, which is the statement of geotop.predicates.de9im_disjoint.",
+          "Symmetric in the two regions, since MEET and JOIN are.",
+          "Area is a valuation on the lattice of regions: monotone, and modular in the sense this identity states. Every valuation -- counting measure, probability, Lebesgue area, the Euler characteristic -- satisfies the same equation, which is why the CARD head is shared rather than renamed.",
+          "Extends to n regions with alternating signs over all non-empty subsets, the Moebius function of the Boolean lattice."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A measurable planar region."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A second measurable planar region."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "mu",
+            "name": "Lebesgue measure of a planar region",
+            "arity": 1,
+            "operator_family": "measure_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "CARD(.)",
+            "name": "valuation on the lattice",
+            "input_arity": 1,
+            "codomain": "reals",
+            "description": "Planar Lebesgue measure (area) of a region, used as the corpus's generic valuation head. Area is a finitely additive, modular, monotone valuation on the lattice of measurable regions, which is the only property inclusion-exclusion uses -- hence the shared head with set cardinality, entropy and the Euler characteristic."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound. Realized as intersection of subspaces/regions here, as conjunction in data/logic, as set intersection in data/set_theory, and as the atom of a shared information content in data/information_theory."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound. Realized as union of subspaces/regions here, as disjunction in data/logic and as set union in data/set_theory."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The area covered by two regions together is the sum of their areas less the area they share, because the overlap would otherwise be paid for twice.",
+        "statistical_significance": "The node this corpus was most confident about, and it delivers: an exact typed twin with `settheory.cardinality.inclusion_exclusion_two_sets`, `infotheory.mutualinfo.entropy_inclusion_exclusion` and `algtop.invariants.euler_characteristic_valuation`, on the skeleton `CARD⟨JOIN⟨?0:V, ?1:V⟩⟩ = +(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))`. Four disciplines, one skeleton, and the reason is not resemblance: counting measure, Yeung's I-measure, Lebesgue area and the Euler characteristic are four valuations on lattices, and inclusion-exclusion is a theorem about valuations that mentions none of them. It is also the most operational node in the geospatial corpus -- double-counting overlapping polygons is the single commonest error in area reporting from a GIS, and the correction term is what a dissolve operation computes.",
+        "regularity_conditions": [
+          "A and B are Lebesgue-measurable regions of finite area",
+          "Area is planar Lebesgue measure, or any finite modular valuation on the lattice of regions",
+          "Both geometries are valid and in one coordinate reference system"
+        ],
+        "failure_modes": [
+          "Regions of infinite area make the subtraction meaningless; the identity needs finiteness, not merely measurability.",
+          "Areas computed after different map projections are not comparable, so the identity holds per projection and fails across a reprojection boundary -- an equal-area projection is required before the arithmetic means anything on the sphere.",
+          "The n-region expansion has 2^n - 1 terms and is numerically unstable when many similar-sized overlaps cancel; production dissolve operations compute the union geometry instead, for good reason.",
+          "Transplanting the identity to a submodular set function (viewshed coverage, sensor coverage with occlusion) turns it into an inequality."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "geotop.measure.area_monotonicity"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.predicates.de9im_disjoint",
+          "algtop.invariants.euler_characteristic_valuation",
+          "settheory.cardinality.inclusion_exclusion_two_sets",
+          "infotheory.mutualinfo.entropy_inclusion_exclusion"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1950",
+          "bibliographic_entry": "Halmos, P. R. (1950). Measure Theory. New York: D. Van Nostrand."
+        },
+        {
+          "citation_key": "rota1964",
+          "bibliographic_entry": "Rota, G.-C. (1964). On the Foundations of Combinatorial Theory I: Theory of Moebius Functions. Zeitschrift fuer Wahrscheinlichkeitstheorie und Verwandte Gebiete, 2(4), 340-368."
+        },
+        {
+          "citation_key": "klain1997",
+          "bibliographic_entry": "Klain, D. A., Rota, G.-C. (1997). Introduction to Geometric Probability. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "stanley2011",
+          "bibliographic_entry": "Stanley, R. P. (2011). Enumerative Combinatorics, Volume 1 (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        }
+      ],
+      "keywords": [
+        "inclusion-exclusion",
+        "area",
+        "union",
+        "overlap",
+        "valuation",
+        "modularity",
+        "dissolve"
+      ]
+    },
+    {
+      "statement_id": "geotop.measure.area_monotonicity",
+      "title": "Monotonicity of Area under Containment",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "geospatial_topology"
+        ],
+        "subfield": "geospatial_topology",
+        "topic": "measure_on_regions",
+        "canonical_objects": [
+          "planar region",
+          "simple feature geometry",
+          "nine-intersection matrix",
+          "planar subdivision",
+          "lattice of regions"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (A within B) then area(A) <= area(B)",
+        "canonical_latex": "A \\sqsubseteq B \\implies \\mu(A) \\le \\mu(B)",
+        "equivalent_forms": [
+          {
+            "form_id": "difference",
+            "notation_system": "ascii",
+            "expression": "area(B) - area(A) = area(B minus A) when A within B",
+            "scope_note": "The sharper form: the gap is itself an area, which is what makes monotonicity follow from non-negativity"
+          },
+          {
+            "form_id": "buffer",
+            "notation_system": "ascii",
+            "expression": "if r <= s then area(buffer(A, r)) <= area(buffer(A, s))",
+            "scope_note": "Buffer monotonicity: buffering by a larger radius contains buffering by a smaller one, so areas are ordered"
+          },
+          {
+            "form_id": "union",
+            "notation_system": "ascii",
+            "expression": "area(A) <= area(A union B)",
+            "scope_note": "Union monotonicity, the instance obtained by taking the larger region to be a union"
+          },
+          {
+            "form_id": "subadditivity",
+            "notation_system": "ascii",
+            "expression": "area(A union B) <= area(A) + area(B)",
+            "scope_note": "The companion inequality, which is inclusion-exclusion with the non-negative correction term dropped"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "monotone_valuation",
+        "anonymized_template": "IMPLIES(LEQ(REGA, REGB), CARD(REGA) <= CARD(REGB))",
+        "slot_schema": [
+          {
+            "slot_id": "REGA",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          },
+          {
+            "slot_id": "REGB",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand"
+          }
+        ],
+        "invariants": [
+          "An order-preserving map: the lattice order on the left is carried to the numeric order on the right, which is exactly what 'monotone valuation' means.",
+          "Two orders appear in one statement and they are different orders -- LEQ between regions, `<=` between reals. The template keeps them typographically distinct on purpose, since collapsing them would claim a structural identity that does not hold.",
+          "Follows from inclusion-exclusion plus non-negativity of area: area(B) = area(A) + area(B minus A) and the second term cannot be negative.",
+          "This is where area and the Euler characteristic part company. Area is monotone; chi is not, since a subcomplex can easily have larger chi than the complex containing it. The inclusion-exclusion twin they share uses only modularity, and monotonicity is the extra property that measures have and general valuations do not."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A measurable region."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "region_operand",
+            "mathematical_order": 0,
+            "description": "A second measurable region containing the first."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<=",
+            "name": "less than or equal",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication at the meta level",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "subset",
+            "name": "subset inclusion",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "mu",
+            "name": "Lebesgue measure of a planar region",
+            "arity": 1,
+            "operator_family": "measure_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Meta-level 'if ... then' joining the premises of a rule to its conclusion. Same head and same argument order as data/logic and data/set_theory use for their inference nodes."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as spatial containment (OGC ST_Within / ST_Contains) here, as entailment in data/logic and as subset inclusion in data/set_theory."
+          },
+          {
+            "notation": "CARD(.)",
+            "name": "valuation on the lattice",
+            "input_arity": 1,
+            "codomain": "reals",
+            "description": "Planar Lebesgue measure (area) of a region, used as the corpus's generic valuation head. Area is a finitely additive, modular, monotone valuation on the lattice of measurable regions, which is the only property inclusion-exclusion uses -- hence the shared head with set cardinality, entropy and the Euler characteristic."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A region contained in another cannot have more area: enlarging a footprint never shrinks it.",
+        "statistical_significance": "The node that keeps the valuation twin honest. Because `geotop.measure.area_inclusion_exclusion` and `algtop.invariants.euler_characteristic_valuation` share a skeleton exactly, a reader could conclude that area and the Euler characteristic are interchangeable. They are not, and this node is the difference: area is monotone and chi is not. Structurally it is a reported miss -- `IMPLIES⟨LEQ⟨?0:V, ?1:V⟩, CARD⟨?0:V⟩ <= CARD⟨?1:V⟩⟩` matches nothing: it and `algtop.homotopy.homotopy_invariance` are the only two statements in the graph that nest a relation inside a call argument, and they nest different ones. That is a fair verdict on a fair statement: the corpus contains no other order-preservation claim to twin with, and inventing one to manufacture a match would be exactly the failure mode this repository exists to avoid.",
+        "regularity_conditions": [
+          "A and B are Lebesgue-measurable regions of finite area",
+          "Containment is the OGC `within` relation, matching the LEQ head used in geotop.predicates.containment_transitivity",
+          "Both geometries in one coordinate reference system"
+        ],
+        "failure_modes": [
+          "Fails for signed or oriented areas: a polygon with reversed ring orientation reports negative area in many engines, and monotonicity is then false as stated.",
+          "Fails across projections, since containment is projection-invariant but area is not; a contained region can report a larger area after a non-equal-area reprojection of only one of the two.",
+          "Does not transfer to the Euler characteristic or to any signed valuation, which is the point of the node: the shared inclusion-exclusion skeleton uses modularity only, never non-negativity."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "geotop.measure.area_inclusion_exclusion"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geotop.predicates.containment_transitivity",
+          "algtop.invariants.euler_characteristic_valuation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1950",
+          "bibliographic_entry": "Halmos, P. R. (1950). Measure Theory. New York: D. Van Nostrand."
+        },
+        {
+          "citation_key": "klain1997",
+          "bibliographic_entry": "Klain, D. A., Rota, G.-C. (1997). Introduction to Geometric Probability. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "ogc2011sfa",
+          "bibliographic_entry": "Open Geospatial Consortium (2011). OpenGIS Implementation Standard for Geographic Information -- Simple Feature Access, Part 1: Common Architecture, version 1.2.1. OGC 06-103r4.",
+          "url": "https://www.ogc.org/standard/sfa/"
+        },
+        {
+          "citation_key": "worboys2004",
+          "bibliographic_entry": "Worboys, M. F., Duckham, M. (2004). GIS: A Computing Perspective (2nd ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "monotonicity",
+        "area",
+        "containment",
+        "valuation",
+        "measure",
+        "buffer",
+        "subadditivity"
+      ]
+    }
+  ]
+}

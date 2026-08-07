@@ -1,0 +1,1473 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "algebraic_topology.invariants.v1",
+  "discipline": "algebraic_topology",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "algtop.invariants.euler_characteristic_surface",
+      "title": "Euler Characteristic of a Closed Orientable Surface",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "topological_invariants",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi(Sigma_g) = 2 - 2*g",
+        "canonical_latex": "\\chi(\\Sigma_g) = 2 - 2g",
+        "equivalent_forms": [
+          {
+            "form_id": "literal_constants",
+            "notation_system": "ascii",
+            "expression": "EULERCHAR = 2 - 2*GENUS",
+            "scope_note": "The same statement with the two 2s as numeric literals rather than constant slots. Recorded because the choice is load-bearing: with literals the node joins no twin group at all, since numeric literals are not slots and the matcher's sign-absorption rule fires only on parameter-like slots."
+          },
+          {
+            "form_id": "sphere",
+            "notation_system": "ascii",
+            "expression": "chi(S^2) = 2",
+            "scope_note": "Genus 0; the value Euler's polyhedron formula pins down"
+          },
+          {
+            "form_id": "torus",
+            "notation_system": "ascii",
+            "expression": "chi(T^2) = 0",
+            "scope_note": "Genus 1; the vanishing that makes the torus admit a nowhere-zero vector field"
+          },
+          {
+            "form_id": "non_orientable",
+            "notation_system": "ascii",
+            "expression": "chi(N_k) = 2 - k",
+            "scope_note": "Non-orientable closed surface with k crosscaps; affine in k with half the slope, so the two families are cousins rather than instances"
+          },
+          {
+            "form_id": "gauss_bonnet",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(GAUSSCURVATURE) = 2*pi*chi",
+            "scope_note": "Gauss-Bonnet: the same invariant computed by integrating curvature, which is how differential geometry reaches it"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_operator",
+        "anonymized_template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS",
+        "slot_schema": [
+          {
+            "slot_id": "EULERCHAR",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "intercept_sphere_characteristic"
+          },
+          {
+            "slot_id": "CONSTANT2",
+            "syntactic_category": "constant",
+            "semantic_role": "slope_cost_per_handle"
+          },
+          {
+            "slot_id": "GENUS",
+            "syntactic_category": "variable",
+            "semantic_role": "handle_count"
+          }
+        ],
+        "invariants": [
+          "Affine in the genus: one intercept and one slope, with the genus as the free variable. That is the whole content of the classification of closed orientable surfaces read numerically.",
+          "The two constants are numerically equal (both 2) but semantically distinct: the intercept is chi(S^2) and the slope is the drop in chi caused by attaching one handle. They are authored as separate slots because collapsing them to one slot would destroy the affine shape.",
+          "Strictly decreasing in the genus, so chi is a complete invariant for closed orientable surfaces: two such surfaces are homeomorphic exactly when their Euler characteristics agree.",
+          "Homotopy invariant, hence homeomorphism invariant; it cannot distinguish a surface from anything homotopy equivalent to it."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant",
+            "mathematical_order": 0,
+            "description": "Euler characteristic of the surface; an integer."
+          },
+          {
+            "symbol": "g",
+            "syntactic_category": "variable",
+            "semantic_role": "handle_count",
+            "mathematical_order": 0,
+            "description": "Genus: the number of handles attached to the sphere, a non-negative integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "chi of the 2-sphere, the base surface of the classification."
+          },
+          {
+            "symbol": "2 (slope)",
+            "value": 2,
+            "description": "The decrease in chi per attached handle: a handle adds one 1-cell pair and one 2-cell, netting -2."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every closed orientable surface is a sphere with some number of handles, and each handle costs exactly two units of Euler characteristic; so the invariant is a straight line in the genus.",
+        "statistical_significance": "The corpus's test of whether a topological invariant can join an *economic* structural family, and it does -- at the family level, not the typed one. The typed skeleton is `?0:V = +(?1:P, neg(*(?2:P, ?3:V)))`; the affine family (CAPM, the Keynesian consumption function, the tangent-line linearization, the location-scale transform) is `?0:V = +(?1:P, *(?2:P, ?3:V))`. They meet only once match_signatures.py absorbs the minus sign into the parameter-like slope slot, which is exactly the right verdict: the sign is a convention (chi decreasing in genus) and not structure. Two further consequences are worth recording. First, this node makes `affine_operator` span two shapes, so the matcher's archetype-drift section now flags the label -- correctly, because the hand-assigned label was always the family-level claim. Second, the same statement written `EULERCHAR = 2 - 2*GENUS` twins with nothing whatsoever, which is the sharpest available demonstration that in this corpus 'is a fixed number a literal or a constant slot?' is a structural decision and not a formatting one.",
+        "regularity_conditions": [
+          "The surface is closed (compact, without boundary), connected and orientable",
+          "Genus is a non-negative integer"
+        ],
+        "failure_modes": [
+          "Fails as stated for non-orientable surfaces: chi = 2 - k in the number of crosscaps, a different line, and the Klein bottle (chi = 0) is then indistinguishable from the torus by chi alone.",
+          "Surfaces with boundary lose one unit of chi per boundary circle, so the formula must become chi = 2 - 2g - b; applying the closed form to a disc or an annulus is the standard error.",
+          "In dimensions above 2 chi stops being a complete invariant and vanishes identically for odd-dimensional closed manifolds, so the intuition 'chi counts holes' does not survive the passage to 3-manifolds."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "algtop.invariants.euler_characteristic_complex"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homology.betti_alternating_sum",
+          "calculus.approximation.tangent_line_linearization",
+          "probstat.transform.affine_location_scale"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "richeson2008",
+          "bibliographic_entry": "Richeson, D. S. (2008). Euler's Gem: The Polyhedron Formula and the Birth of Topology. Princeton: Princeton University Press."
+        }
+      ],
+      "keywords": [
+        "Euler characteristic",
+        "genus",
+        "closed surface",
+        "classification of surfaces",
+        "affine",
+        "topological invariant"
+      ]
+    },
+    {
+      "statement_id": "algtop.invariants.euler_characteristic_complex",
+      "title": "Euler Characteristic of a Finite 2-Complex (Alternating Cell Count)",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "topological_invariants",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi = V - E + F",
+        "canonical_latex": "\\chi(X) = V - E + F",
+        "equivalent_forms": [
+          {
+            "form_id": "general_dimension",
+            "notation_system": "ascii",
+            "expression": "chi = sum_i COEFF_i*CELLCOUNT_i",
+            "scope_note": "Arbitrary finite CW complex: the alternating sum of the number of i-cells, of which V - E + F is the 2-dimensional case"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "χ = |X^0| - |X^1| + |X^2|",
+            "scope_note": "Written with cell-set cardinalities"
+          },
+          {
+            "form_id": "graph",
+            "notation_system": "ascii",
+            "expression": "chi = V - E",
+            "scope_note": "A finite graph is a 1-complex; chi is then the number of connected components minus the number of independent cycles"
+          },
+          {
+            "form_id": "triangulation",
+            "notation_system": "ascii",
+            "expression": "chi = n_0 - n_1 + n_2",
+            "scope_note": "Simplicial form, with n_k the number of k-simplices in a triangulation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "alternating_cell_count",
+        "anonymized_template": "EULERCHAR = VERTICES - EDGES + FACES",
+        "slot_schema": [
+          {
+            "slot_id": "EULERCHAR",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant"
+          },
+          {
+            "slot_id": "VERTICES",
+            "syntactic_category": "variable",
+            "semantic_role": "zero_cell_count"
+          },
+          {
+            "slot_id": "EDGES",
+            "syntactic_category": "variable",
+            "semantic_role": "one_cell_count"
+          },
+          {
+            "slot_id": "FACES",
+            "syntactic_category": "variable",
+            "semantic_role": "two_cell_count"
+          }
+        ],
+        "invariants": [
+          "Alternating in cell dimension: even-dimensional cells add, odd-dimensional cells subtract. The alternation is the entire reason the count is a topological invariant rather than an artefact of the chosen cell structure.",
+          "Independent of the cell structure although every term in it is not: subdividing a face changes V, E and F individually while leaving the combination fixed. This is the corpus's clearest example of an invariant defined by a non-invariant recipe.",
+          "All three counts are free variables of the same category, so the typed skeleton carries no parameter slot at all -- unlike the surface form, where the two 2s are constants.",
+          "Extends verbatim to every finite dimension as the alternating sum over cell dimensions; the 2-dimensional case is written out only because the grammar has no alternating-sign construct."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant",
+            "mathematical_order": 0,
+            "description": "Euler characteristic of the complex."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "zero_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of vertices (0-cells)."
+          },
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "one_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of edges (1-cells)."
+          },
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "two_cell_count",
+            "mathematical_order": 0,
+            "description": "Number of faces (2-cells)."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The Euler characteristic of a complex is obtained by counting its cells with alternating signs: vertices minus edges plus faces.",
+        "statistical_significance": "The hinge node of this whole seeding effort. It is the combinatorial definition that `geotop.polyhedra.euler_polyhedron_formula` pins to the value 2, and it is the node the parallel differential-geometry corpus reaches through Gauss-Bonnet, so its id is fixed by contract. Structurally it is also an instructive miss: the polyhedron formula is *literally this template with the invariant slot bound to 2*, yet neither tool reports the relation. match_signatures.py compares skeletons and a numeric literal is not a slot; specialize.py finds the match but suppresses it, because it only emits edges that used absorption or identity-element binding and this one is a plain slot-to-literal bind. The edge is therefore asserted by hand below, joining the short list of relations in this repository that the tooling cannot check.",
+        "regularity_conditions": [
+          "The complex is finite and of dimension at most 2 as written",
+          "Cells are attached along their boundaries in the CW sense"
+        ],
+        "failure_modes": [
+          "Infinite complexes have no such count; chi is defined only when the cell counts are finite (or the homology is finitely generated).",
+          "The count is invariant only under cell structures of the *same* space. Lakatos's history of the polyhedron formula is a catalogue of what happens when 'polyhedron' is left informal enough to admit non-complexes.",
+          "Written as V - E + F it silently assumes there are no cells of dimension 3 or higher; a solid tetrahedron and its boundary surface have different Euler characteristics (1 and 2)."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "algtop.invariants.euler_characteristic_surface",
+          "algtop.invariants.euler_characteristic_valuation"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "geotop.polyhedra.euler_polyhedron_formula"
+        ],
+        "composed_with": [
+          "algtop.homology.betti_alternating_sum"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "poincare1895",
+          "bibliographic_entry": "Poincare, H. (1895). Analysis Situs. Journal de l'Ecole Polytechnique, 2nd series, 1, 1-121."
+        },
+        {
+          "citation_key": "lakatos1976",
+          "bibliographic_entry": "Lakatos, I. (1976). Proofs and Refutations: The Logic of Mathematical Discovery. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "Euler characteristic",
+        "CW complex",
+        "alternating sum",
+        "cell count",
+        "combinatorial topology"
+      ]
+    },
+    {
+      "statement_id": "algtop.invariants.euler_characteristic_valuation",
+      "title": "Euler Characteristic is a Valuation (Inclusion-Exclusion for Subcomplexes)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "topological_invariants",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi(A union B) = chi(A) + chi(B) - chi(A inter B)",
+        "canonical_latex": "\\chi(A \\cup B) = \\chi(A) + \\chi(B) - \\chi(A \\cap B)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "χ(A ∪ B) = χ(A) + χ(B) − χ(A ∩ B)"
+          },
+          {
+            "form_id": "mayer_vietoris",
+            "notation_system": "ascii",
+            "expression": "... -> H_n(A inter B) -> H_n(A) (+) H_n(B) -> H_n(A union B) -> H_{n-1}(A inter B) -> ...",
+            "scope_note": "The Mayer-Vietoris long exact sequence, whose exactness makes the alternating sum of ranks telescope into the identity above"
+          },
+          {
+            "form_id": "disjoint_case",
+            "notation_system": "ascii",
+            "expression": "chi(A union B) = chi(A) + chi(B) when A inter B = emptyset",
+            "scope_note": "Finite additivity as the degenerate case"
+          },
+          {
+            "form_id": "product",
+            "notation_system": "ascii",
+            "expression": "chi(A x B) = chi(A) * chi(B)",
+            "scope_note": "The companion multiplicativity, which is a different structure and deliberately not stated as a node here"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "inclusion_exclusion_correction",
+        "anonymized_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
+        "slot_schema": [
+          {
+            "slot_id": "SPACEA",
+            "syntactic_category": "set",
+            "semantic_role": "subcomplex_operand"
+          },
+          {
+            "slot_id": "SPACEB",
+            "syntactic_category": "set",
+            "semantic_role": "subcomplex_operand"
+          }
+        ],
+        "invariants": [
+          "The Euler characteristic is a valuation: finitely additive with a modular correction term. Nothing in the statement mentions cells, homology or topology, which is precisely why it twins with counting and with entropy.",
+          "Signed, unlike cardinality and area: chi can be negative, so the identity is genuinely an identity of valuations and not of measures. The correction term is subtracted for the same reason in all four corpora regardless.",
+          "Symmetric in the two operands, since MEET and JOIN are.",
+          "Derived from Mayer-Vietoris by taking alternating sums of ranks; exactness of the sequence is what makes the correction exactly one term rather than an error bound.",
+          "Extends to n subcomplexes with alternating signs over all non-empty subsets -- the Moebius function of the Boolean lattice, the same combinatorics as the set-theoretic case."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "subcomplex_operand",
+            "mathematical_order": 0,
+            "description": "A subcomplex of a finite CW complex."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "subcomplex_operand",
+            "mathematical_order": 0,
+            "description": "A second subcomplex of the same complex."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "CARD(.)",
+            "name": "valuation on the lattice",
+            "input_arity": 1,
+            "codomain": "reals",
+            "description": "The Euler characteristic chi, used as the corpus's generic valuation head. chi is finitely additive and modular on the lattice of finite CW subcomplexes -- exactly the property CARD names in data/set_theory (counting measure) and in data/information_theory (Yeung's I-measure). Unlike cardinality it is signed and takes the value 0 on odd-dimensional closed manifolds, which is why it is a valuation rather than a measure."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound. Realized as intersection of subspaces/regions here, as conjunction in data/logic, as set intersection in data/set_theory, and as the atom of a shared information content in data/information_theory."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound. Realized as union of subspaces/regions here, as disjunction in data/logic and as set union in data/set_theory."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Gluing two subcomplexes adds their Euler characteristics and then removes the characteristic of the overlap, which would otherwise have been counted twice.",
+        "statistical_significance": "The node that makes the corpus's valuation claim testable. It is an exact typed twin of `settheory.cardinality.inclusion_exclusion_two_sets`, `infotheory.mutualinfo.entropy_inclusion_exclusion` and `geotop.measure.area_inclusion_exclusion`, on the skeleton `CARD⟨JOIN⟨?0:V, ?1:V⟩⟩ = +(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))`, because all four reuse the template string fixed in scripts/seed_logic.py. The claim the twin encodes is Rota's: counting measure, Shannon entropy, Lebesgue area and the Euler characteristic are four valuations on lattices, and inclusion-exclusion is one theorem about valuations. This is the strongest form of the corpus's thesis -- not four analogous statements, one statement with four interpretations of CARD -- and it is worth noting that the four differ sharply elsewhere: counting is non-negative and integral, entropy is non-negative and real, area is non-negative and continuous, and chi is signed and integral. Modularity is the only property the identity uses.",
+        "regularity_conditions": [
+          "A, B and A inter B are finite CW subcomplexes of a common complex",
+          "The triple is excisive, so that Mayer-Vietoris applies",
+          "All Euler characteristics involved are finite"
+        ],
+        "failure_modes": [
+          "Fails for pairs whose intersection is not a subcomplex; a CW-incompatible decomposition breaks exactness and with it the identity.",
+          "For infinite complexes chi need not be defined, so the equation is vacuous rather than false.",
+          "The n-fold expansion inherits the 2^n - 1 term count of set-theoretic inclusion-exclusion, and with signed values the terms do not merely cancel numerically but can do so catastrophically."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "algtop.invariants.euler_characteristic_complex"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homology.betti_alternating_sum",
+          "geotop.measure.area_inclusion_exclusion",
+          "settheory.cardinality.inclusion_exclusion_two_sets",
+          "infotheory.mutualinfo.entropy_inclusion_exclusion"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "rota1964",
+          "bibliographic_entry": "Rota, G.-C. (1964). On the Foundations of Combinatorial Theory I: Theory of Moebius Functions. Zeitschrift fuer Wahrscheinlichkeitstheorie und Verwandte Gebiete, 2(4), 340-368."
+        },
+        {
+          "citation_key": "klain1997",
+          "bibliographic_entry": "Klain, D. A., Rota, G.-C. (1997). Introduction to Geometric Probability. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        }
+      ],
+      "keywords": [
+        "Euler characteristic",
+        "valuation",
+        "inclusion-exclusion",
+        "Mayer-Vietoris",
+        "modularity",
+        "additivity"
+      ]
+    },
+    {
+      "statement_id": "algtop.homology.betti_alternating_sum",
+      "title": "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "homology",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "chi = sum_i (-1)^i * b_i",
+        "canonical_latex": "\\chi(X) = \\sum_{i \\ge 0} (-1)^i b_i",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit_signs",
+            "notation_system": "ascii",
+            "expression": "chi = b_0 - b_1 + b_2 - b_3 + ...",
+            "scope_note": "Written out; the signs the template cannot express"
+          },
+          {
+            "form_id": "surface",
+            "notation_system": "ascii",
+            "expression": "chi = 2 - 2g = b_0 - b_1 + b_2 = 1 - 2g + 1",
+            "scope_note": "Closed orientable surface, where b_0 = b_2 = 1 and b_1 = 2g"
+          },
+          {
+            "form_id": "cell_form",
+            "notation_system": "ascii",
+            "expression": "chi = sum_i (-1)^i * c_i",
+            "scope_note": "The same alternating sum over cell counts; equality of the two sums IS the Euler-Poincare theorem"
+          },
+          {
+            "form_id": "rank_form",
+            "notation_system": "ascii",
+            "expression": "chi = sum_i (-1)^i * RANK(HOMOLOGY_i)",
+            "scope_note": "Betti numbers spelled out as ranks of homology groups"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "alternating_rank_sum",
+        "anonymized_template": "EULERCHAR = sum_i COEFF_i*BETTI_i",
+        "slot_schema": [
+          {
+            "slot_id": "EULERCHAR",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant"
+          },
+          {
+            "slot_id": "COEFF_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "alternating_sign"
+          },
+          {
+            "slot_id": "BETTI_i",
+            "syntactic_category": "variable",
+            "semantic_role": "component_rank"
+          }
+        ],
+        "invariants": [
+          "A total decomposed as a weighted sum of indexed components: the invariant on the left is nothing but the components on the right combined with fixed weights.",
+          "The weights are (-1)^i and are therefore *fixed by the index*, not free. The template grammar has no way to say this, so the sign lives in a parameter slot and the alternation is invisible to the matcher. This is a real loss and is recorded as such rather than papered over.",
+          "Only finitely many Betti numbers are non-zero for a finite complex, so the sum is finite even when written over all dimensions.",
+          "Torsion is invisible: Betti numbers are ranks, so two spaces with the same free part and different torsion share a chi. That the alternating sum of cell counts nonetheless equals the alternating sum of ranks is the content of the theorem, not a triviality."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "chi",
+            "syntactic_category": "variable",
+            "semantic_role": "topological_invariant",
+            "mathematical_order": 0,
+            "description": "Euler characteristic of the space."
+          },
+          {
+            "symbol": "b_i",
+            "syntactic_category": "variable",
+            "semantic_role": "betti_number",
+            "mathematical_order": 0,
+            "description": "i-th Betti number: the rank of the i-th homology group."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "sum",
+            "name": "finite summation over a dimension index",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [
+          {
+            "notation": "i",
+            "domain": "non-negative integers up to the dimension of the complex",
+            "description": "Homological degree. Only finitely many terms are non-zero for a finite complex."
+          }
+        ],
+        "constants": [
+          {
+            "symbol": "(-1)^i",
+            "description": "The alternating sign attached to degree i. A fixed function of the index, occupying a parameter slot because the grammar has no index-dependent coefficient."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces.",
+        "statistical_significance": "An honest surprise. Because the alternating signs collapse into an opaque parameter slot, the typed skeleton is `?0:V = sum⟨*(?1:P, ?2:V)⟩` -- which is character for character the skeleton of `probstat.probability.total_probability_partition` (`MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i`). The twin fires. Is it real? Partly, and the partial answer is the useful one: both statements decompose a total into a weighted sum of indexed components, and both are instances of a valuation evaluated on a decomposition. What the matcher cannot see is that one family of weights is a probability distribution (non-negative, summing to one) and the other alternates in sign, which is the difference between an average and a signed count. The archetype labels are left distinct (`alternating_rank_sum` against `conditional_marginalization`) so the matcher's 'identical structures with different archetype ids' section flags the pair -- that flag is the finding, not a defect.",
+        "regularity_conditions": [
+          "The space has finitely generated homology in each degree and non-zero homology in only finitely many degrees",
+          "Betti numbers are taken as ranks over the integers, or equivalently dimensions over the rationals"
+        ],
+        "failure_modes": [
+          "The template cannot express (-1)^i, so nothing checks that the weights alternate; a reader who trusts the anonymized template alone would take the statement to be an arbitrary weighted sum.",
+          "Betti numbers computed with field coefficients of positive characteristic can differ from the integral ranks (universal coefficients), and the alternating sum is nevertheless the same chi -- a coincidence that regularly misleads.",
+          "For spaces with infinitely many non-zero Betti numbers the sum diverges and chi is undefined; regularized versions exist but are not this statement."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "algtop.homology.chain_rank_nullity",
+          "algtop.homology.betti_number_rank"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.invariants.euler_characteristic_complex",
+          "algtop.invariants.euler_characteristic_surface",
+          "algtop.invariants.euler_characteristic_valuation",
+          "probstat.probability.total_probability_partition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "poincare1895",
+          "bibliographic_entry": "Poincare, H. (1895). Analysis Situs. Journal de l'Ecole Polytechnique, 2nd series, 1, 1-121."
+        },
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "Euler-Poincare formula",
+        "Betti number",
+        "alternating sum",
+        "homology",
+        "rank",
+        "topological invariant"
+      ]
+    },
+    {
+      "statement_id": "algtop.homology.betti_number_rank",
+      "title": "Betti Number as Rank of Cycles Modulo Boundaries",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "homology",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "b_n = rank(Z_n) - rank(B_n)",
+        "canonical_latex": "b_n = \\operatorname{rank} Z_n - \\operatorname{rank} B_n",
+        "equivalent_forms": [
+          {
+            "form_id": "quotient",
+            "notation_system": "ascii",
+            "expression": "b_n = rank(H_n) = rank(Z_n / B_n)",
+            "scope_note": "Betti number as the rank of the homology group itself"
+          },
+          {
+            "form_id": "kernel_image",
+            "notation_system": "ascii",
+            "expression": "b_n = rank(ker d_n) - rank(im d_{n+1})",
+            "scope_note": "Cycles are the kernel of the boundary map, boundaries the image of the next one"
+          },
+          {
+            "form_id": "dimension",
+            "notation_system": "ascii",
+            "expression": "b_n = dim_Q (H_n (x) Q)",
+            "scope_note": "Rationalized form, which is what makes rank subtraction legitimate"
+          },
+          {
+            "form_id": "graph",
+            "notation_system": "ascii",
+            "expression": "b_0 = number of connected components, b_1 = E - V + b_0",
+            "scope_note": "1-complex case; the circuit rank a GIS planar-graph index computes"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "rank_difference",
+        "anonymized_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+        "slot_schema": [
+          {
+            "slot_id": "BETTI",
+            "syntactic_category": "variable",
+            "semantic_role": "component_rank"
+          },
+          {
+            "slot_id": "CYCLERANK",
+            "syntactic_category": "variable",
+            "semantic_role": "cycle_group_rank"
+          },
+          {
+            "slot_id": "BOUNDARYRANK",
+            "syntactic_category": "variable",
+            "semantic_role": "boundary_group_rank"
+          }
+        ],
+        "invariants": [
+          "A difference of two ranks, both of free abelian groups; the subtraction is legitimate because rank is additive on short exact sequences of finitely generated abelian groups.",
+          "Torsion contributes nothing to either term, so the definition deliberately discards information that the homology group retains. Betti numbers are a lossy shadow of homology, and this is where the loss happens.",
+          "Non-negative, since boundaries are cycles: the subtrahend indexes a subgroup of the group the minuend indexes.",
+          "All three slots are variable-like; no parameter or constant appears, which distinguishes this skeleton from the free-energy differences it otherwise resembles in shape."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "b_n",
+            "syntactic_category": "variable",
+            "semantic_role": "component_rank",
+            "mathematical_order": 0,
+            "description": "n-th Betti number."
+          },
+          {
+            "symbol": "Z_n",
+            "syntactic_category": "set",
+            "semantic_role": "cycle_group",
+            "mathematical_order": 0,
+            "description": "Group of n-cycles: the kernel of the n-th boundary map."
+          },
+          {
+            "symbol": "B_n",
+            "syntactic_category": "set",
+            "semantic_role": "boundary_group",
+            "mathematical_order": 0,
+            "description": "Group of n-boundaries: the image of the (n+1)-st boundary map."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "RANK(.)",
+            "name": "rank of a finitely generated abelian group",
+            "input_arity": 1,
+            "codomain": "non-negative integers",
+            "description": "Number of free generators, i.e. the dimension of the rationalization. Torsion is invisible to it, which is the whole reason Betti numbers lose information that homology keeps."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The n-th Betti number counts the independent n-dimensional holes: the cycles that are not themselves boundaries, measured by rank.",
+        "statistical_significance": "A structural miss worth naming. The skeleton `?0:V = +(?1:V, neg(?2:V))` -- a bare difference of two same-category quantities -- matches nothing in the corpus, even though the corpus is full of differences. The nearest candidates all differ by having a parameter or a product on the right: the free-energy nodes are `?0:V = +(?1:V, neg(*(?2:V, ?3:V)))` and the z-standardization divides. The lesson is that two-term differences are too small to carry structure; they twin only when the terms themselves have shape. That is a useful negative result about where the twin thesis has content.",
+        "regularity_conditions": [
+          "The chain complex is of finitely generated free abelian groups",
+          "Ranks are taken over the integers"
+        ],
+        "failure_modes": [
+          "Over a field of positive characteristic the 'Betti numbers' are dimensions and can exceed the integral ranks wherever there is matching torsion, so the same name denotes different numbers.",
+          "For infinitely generated chain groups the ranks may be infinite and the difference undefined.",
+          "The formula invites the belief that homology is determined by Betti numbers; the lens space pair L(7,1) and L(7,2) have equal Betti numbers and different homotopy types."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "algtop.homology.betti_alternating_sum"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homology.chain_rank_nullity",
+          "algtop.homotopy.homotopy_invariance"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "poincare1895",
+          "bibliographic_entry": "Poincare, H. (1895). Analysis Situs. Journal de l'Ecole Polytechnique, 2nd series, 1, 1-121."
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "Betti number",
+        "rank",
+        "cycle",
+        "boundary",
+        "homology",
+        "torsion"
+      ]
+    },
+    {
+      "statement_id": "algtop.homology.chain_rank_nullity",
+      "title": "Rank-Nullity for the Boundary Homomorphism",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "homology",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "rank(C_n) = rank(ker d_n) + rank(im d_n)",
+        "canonical_latex": "\\operatorname{rank} C_n = \\operatorname{rank}(\\ker \\partial_n) + \\operatorname{rank}(\\operatorname{im} \\partial_n)",
+        "equivalent_forms": [
+          {
+            "form_id": "linear_algebra",
+            "notation_system": "ascii",
+            "expression": "dim(V) = nullity(T) + rank(T)",
+            "scope_note": "The rank-nullity theorem of linear algebra, of which this is the chain-complex instance"
+          },
+          {
+            "form_id": "cycles",
+            "notation_system": "ascii",
+            "expression": "rank(C_n) = rank(Z_n) + rank(B_{n-1})",
+            "scope_note": "Naming the kernel the cycles and the image the boundaries one dimension down"
+          },
+          {
+            "form_id": "exact_sequence",
+            "notation_system": "ascii",
+            "expression": "0 -> Z_n -> C_n -> B_{n-1} -> 0",
+            "scope_note": "The short exact sequence whose splitting over Q gives the rank identity"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "rank_decomposition",
+        "anonymized_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+        "slot_schema": [
+          {
+            "slot_id": "CHAINRANK",
+            "syntactic_category": "variable",
+            "semantic_role": "chain_group_rank"
+          },
+          {
+            "slot_id": "CYCLERANK",
+            "syntactic_category": "variable",
+            "semantic_role": "kernel_rank"
+          },
+          {
+            "slot_id": "IMAGERANK",
+            "syntactic_category": "variable",
+            "semantic_role": "image_rank"
+          }
+        ],
+        "invariants": [
+          "A conservation statement: the rank of the source splits exactly into what the map kills and what it produces, with no remainder.",
+          "Holds for any homomorphism of finitely generated free abelian groups, not just boundary maps; the topology enters only through which map is chosen.",
+          "Summing this identity over all degrees with alternating signs is what makes the cell count and the Betti sum agree -- the telescoping is the proof of the Euler-Poincare formula.",
+          "Symmetric in its two summands as written, which is a small lie the shape tells: kernel and image play very different roles even though addition does not care."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "C_n",
+            "syntactic_category": "set",
+            "semantic_role": "chain_group",
+            "mathematical_order": 0,
+            "description": "Group of n-chains: the free abelian group on the n-cells."
+          },
+          {
+            "symbol": "d_n",
+            "syntactic_category": "variable",
+            "semantic_role": "boundary_map",
+            "mathematical_order": 0,
+            "description": "The n-th boundary homomorphism C_n -> C_{n-1}."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "RANK(.)",
+            "name": "rank of a finitely generated abelian group",
+            "input_arity": 1,
+            "codomain": "non-negative integers",
+            "description": "Number of free generators, i.e. the dimension of the rationalization. Torsion is invisible to it, which is the whole reason Betti numbers lose information that homology keeps."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every n-chain either dies under the boundary map or survives into its image, and counting free generators respects that split exactly.",
+        "statistical_significance": "Included as the engine under the Euler-Poincare formula rather than for its twinning prospects, and the matcher agrees: `?0:V = +(?1:V, ?2:V)` matches nothing, because the corpus's other additive identities all have more terms (`economics.macroeconomics.gdp_expenditure_identity` has four) or a correction term (every inclusion-exclusion node). It is the smallest non-trivial equation in either topology corpus and it twins with nothing -- a useful calibration for how much structure a template needs before a twin means anything. Its real weight in the graph is inferential: summing it with alternating signs is the one-line proof that the two definitions of the Euler characteristic agree.",
+        "regularity_conditions": [
+          "Chain groups are finitely generated and free",
+          "Ranks are taken over the integers or dimensions over a field"
+        ],
+        "failure_modes": [
+          "Over a ring that is not a PID the kernel need not be free and the rank identity can fail.",
+          "Infinite-dimensional chain complexes need the statement recast in terms of exact sequences rather than rank arithmetic."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "algtop.homology.betti_alternating_sum"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homology.betti_number_rank"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "rank-nullity",
+        "boundary map",
+        "chain complex",
+        "kernel",
+        "image",
+        "exact sequence"
+      ]
+    },
+    {
+      "statement_id": "algtop.homotopy.fundamental_group_circle",
+      "title": "Fundamental Group of the Circle",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "homotopy",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "pi_1(S^1) iso Z",
+        "canonical_latex": "\\pi_1(S^1) \\cong \\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "degree",
+            "notation_system": "ascii",
+            "expression": "[loop] |-> winding number",
+            "scope_note": "The isomorphism is given by the winding number, which is why it is computable"
+          },
+          {
+            "form_id": "covering",
+            "notation_system": "ascii",
+            "expression": "R -> S^1, t |-> exp(2*pi*i*t)",
+            "scope_note": "The universal cover whose deck transformation group is Z; the proof is the lifting criterion applied to it"
+          },
+          {
+            "form_id": "torus",
+            "notation_system": "ascii",
+            "expression": "pi_1(T^2) iso Z x Z",
+            "scope_note": "Product form, obtained from this one by the product formula for pi_1"
+          },
+          {
+            "form_id": "homology",
+            "notation_system": "ascii",
+            "expression": "H_1(S^1) iso Z",
+            "scope_note": "Abelianization; for the circle pi_1 is already abelian so the two agree"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "invariant_evaluation",
+        "anonymized_template": "FUNDGROUP(CIRCLE) = INTEGERS",
+        "slot_schema": [
+          {
+            "slot_id": "CIRCLE",
+            "syntactic_category": "constant",
+            "semantic_role": "base_space"
+          },
+          {
+            "slot_id": "INTEGERS",
+            "syntactic_category": "constant",
+            "semantic_role": "invariant_value"
+          }
+        ],
+        "invariants": [
+          "A point evaluation of an invariant, not a law: both slots are fixed objects, so the statement has no free variable at all. That is exactly why it twins with nothing and should not be expected to.",
+          "The isomorphism is canonical once an orientation is chosen; the generator is the class of the identity loop.",
+          "Infinite and abelian, which is what makes the circle detect holes that homology also detects; for higher spheres pi_1 is trivial while H_n is not, and the two invariants part company.",
+          "The first computation in algebraic topology from which anything else follows -- Brouwer in dimension 2, the fundamental theorem of algebra, Borsuk-Ulam in dimension 1 -- so its value in the graph is as a source of entailments, not as a shape."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "S^1",
+            "syntactic_category": "constant",
+            "semantic_role": "base_space",
+            "mathematical_order": 0,
+            "description": "The circle: the one-dimensional sphere."
+          },
+          {
+            "symbol": "Z",
+            "syntactic_category": "constant",
+            "semantic_role": "invariant_value",
+            "mathematical_order": 0,
+            "description": "The additive group of integers."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "iso",
+            "name": "group isomorphism",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "FUNDGROUP(.)",
+            "name": "fundamental group",
+            "input_arity": 1,
+            "codomain": "groups",
+            "description": "pi_1(X, x0), the group of homotopy classes of loops at a basepoint under concatenation. The basepoint is suppressed because the spaces named here are path-connected."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "S^1",
+            "description": "The circle, taken with any basepoint since it is path-connected."
+          },
+          {
+            "symbol": "Z",
+            "description": "The infinite cyclic group, generated by the class of the once-around loop."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Loops on a circle are classified up to homotopy by how many times they wind around it, with sign; concatenating loops adds winding numbers.",
+        "statistical_significance": "Deliberately the odd node out in this corpus, and an honest reported miss. Its skeleton `?0:P = FUNDGROUP⟨?1:P⟩` has two constant slots and one unshared head, so it cannot twin with anything and nothing was engineered to make it. It is included because a topology corpus that contained only additive invariants would misrepresent the subject: the fundamental group is non-abelian in general, is not a valuation, and obeys none of the inclusion-exclusion structure that the rest of this corpus twins on. Recording a statement the matcher provably cannot use is part of keeping the twin counts meaningful.",
+        "regularity_conditions": [
+          "The circle is taken with its standard topology",
+          "Basepoint suppressed because the space is path-connected"
+        ],
+        "failure_modes": [
+          "The analogous statement fails for higher spheres: pi_1(S^n) is trivial for n >= 2, so 'the sphere's group counts its hole' does not generalize.",
+          "pi_1 is not abelian in general (the figure eight gives a free group on two generators), so intuitions transferred from this abelian case mislead badly.",
+          "Homotopy groups above degree 1 are not computable by this kind of covering-space argument; pi_n(S^2) is non-trivial for infinitely many n and remains unknown in general."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homotopy.homotopy_invariance",
+          "algtop.invariants.euler_characteristic_surface"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "poincare1895",
+          "bibliographic_entry": "Poincare, H. (1895). Analysis Situs. Journal de l'Ecole Polytechnique, 2nd series, 1, 1-121."
+        },
+        {
+          "citation_key": "munkres2000",
+          "bibliographic_entry": "Munkres, J. R. (2000). Topology (2nd ed.). Upper Saddle River: Prentice Hall."
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "fundamental group",
+        "circle",
+        "winding number",
+        "covering space",
+        "homotopy"
+      ]
+    },
+    {
+      "statement_id": "algtop.homotopy.homotopy_invariance",
+      "title": "Homotopy Invariance of Homology",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "algebraic_topology"
+        ],
+        "subfield": "algebraic_topology",
+        "topic": "homotopy",
+        "canonical_objects": [
+          "topological space",
+          "CW complex",
+          "chain complex",
+          "homology group",
+          "Euler characteristic"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if X is homotopy equivalent to Y then H_*(X) iso H_*(Y)",
+        "canonical_latex": "X \\simeq Y \\implies H_*(X) \\cong H_*(Y)",
+        "equivalent_forms": [
+          {
+            "form_id": "maps",
+            "notation_system": "ascii",
+            "expression": "f homotopic to g implies f_* = g_* on homology",
+            "scope_note": "The underlying statement about induced maps, from which the space-level version follows"
+          },
+          {
+            "form_id": "contractible",
+            "notation_system": "ascii",
+            "expression": "X contractible implies H_n(X) = 0 for n > 0",
+            "scope_note": "The degenerate case: a homotopy equivalence to a point"
+          },
+          {
+            "form_id": "deformation_retract",
+            "notation_system": "ascii",
+            "expression": "A a deformation retract of X implies H_*(A) iso H_*(X)",
+            "scope_note": "The form used in practice, e.g. the annulus retracting to its core circle"
+          },
+          {
+            "form_id": "consequence",
+            "notation_system": "ascii",
+            "expression": "X homeomorphic to Y implies H_*(X) iso H_*(Y)",
+            "scope_note": "Homeomorphism invariance as the weaker corollary, which is what makes homology usable as a classification tool"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "invariance_under_equivalence",
+        "anonymized_template": "IMPLIES(HOMOTOPYEQUIVALENT(SPACE1, SPACE2), HOMOLOGY(SPACE1) = HOMOLOGY(SPACE2))",
+        "slot_schema": [
+          {
+            "slot_id": "SPACE1",
+            "syntactic_category": "set",
+            "semantic_role": "space_operand"
+          },
+          {
+            "slot_id": "SPACE2",
+            "syntactic_category": "set",
+            "semantic_role": "space_operand"
+          }
+        ],
+        "invariants": [
+          "An implication, not an equation: the statement licenses a transfer and is not reversible. Spaces with isomorphic homology need not be homotopy equivalent, and the asymmetric IMPLIES root records that.",
+          "The two space slots occur once in each position on both sides, so the content is entirely in the pairing: whatever relation holds of the pair on the left forces the equality on the right.",
+          "The same shell -- a premise about a pair implying an equality of a functional applied to each -- is what every invariance statement in mathematics has, which is why the node is authored with a generic IMPLIES head rather than topology-specific notation.",
+          "Homotopy equivalence is strictly coarser than homeomorphism, so this is the stronger of the two invariance claims and the weaker as a classification tool."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "X",
+            "syntactic_category": "set",
+            "semantic_role": "space_operand",
+            "mathematical_order": 0,
+            "description": "A topological space."
+          },
+          {
+            "symbol": "Y",
+            "syntactic_category": "set",
+            "semantic_role": "space_operand",
+            "mathematical_order": 0,
+            "description": "A second topological space."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication at the meta level",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "iso",
+            "name": "group isomorphism",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Meta-level 'if ... then' joining the premises of a rule to its conclusion. Same head and same argument order as data/logic and data/set_theory use for their inference nodes."
+          },
+          {
+            "notation": "HOMOTOPYEQUIVALENT(.,.)",
+            "name": "homotopy equivalence",
+            "input_arity": 2,
+            "codomain": "truth values",
+            "description": "There exist maps f: X -> Y and g: Y -> X with gf and fg homotopic to the identities. Weaker than homeomorphism and strictly stronger than having isomorphic homology."
+          },
+          {
+            "notation": "HOMOLOGY(.)",
+            "name": "singular homology functor",
+            "input_arity": 1,
+            "codomain": "graded abelian groups",
+            "description": "H_*(X), the graded singular homology of a space with integer coefficients. Written as a call rather than expanded so that invariance is visible as a statement about the functor rather than about any particular group."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Homology cannot tell apart spaces that can be continuously deformed into one another; it is an invariant of homotopy type, not of the space as a point set.",
+        "statistical_significance": "The node that explains why the rest of this corpus is allowed to exist. Euler characteristics and Betti numbers are computed from a chosen cell structure, and it is invariance that makes the answer a property of the space. Structurally it is a reported miss: `IMPLIES⟨HOMOTOPYEQUIVALENT⟨?0:V, ?1:V⟩, HOMOLOGY⟨?0:V⟩ = HOMOLOGY⟨?1:V⟩⟩` shares its outer IMPLIES shell with `logic.inference.modus_ponens`, `settheory.order.subset_transitivity`, `geotop.predicates.containment_transitivity`, `geotop.predicates.adjacency_symmetry` and `geotop.measure.area_monotonicity`, and twins with none of them, because the premises differ in head and arity. The graph now holds seven IMPLIES-rooted nodes across four disciplines falling into six distinct skeletons, of which exactly one pair twins. That is the near miss seed_logic.py first recorded between modus ponens and subset transitivity, now with enough instances to say that a matcher abstracting over premise *heads* would be earning its keep.",
+        "regularity_conditions": [
+          "Singular homology with any coefficient group",
+          "No finiteness or CW hypothesis is needed; the theorem is general"
+        ],
+        "failure_modes": [
+          "The converse is false: the Poincare sphere has the homology of S^3 and is not homotopy equivalent to it, which is exactly the failure that made the Poincare conjecture a conjecture.",
+          "Homotopy invariance means homology cannot detect anything about embedding or metric structure; knot complements in S^3 all have the same homology, so knot theory needs finer invariants.",
+          "Naive dimension arguments break: R^n is contractible for every n, so homology alone does not see dimension."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "algtop.homology.betti_number_rank",
+          "algtop.invariants.euler_characteristic_surface",
+          "algtop.homotopy.fundamental_group_circle"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hatcher2002",
+          "bibliographic_entry": "Hatcher, A. (2002). Algebraic Topology. Cambridge: Cambridge University Press.",
+          "url": "https://pi.math.cornell.edu/~hatcher/AT/ATpage.html"
+        },
+        {
+          "citation_key": "munkres1984",
+          "bibliographic_entry": "Munkres, J. R. (1984). Elements of Algebraic Topology. Menlo Park: Addison-Wesley."
+        },
+        {
+          "citation_key": "massey1991",
+          "bibliographic_entry": "Massey, W. S. (1991). A Basic Course in Algebraic Topology. Graduate Texts in Mathematics 127. New York: Springer."
+        },
+        {
+          "citation_key": "poincare1895",
+          "bibliographic_entry": "Poincare, H. (1895). Analysis Situs. Journal de l'Ecole Polytechnique, 2nd series, 1, 1-121."
+        }
+      ],
+      "keywords": [
+        "homotopy invariance",
+        "homology",
+        "deformation retract",
+        "homotopy equivalence",
+        "functor"
+      ]
+    }
+  ]
+}
