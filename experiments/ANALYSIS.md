@@ -234,8 +234,37 @@ and the skeleton vocabulary live outside the weights for both size
 (embedding tables dominate tiny models) and robustness (weight-stored
 lexica die OOD). Every clause is now a measurement, not a design bet.
 
+## Emergence battery 1 — solve-for-X (span pointing, recombination splits)
+
+Answer a cross-language WH-question by pointing (start, end) at the
+answer span in the statement. Test = ONLY held-out verb x noun combos;
+ood = held-out combos + deeper recursion. 2 seeds/arm, exact match:
+
+| arm | test (novel combos) | OOD (deeper) |
+|---|---|---|
+| struct | 0.999 | 0.203 |
+| hybrid | 1.000 | 0.206 |
+
+- **Recombination is solved**: perfect exact-match on combinations never
+  seen together in training. The compositional signature — seen parts,
+  novel combination — is fully present in the pointer mechanism. One
+  desired emergent property, clearly apparent, achieved.
+- **Depth is the wall, and it is a pointer failure, not a comparison
+  failure**: the hybrid's structural features do not help because the
+  breakdown is absolute position embeddings failing to extrapolate to
+  longer sequences. Depth/length generalization is now isolated as THE
+  frontier across the whole suite (every task's OOD collapse traces to
+  it).
+- Next probe follows the house pattern (symbolic carries what it knows
+  exactly): replace linear positions with tree coordinates from the
+  parse (depth + sibling index) — depth-invariant by construction — and
+  measure OOD recovery.
+
 ## Next
 
-1. Binding category-compatibility constraints for specialize.py noise.
-2. Prover phase 1 (LeanDojo extraction) — needs a Linux/WSL2 decision.
-3. Scale hybrid to richer grammars / real bilingual data.
+1. Tree-structural positional encoding for solvex OOD (in progress).
+2. Binding category-compatibility constraints for specialize.py noise.
+3. Prover phase 1: LeanDojo-v2 native-Windows attempt (WSL2 only if
+   Lean tracing forces it).
+4. Ingest Rasmussen-Schuler LREC2020 corpus (2k sentences + lambda
+   forms) as the real language-logic bridge.

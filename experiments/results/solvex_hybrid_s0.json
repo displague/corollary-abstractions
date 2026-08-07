@@ -1,0 +1,15 @@
+{
+  "task": "solvex",
+  "arm": "hybrid",
+  "d_model": 128,
+  "n_layers": 4,
+  "train_frac": 1.0,
+  "train_size": 50000,
+  "params": 870914,
+  "vocab_size": 94,
+  "seed": 0,
+  "val_exact_best": 0.9994,
+  "test_exact": 0.9994,
+  "ood_exact": 0.19733333333333333,
+  "seconds": 64.6
+}

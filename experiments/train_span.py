@@ -37,6 +37,29 @@ def tokens_for(example: dict, arm: str) -> tuple[list[str], int]:
     return feats + example["tokens_struct"], 2
 
 
+MAX_DEPTH, MAX_SIB = 32, 64
+
+
+def tree_coords(tokens: list[str]) -> list[tuple[int, int]]:
+    """(depth, sibling-index) per token from the serialized bracket stream —
+    symbolic coordinates the front-end knows exactly, depth-capped."""
+    coords = []
+    sib_stack = [0]
+    for t in tokens:
+        if t.endswith("(") or t.endswith("⟨"):
+            coords.append((len(sib_stack) - 1, sib_stack[-1]))
+            sib_stack[-1] += 1
+            sib_stack.append(0)
+        elif t == ")":
+            coords.append((max(len(sib_stack) - 2, 0), 0))
+            if len(sib_stack) > 1:
+                sib_stack.pop()
+        else:
+            coords.append((len(sib_stack) - 1, sib_stack[-1]))
+            sib_stack[-1] += 1
+    return [(min(d, MAX_DEPTH - 1), min(s, MAX_SIB - 1)) for d, s in coords]
+
+
 class SpanDataset(Dataset):
     def __init__(self, rows: list[dict], vocab: Vocab, arm: str, max_len: int):
         self.items = []
@@ -47,7 +70,10 @@ class SpanDataset(Dataset):
                 continue
             start = r["ans_start"] + shift + 1  # +1 for CLS
             end = r["ans_end"] + shift + 1
-            self.items.append((torch.tensor(ids, dtype=torch.long), start, end))
+            coords = [(0, 0)] + tree_coords(toks)  # CLS at origin
+            self.items.append((torch.tensor(ids, dtype=torch.long),
+                               torch.tensor(coords, dtype=torch.long),
+                               start, end))
 
     def __len__(self):
         return len(self.items)
@@ -57,33 +83,44 @@ class SpanDataset(Dataset):
 
 
 def collate(batch):
-    seqs, starts, ends = zip(*batch)
+    seqs, coords, starts, ends = zip(*batch)
     max_len = max(len(s) for s in seqs)
     out = torch.zeros(len(seqs), max_len, dtype=torch.long)
+    crd = torch.zeros(len(seqs), max_len, 2, dtype=torch.long)
     mask = torch.zeros(len(seqs), max_len, dtype=torch.bool)
-    for i, s in enumerate(seqs):
+    for i, (s, c) in enumerate(zip(seqs, coords)):
         out[i, : len(s)] = s
+        crd[i, : len(c)] = c
         mask[i, : len(s)] = True
-    return (out, mask, torch.tensor(starts, dtype=torch.long),
+    return (out, crd, mask, torch.tensor(starts, dtype=torch.long),
             torch.tensor(ends, dtype=torch.long))
 
 
 class SpanPointer(nn.Module):
     def __init__(self, vocab_size: int, d_model: int, n_layers: int,
-                 n_heads: int = 4, max_len: int = 512):
+                 n_heads: int = 4, max_len: int = 512, positions: str = "abs"):
         super().__init__()
+        self.positions = positions
         self.embed = nn.Embedding(vocab_size, d_model, padding_idx=0)
-        self.pos = nn.Embedding(max_len, d_model)
+        if positions == "abs":
+            self.pos = nn.Embedding(max_len, d_model)
+        else:  # tree: symbolic (depth, sibling) coordinates from the parse
+            self.depth_emb = nn.Embedding(MAX_DEPTH, d_model)
+            self.sib_emb = nn.Embedding(MAX_SIB, d_model)
         layer = nn.TransformerEncoderLayer(
             d_model, n_heads, dim_feedforward=4 * d_model,
             dropout=0.1, batch_first=True, norm_first=True)
         self.encoder = nn.TransformerEncoder(layer, n_layers)
         self.span_head = nn.Linear(d_model, 2)  # start logit, end logit per pos
 
-    def forward(self, x, mask):
-        pos = torch.arange(x.size(1), device=x.device).unsqueeze(0)
-        h = self.encoder(self.embed(x) + self.pos(pos),
-                         src_key_padding_mask=~mask)
+    def forward(self, x, coords, mask):
+        h = self.embed(x)
+        if self.positions == "abs":
+            pos = torch.arange(x.size(1), device=x.device).unsqueeze(0)
+            h = h + self.pos(pos)
+        else:
+            h = h + self.depth_emb(coords[..., 0]) + self.sib_emb(coords[..., 1])
+        h = self.encoder(h, src_key_padding_mask=~mask)
         logits = self.span_head(h)  # B x L x 2
         neg = torch.finfo(logits.dtype).min
         logits = logits.masked_fill(~mask.unsqueeze(-1), neg)
@@ -94,9 +131,9 @@ def evaluate(model, loader, device) -> float:
     model.eval()
     correct = total = 0
     with torch.no_grad():
-        for x, mask, s, e in loader:
-            x, mask = x.to(device), mask.to(device)
-            ls, le = model(x, mask)
+        for x, crd, mask, s, e in loader:
+            x, crd, mask = x.to(device), crd.to(device), mask.to(device)
+            ls, le = model(x, crd, mask)
             ps, pe = ls.argmax(-1).cpu(), le.argmax(-1).cpu()
             correct += ((ps == s) & (pe == e)).sum().item()
             total += len(s)
@@ -116,6 +153,7 @@ def main() -> None:
     ap.add_argument("--max-len", type=int, default=512)
     ap.add_argument("--train-frac", type=float, default=1.0,
                     help="fraction of the train split used (scaling axis)")
+    ap.add_argument("--positions", choices=["abs", "tree"], default="abs")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
@@ -141,7 +179,7 @@ def main() -> None:
                for s, ds in datasets.items()}
 
     model = SpanPointer(len(vocab), args.d_model, args.n_layers,
-                        max_len=args.max_len).to(device)
+                        max_len=args.max_len, positions=args.positions).to(device)
     n_params = sum(p.numel() for p in model.parameters())
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     total_steps = args.epochs * math.ceil(len(datasets["train"]) / args.batch_size)
@@ -149,7 +187,7 @@ def main() -> None:
                                                 total_steps=total_steps)
     loss_fn = nn.CrossEntropyLoss()
 
-    print(f"solvex arm={args.arm} d={args.d_model} L={args.n_layers} "
+    print(f"solvex arm={args.arm} pos={args.positions} d={args.d_model} L={args.n_layers} "
           f"train={len(datasets['train'])} vocab={len(vocab)} "
           f"params={n_params:,} device={device}", flush=True)
 
@@ -158,10 +196,11 @@ def main() -> None:
     for epoch in range(args.epochs):
         model.train()
         running = 0.0
-        for x, mask, s, e in loaders["train"]:
-            x, mask, s, e = x.to(device), mask.to(device), s.to(device), e.to(device)
+        for x, crd, mask, s, e in loaders["train"]:
+            x, crd, mask, s, e = (x.to(device), crd.to(device), mask.to(device),
+                                  s.to(device), e.to(device))
             opt.zero_grad()
-            ls, le = model(x, mask)
+            ls, le = model(x, crd, mask)
             loss = loss_fn(ls, s) + loss_fn(le, e)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -179,7 +218,8 @@ def main() -> None:
     if best_state is not None:
         model.load_state_dict(best_state)
     result = {
-        "task": "solvex", "arm": args.arm, "d_model": args.d_model,
+        "task": "solvex", "arm": args.arm, "positions": args.positions,
+        "d_model": args.d_model,
         "n_layers": args.n_layers, "train_frac": args.train_frac,
         "train_size": len(datasets["train"]), "params": n_params,
         "vocab_size": len(vocab), "seed": args.seed,
@@ -190,7 +230,7 @@ def main() -> None:
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(f"DONE {json.dumps({k: result[k] for k in ['arm','d_model','n_layers','train_frac','test_exact','ood_exact']})}",
+    print(f"DONE {json.dumps({k: result[k] for k in ['arm','positions','test_exact','ood_exact']})}",
           flush=True)
 
 
