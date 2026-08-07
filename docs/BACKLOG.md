@@ -431,6 +431,121 @@ or commit history. Each item names the evidence that motivated it.
   loose ones, so an extremal statement can eventually be related to the
   equality case it saturates.
 
+- **`specialize.py` cannot use a non-equation as a general pattern, so every
+  inference rule in the graph is excluded from the general side.**
+  `find_specializations` opens with `if gtree[0] != "rel": continue`, which
+  silently drops any node whose canonical template is a bare call rather than a
+  relation. That is **16 of 195 nodes**: `logic.inference.modus_ponens`,
+  `logic.inference.ex_falso_quodlibet`, `logic.inference.reductio_ad_absurdum`,
+  `settheory.order.subset_transitivity`,
+  `settheory.order.empty_set_minimality`,
+  `geotop.predicates.containment_transitivity`,
+  `geotop.predicates.adjacency_symmetry`, `geotop.measure.area_monotonicity`,
+  `algtop.homotopy.homotopy_invariance` and the seven rule-shaped nodes in
+  `data/temporal_logic` / `data/narrative`. Concrete cost, and the case that
+  found it: `temporal.response.response_pattern`
+  (`ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))`) covers
+  `narrative.constraint.chekhov_gun`
+  (`ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))`) by
+  binding `TRIGGER -> PLANTED(ELEMENT)`, `RESPONSE -> DISCHARGED(ELEMENT)`.
+  Probed directly: `MATCHES = True, used_absorption = False,
+  used_identity = False`. Two filters stacked — this one first, then the
+  plain-binding suppression already recorded five times — so Chekhov's gun
+  being an instance of an LTL liveness pattern has to be asserted by hand.
+  Fix: drop the `rel` guard and gate on `op_count` alone (the guard's stated
+  purpose, avoiding near-trivial patterns, is already served by
+  `op_count(gtree) < 2`).
+- **`decompose.py` rates a recursive definition as maximally ungrounded, which
+  breaks the epistemic ladder's one graded rung.**
+  `temporal.recurrence.until_unfolding`
+  (`UNTIL(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, NEXT(UNTIL(PROPA, PROPB))))`)
+  scores **groundedness 0.000** — the lowest of the seventeen nodes in that
+  seeding pass, on an axiom of a fifty-year-old logic. Cause: all five of its
+  non-trivial constituents contain `UNTIL`, the head being defined
+  (`JOIN⟨?0, MEET⟨?1, NEXT⟨UNTIL⟨?1, ?0⟩⟩⟩⟩`, `MEET⟨?1, NEXT⟨UNTIL⟨?1, ?0⟩⟩⟩`,
+  `NEXT⟨UNTIL⟨?1, ?0⟩⟩`, `UNTIL⟨?1, ?0⟩` twice), and the form inventory is
+  built from *other* statements, where the head does not occur. Its Boolean
+  neighbour `temporal.modality.next_distributes_over_meet` scores 0.600 with
+  its `MEET⟨?0:V, ?1:V⟩` constituent recognized in 10 statements, so the
+  contrast is internal to one corpus. Per `docs/DESIGN-epistemic-ladder.md`
+  groundedness grades the UNGROUNDED rung, so a correct axiom currently lands
+  where near-gibberish lands, and every recursive definition anyone adds
+  (factorial, Fibonacci, a grammar production, the mu-calculus fragment) will
+  land there too. Fix: while decomposing a statement, treat that statement's
+  own root head as a known form.
+- **Groundedness measures vocabulary overlap, so a new discipline's first
+  corpus is guaranteed to grade as disorder.** Across the 17 nodes of
+  `data/temporal_logic` + `data/narrative` the score is almost perfectly
+  predicted by how many pre-existing heads the template reuses: 1.000 for the
+  two nodes written entirely in adopted heads
+  (`temporal.order.precedence_transitivity`,
+  `narrative.frame.frame_consistency`), 0.400–0.750 for mixed templates, and
+  0.000 for all five written only in heads the corpus introduced
+  (`until_unfolding`, `chekhov_gun`, and the three
+  `narrative.structure.*` unit definitions). This is the numeric form of the
+  already-recorded "a new discipline's vocabulary is structurally quarantined".
+  Sharper instance: `narrative.constraint.chekhov_gun` is written *entirely* in
+  the temporal corpus's ALWAYS/IMPLIES/EVENTUALLY vocabulary and still scores
+  0.000, because its constituents are `EVENTUALLY⟨DISCHARGED⟨?0⟩⟩` and
+  `PLANTED⟨?0⟩` rather than `EVENTUALLY⟨?0⟩` — one extra unary head under the
+  modality changes the skeleton. The general pattern it instantiates scores
+  0.500 on the same formula shape, so an instance grades *lower* than its
+  pattern, which inverts what the score is for.
+- **`specialize.py` produces zero edges and zero noise on call-only corpora —
+  fifth confirmation, from the other side.** 468 specialization edges over the
+  merged graph, none touching either of the 17 new nodes in either direction.
+  Same root cause as the recorded "specialize.py is arithmetic-only"
+  (`COMMUTATIVE = {+, *}`, `IDENTITY = {+: 0, *: 1}`) that already gave
+  `data/logic` and `data/set_theory` zero edges. The new information is that
+  these corpora also contribute **zero degenerate noise**, because the noise
+  mechanism (a variable slot absorbing arguments of a commutative arithmetic
+  op) has nothing to bite on in a template made only of call heads. Any
+  evaluation of the proposed category-compatibility constraint should note that
+  the corpora it would clean up are exactly the corpora that get edges at all.
+- **Monotone endo-functions need a second monotonicity template, and the
+  backlog's own request could not be honoured.** The
+  `geotop.measure.area_monotonicity` entry above asks that a future
+  monotone-functional node be written with *that* template
+  (`IMPLIES(LEQ(REGA, REGB), CARD(REGA) <= CARD(REGB))`).
+  `temporal.monotonicity.eventually_monotonicity` is the first such node and
+  cannot: `CARD` is a valuation into the numbers, while `EVENTUALLY` maps the
+  lattice of temporal properties into itself, so its conclusion must be a
+  second `LEQ` and the honest template is
+  `IMPLIES(LEQ(PROPA, PROPB), LEQ(EVENTUALLY(PROPA), EVENTUALLY(PROPB)))`.
+  The two skeletons share their premise and differ in the kind of their
+  conclusion, so no group forms. The request presumed every monotone functional
+  is a valuation; monotone *endo*-functions are a second kind. The
+  generalization the graph wants — `IMPLIES(LEQ(x, y), LEQ(F(x), F(y)))` with
+  the numeric case as its specialization along a valuation — is also out of
+  reach for `specialize.py`, since `<=` and `LEQ` are different relation kinds.
+  Wanted: either a `LEQ` spelling of the numeric case, or a match level that
+  treats a declared order relation and `<=` as one head.
+- **The two-premise detachment shell is now the graph's most-populated
+  non-family.** `IMPLIES⟨MEET⟨_, _⟩, _⟩` carries five nodes —
+  `logic.inference.modus_ponens`, `settheory.order.subset_transitivity`,
+  `geotop.predicates.containment_transitivity`,
+  `temporal.order.precedence_transitivity` and
+  `narrative.causality.precedence_causation_bridge` — and forms exactly one
+  group (the three transitivity nodes). The three that group share a *slot
+  pattern* ((0,1),(1,2) ⊢ (0,2)); the causation bridge conjoins two relations
+  over the SAME pair and concludes a third over that pair. The distinction is
+  real and the graph has no vocabulary for it: "same shell, different slot
+  pattern" is currently indistinguishable from "unrelated" in every report.
+  Companion to the recorded "slot recurrence, not slot shape" wanted level —
+  that one asks for a query over slot recurrence within a statement, this one
+  asks for the shell itself to be reportable as a weaker grouping.
+- **Idempotence and involution cannot be related, and the reason is a fixed
+  point rather than a head.** `temporal.modality.always_idempotence`
+  (`ALWAYS⟨?0:V⟩ = ALWAYS⟨ALWAYS⟨?0:V⟩⟩`) is the fifth member of the recorded
+  "operation that returns its argument" family and the first idempotent
+  *modality*. Worth separating from the head-literalism entries because the
+  blocker against `logic.boolean_laws.double_negation`
+  (`?0:V = NEG⟨NEG⟨?0:V⟩⟩`) is not the head: NEG applied twice equals the bare
+  slot, ALWAYS applied twice equals `ALWAYS⟨?0⟩`, so the two sides differ in
+  depth. An idempotent has a fixed point an involution does not, and that is a
+  property of the skeleton rather than a shape of it — the exact case the
+  wanted structural-query facility has to cover.
+
 ## Schema
 
 - **`symbolToken.syntactic_category` lacks `functional`/`operator`** (unlike
@@ -589,6 +704,50 @@ or commit history. Each item names the evidence that motivated it.
   propose the fix concretely: let `archetype_id` be a list, or add an
   `archetype_family` field, so a node can say "my label is X, my structural
   family is Y" and the lint can check the second while leaving the first free.
+
+- **No scope construct, so `docs/DESIGN-frames-and-retrieval.md`'s central
+  mechanism cannot be stated in a template.** `narrative.frame.frame_consistency`
+  (`MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY`) is an exact typed
+  twin of `logic.boolean_laws.complement_laws` and
+  `settheory.boolean_laws.complement_laws` — which is the intended result, and
+  also the whole problem. Everything that makes it a *frame* law rather than a
+  logic law is the scope: "within frame F", frame premises occupying the
+  frame's local VERIFIED tier, and their reversion to
+  CONJECTURED-under-premise on scope exit. The grammar has no binder and no
+  scope construct, so all of that sits in `regularity_conditions` as prose and
+  the graph cannot check the boundary that the design document says is
+  "structural, not stylistic". Same family as the lost quantifiers recorded for
+  differential topology and the missing binder recorded for channel capacity,
+  but with a new consequence: this is the first time the gap costs a *design
+  document's* mechanism rather than a single statement's content. Fix shapes,
+  in increasing order of work: a `scope` field on a node naming the frame its
+  claims are relative to; a `FRAME(premises, claim)` head; or a real scoped
+  construct in the grammar shared with the wanted `MAX(body, binder, domain)`.
+- **No past modality, so half of a two-directional law cannot be written.**
+  `narrative.constraint.chekhov_gun` states one direction — every planted
+  element is eventually discharged. Its converse, `ALWAYS(IMPLIES(
+  DISCHARGED(e), ONCE(PLANTED(e))))`, is the half that forbids deus ex machina
+  and is the half most authors care about; it needs a past-tense modality
+  (`ONCE`/`H` in the Manna–Pnueli past fragment) that `data/temporal_logic`
+  does not carry. Adding one is cheap as a head, but note it will *not* twin
+  its future dual for the usual reason, so the corpus would gain a statement
+  and no structure. Recorded so that whoever adds past LTL knows the expected
+  yield up front.
+- **A strict order and its reflexive closure cannot share a head, and the
+  corpus now pays for it inside one file.**
+  `temporal.order.precedence_transitivity` uses the abstract `LEQ` head and is
+  a three-discipline typed twin;
+  `temporal.order.strict_precedence_asymmetry` uses `BEFORE` and is a singleton
+  at every level. The second could not honestly use `LEQ`, because asymmetry is
+  false of a reflexive relation, so this is not an authoring slip — it is the
+  cheapest available demonstration that twin counts measure which head a
+  statement is *allowed* to use. Companion to the recorded
+  `authored_to_match` vs `emergent` request: a provenance flag on twin groups
+  should be readable alongside this pair, since one member of an adjacent pair
+  from one author lands in a cross-discipline group and the other lands nowhere.
+  Wanted: a way to declare `BEFORE` as the strict part of `LEQ` (an order and
+  its strict/reflexive variants as one declared family), which would also cover
+  `⊆`/`⊂` and `<=`/`<`.
 
 ## Experiments
 
