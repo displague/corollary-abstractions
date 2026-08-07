@@ -275,6 +275,35 @@ def skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
 PARAMETER_LIKE = {"parameter", "constant"}
 
 
+def absorb_parameter_signs(node: tuple, slot_class: dict[str, str]) -> tuple:
+    """Drop negations whose sign can be absorbed into a free parameter.
+
+    `EXP(RATE*TIME)` (growth) and `EXP(-(RATECONST*TIME))` (decay) are the
+    same one-parameter family under the reparameterization RATE = -RATECONST;
+    the minus sign is a discipline's sign convention, not structure. A `neg`
+    is absorbable exactly when its operand contains a parameter-like slot at
+    multiplicative position, since that free coefficient can carry the sign.
+
+    Applied only for the `family` match level -- typed twins stay sign-exact,
+    because for a *fixed-value* constant the sign is real structure.
+    """
+
+    def has_param_factor(n: tuple) -> bool:
+        if n[0] == "slot":
+            return slot_class.get(n[1]) == "P"
+        if n[0] == "op" and n[1] in {"*", "inv"}:
+            return any(has_param_factor(a) for a in n[2])
+        return False
+
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return node
+    args = tuple(absorb_parameter_signs(a, slot_class) for a in node[2])
+    if kind == "op" and node[1] == "neg" and has_param_factor(args[0]):
+        return args[0]
+    return (kind, node[1], args)
+
+
 def slot_classes(node_json: dict) -> dict[str, str]:
     classes: dict[str, str] = {}
     for slot in node_json.get("structural_signature", {}).get("slot_schema", []):
@@ -304,6 +333,7 @@ class ParsedNode:
     template: str
     shape: str
     typed: str
+    family: str
     missing_slots: list[str]
 
 
@@ -335,6 +365,8 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                     template=template,
                     shape=skeleton(tree),
                     typed=skeleton(tree, classes),
+                    family=skeleton(
+                        canonicalize(absorb_parameter_signs(tree, classes)), classes),
                     missing_slots=missing,
                 )
             )
@@ -351,6 +383,7 @@ def group_by(nodes: list[ParsedNode], key: str) -> dict[str, list[ParsedNode]]:
 def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
     shape_groups = group_by(nodes, "shape")
     typed_groups = group_by(nodes, "typed")
+    family_groups = group_by(nodes, "family")
 
     def group_entries(groups: dict[str, list[ParsedNode]]) -> list[dict]:
         entries = []
@@ -399,9 +432,24 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
         if n.missing_slots
     ]
 
+    # Family twins subsume typed twins by construction (sign absorption only
+    # merges groups); report only groups that grew beyond every typed group,
+    # since the rest would repeat the typed section verbatim.
+    typed_member_sets = {
+        frozenset(m.statement_id for m in members)
+        for members in typed_groups.values()
+    }
+    family_new = {
+        skel: members
+        for skel, members in family_groups.items()
+        if len(members) > 1
+        and frozenset(m.statement_id for m in members) not in typed_member_sets
+    }
+
     return {
         "nodes_analyzed": len(nodes),
         "typed_twin_groups": group_entries(typed_groups),
+        "family_twin_groups_beyond_typed": group_entries(family_new),
         "shape_twin_groups": group_entries(shape_groups),
         "archetype_label_drift": label_drift,
         "skeletons_with_split_archetypes": split_labels,
@@ -423,6 +471,8 @@ def print_report(report: dict) -> None:
         print()
 
     show_groups("Typed structural twins", report["typed_twin_groups"])
+    show_groups("Family twins (parameter signs absorbed, beyond typed)",
+                report["family_twin_groups_beyond_typed"])
     show_groups("Shape twins (slot categories ignored)", report["shape_twin_groups"])
 
     if report["archetype_label_drift"]:
