@@ -386,3 +386,26 @@ plus rare vocabulary tokens for structure, with the extrinsic lexicon
 translating pointed surface words to concepts deterministically.
 Creating = iterated pointing + symbolic realization. Queued as the next
 build.
+
+
+## Generation attempt 2 (pointer-generator) and the resolution
+
+Pointer-gen (GEN/COPY actions, grounded copy embeddings): val 0.44 on
+seen combos but 0.038 on held-out — it memorizes content associations
+where the span head composes. Both learned decoders fail the same way.
+
+The resolution is better than fixing the decoder: for extractive
+answers NO learned decoder should exist. The span head finds the
+constituent (1.000/0.69, compositional); parsing the span,
+canonicalizing, and inverting the lexicon are closed-form; the renderer
+realizes the tree in either language. demo_answer.py runs this pipeline
+end to end: foreign question + KB in, fluent answer out in both
+languages, every generated word either pointed-at or produced by exact
+code. Creating-by-pointing is complete for extractive tasks.
+
+The measured boundary of the creating question, for v0.2: learned
+generation is needed exactly where the answer exists nowhere in the
+input — non-extractive synthesis (analogy completion: emit F = m*a
+given Ohm : circuits :: ? : mechanics, verifiable against
+specialize.py bindings). Both decoder failures say that frontier will
+need its own mechanism, not a bigger decoder.

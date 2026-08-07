@@ -1,0 +1,9 @@
+{
+  "task": "solvex2-pgen",
+  "params": 1474822,
+  "seed": 0,
+  "val_exact_best": 0.4468,
+  "test_exact": 0.0418,
+  "ood_exact": 0.015675097969362308,
+  "seconds": 246.0
+}

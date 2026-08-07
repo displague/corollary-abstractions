@@ -206,6 +206,7 @@ def main() -> None:
                     help="fraction of the train split used (scaling axis)")
     ap.add_argument("--positions", choices=["abs", "tree"], default="abs")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--save-model", type=Path, default=None)
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -283,6 +284,14 @@ def main() -> None:
     args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"DONE {json.dumps({k: result[k] for k in ['arm','positions','test_exact','ood_exact']})}",
           flush=True)
+    if args.save_model:
+        args.save_model.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({"state_dict": model.state_dict(), "vocab": vocab.itos,
+                    "config": {"d_model": args.d_model,
+                               "n_layers": args.n_layers,
+                               "max_len": args.max_len,
+                               "positions": args.positions}},
+                   args.save_model)
 
 
 if __name__ == "__main__":
