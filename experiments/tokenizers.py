@@ -40,6 +40,12 @@ def char_tokens(example: dict) -> list[str]:
     return list(example["expr1"]) + [SEP] + list(example["expr2"])
 
 
+def precomputed(example: dict, arm: str) -> list[str] | None:
+    """Language-world examples carry pregenerated token streams (their
+    serialization needs per-language lexica unavailable here)."""
+    return example.get(f"tokens_{arm}")
+
+
 def _struct_serialize(t: tuple, slot_idx: dict[str, int]) -> list[str]:
     kind = t[0]
     if kind == "num":
@@ -56,12 +62,18 @@ def _struct_serialize(t: tuple, slot_idx: dict[str, int]) -> list[str]:
 
 
 def struct_tokens(example: dict) -> list[str]:
+    pre = precomputed(example, "struct")
+    if pre is not None:
+        return pre
     t1 = tree_from_json(example["tree1"])
     t2 = tree_from_json(example["tree2"])
     return _struct_serialize(t1, {}) + [SEP] + _struct_serialize(t2, {})
 
 
 def canon_tokens(example: dict) -> list[str]:
+    pre = precomputed(example, "canon")
+    if pre is not None:
+        return pre
     t1 = canonicalize(tree_from_json(example["tree1"]))
     t2 = canonicalize(tree_from_json(example["tree2"]))
     return _struct_serialize(t1, {}) + [SEP] + _struct_serialize(t2, {})
