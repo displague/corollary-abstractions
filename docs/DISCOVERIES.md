@@ -91,3 +91,23 @@ bindings), **near-miss** (informative failure, kept deliberately).
 - **Modus ponens does not twin subset transitivity** — same detachment
   shell, different premise heads; LEQ chosen so hypothetical syllogism
   will twin for free when authored. (2026-08-07)
+
+- **Word concatenation correctly refuses the logarithm analogy.**
+  `LENGTH(CONCAT(A,B)) = LENGTH(A)+LENGTH(B)` and `LOG(X·Y) = LOG X + LOG Y`
+  are both monoid homomorphisms — but the matcher will not twin them,
+  because CONCAT is ordered and `·` commutes: the free monoid of morphs
+  and the multiplicative reals are different structures sharing only an
+  archetype. A refusal that encodes real mathematics. *near-miss*
+  (2026-08-07)
+
+- **The derivation/inflection distinction survives total anonymization.**
+  `CATEGORY(CONCAT(STEM, X)) = CATEGORY(STEM)` vs `= CATEGORY(X)` differ
+  in one argument index after every symbol is erased — the grammar
+  distinction is pure structure. *exact-distinction* (2026-08-07)
+
+- **Word-level and phrase-level recursion are one skeleton apart**
+  (registered prediction): iterated affixation `CONCAT(CONCAT(s,x),y)`
+  and intensifier nesting `MOD(MOD(a,i),j)` differ only in head string —
+  authoring the MOD node makes the discrete-infinity-at-every-level
+  claim mechanically checkable, pending head aliasing. *prediction*
+  (2026-08-07)
