@@ -143,11 +143,14 @@ not for operations that have closed forms.
   The strongest single data point of the suite for the front-end floor:
   the residual (unification) is only learnable at all once parsing has
   been done for the model.
-- struct vs canon differ within a few points (struct better test, canon
-  better OOD); with single seeds this is not a strong ordering. What is
-  clear is both sit far above char and far below solved — unification is
-  the genuinely graded learnable residual, exactly where a hybrid
-  (symbolic candidate-binding + learned scoring) should be aimed.
+- struct vs canon, settled by 3 seeds each: test means overlap (struct
+  0.648 +/- 0.045, canon 0.661 +/- 0.023 — the single-seed "struct wins
+  test" was seed noise), but **canon generalizes better OOD in every
+  seed** (0.587 +/- 0.016 vs 0.523 +/- 0.030, one struct seed at chance).
+  Canonical interlingua shrinks what must generalize; surface parses
+  leave word-order variance the model must absorb. Also notable: 9-point
+  test spread across seeds for struct — tiny models are seed-sensitive
+  here, so no single-seed claim from this suite should be trusted.
 
 ## Next
 

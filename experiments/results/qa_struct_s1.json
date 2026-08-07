@@ -1,0 +1,77 @@
+{
+  "task": "qa",
+  "arm": "struct",
+  "vocab_size": 92,
+  "params": 887297,
+  "mean_train_seq_len": 41.4,
+  "truncated_train": 0,
+  "val_acc_best": 0.6096,
+  "test_acc": 0.6,
+  "ood_acc": 0.5036666666666667,
+  "epochs": 12,
+  "seconds": 74.9,
+  "d_model": 128,
+  "n_layers": 4,
+  "history": [
+    {
+      "epoch": 0,
+      "loss": 0.6937652692502859,
+      "val_acc": 0.5072
+    },
+    {
+      "epoch": 1,
+      "loss": 0.6938736654666006,
+      "val_acc": 0.5
+    },
+    {
+      "epoch": 2,
+      "loss": 0.6935341157475297,
+      "val_acc": 0.5006
+    },
+    {
+      "epoch": 3,
+      "loss": 0.6932849233247795,
+      "val_acc": 0.5006
+    },
+    {
+      "epoch": 4,
+      "loss": 0.6911779049099708,
+      "val_acc": 0.5198
+    },
+    {
+      "epoch": 5,
+      "loss": 0.6721134353048948,
+      "val_acc": 0.5446
+    },
+    {
+      "epoch": 6,
+      "loss": 0.6572717270072626,
+      "val_acc": 0.56
+    },
+    {
+      "epoch": 7,
+      "loss": 0.6473359830525457,
+      "val_acc": 0.5666
+    },
+    {
+      "epoch": 8,
+      "loss": 0.6399949138261833,
+      "val_acc": 0.599
+    },
+    {
+      "epoch": 9,
+      "loss": 0.6324288902842269,
+      "val_acc": 0.605
+    },
+    {
+      "epoch": 10,
+      "loss": 0.626994499746634,
+      "val_acc": 0.6096
+    },
+    {
+      "epoch": 11,
+      "loss": 0.6244899411590732,
+      "val_acc": 0.6088
+    }
+  ]
+}
