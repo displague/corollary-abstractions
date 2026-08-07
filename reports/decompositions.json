@@ -12,7 +12,7 @@
           ],
           "skeleton": "neg(?0:P)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         }
       ]
     },
@@ -41,10 +41,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -69,7 +70,7 @@
           ],
           "skeleton": "neg(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -172,9 +173,11 @@
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
           "instance_of_statements": [
+            "geomodel.barycentric.barycentric_point_reconstruction",
+            "geomodel.bezier.bernstein_bezier_evaluation",
             "probstat.probability.total_probability_partition"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -185,10 +188,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -202,7 +206,7 @@
           ],
           "skeleton": "+(?0:V, neg(?1:V))",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -211,7 +215,7 @@
           ],
           "skeleton": "neg(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -227,7 +231,7 @@
           "instance_of_statements": [
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -256,7 +260,7 @@
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -289,7 +293,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -306,10 +310,11 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -318,7 +323,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -332,6 +337,17 @@
             0
           ],
           "skeleton": "^(?0:V, ?1:P)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(1)",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -362,10 +378,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -377,10 +394,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -422,9 +440,10 @@
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         },
         {
           "path": [
@@ -513,10 +532,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -537,10 +557,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -577,10 +598,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -680,10 +702,11 @@
           "instance_of_statements": [
             "economics.finance.capm_expected_return",
             "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform",
             "probstat.regression.slr_conditional_expectation",
             "probstat.transform.affine_location_scale"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -694,10 +717,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -763,10 +787,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -802,10 +827,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -859,9 +885,10 @@
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -899,9 +926,10 @@
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -955,10 +983,11 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -969,7 +998,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -986,10 +1015,11 @@
             "calculus.differentiation.average_rate_of_change",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -998,7 +1028,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -1035,7 +1065,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1050,7 +1080,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -1070,7 +1100,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1084,7 +1114,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1096,7 +1126,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1125,7 +1155,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1138,7 +1168,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1150,7 +1180,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1166,9 +1196,10 @@
           "instance_of_statements": [
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -1193,10 +1224,11 @@
           "skeleton": "*(?0:P, ?1:V)",
           "instance_of_statements": [
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1340,9 +1372,10 @@
           ],
           "skeleton": "sum⟨?0:V⟩",
           "instance_of_statements": [
-            "difftop.vectorfields.poincare_hopf_index_theorem"
+            "difftop.vectorfields.poincare_hopf_index_theorem",
+            "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         }
       ]
     },
@@ -1384,6 +1417,22 @@
       ]
     },
     {
+      "statement_id": "difftop.degree.brouwer_fixed_point",
+      "template": "FIXEDPOINT = SELFMAP(FIXEDPOINT)",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "SELFMAP⟨?0:V⟩",
+          "instance_of_statements": [
+            "numanalysis.rootfinding.fixed_point_iteration"
+          ],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
       "statement_id": "difftop.vectorfields.poincare_hopf_index_theorem",
       "template": "EULERCHAR(MANIFOLD) = sum_i INDEX_i",
       "constituents": [
@@ -1404,9 +1453,10 @@
           ],
           "skeleton": "sum⟨?0:V⟩",
           "instance_of_statements": [
-            "difftop.degree.degree_regular_value_count"
+            "difftop.degree.degree_regular_value_count",
+            "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         }
       ]
     },
@@ -1460,10 +1510,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1514,10 +1565,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1535,10 +1587,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1555,10 +1608,11 @@
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -1567,7 +1621,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -1583,9 +1637,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         },
         {
           "path": [
@@ -1595,9 +1650,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -1637,10 +1693,11 @@
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform",
             "probstat.regression.slr_conditional_expectation",
             "probstat.transform.affine_location_scale"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -1651,10 +1708,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1670,10 +1728,11 @@
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
+            "geomodel.transforms.homogeneous_rigid_transform",
             "probstat.regression.slr_conditional_expectation",
             "probstat.transform.affine_location_scale"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -1684,10 +1743,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1703,7 +1763,266 @@
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity"
           ],
+          "recurs_in_n_statements": 6
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
+      "template": "POINT = sum_i BASIS_i*CONTROL_i",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "instance_of_statements": [
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.barycentric.barycentric_point_reconstruction",
+            "probstat.probability.total_probability_partition"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.de_casteljau_step",
+      "template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
+          "instance_of_statements": [
+            "numanalysis.interpolation.linear_interpolation"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:V, +(1, neg(?1:P)))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "+(1, neg(?0:P))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(?0:P)",
+          "instance_of_statements": [],
           "recurs_in_n_statements": 5
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
+      "template": "POINT = sum_i BARY_i*VERTEX_i",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "instance_of_statements": [
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.bezier.bernstein_bezier_evaluation",
+            "probstat.probability.total_probability_partition"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
+      "template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "instance_of_statements": [
+            "calculus.approximation.tangent_line_linearization",
+            "economics.finance.capm_expected_return",
+            "economics.macroeconomics.keynesian_consumption_function",
+            "probstat.regression.slr_conditional_expectation",
+            "probstat.transform.affine_location_scale"
+          ],
+          "recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.quaternions.unit_quaternion_constraint",
+      "template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+      "constituents": [
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "^(?0:V, 2)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "diffgeo.surfaces.first_fundamental_form",
+            "geometry.area_formulas.square_area_formula",
+            "geometry.right_triangles.pythagorean_theorem"
+          ],
+          "recurs_in_n_statements": 14
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "^(?0:V, 2)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "diffgeo.surfaces.first_fundamental_form",
+            "geometry.area_formulas.square_area_formula",
+            "geometry.right_triangles.pythagorean_theorem"
+          ],
+          "recurs_in_n_statements": 14
+        },
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "^(?0:V, 2)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "diffgeo.surfaces.first_fundamental_form",
+            "geometry.area_formulas.square_area_formula",
+            "geometry.right_triangles.pythagorean_theorem"
+          ],
+          "recurs_in_n_statements": 14
+        },
+        {
+          "path": [
+            1,
+            3
+          ],
+          "skeleton": "^(?0:V, 2)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "diffgeo.surfaces.first_fundamental_form",
+            "geometry.area_formulas.square_area_formula",
+            "geometry.right_triangles.pythagorean_theorem"
+          ],
+          "recurs_in_n_statements": 14
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.endpoint_tangent",
+      "template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, +(?1:V, neg(?2:V)))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "+(?0:V, neg(?1:V))",
+          "instance_of_statements": [
+            "algtop.homology.betti_number_rank"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(?0:V)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -1732,7 +2051,7 @@
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1745,7 +2064,7 @@
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -1757,7 +2076,7 @@
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1773,9 +2092,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -1793,7 +2113,7 @@
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -1808,10 +2128,11 @@
           "skeleton": "*(?0:P, ?1:V)",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -1842,7 +2163,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1891,7 +2212,7 @@
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1922,7 +2243,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1953,7 +2274,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -1989,7 +2310,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         },
         {
           "path": [
@@ -2019,7 +2340,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -2027,6 +2348,16 @@
       "statement_id": "geometry.area_formulas.trapezoid_area_formula",
       "template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, ?1:V, +(?2:V, ?3:V))",
+          "instance_of_statements": [
+            "numanalysis.integration.trapezoidal_rule"
+          ],
+          "recurs_in_n_statements": 2
+        },
         {
           "path": [
             1,
@@ -2037,7 +2368,7 @@
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -2062,7 +2393,7 @@
           ],
           "skeleton": "neg(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -2238,6 +2569,116 @@
           "skeleton": "CARD⟨?0:V⟩",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.degree.handshake_lemma",
+      "template": "sum_i DEGREE_i = 2*EDGES",
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "sum⟨?0:V⟩",
+          "instance_of_statements": [
+            "difftop.degree.degree_regular_value_count",
+            "difftop.vectorfields.poincare_hopf_index_theorem"
+          ],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.degree.average_degree_from_edge_count",
+      "template": "AVGDEGREE = 2*EDGES/VERTICES",
+      "constituents": [
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "inv(?0:V)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 15
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.enumeration.complete_graph_edge_count",
+      "template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "constituents": [
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "+(?0:V, neg(1))",
+          "instance_of_statements": [
+            "graphtheory.trees.tree_edge_count"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(1)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "inv(2)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "template": "EDGES = PARTONE*PARTTWO",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:V, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "physics.thermodynamics.ideal_gas_law"
+          ],
+          "recurs_in_n_statements": 10
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.trees.tree_edge_count",
+      "template": "EDGES = VERTICES - 1",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(?0:V, neg(1))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "neg(1)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
         }
       ]
     },
@@ -2440,7 +2881,7 @@
           ],
           "skeleton": "neg(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -2560,10 +3001,11 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -2576,7 +3018,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -2638,10 +3080,11 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -2654,7 +3097,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -2949,10 +3392,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -2964,10 +3408,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -2994,10 +3439,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -3009,10 +3455,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3037,10 +3484,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -3051,10 +3499,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3072,9 +3521,10 @@
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -3113,10 +3563,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3167,10 +3618,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3267,10 +3719,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3287,10 +3740,11 @@
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -3299,7 +3753,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -3317,9 +3771,10 @@
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -3332,6 +3787,19 @@
             1,
             0,
             0,
+            0
+          ],
+          "skeleton": "*(?0:P, +(?1:V, neg(?2:V)))",
+          "instance_of_statements": [
+            "geomodel.bezier.endpoint_tangent"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            0,
             0,
             1
           ],
@@ -3339,7 +3807,7 @@
           "instance_of_statements": [
             "algtop.homology.betti_number_rank"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -3352,7 +3820,7 @@
           ],
           "skeleton": "neg(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -3387,7 +3855,7 @@
           ],
           "skeleton": "neg(?0:P)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -3623,6 +4091,231 @@
       ]
     },
     {
+      "statement_id": "numanalysis.rootfinding.newton_iteration",
+      "template": "XNEXT = X - FVALUE/FDERIV",
+      "constituents": [
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "*(?0:V, inv(?1:V))",
+          "instance_of_statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "chemistry.solutions.molarity_definition",
+            "economics.microeconomics.price_elasticity_of_demand",
+            "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
+            "physics.kinematics.average_speed",
+            "physics.materials.mass_density"
+          ],
+          "recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "skeleton": "inv(?0:V)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 15
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.rootfinding.fixed_point_iteration",
+      "template": "XNEXT = SELFMAP(X)",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "SELFMAP⟨?0:V⟩",
+          "instance_of_statements": [
+            "difftop.degree.brouwer_fixed_point"
+          ],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.rootfinding.bisection_interval_halving",
+      "template": "WIDTHNEXT = WIDTH/2",
+      "constituents": [
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "inv(2)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.integration.trapezoidal_rule",
+      "template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, ?1:V, +(?2:V, ?3:V))",
+          "instance_of_statements": [
+            "geometry.area_formulas.trapezoid_area_formula"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation"
+          ],
+          "recurs_in_n_statements": 6
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.ode.euler_method_step",
+      "template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "constituents": [
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.interpolation.linear_interpolation",
+      "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
+          "instance_of_statements": [
+            "geomodel.bezier.de_casteljau_step"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:V, +(1, neg(?1:P)))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "+(1, neg(?0:P))",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(?0:P)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.error.relative_condition_number",
+      "template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:V, inv(?1:V))",
+          "instance_of_statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "chemistry.solutions.molarity_definition",
+            "economics.microeconomics.price_elasticity_of_demand",
+            "ml.policy.policy_probability_ratio",
+            "physics.kinematics.average_speed",
+            "physics.materials.mass_density"
+          ],
+          "recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "inv(?0:V)",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 15
+        }
+      ]
+    },
+    {
+      "statement_id": "numanalysis.floatingpoint.machine_epsilon_bound",
+      "template": "ROUNDOFF <= UNITROUNDOFF*EXACT",
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 35
+        }
+      ]
+    },
+    {
       "statement_id": "physics.mechanics.newton_second_law",
       "template": "FORCE = INERTIA * RESPONSE",
       "constituents": [
@@ -3634,9 +4327,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3652,9 +4346,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3674,7 +4369,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -3699,10 +4394,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -3742,7 +4438,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -3782,7 +4478,7 @@
             "geometry.area_formulas.square_area_formula",
             "geometry.right_triangles.pythagorean_theorem"
           ],
-          "recurs_in_n_statements": 13
+          "recurs_in_n_statements": 14
         }
       ]
     },
@@ -3798,9 +4494,10 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula"
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 10
         }
       ]
     },
@@ -3818,9 +4515,10 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.materials.mass_density"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -3829,7 +4527,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -3847,9 +4545,10 @@
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
             "ml.policy.policy_probability_ratio",
+            "numanalysis.error.relative_condition_number",
             "physics.kinematics.average_speed"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -3858,7 +4557,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },
@@ -4281,9 +4980,10 @@
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
             "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform",
             "probstat.regression.slr_conditional_expectation"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -4294,10 +4994,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -4314,10 +5015,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -4334,9 +5036,10 @@
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
             "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform",
             "probstat.transform.affine_location_scale"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -4347,10 +5050,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -4385,7 +5089,7 @@
           ],
           "skeleton": "neg(?0:P)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -4408,9 +5112,11 @@
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
           "instance_of_statements": [
-            "algtop.homology.betti_alternating_sum"
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.barycentric.barycentric_point_reconstruction",
+            "geomodel.bezier.bernstein_bezier_evaluation"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -4421,10 +5127,11 @@
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 28
+          "recurs_in_n_statements": 35
         }
       ]
     },
@@ -4439,7 +5146,7 @@
           ],
           "skeleton": "inv(?0:V)",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 12
+          "recurs_in_n_statements": 15
         }
       ]
     },

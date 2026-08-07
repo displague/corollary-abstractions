@@ -193,3 +193,23 @@ bindings), **near-miss** (informative failure, kept deliberately).
   constituents are the other valuation statements. Commitment #1 of the
   concept-token design — forms as constructs of forms — is mechanical.
   *derivational* (2026-08-07)
+
+- **Gradient descent is Euler's method** — explicit Euler on the gradient
+  flow, fired as a family twin; every training loop runs 1768
+  mathematics. Newton's method *correctly* misses the family: its inv()
+  is the second-order information, isolated by the refusal. *family +
+  near-miss* (2026-08-07)
+
+- **The trapezoidal rule is the trapezoid area formula** — exact typed
+  twin across numerical analysis and geometry; the quadrature rule IS
+  the shape it sums. *exact* (2026-08-07)
+
+- **Bézier evaluation, barycentric reconstruction, total probability,
+  and Betti sums are one weighted-sum law** (4 disciplines). *exact*
+  (2026-08-07)
+
+- **Newton's correction term is a rate** — invisible to whole-statement
+  twinning, read out by decomposition as the ratio family's expression
+  side (11 statements). And fixed-point iteration vs Brouwer's theorem:
+  two tools, one pair, opposite correct answers (shared constituent,
+  provably not twins). *derivational* (2026-08-07)

@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 151,
+  "nodes_analyzed": 175,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -91,6 +91,28 @@
           "statement_id": "physics.circuits.ohms_law",
           "discipline": "physics",
           "template": "POTENTIAL = FLOW * RESISTANCE"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "disciplines": [
+        "geometry",
+        "numerical_analysis"
+      ],
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "members": [
+        {
+          "statement_id": "geometry.area_formulas.trapezoid_area_formula",
+          "discipline": "geometry",
+          "template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT"
+        },
+        {
+          "statement_id": "numanalysis.integration.trapezoidal_rule",
+          "discipline": "numerical_analysis",
+          "template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH"
         }
       ]
     },
@@ -218,7 +240,8 @@
       "skeleton": "?0:V = *(?1:V, ?2:V)",
       "disciplines": [
         "differential_geometry",
-        "geometry"
+        "geometry",
+        "graph_theory"
       ],
       "archetypes": [
         "bilinear_product"
@@ -233,6 +256,11 @@
           "statement_id": "geometry.area_formulas.rectangle_area_formula",
           "discipline": "geometry",
           "template": "AREA = DIM1 * DIM2"
+        },
+        {
+          "statement_id": "graphtheory.enumeration.complete_bipartite_edge_count",
+          "discipline": "graph_theory",
+          "template": "EDGES = PARTONE*PARTTWO"
         }
       ]
     },
@@ -243,6 +271,7 @@
         "chemistry",
         "economics",
         "machine_learning",
+        "numerical_analysis",
         "physics"
       ],
       "archetypes": [
@@ -270,6 +299,11 @@
           "template": "RATIO = POLICYNEW / POLICYOLD"
         },
         {
+          "statement_id": "numanalysis.error.relative_condition_number",
+          "discipline": "numerical_analysis",
+          "template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB"
+        },
+        {
           "statement_id": "physics.kinematics.average_speed",
           "discipline": "physics",
           "template": "RATE = QUANTITY / INTERVAL"
@@ -282,10 +316,33 @@
       ]
     },
     {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "disciplines": [
+        "geometric_modeling",
+        "numerical_analysis"
+      ],
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "members": [
+        {
+          "statement_id": "geomodel.bezier.de_casteljau_step",
+          "discipline": "geometric_modeling",
+          "template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT"
+        },
+        {
+          "statement_id": "numanalysis.interpolation.linear_interpolation",
+          "discipline": "numerical_analysis",
+          "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH"
+        }
+      ]
+    },
+    {
       "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
       "disciplines": [
         "calculus",
         "economics",
+        "geometric_modeling",
         "statistics"
       ],
       "archetypes": [
@@ -306,6 +363,11 @@
           "statement_id": "economics.macroeconomics.keynesian_consumption_function",
           "discipline": "economics",
           "template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME"
+        },
+        {
+          "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
+          "discipline": "geometric_modeling",
+          "template": "POINTNEW = ROTATION*POINT + TRANSLATION"
         },
         {
           "statement_id": "probstat.transform.affine_location_scale",
@@ -515,17 +577,29 @@
       "skeleton": "?0:V = sum⟨*(?1:P, ?2:V)⟩",
       "disciplines": [
         "algebraic_topology",
+        "geometric_modeling",
         "statistics"
       ],
       "archetypes": [
         "alternating_rank_sum",
-        "conditional_marginalization"
+        "conditional_marginalization",
+        "weighted_accumulation"
       ],
       "members": [
         {
           "statement_id": "algtop.homology.betti_alternating_sum",
           "discipline": "algebraic_topology",
           "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+        },
+        {
+          "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
+          "discipline": "geometric_modeling",
+          "template": "POINT = sum_i BASIS_i*CONTROL_i"
+        },
+        {
+          "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
+          "discipline": "geometric_modeling",
+          "template": "POINT = sum_i BARY_i*VERTEX_i"
         },
         {
           "statement_id": "probstat.probability.total_probability_partition",
@@ -738,6 +812,7 @@
         "algebraic_topology",
         "calculus",
         "economics",
+        "geometric_modeling",
         "statistics"
       ],
       "archetypes": [
@@ -765,9 +840,43 @@
           "template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME"
         },
         {
+          "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
+          "discipline": "geometric_modeling",
+          "template": "POINTNEW = ROTATION*POINT + TRANSLATION"
+        },
+        {
           "statement_id": "probstat.transform.affine_location_scale",
           "discipline": "statistics",
           "template": "OUT = SCALE*IN + SHIFT"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, *(?2:P, ?3:V))",
+      "disciplines": [
+        "machine_learning",
+        "numerical_analysis"
+      ],
+      "archetypes": [
+        "state_minus_scaled_correction",
+        "state_plus_scaled_rate",
+        "value_minus_weighted_penalty"
+      ],
+      "members": [
+        {
+          "statement_id": "ml.optimization.gradient_descent_step",
+          "discipline": "machine_learning",
+          "template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT"
+        },
+        {
+          "statement_id": "ml.objective.kl_regularized_rl_objective",
+          "discipline": "machine_learning",
+          "template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE"
+        },
+        {
+          "statement_id": "numanalysis.ode.euler_method_step",
+          "discipline": "numerical_analysis",
+          "template": "YNEXT = Y + STEPSIZE*SLOPE"
         }
       ]
     }
@@ -822,6 +931,7 @@
       "disciplines": [
         "differential_geometry",
         "geometry",
+        "graph_theory",
         "physics"
       ],
       "archetypes": [
@@ -845,6 +955,11 @@
           "template": "CIRCUMFERENCE = CONSTANT * RADIUS"
         },
         {
+          "statement_id": "graphtheory.enumeration.complete_bipartite_edge_count",
+          "discipline": "graph_theory",
+          "template": "EDGES = PARTONE*PARTTWO"
+        },
+        {
           "statement_id": "physics.mechanics.newton_second_law",
           "discipline": "physics",
           "template": "FORCE = INERTIA * RESPONSE"
@@ -853,6 +968,28 @@
           "statement_id": "physics.circuits.ohms_law",
           "discipline": "physics",
           "template": "POTENTIAL = FLOW * RESISTANCE"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = *(?1, ?2, +(?3, ?4))",
+      "disciplines": [
+        "geometry",
+        "numerical_analysis"
+      ],
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "members": [
+        {
+          "statement_id": "geometry.area_formulas.trapezoid_area_formula",
+          "discipline": "geometry",
+          "template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT"
+        },
+        {
+          "statement_id": "numanalysis.integration.trapezoidal_rule",
+          "discipline": "numerical_analysis",
+          "template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH"
         }
       ]
     },
@@ -996,6 +1133,7 @@
         "chemistry",
         "economics",
         "machine_learning",
+        "numerical_analysis",
         "physics"
       ],
       "archetypes": [
@@ -1028,6 +1166,11 @@
           "template": "RATIO = POLICYNEW / POLICYOLD"
         },
         {
+          "statement_id": "numanalysis.error.relative_condition_number",
+          "discipline": "numerical_analysis",
+          "template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB"
+        },
+        {
           "statement_id": "physics.kinematics.average_speed",
           "discipline": "physics",
           "template": "RATE = QUANTITY / INTERVAL"
@@ -1040,14 +1183,39 @@
       ]
     },
     {
+      "skeleton": "?0 = +(*(?1, ?2), *(?3, +(1, neg(?1))))",
+      "disciplines": [
+        "geometric_modeling",
+        "numerical_analysis"
+      ],
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "members": [
+        {
+          "statement_id": "geomodel.bezier.de_casteljau_step",
+          "discipline": "geometric_modeling",
+          "template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT"
+        },
+        {
+          "statement_id": "numanalysis.interpolation.linear_interpolation",
+          "discipline": "numerical_analysis",
+          "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH"
+        }
+      ]
+    },
+    {
       "skeleton": "?0 = +(?1, *(?2, ?3))",
       "disciplines": [
         "calculus",
         "economics",
+        "geometric_modeling",
+        "numerical_analysis",
         "statistics"
       ],
       "archetypes": [
-        "affine_operator"
+        "affine_operator",
+        "state_plus_scaled_rate"
       ],
       "members": [
         {
@@ -1064,6 +1232,16 @@
           "statement_id": "economics.macroeconomics.keynesian_consumption_function",
           "discipline": "economics",
           "template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME"
+        },
+        {
+          "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
+          "discipline": "geometric_modeling",
+          "template": "POINTNEW = ROTATION*POINT + TRANSLATION"
+        },
+        {
+          "statement_id": "numanalysis.ode.euler_method_step",
+          "discipline": "numerical_analysis",
+          "template": "YNEXT = Y + STEPSIZE*SLOPE"
         },
         {
           "statement_id": "probstat.transform.affine_location_scale",
@@ -1293,17 +1471,29 @@
       "skeleton": "?0 = sum⟨*(?1, ?2)⟩",
       "disciplines": [
         "algebraic_topology",
+        "geometric_modeling",
         "statistics"
       ],
       "archetypes": [
         "alternating_rank_sum",
-        "conditional_marginalization"
+        "conditional_marginalization",
+        "weighted_accumulation"
       ],
       "members": [
         {
           "statement_id": "algtop.homology.betti_alternating_sum",
           "discipline": "algebraic_topology",
           "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+        },
+        {
+          "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
+          "discipline": "geometric_modeling",
+          "template": "POINT = sum_i BASIS_i*CONTROL_i"
+        },
+        {
+          "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
+          "discipline": "geometric_modeling",
+          "template": "POINT = sum_i BARY_i*VERTEX_i"
         },
         {
           "statement_id": "probstat.probability.total_probability_partition",
@@ -1447,6 +1637,7 @@
         "calculus.approximation.tangent_line_linearization",
         "economics.finance.capm_expected_return",
         "economics.macroeconomics.keynesian_consumption_function",
+        "geomodel.transforms.homogeneous_rigid_transform",
         "probstat.transform.affine_location_scale"
       ]
     },
@@ -1509,6 +1700,7 @@
         "diffgeo.surfaces.gaussian_curvature_principal_product",
         "geometry.area_formulas.rectangle_area_formula",
         "geometry.circle_formulas.circle_circumference_formula",
+        "graphtheory.enumeration.complete_bipartite_edge_count",
         "physics.mechanics.newton_second_law",
         "physics.circuits.ohms_law"
       ]
@@ -1551,6 +1743,21 @@
       ]
     },
     {
+      "skeleton": "?0 = +(?1, *(?2, ?3))",
+      "archetype_ids": [
+        "affine_operator",
+        "state_plus_scaled_rate"
+      ],
+      "members": [
+        "calculus.approximation.tangent_line_linearization",
+        "economics.finance.capm_expected_return",
+        "economics.macroeconomics.keynesian_consumption_function",
+        "geomodel.transforms.homogeneous_rigid_transform",
+        "numanalysis.ode.euler_method_step",
+        "probstat.transform.affine_location_scale"
+      ]
+    },
+    {
       "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
       "archetype_ids": [
         "affine_operator",
@@ -1570,10 +1777,13 @@
       "skeleton": "?0 = sum⟨*(?1, ?2)⟩",
       "archetype_ids": [
         "alternating_rank_sum",
-        "conditional_marginalization"
+        "conditional_marginalization",
+        "weighted_accumulation"
       ],
       "members": [
         "algtop.homology.betti_alternating_sum",
+        "geomodel.bezier.bernstein_bezier_evaluation",
+        "geomodel.barycentric.barycentric_point_reconstruction",
         "probstat.probability.total_probability_partition"
       ]
     }
