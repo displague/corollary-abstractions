@@ -345,3 +345,25 @@ an interface property, not an emergent-with-scale property. For the
 model design this is the strongest budget argument yet: the symbolic
 interface substitutes for orders of magnitude of scale on exactly the
 capability the 64MB target cannot buy with parameters.
+
+
+## solvex-v2 verdict: recombination re-established, on an audited instrument
+
+Content load-bearing (K=3 distractor KB, dictionary on the critical
+path), held-out verb x noun combos, 2 seeds:
+
+| positions | val (seen) | test (held-out combos) | OOD (deeper) |
+|---|---|---|---|
+| abs | 0.29 | 0.25 | 0.06 |
+| tree | 1.000 | **1.000 / 1.000** | 0.69 |
+
+- The retracted v1 claim returns in a stronger, sound form: with
+  symbolic tree addresses the model composes seen parts into never-
+  seen-together combinations PERFECTLY, on a split whose capability-
+  blind floor is verified at 0.31.
+- Under absolute positions the model cannot even learn the SEEN cases
+  (0.29 = floor): on multi-statement input, structural addressing is
+  not a robustness aid but a precondition for the compositional
+  learning problem to be tractable at all.
+- Honest headroom: depth OOD is 0.69 on v2 (vs 0.97 on the pure-
+  pointing v1) — deeper KBs with distractors remain open.
