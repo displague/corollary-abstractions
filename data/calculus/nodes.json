@@ -1,0 +1,1715 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "calculus.foundations.v1",
+  "discipline": "calculus",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "calculus.limits.derivative_definition",
+      "title": "Derivative as the Limit of Difference Quotients",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "limits"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(f)(x) = lim_{h->0} (f(x + h) - f(x)) / h",
+        "canonical_latex": "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}",
+        "equivalent_forms": [
+          {
+            "form_id": "leibniz_notation",
+            "notation_system": "ascii",
+            "expression": "df/dx = lim_{h->0} (f(x+h) - f(x))/h",
+            "scope_note": "Leibniz differential notation for the same limit"
+          },
+          {
+            "form_id": "increment_quotient",
+            "notation_system": "ascii",
+            "expression": "D(f)(x) = lim_{Delta_x->0} Delta_f/Delta_x",
+            "scope_note": "Increment notation: the derivative as a limit of average rates"
+          },
+          {
+            "form_id": "secant_at_point",
+            "notation_system": "ascii",
+            "expression": "D(f)(a) = lim_{x->a} (f(x) - f(a))/(x - a)",
+            "scope_note": "Equivalent point form obtained by substituting x = a + h"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "limit_of_difference_quotient",
+        "anonymized_template": "D(F) = lim_h (F(VAR + STEP) - F(VAR)) / STEP",
+        "slot_schema": [
+          {
+            "slot_id": "F",
+            "syntactic_category": "functional",
+            "semantic_role": "differentiand"
+          },
+          {
+            "slot_id": "VAR",
+            "syntactic_category": "variable",
+            "semantic_role": "evaluation_point"
+          },
+          {
+            "slot_id": "STEP",
+            "syntactic_category": "variable",
+            "semantic_role": "vanishing_increment"
+          }
+        ],
+        "invariants": [
+          "A ratio archetype wrapped in a limit: the derivative is an average rate of change pushed to a vanishing interval.",
+          "The increment appears twice, once inside the perturbed argument and once as the denominator; those two roles must be the same quantity.",
+          "Existence requires the left and right one-sided limits to agree, which is what makes differentiability strictly stronger than continuity."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "evaluation_point",
+            "mathematical_order": 0,
+            "description": "Point at which the derivative is evaluated."
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "vanishing_increment",
+            "mathematical_order": 0,
+            "description": "Increment in the argument, driven to zero."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "lim",
+            "name": "limit",
+            "arity": 1,
+            "operator_family": "limit"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "lim",
+            "name": "limit_functional",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Limit of an expression as the indicated variable approaches its target value."
+          },
+          {
+            "notation": "f(.)",
+            "name": "differentiand",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Real-valued function being differentiated."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The derivative of a function at a point is the limit of its average rate of change over intervals shrinking to that point.",
+        "statistical_significance": "Root definition of the whole differential corpus: every differentiation rule below is discharged against this limit, and it is the bridge from the finite ratio archetype shared with physics rate definitions to the infinitesimal operator D.",
+        "regularity_conditions": [
+          "f defined on an open neighbourhood of x",
+          "The two-sided limit exists and is finite",
+          "The increment h is nonzero throughout the limiting process"
+        ],
+        "failure_modes": [
+          "Corner or cusp points where the one-sided limits differ",
+          "Vertical tangents where the limit diverges",
+          "Everywhere-continuous nowhere-differentiable functions"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "calculus.differentiation.power_rule",
+          "calculus.differentiation.linearity_of_derivative",
+          "calculus.differentiation.product_rule",
+          "calculus.differentiation.chain_rule",
+          "calculus.differentiation.exponential_derivative",
+          "calculus.approximation.tangent_line_linearization"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.differentiation.average_rate_of_change"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cauchy1823",
+          "bibliographic_entry": "Cauchy, A.-L. (1823). Resume des lecons donnees a l'Ecole Royale Polytechnique sur le calcul infinitesimal. Paris: Imprimerie Royale."
+        },
+        {
+          "citation_key": "rudin1976",
+          "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+        },
+        {
+          "citation_key": "spivak2008",
+          "bibliographic_entry": "Spivak, M. (2008). Calculus (4th ed.). Publish or Perish."
+        }
+      ],
+      "keywords": [
+        "derivative",
+        "limit",
+        "difference quotient",
+        "differentiability"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.average_rate_of_change",
+      "title": "Average Rate of Change",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "rates_of_change"
+      },
+      "formal_statement": {
+        "canonical_ascii": "R = Delta_f / Delta_x",
+        "canonical_latex": "R = \\frac{\\Delta f}{\\Delta x}",
+        "equivalent_forms": [
+          {
+            "form_id": "endpoint_form",
+            "notation_system": "ascii",
+            "expression": "R = (f(b) - f(a)) / (b - a)",
+            "scope_note": "Secant slope over the interval [a, b]"
+          },
+          {
+            "form_id": "difference_quotient",
+            "notation_system": "ascii",
+            "expression": "R = (f(x + h) - f(x)) / h",
+            "scope_note": "Increment form entering the derivative definition"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "RATE = QUANTITY / INTERVAL",
+        "slot_schema": [
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "QUANTITY",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity"
+          },
+          {
+            "slot_id": "INTERVAL",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent"
+          }
+        ],
+        "invariants": [
+          "Rate as ratio of accumulated quantity to elapsed interval.",
+          "Invariant under a common rescaling of numerator and denominator; only their dimensional quotient is meaningful.",
+          "Undefined exactly when the reference extent collapses to zero, which is what forces the limit construction."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "R",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Average rate of change."
+          },
+          {
+            "symbol": "Delta_f",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity",
+            "mathematical_order": 0,
+            "description": "Change in the function value across the interval."
+          },
+          {
+            "symbol": "Delta_x",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent",
+            "mathematical_order": 0,
+            "description": "Extent of the interval over which the change accumulates."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "f(.)",
+            "name": "response_function",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Function whose change is being measured."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued.",
+        "statistical_significance": "The purely structural core of every rate notion: an exact typed twin of physics.kinematics.average_speed and physics.materials.mass_density. The same skeleton carries distance-per-time, mass-per-volume, and output-change-per-input-change, which is the clearest evidence in the corpus that rate is a shape rather than a physical dimension.",
+        "regularity_conditions": [
+          "Nonzero interval extent",
+          "Function defined at both endpoints"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.limits.derivative_definition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Cengage Learning."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        }
+      ],
+      "keywords": [
+        "rate",
+        "secant slope",
+        "difference quotient",
+        "ratio archetype"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.power_rule",
+      "title": "Power Rule for Differentiation",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "differentiation_rules"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(x^n) = n*x^(n - 1)",
+        "canonical_latex": "\\frac{d}{dx} x^n = n x^{n-1}",
+        "equivalent_forms": [
+          {
+            "form_id": "antiderivative_form",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(x^n) = x^(n + 1)/(n + 1)",
+            "scope_note": "Inverse form, valid for n != -1"
+          },
+          {
+            "form_id": "monomial_form",
+            "notation_system": "ascii",
+            "expression": "D(c*x^n) = c*n*x^(n - 1)",
+            "scope_note": "With a leading coefficient, via linearity"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "exponent_decrement_rule",
+        "anonymized_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+        "slot_schema": [
+          {
+            "slot_id": "VAR",
+            "syntactic_category": "variable",
+            "semantic_role": "base"
+          },
+          {
+            "slot_id": "EXPONENT",
+            "syntactic_category": "parameter",
+            "semantic_role": "exponent"
+          }
+        ],
+        "invariants": [
+          "Differentiation lowers polynomial degree by exactly one.",
+          "The old exponent is not destroyed but reappears as a multiplicative factor, so the exponent occupies two structural positions on the right.",
+          "Holds for every real exponent on the domain where the power is defined, not merely for positive integers."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "base",
+            "mathematical_order": 0,
+            "description": "Base variable."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "parameter",
+            "semantic_role": "exponent",
+            "mathematical_order": 0,
+            "description": "Real exponent."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "Unit decrement applied to the exponent."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The derivative of a power function multiplies by the exponent and reduces the exponent by one.",
+        "statistical_significance": "The rule that makes the geometric power hierarchy differentiable: it maps the scaled-cubic, scaled-quadratic and scaled-linear archetypes of the geometry corpus onto one another, so sphere volume differentiates to sphere surface area and circle area to circumference.",
+        "regularity_conditions": [
+          "x in the domain of x^n",
+          "For non-integer n, restrict to positive x",
+          "For n = 0 the derivative is identically zero"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "leibniz1684",
+          "bibliographic_entry": "Leibniz, G. W. (1684). Nova Methodus pro Maximis et Minimis. Acta Eruditorum, 467-473."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "power rule",
+        "polynomial",
+        "degree",
+        "exponent"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.linearity_of_derivative",
+      "title": "Linearity of the Derivative",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "differentiation_rules"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(a*f + b*g) = a*D(f) + b*D(g)",
+        "canonical_latex": "\\frac{d}{dx}\\bigl(a f + b g\\bigr) = a \\frac{df}{dx} + b \\frac{dg}{dx}",
+        "equivalent_forms": [
+          {
+            "form_id": "additivity",
+            "notation_system": "ascii",
+            "expression": "D(f + g) = D(f) + D(g)",
+            "scope_note": "Additivity alone, with both coefficients set to one"
+          },
+          {
+            "form_id": "homogeneity",
+            "notation_system": "ascii",
+            "expression": "D(a*f) = a*D(f)",
+            "scope_note": "Homogeneity alone, with the second summand dropped"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "linear_operator_law",
+        "anonymized_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+        "slot_schema": [
+          {
+            "slot_id": "SCALAR1",
+            "syntactic_category": "parameter",
+            "semantic_role": "coefficient"
+          },
+          {
+            "slot_id": "FUNC1",
+            "syntactic_category": "functional",
+            "semantic_role": "first_summand"
+          },
+          {
+            "slot_id": "SCALAR2",
+            "syntactic_category": "parameter",
+            "semantic_role": "coefficient"
+          },
+          {
+            "slot_id": "FUNC2",
+            "syntactic_category": "functional",
+            "semantic_role": "second_summand"
+          }
+        ],
+        "invariants": [
+          "The operator commutes with the affine combination: the same expression shape appears on both sides of the relation with D pushed inward.",
+          "Coefficients are inert under the operator; only the function slots are acted upon.",
+          "Additivity and homogeneity are packaged as one statement, which is the defining property of a linear map on the space of differentiable functions."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "parameter",
+            "semantic_role": "coefficient",
+            "mathematical_order": 0,
+            "description": "Scalar multiplier of the first term."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "coefficient",
+            "mathematical_order": 0,
+            "description": "Scalar multiplier of the second term."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Differentiation distributes over sums and passes through constant multipliers.",
+        "statistical_significance": "Establishes D as a linear operator, which is why the derivative interacts with the affine archetype shared by the tangent-line linearization and the location-scale transform of the statistics corpus: an operator that preserves affine structure is what lets local linear models be composed.",
+        "regularity_conditions": [
+          "f and g differentiable at the point of evaluation",
+          "Coefficients independent of the differentiation variable"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.differentiation.power_rule"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "rudin1976",
+          "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        }
+      ],
+      "keywords": [
+        "linearity",
+        "linear operator",
+        "additivity",
+        "homogeneity"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.product_rule",
+      "title": "Product Rule (Leibniz Rule)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "differentiation_rules"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(f*g) = D(f)*g + f*D(g)",
+        "canonical_latex": "(fg)' = f' g + f g'",
+        "equivalent_forms": [
+          {
+            "form_id": "prime_notation",
+            "notation_system": "ascii",
+            "expression": "(f*g)' = f'*g + f*g'"
+          },
+          {
+            "form_id": "quotient_corollary",
+            "notation_system": "ascii",
+            "expression": "D(f/g) = (D(f)*g - f*D(g))/g^2",
+            "scope_note": "Quotient rule, obtained by applying the product rule to f*(1/g)"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "derivation_leibniz_law",
+        "anonymized_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+        "slot_schema": [
+          {
+            "slot_id": "FUNC1",
+            "syntactic_category": "functional",
+            "semantic_role": "first_factor"
+          },
+          {
+            "slot_id": "FUNC2",
+            "syntactic_category": "functional",
+            "semantic_role": "second_factor"
+          }
+        ],
+        "invariants": [
+          "Each factor is differentiated exactly once per summand; the two summands exhaust the ways of placing the operator.",
+          "Symmetric under exchange of the two factors, matching the commutativity of the product being differentiated.",
+          "Differentiation is a derivation rather than a ring homomorphism: it is additive but explicitly not multiplicative."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "first_factor",
+            "mathematical_order": 0,
+            "description": "First factor evaluated pointwise."
+          },
+          {
+            "symbol": "g",
+            "syntactic_category": "variable",
+            "semantic_role": "second_factor",
+            "mathematical_order": 0,
+            "description": "Second factor evaluated pointwise."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The derivative of a product is the first factor differentiated times the second, plus the first times the second differentiated.",
+        "statistical_significance": "The canonical failure of naive operator distribution: it is the statement that separates linear operators from multiplicative ones, and its shape recurs wherever a coupled pair is perturbed, as in error propagation for products of measured quantities.",
+        "regularity_conditions": [
+          "Both factors differentiable at the point of evaluation"
+        ],
+        "failure_modes": [
+          "Assuming D(f*g) = D(f)*D(g), which holds only in degenerate cases"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "leibniz1684",
+          "bibliographic_entry": "Leibniz, G. W. (1684). Nova Methodus pro Maximis et Minimis. Acta Eruditorum, 467-473."
+        },
+        {
+          "citation_key": "spivak2008",
+          "bibliographic_entry": "Spivak, M. (2008). Calculus (4th ed.). Publish or Perish."
+        },
+        {
+          "citation_key": "rudin1976",
+          "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "product rule",
+        "Leibniz rule",
+        "derivation"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.chain_rule",
+      "title": "Chain Rule",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "differentiation_rules"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(COMPOSE(f, g)) = COMPOSE(D(f), g) * D(g)",
+        "canonical_latex": "\\frac{d}{dx} f(g(x)) = f'(g(x))\\, g'(x)",
+        "equivalent_forms": [
+          {
+            "form_id": "pointwise_form",
+            "notation_system": "ascii",
+            "expression": "D(f(g(x))) = D(f)(g(x)) * D(g)(x)",
+            "scope_note": "Explicit pointwise evaluation of the composite derivative"
+          },
+          {
+            "form_id": "leibniz_cancellation",
+            "notation_system": "ascii",
+            "expression": "dy/dx = (dy/du)*(du/dx)",
+            "scope_note": "Leibniz form, mnemonically a cancellation of differentials"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "composition_factorization",
+        "anonymized_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+        "slot_schema": [
+          {
+            "slot_id": "OUTER",
+            "syntactic_category": "functional",
+            "semantic_role": "outer_map"
+          },
+          {
+            "slot_id": "INNER",
+            "syntactic_category": "functional",
+            "semantic_role": "inner_map"
+          }
+        ],
+        "invariants": [
+          "The derivative of a composite factorizes into a product of derivatives, with the outer derivative re-evaluated along the inner map.",
+          "The inner map appears twice: once as the argument of the outer derivative and once differentiated in its own right.",
+          "Reduces to the identity rule when the inner map is the identity, which fixes the normalization of the factorization."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Input to the inner map."
+          },
+          {
+            "symbol": "u",
+            "syntactic_category": "variable",
+            "semantic_role": "intermediate",
+            "mathematical_order": 0,
+            "description": "Intermediate value produced by the inner map and consumed by the outer map."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "COMPOSE(.,.)",
+            "name": "function_composition",
+            "input_arity": 2,
+            "codomain": "function",
+            "description": "Composition of an outer map with an inner map."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The rate of change of a composite equals the outer rate of change measured at the inner value, scaled by the inner rate of change.",
+        "statistical_significance": "The composition law that makes local rates chainable, and therefore the mechanism by which unit conversions, change of variables in integration, and backpropagation through layered models are all one statement.",
+        "regularity_conditions": [
+          "g differentiable at the point",
+          "f differentiable at the image of that point under g"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.differentiation.exponential_derivative"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cauchy1823",
+          "bibliographic_entry": "Cauchy, A.-L. (1823). Resume des lecons donnees a l'Ecole Royale Polytechnique sur le calcul infinitesimal. Paris: Imprimerie Royale."
+        },
+        {
+          "citation_key": "rudin1976",
+          "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+        },
+        {
+          "citation_key": "courant1937",
+          "bibliographic_entry": "Courant, R. (1937). Differential and Integral Calculus, Volume I (2nd ed.). Interscience."
+        }
+      ],
+      "keywords": [
+        "chain rule",
+        "composition",
+        "change of variables"
+      ]
+    },
+    {
+      "statement_id": "calculus.differentiation.exponential_derivative",
+      "title": "Derivative of the Natural Exponential",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "transcendental_functions"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(EXP(k*x)) = k*EXP(k*x)",
+        "canonical_latex": "\\frac{d}{dx} e^{kx} = k e^{kx}",
+        "equivalent_forms": [
+          {
+            "form_id": "unit_rate",
+            "notation_system": "ascii",
+            "expression": "D(EXP(x)) = EXP(x)",
+            "scope_note": "Fixed point of differentiation, obtained at k = 1"
+          },
+          {
+            "form_id": "ode_form",
+            "notation_system": "ascii",
+            "expression": "D(y) = k*y",
+            "scope_note": "The differential equation that the exponential solves"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "eigenfunction_of_differentiation",
+        "anonymized_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+        "slot_schema": [
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant"
+          },
+          {
+            "slot_id": "VAR",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "The operand is reproduced exactly on the right, scaled by a constant: an eigenvalue equation for the differentiation operator.",
+          "The rate constant occupies two positions, inside the exponent and as the outer scale factor, and those must be the same quantity.",
+          "Self-similarity under differentiation is preserved under repeated application, each pass contributing another factor of the rate."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "k",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant",
+            "mathematical_order": 0,
+            "description": "Rate constant appearing in the exponent."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Input variable."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "EXP(.)",
+            "name": "natural_exponential",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Natural exponential function, the base-e power map."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "e",
+            "description": "Base of the natural exponential, the unique base for which the eigenvalue equals the exponent rate."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Differentiating a scaled exponential returns the same exponential multiplied by the rate constant in its exponent.",
+        "statistical_significance": "Identifies the exponential family as the eigenfunctions of differentiation, which is exactly why the exponential growth law is the universal solution shape for any process whose rate is proportional to its own size.",
+        "regularity_conditions": [
+          "k independent of x",
+          "Natural base for the stated eigenvalue"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [
+          "calculus.growth.exponential_growth_law"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.differentiation.chain_rule"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1748",
+          "bibliographic_entry": "Euler, L. (1748). Introductio in Analysin Infinitorum. Lausanne: Bousquet."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        }
+      ],
+      "keywords": [
+        "exponential",
+        "eigenfunction",
+        "rate constant"
+      ]
+    },
+    {
+      "statement_id": "calculus.growth.exponential_growth_law",
+      "title": "Exponential Growth and Decay Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_equations",
+        "topic": "growth_and_decay",
+        "canonical_objects": [
+          "amount",
+          "initial condition",
+          "rate constant",
+          "time"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "N = N0*EXP(k*t)",
+        "canonical_latex": "N(t) = N_0 e^{k t}",
+        "equivalent_forms": [
+          {
+            "form_id": "governing_ode",
+            "notation_system": "ascii",
+            "expression": "D(N) = k*N",
+            "scope_note": "Equivalent differential specification: rate proportional to size"
+          },
+          {
+            "form_id": "decay_form",
+            "notation_system": "ascii",
+            "expression": "N = N0*EXP(-k*t)",
+            "scope_note": "Decay regime, obtained by negating the rate constant"
+          },
+          {
+            "form_id": "half_life_form",
+            "notation_system": "ascii",
+            "expression": "N = N0*2^(-t/T)",
+            "scope_note": "Base-2 reparameterization in terms of a half-life T"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "exponential_evolution",
+        "anonymized_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
+        "slot_schema": [
+          {
+            "slot_id": "AMOUNT",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "INITIAL",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition"
+          },
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant"
+          },
+          {
+            "slot_id": "TIME",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Constant proportional rate of change: the relative growth rate is time-invariant even though the absolute rate is not.",
+          "Multiplicative in elapsed time, so equal intervals multiply the amount by equal factors and the law is invariant under time translation up to a change of the initial condition.",
+          "The sign of the rate constant separates growth from decay while leaving the structure untouched, which is why growth and decay are one archetype."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Amount present at time t."
+          },
+          {
+            "symbol": "N0",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition",
+            "mathematical_order": 0,
+            "description": "Amount present at time zero."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant",
+            "mathematical_order": 0,
+            "description": "Proportional rate constant; positive for growth, negative for decay."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Elapsed time."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EXP(.)",
+            "name": "natural_exponential",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Natural exponential function, the base-e power map."
+          },
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "e",
+            "description": "Base of the natural exponential."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A quantity whose instantaneous rate of change is proportional to its current size evolves as its initial value times an exponential of the rate times elapsed time.",
+        "statistical_significance": "The most heavily reused shape in the corpus: radioactive and chemical first-order decay, continuously compounded interest, unconstrained population growth, and RC circuit relaxation are the same statement with different slot fillings. It is the intended cross-discipline anchor between the calculus corpus and any chemistry kinetics corpus.",
+        "regularity_conditions": [
+          "Rate constant independent of time and of the amount",
+          "Unbounded resources, i.e. no saturation term",
+          "Continuous rather than discrete evolution"
+        ],
+        "failure_modes": [
+          "Saturating systems where a carrying capacity invalidates the constant-rate assumption",
+          "Time-varying rate constants",
+          "Small-population regimes where discreteness dominates"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.differentiation.exponential_derivative"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "malthus1798",
+          "bibliographic_entry": "Malthus, T. R. (1798). An Essay on the Principle of Population. London: J. Johnson."
+        },
+        {
+          "citation_key": "euler1748",
+          "bibliographic_entry": "Euler, L. (1748). Introductio in Analysin Infinitorum. Lausanne: Bousquet."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "exponential growth",
+        "decay",
+        "rate constant",
+        "half-life"
+      ]
+    },
+    {
+      "statement_id": "calculus.integration.ftc_differentiation_part",
+      "title": "Fundamental Theorem of Calculus, Differentiation Part",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "integral_calculus",
+        "topic": "fundamental_theorem"
+      },
+      "formal_statement": {
+        "canonical_ascii": "D(INTEGRAL(f)) = f",
+        "canonical_latex": "\\frac{d}{dx}\\int_a^x f(t)\\,dt = f(x)",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit_limits",
+            "notation_system": "ascii",
+            "expression": "D(INTEGRAL(f, a, x)) = f(x)",
+            "scope_note": "Accumulation function with an explicit lower limit"
+          },
+          {
+            "form_id": "operator_form",
+            "notation_system": "ascii",
+            "expression": "D o INTEGRAL = identity",
+            "scope_note": "Operator composition statement on continuous integrands"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "left_inverse_operator_pair",
+        "anonymized_template": "D(INTEGRAL(F)) = F",
+        "slot_schema": [
+          {
+            "slot_id": "F",
+            "syntactic_category": "functional",
+            "semantic_role": "integrand"
+          }
+        ],
+        "invariants": [
+          "Differentiation is a left inverse of accumulation on continuous integrands: the composite operator is the identity.",
+          "The single function slot appears on both sides unchanged, which is what makes this an operator identity rather than a computation.",
+          "Independent of the lower limit of accumulation, since changing it shifts the accumulation function by a constant."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "upper_limit",
+            "mathematical_order": 0,
+            "description": "Upper limit of accumulation."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "integration_variable",
+            "mathematical_order": 0,
+            "description": "Bound variable of integration."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps an integrable function to its accumulation function or definite integral."
+          },
+          {
+            "notation": "f(.)",
+            "name": "integrand",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Continuous function being accumulated."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Differentiating the accumulation function of a continuous integrand recovers the integrand at the upper limit.",
+        "statistical_significance": "One half of the statement that the two central operators of calculus are mutually inverse; it converts the integral from an area computation into an antidifferentiation problem.",
+        "regularity_conditions": [
+          "f continuous on the interval of accumulation",
+          "Upper limit interior to that interval"
+        ],
+        "failure_modes": [
+          "Discontinuous integrands, where the derivative of the accumulation function can fail to exist at jumps"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "calculus.integration.ftc_evaluation_part"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "barrow1670",
+          "bibliographic_entry": "Barrow, I. (1670). Lectiones Geometricae. London."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        },
+        {
+          "citation_key": "rudin1976",
+          "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "fundamental theorem",
+        "accumulation",
+        "antiderivative",
+        "operator inverse"
+      ]
+    },
+    {
+      "statement_id": "calculus.integration.ftc_evaluation_part",
+      "title": "Fundamental Theorem of Calculus, Evaluation Part",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "integral_calculus",
+        "topic": "fundamental_theorem"
+      },
+      "formal_statement": {
+        "canonical_ascii": "INTEGRAL(D(f)) = f(b) - f(a)",
+        "canonical_latex": "\\int_a^b f'(x)\\,dx = f(b) - f(a)",
+        "equivalent_forms": [
+          {
+            "form_id": "antiderivative_form",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(g, a, b) = F(b) - F(a)",
+            "scope_note": "Stated for any antiderivative F of the integrand g"
+          },
+          {
+            "form_id": "net_change_form",
+            "notation_system": "ascii",
+            "expression": "INTEGRAL(D(f)) = Delta_f",
+            "scope_note": "Net change theorem reading"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "boundary_difference_evaluation",
+        "anonymized_template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
+        "slot_schema": [
+          {
+            "slot_id": "F",
+            "syntactic_category": "functional",
+            "semantic_role": "antiderivative"
+          },
+          {
+            "slot_id": "UPPER",
+            "syntactic_category": "variable",
+            "semantic_role": "upper_limit"
+          },
+          {
+            "slot_id": "LOWER",
+            "syntactic_category": "variable",
+            "semantic_role": "lower_limit"
+          }
+        ],
+        "invariants": [
+          "An integral over an extent collapses to a difference of boundary values: interior behaviour is irrelevant to the total.",
+          "The continuum analogue of a telescoping sum, and the one-dimensional case of the general Stokes pattern relating a region to its boundary.",
+          "Any two antiderivatives differ by an additive constant, which cancels in the difference and makes the right-hand side well defined."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "lower_limit",
+            "mathematical_order": 0,
+            "description": "Lower limit of integration."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "upper_limit",
+            "mathematical_order": 0,
+            "description": "Upper limit of integration."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "INTEGRAL(.)",
+            "name": "integration_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps an integrable function to its accumulation function or definite integral."
+          },
+          {
+            "notation": "f(.)",
+            "name": "antiderivative",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Function whose derivative is being integrated."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The definite integral of a derivative over an interval equals the net change of the function between the endpoints.",
+        "statistical_significance": "Turns integration into evaluation and supplies the accounting identity behind conservation arguments: total accumulated change depends only on the boundary, which is the shape reused by path-independence and potential-function statements in physics.",
+        "regularity_conditions": [
+          "f continuously differentiable on the closed interval",
+          "The derivative integrable over that interval"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.integration.ftc_differentiation_part"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "barrow1670",
+          "bibliographic_entry": "Barrow, I. (1670). Lectiones Geometricae. London."
+        },
+        {
+          "citation_key": "leibniz1684",
+          "bibliographic_entry": "Leibniz, G. W. (1684). Nova Methodus pro Maximis et Minimis. Acta Eruditorum, 467-473."
+        },
+        {
+          "citation_key": "apostol1967",
+          "bibliographic_entry": "Apostol, T. M. (1967). Calculus, Volume I: One-Variable Calculus with an Introduction to Linear Algebra (2nd ed.). Wiley."
+        }
+      ],
+      "keywords": [
+        "fundamental theorem",
+        "net change",
+        "boundary evaluation",
+        "telescoping"
+      ]
+    },
+    {
+      "statement_id": "calculus.approximation.tangent_line_linearization",
+      "title": "Tangent-Line Linearization",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "calculus"
+        ],
+        "subfield": "differential_calculus",
+        "topic": "linear_approximation"
+      },
+      "formal_statement": {
+        "canonical_ascii": "L = f(a) + D(f)(a)*(x - a)",
+        "canonical_latex": "L(x) = f(a) + f'(a)(x - a)",
+        "equivalent_forms": [
+          {
+            "form_id": "approximation_form",
+            "notation_system": "ascii",
+            "expression": "f(x) approx f(a) + D(f)(a)*(x - a)",
+            "scope_note": "First-order Taylor approximation valid near a"
+          },
+          {
+            "form_id": "differential_form",
+            "notation_system": "ascii",
+            "expression": "Delta_f approx D(f)(a)*Delta_x",
+            "scope_note": "Increment form used for error propagation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_operator",
+        "anonymized_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+        "slot_schema": [
+          {
+            "slot_id": "LINEARIZED",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "BASEVALUE",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_value"
+          },
+          {
+            "slot_id": "SLOPE",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "DISPLACEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Affine in the displacement from the anchor point: a constant offset plus a scaled input.",
+          "Agrees with the function to first order at the anchor, where both the value and the slope are matched exactly.",
+          "The anchor value and slope are frozen constants of the approximation, even though both are function evaluations."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "L",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Linearized value."
+          },
+          {
+            "symbol": "a",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_point",
+            "mathematical_order": 0,
+            "description": "Point of expansion."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Point at which the linearization is read."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "D(.)",
+            "name": "differentiation_operator",
+            "input_arity": 1,
+            "codomain": "function",
+            "description": "Maps a differentiable function to its derivative function."
+          },
+          {
+            "notation": "f(.)",
+            "name": "target_function",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Function being locally approximated."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Near a chosen point, a differentiable function is replaced by the affine function that matches its value and slope there.",
+        "statistical_significance": "The exact typed twin of probstat.transform.affine_location_scale: the linearization is a location-scale map whose shift is the anchored value and whose scale is the derivative. This is why delta-method variance propagation in statistics and first-order error propagation in physics are the same computation performed on the same skeleton.",
+        "regularity_conditions": [
+          "f differentiable at the anchor point",
+          "Displacement small enough that the first-order remainder is negligible"
+        ],
+        "failure_modes": [
+          "Large displacements where curvature dominates",
+          "Anchors at inflection or non-differentiable points"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "calculus.limits.derivative_definition"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.transform.affine_location_scale"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "taylor1715",
+          "bibliographic_entry": "Taylor, B. (1715). Methodus Incrementorum Directa et Inversa. London: Pearson."
+        },
+        {
+          "citation_key": "courant1937",
+          "bibliographic_entry": "Courant, R. (1937). Differential and Integral Calculus, Volume I (2nd ed.). Interscience."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "linearization",
+        "tangent line",
+        "affine",
+        "first-order Taylor",
+        "delta method"
+      ]
+    }
+  ]
+}
