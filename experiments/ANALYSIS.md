@@ -260,6 +260,32 @@ ood = held-out combos + deeper recursion. 2 seeds/arm, exact match:
   parse (depth + sibling index) — depth-invariant by construction — and
   measure OOD recovery.
 
+### Positional-encoding ladder (struct arm, 2 seeds each)
+
+| positions | test | OOD | failure mode |
+|---|---|---|---|
+| absolute | 0.999 | 0.203 | no extrapolation to longer sequences |
+| local (depth, sib) + segment | 0.694 | 0.505 | aliasing: identical (word, depth, sib) across subtrees are indistinguishable to a pointer (seeds bit-identical — deterministic ties) |
+| **ancestry paths** | **1.000** | **0.973** | (one seed: 1.000 OOD — perfect depth extrapolation) |
+
+**Depth generalization — the wall behind every OOD collapse in the
+suite — falls when position = symbolic tree address.** Ancestry paths
+(per-token sequence of sibling indices, level-wise embedded, per-side +
+segment id) are unique per node (no aliasing) and level-wise
+in-distribution as trees deepen (span-boundary tokens keep shallow
+paths). An ~800k-param pointer then handles BOTH novel combinations
+(1.000) and novel depths (0.973, one seed perfect) — the two signatures
+of compositional generalization, simultaneously, from the house
+pattern's third application: the symbolic front-end supplies content
+features (hybrid bit), lexicon (extrinsic), and now *addresses*.
+
+Implication for the model design: positional encoding is not a
+hyperparameter here, it is part of the symbolic/learned interface.
+"Discrete infinity" behavior appears when the addressing scheme is
+recursion-aware. Follow-up: port path positions to the classifier tasks
+(xlang/syn OOD collapses used absolute positions) and expect the same
+recovery.
+
 ## Next
 
 1. Tree-structural positional encoding for solvex OOD (in progress).

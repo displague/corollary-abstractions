@@ -38,6 +38,37 @@ def tokens_for(example: dict, arm: str) -> tuple[list[str], int]:
 
 
 MAX_DEPTH, MAX_SIB = 32, 64
+MAX_LEVELS = 12
+
+
+def tree_paths(tokens: list[str]) -> list[list[int]]:
+    """Per-token ancestry path of sibling indices — unique addressing that
+    stays level-wise in-distribution as trees deepen."""
+    paths = []
+    sib_stack = [0]
+    path_stack: list[int] = []
+    for t in tokens:
+        if t.endswith("(") or t.endswith("⟨"):
+            idx = sib_stack[-1]
+            sib_stack[-1] += 1
+            path_stack.append(idx)
+            paths.append(list(path_stack))
+            sib_stack.append(0)
+        elif t == ")":
+            paths.append(list(path_stack) if path_stack else [0])
+            if len(sib_stack) > 1:
+                sib_stack.pop()
+            if path_stack:
+                path_stack.pop()
+        else:
+            idx = sib_stack[-1]
+            sib_stack[-1] += 1
+            paths.append(list(path_stack) + [idx])
+    out = []
+    for p in paths:
+        p = [min(x, MAX_SIB - 1) + 1 for x in p[:MAX_LEVELS]]  # 0 = absent
+        out.append(p + [0] * (MAX_LEVELS - len(p)))
+    return out
 
 
 def tree_coords(tokens: list[str]) -> list[tuple[int, int]]:
@@ -70,7 +101,16 @@ class SpanDataset(Dataset):
                 continue
             start = r["ans_start"] + shift + 1  # +1 for CLS
             end = r["ans_end"] + shift + 1
-            coords = [(0, 0)] + tree_coords(toks)  # CLS at origin
+            # coords rooted per side; segment id disambiguates the trees
+            zero_path = [0] * MAX_LEVELS
+            if "<sep>" in toks:
+                cut = toks.index("<sep>")
+                coords = ([[0] + zero_path]
+                          + [[0] + p for p in tree_paths(toks[:cut])]
+                          + [[1] + zero_path]
+                          + [[1] + p for p in tree_paths(toks[cut + 1:])])
+            else:
+                coords = [[0] + zero_path] + [[0] + p for p in tree_paths(toks)]
             self.items.append((torch.tensor(ids, dtype=torch.long),
                                torch.tensor(coords, dtype=torch.long),
                                start, end))
@@ -86,7 +126,7 @@ def collate(batch):
     seqs, coords, starts, ends = zip(*batch)
     max_len = max(len(s) for s in seqs)
     out = torch.zeros(len(seqs), max_len, dtype=torch.long)
-    crd = torch.zeros(len(seqs), max_len, 2, dtype=torch.long)
+    crd = torch.zeros(len(seqs), max_len, 1 + MAX_LEVELS, dtype=torch.long)
     mask = torch.zeros(len(seqs), max_len, dtype=torch.bool)
     for i, (s, c) in enumerate(zip(seqs, coords)):
         out[i, : len(s)] = s
@@ -105,8 +145,13 @@ class SpanPointer(nn.Module):
         if positions == "abs":
             self.pos = nn.Embedding(max_len, d_model)
         else:  # tree: symbolic (depth, sibling) coordinates from the parse
-            self.depth_emb = nn.Embedding(MAX_DEPTH, d_model)
-            self.sib_emb = nn.Embedding(MAX_SIB, d_model)
+            self.seg_emb = nn.Embedding(2, d_model)
+            # one table, level-offset indices: level l sib s -> l*(MAX_SIB+1)+s
+            self.path_emb = nn.Embedding(MAX_LEVELS * (MAX_SIB + 1), d_model,
+                                         padding_idx=None)
+            self.register_buffer(
+                "level_offsets",
+                torch.arange(MAX_LEVELS) * (MAX_SIB + 1))
         layer = nn.TransformerEncoderLayer(
             d_model, n_heads, dim_feedforward=4 * d_model,
             dropout=0.1, batch_first=True, norm_first=True)
@@ -119,7 +164,12 @@ class SpanPointer(nn.Module):
             pos = torch.arange(x.size(1), device=x.device).unsqueeze(0)
             h = h + self.pos(pos)
         else:
-            h = h + self.depth_emb(coords[..., 0]) + self.sib_emb(coords[..., 1])
+            seg = coords[..., 0]
+            paths = coords[..., 1:]
+            idx = paths + self.level_offsets  # broadcast over levels
+            emb = self.path_emb(idx)
+            emb = emb * (paths > 0).unsqueeze(-1)  # zero out absent levels
+            h = h + emb.sum(dim=-2) + self.seg_emb(seg)
         h = self.encoder(h, src_key_padding_mask=~mask)
         logits = self.span_head(h)  # B x L x 2
         neg = torch.finfo(logits.dtype).min
