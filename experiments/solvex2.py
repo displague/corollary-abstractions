@@ -31,6 +31,28 @@ from langgen import (  # noqa: E402
 from solvex import np_noun  # noqa: E402
 
 
+STRUCT_TOKENS = {"+(", "MOD(", ")"}
+
+
+def answer_actions(canon: list[str], tokens: list[str],
+                   span_lo: int, span_hi: int) -> list:
+    """Per canon token: ["g", tok] for structure, ["c", abs_pos] for content —
+    pos is the first unused span position whose word realizes the concept."""
+    from langgen import LEX_A
+    used: set[int] = set()
+    acts = []
+    for t in canon:
+        if t in STRUCT_TOKENS:
+            acts.append(["g", t])
+            continue
+        word = LEX_A[t]
+        pos = next(p for p in range(span_lo, span_hi + 1)
+                   if p not in used and tokens[p] == word)
+        used.add(pos)
+        acts.append(["c", pos])
+    return acts
+
+
 def make_example(rng: random.Random, depth: int, n_stmts: int,
                  combos: set, want_heldout: bool) -> dict | None:
     verb = ("slot", f"v{rng.randrange(len(VERBS))}")
@@ -91,6 +113,8 @@ def make_example(rng: random.Random, depth: int, n_stmts: int,
         "ans_end": block_off + hi,
         "answer": " ".join(stmt_tok_lists[correct_idx][lo:hi + 1]),
         "answer_canon": canon_tokens_lang(answer_np),
+        "answer_actions": answer_actions(
+            canon_tokens_lang(answer_np), tokens, block_off + lo, block_off + hi),
         "correct_idx": correct_idx,
         "n_stmts": n_stmts,
         "combo": list(combo),
