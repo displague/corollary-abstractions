@@ -1,0 +1,1578 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "set_theory.boolean_foundations.v1",
+  "discipline": "set_theory",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "settheory.boolean_laws.de_morgan_laws",
+      "title": "De Morgan's Laws (Set Form)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "complement(A inter B) = complement(A) union complement(B)",
+        "canonical_latex": "(A \\cap B)^{c} = A^{c} \\cup B^{c}",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(A ∩ B)^c = A^c ∪ B^c",
+            "scope_note": "Standard set notation, complement taken in U"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "(A ∪ B)^c = A^c ∩ B^c",
+            "scope_note": "The dual law"
+          },
+          {
+            "form_id": "relative",
+            "notation_system": "ascii",
+            "expression": "X \\ (A inter B) = (X \\ A) union (X \\ B)",
+            "scope_note": "Relative-difference form, valid without a fixed universe"
+          },
+          {
+            "form_id": "sigma_algebra",
+            "notation_system": "measure_theoretic",
+            "expression": "(union_i A_i)^c = inter_i A_i^c",
+            "scope_note": "Countable form; why a sigma-algebra closed under complement and countable union is closed under countable intersection"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "de_morgan_duality",
+        "anonymized_template": "NEG(MEET(SETA, SETB)) = JOIN(NEG(SETA), NEG(SETB))",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETB",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "Self-dual as a pair: swapping MEET with JOIN and TOP with BOT maps the stated form onto its dual, so one line of the pair proves the other for free.",
+          "NEG is an order-reversing bijection (an antitone involution), which is the single fact the law encodes.",
+          "Both sides are symmetric under exchanging the two operands.",
+          "Generalizes verbatim to arbitrary arities and, in a complete Boolean algebra, to infinite meets and joins."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary subset of U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "^c",
+            "name": "set complement relative to the universe",
+            "arity": 1,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The complement of an intersection is the union of the complements: a point misses the overlap exactly when it misses at least one of the sets.",
+        "statistical_significance": "Exact typed twin of logic.boolean_laws.de_morgan_laws. The two templates are generated from one shared format string in scripts/seed_logic.py, so the skeleton `JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩` is identical by construction rather than by luck. The set form is also the workhorse of measure theory: closure of a sigma-algebra under countable intersection is this law plus closure under complement, which is why the probability corpus can assume it silently.",
+        "regularity_conditions": [
+          "A fixed ambient universe U relative to which complements are taken",
+          "A and B are subsets of that same U"
+        ],
+        "failure_modes": [
+          "Absolute complements do not exist in ZFC: {x : x not-in A} is a proper class, so the law must be stated relative to a set U or as a difference.",
+          "Changing the universe changes both sides; comparing complements taken in different universes is the commonest error in practice."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "settheory.boolean_laws.complement_laws",
+          "settheory.boolean_laws.distributivity_meet_over_join",
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "logic.boolean_laws.de_morgan_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "demorgan1847",
+          "bibliographic_entry": "De Morgan, A. (1847). Formal Logic: or, The Calculus of Inference, Necessary and Probable. London: Taylor and Walton."
+        },
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "kolmogorov1933",
+          "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Ergebnisse der Mathematik 2(3). Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "De Morgan",
+        "complement",
+        "intersection",
+        "union",
+        "sigma-algebra",
+        "Boolean lattice"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.distributivity_meet_over_join",
+      "title": "Distributivity of Intersection over Union",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A inter (B union C) = (A inter B) union (A inter C)",
+        "canonical_latex": "A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)"
+          },
+          {
+            "form_id": "indexed",
+            "notation_system": "ascii",
+            "expression": "A inter (union_i B_i) = union_i (A inter B_i)",
+            "scope_note": "Arbitrary-index form; holds for any family, not just finite ones"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "meet_distributes_over_join",
+        "anonymized_template": "MEET(SETA, JOIN(SETB, SETC)) = JOIN(MEET(SETA, SETB), MEET(SETA, SETC))",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETB",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETC",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "One operand is repeated on the right, so the law is not a rearrangement but a duplication: it is what separates distributive lattices from general ones.",
+          "Self-dual: the same statement with MEET and JOIN exchanged also holds, and in a lattice each of the two implies the other.",
+          "Fails in the smallest non-distributive lattices M3 and N5; a lattice is distributive exactly when neither embeds in it.",
+          "Symmetric in the two distributed operands but not in the distributing one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary subset of U."
+          },
+          {
+            "symbol": "C",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A third arbitrary subset of U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Intersecting with a union distributes across that union: a point is in A and in one of B, C exactly when it is in A-and-B or in A-and-C.",
+        "statistical_significance": "The powerset reading of the same Huntington postulate, and an exact typed twin of the propositional form. Worth noting what the twin buys: the *proof* is one proof. Membership unfolds `x ∈ A ∩ (B ∪ C)` into `x ∈ A and (x ∈ B or x ∈ C)`, at which point the set law is the propositional law applied pointwise. The Lindenbaum-Tarski/powerset correspondence is not decoration on this pair; it is the derivation.",
+        "regularity_conditions": [
+          "A, B, C are sets (no universe needed: no complement appears)"
+        ],
+        "failure_modes": [
+          "The unrestricted-index dual A ∪ (∩_i B_i) = ∩_i (A ∪ B_i) needs the family to be non-empty; over an empty family the intersection is not a set.",
+          "Analogous distributivity fails for cartesian product over difference in the way beginners expect, so the law should not be transplanted to other set operations by pattern-matching."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "settheory.boolean_laws.absorption",
+          "settheory.boolean_laws.de_morgan_laws",
+          "settheory.boolean_laws.double_negation",
+          "settheory.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "logic.boolean_laws.distributivity_meet_over_join"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "huntington1904",
+          "bibliographic_entry": "Huntington, E. V. (1904). Sets of Independent Postulates for the Algebra of Logic. Transactions of the American Mathematical Society, 5(3), 288-309."
+        },
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "distributivity",
+        "intersection",
+        "union",
+        "distributive lattice",
+        "algebra of sets"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.double_negation",
+      "title": "Double Complement (Involution of Complement)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "complement(complement(A)) = A",
+        "canonical_latex": "(A^{c})^{c} = A",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(A^c)^c = A"
+          },
+          {
+            "form_id": "relative",
+            "notation_system": "ascii",
+            "expression": "U \\ (U \\ A) = A",
+            "scope_note": "Complement as relative difference, requires A subset U"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "complement_involution",
+        "anonymized_template": "NEG(NEG(SETA)) = SETA",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "NEG is an involution: applying it twice is the identity map, so it is its own inverse and a bijection of the algebra onto itself.",
+          "Order-reversing, hence an anti-automorphism: it exchanges TOP with BOT and MEET with JOIN, which is the source of every duality in this corpus.",
+          "The complement of an element is unique in a distributive lattice, which is what makes the two-sided statement well posed.",
+          "Only one free element appears, twice: the law is about the operator, not about any relation between operands."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^c",
+            "name": "set complement relative to the universe",
+            "arity": 1,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Taking the complement of a complement returns the original set: the points not outside A are exactly the points in A.",
+        "statistical_significance": "Exact typed twin of double negation elimination, and the reason De Morgan's two dual forms are interderivable in either corpus: complement each side and apply this law. Where the propositional version is the contested boundary between classical and constructive logic, the set version is uncontroversial as long as U is fixed, which is a useful reminder that structural identity of statements does not imply identity of their epistemic risk.",
+        "regularity_conditions": [
+          "A is a subset of the fixed universe U",
+          "Complement taken relative to that same U on both applications"
+        ],
+        "failure_modes": [
+          "Silently switching universes between the two complements breaks it; the expression is only well formed with U fixed.",
+          "In a constructive/topos setting the subobject lattice is a Heyting algebra, and double complement is a closure operator rather than the identity (it lands on the regular subobjects only)."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "settheory.boolean_laws.complement_laws",
+          "settheory.boolean_laws.distributivity_meet_over_join",
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "logic.boolean_laws.double_negation"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "jech2003",
+          "bibliographic_entry": "Jech, T. (2003). Set Theory (3rd millennium ed.). Berlin: Springer."
+        }
+      ],
+      "keywords": [
+        "complement",
+        "involution",
+        "algebra of sets",
+        "duality"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.absorption",
+      "title": "Absorption Law (Intersection over Union)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A inter (A union B) = A",
+        "canonical_latex": "A \\cap (A \\cup B) = A",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ (A ∪ B) = A"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "A ∪ (A ∩ B) = A"
+          },
+          {
+            "form_id": "order_form",
+            "notation_system": "ascii",
+            "expression": "A subset (A union B)",
+            "scope_note": "The inclusion the equation encodes"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "lattice_absorption",
+        "anonymized_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETB",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "The second operand vanishes from the result entirely, so the law is a genuine simplification, not a rearrangement.",
+          "Equivalent to the order statement MEET(x, y) = x iff JOIN(x, y) = y; absorption is what ties the two operations to one partial order.",
+          "Holds in every lattice, distributive or not, and together with commutativity, associativity and idempotence it *characterizes* lattices algebraically -- the order can be recovered from the equations.",
+          "Self-dual: JOIN(x, MEET(x, y)) = x is the same law with the operations exchanged."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary subset of U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing.",
+        "statistical_significance": "Exact typed twin of propositional absorption. It is also the reason the powerset order can be *defined* from either operation -- A ⊆ B iff A ∩ B = A iff A ∪ B = B -- which is the set-theoretic content of the LEQ head this corpus uses in settheory.order.subset_transitivity.",
+        "regularity_conditions": [
+          "A and B are sets; no universe or complement needed"
+        ],
+        "failure_modes": [
+          "Multisets and bags break it: with multiplicities, absorption fails because union and intersection stop being idempotent.",
+          "Fuzzy sets under min/max keep absorption, but under other t-norm/t-conorm pairs (product, Lukasiewicz) it fails, so 'set-like' is not enough."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "settheory.boolean_laws.distributivity_meet_over_join",
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "logic.boolean_laws.absorption"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "settheory.boolean_laws.complement_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "birkhoff1967",
+          "bibliographic_entry": "Birkhoff, G. (1967). Lattice Theory (3rd ed.). AMS Colloquium Publications 25. Providence: American Mathematical Society."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        }
+      ],
+      "keywords": [
+        "absorption",
+        "lattice",
+        "subset order",
+        "algebra of sets"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.identity_laws",
+      "title": "Identity Laws (Intersection with the Universe, Union with the Empty Set)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A inter U = A",
+        "canonical_latex": "A \\cap U = A",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ U = A"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "A ∪ emptyset = A",
+            "scope_note": "The empty set is the identity for union"
+          },
+          {
+            "form_id": "annihilators",
+            "notation_system": "ascii",
+            "expression": "A ∩ ∅ = ∅, A ∪ U = U",
+            "scope_note": "Companion domination laws"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "identity_element_law",
+        "anonymized_template": "MEET(SETA, UNIVERSE) = SETA",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "UNIVERSE",
+            "syntactic_category": "constant",
+            "semantic_role": "top_element"
+          }
+        ],
+        "invariants": [
+          "TOP is a two-sided identity for MEET, and dually BOT is one for JOIN; being an identity is what *defines* these two constants.",
+          "The only law here in which a constant slot (P-category) appears, which is why the typed skeleton `?0:V = MEET⟨?0:V, ?1:P⟩` differs in kind from the all-variable laws.",
+          "Identities are unique: any two elements both acting as identities for MEET are equal, so TOP is determined by the law rather than posited alongside it.",
+          "Combined with the complement laws it makes the lattice bounded and complemented, i.e. Boolean."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "U",
+            "description": "The universe of discourse: the greatest element of the powerset lattice, containing every set under consideration."
+          },
+          {
+            "symbol": "emptyset",
+            "description": "The empty set: the least element of the powerset lattice, contained in every set."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Intersecting with everything, or uniting with nothing, leaves a set unchanged.",
+        "statistical_significance": "Exact typed twin of the propositional identity laws, including the P/V split: UNIVERSE sits in the same parameter-like slot as TRUTH. This is the node where the abstraction pays for itself most visibly -- U and `true` look nothing alike and belong to different subjects, but both are the top element of a bounded lattice, and the template says so.",
+        "regularity_conditions": [
+          "A is a subset of U",
+          "U is fixed for the duration of the argument"
+        ],
+        "failure_modes": [
+          "There is no universal set in ZFC, so U must be a set chosen in advance; treating it as 'the set of everything' reintroduces Russell's paradox.",
+          "A ∩ U = A silently asserts A ⊆ U; if A escapes the chosen universe the left side is a proper subset of A."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "settheory.boolean_laws.absorption",
+          "settheory.boolean_laws.de_morgan_laws",
+          "settheory.boolean_laws.double_negation",
+          "settheory.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "logic.boolean_laws.identity_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "kunen1980",
+          "bibliographic_entry": "Kunen, K. (1980). Set Theory: An Introduction to Independence Proofs. Amsterdam: North-Holland."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "identity element",
+        "universe",
+        "empty set",
+        "bounded lattice",
+        "algebra of sets"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.complement_laws",
+      "title": "Complement Laws (Disjointness and Exhaustiveness)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A inter complement(A) = emptyset",
+        "canonical_latex": "A \\cap A^{c} = \\emptyset",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ A^c = ∅"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "A ∪ A^c = U",
+            "scope_note": "A set and its complement exhaust the universe"
+          },
+          {
+            "form_id": "partition",
+            "notation_system": "ascii",
+            "expression": "{A, A^c} is a partition of U whenever A is neither empty nor U"
+          },
+          {
+            "form_id": "probability",
+            "notation_system": "event_probability",
+            "expression": "Pr(A) + Pr(A^c) = 1",
+            "scope_note": "The measure-theoretic consequence: disjointness gives additivity, exhaustiveness gives the total"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "complement_annihilation",
+        "anonymized_template": "MEET(SETA, NEG(SETA)) = EMPTYSET",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "EMPTYSET",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          }
+        ],
+        "invariants": [
+          "An element and its complement meet in BOT and join in TOP; the pair of statements is what makes the bounded lattice complemented.",
+          "In a distributive lattice the complement satisfying both halves is unique, so NEG is a well-defined function rather than a relation.",
+          "The stated half fixes a constant on the right, so the typed skeleton `?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩` puts the P slot on the *result* side, unlike the identity laws where it is an argument.",
+          "Self-dual as a pair under exchanging MEET/JOIN and TOP/BOT."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "^c",
+            "name": "set complement relative to the universe",
+            "arity": 1,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "U",
+            "description": "The universe of discourse: the greatest element of the powerset lattice, containing every set under consideration."
+          },
+          {
+            "symbol": "emptyset",
+            "description": "The empty set: the least element of the powerset lattice, contained in every set."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A set and its complement share no points and together cover the universe: complementation cuts U in two.",
+        "statistical_significance": "Exact typed twin of non-contradiction. The set reading is also the hinge between this corpus and the probability one: the two-block partition {A, A^c} is the smallest instance of the partition that probstat.probability.total_probability_partition sums over, and Pr(A^c) = 1 - Pr(A) is that sum with two terms. The structural bridge is the CARD/measure functional, not the lattice itself.",
+        "regularity_conditions": [
+          "A is a subset of the fixed universe U",
+          "Complement taken relative to U"
+        ],
+        "failure_modes": [
+          "Without a fixed universe there is no complement to speak of, so the law is vacuous rather than false in unrestricted set talk.",
+          "In a Heyting algebra (open sets of a topological space, subobjects in a topos) the join half fails: A ∪ A^c is generally a proper subset of U, which is the topological face of intuitionism."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "settheory.boolean_laws.de_morgan_laws",
+          "settheory.boolean_laws.double_negation",
+          "settheory.boolean_laws.idempotence"
+        ],
+        "equivalent_to": [
+          "logic.boolean_laws.complement_laws"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.probability.total_probability_partition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "kolmogorov1933",
+          "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Ergebnisse der Mathematik 2(3). Berlin: Springer."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "complement",
+        "disjoint",
+        "partition",
+        "universe",
+        "Boolean algebra"
+      ]
+    },
+    {
+      "statement_id": "settheory.boolean_laws.idempotence",
+      "title": "Idempotence of Intersection and Union",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "boolean_laws",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "A inter A = A",
+        "canonical_latex": "A \\cap A = A",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "A ∩ A = A"
+          },
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "A ∪ A = A"
+          },
+          {
+            "form_id": "extensional",
+            "notation_system": "ascii",
+            "expression": "{x : x in A and x in A} = {x : x in A}",
+            "scope_note": "Extensionality reduces the set law to the propositional one pointwise"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "idempotent_operation",
+        "anonymized_template": "MEET(SETA, SETA) = SETA",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "A single free element occupies every position, so the law says something about the operation alone: repetition carries no information.",
+          "Self-dual: JOIN(x, x) = x is the same statement with operations exchanged.",
+          "Forced in any lattice by absorption, and derivable in a Boolean algebra from the identity, complement and distributive postulates without assuming it.",
+          "Idempotence is what makes these operations *logical* rather than arithmetic: multiplication and addition are not idempotent, which is why counting arguments need inclusion-exclusion corrections."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A set intersected or united with itself is itself: sets record membership, not multiplicity.",
+        "statistical_significance": "Exact typed twin of propositional idempotence, and the property that distinguishes sets from multisets and from cardinalities. The contrast with settheory.cardinality.inclusion_exclusion_two_sets in this same corpus is the point: CARD is not idempotent, so once a counting functional is applied to the lattice the overlap-correction term appears. Idempotence upstairs, inclusion-exclusion downstairs.",
+        "regularity_conditions": [
+          "A is a set; extensionality holds"
+        ],
+        "failure_modes": [
+          "Multisets, bags and lists are not idempotent under their union analogues; SQL's UNION ALL is the everyday counterexample.",
+          "Idempotence at the set level does not survive the passage to counts or measures, which is exactly why inclusion-exclusion exists."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "settheory.boolean_laws.complement_laws",
+          "settheory.boolean_laws.distributivity_meet_over_join",
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [
+          "logic.boolean_laws.idempotence"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "boole1854",
+          "bibliographic_entry": "Boole, G. (1854). An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities. London: Walton and Maberly."
+        },
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "birkhoff1967",
+          "bibliographic_entry": "Birkhoff, G. (1967). Lattice Theory (3rd ed.). AMS Colloquium Publications 25. Providence: American Mathematical Society."
+        }
+      ],
+      "keywords": [
+        "idempotence",
+        "intersection",
+        "union",
+        "extensionality",
+        "multiset"
+      ]
+    },
+    {
+      "statement_id": "settheory.order.subset_transitivity",
+      "title": "Transitivity of Subset Inclusion",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "inclusion_order",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (A subset B) and (B subset C) then (A subset C)",
+        "canonical_latex": "A \\subseteq B \\ \\land\\ B \\subseteq C \\implies A \\subseteq C",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(A ⊆ B) ∧ (B ⊆ C) → (A ⊆ C)"
+          },
+          {
+            "form_id": "membership",
+            "notation_system": "ascii",
+            "expression": "(forall x. x in A implies x in B) and (forall x. x in B implies x in C) implies (forall x. x in A implies x in C)",
+            "scope_note": "Unfolded to membership; the proof is hypothetical syllogism applied pointwise"
+          },
+          {
+            "form_id": "lattice",
+            "notation_system": "ascii",
+            "expression": "(A inter B = A) and (B inter C = B) implies (A inter C = A)",
+            "scope_note": "Inclusion expressed through meet, which is how LEQ is defined in the template"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "order_transitivity",
+        "anonymized_template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETB",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETC",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "The middle element appears twice, once as the consequent of the first premise and once as the antecedent of the second: transitivity is the chaining pattern, and the repeated slot is the whole content.",
+          "Together with reflexivity and antisymmetry it makes inclusion a partial order, which is the order underlying every MEET/JOIN statement in this corpus.",
+          "Order-theoretic restatement of absorption: LEQ(x, y) holds exactly when MEET(x, y) = x, so transitivity is a consequence of the lattice equations.",
+          "Not an equation and not reversible, which puts it in the same structural family as modus ponens rather than with the Boolean laws."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary subset of U."
+          },
+          {
+            "symbol": "C",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A third arbitrary subset of U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "subset",
+            "name": "subset inclusion",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic and as subset inclusion in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Containment chains: if every element of A lies in B and every element of B lies in C, then every element of A lies in C.",
+        "statistical_significance": "The set corpus's inferential node, chosen to mirror logic.inference.modus_ponens rather than to twin with it. Both are two-premise detachment shells `IMPLIES⟨MEET⟨_, _⟩, _⟩`, but the premises differ in head, so the matcher reports no group -- correctly. The template uses the lattice-abstract LEQ head rather than a SUBSET head precisely so that a future logic node for entailment transitivity (hypothetical syllogism, stated over the Lindenbaum-Tarski order) would twin with this one exactly, without either corpus being rewritten.",
+        "regularity_conditions": [
+          "A, B, C are sets",
+          "Inclusion defined extensionally by universally quantified membership"
+        ],
+        "failure_modes": [
+          "Membership `in` is emphatically not transitive; conflating ⊆ with ∈ is the standard beginner error and the reason transitive *sets* are a named special class.",
+          "Proper inclusion ⊂ is transitive but not reflexive, so results stated for ⊆ do not transfer verbatim."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "settheory.boolean_laws.complement_laws",
+          "settheory.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "kunen1980",
+          "bibliographic_entry": "Kunen, K. (1980). Set Theory: An Introduction to Independence Proofs. Amsterdam: North-Holland."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "transitivity",
+        "subset",
+        "partial order",
+        "inclusion",
+        "lattice order"
+      ]
+    },
+    {
+      "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
+      "title": "Inclusion-Exclusion for Two Sets",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "combinatorial_set_theory",
+        "topic": "finite_cardinality",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "CARD(A union B) = CARD(A) + CARD(B) - CARD(A inter B)",
+        "canonical_latex": "|A \\cup B| = |A| + |B| - |A \\cap B|",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "|A ∪ B| = |A| + |B| - |A ∩ B|"
+          },
+          {
+            "form_id": "disjoint_case",
+            "notation_system": "ascii",
+            "expression": "|A ∪ B| = |A| + |B| when A ∩ B = ∅",
+            "scope_note": "Finite additivity as the degenerate case"
+          },
+          {
+            "form_id": "probability",
+            "notation_system": "event_probability",
+            "expression": "Pr(A ∪ B) = Pr(A) + Pr(B) - Pr(A ∩ B)",
+            "scope_note": "The addition rule; same identity with probability as the valuation"
+          },
+          {
+            "form_id": "n_sets",
+            "notation_system": "ascii",
+            "expression": "CARD(union_i A_i) = sum over non-empty S of (-1)^(CARD(S)+1) * CARD(inter_{i in S} A_i)",
+            "scope_note": "General form; the signs are the Moebius function of the Boolean lattice"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "inclusion_exclusion_correction",
+        "anonymized_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
+        "slot_schema": [
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          },
+          {
+            "slot_id": "SETB",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "Additive with a single correction term: the overlap is counted twice by the naive sum and subtracted once, so the identity is exact rather than a bound.",
+          "Reduces to plain additivity CARD(JOIN(x, y)) = CARD(x) + CARD(y) exactly when MEET(x, y) = BOT, which is the complement law's hypothesis.",
+          "Symmetric in the two sets, since both MEET and JOIN are.",
+          "CARD is a valuation on the lattice: monotone, and modular in the sense this identity states. Any valuation -- counting measure, probability, Lebesgue measure, dimension of a vector-space sum -- satisfies the same equation.",
+          "Extends to n sets with alternating signs over all non-empty subsets, the Moebius function of the Boolean lattice."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          },
+          {
+            "symbol": "B",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary subset of U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "union",
+            "name": "set union",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "+",
+            "name": "addition of cardinals",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction of cardinals",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          },
+          {
+            "notation": "CARD(.)",
+            "name": "cardinality",
+            "input_arity": 1,
+            "codomain": "non-negative integers",
+            "description": "Number of elements of a finite set; the measure that turns lattice statements into counting ones."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Counting the union by adding the parts double-counts whatever lies in both, so the overlap is subtracted once to make the count exact.",
+        "statistical_significance": "Included to test the shape relation the corpus predicted with probstat.probability.total_probability_partition, and the honest answer is that it does not twin: total probability is `MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i`, a weighted sum over an index, while this is a three-term signed sum with a nested MEET inside the correction. What they share is the *idea* of a valuation on a Boolean lattice, and the two do meet on the `probability` equivalent form recorded above, which is literally the probability addition rule. The structural moral is worth keeping: applying a non-idempotent functional (CARD) to idempotent lattice operations is exactly what manufactures the correction term, so this node is the counterweight to settheory.boolean_laws.idempotence.",
+        "regularity_conditions": [
+          "A and B are finite (or CARD is replaced by a finite measure)",
+          "Counting measure, or any modular valuation on the lattice"
+        ],
+        "failure_modes": [
+          "Meaningless as stated for infinite sets: |A ∪ B| = |A| for infinite A and countable B, so cardinal arithmetic absorbs rather than corrects.",
+          "The n-set expansion has 2^n - 1 terms and is numerically unstable in floating point when the alternating terms are of comparable size.",
+          "Transplanting it to a non-modular valuation (e.g. a submodular set function) turns the identity into an inequality."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.probability.bayes_rule",
+          "probstat.probability.total_probability_partition",
+          "settheory.boolean_laws.complement_laws",
+          "settheory.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "stanley2011",
+          "bibliographic_entry": "Stanley, R. P. (2011). Enumerative Combinatorics, Volume 1 (2nd ed.). Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "rota1964",
+          "bibliographic_entry": "Rota, G.-C. (1964). On the Foundations of Combinatorial Theory I: Theory of Moebius Functions. Zeitschrift fuer Wahrscheinlichkeitstheorie und Verwandte Gebiete, 2(4), 340-368."
+        },
+        {
+          "citation_key": "kolmogorov1933",
+          "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Ergebnisse der Mathematik 2(3). Berlin: Springer."
+        },
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        }
+      ],
+      "keywords": [
+        "inclusion-exclusion",
+        "cardinality",
+        "counting",
+        "valuation",
+        "addition rule",
+        "modularity"
+      ]
+    }
+  ]
+}

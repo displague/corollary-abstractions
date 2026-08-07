@@ -27,6 +27,23 @@ or commit history. Each item names the evidence that motivated it.
   literals (trapezoid >= rectangle-perimeter binds HEIGHT->2). Consider
   category-compatibility constraints on bindings (V slots should not bind
   nums; P slots should not bind V-rooted subtrees).
+- **Call args are ordered, so commutative call heads need an authoring
+  convention.** `MEET`/`JOIN` are commutative in every model of a Boolean
+  lattice, but the matcher flattens/sorts only the `op` heads in
+  `COMMUTATIVE = {+, *}`; a `call` keeps its argument order. `MEET(X, TOP)`
+  and `MEET(TOP, X)` are therefore different skeletons. The logic/set corpora
+  twin only because `scripts/seed_logic.py` generates both from one shared
+  format string and fixes the order (distinguished operand first, special
+  element second). Fix: let a template declare commutative call heads, or
+  lint for the same head appearing with permuted argument categories.
+- **Specialization matcher is arithmetic-only.** `COMMUTATIVE = {+, *}` and
+  `IDENTITY = {+: 0, *: 1}` are hardcoded, so `specialize.py` finds *zero*
+  edges touching the 18 logic/set_theory nodes even though those nodes
+  literally state their own identity elements (`MEET(X, TOP) = X`,
+  `JOIN(X, BOT) = X`) and their own annihilators. Generalizing IDENTITY to a
+  per-head table sourced from `identity_laws`-style nodes would let e.g.
+  De Morgan >= the degenerate one-operand case fire, and would give the
+  Boolean corpora any specialization structure at all.
 
 ## Schema
 
@@ -35,6 +52,14 @@ or commit history. Each item names the evidence that motivated it.
   `functionals` while `symbols` still demands `minItems: 1` — FTC part 1
   needed a scalar symbol it didn't naturally have. Either add the enum
   members or relax `minItems`.
+- **`statement_id` pattern forbids underscores in the first segment.**
+  `^[a-z0-9]+(\.[a-z0-9_]+)+$` allows `_` in every segment except the
+  discipline prefix, so `set_theory.boolean_laws.de_morgan_laws` fails
+  validation and the corpus had to use `settheory.` while the directory and
+  the `discipline` field stay `set_theory`. The prefix and the directory name
+  now disagree, which is a trap for anything that derives one from the other.
+  Fix: allow `[a-z0-9_]+` in the first segment too (there is no reason for the
+  asymmetry), or document the prefix-vs-directory mapping in the schema.
 - **Cross-corpus entailment is blocked by reciprocity.** `entails` /
   `special_case_of` / `generalizes` require the reciprocal edge in the other
   corpus's file, so genuine cross-discipline entailments (physics average
