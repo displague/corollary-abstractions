@@ -75,6 +75,79 @@ or commit history. Each item names the evidence that motivated it.
   per-head table sourced from `identity_laws`-style nodes would let e.g.
   De Morgan >= the degenerate one-operand case fire, and would give the
   Boolean corpora any specialization structure at all.
+- **Discrete and continuous statements of one fact can never twin.** `sum_i X`
+  parses to a call with head `sum`; `INTEGRAL(X)` parses to a call with head
+  `INTEGRAL`. The two heads are unrelated strings, so the discrete and
+  continuous forms of the *same* statement are structurally invisible to each
+  other. The differential-geometry corpus produced the sharpest instance
+  available: `difftop.vectorfields.poincare_hopf_index_theorem`
+  (`EULERCHAR⟨?0:V⟩ = sum⟨?1:V⟩`) and `diffgeo.surfaces.gauss_bonnet_theorem`
+  (`INTEGRAL⟨?0:V⟩ = *(?1:P, ?2:V)`) are the two halves of Chern's theorem —
+  one theorem, proved from the other — and they share not one node. Same
+  obstacle blocks probability normalization (`sum_i p_i = 1` vs
+  `INTEGRAL(density) = 1`), every expectation, and every conservation law in
+  the graph, all of which have both forms. This is bigger than the `lim_h` vs
+  `LIM(...)` split already recorded above and has the same fix shape: a
+  head-aliasing table (`sum` ~ `INTEGRAL` ~ `prod`, as accumulation operators)
+  applied at a match level below `typed`, or an explicit `ACCUMULATE(...)`
+  authoring convention that both forms adopt.
+- **Three independent obstacles stacked on one pair.** Worth recording as a
+  unit because fixing any one of them would not have made Gauss-Bonnet meet
+  Poincaré-Hopf: (1) the `sum`/`INTEGRAL` head split above; (2) the Euler
+  characteristic is a *slot* in Gauss-Bonnet and a *call head* in
+  differential topology (see the Schema section); (3) Gauss-Bonnet carries an
+  explicit `2*pi` normalization that the already-integer index sum does not, so
+  even after (1) and (2) the arities differ. Any head-aliasing work should be
+  tested against this pair, not against a single-obstacle example.
+- **A numeric literal in a slot position blocks an otherwise real match.**
+  `diffgeo.curves.circle_curvature` is `CURVATURE = 1 / RADIUS` ->
+  `?0:V = *(1, inv(?1:V))`, and the rate/density family (average rate of
+  change, average speed, mass density, molarity) is
+  `?0:V = *(?1:V, inv(?2:V))`. Curvature really is a density — turning per
+  unit length — whose numerator has been normalized to 1, but the literal is
+  not a slot and the arities differ, so nothing fires at shape, typed or
+  family level. Authoring around it (inventing a `UNITLENGTH` numerator slot)
+  would be a lie. Fix candidate: a match level in which a numeric literal may
+  bind a parameter-like slot, which is the dual of the existing sign-absorption
+  level; it should be reported separately from `typed` since it is strictly
+  looser.
+- **Wanted match level: slot recurrence, not slot shape.**
+  `difftop.degree.brouwer_fixed_point` (`?0:V = SELFMAP⟨?0:V⟩`),
+  `logic.boolean_laws.double_negation` (`?0 = NEG⟨NEG⟨?0⟩⟩`),
+  `settheory.boolean_laws.idempotence` (`?0 = MEET⟨?0, ?0⟩`) and
+  `calculus.integration.ftc_differentiation_part` (`?0 = D⟨INTEGRAL⟨?0⟩⟩`) are
+  all "an operation that returns its argument" — fixed points, idempotents,
+  involutions, left inverses — and no two of them twin, because they differ in
+  arity and nesting depth. The family is defined by a *property* of the
+  skeleton (one slot occurring on both sides of the relation at different
+  depths) rather than by the skeleton itself, so twin detection cannot express
+  it. Wanted: a structural *query* facility ("templates where slot S occurs on
+  both sides of the relation") alongside the equality-based twin grouping.
+- **Notation adoption is manual, and the corpus should say so out loud.**
+  `diffgeo.stokes.stokes_theorem`
+  (`INTEGRAL(D(FORM)) = BOUNDARYINTEGRAL(FORM)`) is the statement a geometer
+  writes and it twins with nothing.
+  `diffgeo.stokes.stokes_zero_form_case`
+  (`INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)`) states the k=0 case in
+  `calculus.integration.ftc_evaluation_part`'s own vocabulary and twins with it
+  exactly. Both are honest; the difference is that an author who already knew
+  the answer spelled the second one to match. Same pattern as
+  `infotheory.mutualinfo.entropy_inclusion_exclusion` adopting CARD/MEET/JOIN.
+  Two twin groups in the graph now exist because of hand translation rather
+  than discovery, which is a real limit on any claim that the matcher *finds*
+  cross-discipline structure. Worth a provenance flag on twin groups
+  (`authored_to_match` vs `emergent`) so the ledger can report the two counts
+  separately; `diffgeo.surfaces.gaussian_curvature_principal_product` joining
+  `geometry.area_formulas.rectangle_area_formula` was emergent and should not
+  be pooled with the two adopted ones.
+- **Specialization noise now reaches nonsense.** The new corpora add edges like
+  `chemistry.spectroscopy.beer_lambert_law >= diffgeo.surfaces.gauss_bonnet_theorem`
+  (looseness 1, via identity) and
+  `geometry.area_formulas.triangle_area_formula >= diffgeo.surfaces.gaussian_curvature_principal_product`.
+  Beer-Lambert does not generalize Gauss-Bonnet. Same root cause as the
+  entries above under "Specialization noise control" — variable slots absorbing
+  arbitrary subtrees and parameter slots binding literals — and another vote
+  for category-compatibility constraints on bindings.
 
 - **Call heads are literal at every match level, so a new discipline's
   vocabulary is structurally quarantined.** `data/morphology` (10 nodes) fires
@@ -163,6 +236,42 @@ or commit history. Each item names the evidence that motivated it.
   only `composed_with` (unchecked) is usable one-sided. Options: a repair
   tool that writes the reciprocal edge into the target corpus, or relax
   reciprocity to a warning for cross-corpus edges.
+- **Even one-sided `composed_with` cannot forward-reference a corpus authored
+  on a parallel branch.** `validate_nodes.py` requires every link target to
+  resolve in the merged graph, and the merged graph is whatever `data/*/` holds
+  on the current branch. `diffgeo.surfaces.gauss_bonnet_theorem` should point
+  at `algtop.invariants.euler_characteristic_surface`, which a parallel branch
+  is authoring; writing the edge now makes validation fail here and pass only
+  after a merge, so the reference sits in prose and the edge is a documented
+  one-line addition in `scripts/seed_diffgeo.py`. Two agents seeding
+  interlocking corpora in parallel therefore cannot link to each other at all.
+  Fix: a `pending`/`external` link list the validator warns on instead of
+  failing, or a manifest of reserved ids that branches may reference before the
+  corpus lands.
+- **Same invariant, slot in one corpus and call head in another.** The Euler
+  characteristic is a bare slot in `diffgeo.surfaces.gauss_bonnet_theorem`
+  (where it is the number on the right-hand side) and a call `EULERCHAR(.)`
+  throughout `data/differential_topology` (where it is an invariant applied to
+  a space). Both readings are natural, and the matcher cannot relate a slot to
+  a call head, so the two corpora cannot see that they discuss one integer.
+  The same trap is open for every named quantity that is sometimes a value and
+  sometimes a functional (entropy, degree, cardinality, expectation). Wanted: a
+  lint that flags an identifier used as a slot id in one node and a call head
+  in another, plus a documented convention for which reading wins.
+- **A quarter of the corpus loses its logical form.** The grammar has no
+  quantifier and no usable implication, so conditional and existential
+  statements reduce to their conclusions: of the sixteen nodes in
+  `data/differential_geometry` and `data/differential_topology`, four carry
+  their real content in `regularity_conditions` instead of the template —
+  `difftop.invariants.euler_characteristic_diffeomorphism_invariance` (loses
+  "whenever M and N are diffeomorphic"),
+  `difftop.vectorfields.hairy_ball_theorem` (loses "if a nowhere-vanishing
+  field exists"), `difftop.degree.brouwer_fixed_point` (loses "there exists x"),
+  and `difftop.morse.weak_morse_inequality` (loses "for every Morse function
+  and every k"). Consequence for the ledger: twin density is not comparable
+  across `statement_class`, because definitions keep their whole content in the
+  template and theorems routinely do not. Same family as the missing binder
+  recorded under Parser / matcher.
 
 ## Experiments
 
