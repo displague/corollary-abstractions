@@ -18,6 +18,16 @@ or commit history. Each item names the evidence that motivated it.
   skeletons. Slot-to-subtree subsumption (`OUT = SCALE*IN + SHIFT` subsumes
   `Y = M*X + 0`-style instances) and identity-element reasoning (SHIFT=0)
   would connect e.g. circumference to the affine family.
+  Further evidence from the economics corpus, all arity mismatches an
+  identity-element rule would close: the equation of exchange
+  `MONEY*VELOCITY = PRICE_LEVEL*OUTPUT` (2x2) misses the ideal gas law
+  `PRESSURE*VOLUME = AMOUNT*CONSTANT*TEMPERATURE` (2x3) only because the gas
+  law carries an explicit dimensional constant; Cobb-Douglas
+  `OUTPUT = PRODUCTIVITY*CAPITAL^A*LABOR^B` misses the chemistry power-law
+  rate law `RATE = RATECONST*CONCENTRATION^ORDER` only by one extra power
+  factor; and simple interest `VALUE = PRINCIPAL*(1 + RATE*TIME)` is the
+  first-order truncation of continuous compounding
+  `VALUE = PRINCIPAL*EXP(RATE*TIME)` with no relation between them recorded.
 
 ## Schema
 

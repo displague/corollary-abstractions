@@ -1,0 +1,1882 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "economics.foundations.v1",
+  "discipline": "economics",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "economics.finance.continuous_compounding",
+      "title": "Continuous Compounding",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "economics",
+          "finance"
+        ],
+        "subfield": "financial_mathematics",
+        "topic": "time_value_of_money"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = P*exp(r*t)",
+        "canonical_latex": "V(t) = P e^{r t}",
+        "equivalent_forms": [
+          {
+            "form_id": "discrete_limit",
+            "notation_system": "ascii",
+            "expression": "V = lim_m P*(1 + r/m)^(m*t)",
+            "scope_note": "Continuous compounding as the limit of m compoundings per period"
+          },
+          {
+            "form_id": "log_return",
+            "notation_system": "ascii",
+            "expression": "ln(V/P) = r*t",
+            "scope_note": "Continuously compounded (log) return is linear in time"
+          },
+          {
+            "form_id": "differential",
+            "notation_system": "ascii",
+            "expression": "dV/dt = r*V",
+            "scope_note": "The growth law the closed form solves"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "exponential_evolution",
+        "anonymized_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
+        "slot_schema": [
+          {
+            "slot_id": "VALUE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PRINCIPAL",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition"
+          },
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant"
+          },
+          {
+            "slot_id": "TIME",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Constant proportional increment per unit time: dV/dt = RATE*VALUE.",
+          "Semilog-linear: LOG(VALUE) is affine in TIME with slope RATE.",
+          "Scale free in the principal: doubling PRINCIPAL doubles VALUE at every TIME.",
+          "Time-additive: the growth factor over an interval depends only on its length, so compounding over t1 then t2 equals compounding over t1 + t2."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Account value at time t."
+          },
+          {
+            "symbol": "P",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition",
+            "mathematical_order": 0,
+            "description": "Principal invested at t = 0."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant",
+            "mathematical_order": 0,
+            "description": "Continuously compounded (force of) interest, per unit time."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Elapsed time in the rate's units."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EXP(.)",
+            "name": "exponential",
+            "input_arity": 1,
+            "codomain": "positive reals",
+            "description": "Natural exponential of a dimensionless argument."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "e",
+            "value": 2.718281828459045,
+            "description": "Base of natural logarithms; the limit of (1 + 1/m)^m, which is exactly the continuous-compounding limit of the discrete form."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Money left to compound without interruption grows by a fixed proportion of its current size, so value is the principal times an exponential in rate times time.",
+        "statistical_significance": "Economics' entry into the exponential archetype. Its typed skeleton is identical to the calculus exponential growth law, and identical up to one sign to chemistry's integrated first-order rate law: the matcher's family level, which absorbs a negation into a free rate parameter, puts compounding interest, population growth and radioactive-style decay in one group. Nothing physical is shared; only the single-parameter multiplicative-increment form is.",
+        "regularity_conditions": [
+          "Interest accrues continuously with no withdrawal or deposit",
+          "Constant rate over the horizon",
+          "Rate and time expressed in matching units"
+        ],
+        "failure_modes": [
+          "Quoted rates are usually nominal annual rates with a stated compounding frequency; substituting one for the force of interest overstates or understates growth.",
+          "Fails once cash flows enter or leave the account, or once the rate is itself stochastic."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "economics.finance.present_value_continuous"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.compound_interest_discrete",
+          "calculus.growth.exponential_growth_law",
+          "calculus.differentiation.exponential_derivative"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "fisher1930",
+          "bibliographic_entry": "Fisher, I. (1930). The Theory of Interest, as Determined by Impatience to Spend Income and Opportunity to Invest It. New York: Macmillan."
+        },
+        {
+          "citation_key": "bernoulli1690",
+          "bibliographic_entry": "Bernoulli, J. (1690). Quaestiones nonnullae de usuris, cum solutione problematis de sorte alearum. Acta Eruditorum, May 1690, 219-223."
+        },
+        {
+          "citation_key": "bodie2014",
+          "bibliographic_entry": "Bodie, Z., Kane, A., Marcus, A. J. (2014). Investments (10th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "compounding",
+        "force of interest",
+        "exponential growth",
+        "time value of money"
+      ]
+    },
+    {
+      "statement_id": "economics.finance.present_value_continuous",
+      "title": "Continuous-Time Present Value",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "economics",
+          "finance"
+        ],
+        "subfield": "financial_mathematics",
+        "topic": "discounting"
+      },
+      "formal_statement": {
+        "canonical_ascii": "PV = FV*exp(-r*t)",
+        "canonical_latex": "PV = FV\\, e^{-r t}",
+        "equivalent_forms": [
+          {
+            "form_id": "discount_factor",
+            "notation_system": "ascii",
+            "expression": "PV = FV*DF(t), DF(t) = exp(-r*t)",
+            "scope_note": "Isolating the discount factor"
+          },
+          {
+            "form_id": "discrete_discounting",
+            "notation_system": "ascii",
+            "expression": "PV = FV/(1 + r)^n",
+            "scope_note": "Period-by-period discounting"
+          },
+          {
+            "form_id": "log_form",
+            "notation_system": "ascii",
+            "expression": "ln(PV/FV) = -r*t"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "exponential_decay",
+        "anonymized_template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
+        "slot_schema": [
+          {
+            "slot_id": "PRESENT",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "FUTURE",
+            "syntactic_category": "parameter",
+            "semantic_role": "terminal_condition"
+          },
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "discount_rate"
+          },
+          {
+            "slot_id": "HORIZON",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Constant proportional decrement per unit of deferral.",
+          "Semilog-linear: LOG(PRESENT) is affine in HORIZON with slope -RATE.",
+          "Multiplicatively separable in horizon: discounting over t1 then t2 equals discounting over t1 + t2, which is what makes discount factors chainable.",
+          "Exact inverse of the continuous-compounding map at the same rate."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "PV",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Value today of a deferred amount."
+          },
+          {
+            "symbol": "FV",
+            "syntactic_category": "parameter",
+            "semantic_role": "terminal_condition",
+            "mathematical_order": 0,
+            "description": "Amount receivable at the horizon."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "parameter",
+            "semantic_role": "discount_rate",
+            "mathematical_order": 0,
+            "description": "Continuously compounded discount rate."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Deferral horizon."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EXP(.)",
+            "name": "exponential",
+            "input_arity": 1,
+            "codomain": "positive reals",
+            "description": "Natural exponential of a dimensionless argument."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "e",
+            "value": 2.718281828459045,
+            "description": "Base of natural logarithms; the limit of (1 + 1/m)^m, which is exactly the continuous-compounding limit of the discrete form."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A sum receivable later is worth less today by an exponential factor in the discount rate times the waiting time.",
+        "statistical_significance": "The decay-signed member of the exponential archetype from the economics side, and therefore an exact typed twin of chemistry's integrated first-order rate law: `PRESENT = FUTURE * EXP(-(RATE * HORIZON))` and `AMOUNT = INITIAL * EXP(-(RATECONST * TIME))` are the same statement. The pairing is unusually apt -- both say the future is discounted at a constant proportional rate, one by impatience and one by decay probability.",
+        "regularity_conditions": [
+          "Constant discount rate over the horizon",
+          "A single certain cash flow",
+          "Rate and horizon in matching units"
+        ],
+        "failure_modes": [
+          "A single flat rate misprices cash flows when the term structure is not flat; each maturity needs its own zero-coupon rate.",
+          "Risky cash flows require either a risk-adjusted rate or risk-neutral expectation, not this deterministic factor."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "economics.finance.continuous_compounding"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.capm_expected_return",
+          "economics.macroeconomics.fisher_equation",
+          "chemistry.kinetics.first_order_integrated_rate_law"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "fisher1930",
+          "bibliographic_entry": "Fisher, I. (1930). The Theory of Interest, as Determined by Impatience to Spend Income and Opportunity to Invest It. New York: Macmillan."
+        },
+        {
+          "citation_key": "bodie2014",
+          "bibliographic_entry": "Bodie, Z., Kane, A., Marcus, A. J. (2014). Investments (10th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "present value",
+        "discounting",
+        "discount factor",
+        "exponential decay"
+      ]
+    },
+    {
+      "statement_id": "economics.finance.simple_interest",
+      "title": "Simple Interest Accumulation",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "economics",
+          "finance"
+        ],
+        "subfield": "financial_mathematics",
+        "topic": "time_value_of_money"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = P*(1 + r*t)",
+        "canonical_latex": "V = P(1 + r t)",
+        "equivalent_forms": [
+          {
+            "form_id": "interest_isolated",
+            "notation_system": "ascii",
+            "expression": "I = P*r*t, V = P + I",
+            "scope_note": "Interest earned separated from the principal"
+          },
+          {
+            "form_id": "accumulation_factor",
+            "notation_system": "ascii",
+            "expression": "V/P = 1 + r*t",
+            "scope_note": "Accumulation factor per unit of principal"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_accumulation_factor",
+        "anonymized_template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
+        "slot_schema": [
+          {
+            "slot_id": "VALUE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PRINCIPAL",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition"
+          },
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant"
+          },
+          {
+            "slot_id": "TIME",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Affine in TIME at fixed rate, with slope PRINCIPAL*RATE: interest does not itself earn interest.",
+          "Homogeneous of degree one in PRINCIPAL.",
+          "Reduces to the principal at TIME = 0, since the unit term returns the principal.",
+          "First-order Taylor expansion of the compounded forms in RATE*TIME, so it understates them for all positive rate-time products."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Accumulated value."
+          },
+          {
+            "symbol": "P",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition",
+            "mathematical_order": 0,
+            "description": "Principal."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant",
+            "mathematical_order": 0,
+            "description": "Simple interest rate per unit time."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Elapsed time."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "Unit multiplier standing for return of the principal itself; the interest terms are what is added to it."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Under simple interest only the original principal earns, so value grows linearly in time rather than exponentially.",
+        "statistical_significance": "The linear degeneration of the exponential archetype: the same four slots in the same roles, but the accumulation factor is the exponential's first-order truncation `1 + RATE*TIME` instead of `EXP(RATE*TIME)`. The matcher keeps them apart, correctly -- an approximation and the thing it approximates are not the same form -- but the pair is exactly the specialization relation docs/BACKLOG.md wants a v2 matcher to see.",
+        "regularity_conditions": [
+          "Interest computed on the original principal only",
+          "Constant rate",
+          "No intermediate capitalization"
+        ],
+        "failure_modes": [
+          "Diverges badly from compounded value over long horizons or high rates; usable mainly for sub-annual money-market conventions."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.compound_interest_discrete"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "fisher1930",
+          "bibliographic_entry": "Fisher, I. (1930). The Theory of Interest, as Determined by Impatience to Spend Income and Opportunity to Invest It. New York: Macmillan."
+        },
+        {
+          "citation_key": "kellison2008",
+          "bibliographic_entry": "Kellison, S. G. (2008). The Theory of Interest (3rd ed.). New York: McGraw-Hill/Irwin."
+        }
+      ],
+      "keywords": [
+        "simple interest",
+        "accumulation factor",
+        "linear growth"
+      ]
+    },
+    {
+      "statement_id": "economics.finance.compound_interest_discrete",
+      "title": "Discrete Compound Interest",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "economics",
+          "finance"
+        ],
+        "subfield": "financial_mathematics",
+        "topic": "time_value_of_money"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = P*(1 + r)^n",
+        "canonical_latex": "V_n = P(1 + r)^{n}",
+        "equivalent_forms": [
+          {
+            "form_id": "sub_period",
+            "notation_system": "ascii",
+            "expression": "V = P*(1 + r/m)^(m*t)",
+            "scope_note": "m compoundings per period over t periods"
+          },
+          {
+            "form_id": "effective_rate",
+            "notation_system": "ascii",
+            "expression": "1 + r_eff = (1 + r/m)^m",
+            "scope_note": "Effective annual rate from a nominal rate"
+          },
+          {
+            "form_id": "log_form",
+            "notation_system": "ascii",
+            "expression": "ln(V/P) = n*ln(1 + r)",
+            "scope_note": "Linear in the number of periods on a log scale"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "geometric_accumulation",
+        "anonymized_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+        "slot_schema": [
+          {
+            "slot_id": "VALUE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PRINCIPAL",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition"
+          },
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant"
+          },
+          {
+            "slot_id": "PERIODS",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Geometric in PERIODS: each period multiplies value by the same factor.",
+          "Log-linear in PERIODS with slope LOG(1 + RATE).",
+          "Homogeneous of degree one in PRINCIPAL.",
+          "Tends to the continuous-compounding form as the compounding frequency grows without bound, which is where the base of natural logarithms enters finance."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Value after n periods."
+          },
+          {
+            "symbol": "P",
+            "syntactic_category": "parameter",
+            "semantic_role": "initial_condition",
+            "mathematical_order": 0,
+            "description": "Principal."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "parameter",
+            "semantic_role": "rate_constant",
+            "mathematical_order": 0,
+            "description": "Periodic interest rate."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Number of compounding periods."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "Unit multiplier standing for return of the principal itself; the interest terms are what is added to it."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "When interest is capitalized each period, value is the principal times the per-period growth factor raised to the number of periods.",
+        "statistical_significance": "A power-law in the accumulation factor rather than in a measured quantity: the exponent slot is the *variable* and the base is built from the parameter, which is the mirror image of chemistry's power-law rate law and geometry's scaled powers, where the base varies and the exponent is fixed. Same `^` node, opposite slot typing -- a case where the typed level earns its keep by refusing the match.",
+        "regularity_conditions": [
+          "Interest capitalized at the end of each period",
+          "Constant periodic rate",
+          "Whole or fractional periods measured consistently"
+        ],
+        "failure_modes": [
+          "Comparing quoted rates without converting to a common effective rate confuses nominal with effective compounding.",
+          "Negative rates make the base less than one and can invert the usual monotonicity arguments."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.simple_interest",
+          "economics.finance.continuous_compounding"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "bernoulli1690",
+          "bibliographic_entry": "Bernoulli, J. (1690). Quaestiones nonnullae de usuris, cum solutione problematis de sorte alearum. Acta Eruditorum, May 1690, 219-223."
+        },
+        {
+          "citation_key": "fisher1930",
+          "bibliographic_entry": "Fisher, I. (1930). The Theory of Interest, as Determined by Impatience to Spend Income and Opportunity to Invest It. New York: Macmillan."
+        },
+        {
+          "citation_key": "bodie2014",
+          "bibliographic_entry": "Bodie, Z., Kane, A., Marcus, A. J. (2014). Investments (10th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "compound interest",
+        "geometric growth",
+        "effective rate",
+        "power law"
+      ]
+    },
+    {
+      "statement_id": "economics.microeconomics.price_elasticity_of_demand",
+      "title": "Price Elasticity of Demand",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "microeconomics",
+        "topic": "demand_response"
+      },
+      "formal_statement": {
+        "canonical_ascii": "E = pct_change_Q / pct_change_P",
+        "canonical_latex": "\\varepsilon = \\frac{\\%\\Delta Q}{\\%\\Delta P}",
+        "equivalent_forms": [
+          {
+            "form_id": "point_elasticity",
+            "notation_system": "ascii",
+            "expression": "E = (dQ/dP)*(P/Q)",
+            "scope_note": "Limiting form as the price change goes to zero"
+          },
+          {
+            "form_id": "log_derivative",
+            "notation_system": "ascii",
+            "expression": "E = d(ln Q)/d(ln P)",
+            "scope_note": "Elasticity as a log-log slope"
+          },
+          {
+            "form_id": "arc_elasticity",
+            "notation_system": "ascii",
+            "expression": "E = ((Q2-Q1)/((Q1+Q2)/2))/((P2-P1)/((P1+P2)/2))",
+            "scope_note": "Midpoint formula used for finite changes"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+        "slot_schema": [
+          {
+            "slot_id": "ELASTICITY",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PCT_QUANTITY",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity"
+          },
+          {
+            "slot_id": "PCT_PRICE",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent"
+          }
+        ],
+        "invariants": [
+          "Dimensionless: both arguments are relative changes, so the value is invariant to the units of price and of quantity.",
+          "Invariant to currency redenomination and to the choice of quantity unit, which is precisely why elasticities are comparable across markets.",
+          "Undefined in the limit of vanishing price change.",
+          "Negative for ordinary demand; the sign carries the law of demand and is often suppressed by reporting the magnitude."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Own-price elasticity of demand."
+          },
+          {
+            "symbol": "pct_change_Q",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity",
+            "mathematical_order": 0,
+            "description": "Proportional change in quantity demanded."
+          },
+          {
+            "symbol": "pct_change_P",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent",
+            "mathematical_order": 0,
+            "description": "Proportional change in own price."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Elasticity is the proportional response of quantity demanded to a proportional change in price -- how much buyers move, per unit of how much the price moved.",
+        "statistical_significance": "Exact typed twin of the ratio archetype already held by calculus' average rate of change, physics' average speed and mass density, and chemistry's molarity: one measured quantity per unit of a measured reference extent, with all slots variable-like. Elasticity is the most abstract member of that group because both of its arguments are already dimensionless, which is what lets it compare a grocery market to an airline route.",
+        "regularity_conditions": [
+          "Own price varies while other prices, income and tastes are held fixed",
+          "Nonzero price change",
+          "Movement along a fixed demand curve, not a shift of it"
+        ],
+        "failure_modes": [
+          "Point and arc formulas disagree for large price changes; the midpoint form exists only to make the discrepancy symmetric.",
+          "Estimating it from observed price-quantity pairs recovers neither the demand nor the supply elasticity without an instrument -- the classic identification problem."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "calculus.differentiation.average_rate_of_change"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "marshall1890",
+          "bibliographic_entry": "Marshall, A. (1890). Principles of Economics. London: Macmillan."
+        },
+        {
+          "citation_key": "varian1992",
+          "bibliographic_entry": "Varian, H. R. (1992). Microeconomic Analysis (3rd ed.). New York: W. W. Norton."
+        }
+      ],
+      "keywords": [
+        "elasticity",
+        "demand",
+        "intensive ratio",
+        "dimensionless"
+      ]
+    },
+    {
+      "statement_id": "economics.macroeconomics.gdp_expenditure_identity",
+      "title": "GDP Expenditure Identity",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "macroeconomics",
+        "topic": "national_accounts"
+      },
+      "formal_statement": {
+        "canonical_ascii": "Y = C + I + G + NX",
+        "canonical_latex": "Y = C + I + G + (X - M)",
+        "equivalent_forms": [
+          {
+            "form_id": "explicit_trade",
+            "notation_system": "ascii",
+            "expression": "Y = C + I + G + X - M",
+            "scope_note": "Net exports written as exports less imports"
+          },
+          {
+            "form_id": "closed_economy",
+            "notation_system": "ascii",
+            "expression": "Y = C + I + G",
+            "scope_note": "Closed-economy special case, NX = 0"
+          },
+          {
+            "form_id": "saving_investment",
+            "notation_system": "ascii",
+            "expression": "S = I + NX",
+            "scope_note": "Rearrangement giving the saving-investment balance"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "additive_decomposition",
+        "anonymized_template": "OUTPUT = CONSUMPTION + INVESTMENT + GOVERNMENT + NET_EXPORTS",
+        "slot_schema": [
+          {
+            "slot_id": "OUTPUT",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "CONSUMPTION",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          },
+          {
+            "slot_id": "INVESTMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          },
+          {
+            "slot_id": "GOVERNMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          },
+          {
+            "slot_id": "NET_EXPORTS",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          }
+        ],
+        "invariants": [
+          "Exhaustive and mutually exclusive: every unit of final expenditure lands in exactly one component.",
+          "Additive and unit-homogeneous: all terms carry the same currency-per-period units.",
+          "Holds ex post for any period by construction, whatever behaviour generated it.",
+          "Only NET_EXPORTS may be negative, so the decomposition is not a partition of a positive quantity into positive parts."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Y",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Gross domestic product at market prices."
+          },
+          {
+            "symbol": "C",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Household final consumption expenditure."
+          },
+          {
+            "symbol": "I",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Gross capital formation."
+          },
+          {
+            "symbol": "G",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Government final consumption expenditure."
+          },
+          {
+            "symbol": "NX",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Net exports of goods and services."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Total output equals the sum of what households, firms, government and the rest of the world spend on final goods and services.",
+        "statistical_significance": "A pure additive decomposition, and deliberately the corpus's clearest example of a statement with no empirical content: it is true by the construction of the accounts, the way a partition sums to the whole. Its structural neighbours are the law-of-total-probability decomposition in the statistics corpus, which sums weighted parts to a whole, though the matcher separates them because that one carries an index and a weight and this one does not.",
+        "regularity_conditions": [
+          "Final expenditure only; intermediate goods are netted out",
+          "A single consistently valued accounting period",
+          "Components measured at the same prices, all nominal or all real"
+        ],
+        "failure_modes": [
+          "Statistical discrepancy: the expenditure, income and production measures of the same total differ in practice because they are collected separately.",
+          "Non-market production, unpaid work and the informal sector fall outside the boundary, so the identity is exact only for what is inside it."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.macroeconomics.keynesian_consumption_function",
+          "economics.monetary.equation_of_exchange",
+          "economics.production.cobb_douglas_production_function"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "sna2008",
+          "bibliographic_entry": "European Commission, IMF, OECD, United Nations, World Bank (2009). System of National Accounts 2008. New York: United Nations."
+        },
+        {
+          "citation_key": "kuznets1934",
+          "bibliographic_entry": "Kuznets, S. (1934). National Income, 1929-1932. Senate Document No. 124, 73rd Congress, 2nd Session. Washington: US Government Printing Office."
+        },
+        {
+          "citation_key": "romer2019",
+          "bibliographic_entry": "Romer, D. (2019). Advanced Macroeconomics (5th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "GDP",
+        "national accounts",
+        "identity",
+        "additive decomposition"
+      ]
+    },
+    {
+      "statement_id": "economics.monetary.equation_of_exchange",
+      "title": "Equation of Exchange (Quantity Theory of Money)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "monetary_economics",
+        "topic": "money_and_prices"
+      },
+      "formal_statement": {
+        "canonical_ascii": "M*V = P*Q",
+        "canonical_latex": "M V = P Q",
+        "equivalent_forms": [
+          {
+            "form_id": "nominal_output",
+            "notation_system": "ascii",
+            "expression": "M*V = P*Y",
+            "scope_note": "With real output Y in place of transaction volume Q"
+          },
+          {
+            "form_id": "growth_rates",
+            "notation_system": "ascii",
+            "expression": "g_M + g_V = g_P + g_Y",
+            "scope_note": "Log-differentiated form used for inflation accounting"
+          },
+          {
+            "form_id": "velocity_definition",
+            "notation_system": "ascii",
+            "expression": "V = P*Q/M",
+            "scope_note": "The definition that makes the equation an identity"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "balanced_product_relation",
+        "anonymized_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+        "slot_schema": [
+          {
+            "slot_id": "MONEY",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          },
+          {
+            "slot_id": "VELOCITY",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          },
+          {
+            "slot_id": "PRICE_LEVEL",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          },
+          {
+            "slot_id": "OUTPUT",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          }
+        ],
+        "invariants": [
+          "Balanced bilinear relation: the product on each side is the same nominal transaction volume, so all four slots carry compatible units.",
+          "Scale invariant in a joint sense: doubling MONEY with VELOCITY and OUTPUT fixed forces PRICE_LEVEL to double.",
+          "Any one slot is determined by the other three; velocity is the slot that is residually defined rather than independently measured.",
+          "Log-additive: the identity becomes a sum of growth rates under differentiation."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "M",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Money stock on a stated aggregate."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Income velocity of money."
+          },
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Price level (deflator or index)."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Real volume of transactions or output."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The money stock times the rate at which it turns over equals the price level times real output: every transaction is a payment on one side and a good on the other.",
+        "statistical_significance": "Included to probe a predicted twin with the ideal gas law, and the probe came back negative -- see the module-level QUANTITY_THEORY_NOTE. Both statements are 'balanced products of state quantities' and both are read as 'raise one factor and another must give', but the gas law carries an explicit dimensional constant, making it a 2x3 product against this 2x2 one, so the exact-skeleton matcher keeps them apart. The near miss is the sharpest live argument in this corpus for the specialization matching queued in the backlog.",
+        "regularity_conditions": [
+          "A stated monetary aggregate and a matching measure of transactions",
+          "Velocity defined residually, which is what makes the relation an identity",
+          "Consistent nominal-versus-real accounting on the two sides"
+        ],
+        "failure_modes": [
+          "The identity is empty until velocity is assumed stable; the quantity *theory* is that behavioural assumption, not the equation, and velocity has been visibly unstable since the 1980s.",
+          "Results depend on which monetary aggregate is chosen, and the aggregates diverge."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.macroeconomics.gdp_expenditure_identity",
+          "physics.thermodynamics.ideal_gas_law"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "fisher1911",
+          "bibliographic_entry": "Fisher, I. (1911). The Purchasing Power of Money: Its Determination and Relation to Credit, Interest and Crises. New York: Macmillan."
+        },
+        {
+          "citation_key": "friedman1956",
+          "bibliographic_entry": "Friedman, M. (1956). The Quantity Theory of Money: A Restatement. In M. Friedman (Ed.), Studies in the Quantity Theory of Money (pp. 3-21). Chicago: University of Chicago Press."
+        },
+        {
+          "citation_key": "romer2019",
+          "bibliographic_entry": "Romer, D. (2019). Advanced Macroeconomics (5th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "quantity theory",
+        "velocity of money",
+        "equation of exchange",
+        "inflation"
+      ]
+    },
+    {
+      "statement_id": "economics.production.cobb_douglas_production_function",
+      "title": "Cobb-Douglas Production Function",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "production_theory",
+        "topic": "production_functions"
+      },
+      "formal_statement": {
+        "canonical_ascii": "Y = A*K^alpha*L^beta",
+        "canonical_latex": "Y = A K^{\\alpha} L^{\\beta}",
+        "equivalent_forms": [
+          {
+            "form_id": "constant_returns",
+            "notation_system": "ascii",
+            "expression": "Y = A*K^alpha*L^(1-alpha)",
+            "scope_note": "Constant-returns-to-scale restriction beta = 1 - alpha"
+          },
+          {
+            "form_id": "log_linear",
+            "notation_system": "ascii",
+            "expression": "ln(Y) = ln(A) + alpha*ln(K) + beta*ln(L)",
+            "scope_note": "The form actually estimated"
+          },
+          {
+            "form_id": "intensive",
+            "notation_system": "ascii",
+            "expression": "y = A*k^alpha",
+            "scope_note": "Per-worker form under constant returns"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_power_product",
+        "anonymized_template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
+        "slot_schema": [
+          {
+            "slot_id": "OUTPUT",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "PRODUCTIVITY",
+            "syntactic_category": "parameter",
+            "semantic_role": "scale_coefficient"
+          },
+          {
+            "slot_id": "CAPITAL",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          },
+          {
+            "slot_id": "CAPITAL_SHARE",
+            "syntactic_category": "parameter",
+            "semantic_role": "power_exponent"
+          },
+          {
+            "slot_id": "LABOR",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          },
+          {
+            "slot_id": "LABOR_SHARE",
+            "syntactic_category": "parameter",
+            "semantic_role": "power_exponent"
+          }
+        ],
+        "invariants": [
+          "Homogeneous of degree CAPITAL_SHARE + LABOR_SHARE, so returns to scale are read straight off the exponents.",
+          "Log-log linear in both inputs, which is the entire reason for its empirical popularity.",
+          "Unit elasticity of substitution between the two inputs, everywhere.",
+          "Exponents equal factor income shares under competitive pricing, so the parameters are observable in the national accounts.",
+          "Output is zero if either input is zero: the inputs are essential, not substitutes."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Y",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Real output."
+          },
+          {
+            "symbol": "A",
+            "syntactic_category": "parameter",
+            "semantic_role": "scale_coefficient",
+            "mathematical_order": 0,
+            "description": "Total factor productivity."
+          },
+          {
+            "symbol": "K",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Capital services."
+          },
+          {
+            "symbol": "alpha",
+            "syntactic_category": "parameter",
+            "semantic_role": "power_exponent",
+            "mathematical_order": 0,
+            "description": "Output elasticity of capital."
+          },
+          {
+            "symbol": "L",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Labour input."
+          },
+          {
+            "symbol": "beta",
+            "syntactic_category": "parameter",
+            "semantic_role": "power_exponent",
+            "mathematical_order": 0,
+            "description": "Output elasticity of labour."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Output is a productivity level times capital and labour each raised to a fixed exponent, so each input has a constant output elasticity.",
+        "statistical_significance": "The two-factor generalization of the scaled power law that chemistry states with one factor (`RATE = RATECONST * CONCENTRATION^ORDER`). Same construction -- a scale coefficient multiplying inputs at symbolic exponents fitted rather than derived -- and the same epistemic status, empirical rather than formal. The matcher does not group them, since one product has two power factors and the other has one, which is again the specialization gap: this is the arity-extended sibling, not a twin.",
+        "regularity_conditions": [
+          "Inputs measured as flows of services over the same period",
+          "Exponents constant over the fitted sample",
+          "Competitive factor markets if the exponents are to be read as income shares"
+        ],
+        "failure_modes": [
+          "Unit elasticity of substitution is an assumption, not a finding; CES forms nest it as a special case and generally reject it.",
+          "The log-linear fit recovers shares rather than technology when the accounting identity itself generates the correlation (the Shaikh critique).",
+          "Aggregating heterogeneous capital into a single K is not innocuous."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.macroeconomics.gdp_expenditure_identity",
+          "chemistry.kinetics.rate_law_power"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cobb1928",
+          "bibliographic_entry": "Cobb, C. W., Douglas, P. H. (1928). A Theory of Production. American Economic Review, 18(1), 139-165."
+        },
+        {
+          "citation_key": "solow1957",
+          "bibliographic_entry": "Solow, R. M. (1957). Technical Change and the Aggregate Production Function. Review of Economics and Statistics, 39(3), 312-320."
+        },
+        {
+          "citation_key": "romer2019",
+          "bibliographic_entry": "Romer, D. (2019). Advanced Macroeconomics (5th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "Cobb-Douglas",
+        "production function",
+        "returns to scale",
+        "power law",
+        "factor shares"
+      ]
+    },
+    {
+      "statement_id": "economics.finance.capm_expected_return",
+      "title": "CAPM Expected Return (Risk-Premium Form)",
+      "statement_class": "model_specification",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "economics",
+          "finance"
+        ],
+        "subfield": "asset_pricing",
+        "topic": "risk_and_return"
+      },
+      "formal_statement": {
+        "canonical_ascii": "E[Ri] = rf + beta_i*MRP",
+        "canonical_latex": "\\mathbb{E}[R_i] = r_f + \\beta_i\\,\\mathrm{MRP}",
+        "equivalent_forms": [
+          {
+            "form_id": "market_excess",
+            "notation_system": "ascii",
+            "expression": "E[Ri] = rf + beta_i*(E[Rm] - rf)",
+            "scope_note": "Risk premium written out as market excess return"
+          },
+          {
+            "form_id": "beta_definition",
+            "notation_system": "ascii",
+            "expression": "beta_i = Cov(Ri, Rm)/Var(Rm)",
+            "scope_note": "The slot that carries the asset's identity"
+          },
+          {
+            "form_id": "excess_return",
+            "notation_system": "ascii",
+            "expression": "E[Ri] - rf = beta_i*(E[Rm] - rf)",
+            "scope_note": "Security market line through the origin in excess returns"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_operator",
+        "anonymized_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+        "slot_schema": [
+          {
+            "slot_id": "EXPECTED",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "RISKFREE",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_value"
+          },
+          {
+            "slot_id": "SENSITIVITY",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "PREMIUM",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Affine in the market premium, with intercept RISKFREE and slope SENSITIVITY.",
+          "Reduces to the risk-free rate when SENSITIVITY is zero: only covariance with the market is compensated.",
+          "Linear in SENSITIVITY, so portfolio expected return is the value-weighted average of its holdings' expected returns.",
+          "Idiosyncratic risk enters nowhere in the form, which is the theorem's whole claim."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E[Ri]",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Expected return on asset i."
+          },
+          {
+            "symbol": "rf",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_value",
+            "mathematical_order": 0,
+            "description": "Risk-free rate of return."
+          },
+          {
+            "symbol": "beta_i",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Sensitivity of the asset's return to the market return."
+          },
+          {
+            "symbol": "MRP",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Market risk premium, the market's expected excess return."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk.",
+        "statistical_significance": "Joins the affine family at the typed level with the statistics location-scale transform (`OUT = SCALE*IN + SHIFT`) and the calculus tangent-line linearization (`LINEARIZED = BASEVALUE + SLOPE*DISPLACEMENT`) -- all three are `?0:V = +(?1:P, *(?2:P, ?3:V))`, an anchor displaced by a scaled input. That the anchor is a risk-free rate, a function value at a point, or a distributional location is invisible to the form, which is the twin thesis in miniature.",
+        "regularity_conditions": [
+          "Mean-variance optimizing investors over a single period",
+          "Homogeneous expectations and a risk-free asset available to all",
+          "The market portfolio is the relevant, and observable, benchmark"
+        ],
+        "failure_modes": [
+          "The market portfolio is unobservable, so every test is a joint test of the model and the chosen proxy (Roll's critique).",
+          "Empirically the security market line is too flat, and size, value and momentum carry premia the single beta does not explain."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.present_value_continuous",
+          "probstat.transform.affine_location_scale"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "sharpe1964",
+          "bibliographic_entry": "Sharpe, W. F. (1964). Capital Asset Prices: A Theory of Market Equilibrium under Conditions of Risk. Journal of Finance, 19(3), 425-442."
+        },
+        {
+          "citation_key": "lintner1965",
+          "bibliographic_entry": "Lintner, J. (1965). The Valuation of Risk Assets and the Selection of Risky Investments in Stock Portfolios and Capital Budgets. Review of Economics and Statistics, 47(1), 13-37."
+        },
+        {
+          "citation_key": "fama2004",
+          "bibliographic_entry": "Fama, E. F., French, K. R. (2004). The Capital Asset Pricing Model: Theory and Evidence. Journal of Economic Perspectives, 18(3), 25-46."
+        },
+        {
+          "citation_key": "bodie2014",
+          "bibliographic_entry": "Bodie, Z., Kane, A., Marcus, A. J. (2014). Investments (10th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "CAPM",
+        "beta",
+        "risk premium",
+        "affine",
+        "asset pricing"
+      ]
+    },
+    {
+      "statement_id": "economics.macroeconomics.keynesian_consumption_function",
+      "title": "Keynesian Consumption Function",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "macroeconomics",
+        "topic": "consumption"
+      },
+      "formal_statement": {
+        "canonical_ascii": "C = a + b*Yd",
+        "canonical_latex": "C = a + b\\,Y_d",
+        "equivalent_forms": [
+          {
+            "form_id": "average_propensity",
+            "notation_system": "ascii",
+            "expression": "C/Yd = a/Yd + b",
+            "scope_note": "Average propensity falls toward the marginal one as income rises"
+          },
+          {
+            "form_id": "marginal_propensity",
+            "notation_system": "ascii",
+            "expression": "dC/dYd = b",
+            "scope_note": "The marginal propensity to consume as a derivative"
+          },
+          {
+            "form_id": "multiplier",
+            "notation_system": "ascii",
+            "expression": "dY/dG = 1/(1 - b)",
+            "scope_note": "The expenditure multiplier this specification implies"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "affine_operator",
+        "anonymized_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+        "slot_schema": [
+          {
+            "slot_id": "CONSUMPTION",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "AUTONOMOUS",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_value"
+          },
+          {
+            "slot_id": "PROPENSITY",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "DISPOSABLE_INCOME",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Affine in income with constant slope PROPENSITY, strictly between zero and one.",
+          "Average propensity exceeds the marginal one whenever AUTONOMOUS is positive, and falls monotonically toward it as income rises.",
+          "Positive consumption at zero income, financed by dissaving.",
+          "Because the slope is below one, the implied expenditure multiplier 1/(1 - PROPENSITY) is finite and greater than one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "C",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Aggregate real consumption."
+          },
+          {
+            "symbol": "a",
+            "syntactic_category": "parameter",
+            "semantic_role": "anchor_value",
+            "mathematical_order": 0,
+            "description": "Autonomous consumption at zero income."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Marginal propensity to consume."
+          },
+          {
+            "symbol": "Yd",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Real disposable income."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Consumption is a fixed autonomous amount plus a constant fraction of disposable income, with that fraction less than one.",
+        "statistical_significance": "The second economics member of the affine family, and the one that shows why the family matters: written as a stochastic relation it is literally the simple linear regression specification from the statistics corpus, with the marginal propensity to consume in the slope slot. Structure travels between a behavioural postulate and an estimator without changing shape, which is exactly the identification hazard econometrics spent decades on.",
+        "regularity_conditions": [
+          "Aggregate income and consumption in real terms over the same period",
+          "Propensity stable over the sample",
+          "Income taken as given rather than jointly determined with consumption"
+        ],
+        "failure_modes": [
+          "Fails in long-run and cross-section data, where the average propensity is roughly constant; permanent-income and life-cycle theories were built to explain that failure.",
+          "Regressing consumption on income conflates the behavioural slope with the accounting identity linking the two, so the estimate is not the parameter."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.macroeconomics.gdp_expenditure_identity",
+          "probstat.regression.slr_conditional_expectation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "keynes1936",
+          "bibliographic_entry": "Keynes, J. M. (1936). The General Theory of Employment, Interest and Money. London: Macmillan."
+        },
+        {
+          "citation_key": "friedman1957",
+          "bibliographic_entry": "Friedman, M. (1957). A Theory of the Consumption Function. Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "romer2019",
+          "bibliographic_entry": "Romer, D. (2019). Advanced Macroeconomics (5th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "consumption function",
+        "marginal propensity to consume",
+        "multiplier",
+        "affine",
+        "Keynes"
+      ]
+    },
+    {
+      "statement_id": "economics.macroeconomics.fisher_equation",
+      "title": "Fisher Equation (Additive Form)",
+      "statement_class": "approximation",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "economics"
+        ],
+        "subfield": "monetary_economics",
+        "topic": "interest_and_inflation"
+      },
+      "formal_statement": {
+        "canonical_ascii": "i approx r + pi",
+        "canonical_latex": "i \\approx r + \\pi",
+        "equivalent_forms": [
+          {
+            "form_id": "exact",
+            "notation_system": "ascii",
+            "expression": "(1 + i) = (1 + r)*(1 + pi)",
+            "scope_note": "The exact multiplicative relation the additive form approximates"
+          },
+          {
+            "form_id": "real_rate_solved",
+            "notation_system": "ascii",
+            "expression": "r = (1 + i)/(1 + pi) - 1",
+            "scope_note": "Exact real rate"
+          },
+          {
+            "form_id": "ex_ante",
+            "notation_system": "ascii",
+            "expression": "i approx r + E[pi]",
+            "scope_note": "Ex ante form with expected rather than realized inflation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "additive_approximation",
+        "anonymized_template": "NOMINAL approx REAL + INFLATION",
+        "slot_schema": [
+          {
+            "slot_id": "NOMINAL",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "REAL",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          },
+          {
+            "slot_id": "INFLATION",
+            "syntactic_category": "variable",
+            "semantic_role": "component"
+          }
+        ],
+        "invariants": [
+          "Error is exactly the cross term REAL*INFLATION, so accuracy degrades as the product of the two rates grows.",
+          "Additive and symmetric in its two components, unlike the exact multiplicative form.",
+          "Exact in the continuously compounded convention, where log rates add without remainder.",
+          "Unit slope in each component: a point of inflation passes one for one into the nominal rate, which is the Fisher effect."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "i",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Nominal interest rate."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Real interest rate."
+          },
+          {
+            "symbol": "pi",
+            "syntactic_category": "variable",
+            "semantic_role": "component",
+            "mathematical_order": 0,
+            "description": "Inflation rate over the same horizon."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "~=",
+            "name": "approximate equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The nominal interest rate is approximately the real rate plus inflation, so lenders are compensated for both waiting and for the erosion of the currency.",
+        "statistical_significance": "The corpus's clearest case of an approximation node carrying its exactness condition in the notation rather than in prose: the relation is `approx` under simple compounding and `=` under continuous compounding, because taking logs turns the exact product into an exact sum. Structurally it is the additive shadow of the multiplicative accumulation factors in the interest nodes.",
+        "regularity_conditions": [
+          "Rates quoted for the same horizon and compounding convention",
+          "Small rates, so the cross term is negligible",
+          "Realized inflation for the ex post form, expected inflation for the ex ante one"
+        ],
+        "failure_modes": [
+          "The approximation is poor under high inflation, exactly when the real rate matters most.",
+          "The ex ante real rate is unobservable, so empirical work substitutes a forecast and inherits its error.",
+          "One-for-one pass-through of inflation is an equilibrium claim that fails over short horizons when nominal rates are sticky or at the effective lower bound."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "economics.finance.present_value_continuous"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "fisher1930",
+          "bibliographic_entry": "Fisher, I. (1930). The Theory of Interest, as Determined by Impatience to Spend Income and Opportunity to Invest It. New York: Macmillan."
+        },
+        {
+          "citation_key": "fisher1911",
+          "bibliographic_entry": "Fisher, I. (1911). The Purchasing Power of Money: Its Determination and Relation to Credit, Interest and Crises. New York: Macmillan."
+        },
+        {
+          "citation_key": "romer2019",
+          "bibliographic_entry": "Romer, D. (2019). Advanced Macroeconomics (5th ed.). New York: McGraw-Hill Education."
+        }
+      ],
+      "keywords": [
+        "Fisher equation",
+        "real interest rate",
+        "inflation",
+        "approximation"
+      ]
+    }
+  ]
+}
