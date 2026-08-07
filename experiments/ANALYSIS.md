@@ -245,10 +245,18 @@ ood = held-out combos + deeper recursion. 2 seeds/arm, exact match:
 | struct | 0.999 | 0.203 |
 | hybrid | 1.000 | 0.206 |
 
-- **Recombination is solved**: perfect exact-match on combinations never
-  seen together in training. The compositional signature — seen parts,
-  novel combination — is fully present in the pointer mechanism. One
-  desired emergent property, clearly apparent, achieved.
+- **RETRACTED (user audit): "recombination is solved" was an
+  overclaim.** A content-free structural rule (WH position in the
+  question names the role; bracket-counting locates that role's
+  constituent in the statement) scores 1.0000 on test AND ood — the
+  label never depends on lexical content, so the held-out-combo split
+  cannot stress composition. Zero literal train/test duplicates
+  (construction forbids them); the flaw was a shortcut, not leakage.
+  The 1.000 shows only that the pointer learns a structural rule the
+  symbolic layer computes exactly anyway — one more entry for "exact
+  ops stay symbolic." A real recombination test needs content to be
+  load-bearing: solvex-v2 adds distractor statements so selecting the
+  right one requires cross-language matching of the fixed role.
 - **Depth is the wall, and it is a pointer failure, not a comparison
   failure**: the hybrid's structural features do not help because the
   breakdown is absolute position embeddings failing to extrapolate to
@@ -273,11 +281,13 @@ suite — falls when position = symbolic tree address.** Ancestry paths
 (per-token sequence of sibling indices, level-wise embedded, per-side +
 segment id) are unique per node (no aliasing) and level-wise
 in-distribution as trees deepen (span-boundary tokens keep shallow
-paths). An ~800k-param pointer then handles BOTH novel combinations
-(1.000) and novel depths (0.973, one seed perfect) — the two signatures
-of compositional generalization, simultaneously, from the house
-pattern's third application: the symbolic front-end supplies content
-features (hybrid bit), lexicon (extrinsic), and now *addresses*.
+paths). With the shortcut audit in mind, the ladder's meaning narrows and
+sharpens: the task is PURE structural pointing (content irrelevant), so
+this cleanly isolates addressing with no lexical confound — absolute
+positions cannot even point structurally at unseen depths (0.203);
+ancestry paths can (0.973, one seed perfect). The claim that survives:
+the symbolic front-end's third contribution is addresses. The
+recombination claim moves to solvex-v2.
 
 Implication for the model design: positional encoding is not a
 hyperparameter here, it is part of the symbolic/learned interface.
