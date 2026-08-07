@@ -1,0 +1,16 @@
+{
+  "task": "solvex",
+  "arm": "struct",
+  "positions": "abs",
+  "d_model": 64,
+  "n_layers": 4,
+  "train_frac": 0.1,
+  "train_size": 5000,
+  "params": 238722,
+  "vocab_size": 92,
+  "seed": 0,
+  "val_exact_best": 0.5126,
+  "test_exact": 0.501,
+  "ood_exact": 0.042666666666666665,
+  "seconds": 6.4
+}

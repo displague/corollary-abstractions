@@ -317,3 +317,31 @@ clean.
    Lean tracing forces it).
 4. Ingest Rasmussen-Schuler LREC2020 corpus (2k sentences + lambda
    forms) as the real language-logic bridge.
+
+
+## Scaling grid: emergence curves for depth generalization
+
+16 cells: width {32,64,128,256} x data {10%,100%} x positions {abs,tree},
+solvex (pure structural pointing after the shortcut audit), single seed
+per cell (trend claims only).
+
+| width | data | abs test/OOD | tree test/OOD |
+|---|---|---|---|
+| 32 | 10% | 0.243 / 0.050 | 0.932 / 0.964 |
+| 32 | 100% | 0.955 / 0.183 | 1.000 / 0.995 |
+| 64 | 10% | 0.501 / 0.043 | 1.000 / 1.000 |
+| 64 | 100% | 0.994 / 0.187 | 1.000 / 1.000 |
+| 128 | 10% | 0.836 / 0.125 | 1.000 / 0.990 |
+| 128 | 100% | 1.000 / 0.178 | 1.000 / 0.946 |
+| 256 | 10% | 0.969 / 0.137 | 1.000 / 1.000 |
+| 256 | 100% | 1.000 / 0.186 | 1.000 / 1.000 |
+
+The curve answer: under absolute positions OOD is FLAT (~0.05-0.19)
+across 8x width and 10x data -- scale buys in-distribution accuracy and
+zero extrapolation; there is no knee to wait for at these budgets. Under
+tree addresses the property is present at every cell including the
+smallest (32-wide, 5k examples, ~0.96 OOD). Depth generalization here is
+an interface property, not an emergent-with-scale property. For the
+model design this is the strongest budget argument yet: the symbolic
+interface substitutes for orders of magnitude of scale on exactly the
+capability the 64MB target cannot buy with parameters.

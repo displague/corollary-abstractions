@@ -193,6 +193,7 @@ def evaluate(model, loader, device) -> float:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", choices=["struct", "hybrid"], required=True)
+    ap.add_argument("--task-prefix", default="solvex")
     ap.add_argument("--data-dir", type=Path, default=Path("data"))
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--epochs", type=int, default=10)
@@ -210,7 +211,7 @@ def main() -> None:
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    splits = {s: load_jsonl(args.data_dir / f"solvex_{s}.jsonl")
+    splits = {s: load_jsonl(args.data_dir / f"{args.task_prefix}_{s}.jsonl")
               for s in ["train", "val", "test", "ood"]}
     if args.train_frac < 1.0:
         keep = int(len(splits["train"]) * args.train_frac)
@@ -268,7 +269,7 @@ def main() -> None:
     if best_state is not None:
         model.load_state_dict(best_state)
     result = {
-        "task": "solvex", "arm": args.arm, "positions": args.positions,
+        "task": args.task_prefix, "arm": args.arm, "positions": args.positions,
         "d_model": args.d_model,
         "n_layers": args.n_layers, "train_frac": args.train_frac,
         "train_size": len(datasets["train"]), "params": n_params,
