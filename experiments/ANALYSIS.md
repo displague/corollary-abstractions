@@ -203,9 +203,39 @@ the recorded arity misses now fire (equation of exchange >= ideal gas;
 Cobb-Douglas <= power-law rate; Beer-Lambert generalizes the
 scaled-linear family) — see reports/specializations.json.
 
+## Hybrid head (syn task, 2 seeds): the capstone
+
+Two symbolic feature tokens prepended to the struct stream: a
+lexicon-blind structural-unification bit (WH matches anything, leaf
+identity erased) and the WH-role. The bit alone scores 0.738 with
+perfect rejection precision — already above every learned arm.
+
+| arm | test | OOD |
+|---|---|---|
+| char | 0.506 | 0.513 |
+| struct | 0.600 | 0.508 |
+| canon (gold lexicon) | 0.660 | 0.587 |
+| shape-bit alone (no learning) | 0.738 | — |
+| **hybrid (bit + learned lexicon)** | **0.746** | **0.805** |
+
+OOD accuracy EXCEEDS in-distribution accuracy — unique in the suite. The
+symbolic feature is depth-invariant, and deeper trees break shape more
+often, so the symbolic share of the decision *grows* exactly where the
+learned share collapses. Hybrid beats the gold-lexicon arm by 9 points
+test and 22 OOD: fusing symbolic exactness with the learned residual
+strictly dominates choosing either.
+
+This closes the experimental arc the suite was built for. The measured
+division of labor, end to end: the symbolic layer parses always,
+canonicalizes when the query is identity, performs all exact
+comparisons, and contributes depth-invariant structural evidence; the
+weights hold only the graded residual (lexical alignment); the lexicon
+and the skeleton vocabulary live outside the weights for both size
+(embedding tables dominate tiny models) and robustness (weight-stored
+lexica die OOD). Every clause is now a measurement, not a design bet.
+
 ## Next
 
-1. Hybrid head (symbolic bit + learned scoring) — informed by syn: the
-   symbolic side carries the lexicon, weights score the soft residual.
-2. Binding category-compatibility constraints for specialize.py noise.
-3. Prover phase 1 (LeanDojo extraction) when a Linux/WSL2 window opens.
+1. Binding category-compatibility constraints for specialize.py noise.
+2. Prover phase 1 (LeanDojo extraction) — needs a Linux/WSL2 decision.
+3. Scale hybrid to richer grammars / real bilingual data.

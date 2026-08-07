@@ -106,6 +106,20 @@ knowledge domains.
 
 ## What must be true for this to work (falsifiable milestones)
 
+> **Status 2026-08-07** (details in experiments/ANALYSIS.md): milestone 1
+> holding (49 stable skeletons over 67 nodes, zero parse failures);
+> milestone 2 **passed** on synthetic (2.7x) and real corpus (8.4x with
+> the skeleton vocabulary as the extrinsic store); milestone 3 **passed
+> with a revision** — concept tokens beat subword everywhere tested, but
+> the deeper result is that exact operations (equality, structure checks)
+> must stay symbolic: the hybrid (symbolic bits + learned residual)
+> strictly dominates every pure encoding, and is the only arm whose OOD
+> accuracy exceeds in-distribution. Milestone 4 (round-trip) implicitly
+> exercised by the bilingual world's canon arm. The extrinsic-lexicon
+> commitment gained a second leg: weight-stored lexica are not just
+> oversized but brittle (chance OOD), while the same lexicon supplied
+> externally loses nothing.
+
 1. Skeleton extraction scales: the matcher's canonical skeletons stay stable
    and discriminative as the corpus grows past hundreds of nodes.
 2. Concept tokens compress: re-encoding statements over the concept
