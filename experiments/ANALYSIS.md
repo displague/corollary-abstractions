@@ -367,3 +367,22 @@ path), held-out verb x noun combos, 2 seeds:
   learning problem to be tractable at all.
 - Honest headroom: depth OOD is 0.69 on v2 (vs 0.97 on the pure-
   pointing v1) — deeper KBs with distractors remain open.
+
+
+## Generation attempt 1 (answer-tree decoder): informative failure
+
+Naive seq2seq (tree-path encoder + 2-layer autoregressive decoder over
+concept tokens), exact-tree match, 2 seeds: test 0.107/0.022, OOD ~0.00
+-- against 1.000/0.69 for span-pointing on identical data. The failure
+is in-distribution, so it is not recombination breaking: a small
+decoder has no reliable mechanism to COPY variable-length content
+through cross-attention, even content the encoder demonstrably
+localizes perfectly.
+
+The architecture prescribes its own fix, and it is the component the
+project's original sketch contained: a pointer-generator. Generation at
+this scale should emit pointer actions into the input (proven at 1.000)
+plus rare vocabulary tokens for structure, with the extrinsic lexicon
+translating pointed surface words to concepts deterministically.
+Creating = iterated pointing + symbolic realization. Queued as the next
+build.

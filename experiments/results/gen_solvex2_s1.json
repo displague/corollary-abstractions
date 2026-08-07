@@ -1,0 +1,11 @@
+{
+  "task": "solvex2-gen",
+  "params": 1449255,
+  "src_vocab": 92,
+  "tgt_vocab": 39,
+  "seed": 1,
+  "val_exact_best": 0.144,
+  "test_exact": 0.0216,
+  "ood_exact": 0.0,
+  "seconds": 238.1
+}
