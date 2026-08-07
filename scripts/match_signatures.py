@@ -214,12 +214,41 @@ def shape_key(node: tuple) -> str:
     return f"{kind}:{head}({','.join(shape_key(a) for a in node[2])})"
 
 
+def typed_resort(node: tuple, slot_class: dict[str, str]) -> tuple:
+    """Re-sort commutative args with slot categories visible, so typed
+    skeletons are invariant to `P*V` vs `V*P` orderings that the
+    category-blind canonical sort leaves arbitrary."""
+
+    def typed_key(n: tuple) -> str:
+        if n[0] == "slot":
+            return f"?{slot_class.get(n[1], 'V')}"
+        if n[0] == "num":
+            return f"#{n[1]:g}"
+        return f"{n[0]}:{n[1]}({','.join(typed_key(a) for a in n[2])})"
+
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return node
+    if kind == "rel":
+        rel, (lhs, rhs) = node[1], node[2]
+        lhs, rhs = typed_resort(lhs, slot_class), typed_resort(rhs, slot_class)
+        if rel in SYMMETRIC_RELATIONS and typed_key(lhs) > typed_key(rhs):
+            lhs, rhs = rhs, lhs
+        return ("rel", rel, (lhs, rhs))
+    args = [typed_resort(a, slot_class) for a in node[2]]
+    if kind == "op" and node[1] in COMMUTATIVE:
+        args.sort(key=typed_key)
+    return (kind, node[1], tuple(args))
+
+
 def skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
     """Render canonicalized tree with slots as position-indexed placeholders.
 
     With `slot_class`, placeholders carry a coarse category (P: parameter-like,
     V: variable-like), so `CONSTANT * RADIUS` and `DIM1 * DIM2` diverge.
     """
+    if slot_class is not None:
+        node = typed_resort(node, slot_class)
     indices: dict[str, int] = {}
 
     def render(n: tuple) -> str:

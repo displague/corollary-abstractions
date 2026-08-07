@@ -1,6 +1,54 @@
 {
-  "nodes_analyzed": 25,
+  "nodes_analyzed": 35,
   "typed_twin_groups": [
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "disciplines": [
+        "geometry",
+        "physics"
+      ],
+      "archetypes": [
+        "scaled_linear"
+      ],
+      "members": [
+        {
+          "statement_id": "geometry.circle_formulas.circle_circumference_formula",
+          "discipline": "geometry",
+          "template": "CIRCUMFERENCE = CONSTANT * RADIUS"
+        },
+        {
+          "statement_id": "physics.mechanics.newton_second_law",
+          "discipline": "physics",
+          "template": "FORCE = INERTIA * RESPONSE"
+        },
+        {
+          "statement_id": "physics.circuits.ohms_law",
+          "discipline": "physics",
+          "template": "POTENTIAL = FLOW * RESISTANCE"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V, inv(^(?4:V, 2)))",
+      "disciplines": [
+        "physics"
+      ],
+      "archetypes": [
+        "inverse_square_pair_coupling"
+      ],
+      "members": [
+        {
+          "statement_id": "physics.gravitation.newton_universal_gravitation",
+          "discipline": "physics",
+          "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2"
+        },
+        {
+          "statement_id": "physics.electromagnetism.coulombs_law",
+          "discipline": "physics",
+          "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2"
+        }
+      ]
+    },
     {
       "skeleton": "?0:V = *(?1:P, ^(?2:V, 2))",
       "disciplines": [
@@ -26,13 +74,35 @@
           "template": "AREA = CONSTANT * RADIUS^2"
         }
       ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "disciplines": [
+        "physics"
+      ],
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "members": [
+        {
+          "statement_id": "physics.kinematics.average_speed",
+          "discipline": "physics",
+          "template": "RATE = QUANTITY / INTERVAL"
+        },
+        {
+          "statement_id": "physics.materials.mass_density",
+          "discipline": "physics",
+          "template": "RATE = QUANTITY / INTERVAL"
+        }
+      ]
     }
   ],
   "shape_twin_groups": [
     {
       "skeleton": "?0 = *(?1, ?2)",
       "disciplines": [
-        "geometry"
+        "geometry",
+        "physics"
       ],
       "archetypes": [
         "bilinear_product",
@@ -48,6 +118,16 @@
           "statement_id": "geometry.circle_formulas.circle_circumference_formula",
           "discipline": "geometry",
           "template": "CIRCUMFERENCE = CONSTANT * RADIUS"
+        },
+        {
+          "statement_id": "physics.mechanics.newton_second_law",
+          "discipline": "physics",
+          "template": "FORCE = INERTIA * RESPONSE"
+        },
+        {
+          "statement_id": "physics.circuits.ohms_law",
+          "discipline": "physics",
+          "template": "POTENTIAL = FLOW * RESISTANCE"
         }
       ]
     },
@@ -74,11 +154,34 @@
       ]
     },
     {
-      "skeleton": "?0 = *(?1, ^(?2, 2))",
+      "skeleton": "?0 = *(?1, ?2, ?3, inv(^(?4, 2)))",
       "disciplines": [
-        "geometry"
+        "physics"
       ],
       "archetypes": [
+        "inverse_square_pair_coupling"
+      ],
+      "members": [
+        {
+          "statement_id": "physics.gravitation.newton_universal_gravitation",
+          "discipline": "physics",
+          "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2"
+        },
+        {
+          "statement_id": "physics.electromagnetism.coulombs_law",
+          "discipline": "physics",
+          "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = *(?1, ^(?2, 2))",
+      "disciplines": [
+        "geometry",
+        "physics"
+      ],
+      "archetypes": [
+        "scaled_linear_by_squared_constant",
         "scaled_quadratic"
       ],
       "members": [
@@ -96,11 +199,51 @@
           "statement_id": "geometry.surface_area_formulas.sphere_surface_area",
           "discipline": "geometry",
           "template": "AREA = CONSTANT * RADIUS^2"
+        },
+        {
+          "statement_id": "physics.relativity.mass_energy_equivalence",
+          "discipline": "physics",
+          "template": "ENERGY = MASS * SPEEDLIMIT^2"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = *(?1, inv(?2))",
+      "disciplines": [
+        "physics"
+      ],
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "members": [
+        {
+          "statement_id": "physics.kinematics.average_speed",
+          "discipline": "physics",
+          "template": "RATE = QUANTITY / INTERVAL"
+        },
+        {
+          "statement_id": "physics.materials.mass_density",
+          "discipline": "physics",
+          "template": "RATE = QUANTITY / INTERVAL"
         }
       ]
     }
   ],
-  "archetype_label_drift": [],
+  "archetype_label_drift": [
+    {
+      "archetype_id": "scaled_quadratic",
+      "distinct_shapes": [
+        "?0 = *(?1, ?2, ^(?3, 2))",
+        "?0 = *(?1, ^(?2, 2))"
+      ],
+      "members": [
+        "geometry.area_formulas.circle_area_formula",
+        "geometry.surface_area_formulas.cube_surface_area",
+        "geometry.surface_area_formulas.sphere_surface_area",
+        "physics.mechanics.kinetic_energy"
+      ]
+    }
+  ],
   "skeletons_with_split_archetypes": [
     {
       "skeleton": "?0 = *(?1, ?2)",
@@ -110,7 +253,9 @@
       ],
       "members": [
         "geometry.area_formulas.rectangle_area_formula",
-        "geometry.circle_formulas.circle_circumference_formula"
+        "geometry.circle_formulas.circle_circumference_formula",
+        "physics.mechanics.newton_second_law",
+        "physics.circuits.ohms_law"
       ]
     },
     {
@@ -122,6 +267,19 @@
       "members": [
         "geometry.volume_formulas.rectangular_prism_volume",
         "geometry.area_formulas.triangle_area_formula"
+      ]
+    },
+    {
+      "skeleton": "?0 = *(?1, ^(?2, 2))",
+      "archetype_ids": [
+        "scaled_linear_by_squared_constant",
+        "scaled_quadratic"
+      ],
+      "members": [
+        "geometry.area_formulas.circle_area_formula",
+        "geometry.surface_area_formulas.cube_surface_area",
+        "geometry.surface_area_formulas.sphere_surface_area",
+        "physics.relativity.mass_energy_equivalence"
       ]
     }
   ],

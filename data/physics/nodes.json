@@ -1,0 +1,1245 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "physics.foundations.v1",
+  "discipline": "physics",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "physics.mechanics.newton_second_law",
+      "title": "Newton's Second Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "dynamics"
+      },
+      "formal_statement": {
+        "canonical_ascii": "F = m*a",
+        "canonical_latex": "F = m a",
+        "equivalent_forms": [
+          {
+            "form_id": "momentum_rate",
+            "notation_system": "ascii",
+            "expression": "F = dp/dt",
+            "scope_note": "Momentum form for constant mass"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_linear",
+        "anonymized_template": "FORCE = INERTIA * RESPONSE",
+        "slot_schema": [
+          {
+            "slot_id": "FORCE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "INERTIA",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "RESPONSE",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Linearity of force in acceleration at fixed mass."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Net force."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Inertial mass."
+          },
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Acceleration."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Net force equals mass times acceleration.",
+        "statistical_significance": "Central linear response law of classical dynamics.",
+        "regularity_conditions": [
+          "Inertial reference frame",
+          "Speeds far below c",
+          "Constant mass"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "newton1687",
+          "bibliographic_entry": "Newton, I. (1687). Philosophiae Naturalis Principia Mathematica."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.circuits.ohms_law",
+      "title": "Ohm's Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "electromagnetism",
+        "topic": "circuits"
+      },
+      "formal_statement": {
+        "canonical_ascii": "V = I*R",
+        "canonical_latex": "V = I R",
+        "equivalent_forms": [
+          {
+            "form_id": "current_form",
+            "notation_system": "ascii",
+            "expression": "I = V/R"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_linear",
+        "anonymized_template": "POTENTIAL = FLOW * RESISTANCE",
+        "slot_schema": [
+          {
+            "slot_id": "POTENTIAL",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "FLOW",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          },
+          {
+            "slot_id": "RESISTANCE",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          }
+        ],
+        "invariants": [
+          "Linearity of voltage in current at fixed resistance."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Potential difference."
+          },
+          {
+            "symbol": "I",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Current."
+          },
+          {
+            "symbol": "R",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Resistance."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Voltage across an ohmic conductor is proportional to current.",
+        "statistical_significance": "Prototype linear constitutive relation; structural twin of Newton's second law.",
+        "regularity_conditions": [
+          "Ohmic (linear) material",
+          "Constant temperature"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "ohm1827",
+          "bibliographic_entry": "Ohm, G. S. (1827). Die galvanische Kette, mathematisch bearbeitet."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.relativity.mass_energy_equivalence",
+      "title": "Mass-Energy Equivalence",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "special_relativity",
+        "topic": "energy"
+      },
+      "formal_statement": {
+        "canonical_ascii": "E = m*c^2",
+        "canonical_latex": "E = m c^2",
+        "equivalent_forms": [
+          {
+            "form_id": "rest_energy",
+            "notation_system": "ascii",
+            "expression": "E_0 = m*c^2",
+            "scope_note": "Rest energy"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_linear_by_squared_constant",
+        "anonymized_template": "ENERGY = MASS * SPEEDLIMIT^2",
+        "slot_schema": [
+          {
+            "slot_id": "ENERGY",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "MASS",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          },
+          {
+            "slot_id": "SPEEDLIMIT",
+            "syntactic_category": "constant",
+            "semantic_role": "scale_constant"
+          }
+        ],
+        "invariants": [
+          "Linearity of rest energy in mass; universal constant squared as scale."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "E",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Rest energy."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Rest mass."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "c",
+            "description": "Invariant speed of light in vacuum."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Rest energy is proportional to rest mass with c squared as the constant of proportionality.",
+        "statistical_significance": "Cross-domain shape twin of geometric scaled-quadratic forms with the squared quantity as constant rather than variable.",
+        "regularity_conditions": [
+          "Rest frame of the body"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "einstein1905",
+          "bibliographic_entry": "Einstein, A. (1905). Ist die Traegheit eines Koerpers von seinem Energieinhalt abhaengig? Annalen der Physik."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.mechanics.kinetic_energy",
+      "title": "Kinetic Energy",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "energy"
+      },
+      "formal_statement": {
+        "canonical_ascii": "KE = (1/2)*m*v^2",
+        "canonical_latex": "KE = \\tfrac{1}{2} m v^2",
+        "equivalent_forms": [
+          {
+            "form_id": "momentum_form",
+            "notation_system": "ascii",
+            "expression": "KE = p^2/(2*m)"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_quadratic",
+        "anonymized_template": "ENERGY = CONSTANT * MASS * SPEED^2",
+        "slot_schema": [
+          {
+            "slot_id": "ENERGY",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "scale_factor"
+          },
+          {
+            "slot_id": "MASS",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "SPEED",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Quadratic in speed; linear in mass."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "KE",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Kinetic energy."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Mass."
+          },
+          {
+            "symbol": "v",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Speed."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1/2",
+            "description": "Kinetic energy scale factor."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Kinetic energy grows with the square of speed, scaled by half the mass.",
+        "statistical_significance": "Physics member of the scaled-quadratic archetype shared with circle and sphere area formulas.",
+        "regularity_conditions": [
+          "Non-relativistic speeds"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "goldstein2002",
+          "bibliographic_entry": "Goldstein, H., Poole, C., Safko, J. (2002). Classical Mechanics (3rd ed.). Addison Wesley."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.mechanics.hookes_law",
+      "title": "Hooke's Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "elasticity"
+      },
+      "formal_statement": {
+        "canonical_ascii": "F = -k*x",
+        "canonical_latex": "F = -k x",
+        "equivalent_forms": [
+          {
+            "form_id": "magnitude_form",
+            "notation_system": "ascii",
+            "expression": "|F| = k*|x|"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "negated_scaled_linear",
+        "anonymized_template": "FORCE = -(STIFFNESS * DISPLACEMENT)",
+        "slot_schema": [
+          {
+            "slot_id": "FORCE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "STIFFNESS",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor"
+          },
+          {
+            "slot_id": "DISPLACEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "input"
+          }
+        ],
+        "invariants": [
+          "Linear restoring response opposing displacement."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Restoring force."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "parameter",
+            "semantic_role": "linear_factor",
+            "mathematical_order": 0,
+            "description": "Spring stiffness."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "input",
+            "mathematical_order": 0,
+            "description": "Displacement from equilibrium."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Restoring force is proportional to displacement and directed against it.",
+        "statistical_significance": "Signed variant of the scaled-linear archetype; generator of harmonic motion.",
+        "regularity_conditions": [
+          "Small displacements within the elastic limit"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hooke1678",
+          "bibliographic_entry": "Hooke, R. (1678). Lectures de Potentia Restitutiva."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.gravitation.newton_universal_gravitation",
+      "title": "Newton's Law of Universal Gravitation",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "gravitation"
+      },
+      "formal_statement": {
+        "canonical_ascii": "F = G*m1*m2/r^2",
+        "canonical_latex": "F = G \\frac{m_1 m_2}{r^2}",
+        "equivalent_forms": [
+          {
+            "form_id": "vector_form",
+            "notation_system": "ascii",
+            "expression": "F = -(G*m1*m2/r^2) * rhat",
+            "scope_note": "Attractive direction along separation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "inverse_square_pair_coupling",
+        "anonymized_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+        "slot_schema": [
+          {
+            "slot_id": "COUPLING",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "coupling_constant"
+          },
+          {
+            "slot_id": "SOURCE1",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge"
+          },
+          {
+            "slot_id": "SOURCE2",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge"
+          },
+          {
+            "slot_id": "SEPARATION",
+            "syntactic_category": "variable",
+            "semantic_role": "distance"
+          }
+        ],
+        "invariants": [
+          "Symmetric bilinear in the two sources; inverse-square in separation."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Gravitational force magnitude."
+          },
+          {
+            "symbol": "m1",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge",
+            "mathematical_order": 0,
+            "description": "First mass."
+          },
+          {
+            "symbol": "m2",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge",
+            "mathematical_order": 0,
+            "description": "Second mass."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "distance",
+            "mathematical_order": 0,
+            "description": "Separation distance."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "G",
+            "description": "Universal gravitational constant."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Two masses attract with force proportional to their product and inversely to squared separation.",
+        "statistical_significance": "Canonical inverse-square pair coupling; exact typed twin of Coulomb's law.",
+        "regularity_conditions": [
+          "Point masses or spherical symmetry",
+          "Weak-field regime"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "newton1687",
+          "bibliographic_entry": "Newton, I. (1687). Philosophiae Naturalis Principia Mathematica."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.electromagnetism.coulombs_law",
+      "title": "Coulomb's Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "electromagnetism",
+        "topic": "electrostatics"
+      },
+      "formal_statement": {
+        "canonical_ascii": "F = k*q1*q2/r^2",
+        "canonical_latex": "F = k \\frac{q_1 q_2}{r^2}",
+        "equivalent_forms": [
+          {
+            "form_id": "permittivity_form",
+            "notation_system": "ascii",
+            "expression": "F = q1*q2/(4*pi*eps0*r^2)"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "inverse_square_pair_coupling",
+        "anonymized_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
+        "slot_schema": [
+          {
+            "slot_id": "COUPLING",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "coupling_constant"
+          },
+          {
+            "slot_id": "SOURCE1",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge"
+          },
+          {
+            "slot_id": "SOURCE2",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge"
+          },
+          {
+            "slot_id": "SEPARATION",
+            "syntactic_category": "variable",
+            "semantic_role": "distance"
+          }
+        ],
+        "invariants": [
+          "Symmetric bilinear in the two charges; inverse-square in separation."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Electrostatic force magnitude."
+          },
+          {
+            "symbol": "q1",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge",
+            "mathematical_order": 0,
+            "description": "First charge."
+          },
+          {
+            "symbol": "q2",
+            "syntactic_category": "variable",
+            "semantic_role": "source_charge",
+            "mathematical_order": 0,
+            "description": "Second charge."
+          },
+          {
+            "symbol": "r",
+            "syntactic_category": "variable",
+            "semantic_role": "distance",
+            "mathematical_order": 0,
+            "description": "Separation distance."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "k",
+            "description": "Electrostatic coupling constant."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Two point charges interact with force proportional to their product and inversely to squared separation.",
+        "statistical_significance": "Exact typed twin of Newtonian gravitation across subfields; the flagship cross-domain isomorphism.",
+        "regularity_conditions": [
+          "Point charges at rest",
+          "Vacuum or linear medium"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "coulomb1785",
+          "bibliographic_entry": "Coulomb, C. A. (1785). Premier memoire sur l'electricite et le magnetisme."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.thermodynamics.ideal_gas_law",
+      "title": "Ideal Gas Law",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "thermodynamics",
+        "topic": "equations_of_state"
+      },
+      "formal_statement": {
+        "canonical_ascii": "P*V = n*R*T",
+        "canonical_latex": "P V = n R T",
+        "equivalent_forms": [
+          {
+            "form_id": "particle_form",
+            "notation_system": "ascii",
+            "expression": "P*V = N*kB*T",
+            "scope_note": "Particle-count form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "balanced_product_state_relation",
+        "anonymized_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+        "slot_schema": [
+          {
+            "slot_id": "PRESSURE",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          },
+          {
+            "slot_id": "VOLUME",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          },
+          {
+            "slot_id": "AMOUNT",
+            "syntactic_category": "parameter",
+            "semantic_role": "extensive_quantity"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "gas_constant"
+          },
+          {
+            "slot_id": "TEMPERATURE",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable"
+          }
+        ],
+        "invariants": [
+          "Product of state variables balanced against scaled temperature."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Pressure."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Volume."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "parameter",
+            "semantic_role": "extensive_quantity",
+            "mathematical_order": 0,
+            "description": "Amount of substance."
+          },
+          {
+            "symbol": "T",
+            "syntactic_category": "variable",
+            "semantic_role": "state_variable",
+            "mathematical_order": 0,
+            "description": "Absolute temperature."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "R",
+            "description": "Universal gas constant."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Pressure times volume balances amount times temperature for an ideal gas.",
+        "statistical_significance": "State-equation archetype with products on both relation sides.",
+        "regularity_conditions": [
+          "Dilute gas",
+          "No intermolecular forces",
+          "Absolute temperature scale"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "clapeyron1834",
+          "bibliographic_entry": "Clapeyron, E. (1834). Memoire sur la puissance motrice de la chaleur."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.kinematics.average_speed",
+      "title": "Average Speed",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "kinematics"
+      },
+      "formal_statement": {
+        "canonical_ascii": "v = d/t",
+        "canonical_latex": "v = d/t",
+        "equivalent_forms": [
+          {
+            "form_id": "rate_form",
+            "notation_system": "ascii",
+            "expression": "v = distance/elapsed_time"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "RATE = QUANTITY / INTERVAL",
+        "slot_schema": [
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "QUANTITY",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity"
+          },
+          {
+            "slot_id": "INTERVAL",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent"
+          }
+        ],
+        "invariants": [
+          "Rate as ratio of accumulated quantity to elapsed interval."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "v",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Average speed."
+          },
+          {
+            "symbol": "d",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity",
+            "mathematical_order": 0,
+            "description": "Distance traveled."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent",
+            "mathematical_order": 0,
+            "description": "Elapsed time."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Average speed is distance traveled per unit time.",
+        "statistical_significance": "Prototype rate definition; structural twin of density and other intensive ratios.",
+        "regularity_conditions": [
+          "Nonzero elapsed time"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "halliday2013",
+          "bibliographic_entry": "Halliday, D., Resnick, R., Walker, J. (2013). Fundamentals of Physics (10th ed.). Wiley."
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.materials.mass_density",
+      "title": "Mass Density",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "physics"
+        ],
+        "subfield": "classical_mechanics",
+        "topic": "material_properties"
+      },
+      "formal_statement": {
+        "canonical_ascii": "rho = m/V",
+        "canonical_latex": "\\rho = m/V",
+        "equivalent_forms": [
+          {
+            "form_id": "verbose_form",
+            "notation_system": "ascii",
+            "expression": "density = mass/volume"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "RATE = QUANTITY / INTERVAL",
+        "slot_schema": [
+          {
+            "slot_id": "RATE",
+            "syntactic_category": "variable",
+            "semantic_role": "output"
+          },
+          {
+            "slot_id": "QUANTITY",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity"
+          },
+          {
+            "slot_id": "INTERVAL",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent"
+          }
+        ],
+        "invariants": [
+          "Intensive quantity as ratio of extensive quantities."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "rho",
+            "syntactic_category": "variable",
+            "semantic_role": "output",
+            "mathematical_order": 0,
+            "description": "Mass density."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "accumulated_quantity",
+            "mathematical_order": 0,
+            "description": "Mass."
+          },
+          {
+            "symbol": "V",
+            "syntactic_category": "variable",
+            "semantic_role": "reference_extent",
+            "mathematical_order": 0,
+            "description": "Volume."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Density is mass per unit volume.",
+        "statistical_significance": "Same ratio archetype as average speed; slots range over different physical dimensions.",
+        "regularity_conditions": [
+          "Homogeneous material or local limit"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "halliday2013",
+          "bibliographic_entry": "Halliday, D., Resnick, R., Walker, J. (2013). Fundamentals of Physics (10th ed.). Wiley."
+        }
+      ]
+    }
+  ]
+}
