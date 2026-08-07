@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 175,
+  "nodes_analyzed": 195,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -27,6 +27,7 @@
       "skeleton": "?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
       "disciplines": [
         "logic",
+        "narrative",
         "set_theory"
       ],
       "archetypes": [
@@ -37,6 +38,11 @@
           "statement_id": "logic.boolean_laws.complement_laws",
           "discipline": "logic",
           "template": "MEET(PROP1, NEG(PROP1)) = FALSITY"
+        },
+        {
+          "statement_id": "narrative.frame.frame_consistency",
+          "discipline": "narrative",
+          "template": "MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY"
         },
         {
           "statement_id": "settheory.boolean_laws.complement_laws",
@@ -646,7 +652,8 @@
       "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩",
       "disciplines": [
         "geospatial_topology",
-        "set_theory"
+        "set_theory",
+        "temporal_logic"
       ],
       "archetypes": [
         "order_transitivity"
@@ -661,6 +668,11 @@
           "statement_id": "settheory.order.subset_transitivity",
           "discipline": "set_theory",
           "template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))"
+        },
+        {
+          "statement_id": "temporal.order.precedence_transitivity",
+          "discipline": "temporal_logic",
+          "template": "IMPLIES(MEET(LEQ(EVENTA, EVENTB), LEQ(EVENTB, EVENTC)), LEQ(EVENTA, EVENTC))"
         }
       ]
     },
@@ -1361,6 +1373,7 @@
       "skeleton": "?0 = MEET⟨?1, NEG⟨?1⟩⟩",
       "disciplines": [
         "logic",
+        "narrative",
         "set_theory"
       ],
       "archetypes": [
@@ -1371,6 +1384,11 @@
           "statement_id": "logic.boolean_laws.complement_laws",
           "discipline": "logic",
           "template": "MEET(PROP1, NEG(PROP1)) = FALSITY"
+        },
+        {
+          "statement_id": "narrative.frame.frame_consistency",
+          "discipline": "narrative",
+          "template": "MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY"
         },
         {
           "statement_id": "settheory.boolean_laws.complement_laws",
@@ -1540,7 +1558,8 @@
       "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0, ?1⟩, LEQ⟨?1, ?2⟩⟩, LEQ⟨?0, ?2⟩⟩",
       "disciplines": [
         "geospatial_topology",
-        "set_theory"
+        "set_theory",
+        "temporal_logic"
       ],
       "archetypes": [
         "order_transitivity"
@@ -1555,6 +1574,11 @@
           "statement_id": "settheory.order.subset_transitivity",
           "discipline": "set_theory",
           "template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))"
+        },
+        {
+          "statement_id": "temporal.order.precedence_transitivity",
+          "discipline": "temporal_logic",
+          "template": "IMPLIES(MEET(LEQ(EVENTA, EVENTB), LEQ(EVENTB, EVENTC)), LEQ(EVENTA, EVENTC))"
         }
       ]
     },
@@ -1642,6 +1666,21 @@
       ]
     },
     {
+      "archetype_id": "binary_composition_definition",
+      "distinct_shapes": [
+        "?0 = CONCAT⟨?1, ?2⟩",
+        "?0 = INTRODUCE⟨?1, ?2⟩",
+        "?0 = OBSTRUCT⟨?1, ?2⟩",
+        "?0 = RESOLVE⟨?1, ?2⟩"
+      ],
+      "members": [
+        "morphology.wordformation.affixation",
+        "narrative.structure.setup_introduction",
+        "narrative.structure.complication_obstruction",
+        "narrative.structure.resolution_outcome"
+      ]
+    },
+    {
       "archetype_id": "composition_factorization",
       "distinct_shapes": [
         "DEGREE⟨COMPOSE⟨?0, ?1⟩⟩ = *(DEGREE⟨?0⟩, DEGREE⟨?1⟩)",
@@ -1650,6 +1689,41 @@
       "members": [
         "calculus.differentiation.chain_rule",
         "difftop.degree.degree_multiplicativity"
+      ]
+    },
+    {
+      "archetype_id": "de_morgan_duality",
+      "distinct_shapes": [
+        "ALWAYS⟨?0⟩ = NEG⟨EVENTUALLY⟨NEG⟨?0⟩⟩⟩",
+        "JOIN⟨NEG⟨?0⟩, NEG⟨?1⟩⟩ = NEG⟨MEET⟨?0, ?1⟩⟩"
+      ],
+      "members": [
+        "logic.boolean_laws.de_morgan_laws",
+        "settheory.boolean_laws.de_morgan_laws",
+        "temporal.modality.temporal_duality"
+      ]
+    },
+    {
+      "archetype_id": "fixpoint_expansion_law",
+      "distinct_shapes": [
+        "EVENTUALLY⟨?0⟩ = JOIN⟨?0, NEXT⟨EVENTUALLY⟨?0⟩⟩⟩",
+        "JOIN⟨?0, MEET⟨?1, NEXT⟨UNTIL⟨?1, ?0⟩⟩⟩⟩ = UNTIL⟨?1, ?0⟩"
+      ],
+      "members": [
+        "temporal.recurrence.until_unfolding",
+        "temporal.modality.eventually_unfolding"
+      ]
+    },
+    {
+      "archetype_id": "idempotent_operation",
+      "distinct_shapes": [
+        "?0 = MEET⟨?0, ?0⟩",
+        "ALWAYS⟨?0⟩ = ALWAYS⟨ALWAYS⟨?0⟩⟩"
+      ],
+      "members": [
+        "logic.boolean_laws.idempotence",
+        "settheory.boolean_laws.idempotence",
+        "temporal.modality.always_idempotence"
       ]
     },
     {
@@ -1662,6 +1736,17 @@
         "logic.boolean_laws.identity_laws",
         "morphology.wordformation.zero_morpheme_identity",
         "settheory.boolean_laws.identity_laws"
+      ]
+    },
+    {
+      "archetype_id": "liveness_response_pattern",
+      "distinct_shapes": [
+        "ALWAYS⟨IMPLIES⟨?0, EVENTUALLY⟨?1⟩⟩⟩",
+        "ALWAYS⟨IMPLIES⟨PLANTED⟨?0⟩, EVENTUALLY⟨DISCHARGED⟨?0⟩⟩⟩⟩"
+      ],
+      "members": [
+        "narrative.constraint.chekhov_gun",
+        "temporal.response.response_pattern"
       ]
     },
     {

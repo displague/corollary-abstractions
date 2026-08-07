@@ -213,3 +213,31 @@ bindings), **near-miss** (informative failure, kept deliberately).
   side (11 statements). And fixed-point iteration vs Brouwer's theorem:
   two tools, one pair, opposite correct answers (shared constituent,
   provably not twins). *derivational* (2026-08-07)
+
+- **Time is an order structure.** Temporal precedence transitivity
+  typed-twins subset transitivity and geospatial containment
+  transitivity — before/⊆/within are one law across three disciplines.
+  *exact (authored-to-match convention, surviving three corpora)*
+  (2026-08-07)
+
+- **Fiction obeys logic.** The narrative frame-consistency law
+  typed-twins the machine-checked Boolean complement laws — story
+  coherence IS non-contradiction, so the fictional-frame design
+  inherits a proven theorem rather than a style rule. *exact*
+  (2026-08-07)
+
+- **Temporal duality is the infinitary De Morgan.** ALWAYS/EVENTUALLY
+  are MEET/JOIN over suffix chains; the twin is blocked by heads and
+  arity but carried honestly on the shared archetype. *near-miss,
+  channeled* (2026-08-07)
+
+- **Idempotence and involution differ by a fixed point, not a head.**
+  ALWAYS(ALWAYS(P)) keeps its base where NEG(NEG(P)) cancels — the
+  matcher's refusal isolates the semantic distinction exactly.
+  *near-miss, load-bearing* (2026-08-07)
+
+- **An instance can grade less grounded than its pattern.** Chekhov's
+  gun (0.000) vs its own response-pattern abstraction (0.500):
+  instantiated heads hide pattern membership — a measured groundedness
+  pathology, filed with the recursive-definition self-reference case
+  (until-unfolding, 0.000). *pathology* (2026-08-07)
