@@ -1,6 +1,28 @@
 {
-  "nodes_analyzed": 106,
+  "nodes_analyzed": 122,
   "typed_twin_groups": [
+    {
+      "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
+      "disciplines": [
+        "differential_geometry",
+        "geometry"
+      ],
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "members": [
+        {
+          "statement_id": "diffgeo.surfaces.euclidean_line_element",
+          "discipline": "differential_geometry",
+          "template": "LINEELEMENT^2 = DU^2 + DV^2"
+        },
+        {
+          "statement_id": "geometry.right_triangles.pythagorean_theorem",
+          "discipline": "geometry",
+          "template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2"
+        }
+      ]
+    },
     {
       "skeleton": "?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
       "disciplines": [
@@ -160,6 +182,28 @@
           "statement_id": "geometry.surface_area_formulas.sphere_surface_area",
           "discipline": "geometry",
           "template": "AREA = CONSTANT * RADIUS^2"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "disciplines": [
+        "differential_geometry",
+        "geometry"
+      ],
+      "archetypes": [
+        "bilinear_product"
+      ],
+      "members": [
+        {
+          "statement_id": "diffgeo.surfaces.gaussian_curvature_principal_product",
+          "discipline": "differential_geometry",
+          "template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2"
+        },
+        {
+          "statement_id": "geometry.area_formulas.rectangle_area_formula",
+          "discipline": "geometry",
+          "template": "AREA = DIM1 * DIM2"
         }
       ]
     },
@@ -411,6 +455,28 @@
       ]
     },
     {
+      "skeleton": "INTEGRAL⟨D⟨?0:V⟩⟩ = +(F⟨?1:V⟩, neg(F⟨?2:V⟩))",
+      "disciplines": [
+        "calculus",
+        "differential_geometry"
+      ],
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "members": [
+        {
+          "statement_id": "calculus.integration.ftc_evaluation_part",
+          "discipline": "calculus",
+          "template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)"
+        },
+        {
+          "statement_id": "diffgeo.stokes.stokes_zero_form_case",
+          "discipline": "differential_geometry",
+          "template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)"
+        }
+      ]
+    },
+    {
       "skeleton": "JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩ = MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
       "disciplines": [
         "logic",
@@ -526,8 +592,31 @@
   ],
   "shape_twin_groups": [
     {
+      "skeleton": "+(^(?0, 2), ^(?1, 2)) = ^(?2, 2)",
+      "disciplines": [
+        "differential_geometry",
+        "geometry"
+      ],
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "members": [
+        {
+          "statement_id": "diffgeo.surfaces.euclidean_line_element",
+          "discipline": "differential_geometry",
+          "template": "LINEELEMENT^2 = DU^2 + DV^2"
+        },
+        {
+          "statement_id": "geometry.right_triangles.pythagorean_theorem",
+          "discipline": "geometry",
+          "template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2"
+        }
+      ]
+    },
+    {
       "skeleton": "?0 = *(?1, ?2)",
       "disciplines": [
+        "differential_geometry",
         "geometry",
         "physics"
       ],
@@ -536,6 +625,11 @@
         "scaled_linear"
       ],
       "members": [
+        {
+          "statement_id": "diffgeo.surfaces.gaussian_curvature_principal_product",
+          "discipline": "differential_geometry",
+          "template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2"
+        },
         {
           "statement_id": "geometry.area_formulas.rectangle_area_formula",
           "discipline": "geometry",
@@ -959,6 +1053,28 @@
       ]
     },
     {
+      "skeleton": "INTEGRAL⟨D⟨?0⟩⟩ = +(F⟨?1⟩, neg(F⟨?2⟩))",
+      "disciplines": [
+        "calculus",
+        "differential_geometry"
+      ],
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "members": [
+        {
+          "statement_id": "calculus.integration.ftc_evaluation_part",
+          "discipline": "calculus",
+          "template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)"
+        },
+        {
+          "statement_id": "diffgeo.stokes.stokes_zero_form_case",
+          "discipline": "differential_geometry",
+          "template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)"
+        }
+      ]
+    },
+    {
       "skeleton": "JOIN⟨MEET⟨?0, ?1⟩, MEET⟨?0, ?2⟩⟩ = MEET⟨?0, JOIN⟨?1, ?2⟩⟩",
       "disciplines": [
         "logic",
@@ -1005,6 +1121,17 @@
   ],
   "archetype_label_drift": [
     {
+      "archetype_id": "composition_factorization",
+      "distinct_shapes": [
+        "DEGREE⟨COMPOSE⟨?0, ?1⟩⟩ = *(DEGREE⟨?0⟩, DEGREE⟨?1⟩)",
+        "D⟨COMPOSE⟨?0, ?1⟩⟩ = *(COMPOSE⟨D⟨?0⟩, ?1⟩, D⟨?1⟩)"
+      ],
+      "members": [
+        "calculus.differentiation.chain_rule",
+        "difftop.degree.degree_multiplicativity"
+      ]
+    },
+    {
       "archetype_id": "identity_element_law",
       "distinct_shapes": [
         "?0 = CONCAT⟨?0, ?1⟩",
@@ -1049,6 +1176,7 @@
         "scaled_linear"
       ],
       "members": [
+        "diffgeo.surfaces.gaussian_curvature_principal_product",
         "geometry.area_formulas.rectangle_area_formula",
         "geometry.circle_formulas.circle_circumference_formula",
         "physics.mechanics.newton_second_law",
