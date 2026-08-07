@@ -25,8 +25,8 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from match_signatures import canonicalize  # noqa: E402
 
 from langgen import (  # noqa: E402
-    LEX_A, LEX_B, NOUNS, SEP, VERBS, gen_np, mutate_np, render,
-    struct_tokens_lang,
+    LEX_A, LEX_B, NOUNS, SEP, VERBS, canon_tokens_lang, gen_np, mutate_np,
+    render, struct_tokens_lang,
 )
 from solvex import np_noun  # noqa: E402
 
@@ -90,6 +90,7 @@ def make_example(rng: random.Random, depth: int, n_stmts: int,
         "ans_start": block_off + lo,
         "ans_end": block_off + hi,
         "answer": " ".join(stmt_tok_lists[correct_idx][lo:hi + 1]),
+        "answer_canon": canon_tokens_lang(answer_np),
         "correct_idx": correct_idx,
         "n_stmts": n_stmts,
         "combo": list(combo),
