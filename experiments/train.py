@@ -90,7 +90,7 @@ def evaluate(model, loader, device) -> float:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--task", choices=["twins", "equiv"], required=True)
+    ap.add_argument("--task", choices=["twins", "equiv", "xlang"], required=True)
     ap.add_argument("--arm", choices=["char", "struct", "canon"], required=True)
     ap.add_argument("--data-dir", type=Path, default=Path("data"))
     ap.add_argument("--out", type=Path, required=True)

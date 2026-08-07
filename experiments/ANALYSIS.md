@@ -98,11 +98,46 @@ time, one compute domain at a time, 85C alarm) completed the entire queue
 at a steady 58-60C with no incident. The throttle is now the house rule
 for GPU work on this machine.
 
+## xlang task (bilingual grammar world): predictions vs results
+
+Registered predictions: char << struct << canon ~= 1.0; char worst OOD.
+
+| arm | test acc | OOD acc | front-end gave |
+|---|---|---|---|
+| char | 0.576 | 0.564 | nothing |
+| struct | 0.674 | 0.560 | both parse trees, native words |
+| canon | 0.708 | 0.553 | canonical interlingua (concept ids) |
+
+- **Confirmed**: the ladder direction on test. Parsing two grammars +
+  bilingual dictionary from characters is hardest; each front-end
+  increment helps.
+- **Falsified, informatively**: canon was predicted ~1.0 because its
+  positive pairs are *literally identical token streams* around the
+  separator. It reached 0.708. An 880k-param encoder cannot reliably do
+  exact cross-segment equality — a known transformer weakness (exact
+  match/copy needs induction-head-like circuits this scale doesn't
+  spare). Same ceiling visible in twins/canon (0.709): the twin tasks
+  were bottlenecked by learned *comparison*, not by tokenization.
+- **Falsified**: all arms collapse comparably on deeper modifier
+  recursion (0.55-0.56); char was not distinctly worst OOD.
+
+Design consequence, and it is the night's thesis sharpened from a new
+direction: once the symbolic front-end has reduced a question to exact
+stream equality, *the equality check itself belongs in the symbolic
+layer* (where it is free and perfect), not in weights. Weights are for
+the graded residual only: dictionary alignment (struct's real job),
+soft/partial matches, semantics that survive after exact structure is
+handled. "Emergent understanding" should be expected for the residual,
+not for operations that have closed forms.
+
 ## Next
 
-1. Two-channel encoding experiment (surface parse + canonical form as
-   parallel inputs) — the equiv result says don't choose, expose both.
-2. Grow the family-level concept vocabulary from the corpus; measure
-   milestone 2 compression on real statement nodes rather than synthetic.
-3. More disciplines (economics/finance: compound interest should family-
-   twin exponential growth/decay).
+1. QA-as-unification task (questions ARE equations): statement in
+   language A, question in language B — does the statement answer it?
+   Graded, no closed form, the residual weights are actually for.
+2. Hybrid head: symbolic-equality bit + learned residual as model input;
+   measure the lift over either alone.
+3. Grow the family-level concept vocabulary from the corpus; measure
+   milestone 2 compression on real statement nodes.
+4. More disciplines (economics: compound interest should family-twin
+   exponential growth/decay).
