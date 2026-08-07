@@ -130,14 +130,31 @@ soft/partial matches, semantics that survive after exact structure is
 handled. "Emergent understanding" should be expected for the residual,
 not for operations that have closed forms.
 
+## qa task (QA-as-unification, cross-language): the residual is real
+
+| arm | test acc | OOD acc |
+|---|---|---|
+| char | 0.500 | 0.500 |
+| struct | 0.689 | 0.557 |
+| canon | 0.644 | 0.592 |
+
+- **char is at exact chance, in-distribution.** Raw text at this scale
+  learns nothing about cross-lingual unification — not "less," nothing.
+  The strongest single data point of the suite for the front-end floor:
+  the residual (unification) is only learnable at all once parsing has
+  been done for the model.
+- struct vs canon differ within a few points (struct better test, canon
+  better OOD); with single seeds this is not a strong ordering. What is
+  clear is both sit far above char and far below solved — unification is
+  the genuinely graded learnable residual, exactly where a hybrid
+  (symbolic candidate-binding + learned scoring) should be aimed.
+
 ## Next
 
-1. QA-as-unification task (questions ARE equations): statement in
-   language A, question in language B — does the statement answer it?
-   Graded, no closed form, the residual weights are actually for.
-2. Hybrid head: symbolic-equality bit + learned residual as model input;
-   measure the lift over either alone.
-3. Grow the family-level concept vocabulary from the corpus; measure
+1. Hybrid head: symbolic-equality/unification bit + learned residual as
+   model input; measure the lift over either alone.
+2. Grow the family-level concept vocabulary from the corpus; measure
    milestone 2 compression on real statement nodes.
-4. More disciplines (economics: compound interest should family-twin
+3. More disciplines (economics: compound interest should family-twin
    exponential growth/decay).
+4. Multi-seed reruns before claiming struct/canon orderings on qa.
