@@ -147,3 +147,38 @@ bindings), **near-miss** (informative failure, kept deliberately).
   combinatorial χ at χ=2, and DE-9IM disjointness IS the complement law —
   match() succeeds on both, the requires-absorption filter drops both.
   Direct probes on record. (2026-08-07)
+
+- **GRPO's advantage is the z-score.** DeepSeek's 2024 group-relative
+  advantage `(R − mean)/std` fired as an emergent typed twin of
+  probstat's z-standardization — frontier RLHF machinery is a
+  century-old statistical transform. *exact* (2026-08-07)
+
+- **LLM sampling is exponential decay.** The Boltzmann/softmax factor
+  joins the family of radioactive decay, compound interest, and
+  discounting (5 nodes, 4 disciplines) — temperature sampling and
+  half-lives are one parametric family. *family* (2026-08-07)
+
+- **The PPO probability ratio is a rate.** It joins rate-of-change,
+  speed, density, molarity, and elasticity — the ratio family now spans
+  6 nodes in 5 disciplines including RL. *exact* (2026-08-07)
+
+- **Linear regression generalizes the Mamba/S4 state update.** SLR ⊒
+  the linear SSM recurrence with intercept→0 and the noise slot
+  absorbing the transition term — the 1900s statistical model contains
+  the 2020s sequence architecture. *specialization* (2026-08-07)
+
+- **Affine location-scale generalizes LoRA.** `W = W₀ + s·BA` is the
+  statistics transform with the scale factored low-rank. *specialization*
+  (2026-08-07)
+
+- **Gradient descent shape-twins the free energies** and typed-twins the
+  KL-regularized RLHF objective — optimization steps and thermodynamic
+  potentials share the value-minus-scaled-quantity skeleton. *shape/exact*
+  (2026-08-07)
+
+- **The type system sees the gating innovation.** mLSTM does not twin
+  the SSM precisely because its gates are variable-like where SSM
+  coefficients are parameter-like — the matcher's refusal isolates
+  exactly what xLSTM added. Likewise gradient descent misses the affine
+  family by one slot category: descent updates a variable, affine
+  shifts by a parameter. *near-miss, load-bearing* (2026-08-07)
