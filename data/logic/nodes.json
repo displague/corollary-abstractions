@@ -195,6 +195,23 @@
         "negation",
         "Boolean lattice",
         "propositional logic"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.de_morgan_not_and"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.de_morgan_not_or"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.not_forall_iff_exists_not"
+        }
       ]
     },
     {
@@ -378,6 +395,18 @@
         "normal form",
         "Huntington postulate",
         "distributive lattice"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.distrib_and_or"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.distrib_or_and"
+        }
       ]
     },
     {
@@ -530,6 +559,13 @@
         "involution",
         "classical logic",
         "intuitionism"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.double_negation"
+        }
       ]
     },
     {
@@ -700,6 +736,18 @@
         "lattice",
         "simplification",
         "order"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.absorption_and_or"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.absorption_or_and"
+        }
       ]
     },
     {
@@ -835,7 +883,9 @@
           "logic.boolean_laws.absorption",
           "logic.boolean_laws.de_morgan_laws",
           "logic.boolean_laws.double_negation",
-          "logic.boolean_laws.idempotence"
+          "logic.boolean_laws.idempotence",
+          "logic.inference.ex_falso_quodlibet",
+          "logic.inference.reductio_ad_absurdum"
         ],
         "equivalent_to": [
           "settheory.boolean_laws.identity_laws"
@@ -867,6 +917,18 @@
         "tautology",
         "neutral element",
         "bounded lattice"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.identity_and_true"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.identity_or_false"
+        }
       ]
     },
     {
@@ -1016,7 +1078,9 @@
         "entails": [
           "logic.boolean_laws.de_morgan_laws",
           "logic.boolean_laws.double_negation",
-          "logic.boolean_laws.idempotence"
+          "logic.boolean_laws.idempotence",
+          "logic.inference.ex_falso_quodlibet",
+          "logic.inference.reductio_ad_absurdum"
         ],
         "equivalent_to": [
           "settheory.boolean_laws.complement_laws"
@@ -1053,6 +1117,18 @@
         "non-contradiction",
         "complement",
         "Boolean algebra"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.non_contradiction"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.excluded_middle"
+        }
       ]
     },
     {
@@ -1203,6 +1279,18 @@
         "contraction",
         "lattice operation",
         "repetition"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.idempotence_and"
+        },
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.idempotence_or"
+        }
       ]
     },
     {
@@ -1381,6 +1469,13 @@
         "detachment",
         "inference rule",
         "implication elimination"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.modus_ponens"
+        }
       ]
     },
     {
@@ -1552,6 +1647,382 @@
         "implication",
         "converse",
         "inverse"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.contraposition"
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.inference.ex_falso_quodlibet",
+      "title": "Ex Falso Quodlibet (Explosion)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "inference_rules",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "false implies P",
+        "canonical_latex": "\\bot \\to P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "⊥ → P"
+          },
+          {
+            "form_id": "entailment",
+            "notation_system": "ascii",
+            "expression": "false |- P",
+            "scope_note": "Entailment form: from a contradiction every formula is derivable. Its skeleton LEQ(BOT, PROP) is the one that would twin exactly with settheory.order.empty_set_minimality; the deduction theorem is the step between the two forms"
+          },
+          {
+            "form_id": "disjunctive",
+            "notation_system": "ascii",
+            "expression": "(not false) or P = true",
+            "scope_note": "Unfolding material implication: the antecedent's complement is TOP, and TOP dominates every join"
+          },
+          {
+            "form_id": "two_premise_rule",
+            "notation_system": "ascii",
+            "expression": "P ; not P |- Q",
+            "scope_note": "The everyday explosion rule: a contradiction is assembled first, then anything at all is detached from it"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "explosion_from_falsehood",
+        "anonymized_template": "IMPLIES(FALSITY, PROP1)",
+        "slot_schema": [
+          {
+            "slot_id": "FALSITY",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          },
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "The antecedent is a constant rather than a free operand, so the typed skeleton `IMPLIES⟨?0:P, ?1:V⟩` carries the P/V split at the root: the law is about BOT itself, not about a relation between two operands. Only its set-side echo, settheory.order.empty_set_minimality, makes a claim of that shape.",
+          "The consequent slot occurs once and is never inspected -- that is the entire content, and it is also the relevantist's objection: a conclusion with no subject-matter connection to the premise.",
+          "Order-theoretic restatement: LEQ(BOT, x) holds for every x, i.e. BOT is the least element of the bounded lattice. The two readings are the deduction theorem apart.",
+          "Dual in position to reductio_ad_absurdum: BOT sits in the antecedent here and in the consequent there, so the pair exhausts what an object-language falsum can be attached to.",
+          "Intuitionistically valid. It is minimal logic (which keeps BOT as an ordinary unprovable atom) and the paraconsistent logics that reject it, not constructivism."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "false",
+            "value": false,
+            "description": "The falsum: the least element of the propositional lattice, entailing every formula."
+          },
+          {
+            "symbol": "true",
+            "value": true,
+            "description": "The verum: the greatest element of the propositional lattice, entailed by every formula."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "From falsehood, anything follows: a false antecedent places no constraint on the consequent, so the conditional holds whatever the consequent happens to say.",
+        "statistical_significance": "The forward half of the epistemic ladder's falsehood rung (docs/DESIGN-epistemic-ladder.md) made corpus-real. BOT was already present algebraically -- it is the right-hand side of logic.boolean_laws.complement_laws -- but until now nothing said what could be *done* with it; this node says it forwards and logic.inference.reductio_ad_absurdum says it backwards. It twins with nothing, and the near miss is the informative part: written in the entailment form the skeleton would be `LEQ⟨?0:P, ?1:V⟩`, matching settheory.order.empty_set_minimality character for character, because 'falsity entails everything' and 'the empty set is contained in everything' are one statement about the least element of a bounded lattice. The object-language IMPLIES form was authored instead because it is what the prover lane proves and what reductio inverts, and the honest consequence -- two heads, no group -- is recorded rather than dissolved by rewriting one side.",
+        "regularity_conditions": [
+          "A consequence relation in which BOT is the least element",
+          "An implication satisfying the deduction theorem, or an explicit BOT-elimination rule"
+        ],
+        "failure_modes": [
+          "Rejected by paraconsistent logics (LP, relevance logics) precisely so that a single inconsistency does not trivialize a theory; this is the law that makes an inconsistent knowledge base useless rather than merely wrong, which is why a corpus that reasons over its own contents has a practical stake in it.",
+          "Minimal logic keeps intuitionistic implication but drops BOT-elimination, so explosion fails while the rest of the constructive apparatus survives; 'constructive' is therefore not the axis on which this law is contested.",
+          "The natural-language gloss 'a false premise proves anything' invites the slide from validity to soundness: the schema says nothing about whether the antecedent is ever satisfied, and in practice it never is."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "priest1979",
+          "bibliographic_entry": "Priest, G. (1979). The Logic of Paradox. Journal of Philosophical Logic, 8(1), 219-241."
+        }
+      ],
+      "keywords": [
+        "ex falso quodlibet",
+        "explosion",
+        "falsum",
+        "bottom element",
+        "paraconsistency"
+      ]
+    },
+    {
+      "statement_id": "logic.inference.reductio_ad_absurdum",
+      "title": "Reductio ad Absurdum (Negation Introduction)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "inference_rules",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(P implies false) implies (not P)",
+        "canonical_latex": "(P \\to \\bot) \\to \\lnot P",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(P → ⊥) → ¬P"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "P |- false ; therefore |- not P",
+            "scope_note": "Natural-deduction negation introduction: the assumption P is discharged once it has yielded a contradiction"
+          },
+          {
+            "form_id": "definitional",
+            "notation_system": "ascii",
+            "expression": "not P = (P implies false)",
+            "scope_note": "Intuitionistic presentations define NEG this way, which turns the law into an identity rather than a derivation"
+          },
+          {
+            "form_id": "classical",
+            "notation_system": "ascii",
+            "expression": "((not P) implies false) implies P",
+            "scope_note": "The classical form, equivalent to double negation elimination and to excluded middle; NOT intuitionistically valid, and supplied in Lean by the explicit axiom Classical.byContradiction"
+          },
+          {
+            "form_id": "contradiction_pair",
+            "notation_system": "ascii",
+            "expression": "((P implies Q) and (P implies not Q)) implies not P",
+            "scope_note": "The everyday two-premise form, where the contradiction is exhibited as a pair instead of as BOT"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "refutation_by_contradiction",
+        "anonymized_template": "IMPLIES(IMPLIES(PROP1, FALSITY), NEG(PROP1))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "FALSITY",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          }
+        ],
+        "invariants": [
+          "The only statement in either corpus with an implication as its own antecedent, which is what makes this negation *introduction*: the premise being consumed is itself a derivation.",
+          "The operand slot occurs twice, once inside the refuted conditional and once under NEG, so the rule is fixed entirely by that reuse; nothing else about the operand is used.",
+          "BOT appears in consequent position here and in antecedent position in ex_falso_quodlibet, so the two nodes are one constant read in the two available directions.",
+          "Intuitionistically valid as stated. The mirror image IMPLIES(IMPLIES(NEG(a), BOT), a) is not: that is double negation elimination in disguise, recorded on logic.boolean_laws.double_negation rather than duplicated here.",
+          "Definitional where NEG(x) abbreviates IMPLIES(x, BOT), a theorem where NEG is the primitive lattice complement -- as it is in this corpus. Same line, two statuses, decided by which head is basic."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "false",
+            "value": false,
+            "description": "The falsum: the least element of the propositional lattice, entailing every formula."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If assuming a proposition drives you to falsehood, the proposition is refuted: a hypothesis that entails a contradiction is discharged as its own negation.",
+        "statistical_significance": "The backward half of the falsehood rung, and the corpus's point of maximum care about intuitionistic honesty. The direction stated here is constructively valid and is a primitive rule of intuitionistic natural deduction; the classical mirror image is the contested one, and the extraction in prover/sample_triples.json shows exactly that boundary being crossed by name -- `Classical.byContradiction` appears twice inside `not_forall_iff_exists_not`, which is why that theorem verifies logic.boolean_laws.de_morgan_laws and not this node. Structurally its nearest neighbour is logic.inference.modus_ponens: both have an IMPLIES root over an IMPLIES-headed antecedent, but modus ponens conjoins the antecedent where this drives it to BOT, so the skeletons differ and no group is reported. Operationally this is the closed form behind the ladder's REFUTED rung: deriving BOT along a branch is search, and this node is what licenses the discharge once the search succeeds.",
+        "regularity_conditions": [
+          "An implication satisfying the deduction theorem, so the assumption can be discharged",
+          "BOT available as an object-language proposition, not merely as a metatheoretic marker"
+        ],
+        "failure_modes": [
+          "Routinely conflated with the classical reductio ((not P) implies false) implies P; only the stated direction is intuitionistically valid, which is why proof assistants make the other an explicit axiom rather than a tactic.",
+          "In paraconsistent settings deriving BOT no longer refutes the assumption, since contradictions are tolerated: reductio and explosion stand or fall together, and rejecting one to save inconsistent theories costs the other.",
+          "Informally, 'that leads to absurdity' is used for conclusions that are merely implausible; the rule requires an actual contradiction, and the slippage is where rhetorical reductio arguments fail."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mathlib2020",
+          "bibliographic_entry": "The mathlib Community (2020). The Lean Mathematical Library. Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381.",
+          "url": "https://doi.org/10.1145/3372885.3373824"
+        }
+      ],
+      "keywords": [
+        "reductio ad absurdum",
+        "negation introduction",
+        "proof by contradiction",
+        "falsum",
+        "intuitionistic logic"
       ]
     }
   ]

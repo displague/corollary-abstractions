@@ -63,6 +63,33 @@ and contraposition on the logic side (inference, not equation), subset
 transitivity and two-set inclusion-exclusion on the set side (order and
 counting, which propositions have no analogue of).
 
+Falsehood (docs/DESIGN-epistemic-ladder.md) is authored as a pair plus an
+honest echo. BOT was already an algebraic constant here -- it is the right
+side of the complement laws -- but nothing said what could be *done* with it.
+Ex falso quodlibet `IMPLIES(BOT, PROP)` reads BOT forwards (from falsehood,
+anything) and reductio ad absurdum `IMPLIES(IMPLIES(PROP, BOT), NEG(PROP))`
+reads it backwards (what drives you to falsehood is refuted). Both are logic
+nodes. The set side gets the order form `LEQ(BOT, ANYSET)` -- the empty set is
+LEQ-minimal -- as a set-theory-only law, and that choice costs a twin on
+purpose: transcribing the IMPLIES head into set theory would give
+`∅^c ∪ A = U`, true in the powerset Boolean algebra but not a statement any
+set theory is written in, so a same-template twin would have been manufactured
+rather than found. `IMPLIES⟨?0:P, ?1:V⟩` and `LEQ⟨?0:P, ?1:V⟩` differ at the
+head and the matcher reports no group -- correctly. The identity is real; it
+lives one deduction-theorem step away from the templates, and that near miss
+is recorded in both nodes' commentary instead of being engineered away.
+
+Truth versus provability is made structural by `verified_by` (the schema's
+optional bridge). VERIFIED_BY below maps a law name to the Lean 4 theorems in
+`prover/sample_triples.json` that machine-check its propositional form, and
+`build_node` injects the field on LOGIC nodes only: the extraction proves
+`P Q : Prop` statements, so claiming the set readings on that evidence would
+overstate what was checked (the Lindenbaum-Tarski/powerset transport is a
+further theorem, not part of the artifact). Nine of the eleven logic nodes
+carry a bridge, covering all 16 extracted theorems. The two that do not are
+the falsehood pair, which is the ladder's VERIFIED-vs-PROVEN distinction
+showing up as a real gap rather than a slogan.
+
 Note on `statement_id`: the schema pattern `^[a-z0-9]+(\\.[a-z0-9_]+)+$`
 forbids an underscore in the *first* segment, so set-theory ids are prefixed
 `settheory.` even though the corpus directory and `discipline` field are
@@ -89,6 +116,14 @@ TPL_IDEMPOTENCE = "MEET({a}, {a}) = {a}"
 
 TPL_MODUS_PONENS = "IMPLIES(MEET(IMPLIES({a}, {b}), {a}), {b})"
 TPL_CONTRAPOSITION = "IMPLIES({a}, {b}) = IMPLIES(NEG({b}), NEG({a}))"
+# The falsehood pair. Stated bare, like modus ponens and unlike contraposition:
+# these are valid schemas, not equations between two expressions, and the file's
+# convention is that a rule keeps its IMPLIES root rather than being padded to
+# `... = TOP`. (Padding would also render as `= UNIVERSE` on the set side, which
+# is why the order form below is bare too.)
+TPL_EX_FALSO = "IMPLIES({bot}, {a})"
+TPL_REDUCTIO = "IMPLIES(IMPLIES({a}, {bot}), NEG({a}))"
+TPL_BOTTOM_MINIMAL = "LEQ({bot}, {a})"
 TPL_SUBSET_TRANSITIVITY = "IMPLIES(MEET(LEQ({a}, {b}), LEQ({b}, {c})), LEQ({a}, {c}))"
 TPL_INCLUSION_EXCLUSION = (
     "CARD(JOIN({a}, {b})) = CARD({a}) + CARD({b}) - CARD(MEET({a}, {b}))"
@@ -293,6 +328,63 @@ KOLMOGOROV = {"citation_key": "kolmogorov1933",
 MATHLIB = {"citation_key": "mathlib2020",
            "bibliographic_entry": "The mathlib Community (2020). The Lean Mathematical Library. Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381.",
            "url": "https://doi.org/10.1145/3372885.3373824"}
+PRIEST = {"citation_key": "priest1979",
+          "bibliographic_entry": "Priest, G. (1979). The Logic of Paradox. Journal of Philosophical Logic, 8(1), 219-241."}
+
+# --------------------------------------------------------------------------
+# The prover bridge: truth (a corpus node) versus provability (a machine-
+# checked artifact), made structural.
+#
+# `prover/sample_triples.json` holds 155 tactic steps extracted from 16 Lean 4
+# theorems over `P Q R : Prop` (prover/PHASE1_NOTES.md records the extraction
+# and the theorem -> node mapping). Several theorems land on one law, because
+# a law here states a self-dual pair while Lean proves each half separately,
+# and because De Morgan additionally gets its quantifier form.
+#
+# Injected on LOGIC nodes only. The Lean statements quantify over `Prop`; the
+# powerset reading follows by Stone/Lindenbaum-Tarski transport, which is a
+# further theorem and is *not* in the artifact. Claiming it on the set nodes
+# would be asserting more verification than was performed.
+# --------------------------------------------------------------------------
+
+LEAN_ARTIFACT = "prover/sample_triples.json"
+
+
+def lean(*theorems: str) -> list[dict]:
+    return [{"system": "lean4", "artifact": LEAN_ARTIFACT,
+             "reference": f"BooleanLaws.{t}"} for t in theorems]
+
+
+VERIFIED_BY = {
+    "de_morgan_laws": lean("de_morgan_not_and", "de_morgan_not_or",
+                           "not_forall_iff_exists_not"),
+    "distributivity_meet_over_join": lean("distrib_and_or", "distrib_or_and"),
+    "double_negation": lean("double_negation"),
+    "absorption": lean("absorption_and_or", "absorption_or_and"),
+    "identity_laws": lean("identity_and_true", "identity_or_false"),
+    "complement_laws": lean("non_contradiction", "excluded_middle"),
+    "idempotence": lean("idempotence_and", "idempotence_or"),
+    "modus_ponens": lean("modus_ponens"),
+    "contraposition": lean("contraposition"),
+}
+
+
+def check_verified_by() -> str:
+    """Fail regeneration if the bridge and the artifact have drifted apart."""
+    referenced = {e["reference"] for entries in VERIFIED_BY.values()
+                  for e in entries}
+    path = Path(LEAN_ARTIFACT)
+    if not path.exists():
+        return f"{len(referenced)} references (artifact not present; unchecked)"
+    proved = {t["theorem"] for t in json.loads(path.read_text(encoding="utf-8"))}
+    dangling = sorted(referenced - proved)
+    unclaimed = sorted(proved - referenced)
+    if dangling:
+        raise SystemExit(f"verified_by references no such Lean theorem: {dangling}")
+    if unclaimed:
+        raise SystemExit(f"Lean theorems no corpus node claims: {unclaimed}")
+    return f"{len(referenced)} of {len(proved)} extracted Lean theorems claimed"
+
 
 # --------------------------------------------------------------------------
 # Law specifications. `logic` and `set_theory` sub-dicts differ only in
@@ -1104,6 +1196,181 @@ DISCIPLINE_ONLY_LAWS = [
         },
     },
     {
+        "name": "ex_falso_quodlibet",
+        "topic_id": "inference",
+        "archetype": "explosion_from_falsehood",
+        "cls": "theorem",
+        "status": "derived",
+        "template": TPL_EX_FALSO,
+        "entailed_by": ["complement_laws", "identity_laws"],
+        "invariants": [
+            "The antecedent is a constant rather than a free operand, so the "
+            "typed skeleton `IMPLIES⟨?0:P, ?1:V⟩` carries the P/V split at the "
+            "root: the law is about BOT itself, not about a relation between two "
+            "operands. Only its set-side echo, "
+            "settheory.order.empty_set_minimality, makes a claim of that shape.",
+            "The consequent slot occurs once and is never inspected -- that is "
+            "the entire content, and it is also the relevantist's objection: a "
+            "conclusion with no subject-matter connection to the premise.",
+            "Order-theoretic restatement: LEQ(BOT, x) holds for every x, i.e. BOT "
+            "is the least element of the bounded lattice. The two readings are "
+            "the deduction theorem apart.",
+            "Dual in position to reductio_ad_absurdum: BOT sits in the antecedent "
+            "here and in the consequent there, so the pair exhausts what an "
+            "object-language falsum can be attached to.",
+            "Intuitionistically valid. It is minimal logic (which keeps BOT as an "
+            "ordinary unprovable atom) and the paraconsistent logics that reject "
+            "it, not constructivism.",
+        ],
+        "logic": {
+            "title": "Ex Falso Quodlibet (Explosion)",
+            "ascii": "false implies P",
+            "latex": "\\bot \\to P",
+            "forms": [
+                {"form_id": "unicode", "notation_system": "ascii",
+                 "expression": "⊥ → P"},
+                {"form_id": "entailment", "notation_system": "ascii",
+                 "expression": "false |- P",
+                 "scope_note": "Entailment form: from a contradiction every formula is derivable. Its skeleton LEQ(BOT, PROP) is the one that would twin exactly with settheory.order.empty_set_minimality; the deduction theorem is the step between the two forms"},
+                {"form_id": "disjunctive", "notation_system": "ascii",
+                 "expression": "(not false) or P = true",
+                 "scope_note": "Unfolding material implication: the antecedent's complement is TOP, and TOP dominates every join"},
+                {"form_id": "two_premise_rule", "notation_system": "ascii",
+                 "expression": "P ; not P |- Q",
+                 "scope_note": "The everyday explosion rule: a contradiction is assembled first, then anything at all is detached from it"},
+            ],
+            "meaning": "From falsehood, anything follows: a false antecedent places no "
+                       "constraint on the consequent, so the conditional holds whatever "
+                       "the consequent happens to say.",
+            "significance": "The forward half of the epistemic ladder's falsehood rung "
+                            "(docs/DESIGN-epistemic-ladder.md) made corpus-real. BOT was "
+                            "already present algebraically -- it is the right-hand side of "
+                            "logic.boolean_laws.complement_laws -- but until now nothing "
+                            "said what could be *done* with it; this node says it forwards "
+                            "and logic.inference.reductio_ad_absurdum says it backwards. "
+                            "It twins with nothing, and the near miss is the informative "
+                            "part: written in the entailment form the skeleton would be "
+                            "`LEQ⟨?0:P, ?1:V⟩`, matching settheory.order.empty_set_minimality "
+                            "character for character, because 'falsity entails everything' "
+                            "and 'the empty set is contained in everything' are one "
+                            "statement about the least element of a bounded lattice. The "
+                            "object-language IMPLIES form was authored instead because it "
+                            "is what the prover lane proves and what reductio inverts, and "
+                            "the honest consequence -- two heads, no group -- is recorded "
+                            "rather than dissolved by rewriting one side.",
+            "conditions": ["A consequence relation in which BOT is the least element",
+                           "An implication satisfying the deduction theorem, or an "
+                           "explicit BOT-elimination rule"],
+            "failure_modes": [
+                "Rejected by paraconsistent logics (LP, relevance logics) precisely so "
+                "that a single inconsistency does not trivialize a theory; this is the "
+                "law that makes an inconsistent knowledge base useless rather than merely "
+                "wrong, which is why a corpus that reasons over its own contents has a "
+                "practical stake in it.",
+                "Minimal logic keeps intuitionistic implication but drops BOT-elimination, "
+                "so explosion fails while the rest of the constructive apparatus survives; "
+                "'constructive' is therefore not the axis on which this law is contested.",
+                "The natural-language gloss 'a false premise proves anything' invites the "
+                "slide from validity to soundness: the schema says nothing about whether "
+                "the antecedent is ever satisfied, and in practice it never is.",
+            ],
+            "provenance": [PRINCIPIA, GENTZEN, HEYTING, ENDERTON_LOGIC, PRIEST],
+            "keywords": ["ex falso quodlibet", "explosion", "falsum", "bottom element",
+                         "paraconsistency"],
+            "ops": [IMPL, TURNSTILE, OR, NOT],
+            "constants": [FALSE_CONST, TRUE_CONST],
+        },
+    },
+    {
+        "name": "reductio_ad_absurdum",
+        "topic_id": "inference",
+        "archetype": "refutation_by_contradiction",
+        "cls": "theorem",
+        "status": "derived",
+        "template": TPL_REDUCTIO,
+        "entailed_by": ["complement_laws", "identity_laws"],
+        "invariants": [
+            "The only statement in either corpus with an implication as its own "
+            "antecedent, which is what makes this negation *introduction*: the "
+            "premise being consumed is itself a derivation.",
+            "The operand slot occurs twice, once inside the refuted conditional "
+            "and once under NEG, so the rule is fixed entirely by that reuse; "
+            "nothing else about the operand is used.",
+            "BOT appears in consequent position here and in antecedent position "
+            "in ex_falso_quodlibet, so the two nodes are one constant read in the "
+            "two available directions.",
+            "Intuitionistically valid as stated. The mirror image "
+            "IMPLIES(IMPLIES(NEG(a), BOT), a) is not: that is double negation "
+            "elimination in disguise, recorded on "
+            "logic.boolean_laws.double_negation rather than duplicated here.",
+            "Definitional where NEG(x) abbreviates IMPLIES(x, BOT), a theorem "
+            "where NEG is the primitive lattice complement -- as it is in this "
+            "corpus. Same line, two statuses, decided by which head is basic.",
+        ],
+        "logic": {
+            "title": "Reductio ad Absurdum (Negation Introduction)",
+            "ascii": "(P implies false) implies (not P)",
+            "latex": "(P \\to \\bot) \\to \\lnot P",
+            "forms": [
+                {"form_id": "unicode", "notation_system": "ascii",
+                 "expression": "(P → ⊥) → ¬P"},
+                {"form_id": "rule", "notation_system": "ascii",
+                 "expression": "P |- false ; therefore |- not P",
+                 "scope_note": "Natural-deduction negation introduction: the assumption P is discharged once it has yielded a contradiction"},
+                {"form_id": "definitional", "notation_system": "ascii",
+                 "expression": "not P = (P implies false)",
+                 "scope_note": "Intuitionistic presentations define NEG this way, which turns the law into an identity rather than a derivation"},
+                {"form_id": "classical", "notation_system": "ascii",
+                 "expression": "((not P) implies false) implies P",
+                 "scope_note": "The classical form, equivalent to double negation elimination and to excluded middle; NOT intuitionistically valid, and supplied in Lean by the explicit axiom Classical.byContradiction"},
+                {"form_id": "contradiction_pair", "notation_system": "ascii",
+                 "expression": "((P implies Q) and (P implies not Q)) implies not P",
+                 "scope_note": "The everyday two-premise form, where the contradiction is exhibited as a pair instead of as BOT"},
+            ],
+            "meaning": "If assuming a proposition drives you to falsehood, the "
+                       "proposition is refuted: a hypothesis that entails a contradiction "
+                       "is discharged as its own negation.",
+            "significance": "The backward half of the falsehood rung, and the corpus's "
+                            "point of maximum care about intuitionistic honesty. The "
+                            "direction stated here is constructively valid and is a "
+                            "primitive rule of intuitionistic natural deduction; the "
+                            "classical mirror image is the contested one, and the "
+                            "extraction in prover/sample_triples.json shows exactly that "
+                            "boundary being crossed by name -- `Classical.byContradiction` "
+                            "appears twice inside `not_forall_iff_exists_not`, which is why "
+                            "that theorem verifies logic.boolean_laws.de_morgan_laws and "
+                            "not this node. Structurally its nearest neighbour is "
+                            "logic.inference.modus_ponens: both have an IMPLIES root over "
+                            "an IMPLIES-headed antecedent, but modus ponens conjoins the "
+                            "antecedent where this drives it to BOT, so the skeletons "
+                            "differ and no group is reported. Operationally this is the "
+                            "closed form behind the ladder's REFUTED rung: deriving BOT "
+                            "along a branch is search, and this node is what licenses the "
+                            "discharge once the search succeeds.",
+            "conditions": ["An implication satisfying the deduction theorem, so the "
+                           "assumption can be discharged",
+                           "BOT available as an object-language proposition, not merely "
+                           "as a metatheoretic marker"],
+            "failure_modes": [
+                "Routinely conflated with the classical reductio ((not P) implies false) "
+                "implies P; only the stated direction is intuitionistically valid, which "
+                "is why proof assistants make the other an explicit axiom rather than a "
+                "tactic.",
+                "In paraconsistent settings deriving BOT no longer refutes the assumption, "
+                "since contradictions are tolerated: reductio and explosion stand or fall "
+                "together, and rejecting one to save inconsistent theories costs the other.",
+                "Informally, 'that leads to absurdity' is used for conclusions that are "
+                "merely implausible; the rule requires an actual contradiction, and the "
+                "slippage is where rhetorical reductio arguments fail.",
+            ],
+            "provenance": [GENTZEN, HEYTING, PRINCIPIA, ENDERTON_LOGIC, MATHLIB],
+            "keywords": ["reductio ad absurdum", "negation introduction",
+                         "proof by contradiction", "falsum", "intuitionistic logic"],
+            "ops": [IMPL, NOT, TURNSTILE],
+            "constants": [FALSE_CONST],
+        },
+    },
+    {
         "name": "subset_transitivity",
         "topic_id": "order",
         "archetype": "order_transitivity",
@@ -1162,6 +1429,87 @@ DISCIPLINE_ONLY_LAWS = [
             "keywords": ["transitivity", "subset", "partial order", "inclusion",
                          "lattice order"],
             "ops": [SUBSET, AND, IMPL],
+        },
+    },
+    {
+        "name": "empty_set_minimality",
+        "topic_id": "order",
+        "archetype": "least_element_minimality",
+        "cls": "theorem",
+        "status": "derived",
+        "template": TPL_BOTTOM_MINIMAL,
+        "entailed_by": ["identity_laws"],
+        "invariants": [
+            "One constant and one free operand, and the operand is never "
+            "inspected: BOT is below everything unconditionally, which is what "
+            "'least' means.",
+            "Equivalent to the domination law MEET(BOT, x) = BOT, so the content "
+            "is purely lattice-algebraic; the order form is merely the readable "
+            "one.",
+            "The order-theoretic transcription of ex falso quodlibet. LEQ is "
+            "realized as entailment in data/logic and as inclusion here, so "
+            "'falsity entails everything' and 'the empty set is contained in "
+            "everything' are one statement over two carriers.",
+            "Vacuous truth is the entire proof: the universally quantified "
+            "membership condition ranges over an empty domain, so it holds with "
+            "nothing to check.",
+            "Not an equation and not reversible, which places it structurally "
+            "with subset_transitivity rather than with the Boolean laws.",
+        ],
+        "set_theory": {
+            "title": "Minimality of the Empty Set",
+            "ascii": "emptyset subset A",
+            "latex": "\\emptyset \\subseteq A",
+            "forms": [
+                {"form_id": "unicode", "notation_system": "ascii",
+                 "expression": "∅ ⊆ A"},
+                {"form_id": "membership", "notation_system": "ascii",
+                 "expression": "forall x. (x in emptyset implies x in A)",
+                 "scope_note": "Unfolded to membership; vacuously true, because the antecedent is never satisfied"},
+                {"form_id": "lattice", "notation_system": "ascii",
+                 "expression": "emptyset inter A = emptyset",
+                 "scope_note": "Inclusion expressed through meet, which is how LEQ is defined in the template; this is the domination law"},
+                {"form_id": "bounded", "notation_system": "ascii",
+                 "expression": "emptyset subset A subset U",
+                 "scope_note": "Paired with the universe from the identity laws: the two bounds that make the powerset lattice bounded"},
+            ],
+            "meaning": "Every set contains the empty set: there is no element of the "
+                       "empty set that could fail to lie in A, so the inclusion holds "
+                       "with nothing to verify.",
+            "significance": "The set corpus's half of the epistemic ladder's falsehood "
+                            "rung, and deliberately the *order* form rather than a copy of "
+                            "logic.inference.ex_falso_quodlibet's template. Transcribing "
+                            "the object-language head IMPLIES into set theory would read "
+                            "`∅^c ∪ A = U` -- true in the powerset Boolean algebra, and no "
+                            "set theory is written that way; authoring it would have "
+                            "manufactured a twin rather than found one. The cost is stated "
+                            "instead of hidden: `LEQ⟨?0:P, ?1:V⟩` and `IMPLIES⟨?0:P, ?1:V⟩` "
+                            "differ at the head, so the matcher reports no group even "
+                            "though the two nodes are the same fact about the least element "
+                            "of a bounded lattice, one deduction theorem apart. Against its "
+                            "own corpus the contrast is with "
+                            "settheory.order.subset_transitivity: same LEQ head, but there "
+                            "every operand is free, while here the lower one is the fixed "
+                            "bottom element -- the P/V split, not the shape, is what "
+                            "separates them.",
+            "conditions": ["A is a set",
+                           "Inclusion defined extensionally by universally quantified "
+                           "membership"],
+            "failure_modes": [
+                "The vacuous-truth argument reads as a trick rather than a proof to most "
+                "beginners, and is the commonest place where quantification over an empty "
+                "domain gets rejected on intuitive grounds.",
+                "Inclusion is not membership: ∅ ⊆ A always, while ∅ ∈ A only if A was "
+                "built to contain it. Conflating the two is the standard error and the "
+                "reason {∅} ≠ ∅.",
+                "Proper inclusion fails at the single point A = ∅, since ∅ ⊂ ∅ is false, "
+                "so the statement does not transfer verbatim from ⊆ to ⊂.",
+            ],
+            "provenance": [HALMOS, ENDERTON_SETS, KUNEN, DAVEY_PRIESTLEY],
+            "keywords": ["empty set", "subset", "vacuous truth", "least element",
+                         "bounded lattice"],
+            "ops": [SUBSET, INTER, EQ],
+            "constants": [EMPTY_CONST],
         },
     },
     {
@@ -1370,6 +1718,9 @@ def build_node(discipline: str, spec: dict) -> dict:
         "provenance": content["provenance"],
         "keywords": content["keywords"],
     }
+    # The truth/provability bridge. Logic corpus only -- see VERIFIED_BY above.
+    if discipline == "logic" and spec["name"] in VERIFIED_BY:
+        node["verified_by"] = VERIFIED_BY[spec["name"]]
     return node
 
 
@@ -1380,6 +1731,7 @@ CORPUS_META = {
 
 
 def main() -> None:
+    artifact_note = check_verified_by()
     for discipline, (corpus_id, disc_field) in CORPUS_META.items():
         nodes = [build_node(discipline, spec) for spec in ALL_LAWS
                  if discipline in spec]
@@ -1394,7 +1746,10 @@ def main() -> None:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n",
                        encoding="utf-8")
-        print(f"wrote {len(nodes)} {discipline} nodes -> {out}")
+        bridged = sum(1 for n in nodes if "verified_by" in n)
+        print(f"wrote {len(nodes)} {discipline} nodes -> {out}"
+              + (f" ({bridged} carry verified_by)" if bridged else ""))
+    print(f"verified_by: {artifact_note}")
 
 
 if __name__ == "__main__":

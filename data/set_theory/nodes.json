@@ -818,7 +818,8 @@
           "settheory.boolean_laws.absorption",
           "settheory.boolean_laws.de_morgan_laws",
           "settheory.boolean_laws.double_negation",
-          "settheory.boolean_laws.idempotence"
+          "settheory.boolean_laws.idempotence",
+          "settheory.order.empty_set_minimality"
         ],
         "equivalent_to": [
           "logic.boolean_laws.identity_laws"
@@ -1374,6 +1375,174 @@
         "partial order",
         "inclusion",
         "lattice order"
+      ]
+    },
+    {
+      "statement_id": "settheory.order.empty_set_minimality",
+      "title": "Minimality of the Empty Set",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "set_theory"
+        ],
+        "subfield": "algebra_of_sets",
+        "topic": "inclusion_order",
+        "canonical_objects": [
+          "set",
+          "universe of discourse",
+          "powerset algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "emptyset subset A",
+        "canonical_latex": "\\emptyset \\subseteq A",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "∅ ⊆ A"
+          },
+          {
+            "form_id": "membership",
+            "notation_system": "ascii",
+            "expression": "forall x. (x in emptyset implies x in A)",
+            "scope_note": "Unfolded to membership; vacuously true, because the antecedent is never satisfied"
+          },
+          {
+            "form_id": "lattice",
+            "notation_system": "ascii",
+            "expression": "emptyset inter A = emptyset",
+            "scope_note": "Inclusion expressed through meet, which is how LEQ is defined in the template; this is the domination law"
+          },
+          {
+            "form_id": "bounded",
+            "notation_system": "ascii",
+            "expression": "emptyset subset A subset U",
+            "scope_note": "Paired with the universe from the identity laws: the two bounds that make the powerset lattice bounded"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "least_element_minimality",
+        "anonymized_template": "LEQ(EMPTYSET, SETA)",
+        "slot_schema": [
+          {
+            "slot_id": "EMPTYSET",
+            "syntactic_category": "constant",
+            "semantic_role": "bottom_element"
+          },
+          {
+            "slot_id": "SETA",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand"
+          }
+        ],
+        "invariants": [
+          "One constant and one free operand, and the operand is never inspected: BOT is below everything unconditionally, which is what 'least' means.",
+          "Equivalent to the domination law MEET(BOT, x) = BOT, so the content is purely lattice-algebraic; the order form is merely the readable one.",
+          "The order-theoretic transcription of ex falso quodlibet. LEQ is realized as entailment in data/logic and as inclusion here, so 'falsity entails everything' and 'the empty set is contained in everything' are one statement over two carriers.",
+          "Vacuous truth is the entire proof: the universally quantified membership condition ranges over an empty domain, so it holds with nothing to check.",
+          "Not an equation and not reversible, which places it structurally with subset_transitivity rather than with the Boolean laws."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "A",
+            "syntactic_category": "set",
+            "semantic_role": "set_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary subset of the ambient universe U."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "subset",
+            "name": "subset inclusion",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "inter",
+            "name": "set intersection",
+            "arity": 2,
+            "operator_family": "set_theoretic"
+          },
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic and as subset inclusion in data/set_theory.",
+            "codomain": "subsets of the universe U"
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "emptyset",
+            "description": "The empty set: the least element of the powerset lattice, contained in every set."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Every set contains the empty set: there is no element of the empty set that could fail to lie in A, so the inclusion holds with nothing to verify.",
+        "statistical_significance": "The set corpus's half of the epistemic ladder's falsehood rung, and deliberately the *order* form rather than a copy of logic.inference.ex_falso_quodlibet's template. Transcribing the object-language head IMPLIES into set theory would read `∅^c ∪ A = U` -- true in the powerset Boolean algebra, and no set theory is written that way; authoring it would have manufactured a twin rather than found one. The cost is stated instead of hidden: `LEQ⟨?0:P, ?1:V⟩` and `IMPLIES⟨?0:P, ?1:V⟩` differ at the head, so the matcher reports no group even though the two nodes are the same fact about the least element of a bounded lattice, one deduction theorem apart. Against its own corpus the contrast is with settheory.order.subset_transitivity: same LEQ head, but there every operand is free, while here the lower one is the fixed bottom element -- the P/V split, not the shape, is what separates them.",
+        "regularity_conditions": [
+          "A is a set",
+          "Inclusion defined extensionally by universally quantified membership"
+        ],
+        "failure_modes": [
+          "The vacuous-truth argument reads as a trick rather than a proof to most beginners, and is the commonest place where quantification over an empty domain gets rejected on intuitive grounds.",
+          "Inclusion is not membership: ∅ ⊆ A always, while ∅ ∈ A only if A was built to contain it. Conflating the two is the standard error and the reason {∅} ≠ ∅.",
+          "Proper inclusion fails at the single point A = ∅, since ∅ ⊂ ∅ is false, so the statement does not transfer verbatim from ⊆ to ⊂."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "settheory.boolean_laws.complement_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "halmos1960",
+          "bibliographic_entry": "Halmos, P. R. (1960). Naive Set Theory. Princeton: D. Van Nostrand."
+        },
+        {
+          "citation_key": "enderton1977",
+          "bibliographic_entry": "Enderton, H. B. (1977). Elements of Set Theory. New York: Academic Press."
+        },
+        {
+          "citation_key": "kunen1980",
+          "bibliographic_entry": "Kunen, K. (1980). Set Theory: An Introduction to Independence Proofs. Amsterdam: North-Holland."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "empty set",
+        "subset",
+        "vacuous truth",
+        "least element",
+        "bounded lattice"
       ]
     },
     {
