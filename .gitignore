@@ -33,3 +33,15 @@ htmlcov/
 /tmp/
 *.tmp
 *.bak
+
+# Local virtual environments (uv)
+.venv/
+
+# Worktrees for parallel subagent work
+.worktrees/
+
+# Experiment artifacts: generated datasets, model checkpoints, run logs
+experiments/data/
+experiments/data_smoke/
+experiments/results/*.pt
+experiments/*.log
