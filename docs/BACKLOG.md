@@ -352,6 +352,85 @@ or commit history. Each item names the evidence that motivated it.
   claim" from "same claim, drifting label", and this corpus deliberately
   produced both.
 
+- **A numeric literal in a multiplicative position, third and fourth
+  confirmations — and the specialization matcher already fixes half of it.**
+  docs/BACKLOG.md records `diffgeo.curves.circle_curvature` (`1 / RADIUS`)
+  being kept out of the rate/density family by a literal `1`. The
+  numerical-analysis and graph-theory corpora hit the same wall twice more,
+  from the other side: `graphtheory.degree.average_degree_from_edge_count`
+  (`?0:V = *(2, ?1:V, inv(?2:V))`) versus the seven-member rate family
+  (`?0:V = *(?1:V, inv(?2:V))`), and
+  `numanalysis.rootfinding.bisection_interval_halving`
+  (`?0:V = *(?1:V, inv(2))`) versus the same family with the literal in the
+  denominator. The new information is that `specialize.py` **does** recover the
+  first one — `calculus.differentiation.average_rate_of_change >=
+  average_degree_from_edge_count` via absorption, binding
+  `QUANTITY -> *(2, EDGES)`, and likewise from molarity — so the relation is
+  reachable, just not as a twin. That is now a repeatable pattern worth naming
+  in its own right (a twin-level miss recovered one level down, first recorded
+  for the ML state-space update), and it argues the wanted "numeric literal may
+  bind a parameter-like slot" match level should be specified as a *twin*
+  level, since the specialization level already covers the case where the
+  literal can be absorbed into a variable slot but not the case where it must
+  bind a parameter slot (bisection).
+- **`decompose.py` sees three relations the twin matcher structurally cannot,
+  and the pattern is predictable.** All three come from one cause: decompose
+  compares *expression sides*, so it is blind to the relation symbol and to
+  slot recurrence across the relation. Instances from this seeding pass:
+  1. `numanalysis.floatingpoint.machine_epsilon_bound`
+     (`ROUNDOFF <= UNITROUNDOFF*EXACT`) is a whole-statement singleton purely
+     because of the `<=`; decompose reports its right side as `*(?0:P, ?1:V)`,
+     the expression side of Ohm's law, Newton's second law and circle
+     circumference, recurring in 35 statements. Every error bound anyone adds
+     will be isolated at twin level and connected at decomposition level.
+  2. `numanalysis.rootfinding.fixed_point_iteration`
+     (`?0:V = SELFMAP⟨?1:V⟩`) does not twin
+     `difftop.degree.brouwer_fixed_point` (`?0:V = SELFMAP⟨?0:V⟩`) because of
+     slot recurrence — but decompose reports its expression side as *being*
+     Brouwer's expression side, since on one side of the relation the
+     recurrence is invisible. The two tools disagree, both correctly, about
+     the same pair.
+  3. `numanalysis.rootfinding.newton_iteration` misses the whole
+     iteration/update family over one `inv` node, and decompose finds its
+     correction term `*(?0:V, inv(?1:V))` is the rate/density family's
+     expression side (11 statements) — i.e. a Newton correction is a rate.
+  Proposal: rather than three more match levels, have `match_signatures.py`
+  cross-reference `decompose.py`'s side-forms and report "singleton at every
+  level, but its expression side is a known form shared with N statements" as
+  a fourth report section. It costs nothing new and it would have caught all
+  three of these automatically.
+- **Head literalism: the two-argument opaque-composition count reaches seven,
+  two of them added in one pass.** `?0 = HEAD⟨?1, ?2⟩` is now carried by
+  `morphology.wordformation.affixation` (CONCAT),
+  `morphology.inflection.paradigm_realization` (REALIZE),
+  `infotheory.channel.channel_capacity` (CAPMAX),
+  `geotop.predicates.de9im_disjoint` (MEET),
+  `ml.recurrence.belief_state_update` (UPDATE),
+  `graphtheory.walks.adjacency_power_walk_count` (MATRIXPOWER) and
+  `geomodel.surfaces.surface_normal_cross_product` (CROSS). Seven nodes, seven
+  heads, zero groups at any level. The two new ones sharpen the diagnosis: both
+  exist *because `*` is hardcoded commutative*. MATRIXPOWER cannot use `^`
+  because matrix multiplication does not commute; CROSS cannot use `*` because
+  it ANTI-commutes. This is the same root cause as
+  `ml.recurrence.mlstm_matrix_memory_update`'s OUTER, and it means the
+  per-head associativity/commutativity table already requested for CONCAT is
+  now blocking four nodes in three corpora, not one. CROSS additionally needs
+  a value the table cannot currently express (antisymmetric), and the cost is
+  concrete: the cross product's magnitude is a rectangle area, and
+  `?0:V = *(?1:V, ?2:V)` is a three-discipline group in the same graph.
+- **Two inequalities, opposite in kind, indistinguishable to the matcher.**
+  `numanalysis.floatingpoint.machine_epsilon_bound` (never attained, a
+  guarantee) and `graphtheory.planarity.planar_edge_bound` (attained by every
+  maximal planar graph, an extremal identity in disguise) are both singletons
+  for the same mechanical reason — the relation symbol is part of the skeleton
+  — and the graph has no way to say that the second is an equality on a
+  subfamily while the first is not. Related to but distinct from the
+  `geotop.measure.area_monotonicity` entry above: that one is isolated for
+  being the only *nested* relation, these two for being non-`=` at top level.
+  Wanted: a flag or slot-schema note distinguishing tight/attained bounds from
+  loose ones, so an extremal statement can eventually be related to the
+  equality case it saturates.
+
 ## Schema
 
 - **`symbolToken.syntactic_category` lacks `functional`/`operator`** (unlike
@@ -453,6 +532,63 @@ or commit history. Each item names the evidence that motivated it.
   papers (LoRA, PiSSA, LoftQ) share one skeleton and differ only in how the
   same slots are initialized, so skeleton count understates the corpus's
   content in a way that is invisible from the reports.
+
+- **`specialize.py` plain-binding suppression, fifth instance, same target node
+  as the first.** `geotop.polyhedra.euler_polyhedron_formula`
+  (`VERTICES - EDGES + FACES = 2`) covers
+  `graphtheory.trees.tree_edge_count` (`EDGES = VERTICES - 1`) by binding
+  `FACES -> 1`: a plane tree has exactly one face. Plain slot-to-literal
+  binding, no absorption, no identity, so the filter drops it — exactly as
+  recorded for `algtop.invariants.euler_characteristic_complex` covering the
+  *same* polyhedron-formula node, for DE-9IM disjointness covering the
+  complement law, and for surprisal covering the DPO loss. That node is now
+  the target of two suppressed specializations from two different corpora,
+  which makes it the natural regression test for the proposed fix (report
+  matches whose bindings are non-trivial even when neither absorption nor
+  identity fired).
+- **The corpus gap is now measurable: two twin groups are blocked by one
+  missing node.** `data/statistics` carries the law of total probability,
+  Bayes's rule, z-standardization and the CLT, but **not** the normalization
+  axiom `sum_i p_i = 1` and **not** a two-component mixture
+  `p = (1-w)*p_0 + w*p_1`. Consequently
+  `geomodel.barycentric.barycentric_partition_of_unity` (`1 = sum⟨?0:P⟩`) is a
+  singleton whose exact structural twin is a one-line addition away, and
+  prediction 2 of `scripts/seed_numgraph.py` ("linear interpolation versus
+  probability mixtures") could not be evaluated at all — there was nothing to
+  compare against, which is a different outcome from a miss and was reported
+  as such. Both would be fixed by two nodes in `data/statistics`. That corpus
+  still has no seed script (recorded above under cross-corpus reciprocity),
+  so the cheapest fix to the graph's connectivity is currently the one that
+  requires hand-editing the one file nobody can regenerate.
+- **Same statement, two spellings, and only one of them matches — now
+  quantified.** `numanalysis.integration.trapezoidal_rule` twins
+  `geometry.area_formulas.trapezoid_area_formula` at typed level *because it
+  was written with the one-half as a `constant` slot*; the textbook spelling
+  `h*(f(a)+f(b))/2` produces `*(?1:P, +(?2:V, ?3:V), inv(2))` and matches
+  nothing. Same for `numanalysis.interpolation.linear_interpolation`, where
+  the expanded form `START + PARAM*(FINISH - START)` would have joined the
+  five-member affine family and the written form
+  `(1-PARAM)*START + PARAM*FINISH` joins nothing (the parameter slot recurs).
+  In both cases the two spellings are algebraically identical, one fires and
+  one does not, and the choice is the author's. This is the
+  `authored_to_match` versus `emergent` distinction already requested for twin
+  groups, seen from the authoring side: the corpus needs a way to record
+  "these two templates are the same statement" so that a *normalizer* could
+  eventually choose the canonical spelling, rather than relying on the author
+  having already known which one fires. Without it, twin counts measure
+  authoring luck as much as mathematical structure.
+- **A `weighted_accumulation` archetype label was minted rather than adopted,
+  deliberately, and the lint cannot tell.** `?0 = sum⟨*(?1, ?2)⟩` now spans
+  three labels — `alternating_rank_sum` (topology),
+  `conditional_marginalization` (statistics) and `weighted_accumulation`
+  (both new geometric-modeling nodes). Neither existing label could honestly
+  cover a Bezier point or a barycentric combination, and the new label could
+  not honestly replace them either, so the drift entry is correct and
+  unfixable by renaming. Same situation the ML corpus recorded for
+  `state_minus_scaled_correction`. The pattern is stable enough now to
+  propose the fix concretely: let `archetype_id` be a list, or add an
+  `archetype_family` field, so a node can say "my label is X, my structural
+  family is Y" and the lint can check the second while leaving the first free.
 
 ## Experiments
 

@@ -1,0 +1,1423 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "numerical_analysis.computation_and_error.v1",
+  "discipline": "numerical_analysis",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "numanalysis.rootfinding.newton_iteration",
+      "title": "Newton-Raphson Iteration Step",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "root_finding",
+        "topic": "iteration",
+        "canonical_objects": [
+          "iterate",
+          "residual",
+          "derivative"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "x_(n+1) = x_n - f(x_n)/f'(x_n)",
+        "canonical_latex": "x_{n+1} = x_n - \\frac{f(x_n)}{f'(x_n)}",
+        "equivalent_forms": [
+          {
+            "form_id": "correction",
+            "notation_system": "ascii",
+            "expression": "x_(n+1) = x_n + delta_n,  f'(x_n)*delta_n = -f(x_n)",
+            "scope_note": "Split into the linear solve and the update; this is the form that generalizes to systems, where the division becomes a Jacobian solve"
+          },
+          {
+            "form_id": "multivariate",
+            "notation_system": "matrix_notation",
+            "expression": "x_(n+1) = x_n - J(x_n)^(-1) * F(x_n)",
+            "scope_note": "Vector form; the reciprocal derivative becomes an inverse Jacobian, which is why the scalar `/` in the template is the honest scalar case only"
+          },
+          {
+            "form_id": "as_fixed_point",
+            "notation_system": "ascii",
+            "expression": "x_(n+1) = g(x_n),  g(x) = x - f(x)/f'(x)",
+            "scope_note": "Newton exhibited as fixed-point iteration; g'(root) = 0 is exactly why convergence is quadratic rather than linear"
+          },
+          {
+            "form_id": "secant",
+            "notation_system": "ascii",
+            "expression": "x_(n+1) = x_n - f(x_n)*(x_n - x_(n-1))/(f(x_n) - f(x_(n-1)))",
+            "scope_note": "The secant method: the same step with the derivative replaced by a difference quotient"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "state_minus_ratio_correction",
+        "anonymized_template": "XNEXT = X - FVALUE/FDERIV",
+        "slot_schema": [
+          {
+            "slot_id": "XNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "updated_iterate"
+          },
+          {
+            "slot_id": "X",
+            "syntactic_category": "variable",
+            "semantic_role": "current_iterate"
+          },
+          {
+            "slot_id": "FVALUE",
+            "syntactic_category": "variable",
+            "semantic_role": "residual_at_iterate"
+          },
+          {
+            "slot_id": "FDERIV",
+            "syntactic_category": "variable",
+            "semantic_role": "derivative_at_iterate"
+          }
+        ],
+        "invariants": [
+          "The correction is a RATIO, not a product. That single structural fact is the difference between this node and every other update step in the graph: gradient descent, Euler's method and the state-space recurrence all correct by a parameter times a variable, and Newton corrects by a variable divided by a variable.",
+          "Because the correction is a ratio of two quantities that both scale with f, the step is invariant under rescaling the function: replace f by c*f and the iteration is unchanged. No other node in the update family has that property, and it is what removes the step-size parameter every other method needs.",
+          "All four slots are variable-like. There is no tuning parameter at all, which is the method's entire selling point and also the source of its fragility: nothing can be turned down when it diverges.",
+          "The template is one step. Quadratic convergence is a property of the iterated map's derivative at the root, invisible here, and recorded in the significance and failure-mode fields instead."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x_n",
+            "syntactic_category": "variable",
+            "semantic_role": "current_iterate",
+            "mathematical_order": 0,
+            "description": "The n-th approximation to a root."
+          },
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "residual_at_iterate",
+            "mathematical_order": 0,
+            "description": "Value of the function whose root is sought, at the current iterate."
+          },
+          {
+            "symbol": "fprime",
+            "syntactic_category": "variable",
+            "semantic_role": "derivative_at_iterate",
+            "mathematical_order": 0,
+            "description": "Derivative of that function at the current iterate."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "index",
+            "semantic_role": "iteration_index",
+            "mathematical_order": 0,
+            "description": "Iteration counter."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Replace the current guess by the root of the tangent line drawn at the current guess: linearize, solve exactly, repeat.",
+        "statistical_significance": "Prediction 1 said Newton and Euler would meet gradient descent as one iteration/update family. Newton MISSED at shape, typed and family level, and the miss is correct rather than a tooling gap. Its skeleton is `?0:V = +(?1:V, neg(*(?2:V, inv(?3:V))))`; gradient descent's is `?0:V = +(?1:V, neg(*(?2:P, ?3:V)))`. The `inv` node is not decoration -- it is the second-order information. A gradient step multiplies the residual by a number someone chose; a Newton step divides it by a number the problem supplied. Everything that distinguishes the two methods (scale invariance, quadratic versus linear convergence, no learning rate to tune) follows from that one `inv`, so a matcher that grouped them would be hiding the finding rather than making it. Recorded as the corpus's clearest example of a registered prediction that deserved to fail.",
+        "regularity_conditions": [
+          "f differentiable in a neighbourhood of the root",
+          "f'(x_n) nonzero at every iterate",
+          "An initial guess in the basin of attraction of the sought root",
+          "A simple root, if quadratic convergence is wanted"
+        ],
+        "failure_modes": [
+          "A zero or near-zero derivative makes the step unbounded; the equation is silent about it because division by zero is a fact about the arithmetic, not about the statement.",
+          "At a multiple root convergence degrades from quadratic to linear, and the residual stops being a usable stopping test.",
+          "Basins of attraction for polynomials of degree three or more are fractal, so 'a good enough initial guess' is not a neighbourhood condition that can be checked cheaply.",
+          "The scalar `/` in the template hides that the multivariate step is a linear SOLVE, not an inverse-and-multiply; forming J^(-1) explicitly is the classic way to make a correct method numerically useless."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "numanalysis.rootfinding.fixed_point_iteration"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "numanalysis.rootfinding.bisection_interval_halving",
+          "numanalysis.error.relative_condition_number"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "newton1669",
+          "bibliographic_entry": "Newton, I. (1669, published 1711). De analysi per aequationes numero terminorum infinitas. London: William Jones."
+        },
+        {
+          "citation_key": "raphson1690",
+          "bibliographic_entry": "Raphson, J. (1690). Analysis aequationum universalis, seu ad aequationes algebraicas resolvendas methodus generalis et expedita. London: Thomas Braddyll."
+        },
+        {
+          "citation_key": "simpson1740",
+          "bibliographic_entry": "Simpson, T. (1740). Essays on Several Curious and Useful Subjects in Speculative and Mix'd Mathematicks. London: H. Woodfall."
+        },
+        {
+          "citation_key": "ypma1995",
+          "bibliographic_entry": "Ypma, T. J. (1995). Historical Development of the Newton-Raphson Method. SIAM Review, 37(4), 531-551.",
+          "url": "https://doi.org/10.1137/1037125"
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "Newton's method",
+        "Newton-Raphson",
+        "root finding",
+        "quadratic convergence",
+        "tangent line",
+        "secant method"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.rootfinding.fixed_point_iteration",
+      "title": "Fixed-Point Iteration",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "root_finding",
+        "topic": "iteration",
+        "canonical_objects": [
+          "iteration map",
+          "fixed point",
+          "bracketing interval"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "x_(n+1) = g(x_n)",
+        "canonical_latex": "x_{n+1} = g(x_n)",
+        "equivalent_forms": [
+          {
+            "form_id": "fixed_point_condition",
+            "notation_system": "ascii",
+            "expression": "g(xstar) = xstar",
+            "scope_note": "The limit's defining property: what the iteration converges TO, which is difftop.degree.brouwer_fixed_point's statement rather than this one"
+          },
+          {
+            "form_id": "contraction_bound",
+            "notation_system": "ascii",
+            "expression": "|x_(n+1) - xstar| <= L * |x_n - xstar|",
+            "scope_note": "Banach's estimate with Lipschitz constant L < 1; linear convergence at rate L"
+          },
+          {
+            "form_id": "root_form",
+            "notation_system": "ascii",
+            "expression": "g(x) = x - f(x)/f'(x)",
+            "scope_note": "The choice of g that makes this Newton's method; other choices give the chord method, Steffensen's method, and so on"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "opaque_unary_state_map",
+        "anonymized_template": "XNEXT = SELFMAP(X)",
+        "slot_schema": [
+          {
+            "slot_id": "XNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_iterate"
+          },
+          {
+            "slot_id": "X",
+            "syntactic_category": "variable",
+            "semantic_role": "current_iterate"
+          },
+          {
+            "slot_id": "SELFMAP",
+            "syntactic_category": "functional",
+            "semantic_role": "iteration_map"
+          }
+        ],
+        "invariants": [
+          "The head is deliberately `SELFMAP`, the head difftop.degree.brouwer_fixed_point uses, because g really is a self-map of the bracketing interval and adopting an existing vocabulary is the graph's only cross-corpus channel (docs/BACKLOG.md). The adoption is honest and it still does not produce a twin -- see the significance field.",
+          "Every root-finding method in this corpus is an instance: choosing g is choosing a method. Newton, the secant method, the chord method and Jacobi/Gauss-Seidel splitting all differ only in which g is substituted here.",
+          "Both slots are variable-like and the map is opaque, so the template carries no rate information at all. The contraction constant that decides whether the iteration converges lives in regularity_conditions, which is where a quarter of the graph's theorems already keep their real content.",
+          "The statement is one step of a recurrence. That the sequence has a limit, and that the limit is a fixed point, are separate claims requiring completeness and continuity respectively."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x_n",
+            "syntactic_category": "variable",
+            "semantic_role": "current_iterate",
+            "mathematical_order": 0,
+            "description": "The n-th iterate of the sequence."
+          },
+          {
+            "symbol": "xstar",
+            "syntactic_category": "variable",
+            "semantic_role": "next_iterate",
+            "mathematical_order": 0,
+            "description": "The successor iterate; in the limit, the fixed point itself."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "index",
+            "semantic_role": "iteration_index",
+            "mathematical_order": 0,
+            "description": "Iteration counter."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SELFMAP(.)",
+            "name": "iteration map",
+            "input_arity": 1,
+            "codomain": "the same interval as its domain",
+            "description": "The map g whose fixed points are the sought roots, and which sends the bracketing interval into itself. The head is deliberately the one difftop.degree.brouwer_fixed_point uses, because it is the same kind of object -- a self-map of a set -- and adopting the vocabulary is the graph's only cross-corpus channel. It does not produce a twin: Brouwer says SELFMAP(x) = x (one slot twice), this node says x_next = SELFMAP(x) (two slots)."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Iterating a map that sends an interval into itself: the next approximation is whatever the map returns on the current one.",
+        "statistical_significance": "A deliberately constructed instance of docs/BACKLOG.md's wanted match level, 'slot recurrence, not slot shape'. This node adopts Brouwer's `SELFMAP` head on purpose, so the two skeletons differ in exactly one respect: `difftop.degree.brouwer_fixed_point` is `?0:V = SELFMAP⟨?0:V⟩` -- one slot, occurring twice -- and this node is `?0:V = SELFMAP⟨?1:V⟩` -- two slots. They do not twin at shape, typed or family level. And they should not: the difference between one slot and two IS the difference between the fixed-point property and the fixed-point iteration, between 'x is unmoved by g' and 'apply g to get the next x'. What the backlog wants is not for these to be merged but for the graph to be able to ASK 'which templates have a slot occurring on both sides of the relation', a query that would collect Brouwer, double negation, idempotence and the FTC, and would correctly exclude this node. Recorded because it is the cheapest available control case: same head, same arity, different slot recurrence, authored on purpose.",
+        "regularity_conditions": [
+          "g maps a closed interval into itself",
+          "g Lipschitz with constant strictly less than one, for Banach's guarantee of a unique fixed point and linear convergence",
+          "A starting point inside that interval",
+          "Completeness of the underlying space"
+        ],
+        "failure_modes": [
+          "A Lipschitz constant at or above one makes the iteration diverge or cycle; the template cannot express the constant, so nothing in the structure warns of it.",
+          "A fixed point can exist without the iteration finding it: Brouwer guarantees existence on a convex compact set with no contraction assumption, and the iteration then has no reason to converge.",
+          "Reading `SELFMAP` as 'the function whose root we want' is wrong by one algebraic step -- the roots of f are the fixed points of g, and constructing g from f is where the method is chosen."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "numanalysis.rootfinding.newton_iteration"
+        ],
+        "composed_with": [
+          "difftop.degree.brouwer_fixed_point",
+          "numanalysis.rootfinding.bisection_interval_halving"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "banach1922",
+          "bibliographic_entry": "Banach, S. (1922). Sur les operations dans les ensembles abstraits et leur application aux equations integrales. Fundamenta Mathematicae, 3, 133-181.",
+          "url": "https://doi.org/10.4064/fm-3-1-133-181"
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        },
+        {
+          "citation_key": "higham2002",
+          "bibliographic_entry": "Higham, N. J. (2002). Accuracy and Stability of Numerical Algorithms (2nd ed.). Philadelphia: SIAM."
+        }
+      ],
+      "keywords": [
+        "fixed-point iteration",
+        "contraction mapping",
+        "Banach",
+        "self-map",
+        "linear convergence",
+        "slot recurrence"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.rootfinding.bisection_interval_halving",
+      "title": "Bisection Interval Halving",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "root_finding",
+        "topic": "bracketing",
+        "canonical_objects": [
+          "bracketing interval",
+          "midpoint",
+          "sign change"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "w_(n+1) = w_n / 2",
+        "canonical_latex": "w_{n+1} = \\frac{w_n}{2}",
+        "equivalent_forms": [
+          {
+            "form_id": "closed_form",
+            "notation_system": "ascii",
+            "expression": "w_n = w_0 / 2^n",
+            "scope_note": "The solved recurrence; this form exposes the geometric decay, and it is a different statement from the one-step template"
+          },
+          {
+            "form_id": "error_bound",
+            "notation_system": "ascii",
+            "expression": "|x_n - xstar| <= w_0 / 2^(n+1)",
+            "scope_note": "The guarantee: the midpoint is within half the current bracket of the root, unconditionally"
+          },
+          {
+            "form_id": "iterations_needed",
+            "notation_system": "ascii",
+            "expression": "n >= LOG(w_0/tol)/LOG(2)",
+            "scope_note": "Inverting the bound: the iteration count is known in advance, which no other method in this corpus can say"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "halving_recurrence",
+        "anonymized_template": "WIDTHNEXT = WIDTH/2",
+        "slot_schema": [
+          {
+            "slot_id": "WIDTHNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_bracket_width"
+          },
+          {
+            "slot_id": "WIDTH",
+            "syntactic_category": "variable",
+            "semantic_role": "current_bracket_width"
+          }
+        ],
+        "invariants": [
+          "The smallest non-trivial update in the three corpora: one variable, one literal. It carries no parameter at all, which is why the convergence rate is fixed in advance and identical on every problem.",
+          "Written as the one-step recurrence rather than as the closed form w_0/2^n on purpose. The closed form belongs to the exponential-decay family (cousin to first-order kinetics and continuous discounting); the one-step form does not. Both are honest statements of different things, and the corpus keeps the recurrence in the template with the closed form as an equivalent variant, because bisection is specified as a loop, not as a formula.",
+          "The literal 2 is the bisection: replacing it with a slot would be the false-position or golden-section method, and those have different guarantees. So the literal is structure, not an unparameterized constant.",
+          "The width recurrence is unconditional. Unlike every other node in this corpus, no smoothness, no derivative and no basin of attraction is required -- only a sign change at the endpoints."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "w_n",
+            "syntactic_category": "variable",
+            "semantic_role": "current_bracket_width",
+            "mathematical_order": 0,
+            "description": "Width of the bracketing interval after n halvings."
+          },
+          {
+            "symbol": "n",
+            "syntactic_category": "index",
+            "semantic_role": "iteration_index",
+            "mathematical_order": 0,
+            "description": "Iteration counter."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Each step of bisection halves the interval known to contain a root, so the uncertainty about the root's location is cut in half per function evaluation.",
+        "statistical_significance": "Authored honestly rather than baited into the exponential family, and the outcome is a singleton: `?0:V = *(?1:V, inv(2))` matches nothing at shape, typed or family level. Two near misses are worth naming. Against the rate/density family `?0:V = *(?1:V, inv(?2:V))` -- seven members including this corpus's own condition number -- the only difference is that the denominator is the literal 2 rather than a slot, which is character for character the blocker docs/BACKLOG.md records for `diffgeo.curves.circle_curvature` (a literal 1 in the numerator) and which these corpora hit a second time in `graphtheory.degree.average_degree_from_edge_count`. Against `chemistry.kinetics.half_life_first_order` the relationship is semantic and exact -- a half-life IS the time for a halving -- but the two statements are written from opposite sides (one asks how much remains after a step, the other how long a halving takes), so no match is available. Three independent corpora now want the same 'numeric literal may bind a parameter-like slot' match level.",
+        "regularity_conditions": [
+          "A continuous function with a sign change across the initial bracket",
+          "Exact arithmetic on the midpoint, or a midpoint formula that cannot fall outside the bracket in floating point",
+          "The bracket, not the iterate, is what the recurrence describes"
+        ],
+        "failure_modes": [
+          "Guaranteed but slow: one bit of accuracy per function evaluation, so the method that never fails is also the one no one uses alone.",
+          "A sign change is not a root -- a pole with a sign change satisfies the hypothesis and the method converges confidently to the singularity.",
+          "Even-multiplicity roots produce no sign change and are invisible to the bracket, so the method cannot find them at all.",
+          "Computing the midpoint as (a+b)/2 can overflow or fall outside [a,b] in floating point; a + (b-a)/2 is the form that preserves the invariant this node states."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numanalysis.rootfinding.newton_iteration",
+          "numanalysis.rootfinding.fixed_point_iteration"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "bolzano1817",
+          "bibliographic_entry": "Bolzano, B. (1817). Rein analytischer Beweis des Lehrsatzes, dass zwischen je zwey Werthen, die ein entgegengesetztes Resultat gewaehren, wenigstens eine reelle Wurzel der Gleichung liege. Prague: Gottlieb Haase."
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        },
+        {
+          "citation_key": "higham2002",
+          "bibliographic_entry": "Higham, N. J. (2002). Accuracy and Stability of Numerical Algorithms (2nd ed.). Philadelphia: SIAM."
+        }
+      ],
+      "keywords": [
+        "bisection",
+        "bracketing",
+        "interval halving",
+        "intermediate value theorem",
+        "guaranteed convergence"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.integration.trapezoidal_rule",
+      "title": "Trapezoidal Rule (Single Panel)",
+      "statement_class": "approximation",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "quadrature",
+        "topic": "newton_cotes",
+        "canonical_objects": [
+          "panel",
+          "endpoint sample",
+          "quadrature estimate"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "I = (1/2) * (f(a) + f(b)) * h,  h = b - a",
+        "canonical_latex": "I \\approx \\tfrac{1}{2}\\left(f(a) + f(b)\\right) h, \\qquad h = b - a",
+        "equivalent_forms": [
+          {
+            "form_id": "step_over_two",
+            "notation_system": "ascii",
+            "expression": "I = h*(f(a) + f(b))/2",
+            "scope_note": "The spelling every textbook uses. Structurally different: it produces `*(?1:P, +(?2:V, ?3:V), inv(2))`, with the half as a literal, and matches nothing"
+          },
+          {
+            "form_id": "mean_times_width",
+            "notation_system": "ascii",
+            "expression": "I = MEAN(f(a), f(b)) * h",
+            "scope_note": "Read as average height times width -- the mean-value reading, and the reason the rule is exact for affine integrands"
+          },
+          {
+            "form_id": "composite",
+            "notation_system": "ascii",
+            "expression": "I = h*(f(x_0)/2 + f(x_1) + ... + f(x_(n-1)) + f(x_n)/2)",
+            "scope_note": "The composite rule over n equal subintervals; interior samples are shared between neighbouring trapezoids and so carry weight one"
+          },
+          {
+            "form_id": "error_term",
+            "notation_system": "ascii",
+            "expression": "E = -(h^3/12) * fsecond(xi),  xi in (a,b)",
+            "scope_note": "Euler-Maclaurin remainder for one panel; the h^3 is what makes the composite rule second-order accurate"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "scaled_sum_product",
+        "anonymized_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
+        "slot_schema": [
+          {
+            "slot_id": "AREA",
+            "syntactic_category": "variable",
+            "semantic_role": "approximated_integral"
+          },
+          {
+            "slot_id": "CONSTANT",
+            "syntactic_category": "constant",
+            "semantic_role": "one_half"
+          },
+          {
+            "slot_id": "VALUELEFT",
+            "syntactic_category": "variable",
+            "semantic_role": "left_sample"
+          },
+          {
+            "slot_id": "VALUERIGHT",
+            "syntactic_category": "variable",
+            "semantic_role": "right_sample"
+          },
+          {
+            "slot_id": "STEPWIDTH",
+            "syntactic_category": "variable",
+            "semantic_role": "panel_width"
+          }
+        ],
+        "invariants": [
+          "Authored in geometry.area_formulas.trapezoid_area_formula's own shape, with the one-half as a `constant` slot rather than a literal `/2`. That is not a disguise: the trapezoidal rule computes exactly the area of a trapezoid whose parallel sides are the two sampled function values and whose width is the step. Same statement, therefore same template. The textbook `/2` spelling is kept as an equivalent form and produces a skeleton that matches nothing.",
+          "The two samples are variable-like and enter symmetrically; the commutative `+` of the grammar tells no lie here, since swapping the endpoints of the panel does not change the estimate.",
+          "The step width is variable-like rather than parameter-like because in the single-panel statement it IS the trapezoid's height -- a geometric extent of the problem. In the composite rule it becomes a tuning parameter, which is a different statement and would be a different slot category.",
+          "The rule is exact for affine integrands and in general for nothing else, which is the same fact as: a trapezoid is the region under a straight line."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "I",
+            "syntactic_category": "variable",
+            "semantic_role": "approximated_integral",
+            "mathematical_order": 0,
+            "description": "Estimate of the integral over one panel."
+          },
+          {
+            "symbol": "f_a",
+            "syntactic_category": "variable",
+            "semantic_role": "left_sample",
+            "mathematical_order": 0,
+            "description": "Integrand evaluated at the left endpoint."
+          },
+          {
+            "symbol": "f_b",
+            "syntactic_category": "variable",
+            "semantic_role": "right_sample",
+            "mathematical_order": 0,
+            "description": "Integrand evaluated at the right endpoint."
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "panel_width",
+            "mathematical_order": 0,
+            "description": "Width of the panel, b - a."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1/2",
+            "value": 0.5,
+            "description": "The one-half of the trapezoid. Carried as a constant slot rather than as a literal `/2` so that the template is the same string as geometry.area_formulas.trapezoid_area_formula's -- which is not a trick, because the two statements are the same statement. The `/2` spelling is kept as an equivalent form and is what produces the non-matching skeleton `*(?1:P, +(?2:V, ?3:V), inv(2))`."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Approximate the area under a curve on one interval by the area of the trapezoid through the two endpoint samples.",
+        "statistical_significance": "The sharpest 'the numerical method IS the elementary formula' result in the three corpora, and it fires at TYPED level, character for character: `?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))`, shared with geometry.area_formulas.trapezoid_area_formula. A quadrature rule from Cotes and a mensuration formula from antiquity are one statement, and the matcher says so. Two caveats keep the claim honest. First, this is an `authored_to_match` twin in docs/BACKLOG.md's sense: the one-half is written as a constant slot because geometry writes it that way, and the textbook `h*(f(a)+f(b))/2` would not have fired. The defence is that the two statements really are the same statement, so adopting the notation is translation rather than disguise -- the same defence diffgeo.stokes.stokes_zero_form_case makes. Second, the twin is with the ONE-PANEL rule; the composite rule is a weighted sum with halved endpoint weights and belongs instead to the `sum⟨*(?1:P, ?2:V)⟩` family that this seeding pass grows to four members elsewhere.",
+        "regularity_conditions": [
+          "Integrand defined and finite at both endpoints",
+          "A single panel; the composite rule is a different statement",
+          "Twice-differentiable integrand, if the h^3/12 error term is wanted",
+          "Exactness holds for affine integrands and, by symmetry, for odd perturbations about the midpoint"
+        ],
+        "failure_modes": [
+          "Applying it to an integrand with an endpoint singularity gives a finite answer for an infinite integral, silently.",
+          "The composite rule's second-order accuracy becomes spectral accuracy for smooth periodic integrands over a full period -- so its reputation as a crude method is wrong in precisely the case where it is most often used.",
+          "The error term's sign is fixed by the second derivative's sign, so for convex integrands the rule always OVERestimates; averaging it with the midpoint rule (which always underestimates) is Simpson's rule, and that structure is invisible here."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "geometry.area_formulas.trapezoid_area_formula",
+          "numanalysis.interpolation.linear_interpolation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "cotes1722",
+          "bibliographic_entry": "Cotes, R. (1722). Harmonia mensurarum, sive analysis et synthesis per rationum et angulorum mensuras promotae. Cambridge: Robert Smith (posthumous)."
+        },
+        {
+          "citation_key": "davis1984",
+          "bibliographic_entry": "Davis, P. J., Rabinowitz, P. (1984). Methods of Numerical Integration (2nd ed.). Orlando: Academic Press."
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "trapezoidal rule",
+        "quadrature",
+        "Newton-Cotes",
+        "numerical integration",
+        "trapezoid area",
+        "Euler-Maclaurin"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.ode.euler_method_step",
+      "title": "Explicit Euler Method Step",
+      "statement_class": "approximation",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "ordinary_differential_equations",
+        "topic": "time_stepping",
+        "canonical_objects": [
+          "state",
+          "vector field",
+          "time step"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "y_(n+1) = y_n + h * f(t_n, y_n)",
+        "canonical_latex": "y_{n+1} = y_n + h\\, f(t_n, y_n)",
+        "equivalent_forms": [
+          {
+            "form_id": "increment",
+            "notation_system": "ascii",
+            "expression": "y_(n+1) - y_n = h * f(t_n, y_n)",
+            "scope_note": "The increment form: a difference quotient set equal to the vector field, i.e. the ODE with the derivative replaced by a forward difference"
+          },
+          {
+            "form_id": "implicit",
+            "notation_system": "ascii",
+            "expression": "y_(n+1) = y_n + h * f(t_(n+1), y_(n+1))",
+            "scope_note": "Backward Euler: the same template, the slope evaluated at the new point. Structurally identical, numerically opposite (A-stable)"
+          },
+          {
+            "form_id": "gradient_flow",
+            "notation_system": "ascii",
+            "expression": "theta_(n+1) = theta_n - h * GRAD(L)(theta_n)",
+            "scope_note": "Explicit Euler applied to the gradient flow dtheta/dt = -GRAD(L); this IS ml.optimization.gradient_descent_step, with h the learning rate"
+          },
+          {
+            "form_id": "runge_kutta",
+            "notation_system": "ascii",
+            "expression": "y_(n+1) = y_n + h * sum_j WEIGHT_j*STAGE_j",
+            "scope_note": "The general explicit Runge-Kutta step; Euler is the one-stage member, and this form belongs to the weighted-sum family instead"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "state_plus_scaled_rate",
+        "anonymized_template": "YNEXT = Y + STEPSIZE*SLOPE",
+        "slot_schema": [
+          {
+            "slot_id": "YNEXT",
+            "syntactic_category": "variable",
+            "semantic_role": "next_state"
+          },
+          {
+            "slot_id": "Y",
+            "syntactic_category": "variable",
+            "semantic_role": "current_state"
+          },
+          {
+            "slot_id": "STEPSIZE",
+            "syntactic_category": "parameter",
+            "semantic_role": "step_size"
+          },
+          {
+            "slot_id": "SLOPE",
+            "syntactic_category": "variable",
+            "semantic_role": "vector_field_value"
+          }
+        ],
+        "invariants": [
+          "The step size is parameter-like and the slope is variable-like, which is the categorical fingerprint of every first-order method in the graph: a chosen number times a quantity the problem supplies.",
+          "Sign is the only difference from ml.optimization.gradient_descent_step, and the matcher's family level absorbs it, since a free parameter can carry a sign. That absorption is the whole content of prediction 1's surviving half.",
+          "One step, first order: the local error is O(h^2) and the global error O(h). Neither exponent appears in the template, because both are properties of the iterated map rather than of this statement.",
+          "Explicit and implicit Euler share this template exactly. What separates them -- whether SLOPE is evaluated at the old or the new state -- is a statement about the arguments of f, and f does not appear. The grammar cannot distinguish the stable method from the unstable one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "y_n",
+            "syntactic_category": "variable",
+            "semantic_role": "current_state",
+            "mathematical_order": 0,
+            "description": "Numerical approximation to the solution at time t_n."
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "parameter",
+            "semantic_role": "step_size",
+            "mathematical_order": 0,
+            "description": "Time step, chosen by the integrator."
+          },
+          {
+            "symbol": "f",
+            "syntactic_category": "variable",
+            "semantic_role": "vector_field_value",
+            "mathematical_order": 0,
+            "description": "Value of the right-hand side at the current point: the slope the solution has there."
+          },
+          {
+            "symbol": "t_n",
+            "syntactic_category": "index",
+            "semantic_role": "time_index",
+            "mathematical_order": 0,
+            "description": "Discrete time level."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Advance the solution by following the tangent direction the differential equation prescribes at the current point, for one step.",
+        "statistical_significance": "Prediction 1's surviving half, and it FIRED at family level. The typed skeleton `?0:V = +(?1:V, *(?2:P, ?3:V))` has no partner, because gradient descent carries a minus sign: `?0:V = +(?1:V, neg(*(?2:P, ?3:V)))`. But `absorb_parameter_signs` drops a negation whose operand has a parameter-like factor, which is exactly the case here -- so at family level this node twins `ml.optimization.gradient_descent_step` AND `ml.objective.kl_regularized_rl_objective`. The relationship is not a pun and not an analogy: gradient descent IS explicit Euler applied to the gradient flow dtheta/dt = -GRAD(L), and the learning rate IS the step size, with the entire stability theory (why too large a rate diverges) carried over unchanged. The one honest caveat is that the match level which fired is the loosest one, and it fired by erasing the minus sign that says descent rather than ascent -- true for a free parameter, and the reason the corpus reports family twins separately from typed ones. At shape level this node also joins the affine family (tangent-line linearization, CAPM, the Keynesian consumption function, affine location-scale), which is correct for a different reason: one Euler step is a tangent-line linearization of the solution.",
+        "regularity_conditions": [
+          "f defined and continuous on the step interval",
+          "Lipschitz continuity of f in y, for the classical convergence proof",
+          "A step size inside the method's stability region for the problem's stiffest mode",
+          "A supplied initial condition y_0"
+        ],
+        "failure_modes": [
+          "Explicit Euler is conditionally stable: on a stiff problem the step size is limited by the fastest decaying mode, not by the accuracy wanted, and the method blows up rather than degrading.",
+          "First-order accuracy means halving the step buys one bit; the method is almost never the right choice and is almost always the one taught, which is the same relationship bisection has to root finding.",
+          "Energy drift: applied to a Hamiltonian system, explicit Euler systematically gains energy, so the qualitative behaviour is wrong however small the step. The template cannot express the geometric structure being violated."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "ml.optimization.gradient_descent_step",
+          "calculus.approximation.tangent_line_linearization",
+          "numanalysis.error.relative_condition_number"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "euler1768",
+          "bibliographic_entry": "Euler, L. (1768). Institutionum calculi integralis, volumen primum, sectio secunda, caput VII. St Petersburg: Academia Imperialis Scientiarum."
+        },
+        {
+          "citation_key": "hairer1993",
+          "bibliographic_entry": "Hairer, E., Norsett, S. P., Wanner, G. (1993). Solving Ordinary Differential Equations I: Nonstiff Problems (2nd ed.). Berlin: Springer."
+        },
+        {
+          "citation_key": "butcher2016",
+          "bibliographic_entry": "Butcher, J. C. (2016). Numerical Methods for Ordinary Differential Equations (3rd ed.). Chichester: Wiley."
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "Euler method",
+        "explicit Euler",
+        "time stepping",
+        "gradient flow",
+        "gradient descent",
+        "step size",
+        "first-order method"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.interpolation.linear_interpolation",
+      "title": "Linear Interpolation (Convex Combination of Two Points)",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics",
+          "geometric_modeling"
+        ],
+        "subfield": "interpolation",
+        "topic": "affine_combination",
+        "canonical_objects": [
+          "data pair",
+          "interpolation parameter",
+          "segment"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "y = (1 - t)*y_0 + t*y_1,  t in [0,1]",
+        "canonical_latex": "y = (1-t)\\,y_0 + t\\,y_1, \\qquad t \\in [0,1]",
+        "equivalent_forms": [
+          {
+            "form_id": "expanded_affine",
+            "notation_system": "ascii",
+            "expression": "y = y_0 + t*(y_1 - y_0)",
+            "scope_note": "Algebraically identical and structurally different: this form IS the affine family `?0:V = +(?1:V, *(?2:P, ?3:V))`, with the base point and the scaled displacement. Kept here rather than in the template because it is not how interpolation is written"
+          },
+          {
+            "form_id": "two_point_form",
+            "notation_system": "ascii",
+            "expression": "y = y_0 + (x - x_0)*(y_1 - y_0)/(x_1 - x_0)",
+            "scope_note": "The form used when the parameter must be recovered from an abscissa; the fraction is the parameter t"
+          },
+          {
+            "form_id": "lagrange",
+            "notation_system": "ascii",
+            "expression": "y = sum_i BASIS_i*VALUE_i",
+            "scope_note": "Degree-one Lagrange interpolation; the same statement written as a weighted sum, which is the form that joins the graph's four-discipline weighted-sum family"
+          },
+          {
+            "form_id": "geometric",
+            "notation_system": "vector_notation",
+            "expression": "P(t) = (1 - t)*P_0 + t*P_1",
+            "scope_note": "Vector-valued: the parameterized segment between two points, which is geomodel.bezier.de_casteljau_step"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "two_point_convex_combination",
+        "anonymized_template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
+        "slot_schema": [
+          {
+            "slot_id": "RESULT",
+            "syntactic_category": "variable",
+            "semantic_role": "interpolated_value"
+          },
+          {
+            "slot_id": "PARAM",
+            "syntactic_category": "parameter",
+            "semantic_role": "interpolation_parameter"
+          },
+          {
+            "slot_id": "START",
+            "syntactic_category": "variable",
+            "semantic_role": "left_value"
+          },
+          {
+            "slot_id": "FINISH",
+            "syntactic_category": "variable",
+            "semantic_role": "right_value"
+          }
+        ],
+        "invariants": [
+          "The interpolation parameter occurs TWICE, once bare and once inside `1 - PARAM`. That repetition is the partition of unity -- the two weights sum to one -- and it is the reason the node cannot reach the affine family, whose members all have distinct slots in every position.",
+          "The weights sum to one, so the statement is invariant under adding a constant to both data values: interpolation commutes with translation. That is what makes it meaningful for points in space, where there is no origin, and it is the defining property of an AFFINE combination as opposed to a merely linear one.",
+          "Restricting the parameter to [0,1] makes the combination convex and the result lie between the data; outside that range the same template is extrapolation, with the same algebra and none of the guarantees. The interval is a regularity condition, not part of the structure.",
+          "Both data slots are variable-like and enter symmetrically under PARAM -> 1 - PARAM, which is the reversal symmetry of the segment."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "y",
+            "syntactic_category": "variable",
+            "semantic_role": "interpolated_value",
+            "mathematical_order": 0,
+            "description": "Interpolated value at parameter t."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "parameter",
+            "semantic_role": "interpolation_parameter",
+            "mathematical_order": 0,
+            "description": "Normalized position along the segment, zero at the left datum and one at the right."
+          },
+          {
+            "symbol": "y_0",
+            "syntactic_category": "variable",
+            "semantic_role": "left_value",
+            "mathematical_order": 0,
+            "description": "Value at the left datum."
+          },
+          {
+            "symbol": "y_1",
+            "syntactic_category": "variable",
+            "semantic_role": "right_value",
+            "mathematical_order": 0,
+            "description": "Value at the right datum."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The value at a fraction t of the way between two data is the same fraction of the way between their values: a straight line through two points, parameterized.",
+        "statistical_significance": "Prediction 2 registered two comparisons and lost both, for two different and separately interesting reasons. (a) Against the AFFINE FAMILY: the relationship is real -- expand and you get `START + PARAM*(FINISH - START)`, which is `?0:V = +(?1:V, *(?2:P, ?3:V))` -- but the unexpanded skeleton is `?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))`, with the parameter slot occurring twice and an extra `+` node inside a factor. Nothing matches at any level. Rewriting to the expanded form would have made it fire and would have been authoring to match, so the expanded form sits in equivalent_forms where it belongs; the miss goes on the record. It is a rewrite-based relation, the same class docs/BACKLOG.md already records for series truncation and for collapsing a sum under a constant summand. (b) Against PROBABILITY MIXTURES: there is nothing to compare with. The graph has no mixture node -- `probstat.probability.total_probability_partition` is an indexed sum, not a two-point convex combination -- so the prediction could not be evaluated at all. A two-component mixture `p = (1-w)*p_0 + w*p_1` would twin this node exactly, and is the single highest-value addition anyone could make to data/statistics for the purpose of connecting it to geometry.",
+        "regularity_conditions": [
+          "Two data values and a parameter in [0,1] for interpolation proper",
+          "Values in an affine space, so that convex combinations are defined; the statement is meaningless for categorical data however numeric the codes",
+          "Outside [0,1] the same formula is extrapolation and carries no betweenness guarantee"
+        ],
+        "failure_modes": [
+          "Interpolating angles, hues or rotations componentwise takes the chord instead of the arc: the formula is defined but the answer leaves the manifold, which is exactly why geomodel.quaternions.unit_quaternion_constraint exists.",
+          "Repeated linear interpolation of sampled data is only C-zero continuous, so derivatives computed from it are discontinuous at every knot.",
+          "Written as (1-t)*y_0 + t*y_1 the formula is not exactly value-preserving at t = 1 in floating point; the expanded form y_0 + t*(y_1 - y_0) is monotone but not endpoint-exact. No spelling is both, and the template cannot say which was meant."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "geomodel.bezier.de_casteljau_step"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numanalysis.integration.trapezoidal_rule",
+          "probstat.transform.affine_location_scale"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "meijering2002",
+          "bibliographic_entry": "Meijering, E. (2002). A Chronology of Interpolation: From Ancient Astronomy to Modern Signal and Image Processing. Proceedings of the IEEE, 90(3), 319-342.",
+          "url": "https://doi.org/10.1109/5.993400"
+        },
+        {
+          "citation_key": "farin2002",
+          "bibliographic_entry": "Farin, G. (2002). Curves and Surfaces for CAGD: A Practical Guide (5th ed.). San Francisco: Morgan Kaufmann."
+        },
+        {
+          "citation_key": "burden2015",
+          "bibliographic_entry": "Burden, R. L., Faires, J. D., Burden, A. M. (2015). Numerical Analysis (10th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "linear interpolation",
+        "lerp",
+        "convex combination",
+        "affine combination",
+        "partition of unity",
+        "barycentric"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.error.relative_condition_number",
+      "title": "Relative Condition Number",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "mathematics"
+        ],
+        "subfield": "error_analysis",
+        "topic": "conditioning",
+        "canonical_objects": [
+          "problem",
+          "perturbation",
+          "amplification factor"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "kappa = (relative change in output) / (relative change in input)",
+        "canonical_latex": "\\kappa = \\frac{\\lVert \\delta f \\rVert / \\lVert f \\rVert}{\\lVert \\delta x \\rVert / \\lVert x \\rVert}",
+        "equivalent_forms": [
+          {
+            "form_id": "derivative_form",
+            "notation_system": "ascii",
+            "expression": "kappa = |x * f'(x) / f(x)|",
+            "scope_note": "The differential limit for a scalar function; the elasticity of f, which is the same quantity economics calls price elasticity"
+          },
+          {
+            "form_id": "matrix_condition",
+            "notation_system": "matrix_notation",
+            "expression": "kappa(A) = NORM(A) * NORM(INVERSE(A))",
+            "scope_note": "Turing's condition number of a linear system, the special case for f(x) = A^(-1)x"
+          },
+          {
+            "form_id": "error_budget",
+            "notation_system": "ascii",
+            "expression": "(relative forward error) <= kappa * (relative backward error)",
+            "scope_note": "The rule of thumb the number exists for: conditioning is the problem's, stability is the algorithm's, and this inequality is how they combine"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_rate",
+        "anonymized_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+        "slot_schema": [
+          {
+            "slot_id": "CONDITION",
+            "syntactic_category": "variable",
+            "semantic_role": "condition_number"
+          },
+          {
+            "slot_id": "OUTPUTPERTURB",
+            "syntactic_category": "variable",
+            "semantic_role": "relative_output_change"
+          },
+          {
+            "slot_id": "INPUTPERTURB",
+            "syntactic_category": "variable",
+            "semantic_role": "relative_input_change"
+          }
+        ],
+        "invariants": [
+          "Both perturbations are already RELATIVE, so the ratio is dimensionless and scale-free. That is what makes it a property of the problem rather than of the units, and it is why the node belongs in the same family as a price elasticity rather than in the same family as a speed.",
+          "Both slots are variable-like: neither perturbation is chosen, both are observed. A parameter-like slot here would make the statement a model rather than a measurement.",
+          "The template is the ratio, not the supremum over perturbations. The actual definition takes a limit of a supremum over all perturbations of a given size, and the grammar has neither a binder nor a limit that composes with one -- the same obstacle infotheory.channel.channel_capacity records.",
+          "Conditioning is a property of the problem; stability is a property of the algorithm. This statement mentions no algorithm, and that absence is the point."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "kappa",
+            "syntactic_category": "variable",
+            "semantic_role": "condition_number",
+            "mathematical_order": 0,
+            "description": "Relative condition number of the problem at the given input."
+          },
+          {
+            "symbol": "rel_out",
+            "syntactic_category": "variable",
+            "semantic_role": "relative_output_change",
+            "mathematical_order": 0,
+            "description": "Relative change induced in the output."
+          },
+          {
+            "symbol": "rel_in",
+            "syntactic_category": "variable",
+            "semantic_role": "relative_input_change",
+            "mathematical_order": 0,
+            "description": "Relative change applied to the input."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer.",
+        "statistical_significance": "FIRED into the graph's largest cross-discipline family. `?0:V = *(?1:V, inv(?2:V))` -- one variable over another -- now has seven members across six disciplines: average rate of change (calculus), molarity (chemistry), price elasticity (economics), the PPO probability ratio (machine learning), average speed and mass density (physics), and this. The membership is not a coincidence of notation. A condition number IS an elasticity: the derivative-form variant `|x f'(x)/f(x)|` is character for character the economists' definition of elasticity of demand, discovered independently in the 1890s and the 1940s. What the family shares is the act of dividing a response by the stimulus that caused it and reading the quotient as a property of the system, and the matcher groups all seven without being told any of the semantics.",
+        "regularity_conditions": [
+          "A well-defined nonzero input and output, so the relative measures exist",
+          "Perturbations small enough for the linearization to hold; the definition is a limit, and the template is its ratio",
+          "A norm chosen on each side; different norms give different constants and the same order of magnitude"
+        ],
+        "failure_modes": [
+          "A large condition number does not mean the algorithm is bad -- it means no algorithm can do better. Reporting it as a criticism of the code is the commonest misreading.",
+          "The relative form is undefined where the output vanishes, which is exactly where root-finding problems live; near a multiple root the condition number diverges and the accuracy loss it predicts is real.",
+          "Condition numbers compose multiplicatively along a pipeline, so a chain of well-conditioned steps can be badly conditioned overall and no single step's number will show it."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numanalysis.floatingpoint.machine_epsilon_bound",
+          "numanalysis.rootfinding.newton_iteration",
+          "economics.microeconomics.price_elasticity_of_demand"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "turing1948",
+          "bibliographic_entry": "Turing, A. M. (1948). Rounding-off Errors in Matrix Processes. Quarterly Journal of Mechanics and Applied Mathematics, 1(1), 287-308.",
+          "url": "https://doi.org/10.1093/qjmam/1.1.287"
+        },
+        {
+          "citation_key": "rice1966",
+          "bibliographic_entry": "Rice, J. R. (1966). A Theory of Condition. SIAM Journal on Numerical Analysis, 3(2), 287-310.",
+          "url": "https://doi.org/10.1137/0703023"
+        },
+        {
+          "citation_key": "trefethen1997",
+          "bibliographic_entry": "Trefethen, L. N., Bau, D. (1997). Numerical Linear Algebra. Philadelphia: SIAM."
+        },
+        {
+          "citation_key": "higham2002",
+          "bibliographic_entry": "Higham, N. J. (2002). Accuracy and Stability of Numerical Algorithms (2nd ed.). Philadelphia: SIAM."
+        }
+      ],
+      "keywords": [
+        "condition number",
+        "conditioning",
+        "error analysis",
+        "elasticity",
+        "relative error",
+        "backward stability"
+      ]
+    },
+    {
+      "statement_id": "numanalysis.floatingpoint.machine_epsilon_bound",
+      "title": "Floating-Point Rounding Bound",
+      "statement_class": "theorem",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "numerical_analysis",
+          "computer_science"
+        ],
+        "subfield": "floating_point",
+        "topic": "rounding",
+        "canonical_objects": [
+          "floating-point number",
+          "rounding",
+          "unit roundoff"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "|fl(x) - x| <= u * |x|",
+        "canonical_latex": "\\lvert \\mathrm{fl}(x) - x \\rvert \\le u \\lvert x \\rvert",
+        "equivalent_forms": [
+          {
+            "form_id": "relative_form",
+            "notation_system": "ascii",
+            "expression": "fl(x) = x*(1 + delta),  |delta| <= u",
+            "scope_note": "The (1+delta) model: the form every rounding-error proof actually uses, because it composes multiplicatively through a computation"
+          },
+          {
+            "form_id": "spacing",
+            "notation_system": "ascii",
+            "expression": "|fl(x) - x| <= ULP(x)/2",
+            "scope_note": "Absolute form in units in the last place; equivalent under round-to-nearest and sharper near the bottom of a binade"
+          },
+          {
+            "form_id": "operation_form",
+            "notation_system": "ascii",
+            "expression": "fl(a OP b) = (a OP b)*(1 + delta),  |delta| <= u",
+            "scope_note": "IEEE 754's correct-rounding requirement extended from representation to each of the five basic operations"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "relative_error_bound",
+        "anonymized_template": "ROUNDOFF <= UNITROUNDOFF*EXACT",
+        "slot_schema": [
+          {
+            "slot_id": "ROUNDOFF",
+            "syntactic_category": "variable",
+            "semantic_role": "representation_error"
+          },
+          {
+            "slot_id": "UNITROUNDOFF",
+            "syntactic_category": "constant",
+            "semantic_role": "unit_roundoff"
+          },
+          {
+            "slot_id": "EXACT",
+            "syntactic_category": "variable",
+            "semantic_role": "exact_magnitude"
+          }
+        ],
+        "invariants": [
+          "A `<=`, not an `=`. It is one of the few inequalities in the graph, and the relation is the content: no equality holds, because the actual error depends on where in a binade the number falls, and the guarantee is exactly that it never exceeds this bound.",
+          "The unit roundoff is a `constant` slot -- a fixed property of the arithmetic, not of the problem. That is what distinguishes this statement from the condition number, whose every slot is variable-like: one is about the machine, the other about the problem.",
+          "The bound is RELATIVE (the right-hand side scales with the magnitude), which is the whole design of floating point: constant relative precision across many orders of magnitude, paid for with unbounded absolute error at the top of the range.",
+          "The statement covers representation only. That every basic operation obeys the same bound is IEEE 754's correct-rounding requirement -- a much stronger claim about an implementation, kept in equivalent_forms rather than in the template."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "exact_magnitude",
+            "mathematical_order": 0,
+            "description": "The exact real number being represented."
+          },
+          {
+            "symbol": "fl_x",
+            "syntactic_category": "variable",
+            "semantic_role": "representation_error",
+            "mathematical_order": 0,
+            "description": "Magnitude of the difference between x and its nearest representable neighbour."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "<=",
+            "name": "less than or equal",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "u",
+            "value": "2^-53 for IEEE 754 binary64 with round-to-nearest",
+            "description": "Unit roundoff, half the machine epsilon in the round-to-nearest convention. A fixed property of the arithmetic, not of the problem: the single number that converts every exact quantity into a bound on its representable neighbour."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Rounding a real number to the nearest floating-point number changes it by at most a fixed fraction of its own size.",
+        "statistical_significance": "A singleton, and the relation symbol is why. Its skeleton `?0:V <= *(?1:P, ?2:V)` is the family `?0:V = *(?1:P, ?2:V)` -- circle circumference, Newton's second law, Ohm's law -- with `=` replaced by `<=`, and the matcher treats relations as part of the skeleton, so nothing fires at any level. That is defensible: `F = m*a` and `err <= u*|x|` really are different kinds of claim, one an identity and one a guarantee, and collapsing them would erase the difference between a law and a bound. But it does mean the graph currently has no way to say 'this bound is the inequality form of that proportionality', and every error bound anyone adds will land in the same isolation. Worth contrasting with `geotop.measure.area_monotonicity`, the graph's other lonely inequality, which is isolated for the opposite reason -- it is the only relation nested inside a call argument.",
+        "regularity_conditions": [
+          "Round-to-nearest, ties-to-even; other rounding modes double the constant",
+          "x within the normal range: no overflow, and not subnormal, where the relative bound fails and only an absolute one holds",
+          "u = 2^-53 for binary64, 2^-24 for binary32, under IEEE 754"
+        ],
+        "failure_modes": [
+          "Subnormal numbers violate the relative bound outright: near zero the spacing stops shrinking and only an absolute bound survives.",
+          "The bound is per operation and composes as a product of (1 + delta) factors, so an n-operation computation carries roughly n*u, and quoting the single-operation bound for a whole algorithm understates the error by that factor.",
+          "'Machine epsilon' names two different numbers in common use -- the spacing above one (2^-52 for binary64) and the unit roundoff (2^-53) -- and the constant slot here is the second."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numanalysis.error.relative_condition_number",
+          "numanalysis.rootfinding.bisection_interval_halving"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "wilkinson1963",
+          "bibliographic_entry": "Wilkinson, J. H. (1963). Rounding Errors in Algebraic Processes. Englewood Cliffs: Prentice-Hall."
+        },
+        {
+          "citation_key": "ieee754_2019",
+          "bibliographic_entry": "IEEE (2019). IEEE Standard for Floating-Point Arithmetic. IEEE Std 754-2019.",
+          "url": "https://doi.org/10.1109/IEEESTD.2019.8766229"
+        },
+        {
+          "citation_key": "higham2002",
+          "bibliographic_entry": "Higham, N. J. (2002). Accuracy and Stability of Numerical Algorithms (2nd ed.). Philadelphia: SIAM."
+        },
+        {
+          "citation_key": "trefethen1997",
+          "bibliographic_entry": "Trefethen, L. N., Bau, D. (1997). Numerical Linear Algebra. Philadelphia: SIAM."
+        }
+      ],
+      "keywords": [
+        "machine epsilon",
+        "unit roundoff",
+        "IEEE 754",
+        "floating point",
+        "relative error",
+        "correct rounding"
+      ]
+    }
+  ]
+}
