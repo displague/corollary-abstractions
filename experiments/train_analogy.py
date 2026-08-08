@@ -224,6 +224,7 @@ def main() -> None:
     ap.add_argument("--max-len", type=int, default=512)
     ap.add_argument("--max-tgt", type=int, default=96)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--save-model", type=Path, default=None)
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -297,6 +298,13 @@ def main() -> None:
     args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"DONE {json.dumps({k: result[k] for k in ['test_exact','ood_exact','seconds']})}",
           flush=True)
+    if args.save_model:
+        args.save_model.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({"state_dict": model.state_dict(), "vocab": vocab.itos,
+                    "config": {"d_model": args.d_model,
+                               "max_tgt": args.max_tgt,
+                               "max_len": args.max_len}},
+                   args.save_model)
 
 
 if __name__ == "__main__":

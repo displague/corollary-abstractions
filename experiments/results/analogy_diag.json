@@ -1,0 +1,9 @@
+{
+  "task": "analogy",
+  "params": 1474307,
+  "seed": 0,
+  "val_exact_best": 1.0,
+  "test_exact": 1.0,
+  "ood_exact": 0.013877551020408163,
+  "seconds": 2091.3
+}

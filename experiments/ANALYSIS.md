@@ -461,3 +461,23 @@ diagnostic, not a fourth mechanism: per-step teacher-forced error
 localization on OOD (structure vs leaf steps, early vs late). Queued
 for v0.3's experiment 3; length was already ruled out (95.4% of kept
 OOD targets are within trained length range).
+
+### The depth wall, solved as a diagnosis: 34 = 34
+
+Teacher-forced per-step diagnosis (diagnose_analogy.py) on the fresh
+checkpoint: OOD failure is immediate (88% of first errors in the first
+two deciles), C-leaf selection collapses to 0.139, EOS is perfect --
+so neither drift nor length. The unified account: trained trees reach
+tree level 5; path embeddings are per-level LOOKUP rows; tokens at
+levels > 5 carry untrained rows. Verification: exactly 34 kept OOD
+examples stay within level 5, and exactly those 34 succeed --
+bit-identically across absolute, tree-coordinate, and tied-path
+mechanisms, which all shared the same per-level lookup and therefore
+could not differ. C-leaf steps fail worst because leaves live deepest;
+solvex survived depth because span targets sit at shallow levels.
+
+Prescription (v0.4): the address ENCODING must generalize over depth --
+functional level codes (sinusoidal levels, or path-recurrent
+composition where level k+1's code derives from level k's) instead of
+enumerated embedding rows. The interface catalogue's addresses entry
+gains a requirement: closed form over depth, not a table.
