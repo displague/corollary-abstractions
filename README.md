@@ -110,7 +110,7 @@ scripts/
   match_signatures.py   twins plus a separate time-reversal mirror relation
   specialize.py         general->specific edges (absorption + identities)
   decompose.py          statements as constructs of named forms + groundedness
-  compose_assert.py     grounded assertions: the six-tier epistemic ladder demo
+  compose_assert.py     global ladder + live frame-local executor statuses
   controller.py         shared v0.5 state/action/verifier loop
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (10.7x on the real corpus)

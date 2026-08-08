@@ -32,6 +32,14 @@ or commit history. Each item names the evidence that motivated it.
   rather than being silently refuted. Wiring that authored law is the open
   runtime step.
 
+- **SHIPPED — the public epistemic-ladder demo now calls the frame executor.**
+  `compose_assert.py` retains its corpus-derived PROVEN, VERIFIED, HYPOTHESIS,
+  UNKNOWN, REFUTED, and REFUSED examples, then obtains declaration agreement,
+  contradiction, missing information, suspension-gated invention, close,
+  demotion, and post-close refusal directly from `FrameExecutor`. This closes
+  the duplicate-demo gap; it does not claim that global structural-family
+  statuses are frame statuses.
+
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and
   `heraldry_pattern -> no_deus_ex_machina`, both cost 4. The same run also

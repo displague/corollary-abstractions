@@ -87,9 +87,23 @@ demo and a multi-step derivation remain one milestone in two costumes.
    resolution, preventing a hidden-ledger pass. Item 5 subsequently authored
    the first shared-scope declaration/assertion pair for cartoon gravity and a
    scoped premise-persistence declaration. Still open: the check is finite
-   close-time accounting rather than general LTL
-   model checking, and `compose_assert`'s demo ladder is not yet wired to
-   `frames.py`.
+   close-time accounting rather than general LTL model checking.
+
+   **Registered compose/frame prediction (before implementation or tests):**
+   wiring adds no corpus or matcher change. A deterministic helper in
+   `compose_assert.py` will obtain, rather than print by assertion, this exact
+   runtime sequence from `FrameExecutor`: declared truth VERIFIED; contradiction
+   REFUTED; missing trait UNKNOWN; suspended world contradiction UNKNOWN before
+   admission and VERIFIED after `assert_literal`; clean close VERIFIED with all
+   local truths demoted to `conjectured`; post-close check REFUSED. Existing
+   global PROVEN/HYPOTHESIS/REFUSAL examples remain separate because frames do
+   not manufacture proof or structural-family status.
+
+   **Adjudication — fired:** `compose_assert.py` now obtains the registered
+   seven-step sequence and exit demotions from `FrameExecutor`; none of those
+   labels is locally reimplemented. The global PROVEN/HYPOTHESIS/REFUSAL
+   examples remain report/corpus demonstrations, as predicted. The full suite
+   moved 63 -> 65 tests with no corpus or report diff.
 
    **Registered obligation prediction (before implementation or tests):**
    planting an element creates one frame-local obligation under

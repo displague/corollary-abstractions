@@ -705,3 +705,15 @@ positive `ALWAYS(MEET(HOLDS(p), SINCE(HOLDS(p), opening)))` obligation; the
 earlier implication became vacuously true if the premise disappeared and is
 retracted. The node is explicitly restricted to opening declarations rather
 than later accepted assertions.
+
+## v0.5 public ladder / frame-executor integration
+
+Prediction was registered in `docs/ROADMAP-v0.5.md`: without changing corpus
+or matcher output, the public `compose_assert.py` demo would source an exact
+runtime sequence from `FrameExecutor`—VERIFIED declaration, REFUTED
+contradiction, UNKNOWN missing trait, UNKNOWN suspended contradiction before
+admission, VERIFIED admission, VERIFIED clean close with conjectured exit
+demotions, then REFUSED post-close check. It fired exactly. Two tests assert
+both the ordered verdicts and their rule/world/frame evidence. The existing
+global PROVEN/HYPOTHESIS/REFUSAL examples remain separate because the frame
+executor should not manufacture machine-proof or structural-family status.

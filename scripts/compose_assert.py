@@ -22,7 +22,88 @@ from __future__ import annotations
 import argparse
 import json
 import random
+from dataclasses import dataclass
 from pathlib import Path
+
+from controller import Verdict
+from frames import DemotedClaim, FrameExecutor, FrameSpec, Literal
+
+
+GRAVITY = "physics.gravitation.newton_universal_gravitation"
+
+
+@dataclass(frozen=True)
+class FrameLadderStep:
+    """One status actually returned by the frame executor."""
+
+    label: str
+    verdict: Verdict
+    reason: str
+    evidence: tuple[str, ...]
+
+
+def execute_frame_ladder() -> tuple[
+    tuple[FrameLadderStep, ...], tuple[DemotedClaim, ...]
+]:
+    """Exercise scope-local statuses without duplicating ladder logic."""
+
+    executor = FrameExecutor(
+        {GRAVITY: (Literal("unsupported objects", "behavior", "fall"),)}
+    )
+    state = executor.open_frame(
+        FrameSpec(
+            frame="narrative.frames.compose_assert_demo",
+            title="compose_assert frame ladder",
+            declarations=(
+                ("golden", Literal("the chicken", "trait", "golden")),
+                (
+                    "not_silver",
+                    Literal(
+                        "the chicken", "trait", "silver", polarity=False
+                    ),
+                ),
+            ),
+            suspends=(GRAVITY,),
+        )
+    )
+    steps: list[FrameLadderStep] = []
+
+    def record(label: str, result) -> None:
+        steps.append(
+            FrameLadderStep(
+                label=label,
+                verdict=result.verdict,
+                reason=result.reason,
+                evidence=tuple(result.evidence),
+            )
+        )
+
+    record(
+        "declared truth",
+        executor.check(state, Literal("the chicken", "trait", "golden")),
+    )
+    record(
+        "contradicted declaration",
+        executor.check(state, Literal("the chicken", "trait", "silver")),
+    )
+    record(
+        "missing trait",
+        executor.check(state, Literal("the chicken", "trait", "brave")),
+    )
+    hover = Literal(
+        "unsupported objects", "behavior", "fall", polarity=False
+    )
+    record("suspended contradiction before admission", executor.check(state, hover))
+    admitted = executor.assert_literal(state, "cartoon_hover", hover)
+    record("suspended contradiction admitted", admitted)
+    if admitted.next_state is None:  # pragma: no cover - contract tripwire
+        raise RuntimeError("VERIFIED frame admission returned no next state")
+    state = admitted.next_state
+
+    closed = executor.close_frame(state)
+    record("clean frame close", closed)
+    record("post-close check", executor.check(closed.state, hover))
+    return tuple(steps), closed.demoted
 
 
 def title_of(nodes_by_id: dict, sid: str) -> str:
@@ -147,6 +228,23 @@ def main() -> int:
     print("    [REFUSED — no corpus statement or recurring constituent "
           "family matches this skeleton; the composition is not asserted. "
           "A claim without a known form is a shape, not a statement.]")
+
+    print()
+    print("=" * 72)
+    print("FRAME-LOCAL LADDER (statuses returned by the live executor)")
+    print("=" * 72)
+    frame_steps, demoted = execute_frame_ladder()
+    for step in frame_steps:
+        evidence = ", ".join(step.evidence) if step.evidence else "none"
+        print(f"\n  {step.label}: {step.verdict.value.upper()}")
+        print(f"    {step.reason}")
+        print(f"    [evidence: {evidence}]")
+    print("\n  exit demotions:")
+    for claim in demoted:
+        print(
+            f"    {claim.claim_id}: {claim.literal.describe()} -> "
+            f"{claim.epistemic_status} outside {claim.frame}"
+        )
     print()
     return 0
 
