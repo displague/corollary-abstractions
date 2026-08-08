@@ -6,11 +6,11 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.3.0](docs/RELEASE-v0.3.0.md).
+interface. Latest release: [v0.4.0](docs/RELEASE-v0.4.0.md).
 
 ## The two headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 195
+**1. The matcher discovers that sciences repeat one another.** From 199
 hand-authored statement nodes across 21 disciplines, structure alone:
 
 ```
@@ -92,6 +92,7 @@ the graded residual.
 | The lexicon lives outside the weights | weight-induced lexica reach ⅔ of ceiling in-distribution and collapse to chance OOD; the same lexicon supplied symbolically loses nothing |
 | Composition needs addresses | with tree-path positions, held-out verb×noun combinations answer at 1.000 (both seeds); with learned positions the same model cannot even fit seen data |
 | Scale does not buy generalization | across 8× width and 10× data, depth-OOD under learned positions is flat (~0.05–0.19); with symbolic addresses it is ≥0.95 in every cell, including 32-wide on 5k examples |
+| Exposure does not generalize; iteration does | curriculum training moved the depth cliff without removing it (0.006 OOD); a shared recurrent cell per tree level extrapolates at 16× the lookup baseline |
 | Creating = pointing + realization | both learned decoders failed informatively (memorize, can't copy); pointing plus closed-form realization generates perfectly for any answer present in the input |
 
 Two retractions are part of the record (a too-easy test caught by external
@@ -103,7 +104,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (21 disciplines, 195 nodes)
+data/<discipline>/      statement corpora (21 disciplines, 199 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twin detection: shape / typed / family skeletons
@@ -140,7 +141,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 195 nodes / 21 corpora green
+python scripts/validate_nodes.py            # 199 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 cd experiments

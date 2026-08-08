@@ -1,5 +1,11 @@
 # v0.4 roadmap — reasoning chains
 
+> **CLOSED at v0.4.0** — historical plan-of-record. Triage: items 2 and
+> 10's six SHIPPED entries are in [RELEASE-v0.4.0.md](RELEASE-v0.4.0.md)
+> (the depth fork settled: recurrence 0.226 vs curriculum 0.006); items
+> 1, 3–9 and the OPEN tooling entries carried to
+> [ROADMAP-v0.5.md](ROADMAP-v0.5.md). Nothing dropped.
+
 Theme: chained composition with the prover as verifier — each proposal
 becomes the next step's premise, checked before it stands. Story
 generation and derivational reasoning are one problem here
