@@ -22,6 +22,9 @@ or commit history. Each item names the evidence that motivated it.
   family (identity). Remaining out of scope: *series-truncation* relations
   (simple interest as the first-order truncation of continuous
   compounding) need rewrite-based reasoning, not matching.
+  **v3: SHIPPED** (branch `tooling/cheapest-derivation`): the matcher now
+  returns the cheapest derivation rather than the first, so `looseness` has
+  the `cost` companion axis the first-success entry below asked for.
 - **Specialization noise control.** 236 edges among 67 nodes; looseness
   ranking surfaces tight ones, but variable slots can still bind numeric
   literals (trapezoid >= rectangle-perimeter binds HEIGHT->2). Consider
@@ -731,6 +734,20 @@ or commit history. Each item names the evidence that motivated it.
   sum-collapse-under-constant-summand, series truncation) has the same shape:
   it shrinks the pattern, and the guard that made patterns non-trivial has to
   be evaluated on the pattern *as used*.
+  **SHIPPED, and strengthened** (branch `tooling/cheapest-derivation`): the
+  bar is no longer a post-filter over one derivation but a *constraint inside
+  the search* (`Search.acceptable`, consulted per candidate derivation).
+  A derivation that shrinks the pattern below the bar can no longer end the
+  search; the matcher keeps looking and returns the cheapest derivation that
+  passes. Re-measured on the 199-node corpus: with the guard removed the
+  count goes 622 -> **1130** edges (+508, the same explosion the head-algebra
+  work measured as 573 -> 1080), so the guard is still entirely load-bearing.
+  The generalization the entry predicted also held: applying the *whole*
+  acceptability test (guard + non-triviality) as a post-filter over the
+  global minimum instead of as a search constraint yields only 463 edges —
+  159 pairs whose cheapest derivation is degenerate but which have a
+  perfectly good informative one. Any future rewrite inherits the constraint
+  for free by being priced in the cost model.
 - **First-success-wins search lets a weaker reading pre-empt a stronger one.**
   Second finding from the same work, and independent of it.
   `find_specializations` calls `match` once and keeps whatever it returns, so
@@ -748,6 +765,120 @@ or commit history. Each item names the evidence that motivated it.
   than the first, e.g. by scoring mechanisms and searching best-first, which
   would also give `looseness` a companion "how much algebra did this need"
   axis.
+  **SHIPPED** (branch `tooling/cheapest-derivation`). Every mechanism now
+  carries a price — rename 0, slot->structure `1 + op_count(bound)`,
+  absorption 1 per extra argument swallowed, arithmetic identity 2 per use,
+  head-identity collapse 4 per use — and `Search` returns the minimum-cost
+  *acceptable* derivation over the whole space (exhaustive DFS with
+  branch-and-bound; cost is monotone along a derivation, so pruning at the
+  incumbent is exact). The two-pass workaround is deleted: the guarded
+  reproducer `de9im_disjoint >= next_distributes_over_meet` comes back via
+  plain binding at cost 7 (7 structure + 0 algebra, 0 collapses), and it does
+  so at every depth rather than only at the root, because acceptability is a
+  search constraint now (see the entry above). Measured against the v2 count
+  of 589 edges on the same 199 nodes: **622 edges, 33 gained, 0 lost.** All
+  33 gains have one general node, `physics.circuits.ohms_law`
+  (`POTENTIAL = FLOW * RESISTANCE`), and all 33 are the entry's own failure
+  mode in its harshest form — v2's first success bound `FLOW -> QUANTITY,
+  RESISTANCE -> inv(INTERVAL)`, a reading the informativeness filter scores
+  as a bare renaming (see the `used_compound` entry below), so the pair was
+  dropped entirely rather than re-derived as `FLOW -> QUANTITY*inv(INTERVAL),
+  RESISTANCE -> 1` (cost 6), which is the same shape as the
+  `beer_lambert_law`/`ABSORPTIVITY -> 1` edges the graph already carried.
+  Of the 589 retained edges, 106 change `via` and 128 change bindings, always
+  towards a cheaper reading: `newton_second_law >= triangle_area_formula` was
+  `INERTIA -> 1` plus a three-factor absorption and is now `INERTIA ->
+  CONSTANT` plus a two-factor one (the search stops paying for the identity
+  rule when an honest binding is available). Cost range 1-12, median 6.
+  Runtime *fell*: `find_specializations` 0.157s -> **0.111s** (best of 3,
+  209383 search steps), 0.49s wall for the whole tool, because dropping the
+  second pass buys more than exhaustive enumeration costs and the incumbent
+  prunes the rest. No beam, no memo, no bound needed at this corpus size.
+- **The commutative path never sets `used_compound`, so a slot swallowing a
+  subtree inside `+`/`*` reads as a bare renaming.** Found while shipping the
+  cost search, which is why the 33 gained edges above are all one node.
+  `gen_commutative` assigns its bindings directly instead of recursing
+  through the slot case of `gen_direct`, and only `gen_direct` sets the flag
+  (v2 had the identical split between `match_commutative` and `match_direct`,
+  so this is inherited, not introduced). Consequence: a match whose only
+  novelty is `RESISTANCE -> inv(INTERVAL)` scores as "pure slot-to-slot
+  renaming" and is filtered out, even though the module docstring explicitly
+  lists "a slot binding structure (a compound subtree or a literal)" as
+  informative. `looseness` and `structure_cost` both count that binding, so
+  the flag is the only thing that disagrees. Measured cost of the bug:
+  setting `compound=1` on non-slot commutative bindings takes the graph from
+  **622 to 791 edges** (+169 beyond the 33 already recovered) and drops the
+  median cost from 6 to 4, because the 33 ohms-law edges and many others then
+  derive far more cheaply (the ohms-law pairs at cost 2 via plain compound
+  binding rather than cost 6 via absorption + identity). Deliberately NOT
+  fixed in the cheapest-derivation commit: it is a change to what "informative"
+  means, a +169-edge adjudication in its own right, and mixing it in would
+  have made the cost-search regression unreadable. Wanted: decide whether the
+  non-triviality bar means "the pattern did work" (fix it) or "the pattern
+  bound a subtree *where a leaf was written*" (document it), then land the
+  edge-count change on its own with the usual per-family adjudication.
+- **The same first-success bug was living in `decompose.py`, one import
+  away, and cost the groundedness ladder two rungs.** `decompose.py` uses
+  `specialize.match` as a predicate and then refuses the match if
+  `used_absorption or used_identity` — i.e. it wants the no-algebra reading
+  specifically. Under first-success it never got to ask: matching
+  `*(?0:P, ?1:V)` against `*(?0:P, LOG(?1:V))`, the parameter slot's identity
+  branch fires first (`?0 -> 1`, the rest absorbed), `match` returns True
+  with the algebra flags set, and `pattern_cover` rejects a pattern that
+  covers the subterm perfectly well by plain binding. The consequence was not
+  "no grounding" but *worse* grounding: the coarser `*(?0:V, ?1:V)` was cited
+  instead, which is the P-vs-V category mismatch `pattern_cover`'s own
+  docstring says it refuses weaker matches to avoid. Routing the compatibility
+  `match` through the cost search fixes it for free. Measured on the 199-node
+  corpus: **10 of 198 nodes change constituents, corpus mean groundedness
+  0.7634 -> 0.7660**, `calculus.differentiation.product_rule` 0.714 -> 0.857
+  and `linearity_of_derivative` 0.778 -> 0.889, each gaining one
+  `grounded_via_pattern` constituent. Not adjudicated here and the ledgers are
+  deliberately not refreshed on this branch (see the entry below); wanted: a
+  groundedness-owner pass over those 10 nodes' new citations, then a ledger
+  refresh. Generalisation worth keeping: any consumer that asks a matcher
+  "did you need mechanism X" is silently asking "was X on the first path you
+  happened to take", which is not a question about the statements at all.
+- **`reports/` has no regeneration check, and two of the four ledgers are
+  already stale on `main`.** `scripts/check_regeneration.py` enforces
+  seeds -> `data/` coherence and nothing else, so nothing notices when a
+  committed report stops matching what its script produces. Found while
+  regression-testing this branch: at `main` (6483a23, "Refresh all ledgers
+  post-head-algebra"), re-running `measure_compression.py` and `decompose.py`
+  with the *unmodified* v2 matcher already produces a 46-line diff in
+  `reports/compression.json` and a 290-line diff in
+  `reports/decompositions.json` — `logic.inference.hypothetical_syllogism` is
+  missing from the compression ledger entirely and several `family_reuse`
+  counts are one low, which smells like a corpus merge that refreshed some
+  ledgers and not others. Both files are therefore left untouched here rather
+  than refreshed, so that this branch's diff is only the matcher's doing.
+  Fix: extend `check_regeneration.py` (or add a sibling) to re-run each
+  report writer into a temp path and diff, and put it in the release skill's
+  step 1 alongside the data check.
+- **The cost weights are the first numbers in the matcher with no corpus
+  citation.** `HEAD_ALGEBRA` was built on the house rule that every algebraic
+  claim names the node that justifies it; `COST_IDENTITY = 2` and
+  `COST_HEAD_COLLAPSE = 4` name nothing. They are defensible ordinally — a
+  rewrite that erases a node should cost more than one that fills a slot in,
+  which should cost more than a rename — and the ordinal facts are what the
+  search actually uses, but the specific magnitudes decide ties between
+  mechanisms and nothing in `data/` adjudicates them. Probed the whole
+  algebra half of the model by sweeping each weight independently and
+  diffing membership *and* per-edge derivations against the shipped report:
+  `COST_HEAD_COLLAPSE` in {0, 1, 2, 3, 4, 5, 6, 7, 8, 20, 100},
+  `COST_IDENTITY` in {0, 1, 2, 3, 5, 10}, `COST_ABSORB_ARG` in {0, 1, 2, 3}
+  — **622 edges and identical membership in every one of the 21 runs**, with
+  exactly one edge changing its *derivation* (at `COST_IDENTITY >= 3` and
+  again at `COST_ABSORB_ARG = 0`). So on the 199-node corpus the graph is
+  decided by the acceptability constraint and the structure cost; the algebra
+  weights are currently unfalsifiable by the data, which is the real reason
+  to be uneasy about them rather than a reason to relax. The exposure grows
+  with every mechanism added, since each new one has to be priced against
+  numbers nothing tests. Wanted: either derive the weights from something
+  (edit distance on the skeleton? the epistemic ladder's rung ordering?) or
+  record them as a declared, provenanced table the way head algebra is, so a
+  future mechanism has to argue its price rather than pick one — and add a
+  corpus pair that *does* discriminate, so the sweep above stops being flat.
 - **The typed sort key orders P before V, which silently re-splits heads that
   a future alias would want to merge.** `typed_resort` sorts by a key in which
   `?P` precedes `?V`, so declaring MEET commutative moved
@@ -887,6 +1018,29 @@ or commit history. Each item names the evidence that motivated it.
   same request is the recorded "same invariant, slot in one corpus and call
   head in another" lint — both want a notion of "these identifiers name one
   object" that the graph does not yet have.
+  **SHIPPED** (branch `tooling/cheapest-derivation`), with one correction to
+  the proposed fix: the specific node's own `slot_schema` is not enough.
+  `settheory.boolean_laws.idempotence` is `MEET(SETA, SETA) = SETA` and
+  declares no constant at all, so the node-level rule would have left the
+  cited edge printing `FALSITY`. `spelling_ranker` therefore ranks spellings
+  by the specific statement's `slot_schema` first, then by the union of every
+  `slot_id` its *discipline* declares anywhere, then by table order; ties in
+  derivation cost keep the first spelling tried, so the ranking decides the
+  printed name. The corpus vocabularies are cleanly disjoint —
+  `data/logic` {TRUTH, FALSITY}, `data/set_theory` and
+  `data/geospatial_topology` {UNIVERSE, EMPTYSET}, `data/narrative`
+  {INCONSISTENCY}, `data/morphology` {EMPTY} — so the discipline rule is
+  decisive wherever it applies. Measured: the two edges with a set-theory
+  *specific* flip `FALSITY` -> `EMPTYSET`
+  (`logic.boolean_laws.absorption >= settheory.boolean_laws.idempotence` and
+  `settheory.boolean_laws.absorption >= settheory.boolean_laws.idempotence`),
+  the two with a logic specific correctly keep `FALSITY`, and the five CONCAT
+  collapses report `EMPTY` as `sole`. Every edge that binds an ambiguous
+  identity now carries an `identity_spellings` block naming the head and the
+  basis (`specific-node` / `specific-discipline` / `table-order` / `sole`),
+  and a table-order fallback additionally prints an
+  `identity_spelling_note`. **Zero edges currently fall back**, which is the
+  number to watch as corpora are added.
 
 ## Schema
 
