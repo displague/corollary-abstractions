@@ -100,13 +100,32 @@ def collate(batch):
     return x, crd, mask, y, tc, tgts
 
 
+def sinusoidal_level_codes(n_levels: int, d_model: int) -> torch.Tensor:
+    """Fixed per-level modulation codes -- closed form over depth, so no
+    level ever carries an untrained parameter (the 34=34 diagnosis)."""
+    pos = torch.arange(n_levels, dtype=torch.float32).unsqueeze(1)
+    i = torch.arange(d_model // 2, dtype=torch.float32)
+    ang = pos / torch.pow(50.0, 2 * i / d_model)
+    codes = torch.zeros(n_levels, d_model)
+    codes[:, 0::2] = torch.sin(ang)
+    codes[:, 1::2] = torch.cos(ang)
+    return codes
+
+
 class AnalogyPointer(nn.Module):
     def __init__(self, src_vocab: int, d_model: int = 128, n_layers: int = 4,
-                 n_dec: int = 2, n_heads: int = 4, max_tgt: int = 96):
+                 n_dec: int = 2, n_heads: int = 4, max_tgt: int = 96,
+                 level_code: str = "table"):
         super().__init__()
+        self.level_code = level_code
         self.embed = nn.Embedding(src_vocab, d_model, padding_idx=0)
         self.seg_emb = nn.Embedding(N_SEG + 1, d_model)
-        self.path_emb = nn.Embedding(MAX_LEVELS * (MAX_SIB + 1), d_model)
+        if level_code == "sinusoidal":
+            self.sib_shared = nn.Embedding(MAX_SIB + 2, d_model, padding_idx=0)
+            self.register_buffer("level_codes",
+                                 sinusoidal_level_codes(MAX_LEVELS, d_model))
+        else:
+            self.path_emb = nn.Embedding(MAX_LEVELS * (MAX_SIB + 1), d_model)
         self.register_buffer("level_offsets",
                              torch.arange(MAX_LEVELS) * (MAX_SIB + 1))
         enc_layer = nn.TransformerEncoderLayer(
@@ -116,7 +135,6 @@ class AnalogyPointer(nn.Module):
         self.act_embed = nn.Embedding(len(GEN_TOKENS), d_model)
         self.copy_proj = nn.Linear(d_model, d_model)
         self.tgt_pos = nn.Embedding(max_tgt, d_model)
-        self.tgt_path_emb = self.path_emb  # tied: path-match becomes dot-product-visible
         dec_layer = nn.TransformerDecoderLayer(
             d_model, n_heads, dim_feedforward=4 * d_model, dropout=0.1,
             batch_first=True, norm_first=True)
@@ -124,12 +142,16 @@ class AnalogyPointer(nn.Module):
         self.gen_head = nn.Linear(d_model, len(GEN_TOKENS))
         self.ptr_q = nn.Linear(d_model, d_model)
 
+    def path_embedding(self, paths):
+        if self.level_code == "sinusoidal":
+            emb = self.sib_shared(paths) * self.level_codes  # broadcast levels
+        else:
+            emb = self.path_emb(paths + self.level_offsets)
+        return (emb * (paths > 0).unsqueeze(-1)).sum(dim=-2)
+
     def encode(self, x, coords, mask):
         h = self.embed(x)
-        paths = coords[..., 1:]
-        emb = self.path_emb(paths + self.level_offsets)
-        emb = emb * (paths > 0).unsqueeze(-1)
-        h = h + emb.sum(dim=-2) + self.seg_emb(
+        h = h + self.path_embedding(coords[..., 1:]) + self.seg_emb(
             torch.clamp(coords[..., 0], max=N_SEG))
         return self.encoder(h, src_key_padding_mask=~mask)
 
@@ -149,9 +171,7 @@ class AnalogyPointer(nn.Module):
             pos = torch.arange(y_in.size(1), device=y_in.device).unsqueeze(0)
             h = h + self.tgt_pos(pos)
         else:
-            emb = self.tgt_path_emb(tgt_coords + self.level_offsets)
-            emb = emb * (tgt_coords > 0).unsqueeze(-1)
-            h = h + emb.sum(dim=-2)
+            h = h + self.path_embedding(tgt_coords)
         causal = nn.Transformer.generate_square_subsequent_mask(
             y_in.size(1), device=y_in.device)
         h = self.decoder(h, memory, tgt_mask=causal,
@@ -225,6 +245,8 @@ def main() -> None:
     ap.add_argument("--max-tgt", type=int, default=96)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--save-model", type=Path, default=None)
+    ap.add_argument("--level-code", choices=["table", "sinusoidal"],
+                    default="table")
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -243,8 +265,8 @@ def main() -> None:
                              shuffle=(s == "train"), collate_fn=collate)
                for s, ds in datasets.items()}
 
-    model = AnalogyPointer(len(vocab), args.d_model,
-                           max_tgt=args.max_tgt).to(device)
+    model = AnalogyPointer(len(vocab), args.d_model, max_tgt=args.max_tgt,
+                           level_code=args.level_code).to(device)
     n_params = sum(p.numel() for p in model.parameters())
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     total_steps = args.epochs * math.ceil(len(datasets["train"]) / args.batch_size)
@@ -287,6 +309,7 @@ def main() -> None:
         model.load_state_dict(best_state)
     result = {
         "task": "analogy", "params": n_params, "seed": args.seed,
+        "level_code": args.level_code,
         "val_exact_best": best_val,
         "test_exact": greedy_exact(model, loaders["test"], device,
                                    args.max_tgt, vocab.itos),
