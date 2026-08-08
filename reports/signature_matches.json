@@ -1,5 +1,184 @@
 {
   "nodes_analyzed": 199,
+  "group_counts": {
+    "shape": 28,
+    "typed": 29,
+    "family": 28,
+    "aliased": 30
+  },
+  "ladder_violations": [],
+  "slot_vs_call_head_collisions": [
+    {
+      "name": "degree",
+      "slot_spellings": [
+        "DEGREE"
+      ],
+      "call_head_spellings": [
+        "DEGREE"
+      ],
+      "as_slot_in": [
+        "geomodel.bezier.endpoint_tangent"
+      ],
+      "as_call_head_in": [
+        "difftop.degree.degree_multiplicativity",
+        "difftop.degree.degree_regular_value_count"
+      ],
+      "as_slot_only_in": [
+        "geomodel.bezier.endpoint_tangent"
+      ],
+      "as_call_head_only_in": [
+        "difftop.degree.degree_multiplicativity",
+        "difftop.degree.degree_regular_value_count"
+      ]
+    },
+    {
+      "name": "eulerchar",
+      "slot_spellings": [
+        "EULERCHAR"
+      ],
+      "call_head_spellings": [
+        "EULERCHAR"
+      ],
+      "as_slot_in": [
+        "algtop.homology.betti_alternating_sum",
+        "algtop.invariants.euler_characteristic_complex",
+        "algtop.invariants.euler_characteristic_surface",
+        "diffgeo.surfaces.gauss_bonnet_theorem"
+      ],
+      "as_call_head_in": [
+        "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+        "difftop.vectorfields.hairy_ball_theorem",
+        "difftop.vectorfields.poincare_hopf_index_theorem"
+      ],
+      "as_slot_only_in": [
+        "algtop.homology.betti_alternating_sum",
+        "algtop.invariants.euler_characteristic_complex",
+        "algtop.invariants.euler_characteristic_surface",
+        "diffgeo.surfaces.gauss_bonnet_theorem"
+      ],
+      "as_call_head_only_in": [
+        "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+        "difftop.vectorfields.hairy_ball_theorem",
+        "difftop.vectorfields.poincare_hopf_index_theorem"
+      ]
+    },
+    {
+      "name": "f",
+      "slot_spellings": [
+        "F"
+      ],
+      "call_head_spellings": [
+        "F"
+      ],
+      "as_slot_in": [
+        "calculus.integration.ftc_differentiation_part",
+        "calculus.integration.ftc_evaluation_part",
+        "calculus.limits.derivative_definition",
+        "diffgeo.stokes.stokes_zero_form_case"
+      ],
+      "as_call_head_in": [
+        "calculus.integration.ftc_evaluation_part",
+        "calculus.limits.derivative_definition",
+        "diffgeo.stokes.stokes_zero_form_case"
+      ],
+      "as_slot_only_in": [
+        "calculus.integration.ftc_differentiation_part"
+      ],
+      "as_call_head_only_in": []
+    },
+    {
+      "name": "length",
+      "slot_spellings": [
+        "LENGTH"
+      ],
+      "call_head_spellings": [
+        "LENGTH"
+      ],
+      "as_slot_in": [
+        "diffgeo.curves.arc_length_functional",
+        "graphtheory.walks.adjacency_power_walk_count"
+      ],
+      "as_call_head_in": [
+        "morphology.quantity.morpheme_count_additivity"
+      ],
+      "as_slot_only_in": [
+        "diffgeo.curves.arc_length_functional",
+        "graphtheory.walks.adjacency_power_walk_count"
+      ],
+      "as_call_head_only_in": [
+        "morphology.quantity.morpheme_count_additivity"
+      ]
+    },
+    {
+      "name": "outer",
+      "slot_spellings": [
+        "OUTER"
+      ],
+      "call_head_spellings": [
+        "OUTER"
+      ],
+      "as_slot_in": [
+        "calculus.differentiation.chain_rule",
+        "difftop.degree.degree_multiplicativity"
+      ],
+      "as_call_head_in": [
+        "ml.recurrence.mlstm_matrix_memory_update"
+      ],
+      "as_slot_only_in": [
+        "calculus.differentiation.chain_rule",
+        "difftop.degree.degree_multiplicativity"
+      ],
+      "as_call_head_only_in": [
+        "ml.recurrence.mlstm_matrix_memory_update"
+      ]
+    },
+    {
+      "name": "scale",
+      "slot_spellings": [
+        "SCALE"
+      ],
+      "call_head_spellings": [
+        "SCALE"
+      ],
+      "as_slot_in": [
+        "physics.thermodynamics.gibbs_entropy",
+        "probstat.transform.affine_location_scale",
+        "probstat.transform.z_standardization"
+      ],
+      "as_call_head_in": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ],
+      "as_slot_only_in": [
+        "physics.thermodynamics.gibbs_entropy",
+        "probstat.transform.affine_location_scale",
+        "probstat.transform.z_standardization"
+      ],
+      "as_call_head_only_in": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ]
+    },
+    {
+      "name": "sequence",
+      "slot_spellings": [
+        "SEQUENCE"
+      ],
+      "call_head_spellings": [
+        "SEQUENCE"
+      ],
+      "as_slot_in": [
+        "probstat.limit.law_of_large_numbers"
+      ],
+      "as_call_head_in": [
+        "narrative.structure.story_sequence"
+      ],
+      "as_slot_only_in": [
+        "probstat.limit.law_of_large_numbers"
+      ],
+      "as_call_head_only_in": [
+        "narrative.structure.story_sequence"
+      ]
+    }
+  ],
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
