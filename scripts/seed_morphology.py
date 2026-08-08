@@ -1158,7 +1158,7 @@ NODES.append({
                        "topic": "recursion"},
     "formal_statement": {
         "canonical_ascii": "phrase = ((base mod i1) mod i2)",
-        "canonical_latex": "\text{phrase} = ((\text{base}\ i_1)\ i_2)",
+        "canonical_latex": "\\text{phrase} = ((\\text{base}\\, i_1)\\, i_2)",
         "equivalent_forms": [{"form_id": "example",
                               "notation_system": "ascii",
                               "expression": "very very big = ((big very) very)",
