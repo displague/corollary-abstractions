@@ -1,3 +1,8 @@
+> **HISTORICAL (pre-pivot).** Describes the original template-CLI
+> implementation, now deprecated by the seed-script workflow
+> ([ADDING_FORMULAE.md](ADDING_FORMULAE.md)) and the
+> `check_regeneration.py` invariant. Kept as a record.
+
 # Implementation Summary: Formula Entry System
 
 ## Problem

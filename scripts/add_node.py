@@ -241,6 +241,16 @@ def generate_statement_id(discipline: str, node: dict, existing_ids: set[str]) -
 
 def main() -> int:
     """Main entry point."""
+    import sys as _sys
+    if "--legacy-direct-json" not in _sys.argv:
+        print("DEPRECATED: add_node.py edits nodes.json directly, which now")
+        print("violates the seed-as-source-of-truth invariant enforced by")
+        print("scripts/check_regeneration.py (your edit would be flagged as")
+        print("DRIFT and clobbered by the next regeneration).")
+        print("Author via scripts/seed_<discipline>.py instead -- see")
+        print("docs/ADDING_FORMULAE.md. To run anyway: --legacy-direct-json")
+        return 1
+    _sys.argv.remove("--legacy-direct-json")
     parser = argparse.ArgumentParser(
         description="Add Mathematical Statement Nodes from template files",
         epilog="Use --create-template to generate a template file to fill in."
