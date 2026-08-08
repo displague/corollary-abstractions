@@ -268,3 +268,11 @@ bindings), **near-miss** (informative failure, kept deliberately).
   absorption ⊒ idempotence via JOIN's identity element (BOT), two edges
   cross-corpus — the lattice laws now relate derivationally, not just
   as twins. *specialization* (2026-08-07)
+
+- **The audit caught our own table asserting a falsehood.** The
+  order_le alias class (BEFORE~LEQ) declares a reflexive order that
+  strict_precedence_asymmetry makes asymmetric — deriving ⊥ at x = x —
+  inert only because the class yields zero groups. Found by the scope
+  design's measurement pass; fix queued (LT strict head, the
+  strict/reflexive relation into HEAD_ALGEBRA). The epistemic ladder's
+  REFUTED rung, applied to the tooling itself. *self-audit* (2026-08-07)
