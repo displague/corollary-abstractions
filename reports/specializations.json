@@ -1,6 +1,142 @@
 {
   "specialization_edges": [
     {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "graphtheory.trees.tree_edge_count",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "EDGES = VERTICES - 1",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "EDGES",
+        "BOUNDARYRANK": "1",
+        "CYCLERANK": "VERTICES"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "geotop.polyhedra.euler_polyhedron_formula",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "VERTICES - EDGES + FACES = 2",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "EDGES",
+        "EULERCHAR": "2",
+        "FACES": "FACES",
+        "VERTICES": "VERTICES"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "WIDTH",
+        "RATE": "WIDTHNEXT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "CONSTANT": "WIDTH",
+        "HALFLIFE": "WIDTHNEXT",
+        "RATECONST": "2"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "geometry.area_formulas.circle_area_formula",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "RADIUS",
+        "ORDER": "2",
+        "RATE": "AREA",
+        "RATECONST": "CONSTANT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "geometry.volume_formulas.sphere_volume_formula",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "VOLUME = CONSTANT * RADIUS^3",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "RADIUS",
+        "ORDER": "3",
+        "RATE": "VOLUME",
+        "RATECONST": "CONSTANT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "geometry.surface_area_formulas.cube_surface_area",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "AREA = CONSTANT * SIDE^2",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "SIDE",
+        "ORDER": "2",
+        "RATE": "AREA",
+        "RATECONST": "CONSTANT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "geometry.surface_area_formulas.sphere_surface_area",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "AREA = CONSTANT * RADIUS^2",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "RADIUS",
+        "ORDER": "2",
+        "RATE": "AREA",
+        "RATECONST": "CONSTANT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "physics.relativity.mass_energy_equivalence",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "ENERGY = MASS * SPEEDLIMIT^2",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "SPEEDLIMIT",
+        "ORDER": "2",
+        "RATE": "ENERGY",
+        "RATECONST": "MASS"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "AMOUNT": "WIDTH",
+        "CONCENTRATION": "WIDTHNEXT",
+        "VOLUME": "2"
+      },
+      "looseness": 0
+    },
+    {
       "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "diffgeo.surfaces.gaussian_curvature_principal_product",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
@@ -81,6 +217,19 @@
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "RESISTANCE",
         "PATHLENGTH": "FLOW"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "ELASTICITY": "WIDTHNEXT",
+        "PCT_PRICE": "2",
+        "PCT_QUANTITY": "WIDTH"
       },
       "looseness": 0
     },
@@ -274,6 +423,32 @@
       "looseness": 0
     },
     {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "POLICYNEW": "WIDTH",
+        "POLICYOLD": "2",
+        "RATIO": "WIDTHNEXT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "CONDITION": "WIDTHNEXT",
+        "INPUTPERTURB": "2",
+        "OUTPUTPERTURB": "WIDTH"
+      },
+      "looseness": 0
+    },
+    {
       "general": "numanalysis.integration.trapezoidal_rule",
       "specific": "geometry.perimeter_formulas.rectangle_perimeter_formula",
       "general_template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
@@ -285,6 +460,32 @@
         "STEPWIDTH": "2",
         "VALUELEFT": "DIM1",
         "VALUERIGHT": "DIM2"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "WIDTH",
+        "RATE": "WIDTHNEXT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "numanalysis.rootfinding.bisection_interval_halving",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "WIDTHNEXT = WIDTH/2",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "2",
+        "QUANTITY": "WIDTH",
+        "RATE": "WIDTHNEXT"
       },
       "looseness": 0
     },
@@ -346,6 +547,19 @@
     },
     {
       "general": "algtop.homology.betti_number_rank",
+      "specific": "algtop.invariants.euler_characteristic_surface",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "EULERCHAR",
+        "BOUNDARYRANK": "*(CONSTANT2, GENUS)",
+        "CYCLERANK": "CONSTANT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
       "specific": "algtop.invariants.euler_characteristic_complex",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "EULERCHAR = VERTICES - EDGES + FACES",
@@ -359,14 +573,66 @@
     },
     {
       "general": "algtop.homology.betti_number_rank",
+      "specific": "chemistry.thermodynamics.gibbs_free_energy",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "FREE_ENERGY",
+        "BOUNDARYRANK": "*(TEMPERATURE, ENTROPY)",
+        "CYCLERANK": "ENTHALPY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "chemistry.thermodynamics.helmholtz_free_energy",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "FREE_ENERGY",
+        "BOUNDARYRANK": "*(TEMPERATURE, ENTROPY)",
+        "CYCLERANK": "INTERNAL_ENERGY"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
       "specific": "geotop.polyhedra.euler_polyhedron_formula",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "VERTICES - EDGES + FACES = 2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "2",
         "BOUNDARYRANK": "EDGES",
         "CYCLERANK": "+(VERTICES, FACES)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "ml.optimization.gradient_descent_step",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "PARAMNEXT",
+        "BOUNDARYRANK": "*(LEARNRATE, GRADIENT)",
+        "CYCLERANK": "PARAM"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "ml.objective.kl_regularized_rl_objective",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "OBJECTIVE",
+        "BOUNDARYRANK": "*(KLWEIGHT, DIVERGENCE)",
+        "CYCLERANK": "EXPECTEDREWARD"
       },
       "looseness": 1
     },
@@ -451,10 +717,38 @@
     },
     {
       "general": "chemistry.kinetics.rate_law_power",
+      "specific": "economics.finance.compound_interest_discrete",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "+(1, RATE)",
+        "ORDER": "PERIODS",
+        "RATE": "VALUE",
+        "RATECONST": "PRINCIPAL"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "geometry.circle_formulas.circle_area_from",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "CIRCUMFERENCE",
+        "ORDER": "2",
+        "RATE": "AREA",
+        "RATECONST": "inv(CONSTANT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
       "specific": "physics.mechanics.kinetic_energy",
       "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
       "specific_template": "ENERGY = CONSTANT * MASS * SPEED^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONCENTRATION": "SPEED",
         "ORDER": "2",
@@ -564,7 +858,7 @@
       "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "INTEGRAL(CURVATURE)",
         "ABSORPTIVITY": "1",
@@ -592,7 +886,7 @@
       "specific": "economics.monetary.equation_of_exchange",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "*(MONEY, VELOCITY)",
         "ABSORPTIVITY": "1",
@@ -676,7 +970,7 @@
       "specific": "graphtheory.degree.handshake_lemma",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "sum_i DEGREE_i = 2*EDGES",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "sum(DEGREE_i)",
         "ABSORPTIVITY": "1",
@@ -784,6 +1078,18 @@
       "looseness": 1
     },
     {
+      "general": "diffgeo.curves.arc_length_functional",
+      "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "general_template": "LENGTH = INTEGRAL(SPEED)",
+      "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+      "via": "compound",
+      "bindings": {
+        "LENGTH": "*(CONSTANT, EULERCHAR)",
+        "SPEED": "CURVATURE"
+      },
+      "looseness": 1
+    },
+    {
       "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
       "specific": "chemistry.spectroscopy.beer_lambert_law",
       "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
@@ -793,6 +1099,32 @@
         "GAUSSCURVATURE": "ABSORBANCE",
         "PRINCIPAL1": "ABSORPTIVITY",
         "PRINCIPAL2": "*(PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "INTEGRAL(CURVATURE)",
+        "PRINCIPAL1": "CONSTANT",
+        "PRINCIPAL2": "EULERCHAR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "*(MONEY, VELOCITY)",
+        "PRINCIPAL1": "PRICE_LEVEL",
+        "PRINCIPAL2": "OUTPUT"
       },
       "looseness": 1
     },
@@ -819,6 +1151,19 @@
         "GAUSSCURVATURE": "AREA",
         "PRINCIPAL1": "CONSTANT",
         "PRINCIPAL2": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "sum(DEGREE_i)",
+        "PRINCIPAL1": "2",
+        "PRINCIPAL2": "EDGES"
       },
       "looseness": 1
     },
@@ -918,6 +1263,32 @@
     },
     {
       "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+      "via": "compound",
+      "bindings": {
+        "AREA": "INTEGRAL(CURVATURE)",
+        "DIM1": "CONSTANT",
+        "DIM2": "EULERCHAR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "compound",
+      "bindings": {
+        "AREA": "*(MONEY, VELOCITY)",
+        "DIM1": "PRICE_LEVEL",
+        "DIM2": "OUTPUT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
       "specific": "geometry.volume_formulas.rectangular_prism_volume",
       "general_template": "AREA = DIM1 * DIM2",
       "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
@@ -939,6 +1310,19 @@
         "AREA": "AREA",
         "DIM1": "CONSTANT",
         "DIM2": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "compound",
+      "bindings": {
+        "AREA": "sum(DEGREE_i)",
+        "DIM1": "2",
+        "DIM2": "EDGES"
       },
       "looseness": 1
     },
@@ -1047,7 +1431,7 @@
       "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "INTEGRAL(CURVATURE)",
         "BASE": "CONSTANT",
@@ -1075,7 +1459,7 @@
       "specific": "economics.monetary.equation_of_exchange",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "*(MONEY, VELOCITY)",
         "BASE": "PRICE_LEVEL",
@@ -1159,7 +1543,7 @@
       "specific": "graphtheory.degree.handshake_lemma",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "sum_i DEGREE_i = 2*EDGES",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "sum(DEGREE_i)",
         "BASE": "2",
@@ -1332,6 +1716,20 @@
       "looseness": 1
     },
     {
+      "general": "geometry.volume_formulas.rectangular_prism_volume",
+      "specific": "physics.thermodynamics.ideal_gas_law",
+      "general_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
+      "via": "compound",
+      "bindings": {
+        "DIM1": "AMOUNT",
+        "DIM2": "CONSTANT",
+        "DIM3": "TEMPERATURE",
+        "VOLUME": "*(PRESSURE, VOLUME)"
+      },
+      "looseness": 1
+    },
+    {
       "general": "geomodel.transforms.homogeneous_rigid_transform",
       "specific": "ml.adaptation.lora_low_rank_update",
       "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
@@ -1346,6 +1744,71 @@
       "looseness": 1
     },
     {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "logic.boolean_laws.absorption",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "PROP1",
+        "REGA": "PROP1",
+        "REGB": "JOIN(PROP1, PROP2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "logic.boolean_laws.complement_laws",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(PROP1, NEG(PROP1)) = FALSITY",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "FALSITY",
+        "REGA": "PROP1",
+        "REGB": "NEG(PROP1)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "narrative.frame.frame_consistency",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "INCONSISTENCY",
+        "REGA": "FRAMEPREMISE",
+        "REGB": "NEG(FRAMEPREMISE)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "settheory.boolean_laws.absorption",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "SETA",
+        "REGA": "SETA",
+        "REGB": "JOIN(SETA, SETB)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "settheory.boolean_laws.complement_laws",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(SETA, NEG(SETA)) = EMPTYSET",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "EMPTYSET",
+        "REGA": "SETA",
+        "REGB": "NEG(SETA)"
+      },
+      "looseness": 1
+    },
+    {
       "general": "graphtheory.enumeration.complete_bipartite_edge_count",
       "specific": "chemistry.spectroscopy.beer_lambert_law",
       "general_template": "EDGES = PARTONE*PARTTWO",
@@ -1355,6 +1818,32 @@
         "EDGES": "ABSORBANCE",
         "PARTONE": "ABSORPTIVITY",
         "PARTTWO": "*(PATHLENGTH, CONCENTRATION)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "INTEGRAL(CURVATURE)",
+        "PARTONE": "CONSTANT",
+        "PARTTWO": "EULERCHAR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "*(MONEY, VELOCITY)",
+        "PARTONE": "PRICE_LEVEL",
+        "PARTTWO": "OUTPUT"
       },
       "looseness": 1
     },
@@ -1381,6 +1870,43 @@
         "EDGES": "AREA",
         "PARTONE": "CONSTANT",
         "PARTTWO": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "sum(DEGREE_i)",
+        "PARTONE": "2",
+        "PARTTWO": "EDGES"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "logic.boolean_laws.identity_laws",
+      "specific": "logic.boolean_laws.absorption",
+      "general_template": "MEET(PROP1, TRUTH) = PROP1",
+      "specific_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "via": "compound",
+      "bindings": {
+        "PROP1": "PROP1",
+        "TRUTH": "JOIN(PROP1, PROP2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "logic.boolean_laws.identity_laws",
+      "specific": "settheory.boolean_laws.absorption",
+      "general_template": "MEET(PROP1, TRUTH) = PROP1",
+      "specific_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+      "via": "compound",
+      "bindings": {
+        "PROP1": "SETA",
+        "TRUTH": "JOIN(SETA, SETB)"
       },
       "looseness": 1
     },
@@ -1419,7 +1945,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "LOWRANKA": "INPUT",
         "LOWRANKB": "SLOPE",
@@ -1452,6 +1978,19 @@
         "POLICYNEW": "*(LIKELIHOOD, PRIOR)",
         "POLICYOLD": "NORMALIZER",
         "RATIO": "POSTERIOR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "morphology.wordformation.affixation",
+      "specific": "morphology.wordformation.iterated_affixation",
+      "general_template": "WORD = CONCAT(STEM, SUFFIX)",
+      "specific_template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)",
+      "via": "compound",
+      "bindings": {
+        "STEM": "CONCAT(STEM, SUFFIX1)",
+        "SUFFIX": "SUFFIX2",
+        "WORD": "WORD"
       },
       "looseness": 1
     },
@@ -1540,6 +2079,32 @@
     },
     {
       "general": "physics.circuits.ohms_law",
+      "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "CONSTANT",
+        "POTENTIAL": "INTEGRAL(CURVATURE)",
+        "RESISTANCE": "EULERCHAR"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "economics.monetary.equation_of_exchange",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "PRICE_LEVEL",
+        "POTENTIAL": "*(MONEY, VELOCITY)",
+        "RESISTANCE": "OUTPUT"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
       "specific": "geometry.volume_formulas.rectangular_prism_volume",
       "general_template": "POTENTIAL = FLOW * RESISTANCE",
       "specific_template": "VOLUME = DIM1 * DIM2 * DIM3",
@@ -1561,6 +2126,19 @@
         "FLOW": "CONSTANT",
         "POTENTIAL": "AREA",
         "RESISTANCE": "*(BASE, HEIGHT)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "graphtheory.degree.handshake_lemma",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "sum_i DEGREE_i = 2*EDGES",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "2",
+        "POTENTIAL": "sum(DEGREE_i)",
+        "RESISTANCE": "EDGES"
       },
       "looseness": 1
     },
@@ -1817,6 +2395,43 @@
       "looseness": 1
     },
     {
+      "general": "settheory.boolean_laws.identity_laws",
+      "specific": "logic.boolean_laws.absorption",
+      "general_template": "MEET(SETA, UNIVERSE) = SETA",
+      "specific_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "via": "compound",
+      "bindings": {
+        "SETA": "PROP1",
+        "UNIVERSE": "JOIN(PROP1, PROP2)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "settheory.boolean_laws.identity_laws",
+      "specific": "settheory.boolean_laws.absorption",
+      "general_template": "MEET(SETA, UNIVERSE) = SETA",
+      "specific_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+      "via": "compound",
+      "bindings": {
+        "SETA": "SETA",
+        "UNIVERSE": "JOIN(SETA, SETB)"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "numanalysis.rootfinding.newton_iteration",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "XNEXT = X - FVALUE/FDERIV",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "XNEXT",
+        "BOUNDARYRANK": "*(FVALUE, inv(FDERIV))",
+        "CYCLERANK": "X"
+      },
+      "looseness": 2
+    },
+    {
       "general": "algtop.homology.chain_rank_nullity",
       "specific": "algtop.invariants.euler_characteristic_complex",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
@@ -1834,7 +2449,7 @@
       "specific": "geotop.polyhedra.euler_polyhedron_formula",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "VERTICES - EDGES + FACES = 2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "2",
         "CYCLERANK": "VERTICES",
@@ -1852,6 +2467,19 @@
         "CHAINRANK": "RV_i",
         "CYCLERANK": "INTERCEPT",
         "IMAGERANK": "+(NOISE_i, *(SLOPE, PRED_i))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "E[](RV, COND)",
+        "CYCLERANK": "INTERCEPT",
+        "IMAGERANK": "*(SLOPE, INPUT)"
       },
       "looseness": 2
     },
@@ -1902,7 +2530,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "BASEVALUE": "INTERCEPT",
         "DISPLACEMENT": "*(SLOPE, INPUT)",
@@ -1916,7 +2544,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -1929,7 +2557,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -1942,7 +2570,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "HALFLIFE = CONSTANT / RATECONST",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONSTANT": "*(CONSTANT, SOURCE1, SOURCE2)",
         "HALFLIFE": "COUPLING",
@@ -1955,7 +2583,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "HALFLIFE = CONSTANT / RATECONST",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONSTANT": "*(CONSTANT, SOURCE1, SOURCE2)",
         "HALFLIFE": "COUPLING",
@@ -1982,7 +2610,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "CONCENTRATION = AMOUNT / VOLUME",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "AMOUNT": "*(CONSTANT, SOURCE1, SOURCE2)",
         "CONCENTRATION": "COUPLING",
@@ -1995,7 +2623,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "CONCENTRATION = AMOUNT / VOLUME",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "AMOUNT": "*(CONSTANT, SOURCE1, SOURCE2)",
         "CONCENTRATION": "COUPLING",
@@ -2162,7 +2790,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "ABSORBANCE": "*(PRESSURE, VOLUME)",
         "ABSORPTIVITY": "1",
@@ -2182,6 +2810,18 @@
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "*(PRIOR, inv(NORMALIZER))",
         "PATHLENGTH": "LIKELIHOOD"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "diffgeo.curves.arc_length_functional",
+      "specific": "diffgeo.stokes.stokes_theorem",
+      "general_template": "LENGTH = INTEGRAL(SPEED)",
+      "specific_template": "INTEGRAL(D(FORM)) = BOUNDARYINTEGRAL(FORM)",
+      "via": "compound",
+      "bindings": {
+        "LENGTH": "BOUNDARYINTEGRAL(FORM)",
+        "SPEED": "D(FORM)"
       },
       "looseness": 2
     },
@@ -2242,7 +2882,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "GAUSSCURVATURE": "*(PRESSURE, VOLUME)",
         "PRINCIPAL1": "AMOUNT",
@@ -2296,7 +2936,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "EXPECTED": "E[](RV, COND)",
         "PREMIUM": "*(SLOPE, INPUT)",
@@ -2338,7 +2978,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AUTONOMOUS": "INTERCEPT",
         "CONSUMPTION": "E[](RV, COND)",
@@ -2352,7 +2992,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "ELASTICITY": "COUPLING",
         "PCT_PRICE": "^(SEPARATION, 2)",
@@ -2365,7 +3005,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "ELASTICITY": "COUPLING",
         "PCT_PRICE": "^(SEPARATION, 2)",
@@ -2430,7 +3070,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "AREA = DIM1 * DIM2",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "AREA": "*(PRESSURE, VOLUME)",
         "DIM1": "AMOUNT",
@@ -2640,7 +3280,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AREA": "*(PRESSURE, VOLUME)",
         "BASE": "AMOUNT",
@@ -2733,7 +3373,7 @@
       "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "INTEGRAL(CURVATURE)",
         "CONSTANT": "1",
@@ -2759,7 +3399,7 @@
       "specific": "economics.monetary.equation_of_exchange",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "*(MONEY, VELOCITY)",
         "CONSTANT": "1",
@@ -2850,7 +3490,7 @@
       "specific": "graphtheory.degree.handshake_lemma",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "sum_i DEGREE_i = 2*EDGES",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "sum(DEGREE_i)",
         "CONSTANT": "1",
@@ -2967,7 +3607,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "*(PRESSURE, VOLUME)",
         "CONSTANT": "1",
@@ -3019,7 +3659,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONTROLONE": "VERTICES",
         "CONTROLZERO": "1",
@@ -3061,7 +3701,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "POINT": "*(SLOPE, INPUT)",
         "POINTNEW": "E[](RV, COND)",
@@ -3127,7 +3767,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "EDGES = PARTONE*PARTTWO",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "EDGES": "*(PRESSURE, VOLUME)",
         "PARTONE": "AMOUNT",
@@ -3196,7 +3836,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "RATIO = POLICYNEW / POLICYOLD",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "POLICYNEW": "*(CONSTANT, SOURCE1, SOURCE2)",
         "POLICYOLD": "^(SEPARATION, 2)",
@@ -3209,7 +3849,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "RATIO = POLICYNEW / POLICYOLD",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "POLICYNEW": "*(CONSTANT, SOURCE1, SOURCE2)",
         "POLICYOLD": "^(SEPARATION, 2)",
@@ -3218,11 +3858,25 @@
       "looseness": 2
     },
     {
+      "general": "morphology.wordformation.iterated_affixation",
+      "specific": "morphology.wordformation.concat_associativity",
+      "general_template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)",
+      "specific_template": "CONCAT(CONCAT(FIRST, SECOND), THIRD) = CONCAT(FIRST, CONCAT(SECOND, THIRD))",
+      "via": "compound",
+      "bindings": {
+        "STEM": "FIRST",
+        "SUFFIX1": "SECOND",
+        "SUFFIX2": "THIRD",
+        "WORD": "CONCAT(FIRST, CONCAT(SECOND, THIRD))"
+      },
+      "looseness": 2
+    },
+    {
       "general": "numanalysis.error.relative_condition_number",
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONDITION": "COUPLING",
         "INPUTPERTURB": "^(SEPARATION, 2)",
@@ -3235,7 +3889,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONDITION": "COUPLING",
         "INPUTPERTURB": "^(SEPARATION, 2)",
@@ -3306,7 +3960,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "SLOPE": "*(SLOPE, INPUT)",
         "STEPSIZE": "1",
@@ -3372,7 +4026,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "POTENTIAL = FLOW * RESISTANCE",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "FLOW": "AMOUNT",
         "POTENTIAL": "*(PRESSURE, VOLUME)",
@@ -3398,7 +4052,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -3411,7 +4065,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -3424,7 +4078,7 @@
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -3437,7 +4091,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "^(SEPARATION, 2)",
         "QUANTITY": "*(CONSTANT, SOURCE1, SOURCE2)",
@@ -3515,7 +4169,7 @@
       "specific": "diffgeo.surfaces.gauss_bonnet_theorem",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "INTEGRAL(CURVATURE)",
         "INERTIA": "1",
@@ -3541,7 +4195,7 @@
       "specific": "economics.monetary.equation_of_exchange",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "*(MONEY, VELOCITY)",
         "INERTIA": "1",
@@ -3632,7 +4286,7 @@
       "specific": "graphtheory.degree.handshake_lemma",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "sum_i DEGREE_i = 2*EDGES",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "sum(DEGREE_i)",
         "INERTIA": "1",
@@ -3749,7 +4403,7 @@
       "specific": "physics.thermodynamics.ideal_gas_law",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "*(PRESSURE, VOLUME)",
         "INERTIA": "1",
@@ -3798,10 +4452,24 @@
     },
     {
       "general": "probstat.probability.bayes_rule",
+      "specific": "graphtheory.enumeration.complete_graph_edge_count",
+      "general_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
+      "via": "compound",
+      "bindings": {
+        "LIKELIHOOD": "VERTICES",
+        "NORMALIZER": "2",
+        "POSTERIOR": "EDGES",
+        "PRIOR": "+(VERTICES, neg(1))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "probstat.probability.bayes_rule",
       "specific": "physics.gravitation.newton_universal_gravitation",
       "general_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "LIKELIHOOD": "CONSTANT",
         "NORMALIZER": "^(SEPARATION, 2)",
@@ -3815,7 +4483,7 @@
       "specific": "physics.electromagnetism.coulombs_law",
       "general_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
       "specific_template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "LIKELIHOOD": "CONSTANT",
         "NORMALIZER": "^(SEPARATION, 2)",
@@ -3844,7 +4512,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "INTERCEPT": "0",
         "NOISE_i": "INTERCEPT",
@@ -3887,7 +4555,7 @@
       "specific": "probstat.regression.slr_conditional_expectation",
       "general_template": "OUT = SCALE*IN + SHIFT",
       "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "IN": "*(SLOPE, INPUT)",
         "OUT": "E[](RV, COND)",
@@ -3895,6 +4563,58 @@
         "SHIFT": "INTERCEPT"
       },
       "looseness": 2
+    },
+    {
+      "general": "temporal.response.response_pattern",
+      "specific": "narrative.constraint.chekhov_gun",
+      "general_template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))",
+      "specific_template": "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))",
+      "via": "compound",
+      "bindings": {
+        "RESPONSE": "DISCHARGED(ELEMENT)",
+        "TRIGGER": "PLANTED(ELEMENT)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "diffgeo.surfaces.euclidean_line_element",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "LINEELEMENT^2 = DU^2 + DV^2",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "^(LINEELEMENT, 2)",
+        "CYCLERANK": "^(DU, 2)",
+        "IMAGERANK": "^(DV, 2)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "geometry.right_triangles.pythagorean_theorem",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "^(HYPOTENUSE, 2)",
+        "CYCLERANK": "^(SIDE1, 2)",
+        "IMAGERANK": "^(SIDE2, 2)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "infotheory.mutualinfo.mutual_information",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "SHAREDINFORMATION = ENTROPYOF(FIRST) + ENTROPYOF(SECOND) - ENTROPYOF(FIRST, SECOND)",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "ENTROPYOF(FIRST, SECOND)",
+        "EULERCHAR": "SHAREDINFORMATION",
+        "FACES": "ENTROPYOF(SECOND)",
+        "VERTICES": "ENTROPYOF(FIRST)"
+      },
+      "looseness": 3
     },
     {
       "general": "calculus.approximation.tangent_line_linearization",
@@ -3915,7 +4635,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "2",
         "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
@@ -3942,7 +4662,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "HALFLIFE = CONSTANT / RATECONST",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONSTANT": "*(VERTICES, +(VERTICES, neg(1)))",
         "HALFLIFE": "EDGES",
@@ -3955,7 +4675,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "CONCENTRATION = AMOUNT / VOLUME",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "AMOUNT": "*(VERTICES, +(VERTICES, neg(1)))",
         "CONCENTRATION": "EDGES",
@@ -4161,7 +4881,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "ELASTICITY": "EDGES",
         "PCT_PRICE": "2",
@@ -4205,6 +4925,30 @@
         "AREA": "COUPLING",
         "DIM1": "CONSTANT",
         "DIM2": "*(SOURCE1, SOURCE2, inv(^(SEPARATION, 2)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.square_area_formula",
+      "specific": "diffgeo.surfaces.euclidean_line_element",
+      "general_template": "AREA = SIDE^2",
+      "specific_template": "LINEELEMENT^2 = DU^2 + DV^2",
+      "via": "compound",
+      "bindings": {
+        "AREA": "+(^(DU, 2), ^(DV, 2))",
+        "SIDE": "LINEELEMENT"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "geometry.area_formulas.square_area_formula",
+      "specific": "geometry.right_triangles.pythagorean_theorem",
+      "general_template": "AREA = SIDE^2",
+      "specific_template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2",
+      "via": "compound",
+      "bindings": {
+        "AREA": "+(^(SIDE1, 2), ^(SIDE2, 2))",
+        "SIDE": "HYPOTENUSE"
       },
       "looseness": 3
     },
@@ -4595,11 +5339,25 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATIO = POLICYNEW / POLICYOLD",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "POLICYNEW": "*(VERTICES, +(VERTICES, neg(1)))",
         "POLICYOLD": "2",
         "RATIO": "EDGES"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "ml.preference.grpo_group_relative_advantage",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "ADVANTAGE": "VAR",
+        "MEANREWARD": "COEFF1",
+        "REWARD": "pm(SQRT(DISC))",
+        "STDREWARD": "*(2, COEFF0)"
       },
       "looseness": 3
     },
@@ -4619,11 +5377,24 @@
       "looseness": 3
     },
     {
+      "general": "morphology.wordformation.affixation",
+      "specific": "morphology.wordformation.concat_associativity",
+      "general_template": "WORD = CONCAT(STEM, SUFFIX)",
+      "specific_template": "CONCAT(CONCAT(FIRST, SECOND), THIRD) = CONCAT(FIRST, CONCAT(SECOND, THIRD))",
+      "via": "compound",
+      "bindings": {
+        "STEM": "CONCAT(FIRST, SECOND)",
+        "SUFFIX": "THIRD",
+        "WORD": "CONCAT(FIRST, CONCAT(SECOND, THIRD))"
+      },
+      "looseness": 3
+    },
+    {
       "general": "numanalysis.error.relative_condition_number",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CONDITION": "EDGES",
         "INPUTPERTURB": "2",
@@ -4716,7 +5487,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "2",
         "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
@@ -4729,7 +5500,7 @@
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATE = QUANTITY / INTERVAL",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "INTERVAL": "2",
         "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
@@ -4897,15 +5668,68 @@
       "looseness": 3
     },
     {
+      "general": "probstat.transform.z_standardization",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "STD = (RAW - CENTER)/SCALE",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "CENTER": "COEFF1",
+        "RAW": "pm(SQRT(DISC))",
+        "SCALE": "*(2, COEFF0)",
+        "STD": "VAR"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "calculus.integration.ftc_evaluation_part",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "INTEGRAL(D(F))",
+        "BOUNDARYRANK": "F(LOWER)",
+        "CYCLERANK": "F(UPPER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "diffgeo.stokes.stokes_zero_form_case",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
+      "via": "compound",
+      "bindings": {
+        "BETTI": "INTEGRAL(D(F))",
+        "BOUNDARYRANK": "F(STARTPOINT)",
+        "CYCLERANK": "F(ENDPOINT)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "algtop.homology.betti_number_rank",
       "specific": "infotheory.mutualinfo.mutual_information",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "SHAREDINFORMATION = ENTROPYOF(FIRST) + ENTROPYOF(SECOND) - ENTROPYOF(FIRST, SECOND)",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "SHAREDINFORMATION",
         "BOUNDARYRANK": "ENTROPYOF(FIRST, SECOND)",
         "CYCLERANK": "+(ENTROPYOF(FIRST), ENTROPYOF(SECOND))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "morphology.quantity.morpheme_count_additivity",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "LENGTH(CONCAT(FIRST, SECOND)) = LENGTH(FIRST) + LENGTH(SECOND)",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "LENGTH(CONCAT(FIRST, SECOND))",
+        "CYCLERANK": "LENGTH(FIRST)",
+        "IMAGERANK": "LENGTH(SECOND)"
       },
       "looseness": 4
     },
@@ -4942,7 +5766,7 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AMOUNT": "D(EXP(*(RATE, VAR)))",
         "INITIAL": "RATE",
@@ -4952,11 +5776,37 @@
       "looseness": 4
     },
     {
+      "general": "chemistry.acid_base.ph_definition",
+      "specific": "ml.preference.dpo_preference_loss",
+      "general_template": "PH = -LOG(ACTIVITY)",
+      "specific_template": "LOSS = -(LOG(SIGMOID(BETA * (LOGRATIOCHOSEN - LOGRATIOREJECTED))))",
+      "via": "compound",
+      "bindings": {
+        "ACTIVITY": "SIGMOID(*(BETA, +(LOGRATIOCHOSEN, neg(LOGRATIOREJECTED))))",
+        "PH": "LOSS"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "chemistry.kinetics.rate_law_power",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "RATE = RATECONST * CONCENTRATION^ORDER",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "compound",
+      "bindings": {
+        "CONCENTRATION": "VAR",
+        "ORDER": "+(EXPONENT, neg(1))",
+        "RATE": "D(^(VAR, EXPONENT))",
+        "RATECONST": "EXPONENT"
+      },
+      "looseness": 4
+    },
+    {
       "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "DEGREE(COMPOSE(OUTER, INNER))",
         "ABSORPTIVITY": "1",
@@ -4976,6 +5826,19 @@
         "ABSORPTIVITY": "1",
         "CONCENTRATION": "*(+(VERTICES, neg(1)), inv(2))",
         "PATHLENGTH": "VERTICES"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "difftop.degree.degree_multiplicativity",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "DEGREE(COMPOSE(OUTER, INNER))",
+        "PRINCIPAL1": "DEGREE(OUTER)",
+        "PRINCIPAL2": "DEGREE(INNER)"
       },
       "looseness": 4
     },
@@ -5025,12 +5888,27 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "PRINCIPAL": "RATE",
         "RATE": "1",
         "TIME": "*(RATE, VAR)",
         "VALUE": "D(EXP(*(RATE, VAR)))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.macroeconomics.gdp_expenditure_identity",
+      "specific": "geomodel.quaternions.unit_quaternion_constraint",
+      "general_template": "OUTPUT = CONSUMPTION + INVESTMENT + GOVERNMENT + NET_EXPORTS",
+      "specific_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+      "via": "compound",
+      "bindings": {
+        "CONSUMPTION": "^(REALPART, 2)",
+        "GOVERNMENT": "^(IMAGJ, 2)",
+        "INVESTMENT": "^(IMAGI, 2)",
+        "NET_EXPORTS": "^(IMAGK, 2)",
+        "OUTPUT": "1"
       },
       "looseness": 4
     },
@@ -5064,6 +5942,19 @@
     },
     {
       "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "difftop.degree.degree_multiplicativity",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
+      "via": "compound",
+      "bindings": {
+        "AREA": "DEGREE(COMPOSE(OUTER, INNER))",
+        "DIM1": "DEGREE(OUTER)",
+        "DIM2": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "AREA = DIM1 * DIM2",
       "specific_template": "EDGES = VERTICES*(VERTICES - 1)/2",
@@ -5080,7 +5971,7 @@
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "DEGREE(COMPOSE(OUTER, INNER))",
         "BASE": "DEGREE(OUTER)",
@@ -5210,6 +6101,58 @@
       "looseness": 4
     },
     {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "logic.boolean_laws.distributivity_meet_over_join",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))",
+        "REGA": "PROP1",
+        "REGB": "JOIN(PROP2, PROP3)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "settheory.boolean_laws.distributivity_meet_over_join",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "MEET(SETA, JOIN(SETB, SETC)) = JOIN(MEET(SETA, SETB), MEET(SETA, SETC))",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "JOIN(MEET(SETA, SETB), MEET(SETA, SETC))",
+        "REGA": "SETA",
+        "REGB": "JOIN(SETB, SETC)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "temporal.modality.next_distributes_over_meet",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "NEXT(MEET(PROPA, PROPB)) = MEET(NEXT(PROPA), NEXT(PROPB))",
+      "via": "compound",
+      "bindings": {
+        "EMPTYSET": "NEXT(MEET(PROPA, PROPB))",
+        "REGA": "NEXT(PROPA)",
+        "REGB": "NEXT(PROPB)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "difftop.degree.degree_multiplicativity",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "DEGREE(COMPOSE(OUTER, INNER))",
+        "PARTONE": "DEGREE(OUTER)",
+        "PARTTWO": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "graphtheory.enumeration.complete_bipartite_edge_count",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "EDGES = PARTONE*PARTTWO",
@@ -5219,6 +6162,18 @@
         "EDGES": "EDGES",
         "PARTONE": "VERTICES",
         "PARTTWO": "*(+(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "infotheory.entropy.surprisal",
+      "specific": "ml.preference.dpo_preference_loss",
+      "general_template": "SURPRISAL = -(LOG(WEIGHT))",
+      "specific_template": "LOSS = -(LOG(SIGMOID(BETA * (LOGRATIOCHOSEN - LOGRATIOREJECTED))))",
+      "via": "compound",
+      "bindings": {
+        "SURPRISAL": "LOSS",
+        "WEIGHT": "SIGMOID(*(BETA, +(LOGRATIOCHOSEN, neg(LOGRATIOREJECTED))))"
       },
       "looseness": 4
     },
@@ -5277,6 +6232,19 @@
         "STEPSIZE": "1",
         "Y": "*(PARAM, FINISH)",
         "YNEXT": "RESULT"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "difftop.degree.degree_multiplicativity",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "DEGREE(OUTER)",
+        "POTENTIAL": "DEGREE(COMPOSE(OUTER, INNER))",
+        "RESISTANCE": "DEGREE(INNER)"
       },
       "looseness": 4
     },
@@ -5483,10 +6451,36 @@
     },
     {
       "general": "algtop.homology.chain_rank_nullity",
+      "specific": "calculus.integration.ftc_evaluation_part",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "INTEGRAL(D(F))",
+        "CYCLERANK": "F(UPPER)",
+        "IMAGERANK": "neg(F(LOWER))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "diffgeo.stokes.stokes_zero_form_case",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "INTEGRAL(D(F))",
+        "CYCLERANK": "F(ENDPOINT)",
+        "IMAGERANK": "neg(F(STARTPOINT))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
       "specific": "geomodel.quaternions.unit_quaternion_constraint",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "1",
         "CYCLERANK": "^(REALPART, 2)",
@@ -5508,11 +6502,50 @@
       "looseness": 5
     },
     {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "*(2, COEFF0)",
+        "QUANTITY": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "RATE": "VAR"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "CONSTANT": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "HALFLIFE": "VAR",
+        "RATECONST": "*(2, COEFF0)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "AMOUNT": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "CONCENTRATION": "VAR",
+        "VOLUME": "*(2, COEFF0)"
+      },
+      "looseness": 5
+    },
+    {
       "general": "chemistry.spectroscopy.beer_lambert_law",
       "specific": "calculus.differentiation.power_rule",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "D(^(VAR, EXPONENT))",
         "ABSORPTIVITY": "1",
@@ -5526,7 +6559,7 @@
       "specific": "calculus.differentiation.chain_rule",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "D(COMPOSE(OUTER, INNER))",
         "ABSORPTIVITY": "1",
@@ -5540,7 +6573,7 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "ABSORBANCE": "D(EXP(*(RATE, VAR)))",
         "ABSORPTIVITY": "1",
@@ -5578,6 +6611,121 @@
       "looseness": 5
     },
     {
+      "general": "diffgeo.curves.arc_length_functional",
+      "specific": "calculus.integration.ftc_evaluation_part",
+      "general_template": "LENGTH = INTEGRAL(SPEED)",
+      "specific_template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
+      "via": "compound",
+      "bindings": {
+        "LENGTH": "+(F(UPPER), neg(F(LOWER)))",
+        "SPEED": "D(F)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "diffgeo.curves.arc_length_functional",
+      "specific": "diffgeo.stokes.stokes_zero_form_case",
+      "general_template": "LENGTH = INTEGRAL(SPEED)",
+      "specific_template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
+      "via": "compound",
+      "bindings": {
+        "LENGTH": "+(F(ENDPOINT), neg(F(STARTPOINT)))",
+        "SPEED": "D(F)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "D(^(VAR, EXPONENT))",
+        "PRINCIPAL1": "EXPONENT",
+        "PRINCIPAL2": "^(VAR, +(EXPONENT, neg(1)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "D(COMPOSE(OUTER, INNER))",
+        "PRINCIPAL1": "COMPOSE(D(OUTER), INNER)",
+        "PRINCIPAL2": "D(INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "compound",
+      "bindings": {
+        "GAUSSCURVATURE": "D(EXP(*(RATE, VAR)))",
+        "PRINCIPAL1": "RATE",
+        "PRINCIPAL2": "EXP(*(RATE, VAR))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "ELASTICITY": "VAR",
+        "PCT_PRICE": "*(2, COEFF0)",
+        "PCT_QUANTITY": "+(neg(COEFF1), pm(SQRT(DISC)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "compound",
+      "bindings": {
+        "AREA": "D(^(VAR, EXPONENT))",
+        "DIM1": "EXPONENT",
+        "DIM2": "^(VAR, +(EXPONENT, neg(1)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "compound",
+      "bindings": {
+        "AREA": "D(COMPOSE(OUTER, INNER))",
+        "DIM1": "COMPOSE(D(OUTER), INNER)",
+        "DIM2": "D(INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "compound",
+      "bindings": {
+        "AREA": "D(EXP(*(RATE, VAR)))",
+        "DIM1": "RATE",
+        "DIM2": "EXP(*(RATE, VAR))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "geometry.area_formulas.trapezoid_area_formula",
       "specific": "algebra.polynomial_equations.quadratic_formula",
       "general_template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
@@ -5597,7 +6745,7 @@
       "specific": "calculus.differentiation.power_rule",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "D(^(VAR, EXPONENT))",
         "BASE": "EXPONENT",
@@ -5611,7 +6759,7 @@
       "specific": "calculus.differentiation.chain_rule",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "D(COMPOSE(OUTER, INNER))",
         "BASE": "COMPOSE(D(OUTER), INNER)",
@@ -5625,7 +6773,7 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "AREA": "D(EXP(*(RATE, VAR)))",
         "BASE": "RATE",
@@ -5667,7 +6815,7 @@
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "DEGREE(COMPOSE(OUTER, INNER))",
         "CONSTANT": "1",
@@ -5676,17 +6824,82 @@
       "looseness": 5
     },
     {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "D(^(VAR, EXPONENT))",
+        "PARTONE": "EXPONENT",
+        "PARTTWO": "^(VAR, +(EXPONENT, neg(1)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "D(COMPOSE(OUTER, INNER))",
+        "PARTONE": "COMPOSE(D(OUTER), INNER)",
+        "PARTTWO": "D(INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "D(EXP(*(RATE, VAR)))",
+        "PARTONE": "RATE",
+        "PARTTWO": "EXP(*(RATE, VAR))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "calculus.differentiation.product_rule",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "LOWRANKA": "D(FUNC2)",
         "LOWRANKB": "FUNC1",
         "SCALING": "1",
         "WEIGHT": "D(*(FUNC1, FUNC2))",
         "WEIGHTFROZEN": "*(FUNC2, D(FUNC1))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "POLICYNEW": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "POLICYOLD": "*(2, COEFF0)",
+        "RATIO": "VAR"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "CONDITION": "VAR",
+        "INPUTPERTURB": "*(2, COEFF0)",
+        "OUTPUTPERTURB": "+(neg(COEFF1), pm(SQRT(DISC)))"
       },
       "looseness": 5
     },
@@ -5706,11 +6919,76 @@
       "looseness": 5
     },
     {
+      "general": "physics.circuits.ohms_law",
+      "specific": "calculus.differentiation.power_rule",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "EXPONENT",
+        "POTENTIAL": "D(^(VAR, EXPONENT))",
+        "RESISTANCE": "^(VAR, +(EXPONENT, neg(1)))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "calculus.differentiation.chain_rule",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "COMPOSE(D(OUTER), INNER)",
+        "POTENTIAL": "D(COMPOSE(OUTER, INNER))",
+        "RESISTANCE": "D(INNER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "calculus.differentiation.exponential_derivative",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
+      "via": "compound",
+      "bindings": {
+        "FLOW": "RATE",
+        "POTENTIAL": "D(EXP(*(RATE, VAR)))",
+        "RESISTANCE": "EXP(*(RATE, VAR))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.kinematics.average_speed",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "*(2, COEFF0)",
+        "QUANTITY": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "RATE": "VAR"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "algebra.polynomial_equations.quadratic_formula",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
+      "via": "compound",
+      "bindings": {
+        "INTERVAL": "*(2, COEFF0)",
+        "QUANTITY": "+(neg(COEFF1), pm(SQRT(DISC)))",
+        "RATE": "VAR"
+      },
+      "looseness": 5
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "DEGREE(COMPOSE(OUTER, INNER))",
         "INERTIA": "1",
@@ -5719,11 +6997,80 @@
       "looseness": 5
     },
     {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "D(*(FUNC1, FUNC2))",
+        "CYCLERANK": "*(FUNC2, D(FUNC1))",
+        "IMAGERANK": "*(FUNC1, D(FUNC2))"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "algtop.invariants.euler_characteristic_valuation",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "CARD(MEET(SPACEA, SPACEB))",
+        "EULERCHAR": "CARD(JOIN(SPACEA, SPACEB))",
+        "FACES": "CARD(SPACEB)",
+        "VERTICES": "CARD(SPACEA)"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "geotop.measure.area_inclusion_exclusion",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "CARD(MEET(REGA, REGB))",
+        "EULERCHAR": "CARD(JOIN(REGA, REGB))",
+        "FACES": "CARD(REGB)",
+        "VERTICES": "CARD(REGA)"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "CARD(MEET(FIRST, SECOND))",
+        "EULERCHAR": "CARD(JOIN(FIRST, SECOND))",
+        "FACES": "CARD(SECOND)",
+        "VERTICES": "CARD(FIRST)"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "algtop.invariants.euler_characteristic_complex",
+      "specific": "settheory.cardinality.inclusion_exclusion_two_sets",
+      "general_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "specific_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
+      "via": "compound",
+      "bindings": {
+        "EDGES": "CARD(MEET(SETA, SETB))",
+        "EULERCHAR": "CARD(JOIN(SETA, SETB))",
+        "FACES": "CARD(SETB)",
+        "VERTICES": "CARD(SETA)"
+      },
+      "looseness": 6
+    },
+    {
       "general": "calculus.approximation.tangent_line_linearization",
       "specific": "calculus.differentiation.product_rule",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "BASEVALUE": "*(FUNC2, D(FUNC1))",
         "DISPLACEMENT": "*(FUNC1, D(FUNC2))",
@@ -5751,7 +7098,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "EXPECTED": "D(*(FUNC1, FUNC2))",
         "PREMIUM": "*(FUNC1, D(FUNC2))",
@@ -5765,12 +7112,24 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AUTONOMOUS": "*(FUNC2, D(FUNC1))",
         "CONSUMPTION": "D(*(FUNC1, FUNC2))",
         "DISPOSABLE_INCOME": "*(FUNC1, D(FUNC2))",
         "PROPENSITY": "1"
+      },
+      "looseness": 6
+    },
+    {
+      "general": "geometry.area_formulas.square_area_formula",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "AREA = SIDE^2",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "compound",
+      "bindings": {
+        "AREA": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)), *(COEFFG, ^(DV, 2)))",
+        "SIDE": "LINEELEMENT"
       },
       "looseness": 6
     },
@@ -5793,7 +7152,7 @@
       "specific": "calculus.differentiation.power_rule",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "D(^(VAR, EXPONENT))",
         "CONSTANT": "1",
@@ -5806,7 +7165,7 @@
       "specific": "calculus.differentiation.chain_rule",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "D(COMPOSE(OUTER, INNER))",
         "CONSTANT": "1",
@@ -5819,7 +7178,7 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "CIRCUMFERENCE": "D(EXP(*(RATE, VAR)))",
         "CONSTANT": "1",
@@ -5858,7 +7217,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "POINT": "*(FUNC1, D(FUNC2))",
         "POINTNEW": "D(*(FUNC1, FUNC2))",
@@ -5872,7 +7231,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "LOWRANKA": "^(DV, 2)",
         "LOWRANKB": "COEFFG",
@@ -5887,7 +7246,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "DRIVE": "*(FUNC1, D(FUNC2))",
         "INPUTGAIN": "1",
@@ -5902,7 +7261,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "SLOPE": "*(FUNC1, D(FUNC2))",
         "STEPSIZE": "1",
@@ -5916,7 +7275,7 @@
       "specific": "calculus.differentiation.power_rule",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "D(^(VAR, EXPONENT))",
         "INERTIA": "1",
@@ -5929,7 +7288,7 @@
       "specific": "calculus.differentiation.chain_rule",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "D(COMPOSE(OUTER, INNER))",
         "INERTIA": "1",
@@ -5942,7 +7301,7 @@
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "FORCE = INERTIA * RESPONSE",
       "specific_template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "FORCE": "D(EXP(*(RATE, VAR)))",
         "INERTIA": "1",
@@ -5981,7 +7340,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "INTERCEPT": "0",
         "NOISE_i": "*(FUNC2, D(FUNC1))",
@@ -5996,7 +7355,7 @@
       "specific": "calculus.differentiation.product_rule",
       "general_template": "OUT = SCALE*IN + SHIFT",
       "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "IN": "*(FUNC1, D(FUNC2))",
         "OUT": "D(*(FUNC1, FUNC2))",
@@ -6010,7 +7369,7 @@
       "specific": "algtop.invariants.euler_characteristic_valuation",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "CARD(JOIN(SPACEA, SPACEB))",
         "BOUNDARYRANK": "CARD(MEET(SPACEA, SPACEB))",
@@ -6023,7 +7382,7 @@
       "specific": "geotop.measure.area_inclusion_exclusion",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "CARD(JOIN(REGA, REGB))",
         "BOUNDARYRANK": "CARD(MEET(REGA, REGB))",
@@ -6036,7 +7395,7 @@
       "specific": "infotheory.mutualinfo.entropy_inclusion_exclusion",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "CARD(JOIN(FIRST, SECOND))",
         "BOUNDARYRANK": "CARD(MEET(FIRST, SECOND))",
@@ -6049,7 +7408,7 @@
       "specific": "settheory.cardinality.inclusion_exclusion_two_sets",
       "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "specific_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "BETTI": "CARD(JOIN(SETA, SETB))",
         "BOUNDARYRANK": "CARD(MEET(SETA, SETB))",
@@ -6062,7 +7421,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "^(LINEELEMENT, 2)",
         "CYCLERANK": "*(2, COEFFF, DU, DV)",
@@ -6075,7 +7434,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "BASEVALUE": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))",
         "DISPLACEMENT": "*(COEFFG, ^(DV, 2))",
@@ -6089,7 +7448,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "EXPECTED": "^(LINEELEMENT, 2)",
         "PREMIUM": "*(COEFFG, ^(DV, 2))",
@@ -6103,7 +7462,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AUTONOMOUS": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))",
         "CONSUMPTION": "^(LINEELEMENT, 2)",
@@ -6130,7 +7489,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "POINT": "*(COEFFG, ^(DV, 2))",
         "POINTNEW": "^(LINEELEMENT, 2)",
@@ -6144,7 +7503,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "identity",
+      "via": "identity+compound",
       "bindings": {
         "LOWRANKA": "D(FUNC2)",
         "LOWRANKB": "SCALAR2",
@@ -6159,7 +7518,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "SLOPE": "*(COEFFG, ^(DV, 2))",
         "STEPSIZE": "1",
@@ -6186,7 +7545,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "INTERCEPT": "0",
         "NOISE_i": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)))",
@@ -6201,7 +7560,7 @@
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "OUT = SCALE*IN + SHIFT",
       "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "IN": "*(COEFFG, ^(DV, 2))",
         "OUT": "^(LINEELEMENT, 2)",
@@ -6215,7 +7574,7 @@
       "specific": "algtop.invariants.euler_characteristic_valuation",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "CARD(JOIN(SPACEA, SPACEB))",
         "CYCLERANK": "CARD(SPACEA)",
@@ -6225,10 +7584,23 @@
     },
     {
       "general": "algtop.homology.chain_rank_nullity",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "compound",
+      "bindings": {
+        "CHAINRANK": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "CYCLERANK": "*(SCALAR1, D(FUNC1))",
+        "IMAGERANK": "*(SCALAR2, D(FUNC2))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
       "specific": "geotop.measure.area_inclusion_exclusion",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "CARD(JOIN(REGA, REGB))",
         "CYCLERANK": "CARD(REGA)",
@@ -6241,7 +7613,7 @@
       "specific": "infotheory.mutualinfo.entropy_inclusion_exclusion",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "CARD(JOIN(FIRST, SECOND))",
         "CYCLERANK": "CARD(FIRST)",
@@ -6254,7 +7626,7 @@
       "specific": "settheory.cardinality.inclusion_exclusion_two_sets",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "specific_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
-      "via": "absorption",
+      "via": "absorption+compound",
       "bindings": {
         "CHAINRANK": "CARD(JOIN(SETA, SETB))",
         "CYCLERANK": "CARD(SETA)",
@@ -6267,7 +7639,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "BASEVALUE": "*(SCALAR1, D(FUNC1))",
         "DISPLACEMENT": "*(SCALAR2, D(FUNC2))",
@@ -6281,7 +7653,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "EXPECTED": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "PREMIUM": "*(SCALAR2, D(FUNC2))",
@@ -6295,7 +7667,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "AUTONOMOUS": "*(SCALAR1, D(FUNC1))",
         "CONSUMPTION": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
@@ -6309,7 +7681,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "POINT": "*(SCALAR2, D(FUNC2))",
         "POINTNEW": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
@@ -6323,7 +7695,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "DRIVE": "*(SCALAR2, D(FUNC2))",
         "INPUTGAIN": "1",
@@ -6338,7 +7710,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "SLOPE": "*(SCALAR2, D(FUNC2))",
         "STEPSIZE": "1",
@@ -6352,7 +7724,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "INTERCEPT": "0",
         "NOISE_i": "*(SCALAR1, D(FUNC1))",
@@ -6367,7 +7739,7 @@
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "OUT = SCALE*IN + SHIFT",
       "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "via": "absorption+identity",
+      "via": "absorption+identity+compound",
       "bindings": {
         "IN": "*(SCALAR2, D(FUNC2))",
         "OUT": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",

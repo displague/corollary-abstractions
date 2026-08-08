@@ -18,10 +18,11 @@ This tool matches a *general* node's canonical tree as a pattern against a
   (SHIFT -> 0). Variable-like slots may not vanish: a law does not lose its
   variables, only its conventions.
 
-Only matches that USE absorption or identity binding are reported: anything
-matchable without them is an exact twin and already in the skeleton report.
-Patterns must be relations with at least two operator/call nodes, else
-near-trivial templates (X = A*B) would subsume half the corpus.
+Only matches beyond pure slot-to-slot renaming are reported (a renaming is
+an exact twin, already in the skeleton report): absorption, identity
+binding, or a slot binding structure (a compound subtree or a literal).
+Patterns must be rel- or call-rooted with at least two operator/call nodes,
+else near-trivial templates (X = A*B) would subsume half the corpus.
 """
 
 from __future__ import annotations
@@ -51,6 +52,7 @@ class MatchState:
         self.slot_class = slot_class
         self.used_absorption = False
         self.used_identity = False
+        self.used_compound = False  # a slot bound a non-leaf or a literal
 
 
 def match(pat: tuple, term: tuple, st: MatchState) -> bool:
@@ -60,6 +62,8 @@ def match(pat: tuple, term: tuple, st: MatchState) -> bool:
         if name in st.binds:
             return st.binds[name] == term
         st.binds[name] = term
+        if term[0] != "slot":
+            st.used_compound = True  # binding structure, not renaming
         return True
     if kind == "num":
         return term[0] == "num" and term[1] == pat[1]
@@ -163,7 +167,10 @@ def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
     edges = []
     for gen in nodes:
         gtree = trees[gen.statement_id]
-        if gtree[0] != "rel" or op_count(gtree) < 2:
+        # rel-rooted equations AND call-rooted statements (inference rules,
+        # relational predicates) may serve as patterns; the old rel-only
+        # guard excluded all 16 inference-rule nodes (probed, BACKLOG).
+        if gtree[0] not in {"rel", "call", "op"} or op_count(gtree) < 2:
             continue
         for spec in nodes:
             if spec.statement_id == gen.statement_id:
@@ -171,16 +178,22 @@ def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
             if gen.shape == spec.shape:
                 continue  # exact twins already reported
             st = MatchState(classes[gen.statement_id])
+            # informative = anything beyond pure slot-to-slot renaming
+            # (renamings are exact twins, already in the skeleton report);
+            # the old absorption/identity-only filter provably suppressed
+            # the plainest specializations (5 probed instances in BACKLOG).
             if match(gtree, trees[spec.statement_id], st) and (
-                    st.used_absorption or st.used_identity):
+                    st.used_absorption or st.used_identity
+                    or st.used_compound):
                 edges.append({
                     "general": gen.statement_id,
                     "specific": spec.statement_id,
                     "general_template": gen.template,
                     "specific_template": spec.template,
-                    "via": ("absorption" if st.used_absorption else "")
-                           + ("+" if st.used_absorption and st.used_identity else "")
-                           + ("identity" if st.used_identity else ""),
+                    "via": "+".join(v for v, on in [
+                        ("absorption", st.used_absorption),
+                        ("identity", st.used_identity),
+                        ("compound", st.used_compound)] if on),
                     "bindings": {k: render(v) for k, v in sorted(st.binds.items())},
                 })
     return edges
