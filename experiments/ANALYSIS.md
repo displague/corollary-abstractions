@@ -747,8 +747,9 @@ malformed—preserve the underlying frame verifier's verdict, reason, and
 evidence exactly. Eleven retrieval tests move the suite 70 -> 81.
 
 Honest boundary: this is an oracle-driven local adapter, not learned tool use.
-The neighborhood is an unranked closed-form token relation; external tools and
-the ASK return channel remain unbuilt; POINT binds a retrieved record rather
+The neighborhood is an unranked closed-form token relation; external tools
+remain unbuilt, and at this 6a result's landing ASK had no return channel (the
+later item-10a section records its implementation); POINT binds a retrieved record rather
 than implementing every existing-context pointer task; and 702 items are small
 enough for a linear scan. Those are the next scaling and policy experiments.
 
@@ -947,3 +948,51 @@ though retrieval supports only `lean4`. Completeness now requires nonblank
 theorem, tactic, before-state, and after-state fields. Until a second parser is
 registered, every non-`lean4` system fails validation. The four blank-field
 cases and unsupported-system reproducer are retained.
+
+## Conversational ASK return channel (v0.5 item 10a)
+
+ASK is now a real two-transition protocol over the same generic controller as
+proof replay, story composition, frames, and retrieval. A parsed UNKNOWN carries
+a closed-form resolution channel (`store` or `user`). `ASK(clarify)` on a
+user-private need records a verifier-signed question in persistent runtime
+`UserFrame` state and stops the controller as WAITING. The next run accepts only
+a return-channel signature bound to session, immutable FrameSpec, owner label,
+question id, slot, unresolved literal, canonical key, channel, prompt, and
+answer. It clears that exact still-UNKNOWN need and records a signed user
+binding; it never asserts the answer into frame/world/corpus truth.
+
+The capability-blind result is load-bearing: a policy sees every public action
+field but not the verifier's per-instance secret, so a guessed reply is REFUSED
+without mutation. Twenty-five controls additionally reject second-verifier,
+post-signature mutation, cross-question/session/frame/owner replay, forged
+public question/binding/pending state, stale needs, channel confusion, closed
+frames, and all non-reply actions while waiting. The durable store is never
+queried by ASK. Suite: 130 -> 155; 209 nodes and every structural report are
+unchanged.
+
+`scripts/conversation.py` is the first two-turn golden-chicken revision: “make
+it lay eggs” leaves `egg_color` user-private, the controller waits and asks, the
+host supplies “silver,” and the resumed session renders “Now the golden chicken
+laid silver eggs.” This demonstrates symbolic pause/resume and attributable
+session memory, not open-English intent parsing or learned prose. The signature
+authenticates the host channel, not the human's real-world identity.
+
+Adversarial review found three gaps. First, a consumed signed answer could be
+replayed after public state reinstated the identical need and question. A
+verifier-private consumed-request ledger now survives public-state rollback,
+with request ids mirrored in user-frame state for audit. Second, unsigned
+`Action.dependencies` could be added after reply signing; both ASK transitions
+now require none. Third, the original demo began from a fresh empty FrameState,
+so its “existing story revision” claim was vacuous. It now begins with the real
+accepted three-beat `StoryState`; all beats and its discharged obligation remain
+unchanged across both turns and are included in the revised rendering. Each
+review reproducer is retained.
+
+Re-review found a transaction-order defect: `_reply` consumed its private nonce
+during speculative evaluation, before the controller's goal callback completed.
+If that callback raised, no accepted state returned but retry was refused.
+Controller termination now has an optional run-level commit hook; completion
+and WAITING callbacks run first, then the retrieval verifier atomically commits
+all accepted reply ids immediately before `RunResult` returns. The exact
+exception-and-retry control proves an uncommitted answer remains usable while a
+returned run remains replay-resistant. Suite: 155.

@@ -113,6 +113,7 @@ scripts/
   compose_assert.py     global ladder + live frame-local executor statuses
   controller.py         shared v0.5 state/action/verifier loop
   retrieval.py          UNKNOWN -> five-store RETRIEVE -> pointable context
+  conversation.py       ASK -> WAITING -> signed user reply -> resumed binding
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (10.7x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
@@ -149,6 +150,7 @@ python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
 python scripts/retrieval.py                 # exact five-store lookup then POINT
+python scripts/conversation.py              # two-turn golden-chicken clarification
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)

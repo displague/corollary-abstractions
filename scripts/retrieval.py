@@ -452,6 +452,7 @@ class RetrievalNeed:
     suggested_key: str
     unresolved_literal: Literal
     unknown_evidence: tuple[str, ...]
+    resolution_channel: str = "store"
 
 
 @dataclass(frozen=True)
@@ -483,6 +484,39 @@ class RetrievalReceipt:
 
 
 @dataclass(frozen=True)
+class ClarificationRequest:
+    """Verifier-minted question for one frame-private UNKNOWN."""
+
+    request_id: str
+    slot: str
+    prompt: str
+    unresolved_literal: Literal
+    suggested_key: str
+    resolution_channel: str
+    signature: str
+
+
+@dataclass(frozen=True)
+class UserBinding:
+    """Channel-authenticated answer in the persistent user-owned frame."""
+
+    request_id: str
+    slot: str
+    value: str
+    signature: str
+
+
+@dataclass(frozen=True)
+class UserFrame:
+    """Runtime-owned interlocutor state; never promoted to corpus truth."""
+
+    owner: str = "user"
+    questions: tuple[ClarificationRequest, ...] = ()
+    bindings: tuple[UserBinding, ...] = ()
+    consumed_request_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
 class RetrievalState:
     """Frame state plus one unresolved slot and its retrieved context."""
 
@@ -493,6 +527,8 @@ class RetrievalState:
     bindings: tuple[tuple[str, str], ...] = ()
     resolutions: tuple[RetrievalResolution, ...] = ()
     retrieval_receipts: tuple[RetrievalReceipt, ...] = ()
+    user_frame: UserFrame = field(default_factory=UserFrame)
+    awaiting: ClarificationRequest | None = None
 
     @classmethod
     def from_unknown(
@@ -502,6 +538,8 @@ class RetrievalState:
         slot: str,
         suggested_key: str,
         unresolved_literal: Literal,
+        resolution_channel: str = "store",
+        user_owner: str = "user",
     ) -> "RetrievalState":
         finding = executor.check(frame, unresolved_literal)
         if finding.verdict is not Verdict.UNKNOWN:
@@ -515,11 +553,20 @@ class RetrievalState:
                 "retrieval key must be the unresolved literal's value; request "
                 "parsing owns that key constraint"
             )
+        if resolution_channel not in {"store", "user"}:
+            raise ValueError("resolution_channel must be 'store' or 'user'")
+        if not user_owner.strip():
+            raise ValueError("user_owner must be non-empty")
         return cls(
             frame=frame,
             pending=RetrievalNeed(
-                slot, suggested_key, unresolved_literal, tuple(finding.evidence)
+                slot,
+                suggested_key,
+                unresolved_literal,
+                tuple(finding.evidence),
+                resolution_channel,
             ),
+            user_frame=UserFrame(owner=user_owner),
         )
 
 
@@ -541,6 +588,89 @@ class RetrievalVerifier:
         self.frame_executor = frame_executor
         self.frame_verifier = FrameAssertionVerifier(frame_executor)
         self._receipt_secret = secrets.token_bytes(32)
+        self._ask_secret = secrets.token_bytes(32)
+        self._consumed_ask_requests: set[tuple[str, str]] = set()
+
+    def _ask_signature(self, domain: str, *parts: object) -> str:
+        payload = repr((domain, *parts)).encode("utf-8")
+        return hmac.new(self._ask_secret, payload, hashlib.sha256).hexdigest()
+
+    @staticmethod
+    def _question_parts(
+        state: RetrievalState, request: ClarificationRequest
+    ) -> tuple[object, ...]:
+        return (
+            state.session_id,
+            repr(state.frame.spec),
+            state.user_frame.owner,
+            request.request_id,
+            request.slot,
+            request.unresolved_literal,
+            request.suggested_key,
+            request.resolution_channel,
+            request.prompt,
+        )
+
+    def _valid_question(
+        self, state: RetrievalState, request: ClarificationRequest
+    ) -> bool:
+        expected = self._ask_signature(
+            "question", *self._question_parts(state, request)
+        )
+        return hmac.compare_digest(request.signature, expected)
+
+    def reply_action(self, state: RetrievalState, value: str) -> Action:
+        """Trusted return-channel boundary: sign one actual user response."""
+        request = state.awaiting
+        if request is None or not self._valid_question(state, request):
+            raise ValueError("cannot reply without a verifier-minted question")
+        if not value.strip():
+            raise ValueError("user reply must be non-empty")
+        signature = self._ask_signature(
+            "reply", *self._question_parts(state, request), value
+        )
+        return Action.build(
+            ActionKind.ASK,
+            "reply",
+            {
+                "request_id": request.request_id,
+                "value": value,
+                "signature": signature,
+            },
+        )
+
+    def binding_value(self, state: RetrievalState, slot: str) -> str | None:
+        """Return the latest authentic user binding for this exact session."""
+        for binding in reversed(state.user_frame.bindings):
+            if binding.slot != slot:
+                continue
+            expected = self._ask_signature(
+                "binding",
+                state.session_id,
+                repr(state.frame.spec),
+                state.user_frame.owner,
+                binding.request_id,
+                binding.slot,
+                binding.value,
+            )
+            if hmac.compare_digest(binding.signature, expected):
+                return binding.value
+        return None
+
+    def commit_run(self, trace: tuple[object, ...]) -> None:
+        """Atomically consume replies only when Controller returns the run."""
+        consumed: set[tuple[str, str]] = set()
+        for entry in trace:
+            action = entry.action
+            if (
+                entry.accepted
+                and action.kind is ActionKind.ASK
+                and action.name == "reply"
+            ):
+                request_id = action.argument("request_id")
+                if request_id is not None:
+                    consumed.add((entry.state_after.session_id, request_id))
+        self._consumed_ask_requests.update(consumed)
 
     def _receipt_signature(
         self,
@@ -587,12 +717,23 @@ class RetrievalVerifier:
                 state.bindings,
                 state.resolutions,
                 state.retrieval_receipts,
+                state.user_frame,
+                state.awaiting,
             )
         )
 
     def evaluate(
         self, state: RetrievalState, action: Action
     ) -> Verification[RetrievalState]:
+        if state.awaiting is not None and not (
+            action.kind is ActionKind.ASK and action.name == "reply"
+        ):
+            return Verification(
+                Verdict.REFUSED,
+                "controller is waiting for the outstanding user reply; no "
+                "other transition may advance this branch",
+                evidence=(state.awaiting.request_id,),
+            )
         if action.kind is ActionKind.RETRIEVE:
             if action.name != "lookup":
                 return Verification(
@@ -609,6 +750,16 @@ class RetrievalVerifier:
                     evidence=(self.name,),
                 )
             return self._point(state, action)
+        if action.kind is ActionKind.ASK:
+            if action.name == "clarify":
+                return self._ask(state, action)
+            if action.name == "reply":
+                return self._reply(state, action)
+            return Verification(
+                Verdict.REFUSED,
+                f"unknown ASK transition {action.name!r}",
+                evidence=(self.name,),
+            )
 
         delegated = self.frame_verifier.evaluate(state.frame, action)
         if not delegated.verdict.accepts:
@@ -693,6 +844,13 @@ class RetrievalVerifier:
         stale = self._pending_is_current_unknown(state)
         if stale is not None:
             return stale
+        if state.pending.resolution_channel == "user":
+            return Verification(
+                Verdict.REFUSED,
+                "pending UNKNOWN is user-private; RETRIEVE cannot impersonate "
+                f"the interlocutor, use ASK({state.pending.slot})",
+                evidence=(state.user_frame.owner, f"ASK({state.pending.slot})"),
+            )
         if state.frame.spec.retrieval == "frame_local":
             return Verification(
                 Verdict.REFUSED,
@@ -854,9 +1012,237 @@ class RetrievalVerifier:
             (material.item.item_id, *material.item.source_ids),
         )
 
+    def _ask(
+        self, state: RetrievalState, action: Action
+    ) -> Verification[RetrievalState]:
+        if state.frame.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; ASK cannot extend its user context",
+                evidence=(state.frame.spec.frame,),
+            )
+        if state.pending is None:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK requires an unresolved UNKNOWN slot",
+                evidence=(self.name,),
+            )
+        stale = self._pending_is_current_unknown(state)
+        if stale is not None:
+            return stale
+        if state.awaiting is not None:
+            return Verification(
+                Verdict.REFUSED,
+                "one clarification is already awaiting a user reply",
+                evidence=(state.awaiting.request_id,),
+            )
+        if not state.user_frame.owner.strip():
+            return Verification(
+                Verdict.REFUSED,
+                "ASK requires a non-empty user-frame owner",
+                evidence=(self.name,),
+            )
+        if state.pending.resolution_channel not in {"store", "user"}:
+            return Verification(
+                Verdict.REFUSED,
+                "pending UNKNOWN has an invalid resolution channel",
+                evidence=(state.pending.slot,),
+            )
+        if (
+            state.pending.resolution_channel != "user"
+            and state.frame.spec.retrieval != "frame_local"
+        ):
+            return Verification(
+                Verdict.REFUSED,
+                "pending UNKNOWN is assigned to the durable store, not the "
+                "interlocutor",
+                evidence=(state.pending.slot, "RETRIEVE"),
+            )
+        if tuple(key for key, _ in action.arguments) != ("slot",):
+            return Verification(
+                Verdict.REFUSED,
+                "ASK(clarify) requires exactly one slot argument",
+                evidence=(self.name,),
+            )
+        if action.dependencies:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK(clarify) accepts no policy-supplied dependencies",
+                evidence=(self.name,),
+            )
+        slot = action.argument("slot")
+        if slot != state.pending.slot:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK slot must equal the pending UNKNOWN slot",
+                evidence=(state.pending.slot, slot or ""),
+            )
+        request_id = secrets.token_hex(16)
+        literal = state.pending.unresolved_literal
+        prompt = (
+            f"What value should fill {slot!r} for "
+            f"{literal.subject} {literal.predicate}?"
+        )
+        unsigned = ClarificationRequest(
+            request_id,
+            slot,
+            prompt,
+            literal,
+            state.pending.suggested_key,
+            state.pending.resolution_channel,
+            signature="",
+        )
+        request = replace(
+            unsigned,
+            signature=self._ask_signature(
+                "question", *self._question_parts(state, unsigned)
+            ),
+        )
+        return Verification(
+            Verdict.VERIFIED,
+            "clarification request recorded in the persistent user frame; "
+            "controller must wait for interlocutor input",
+            replace(
+                state,
+                awaiting=request,
+                user_frame=replace(
+                    state.user_frame,
+                    questions=state.user_frame.questions + (request,),
+                ),
+            ),
+            (state.user_frame.owner, f"ASK({slot})", request_id),
+        )
+
+    def _reply(
+        self, state: RetrievalState, action: Action
+    ) -> Verification[RetrievalState]:
+        if state.frame.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; a user reply cannot bind into it",
+                evidence=(state.frame.spec.frame,),
+            )
+        request = state.awaiting
+        if state.pending is None or request is None:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK(reply) requires a pending verifier-minted question",
+                evidence=(self.name,),
+            )
+        if not self._valid_question(state, request):
+            return Verification(
+                Verdict.REFUSED,
+                "clarification request provenance is invalid for this "
+                "session/frame/user",
+                evidence=(state.user_frame.owner,),
+            )
+        consumed_key = (state.session_id, request.request_id)
+        if (
+            consumed_key in self._consumed_ask_requests
+            or request.request_id in state.user_frame.consumed_request_ids
+        ):
+            return Verification(
+                Verdict.REFUSED,
+                "clarification request was already consumed; a later need "
+                "requires fresh user input",
+                evidence=(request.request_id,),
+            )
+        stale = self._pending_is_current_unknown(state)
+        if stale is not None:
+            return stale
+        if (
+            state.pending.slot != request.slot
+            or state.pending.unresolved_literal != request.unresolved_literal
+            or state.pending.suggested_key != request.suggested_key
+            or state.pending.resolution_channel != request.resolution_channel
+        ):
+            return Verification(
+                Verdict.REFUSED,
+                "pending UNKNOWN differs from the signed clarification request",
+                evidence=(request.request_id,),
+            )
+        if (
+            state.pending.resolution_channel != "user"
+            and state.frame.spec.retrieval != "frame_local"
+        ):
+            return Verification(
+                Verdict.REFUSED,
+                "signed clarification no longer targets a user-resolvable need",
+                evidence=(request.request_id,),
+            )
+        expected_keys = ("request_id", "signature", "value")
+        if tuple(key for key, _ in action.arguments) != expected_keys:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK(reply) requires exactly request_id, signature, and value",
+                evidence=(request.request_id,),
+            )
+        if action.dependencies:
+            return Verification(
+                Verdict.REFUSED,
+                "ASK(reply) accepts no policy-supplied dependencies",
+                evidence=(request.request_id,),
+            )
+        request_id = action.argument("request_id")
+        value = action.argument("value")
+        signature = action.argument("signature")
+        if request_id != request.request_id or value is None or not value.strip():
+            return Verification(
+                Verdict.REFUSED,
+                "user reply has a missing/mismatched request id or empty value",
+                evidence=(request.request_id,),
+            )
+        expected = self._ask_signature(
+            "reply", *self._question_parts(state, request), value
+        )
+        if signature is None or not hmac.compare_digest(signature, expected):
+            return Verification(
+                Verdict.REFUSED,
+                "user reply signature is invalid; policy output is not user "
+                "input",
+                evidence=(request.request_id,),
+            )
+        binding = UserBinding(
+            request.request_id,
+            request.slot,
+            value,
+            self._ask_signature(
+                "binding",
+                state.session_id,
+                repr(state.frame.spec),
+                state.user_frame.owner,
+                request.request_id,
+                request.slot,
+                value,
+            ),
+        )
+        return Verification(
+            Verdict.VERIFIED,
+            "channel-authenticated reply binds the frame-private UNKNOWN without "
+            "asserting it as world or corpus truth",
+            replace(
+                state,
+                pending=None,
+                awaiting=None,
+                user_frame=replace(
+                    state.user_frame,
+                    bindings=state.user_frame.bindings + (binding,),
+                    consumed_request_ids=(
+                        state.user_frame.consumed_request_ids
+                        + (request.request_id,)
+                    ),
+                ),
+            ),
+            (state.user_frame.owner, request.request_id, request.slot),
+        )
+
 
 def retrieval_action(key: str) -> Action:
     return Action.build(ActionKind.RETRIEVE, "lookup", {"key": key})
+
+
+def ask_action(slot: str) -> Action:
+    return Action.build(ActionKind.ASK, "clarify", {"slot": slot})
 
 
 def point_action(position: int) -> Action:

@@ -9,9 +9,11 @@ the storage bet the repository exists to test.** What follows is the mapping
 in full, the staged work it implies, and the registered predictions that make
 the mapping falsifiable rather than decorative.
 
-Status of everything here: QUEUED. Nothing in this document is built. Each
-section ends with its work items; ROADMAP-v0.5 section 10 and BACKLOG's
-"Cognitive frames / lexical stores" section index them.
+Status: ASK's runtime user frame and return channel are now executable
+(`scripts/conversation.py`); physical frames, FrameSpec ownership/visibility,
+WordNet, masked skeletons, provability, and nesting remain queued. Each section
+ends with its work items; ROADMAP-v0.5 section 10 and BACKLOG's "Cognitive
+frames / lexical stores" section index them.
 
 ---
 
@@ -54,12 +56,15 @@ What is genuinely missing, in dependency order:
    negative controls (a grandchild truth must not leak into either ancestor;
    an ancestor's suspension must be inheritable-or-not by explicit choice,
    not accident).
-4. **The user frame.** Multi-turn golden-chicken revision ("now make the
+4. **The user frame — first runtime cut SHIPPED.** Multi-turn golden-chicken revision ("now make the
    chicken lay silver eggs") requires a persistent owned frame for the
    interlocutor: what they have been told, what they have asked for, which
    of their bindings arrived via ASK. This makes the ASK return channel and
    ToM the same slice viewed from two sides — the return channel *is* the
-   user-frame update rule.
+   user-frame update rule. The shipped cut keeps a signed, runtime-owned
+   `UserFrame` beside retrieval state, pauses the generic controller as WAITING,
+   and resumes from a channel-signed reply. It does not yet add `owner` to
+   `FrameSpec`; that schema-level belief ownership remains item 10c.
 
 **Registered prediction P-CF1 (falsifiable at authoring time):** a
 Sally–Anne corpus node pair (belief-frame declaration vs world assertion)
@@ -328,8 +333,9 @@ chain; reduced-extract decision; P-CF6 adjudication.
 
 ## 7. Sequencing
 
-1. **ASK return channel** (already the agreed next slice) — now understood
-   as the ToM entry point: its return path is the user-frame update rule.
+1. **ASK return channel — SHIPPED executable first cut.** Its return path is
+   the runtime user-frame update rule; schema-level FrameSpec ownership remains
+   in step 3.
 2. **physics.frames corpus lane** + P-CF2/P-CF3 — cheapest high-yield test
    of scope generality; also unblocks the frame-id convention decision
    already in BACKLOG (these nodes need frame ids on day one).

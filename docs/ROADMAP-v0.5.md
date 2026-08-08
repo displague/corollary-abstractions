@@ -173,8 +173,9 @@ demo and a multi-step derivation remain one milestone in two costumes.
      guard, duplicate, malformed, delegation, and provenance predictions fire;
      the suite moves 70 -> 81 tests with no `data/` or `reports/` diff. VERIFIED
      labels the retrieval transaction, not its contents: every pointable item
-     retains its corpus/derived/verified/proven status. Still open: ASK is only
-     an explicit escalation in evidence, external tools are not stores yet,
+     retains its corpus/derived/verified/proven status. **At 6a's landing,** ASK
+     was only an explicit escalation in evidence; item 10a below now ships its
+     return channel. External tools are not stores yet,
      token-neighborhood search is deterministic but unranked taste, and no
      learned policy chooses the point; open-language parsing into the canonical
      key remains unbuilt.
@@ -376,10 +377,76 @@ demo and a multi-step derivation remain one milestone in two costumes.
     carries the full mapping, six registered predictions (P-CF1..6), and
     the sequencing. Queued items, in the design's order:
 
-    - **10a — ASK return channel as ToM entry** (the agreed next slice,
+    - **SHIPPED (executable first cut) — 10a: ASK return channel as ToM
+      entry** (the agreed next slice,
       reframed): the return path is the user-frame update rule; the user
       is an owned frame whose bindings arrive via ASK. Multi-turn
       golden-chicken revision is its acceptance test.
+
+      **Registered 10a prediction (before implementation or tests):** this
+      slice changes no corpus or structural report. UNKNOWN resolution gains a
+      closed-form channel marker: durable-store needs remain RETRIEVE-only;
+      explicitly user-private needs (and `retrieval: frame_local` authorial
+      needs) may ASK, while neither channel silently falls through to the
+      other. An accepted `ASK(clarify)` records one verifier-minted question in
+      a persistent user-owned runtime frame and makes the generic Controller
+      stop as WAITING, not SOLVED or EXHAUSTED. A later run over the same
+      session accepts only a channel-signed reply bound to the exact session,
+      immutable FrameSpec, user owner, question id, slot, unresolved literal,
+      and answer value; it clears the pending UNKNOWN and records a user
+      binding without asserting the answer as world truth, corpus truth, or a
+      `verified_by` fact. Guessed signatures, a second verifier, answer
+      mutation, and cross-question/session/frame replay are REFUSED with zero
+      state mutation. The capability-blind policy may propose every public ASK
+      argument except the channel secret and therefore cannot fabricate a user
+      reply. Acceptance demo: an existing golden-chicken story receives the
+      underspecified revision “make it lay eggs,” pauses to ask egg color, then
+      resumes after the user answers “silver” and renders one coherent revision
+      from the recorded binding. This is a two-turn symbolic conversation, not
+      open-English intent parsing or learned dialogue.
+
+      **Adjudication — fired:** `RetrievalNeed.resolution_channel` separates
+      store and user-private holes before policy choice. ASK never touches the
+      store for a user-private need; RETRIEVE refuses the same need before its
+      store query. `ASK(clarify)` records a signed question in a persistent
+      `UserFrame` and the unchanged generic controller stops with the new
+      WAITING outcome. A second controller run over the same session accepts a
+      channel-signed reply, clears only the exact still-UNKNOWN need, and adds a
+      signed `UserBinding`; no frame assertion, corpus node, or epistemic status
+      is promoted. Twenty-five controls cover guessed/second-verifier/mutated
+      signatures; cross-question/session/frame/owner replay; forged public
+      question/binding/pending state; stale resolution; closed frames; channel
+      confusion; and the rule that every non-reply action is frozen while the
+      branch waits. Suite: 130 -> 155. The golden-chicken demo pauses after
+      “make it lay eggs,” asks `egg_color`, resumes on “silver,” and renders
+      “Now the golden chicken laid silver eggs.” Corpus and structural reports
+      remain byte-identical.
+
+      **Honest boundary:** the HMAC proves that a value crossed the host's
+      trusted return-channel method and was not proposed by the model policy;
+      it does not authenticate the real-world identity of the human. `owner`
+      is therefore a runtime attribution label, not identity proof. The demo
+      begins from an already parsed symbolic revision and uses a deterministic
+      renderer; open-English intent parsing, learned question wording, durable
+      session serialization, FrameSpec ownership, visibility filtering, and
+      nested beliefs remain later items.
+
+      **Review corrections:** the first pass allowed an already consumed reply
+      to solve a publicly reinstated identical need, permitted unsigned action
+      dependencies after signing, and called a fresh empty frame an “existing
+      story.” The verifier now keeps a private consumed-request ledger (with an
+      auditable state mirror), both ASK transitions require empty dependencies,
+      and the demo begins from the actual accepted three-beat oracle StoryState.
+      Tests prove all three beats and the discharged obligation survive both
+      conversation turns and appear in the revised rendering. The three exact
+      reproducers are permanent controls.
+
+      Re-review found consumption occurred during speculative verifier
+      evaluation, so a goal callback exception could lose a valid answer before
+      any accepted state was returned. `Controller.finish` now invokes an
+      optional run-level commit hook only after goal/waiting callbacks succeed;
+      ASK consumption moves there atomically. The exception-and-retry reproducer
+      is the twenty-fifth control.
     - **10b — physics.frames corpus lane**: velocity addition, acceleration
       invariance, inertial-frame definition, and the rotating frame as a
       scope that suspends an inertia law and admits centrifugal force —

@@ -94,7 +94,7 @@ or commit history. Each item names the evidence that motivated it.
   "digest-pinned proof trust" must not be read as semantic correspondence
   (retrieval.py's trust-model docstring now says so).
 
-- **PARTIAL — the common protocol is executable; two action adapters remain.**
+- **PARTIAL — the common protocol is executable; WRITE remains.**
   `scripts/controller.py` now carries typed state + one of
   `{POINT, GEN, RETRIEVE, ASK, WRITE}` + symbolic verifier result + accepted
   next state + branch trace. The deterministic oracle runs both a three-step
@@ -105,8 +105,9 @@ or commit history. Each item names the evidence that motivated it.
   state, out-of-order story beats, and a frame-trait contradiction. Still open:
   `GEN` has proof/story/frame semantics, and `retrieval.RetrievalVerifier`
   layers executable `RETRIEVE` plus exact `POINT(position)` over the unchanged
-  frame verifier. `ASK` and `WRITE` remain vocabulary without adapters, and
-  Lean replay is not live tactic application or search.
+  frame verifier. ASK now adds an authenticated pause/return adapter with a
+  runtime user frame; `WRITE` remains vocabulary without an adapter. Lean
+  replay is not live tactic application or search.
 
 - **PARTIAL — Chekhov's law executes at frame close, but event grounding is
   still demo-specific.** `FrameState` now records planted/discharged elements;
@@ -200,7 +201,8 @@ or commit history. Each item names the evidence that motivated it.
   context, not answers. Empty-
   store and unrelated-query controls remain UNKNOWN with ABSTAIN evidence and
   no mutation. A `frame_local` scope refuses before store access and emits
-  `ASK(slot)`. Still open: the ASK return channel, external tool connectors,
+  `ASK(slot)`. The ASK return channel now ships as item 10a; still open here:
+  external tool connectors,
   semantic/ranked neighborhood taste, open-language parsing of a request into
   the literal's canonical target key, learned item selection, and
   evaluation on deeper distractor-bearing stores rather than the deterministic
@@ -232,15 +234,24 @@ or commit history. Each item names the evidence that motivated it.
   session-local unless separately proved. This preserves correction-by-edit
   without turning policy output into trusted knowledge.
 
-- **No first-class conversational clarification action.** An unresolved slot
+- **PARTIAL — ASK is executable; open dialogue and durable sessions remain.** An unresolved slot
   can be answerable but absent from every durable store because its source of
   truth is the interlocutor: desired tone, ambiguous referent, private fact, or
   unstated constraint. Define `ASK(slot)` as retrieval from the user for these
   frame-private UNKNOWNs. Its return value must bind the slot in mutable session
   state and resume the same controller branch, which implies a multi-turn frame
-  lifecycle rather than a one-shot prompt wrapper. The deterministic dispatcher
-  must distinguish derivable, store-retrievable, user-private, and genuinely
-  unresolved holes before a learned tool chooser is evaluated.
+  lifecycle rather than a one-shot prompt wrapper. `RetrievalNeed` now marks
+  store vs user resolution before policy choice; ASK records a signed question,
+  pauses the generic controller as WAITING, and a channel-signed reply resumes
+  the same session with a frame-private `UserBinding`. While waiting, every
+  non-reply action is frozen. Signatures establish passage through the host
+  return-channel API, not real-world human identity. Still open: durable session
+  serialization, actual UI/transport integration, open-English parsing,
+  learned question rendering, and the deterministic dispatcher across
+  derivable/store/user/terminal channels before a learned chooser is evaluated.
+  Consumption is verifier-private but commits only through the controller's
+  run-level commit hook after completion/waiting callbacks succeed; durable
+  restoration must preserve the same atomicity without serializing the secret.
 
 - **PARTIAL — dead branches are traced and pruned; terminal taxonomy remains.**
   The controller records state-before, action, verifier verdict/reason/evidence,

@@ -1,6 +1,6 @@
 # Design: fictional frames and retrieval-as-action
 
-> **Implementation status (2026-08-08).** Frames, finite temporal obligations,
+> **Implementation status (updated 2026-08-09).** Frames, finite temporal obligations,
 > and both narrative temporal laws now execute. The first local RETRIEVE adapter
 > also ships: UNKNOWN-gated sessions query five committed stores, return indexed
 > material to POINT, fall back to deterministic neighborhood search, preserve
@@ -13,8 +13,10 @@
 > UNKNOWNs cannot bind; resolved literals enter a frame-resolution ledger and
 > leave the retrieval queue. The query key is the unresolved literal's value,
 > not independent policy metadata; parsing that value from open language is an
-> upstream capability. ASK's return channel, external tools, learned parsing
-> and item choice, and durable WRITE remain open. RETRIEVE cannot substitute a
+> upstream capability. ASK's parsed return channel now pauses as WAITING and
+> resumes persistent user-frame state from a channel-signed reply. External
+> tools, learned parsing and item choice, durable sessions, and WRITE remain
+> open. RETRIEVE cannot substitute a
 > different key after session construction. The sections below retain the original
 > design language as the before-state.
 > Proof summaries reach PROVEN only for the same digest-pinned native

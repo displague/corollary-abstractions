@@ -48,6 +48,7 @@ class Verdict(str, Enum):
 
 class StopReason(str, Enum):
     SOLVED = "solved"
+    WAITING = "waiting"
     EXHAUSTED = "exhausted"
     BUDGET = "budget"
 
@@ -193,26 +194,34 @@ class Controller(Generic[StateT]):
         policy: Policy[StateT],
         verifier: VerifierAdapter[StateT],
         is_complete: Goal[StateT],
+        is_waiting: Goal[StateT] | None = None,
     ) -> RunResult[StateT]:
         initial_snapshot = deepcopy(initial_state)
         state = deepcopy(initial_state)
         entries: list[TraceEntry[StateT]] = []
         rejected: set[tuple[str, tuple[object, ...]]] = set()
 
-        if is_complete(deepcopy(state)):
-            return RunResult(
-                initial_snapshot, deepcopy(state), (), StopReason.SOLVED
+        def finish(stop_reason: StopReason) -> RunResult[StateT]:
+            """Commit verifier-private effects only with a returned run state."""
+            trace = deepcopy(tuple(entries))
+            result = RunResult(
+                initial_snapshot,
+                deepcopy(state),
+                trace,
+                stop_reason,
             )
+            commit_run = getattr(verifier, "commit_run", None)
+            if callable(commit_run):
+                commit_run(deepcopy(trace))
+            return result
+
+        if is_complete(deepcopy(state)):
+            return finish(StopReason.SOLVED)
 
         for index in range(self.max_steps):
             action = policy.propose(deepcopy(state), deepcopy(tuple(entries)))
             if action is None:
-                return RunResult(
-                    initial_snapshot,
-                    deepcopy(state),
-                    tuple(entries),
-                    StopReason.EXHAUSTED,
-                )
+                return finish(StopReason.EXHAUSTED)
 
             branch_key = (
                 verifier.state_key(deepcopy(state)),
@@ -248,15 +257,10 @@ class Controller(Generic[StateT]):
             if verification.verdict.accepts:
                 state = next_state
                 if is_complete(deepcopy(state)):
-                    return RunResult(
-                        initial_snapshot,
-                        deepcopy(state),
-                        tuple(entries),
-                        StopReason.SOLVED,
-                    )
+                    return finish(StopReason.SOLVED)
+                if is_waiting is not None and is_waiting(deepcopy(state)):
+                    return finish(StopReason.WAITING)
             else:
                 rejected.add(branch_key)
 
-        return RunResult(
-            initial_snapshot, deepcopy(state), tuple(entries), StopReason.BUDGET
-        )
+        return finish(StopReason.BUDGET)

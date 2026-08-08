@@ -261,12 +261,14 @@ making open-language request parsing an honest upstream gap. Choosing useful
 queries and items remains oracle-driven today, and external tools are not
 connected.
 
-**Local miss handling is executable; conversation is not.** A direct miss
+**Local miss handling and parsed clarification are executable.** A direct miss
 widens to deterministic token-neighborhood search. A durable miss leaves
 UNKNOWN open with ABSTAIN evidence and no state mutation. A frame-private value
-refuses before store access and emits `ASK(slot)`, but the multi-turn ASK return
-channel is still unbuilt. “I cannot establish that” is a valid terminal state,
-not an invitation to fabricate.
+refuses before store access and emits `ASK(slot)`. ASK now records a signed
+question, pauses the controller as WAITING, and resumes the same session from a
+channel-signed user reply. Open-English intent parsing, UI transport, and
+durable session restoration remain unbuilt. “I cannot establish that” is a
+valid terminal state, not an invitation to fabricate.
 
 This also clarifies tool choice. The exact harness decides whether a local
 closed form already resolves the slot and whether the slot is actually
@@ -309,10 +311,11 @@ funny” may be clear enough to attempt. “Make it like the one I told you
 yesterday” may require session memory. “Which Alex?” can only be answered by
 the user. A private preference is not missing world knowledge.
 
-The proposed `ASK(slot)` action treats the user as the authoritative source for
-frame-private UNKNOWNs. The reply binds the slot in mutable session state and
-the same controller branch resumes. This is the beginning of an actual
-conversation loop rather than a sequence of unrelated prompts.
+The implemented `ASK(slot)` action treats the user as the attributed source for
+frame-private UNKNOWNs. The channel-signed reply binds the slot in runtime
+session state and the same controller branch resumes. This is the first parsed
+conversation loop rather than a sequence of unrelated prompts; it does not yet
+authenticate human identity or parse unrestricted dialogue.
 
 Some branches will still fail. A verifier may refute a candidate. A tool may
 miss. Search may exhaust its budget. The user may defer an answer. The harness
@@ -345,11 +348,12 @@ detail of individual tools.
 | Runtime fictional frame | Scope executor, two-sided temporal laws, scoped corpus nodes, and finite obligations operational |
 | Lean training transitions | Phase 1 delivered: 155 transitions |
 | Learned tactic policy and proof search | Unbuilt |
-| Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT adapters implemented; learned policy unbuilt |
-| Conversational clarification | `ASK` specified; conversation loop unbuilt |
+| Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT/ASK adapters implemented; learned policy unbuilt |
+| Conversational clarification | Parsed ASK pauses as WAITING, accepts a channel-signed reply, and resumes persistent user-frame state |
 | Expressive LLM-like prose | Far from the present renderer |
 | Oracle golden-chicken integration baseline | 1/1, three checked beats plus visible plant/discharge accounting |
-| End-to-end conversational golden-chicken story | 0/1 |
+| Parsed two-turn golden-chicken revision | 1/1: accepted three-beat story preserved, clarified, and revised |
+| Open-English conversational golden-chicken story | 0/1 |
 
 That final zero prevents the component inventory from becoming self-congratulatory.
 The project has rails, forms, measurements, and verifier footholds. It does not
@@ -384,21 +388,21 @@ knows, assumes, tries, proves, and cannot resolve.
 
 The immediate path is now concrete:
 
-1. Extend the implemented controller core with the `ASK` return channel and
-   PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
-2. Replace the minimal story adapter with the scope-backed frame executor and
-   frame-local ladder.
-3. Connect the now-executable UNKNOWN retrieval/abstention path to user
-   clarification and external tools.
-4. Replace committed Lean-transition replay with live PyPantograph application
+1. Author the `physics.frames` lane and adjudicate the rotating-frame/cartoon-
+   gravity and Galilean-composition predictions.
+2. Add FrameSpec ownership and visibility-filtered events, then run the
+   Sally–Anne false-belief demo before attempting nested frames.
+3. Add the licensed, external WordNet retrieval adapter with zero frame-verdict
+   changes, and connect retrieval to external tools.
+4. Implement PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
+5. Replace committed Lean-transition replay with live PyPantograph application
    and search.
-5. Make the existing dead-branch trace serializable with complete terminal
+6. Make sessions and the existing dead-branch trace serializable with complete terminal
    outcomes.
-6. Replace the deterministic oracle with a tiny verifier-coupled policy.
-7. Extend recurrent processing into the consumers that still fail at depth.
-8. Test one shared policy across proof and story tasks.
-9. Transfer to a third scientific or mathematical domain.
-10. Add a richer renderer and multi-turn interaction without weakening the
+7. Replace the deterministic oracle with a tiny verifier-coupled policy.
+8. Extend recurrent processing into the consumers that still fail at depth.
+9. Test one shared policy across proof and story tasks.
+10. Add a richer renderer and open-language multi-turn interaction without weakening the
     symbolic audit trail.
 
 The golden chicken is the approachable demonstration. The real experiment is

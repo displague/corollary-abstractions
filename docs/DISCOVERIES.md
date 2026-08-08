@@ -13,6 +13,18 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Waiting is a controller outcome, not a failed proof search.** A valid ASK
+  records one signed question and stops the generic controller as WAITING;
+  EXHAUSTED still means policy had nothing more to propose, and SOLVED still
+  means the goal closed. A later run resumes the same immutable session state.
+  *conversation control-plane distinction, executable* (2026-08-09)
+
+- **User testimony can be locally attributable without becoming world truth.**
+  The ASK return path records a signed `UserBinding` in a runtime-owned user
+  frame and clears its exact UNKNOWN, but adds no frame assertion or corpus
+  fact. The signature proves host-channel passage, not human identity or content
+  correctness. *ToM entry boundary, 25 adversarial controls* (2026-08-09)
+
 - **Proof provenance integrity is cheaper than proof correspondence—and must
   not be confused with it.** The merged validator can establish that an
   artifact is repository-contained and well formed, that a cited theorem
