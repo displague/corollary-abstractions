@@ -17,7 +17,7 @@
           "skeleton": "neg(?0:P)",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -56,7 +56,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -227,7 +227,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -502,7 +502,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -519,7 +519,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -826,7 +826,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -872,7 +872,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -920,7 +920,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -1078,7 +1078,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -1161,7 +1161,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -1230,7 +1230,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -1742,7 +1742,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2119,7 +2119,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2182,7 +2182,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2209,7 +2209,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2372,7 +2372,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2413,7 +2413,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2473,7 +2473,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2492,9 +2492,10 @@
           "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
           "grounded_via": "exact",
           "instance_of_statements": [
-            "numanalysis.interpolation.linear_interpolation"
+            "numanalysis.interpolation.linear_interpolation",
+            "probstat.probability.two_component_mixture"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -2510,7 +2511,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -2520,7 +2521,7 @@
           "skeleton": "*(?0:V, +(1, neg(?1:P)))",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -2531,7 +2532,7 @@
           "skeleton": "+(1, neg(?0:P))",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -2543,7 +2544,7 @@
           "skeleton": "neg(?0:P)",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -2591,7 +2592,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2632,7 +2633,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -2886,7 +2887,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -3285,7 +3286,7 @@
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -3295,7 +3296,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -3305,7 +3306,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -3314,7 +3315,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -3462,7 +3463,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -3823,9 +3824,10 @@
             "geomodel.bezier.de_casteljau_step",
             "ml.preference.grpo_group_relative_advantage",
             "numanalysis.interpolation.linear_interpolation",
+            "probstat.probability.two_component_mixture",
             "probstat.transform.z_standardization"
           ],
-          "pattern_recurs_in_n_statements": 5
+          "pattern_recurs_in_n_statements": 6
         }
       ]
     },
@@ -4586,6 +4588,54 @@
       ]
     },
     {
+      "statement_id": "logic.inference.hypothetical_syllogism",
+      "template": "IMPLIES(MEET(LEQ(PROP1, PROP2), LEQ(PROP2, PROP3)), LEQ(PROP1, PROP3))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
+        }
+      ]
+    },
+    {
       "statement_id": "ml.recurrence.elman_rnn_hidden_state",
       "template": "HIDDENNEXT = ACTIVATION(WEIGHTREC*HIDDEN + WEIGHTIN*INPUT + BIAS)",
       "groundedness": 0.75,
@@ -4618,7 +4668,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -4635,7 +4685,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -4672,7 +4722,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -4689,7 +4739,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -4724,7 +4774,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -4740,7 +4790,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -4845,7 +4895,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -4908,7 +4958,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -5025,7 +5075,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -5234,7 +5284,7 @@
           "skeleton": "neg(?0:P)",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -5867,7 +5917,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -5886,9 +5936,10 @@
           "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
           "grounded_via": "exact",
           "instance_of_statements": [
-            "geomodel.bezier.de_casteljau_step"
+            "geomodel.bezier.de_casteljau_step",
+            "probstat.probability.two_component_mixture"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -5904,7 +5955,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -5914,7 +5965,7 @@
           "skeleton": "*(?0:V, +(1, neg(?1:P)))",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -5925,7 +5976,7 @@
           "skeleton": "+(1, neg(?0:P))",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -5937,7 +5988,7 @@
           "skeleton": "neg(?0:P)",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -5997,7 +6048,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6021,7 +6072,7 @@
             "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.circuits.ohms_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6045,7 +6096,7 @@
             "numanalysis.floatingpoint.machine_epsilon_bound",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6114,7 +6165,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6656,7 +6707,7 @@
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -6666,7 +6717,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -6676,7 +6727,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -6685,7 +6736,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -6836,7 +6887,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6862,7 +6913,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6903,7 +6954,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -6945,7 +6996,7 @@
           "skeleton": "neg(?0:P)",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -6994,7 +7045,7 @@
             "physics.circuits.ohms_law",
             "physics.mechanics.newton_second_law"
           ],
-          "recurs_in_n_statements": 35
+          "recurs_in_n_statements": 36
         }
       ]
     },
@@ -7088,6 +7139,77 @@
             "graphtheory.degree.handshake_lemma"
           ],
           "recurs_in_n_statements": 4
+        }
+      ]
+    },
+    {
+      "statement_id": "probstat.probability.two_component_mixture",
+      "template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "geomodel.bezier.de_casteljau_step",
+            "numanalysis.interpolation.linear_interpolation"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "diffgeo.surfaces.gauss_bonnet_theorem",
+            "geometry.circle_formulas.circle_circumference_formula",
+            "numanalysis.floatingpoint.machine_epsilon_bound",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "recurs_in_n_statements": 36
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:V, +(1, neg(?1:P)))",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "+(1, neg(?0:P))",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -7464,7 +7586,7 @@
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -7474,7 +7596,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -7484,7 +7606,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -7493,7 +7615,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         }
       ]
     },
@@ -7560,7 +7682,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
