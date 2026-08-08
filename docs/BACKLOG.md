@@ -36,6 +36,20 @@ or commit history. Each item names the evidence that motivated it.
   format string and fixes the order (distinguished operand first, special
   element second). Fix: let a template declare commutative call heads, or
   lint for the same head appearing with permuted argument categories.
+  **SHIPPED** as `HEAD_ALGEBRA` in `scripts/match_signatures.py` (branch
+  `tooling/head-algebra`): a declared table of per-head commutativity,
+  associativity, identity and annihilator, each entry citing the node that
+  justifies it. `canonicalize` and `typed_resort` now sort the arguments of
+  declared-commutative call heads (sort only — flattening would need the
+  `associative` field, which no pass consumes). Adjudicated: **no twin group
+  changed membership at any level**, exactly as predicted, because the
+  corpora were authored to the convention the declaration now enforces; four
+  nodes' skeleton *strings* reorder (`logic`/`settheory.boolean_laws.identity_laws`
+  to `?0:V = MEET⟨?1:P, ?0:V⟩`, `logic.inference.modus_ponens` to
+  `IMPLIES⟨MEET⟨?0, IMPLIES⟨?0, ?1⟩⟩, ?1⟩`, and
+  `narrative.causality.precedence_causation_bridge` at aliased level). The
+  convention is now robust rather than lucky: a future `MEET(TOP, X)` spelling
+  lands in the same group as `MEET(X, TOP)`.
 - **No binder syntax, so optimizations cannot be compared.** Channel capacity
   is `C = max over p(x) of I(X;Y)`: a maximization over a *family*, with a
   constraint set (the probability simplex). The grammar has identifiers,
@@ -75,6 +89,18 @@ or commit history. Each item names the evidence that motivated it.
   per-head table sourced from `identity_laws`-style nodes would let e.g.
   De Morgan >= the degenerate one-operand case fire, and would give the
   Boolean corpora any specialization structure at all.
+  **SHIPPED** (branch `tooling/head-algebra`): `IDENTITY` is gone, replaced by
+  `match_signatures.identity_terms(head)` reading `HEAD_ALGEBRA`, and
+  `specialize.py` additionally matches declared-commutative call heads in
+  either argument order. The Boolean corpora now have specialization
+  structure — four edges, all looseness 0, all cross-corpus in two of the four
+  cases: `logic.boolean_laws.absorption >= logic.boolean_laws.idempotence`,
+  `>= settheory.boolean_laws.idempotence`, and the two with
+  `settheory.boolean_laws.absorption` as the general side, each binding the
+  join operand to JOIN's declared identity BOT
+  (`MEET(X, JOIN(X, BOT)) = MEET(X, X)`). Not the De Morgan edge the entry
+  guessed at, but the same kind and arguably better: idempotence *is*
+  absorption at the bottom of the lattice.
 - **Discrete and continuous statements of one fact can never twin.** `sum_i X`
   parses to a call with head `sum`; `INTEGRAL(X)` parses to a call with head
   `INTEGRAL`. The two heads are unrelated strings, so the discrete and
@@ -91,6 +117,26 @@ or commit history. Each item names the evidence that motivated it.
   head-aliasing table (`sum` ~ `INTEGRAL` ~ `prod`, as accumulation operators)
   applied at a match level below `typed`, or an explicit `ACCUMULATE(...)`
   authoring convention that both forms adopt.
+  **HALF SHIPPED** (branch `tooling/head-algebra`): `{"sum": "aggregate",
+  "INTEGRAL": "aggregate"}` is now in `HEAD_ALIASES`, so the two heads *do*
+  share a node at the ALIASED level. `prod` is deliberately not included — it
+  is not linear aggregation, and no node in `data/` carries it. Adjudicated:
+  **zero new twin groups.** All 23 sum/INTEGRAL-bearing nodes were rechecked;
+  the four aliased groups containing `aggregate` are all pre-existing typed
+  groups (weighted accumulation ×4, Shannon/Gibbs, cross-entropy ×2,
+  FTC/Stokes-zero-form), none of which crosses the discrete/continuous divide.
+  The alias removes one obstacle and reveals what was behind it: the three
+  nodes whose right side is a bare `aggregate⟨?:V⟩` —
+  `diffgeo.curves.arc_length_functional` (`?0:V = aggregate⟨?1:V⟩`),
+  `difftop.degree.degree_regular_value_count` (`DEGREE⟨?0:V⟩ = aggregate⟨?1:V⟩`)
+  and `difftop.vectorfields.poincare_hopf_index_theorem`
+  (`EULERCHAR⟨?0:V⟩ = aggregate⟨?1:V⟩`) — are now separated *only* by whether
+  the left side is a slot or a call, i.e. by the "same invariant, slot in one
+  corpus and call head in another" entry in the Schema section. That entry was
+  one obstacle among three for one pair; it is now the sole remaining obstacle
+  for three pairs, and should be promoted accordingly. (The entry's other
+  prediction, probability normalization, is untestable: `data/` has
+  `sum_i p_i = 1` but no `INTEGRAL(density) = 1`.)
 - **Three independent obstacles stacked on one pair.** Worth recording as a
   unit because fixing any one of them would not have made Gauss-Bonnet meet
   Poincaré-Hopf: (1) the `sum`/`INTEGRAL` head split above; (2) the Euler
@@ -99,6 +145,19 @@ or commit history. Each item names the evidence that motivated it.
   explicit `2*pi` normalization that the already-integer index sum does not, so
   even after (1) and (2) the arities differ. Any head-aliasing work should be
   tested against this pair, not against a single-obstacle example.
+  **TESTED, one of three cleared** (branch `tooling/head-algebra`). After the
+  `sum`/`INTEGRAL` alias the pair reads:
+  - `difftop.vectorfields.poincare_hopf_index_theorem`:
+    `EULERCHAR⟨?0:V⟩ = aggregate⟨?1:V⟩`
+  - `diffgeo.surfaces.gauss_bonnet_theorem`: `aggregate⟨?0:V⟩ = *(?1:P, ?2:V)`
+
+  Obstacle (1) is gone — both now carry `aggregate`. Obstacle (2) is intact:
+  the Euler characteristic is the call head on one side and the `?2:V` slot on
+  the other. Obstacle (3) is intact: the `2*pi` shows as an extra `*(?1:P, …)`
+  against a bare aggregate. The pair remains blocked at every level, and the
+  entry's warning was correct — a single-obstacle test (the ML
+  `ACTIVATION`/`SIGMOID` pair, the morphology near-misses) would have declared
+  head aliasing a success on the strength of a case it does not resolve.
 - **A numeric literal in a slot position blocks an otherwise real match.**
   `diffgeo.curves.circle_curvature` is `CURVATURE = 1 / RADIUS` ->
   `?0:V = *(1, inv(?1:V))`, and the rate/density family (average rate of
@@ -197,6 +256,19 @@ or commit history. Each item names the evidence that motivated it.
   `SUFFIX2 -> EMPTY`. Fix needs both parts: a per-head identity table sourced
   from identity-law nodes, and permission for a variable slot to bind an
   identity element *for a head whose identity the corpus has declared*.
+  **SHIPPED** (branch `tooling/head-algebra`), both parts, and the predicted
+  edge fires:
+  `morphology.wordformation.iterated_affixation >= affixation`, looseness 0,
+  via `SUFFIX1 -> EMPTY` — the *inner* affix vanishes rather than the outer
+  one this entry guessed, which is the same law read the other way round
+  (`CONCAT(CONCAT(STEM, ∅), SUFFIX) = CONCAT(STEM, SUFFIX)`) and puts the zero
+  morph where a linguist would, between stem and suffix. Two more morphology
+  edges came with it: `iterated_affixation >= zero_morpheme_identity` (both
+  affixes empty) and `concat_associativity >= zero_morpheme_identity`. The
+  mechanism is `match_via_head_identity`: a call whose vanishing argument is a
+  slot collapses to its other argument. Note it is NOT the "arguments run out"
+  rule generalized — a call has fixed arity, so the collapse is a rewrite of
+  the pattern, and it needs its own non-triviality guard (below).
 - **Associativity and commutativity are one package in the canonicalizer.**
   `COMMUTATIVE = {+, *}` gets flattening (associativity) and sorting
   (commutativity) together, and call heads get neither.
@@ -206,6 +278,18 @@ or commit history. Each item names the evidence that motivated it.
   they are the same string. Fix: let a template declare a call head associative
   (flatten only) independently of commutative (flatten and sort). CONCAT must
   never be added to `COMMUTATIVE`.
+  **HALF SHIPPED** (branch `tooling/head-algebra`): `HEAD_ALGEBRA` separates
+  the two declarations — `CONCAT` is `associative: True, commutative: False`,
+  cited to `morphology.wordformation.concat_associativity` and to the corpus's
+  own `re-do` is not `do-re` note — and `COMMUTATIVE` /
+  `COMMUTATIVE_CALL_HEADS` are now *derived* from the table rather than
+  hardcoded, so CONCAT cannot be added to `COMMUTATIVE` by accident. What is
+  **not** shipped is a consumer: no pass reads `associative`, so
+  `CONCAT(CONCAT(A,B),C)` and `CONCAT(A,CONCAT(B,C))` are still different
+  skeletons. The remaining work needs a decision the commutative case did not:
+  a flattened n-ary `CONCAT` has no spelling in the grammar, so either the
+  skeleton renderer gains a variadic form or the canonicalizer
+  right-associates instead of flattening.
 - **`specialize.py` suppresses the plainest specializations of all.** Its
   filter is `if match(...) and (st.used_absorption or st.used_identity)`,
   justified in the docstring by "anything matchable without them is an exact
@@ -245,6 +329,18 @@ or commit history. Each item names the evidence that motivated it.
   every Boolean-corpus node silently *assumes* commutativity of its head, and
   this is the first node in `data/` that *asserts* it. If a commutative-head
   declaration is added, this node is the test case for it.
+  **SHIPPED** (branch `tooling/head-algebra`): `TOUCHES` is declared
+  commutative in `HEAD_ALGEBRA` with this node as its cited justification —
+  the only ASSERTED commutativity in the table, everything else being DERIVED
+  or CONVENTION. Adjudicated against the test case, with a result worth
+  keeping: **the node's own skeleton does not change**. Sorting uses
+  `shape_key`, which erases slot identity, so `TOUCHES⟨?0, ?1⟩` and
+  `TOUCHES⟨?1, ?0⟩` have equal sort keys and the stable sort leaves both
+  alone. Declaring a head commutative therefore does *not* collapse a symmetry
+  statement into a tautology, which is the desirable outcome (the node still
+  says something) but also means this test case cannot demonstrate the
+  feature. A head whose arguments differ in *shape* is what the sort acts on;
+  `logic.inference.modus_ponens` is the only node in `data/` that supplies one.
 - **The one relation nested inside a call argument matches nothing.**
   `geotop.measure.area_monotonicity` is
   `IMPLIES(LEQ(REGA, REGB), CARD(REGA) <= CARD(REGB))` — an order-preservation
@@ -312,6 +408,17 @@ or commit history. Each item names the evidence that motivated it.
   head has the *wrong* algebra declared. Fix shape: a non-commutative
   multiplication head, or a per-head associativity/commutativity table that
   `*` itself participates in.
+  **PARTIALLY ADDRESSED** (branch `tooling/head-algebra`): the table exists and
+  `*` participates in it — `HEAD_ALGEBRA["*"]` is now the source of truth for
+  `COMMUTATIVE`, and its comment records the over-declaration by name
+  (`OUTER`, `CROSS`). It is still declared commutative, because ~30 scalar
+  products carrying the affine and rate families need it that way and nothing
+  lets a single template opt out. So the *cost* is now written next to the
+  declaration instead of only in this file, and the fix is unchanged: a second
+  multiplication head, or per-node algebra overrides. `CROSS`'s antisymmetry
+  stays inexpressible — the table carries boolean commutativity only, and
+  inventing a third value for one node would declare more than `data/`
+  justifies.
 - **`specialize.py` plain-binding suppression, fourth instance, and the one
   the node most wanted.** `infotheory.entropy.surprisal`
   (`?0:V = neg(LOG⟨?1:V⟩)`) covers `ml.preference.dpo_preference_loss`
@@ -502,6 +609,16 @@ or commit history. Each item names the evidence that motivated it.
   op) has nothing to bite on in a template made only of call heads. Any
   evaluation of the proposed category-compatibility constraint should note that
   the corpora it would clean up are exactly the corpora that get edges at all.
+  **PARTIALLY RESOLVED** (branch `tooling/head-algebra`): with per-head
+  identities, `data/logic`, `data/set_theory` and `data/morphology` now get
+  edges — seven of them, every one looseness 0 and every one informative,
+  which is a hit rate no arithmetic corpus in this graph comes close to. The
+  "zero noise" observation survives intact and is now load-bearing evidence:
+  the seven call-corpus edges added **zero** degenerate ones, because a call
+  head is arity-fixed and cannot be absorbed into. `data/temporal_logic` and
+  `data/narrative` are still at zero in both directions — they carry no head
+  with a declared identity (`UNTIL`, `ALWAYS`, `EVENTUALLY`, `NEXT`), so the
+  new mechanism has nothing to bite on there either.
 - **Monotone endo-functions need a second monotonicity template, and the
   backlog's own request could not be honoured.** The
   `geotop.measure.area_monotonicity` entry above asks that a future
@@ -545,6 +662,84 @@ or commit history. Each item names the evidence that motivated it.
   depth. An idempotent has a fixed point an involution does not, and that is a
   property of the skeleton rather than a shape of it — the exact case the
   wanted structural-query facility has to cover.
+
+- **An identity that collapses a call is a rewrite, and rewrites need their
+  own non-triviality bar.** Found while shipping `HEAD_ALGEBRA`. The
+  arithmetic identity rule is safe because a commutative op's arity is
+  variable: binding `SHIFT -> 0` removes an *argument*. A call's arity is
+  fixed, so `HEAD(a, e) = a` removes a *node*, and the pattern that survives is
+  smaller than the one `op_count(gtree) >= 2` was checked against. Measured
+  cost of not noticing: `specialize.py` went from 573 edges to **1080**, and
+  500 of the 507 extra came from three templates —
+  `geotop.predicates.de9im_disjoint` (`MEET(REGA, REGB) = EMPTYSET`
+  collapsing to `REGA = EMPTYSET`), `morphology.wordformation.affixation` and
+  `iterated_affixation` — each then matching every two-slot equation in the
+  graph. Fixed by counting collapses and re-checking
+  `op_count(gtree) - collapses >= 2`, which drops the count to 580. Recorded
+  because every future algebraic rewrite (associative flattening, the wanted
+  sum-collapse-under-constant-summand, series truncation) has the same shape:
+  it shrinks the pattern, and the guard that made patterns non-trivial has to
+  be evaluated on the pattern *as used*.
+- **First-success-wins search lets a weaker reading pre-empt a stronger one.**
+  Second finding from the same work, and independent of it.
+  `find_specializations` calls `match` once and keeps whatever it returns, so
+  when a new mechanism is added, an edge that previously matched cleanly can
+  come back with a degenerate derivation instead. Observed exactly once:
+  `geotop.predicates.de9im_disjoint >= temporal.modality.next_distributes_over_meet`
+  was matched by plain binding, and the identity rule found
+  `REGB -> TRUTH` first, which then failed the collapse guard and deleted the
+  edge. Worked around by running `match` twice per candidate pair, with head
+  identities disabled on the first pass — the general principle being that a
+  reading needing no algebra is always the better reading. That principle is
+  not enforced *within* a pass (a collapse deep in a subtree can still
+  pre-empt an argument swap higher up), and it will not scale to a third and
+  fourth mechanism. Wanted: `match` returns the *cheapest* derivation rather
+  than the first, e.g. by scoring mechanisms and searching best-first, which
+  would also give `looseness` a companion "how much algebra did this need"
+  axis.
+- **The typed sort key orders P before V, which silently re-splits heads that
+  a future alias would want to merge.** `typed_resort` sorts by a key in which
+  `?P` precedes `?V`, so declaring MEET commutative moved
+  `logic.boolean_laws.identity_laws` from `?0:V = MEET⟨?0:V, ?1:P⟩` to
+  `?0:V = MEET⟨?1:P, ?0:V⟩`, while
+  `morphology.wordformation.zero_morpheme_identity` keeps
+  `?0:V = CONCAT⟨?0:V, ?1:P⟩` because CONCAT is (correctly) not commutative.
+  The two identity laws are the pair `docs/BACKLOG.md` names as the
+  head-literalism reproducer, and they are now *further* apart than before:
+  same structure, different head, and now different argument order too. Harmless
+  today (`CONCAT` and `MEET` share no alias class and must not), but it means
+  any future "opaque binary composition" alias has to normalize argument order
+  after aliasing, not before. Cheap fix when it lands: run the commutative sort
+  inside `alias_heads`' output rather than only in `canonicalize`.
+- **Commutative-head robustness reaches `typed` but not `shape`.** Probed on
+  the pair the declaration was meant to make safe: `MEET(PROP1, TRUTH) = PROP1`
+  and `MEET(TRUTH, PROP1) = PROP1` now share a typed skeleton
+  (`?0:V = MEET⟨?1:P, ?0:V⟩`) — which is the whole point, and what makes the
+  logic/set-theory twin robust rather than lucky — but their *shape* skeletons
+  are `?0 = MEET⟨?0, ?1⟩` and `?0 = MEET⟨?1, ?0⟩`. Cause: `shape_key` erases
+  slot identity, so two slot arguments compare equal, the sort is stable, and
+  the placeholder indices are then assigned in the surviving order. The gap
+  only opens when a slot RECURS across the relation, which is exactly the
+  family the wanted "slot recurrence, not slot shape" match level is about.
+  `shape` is documented as the loosest level and is here strictly stricter
+  than `typed`, which inverts the ladder. Fix candidate: order commutative
+  arguments by first-occurrence index of their slots over the whole statement
+  (a fixpoint, since the indices depend on the order), or accept it and note
+  in the report that `shape` is not a relaxation of `typed`.
+- **An identity element has one abstract identity and several corpus
+  spellings, and the report prints whichever is listed first.**
+  `HEAD_ALGEBRA["JOIN"]["identity"]` is `("FALSITY", "EMPTYSET",
+  "INCONSISTENCY")` because the same lattice bottom is spelled three ways in
+  `data/logic`, `data/set_theory` and `data/narrative`. `specialize.py` tries
+  the spellings in table order, so
+  `settheory.boolean_laws.absorption >= settheory.boolean_laws.idempotence`
+  reports `SETB -> FALSITY` — correct, but in the wrong corpus's vocabulary.
+  Cosmetic today (four edges), and it will not stay cosmetic once more corpora
+  declare identities. Fix: prefer the spelling that occurs in the *specific*
+  node's `slot_schema`, falling back to table order. The deeper version of the
+  same request is the recorded "same invariant, slot in one corpus and call
+  head in another" lint — both want a notion of "these identifiers name one
+  object" that the graph does not yet have.
 
 ## Schema
 
@@ -763,3 +958,15 @@ or commit history. Each item names the evidence that motivated it.
   806/839 articles. LICENSE: data files carry no license statement (paper
   CC-BY covers the paper only); local research use only, no redistribution
   of derivatives without written confirmation from the maintainer.
+  **Step (1) is blocked on a name collision, not on effort** (branch
+  `tooling/head-algebra`): it cannot be done in `HEAD_ALGEBRA`. In this grammar
+  `^` is exponentiation — `Parser.parse_power`, and `SIDE1^2` in
+  `geometry.right_triangles.pythagorean_theorem` is not `2^SIDE1` — while in
+  Wikisem `^` is conjunction. Declaring `^` commutative would silently
+  scramble the 30 nodes in `data/` that use it as a power, so the table
+  records `^` in its "deliberately absent" list with this reason. The lane
+  needs either a lane-local algebra table layered over `HEAD_ALGEBRA`, or an
+  ingestion step that rewrites Wikisem's `^` to `MEET` — which is already
+  declared commutative, and is the head `data/logic` uses for conjunction, so
+  the ingested forms would twin the Boolean corpora for free. The second is
+  cheaper and strictly better.
