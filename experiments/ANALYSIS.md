@@ -500,3 +500,21 @@ redefines what OOD means and must be labeled as such), or
 with shared weights so depth is iteration, not vocabulary -- the
 recurrent instinct from the project's original sketch returning in a
 precise, motivated role). Both carry to v0.4 as a decision point.
+
+### Depth fork verdict: exposure does not generalize; iteration does
+
+| arm | train depths | OOD depths | OOD exact |
+|---|---|---|---|
+| table lookup (baseline) | 2-3 | 4-5 | 0.014 |
+| table + curriculum | 2-4 | 5-6 | **0.006** |
+| recurrent (GRU over levels) | 2-3 | 4-5 | **0.226** |
+
+Curriculum FAILED: deeper exposure with lookup addressing just moves
+the cliff one level out -- the consumer memorizes the levels it sees
+and falls off the same edge. The recurrent arm, with LESS exposure, is
+the only mechanism showing true extrapolation (16x over baseline).
+Depth-as-iteration -- one shared cell applied once per level -- is the
+direction; the open work is closing 0.226 -> 1.0 (deeper recurrent
+integration: the pointer/decoder still consume addresses through
+depth-naive attention). The original architecture sketch's recurrent
+instinct survives its controlled test.

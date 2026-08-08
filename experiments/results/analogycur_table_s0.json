@@ -1,0 +1,10 @@
+{
+  "task": "analogy",
+  "params": 1478403,
+  "seed": 0,
+  "level_code": "table",
+  "val_exact_best": 1.0,
+  "test_exact": 1.0,
+  "ood_exact": 0.005699481865284974,
+  "seconds": 4518.7
+}
