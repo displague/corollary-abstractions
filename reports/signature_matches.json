@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 197,
+  "nodes_analyzed": 199,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -325,7 +325,8 @@
       "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
       "disciplines": [
         "geometric_modeling",
-        "numerical_analysis"
+        "numerical_analysis",
+        "statistics"
       ],
       "archetypes": [
         "two_point_convex_combination"
@@ -340,6 +341,11 @@
           "statement_id": "numanalysis.interpolation.linear_interpolation",
           "discipline": "numerical_analysis",
           "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH"
+        },
+        {
+          "statement_id": "probstat.probability.two_component_mixture",
+          "discipline": "statistics",
+          "template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2"
         }
       ]
     },
@@ -652,6 +658,7 @@
       "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩",
       "disciplines": [
         "geospatial_topology",
+        "logic",
         "set_theory",
         "temporal_logic"
       ],
@@ -663,6 +670,11 @@
           "statement_id": "geotop.predicates.containment_transitivity",
           "discipline": "geospatial_topology",
           "template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))"
+        },
+        {
+          "statement_id": "logic.inference.hypothetical_syllogism",
+          "discipline": "logic",
+          "template": "IMPLIES(MEET(LEQ(PROP1, PROP2), LEQ(PROP2, PROP3)), LEQ(PROP1, PROP3))"
         },
         {
           "statement_id": "settheory.order.subset_transitivity",
@@ -1244,7 +1256,8 @@
       "skeleton": "?0 = +(*(?1, ?2), *(?3, +(1, neg(?1))))",
       "disciplines": [
         "geometric_modeling",
-        "numerical_analysis"
+        "numerical_analysis",
+        "statistics"
       ],
       "archetypes": [
         "two_point_convex_combination"
@@ -1259,6 +1272,11 @@
           "statement_id": "numanalysis.interpolation.linear_interpolation",
           "discipline": "numerical_analysis",
           "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH"
+        },
+        {
+          "statement_id": "probstat.probability.two_component_mixture",
+          "discipline": "statistics",
+          "template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2"
         }
       ]
     },
@@ -1604,6 +1622,7 @@
       "skeleton": "IMPLIES⟨MEET⟨LEQ⟨?0, ?1⟩, LEQ⟨?1, ?2⟩⟩, LEQ⟨?0, ?2⟩⟩",
       "disciplines": [
         "geospatial_topology",
+        "logic",
         "set_theory",
         "temporal_logic"
       ],
@@ -1615,6 +1634,11 @@
           "statement_id": "geotop.predicates.containment_transitivity",
           "discipline": "geospatial_topology",
           "template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))"
+        },
+        {
+          "statement_id": "logic.inference.hypothetical_syllogism",
+          "discipline": "logic",
+          "template": "IMPLIES(MEET(LEQ(PROP1, PROP2), LEQ(PROP2, PROP3)), LEQ(PROP1, PROP3))"
         },
         {
           "statement_id": "settheory.order.subset_transitivity",
