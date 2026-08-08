@@ -1381,6 +1381,18 @@ or commit history. Each item names the evidence that motivated it.
   in increasing order of work: a `scope` field on a node naming the frame its
   claims are relative to; a `FRAME(premises, claim)` head; or a real scoped
   construct in the grammar shared with the wanted `MAX(body, binder, domain)`.
+
+  **FIRST FIX SHAPE SHIPPED** (branch `feature/frame-executor`): the live
+  schema carries the draft's optional `scope` object (frame id, role,
+  premises, suspends, governed_by, on_exit, retrieval), `validate_nodes.py`
+  enforces frame-id pattern / frame agreement / reference resolution, and
+  `scripts/frames.py` executes the boundary at runtime — declarations as
+  the frame-local VERIFIED tier, suspension-gated contradiction, demotion
+  on exit (32/32 tests; matcher report byte-identical, so the twin this
+  item celebrates is untouched). Still prose-bound: nothing migrates
+  `frame_consistency`'s own `regularity_conditions` into structure, no
+  corpus node carries `scope` yet, and the `FRAME(...)` head / grammar
+  binder remain the deeper fix shapes for statements *about* scoped claims.
 - **No past modality, so half of a two-directional law cannot be written.**
   `narrative.constraint.chekhov_gun` states one direction — every planted
   element is eventually discharged. Its converse, `ALWAYS(IMPLIES(

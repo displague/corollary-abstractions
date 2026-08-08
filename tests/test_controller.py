@@ -158,9 +158,7 @@ class ControllerContractTests(unittest.TestCase):
         self.assertEqual(run.final_state, [])
 
     def test_duplicate_rejected_action_is_pruned(self) -> None:
-        initial = StoryState(
-            "narrative.frames.golden_chicken", "the golden chicken", ("golden",)
-        )
+        initial = StoryFrameVerifier().initial_state()
         invalid = Action.build(
             ActionKind.GEN,
             "resolve",

@@ -285,9 +285,98 @@
           }
         }
       }
+    },
+    "scope": {
+      "$ref": "#/$defs/frameScope",
+      "$comment": "OPTIONAL, and absent from `required` on purpose: an unscoped node is a claim about the actual world, which is what all 199 pre-scope nodes are. Only a statement asserted inside a hypothetical frame carries `scope`. A statement ABOUT frames -- narrative.frame.frame_consistency -- stays unscoped: it is the law the frame checker enforces, not a claim inside a frame. The matcher never reads this field, so structural_signature and every twin group are invariant under adding it. Adopted from docs/schema-drafts/equation-node.scope-draft.json; rationale in docs/DESIGN-scope-and-modality.md."
     }
   },
   "$defs": {
+    "frameScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frame",
+        "role"
+      ],
+      "properties": {
+        "frame": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
+          "$comment": "Frame identifier, conventionally <discipline>.frames.<name>. Underscores are allowed in the FIRST segment, unlike statement_id, whose pattern forbids them -- docs/BACKLOG.md records that asymmetry as a defect and this schema declines to reproduce it. The validator checks the pattern and that nodes sharing a frame agree on the frame's properties; when a frames/ registry lands this becomes a resolvable reference and no node has to change."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "declaration",
+            "assertion"
+          ],
+          "$comment": "`declaration`: this node states one of the frame's premises and occupies the frame's LOCAL VERIFIED tier per docs/DESIGN-epistemic-ladder.md. `assertion`: this node is a claim made inside the frame, checked against the frame's declarations plus the corpus minus `suspends`."
+        },
+        "frame_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "premises": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scopedPremise"
+          },
+          "$comment": "The premise set P1..Pn the frame opens with. Written on the `declaration` nodes; an `assertion` node normally leaves it empty and inherits it from its frame."
+        },
+        "suspends": {
+          "$ref": "#/$defs/nodeIdList",
+          "$comment": "Corpus nodes the frame removes from its local VERIFIED tier. This is what makes the frame boundary structural rather than stylistic: invention is unlimited at the boundary, and exactly the listed world-truths stop being available inside. A statement that contradicts a VERIFIED node NOT listed here is REFUTED -- in fiction exactly as in physics."
+        },
+        "governed_by": {
+          "$ref": "#/$defs/nodeIdList",
+          "$comment": "The corpus laws the frame is checked against; in practice narrative.frame.frame_consistency. Turns that node from a statement the graph merely contains into the cited rule a checker runs."
+        },
+        "on_exit": {
+          "type": "string",
+          "enum": [
+            "conjectured",
+            "assumed",
+            "retracted"
+          ],
+          "default": "conjectured",
+          "$comment": "The epistemic status the claim reverts to outside the frame. The first two values are existing `epistemic_status` members on purpose: frame truths never leak, they demote. Frames need no new epistemic status."
+        },
+        "retrieval": {
+          "type": "string",
+          "enum": [
+            "open",
+            "frame_local"
+          ],
+          "$comment": "docs/DESIGN-frames-and-retrieval.md section 2: a frame may declare an unknown unresolvable-by-retrieval (do not look up real chickens). `frame_local` forbids the RETRIEVE action from leaving the frame's premise set."
+        },
+        "scope_note": {
+          "type": "string"
+        }
+      }
+    },
+    "scopedPremise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "premise_id",
+        "expression"
+      ],
+      "properties": {
+        "premise_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "$comment": "An anonymized-template expression in the SAME grammar as structural_signature.anonymized_template, so a frame's premises can be parsed, skeletonized and matched by the existing pipeline. That is the point of putting the scope beside the template instead of inside it."
+        },
+        "scope_note": {
+          "type": "string"
+        }
+      }
+    },
     "formalVariant": {
       "type": "object",
       "additionalProperties": false,

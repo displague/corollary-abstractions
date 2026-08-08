@@ -5,7 +5,25 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
+
+
+# Mirrors $defs.frameScope in schema/equation-node.schema.json. Underscores
+# are allowed in the first segment on purpose (statement_id forbids them;
+# BACKLOG records that asymmetry as a defect, not a convention to copy).
+FRAME_ID_RE = re.compile(r"^[a-z0-9_]+(\.[a-z0-9_]+)+\Z")
+FRAME_ROLES = {"declaration", "assertion"}
+# Frame-level properties every member of a frame must agree on: they describe
+# the FRAME, not the member node, so disagreement means two nodes are talking
+# about different frames under one identifier.
+FRAME_AGREEMENT_PROPS = (
+    "frame_title",
+    "suspends",
+    "governed_by",
+    "retrieval",
+    "on_exit",
+)
 
 
 def load_json(path: Path) -> dict:
@@ -133,6 +151,110 @@ def inferential_link_errors(
     return errors
 
 
+def scope_errors(
+    nodes: list[dict], known_ids: set[str] | None = None
+) -> list[str]:
+    """Closed-form checks for the optional `scope` object.
+
+    Runs even when jsonschema is absent (pattern/role fallback), and adds
+    the two checks jsonschema cannot express: suspends/governed_by must
+    resolve against the merged graph, and nodes sharing a frame identifier
+    must agree on the frame's properties.
+    """
+    errors: list[str] = []
+    resolvable = {
+        n.get("statement_id") for n in nodes if n.get("statement_id")
+    } | (known_ids or set())
+    frames: dict[str, list[tuple[str, dict]]] = {}
+
+    for i, node in enumerate(nodes):
+        node_id = node.get("statement_id", f"<node-{i}>")
+        if "scope" not in node:
+            continue
+        scope = node["scope"]
+        if not isinstance(scope, dict):
+            # Catches an explicit `"scope": null` too, which jsonschema would
+            # flag but this fallback must not silently wave through.
+            errors.append(f"{node_id}: `scope` must be an object")
+            continue
+        frame = scope.get("frame")
+        if not isinstance(frame, str) or not FRAME_ID_RE.match(frame):
+            errors.append(
+                f"{node_id}: scope.frame `{frame}` does not match the "
+                "frame-id pattern"
+            )
+        if scope.get("role") not in FRAME_ROLES:
+            errors.append(
+                f"{node_id}: scope.role `{scope.get('role')}` must be one of "
+                f"{sorted(FRAME_ROLES)}"
+            )
+        for field in ("suspends", "governed_by"):
+            refs = scope.get(field, [])
+            if not isinstance(refs, list):
+                errors.append(f"{node_id}: scope.{field} must be a list")
+                continue
+            for ref in refs:
+                if ref == node_id:
+                    errors.append(
+                        f"{node_id}: scope.{field} must not self-reference"
+                    )
+                elif ref not in resolvable:
+                    errors.append(
+                        f"{node_id}: scope.{field} references missing node "
+                        f"`{ref}`"
+                    )
+        if isinstance(frame, str):
+            frames.setdefault(frame, []).append((node_id, scope))
+
+    for frame, members in sorted(frames.items()):
+        for prop in FRAME_AGREEMENT_PROPS:
+            stated: dict[str, list[str]] = {}
+            for node_id, scope in members:
+                if prop in scope:
+                    value = scope[prop]
+                    if isinstance(value, list):
+                        # suspends/governed_by are set-valued: element order
+                        # must not manufacture a disagreement.
+                        value = sorted(value, key=json.dumps)
+                    key = json.dumps(value, sort_keys=True)
+                    stated.setdefault(key, []).append(node_id)
+            if len(stated) > 1:
+                groups = "; ".join(
+                    f"{value} in {ids}" for value, ids in sorted(stated.items())
+                )
+                errors.append(
+                    f"frame `{frame}`: members disagree on `{prop}`: {groups}"
+                )
+        premise_owner: dict[str, tuple[str, str]] = {}
+        for node_id, scope in members:
+            premises = scope.get("premises", [])
+            if not isinstance(premises, list):
+                errors.append(
+                    f"{node_id}: scope.premises must be a list of premise "
+                    "objects"
+                )
+                continue
+            for premise in premises:
+                if not isinstance(premise, dict):
+                    errors.append(
+                        f"{node_id}: scope.premises entries must be objects"
+                    )
+                    continue
+                premise_id = premise.get("premise_id")
+                expression = premise.get("expression")
+                if premise_id is None:
+                    continue
+                prior = premise_owner.get(premise_id)
+                if prior is not None and prior[0] != expression:
+                    errors.append(
+                        f"frame `{frame}`: premise `{premise_id}` has "
+                        f"conflicting expressions in {prior[1]} and {node_id}"
+                    )
+                premise_owner.setdefault(premise_id, (expression, node_id))
+
+    return errors
+
+
 def jsonschema_errors(schema: dict, nodes: list[dict]) -> list[str]:
     try:
         import jsonschema
@@ -194,6 +316,10 @@ def main() -> int:
 
     # Link integrity and reciprocity over the merged cross-discipline graph.
     errors.extend(inferential_link_errors(schema, all_nodes))
+    # Scope integrity: frame ids, frame agreement, suspends/governed_by
+    # resolution -- also over the merged graph, since a frame may suspend
+    # or be governed by nodes in another corpus.
+    errors.extend(scope_errors(all_nodes))
 
     if errors:
         print("Validation failed:")

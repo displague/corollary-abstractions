@@ -59,6 +59,32 @@ demo and a multi-step derivation remain one milestone in two costumes.
    validator upgrade), migrate the remaining scope semantics out of
    `frame_consistency`'s prose, and build the runtime state manager that extends
    `compose_assert`'s ladder into a frame-local evaluator for those axioms.
+
+   **PARTIAL — scope adopted, executor runs, temporal obligations open:**
+   the live schema now carries the draft's optional `scope` object (199/199
+   nodes validate unchanged; matcher report byte-identical — `scope` is
+   invisible to it, as designed). `validate_nodes.py` checks frame-id
+   pattern, frame agreement across members (order-insensitive for
+   set-valued fields), and suspends/governed_by resolution over the merged
+   graph, without crashing on malformed scope values. `scripts/frames.py`
+   executes the frame-local ladder: declarations load as the local
+   VERIFIED tier and may contradict a world truth only if the frame
+   explicitly suspends it (the boundary rule — the adversarial review's
+   blocking finding was that declarations could smuggle contradictions
+   past `suspends`); assertions adjudicate against declarations plus
+   unsuspended world truths; a contradiction whose only grounding is
+   suspended is UNKNOWN to read-only `check` and admissible via
+   `assert_literal` as an act of invention, after which its negation is
+   REFUTED; missing information is UNKNOWN never REFUTED; the world map
+   itself is rejected if incoherent; and `close_frame` demotes every local
+   truth to `on_exit` status — nothing leaks, closed frames refuse
+   everything, double-close is an error. The golden-chicken oracle routes
+   trait checks through this executor on the same generic Controller
+   (42/42 tests; every review finding has a regression test). Still open:
+   Chekhov-style temporal obligations are not evaluated, no corpus node
+   yet carries `scope` (the nine payoff nodes of item 5 are the natural
+   first authors), and `compose_assert`'s demo ladder is not yet wired to
+   `frames.py`.
 5. **Past modality + mirror level**: author the nine payoff nodes
    (heraldry pattern before Chekhov's converse), add the
    separately-reported mirror level, fix order_le → LT with the

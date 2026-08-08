@@ -24,6 +24,7 @@ from controller import (
     Verification,
     Verdict,
 )
+from frames import FrameExecutor, FrameSpec, FrameState, Literal
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -141,18 +142,58 @@ class StoryBeat:
 
 @dataclass(frozen=True)
 class StoryState:
-    frame: str
-    agent: str
-    declared_traits: tuple[str, ...]
-    denied_traits: tuple[str, ...] = ()
+    """Story progress on top of a real frame state, not beside one."""
+
+    frame_state: FrameState
     desire: str | None = None
     beats: tuple[StoryBeat, ...] = ()
 
+    @property
+    def agent(self) -> str | None:
+        """The frame's declared agent, or None if the spec omits one."""
+        for _, literal in self.frame_state.spec.declarations:
+            if literal.predicate == "agent" and literal.polarity:
+                return literal.value
+        return None
+
+
+def golden_chicken_frame_spec() -> FrameSpec:
+    return FrameSpec(
+        frame="narrative.frames.golden_chicken",
+        title="The golden chicken",
+        declarations=(
+            ("agent", Literal("story", "agent", "the golden chicken")),
+            ("golden", Literal("the golden chicken", "trait", "golden")),
+            (
+                "no_silver",
+                Literal("the golden chicken", "trait", "silver", polarity=False),
+            ),
+        ),
+    )
+
 
 class StoryFrameVerifier:
-    """Minimal executable frame for the authored three-beat story grammar."""
+    """Three-beat story grammar over the runtime frame executor.
+
+    Beat ordering and desire preservation are the story grammar's own laws
+    (narrative.structure.*); trait consistency is delegated to the frame
+    executor, which adjudicates every trait literal against the frame's
+    declarations and the unsuspended world exactly as scripts/frames.py
+    documents. One executor, two costumes.
+    """
 
     name = "narrative-three-beat-frame"
+
+    def __init__(
+        self,
+        executor: FrameExecutor | None = None,
+        spec: FrameSpec | None = None,
+    ):
+        self.executor = executor or FrameExecutor()
+        self.spec = spec or golden_chicken_frame_spec()
+
+    def initial_state(self) -> StoryState:
+        return StoryState(frame_state=self.executor.open_frame(self.spec))
 
     def state_key(self, state: StoryState) -> str:
         return repr(state)
@@ -167,6 +208,13 @@ class StoryFrameVerifier:
                 evidence=(self.name,),
             )
         args = dict(action.arguments)
+        if state.agent is None:
+            return Verification(
+                Verdict.REFUSED,
+                "story frame declares no agent premise; the adapter cannot "
+                "adjudicate agent-bound beats",
+                evidence=(self.name,),
+            )
         if args.get("agent") not in {None, state.agent}:
             return Verification(
                 Verdict.REFUTED,
@@ -174,18 +222,25 @@ class StoryFrameVerifier:
                 evidence=("narrative.frame.frame_consistency",),
             )
         trait = args.get("trait")
-        if trait in state.denied_traits:
-            return Verification(
-                Verdict.REFUTED,
-                "candidate asserts a trait explicitly denied by the frame",
-                evidence=("narrative.frame.frame_consistency",),
+        if trait is not None:
+            finding = self.executor.check(
+                state.frame_state,
+                Literal(state.agent, "trait", trait),
             )
-        if trait is not None and trait not in state.declared_traits:
-            return Verification(
-                Verdict.UNKNOWN,
-                "candidate trait is neither declared nor denied in this frame",
-                evidence=("narrative.frame.frame_consistency",),
-            )
+            if finding.verdict is Verdict.REFUTED:
+                return Verification(
+                    Verdict.REFUTED,
+                    "candidate asserts a trait explicitly denied by the "
+                    f"frame ({finding.reason})",
+                    evidence=finding.evidence,
+                )
+            if finding.verdict is not Verdict.VERIFIED:
+                return Verification(
+                    Verdict.UNKNOWN,
+                    "candidate trait is neither declared nor denied in this "
+                    f"frame ({finding.reason})",
+                    evidence=finding.evidence,
+                )
 
         if action.name == "introduce":
             if state.beats:
@@ -300,16 +355,11 @@ def story_oracle_actions() -> tuple[Action, ...]:
 
 
 def story_oracle_run() -> RunResult[StoryState]:
-    initial = StoryState(
-        frame="narrative.frames.golden_chicken",
-        agent="the golden chicken",
-        declared_traits=("golden",),
-        denied_traits=("silver",),
-    )
+    verifier = StoryFrameVerifier()
     return Controller[StoryState](max_steps=3).run(
-        initial,
+        verifier.initial_state(),
         SequencePolicy(story_oracle_actions()),
-        StoryFrameVerifier(),
+        verifier,
         lambda state: tuple(beat.role for beat in state.beats)
         == ("setup", "complication", "resolution"),
     )
@@ -337,9 +387,19 @@ def main() -> int:
     print("\nSTORY")
     for beat in story.final_state.beats:
         print(f"  {beat.role.upper()}: {beat.text}")
+
+    _, demoted = FrameExecutor().close_frame(story.final_state.frame_state)
+    print("\nON FRAME EXIT (truths demote; nothing leaks)")
+    for claim in demoted:
+        print(
+            f"  {claim.literal.describe()} -> {claim.epistemic_status} "
+            f"outside {claim.frame}"
+        )
     print(
         "\nLIMIT: Lean steps are exact committed extraction replay; "
-        "live PyPantograph search remains unbuilt."
+        "live PyPantograph search remains unbuilt. The frame executor "
+        "checks declarations, denials and suspensions; Chekhov-style "
+        "temporal obligations are not yet evaluated."
     )
     return 0 if lean.solved and story.solved else 1
 
