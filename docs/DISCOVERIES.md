@@ -255,3 +255,16 @@ bindings), **near-miss** (informative failure, kept deliberately).
   the sharpest measured case of spelling-dependent twin membership,
   since both spellings match, just not each other. *exact + pathology*
   (2026-08-07)
+
+- **The zero morph lands where a linguist would put it.** With CONCAT's
+  declared identity (∅ from zero_morpheme_identity), iterated
+  affixation specializes to plain affixation via the INNER position —
+  `CONCAT(CONCAT(stem, ∅), suffix)` — the matcher independently
+  choosing the linguistically standard analysis over the registered
+  prediction's outer-position guess. *specialization, looseness 0*
+  (2026-08-07)
+
+- **The Boolean corpora gain their first specialization structure**:
+  absorption ⊒ idempotence via JOIN's identity element (BOT), two edges
+  cross-corpus — the lattice laws now relate derivationally, not just
+  as twins. *specialization* (2026-08-07)
