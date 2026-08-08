@@ -1,0 +1,644 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corollary-abstractions.local/schema/drafts/mathematical-statement-node.scope-draft.schema.json",
+  "title": "Mathematical Statement Node (DRAFT: scope + provenance scope_note)",
+  "$comment": "DRAFT ONLY -- not the live schema. The live schema is schema/equation-node.schema.json and is unchanged by this file. Rationale, alternatives considered and migration cost: docs/DESIGN-scope-and-modality.md. Two additions over the live schema, both optional and additive: (1) a top-level `scope` object declaring the hypothetical frame a statement is asserted inside (docs/DESIGN-frames-and-retrieval.md section 1); (2) `scope_note` on a `provenance` entry, removing the asymmetry with `equivalent_forms` recorded in docs/BACKLOG.md. Nothing is added to `required`, no enum loses a member, and no existing property changes, so every node valid under the live schema is valid under this draft -- verified against all 199 nodes in data/ and reported in the design document. The past-modality heads (ONCE/PREV/SINCE/HISTORICALLY) and the LT/LEQ order declaration deliberately appear NOWHERE in this file: the first are ordinary call heads the grammar already parses, the second belongs in scripts/match_signatures.py's HEAD_ALGEBRA. Neither is a schema concern.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "statement_id",
+    "title",
+    "statement_class",
+    "epistemic_status",
+    "theory_context",
+    "formal_statement",
+    "structural_signature",
+    "symbol_lexicon",
+    "semantic_interpretation",
+    "inferential_links"
+  ],
+  "properties": {
+    "statement_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "statement_class": {
+      "type": "string",
+      "enum": [
+        "axiom",
+        "definition",
+        "lemma",
+        "proposition",
+        "theorem",
+        "corollary",
+        "identity",
+        "model_specification",
+        "estimator",
+        "transformation",
+        "approximation"
+      ]
+    },
+    "epistemic_status": {
+      "type": "string",
+      "enum": [
+        "formal",
+        "derived",
+        "assumed",
+        "asymptotic",
+        "empirical",
+        "conjectured"
+      ]
+    },
+    "theory_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disciplines",
+        "subfield",
+        "topic"
+      ],
+      "properties": {
+        "disciplines": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "subfield": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_objects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "formal_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_ascii",
+        "equivalent_forms"
+      ],
+      "properties": {
+        "canonical_ascii": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_latex": {
+          "type": "string"
+        },
+        "equivalent_forms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/formalVariant"
+          }
+        }
+      }
+    },
+    "structural_signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archetype_id",
+        "anonymized_template",
+        "slot_schema",
+        "invariants"
+      ],
+      "properties": {
+        "archetype_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "anonymized_template": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slot_schema": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/signatureSlot"
+          }
+        },
+        "invariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "symbol_lexicon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "symbols",
+        "operators",
+        "functionals",
+        "index_sets",
+        "constants"
+      ],
+      "properties": {
+        "symbols": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/symbolToken"
+          }
+        },
+        "operators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/operatorToken"
+          }
+        },
+        "functionals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/functionalToken"
+          }
+        },
+        "index_sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/indexSet"
+          }
+        },
+        "constants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constantToken"
+          }
+        }
+      }
+    },
+    "semantic_interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement_meaning",
+        "statistical_significance",
+        "regularity_conditions"
+      ],
+      "properties": {
+        "statement_meaning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statistical_significance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "regularity_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failure_modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "inferential_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entailed_by",
+        "entails",
+        "equivalent_to",
+        "special_case_of",
+        "generalizes",
+        "composed_with"
+      ],
+      "properties": {
+        "entailed_by": {
+          "$ref": "#/$defs/nodeIdList"
+        },
+        "entails": {
+          "$ref": "#/$defs/nodeIdList"
+        },
+        "equivalent_to": {
+          "$ref": "#/$defs/nodeIdList"
+        },
+        "special_case_of": {
+          "$ref": "#/$defs/nodeIdList"
+        },
+        "generalizes": {
+          "$ref": "#/$defs/nodeIdList"
+        },
+        "composed_with": {
+          "$ref": "#/$defs/nodeIdList"
+        }
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "verified_by": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "system",
+          "artifact"
+        ],
+        "properties": {
+          "system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scope": {
+      "$ref": "#/$defs/frameScope",
+      "$comment": "OPTIONAL, and absent from `required` on purpose: an unscoped node is a claim about the actual world, which is what all 199 current nodes are. Only a statement asserted inside a hypothetical frame carries `scope`. A statement ABOUT frames -- narrative.frame.frame_consistency -- stays unscoped: it is the law the frame checker enforces, not a claim inside a frame. The matcher never reads this field, so structural_signature and every twin group are invariant under adding it."
+    }
+  },
+  "$defs": {
+    "formalVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "form_id",
+        "notation_system",
+        "expression"
+      ],
+      "properties": {
+        "form_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notation_system": {
+          "type": "string",
+          "enum": [
+            "ascii",
+            "latex",
+            "matrix_notation",
+            "event_probability",
+            "measure_theoretic",
+            "vector_notation"
+          ]
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope_note": {
+          "type": "string"
+        }
+      }
+    },
+    "signatureSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_id",
+        "syntactic_category",
+        "semantic_role"
+      ],
+      "properties": {
+        "slot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "syntactic_category": {
+          "type": "string",
+          "enum": [
+            "variable",
+            "parameter",
+            "random_variable",
+            "statistic",
+            "functional",
+            "operator",
+            "set",
+            "index",
+            "sequence",
+            "distribution",
+            "constant"
+          ]
+        },
+        "semantic_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "admissible_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "symbolToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "syntactic_category",
+        "semantic_role",
+        "mathematical_order",
+        "description"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "syntactic_category": {
+          "type": "string",
+          "enum": [
+            "variable",
+            "parameter",
+            "random_variable",
+            "statistic",
+            "set",
+            "index",
+            "sequence",
+            "distribution",
+            "constant"
+          ]
+        },
+        "semantic_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mathematical_order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "operatorToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "name",
+        "arity",
+        "operator_family"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "operator_family": {
+          "type": "string",
+          "enum": [
+            "arithmetic",
+            "relational",
+            "logical",
+            "set_theoretic",
+            "measure_theoretic",
+            "stochastic",
+            "limit"
+          ]
+        }
+      }
+    },
+    "functionalToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notation",
+        "name",
+        "input_arity",
+        "description"
+      ],
+      "properties": {
+        "notation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_arity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "codomain": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "indexSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notation",
+        "domain",
+        "description"
+      ],
+      "properties": {
+        "notation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "constantToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "description"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {},
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "citation_key",
+        "bibliographic_entry"
+      ],
+      "properties": {
+        "citation_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bibliographic_entry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string"
+        },
+        "scope_note": {
+          "type": "string",
+          "$comment": "THE ONE-LINE FIX. docs/BACKLOG.md: `provenance` entries reject `scope_note` while `equivalent_forms` entries accept it, and there is no reason for the asymmetry. Measured across data/: 498 of 562 equivalent_forms entries carry a scope_note; 0 of 648 provenance entries can, and probstat.probability.two_component_mixture smuggles two of them into `bibliographic_entry` inside square brackets, where no bibliography consumer can parse them."
+        }
+      }
+    },
+    "nodeIdList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "frameScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frame",
+        "role"
+      ],
+      "properties": {
+        "frame": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
+          "$comment": "Frame identifier, conventionally <discipline>.frames.<name> (e.g. narrative.frames.cartoon_gravity). Underscores are allowed in the FIRST segment, unlike statement_id, whose pattern forbids them -- docs/BACKLOG.md records that asymmetry as a defect and this draft declines to reproduce it. Today the validator checks the pattern and that nodes sharing a frame agree on the frame's properties; when a frames/ registry lands this becomes a resolvable reference and no node has to change."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "declaration",
+            "assertion"
+          ],
+          "$comment": "`declaration`: this node states one of the frame's premises and occupies the frame's LOCAL VERIFIED tier per docs/DESIGN-epistemic-ladder.md. `assertion`: this node is a claim made inside the frame, checked against the frame's declarations plus the corpus minus `suspends`."
+        },
+        "frame_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "premises": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scopedPremise"
+          },
+          "$comment": "The premise set P1..Pn the frame opens with. Written on the `declaration` nodes; an `assertion` node normally leaves it empty and inherits it from its frame."
+        },
+        "suspends": {
+          "$ref": "#/$defs/nodeIdList",
+          "$comment": "Corpus nodes the frame removes from its local VERIFIED tier. This is what makes the frame boundary structural rather than stylistic: invention is unlimited at the boundary, and exactly the listed world-truths stop being available inside. A statement that contradicts a VERIFIED node NOT listed here is REFUTED -- in fiction exactly as in physics."
+        },
+        "governed_by": {
+          "$ref": "#/$defs/nodeIdList",
+          "$comment": "The corpus laws the frame is checked against; in practice narrative.frame.frame_consistency. Turns that node from a statement the graph merely contains into the cited rule a checker runs."
+        },
+        "on_exit": {
+          "type": "string",
+          "enum": [
+            "conjectured",
+            "assumed",
+            "retracted"
+          ],
+          "default": "conjectured",
+          "$comment": "The epistemic status the claim reverts to outside the frame. The first two values are existing `epistemic_status` members on purpose: frame truths never leak, they demote. Frames need no new epistemic status."
+        },
+        "retrieval": {
+          "type": "string",
+          "enum": [
+            "open",
+            "frame_local"
+          ],
+          "$comment": "docs/DESIGN-frames-and-retrieval.md section 2: a frame may declare an unknown unresolvable-by-retrieval (do not look up real chickens). `frame_local` forbids the RETRIEVE action from leaving the frame's premise set."
+        },
+        "scope_note": {
+          "type": "string"
+        }
+      }
+    },
+    "scopedPremise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "premise_id",
+        "expression"
+      ],
+      "properties": {
+        "premise_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "$comment": "An anonymized-template expression in the SAME grammar as structural_signature.anonymized_template, so a frame's premises can be parsed, skeletonized and matched by the existing pipeline. That is the point of putting the scope beside the template instead of inside it."
+        },
+        "scope_note": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
