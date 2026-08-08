@@ -18,8 +18,10 @@ Adjudication order and semantics (each is a deliberate design decision):
 1. A literal matching a frame declaration or an accepted assertion is
    VERIFIED frame-locally, citing the premise that grounds it.
 2. A literal contradicting a declaration or accepted assertion is REFUTED,
-   citing the frame's governing law (narrative.frame.frame_consistency by
-   default) and the contradicted premise. Explicitly denied premises
+   citing the violated law -- narrative.frame.frame_consistency -- and the
+   contradicted premise. Evidence names the law a verdict rests on, never
+   the frame's whole statute book: a trait contradiction does not cite the
+   temporal laws the frame happens to adopt. Explicitly denied premises
    (negative-polarity declarations) refute their positive assertion exactly
    as a false physics claim would be refuted.
 3. A literal grounded by an UNSUSPENDED world truth is VERIFIED (agrees) or
@@ -41,9 +43,22 @@ Adjudication order and semantics (each is a deliberate design decision):
    invitation is not silently admitted either.
 6. `plant` registers one frame-local temporal obligation per element under
    Chekhov's gun; `discharge` closes the matching obligation. Repeating either
-   accepted event is idempotent. A discharge with no prior plant is UNKNOWN,
-   not REFUTED: that judgement belongs to the past-facing converse which is
-   not yet in the executable corpus.
+   accepted event is idempotent. An unheralded discharge (no prior plant)
+   splits on governance: a frame that ADOPTS the past-facing converse --
+   `narrative.constraint.no_deus_ex_machina` in `governed_by` -- REFUTES it,
+   citing that law; a frame that does not adopt it leaves the discharge
+   UNKNOWN, because coincidence-driven genres may reject the constraint
+   deliberately (the corpus node's own regularity note). Adoption gives the
+   STRICT event-order reading: the ledger is strictly sequenced, so a herald
+   must be planted by an earlier event -- the corpus invariant anticipates
+   exactly this ("strict narrative preparation still requires the executor's
+   event-order check"); the law's inclusive same-position herald has no
+   representation in this runtime, so under adoption a plant-less discharge
+   is REFUTED, while the closest expressible encoding -- reusing the
+   plant's own event id for the discharge -- is REFUSED as an id collision
+   before the law is ever consulted. A deliberate narrowing, recorded here.
+   Adoption also extends the non-adopting UNKNOWN's evidence to cite the
+   adoptable law alongside Chekhov's gun.
 7. A frame with an outstanding obligation REFUSES to close, remains open, and
    emits no demotions. A closed frame adjudicates nothing and admits nothing:
    every transition REFUSES, and closing twice is a caller error.
@@ -55,8 +70,7 @@ oracle. Rejected branches cannot mutate accepted frame state -- that
 invariant belongs to the Controller and is inherited, not reimplemented.
 
 What this deliberately does NOT claim: this finite close-time check is not a
-general LTL model checker, and the past-facing no-deus-ex-machina converse is
-not evaluated. Story state is not Lean-proved merely because
+general LTL model checker. Story state is not Lean-proved merely because
 frame_consistency twins a Lean-backed Boolean law -- the executor cites that
 law, the matcher established the twin, and those are the whole connection.
 """
@@ -71,6 +85,7 @@ from controller import Action, ActionKind, Verification, Verdict
 
 FRAME_CONSISTENCY = "narrative.frame.frame_consistency"
 CHEKHOV_GUN = "narrative.constraint.chekhov_gun"
+NO_DEUS = "narrative.constraint.no_deus_ex_machina"
 
 
 @dataclass(frozen=True)
@@ -257,12 +272,12 @@ class FrameExecutor:
                     Verdict.REFUTED,
                     f"candidate asserts what frame premise {premise_id!r} "
                     "explicitly denied",
-                    spec.governed_by + (premise_id,),
+                    (FRAME_CONSISTENCY, premise_id),
                 )
             return Adjudication(
                 Verdict.REFUTED,
                 f"candidate contradicts frame premise {premise_id!r}",
-                spec.governed_by + (premise_id,),
+                (FRAME_CONSISTENCY, premise_id),
             )
 
         suspended_grounds: list[str] = []
@@ -283,7 +298,7 @@ class FrameExecutor:
                     Verdict.REFUTED,
                     "candidate contradicts corpus truth "
                     f"{statement_id!r}, which this frame does not suspend",
-                    spec.governed_by + (statement_id,),
+                    (FRAME_CONSISTENCY, statement_id),
                 )
 
         if suspended_grounds:
@@ -301,7 +316,7 @@ class FrameExecutor:
             Verdict.UNKNOWN,
             "candidate is neither declared nor denied in this frame, and no "
             "corpus truth grounds it either way",
-            spec.governed_by,
+            (spec.frame,),
         )
 
     def assert_literal(
@@ -446,11 +461,21 @@ class FrameExecutor:
                 replace(state, obligations=obligations),
                 (CHEKHOV_GUN, obligation.planted_by, event_id),
             )
+        if NO_DEUS in state.spec.governed_by:
+            return Verification(
+                Verdict.REFUTED,
+                f"unheralded discharge of {element!r}: no earlier event "
+                "planted it, and this frame adopts the no-deus-ex-machina "
+                "law (strict event-order reading)",
+                evidence=(NO_DEUS,),
+            )
         return Verification(
             Verdict.UNKNOWN,
-            f"no planted obligation grounds discharge of {element!r}; the "
-            "past-facing converse is not yet evaluated",
-            evidence=(CHEKHOV_GUN,),
+            f"no planted obligation grounds discharge of {element!r}, and "
+            "this frame does not adopt "
+            "narrative.constraint.no_deus_ex_machina, so the unheralded "
+            "discharge is unadjudicated rather than refuted",
+            evidence=(CHEKHOV_GUN, NO_DEUS),
         )
 
     def close_frame(

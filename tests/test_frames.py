@@ -18,11 +18,28 @@ P4. Suspension is asymmetric by construction: the same contradicting
     literal is locally admissible iff the grounding corpus truth appears
     in the frame's `suspends` (adjudicated by the paired controls below).
 P5. A planted element blocks frame close until its matching discharge; the
-    refused close preserves the open state and emits no demotions. An
-    unplanted or unrelated discharge is UNKNOWN, not REFUTED, because the
-    past-facing converse is not yet executable. Exact event retries are
-    idempotent, fresh ids for bound elements are refused, and closed frames
-    refuse temporal events.
+    refused close preserves the open state and emits no demotions. Exact
+    event retries are idempotent, fresh ids for bound elements are refused,
+    and closed frames refuse temporal events.
+    (Historical note: P5 originally predicted unplanted discharge stays
+    UNKNOWN "because the past-facing converse is not yet executable" -- the
+    no-deus slice made it executable, so the verdict now splits on
+    governance; see P6-P8.)
+
+Registered predictions for the no-deus slice (written before adjudication):
+
+P6. A frame that adopts narrative.constraint.no_deus_ex_machina in
+    `governed_by` REFUTES an unheralded discharge, citing that law, and the
+    refutation leaves the obligation ledger and frame state unchanged.
+P7. A frame that does not adopt the law keeps the UNKNOWN verdict for the
+    same discharge -- genre choice, per the corpus node's own regularity
+    notes. (Adjudication note: "unchanged" holds for verdict and
+    next_state; the reason AND the evidence tuple both changed, the
+    latter now citing the adoptable law alongside Chekhov's gun. The
+    review caught the original wording underselling this.)
+P8. Adoption changes nothing on the lawful path: plant-then-discharge is
+    VERIFIED and close is clean, and the golden-chicken oracle (which now
+    adopts the law) still solves with identical beats.
 """
 
 from __future__ import annotations
@@ -43,12 +60,17 @@ from controller import (  # noqa: E402
     Verdict,
 )
 from frames import (  # noqa: E402
+    FRAME_CONSISTENCY,
+    NO_DEUS,
     FrameAssertionVerifier,
     FrameExecutor,
     FrameSpec,
     Literal,
 )
-from oracle_controller_demo import StoryFrameVerifier  # noqa: E402
+from oracle_controller_demo import (  # noqa: E402
+    StoryFrameVerifier,
+    story_oracle_run,
+)
 from validate_nodes import scope_errors  # noqa: E402
 
 
@@ -77,6 +99,83 @@ def chicken_spec() -> FrameSpec:
             ),
         ),
     )
+
+
+def no_deus_spec() -> FrameSpec:
+    """chicken_spec plus adoption of the no-deus-ex-machina law."""
+    base = chicken_spec()
+    return FrameSpec(
+        frame=base.frame,
+        declarations=base.declarations,
+        governed_by=(FRAME_CONSISTENCY, NO_DEUS),
+    )
+
+
+class NoDeusTests(unittest.TestCase):
+    """P6-P8: the past-facing converse, executable and governance-gated."""
+
+    def setUp(self) -> None:
+        self.executor = FrameExecutor()
+
+    def test_adopting_frame_refutes_unheralded_discharge(self) -> None:
+        state = self.executor.open_frame(no_deus_spec())
+        result = self.executor.discharge(state, "sudden_key", "a magic key")
+        self.assertIs(result.verdict, Verdict.REFUTED)
+        self.assertIsNone(result.next_state)
+        self.assertIn("unheralded", result.reason)
+        self.assertIn(NO_DEUS, result.evidence)
+
+    def test_refuted_discharge_leaves_ledger_and_close_unaffected(self) -> None:
+        state = self.executor.open_frame(no_deus_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        refuted = self.executor.discharge(
+            planted.next_state, "sudden_key", "a magic key"
+        )
+        self.assertIs(refuted.verdict, Verdict.REFUTED)
+        self.assertIsNone(refuted.next_state)
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "fallen feather"
+        )
+        close = self.executor.close_frame(discharged.next_state)
+        self.assertIs(close.verdict, Verdict.VERIFIED)
+        self.assertTrue(close.state.closed)
+
+    def test_non_adopting_frame_keeps_unknown_with_adoption_pointer(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        result = self.executor.discharge(state, "sudden_key", "a magic key")
+        self.assertIs(result.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(result.next_state)
+        self.assertIn("does not adopt", result.reason)
+        self.assertIn(NO_DEUS, result.evidence)
+
+    def test_adapter_passes_through_the_refutation(self) -> None:
+        run = story_oracle_run()
+        self.assertTrue(run.solved)
+        action = Action.build(
+            ActionKind.GEN,
+            "discharge",
+            {
+                "event_id": "sudden_key_used",
+                "element": "key",
+                "evidence_text": "used a fallen feather as a key",
+            },
+        )
+        result = StoryFrameVerifier().evaluate(run.final_state, action)
+        self.assertIs(result.verdict, Verdict.REFUTED)
+        self.assertIn(NO_DEUS, result.evidence)
+        self.assertIn("unheralded", result.reason)
+
+    def test_adoption_changes_nothing_on_the_lawful_path(self) -> None:
+        state = self.executor.open_frame(no_deus_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        self.assertIs(planted.verdict, Verdict.VERIFIED)
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "fallen feather"
+        )
+        self.assertIs(discharged.verdict, Verdict.VERIFIED)
+        close = self.executor.close_frame(discharged.next_state)
+        self.assertIs(close.verdict, Verdict.VERIFIED)
+        self.assertTrue(close.demoted)
 
 
 def assert_action(
@@ -297,7 +396,7 @@ class FrameLadderTests(unittest.TestCase):
         )
         self.assertIs(unrelated.verdict, Verdict.UNKNOWN)
         self.assertIsNone(unrelated.next_state)
-        self.assertIn("past-facing converse", unrelated.reason)
+        self.assertIn("does not adopt", unrelated.reason)
         close = self.executor.close_frame(planted.next_state)
         self.assertIs(close.verdict, Verdict.REFUSED)
 

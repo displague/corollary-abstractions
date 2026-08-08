@@ -24,7 +24,15 @@ from controller import (
     Verification,
     Verdict,
 )
-from frames import FrameExecutor, FrameSpec, FrameState, Literal
+from frames import (
+    CHEKHOV_GUN,
+    FRAME_CONSISTENCY,
+    NO_DEUS,
+    FrameExecutor,
+    FrameSpec,
+    FrameState,
+    Literal,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -169,6 +177,11 @@ def golden_chicken_frame_spec() -> FrameSpec:
                 Literal("the golden chicken", "trait", "silver", polarity=False),
             ),
         ),
+        # The story adopts both narrative constraint laws: Chekhov's gun is
+        # enforced through the obligation ledger, and adopting the no-deus
+        # converse makes an unheralded discharge REFUTED rather than
+        # unadjudicated -- a coincidence-driven genre would simply omit it.
+        governed_by=(FRAME_CONSISTENCY, CHEKHOV_GUN, NO_DEUS),
     )
 
 
@@ -509,6 +522,15 @@ def main() -> int:
             f"  {obligation.element}: planted by {obligation.planted_by}; "
             f"discharged by {obligation.discharged_by}"
         )
+    deus_probe = FrameExecutor().discharge(
+        story.final_state.frame_state, "sudden_key", "a sudden magic key"
+    )
+    print("\nNO DEUS EX MACHINA (adopted by this frame)")
+    print(
+        f"  discharge of 'a sudden magic key' -> {deus_probe.verdict.value}"
+    )
+    print(f"  {deus_probe.reason}")
+
     print("\nON FRAME EXIT (truths demote; nothing leaks)")
     for claim in demoted:
         print(
@@ -518,8 +540,10 @@ def main() -> int:
     print(
         "\nLIMIT: Lean steps are exact committed extraction replay; "
         "live PyPantograph search remains unbuilt. The frame executor "
-        "checks declarations, denials, suspensions, and finite Chekhov-style "
-        "obligations at frame close; this is not general LTL model checking."
+        "checks declarations, denials, suspensions, finite Chekhov-style "
+        "obligations at frame close, and -- where a frame adopts the "
+        "no-deus law -- refutes unheralded discharges under the strict "
+        "event-order reading; this is not general LTL model checking."
     )
     return 0 if lean.solved and story.solved else 1
 
