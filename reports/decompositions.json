@@ -4411,7 +4411,7 @@
           "path": [
             1
           ],
-          "skeleton": "MEET⟨?0:V, ?1:P⟩",
+          "skeleton": "MEET⟨?0:P, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.identity_laws"
@@ -4485,9 +4485,9 @@
           "path": [
             0
           ],
-          "skeleton": "MEET⟨IMPLIES⟨?0:V, ?1:V⟩, ?0:V⟩",
+          "skeleton": "MEET⟨?0:V, IMPLIES⟨?0:V, ?1:V⟩⟩",
           "grounded_via": "pattern",
-          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
           "pattern_known_from": [
             "logic.boolean_laws.identity_laws",
             "settheory.boolean_laws.identity_laws"
@@ -4497,7 +4497,7 @@
         {
           "path": [
             0,
-            0
+            1
           ],
           "skeleton": "IMPLIES⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
@@ -5691,7 +5691,7 @@
           ],
           "skeleton": "MEET⟨BEFORE⟨?0:V, ?1:V⟩, ENABLES⟨?0:V, ?1:V⟩⟩",
           "grounded_via": "pattern",
-          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
           "pattern_known_from": [
             "logic.boolean_laws.identity_laws",
             "settheory.boolean_laws.identity_laws"
@@ -6630,7 +6630,7 @@
           "path": [
             1
           ],
-          "skeleton": "MEET⟨?0:V, ?1:P⟩",
+          "skeleton": "MEET⟨?0:P, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.identity_laws"
@@ -7313,7 +7313,7 @@
           ],
           "skeleton": "MEET⟨?0:V, NEXT⟨UNTIL⟨?0:V, ?1:V⟩⟩⟩",
           "grounded_via": "pattern",
-          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
           "pattern_known_from": [
             "logic.boolean_laws.identity_laws",
             "settheory.boolean_laws.identity_laws"
@@ -7400,7 +7400,7 @@
           ],
           "skeleton": "MEET⟨NEXT⟨?0:V⟩, NEXT⟨?1:V⟩⟩",
           "grounded_via": "pattern",
-          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
           "pattern_known_from": [
             "logic.boolean_laws.identity_laws",
             "settheory.boolean_laws.identity_laws"

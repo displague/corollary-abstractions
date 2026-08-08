@@ -454,28 +454,6 @@
       ]
     },
     {
-      "skeleton": "?0:V = MEET⟨?0:V, ?1:P⟩",
-      "disciplines": [
-        "logic",
-        "set_theory"
-      ],
-      "archetypes": [
-        "identity_element_law"
-      ],
-      "members": [
-        {
-          "statement_id": "logic.boolean_laws.identity_laws",
-          "discipline": "logic",
-          "template": "MEET(PROP1, TRUTH) = PROP1"
-        },
-        {
-          "statement_id": "settheory.boolean_laws.identity_laws",
-          "discipline": "set_theory",
-          "template": "MEET(SETA, UNIVERSE) = SETA"
-        }
-      ]
-    },
-    {
       "skeleton": "?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
       "disciplines": [
         "logic",
@@ -494,6 +472,28 @@
           "statement_id": "settheory.boolean_laws.absorption",
           "discipline": "set_theory",
           "template": "MEET(SETA, JOIN(SETA, SETB)) = SETA"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET⟨?1:P, ?0:V⟩",
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "members": [
+        {
+          "statement_id": "logic.boolean_laws.identity_laws",
+          "discipline": "logic",
+          "template": "MEET(PROP1, TRUTH) = PROP1"
+        },
+        {
+          "statement_id": "settheory.boolean_laws.identity_laws",
+          "discipline": "set_theory",
+          "template": "MEET(SETA, UNIVERSE) = SETA"
         }
       ]
     },

@@ -333,6 +333,30 @@
       "looseness": 0
     },
     {
+      "general": "logic.boolean_laws.absorption",
+      "specific": "logic.boolean_laws.idempotence",
+      "general_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "specific_template": "MEET(PROP1, PROP1) = PROP1",
+      "via": "identity",
+      "bindings": {
+        "PROP1": "PROP1",
+        "PROP2": "FALSITY"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "logic.boolean_laws.absorption",
+      "specific": "settheory.boolean_laws.idempotence",
+      "general_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "specific_template": "MEET(SETA, SETA) = SETA",
+      "via": "identity",
+      "bindings": {
+        "PROP1": "SETA",
+        "PROP2": "FALSITY"
+      },
+      "looseness": 0
+    },
+    {
       "general": "ml.adaptation.lora_low_rank_update",
       "specific": "calculus.approximation.tangent_line_linearization",
       "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
@@ -432,6 +456,47 @@
         "POLICYNEW": "WIDTH",
         "POLICYOLD": "2",
         "RATIO": "WIDTHNEXT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "morphology.wordformation.concat_associativity",
+      "specific": "morphology.wordformation.zero_morpheme_identity",
+      "general_template": "CONCAT(CONCAT(FIRST, SECOND), THIRD) = CONCAT(FIRST, CONCAT(SECOND, THIRD))",
+      "specific_template": "CONCAT(STEM, EMPTY) = STEM",
+      "via": "identity",
+      "bindings": {
+        "FIRST": "EMPTY",
+        "SECOND": "STEM",
+        "THIRD": "EMPTY"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "morphology.wordformation.iterated_affixation",
+      "specific": "morphology.wordformation.affixation",
+      "general_template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)",
+      "specific_template": "WORD = CONCAT(STEM, SUFFIX)",
+      "via": "identity",
+      "bindings": {
+        "STEM": "STEM",
+        "SUFFIX1": "EMPTY",
+        "SUFFIX2": "SUFFIX",
+        "WORD": "WORD"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "morphology.wordformation.iterated_affixation",
+      "specific": "morphology.wordformation.zero_morpheme_identity",
+      "general_template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)",
+      "specific_template": "CONCAT(STEM, EMPTY) = STEM",
+      "via": "identity",
+      "bindings": {
+        "STEM": "STEM",
+        "SUFFIX1": "EMPTY",
+        "SUFFIX2": "EMPTY",
+        "WORD": "STEM"
       },
       "looseness": 0
     },
@@ -542,6 +607,30 @@
         "ENERGY": "ENERGY",
         "MASS": "MASS",
         "SPEED": "SPEEDLIMIT"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "settheory.boolean_laws.absorption",
+      "specific": "logic.boolean_laws.idempotence",
+      "general_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+      "specific_template": "MEET(PROP1, PROP1) = PROP1",
+      "via": "identity",
+      "bindings": {
+        "SETA": "PROP1",
+        "SETB": "FALSITY"
+      },
+      "looseness": 0
+    },
+    {
+      "general": "settheory.boolean_laws.absorption",
+      "specific": "settheory.boolean_laws.idempotence",
+      "general_template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
+      "specific_template": "MEET(SETA, SETA) = SETA",
+      "via": "identity",
+      "bindings": {
+        "SETA": "SETA",
+        "SETB": "FALSITY"
       },
       "looseness": 0
     },
@@ -5321,6 +5410,21 @@
       "looseness": 3
     },
     {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "identity",
+      "bindings": {
+        "LOWRANKA": "+(1, neg(WEIGHT))",
+        "LOWRANKB": "COMPONENT2",
+        "SCALING": "1",
+        "WEIGHT": "MIXED",
+        "WEIGHTFROZEN": "*(WEIGHT, COMPONENT1)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "ml.policy.boltzmann_softmax_policy",
       "specific": "chemistry.kinetics.arrhenius_equation",
       "general_template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
@@ -5762,6 +5866,20 @@
       "looseness": 4
     },
     {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "BASEVALUE": "*(WEIGHT, COMPONENT1)",
+        "DISPLACEMENT": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "LINEARIZED": "MIXED",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "calculus.growth.exponential_growth_law",
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
@@ -5884,6 +6002,20 @@
       "looseness": 4
     },
     {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "EXPECTED": "MIXED",
+        "PREMIUM": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "RISKFREE": "*(WEIGHT, COMPONENT1)",
+        "SENSITIVITY": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "economics.finance.continuous_compounding",
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
@@ -5936,6 +6068,20 @@
         "AUTONOMOUS": "*(PARAM, FINISH)",
         "CONSUMPTION": "RESULT",
         "DISPOSABLE_INCOME": "*(START, +(1, neg(PARAM)))",
+        "PROPENSITY": "1"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "AUTONOMOUS": "*(WEIGHT, COMPONENT1)",
+        "CONSUMPTION": "MIXED",
+        "DISPOSABLE_INCOME": "*(COMPONENT2, +(1, neg(WEIGHT)))",
         "PROPENSITY": "1"
       },
       "looseness": 4
@@ -6101,6 +6247,20 @@
       "looseness": 4
     },
     {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "POINT": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "POINTNEW": "MIXED",
+        "ROTATION": "1",
+        "TRANSLATION": "*(WEIGHT, COMPONENT1)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "geotop.predicates.de9im_disjoint",
       "specific": "logic.boolean_laws.distributivity_meet_over_join",
       "general_template": "MEET(REGA, REGB) = EMPTYSET",
@@ -6208,6 +6368,21 @@
       "looseness": 4
     },
     {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "DRIVE": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "INPUTGAIN": "1",
+        "STATE": "*(WEIGHT, COMPONENT1)",
+        "STATENEXT": "MIXED",
+        "TRANSITION": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "numanalysis.ode.euler_method_step",
       "specific": "geomodel.bezier.de_casteljau_step",
       "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
@@ -6232,6 +6407,20 @@
         "STEPSIZE": "1",
         "Y": "*(PARAM, FINISH)",
         "YNEXT": "RESULT"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "SLOPE": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "STEPSIZE": "1",
+        "Y": "*(WEIGHT, COMPONENT1)",
+        "YNEXT": "MIXED"
       },
       "looseness": 4
     },
@@ -6422,6 +6611,21 @@
       "looseness": 4
     },
     {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(WEIGHT, COMPONENT1)",
+        "PRED_i": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "RV_i": "MIXED",
+        "SLOPE": "1"
+      },
+      "looseness": 4
+    },
+    {
       "general": "probstat.transform.affine_location_scale",
       "specific": "geomodel.bezier.de_casteljau_step",
       "general_template": "OUT = SCALE*IN + SHIFT",
@@ -6446,6 +6650,20 @@
         "OUT": "RESULT",
         "SCALE": "1",
         "SHIFT": "*(PARAM, FINISH)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "probstat.probability.two_component_mixture",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "via": "absorption+identity",
+      "bindings": {
+        "IN": "*(COMPONENT2, +(1, neg(WEIGHT)))",
+        "OUT": "MIXED",
+        "SCALE": "1",
+        "SHIFT": "*(WEIGHT, COMPONENT1)"
       },
       "looseness": 4
     },
