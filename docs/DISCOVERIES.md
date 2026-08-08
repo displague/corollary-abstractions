@@ -241,3 +241,17 @@ bindings), **near-miss** (informative failure, kept deliberately).
   instantiated heads hide pattern membership — a measured groundedness
   pathology, filed with the recursive-definition self-reference case
   (until-unfolding, 0.000). *pathology* (2026-08-07)
+
+- **Consequence, subset, containment, and precedence are one law.**
+  Hypothetical syllogism joined the transitivity family — four
+  disciplines whose carriers share nothing but a partial order,
+  categorically different from the Boolean twins (one algebra read
+  twice): here the shared thing is only the order axioms. *exact, 4
+  disciplines, predicted-and-landed* (2026-08-07)
+
+- **Mixture distributions, linear interpolation, and de Casteljau are
+  one convex combination** (3 disciplines) — and the same node's
+  K-component spelling belongs to the *weighted-sum* family instead:
+  the sharpest measured case of spelling-dependent twin membership,
+  since both spellings match, just not each other. *exact + pathology*
+  (2026-08-07)
