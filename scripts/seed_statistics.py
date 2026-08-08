@@ -1,0 +1,1235 @@
+#!/usr/bin/env python3
+"""Seed data/statistics/nodes.json — the founding corpus, now regenerable.
+
+Statistics was the original hand-edited corpus and the one corpus without a
+seed script; it failed the regenerate test during the ML corpus work, which
+degraded the GRPO<->z-score relation to a one-sided edge. This seed makes it
+the authored source of truth: the node payload below IS the corpus (edit
+here, regenerate, validate), and it adds what the gap was blocking -- the
+probability-normalization axiom (partition of unity), and the reciprocal
+GRPO<->z-standardization equivalence.
+"""
+
+import json
+from pathlib import Path
+
+NODES = json.loads(r"""
+[
+  {
+    "statement_id": "probstat.transform.affine_location_scale",
+    "title": "Affine Location-Scale Transformation",
+    "statement_class": "transformation",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "algebra"
+      ],
+      "subfield": "statistical_methodology",
+      "topic": "linear_transformations"
+    },
+    "formal_statement": {
+      "canonical_ascii": "Y = alpha*X + beta",
+      "canonical_latex": "Y = \\alpha X + \\beta",
+      "equivalent_forms": [
+        {
+          "form_id": "scalar_affine",
+          "notation_system": "ascii",
+          "expression": "y = m*x + b"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "affine_operator",
+      "anonymized_template": "OUT = SCALE*IN + SHIFT",
+      "slot_schema": [
+        {
+          "slot_id": "OUT",
+          "syntactic_category": "variable",
+          "semantic_role": "output"
+        },
+        {
+          "slot_id": "SCALE",
+          "syntactic_category": "parameter",
+          "semantic_role": "linear_factor"
+        },
+        {
+          "slot_id": "IN",
+          "syntactic_category": "variable",
+          "semantic_role": "input"
+        },
+        {
+          "slot_id": "SHIFT",
+          "syntactic_category": "parameter",
+          "semantic_role": "translation"
+        }
+      ],
+      "invariants": [
+        "Linearity in IN with additive translation."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "X",
+          "syntactic_category": "variable",
+          "semantic_role": "input",
+          "mathematical_order": 0,
+          "description": "Input variable."
+        },
+        {
+          "symbol": "Y",
+          "syntactic_category": "variable",
+          "semantic_role": "output",
+          "mathematical_order": 0,
+          "description": "Output variable."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        },
+        {
+          "symbol": "*",
+          "name": "multiplication",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        },
+        {
+          "symbol": "+",
+          "name": "addition",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        }
+      ],
+      "functionals": [],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Canonical affine archetype.",
+      "statistical_significance": "Connects algebraic form to mean-function structure in statistics.",
+      "regularity_conditions": [
+        "Operations are defined in a compatible numeric space."
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [
+        "probstat.regression.slr_conditional_expectation",
+        "probstat.transform.z_standardization"
+      ],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "rudin1976",
+        "bibliographic_entry": "Rudin, W. (1976). Principles of Mathematical Analysis (3rd ed.). McGraw-Hill."
+      }
+    ],
+    "keywords": [
+      "affine",
+      "archetype"
+    ]
+  },
+  {
+    "statement_id": "probstat.regression.slr_stochastic_specification",
+    "title": "Simple Linear Regression Stochastic Specification",
+    "statement_class": "model_specification",
+    "epistemic_status": "assumed",
+    "theory_context": {
+      "disciplines": [
+        "statistics"
+      ],
+      "subfield": "regression_analysis",
+      "topic": "parametric_linear_models"
+    },
+    "formal_statement": {
+      "canonical_ascii": "Y_i = beta_0 + beta_1*x_i + epsilon_i",
+      "canonical_latex": "Y_i = \\beta_0 + \\beta_1 x_i + \\varepsilon_i",
+      "equivalent_forms": [
+        {
+          "form_id": "indexed_scalar_model",
+          "notation_system": "ascii",
+          "expression": "Y_i = beta_0 + beta_1*x_i + epsilon_i"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "noisy_affine_response_model",
+      "anonymized_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "slot_schema": [
+        {
+          "slot_id": "RV_i",
+          "syntactic_category": "random_variable",
+          "semantic_role": "response"
+        },
+        {
+          "slot_id": "INTERCEPT",
+          "syntactic_category": "parameter",
+          "semantic_role": "baseline"
+        },
+        {
+          "slot_id": "SLOPE",
+          "syntactic_category": "parameter",
+          "semantic_role": "marginal_effect"
+        },
+        {
+          "slot_id": "PRED_i",
+          "syntactic_category": "variable",
+          "semantic_role": "predictor"
+        },
+        {
+          "slot_id": "NOISE_i",
+          "syntactic_category": "random_variable",
+          "semantic_role": "error_term"
+        }
+      ],
+      "invariants": [
+        "Conditional mean is affine."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "Y_i",
+          "syntactic_category": "random_variable",
+          "semantic_role": "response_observation",
+          "mathematical_order": 0,
+          "description": "Response at index i."
+        },
+        {
+          "symbol": "x_i",
+          "syntactic_category": "variable",
+          "semantic_role": "predictor_observation",
+          "mathematical_order": 0,
+          "description": "Predictor at index i."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        },
+        {
+          "symbol": "+",
+          "name": "addition",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        }
+      ],
+      "functionals": [],
+      "index_sets": [
+        {
+          "notation": "i in {1,...,n}",
+          "domain": "finite_sample_index",
+          "description": "Sample index set."
+        }
+      ],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Observation-level linear model with additive stochastic error.",
+      "statistical_significance": "Starting point for least-squares estimation and inference.",
+      "regularity_conditions": [
+        "E[epsilon_i|x_i] = 0"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [
+        "probstat.regression.slr_conditional_expectation"
+      ],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "seber2012",
+        "bibliographic_entry": "Seber, G. A. F., & Lee, A. J. (2012). Linear Regression Analysis (2nd ed.). Wiley."
+      }
+    ],
+    "keywords": [
+      "regression",
+      "model_specification"
+    ]
+  },
+  {
+    "statement_id": "probstat.regression.slr_conditional_expectation",
+    "title": "Conditional Expectation Corollary for Simple Linear Regression",
+    "statement_class": "corollary",
+    "epistemic_status": "derived",
+    "theory_context": {
+      "disciplines": [
+        "statistics"
+      ],
+      "subfield": "regression_analysis",
+      "topic": "conditional_expectation"
+    },
+    "formal_statement": {
+      "canonical_ascii": "E[Y|X=x] = beta_0 + beta_1*x",
+      "canonical_latex": "\\mathbb{E}[Y\\mid X=x] = \\beta_0 + \\beta_1 x",
+      "equivalent_forms": [
+        {
+          "form_id": "conditional_mean_affine",
+          "notation_system": "ascii",
+          "expression": "E[Y|X=x] = beta_0 + beta_1*x"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "conditional_affine_mean",
+      "anonymized_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "slot_schema": [
+        {
+          "slot_id": "RV",
+          "syntactic_category": "random_variable",
+          "semantic_role": "response"
+        },
+        {
+          "slot_id": "COND",
+          "syntactic_category": "set",
+          "semantic_role": "conditioning_event"
+        },
+        {
+          "slot_id": "INPUT",
+          "syntactic_category": "variable",
+          "semantic_role": "predictor_value"
+        },
+        {
+          "slot_id": "INTERCEPT",
+          "syntactic_category": "parameter",
+          "semantic_role": "baseline_level"
+        },
+        {
+          "slot_id": "SLOPE",
+          "syntactic_category": "parameter",
+          "semantic_role": "linear_factor"
+        }
+      ],
+      "invariants": [
+        "Follows from conditional expectation of the stochastic specification."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "Y",
+          "syntactic_category": "random_variable",
+          "semantic_role": "response",
+          "mathematical_order": 0,
+          "description": "Response variable."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "|",
+          "name": "conditioning",
+          "arity": 2,
+          "operator_family": "stochastic"
+        },
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "E[.]",
+          "name": "expectation",
+          "input_arity": 1,
+          "codomain": "real_numbers",
+          "description": "Expectation operator."
+        }
+      ],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Regression mean function is affine in predictor value.",
+      "statistical_significance": "Defines the estimand interpreted by slope and intercept.",
+      "regularity_conditions": [
+        "E[epsilon|X=x] = 0"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [
+        "probstat.transform.affine_location_scale",
+        "probstat.regression.slr_stochastic_specification"
+      ],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "seber2012",
+        "bibliographic_entry": "Seber, G. A. F., & Lee, A. J. (2012). Linear Regression Analysis (2nd ed.). Wiley."
+      }
+    ],
+    "keywords": [
+      "corollary",
+      "conditional_mean"
+    ]
+  },
+  {
+    "statement_id": "probstat.transform.z_standardization",
+    "title": "Z-Standardization Transformation",
+    "statement_class": "transformation",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability"
+      ],
+      "subfield": "distribution_theory",
+      "topic": "location_scale_standardization"
+    },
+    "formal_statement": {
+      "canonical_ascii": "Z = (X - mu)/sigma",
+      "canonical_latex": "Z = \\frac{X-\\mu}{\\sigma}",
+      "equivalent_forms": [
+        {
+          "form_id": "population_standardization",
+          "notation_system": "ascii",
+          "expression": "z = (x - mu)/sigma"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "center_scale_map",
+      "anonymized_template": "STD = (RAW - CENTER)/SCALE",
+      "slot_schema": [
+        {
+          "slot_id": "STD",
+          "syntactic_category": "variable",
+          "semantic_role": "standardized_variable"
+        },
+        {
+          "slot_id": "RAW",
+          "syntactic_category": "variable",
+          "semantic_role": "raw_variable"
+        },
+        {
+          "slot_id": "SCALE",
+          "syntactic_category": "parameter",
+          "semantic_role": "positive_scale"
+        },
+        {
+          "slot_id": "CENTER",
+          "syntactic_category": "parameter",
+          "semantic_role": "location"
+        }
+      ],
+      "invariants": [
+        "Scale parameter is strictly positive."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "X",
+          "syntactic_category": "random_variable",
+          "semantic_role": "source_variable",
+          "mathematical_order": 0,
+          "description": "Variable before standardization."
+        },
+        {
+          "symbol": "Z",
+          "syntactic_category": "random_variable",
+          "semantic_role": "standardized_variable",
+          "mathematical_order": 0,
+          "description": "Variable after standardization."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "-",
+          "name": "subtraction",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        },
+        {
+          "symbol": "/",
+          "name": "division",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        }
+      ],
+      "functionals": [],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Centering and scaling map to a unitless coordinate system.",
+      "statistical_significance": "Enables use of standardized reference distributions.",
+      "regularity_conditions": [
+        "sigma > 0"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [
+        "probstat.transform.affine_location_scale"
+      ],
+      "entails": [],
+      "equivalent_to": [
+        "ml.preference.grpo_group_relative_advantage"
+      ],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ]
+    },
+    "provenance": [
+      {
+        "citation_key": "casella2002",
+        "bibliographic_entry": "Casella, G., & Berger, R. L. (2002). Statistical Inference (2nd ed.). Duxbury."
+      }
+    ],
+    "keywords": [
+      "z_score",
+      "standardization"
+    ]
+  },
+  {
+    "statement_id": "probstat.probability.total_probability_partition",
+    "title": "Law of Total Probability",
+    "statement_class": "theorem",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "probability",
+        "statistics"
+      ],
+      "subfield": "probability_axioms",
+      "topic": "conditional_probability"
+    },
+    "formal_statement": {
+      "canonical_ascii": "P(A) = sum_i P(A|B_i)P(B_i)",
+      "canonical_latex": "P(A)=\\sum_i P(A\\mid B_i)P(B_i)",
+      "equivalent_forms": [
+        {
+          "form_id": "partition_expansion",
+          "notation_system": "event_probability",
+          "expression": "P(A)=sum_i P(A|B_i)P(B_i)"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "conditional_marginalization",
+      "anonymized_template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i",
+      "slot_schema": [
+        {
+          "slot_id": "MARGINAL",
+          "syntactic_category": "functional",
+          "semantic_role": "marginal_probability"
+        },
+        {
+          "slot_id": "CONDITIONAL_i",
+          "syntactic_category": "functional",
+          "semantic_role": "conditional_component"
+        },
+        {
+          "slot_id": "WEIGHT_i",
+          "syntactic_category": "parameter",
+          "semantic_role": "partition_probability"
+        }
+      ],
+      "invariants": [
+        "Partition events are disjoint and exhaustive."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "A",
+          "syntactic_category": "set",
+          "semantic_role": "target_event",
+          "mathematical_order": 0,
+          "description": "Event of interest."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "|",
+          "name": "conditioning",
+          "arity": 2,
+          "operator_family": "stochastic"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "P(.)",
+          "name": "probability_measure",
+          "input_arity": 1,
+          "codomain": "unit_interval",
+          "description": "Probability measure."
+        }
+      ],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Marginal probability as weighted conditionals over a partition.",
+      "statistical_significance": "Bridge between latent-state reasoning and observables.",
+      "regularity_conditions": [
+        "B_i form a measurable partition."
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [
+        "probstat.probability.bayes_rule"
+      ],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "billingsley1995",
+        "bibliographic_entry": "Billingsley, P. (1995). Probability and Measure (3rd ed.). Wiley."
+      }
+    ],
+    "keywords": [
+      "total_probability",
+      "partition"
+    ]
+  },
+  {
+    "statement_id": "probstat.probability.bayes_rule",
+    "title": "Bayes Rule",
+    "statement_class": "theorem",
+    "epistemic_status": "derived",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability"
+      ],
+      "subfield": "bayesian_inference",
+      "topic": "posterior_updating"
+    },
+    "formal_statement": {
+      "canonical_ascii": "P(A|B) = P(B|A)P(A)/P(B)",
+      "canonical_latex": "P(A\\mid B)=\\frac{P(B\\mid A)P(A)}{P(B)}",
+      "equivalent_forms": [
+        {
+          "form_id": "event_probability_form",
+          "notation_system": "event_probability",
+          "expression": "P(A|B)=P(B|A)P(A)/P(B)"
+        },
+        {
+          "form_id": "parameter_density_form",
+          "notation_system": "ascii",
+          "expression": "p(theta|x)=p(x|theta)p(theta)/p(x)"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "posterior_reweighting",
+      "anonymized_template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
+      "slot_schema": [
+        {
+          "slot_id": "POSTERIOR",
+          "syntactic_category": "functional",
+          "semantic_role": "updated_belief"
+        },
+        {
+          "slot_id": "LIKELIHOOD",
+          "syntactic_category": "functional",
+          "semantic_role": "data_weight"
+        },
+        {
+          "slot_id": "PRIOR",
+          "syntactic_category": "functional",
+          "semantic_role": "initial_belief"
+        },
+        {
+          "slot_id": "NORMALIZER",
+          "syntactic_category": "functional",
+          "semantic_role": "evidence_marginal"
+        }
+      ],
+      "invariants": [
+        "NORMALIZER is positive on the conditioning event."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "A",
+          "syntactic_category": "set",
+          "semantic_role": "hypothesis_event",
+          "mathematical_order": 0,
+          "description": "Hypothesis event."
+        },
+        {
+          "symbol": "B",
+          "syntactic_category": "set",
+          "semantic_role": "evidence_event",
+          "mathematical_order": 0,
+          "description": "Evidence event."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "|",
+          "name": "conditioning",
+          "arity": 2,
+          "operator_family": "stochastic"
+        },
+        {
+          "symbol": "/",
+          "name": "division",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "P(.)",
+          "name": "probability_measure",
+          "input_arity": 1,
+          "codomain": "unit_interval",
+          "description": "Probability measure."
+        }
+      ],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Posterior probability equals normalized likelihood-weighted prior.",
+      "statistical_significance": "Foundational update mechanism in Bayesian statistics.",
+      "regularity_conditions": [
+        "P(B) > 0"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [
+        "probstat.probability.total_probability_partition"
+      ],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "bernardo2000",
+        "bibliographic_entry": "Bernardo, J. M., & Smith, A. F. M. (2000). Bayesian Theory. Wiley."
+      }
+    ],
+    "keywords": [
+      "bayes_rule",
+      "posterior"
+    ]
+  },
+  {
+    "statement_id": "probstat.limit.clt_iid_standardized_mean",
+    "title": "Lindeberg-Levy Central Limit Theorem",
+    "statement_class": "theorem",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability"
+      ],
+      "subfield": "asymptotic_theory",
+      "topic": "weak_convergence"
+    },
+    "formal_statement": {
+      "canonical_ascii": "sqrt(n)*(X_bar - mu)/sigma converges in distribution to N(0,1)",
+      "canonical_latex": "\\sqrt{n}(\\bar{X}_n-\\mu)/\\sigma \\xrightarrow{d} \\mathcal{N}(0,1)",
+      "equivalent_forms": [
+        {
+          "form_id": "weak_convergence_form",
+          "notation_system": "ascii",
+          "expression": "sqrt(n)*(X_bar-mu)/sigma =>_d N(0,1)"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "standardized_aggregate_convergence",
+      "anonymized_template": "STANDARDIZE(AGGREGATE_n(DATA_n)) =>_d REFERENCE_LAW",
+      "slot_schema": [
+        {
+          "slot_id": "AGGREGATE_n",
+          "syntactic_category": "functional",
+          "semantic_role": "sample_aggregate"
+        },
+        {
+          "slot_id": "REFERENCE_LAW",
+          "syntactic_category": "distribution",
+          "semantic_role": "limit_distribution"
+        },
+        {
+          "slot_id": "DATA_n",
+          "syntactic_category": "sequence",
+          "semantic_role": "sample_sequence"
+        }
+      ],
+      "invariants": [
+        "Convergence mode is weak convergence."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "X_bar",
+          "syntactic_category": "statistic",
+          "semantic_role": "sample_mean",
+          "mathematical_order": 0,
+          "description": "Sample mean."
+        },
+        {
+          "symbol": "n",
+          "syntactic_category": "constant",
+          "semantic_role": "sample_size",
+          "mathematical_order": 0,
+          "description": "Sample size."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=>_d",
+          "name": "weak_convergence",
+          "arity": 2,
+          "operator_family": "limit"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "N(.,.)",
+          "name": "normal_distribution_family",
+          "input_arity": 2,
+          "codomain": "distribution_space",
+          "description": "Gaussian family."
+        }
+      ],
+      "index_sets": [],
+      "constants": [
+        {
+          "symbol": "1",
+          "value": 1,
+          "description": "Asymptotic variance."
+        }
+      ]
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Standardized sample means converge to standard normal.",
+      "statistical_significance": "Basis for large-sample Gaussian inference.",
+      "regularity_conditions": [
+        "IID sample with finite mean and variance."
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": [
+        "probstat.transform.z_standardization"
+      ]
+    },
+    "provenance": [
+      {
+        "citation_key": "durrett2019",
+        "bibliographic_entry": "Durrett, R. (2019). Probability: Theory and Examples (5th ed.). Cambridge University Press."
+      }
+    ],
+    "keywords": [
+      "clt",
+      "asymptotic_normality"
+    ]
+  },
+  {
+    "statement_id": "probstat.limit.normal_approximation_sample_mean",
+    "title": "Asymptotic Normal Approximation for Sample Mean",
+    "statement_class": "corollary",
+    "epistemic_status": "asymptotic",
+    "theory_context": {
+      "disciplines": [
+        "statistics"
+      ],
+      "subfield": "asymptotic_inference",
+      "topic": "normal_approximation"
+    },
+    "formal_statement": {
+      "canonical_ascii": "For large n, X_bar approximately follows N(mu, sigma^2/n)",
+      "canonical_latex": "\\bar{X}_n \\approx \\mathcal{N}(\\mu,\\sigma^2/n)",
+      "equivalent_forms": [
+        {
+          "form_id": "large_sample_form",
+          "notation_system": "ascii",
+          "expression": "X_bar approx N(mu, sigma^2/n)"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "asymptotic_reference_law",
+      "anonymized_template": "AGGREGATE_n(DATA) approx REF_LAW(LOC, SCALE(n))",
+      "slot_schema": [
+        {
+          "slot_id": "AGGREGATE_n",
+          "syntactic_category": "functional",
+          "semantic_role": "sample_aggregate"
+        },
+        {
+          "slot_id": "REF_LAW",
+          "syntactic_category": "distribution",
+          "semantic_role": "reference_distribution"
+        },
+        {
+          "slot_id": "DATA",
+          "syntactic_category": "sequence",
+          "semantic_role": "sample_sequence"
+        },
+        {
+          "slot_id": "LOC",
+          "syntactic_category": "parameter",
+          "semantic_role": "location"
+        },
+        {
+          "slot_id": "n",
+          "syntactic_category": "index",
+          "semantic_role": "sample_size"
+        }
+      ],
+      "invariants": [
+        "Approximation improves with sample size."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "X_bar",
+          "syntactic_category": "statistic",
+          "semantic_role": "sample_mean",
+          "mathematical_order": 0,
+          "description": "Sample mean statistic."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "approx",
+          "name": "asymptotic_approximation",
+          "arity": 2,
+          "operator_family": "limit"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "N(.,.)",
+          "name": "normal_distribution_family",
+          "input_arity": 2,
+          "codomain": "distribution_space",
+          "description": "Reference Gaussian family."
+        }
+      ],
+      "index_sets": [],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "Large-sample approximation induced by CLT.",
+      "statistical_significance": "Supports z-style interval and testing approximations for means.",
+      "regularity_conditions": [
+        "CLT conditions hold.",
+        "n is sufficiently large for desired accuracy."
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [
+        "probstat.limit.clt_iid_standardized_mean"
+      ],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": [
+        "probstat.transform.z_standardization"
+      ]
+    },
+    "provenance": [
+      {
+        "citation_key": "casella2002",
+        "bibliographic_entry": "Casella, G., & Berger, R. L. (2002). Statistical Inference (2nd ed.). Duxbury."
+      }
+    ],
+    "keywords": [
+      "corollary",
+      "normal_approximation"
+    ]
+  },
+  {
+    "title": "Law of Large Numbers",
+    "statement_class": "theorem",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability_theory"
+      ],
+      "subfield": "limit_theorems",
+      "topic": "convergence"
+    },
+    "formal_statement": {
+      "canonical_ascii": "lim(n->inf) (1/n * sum(X_i)) = E[X]",
+      "canonical_latex": "\\lim_{n \\to \\infty} \\frac{1}{n} \\sum_{i=1}^{n} X_i = E[X]",
+      "equivalent_forms": [
+        {
+          "form_id": "sample_mean_convergence",
+          "notation_system": "ascii",
+          "expression": "X_bar_n -> E[X] as n -> inf",
+          "scope_note": "Sample mean converges to expectation"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "limit_convergence",
+      "anonymized_template": "LIM(AGGREGATE(SEQUENCE)) = EXPECTED_VALUE",
+      "slot_schema": [
+        {
+          "slot_id": "SEQUENCE",
+          "syntactic_category": "sequence",
+          "semantic_role": "iid_random_variables"
+        },
+        {
+          "slot_id": "AGGREGATE",
+          "syntactic_category": "functional",
+          "semantic_role": "sample_mean"
+        },
+        {
+          "slot_id": "EXPECTED_VALUE",
+          "syntactic_category": "parameter",
+          "semantic_role": "population_mean"
+        }
+      ],
+      "invariants": [
+        "Random variables must be i.i.d.",
+        "Finite expectation required"
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "X_i",
+          "syntactic_category": "random_variable",
+          "semantic_role": "sample_observation",
+          "mathematical_order": 0,
+          "description": "i-th random variable in sequence"
+        },
+        {
+          "symbol": "n",
+          "syntactic_category": "index",
+          "semantic_role": "sample_size",
+          "mathematical_order": 0,
+          "description": "Number of observations"
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "E[·]",
+          "name": "expectation",
+          "input_arity": 1,
+          "codomain": "real",
+          "description": "Expected value operator"
+        },
+        {
+          "notation": "lim",
+          "name": "limit",
+          "input_arity": 1,
+          "codomain": "real",
+          "description": "Limit operator"
+        }
+      ],
+      "index_sets": [
+        {
+          "notation": "i=1..n",
+          "domain": "natural_numbers",
+          "description": "Summation index from 1 to n"
+        }
+      ],
+      "constants": []
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "The sample mean of i.i.d. random variables converges to the population mean as sample size increases",
+      "statistical_significance": "Justifies using sample averages to estimate population parameters",
+      "regularity_conditions": [
+        "Random variables must be independent and identically distributed",
+        "Finite expectation E[X] must exist"
+      ],
+      "failure_modes": [
+        "Does not hold for dependent observations",
+        "Fails for distributions with undefined expectation"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": []
+    },
+    "provenance": [
+      {
+        "citation_key": "kolmogorov1933",
+        "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung.",
+        "url": "https://en.wikipedia.org/wiki/Law_of_large_numbers"
+      }
+    ],
+    "keywords": [
+      "law of large numbers",
+      "LLN",
+      "convergence",
+      "sample mean"
+    ],
+    "statement_id": "probstat.limit.law_of_large_numbers"
+  },
+  {
+    "statement_id": "probstat.probability.probability_normalization",
+    "title": "Probability Normalization (Sum to One)",
+    "statement_class": "axiom",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability_theory"
+      ],
+      "subfield": "foundations",
+      "topic": "axioms"
+    },
+    "formal_statement": {
+      "canonical_ascii": "sum_i p_i = 1",
+      "canonical_latex": "\\sum_i p_i = 1",
+      "equivalent_forms": [
+        {
+          "form_id": "integral_form",
+          "notation_system": "measure_theoretic",
+          "expression": "integral dP = 1",
+          "scope_note": "Continuous case"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "partition_of_unity",
+      "anonymized_template": "sum_i WEIGHT_i = 1",
+      "slot_schema": [
+        {
+          "slot_id": "WEIGHT_i",
+          "syntactic_category": "variable",
+          "semantic_role": "partition_weight"
+        }
+      ],
+      "invariants": [
+        "Total mass fixed at unity; weights trade off exactly, which is what makes them comparable."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "p_i",
+          "syntactic_category": "variable",
+          "semantic_role": "partition_weight",
+          "mathematical_order": 0,
+          "description": "Probability of outcome i."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        }
+      ],
+      "functionals": [
+        {
+          "notation": "sum_i",
+          "name": "summation",
+          "input_arity": 1,
+          "codomain": "real",
+          "description": "Sum over the outcome index."
+        }
+      ],
+      "index_sets": [],
+      "constants": [
+        {
+          "symbol": "1",
+          "description": "Unit total mass."
+        }
+      ]
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "The probabilities of all outcomes sum to one.",
+      "statistical_significance": "Kolmogorov's normalization axiom; the partition-of-unity structure shared by barycentric coordinates and mixture weights.",
+      "regularity_conditions": [
+        "Countable outcome space or measurable partition"
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [],
+      "generalizes": [],
+      "composed_with": [
+        "probstat.probability.total_probability_partition"
+      ]
+    },
+    "provenance": [
+      {
+        "citation_key": "kolmogorov1933",
+        "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Berlin: Springer."
+      }
+    ]
+  }
+]
+""")
+
+
+def main() -> None:
+    corpus = {
+        "schema": "../../schema/equation-node.schema.json",
+        "corpus_id": "probstat.statistics_foundations.v1",
+        "discipline": "statistics",
+        "version": "1.0.0-alpha",
+        "statement_nodes": NODES,
+    }
+    out = Path("data/statistics/nodes.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n",
+                   encoding="utf-8")
+    print(f"wrote {len(NODES)} statistics nodes -> {out}")
+
+
+if __name__ == "__main__":
+    main()

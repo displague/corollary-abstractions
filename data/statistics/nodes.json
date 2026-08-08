@@ -475,7 +475,9 @@
           "probstat.transform.affine_location_scale"
         ],
         "entails": [],
-        "equivalent_to": [],
+        "equivalent_to": [
+          "ml.preference.grpo_group_relative_advantage"
+        ],
         "special_case_of": [],
         "generalizes": [],
         "composed_with": [
@@ -1100,6 +1102,104 @@
         "sample mean"
       ],
       "statement_id": "probstat.limit.law_of_large_numbers"
+    },
+    {
+      "statement_id": "probstat.probability.probability_normalization",
+      "title": "Probability Normalization (Sum to One)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "statistics",
+          "probability_theory"
+        ],
+        "subfield": "foundations",
+        "topic": "axioms"
+      },
+      "formal_statement": {
+        "canonical_ascii": "sum_i p_i = 1",
+        "canonical_latex": "\\sum_i p_i = 1",
+        "equivalent_forms": [
+          {
+            "form_id": "integral_form",
+            "notation_system": "measure_theoretic",
+            "expression": "integral dP = 1",
+            "scope_note": "Continuous case"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "partition_of_unity",
+        "anonymized_template": "sum_i WEIGHT_i = 1",
+        "slot_schema": [
+          {
+            "slot_id": "WEIGHT_i",
+            "syntactic_category": "variable",
+            "semantic_role": "partition_weight"
+          }
+        ],
+        "invariants": [
+          "Total mass fixed at unity; weights trade off exactly, which is what makes them comparable."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p_i",
+            "syntactic_category": "variable",
+            "semantic_role": "partition_weight",
+            "mathematical_order": 0,
+            "description": "Probability of outcome i."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "sum_i",
+            "name": "summation",
+            "input_arity": 1,
+            "codomain": "real",
+            "description": "Sum over the outcome index."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "description": "Unit total mass."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The probabilities of all outcomes sum to one.",
+        "statistical_significance": "Kolmogorov's normalization axiom; the partition-of-unity structure shared by barycentric coordinates and mixture weights.",
+        "regularity_conditions": [
+          "Countable outcome space or measurable partition"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "probstat.probability.total_probability_partition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "kolmogorov1933",
+          "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Berlin: Springer."
+        }
+      ]
     }
   ]
 }

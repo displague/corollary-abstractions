@@ -2612,7 +2612,9 @@
       "inferential_links": {
         "entailed_by": [],
         "entails": [],
-        "equivalent_to": [],
+        "equivalent_to": [
+          "probstat.transform.z_standardization"
+        ],
         "special_case_of": [],
         "generalizes": [],
         "composed_with": [

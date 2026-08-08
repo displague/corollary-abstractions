@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 195,
+  "nodes_analyzed": 196,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -917,6 +917,29 @@
       ]
     },
     {
+      "skeleton": "1 = sum⟨?0⟩",
+      "disciplines": [
+        "geometric_modeling",
+        "statistics"
+      ],
+      "archetypes": [
+        "normalized_weight_sum",
+        "partition_of_unity"
+      ],
+      "members": [
+        {
+          "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
+          "discipline": "geometric_modeling",
+          "template": "sum_i BARY_i = 1"
+        },
+        {
+          "statement_id": "probstat.probability.probability_normalization",
+          "discipline": "statistics",
+          "template": "sum_i WEIGHT_i = 1"
+        }
+      ]
+    },
+    {
       "skeleton": "?0 = *(+(?1, neg(?2)), inv(?3))",
       "disciplines": [
         "machine_learning",
@@ -1775,6 +1798,17 @@
     }
   ],
   "skeletons_with_split_archetypes": [
+    {
+      "skeleton": "1 = sum⟨?0⟩",
+      "archetype_ids": [
+        "normalized_weight_sum",
+        "partition_of_unity"
+      ],
+      "members": [
+        "geomodel.barycentric.barycentric_partition_of_unity",
+        "probstat.probability.probability_normalization"
+      ]
+    },
     {
       "skeleton": "?0 = *(?1, ?2)",
       "archetype_ids": [

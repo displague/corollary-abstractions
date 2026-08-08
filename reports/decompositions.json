@@ -1424,9 +1424,10 @@
           "skeleton": "sum⟨?0:V⟩",
           "instance_of_statements": [
             "difftop.vectorfields.poincare_hopf_index_theorem",
-            "graphtheory.degree.handshake_lemma"
+            "graphtheory.degree.handshake_lemma",
+            "probstat.probability.probability_normalization"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         }
       ]
     },
@@ -1508,9 +1509,10 @@
           "skeleton": "sum⟨?0:V⟩",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count",
-            "graphtheory.degree.handshake_lemma"
+            "graphtheory.degree.handshake_lemma",
+            "probstat.probability.probability_normalization"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         }
       ]
     },
@@ -2715,9 +2717,10 @@
           "skeleton": "sum⟨?0:V⟩",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count",
-            "difftop.vectorfields.poincare_hopf_index_theorem"
+            "difftop.vectorfields.poincare_hopf_index_theorem",
+            "probstat.probability.probability_normalization"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         }
       ]
     },
@@ -5551,6 +5554,25 @@
       "template": "LIM(AGGREGATE(SEQUENCE)) = EXPECTED_VALUE",
       "groundedness": 0.0,
       "constituents": []
+    },
+    {
+      "statement_id": "probstat.probability.probability_normalization",
+      "template": "sum_i WEIGHT_i = 1",
+      "groundedness": 1.0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "sum⟨?0:V⟩",
+          "instance_of_statements": [
+            "difftop.degree.degree_regular_value_count",
+            "difftop.vectorfields.poincare_hopf_index_theorem",
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 4
+        }
+      ]
     },
     {
       "statement_id": "temporal.modality.temporal_duality",

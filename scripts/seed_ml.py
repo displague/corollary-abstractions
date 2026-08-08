@@ -1701,6 +1701,7 @@ NODES = [
              "identical advantages; the method cannot express that a whole "
              "group was worthless."],
          inferential_links=links(
+             equivalent_to=["probstat.transform.z_standardization"],
              composed_with=["probstat.transform.z_standardization",
                             "ml.policy.ppo_clipped_surrogate",
                             "ml.objective.kl_regularized_rl_objective"]),
