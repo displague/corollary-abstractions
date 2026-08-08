@@ -7,6 +7,13 @@ and division normalization), and abstracts slot names into position-indexed
 placeholders to produce a *skeleton*. Nodes sharing a skeleton are structural
 twins regardless of discipline or notation.
 
+Which heads may be reordered is declared, not folklore: see `HEAD_ALGEBRA`
+below. Before it, the canonicalizer knew only that `+` and `*` commute, and
+the corpora compensated by fixing an argument order in their seed scripts —
+so `MEET(X, TOP)` and `MEET(TOP, X)` were different skeletons, and a node
+existed (`geotop.predicates.adjacency_symmetry`) purely to state a
+commutativity the tooling could not represent.
+
 Two match levels are reported:
 
 - shape twins: identical skeletons with slot identity ignored
@@ -45,8 +52,178 @@ from pathlib import Path
 
 RELATIONS = {"=", "=>_d", "approx", "~", "<=", ">=", "<", ">"}
 SYMMETRIC_RELATIONS = {"="}
-COMMUTATIVE = {"+", "*"}
 BIG_OP_PREFIXES = ("sum_", "prod_", "lim_", "max_", "min_")
+
+# --------------------------------------------------------------------------
+# Declared head algebra
+#
+# Until now the canonicalizer knew exactly one algebraic fact — that `+` and
+# `*` are commutative — and every other head's algebra lived as folklore: in
+# a seed script's fixed argument order (`scripts/seed_logic.py` always writes
+# the distinguished operand first so the two `identity_laws` nodes twin), in
+# a node authored solely to say out loud what the tooling cannot represent
+# (`geotop.predicates.adjacency_symmetry`), or in a scope note. This table
+# replaces the folklore with a declaration that the passes read.
+#
+# Fields:
+#   kind          "op" (an arithmetic operator node) or "call" (a call head)
+#   commutative   arguments may be reordered. Consumed by `canonicalize` /
+#                 `typed_resort` (sort args by shape key) and by
+#                 `specialize.py` (try both argument orders when matching).
+#   associative   nested applications may be reparenthesized. DECLARED ONLY —
+#                 no pass consumes it yet. Flattening a declared-associative
+#                 call head is the separate BACKLOG item "Associativity and
+#                 commutativity are one package in the canonicalizer"; the
+#                 two `+`/`*` entries are the only ones the canonicalizer
+#                 actually flattens, and it flattens them because they are
+#                 commutative, not because of this field.
+#   identity      a two-sided identity element. A float means the numeric
+#                 literal; a tuple of strings means "the corpus writes this
+#                 element as a constant slot under these names" (the same
+#                 lattice top is `TRUTH` in data/logic and `UNIVERSE` in
+#                 data/set_theory). Consumed by `specialize.py`.
+#   annihilator   an absorbing element (x OP a = a). DECLARED ONLY — recorded
+#                 because the corpus states it, not yet consumed by any pass.
+#   provenance    ASSERTED (a node in data/ states the property), DERIVED (it
+#                 follows from a property a node states), or CONVENTION (it is
+#                 an authoring convention the corpus relies on silently).
+#
+# Deliberately ABSENT, with reasons:
+#   `^`   The Wikisem lane (docs/BACKLOG.md, "Real-data lanes") asks for `^`
+#         to be commutative because there `^` is logical conjunction. In THIS
+#         grammar `^` is exponentiation (`Parser.parse_power`), and
+#         `SIDE1^2` is not `2^SIDE1`. The Wikisem request needs a lane-local
+#         algebra table, not an entry here.
+#   CONCAT commutative — false of words: `re-do` is not `do-re`
+#         (morphology.wordformation.affixation's own scope note).
+#   CROSS, OUTER, MATRIXPOWER — anti-commutative / non-commutative; the table
+#         has no vocabulary for antisymmetry and inventing one for a single
+#         node would be declaring more than the corpus justifies.
+HEAD_ALGEBRA: dict[str, dict] = {
+    # ---- arithmetic operators (formerly the hardcoded COMMUTATIVE set) ----
+    "+": {
+        "kind": "op", "commutative": True, "associative": True,
+        "identity": 0.0, "provenance": "CONVENTION",
+        # Ordinary real addition; assumed by every numeric corpus. The
+        # identity is the one `specialize.py` already used to cover
+        # geometry.circle_formulas.circle_circumference_formula from the
+        # affine family (SHIFT -> 0).
+    },
+    "*": {
+        "kind": "op", "commutative": True, "associative": True,
+        "identity": 1.0, "provenance": "CONVENTION",
+        # Scalar multiplication. Known over-declaration: `*` is also the only
+        # spelling available for non-commutative products, which is why
+        # ml.recurrence.mlstm_matrix_memory_update had to introduce an
+        # `OUTER(.,.)` head and geomodel.surfaces.surface_normal_cross_product
+        # a `CROSS(.,.)` head rather than write them with `*`.
+    },
+    # ---- lattice heads ----
+    "MEET": {
+        "kind": "call", "commutative": True, "associative": True,
+        "identity": ("TRUTH", "UNIVERSE"),
+        "annihilator": ("FALSITY", "EMPTYSET", "INCONSISTENCY"),
+        "provenance": "ASSERTED",
+        # Commutativity: DERIVED, but from a statement rather than from
+        # folklore — logic.boolean_laws.identity_laws states in its invariants
+        # "TOP is a two-sided identity for MEET", and settheory.order.
+        # empty_set_minimality states "equivalent to the domination law
+        # MEET(BOT, x) = BOT" with the constant on the LEFT while
+        # geotop.predicates.de9im_disjoint writes MEET(REGA, REGB) and
+        # logic.boolean_laws.identity_laws writes MEET(PROP1, TRUTH) with it
+        # on the right. Two-sidedness is asserted; argument order across the
+        # corpora is already inconsistent, which is the case for declaring it.
+        # Identity: logic.boolean_laws.identity_laws (`MEET(PROP1, TRUTH)`,
+        # TRUTH a `constant` slot) and settheory.boolean_laws.identity_laws
+        # (`MEET(SETA, UNIVERSE)`).
+        # Annihilator: the same two nodes carry it in `equivalent_forms` —
+        # "P and false = false" / "A inter 0 = 0", scope-noted "the companion
+        # domination laws". INCONSISTENCY is narrative.frame.frame_consistency's
+        # spelling of BOT.
+    },
+    "JOIN": {
+        "kind": "call", "commutative": True, "associative": True,
+        "identity": ("FALSITY", "EMPTYSET", "INCONSISTENCY"),
+        "annihilator": ("TRUTH", "UNIVERSE"),
+        "provenance": "ASSERTED",
+        # Identity: logic.boolean_laws.identity_laws equivalent form
+        # "P or false = P", scope-noted "Falsity is the identity for
+        # disjunction"; settheory.boolean_laws.identity_laws equivalent form
+        # "A union emptyset = A". Its invariants say "dually BOT is one for
+        # JOIN". Annihilator: same nodes, "P or true = true" / "A union U = U".
+        # Commutativity: same argument as MEET; additionally
+        # geotop.point_set.interior_boundary_exterior_partition writes a
+        # nested JOIN whose three operands are a partition, which is
+        # order-independent.
+    },
+    # ---- geospatial predicate ----
+    "TOUCHES": {
+        "kind": "call", "commutative": True, "provenance": "ASSERTED",
+        # geotop.predicates.adjacency_symmetry exists for no other reason:
+        # `IMPLIES(TOUCHES(REGA, REGB), TOUCHES(REGB, REGA))`, whose own
+        # invariant says "Recording symmetry this way is the corpus's only
+        # current means of saying that a head is commutative". It is the one
+        # node in data/ that ASSERTS a call head's commutativity rather than
+        # assuming it. No identity element: adjacency has none.
+    },
+    # ---- morphological concatenation ----
+    "CONCAT": {
+        "kind": "call", "commutative": False, "associative": True,
+        "identity": ("EMPTY",), "provenance": "ASSERTED",
+        # Associativity: morphology.wordformation.concat_associativity states
+        # `CONCAT(CONCAT(A,B),C) = CONCAT(A,CONCAT(B,C))` outright.
+        # Identity: morphology.wordformation.zero_morpheme_identity states
+        # `CONCAT(STEM, EMPTY) = STEM`, with an equivalent form
+        # "concat(empty, s) = s = concat(s, empty)" making it two-sided, and
+        # EMPTY declared `constant` in its slot_schema exactly as TRUTH and
+        # UNIVERSE are. NOT commutative -- the same corpus notes `re-do` is
+        # not `do-re`, which is why it needs its own entry rather than
+        # joining MEET.
+    },
+    # ---- binary minimum ----
+    "MINOF": {
+        "kind": "call", "commutative": True, "associative": True,
+        "provenance": "DERIVED",
+        # ml.policy.ppo_clipped_surrogate is the only carrier;
+        # docs/BACKLOG.md records "MINOF is commutative in every model and the
+        # matcher cannot know it". Binary min on a totally ordered codomain is
+        # symmetric. Declared for completeness; the node is a singleton, so
+        # nothing in the current graph turns on it.
+    },
+}
+
+# Operator heads the canonicalizer flattens AND sorts. `specialize.py` imports
+# this name and treats it as "arithmetic commutative op with an identity that
+# an argument may vanish into", so only `op`-kind entries belong here.
+COMMUTATIVE = {
+    name for name, alg in HEAD_ALGEBRA.items()
+    if alg["kind"] == "op" and alg.get("commutative")
+}
+
+# Call heads whose arguments may be reordered. Sorted, never flattened: a
+# nested `JOIN(a, JOIN(b, c))` keeps its nesting, because associativity is a
+# separate declaration that no pass consumes yet.
+COMMUTATIVE_CALL_HEADS = {
+    name for name, alg in HEAD_ALGEBRA.items()
+    if alg["kind"] == "call" and alg.get("commutative")
+}
+
+
+def identity_terms(head: str) -> tuple[tuple, ...]:
+    """Expression-tree spellings of `head`'s declared identity element.
+
+    A float identity yields the numeric literal; a tuple of names yields one
+    `("slot", name)` per spelling the corpora use for that element, so a
+    pattern slot can bind `TRUTH` under MEET in data/logic and `UNIVERSE`
+    under MEET in data/set_theory without either corpus being privileged.
+    Returns `()` for heads with no declared identity.
+    """
+    ident = HEAD_ALGEBRA.get(head, {}).get("identity")
+    if ident is None:
+        return ()
+    if isinstance(ident, (int, float)):
+        return (("num", float(ident)),)
+    return tuple(("slot", name) for name in ident)
 
 TOKEN_RE = re.compile(
     r"\s*(=>_d|<=|>=|[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[=+\-*/^()\[\],|]|±)"
@@ -200,6 +377,12 @@ def canonicalize(node: tuple) -> tuple:
                 flat.append(a)
         flat.sort(key=shape_key)
         return ("op", name, tuple(flat))
+    if kind == "call" and name in COMMUTATIVE_CALL_HEADS and len(args) > 1:
+        # Sort only. Call heads are binary throughout data/, so ordering two
+        # arguments by shape key is the whole of commutativity for them; and
+        # flattening would need the separate `associative` declaration, which
+        # nothing consumes (a nested `JOIN(a, JOIN(b, c))` stays nested).
+        args.sort(key=shape_key)
     return (kind, name, tuple(args))
 
 
@@ -237,6 +420,8 @@ def typed_resort(node: tuple, slot_class: dict[str, str]) -> tuple:
         return ("rel", rel, (lhs, rhs))
     args = [typed_resort(a, slot_class) for a in node[2]]
     if kind == "op" and node[1] in COMMUTATIVE:
+        args.sort(key=typed_key)
+    elif kind == "call" and node[1] in COMMUTATIVE_CALL_HEADS and len(args) > 1:
         args.sort(key=typed_key)
     return (kind, node[1], tuple(args))
 
@@ -284,11 +469,20 @@ PARAMETER_LIKE = {"parameter", "constant"}
 #   with a dependent.
 # - order_le: LEQ and BEFORE -- temporal precedence IS an order relation;
 #   the temporal corpus already twins transitivity through the LEQ shape.
+# - aggregate: `sum` (the prefix big-operator) and INTEGRAL -- both are
+#   linear aggregation of a family over an index set, differing only in
+#   whether that set is discrete or continuous (a Riemann sum IS the
+#   integral's defining approximation, and counting measure makes the two
+#   literally one operator). Registered against the pair docs/BACKLOG.md
+#   nominates as the test case: difftop.vectorfields.poincare_hopf_index_theorem
+#   versus diffgeo.surfaces.gauss_bonnet_theorem.
 HEAD_ALIASES = {
     "MOD": "ordered_compose",
     "CONCAT": "ordered_compose",
     "BEFORE": "order_le",
     "LEQ": "order_le",
+    "sum": "aggregate",
+    "INTEGRAL": "aggregate",
 }
 
 
