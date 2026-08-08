@@ -250,24 +250,29 @@ context, the pointer uses it under distractors and held-out combinations. The
 external-lexicon experiments show why the knowledge should remain outside the
 weights.
 
-**Initiation is designed but unbuilt.** A well-formed unresolved slot occupies
+**Local initiation now has an executable first cut.** A well-formed unresolved slot occupies
 the epistemic ladder's UNKNOWN rung. That is a closed-form signal that more
-information is required. It can trigger `RETRIEVE(key)` without asking a model
-to improvise whether ignorance exists. The learned residual is choosing a
-useful key or source. Today, no unified adapter connects UNKNOWN to the corpus,
-lexicon, twin ledger, decomposition index, proof artifacts, or external tools,
-and no retrieved result automatically returns as pointable context.
+information is required. The adapter accepts such an UNKNOWN, queries one
+read-only surface over corpus, lexicon, twin ledger, decomposition index, and
+Lean proof artifacts, and returns indexed material that POINT can bind. The
+canonical target key must already be the unresolved literal's value; this
+prevents a caller from “answering” one request with an unrelated lookup, while
+making open-language request parsing an honest upstream gap. Choosing useful
+queries and items remains oracle-driven today, and external tools are not
+connected.
 
-**Miss handling is specified but unbuilt.** A direct miss should widen to a
-neighborhood search. If the value is private to the current conversation, the
-system should ask the user. If neither source can answer, UNKNOWN remains open
-and the system abstains. “I cannot establish that” is a valid terminal state,
+**Local miss handling is executable; conversation is not.** A direct miss
+widens to deterministic token-neighborhood search. A durable miss leaves
+UNKNOWN open with ABSTAIN evidence and no state mutation. A frame-private value
+refuses before store access and emits `ASK(slot)`, but the multi-turn ASK return
+channel is still unbuilt. “I cannot establish that” is a valid terminal state,
 not an invitation to fabricate.
 
 This also clarifies tool choice. The exact harness decides whether a local
 closed form already resolves the slot and whether the slot is actually
-unknown. The policy chooses among plausible queries and actions. Oracle-first
-dispatch establishes the correct routing before that choice is learned.
+unknown. RETRIEVE uses the literal's fixed canonical key; the policy chooses
+among permitted actions and pointable results. Oracle-first dispatch
+establishes the correct routing before that choice is learned.
 
 ## Storage: durable knowledge, session state, and write-back
 
@@ -330,17 +335,17 @@ detail of individual tools.
 
 | Capability | Present state |
 |---|---|
-| Cross-discipline symbolic knowledge | Operational: 199 nodes, 21 disciplines |
+| Cross-discipline symbolic knowledge | Operational: 209 nodes, 21 disciplines |
 | Structural twins, specializations, decomposition | Operational and measured |
 | Knowledge supplied in context | Consumed successfully by a tiny pointer |
-| Retrieval initiated by the model | Designed; no unified adapter |
+| Retrieval initiated by the model | Local oracle adapter operational; learned choice/external tools open |
 | Durable human/agent-authored storage | Operational through seeds and validation |
 | Model-initiated durable write | Newly specified; unbuilt |
 | Narrative grammar and axioms | Authored and matcher-visible |
-| Runtime fictional frame | Scope executor + local ladder + finite Chekhov obligations operational; first scoped corpus nodes unbuilt |
+| Runtime fictional frame | Scope executor, two-sided temporal laws, scoped corpus nodes, and finite obligations operational |
 | Lean training transitions | Phase 1 delivered: 155 transitions |
 | Learned tactic policy and proof search | Unbuilt |
-| Multi-step shared controller | Core + first deterministic `GEN` adapters implemented; learned policy unbuilt |
+| Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT adapters implemented; learned policy unbuilt |
 | Conversational clarification | `ASK` specified; conversation loop unbuilt |
 | Expressive LLM-like prose | Far from the present renderer |
 | Oracle golden-chicken integration baseline | 1/1, three checked beats plus visible plant/discharge accounting |
@@ -379,11 +384,12 @@ knows, assumes, tries, proves, and cannot resolve.
 
 The immediate path is now concrete:
 
-1. Extend the implemented controller core from `GEN` into `POINT`, `RETRIEVE`,
-   `ASK`, and PROVEN-gated `WRITE` adapters.
+1. Extend the implemented controller core with the `ASK` return channel and
+   PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
 2. Replace the minimal story adapter with the scope-backed frame executor and
    frame-local ladder.
-3. Connect UNKNOWN to retrieval, user clarification, and abstention.
+3. Connect the now-executable UNKNOWN retrieval/abstention path to user
+   clarification and external tools.
 4. Replace committed Lean-transition replay with live PyPantograph application
    and search.
 5. Make the existing dead-branch trace serializable with complete terminal

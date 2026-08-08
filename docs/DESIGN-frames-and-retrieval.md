@@ -1,5 +1,38 @@
 # Design: fictional frames and retrieval-as-action
 
+> **Implementation status (2026-08-08).** Frames, finite temporal obligations,
+> and both narrative temporal laws now execute. The first local RETRIEVE adapter
+> also ships: UNKNOWN-gated sessions query five committed stores, return indexed
+> material to POINT, fall back to deterministic neighborhood search, preserve
+> source epistemic status, abstain honestly on miss, and refuse frame-local
+> lookup before store access. POINT additionally requires a key to resolve to
+> one corpus owner, so shared symbols can be retrieved but cannot vacuously
+> answer an UNKNOWN; exact resolution retains precedence over neighborhood
+> matches, and short symbolic aliases do not act as word-completion prefixes.
+> Pending literals are re-adjudicated after frame mutations, so stale
+> UNKNOWNs cannot bind; resolved literals enter a frame-resolution ledger and
+> leave the retrieval queue. The query key is the unresolved literal's value,
+> not independent policy metadata; parsing that value from open language is an
+> upstream capability. ASK's return channel, external tools, learned parsing
+> and item choice, and durable WRITE remain open. RETRIEVE cannot substitute a
+> different key after session construction. The sections below retain the original
+> design language as the before-state.
+> Proof summaries reach PROVEN only for the same digest-pinned native
+> extraction trusted by Lean replay under the canonical `lean4` system label;
+> well-shaped untrusted artifacts remain VERIFIED. Public state constructors
+> do not bypass key grounding because each verifier action rechecks it.
+> Binding identity is source-aware: canonical statement views take precedence,
+> followed by a unique decomposition owner or unique structural-group record.
+> POINT also authenticates the selected record against the read-only store, so
+> public state construction cannot inject pointable evidence.
+> Exact keys preserve symbolic operators; lossy word tokens are used only for
+> deterministic neighborhood fallback, with a three-character prefix floor.
+> Exact tokenless symbols are valid; only neighborhood search requires tokens.
+> POINT requires a verifier-minted session receipt as well as store membership;
+> its signature covers a per-session nonce and immutable frame spec to prevent
+> cross-session and cross-scope replay.
+> Durable receipt serialization remains open.
+
 Two extensions toward sustained composition (the golden-chicken test),
 both instances of existing machinery rather than new mechanisms.
 

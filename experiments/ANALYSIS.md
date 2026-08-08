@@ -717,3 +717,193 @@ demotions, then REFUSED post-close check. It fired exactly. Two tests assert
 both the ordered verdicts and their rule/world/frame evidence. The existing
 global PROVEN/HYPOTHESIS/REFUSAL examples remain separate because the frame
 executor should not manufacture machine-proof or structural-family status.
+
+## v0.5 UNKNOWN-triggered retrieval adapter
+
+Prediction was registered in `docs/ROADMAP-v0.5.md` before implementation. A
+read-only loader produces 702 pointable records from the committed local world:
+209 corpus statements, 209 node-lexicon summaries, 67 twin/family/alias/mirror/
+shape groups, 208 decomposition records, and 9 statement-level proof summaries
+that inspect the referenced native Lean transition artifact. No corpus or
+matcher report changes.
+
+The registered exact query `logic.boolean_laws.de_morgan_laws` returns six
+items spanning all five source kinds (two structural groups); the truncated
+`logic.boolean_laws.de_morgan` misses exact equality and succeeds through the
+deterministic token neighborhood. RETRIEVE appends stable positions 0..5 and a
+subsequent POINT(0) binds the pending answer slot to the corpus item. Both are
+VERIFIED transitions, but the material retains its own status: the corpus node
+is `derived`, the structural/decomposition records are mechanically `verified`,
+and the proof summary is `proven`. Successful access is not epistemic promotion.
+
+The capability-blind control removes every store item while replaying the same
+two-action oracle. RETRIEVE stays UNKNOWN with ABSTAIN evidence, context and
+state remain unchanged, POINT is REFUSED, and the controller does not solve.
+A session whose own canonical key is absent behaves identically. A
+`retrieval: frame_local` state is
+stronger: a spy store proves no query runs before REFUSED routes the unresolved
+slot to `ASK(slot)`. Three delegated GEN outcomes—accepted, unknown, and
+malformed—preserve the underlying frame verifier's verdict, reason, and
+evidence exactly. Eleven retrieval tests move the suite 70 -> 81.
+
+Honest boundary: this is an oracle-driven local adapter, not learned tool use.
+The neighborhood is an unranked closed-form token relation; external tools and
+the ASK return channel remain unbuilt; POINT binds a retrieved record rather
+than implementing every existing-context pointer task; and 702 items are small
+enough for a linear scan. Those are the next scaling and policy experiments.
+
+Independent review invalidated the first success control: POINT initially
+validated only index existence, so the policy could retrieve modus ponens and
+bind it to a De-Morgan slot. The store was load-bearing but answer relevance was
+not. POINT now applies the same exact/token-neighborhood relation to the
+selected item's aliases and the pending slot's registered key. The adversarial
+sequence still retrieves context, but its POINT is REFUSED and the UNKNOWN
+remains open. That reproducer is permanent; the original success-only test is
+recorded as vacuous rather than counted as evidence. It is the twelfth
+retrieval test and moved the full-suite count to 82.
+
+A second independent review found that alias equality could still be vacuous:
+the one-letter symbol `a` is an exact lexicon alias for many unrelated nodes,
+and the first returned lexicon could bind an `a` slot. POINT now accepts a
+matched item only when the corpus, lexicon, and proof views matching the key
+resolve to one corpus owner. Retrieval can still expose an ambiguous
+neighborhood, but ambiguity cannot clear UNKNOWN. The same review found a
+schema mismatch: `verified_by.reference` is optional, while the loader indexed
+it unconditionally. Artifact-only proof links now load and report the full
+theorem-bearing artifact's transition count. At this review stage they retained
+PROVEN status; the later identity and proof-trust controls below narrow that to
+single-theorem, digest-pinned artifacts. The two new regression tests bring the
+full suite at this stage to 84.
+
+Re-review supplied two interaction controls. `Quadratic Formula` is an exact
+title but also a token-neighborhood match for a different node's `quadratic
+form`; mixing both match modes made the unambiguous exact result unbindable.
+Owner resolution now respects exact-before-neighborhood precedence. Separately,
+an accepted frame assertion could turn the pending literal from UNKNOWN to
+REFUTED while leaving its old retrieval need pointable. Retrieval needs now
+retain the adjudicated literal, and RETRIEVE/POINT recheck it against current
+frame state. A stale need is REFUSED rather than clearing the slot. These two
+controls originally brought the suite to 86. Final review refined the state
+transition: if a delegated GEN makes the literal VERIFIED or REFUTED, that
+verdict and evidence enter a resolution ledger and the now-resolved retrieval
+need clears. This avoids both stale binding and an unrecoverable pending state.
+
+The next review completed the precedence matrix: context retrieved for
+`quadratic form` contained the first-fundamental-form node, which
+neighborhood-matched a pending `Quadratic Formula` key. Because the binding
+code considered only the selected item's mode, it could ignore the exact
+quadratic-formula owner elsewhere in the store. POINT now refuses every
+neighborhood binding whenever any exact owner exists for the pending key. The
+cross-query reproducer is the seventeenth retrieval test and moves the suite to
+87.
+
+Protocol review then tested malformed proof and action inputs. An empty JSON
+artifact previously yielded a PROVEN summary with zero transitions because
+the absence check ran only when theorem rows existed. JSON proof links now
+fail closed unless they contain at least one applicable theorem transition.
+Likewise, dispatch had checked only `ActionKind`, allowing arbitrary RETRIEVE
+or POINT names to appear as accepted trace operations; only the declared
+`lookup` and `bind` names now execute. Both negative controls are permanent,
+bringing the suite to 89.
+
+The proof-boundary review went one level deeper: a non-JSON file, or a JSON row
+containing only a theorem label, still satisfied file existence while proving
+nothing machine-checked. The current adapter therefore authenticates only the
+native artifact it understands: JSON rows with theorem, tactic, stateBefore,
+and stateAfter strings, including a non-empty theorem and tactic. At least one
+applicable transition must close to `no goals`; a well-shaped but truncated
+trace is not a proof. Unsupported formats, incomplete rows, and unfinished
+traces fail closed instead of receiving PROVEN. The added format control moves
+the suite to 90.
+
+Identity and neighborhood review added two more constraints. An artifact-only
+link may authenticate a single-theorem artifact, but a shared multi-theorem
+artifact cannot establish which theorem proves the statement without an
+explicit `reference`; that ambiguity now fails closed. Separately,
+reverse-prefix matching let a truncated word such as `absor` match ubiquitous
+one-letter aliases such as `a`. Reverse prefixes shorter than three characters
+are now ignored. The scoped `logic boolean absor` query resolves and binds the
+intended owner without admitting those unrelated lexica. Both controls move
+the suite to 92.
+
+The last capability-blind review attacked the origin of the key itself. Before
+the correction, a caller could create a De-Morgan UNKNOWN while supplying
+`Quadratic Formula` as its suggested key; retrieval and POINT would faithfully
+solve the wrong constraint. The session factory now requires canonical key
+tokens to equal the unresolved literal's value. A mismatched pair fails before
+store access. This moves the suite to 93 and narrows the claim honestly: the
+adapter verifies retrieval relative to an already parsed symbolic request;
+open-language parsing into that literal remains upstream and unproven here.
+
+Proof-trust review then demonstrated that even an applicable `no goals` row can
+close only a focused subgoal in a truncated extraction. Shape and a terminal
+sentinel cannot authenticate the whole proof. Retrieval now reuses the Lean
+replay adapter's existing SHA-256 trust root for the committed native
+`sample_triples.json`: proof material from that exact extraction is PROVEN;
+well-shaped, locally closing but untrusted artifacts remain VERIFIED. The new
+completed-subgoal control moves the suite to 94.
+
+Finally, session construction alone did not prevent RETRIEVE from substituting
+another alias or unrelated key. A De-Morgan pending literal could retrieve by
+its prose title and still bind the same record, leaving the action key as free
+policy metadata. RETRIEVE now requires canonical equality with the pending
+literal before store access. Exact lookup and deterministic neighborhood
+widening operate on that fixed key. The alias-bypass control moves the suite to
+95.
+
+Public-boundary review then bypassed the factory by directly constructing the
+frozen dataclasses with a forged key. Both RETRIEVE and POINT now recheck that
+the pending key equals the unresolved literal's value before doing any work.
+The proof trust root also now binds metadata as well as bytes: only the
+canonical `lean4` system label can use the pinned Lean extraction digest. A
+byte-identical artifact mislabeled as another prover is rejected. These two
+controls move the suite to 97.
+
+Five-store review then tested keys that exist only in structural reports. A
+unique chain-rule constituent retrieved its decomposition record but could not
+bind because owner resolution consulted only corpus, lexicon, and proof views.
+Binding now uses explicit precedence: canonical statement views when present;
+otherwise a unique decomposition owner; otherwise one uniquely matched
+structural-group record. The chain-rule decomposition and iterated-composition
+twin-group controls both bind, moving the suite to 99.
+
+The final public-state review forged context rather than the key: an invented
+item copied valid De-Morgan aliases and ownership while using an item id absent
+from the store. POINT previously trusted that dataclass. It now authenticates
+the complete selected record against the authoritative read-only snapshot
+before applying match or owner rules. The forged-context control moves the
+suite to 100.
+
+Closed-form review then found that “exact” equality was still lexical:
+`?0 = *(?1, ?2, ?3)` and `?0 = +(?1, *(?2, ?3))` both reduced to the digit
+tokens 0/1/2/3, making two distinct committed shape groups ambiguous. Exact
+lookup and pending-key equality now normalize only case and whitespace, keeping
+every operator; word tokens are used only for neighborhood fallback. Both
+skeletons retrieve and bind distinct group records, moving the suite to 101.
+
+Transaction review then injected a genuine store item directly into public
+context. Store membership alone could not prove that RETRIEVE had occurred.
+The verifier now mints a session-local HMAC receipt over the canonical key,
+query mode, and admitted item ids; POINT requires a valid receipt and exact
+store membership. A separate short-key control showed `7` prefix-matching
+`IEEE 754`; prefix neighborhood relations now require at least three characters
+on both sides, while exact short aliases remain available. Both controls move
+the suite to 103. Receipt serialization across process/session restart is not
+implemented.
+
+Receipt replay review then used one verifier for two same-key sessions and
+copied session A's context/receipt into session B. The original signature did
+not distinguish them. Retrieval state now has a random session id included in
+every receipt signature; cross-session replay is REFUSED. Copying the complete
+state remains the same logical session. The replay control moves the suite to
+104.
+
+Symbolic-input review then found exact lookup incorrectly gated by the presence
+of ASCII word tokens. Exact alias equality now runs first, so a tokenless
+closed-form key such as `¬` can retrieve and bind; only neighborhood fallback
+requires lexical tokens. The tokenless exact control moves the suite to 105.
+
+Frame-isolation review then preserved a valid session id and receipt while
+replacing the open frame with a `frame_local` frame. Receipt signatures now
+also cover the immutable `FrameSpec`, so the transplanted context is REFUSED.
+The frame-replay control moves the suite to 106.

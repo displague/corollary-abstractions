@@ -519,11 +519,11 @@ class FrameExecutor:
 class FrameAssertionVerifier:
     """Adapt FrameExecutor to the generic controller contract.
 
-    Accepts GEN(assert_fact), GEN(plant), and GEN(discharge). RETRIEVE is
-    REFUSED: either the frame forbids it
-    (`retrieval: frame_local`) or no retrieval adapter is wired yet -- the
-    two refusals carry distinct reasons so the trace records which limit
-    applied.
+    Accepts GEN(assert_fact), GEN(plant), and GEN(discharge). Direct RETRIEVE is
+    REFUSED at this adapter boundary: either the frame forbids it
+    (`retrieval: frame_local`) or the caller must use retrieval.RetrievalVerifier,
+    which layers pointable context over this verifier without duplicating GEN
+    semantics. The two refusals carry distinct reasons in the trace.
     """
 
     name = "frame-local-ladder"
@@ -551,7 +551,7 @@ class FrameAssertionVerifier:
                 )
             return Verification(
                 Verdict.REFUSED,
-                "no retrieval adapter is wired yet (BACKLOG: controller/harness)",
+                "RETRIEVE requires retrieval.RetrievalVerifier at this boundary",
                 evidence=(self.name,),
             )
         if action.kind is not ActionKind.GEN:

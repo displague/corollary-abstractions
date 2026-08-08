@@ -112,6 +112,7 @@ scripts/
   decompose.py          statements as constructs of named forms + groundedness
   compose_assert.py     global ladder + live frame-local executor statuses
   controller.py         shared v0.5 state/action/verifier loop
+  retrieval.py          UNKNOWN -> five-store RETRIEVE -> pointable context
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (10.7x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
@@ -147,6 +148,7 @@ python scripts/validate_nodes.py            # 209 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
+python scripts/retrieval.py                 # exact five-store lookup then POINT
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
@@ -169,6 +171,6 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   closed form; status is symbolic, never learned
 - `docs/DESIGN-frames-and-retrieval.md` — fiction as scoped premises;
   retrieval as an UNKNOWN-triggered action
-- `docs/RELEASE-v0.3.0.md` — current release notes (v0.1.0, v0.2.0 kept)
+- `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence

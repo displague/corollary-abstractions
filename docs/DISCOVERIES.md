@@ -13,6 +13,148 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Retrieval can advance state without promoting knowledge.** A VERIFIED
+  RETRIEVE transition now means the exact store operation succeeded; its six
+  De-Morgan results retain distinct statuses, including a derived corpus node,
+  mechanically verified structural/decomposition records, and a PROVEN Lean
+  artifact summary. The subsequent POINT binds an item id, not an invented
+  truth. *harness invariant, executable* (2026-08-08)
+
+- **A pointable address is not an answer certificate.** The first adapter
+  allowed any retrieved position to clear any UNKNOWN; modus ponens could
+  therefore “answer” a De-Morgan request. A first correction rechecked the
+  pending key against item aliases, but review then showed that `a` is an exact
+  alias in many unrelated lexica. POINT now additionally requires matching
+  corpus/lexicon/proof views to resolve to one corpus owner. Ambiguous context
+  remains retrievable but cannot answer. *two review-found vacuities,
+  corrected* (2026-08-08)
+
+- **UNKNOWN is a live frame judgment, not a session-start label.** A pending
+  retrieval literal can become VERIFIED or REFUTED after an accepted frame
+  assertion. Keeping only its original UNKNOWN evidence allowed a later POINT
+  to clear a stale need. The adapter now retains and re-adjudicates the literal;
+  a delegated action that resolves it records the VERIFIED/REFUTED result and
+  clears the retrieval need. *state-transition invariant, review correction*
+  (2026-08-08)
+
+- **Exact-before-neighborhood is binding semantics, not just query order.**
+  `Quadratic Formula` exactly names one node while neighborhood-matching
+  another node's `quadratic form`. Owner disambiguation must therefore compare
+  exact owners only when the selected material matched exactly. *retrieval
+  precedence invariant, review correction* (2026-08-08)
+
+- **Retrieval actions cannot rewrite the pending question.** Earlier controls
+  allowed context fetched under `quadratic form` to approach a pending
+  `Quadratic Formula`, relying on POINT to reject the wrong owner. The final
+  contract is stronger: RETRIEVE itself refuses any key not canonically equal
+  to the UNKNOWN literal's value; neighborhood widening is internal. *cross-
+  query vacuity, review correction* (2026-08-08)
+
+- **Proof retrieval must honor the proof-link schema, not today's examples.**
+  Every current `verified_by` entry names a theorem reference, but the schema
+  permits an artifact-only link. Review supplied that absent-reference case;
+  the loader now counts the whole theorem-bearing artifact instead of
+  crashing. *schema-boundary correction* (2026-08-08)
+
+- **A proof link is not PROVEN until its artifact contains applicable proof
+  transitions.** An empty JSON artifact is structurally present but supplies
+  no machine-checked evidence; nor does an arbitrary file or a row containing
+  only a theorem label. The loader now authenticates complete native JSON
+  state–tactic–state rows, requires an applicable transition to close to `no
+  goals`, requires artifact-only links to identify exactly one theorem, and
+  fails closed on malformed evidence. But even a locally closing row may be a
+  completed subgoal in a truncated extraction. PROVEN therefore additionally
+  requires the existing SHA-256 identity of the committed native extraction;
+  structurally valid untrusted artifacts remain VERIFIED. *epistemic
+  fail-closed rule, review correction* (2026-08-08)
+
+- **Short algebraic aliases are context, not word-completion prefixes.** A
+  truncated `absor` query reverse-matched every lexicon containing `a`, flooding
+  its neighborhood with unrelated owners. Reverse-prefix matching now requires
+  at least three characters; exact single-symbol retrieval remains possible,
+  but cannot masquerade as lexical completion. *neighborhood precision,
+  review correction* (2026-08-08)
+
+- **A retrieval key is part of the UNKNOWN, not free policy metadata.** The
+  adapter initially allowed callers to pair any unresolved literal with an
+  unrelated key, making relevance true only by assertion. Session construction
+  now requires the key to be the unresolved literal's value. Retrieval is thus
+  verified relative to parsed frame state; whether open language was parsed
+  correctly remains a separate capability. *capability-blind correction,
+  review-blocking* (2026-08-08)
+
+- **Factory invariants must be verifier invariants when state constructors are
+  public.** A caller could bypass the session factory and forge a key/literal
+  mismatch directly in the frozen dataclass. RETRIEVE and POINT now recheck the
+  relation at the action boundary. *extension-boundary correction* (2026-08-08)
+
+- **Pointable context is a capability and needs provenance checking.** A public
+  state constructor could inject a record with plausible aliases and ownership
+  but an invented id. POINT now requires exact membership in the authoritative
+  store snapshot before binding. *capability-boundary correction* (2026-08-08)
+
+- **Closed-form exactness must preserve operators.** Lexical tokenization made
+  multiplication and addition skeletons with the same slots look identical.
+  Exact retrieval now preserves punctuation/operators and uses lexical tokens
+  only for neighborhood search. *symbolic-equality correction* (2026-08-08)
+
+- **Exact symbolic lookup does not require word tokens.** Operators and
+  non-Latin symbols may have no ASCII alphanumeric token at all. Exact alias
+  comparison now precedes the neighborhood-token gate. *symbolic-input
+  correction* (2026-08-08)
+
+- **Store membership is not retrieval provenance.** Public state could inject
+  a genuine item without an accepted RETRIEVE step. Verifier-minted receipts
+  now bind the session key, match mode, and admitted item ids; POINT requires
+  both the receipt and authoritative membership. *transaction-integrity
+  correction* (2026-08-08)
+
+- **A receipt belongs to a session, not merely a verifier.** One verifier may
+  host several same-key sessions. Receipt signatures now cover a per-session
+  nonce, so admitted context cannot be transplanted between them. *replay
+  correction* (2026-08-08)
+
+- **A retrieval receipt belongs to a frame contract too.** Signing only the
+  session allowed open-frame context to move into a `frame_local` scope.
+  Signatures now cover the immutable `FrameSpec`, preserving its retrieval
+  boundary. *scope-replay correction* (2026-08-08)
+
+- **Short exact keys must not become prefixes.** The key `7` is not an answer
+  request for `IEEE 754`. Prefix neighborhood matching now requires at least
+  three characters on each side; exact short aliases remain exact-only.
+  *neighborhood vacuity correction* (2026-08-08)
+
+- **A proof trust root authenticates metadata and bytes together.** A
+  byte-identical Lean extraction labeled as another proof system must not
+  inherit PROVEN. The native adapter now accepts the pinned digest only with
+  the canonical `lean4` system label. *provenance-integrity correction*
+  (2026-08-08)
+
+- **Action kind and transition name are both part of the verifier protocol.**
+  Dispatching every RETRIEVE as lookup and every POINT as bind allowed unknown
+  names to appear as successful audited operations. The adapter now refuses
+  names outside its declared vocabulary. *trace-integrity correction*
+  (2026-08-08)
+
+- **The external store is load-bearing at the controller level too.** The
+  deterministic RETRIEVE→POINT oracle solves with the 702-item local store and
+  cannot solve against an empty store: UNKNOWN leaves context unchanged, POINT
+  is REFUSED, and ABSTAIN is cited. This is the retrieval adapter's capability-
+  blind baseline, not a model-quality result. *negative control* (2026-08-08)
+
+- **One statement id can join five knowledge views without becoming five
+  mechanisms.** Querying De Morgan's law returns corpus meaning, lexicon,
+  typed/shape group records, decomposition, and native Lean transition counts
+  through one interface; a truncated id reaches the same neighborhood only
+  after exact lookup misses. *integration, exact + neighborhood* (2026-08-08)
+
+- **Pointability needs source-aware identity, not one universal owner field.**
+  Corpus, lexicon, and proof records resolve to a statement; a decomposition
+  resolves to its owning statement; a twin-ledger skeleton may identify the
+  group itself. Tiered attribution now lets unique report-only keys bind without
+  weakening canonical statement precedence. *five-store integration, review
+  correction* (2026-08-08)
+
 - **Time reversal is a relation, not an alias.** Five predicted pairs now
   appear at a separately reported mirror level: UNTIL/SINCE,
   EVENTUALLY/ONCE unfolding, NEXT/PREV distribution, future/past duality, and

@@ -5,7 +5,7 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Controller / harness
 
-- **PARTIAL — the common protocol is executable; four action adapters remain.**
+- **PARTIAL — the common protocol is executable; two action adapters remain.**
   `scripts/controller.py` now carries typed state + one of
   `{POINT, GEN, RETRIEVE, ASK, WRITE}` + symbolic verifier result + accepted
   next state + branch trace. The deterministic oracle runs both a three-step
@@ -14,9 +14,10 @@ or commit history. Each item names the evidence that motivated it.
   invariant: REFUTED/UNKNOWN/REFUSED branches cannot mutate accepted state.
   The capability-blind controls reject an unrecorded tactic, a changed Lean
   state, out-of-order story beats, and a frame-trait contradiction. Still open:
-  only `GEN` has executable domain semantics; `POINT`, `RETRIEVE`, `ASK`, and
-  `WRITE` are vocabulary members awaiting adapters, and Lean replay is not live
-  tactic application or search.
+  `GEN` has proof/story/frame semantics, and `retrieval.RetrievalVerifier`
+  layers executable `RETRIEVE` plus exact `POINT(position)` over the unchanged
+  frame verifier. `ASK` and `WRITE` remain vocabulary without adapters, and
+  Lean replay is not live tactic application or search.
 
 - **PARTIAL — Chekhov's law executes at frame close, but event grounding is
   still demo-specific.** `FrameState` now records planted/discharged elements;
@@ -94,17 +95,41 @@ or commit history. Each item names the evidence that motivated it.
   rung separately. The golden-chicken story is the integration gate, not by
   itself evidence that the model has become a general-purpose solver.
 
-- **Retrieval is consumable but not initiable.** `demo_answer.py` and solvex-v2
+- **PARTIAL — local retrieval initiation and point binding are executable.**
+  `demo_answer.py` and solvex-v2
   show that, when a relevant knowledge base is already in context, the pointer
   can use it: held-out combinations reach 1.000 against three distractors, with
   a measured capability-blind floor of 0.31; deeper distractor-bearing inputs
   remain open at 0.69 OOD. `docs/DESIGN-frames-and-retrieval.md` already makes
-  UNKNOWN the closed-form trigger for `RETRIEVE(key)`, but no unified query
-  interface connects that trigger to the lexicon, twin ledger, decomposition
-  index, proof artifacts, or external tools, and no result is returned as
-  pointable context. Miss behavior must be executable rather than prose:
-  neighborhood search, then `ASK` for frame-private values, then UNKNOWN/REFUSED
-  abstention.
+  UNKNOWN the closed-form trigger for `RETRIEVE(key)`. The local adapter now
+  unifies corpus summaries, node lexica, twin/mirror groups, decompositions,
+  and proof artifacts into 702 attributable items; exact lookup falls back to
+  deterministic token-neighborhood search, results enter immutable indexed
+  context, and POINT binds one without promoting its epistemic status only
+  when tiered attribution resolves a unique canonical statement owner,
+  decomposition owner, or structural-group record. Ambiguous symbols remain
+  context, not answers. Empty-
+  store and unrelated-query controls remain UNKNOWN with ABSTAIN evidence and
+  no mutation. A `frame_local` scope refuses before store access and emits
+  `ASK(slot)`. Still open: the ASK return channel, external tool connectors,
+  semantic/ranked neighborhood taste, open-language parsing of a request into
+  the literal's canonical target key, learned item selection, and
+  evaluation on deeper distractor-bearing stores rather than the deterministic
+  oracle.
+
+- **Retrieval is currently a linear scan over a committed snapshot.** The 702
+  items are small enough that exact and token-neighborhood lookup need no
+  index. Growth will require a regenerated query index with the same coherence
+  discipline as reports; otherwise retrieval can silently lag the seeds. Any
+  learned or embedding ranker belongs after the exact/neighborhood controls and
+  must not replace source attribution or epistemic-status preservation.
+
+- **Retrieval receipts are session-local.** POINT now requires a verifier-
+  minted receipt proving which key/mode admitted which item ids. The HMAC key
+  is intentionally process-local and signatures cover a random session id, so
+  persisted frame state cannot yet resume a pending retrieval after restart. A
+  durable session format needs explicit key lifecycle/versioning rather than
+  serializing an ambient secret.
 
 - **No model-initiated durable write path.** Durable knowledge is currently
   excellent but human/agent-mediated: edit a seed, regenerate, validate, and

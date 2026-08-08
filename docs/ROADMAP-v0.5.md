@@ -146,6 +146,152 @@ demo and a multi-step derivation remain one milestone in two costumes.
      proof artifacts, and later external tools. Results re-enter context as
      pointable material. A miss degrades to neighborhood search, `ASK` when the
      missing value is frame-private, then honest abstention.
+
+     **Registered 6a prediction (before implementation or tests):** this slice
+     changes no corpus or matcher report. A retrieval session may be created
+     only through a factory given an actual `UNKNOWN` adjudication; the factory
+     rejects every other rung. One unified, read-only store loads five
+     source kinds—corpus statement, node lexicon, twin/mirror ledger,
+     decomposition index, and `verified_by` proof artifacts. Exact statement-id
+     retrieval for `logic.boolean_laws.de_morgan_laws` returns pointable
+     material from all five; a truncated id misses exact lookup but succeeds by
+     deterministic token-neighborhood search. `POINT(position)` before
+     retrieval is REFUSED, while pointing to a returned position VERIFIED-binds
+     the pending slot and clears it. With an empty store the same two-action
+     oracle cannot solve (capability-blind control); the miss remains UNKNOWN,
+     adds no context, and cites honest abstention. A `frame_local` frame refuses
+     before consulting any store and cites `ASK(slot)` as the only permitted
+     escalation. Non-retrieval frame actions delegated through the wrapper are
+     byte-for-byte verdict/evidence equivalent to `FrameAssertionVerifier`.
+
+     **Adjudication — fired:** the store exposes 702 attributable items
+     (209 corpus, 209 lexicon, 67 structural groups, 208 decomposition entries,
+     9 proof-linked summaries). The exact query returns six items spanning all
+     five kinds; the truncated query takes the neighborhood path. RETRIEVE then
+     POINT solves in two accepted controller steps, while the empty-store
+     control remains unsolved with unchanged state and ABSTAIN evidence. All
+     guard, duplicate, malformed, delegation, and provenance predictions fire;
+     the suite moves 70 -> 81 tests with no `data/` or `reports/` diff. VERIFIED
+     labels the retrieval transaction, not its contents: every pointable item
+     retains its corpus/derived/verified/proven status. Still open: ASK is only
+     an explicit escalation in evidence, external tools are not stores yet,
+     token-neighborhood search is deterministic but unranked taste, and no
+     learned policy chooses the point; open-language parsing into the canonical
+     key remains unbuilt.
+
+     **Review corrections:** the first POINT implementation checked only that a
+     position existed, so an unrelated retrieval could vacuously close the
+     slot. Review reproduced De-Morgan UNKNOWN -> retrieve modus ponens ->
+     POINT(0) -> solved. POINT now rechecks the selected item's aliases against
+     the pending slot's exact/neighborhood key constraint. A
+     second review then showed that exact alias equality was itself
+     insufficient: the symbol `a` names many unrelated lexica, so any one of
+     them could still bind an `a` slot. POINT now requires the matching
+     corpus/lexicon/proof views to resolve to one corpus owner. The same review
+     found that the loader assumed optional `verified_by.reference` existed;
+     artifact-only proof links now load and count their whole theorem-bearing
+     artifact. Re-review then caught two interactions: an exact title could be
+     rejected because another node neighborhood-matched it, and an accepted
+     frame mutation could leave the original UNKNOWN stale. Exact matches now
+     resolve owners only against exact matches, and pending needs retain their
+     literal and re-adjudicate against current frame state before RETRIEVE or
+     POINT; a non-UNKNOWN result is recorded in a resolution ledger and clears
+     the retrieval need. A final precedence review showed that context
+     retrieved under a different key could still supply a neighborhood match even when the
+     pending key had an exact owner. The existence of an exact owner now blocks
+     every neighborhood binding for that key. All five reproducers are
+     permanent controls. The next protocol review found two fail-open edges:
+     an empty JSON artifact could still produce a PROVEN summary, and unknown
+     RETRIEVE/POINT transition names ran by kind alone. JSON proof artifacts
+     now require applicable theorem transitions, while the verifier accepts
+     only `lookup` and `bind`. Those controls bring the final suite to 89
+     tests. A further proof-boundary review showed that file existence and a
+     theorem label still did not establish machine checking. Proof summaries
+     now authenticate only complete native JSON state–tactic–state rows;
+     a referenced theorem must include a transition closing to `no goals`.
+     Incomplete, unfinished, and unsupported artifact formats fail closed. That
+     artifact-format control brings the suite to 90 tests. Identity review then
+     required an artifact-only link to contain exactly one theorem; shared
+     multi-theorem artifacts require an explicit reference. The same review
+     stopped one- and two-character lexicon aliases from reverse-prefix
+     matching longer truncated words. The scoped truncated-query and ambiguous
+     proof controls bring the suite to 92 tests.
+
+     **Key-grounding correction:** the preceding controls still trusted a
+     caller-supplied `suggested_key`; a caller could pair any UNKNOWN literal
+     with an unrelated but unambiguous key and then “solve” it. Session
+     construction now requires the canonical query tokens to equal the
+     unresolved literal's value. The parser must therefore put the desired
+     retrieval target into frame state before the adapter runs. A mismatched
+     De-Morgan-literal/Quadratic-Formula-key control is rejected, bringing the
+     suite to 93 tests. This proves symbolic retrieval relative to a parsed
+     request; it does not prove open-language request parsing.
+
+     **Proof-trust correction:** a locally closing `no goals` row may represent
+     one completed subgoal in a truncated extraction, not the whole theorem.
+     The adapter now shares the controller's existing SHA-256 trust root for
+     `prover/sample_triples.json`. Only that digest-pinned extraction can label
+     proof material PROVEN; structurally valid local artifacts remain VERIFIED.
+     The completed-subgoal control brings the suite to 94 tests.
+
+     **Action-key correction:** grounding the session key was insufficient
+     while RETRIEVE could substitute another alias or unrelated key. RETRIEVE
+     now requires canonical equality with the pending literal's key before any
+     store access. Neighborhood widening remains an internal deterministic
+     fallback, not free policy metadata. The alias bypass control brings the
+     suite to 95 tests.
+
+     **Public-boundary correction:** because retrieval state is an immutable
+     but public dataclass, factory validation alone did not prevent a forged
+     pending key. RETRIEVE and POINT now recheck key/literal equality on every
+     action. Proof trust likewise binds both the pinned digest and the canonical
+     `lean4` system label. The forged-state and wrong-system controls bring the
+     suite to 97 tests.
+
+     **Five-store attribution correction:** owner resolution originally used
+     only corpus/lexicon/proof views, so a unique decomposition-only key could
+     retrieve but not bind. Binding now resolves by source tier: canonical
+     statement views first, then unique decomposition ownership, then a unique
+     structural-group record. Decomposition and twin-ledger controls bring the
+     suite to 99 tests.
+
+     **Context-provenance correction:** public state also allowed a caller to
+     forge a pointable record whose aliases and owner looked valid. POINT now
+     authenticates the complete selected record against the read-only store
+     snapshot before resolving ownership. The invented-item control brings the
+     suite to 100 tests.
+
+     **Operator-preservation correction:** lexical token equality collapsed
+     distinct closed forms such as multiplication and addition skeletons.
+     Exact lookup and key grounding now normalize only case/whitespace while
+     preserving operators; lexical tokens are reserved for neighborhood
+     fallback. Two previously colliding shape-group keys bind distinct records,
+     bringing the suite to 101 tests.
+
+     **Transaction-provenance correction:** exact store membership did not
+     prove that context arrived through RETRIEVE. The verifier now mints a
+     session-local authenticated receipt over key, mode, and admitted item ids;
+     POINT requires that receipt as well as store membership. Prefix matching
+     also requires both query and alias tokens to be at least three characters,
+     so a key like `7` cannot bind `IEEE 754`. These controls bring the suite to
+     103 tests. Receipts are intentionally runtime-local; serializable session
+     resumption remains open.
+
+     **Session-replay correction:** a receipt bound only to one verifier could
+     be copied between two same-key sessions. Each retrieval state now carries
+     a random session id covered by the receipt signature. Copying admitted
+     context/receipts into another session is REFUSED, bringing the suite to
+     104 tests.
+
+     **Tokenless-exact correction:** exact alias comparison now runs before the
+     ASCII word-token check. A symbolic key such as `¬` can retrieve and bind
+     an exact alias, while a tokenless non-match still has no neighborhood
+     fallback. This brings the suite to 105 tests.
+
+     **Frame-replay correction:** receipts now cover the immutable `FrameSpec`
+     as well as verifier/session/key/material. Authenticated context from an
+     open frame cannot be transplanted into a `frame_local` scope, bringing the
+     suite to 106 tests.
    - **6b — `WRITE(candidate)`:** the read-side symmetry is a PROVEN-gated
      durable write. A Lean-checked or equivalently machine-verified conclusion
      may be staged as a seed-level candidate with its proof and provenance;
