@@ -481,3 +481,22 @@ functional level codes (sinusoidal levels, or path-recurrent
 composition where level k+1's code derives from level k's) instead of
 enumerated embedding rows. The interface catalogue's addresses entry
 gains a requirement: closed form over depth, not a table.
+
+### Sinusoidal prescription falsified: the consumer is depth-naive
+
+Closed-form level codes (shared sib table x fixed sinusoidal level
+modulation; no depth-indexed parameter anywhere) moved OOD only 0.0139
+-> 0.0218 (2 seeds; test unchanged). The 34=34 diagnosis correctly
+located the failure boundary, but untrained rows were symptom, not
+cause: making deep levels REPRESENTABLE does not teach the network what
+to DO with codes never active during training. The transformation
+consuming the addresses is itself depth-naive.
+
+This is the syn lesson from the opposite direction -- defined is not
+integrated -- and it forks the v0.4 depth item into a design choice:
+(a) curriculum exposure to deeper trees (teaches the consumer, but
+redefines what OOD means and must be labeled as such), or
+(b) architectural recurrence over levels (process paths level-by-level
+with shared weights so depth is iteration, not vocabulary -- the
+recurrent instinct from the project's original sketch returning in a
+precise, motivated role). Both carry to v0.4 as a decision point.
