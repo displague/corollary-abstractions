@@ -8,7 +8,10 @@ import json
 import re
 from pathlib import Path
 
-from proof_artifacts import select_closing_transitions
+from proof_artifacts import (
+    resolve_contained_artifact,
+    select_closing_transitions,
+)
 
 
 # Mirrors $defs.frameScope in schema/equation-node.schema.json. Underscores
@@ -274,44 +277,35 @@ def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
     regenerated formal skeletons.
     """
     errors: list[str] = []
-    root = repo_root.resolve()
-    artifact_cache: dict[tuple[Path, str | None], str | None] = {}
+    # Cache holds (resolved_reference, error_message): failures are cached
+    # WITH their message so every citing node gets its own attributed error
+    # instead of the first citer absorbing them all.
+    artifact_cache: dict[
+        tuple[Path, str | None], tuple[str | None, str | None]
+    ] = {}
     owners: dict[tuple[str, str], set[str]] = {}
 
     def resolve_reference(
         artifact: str, reference: str | None, node_id: str
     ) -> str | None:
-        artifact_path = Path(artifact)
-        if artifact_path.is_absolute():
-            errors.append(
-                f"{node_id}: verified_by artifact must be repository-relative: "
-                f"`{artifact}`"
-            )
-            return None
-        resolved = (root / artifact_path).resolve()
         try:
-            resolved.relative_to(root)
-        except ValueError:
-            errors.append(
-                f"{node_id}: verified_by artifact escapes repository root: "
-                f"`{artifact}`"
-            )
-            return None
-        if not resolved.is_file():
-            errors.append(
-                f"{node_id}: verified_by artifact does not exist: `{artifact}`"
-            )
+            resolved = resolve_contained_artifact(repo_root, artifact)
+        except ValueError as exc:
+            errors.append(f"{node_id}: {exc}")
             return None
         key = (resolved, reference)
         if key in artifact_cache:
-            return artifact_cache[key]
+            cached_reference, cached_error = artifact_cache[key]
+            if cached_error is not None:
+                errors.append(f"{node_id}: {cached_error}")
+            return cached_reference
         try:
             _, resolved_reference = select_closing_transitions(resolved, reference)
         except ValueError as exc:
             errors.append(f"{node_id}: {exc}")
-            artifact_cache[key] = None
+            artifact_cache[key] = (None, str(exc))
             return None
-        artifact_cache[key] = resolved_reference
+        artifact_cache[key] = (resolved_reference, None)
         return resolved_reference
 
     for i, node in enumerate(nodes):

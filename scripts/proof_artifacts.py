@@ -9,6 +9,42 @@ from pathlib import Path
 REQUIRED_TRANSITION_FIELDS = ("theorem", "tactic", "stateBefore", "stateAfter")
 
 
+def resolve_contained_artifact(repo_root: Path, artifact: str) -> Path:
+    """Resolve an artifact path, refusing anything outside the repository.
+
+    Shared by the validator and the retrieval loader so the containment
+    boundary cannot drift between them (post-merge review of c3c144f,
+    finding F1: containment lived only in the validator, and an
+    out-of-root artifact whose bytes matched the trusted digest minted a
+    trusted proof record in retrieval). Forward slashes only: a backslash
+    separator would name a different file on POSIX than on Windows, so it
+    is refused rather than normalized.
+    """
+    if "\\" in artifact:
+        raise ValueError(
+            "verified_by artifact paths must use forward slashes: "
+            f"`{artifact}`"
+        )
+    artifact_path = Path(artifact)
+    if artifact_path.is_absolute():
+        raise ValueError(
+            f"verified_by artifact must be repository-relative: `{artifact}`"
+        )
+    root = repo_root.resolve()
+    resolved = (root / artifact_path).resolve()
+    try:
+        resolved.relative_to(root)
+    except ValueError:
+        raise ValueError(
+            f"verified_by artifact escapes repository root: `{artifact}`"
+        ) from None
+    if not resolved.is_file():
+        raise ValueError(
+            f"verified_by artifact does not exist: `{artifact}`"
+        )
+    return resolved
+
+
 def load_complete_transitions(artifact_path: Path) -> tuple[dict, ...]:
     """Load a non-empty JSON artifact whose every row is a complete transition."""
     if artifact_path.suffix.casefold() != ".json":

@@ -417,6 +417,107 @@ class RetrievalTests(unittest.TestCase):
             self.assertIn("1 extracted transitions", proof.text)
             self.assertIn("untrusted extraction", proof.text)
 
+    def test_out_of_root_artifact_cannot_mint_a_proof_record(self) -> None:
+        """Review F1 reproduction: containment is now the loader's too.
+
+        The reviewer's probe pointed a drive-absolute artifact path at the
+        REAL repository's trusted triples from a foreign store root; the
+        digest matched, so the record loaded trusted=True. The shared
+        containment helper must now refuse it before any digest check.
+        """
+        real_artifact = REPO_ROOT / "prover" / "sample_triples.json"
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            data_dir = root / "data"
+            reports_dir = root / "reports"
+            corpus_dir = data_dir / "logic"
+            corpus_dir.mkdir(parents=True)
+            reports_dir.mkdir()
+            node = {
+                "statement_id": "logic.example.exfiltrated",
+                "title": "Exfiltrated proof",
+                "semantic_interpretation": {"statement_meaning": "Example"},
+                "structural_signature": {
+                    "anonymized_template": "?0:P = ?0:P",
+                    "archetype_id": "identity",
+                },
+                "keywords": [],
+                "epistemic_status": "derived",
+                "symbol_lexicon": {"symbols": [], "operators": []},
+                "verified_by": [
+                    {
+                        "system": "lean4",
+                        "artifact": real_artifact.as_posix(),
+                        "reference": "BooleanLaws.modus_ponens",
+                    }
+                ],
+            }
+            (corpus_dir / "nodes.json").write_text(
+                json.dumps({"statement_nodes": [node]}), encoding="utf-8"
+            )
+            (reports_dir / "signature_matches.json").write_text(
+                json.dumps(
+                    {
+                        "typed_twin_groups": [],
+                        "family_twin_groups_beyond_typed": [],
+                        "aliased_twin_groups_beyond_typed": [],
+                        "mirror_twin_groups": [],
+                        "shape_twin_groups": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (reports_dir / "decompositions.json").write_text(
+                json.dumps({"decompositions": []}), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(ValueError, "repository-relative"):
+                UnifiedKnowledgeStore.load(data_dir, reports_dir)
+
+    def test_malformed_verified_by_shape_fails_with_named_statement(self) -> None:
+        """Review F4: a shape error names the statement, not a TypeError."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            data_dir = root / "data"
+            reports_dir = root / "reports"
+            corpus_dir = data_dir / "logic"
+            corpus_dir.mkdir(parents=True)
+            reports_dir.mkdir()
+            node = {
+                "statement_id": "logic.example.malformed",
+                "title": "Malformed link",
+                "semantic_interpretation": {"statement_meaning": "Example"},
+                "structural_signature": {
+                    "anonymized_template": "?0:P = ?0:P",
+                    "archetype_id": "identity",
+                },
+                "keywords": [],
+                "epistemic_status": "derived",
+                "symbol_lexicon": {"symbols": [], "operators": []},
+                "verified_by": "prover/sample_triples.json",
+            }
+            (corpus_dir / "nodes.json").write_text(
+                json.dumps({"statement_nodes": [node]}), encoding="utf-8"
+            )
+            (reports_dir / "signature_matches.json").write_text(
+                json.dumps(
+                    {
+                        "typed_twin_groups": [],
+                        "family_twin_groups_beyond_typed": [],
+                        "aliased_twin_groups_beyond_typed": [],
+                        "mirror_twin_groups": [],
+                        "shape_twin_groups": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (reports_dir / "decompositions.json").write_text(
+                json.dumps({"decompositions": []}), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(
+                ValueError, "logic.example.malformed.*malformed"
+            ):
+                UnifiedKnowledgeStore.load(data_dir, reports_dir)
+
     def test_local_no_goals_row_cannot_authenticate_whole_proof(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

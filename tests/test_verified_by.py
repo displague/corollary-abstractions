@@ -175,6 +175,31 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             )
         self.assertTrue(any("escapes repository root" in error for error in errors))
 
+    def test_backslash_artifact_separators_are_refused(self) -> None:
+        """Review F3: a backslash path names a different file on POSIX."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.write_artifact(root, ["BooleanLaws.t"])
+            errors = verified_by_errors(
+                [node("logic.example.slash", "prover\proof.json", "T")], root
+            )
+        self.assertTrue(any("forward slashes" in e for e in errors))
+
+    def test_each_citer_of_a_broken_artifact_gets_its_own_error(self) -> None:
+        """Review F2: the failure cache must re-attribute, not absorb."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "proof.json").write_text("[]", encoding="utf-8")
+            errors = verified_by_errors(
+                [
+                    node("logic.example.first", "proof.json", "T"),
+                    node("logic.example.second", "proof.json", "T"),
+                ],
+                root,
+            )
+        self.assertTrue(any("logic.example.first" in e for e in errors))
+        self.assertTrue(any("logic.example.second" in e for e in errors))
+
     def test_malformed_link_shapes_fail_without_jsonschema(self) -> None:
         cases = (
             ({"statement_id": "logic.example.list", "verified_by": "bad"}, "list"),

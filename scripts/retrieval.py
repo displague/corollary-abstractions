@@ -40,7 +40,10 @@ from frames import (
     FrameState,
     Literal,
 )
-from proof_artifacts import select_closing_transitions
+from proof_artifacts import (
+    resolve_contained_artifact,
+    select_closing_transitions,
+)
 from oracle_controller_demo import TRUSTED_TRIPLES_SHA256
 
 
@@ -201,6 +204,16 @@ class UnifiedKnowledgeStore:
 
             verified_by = node.get("verified_by", [])
             if verified_by:
+                if not isinstance(verified_by, list) or not all(
+                    isinstance(entry, dict)
+                    and isinstance(entry.get("system"), str)
+                    and isinstance(entry.get("artifact"), str)
+                    for entry in verified_by
+                ):
+                    raise ValueError(
+                        f"statement {statement_id!r} has a malformed "
+                        "verified_by value; run scripts/validate_nodes.py"
+                    )
                 references = tuple(
                     entry["reference"]
                     for entry in verified_by
@@ -216,11 +229,13 @@ class UnifiedKnowledgeStore:
                             f"'lean4', got {entry['system']!r}"
                         )
                     reference = entry.get("reference")
-                    artifact_path = repo_root / entry["artifact"]
-                    if not artifact_path.is_file():
-                        raise FileNotFoundError(
-                            f"verified_by artifact does not exist: {artifact_path}"
-                        )
+                    # Shared containment boundary (review F1): the same
+                    # helper the validator uses, so an out-of-root artifact
+                    # can never mint a proof record here even if its bytes
+                    # match the trusted digest.
+                    artifact_path = resolve_contained_artifact(
+                        repo_root, entry["artifact"]
+                    )
                     artifact_digest = hashlib.sha256(
                         artifact_path.read_bytes()
                     ).hexdigest()
