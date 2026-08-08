@@ -226,17 +226,28 @@ bindings), **near-miss** (informative failure, kept deliberately).
   inherits a proven theorem rather than a style rule. *exact*
   (2026-08-07)
 
-- **Frame axioms are implemented; frame execution is not.** The corpus already
+- **Frame axioms and their first executor are implemented; full temporal logic
+  is not.** The corpus already
   contains the story sequence, its setup/complication/resolution decomposition,
   narrative causality, Chekhov-style liveness, and frame consistency. The
   matcher already connects the last two to temporal response and Boolean
-  non-contradiction. What remains is narrower than "implement fictional
-  frames": scope metadata and a runtime state manager must bind declarations,
-  evaluate each proposed transition through the frame-local ladder, preserve
-  accepted premises, reject contradictions, and prevent frame truths from
-  leaking on exit. The machine anchor is structural — the matching Boolean law
-  has a Lean proof — until that executor checks an evolving story state.
-  *status correction: declarative layer shipped, executor open* (2026-08-08)
+  non-contradiction. The runtime now opens schema-declared scope, evaluates
+  declarations/assertions against a frame-local ladder, and prevents local
+  truths from leaking on exit. Its next cut makes Chekhov's law executable as
+  finite obligation accounting: a visible plant registers one element, only a
+  matching discharge closes it, and a frame with an outstanding element
+  REFUSES to close. The first implementation's hidden ledger passed without a
+  plant in the rendered setup; the vacuity audit caught that, so story plants
+  must now alter the visible beat and discharges must cite resolution text.
+  Independent review then found late/unrelated plants and prose duplication on
+  repeated plants; plants are now setup-only, evidence names the bound element,
+  and idempotence covers both symbolic and rendered state.
+  This evaluates the authored future-facing law at frame close; it is not a
+  general LTL checker and does not enforce the unauthored past converse. The
+  machine anchor remains structural — the matching Boolean law has a Lean
+  proof — rather than a claim that story execution itself is Lean-proved.
+  *status progression: declarative layer + scope executor + finite Chekhov
+  obligations shipped* (2026-08-08)
 
 - **One controller can carry a real proof trace and a story trace, but that is
   an interface result, not learned generalization.** A deterministic sequence

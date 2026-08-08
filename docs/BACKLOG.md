@@ -18,6 +18,18 @@ or commit history. Each item names the evidence that motivated it.
   `WRITE` are vocabulary members awaiting adapters, and Lean replay is not live
   tactic application or search.
 
+- **PARTIAL — Chekhov's law executes at frame close, but event grounding is
+  still demo-specific.** `FrameState` now records planted/discharged elements;
+  an outstanding element REFUSES close without mutation or demotion. The
+  golden-chicken adapter also prevents a hidden-ledger pass by requiring the
+  plant to alter a visible beat and the discharge to cite resolution text.
+  That last grounding is currently an exact case-insensitive substring check
+  over an oracle-authored phrase, not a general semantic event binder. Replace
+  it with corpus-grounded event structure as the story policy broadens; keep
+  the present negative controls so a ledger-only implementation cannot regress.
+  Past-facing heraldry/no-deus-ex-machina remains item 5 and unplanted
+  discharge therefore stays UNKNOWN rather than being silently refuted.
+
 - **One loop across two domains is not yet generalized model weights.** A
   shared controller API can still hide two bespoke policies. After the oracle
   proves the infrastructure, evaluate the claim in explicit rungs: separate

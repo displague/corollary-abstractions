@@ -179,9 +179,12 @@ premise and its negation.
 The matcher finds that frame consistency is a typed structural twin of Boolean
 complement laws in logic and set theory. The logical member is linked to a
 machine-checked Lean proof. That makes the frame axiom more than an informal
-design intention, but it does not mean an evolving story has been verified.
-The declarative axiom layer is implemented; the scope metadata and executor
-that apply it to runtime state are not.
+design intention, but it does not mean an evolving story has been Lean-proved.
+The runtime now opens a declared scope, checks local premises, blocks
+contradictions, demotes local truths on exit, and accounts for one finite form
+of Chekhov's law: a planted element must be discharged before the frame can
+close. This is a small executable verifier, not a general temporal-logic model
+checker.
 
 The golden-chicken milestone is therefore not “author a story grammar.” It is:
 
@@ -334,13 +337,13 @@ detail of individual tools.
 | Durable human/agent-authored storage | Operational through seeds and validation |
 | Model-initiated durable write | Newly specified; unbuilt |
 | Narrative grammar and axioms | Authored and matcher-visible |
-| Runtime fictional frame | Minimal three-beat/frame-trait oracle adapter; full scope executor unbuilt |
+| Runtime fictional frame | Scope executor + local ladder + finite Chekhov obligations operational; first scoped corpus nodes unbuilt |
 | Lean training transitions | Phase 1 delivered: 155 transitions |
 | Learned tactic policy and proof search | Unbuilt |
 | Multi-step shared controller | Core + first deterministic `GEN` adapters implemented; learned policy unbuilt |
 | Conversational clarification | `ASK` specified; conversation loop unbuilt |
 | Expressive LLM-like prose | Far from the present renderer |
-| Oracle golden-chicken integration baseline | 1/1, three checked beats |
+| Oracle golden-chicken integration baseline | 1/1, three checked beats plus visible plant/discharge accounting |
 | End-to-end conversational golden-chicken story | 0/1 |
 
 That final zero prevents the component inventory from becoming self-congratulatory.

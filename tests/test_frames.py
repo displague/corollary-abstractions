@@ -12,9 +12,17 @@ P3. Routing golden-chicken trait checks through the executor preserves the
     oracle demo's external behavior exactly: same verdicts, same beat
     texts, same solved status (adjudicated by the pre-existing
     test_controller.py story tests passing unmodified in their assertions).
+    This was adjudicated for the preceding frame slice; the current temporal
+    slice intentionally adds a visible plant sentence and two transitions.
 P4. Suspension is asymmetric by construction: the same contradicting
     literal is locally admissible iff the grounding corpus truth appears
     in the frame's `suspends` (adjudicated by the paired controls below).
+P5. A planted element blocks frame close until its matching discharge; the
+    refused close preserves the open state and emits no demotions. An
+    unplanted or unrelated discharge is UNKNOWN, not REFUTED, because the
+    past-facing converse is not yet executable. Exact event retries are
+    idempotent, fresh ids for bound elements are refused, and closed frames
+    refuse temporal events.
 """
 
 from __future__ import annotations
@@ -84,6 +92,14 @@ def assert_action(
             "value": literal.value,
             "polarity": "true" if literal.polarity else "false",
         },
+    )
+
+
+def temporal_action(name: str, event_id: str, element: str) -> Action:
+    return Action.build(
+        ActionKind.GEN,
+        name,
+        {"event_id": event_id, "element": element},
     )
 
 
@@ -246,6 +262,118 @@ class FrameLadderTests(unittest.TestCase):
         self.assertIs(late.verdict, Verdict.REFUSED)
         self.assertIn("closed", late.reason)
 
+    def test_outstanding_obligation_refuses_close_without_mutation(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        self.assertIs(planted.verdict, Verdict.VERIFIED)
+
+        close = self.executor.close_frame(planted.next_state)
+        self.assertIs(close.verdict, Verdict.REFUSED)
+        self.assertIs(close.state, planted.next_state)
+        self.assertFalse(close.state.closed)
+        self.assertEqual(close.demoted, ())
+        self.assertIn("narrative.constraint.chekhov_gun", close.evidence)
+
+    def test_matching_discharge_allows_clean_close(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "fallen feather"
+        )
+        self.assertIs(discharged.verdict, Verdict.VERIFIED)
+        obligation = discharged.next_state.obligations[0]
+        self.assertEqual(obligation.discharged_by, "feather_used")
+
+        close = self.executor.close_frame(discharged.next_state)
+        self.assertIs(close.verdict, Verdict.VERIFIED)
+        self.assertTrue(close.state.closed)
+        self.assertTrue(close.demoted)
+
+    def test_unrelated_discharge_is_unknown_and_cannot_close_obligation(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        unrelated = self.executor.discharge(
+            planted.next_state, "bell_rung", "brass bell"
+        )
+        self.assertIs(unrelated.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(unrelated.next_state)
+        self.assertIn("past-facing converse", unrelated.reason)
+        close = self.executor.close_frame(planted.next_state)
+        self.assertIs(close.verdict, Verdict.REFUSED)
+
+    def test_duplicate_plant_and_discharge_are_idempotent(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        duplicate_plant = self.executor.plant(
+            planted.next_state, "feather_seen", "fallen feather"
+        )
+        self.assertIs(duplicate_plant.verdict, Verdict.VERIFIED)
+        self.assertIs(duplicate_plant.next_state, planted.next_state)
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "fallen feather"
+        )
+        duplicate_discharge = self.executor.discharge(
+            discharged.next_state, "feather_used", "fallen feather"
+        )
+        self.assertIs(duplicate_discharge.verdict, Verdict.VERIFIED)
+        self.assertIs(duplicate_discharge.next_state, discharged.next_state)
+
+    def test_fresh_ids_are_not_idempotent_retries(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "fallen feather")
+        second_plant = self.executor.plant(
+            planted.next_state, "feather_seen_again", "fallen feather"
+        )
+        self.assertIs(second_plant.verdict, Verdict.REFUSED)
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "fallen feather"
+        )
+        second_discharge = self.executor.discharge(
+            discharged.next_state, "feather_used_again", "fallen feather"
+        )
+        self.assertIs(second_discharge.verdict, Verdict.REFUSED)
+
+        cross_kind = self.executor.discharge(
+            planted.next_state, "feather_seen_again", "fallen feather"
+        )
+        self.assertIs(cross_kind.verdict, Verdict.VERIFIED)
+
+    def test_closed_frame_refuses_temporal_events(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        close = self.executor.close_frame(state)
+        planted = self.executor.plant(close.state, "late", "fallen feather")
+        discharged = self.executor.discharge(
+            close.state, "later", "fallen feather"
+        )
+        self.assertIs(planted.verdict, Verdict.REFUSED)
+        self.assertIs(discharged.verdict, Verdict.REFUSED)
+
+    def test_event_id_conflicts_are_order_independent(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        first = self.executor.plant(state, "event_a", "feather").next_state
+        second = self.executor.plant(first, "event_b", "bell").next_state
+
+        conflict = self.executor.plant(second, "event_b", "feather")
+        self.assertIs(conflict.verdict, Verdict.REFUSED)
+        self.assertIsNone(conflict.next_state)
+        self.assertIn("different element", conflict.reason)
+
+    def test_event_id_cannot_change_temporal_event_kind(self) -> None:
+        state = self.executor.open_frame(chicken_spec())
+        planted = self.executor.plant(state, "feather_seen", "feather")
+        same_id_discharge = self.executor.discharge(
+            planted.next_state, "feather_seen", "feather"
+        )
+        self.assertIs(same_id_discharge.verdict, Verdict.REFUSED)
+
+        discharged = self.executor.discharge(
+            planted.next_state, "feather_used", "feather"
+        )
+        same_id_plant = self.executor.plant(
+            discharged.next_state, "feather_used", "bell"
+        )
+        self.assertIs(same_id_plant.verdict, Verdict.REFUSED)
+
 
 class FrameControllerTests(unittest.TestCase):
     def test_rejected_transition_leaves_state_and_premises_unchanged(self) -> None:
@@ -311,6 +439,30 @@ class FrameControllerTests(unittest.TestCase):
         )
         self.assertIs(result.verdict, Verdict.REFUSED)
         self.assertIn("unresolvable-by-retrieval", result.reason)
+
+    def test_temporal_actions_use_the_generic_controller_contract(self) -> None:
+        executor = FrameExecutor()
+        initial = executor.open_frame(chicken_spec())
+        run = Controller(max_steps=2).run(
+            initial,
+            SequencePolicy(
+                (
+                    temporal_action("plant", "feather_seen", "fallen feather"),
+                    temporal_action("discharge", "feather_used", "fallen feather"),
+                )
+            ),
+            FrameAssertionVerifier(executor),
+            lambda state: bool(state.obligations)
+            and not state.obligations[0].outstanding,
+        )
+        self.assertTrue(run.solved)
+        self.assertEqual(run.accepted_steps, 2)
+        self.assertTrue(
+            all(
+                entry.verification.verdict is Verdict.VERIFIED
+                for entry in run.trace
+            )
+        )
 
 
 class StoryAdapterRobustnessTests(unittest.TestCase):

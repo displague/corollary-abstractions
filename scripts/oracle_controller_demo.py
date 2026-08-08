@@ -176,10 +176,9 @@ class StoryFrameVerifier:
     """Three-beat story grammar over the runtime frame executor.
 
     Beat ordering and desire preservation are the story grammar's own laws
-    (narrative.structure.*); trait consistency is delegated to the frame
-    executor, which adjudicates every trait literal against the frame's
-    declarations and the unsuspended world exactly as scripts/frames.py
-    documents. One executor, two costumes.
+    (narrative.structure.*); trait consistency and planted/discharged temporal
+    obligations are delegated to the frame executor. One executor, two
+    costumes.
     """
 
     name = "narrative-three-beat-frame"
@@ -201,6 +200,12 @@ class StoryFrameVerifier:
     def evaluate(
         self, state: StoryState, action: Action
     ) -> Verification[StoryState]:
+        if state.frame_state.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "story frame is closed; it accepts no further transitions",
+                evidence=(state.frame_state.spec.frame,),
+            )
         if action.kind is not ActionKind.GEN:
             return Verification(
                 Verdict.REFUSED,
@@ -241,6 +246,87 @@ class StoryFrameVerifier:
                     f"frame ({finding.reason})",
                     evidence=finding.evidence,
                 )
+
+        if action.name in {"plant", "discharge"}:
+            missing = [
+                key for key in ("event_id", "element") if not args.get(key)
+            ]
+            if missing:
+                return Verification(
+                    Verdict.REFUSED,
+                    f"{action.name} has missing or empty arguments: {missing}",
+                    evidence=(self.name,),
+                )
+            if action.name == "plant":
+                mention = args.get("mention")
+                if tuple(beat.role for beat in state.beats) != ("setup",):
+                    return self._order_refutation(
+                        "a planted element must appear during the setup beat"
+                    )
+                if not mention:
+                    return Verification(
+                        Verdict.UNKNOWN,
+                        "plant has no rendered mention in the story",
+                        evidence=("narrative.constraint.chekhov_gun",),
+                    )
+                if args["element"].casefold() not in mention.casefold():
+                    return Verification(
+                        Verdict.UNKNOWN,
+                        "plant mention does not name the planted element",
+                        evidence=("narrative.constraint.chekhov_gun",),
+                    )
+            else:
+                evidence_text = args.get("evidence_text")
+                if not state.beats or state.beats[-1].role != "resolution":
+                    return self._order_refutation(
+                        "a discharge must be evidenced by the resolution beat"
+                    )
+                if not evidence_text:
+                    return Verification(
+                        Verdict.UNKNOWN,
+                        "discharge has no text evidence in the resolution",
+                        evidence=("narrative.constraint.chekhov_gun",),
+                    )
+                if args["element"].casefold() not in evidence_text.casefold():
+                    return Verification(
+                        Verdict.UNKNOWN,
+                        "discharge evidence does not name the planted element",
+                        evidence=("narrative.constraint.chekhov_gun",),
+                    )
+                if evidence_text.casefold() not in state.beats[-1].text.casefold():
+                    return Verification(
+                        Verdict.UNKNOWN,
+                        "claimed discharge is absent from the resolution text",
+                        evidence=("narrative.constraint.chekhov_gun",),
+                    )
+            already_planted = action.name == "plant" and any(
+                obligation.element == args["element"]
+                for obligation in state.frame_state.obligations
+            )
+            transition = getattr(self.executor, action.name)
+            result = transition(
+                state.frame_state, args["event_id"], args["element"]
+            )
+            if not result.verdict.accepts:
+                return Verification(
+                    result.verdict,
+                    result.reason,
+                    evidence=result.evidence,
+                )
+            next_state = replace(state, frame_state=result.next_state)
+            if action.name == "plant" and not already_planted:
+                amended = replace(
+                    state.beats[-1], text=f"{state.beats[-1].text} {mention}"
+                )
+                next_state = replace(
+                    next_state, beats=state.beats[:-1] + (amended,)
+                )
+            return Verification(
+                result.verdict,
+                result.reason,
+                next_state,
+                result.evidence,
+            )
 
         if action.name == "introduce":
             if state.beats:
@@ -337,6 +423,16 @@ def story_oracle_actions() -> tuple[Action, ...]:
         ),
         Action.build(
             ActionKind.GEN,
+            "plant",
+            {
+                **shared,
+                "event_id": "fallen_feather_planted",
+                "element": "fallen feather",
+                "mention": "A fallen feather gleamed beside its nest.",
+            },
+        ),
+        Action.build(
+            ActionKind.GEN,
             "obstruct",
             {**shared, "obstacle": "the locked coop door"},
         ),
@@ -351,17 +447,34 @@ def story_oracle_actions() -> tuple[Action, ...]:
                 ),
             },
         ),
+        Action.build(
+            ActionKind.GEN,
+            "discharge",
+            {
+                **shared,
+                "event_id": "fallen_feather_used_as_key",
+                "element": "fallen feather",
+                "evidence_text": "fallen feather as a key",
+            },
+        ),
     )
 
 
 def story_oracle_run() -> RunResult[StoryState]:
     verifier = StoryFrameVerifier()
-    return Controller[StoryState](max_steps=3).run(
+    return Controller[StoryState](max_steps=5).run(
         verifier.initial_state(),
         SequencePolicy(story_oracle_actions()),
         verifier,
-        lambda state: tuple(beat.role for beat in state.beats)
-        == ("setup", "complication", "resolution"),
+        lambda state: (
+            tuple(beat.role for beat in state.beats)
+            == ("setup", "complication", "resolution")
+            and bool(state.frame_state.obligations)
+            and not any(
+                obligation.outstanding
+                for obligation in state.frame_state.obligations
+            )
+        ),
     )
 
 
@@ -388,7 +501,14 @@ def main() -> int:
     for beat in story.final_state.beats:
         print(f"  {beat.role.upper()}: {beat.text}")
 
-    _, demoted = FrameExecutor().close_frame(story.final_state.frame_state)
+    close_result = FrameExecutor().close_frame(story.final_state.frame_state)
+    _, demoted = close_result
+    print("\nTEMPORAL OBLIGATIONS")
+    for obligation in story.final_state.frame_state.obligations:
+        print(
+            f"  {obligation.element}: planted by {obligation.planted_by}; "
+            f"discharged by {obligation.discharged_by}"
+        )
     print("\nON FRAME EXIT (truths demote; nothing leaks)")
     for claim in demoted:
         print(
@@ -398,8 +518,8 @@ def main() -> int:
     print(
         "\nLIMIT: Lean steps are exact committed extraction replay; "
         "live PyPantograph search remains unbuilt. The frame executor "
-        "checks declarations, denials and suspensions; Chekhov-style "
-        "temporal obligations are not yet evaluated."
+        "checks declarations, denials, suspensions, and finite Chekhov-style "
+        "obligations at frame close; this is not general LTL model checking."
     )
     return 0 if lean.solved and story.solved else 1
 

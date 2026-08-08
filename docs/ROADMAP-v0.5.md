@@ -60,7 +60,7 @@ demo and a multi-step derivation remain one milestone in two costumes.
    `frame_consistency`'s prose, and build the runtime state manager that extends
    `compose_assert`'s ladder into a frame-local evaluator for those axioms.
 
-   **PARTIAL — scope adopted, executor runs, temporal obligations open:**
+   **PARTIAL — scope and finite obligations execute; scoped nodes open:**
    the live schema now carries the draft's optional `scope` object (199/199
    nodes validate unchanged; matcher report byte-identical — `scope` is
    invisible to it, as designed). `validate_nodes.py` checks frame-id
@@ -79,12 +79,40 @@ demo and a multi-step derivation remain one milestone in two costumes.
    itself is rejected if incoherent; and `close_frame` demotes every local
    truth to `on_exit` status — nothing leaks, closed frames refuse
    everything, double-close is an error. The golden-chicken oracle routes
-   trait checks through this executor on the same generic Controller
-   (42/42 tests; every review finding has a regression test). Still open:
-   Chekhov-style temporal obligations are not evaluated, no corpus node
-   yet carries `scope` (the nine payoff nodes of item 5 are the natural
-   first authors), and `compose_assert`'s demo ladder is not yet wired to
+   trait checks and temporal events through this executor on the same generic
+   Controller. `plant` now opens a frame-local Chekhov obligation,
+   `discharge` closes only its matching element, and an outstanding obligation
+   REFUSES frame close without state change or demotion. The rendered setup
+   must visibly plant the element and the discharge must cite text in the
+   resolution, preventing a hidden-ledger pass. Still open: no corpus node yet
+   carries `scope` (the nine payoff nodes of item 5 are the natural first
+   authors), the check is finite close-time accounting rather than general LTL
+   model checking, and `compose_assert`'s demo ladder is not yet wired to
    `frames.py`.
+
+   **Registered obligation prediction (before implementation or tests):**
+   planting an element creates one frame-local obligation under
+   `narrative.constraint.chekhov_gun`; discharging that same element closes
+   it. A close request with any obligation still outstanding is `REFUSED`,
+   leaves the frame open, and emits no exit demotions. Discharging an element
+   that was never planted is `UNKNOWN`, not `REFUTED`: the past-facing
+   no-deus-ex-machina converse is item 5 work and must not be smuggled into
+   the future-facing Chekhov law. Exact duplicate event retries are idempotent,
+   while a fresh event id for an already-bound element is `REFUSED`; an
+   unrelated discharge cannot close another element's obligation, and all
+   obligation actions against a closed frame are `REFUSED`.
+
+   **Adjudication:** fired on every listed branch. The first implementation
+   also failed a vacuity audit before review: its obligation ledger could pass
+   while the rendered setup omitted the plant. The story adapter now requires
+   a visible setup mention and resolution-text evidence for discharge.
+   Independent review then found that the mention could be unrelated and late,
+   and that a duplicate plant duplicated prose; setup-only, element-binding,
+   and end-to-end idempotence controls now close those paths.
+   A later review clarified that the original phrase “duplicate plants” was
+   too broad: accepting a fresh id without recording it allowed that id to
+   change event kind later. Idempotence is now exact-event retry only; fresh ids
+   are rejected and the corrected prediction is tested explicitly.
 5. **Past modality + mirror level**: author the nine payoff nodes
    (heraldry pattern before Chekhov's converse), add the
    separately-reported mirror level, fix order_le → LT with the

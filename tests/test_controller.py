@@ -245,7 +245,7 @@ class StoryFrameTests(unittest.TestCase):
     def test_oracle_executes_three_verified_beats(self) -> None:
         run = story_oracle_run()
         self.assertTrue(run.solved)
-        self.assertEqual(run.accepted_steps, 3)
+        self.assertEqual(run.accepted_steps, 5)
         self.assertEqual(
             tuple(beat.role for beat in run.final_state.beats),
             ("setup", "complication", "resolution"),
@@ -253,10 +253,17 @@ class StoryFrameTests(unittest.TestCase):
         self.assertTrue(
             all(entry.verification.verdict is Verdict.VERIFIED for entry in run.trace)
         )
+        self.assertEqual(len(run.final_state.frame_state.obligations), 1)
+        self.assertFalse(run.final_state.frame_state.obligations[0].outstanding)
+        self.assertIn("fallen feather", run.final_state.beats[0].text)
+        self.assertIn("fallen feather as a key", run.final_state.beats[-1].text)
 
     def test_out_of_order_beat_is_refuted_without_state_change(self) -> None:
         initial = story_oracle_run().initial_state
-        resolution = story_oracle_actions()[-1]
+        resolution = next(
+            action for action in story_oracle_actions()
+            if action.name == "resolve"
+        )
         result = StoryFrameVerifier().evaluate(initial, resolution)
         self.assertEqual(result.verdict, Verdict.REFUTED)
         self.assertIsNone(result.next_state)
@@ -293,19 +300,92 @@ class StoryFrameTests(unittest.TestCase):
 
     def test_rejected_branch_is_not_a_premise_for_recovery(self) -> None:
         initial = story_oracle_run().initial_state
-        invalid = story_oracle_actions()[-1]
+        invalid = next(
+            action for action in story_oracle_actions()
+            if action.name == "resolve"
+        )
         actions = (invalid,) + story_oracle_actions()
-        run = Controller[StoryState](max_steps=4).run(
+        run = Controller[StoryState](max_steps=6).run(
             initial,
             SequencePolicy(actions),
             StoryFrameVerifier(),
-            lambda state: len(state.beats) == 3,
+            lambda state: len(state.beats) == 3
+            and bool(state.frame_state.obligations)
+            and not state.frame_state.obligations[0].outstanding,
         )
         self.assertTrue(run.solved)
         self.assertEqual(run.rejected_steps, 1)
-        self.assertEqual(run.accepted_steps, 3)
+        self.assertEqual(run.accepted_steps, 5)
         self.assertEqual(run.trace[0].state_after, initial)
         self.assertEqual(run.trace[1].state_before, initial)
+
+    def test_discharge_without_rendered_resolution_evidence_is_unknown(self) -> None:
+        verifier = StoryFrameVerifier()
+        actions = story_oracle_actions()
+        state = verifier.initial_state()
+        for action in actions[:4]:
+            result = verifier.evaluate(state, action)
+            self.assertTrue(result.verdict.accepts)
+            state = result.next_state
+        unsupported = replace(
+            actions[-1],
+            arguments=tuple(
+                (key, "a silver egg" if key == "evidence_text" else value)
+                for key, value in actions[-1].arguments
+            ),
+        )
+        result = verifier.evaluate(state, unsupported)
+        self.assertIs(result.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(result.next_state)
+        self.assertIn("does not name", result.reason)
+
+    def test_plant_is_setup_only_and_must_name_its_element(self) -> None:
+        verifier = StoryFrameVerifier()
+        actions = story_oracle_actions()
+        setup = verifier.evaluate(verifier.initial_state(), actions[0]).next_state
+        unrelated = replace(
+            actions[1],
+            arguments=tuple(
+                (key, "A brass bell gleamed." if key == "mention" else value)
+                for key, value in actions[1].arguments
+            ),
+        )
+        finding = verifier.evaluate(setup, unrelated)
+        self.assertIs(finding.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(finding.next_state)
+
+        state = setup
+        for action in actions[2:4]:
+            result = verifier.evaluate(state, action)
+            self.assertTrue(result.verdict.accepts)
+            state = result.next_state
+        late = verifier.evaluate(state, actions[1])
+        self.assertIs(late.verdict, Verdict.REFUTED)
+        self.assertIsNone(late.next_state)
+        self.assertIn("setup", late.reason)
+
+    def test_duplicate_story_plant_does_not_duplicate_rendered_text(self) -> None:
+        verifier = StoryFrameVerifier()
+        actions = story_oracle_actions()
+        setup = verifier.evaluate(verifier.initial_state(), actions[0]).next_state
+        planted = verifier.evaluate(setup, actions[1]).next_state
+        duplicate = verifier.evaluate(planted, actions[1])
+        self.assertIs(duplicate.verdict, Verdict.VERIFIED)
+        self.assertEqual(duplicate.next_state, planted)
+        self.assertEqual(
+            duplicate.next_state.beats[0].text.count("fallen feather"), 1
+        )
+
+    def test_closed_story_frame_refuses_new_beats(self) -> None:
+        verifier = StoryFrameVerifier()
+        state = story_oracle_run().final_state
+        closed = verifier.executor.close_frame(state.frame_state).state
+        result = verifier.evaluate(
+            replace(state, frame_state=closed),
+            Action.build(ActionKind.GEN, "introduce", {"desire": "again"}),
+        )
+        self.assertIs(result.verdict, Verdict.REFUSED)
+        self.assertIn("closed", result.reason)
 
 
 if __name__ == "__main__":

@@ -39,8 +39,14 @@ Adjudication order and semantics (each is a deliberate design decision):
    the frame, no world truth either way -- is UNKNOWN. Missing information
    is never REFUTED, and an ungrounded assertion with no suspension
    invitation is not silently admitted either.
-6. A closed frame adjudicates nothing and admits nothing: `check` and
-   `assert_literal` both REFUSE, and closing twice is a caller error.
+6. `plant` registers one frame-local temporal obligation per element under
+   Chekhov's gun; `discharge` closes the matching obligation. Repeating either
+   accepted event is idempotent. A discharge with no prior plant is UNKNOWN,
+   not REFUTED: that judgement belongs to the past-facing converse which is
+   not yet in the executable corpus.
+7. A frame with an outstanding obligation REFUSES to close, remains open, and
+   emits no demotions. A closed frame adjudicates nothing and admits nothing:
+   every transition REFUSES, and closing twice is a caller error.
 
 The executor is a plain verifier component: it holds no mutable state, and
 `FrameAssertionVerifier` adapts it to scripts/controller.py's contract so
@@ -48,11 +54,11 @@ frame evaluation rides the same generic loop as Lean replay and the story
 oracle. Rejected branches cannot mutate accepted frame state -- that
 invariant belongs to the Controller and is inherited, not reimplemented.
 
-What this deliberately does NOT claim: temporal liveness (Chekhov
-obligations) is not evaluated here; story state is not Lean-proved merely
-because frame_consistency twins a Lean-backed Boolean law -- the executor
-cites that law, the matcher established the twin, and those are the whole
-of the connection.
+What this deliberately does NOT claim: this finite close-time check is not a
+general LTL model checker, and the past-facing no-deus-ex-machina converse is
+not evaluated. Story state is not Lean-proved merely because
+frame_consistency twins a Lean-backed Boolean law -- the executor cites that
+law, the matcher established the twin, and those are the whole connection.
 """
 
 from __future__ import annotations
@@ -64,6 +70,7 @@ from controller import Action, ActionKind, Verification, Verdict
 
 
 FRAME_CONSISTENCY = "narrative.frame.frame_consistency"
+CHEKHOV_GUN = "narrative.constraint.chekhov_gun"
 
 
 @dataclass(frozen=True)
@@ -107,6 +114,7 @@ class FrameState:
 
     spec: FrameSpec
     asserted: tuple[tuple[str, Literal], ...] = ()
+    obligations: tuple["TemporalObligation", ...] = ()
     closed: bool = False
 
     @property
@@ -137,6 +145,39 @@ class DemotedClaim:
     literal: Literal
     epistemic_status: str
     frame: str
+
+
+@dataclass(frozen=True)
+class TemporalObligation:
+    """One planted element and the event that eventually discharged it."""
+
+    element: str
+    planted_by: str
+    discharged_by: str | None = None
+
+    @property
+    def outstanding(self) -> bool:
+        return self.discharged_by is None
+
+
+@dataclass(frozen=True)
+class FrameCloseResult:
+    """Explicit close disposition, while preserving tuple unpacking.
+
+    Existing callers may continue to use ``closed, demoted = close_frame(...)``.
+    New callers should inspect ``verdict`` so an incomplete frame cannot be
+    mistaken for a clean close.
+    """
+
+    verdict: Verdict
+    reason: str
+    state: FrameState
+    demoted: tuple[DemotedClaim, ...] = ()
+    evidence: tuple[str, ...] = ()
+
+    def __iter__(self):
+        yield self.state
+        yield self.demoted
 
 
 class FrameExecutor:
@@ -297,13 +338,140 @@ class FrameExecutor:
             finding.verdict, finding.reason, evidence=finding.evidence
         )
 
+    def plant(
+        self, state: FrameState, event_id: str, element: str
+    ) -> Verification[FrameState]:
+        """Register the future-facing half of Chekhov's liveness law."""
+
+        if state.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; it accepts no temporal events",
+                evidence=(state.spec.frame,),
+            )
+        for obligation in state.obligations:
+            if obligation.discharged_by == event_id:
+                return Verification(
+                    Verdict.REFUSED,
+                    f"event id {event_id!r} already identifies a discharge",
+                    evidence=(CHEKHOV_GUN, event_id),
+                )
+            if (
+                obligation.planted_by == event_id
+                and obligation.element != element
+            ):
+                return Verification(
+                    Verdict.REFUSED,
+                    f"event id {event_id!r} already plants a different element",
+                    evidence=(CHEKHOV_GUN, obligation.planted_by),
+                )
+        for obligation in state.obligations:
+            if obligation.element == element:
+                if obligation.planted_by != event_id:
+                    return Verification(
+                        Verdict.REFUSED,
+                        f"element {element!r} was already planted by event "
+                        f"{obligation.planted_by!r}; a fresh id is not an "
+                        "idempotent retry",
+                        evidence=(CHEKHOV_GUN, obligation.planted_by),
+                    )
+                return Verification(
+                    Verdict.VERIFIED,
+                    f"element {element!r} already has a registered obligation",
+                    state,
+                    (CHEKHOV_GUN, obligation.planted_by),
+                )
+        obligation = TemporalObligation(element=element, planted_by=event_id)
+        return Verification(
+            Verdict.VERIFIED,
+            f"planting {element!r} registers a frame-local discharge obligation",
+            replace(state, obligations=state.obligations + (obligation,)),
+            (CHEKHOV_GUN, event_id),
+        )
+
+    def discharge(
+        self, state: FrameState, event_id: str, element: str
+    ) -> Verification[FrameState]:
+        """Discharge a matching plant without inventing the past converse."""
+
+        if state.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; it accepts no temporal events",
+                evidence=(state.spec.frame,),
+            )
+        for obligation in state.obligations:
+            if obligation.planted_by == event_id:
+                return Verification(
+                    Verdict.REFUSED,
+                    f"event id {event_id!r} already identifies a plant",
+                    evidence=(CHEKHOV_GUN, event_id),
+                )
+            if (
+                obligation.discharged_by == event_id
+                and obligation.element != element
+            ):
+                return Verification(
+                    Verdict.REFUSED,
+                    f"event id {event_id!r} already discharges a different element",
+                    evidence=(CHEKHOV_GUN, event_id),
+                )
+        for index, obligation in enumerate(state.obligations):
+            if obligation.element != element:
+                continue
+            if obligation.discharged_by is not None:
+                if obligation.discharged_by != event_id:
+                    return Verification(
+                        Verdict.REFUSED,
+                        f"element {element!r} was already discharged by event "
+                        f"{obligation.discharged_by!r}; a fresh id is not an "
+                        "idempotent retry",
+                        evidence=(CHEKHOV_GUN, obligation.discharged_by),
+                    )
+                return Verification(
+                    Verdict.VERIFIED,
+                    f"element {element!r} was already discharged",
+                    state,
+                    (CHEKHOV_GUN, obligation.discharged_by),
+                )
+            discharged = replace(obligation, discharged_by=event_id)
+            obligations = (
+                state.obligations[:index]
+                + (discharged,)
+                + state.obligations[index + 1 :]
+            )
+            return Verification(
+                Verdict.VERIFIED,
+                f"discharging {element!r} satisfies its planted obligation",
+                replace(state, obligations=obligations),
+                (CHEKHOV_GUN, obligation.planted_by, event_id),
+            )
+        return Verification(
+            Verdict.UNKNOWN,
+            f"no planted obligation grounds discharge of {element!r}; the "
+            "past-facing converse is not yet evaluated",
+            evidence=(CHEKHOV_GUN,),
+        )
+
     def close_frame(
         self, state: FrameState
-    ) -> tuple[FrameState, tuple[DemotedClaim, ...]]:
+    ) -> FrameCloseResult:
         if state.closed:
             raise ValueError(
                 f"frame {state.spec.frame!r} is already closed; closing "
                 "twice would re-emit its demotions"
+            )
+        outstanding = tuple(
+            obligation for obligation in state.obligations if obligation.outstanding
+        )
+        if outstanding:
+            elements = ", ".join(repr(item.element) for item in outstanding)
+            return FrameCloseResult(
+                Verdict.REFUSED,
+                f"frame has outstanding Chekhov obligations: {elements}",
+                state,
+                evidence=(CHEKHOV_GUN,)
+                + tuple(item.planted_by for item in outstanding),
             )
         demoted = tuple(
             DemotedClaim(
@@ -314,14 +482,20 @@ class FrameExecutor:
             )
             for claim_id, literal in state.local_truths
         )
-        return replace(state, closed=True), demoted
+        return FrameCloseResult(
+            Verdict.VERIFIED,
+            "frame closed with every temporal obligation discharged",
+            replace(state, closed=True),
+            demoted,
+            (state.spec.frame,),
+        )
 
 
 class FrameAssertionVerifier:
     """Adapt FrameExecutor to the generic controller contract.
 
-    Accepts GEN(assert_fact) with subject/predicate/value/polarity/claim_id
-    arguments. RETRIEVE is REFUSED: either the frame forbids it
+    Accepts GEN(assert_fact), GEN(plant), and GEN(discharge). RETRIEVE is
+    REFUSED: either the frame forbids it
     (`retrieval: frame_local`) or no retrieval adapter is wired yet -- the
     two refusals carry distinct reasons so the trace records which limit
     applied.
@@ -335,7 +509,8 @@ class FrameAssertionVerifier:
     def state_key(self, state: FrameState) -> str:
         return (
             f"{state.spec.frame}|closed={state.closed}|"
-            f"{[claim_id for claim_id, _ in state.asserted]!r}"
+            f"{[claim_id for claim_id, _ in state.asserted]!r}|"
+            f"{state.obligations!r}"
         )
 
     def evaluate(
@@ -354,14 +529,34 @@ class FrameAssertionVerifier:
                 "no retrieval adapter is wired yet (BACKLOG: controller/harness)",
                 evidence=(self.name,),
             )
-        if action.kind is not ActionKind.GEN or action.name != "assert_fact":
+        if action.kind is not ActionKind.GEN:
             return Verification(
                 Verdict.REFUSED,
-                "frame ladder accepts only GEN(assert_fact)",
+                "frame ladder accepts only GEN transitions",
+                evidence=(self.name,),
+            )
+        arguments = dict(action.arguments)
+        if action.name in {"plant", "discharge"}:
+            missing = [
+                key for key in ("event_id", "element") if not arguments.get(key)
+            ]
+            if missing:
+                return Verification(
+                    Verdict.REFUSED,
+                    f"{action.name} has missing or empty arguments: {missing}",
+                    evidence=(self.name,),
+                )
+            transition = getattr(self.executor, action.name)
+            return transition(
+                state, arguments["event_id"], arguments["element"]
+            )
+        if action.name != "assert_fact":
+            return Verification(
+                Verdict.REFUSED,
+                f"unknown frame transition {action.name!r}",
                 evidence=(self.name,),
             )
         required = ("claim_id", "subject", "predicate", "value")
-        arguments = dict(action.arguments)
         missing = [key for key in required if not arguments.get(key)]
         if missing:
             return Verification(

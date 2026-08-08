@@ -590,3 +590,60 @@ frame declarations was called REFUTED, confusing lack of evidence with a
 contradiction. Frame state now carries explicit declared and denied traits:
 `silver` is REFUTED because this frame denies it, while undeclared `brave` is
 UNKNOWN. The two adversarial cases are tests fifteen and sixteen.
+
+### Frame executor and finite Chekhov obligations
+
+The next registered prediction was that a planted element would create one
+frame-local obligation under `narrative.constraint.chekhov_gun`, a matching
+discharge would close it, and `close_frame` would REFUSE without mutation or
+demotion while anything remained outstanding. The deliberately asymmetric
+negative control predicted that an unplanted discharge would be UNKNOWN rather
+than REFUTED: Chekhov's authored future-facing implication cannot prove its
+past-facing converse.
+
+Result: **PASS, 55/55 contract tests after integration.** The immutable frame
+state now carries an obligation ledger. `GEN(plant)` and `GEN(discharge)` run
+through the same Controller/Verification contract as assertions, story beats,
+and Lean replay. Duplicate plants are idempotent; an unrelated discharge does
+not alter the ledger; closed frames refuse temporal events; and a refused close
+returns the exact still-open state with no demotions. Once every element is
+discharged, close succeeds and the existing frame-truth demotion rule runs.
+
+The first implementation failed its vacuity audit before review: it was
+possible for the hidden ledger to say “feather planted” while the rendered
+setup never mentioned a feather. The story adapter now requires the plant to
+amend an existing visible beat and requires discharge evidence to occur in the
+rendered resolution. The golden-chicken oracle therefore executes five
+verified transitions while retaining three story beats: introduce, visibly
+plant the fallen feather, obstruct, resolve using the feather, and discharge.
+Its completion predicate requires both the three-beat sequence and a nonempty,
+fully discharged ledger.
+
+Independent review then broke the visible grounding in two more ways: it moved
+the plant after the resolution with unrelated prose, and repeated an otherwise
+idempotent plant to duplicate the setup sentence. Planting is now setup-only,
+both plant and discharge evidence must name the bound element, and a duplicate
+plant changes neither the obligation ledger nor the rendered beat. Both
+review reproducers are permanent negative controls.
+
+A second review found that event-id uniqueness depended on obligation order:
+an early same-element idempotence return could hide a later obligation using
+that event id for another element. Conflict detection now scans the whole
+ledger before any idempotent return, and event ids cannot change kind between
+plant and discharge. The exact two-obligation ordering reproducer and both
+cross-kind collisions are covered.
+
+A third review showed that “duplicate” was underspecified. A fresh id for an
+already-planted element had been accepted as idempotent without being recorded,
+so the same id could later identify a discharge. The corrected contract is
+narrower and auditable: only the exact same event-id retry is idempotent; a
+fresh id for an element whose plant or discharge is already bound is REFUSED.
+The earlier broad wording is corrected in the roadmap, and the fresh-id case is
+now an explicit negative control rather than being counted as a pass.
+
+Honest boundary: this is finite obligation accounting at frame close, not a
+general LTL model checker. It executes the one authored
+`ALWAYS(PLANTED(e) -> EVENTUALLY(DISCHARGED(e)))` use case. It neither derives
+past facts nor refutes an unheralded outcome; the heraldry pattern and
+no-deus-ex-machina converse remain item 5 work. No corpus node carries `scope`
+yet, and no learned policy chooses these temporal transitions.
