@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Specialization matcher (v2): find general->specific edges between nodes.
+"""Specialization matcher (v3): find general->specific edges between nodes,
+returning the CHEAPEST derivation rather than the first one found.
 
 The exact-skeleton matcher (match_signatures.py) groups only isomorphic
 templates, which misses relationships the corpus keeps recording as near
@@ -30,18 +31,73 @@ This tool matches a *general* node's canonical tree as a pattern against a
 Identities and commutativity both come from `match_signatures.HEAD_ALGEBRA`;
 nothing about which heads have which algebra is decided in this file.
 
+CHEAPEST-DERIVATION SEARCH
+--------------------------
+Five mechanisms can each explain the same pair, and the v2 matcher kept
+whichever the recursion reached first. That let a weak reading pre-empt a
+strong one (BACKLOG: `de9im_disjoint >= next_distributes_over_meet` was
+matched by plain binding until the head-identity rule found `REGB -> TRUTH`
+first and deleted the edge), and it was patched by running the whole matcher
+twice with head identities disabled on the first pass -- a fix that does not
+generalise to a third and fourth mechanism.
+
+Here every mechanism carries a price, and the search returns the minimum-cost
+ACCEPTABLE derivation over the whole space:
+
+  slot -> slot rename            0   the pattern says exactly what the
+                                     specific statement says
+  slot -> structure          1 + op_count(bound)   one per node of the
+                                     specific statement the pattern did not
+                                     look at (a bare literal costs 1)
+  absorption                     1   per EXTRA argument swallowed, on top of
+                                     the structure cost of the sub-op built
+                                     -- absorption invents a grouping the
+                                     specific statement does not write
+  arithmetic identity            2   per use; the pattern claims a degree of
+                                     freedom (`SHIFT`) the specific lacks.
+                                     Priced like swallowing a one-op subtree
+  head-identity collapse         4   per use; the only mechanism that REMOVES
+                                     a node from the pattern rather than
+                                     filling one in, so it is the dearest
+
+The structure component is `looseness` (which counts parenthesis depth of the
+bindings) plus one per compound binding, so cost is a refinement of the old
+ranking rather than a replacement for it; the algebra component is the
+"how much algebra did this need" axis the BACKLOG asked for.
+
+The search is exhaustive with branch-and-bound: every mechanism is tried in
+cheap-first order, the first acceptable derivation becomes the incumbent, and
+any partial derivation whose cost has already reached the incumbent's is
+abandoned (cost is monotone along a derivation, so this is exact, not a
+heuristic). Acceptability -- the non-triviality bar and the collapse guard --
+is part of the search, not a post-filter, which is what makes the two-pass
+workaround unnecessary: a derivation that would fail the collapse guard can
+no longer pre-empt one that passes it, at ANY depth, whereas the pass
+ordering only protected the root.
+
 Only matches beyond pure slot-to-slot renaming are reported (a renaming is
 an exact twin, already in the skeleton report): absorption, identity
 binding, or a slot binding structure (a compound subtree or a literal).
 Patterns must be rel- or call-rooted with at least two operator/call nodes,
 else near-trivial templates (X = A*B) would subsume half the corpus.
+
+IDENTITY SPELLING
+-----------------
+One lattice bottom is spelled `FALSITY` in data/logic, `EMPTYSET` in
+data/set_theory and `INCONSISTENCY` in data/narrative. The spellings are
+tried in the SPECIFIC statement's own vocabulary first (its `slot_schema`,
+then its discipline's), so a set-theory edge prints `SETB -> EMPTYSET` where
+v2 printed `SETB -> FALSITY` from table order. Edges that fall back to table
+order say so in the report.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-from itertools import permutations
+import time
+from functools import lru_cache
+from itertools import combinations
 from pathlib import Path
 
 from match_signatures import (
@@ -50,266 +106,476 @@ from match_signatures import (
     tokenize,
 )
 
+# ---------------------------------------------------------------------------
+# Cost model. See the module docstring for the reasoning; the numbers are
+# tuned so that (a) cost restricted to plain bindings is monotone in the old
+# `looseness`, and (b) the mechanisms rank in the order the corpus reads them:
+# renaming < swallowing structure < inventing a grouping < spending a numeric
+# identity < erasing a node from the pattern.
+# ---------------------------------------------------------------------------
+COST_BIND_NODE = 1        # per node of specific-statement structure swallowed
+COST_ABSORB_ARG = 1       # per EXTRA argument absorbed into a sub-op
+COST_IDENTITY = 2         # per arithmetic (+ / *) identity binding
+COST_HEAD_COLLAPSE = 4    # per call node erased by a declared head identity
 
+MIN_PATTERN_OPS = 2       # non-triviality bar, checked on the pattern AS USED
+
+
+@lru_cache(maxsize=None)
 def op_count(t: tuple) -> int:
     if t[0] in {"slot", "num"}:
         return 0
     return 1 + sum(op_count(a) for a in t[2])
 
 
-class MatchState:
-    def __init__(self, slot_class: dict[str, str]):
-        self.binds: dict[str, tuple] = {}
+class Deriv:
+    """One (partial) derivation: the bindings so far plus what they cost.
+
+    Immutable by discipline -- every step returns a new `Deriv` -- because the
+    search is a generator pipeline and the save/restore mutation the v2
+    matcher used cannot survive a suspended frame.
+    """
+
+    __slots__ = ("binds", "structure_cost", "algebra_cost", "absorbed",
+                 "identity_uses", "head_collapses", "compound",
+                 "ident_choices")
+
+    def __init__(self, binds, structure_cost=0, algebra_cost=0, absorbed=0,
+                 identity_uses=0, head_collapses=0, compound=0,
+                 ident_choices=()):
+        self.binds = binds
+        self.structure_cost = structure_cost
+        self.algebra_cost = algebra_cost
+        self.absorbed = absorbed
+        self.identity_uses = identity_uses
+        self.head_collapses = head_collapses
+        self.compound = compound
+        self.ident_choices = ident_choices
+
+    @property
+    def cost(self) -> int:
+        return self.structure_cost + self.algebra_cost
+
+    def bind(self, name, term, structure=0, absorbed=0, compound=0):
+        b = dict(self.binds)
+        b[name] = term
+        return Deriv(b, self.structure_cost + structure,
+                     self.algebra_cost + absorbed * COST_ABSORB_ARG,
+                     self.absorbed + absorbed, self.identity_uses,
+                     self.head_collapses, self.compound + compound,
+                     self.ident_choices)
+
+    def bind_identity(self, name, term):
+        """Arithmetic identity: a parameter slot vanishes into 0 or 1.
+
+        Deliberately does NOT set `compound`, matching v2: the bound term is a
+        bare number the matcher supplied, not structure it read off the
+        specific statement, and `looseness` scores it 0 for the same reason.
+        """
+        b = dict(self.binds)
+        b[name] = term
+        return Deriv(b, self.structure_cost, self.algebra_cost + COST_IDENTITY,
+                     self.absorbed, self.identity_uses + 1, self.head_collapses,
+                     self.compound, self.ident_choices)
+
+    def collapse(self, name, term, head, basis):
+        """Head-identity collapse: `HEAD(keep, name)` reduces to `keep`."""
+        b = dict(self.binds)
+        b[name] = term
+        return Deriv(b, self.structure_cost,
+                     self.algebra_cost + COST_HEAD_COLLAPSE, self.absorbed,
+                     self.identity_uses + 1, self.head_collapses + 1,
+                     self.compound,
+                     self.ident_choices + ((name, term[1], head, basis),))
+
+
+EMPTY_DERIV = Deriv({})
+
+
+class Search:
+    """Branch-and-bound minimum-cost matcher for one (general, specific) pair.
+
+    `run` consumes the generator pipeline eagerly; because the incumbent is
+    read by `_pruned` on every recursive entry, improvements found early cut
+    the remaining space while the generators are still suspended.
+    """
+
+    def __init__(self, slot_class: dict[str, str], pattern_ops: int,
+                 idents_for_head, accept_all: bool = False):
         self.slot_class = slot_class
+        self.pattern_ops = pattern_ops
+        self.idents_for_head = idents_for_head
+        # `accept_all` drops the two REPORTING bars (non-triviality, collapse
+        # guard) and leaves a pure "cheapest derivation that matches at all"
+        # search -- what the decompose.py facade at the bottom of the file
+        # wants. Edge reporting always leaves it False.
+        self.accept_all = accept_all
+        self.best: Deriv | None = None
+        self.best_cost: int | None = None
+        self.steps = 0
+
+    # -- acceptability ------------------------------------------------------
+
+    def acceptable(self, d: Deriv) -> bool:
+        if self.accept_all:
+            return True
+        # Head-identity collapse removes a call node from the pattern, so the
+        # non-triviality bar (op_count >= 2, so that templates like `X = A*B`
+        # cannot subsume half the corpus) has to be re-checked against the
+        # pattern as *used*, not as written. Without this,
+        # `MEET(REGA, REGB) = EMPTYSET` collapses to `REGA = EMPTYSET` and
+        # matches every two-slot equation in the graph: measured, it was 507
+        # extra edges, 500 of them from three such templates.
+        if self.pattern_ops - d.head_collapses < MIN_PATTERN_OPS:
+            return False
+        # Informative = anything beyond pure slot-to-slot renaming (renamings
+        # are exact twins, already in the skeleton report).
+        return bool(d.absorbed or d.identity_uses or d.compound)
+
+    def _pruned(self, d: Deriv) -> bool:
+        self.steps += 1
+        return self.best_cost is not None and d.cost >= self.best_cost
+
+    def run(self, pat: tuple, term: tuple) -> Deriv | None:
+        for d in self.gen(pat, term, EMPTY_DERIV):
+            if not self.acceptable(d):
+                continue
+            if self.best_cost is None or d.cost < self.best_cost:
+                self.best, self.best_cost = d, d.cost
+        return self.best
+
+    # -- the generator pipeline --------------------------------------------
+
+    def gen(self, pat, term, d):
+        if self._pruned(d):
+            return
+        yield from self.gen_direct(pat, term, d)
+        # A declared identity lets a call collapse: for a head with a two-sided
+        # identity e, HEAD(a, e) IS a, so a pattern whose vanishing argument is
+        # a slot may bind that slot to e and match its other argument against
+        # the whole term. This is the per-head generalization of the arithmetic
+        # "argument runs out, bind 0 or 1" rule, and it is what makes CONCAT's
+        # zero morph usable. Tried last and priced highest: it is the only
+        # rewrite that shrinks the pattern.
+        if pat[0] == "call" and self.idents_for_head(pat[1]):
+            yield from self.gen_head_identity(pat, term, d)
+
+    def gen_direct(self, pat, term, d):
+        kind = pat[0]
+        if kind == "slot":
+            name = pat[1]
+            if name in d.binds:
+                if d.binds[name] == term:
+                    yield d
+                return
+            if term[0] == "slot":
+                yield d.bind(name, term)                      # free rename
+            else:
+                yield d.bind(name, term,
+                             structure=COST_BIND_NODE * (1 + op_count(term)),
+                             compound=1)
+            return
+        if kind == "num":
+            if term[0] == "num" and term[1] == pat[1]:
+                yield d
+            return
+        if term[0] != kind or term[1] != pat[1]:
+            return
+        if kind == "rel":
+            (pl, pr), (tl, tr) = pat[2], term[2]
+            yield from self.gen_seq((pl, pr), (tl, tr), d)
+            if pat[1] == "=":
+                yield from self.gen_seq((pl, pr), (tr, tl), d)
+            return
+        if kind == "op" and pat[1] in COMMUTATIVE:
+            yield from self.gen_commutative(pat[1], list(pat[2]),
+                                            list(term[2]), d)
+            return
+        if len(pat[2]) != len(term[2]):
+            return
+        if kind == "call" and pat[1] in COMMUTATIVE_CALL_HEADS and len(pat[2]) == 2:
+            # Declared-commutative call head: try both argument orders. Both
+            # trees are already canonically sorted, but the sort key erases
+            # slot identity, so a pattern and a term can still disagree.
+            for order in ((0, 1), (1, 0)):
+                yield from self.gen_seq(
+                    pat[2], (term[2][order[0]], term[2][order[1]]), d)
+            return
+        yield from self.gen_seq(pat[2], term[2], d)
+
+    def gen_seq(self, pats, terms, d, i=0):
+        if i == len(pats):
+            yield d
+            return
+        for d2 in self.gen(pats[i], terms[i], d):
+            yield from self.gen_seq(pats, terms, d2, i + 1)
+
+    def gen_head_identity(self, pat, term, d):
+        """Collapse `HEAD(keep, vanish)` to `keep` by binding `vanish` to
+        HEAD's declared identity element.
+
+        Unlike the arithmetic identity rule, this permits a VARIABLE-like slot
+        to vanish. The justification is in the corpus: a zero morph *is* a
+        morph (`morphology.wordformation.zero_morpheme_identity`,
+        `CONCAT(STEM, EMPTY) = STEM`), and the element it binds is a slot the
+        corpus declares `constant`, not a value invented by the matcher. The
+        blanket rule ("a law does not lose its variables") is right for `+`
+        and `*`, where the identity is a bare number, and wrong here.
+        """
+        args = pat[2]
+        if len(args) != 2:
+            return
+        idents = self.idents_for_head(pat[1])
+        for i in (1, 0):  # right identity first: the corpora write it that way
+            vanish, keep = args[i], args[1 - i]
+            if vanish[0] != "slot":
+                continue
+            name = vanish[1]
+            for ident, basis in idents:
+                if d.binds.get(name, ident) != ident:
+                    continue
+                yield from self.gen(
+                    keep, term, d.collapse(name, ident, pat[1], basis))
+
+    def gen_commutative(self, opname, pats, terms, d):
+        """Assign term args to pattern args. Non-slot pattern args take
+        exactly one term arg; slot args take >=1 (absorbing extras as a
+        sub-op) or, for parameter-like slots, the identity element (none)."""
+        if self._pruned(d):
+            return
+        if not pats:
+            if not terms:
+                yield d
+            return
+        pat = pats[0]
+        if pat[0] != "slot":
+            for i, t in enumerate(terms):
+                for d2 in self.gen(pat, t, d):
+                    yield from self.gen_commutative(
+                        opname, pats[1:], terms[:i] + terms[i + 1:], d2)
+            return
+
+        name = pat[1]
+        n = len(terms)
+        remaining_needed = sum(1 for p in pats[1:] if p[0] != "slot"
+                               or self.slot_class.get(p[1]) != "P")
+        max_take = n - remaining_needed if n - remaining_needed >= 1 else 0
+        # Cheap-first: a plain single-argument binding before absorption
+        # before the identity rule. The order is only an efficiency hint --
+        # the search is exhaustive and the minimum does not depend on it --
+        # but it gets a tight incumbent in place before the dear branches run.
+        for size in range(1, max_take + 1):
+            for combo in combinations(range(n), size):
+                taken = [terms[i] for i in combo]
+                bound = taken[0] if size == 1 else canonicalize(
+                    ("op", opname, tuple(taken)))
+                if name in d.binds:
+                    if d.binds[name] != bound:
+                        continue
+                    # Repeat binding: the structure was paid for the first
+                    # time (as `looseness` also counts it once), but the
+                    # absorption is a second invented grouping and is charged.
+                    d2 = d.bind(name, bound, absorbed=max(0, size - 1))
+                else:
+                    struct = 0 if bound[0] == "slot" else (
+                        COST_BIND_NODE * (1 + op_count(bound)))
+                    # NOTE: deliberately no `compound=1` here, mirroring v2 --
+                    # the commutative path never set `used_compound`, so an
+                    # edge whose ONLY novelty is a commutative slot swallowing
+                    # a subtree is still filtered as non-informative. Recorded
+                    # in docs/BACKLOG.md; changing it is an edge-count change
+                    # that does not belong in the cost-search commit.
+                    d2 = d.bind(name, bound, structure=struct,
+                                absorbed=max(0, size - 1))
+                rest = [terms[i] for i in range(n) if i not in combo]
+                yield from self.gen_commutative(opname, pats[1:], rest, d2)
+
+        # Identity binding for parameter-like slots. The identity comes from
+        # the declared HEAD_ALGEBRA table; for `+` and `*` it is a bare number,
+        # so the parameter-only restriction stays (see gen_head_identity for
+        # why declared constant slots are different).
+        if self.slot_class.get(name) == "P":
+            for ident, _basis in self.idents_for_head(opname):
+                if d.binds.get(name, ident) != ident:
+                    continue
+                yield from self.gen_commutative(
+                    opname, pats[1:], terms, d.bind_identity(name, ident))
+
+
+# ---------------------------------------------------------------------------
+# Compatibility facade for scripts/decompose.py
+# ---------------------------------------------------------------------------
+# `decompose.py` uses this module as a plain "does this pattern cover that
+# subterm, and did it need any algebra to do it" predicate:
+#
+#     st = MatchState(cls)
+#     if match(tree, sub, st) and not (st.used_absorption or st.used_identity)
+#            and any(v[0] == "call" for v in st.binds.values()): ...
+#
+# The names are kept so that pass stays untouched. The semantics are the
+# cost search's, with acceptability relaxed to "any successful derivation"
+# (the non-triviality bar and the collapse guard belong to edge REPORTING,
+# not to the predicate) -- which is the reading decompose.py was asking for
+# all along: it wants the derivation that used the least algebra, and that is
+# what minimising cost returns.
+#
+# This is NOT a no-op for decompose.py, and the difference is the branch's own
+# thesis showing up in a second tool. `*(?0:P, ?1:V)` against
+# `*(?0:P, LOG(?1:V))`: v2's first success bound `?0 -> 1` and absorbed the
+# rest, which decompose.py rejects as algebra, so the honest category-correct
+# grounding was never found and the coarser `*(?0:V, ?1:V)` was cited instead
+# -- exactly the P-vs-V mismatch `pattern_cover`'s own docstring warns about.
+# Measured: 10 of 198 nodes change constituents, corpus mean groundedness
+# 0.7634 -> 0.7660, two calculus nodes gain a rung. `reports/decompositions.json`
+# and `reports/compression.json` are deliberately NOT refreshed on this branch
+# (see docs/BACKLOG.md -- both are already stale against committed data on
+# `main`, so refreshing them here would smuggle an unrelated drift into a
+# matcher commit).
+
+
+class MatchState:
+    """v2-shaped result holder; see the facade note above."""
+
+    def __init__(self, slot_class: dict[str, str]):
+        self.slot_class = slot_class
+        self.binds: dict[str, tuple] = {}
         self.used_absorption = False
         self.used_identity = False
-        self.used_compound = False  # a slot bound a non-leaf or a literal
-        self.head_collapses = 0  # call nodes eliminated via a declared identity
-        # Head-identity collapse is a fallback, enabled only on a second pass
-        # (see find_specializations): a match that needs no algebra at all is
-        # always the better reading, and the first-success-wins search would
-        # otherwise let a collapse pre-empt one. Measured on
-        # `de9im_disjoint >= next_distributes_over_meet`, which the one-pass
-        # version replaced with a degenerate `REGB -> TRUTH` reading.
-        self.allow_head_identity = True
-
-
-def _save(st: MatchState) -> tuple:
-    # used_compound is part of the checkpoint: a branch that binds structure
-    # and then fails must not leave the flag set, or the edge filter reports
-    # "compound" for a match that never used it.
-    return (dict(st.binds), st.used_absorption, st.used_identity,
-            st.used_compound, st.head_collapses)
-
-
-def _restore(st: MatchState, saved: tuple) -> None:
-    st.binds = dict(saved[0])
-    (st.used_absorption, st.used_identity, st.used_compound,
-     st.head_collapses) = saved[1:]
+        self.used_compound = False
+        self.head_collapses = 0
 
 
 def match(pat: tuple, term: tuple, st: MatchState) -> bool:
-    saved = _save(st)
-    if match_direct(pat, term, st):
-        return True
-    _restore(st, saved)
-    # A declared identity lets a call collapse: for a head with a two-sided
-    # identity e, HEAD(a, e) IS a, so a pattern whose vanishing argument is a
-    # slot may bind that slot to e and match its other argument against the
-    # whole term. This is the per-head generalization of the arithmetic
-    # "argument runs out, bind 0 or 1" rule below, and it is what makes
-    # CONCAT's zero morph usable (docs/BACKLOG.md, per-head identities).
-    if st.allow_head_identity and pat[0] == "call" and identity_terms(pat[1]):
-        if match_via_head_identity(pat, term, st):
-            return True
-        _restore(st, saved)
-    return False
-
-
-def match_direct(pat: tuple, term: tuple, st: MatchState) -> bool:
-    kind = pat[0]
-    if kind == "slot":
-        name = pat[1]
-        if name in st.binds:
-            return st.binds[name] == term
-        st.binds[name] = term
-        if term[0] != "slot":
-            st.used_compound = True  # binding structure, not renaming
-        return True
-    if kind == "num":
-        return term[0] == "num" and term[1] == pat[1]
-    if term[0] != kind or term[1] != pat[1]:
+    """True if `pat` covers `term`; fills `st` from the cheapest derivation."""
+    search = Search(st.slot_class, op_count(pat), _bare_idents, accept_all=True)
+    best = search.run(pat, term)
+    if best is None:
         return False
-    if kind == "rel":
-        (pl, pr), (tl, tr) = pat[2], term[2]
-        saved = _save(st)
-        if match(pl, tl, st) and match(pr, tr, st):
-            return True
-        _restore(st, saved)
-        if pat[1] == "=":
-            if match(pl, tr, st) and match(pr, tl, st):
-                return True
-            _restore(st, saved)
-        return False
-    if kind == "op" and pat[1] in COMMUTATIVE:
-        return match_commutative(pat[1], list(pat[2]), list(term[2]), st)
-    if len(pat[2]) != len(term[2]):
-        return False
-    saved = _save(st)
-    if kind == "call" and pat[1] in COMMUTATIVE_CALL_HEADS and len(pat[2]) == 2:
-        # Declared-commutative call head: try both argument orders. Both trees
-        # are already canonically sorted, but the sort key erases slot
-        # identity, so a pattern and a term can still disagree on order.
-        for order in ((0, 1), (1, 0)):
-            if (match(pat[2][0], term[2][order[0]], st)
-                    and match(pat[2][1], term[2][order[1]], st)):
-                return True
-            _restore(st, saved)
-        return False
-    for p, t in zip(pat[2], term[2]):
-        if not match(p, t, st):
-            _restore(st, saved)
-            return False
+    st.binds = dict(best.binds)
+    st.used_absorption = bool(best.absorbed)
+    st.used_identity = bool(best.identity_uses)
+    st.used_compound = bool(best.compound)
+    st.head_collapses = best.head_collapses
     return True
 
 
-def match_via_head_identity(pat: tuple, term: tuple, st: MatchState) -> bool:
-    """Collapse `HEAD(keep, vanish)` to `keep` by binding `vanish` to HEAD's
-    declared identity element.
+@lru_cache(maxsize=None)
+def _bare_idents(head: str) -> tuple:
+    """Identity spellings in HEAD_ALGEBRA table order, for callers with no
+    specific-statement context to prefer a discipline's vocabulary from."""
+    terms = identity_terms(head)
+    sole = len(terms) < 2
+    return tuple((t, "sole" if sole or t[0] != "slot" else "table-order")
+                 for t in terms)
 
-    Unlike the arithmetic identity rule in `match_commutative`, this permits a
-    VARIABLE-like slot to vanish. The justification is in the corpus: a zero
-    morph *is* a morph (`morphology.wordformation.zero_morpheme_identity`,
-    `CONCAT(STEM, EMPTY) = STEM`), and the element it binds is a slot the
-    corpus declares `constant`, not a value invented by the matcher. The old
-    blanket rule ("a law does not lose its variables") is right for `+` and
-    `*`, where the identity is a bare number, and wrong here.
+
+# ---------------------------------------------------------------------------
+# Identity spelling: one abstract element, several corpus vocabularies
+# ---------------------------------------------------------------------------
+
+def spelling_ranker(spec_slots: frozenset, disc_slots: frozenset):
+    """Order a head's identity spellings by the SPECIFIC statement's own
+    vocabulary: names it declares itself first, then names its discipline
+    uses anywhere, then the declaration order in HEAD_ALGEBRA.
+
+    `HEAD_ALGEBRA["JOIN"]["identity"]` is `("FALSITY", "EMPTYSET",
+    "INCONSISTENCY")` because the same lattice bottom is spelled three ways.
+    v2 tried them in table order and so reported
+    `settheory.boolean_laws.absorption >= settheory.boolean_laws.idempotence`
+    as `SETB -> FALSITY` -- correct, but in the wrong corpus's vocabulary.
+    Ties in cost keep the first spelling tried, so ranking here is what
+    decides the printed spelling.
     """
-    args = pat[2]
-    if len(args) != 2:
-        return False
-    idents = identity_terms(pat[1])
-    for i in (1, 0):  # right identity first: the corpora write it that way
-        vanish, keep = args[i], args[1 - i]
-        if vanish[0] != "slot":
-            continue
-        name = vanish[1]
-        for ident in idents:
-            if st.binds.get(name, ident) != ident:
-                continue
-            saved = _save(st)
-            st.binds[name] = ident
-            st.used_identity = True
-            st.head_collapses += 1
-            if match(keep, term, st):
-                return True
-            _restore(st, saved)
-    return False
 
-
-def match_commutative(opname: str, pats: list[tuple], terms: list[tuple],
-                      st: MatchState) -> bool:
-    """Assign term args to pattern args. Non-slot pattern args take exactly
-    one term arg; slot args take >=1 (absorbing extras as a sub-op) or, for
-    parameter-like slots, the identity element (taking none)."""
-    if not pats:
-        return not terms
-    pat = pats[0]
-    saved = _save(st)
-
-    def restore():
-        _restore(st, saved)
-
-    if pat[0] != "slot":
-        for i, t in enumerate(terms):
-            if match(pat, t, st):
-                if match_commutative(opname, pats[1:], terms[:i] + terms[i + 1:], st):
-                    return True
-            restore()
-        return False
-
-    name = pat[1]
-    # Identity binding for parameter-like slots. The identity now comes from
-    # the declared HEAD_ALGEBRA table rather than a local dict; for `+` and
-    # `*` it is a bare number, so the parameter-only restriction stays (see
-    # match_via_head_identity for why declared constant slots are different).
-    if st.slot_class.get(name) == "P":
-        for ident in identity_terms(opname):
-            if st.binds.get(name, ident) != ident:
-                continue
-            prev = name in st.binds
-            st.binds[name] = ident
-            was_ident = st.used_identity
-            st.used_identity = True
-            if match_commutative(opname, pats[1:], terms, st):
-                return True
-            if not prev:
-                st.binds.pop(name, None)
-            st.used_identity = was_ident
-    # bind to each possible non-empty subset (subsets beyond singletons only
-    # explored when the remaining pattern can still be satisfied)
-    n = len(terms)
-    remaining_needed = sum(1 for p in pats[1:] if p[0] != "slot"
-                           or st.slot_class.get(p[1]) != "P")
-    max_take = n - remaining_needed if n - remaining_needed >= 1 else 0
-    for size in range(1, max_take + 1):
-        for combo in _combinations(range(n), size):
-            taken = [terms[i] for i in combo]
-            bound = taken[0] if size == 1 else canonicalize((
-                "op", opname, tuple(taken)))
-            if name in st.binds:
-                if st.binds[name] != bound:
-                    continue
-                prev = True
+    @lru_cache(maxsize=None)
+    def ranked(head: str) -> tuple:
+        terms = identity_terms(head)
+        if not terms:
+            return ()
+        if len(terms) == 1:
+            # A numeric identity, or a head the corpus spells one way only.
+            return ((terms[0], "sole"),)
+        out = []
+        for t in terms:
+            if t[0] != "slot":
+                out.append((1, t, "sole"))
+            elif t[1] in spec_slots:
+                out.append((0, t, "specific-node"))
+            elif t[1] in disc_slots:
+                out.append((1, t, "specific-discipline"))
             else:
-                st.binds[name] = bound
-                prev = False
-            was_abs = st.used_absorption
-            if size > 1:
-                st.used_absorption = True
-            rest = [terms[i] for i in range(n) if i not in combo]
-            if match_commutative(opname, pats[1:], rest, st):
-                return True
-            if not prev:
-                st.binds.pop(name, None)
-            st.used_absorption = was_abs
-    return False
+                out.append((2, t, "table-order"))
+        out.sort(key=lambda r: r[0])  # stable: table order breaks rank ties
+        return tuple((t, b) for _, t, b in out)
+
+    return ranked
 
 
-def _combinations(idx, size):
-    from itertools import combinations
-    return combinations(idx, size)
+# ---------------------------------------------------------------------------
 
 
 def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
-                         classes: dict[str, dict[str, str]]) -> list[dict]:
+                         classes: dict[str, dict[str, str]],
+                         node_slots: dict[str, frozenset],
+                         disc_slots: dict[str, frozenset]) -> tuple[list[dict], dict]:
     edges = []
+    # The search is exhaustive, so it is bounded only by the shape of the
+    # trees. `max_pair_steps` is reported so that the bound stays visible: if
+    # a future corpus grows a wide commutative op (the subset enumeration is
+    # the only super-linear part), it shows up here long before the wall time
+    # does. v2 had exactly the same exposure -- a FAILING first-success match
+    # already explores the whole space -- but no way to see it.
+    stats = {"steps": 0, "max_pair_steps": 0, "max_pair": None}
+    rankers = {n.statement_id: spelling_ranker(
+        node_slots.get(n.statement_id, frozenset()),
+        disc_slots.get(n.discipline, frozenset())) for n in nodes}
     for gen in nodes:
         gtree = trees[gen.statement_id]
         # rel-rooted equations AND call-rooted statements (inference rules,
         # relational predicates) may serve as patterns; the old rel-only
         # guard excluded all 16 inference-rule nodes (probed, BACKLOG).
-        if gtree[0] not in {"rel", "call", "op"} or op_count(gtree) < 2:
+        if gtree[0] not in {"rel", "call", "op"} or op_count(gtree) < MIN_PATTERN_OPS:
             continue
         for spec in nodes:
             if spec.statement_id == gen.statement_id:
                 continue
             if gen.shape == spec.shape:
                 continue  # exact twins already reported
-            # Pass 1 uses no declared head identity; pass 2 allows it. A
-            # reading that needs no algebra is always preferred.
-            st = MatchState(classes[gen.statement_id])
-            st.allow_head_identity = False
-            if not match(gtree, trees[spec.statement_id], st):
-                st = MatchState(classes[gen.statement_id])
-                if not match(gtree, trees[spec.statement_id], st):
-                    continue
-            # informative = anything beyond pure slot-to-slot renaming
-            # (renamings are exact twins, already in the skeleton report);
-            # the old absorption/identity-only filter provably suppressed
-            # the plainest specializations (5 probed instances in BACKLOG).
-            # Head-identity collapse removes a call node from the pattern, so
-            # the non-triviality bar (`op_count >= 2`, so that templates like
-            # `X = A*B` cannot subsume half the corpus) has to be re-checked
-            # against the pattern as *used*, not as written. Without this,
-            # `MEET(REGA, REGB) = EMPTYSET` collapses to `REGA = EMPTYSET`
-            # and matches every two-slot equation in the graph: measured, it
-            # was 507 extra edges, 500 of them from three such templates.
-            if (op_count(gtree) - st.head_collapses >= 2
-                    and (st.used_absorption or st.used_identity
-                         or st.used_compound)):
-                edges.append({
-                    "general": gen.statement_id,
-                    "specific": spec.statement_id,
-                    "general_template": gen.template,
-                    "specific_template": spec.template,
-                    "via": "+".join(v for v, on in [
-                        ("absorption", st.used_absorption),
-                        ("identity", st.used_identity),
-                        ("compound", st.used_compound)] if on),
-                    "bindings": {k: render(v) for k, v in sorted(st.binds.items())},
-                })
-    return edges
+            search = Search(classes[gen.statement_id], op_count(gtree),
+                            rankers[spec.statement_id])
+            best = search.run(gtree, trees[spec.statement_id])
+            stats["steps"] += search.steps
+            if search.steps > stats["max_pair_steps"]:
+                stats["max_pair_steps"] = search.steps
+                stats["max_pair"] = (gen.statement_id, spec.statement_id)
+            if best is None:
+                continue
+            edge = {
+                "general": gen.statement_id,
+                "specific": spec.statement_id,
+                "general_template": gen.template,
+                "specific_template": spec.template,
+                "via": "+".join(v for v, on in [
+                    ("absorption", best.absorbed),
+                    ("identity", best.identity_uses),
+                    ("compound", best.compound)] if on),
+                "cost": best.cost,
+                "structure_cost": best.structure_cost,
+                "algebra_cost": best.algebra_cost,
+                "head_collapses": best.head_collapses,
+                "bindings": {k: render(v) for k, v in sorted(best.binds.items())},
+            }
+            if best.ident_choices:
+                edge["identity_spellings"] = [
+                    {"slot": s, "spelling": sp, "head": h, "basis": b}
+                    for s, sp, h, b in best.ident_choices]
+                if any(b == "table-order" for _, _, _, b in best.ident_choices):
+                    edge["identity_spelling_note"] = (
+                        "no spelling of this identity occurs in the specific "
+                        "statement's discipline; fell back to HEAD_ALGEBRA "
+                        "table order")
+            edges.append(edge)
+    return edges, stats
 
 
 def render(t: tuple) -> str:
@@ -332,41 +598,74 @@ def main() -> int:
     nodes, problems = load_nodes(args.data_dir)
     trees: dict[str, tuple] = {}
     classes: dict[str, dict[str, str]] = {}
-    kept: list[ParsedNode] = []
+    node_slots: dict[str, frozenset] = {}
+    disc_slots: dict[str, set] = {}
     for corpus_path in sorted(args.data_dir.glob("*/nodes.json")):
         corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+        discipline = corpus.get("discipline", corpus_path.parent.name)
+        vocab = disc_slots.setdefault(discipline, set())
         for nj in corpus.get("statement_nodes", []):
             sid = nj.get("statement_id")
             sig = nj.get("structural_signature", {})
             tmpl = sig.get("anonymized_template", "")
+            slots = slot_classes(nj)
+            # The discipline's vocabulary is collected from EVERY node,
+            # including ones whose template fails to parse: a corpus's
+            # spelling of the lattice bottom is a fact about the corpus, not
+            # about which of its statements the matcher can read.
+            vocab.update(slots)
             try:
                 trees[sid] = canonicalize(Parser(tokenize(tmpl)).parse())
             except TemplateParseError:
                 continue
-            classes[sid] = slot_classes(nj)
+            classes[sid] = slots
+            node_slots[sid] = frozenset(slots)
     kept = [n for n in nodes if n.statement_id in trees]
+    frozen_disc = {k: frozenset(v) for k, v in disc_slots.items()}
 
-    edges = find_specializations(kept, trees, classes)
+    t0 = time.perf_counter()
+    edges, stats = find_specializations(kept, trees, classes, node_slots,
+                                        frozen_disc)
+    elapsed = time.perf_counter() - t0
     # Tightness: how much structure the bindings had to swallow. Small =
-    # near-exact relationship; large = loose structural analogy.
+    # near-exact relationship; large = loose structural analogy. `cost` is the
+    # companion axis -- looseness plus what the algebra was charged for.
     for e in edges:
         e["looseness"] = sum(max(0, b.count("(")) for b in e["bindings"].values())
-    edges.sort(key=lambda e: (e["looseness"], e["general"]))
+    edges.sort(key=lambda e: (e["cost"], e["looseness"], e["general"],
+                              e["specific"]))
     cross = [e for e in edges
              if e["general"].split(".")[0] != e["specific"].split(".")[0]]
     print(f"Found {len(edges)} specialization edges "
-          f"({len(cross)} cross-discipline) among {len(kept)} nodes.\n")
+          f"({len(cross)} cross-discipline) among {len(kept)} nodes.")
+    summary = (f"Cheapest-derivation search: {stats['steps']} search steps in "
+               f"{elapsed:.2f}s")
+    if edges:
+        costs = sorted(e["cost"] for e in edges)
+        summary += (f"; cost range {costs[0]}-{costs[-1]} "
+                    f"(median {costs[len(costs) // 2]})")
+    print(summary + ".")
+    if stats["max_pair"]:
+        print(f"  worst single pair: {stats['max_pair_steps']} steps, "
+              f"{stats['max_pair'][0]} vs {stats['max_pair'][1]}.")
+    print()
+    cross_ids = {(e["general"], e["specific"]) for e in cross}
     shown = edges[:40]
     for e in shown:
-        tag = " [CROSS-DISCIPLINE]" if e in cross else ""
+        tag = (" [CROSS-DISCIPLINE]"
+               if (e["general"], e["specific"]) in cross_ids else "")
         print(f"  {e['general']}  >=  {e['specific']}  via {e['via']} "
-              f"(looseness {e['looseness']}){tag}")
+              f"(cost {e['cost']} = {e['structure_cost']} structure + "
+              f"{e['algebra_cost']} algebra, looseness {e['looseness']}){tag}")
         print(f"    general : {e['general_template']}")
         print(f"    specific: {e['specific_template']}")
         binds = ", ".join(f"{k}->{v}" for k, v in e["bindings"].items())
-        print(f"    bindings: {binds}\n")
+        print(f"    bindings: {binds}")
+        if e.get("identity_spelling_note"):
+            print(f"    note: {e['identity_spelling_note']}")
+        print()
     if len(edges) > len(shown):
-        print(f"  ... {len(edges) - len(shown)} looser edges omitted from "
+        print(f"  ... {len(edges) - len(shown)} costlier edges omitted from "
               f"stdout (all are in the JSON report).")
 
     if args.write_report:
