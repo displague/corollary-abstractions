@@ -2024,6 +2024,220 @@
         "falsum",
         "intuitionistic logic"
       ]
+    },
+    {
+      "statement_id": "logic.inference.hypothetical_syllogism",
+      "title": "Hypothetical Syllogism (Transitivity of Entailment)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "propositional_logic",
+        "topic": "inference_rules",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if (P entails Q) and (Q entails R) then (P entails R)",
+        "canonical_latex": "P \\vdash Q \\ \\land\\ Q \\vdash R \\implies P \\vdash R",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(P ⊢ Q) ∧ (Q ⊢ R) → (P ⊢ R)"
+          },
+          {
+            "form_id": "object_language",
+            "notation_system": "ascii",
+            "expression": "((P implies Q) and (Q implies R)) implies (P implies R)",
+            "scope_note": "The conditional-chaining form, which is what most textbooks name hypothetical syllogism. Equivalent to the order form by the deduction theorem; it would carry IMPLIES in the two premise positions and so would NOT twin the inclusion family"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "P |- Q ; Q |- R |- P |- R",
+            "scope_note": "Presented as an inference rule with premises above the line"
+          },
+          {
+            "form_id": "cut",
+            "notation_system": "ascii",
+            "expression": "Gamma |- P, P |- Delta => Gamma |- Delta",
+            "scope_note": "Gentzen's cut rule: hypothetical syllogism is the propositional shadow of cut, and cut-elimination is the theorem that it is admissible rather than primitive"
+          },
+          {
+            "form_id": "lattice",
+            "notation_system": "ascii",
+            "expression": "(P and Q = P) and (Q and R = Q) implies (P and R = P)",
+            "scope_note": "Entailment expressed through meet, which is how LEQ is defined in the template"
+          },
+          {
+            "form_id": "composition",
+            "notation_system": "ascii",
+            "expression": "f : P -> Q, g : Q -> R  gives  g . f : P -> R",
+            "scope_note": "Under Curry-Howard the rule is composition of proof terms; a preorder read as a category has hypothetical syllogism as its composition law"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "order_transitivity",
+        "anonymized_template": "IMPLIES(MEET(LEQ(PROP1, PROP2), LEQ(PROP2, PROP3)), LEQ(PROP1, PROP3))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP1",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP2",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          },
+          {
+            "slot_id": "PROP3",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand"
+          }
+        ],
+        "invariants": [
+          "The middle proposition appears twice, once as the conclusion of the first entailment and once as the premise of the second: transitivity is the chaining pattern, and the repeated slot is the whole content.",
+          "LEQ is the entailment order, not a defined connective. In the Lindenbaum-Tarski algebra the elements are formulas modulo interderivability and the partial order IS logical consequence, so `LEQ(a, b)` reads `a |- b` in exactly the sense in which it reads `A subset B` on the set side. Together with reflexivity (`a |- a`) and antisymmetry-modulo-equivalence, this law is what makes that quotient a poset at all -- the construction the corpus's whole logic/set_theory identity rests on.",
+          "Order-theoretic restatement of absorption: LEQ(x, y) holds exactly when MEET(x, y) = x, so transitivity is a consequence of the lattice equations rather than an extra postulate.",
+          "Not an equation and not reversible, which puts it in the same structural family as modus ponens rather than with the Boolean laws.",
+          "Distinct from the object-language deduction `((a -> b) and (b -> c)) -> (a -> c)`, which is the same fact one deduction-theorem step away and would carry IMPLIES where this carries LEQ. The order form is authored because it is the form the graph can compare -- and, unusually for this corpus, that choice costs nothing: both readings are standard textbook statements of hypothetical syllogism, and the object-language one is recorded in equivalent_forms."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "P",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary proposition (well-formed formula) of the object language."
+          },
+          {
+            "symbol": "Q",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary proposition, independent of P."
+          },
+          {
+            "symbol": "R",
+            "syntactic_category": "variable",
+            "semantic_role": "propositional_operand",
+            "mathematical_order": 0,
+            "description": "A third arbitrary proposition."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "|-",
+            "name": "derivability",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic and as subset inclusion in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Entailment chains: if P is enough for Q and Q is enough for R, then P is enough for R. Reasoning can be assembled from steps, which is what makes proof possible at all.",
+        "statistical_significance": "Authored to cash a prediction the corpus registered against itself. `settheory.order.subset_transitivity` was deliberately written with the lattice-abstract LEQ head rather than a SUBSET head, and its commentary recorded the reason out loud: so that a future logic node for entailment transitivity 'would twin with this one exactly, without either corpus being rewritten'. That is now testable, and the answer is yes -- the two templates are generated from one shared format string (TPL_ORDER_TRANSITIVITY), and the skeleton `IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩` now carries FOUR statements in four disciplines: this node, subset inclusion, geotop.predicates.containment_transitivity and temporal.order.precedence_transitivity. The result is worth separating from the file's other twins. De Morgan twins because logic and set theory are one Boolean algebra; this group twins across four subject matters that share no carrier -- propositions, sets, spatial regions, instants of time -- and what they share is only that each carries a partial order. It is the corpus's clearest instance of structure generalizing past its origin, and the cheapest one to have obtained, since three quarters of it was already in the graph waiting. Against its own corpus the contrast is with logic.inference.modus_ponens, which shares the outer two-premise detachment shell `IMPLIES⟨MEET⟨_, _⟩, _⟩` and differs inside; that shell now carries six nodes and forms exactly one group, which is the measurement docs/BACKLOG.md asked for.",
+        "regularity_conditions": [
+          "A consequence relation that is reflexive and transitive, i.e. a preorder on formulas",
+          "Formulas taken modulo interderivability, so the preorder becomes the partial order of the Lindenbaum-Tarski algebra"
+        ],
+        "failure_modes": [
+          "Fails for non-transitive consequence relations, which are not exotic: probabilistic support, default and defeasible reasoning, and 'is evidence for' all chain badly, and the sorites paradox is what happens when a tolerant relation is chained anyway.",
+          "Substructural logics that reject cut as primitive still validate it as admissible; a logic in which cut is genuinely unavailable is one in which proofs cannot be composed, which is a very strong restriction and rarely what is wanted.",
+          "Conflated with the invalid chain of *converses* and with the material-conditional paradoxes: from vacuously true conditionals the rule still fires and yields a vacuously true conclusion, which is valid and routinely misread as informative."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "settheory.order.subset_transitivity"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "aristotle_priora",
+          "bibliographic_entry": "Aristotle (c. 350 BCE). Prior Analytics. Translated by A. J. Jenkinson, in The Complete Works of Aristotle (J. Barnes, ed., 1984). Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "hypothetical syllogism",
+        "transitivity",
+        "entailment",
+        "cut rule",
+        "Lindenbaum-Tarski algebra",
+        "partial order"
+      ]
     }
   ]
 }

@@ -8,6 +8,47 @@ the authored source of truth: the node payload below IS the corpus (edit
 here, regenerate, validate), and it adds what the gap was blocking -- the
 probability-normalization axiom (partition of unity), and the reciprocal
 GRPO<->z-standardization equivalence.
+
+Registered prediction (written before the matcher was run)
+----------------------------------------------------------
+
+**The two-component mixture closes the convex-combination gap.**
+`scripts/seed_numgraph.py` registered "linear interpolation versus probability
+mixtures" as prediction 2 and could not adjudicate it: the verdict was *not
+evaluable*, because `data/statistics` carried
+`probstat.probability.total_probability_partition` (an indexed sum) and no
+two-point convex combination at all. docs/BACKLOG.md records the same gap from
+the tooling side ("two twin groups are blocked by one missing node").
+
+`probstat.probability.two_component_mixture` is authored here as
+`MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2`, which is how a mixture
+density is written -- Pearson's own two-component decomposition of the crab
+data -- and *not* reshaped towards anything. The prediction: it typed-twins
+(not merely shape-twins) `numanalysis.interpolation.linear_interpolation` and
+`geomodel.bezier.de_casteljau_step`, the two-member convex-combination family,
+turning it into a three-member group spanning three disciplines. The typed
+level is the strong claim, and it is a claim about the *categories* as much as
+the shape: the mixing weight has to be parameter-like (P) and both components
+variable-like (V), matching the interpolation parameter and the two data
+values, or only the shape level fires.
+
+Grammar note: `(1 - WEIGHT)` needs no workaround. The parser reads a
+parenthesized sum and normalizes subtraction to `+(1, neg(...))`, so the
+textbook spelling is the one authored, with no algebraic respelling. That the
+parameter slot recurs (bare and inside `1 - WEIGHT`) is exactly why this
+family is isolated from the affine family -- see the interpolation node's own
+commentary; the mixture inherits that isolation rather than escaping it, which
+is the honest outcome.
+
+VERDICT: **FIRED, at typed and at shape level.** The group is now
+
+    ?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))   [CROSS-DISCIPLINE]
+      - geomodel.bezier.de_casteljau_step               (geometric_modeling)
+      - numanalysis.interpolation.linear_interpolation  (numerical_analysis)
+      - probstat.probability.two_component_mixture      (statistics)
+
+so numgraph's prediction 2(b) is adjudicated at last: not a miss, a hit that
+had nothing to hit.
 """
 
 import json
@@ -598,7 +639,9 @@ NODES = json.loads(r"""
       ],
       "equivalent_to": [],
       "special_case_of": [],
-      "generalizes": [],
+      "generalizes": [
+        "probstat.probability.two_component_mixture"
+      ],
       "composed_with": []
     },
     "provenance": [
@@ -1210,6 +1253,217 @@ NODES = json.loads(r"""
         "citation_key": "kolmogorov1933",
         "bibliographic_entry": "Kolmogorov, A. N. (1933). Grundbegriffe der Wahrscheinlichkeitsrechnung. Berlin: Springer."
       }
+    ]
+  },
+  {
+    "statement_id": "probstat.probability.two_component_mixture",
+    "title": "Two-Component Mixture Distribution",
+    "statement_class": "definition",
+    "epistemic_status": "formal",
+    "theory_context": {
+      "disciplines": [
+        "statistics",
+        "probability_theory"
+      ],
+      "subfield": "distribution_theory",
+      "topic": "mixture_models",
+      "canonical_objects": [
+        "component distribution",
+        "mixing weight",
+        "latent class"
+      ]
+    },
+    "formal_statement": {
+      "canonical_ascii": "f(x) = w*f_1(x) + (1 - w)*f_2(x),  w in [0,1]",
+      "canonical_latex": "f(x) = w\\,f_1(x) + (1-w)\\,f_2(x), \\qquad w \\in [0,1]",
+      "equivalent_forms": [
+        {
+          "form_id": "pearson_two_normals",
+          "notation_system": "ascii",
+          "expression": "f(x) = w*N(x; mu_1, sigma_1^2) + (1 - w)*N(x; mu_2, sigma_2^2)",
+          "scope_note": "Pearson's 1894 dissection of a frequency curve into two normal components, the case the method of moments was invented for"
+        },
+        {
+          "form_id": "latent_class",
+          "notation_system": "event_probability",
+          "expression": "P(X in A) = P(Z=1)*P(X in A | Z=1) + P(Z=2)*P(X in A | Z=2)",
+          "scope_note": "The generative reading: draw a component label Z, then draw from that component. This form is probstat.probability.total_probability_partition with a two-block partition, which is why the special_case_of edge is asserted"
+        },
+        {
+          "form_id": "indexed_general",
+          "notation_system": "ascii",
+          "expression": "f(x) = sum_k w_k*f_k(x),  sum_k w_k = 1",
+          "scope_note": "The K-component form. It is the graph's four-discipline weighted-sum family `?0:V = sum<*(?1:P, ?2:V)>`, not the two-point convex combination, so the two spellings of one model land in two different twin groups"
+        },
+        {
+          "form_id": "contamination",
+          "notation_system": "ascii",
+          "expression": "f = (1 - eps)*f_clean + eps*f_contaminating",
+          "scope_note": "Huber's gross-error model; the same template with the mixing weight read as a contamination fraction"
+        }
+      ]
+    },
+    "structural_signature": {
+      "archetype_id": "two_point_convex_combination",
+      "anonymized_template": "MIXED = WEIGHT*COMPONENT1 + (1 - WEIGHT)*COMPONENT2",
+      "slot_schema": [
+        {
+          "slot_id": "MIXED",
+          "syntactic_category": "variable",
+          "semantic_role": "mixture_density"
+        },
+        {
+          "slot_id": "WEIGHT",
+          "syntactic_category": "parameter",
+          "semantic_role": "mixing_weight"
+        },
+        {
+          "slot_id": "COMPONENT1",
+          "syntactic_category": "variable",
+          "semantic_role": "first_component"
+        },
+        {
+          "slot_id": "COMPONENT2",
+          "syntactic_category": "variable",
+          "semantic_role": "second_component"
+        }
+      ],
+      "invariants": [
+        "The mixing weight occurs TWICE, once bare and once inside `1 - WEIGHT`. That repetition IS the partition of unity: the two weights are not free of each other, they are one number and its complement, which is why one parameter suffices for a two-component model.",
+        "Non-negative weights summing to one make the combination convex, so the mixture is a probability distribution whenever both components are. This is the property the model exists for; drop it and the result need not be a density.",
+        "Both component slots are variable-like and enter symmetrically under WEIGHT -> 1 - WEIGHT, i.e. relabelling the components is a symmetry of the statement. That symmetry is the label-switching non-identifiability of mixture likelihoods, visible in the template rather than only in the estimation theory.",
+        "The mixture is a convex combination of the components, not of their parameters: mixing two normals does not give a normal, which is the whole point and the standard confusion.",
+        "Structurally identical to a two-point linear interpolation, with the mixing weight in the interpolation parameter's slot. A mixture density is the point a fraction w of the way from one density to another in the affine space of finite signed measures."
+      ]
+    },
+    "symbol_lexicon": {
+      "symbols": [
+        {
+          "symbol": "w",
+          "syntactic_category": "parameter",
+          "semantic_role": "mixing_weight",
+          "mathematical_order": 0,
+          "description": "Probability that an observation is drawn from the first component; constrained to [0,1]."
+        },
+        {
+          "symbol": "x",
+          "syntactic_category": "variable",
+          "semantic_role": "evaluation_point",
+          "mathematical_order": 0,
+          "description": "Point at which the densities are evaluated."
+        },
+        {
+          "symbol": "f",
+          "syntactic_category": "variable",
+          "semantic_role": "mixture_density",
+          "mathematical_order": 0,
+          "description": "Density of the mixture at x."
+        },
+        {
+          "symbol": "f_1",
+          "syntactic_category": "variable",
+          "semantic_role": "first_component",
+          "mathematical_order": 0,
+          "description": "Density of the first component at x."
+        },
+        {
+          "symbol": "f_2",
+          "syntactic_category": "variable",
+          "semantic_role": "second_component",
+          "mathematical_order": 0,
+          "description": "Density of the second component at x."
+        }
+      ],
+      "operators": [
+        {
+          "symbol": "=",
+          "name": "equality",
+          "arity": 2,
+          "operator_family": "relational"
+        },
+        {
+          "symbol": "+",
+          "name": "addition",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        },
+        {
+          "symbol": "-",
+          "name": "subtraction",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        },
+        {
+          "symbol": "*",
+          "name": "multiplication",
+          "arity": 2,
+          "operator_family": "arithmetic"
+        }
+      ],
+      "functionals": [],
+      "index_sets": [],
+      "constants": [
+        {
+          "symbol": "1",
+          "value": 1,
+          "description": "Total mixing mass: the two weights are w and its complement, so they sum to one by construction rather than by a side condition."
+        }
+      ]
+    },
+    "semantic_interpretation": {
+      "statement_meaning": "A population made of two subpopulations in proportions w and 1 - w has, at every point, the correspondingly weighted average of the two subpopulation densities.",
+      "statistical_significance": "Authored to adjudicate prediction 2(b) of scripts/seed_numgraph.py, which was registered as 'linear interpolation versus probability mixtures' and returned NOT EVALUABLE -- the graph had no mixture node, so there was nothing to compare against, a different outcome from a miss and reported as such. The verdict is now available and it FIRED: this template's typed skeleton `?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))` is character for character the skeleton of numanalysis.interpolation.linear_interpolation and geomodel.bezier.de_casteljau_step, so the convex-combination family becomes three statements in three disciplines. Two things make the result worth more than the arithmetic. First, no respelling was needed: `w*f_1 + (1-w)*f_2` is how the model is written and how Pearson wrote it, so this is not the authored-to-match case docs/BACKLOG.md warns about for the trapezoidal rule. Second, the family's known limitation transfers with it -- the recurring parameter slot keeps all three members out of the five-member affine family, and the mixture does not escape that any more than the lerp does. The K-component spelling in equivalent_forms lands in a *different* group (the four-discipline weighted-sum family), which is the sharpest available demonstration that twin membership is a property of a spelling, not of a statement.",
+      "regularity_conditions": [
+        "The mixing weight lies in [0,1]; outside it the combination is still an algebraic identity but need not be a density",
+        "Both components are densities with respect to a common dominating measure",
+        "Discrete and continuous components can be mixed only after fixing that common measure; the template does not record the choice"
+      ],
+      "failure_modes": [
+        "Non-identifiable without constraints: the pair (w, f_1, f_2) and (1-w, f_2, f_1) give the same mixture, so likelihood surfaces have symmetric modes and MCMC chains label-switch between them.",
+        "The likelihood of a normal mixture is unbounded -- send one component's variance to zero on a single observation -- so maximum likelihood is only defined on a restricted parameter space, and EM converges to a local, not global, optimum.",
+        "Mixing two unimodal densities need not give a bimodal one; reading component count off the number of modes is the standard error, and Pearson's own criterion was moments rather than modes.",
+        "Estimating w from data close to 0 or 1 is badly conditioned: the two components become nearly unidentifiable, which is the reason contamination fractions are hard to pin down in robust statistics."
+      ]
+    },
+    "inferential_links": {
+      "entailed_by": [],
+      "entails": [],
+      "equivalent_to": [],
+      "special_case_of": [
+        "probstat.probability.total_probability_partition"
+      ],
+      "generalizes": [],
+      "composed_with": [
+        "probstat.probability.probability_normalization",
+        "numanalysis.interpolation.linear_interpolation",
+        "geomodel.bezier.de_casteljau_step"
+      ]
+    },
+    "provenance": [
+      {
+        "citation_key": "pearson1894",
+        "bibliographic_entry": "Pearson, K. (1894). Contributions to the Mathematical Theory of Evolution. Philosophical Transactions of the Royal Society of London A, 185, 71-110. [The founding paper: a two-component normal mixture fitted to Weldon's Naples crab measurements by the method of moments, which Pearson invented for the purpose.]"
+      },
+      {
+        "citation_key": "titterington1985",
+        "bibliographic_entry": "Titterington, D. M., Smith, A. F. M., & Makov, U. E. (1985). Statistical Analysis of Finite Mixture Distributions. Chichester: Wiley."
+      },
+      {
+        "citation_key": "mclachlan2000",
+        "bibliographic_entry": "McLachlan, G. J., & Peel, D. (2000). Finite Mixture Models. New York: Wiley."
+      },
+      {
+        "citation_key": "huber1964",
+        "bibliographic_entry": "Huber, P. J. (1964). Robust Estimation of a Location Parameter. Annals of Mathematical Statistics, 35(1), 73-101. [The gross-error contamination model: the same template read with the weight as a contamination fraction.]"
+      }
+    ],
+    "keywords": [
+      "mixture distribution",
+      "convex combination",
+      "mixing weight",
+      "latent class",
+      "identifiability",
+      "contamination model"
     ]
   }
 ]

@@ -553,6 +553,19 @@ or commit history. Each item names the evidence that motivated it.
   `functionals` while `symbols` still demands `minItems: 1` — FTC part 1
   needed a scalar symbol it didn't naturally have. Either add the enum
   members or relax `minItems`.
+- **`provenance` entries reject `scope_note`, `equivalent_forms` entries accept
+  it.** Two `additionalProperties: false` objects in the same node disagree
+  about the same key name, and there is no reason for the asymmetry: a citation
+  needs to say *why* it is cited at least as often as an alternative notation
+  needs to say when it applies. Found while authoring
+  `probstat.probability.two_component_mixture`, where Pearson 1894 wants "the
+  founding paper, a two-component normal mixture fitted to Weldon's crab
+  measurements" and Huber 1964 wants "the same template with the weight read as
+  a contamination fraction". Validation failed on both; the notes now sit
+  inside `bibliographic_entry` in square brackets, which is unparseable by
+  anything that consumes the bibliography. Fix: add `scope_note` (or `note`) to
+  the provenance entry schema.
+
 - **`statement_id` pattern forbids underscores in the first segment.**
   `^[a-z0-9]+(\.[a-z0-9_]+)+$` allows `_` in every segment except the
   discipline prefix, so `set_theory.boolean_laws.de_morgan_laws` fails
@@ -661,6 +674,41 @@ or commit history. Each item names the evidence that motivated it.
   which makes it the natural regression test for the proposed fix (report
   matches whose bindings are non-trivial even when neither absorption nor
   identity fired).
+- **RESOLVED (corpus gap): both blocked twin groups now exist.** The entry
+  below asked for two nodes in `data/statistics`. Both have landed:
+  `probstat.probability.probability_normalization` (earlier) and
+  `probstat.probability.two_component_mixture` (`corpus/gapfill`). The mixture
+  node typed- *and* shape-twins `numanalysis.interpolation.linear_interpolation`
+  and `geomodel.bezier.de_casteljau_step` with no respelling, so
+  `scripts/seed_numgraph.py`'s prediction 2(b) moves from *not evaluable* to
+  FIRED. Two things are worth keeping from the episode. (1) *Not evaluable* was
+  the right verdict to record and it was payable later by one node — a corpus
+  gap is a cheaper defect than a matcher gap, and the reports should keep
+  distinguishing them. (2) The fix cost nothing in tooling: the `(1 - WEIGHT)`
+  spelling parses as written, so no BACKLOG item blocked it. The gap was
+  purely that nobody had authored the statement.
+- **A statement whose two standard spellings land in two different twin groups,
+  in one node.** `probstat.probability.two_component_mixture` records
+  `f = w*f_1 + (1-w)*f_2` in its template (the two-point convex-combination
+  group: interpolation, de Casteljau, mixture — three disciplines) and
+  `f = sum_k w_k*f_k` in `equivalent_forms` (the four-discipline weighted-sum
+  group: Bezier, barycentric, total probability, Betti). One model, two
+  textbook spellings, two disjoint groups, neither spelling wrong. This is the
+  already-recorded "same statement, two spellings, and only one of them
+  matches" item with the sharpest evidence yet, because here *both* spellings
+  match — just not each other — so it cannot be dismissed as authoring luck
+  about which form fires. It is the same K-to-2 collapse `specialize.py` cannot
+  do (recorded for uniform-vs-Shannon entropy and for de Casteljau as the
+  degree-one Bernstein case), now visible inside a single node.
+- **`specialize.py`'s `rel` guard: 17 nodes, not 16.**
+  `logic.inference.hypothetical_syllogism` is the newest node whose canonical
+  template is a bare call rather than a relation, so it is dropped from the
+  general side along with the sixteen already listed below. Confirmed
+  empirically: of 582 specialization edges over 199 nodes, **zero** touch
+  either node added on `corpus/gapfill`, in either direction. The mixture node
+  is excluded for the other recorded reason (a recurring parameter slot plus a
+  numeric literal in a multiplicative position), so one branch supplied a fresh
+  instance of both filters at once.
 - **The corpus gap is now measurable: two twin groups are blocked by one
   missing node.** `data/statistics` carries the law of total probability,
   Bayes's rule, z-standardization and the CLT, but **not** the normalization

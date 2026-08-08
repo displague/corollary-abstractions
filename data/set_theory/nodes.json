@@ -1330,7 +1330,7 @@
       },
       "semantic_interpretation": {
         "statement_meaning": "Containment chains: if every element of A lies in B and every element of B lies in C, then every element of A lies in C.",
-        "statistical_significance": "The set corpus's inferential node, chosen to mirror logic.inference.modus_ponens rather than to twin with it. Both are two-premise detachment shells `IMPLIES⟨MEET⟨_, _⟩, _⟩`, but the premises differ in head, so the matcher reports no group -- correctly. The template uses the lattice-abstract LEQ head rather than a SUBSET head precisely so that a future logic node for entailment transitivity (hypothetical syllogism, stated over the Lindenbaum-Tarski order) would twin with this one exactly, without either corpus being rewritten.",
+        "statistical_significance": "The set corpus's inferential node, chosen to mirror logic.inference.modus_ponens rather than to twin with it. Both are two-premise detachment shells `IMPLIES⟨MEET⟨_, _⟩, _⟩`, but the premises differ in head, so the matcher reports no group -- correctly. The template uses the lattice-abstract LEQ head rather than a SUBSET head precisely so that a future logic node for entailment transitivity (hypothetical syllogism, stated over the Lindenbaum-Tarski order) would twin with this one exactly, without either corpus being rewritten. That bet has now been settled, and it paid three times over. logic.inference.hypothetical_syllogism was authored from the same shared format string and joined the group, but two corpora had already found it first without being asked to: geotop.predicates.containment_transitivity and temporal.order.precedence_transitivity adopted the same LEQ shape for spatial containment and temporal precedence. The skeleton now carries four statements in four disciplines whose carriers have nothing in common but a partial order. The `equivalent_to` edge to the logic node is literal in the same sense as the Boolean-law twins; the other two are analogies of order and are left to the matcher's report, where analogies belong.",
         "regularity_conditions": [
           "A, B, C are sets",
           "Inclusion defined extensionally by universally quantified membership"
@@ -1343,7 +1343,9 @@
       "inferential_links": {
         "entailed_by": [],
         "entails": [],
-        "equivalent_to": [],
+        "equivalent_to": [
+          "logic.inference.hypothetical_syllogism"
+        ],
         "special_case_of": [],
         "generalizes": [],
         "composed_with": [

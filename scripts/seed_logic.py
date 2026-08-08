@@ -63,6 +63,51 @@ and contraposition on the logic side (inference, not equation), subset
 transitivity and two-set inclusion-exclusion on the set side (order and
 counting, which propositions have no analogue of).
 
+Registered prediction (hypothetical syllogism)
+----------------------------------------------
+
+`settheory.order.subset_transitivity` was authored with the lattice-abstract
+LEQ head rather than a SUBSET head, and its own commentary recorded why: so
+that a future logic node for entailment transitivity "would twin with this one
+exactly, without either corpus being rewritten". The node was left unwritten on
+purpose, as a bet placed against the corpus and payable later.
+
+`logic.inference.hypothetical_syllogism` is that node, and the reading it needs
+is standard rather than convenient: in the Lindenbaum-Tarski algebra the
+elements are formulas modulo interderivability and the partial order IS logical
+consequence, so `LEQ(a, b)` is `a |- b` in the same sense that it is
+`A subset B` over powersets. Both nodes are now generated from ONE format
+string (TPL_ORDER_TRANSITIVITY), which is the file's standing guarantee that a
+twin cannot drift.
+
+PREDICTION: the node joins the LEQ-transitivity group and makes it FOUR
+disciplines -- set inclusion, geospatial containment
+(`geotop.predicates.containment_transitivity`), temporal precedence
+(`temporal.order.precedence_transitivity`) and now propositional entailment.
+
+VERDICT: **FIRED, at typed and at shape level.**
+
+    IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, LEQ⟨?0:V, ?2:V⟩⟩
+      - geotop.predicates.containment_transitivity   (geospatial_topology)
+      - logic.inference.hypothetical_syllogism       (logic)
+      - settheory.order.subset_transitivity          (set_theory)
+      - temporal.order.precedence_transitivity       (temporal_logic)
+
+Worth distinguishing from the Boolean-law twins above. Those twin because logic
+and set theory are literally one algebra, so the group is an identity of
+theorem. This one spans four carriers -- propositions, sets, spatial regions,
+instants -- that share nothing but *being ordered*, and it is the corpus's
+clearest case of a form outliving its origin. It is also the cheapest result in
+the graph: three of the four members were already present, and the fourth cost
+one spec entry because the abstraction had been chosen correctly two corpora
+earlier.
+
+The pair also gets a reciprocal `equivalent_to` (CROSS_LAW_EQUIVALENT below).
+Only the logic/set pair does: those two are one lattice statement over two
+carriers, in exactly the sense the shared laws are, while containment and
+precedence are analogies of order and stay in the matcher's report where
+analogies belong.
+
 Falsehood (docs/DESIGN-epistemic-ladder.md) is authored as a pair plus an
 honest echo. BOT was already an algebraic constant here -- it is the right
 side of the complement laws -- but nothing said what could be *done* with it.
@@ -124,7 +169,11 @@ TPL_CONTRAPOSITION = "IMPLIES({a}, {b}) = IMPLIES(NEG({b}), NEG({a}))"
 TPL_EX_FALSO = "IMPLIES({bot}, {a})"
 TPL_REDUCTIO = "IMPLIES(IMPLIES({a}, {bot}), NEG({a}))"
 TPL_BOTTOM_MINIMAL = "LEQ({bot}, {a})"
-TPL_SUBSET_TRANSITIVITY = "IMPLIES(MEET(LEQ({a}, {b}), LEQ({b}, {c})), LEQ({a}, {c}))"
+# One string, two carriers -- the same rule that makes De Morgan a twin. The
+# set reading is inclusion transitivity and the logic reading is hypothetical
+# syllogism over the Lindenbaum-Tarski order; they are one lattice statement,
+# so they share one format string rather than two hand-kept copies.
+TPL_ORDER_TRANSITIVITY = "IMPLIES(MEET(LEQ({a}, {b}), LEQ({b}, {c})), LEQ({a}, {c}))"
 TPL_INCLUSION_EXCLUSION = (
     "CARD(JOIN({a}, {b})) = CARD({a}) + CARD({b}) - CARD(MEET({a}, {b}))"
 )
@@ -303,6 +352,8 @@ ENDERTON_LOGIC = {"citation_key": "enderton2001",
                   "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."}
 MENDELSON = {"citation_key": "mendelson2015",
              "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."}
+ARISTOTLE = {"citation_key": "aristotle_priora",
+             "bibliographic_entry": "Aristotle (c. 350 BCE). Prior Analytics. Translated by A. J. Jenkinson, in The Complete Works of Aristotle (J. Barnes, ed., 1984). Princeton: Princeton University Press."}
 FREGE = {"citation_key": "frege1879",
          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."}
 PRINCIPIA = {"citation_key": "whitehead1910",
@@ -1371,12 +1422,127 @@ DISCIPLINE_ONLY_LAWS = [
         },
     },
     {
+        "name": "hypothetical_syllogism",
+        "topic_id": "inference",
+        "archetype": "order_transitivity",
+        "cls": "theorem",
+        "status": "derived",
+        "template": TPL_ORDER_TRANSITIVITY,
+        "invariants": [
+            "The middle proposition appears twice, once as the conclusion of the "
+            "first entailment and once as the premise of the second: transitivity "
+            "is the chaining pattern, and the repeated slot is the whole content.",
+            "LEQ is the entailment order, not a defined connective. In the "
+            "Lindenbaum-Tarski algebra the elements are formulas modulo "
+            "interderivability and the partial order IS logical consequence, so "
+            "`LEQ(a, b)` reads `a |- b` in exactly the sense in which it reads "
+            "`A subset B` on the set side. Together with reflexivity (`a |- a`) "
+            "and antisymmetry-modulo-equivalence, this law is what makes that "
+            "quotient a poset at all -- the construction the corpus's whole "
+            "logic/set_theory identity rests on.",
+            "Order-theoretic restatement of absorption: LEQ(x, y) holds exactly "
+            "when MEET(x, y) = x, so transitivity is a consequence of the lattice "
+            "equations rather than an extra postulate.",
+            "Not an equation and not reversible, which puts it in the same "
+            "structural family as modus ponens rather than with the Boolean laws.",
+            "Distinct from the object-language deduction "
+            "`((a -> b) and (b -> c)) -> (a -> c)`, which is the same fact one "
+            "deduction-theorem step away and would carry IMPLIES where this "
+            "carries LEQ. The order form is authored because it is the form the "
+            "graph can compare -- and, unusually for this corpus, that choice "
+            "costs nothing: both readings are standard textbook statements of "
+            "hypothetical syllogism, and the object-language one is recorded in "
+            "equivalent_forms.",
+        ],
+        "logic": {
+            "title": "Hypothetical Syllogism (Transitivity of Entailment)",
+            "ascii": "if (P entails Q) and (Q entails R) then (P entails R)",
+            "latex": "P \\vdash Q \\ \\land\\ Q \\vdash R \\implies P \\vdash R",
+            "forms": [
+                {"form_id": "unicode", "notation_system": "ascii",
+                 "expression": "(P ⊢ Q) ∧ (Q ⊢ R) → (P ⊢ R)"},
+                {"form_id": "object_language", "notation_system": "ascii",
+                 "expression": "((P implies Q) and (Q implies R)) implies (P implies R)",
+                 "scope_note": "The conditional-chaining form, which is what most textbooks name hypothetical syllogism. Equivalent to the order form by the deduction theorem; it would carry IMPLIES in the two premise positions and so would NOT twin the inclusion family"},
+                {"form_id": "rule", "notation_system": "ascii",
+                 "expression": "P |- Q ; Q |- R |- P |- R",
+                 "scope_note": "Presented as an inference rule with premises above the line"},
+                {"form_id": "cut", "notation_system": "ascii",
+                 "expression": "Gamma |- P, P |- Delta => Gamma |- Delta",
+                 "scope_note": "Gentzen's cut rule: hypothetical syllogism is the propositional shadow of cut, and cut-elimination is the theorem that it is admissible rather than primitive"},
+                {"form_id": "lattice", "notation_system": "ascii",
+                 "expression": "(P and Q = P) and (Q and R = Q) implies (P and R = P)",
+                 "scope_note": "Entailment expressed through meet, which is how LEQ is defined in the template"},
+                {"form_id": "composition", "notation_system": "ascii",
+                 "expression": "f : P -> Q, g : Q -> R  gives  g . f : P -> R",
+                 "scope_note": "Under Curry-Howard the rule is composition of proof terms; a preorder read as a category has hypothetical syllogism as its composition law"},
+            ],
+            "meaning": "Entailment chains: if P is enough for Q and Q is enough "
+                       "for R, then P is enough for R. Reasoning can be assembled "
+                       "from steps, which is what makes proof possible at all.",
+            "significance": "Authored to cash a prediction the corpus registered "
+                            "against itself. `settheory.order.subset_transitivity` "
+                            "was deliberately written with the lattice-abstract LEQ "
+                            "head rather than a SUBSET head, and its commentary "
+                            "recorded the reason out loud: so that a future logic "
+                            "node for entailment transitivity 'would twin with this "
+                            "one exactly, without either corpus being rewritten'. "
+                            "That is now testable, and the answer is yes -- the two "
+                            "templates are generated from one shared format string "
+                            "(TPL_ORDER_TRANSITIVITY), and the skeleton "
+                            "`IMPLIES⟨MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩, "
+                            "LEQ⟨?0:V, ?2:V⟩⟩` now carries FOUR statements in four "
+                            "disciplines: this node, subset inclusion, "
+                            "geotop.predicates.containment_transitivity and "
+                            "temporal.order.precedence_transitivity. The result is "
+                            "worth separating from the file's other twins. De "
+                            "Morgan twins because logic and set theory are one "
+                            "Boolean algebra; this group twins across four subject "
+                            "matters that share no carrier -- propositions, sets, "
+                            "spatial regions, instants of time -- and what they "
+                            "share is only that each carries a partial order. It is "
+                            "the corpus's clearest instance of structure "
+                            "generalizing past its origin, and the cheapest one to "
+                            "have obtained, since three quarters of it was already "
+                            "in the graph waiting. Against its own corpus the "
+                            "contrast is with logic.inference.modus_ponens, which "
+                            "shares the outer two-premise detachment shell "
+                            "`IMPLIES⟨MEET⟨_, _⟩, _⟩` and differs inside; that shell "
+                            "now carries six nodes and forms exactly one group, "
+                            "which is the measurement docs/BACKLOG.md asked for.",
+            "conditions": ["A consequence relation that is reflexive and "
+                           "transitive, i.e. a preorder on formulas",
+                           "Formulas taken modulo interderivability, so the "
+                           "preorder becomes the partial order of the "
+                           "Lindenbaum-Tarski algebra"],
+            "failure_modes": [
+                "Fails for non-transitive consequence relations, which are not "
+                "exotic: probabilistic support, default and defeasible reasoning, "
+                "and 'is evidence for' all chain badly, and the sorites paradox is "
+                "what happens when a tolerant relation is chained anyway.",
+                "Substructural logics that reject cut as primitive still validate "
+                "it as admissible; a logic in which cut is genuinely unavailable is "
+                "one in which proofs cannot be composed, which is a very strong "
+                "restriction and rarely what is wanted.",
+                "Conflated with the invalid chain of *converses* and with the "
+                "material-conditional paradoxes: from vacuously true conditionals "
+                "the rule still fires and yields a vacuously true conclusion, which "
+                "is valid and routinely misread as informative.",
+            ],
+            "provenance": [ARISTOTLE, FREGE, GENTZEN, ENDERTON_LOGIC,
+                           DAVEY_PRIESTLEY],
+            "keywords": ["hypothetical syllogism", "transitivity", "entailment",
+                         "cut rule", "Lindenbaum-Tarski algebra", "partial order"],
+            "ops": [TURNSTILE, AND, IMPL],
+        },
+    },
+    {
         "name": "subset_transitivity",
         "topic_id": "order",
         "archetype": "order_transitivity",
         "cls": "theorem",
         "status": "derived",
-        "template": TPL_SUBSET_TRANSITIVITY,
+        "template": TPL_ORDER_TRANSITIVITY,
         "invariants": [
             "The middle element appears twice, once as the consequent of the first "
             "premise and once as the antecedent of the second: transitivity is the "
@@ -1414,7 +1580,20 @@ DISCIPLINE_ONLY_LAWS = [
                             "precisely so that a future logic node for entailment "
                             "transitivity (hypothetical syllogism, stated over the "
                             "Lindenbaum-Tarski order) would twin with this one exactly, "
-                            "without either corpus being rewritten.",
+                            "without either corpus being rewritten. That bet has now been "
+                            "settled, and it paid three times over. "
+                            "logic.inference.hypothetical_syllogism was authored from the "
+                            "same shared format string and joined the group, but two "
+                            "corpora had already found it first without being asked to: "
+                            "geotop.predicates.containment_transitivity and "
+                            "temporal.order.precedence_transitivity adopted the same LEQ "
+                            "shape for spatial containment and temporal precedence. The "
+                            "skeleton now carries four statements in four disciplines "
+                            "whose carriers have nothing in common but a partial order. "
+                            "The `equivalent_to` edge to the logic node is literal in the "
+                            "same sense as the Boolean-law twins; the other two are "
+                            "analogies of order and are left to the matcher's report, "
+                            "where analogies belong.",
             "conditions": ["A, B, C are sets",
                            "Inclusion defined extensionally by universally quantified "
                            "membership"],
@@ -1601,6 +1780,19 @@ CANONICAL_OBJECTS = {
 
 # One-sided `composed_with` edges into other corpora. Only `composed_with` is
 # safe across corpora without writing the reciprocal edge (docs/BACKLOG.md).
+# `equivalent_to` between two *differently named* laws in this file, as opposed
+# to the two readings of one shared law (which build_links derives from the
+# spec having both discipline keys). Only one pair needs it: hypothetical
+# syllogism and subset transitivity are one lattice statement, but they sit in
+# different topics (`inference` / `order`) under names their own disciplines
+# use, so they could not be folded into a single shared law without renaming an
+# existing node. Reciprocity is checked over the merged graph and both ends are
+# generated here, so the pair closes without touching another corpus.
+CROSS_LAW_EQUIVALENT = {
+    ("logic", "hypothetical_syllogism"): ["settheory.order.subset_transitivity"],
+    ("set_theory", "subset_transitivity"): ["logic.inference.hypothetical_syllogism"],
+}
+
 CROSS_CORPUS = {
     ("set_theory", "inclusion_exclusion_two_sets"): [
         "probstat.probability.total_probability_partition",
@@ -1648,6 +1840,7 @@ def build_links(discipline: str, spec: dict) -> dict:
     twin = "set_theory" if discipline == "logic" else "logic"
     if twin in spec:
         equivalent_to.append(qid(twin, spec))
+    equivalent_to.extend(CROSS_LAW_EQUIVALENT.get((discipline, spec["name"]), []))
 
     composed_with = list(CROSS_CORPUS.get((discipline, spec["name"]), []))
     # Every node in a corpus composes with the postulates it is stated over.
