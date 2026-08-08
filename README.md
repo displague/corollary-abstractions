@@ -66,7 +66,7 @@ model trains from scratch in minutes on one consumer GPU.
 | class | file | structure | params | used for |
 |---|---|---|---|---|
 | `TinyTransformer` | `experiments/train.py` | 4-layer encoder + CLS-pool MLP pair-classifier head | ~0.88M | twins / equiv / xlang / qa / syn / realsyn |
-| `SpanPointer` | `experiments/train_span.py` | 4-layer encoder + per-position start/end span head | ~0.80M | solve-for-X answering; the demo checkpoint |
+| `SpanPointer` | `experiments/train_span.py` | 4-layer encoder + per-position start/end span head | 0.82–0.91M (by positional variant) | solve-for-X answering; the demo checkpoint |
 | `TreeSeq2Seq` | `experiments/train_gen.py` | 4-layer encoder + 2-layer autoregressive decoder | ~1.45M | the failed naive generator (kept as the negative result) |
 | `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M | generation-by-pointing; analogy completion |
 
