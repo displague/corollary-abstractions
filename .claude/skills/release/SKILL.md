@@ -36,11 +36,35 @@ rotates the documents:
    its outcome from ANALYSIS.md / DISCOVERIES.md / commit history:
    *shipped* (with numbers), *partial* (what landed, what didn't), or
    *not started*.
-2. **Write `docs/RELEASE-vX.Y.Z.md` from that triage.** Shipped and
-   partial items become the release narrative — measured results, honest
-   limits, plain language first. Add anything significant that shipped
-   *outside* the roadmap. Completed BACKLOG items that shipped this cycle
-   move INTO this doc's record (a "resolved this release" list).
+2. **Write `docs/RELEASE-vX.Y.Z.md` from that triage**, using the
+   section outline below. The governing rule: every claimed improvement
+   is written as **Before → Now → Demonstrate** — what was the case
+   before, what is the case now, and a runnable command or readable
+   ledger line that shows the difference. Plain language first; numbers
+   attached; no improvement without its demonstration.
+
+   ### Release-notes section outline (accumulated from v0.1–v0.4)
+
+   1. **Title + headline** — one line naming the cycle's character.
+   2. **Links row** — previous release, closed roadmap, next roadmap,
+      DISCOVERIES.
+   3. **The headline finding** — the cycle's single most important
+      result, as Before/Now/Demonstrate, with its table if it has one.
+   4. **Roadmap triage** — shipped (with numbers), shipped-as-negative
+      (falsifications and retractions are first-class results), carried.
+   5. **What changed, per area** — each entry Before → Now →
+      Demonstrate. A demonstration is a command the reader can run
+      (quote it) or a specific line in a committed ledger (name it).
+   6. **Discoveries of the cycle** — quote two or three from
+      DISCOVERIES.md; link, don't duplicate.
+   7. **Resolved from BACKLOG** — the pruned entries' record.
+   8. **Honest limits carried forward** — including anything the cycle
+      falsified about its own prior claims.
+   9. **Assets** — every attached checkpoint carries its **story**: the
+      claim it evidences, the before/after it belongs to, and the
+      command that exercises it. An asset without a story does not
+      ship. Note anything seed-reproducible-only.
+   10. **Reproduce** — copy-paste commands from a fresh clone.
 3. **Create `docs/ROADMAP-v<next>.md`.** Migrate every not-started and
    unfinished-half item there; seed it with the newly queued direction.
    Nothing planned is silently dropped — it either ships (release doc),
@@ -83,7 +107,10 @@ gh release create vX.Y.Z --title "vX.Y.Z — <headline>" \
 
 Then attach model checkpoints — the trained artifacts the release's
 claims rest on. At minimum the demo checkpoint; add any new headline
-models (rename assets to be self-describing):
+models (rename assets to be self-describing). **Every asset must have
+its story in the release notes' Assets section** (claim, before/after,
+exercising command) — verify the notes and the upload list match
+one-to-one before uploading:
 
 ```
 gh release upload vX.Y.Z \

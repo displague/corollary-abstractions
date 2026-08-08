@@ -62,6 +62,61 @@ inert only by luck) — the epistemic ladder's REFUTED rung applied to
 the tooling itself. Fix specified (LT strict head; relation into
 HEAD_ALGEBRA), carried to v0.5.
 
+## See the improvement (Before → Now → Demonstrate)
+
+**Depth generalization.** *Before:* the analogy model failed on deeper
+trees at 0.014 OOD — bit-identically under three positional encodings —
+and training on deeper examples made it *worse* (0.006). *Now:* the
+recurrent address encoder extrapolates at 0.226 with no deeper
+exposure. *Demonstrate:*
+```
+cd experiments
+python -c "import json; [print(f, json.load(open(f))['ood_exact']) for f in ['results/analogy_s0.json','results/analogycur_table_s0.json','results/analogy_rec_s0.json']]"
+# or retrain the winner from seed (~35 min GPU):
+python train_analogy.py --level-code recurrent --data-dir data --out results/repro.json
+```
+
+**Head algebra.** *Before:* `MEET(TOP, X)` and `MEET(X, TOP)` were
+different skeletons by authoring luck, and the Boolean laws had no
+derivational relationships at all. *Now:* declared per-head algebra
+makes orderings robust and absorption ⊒ idempotence fires. *Demonstrate:*
+```
+python scripts/specialize.py | grep idempotence
+```
+
+**Specialization search.** *Before:* first-success-wins silently
+dropped every Ohm's-law generalization (a degenerate reading pre-empted
+the good one) and paid identity costs when honest bindings existed.
+*Now:* exhaustive cheapest-derivation — 622 edges, 33 recovered, none
+lost, faster. *Demonstrate:*
+```
+python scripts/specialize.py | head -30        # looseness-0 edges lead
+grep -c '"general": "physics.circuits.ohms_law"' reports/specializations.json
+```
+
+**Groundedness.** *Before:* Chekhov's gun scored 0.000 — below its own
+abstraction — and recursive definitions graded as gibberish. *Now:*
+pattern membership and recursion handling; mean 0.700 → 0.766, zero
+statements fall. *Demonstrate:*
+```
+python scripts/decompose.py | head -3          # mean + least-grounded line
+```
+
+**Seed coherence.** *Before:* a hand-edit to any nodes.json drifted
+silently until regeneration clobbered it; statistics had no seed at
+all. *Now:* a checked invariant. *Demonstrate:*
+```
+python scripts/check_regeneration.py           # "coherence OK: 13 seeds..."
+```
+
+**Ladder soundness.** *Before:* the shape level could split what typed
+united (inverted ladder), and slot-vs-head naming conflicts were
+invisible. *Now:* equal-typed forces equal-shape by construction; the
+lint names 7 conflicted names across 25 statements. *Demonstrate:*
+```
+python scripts/match_signatures.py | grep -A4 "slot and head"
+```
+
 ## Corpus
 
 199 nodes / 21 disciplines, all seed-owned. New families:
@@ -97,13 +152,24 @@ sort just lost; genuinely-unshared heads still ground at 0.0
 chained composition, frames implementation, corpus-grounded analogy,
 prover phase 2, attunement all carried with designs intact.
 
-## Assets (this cycle's claim-bearing checkpoints)
+## Assets (each with its story)
 
-- `analogy_diag.pt` — the model behind the 34=34 diagnosis
-- `analogy_sin_s0.pt` / `analogy_sin_s1.pt` — the falsified sinusoidal
-  prescription (negative results ship too)
-- `analogy_rec_s0.pt` — the recurrent arm's 0.226 (the fork winner)
-- `analogycur_table_s0.pt` — the curriculum arm's 0.006 (the fork loser)
+- `analogy_diag.pt` — the checkpoint behind the **34 = 34 diagnosis**:
+  teacher-forced per-step evaluation of this model
+  (`experiments/diagnose_analogy.py --checkpoint results/analogy_diag.pt`)
+  localizes the depth failure to untrained path-embedding rows and
+  reproduces the exact success/failure boundary.
+- `analogy_sin_s0.pt` / `analogy_sin_s1.pt` — the **falsified
+  prescription**: closed-form sinusoidal level codes that moved OOD only
+  0.014 → 0.022, proving *representable is not integrated*. Negative
+  results ship because the next person will otherwise re-run them.
+- `analogy_rec_s0.pt` — the **fork winner**: depth-as-iteration at
+  0.226 OOD with no deeper exposure, the only mechanism ever to move
+  the wall. Load it against `data/analogy_ood.jsonl` to reproduce the
+  16× gap over any lookup checkpoint.
+- `analogycur_table_s0.pt` — the **fork loser**, kept deliberately:
+  more exposure, worse extrapolation (0.006). The pair of fork
+  checkpoints is the controlled comparison in artifact form.
 
-v0.3.0's thirteen assets remain on that release; all results are
+v0.3.0's thirteen assets remain on that release; every result is also
 seed-reproducible from committed code.
