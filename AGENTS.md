@@ -8,8 +8,9 @@ Cross-discipline ontology of mathematical statements (21 disciplines,
 seed-generated corpora) + symbolic matchers (twins, specializations,
 decomposition) + a measured experiment suite showing tiny models do
 compositional work when every closed-form operation lives outside the
-weights. Current release notes: `docs/RELEASE-v0.3.0.md`; plan:
-`docs/ROADMAP-v0.4.md`.
+weights. Release notes and roadmaps live in `docs/RELEASE-v*.md` and
+`docs/ROADMAP-v*.md`; use the highest-versioned files as the current
+coordinates, and honor any closure banner when consulting older plans.
 
 ## Ground rules
 

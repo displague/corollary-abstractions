@@ -64,7 +64,13 @@ evidence says stop.
 
 ## Practical constraints
 
-- Lean + LeanDojo run best on Linux; on this Windows machine use WSL2.
+- Use the native Windows path documented in `FEASIBILITY.md`: extraction via
+  the patched Lean tracer and interactive proving via PyPantograph (tactic
+  application over the Python RPC, `is_solved: True` on a real theorem) have
+  both been demonstrated without WSL2. Proof *search* — the automated loop —
+  is phase 2's deliverable, not yet built. The `lean-dojo-v2` Python package
+  remains unavailable here because of its `deepspeed` dependency; introduce a
+  Linux/WSL2 path only if a later phase actually requires that package.
 - Phases 2-4 need GPU time (rentable; single consumer GPU is enough for a
   30M-param model).
 - Do not start phase N+1 until phase N's deliverable exists and is committed.
