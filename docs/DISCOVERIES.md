@@ -238,6 +238,20 @@ bindings), **near-miss** (informative failure, kept deliberately).
   has a Lean proof — until that executor checks an evolving story state.
   *status correction: declarative layer shipped, executor open* (2026-08-08)
 
+- **One controller can carry a real proof trace and a story trace, but that is
+  an interface result, not learned generalization.** A deterministic sequence
+  policy drove the same bounded propose/verify/repeat loop through three
+  contiguous state–tactic–state transitions from the committed Lean extraction
+  (`intro hp`, `left`, `exact hp` → `no goals`) and through setup, complication,
+  and resolution for the golden chicken. Negative controls were load-bearing:
+  unrecorded tactics, altered Lean state, out-of-order beats, and a silver-trait
+  contradiction all fail; a rejected story branch leaves no premise behind and
+  a valid branch recovers. The remaining boundary is explicit: replay is not
+  PyPantograph search, the story adapter is a small executable subset of the
+  frame design, and no weights chose an action. *oracle integration baseline,
+  16/16 contract tests, including mutable extension boundaries and adversarial
+  epistemic-status inputs* (2026-08-08)
+
 - **Temporal duality is the infinitary De Morgan.** ALWAYS/EVENTUALLY
   are MEET/JOIN over suffix chains; the twin is blocked by heads and
   arity but carried honestly on the shared archetype. *near-miss,

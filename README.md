@@ -111,6 +111,8 @@ scripts/
   specialize.py         general->specific edges (absorption + identities)
   decompose.py          statements as constructs of named forms + groundedness
   compose_assert.py     grounded assertions: the six-tier epistemic ladder demo
+  controller.py         shared v0.5 state/action/verifier loop
+  oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (10.7x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
@@ -144,6 +146,8 @@ profiling and are never committed):
 python scripts/validate_nodes.py            # 199 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
+python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
+python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

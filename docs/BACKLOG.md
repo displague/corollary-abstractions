@@ -5,17 +5,18 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Controller / harness
 
-- **No integrated state/action/verifier protocol.** The project has measured
-  `POINT`, a small structural `GEN` vocabulary, symbolic matchers, an
-  epistemic ladder, native PyPantograph interaction, and designs for frames and
-  retrieval. None share an executable transition contract. ROADMAP-v0.5 item 1
-  now specifies the contract once: typed frame state + unresolved slots + one
-  of `{POINT, GEN, RETRIEVE, ASK, WRITE}` + verifier result + accepted next
-  state + branch trace. `GEN` proposes domain actions such as Lean tactics or
-  story events; `POINT` supplies their operands. First implementation must use
-  a deterministic oracle to complete both the three-step proof and three-beat
-  story before a learned dispatcher is introduced, or policy failures will be
-  indistinguishable from harness defects.
+- **PARTIAL — the common protocol is executable; four action adapters remain.**
+  `scripts/controller.py` now carries typed state + one of
+  `{POINT, GEN, RETRIEVE, ASK, WRITE}` + symbolic verifier result + accepted
+  next state + branch trace. The deterministic oracle runs both a three-step
+  replay of contiguous machine-extracted Lean transitions and the three-beat
+  golden-chicken story through that one controller. It enforces the key
+  invariant: REFUTED/UNKNOWN/REFUSED branches cannot mutate accepted state.
+  The capability-blind controls reject an unrecorded tactic, a changed Lean
+  state, out-of-order story beats, and a frame-trait contradiction. Still open:
+  only `GEN` has executable domain semantics; `POINT`, `RETRIEVE`, `ASK`, and
+  `WRITE` are vocabulary members awaiting adapters, and Lean replay is not live
+  tactic application or search.
 
 - **One loop across two domains is not yet generalized model weights.** A
   shared controller API can still hide two bespoke policies. After the oracle
@@ -61,16 +62,15 @@ or commit history. Each item names the evidence that motivated it.
   must distinguish derivable, store-retrievable, user-private, and genuinely
   unresolved holes before a learned tool chooser is evaluated.
 
-- **Dead ends are not represented as controller evidence.** Specialization
-  search already explores and rejects derivation paths, and the epistemic
-  ladder already distinguishes REFUTED, UNKNOWN, and REFUSED outcomes, but the
-  planned chain has no trace schema for a failed proposal. Record each rejected
-  action with its verifier, reason, dependencies, and resulting contradiction
-  or miss. A dead branch must prune equivalent retries without entering the
-  accepted premise set; a terminal search should distinguish exhausted,
-  contradicted, tool-missed, user-deferred, and budget-limited outcomes. These
-  traces are session evidence first. Only independently PROVEN conclusions are
-  eligible for the durable `WRITE` path.
+- **PARTIAL — dead branches are traced and pruned; terminal taxonomy remains.**
+  The controller records state-before, action, verifier verdict/reason/evidence,
+  and state-after for every proposal. A rejected branch leaves state unchanged,
+  and the same action at the same state is pruned as REFUSED on repetition;
+  tests prove a later valid branch resumes from the pre-rejection state. Still
+  open: serializable trace schema, dependency/result references richer than
+  strings, and distinct terminal outcomes for contradicted, tool-missed,
+  user-deferred, and budget-limited searches. Only independently PROVEN
+  conclusions remain eligible for the durable `WRITE` path.
 
 ## Parser / matcher
 

@@ -334,13 +334,14 @@ detail of individual tools.
 | Durable human/agent-authored storage | Operational through seeds and validation |
 | Model-initiated durable write | Newly specified; unbuilt |
 | Narrative grammar and axioms | Authored and matcher-visible |
-| Runtime fictional frame | Scope designed; executor unbuilt |
+| Runtime fictional frame | Minimal three-beat/frame-trait oracle adapter; full scope executor unbuilt |
 | Lean training transitions | Phase 1 delivered: 155 transitions |
 | Learned tactic policy and proof search | Unbuilt |
-| Multi-step shared controller | Protocol specified; implementation unbuilt |
+| Multi-step shared controller | Core + first deterministic `GEN` adapters implemented; learned policy unbuilt |
 | Conversational clarification | `ASK` specified; conversation loop unbuilt |
 | Expressive LLM-like prose | Far from the present renderer |
-| End-to-end golden-chicken story | 0/1 |
+| Oracle golden-chicken integration baseline | 1/1, three checked beats |
+| End-to-end conversational golden-chicken story | 0/1 |
 
 That final zero prevents the component inventory from becoming self-congratulatory.
 The project has rails, forms, measurements, and verifier footholds. It does not
@@ -375,12 +376,16 @@ knows, assumes, tries, proves, and cannot resolve.
 
 The immediate path is now concrete:
 
-1. Implement the common state/action/verifier protocol.
-2. Add the runtime frame executor and frame-local ladder.
+1. Extend the implemented controller core from `GEN` into `POINT`, `RETRIEVE`,
+   `ASK`, and PROVEN-gated `WRITE` adapters.
+2. Replace the minimal story adapter with the scope-backed frame executor and
+   frame-local ladder.
 3. Connect UNKNOWN to retrieval, user clarification, and abstention.
-4. Run the deterministic oracle through one proof and one story.
-5. Preserve rejected branches as structured evidence.
-6. Replace the oracle with a tiny verifier-coupled policy.
+4. Replace committed Lean-transition replay with live PyPantograph application
+   and search.
+5. Make the existing dead-branch trace serializable with complete terminal
+   outcomes.
+6. Replace the deterministic oracle with a tiny verifier-coupled policy.
 7. Extend recurrent processing into the consumers that still fail at depth.
 8. Test one shared policy across proof and story tasks.
 9. Transfer to a third scientific or mathematical domain.

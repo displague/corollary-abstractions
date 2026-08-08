@@ -28,6 +28,23 @@ demo and a multi-step derivation remain one milestone in two costumes.
    does a tiny learned policy replace the oracle. Prover phase 2 (baseline
    tactic policy + PyPantograph search) supplies the first learned verifier-
    coupled policy.
+
+   **PARTIAL — oracle baseline:** `scripts/controller.py` now enforces the
+   shared contract and five-action vocabulary, immutable rejected branches,
+   duplicate-dead-end pruning, and bounded termination. One loop executes a
+   three-step replay of contiguous machine-extracted Lean transitions and a
+   three-beat golden-chicken story; negative controls reject an unrecorded
+   tactic, a wrong Lean state, out-of-order beats, and a frame-trait
+   contradiction; mutation probes also prove rejected verifier and state-key
+   hooks cannot alter accepted state through in-place side effects; policy and
+   goal callbacks are isolated too. Epistemic controls prevent untrusted replay
+   data from assigning PROVEN and distinguish an undeclared trait (UNKNOWN)
+   from an explicitly denied one (REFUTED) (16/16
+   tests). This proves the control-plane boundary, not
+   policy generalization: only `GEN` has adapters, Lean is committed extraction
+   replay rather than live PyPantograph, and the story verifier covers the
+   three-beat/shared-desire/frame-trait subset rather than the full scoped
+   ladder.
 2. **Depth 0.226 → 1.0**: extend recurrence past the address encoder
    into the consumers (pointer queries / decoder attention are still
    depth-naive). The fork proved iteration over exposure; this finishes

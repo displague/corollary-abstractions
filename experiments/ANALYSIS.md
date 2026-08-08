@@ -518,3 +518,67 @@ direction; the open work is closing 0.226 -> 1.0 (deeper recurrent
 integration: the pointer/decoder still consume addresses through
 depth-naive attention). The original architecture sketch's recurrent
 instinct survives its controlled test.
+
+## v0.5 oracle-first controller baseline
+
+Prediction registered in `docs/ROADMAP-v0.5.md`: before a learned policy, one
+deterministic controller must execute a three-step derivation and a three-beat
+story, with capability-blind negative controls so an accept-everything verifier
+cannot satisfy the milestone.
+
+Command:
+
+```
+PYTHONIOENCODING=utf-8 python scripts/oracle_controller_demo.py
+python -m unittest discover -s tests -v
+```
+
+Result: **PARTIAL PASS, 16/16 contract tests.** The same generic controller
+replayed three contiguous machine-extracted Lean transitions for
+`BooleanLaws.absorption_or_and`:
+
+```
+intro hp  -> left -> exact hp -> no goals
+```
+
+and executed the golden-chicken frame's setup, complication, and resolution.
+Each accepted step supplies a next state; each rejected step is recorded but is
+forbidden to mutate accepted state. Repeating the same rejected action at the
+same state is pruned. A rejected resolution-before-setup branch followed by the
+valid three actions still solves, proving the dead branch did not become a
+premise.
+
+The vacuity controls all failed as predicted: an unrecorded tactic, the right
+tactic at an altered Lean state, a resolution before its setup/complication,
+and changing the declared golden trait to silver. The Lean adapter therefore
+does exact membership/replay over `prover/sample_triples.json`; it does not
+accept arbitrary text. The story adapter enforces beat order, the desire shared
+by all three authored narrative nodes, and declared frame traits.
+
+Honest boundary: this proves the controller interface and oracle integration,
+not a general solver. Only `GEN` has executable adapters. The Lean path replays
+previously machine-extracted transitions; it does not call PyPantograph live and
+does no search. The story path implements the smallest three-beat/frame-trait
+subset, not the scope schema, temporal liveness checking, retrieval, ASK, or
+WRITE. No learned policy chooses any action yet.
+
+The pre-commit review supplied an additional adversarial control the frozen
+demo states had hidden: a verifier receiving a mutable list could mutate it in
+place and return REFUTED, leaking the dead branch into accepted state despite
+`next_state=None`. The controller now copy-isolates state at every policy,
+goal, verifier, trace, and result boundary; the exact mutation reproducer is
+the eleventh test. A second review found the same opening in `state_key`; that
+hook is now copy-isolated and its reproducer is test twelve. Tests thirteen and
+fourteen exercise mutating goal and policy callbacks, completing the extension-
+boundary audit. This deliberately favors correctness over large-state
+performance while controller states are small symbolic records.
+
+The final review caught two status shortcuts. First, `--triples` accepted an
+arbitrary JSON file, so a fabricated transition ending in the literal
+`no goals` could receive PROVEN. PROVEN is now gated by the SHA-256 identity of
+the committed machine-extracted artifact; a structurally replayable but
+untrusted input can finish only as VERIFIED. Second, any trait absent from the
+frame declarations was called REFUTED, confusing lack of evidence with a
+contradiction. Frame state now carries explicit declared and denied traits:
+`silver` is REFUTED because this frame denies it, while undeclared `brave` is
+UNKNOWN. The two adversarial cases are tests fifteen and sixteen.
