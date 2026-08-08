@@ -56,6 +56,33 @@ either pointed-at by the model or produced by exact code, so surface
 hallucination is structurally impossible. First run self-bootstraps
 (generates data, trains the ~800k-param pointer, ~4 min on GPU).
 
+## The models
+
+Four small architectures, one shared recipe: a **4-layer pre-norm
+Transformer encoder** (d_model=128, 4 heads, feed-forward 512, dropout
+0.1) with task-specific heads. No pretrained weights anywhere; every
+model trains from scratch in minutes on one consumer GPU.
+
+| class | file | structure | params | used for |
+|---|---|---|---|---|
+| `TinyTransformer` | `experiments/train.py` | 4-layer encoder + CLS-pool MLP pair-classifier head | ~0.88M | twins / equiv / xlang / qa / syn / realsyn |
+| `SpanPointer` | `experiments/train_span.py` | 4-layer encoder + per-position start/end span head | ~0.80M | solve-for-X answering; the demo checkpoint |
+| `TreeSeq2Seq` | `experiments/train_gen.py` | 4-layer encoder + 2-layer autoregressive decoder | ~1.45M | the failed naive generator (kept as the negative result) |
+| `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M | generation-by-pointing; analogy completion |
+
+Positional encoding is a first-class experimental variable, not a fixed
+choice: absolute learned positions, tree-path addresses (per-level
+table), sinusoidal level codes, and recurrent path composition (one
+shared GRU cell walking each path) are selectable variants — the
+positional ladder results in ANALYSIS.md come from exactly these
+switches. The scaling grid varies encoder width 32–256 at fixed depth.
+
+At fp32 these are 1.8–3.5 MB of weights (fp16 halves that at zero
+accuracy cost — see the quantization ladder). Thirteen trained
+checkpoints ship as release assets. The smallness is the thesis: every
+exact operation lives outside the weights, so the weights only carry
+the graded residual.
+
 ## Measured findings (full narrative: `experiments/ANALYSIS.md`)
 
 | finding | evidence |
