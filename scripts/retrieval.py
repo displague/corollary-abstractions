@@ -109,6 +109,10 @@ class RetrievalItem:
     epistemic_status: str
     source_ids: tuple[str, ...]
     aliases: tuple[str, ...]
+    # Structured trust marker (review finding: trust lived only in a text
+    # substring). False exactly when a proof record's artifact digest failed
+    # authentication; consumers must not rely on parsing item.text for this.
+    trusted: bool = True
 
 
 @dataclass(frozen=True)
@@ -116,10 +120,24 @@ class QueryResult:
     mode: str
     query: str
     items: tuple[RetrievalItem, ...] = ()
+    # Total matches before the deterministic limit; len(items) < total means
+    # truncation happened and the caller must say so (no silent caps).
+    total: int = 0
 
 
 class UnifiedKnowledgeStore:
-    """Read committed corpus/report artifacts through one exact interface."""
+    """Read local corpus/report artifacts through one exact interface.
+
+    Trust model, stated precisely (review findings F3/F8): the store reads
+    the WORKING TREE, not git -- "committed" here means the files the repo
+    tracks, trusted as-is; the only content-addressed pin is the Lean
+    artifact digest, and that digest covers artifact BYTES, not the
+    semantic correspondence between a statement and the theorem its
+    `verified_by` cites. That correspondence is unchecked node metadata
+    today (BACKLOG: verified_by semantic lint). Duplicate statement_ids
+    across corpora resolve last-writer-wins here; validate_nodes.py names
+    any such collision on the merged graph.
+    """
 
     def __init__(self, items: tuple[RetrievalItem, ...] = ()):
         ids = [item.item_id for item in items]
@@ -286,12 +304,33 @@ class UnifiedKnowledgeStore:
                         epistemic_status=(
                             "proven"
                             if all(proof_artifacts_trusted)
-                            else "verified"
+                            else "conjectured"
                         ),
                         source_ids=(statement_id, *artifacts),
                         aliases=(statement_id, title, *references, *artifacts),
+                        trusted=all(proof_artifacts_trusted),
                     )
                 )
+
+        # Weakest-member inheritance for derivative records (review
+        # finding F1: a hardcoded "verified" let an empirical statement be
+        # answered by a stronger-labeled twin/decomposition record). Order is
+        # the schema's epistemic_status enum from weakest to strongest.
+        status_strength = {
+            "conjectured": 0,
+            "empirical": 1,
+            "asymptotic": 2,
+            "assumed": 3,
+            "derived": 4,
+            "formal": 5,
+        }
+
+        def weakest_status(statement_ids: tuple[str, ...]) -> str:
+            statuses = [
+                nodes[statement_id]["epistemic_status"]
+                for statement_id in statement_ids
+            ]
+            return min(statuses, key=lambda s: status_strength.get(s, 0))
 
         signature_report = json.loads(
             (reports_dir / "signature_matches.json").read_text(encoding="utf-8")
@@ -319,7 +358,7 @@ class UnifiedKnowledgeStore:
                         text=(
                             f"{group['skeleton']} :: " + " | ".join(member_titles)
                         ),
-                        epistemic_status="verified",
+                        epistemic_status=weakest_status(member_ids),
                         source_ids=member_ids,
                         aliases=(*member_ids, *member_titles, group["skeleton"]),
                     )
@@ -342,7 +381,7 @@ class UnifiedKnowledgeStore:
                         f"groundedness={entry['groundedness']:.3f}; "
                         + "; ".join(constituents)
                     ),
-                    epistemic_status="verified",
+                    epistemic_status=weakest_status((statement_id,)),
                     source_ids=(statement_id,),
                     aliases=(statement_id, nodes[statement_id]["title"], *constituents),
                 )
@@ -356,7 +395,7 @@ class UnifiedKnowledgeStore:
             if item_match_mode(item, key) == "exact"
         )
         if exact:
-            return QueryResult("exact", key, exact[:limit])
+            return QueryResult("exact", key, exact[:limit], total=len(exact))
 
         if not query_tokens(key):
             return QueryResult("miss", key)
@@ -367,11 +406,21 @@ class UnifiedKnowledgeStore:
             if item_match_mode(item, key) == "neighborhood"
         )
         if neighborhood:
-            return QueryResult("neighborhood", key, neighborhood[:limit])
+            return QueryResult(
+                "neighborhood",
+                key,
+                neighborhood[:limit],
+                total=len(neighborhood),
+            )
         return QueryResult("miss", key)
 
     def contains_item(self, item: RetrievalItem) -> bool:
-        """Authenticate a pointable record against the committed snapshot."""
+        """Authenticate a pointable record against this store's loaded items.
+
+        Value equality against what load() read from the working tree --
+        an integrity check within the local-files-trusted model, not a
+        git-anchored proof of commit membership.
+        """
 
         return item in self.items
 
@@ -739,10 +788,19 @@ class RetrievalVerifier:
                 item_ids,
             ),
         )
+        truncation = (
+        ""
+            if result.total <= len(result.items)
+            else (
+                f" ({result.total - len(result.items)} further matches "
+                "deterministically truncated at the query limit)"
+            )
+        )
         return Verification(
             Verdict.VERIFIED,
             f"{result.mode} retrieval transaction added {len(added)} pointable "
-            "items without changing their own epistemic statuses",
+            "items without changing their own epistemic statuses"
+            + truncation,
             replace(
                 state,
                 context=state.context + added,
@@ -759,6 +817,12 @@ class RetrievalVerifier:
                 Verdict.REFUSED,
                 "POINT requires an unresolved slot",
                 evidence=(self.name,),
+            )
+        if state.frame.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; POINT cannot bind into it",
+                evidence=(state.frame.spec.frame,),
             )
         stale = self._pending_is_current_unknown(state)
         if stale is not None:

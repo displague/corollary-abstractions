@@ -409,7 +409,11 @@ class RetrievalTests(unittest.TestCase):
 
             store = UnifiedKnowledgeStore.load(data_dir, reports_dir)
             proof = next(item for item in store.items if item.source == "proof")
-            self.assertEqual(proof.epistemic_status, "verified")
+            # Post-review behavior: an untrusted extraction is conjectured,
+            # never "verified", and carries the structured trust marker so
+            # consumers need not parse item.text for it.
+            self.assertEqual(proof.epistemic_status, "conjectured")
+            self.assertFalse(proof.trusted)
             self.assertIn("1 extracted transitions", proof.text)
             self.assertIn("untrusted extraction", proof.text)
 
@@ -469,7 +473,8 @@ class RetrievalTests(unittest.TestCase):
             )
             store = UnifiedKnowledgeStore.load(data_dir, reports_dir)
             proof = next(item for item in store.items if item.source == "proof")
-            self.assertEqual(proof.epistemic_status, "verified")
+            self.assertEqual(proof.epistemic_status, "conjectured")
+            self.assertFalse(proof.trusted)
             self.assertNotEqual(proof.epistemic_status, "proven")
 
     def test_artifact_only_link_requires_one_theorem_identity(self) -> None:
@@ -843,6 +848,93 @@ class RetrievalTests(unittest.TestCase):
         self.assertIs(result.verdict, Verdict.REFUSED)
         self.assertIsNone(result.next_state)
         self.assertIn("no valid RETRIEVE receipt", result.reason)
+
+    def test_derivative_records_inherit_weakest_member_status(self) -> None:
+        """Review F1: no record may outrank its weakest member.
+
+        Registered prediction: every twin_ledger record's status equals the
+        weakest schema status among its members, every decomposition record
+        equals its statement's own status, and no derivative record carries
+        the retired hardcoded "verified" label.
+        """
+        nodes = {}
+        for item in self.store.items:
+            if item.source == "corpus":
+                nodes[item.source_ids[0]] = item.epistemic_status
+        strength = {
+            "conjectured": 0,
+            "empirical": 1,
+            "asymptotic": 2,
+            "assumed": 3,
+            "derived": 4,
+            "formal": 5,
+        }
+        checked = 0
+        for item in self.store.items:
+            if item.source == "twin_ledger":
+                member_statuses = [nodes[sid] for sid in item.source_ids]
+                expected = min(member_statuses, key=lambda s: strength[s])
+                self.assertEqual(item.epistemic_status, expected, item.item_id)
+                checked += 1
+            elif item.source == "decomposition":
+                self.assertEqual(
+                    item.epistemic_status, nodes[item.source_ids[0]], item.item_id
+                )
+                checked += 1
+            self.assertNotEqual(item.epistemic_status, "verified", item.item_id)
+        self.assertGreater(checked, 200)
+
+    def test_empirical_member_no_longer_gets_stronger_labeled_twin(self) -> None:
+        """Review F1's live reproduction, inverted into a control."""
+        empirical = [
+            item
+            for item in self.store.items
+            if item.source == "twin_ledger"
+            and any(
+                other.source == "corpus"
+                and other.source_ids[0] in item.source_ids
+                and other.epistemic_status == "empirical"
+                for other in self.store.items
+            )
+        ]
+        self.assertTrue(empirical)
+        for item in empirical:
+            self.assertEqual(item.epistemic_status, "empirical", item.item_id)
+
+    def test_real_store_proof_records_carry_structured_trust(self) -> None:
+        proofs = [item for item in self.store.items if item.source == "proof"]
+        self.assertTrue(proofs)
+        for item in proofs:
+            self.assertTrue(item.trusted, item.item_id)
+            self.assertEqual(item.epistemic_status, "proven")
+
+    def test_exact_truncation_is_reported_not_silent(self) -> None:
+        """Review F6: the deterministic limit must announce what it dropped."""
+        result = self.store.query("equality")
+        self.assertEqual(result.mode, "exact")
+        self.assertGreater(result.total, len(result.items))
+        state = RetrievalState.from_unknown(
+            self.executor,
+            self.frame,
+            "answer",
+            "equality",
+            Literal("request", "needs", "equality"),
+        )
+        verifier = RetrievalVerifier(self.store, self.executor)
+        outcome = verifier.evaluate(state, retrieval_action("equality"))
+        self.assertIs(outcome.verdict, Verdict.VERIFIED)
+        self.assertIn("deterministically truncated", outcome.reason)
+
+    def test_point_on_closed_frame_names_the_closure(self) -> None:
+        """Review F5: the refusal reason must tell the true story."""
+        verifier = RetrievalVerifier(self.store, self.executor)
+        retrieved = verifier.evaluate(self.state, retrieval_action(DE_MORGAN))
+        closed_frame = replace(retrieved.next_state.frame, closed=True)
+        closed_state = replace(retrieved.next_state, frame=closed_frame)
+        outcome = verifier.evaluate(closed_state, point_action(0))
+        self.assertIs(outcome.verdict, Verdict.REFUSED)
+        self.assertIn("closed", outcome.reason)
+        self.assertNotIn("stale", outcome.reason)
 
     def test_trusted_digest_with_wrong_system_label_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

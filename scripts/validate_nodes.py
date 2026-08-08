@@ -71,7 +71,14 @@ def inferential_link_errors(
         id_set.discard(None)
 
     if len(ids) != len(id_set):
-        errors.append("Duplicate statement_id values found.")
+        seen: set[str] = set()
+        duplicates = sorted({i for i in ids if i in seen or seen.add(i)})
+        # Runs over the MERGED graph, so this also names cross-corpus
+        # collisions -- which matter to every consumer that keys by
+        # statement_id (retrieval's store loader is last-writer-wins).
+        errors.append(
+            "Duplicate statement_id values found: " + ", ".join(duplicates)
+        )
 
     # Links may resolve to nodes in other corpora when a global id set is given.
     resolvable = id_set | (known_ids or set())
