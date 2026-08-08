@@ -226,6 +226,18 @@ bindings), **near-miss** (informative failure, kept deliberately).
   inherits a proven theorem rather than a style rule. *exact*
   (2026-08-07)
 
+- **Frame axioms are implemented; frame execution is not.** The corpus already
+  contains the story sequence, its setup/complication/resolution decomposition,
+  narrative causality, Chekhov-style liveness, and frame consistency. The
+  matcher already connects the last two to temporal response and Boolean
+  non-contradiction. What remains is narrower than "implement fictional
+  frames": scope metadata and a runtime state manager must bind declarations,
+  evaluate each proposed transition through the frame-local ladder, preserve
+  accepted premises, reject contradictions, and prevent frame truths from
+  leaking on exit. The machine anchor is structural — the matching Boolean law
+  has a Lean proof — until that executor checks an evolving story state.
+  *status correction: declarative layer shipped, executor open* (2026-08-08)
+
 - **Temporal duality is the infinitary De Morgan.** ALWAYS/EVENTUALLY
   are MEET/JOIN over suffix chains; the twin is blocked by heads and
   arity but carried honestly on the shared archetype. *near-miss,

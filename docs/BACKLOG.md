@@ -3,6 +3,75 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Controller / harness
+
+- **No integrated state/action/verifier protocol.** The project has measured
+  `POINT`, a small structural `GEN` vocabulary, symbolic matchers, an
+  epistemic ladder, native PyPantograph interaction, and designs for frames and
+  retrieval. None share an executable transition contract. ROADMAP-v0.5 item 1
+  now specifies the contract once: typed frame state + unresolved slots + one
+  of `{POINT, GEN, RETRIEVE, ASK, WRITE}` + verifier result + accepted next
+  state + branch trace. `GEN` proposes domain actions such as Lean tactics or
+  story events; `POINT` supplies their operands. First implementation must use
+  a deterministic oracle to complete both the three-step proof and three-beat
+  story before a learned dispatcher is introduced, or policy failures will be
+  indistinguishable from harness defects.
+
+- **One loop across two domains is not yet generalized model weights.** A
+  shared controller API can still hide two bespoke policies. After the oracle
+  proves the infrastructure, evaluate the claim in explicit rungs: separate
+  learned proof/story policies (learnability); one shared policy with thin
+  verifier adapters (shared mechanism); held-out structures and greater chain
+  depth (composition); then transfer to a third domain such as equation
+  derivation or a science problem (cross-domain generalization). Report each
+  rung separately. The golden-chicken story is the integration gate, not by
+  itself evidence that the model has become a general-purpose solver.
+
+- **Retrieval is consumable but not initiable.** `demo_answer.py` and solvex-v2
+  show that, when a relevant knowledge base is already in context, the pointer
+  can use it: held-out combinations reach 1.000 against three distractors, with
+  a measured capability-blind floor of 0.31; deeper distractor-bearing inputs
+  remain open at 0.69 OOD. `docs/DESIGN-frames-and-retrieval.md` already makes
+  UNKNOWN the closed-form trigger for `RETRIEVE(key)`, but no unified query
+  interface connects that trigger to the lexicon, twin ledger, decomposition
+  index, proof artifacts, or external tools, and no result is returned as
+  pointable context. Miss behavior must be executable rather than prose:
+  neighborhood search, then `ASK` for frame-private values, then UNKNOWN/REFUSED
+  abstention.
+
+- **No model-initiated durable write path.** Durable knowledge is currently
+  excellent but human/agent-mediated: edit a seed, regenerate, validate, and
+  recompute every symbolic consequence. Add `WRITE(candidate)` as the
+  PROVEN-gated dual of UNKNOWN-triggered `RETRIEVE`. The action must stage a
+  seed-level authoring candidate carrying `verified_by` and provenance; it must
+  never edit generated `data/*/nodes.json`, and it does not bypass review,
+  byte-identical regeneration, schema/link validation, or matcher checks.
+  VERIFIED-but-unproved material remains a human-curated corpus assertion;
+  CONJECTURED material stays in a proposal queue; frame declarations remain
+  session-local unless separately proved. This preserves correction-by-edit
+  without turning policy output into trusted knowledge.
+
+- **No first-class conversational clarification action.** An unresolved slot
+  can be answerable but absent from every durable store because its source of
+  truth is the interlocutor: desired tone, ambiguous referent, private fact, or
+  unstated constraint. Define `ASK(slot)` as retrieval from the user for these
+  frame-private UNKNOWNs. Its return value must bind the slot in mutable session
+  state and resume the same controller branch, which implies a multi-turn frame
+  lifecycle rather than a one-shot prompt wrapper. The deterministic dispatcher
+  must distinguish derivable, store-retrievable, user-private, and genuinely
+  unresolved holes before a learned tool chooser is evaluated.
+
+- **Dead ends are not represented as controller evidence.** Specialization
+  search already explores and rejects derivation paths, and the epistemic
+  ladder already distinguishes REFUTED, UNKNOWN, and REFUSED outcomes, but the
+  planned chain has no trace schema for a failed proposal. Record each rejected
+  action with its verifier, reason, dependencies, and resulting contradiction
+  or miss. A dead branch must prune equivalent retries without entering the
+  accepted premise set; a terminal search should distinguish exhausted,
+  contradicted, tool-missed, user-deferred, and budget-limited outcomes. These
+  traces are session evidence first. Only independently PROVEN conclusions are
+  eligible for the durable `WRITE` path.
+
 ## Parser / matcher
 
 - **No call juxtaposition.** `D(F)(POINT)` fails to parse (`parse_atom`
