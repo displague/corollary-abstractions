@@ -273,8 +273,16 @@ ood = held-out combos + deeper recursion. 2 seeds/arm, exact match:
 | positions | test | OOD | failure mode |
 |---|---|---|---|
 | absolute | 0.999 | 0.203 | no extrapolation to longer sequences |
+| local (depth, sib), no segment id | 0.385 | 0.000 | cross-segment collision: question and KB tokens share (depth, sib) coordinates, so the pointer cannot even separate the two trees in-distribution (seeds bit-identical) |
 | local (depth, sib) + segment | 0.694 | 0.505 | aliasing: identical (word, depth, sib) across subtrees are indistinguishable to a pointer (seeds bit-identical — deterministic ties) |
 | **ancestry paths** | **1.000** | **0.973** | (one seed: 1.000 OOD — perfect depth extrapolation) |
+
+(The no-segment rung's artifacts, `solvex_struct_tree_s{0,1}.json`, were
+recovered after sitting untracked: the +256-parameter delta to the
+committed `tree2` run — exactly a 2×128 segment embedding — identifies
+them as the first tree-coordinate attempt, run before the segment id was
+added. Recorded because the rung explains WHY the segment id exists:
+local coordinates fail across segments before they fail across depth.)
 
 **Depth generalization — the wall behind every OOD collapse in the
 suite — falls when position = symbolic tree address.** Ancestry paths
