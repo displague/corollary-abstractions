@@ -762,6 +762,41 @@ or commit history. Each item names the evidence that motivated it.
   any future "opaque binary composition" alias has to normalize argument order
   after aliasing, not before. Cheap fix when it lands: run the commutative sort
   inside `alias_heads`' output rather than only in `canonicalize`.
+  **SHIPPED** (branch `tooling/matcher-consistency`), though the diagnosis was
+  half right and the shipped fix is a different shape than the one proposed.
+  The proposed fix — "run the commutative sort inside `alias_heads`' output" —
+  was already in place: `load_nodes` computed `skeleton(canonicalize(
+  alias_heads(tree)), classes)`, so both the shape sort and the typed re-sort
+  already ran *after* aliasing. What was missing is that they read
+  commutativity in the WRONG VOCABULARY: `COMMUTATIVE_CALL_HEADS` holds
+  pre-alias spellings (`MEET`, `JOIN`, `MINOF`, `TOUCHES`), so the moment a
+  commutative head joined an alias class its post-alias name would match
+  nothing and the sort would silently stop. Now `canonicalize`, `typed_resort`
+  and `skeleton` take the commutative-call set as a parameter, and the aliased
+  level passes `ALIASED_COMMUTATIVE_CALL_HEADS` — the unaliased commutative
+  heads plus every alias class *all* of whose members are declared
+  commutative, which is what keeps `ordered_compose` non-commutative on
+  CONCAT's evidence rather than inheriting it from a sibling.
+  Measured, on the 199-node corpus: the set equals `COMMUTATIVE_CALL_HEADS`
+  today (no declared-commutative head is aliased), so **zero aliased skeletons
+  change and zero groups change membership** — 30 aliased groups before and
+  after, every skeleton string byte-identical. The guard was verified by
+  counterfactual instead: temporarily aliasing `MEET`/`JOIN` into an
+  `opaque_compose` class, `MEET(PROP1, TRUTH) = PROP1` and
+  `MEET(TRUTH, PROP1) = PROP1` split into `?0:V = opaque_compose⟨?0:V, ?1:P⟩`
+  and `?0:V = opaque_compose⟨?1:P, ?0:V⟩` under the old lookup and share
+  `?0:V = opaque_compose⟨?1:P, ?0:V⟩` under the new one.
+  Adjudicated on this entry's own pair: **the MEET and CONCAT identity laws do
+  NOT newly reach the aliased level, and no other pair does either.** They read
+  `?0:V = MEET⟨?1:P, ?0:V⟩` and `?0:V = ordered_compose⟨?0:V, ?1:P⟩`. Sorting
+  after aliasing cannot close that, and the entry's framing ("now *further*
+  apart") over-blames the sort: the argument-order divergence is a
+  *consequence* of a correct declaration, since CONCAT is non-commutative and
+  its arguments must not be reordered at any level. The two are separated by a
+  head, not by an order, and the only thing that would merge them is an alias
+  class asserting that MEET and CONCAT are one operation family — which is
+  false. What this entry really wanted, and what is now impossible to get wrong
+  silently, is that the *hazard* be structural rather than remembered.
 - **Commutative-head robustness reaches `typed` but not `shape`.** Probed on
   the pair the declaration was meant to make safe: `MEET(PROP1, TRUTH) = PROP1`
   and `MEET(TRUTH, PROP1) = PROP1` now share a typed skeleton
@@ -777,6 +812,67 @@ or commit history. Each item names the evidence that motivated it.
   arguments by first-occurrence index of their slots over the whole statement
   (a fixpoint, since the indices depend on the order), or accept it and note
   in the report that `shape` is not a relaxation of `typed`.
+  **SHIPPED** (branch `tooling/matcher-consistency`) as `shape_resort`, the
+  shape-level counterpart of `typed_resort`. The entry's fix candidate names
+  the difficulty correctly and then trips over it: there IS no order-independent
+  key on a single argument, because the fact that distinguishes the two slots —
+  that one of them RECURS on the other side of the relation — is a property of
+  the whole statement, which is why first-occurrence ordering comes out a
+  fixpoint. So the fix is a canonical form rather than a key: among the
+  argument orders declared commutativity permits, take the one whose rendering
+  is lexicographically smallest. Only the permutations WITHIN runs of equal
+  `shape_key` are candidates (`canonicalize` has already fixed the order of
+  everything distinguishable, from the argument multiset alone), so the
+  candidate SET depends only on structure plus slot-recurrence pattern, `min`
+  over it is order-independent, and — since an equal typed skeleton already
+  implies an equal structure-plus-recurrence class — equal typed now FORCES
+  equal shape. The ladder invariant holds by construction, and because the old
+  skeleton is always one of the candidates, shape groups can only coarsen;
+  none can split.
+  Measured on the 199-node corpus:
+  - Group counts unchanged at every level — shape 28, typed 29, family 28,
+    aliased 30 before and after; **zero membership changes anywhere**, and
+    typed/family/aliased skeleton strings byte-identical (the new sort runs
+    only on the `slot_class is None` path). `decompose.py` and `specialize.py`
+    reproduce their reports byte-for-byte.
+  - Four shape skeleton STRINGS move to their canonical minimum:
+    `calculus.differentiation.product_rule`, `diffgeo.surfaces.first_fundamental_form`,
+    `ml.policy.ppo_clipped_surrogate`, and — the one worth reading —
+    `geotop.predicates.adjacency_symmetry`, which goes from
+    `IMPLIES⟨TOUCHES⟨?0, ?1⟩, TOUCHES⟨?1, ?0⟩⟩` to
+    `IMPLIES⟨TOUCHES⟨?0, ?1⟩, TOUCHES⟨?0, ?1⟩⟩`. The node that exists only to
+    say TOUCHES is commutative now renders, at shape level, as the tautology it
+    became once the declaration replaced it.
+  - `ladder_violations` is **0 after — and was 0 before**. Reported honestly:
+    the inversion was never realized in `data/`, because every commutative-head
+    statement in the corpus is authored in one order. It was a robustness hole,
+    not a live defect, and the probe is what shows it: pre-fix,
+    `MEET(TRUTH, PROP1) = PROP1` and `MEET(PROP1, TRUTH) = PROP1` had shape
+    skeletons `?0 = MEET⟨?1, ?0⟩` and `?0 = MEET⟨?0, ?1⟩` while sharing one
+    typed skeleton; post-fix both are `?0 = MEET⟨?0, ?1⟩`. Same for JOIN. The
+    check now runs every invocation and prints to stdout, so a corpus that
+    spells one the other way cannot reintroduce it unnoticed.
+  - Cost: the whole corpus needs at most **24** candidate orderings for one
+    statement (`economics.macroeconomics.gdp_expenditure_identity` and
+    `geomodel.quaternions.unit_quaternion_constraint`, both four-term sums),
+    489 summed over all 199 nodes, against a `SHAPE_ARRANGEMENT_BUDGET` of
+    4096. Restricting to tie-blocks is what makes it cheap: unrestricted
+    permutation would need 1152 for `first_fundamental_form` alone.
+- **The typed sort has the same tie the shape sort just lost.** Found by the
+  probe that verified `shape_resort`. `typed_key` distinguishes `?P` from `?V`
+  but not one `?V` from another, so two variable-like arguments of a
+  commutative head still fall through to the stable sort and keep their
+  authored order. `MEET(SETA, JOIN(SETA, SETB)) = SETA` and the absorption law
+  spelled `MEET(JOIN(SETB, SETA), SETA) = SETA` now share a shape skeleton and
+  still split at typed (`MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩` vs
+  `MEET⟨?0:V, JOIN⟨?1:V, ?0:V⟩⟩`). Not urgent and not a ladder violation — it
+  is the ladder pointing the right way, shape looser than typed — but it is
+  the same defect one level up, and the same remedy applies: give
+  `typed_resort` the `shape_resort` treatment, minimizing the rendering over
+  tie-blocks of equal `typed_key` rather than over tie-blocks of equal
+  `shape_key`. Deliberately not shipped with the shape fix, because it would
+  change typed skeletons and therefore risk twin membership, which that change
+  was required not to do.
 - **An identity element has one abstract identity and several corpus
   spellings, and the report prints whichever is listed first.**
   `HEAD_ALGEBRA["JOIN"]["identity"]` is `("FALSITY", "EMPTYSET",
@@ -856,6 +952,51 @@ or commit history. Each item names the evidence that motivated it.
   sometimes a functional (entropy, degree, cardinality, expectation). Wanted: a
   lint that flags an identifier used as a slot id in one node and a call head
   in another, plus a documented convention for which reading wins.
+  **LINT SHIPPED** (branch `tooling/matcher-consistency`) as
+  `slot_vs_call_head_collisions` in `scripts/match_signatures.py`, reported in
+  JSON and in a stdout block. A lint only — which reading wins is an authoring
+  decision about the corpora and stays one; nothing is rewritten. Comparison is
+  case-insensitive on the stem, with the bracket-call marker `[]` stripped
+  (`E[X|Y]` parses to the head `E[]`) and nothing else: index suffixes like
+  `WEIGHT_i` are part of the identifier an author chose, and folding them would
+  invent collisions rather than find them. A name is only reported when some
+  statement DISAGREES with another — one committing to it as an opaque value
+  while another applies it as an operation. Mere co-occurrence is not a
+  collision, which is why `SELFMAP` and `AGGREGATE_n` are excluded (every
+  statement carrying them uses them both ways) while `F` is included
+  (`calculus.integration.ftc_differentiation_part` uses it as a slot only).
+  **7 names, 25 statements.** The three pairs this entry was promoted for all
+  appear:
+  - `eulerchar` — slot in `algtop.homology.betti_alternating_sum`,
+    `algtop.invariants.euler_characteristic_complex`,
+    `algtop.invariants.euler_characteristic_surface`,
+    `diffgeo.surfaces.gauss_bonnet_theorem`; call head in
+    `difftop.invariants.euler_characteristic_diffeomorphism_invariance`,
+    `difftop.vectorfields.hairy_ball_theorem`,
+    `difftop.vectorfields.poincare_hopf_index_theorem`. Four algebraic-topology
+    nodes on the slot side, not the one this entry named — the gap is wider
+    than Gauss-Bonnet vs Poincaré-Hopf.
+  - `length` — slot in `diffgeo.curves.arc_length_functional` and
+    `graphtheory.walks.adjacency_power_walk_count`; call head in
+    `morphology.quantity.morpheme_count_additivity`.
+  - `degree` — slot in `geomodel.bezier.endpoint_tangent`; call head in
+    `difftop.degree.degree_multiplicativity` and
+    `difftop.degree.degree_regular_value_count`.
+
+  Four the entry did not predict, all real and all of its stated kind ("a named
+  quantity that is sometimes a value and sometimes a functional"): `f` (the
+  FTC/Stokes cluster, where `calculus.integration.ftc_differentiation_part`
+  alone treats the function as a value), `outer` (slot in
+  `calculus.differentiation.chain_rule` and
+  `difftop.degree.degree_multiplicativity`, head in
+  `ml.recurrence.mlstm_matrix_memory_update`), `scale` (slot in three
+  physics/statistics nodes including `probstat.transform.z_standardization`,
+  head in `probstat.limit.normal_approximation_sample_mean` — a disagreement
+  *within* `data/statistics`), and `sequence` (slot in
+  `probstat.limit.law_of_large_numbers`, head in
+  `narrative.structure.story_sequence`). The convention half of this entry is
+  still open: the lint names where a decision is outstanding, it does not make
+  one.
 - **A quarter of the corpus loses its logical form.** The grammar has no
   quantifier and no usable implication, so conditional and existential
   statements reduce to their conclusions: of the sixteen nodes in
