@@ -13,6 +13,55 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Time reversal is a relation, not an alias.** Five predicted pairs now
+  appear at a separately reported mirror level: UNTIL/SINCE,
+  EVENTUALLY/ONCE unfolding, NEXT/PREV distribution, future/past duality, and
+  response/heraldry. The ordinary shape/typed/family/aliased counts remain
+  28/29/28/30, so the new relation adds knowledge without manufacturing an
+  equivalence claim. *mirror, 5 groups, predicted-and-landed* (2026-08-08)
+
+- **A mirror must reverse the whole expression, not quotient each head.** The
+  first implementation falsely grouped partially reversed nested modalities;
+  it also exposed that heraldry/no-deus had kept an outer `ALWAYS` while
+  reversing only EVENTUALLY to ONCE. A whole-tree involution initially reduced
+  the result to four groups; correcting the past formulas to HISTORICALLY
+  restores the fifth. The original five-group implementation is retracted.
+  *self-audit, review-blocking correction* (2026-08-08)
+
+- **A response law does not imply its trigger's converse.**
+  `G(notices -> F(falls))` does not entail `not notices -> not falls`; the
+  scoped cartoon hover is therefore an independently assumed assertion, not a
+  derived consequence of the declaration. The false reciprocal links were
+  removed before commit. *self-audit, refuted* (2026-08-08)
+
+- **Temporal boundaries are part of the theorem.** SINCE/ONCE unfolding is
+  valid here only after fixing PREV to the strong convention (false at trace
+  origin); the exact heraldry mirror is correspondingly inclusive because
+  ONCE includes now. Strict “prepared earlier” remains a stronger executor
+  constraint. Separately, premise persistence must assert `HOLDS(p)`
+  positively—an implication from `HOLDS(p)` becomes vacuous at the moment the
+  premise disappears. *self-audit, boundary conditions corrected* (2026-08-08)
+
+- **The matcher no longer asserts that strict precedence is reflexive.** The
+  false `BEFORE ~ LEQ` alias was removed, strict precedence now uses `LT`, and
+  `HEAD_ALGEBRA` records `LT` as the strict part of `LEQ` (and `LEQ` as its
+  reflexive closure). No prior twin membership moved, exactly as predicted.
+  *self-audit, corrected* (2026-08-08)
+
+- **Groundedness v2 still depends on what surrounds a recursive head.** The
+  new SINCE and ONCE unfoldings scored 0.667 and 0.500 rather than the
+  predicted 1.000: excluding self-headed constituents does not make their
+  remaining compound constituents recognizable. Conversely the
+  no-deus-ex-machina instance scored 1.000 rather than 0.500 because exact
+  PLANTED/DISCHARGED recurrence and heraldry-pattern coverage ground all of
+  it. *prediction missed, metric boundary* (2026-08-08)
+
+- **Scope has its first corpus users.** Cartoon gravity is represented as a
+  shared-scope declaration/assertion pair that suspends Newtonian gravity,
+  while premise persistence declares a frame-local invariant. These are the
+  first authored nodes to exercise the already-live scope validator rather
+  than leaving frame semantics in prose. *schema exercised* (2026-08-08)
+
 - **Coulomb's law is Newtonian gravitation.** Same typed skeleton
   `?V = ?P·?V·?V / ?V²` — inverse-square pair coupling; only the names of
   the charges differ. *exact* (2026-08-06)

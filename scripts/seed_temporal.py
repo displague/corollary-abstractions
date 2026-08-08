@@ -97,6 +97,24 @@ P7. **Chekhov's gun is an LTL response pattern, and `specialize.py` should say
     the miss turned out to be a second, previously unrecorded filter.
     VERDICT: see "Adjudication" below.
 
+P8 (v0.5 payoff, registered before authoring/regeneration/matching).
+    The design's nine numbered payoff entries expand to **ten nodes** because
+    `narrative.frames.cartoon_gravity` is a declaration/assertion pair.
+    Prediction: the merged graph moves 199 -> 209 nodes while the existing
+    shape/typed/family/aliased group counts remain 28/29/28/30. The four
+    declared time-reversal pairs produce exactly five separately reported
+    mirror-only groups: since/until, past/future duality, prev/next
+    distribution, once/eventually unfolding, and heraldry/response. None may
+    be counted as a typed twin. Removing the false BEFORE~LEQ `order_le` alias,
+    spelling strict precedence with LT, and declaring the strict/reflexive
+    relation in HEAD_ALGEBRA change zero existing group memberships. The two
+    cartoon nodes validate as the graph's first shared scope and change no
+    matcher key because `scope` remains outside `structural_signature`.
+    Groundedness predictions from the design: since_unfolding and
+    once_unfolding score 1.000 through recursive-definition detection;
+    no_deus_ex_machina scores 0.500 through heraldry-pattern membership.
+    VERDICT: open; adjudicate below only after all required tools run.
+
 Adjudication (written after running the tools; skeletons quoted verbatim)
 ------------------------------------------------------------------------
 
@@ -266,6 +284,30 @@ P7  MISSED, and the reason is a filter docs/BACKLOG.md had not recorded.
     The edge is asserted by hand (`special_case_of` / `generalizes`, reciprocal
     across the two corpora this file owns), which is the outcome docs/BACKLOG.md
     predicts for every plain-binding case.
+
+P8-payoff  STRUCTURE FIRED; GROUNDEDNESS MISSED.
+    The graph moved 199 -> 209 nodes and the existing structural ladder stayed
+    exactly shape/typed/family/aliased = 28/29/28/30. The separately reported
+    mirror level contains exactly the five registered mirror-only groups, with
+    zero ladder violations and no mirror group counted as typed. Removing
+    BEFORE~LEQ, using LT, and recording strict-part/reflexive-closure relations
+    moved no old membership. Both scoped cartoon nodes validate together.
+    Groundedness did not follow the registered values: since_unfolding is
+    0.667 (not 1.000), once_unfolding is 0.500 (not 1.000), and
+    no_deus_ex_machina is 1.000 (not 0.500). Self-headed terms are excluded,
+    but other unmatched compounds remain in the recursive nodes' denominators;
+    the narrative instance instead gains exact PLANTED/DISCHARGED recurrence
+    plus heraldry-pattern coverage. Specialization moved 622 -> 626: the two
+    intended cost-4 edges are response_pattern -> cartoon_gravity and
+    heraldry_pattern -> no_deus_ex_machina; two cost-7 de9im_disjoint edges are
+    noise and are recorded in docs/BACKLOG.md.
+    Independent review then found that the registered response/heraldry pair
+    was only partially reversed: EVENTUALLY became ONCE while the outer ALWAYS
+    incorrectly stayed future-facing. Under a real whole-tree involution the
+    first authored formulas yielded four, not five, mirror groups. The past
+    formulas now use HISTORICALLY, the matcher applies one global involution,
+    and the corrected corpus yields five. The initial five-group result from
+    per-head quotienting is retracted as a vacuous implementation of "mirror".
 
 P10 (unregistered). **Zero specialization edges, and zero specialization
     noise.** `specialize.py` produces 468 edges over the merged graph and not
@@ -441,7 +483,8 @@ def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
          archetype, template, slots, invariants, symbols, operators,
          meaning, significance, conditions, provenance, disciplines,
          functionals=None, constants=None, index_sets=None, failure_modes=None,
-         inferential_links=None, keywords=None, canonical_objects=None):
+         inferential_links=None, keywords=None, canonical_objects=None,
+         scope=None):
     context = {"disciplines": disciplines, "subfield": subfield, "topic": topic}
     if canonical_objects:
         context["canonical_objects"] = canonical_objects
@@ -469,6 +512,8 @@ def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
     }
     if keywords:
         out["keywords"] = keywords
+    if scope:
+        out["scope"] = scope
     return out
 
 
@@ -490,6 +535,10 @@ BOX = op("G", "always (globally) modality", 1, "logical")
 DIAMOND = op("F", "eventually (finally) modality", 1, "logical")
 CIRCLE = op("X", "next-state modality", 1, "logical")
 UNTIL_OP = op("U", "strong until", 2, "logical")
+PAST_BOX = op("H", "historically modality", 1, "logical")
+PAST_DIAMOND = op("P", "once modality", 1, "logical")
+PREVIOUS = op("Y", "previous-state modality", 1, "logical")
+SINCE_OP = op("S", "strong since", 2, "logical")
 CONCAT_OP = op("+", "ordered concatenation of story parts", 2, "arithmetic")
 
 # --- lattice heads reused verbatim from scripts/seed_logic.py --------------
@@ -570,6 +619,33 @@ UNTIL_FN = {
                    "reading. 'Strong' means psi is required to occur; the weak "
                    "variant (which permits phi forever) is recorded as an "
                    "equivalent form, not as a separate head."}
+HISTORICALLY_FN = {
+    "notation": "HISTORICALLY(.)", "name": "historically",
+    "input_arity": 1, "codomain": "temporal properties (sets of traces)",
+    "description": "H phi: phi has held at every position from the trace "
+                   "origin through now; the time-reversal mirror of ALWAYS."}
+ONCE_FN = {
+    "notation": "ONCE(.)", "name": "once", "input_arity": 1,
+    "codomain": "temporal properties (sets of traces)",
+    "description": "P phi: phi held at some position at or before now; the "
+                   "time-reversal mirror of EVENTUALLY."}
+PREV_FN = {
+    "notation": "PREV(.)", "name": "previous state", "input_arity": 1,
+    "codomain": "temporal properties (sets of traces)",
+    "description": "Y phi: phi held at the immediately preceding position. "
+                   "This corpus fixes strong previous semantics: Y phi is "
+                   "false at the trace origin. That boundary choice is "
+                   "required by the SINCE and ONCE unfoldings below."}
+SINCE_FN = {
+    "notation": "SINCE(hold, origin)", "name": "strong since",
+    "input_arity": 2, "codomain": "temporal properties (sets of traces)",
+    "description": "phi S psi: psi held at some past position and phi has "
+                   "held continuously since; hold-first, origin-second."}
+HOLDS_FN = {
+    "notation": "HOLDS(.)", "name": "frame proposition holds",
+    "input_arity": 1,
+    "description": "Lifts a declared frame premise into the temporal trace "
+                   "of that frame's evolving state."}
 BEFORE_FN = {
     "notation": "BEFORE(earlier, later)", "name": "strict precedence",
     "input_arity": 2,
@@ -579,7 +655,13 @@ BEFORE_FN = {
                    "lattice head LEQ, because LEQ is the reflexive order and "
                    "asymmetry is false of a reflexive relation -- the honest "
                    "spelling costs every twin the head could have bought, which "
-                   "is the point the adjacent transitivity node measures."}
+                    "is the point the adjacent transitivity node measures."}
+LT_FN = {
+    "notation": "LT(earlier, later)", "name": "abstract strict order",
+    "input_arity": 2,
+    "description": "The irreflexive strict part of LEQ. BEFORE is temporal "
+                   "logic's concrete spelling and aliases only to LT, never "
+                   "to the reflexive LEQ head."}
 RESPONSE_KEYWORDS = ["liveness", "response pattern", "specification pattern"]
 
 # --- narrative heads (new) ------------------------------------------------
@@ -640,6 +722,15 @@ DISCHARGED_FN = {
     "description": "Holds at a position when the planted element has done "
                    "narrative work. 'The gun goes off' in Chekhov's own "
                    "example; 'paid off' in screenwriting usage."}
+NOTICES_FN = {
+    "notation": "NOTICES(.)", "name": "notices unsupported state",
+    "input_arity": 1,
+    "description": "Cartoon-frame trigger: the body becomes aware that it is "
+                   "unsupported."}
+FALLS_FN = {
+    "notation": "FALLS(.)", "name": "falls", "input_arity": 1,
+    "description": "Cartoon-frame response whose ordinary-world grounding is "
+                   "explicitly suspended inside the frame."}
 
 INCONSISTENCY_CONST = {
     "symbol": "bottom",
@@ -1351,7 +1442,7 @@ TEMPORAL_NODES = [
            "expression": "the happens-before relation is acyclic",
            "scope_note": "The operational reading: an event cannot be in its own causal past, which is what makes vector clocks and topological sorting of a trace possible"}],
          "strict_order_asymmetry",
-         "IMPLIES(BEFORE(EVENTA, EVENTB), NEG(BEFORE(EVENTB, EVENTA)))",
+         "IMPLIES(LT(EVENTA, EVENTB), NEG(LT(EVENTB, EVENTA)))",
          [slot("EVENTA", "variable", "event_operand"),
           slot("EVENTB", "variable", "event_operand")],
          ["The two operands swap places between premise and conclusion, so the "
@@ -1360,20 +1451,20 @@ TEMPORAL_NODES = [
           "that its head IS symmetric. The two nodes are the positive and "
           "negative answers to the same unaskable question, and the graph has "
           "no way to say either except by writing a node.",
-          "Authored with the concrete BEFORE head rather than the abstract LEQ, "
-          "and the choice is forced: LEQ is the reflexive lattice order, and "
-          "asymmetry is false of any reflexive relation. Spelling this with LEQ "
-          "would have bought a twin by asserting something false.",
+          "Authored with the abstract strict-order head LT rather than LEQ, "
+          "because asymmetry is false of any reflexive relation. BEFORE is an "
+          "honest alias of LT; the former BEFORE-to-LEQ alias asserted a false "
+          "identity and has been removed.",
           "Singleton at shape, typed and family level. Its neighbour "
           "temporal.order.precedence_transitivity, written with LEQ, is a "
           "three-discipline typed twin. Same corpus, same author, adjacent "
           "nodes, same subject matter -- the entire difference is which head "
           "the statement could honestly use.",
-          "BEFORE is shared with data/narrative, where "
+          "The concrete BEFORE spelling remains in data/narrative, where "
           "narrative.causality.precedence_causation_bridge uses it in the same "
           "reading. Both corpora are authored by scripts/seed_temporal.py, so "
           "the head's argument order (earlier first) is fixed once for both.",
-          "Asymmetry plus transitivity makes BEFORE a strict partial order; "
+          "Asymmetry plus transitivity makes LT a strict partial order; "
           "the reflexive closure is the LEQ of the adjacent node, and the two "
           "nodes together are the standard strict/non-strict pair."],
          EVENT_SYMS[:2], [PRECEDES, IMPL, NOT],
@@ -1393,10 +1484,10 @@ TEMPORAL_NODES = [
           "instants -- simultaneity makes the relation a strict partial order "
           "rather than a strict total one",
           "A single consistent timeline, so the relation is acyclic",
-          "Strict reading throughout: BEFORE is irreflexive"],
+           "Strict reading throughout: LT is irreflexive"],
          [LAMPORT1978, ALLEN1983, PRIOR1957, MANI2010],
          ["temporal_logic"],
-         functionals=[BEFORE_FN, NEG_FN, IMPLIES_FN],
+         functionals=[LT_FN, NEG_FN, IMPLIES_FN],
          failure_modes=[
              "Cyclic-time models (recurrence in cosmology, modular clocks in "
              "protocols) drop it, and every algorithm that topologically sorts "
@@ -1410,6 +1501,7 @@ TEMPORAL_NODES = [
              "template does not carry."],
          inferential_links=links(
              composed_with=["temporal.order.precedence_transitivity",
+                            "temporal.order.strict_part_of_order",
                             "narrative.causality.precedence_causation_bridge",
                             "geotop.predicates.adjacency_symmetry"]),
          keywords=["asymmetry", "strict order", "before", "acyclicity",
@@ -1577,11 +1669,186 @@ TEMPORAL_NODES = [
              "repeated triggers a single response satisfies them all, which is "
              "almost never the intent."],
          inferential_links=links(
-             generalizes=["narrative.constraint.chekhov_gun"],
+             generalizes=["narrative.constraint.chekhov_gun",
+                          "narrative.frames.cartoon_gravity"],
              composed_with=["temporal.modality.eventually_unfolding",
                             "temporal.modality.always_idempotence"]),
          keywords=RESPONSE_KEYWORDS + ["leads-to", "eventually", "always",
-                                       "Chekhov"],
+                                        "Chekhov"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.past.since_unfolding",
+         "Expansion Law for Since",
+         "axiom", "formal", "past_temporal_logic", "fixpoint_expansion",
+         "(a since b) = b or (a and previous(a since b))",
+         "a \\mathbin{\\mathcal{S}} b \\equiv b \\lor (a \\land \\mathrm{Y}(a \\mathbin{\\mathcal{S}} b))",
+         [{"form_id": "unicode", "notation_system": "ascii",
+           "expression": "a S b ≡ b ∨ (a ∧ Y(a S b))",
+           "scope_note": "The standard past-time unfolding"}],
+         "fixpoint_expansion_law",
+         "SINCE(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, PREV(SINCE(PROPA, PROPB))))",
+         [slot("PROPA", "variable", "temporal_proposition"),
+          slot("PROPB", "variable", "temporal_proposition")],
+         ["The defined SINCE head recurs under PREV, so groundedness v2 should "
+          "recognize the same recursive-definition structure as UNTIL.",
+          "Time reversal maps this statement to until_unfolding but does not "
+          "make SINCE and UNTIL interchangeable operations.",
+          "The recurrence uses strong PREV, false at the trace origin; weak "
+          "previous would make the base case false."],
+         PROP_SYMS, [LTL_EQUIV, AND, OR, PREVIOUS, SINCE_OP],
+         "A condition has held since an origin exactly when the origin holds "
+         "now, or the condition holds now and the same claim held previously.",
+         "The recursive past operator that makes premise persistence writable.",
+         ["Finite traces with a distinguished origin", "Strong since semantics",
+          "Strong PREV is false at the origin"],
+         [PRIOR1957, MANNA_PNUELI, EMERSON1990, BAIER2008],
+         ["temporal_logic"],
+         functionals=[SINCE_FN, PREV_FN, JOIN_FN, MEET_FN],
+         inferential_links=links(
+             composed_with=["temporal.recurrence.until_unfolding",
+                            "temporal.past.once_unfolding"]),
+         keywords=["since", "past time", "fixpoint", "recurrence"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.past.past_duality",
+         "Past Temporal Duality",
+         "identity", "formal", "past_temporal_logic", "modal_duality",
+         "historically(p) = not(once(not p))",
+         "\\mathrm{H}p \\equiv \\lnot\\mathrm{P}\\lnot p",
+         [{"form_id": "dual", "notation_system": "ascii",
+           "expression": "once(p) = not(historically(not p))"}],
+         "de_morgan_duality",
+         "HISTORICALLY(PROP) = NEG(ONCE(NEG(PROP)))",
+         [slot("PROP", "variable", "temporal_proposition")],
+         ["HISTORICALLY and ONCE are the universal and existential modalities "
+          "over the prefix ending now.",
+          "The mirror relation to future duality is time reversal, not aliasing."],
+         PROP_SYMS[:1], [LTL_EQUIV, NOT, PAST_BOX, PAST_DIAMOND],
+         "A property has always held in the past exactly when it has never "
+         "failed in the past.",
+         "Supplies the past half of temporal De Morgan duality.",
+         ["Classical two-valued semantics", "A trace with a fixed origin"],
+         [PRIOR1957, MANNA_PNUELI, EMERSON1990], ["temporal_logic"],
+         functionals=[HISTORICALLY_FN, ONCE_FN, NEG_FN],
+         inferential_links=links(
+             composed_with=["temporal.modality.temporal_duality"]),
+         keywords=["past duality", "historically", "once", "De Morgan"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.past.prev_distributes_over_meet",
+         "Previous Distributes over Meet",
+         "theorem", "derived", "past_temporal_logic", "modal_homomorphism",
+         "previous(a and b) = previous(a) and previous(b)",
+         "\\mathrm{Y}(a \\land b) \\equiv \\mathrm{Y}a \\land \\mathrm{Y}b",
+         [{"form_id": "unicode", "notation_system": "ascii",
+           "expression": "Y(a ∧ b) ≡ Ya ∧ Yb"}],
+         "unary_homomorphism_over_meet",
+         "PREV(MEET(PROPA, PROPB)) = MEET(PREV(PROPA), PREV(PROPB))",
+         [slot("PROPA", "variable", "temporal_proposition"),
+          slot("PROPB", "variable", "temporal_proposition")],
+         ["PREV reads both operands at the same preceding position.",
+          "At the origin the equation survives under either uniform weak or "
+          "strong previous semantics, though PREV is not self-dual there."],
+         PROP_SYMS, [LTL_EQUIV, AND, PREVIOUS],
+         "Looking back one step after conjoining is the same as looking back "
+         "one step for each conjunct.",
+         "The time-reversal mirror of NEXT distributing over MEET.",
+         ["One consistent convention for PREV at the trace origin"],
+         [PRIOR1957, MANNA_PNUELI, EMERSON1990], ["temporal_logic"],
+         functionals=[PREV_FN, MEET_FN],
+         inferential_links=links(
+             composed_with=["temporal.modality.next_distributes_over_meet"]),
+         keywords=["previous", "distribution", "meet", "past time"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.past.once_unfolding",
+         "Expansion Law for Once",
+         "theorem", "derived", "past_temporal_logic", "fixpoint_expansion",
+         "once(p) = p or previous(once(p))",
+         "\\mathrm{P}p \\equiv p \\lor \\mathrm{Y}\\mathrm{P}p",
+         [{"form_id": "unicode", "notation_system": "ascii",
+           "expression": "Pp ≡ p ∨ YPp"}],
+         "fixpoint_expansion_law",
+         "ONCE(PROP) = JOIN(PROP, PREV(ONCE(PROP)))",
+         [slot("PROP", "variable", "temporal_proposition")],
+         ["ONCE recurs beneath PREV, so the recursive-definition detector has "
+          "the same evidence it has for eventually_unfolding.",
+          "The base case includes the current position.",
+          "PREV is the strong previous operator and is false at the origin."],
+         PROP_SYMS[:1], [LTL_EQUIV, OR, PAST_DIAMOND, PREVIOUS],
+         "Something has happened once if it happens now or had happened by the "
+         "previous position.",
+         "Makes finite past search an explicit recurrence.",
+         ["Finite prefixes with a distinguished origin",
+          "Strong PREV is false at the origin"],
+         [PRIOR1957, MANNA_PNUELI, EMERSON1990], ["temporal_logic"],
+         functionals=[ONCE_FN, PREV_FN, JOIN_FN],
+         inferential_links=links(
+             composed_with=["temporal.modality.eventually_unfolding",
+                            "temporal.past.since_unfolding"]),
+         keywords=["once", "unfolding", "past time", "recurrence"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.response.heraldry_pattern",
+         "Inclusive Heraldry Pattern (Every Outcome Has a Herald)",
+         "model_specification", "assumed", "specification_patterns",
+         "past_response",
+         "historically(outcome implies once(herald))",
+         "\\mathrm{H}(o \\to \\mathrm{P}h)",
+         [{"form_id": "named", "notation_system": "ascii",
+           "expression": "every outcome has a herald at or before it"}],
+         "liveness_response_pattern",
+         "HISTORICALLY(IMPLIES(OUTCOME, ONCE(HERALD)))",
+         [slot("OUTCOME", "variable", "temporal_proposition"),
+          slot("HERALD", "variable", "temporal_proposition")],
+         ["The pattern quantifies over every outcome occurrence and demands a "
+          "witness in its inclusive prefix.",
+          "It is the past-facing structural mirror of response_pattern, not a "
+          "future liveness requirement.",
+          "Because ONCE includes the current position, this minimal mirror "
+          "does not by itself enforce strict earlier-than ordering."],
+         [sym("o", "variable", "outcome_condition", "An observed outcome."),
+          sym("h", "variable", "herald_condition", "Its required preparation.")],
+         [PAST_BOX, PAST_DIAMOND, IMPL],
+         "Whenever an outcome occurs, some herald holds then or occurred "
+         "earlier.",
+         "The general pattern that makes no-deus-ex-machina an instance rather "
+         "than an isolated maxim.",
+         ["A trace prefix including the current position",
+          "ONCE ranges over positions at or before the current outcome"],
+         [MANNA_PNUELI, PRIOR1957, DWYER1999, MANI2010], ["temporal_logic"],
+         functionals=[HISTORICALLY_FN, ONCE_FN, IMPLIES_FN],
+         inferential_links=links(
+             generalizes=["narrative.constraint.no_deus_ex_machina"],
+             composed_with=["temporal.response.response_pattern"]),
+         keywords=["heraldry", "past response", "preparation", "once"],
+         canonical_objects=TEMPORAL_OBJECTS),
+
+    node("temporal.order.strict_part_of_order",
+         "Strict Part of a Reflexive Order",
+         "identity", "formal", "event_order", "strict_reflexive_bridge",
+         "a < b = (a <= b) and not(b <= a)",
+         "a < b \\iff (a \\leq b \\land \\lnot(b \\leq a))",
+         [{"form_id": "set_order", "notation_system": "ascii",
+           "expression": "A proper-subset B iff A subseteq B and not(B subseteq A)"}],
+         "strict_part_of_partial_order",
+         "LT(EVENTA, EVENTB) = MEET(LEQ(EVENTA, EVENTB), NEG(LEQ(EVENTB, EVENTA)))",
+         [slot("EVENTA", "variable", "event_operand"),
+          slot("EVENTB", "variable", "event_operand")],
+         ["LT is irreflexive because LEQ in both directions is excluded.",
+          "The equation relates distinct heads; it does not license substituting "
+          "LT for LEQ in asymmetry statements."],
+         EVENT_SYMS[:2], [EQ, PRECEDES, PRECEQ, AND, NOT],
+         "The strict order consists of the non-strict comparisons whose reverse "
+         "comparison does not hold.",
+         "Repairs the false BEFORE-to-LEQ alias with an asserted bridge.",
+         ["LEQ is antisymmetric and reflexive"],
+         [LAMPORT1978, ALLEN1983, MANNA_PNUELI], ["temporal_logic"],
+         functionals=[LT_FN, LEQ_FN, MEET_FN, NEG_FN],
+         inferential_links=links(
+             composed_with=["temporal.order.strict_precedence_asymmetry",
+                            "temporal.order.precedence_transitivity"]),
+         keywords=["strict order", "partial order", "LT", "LEQ"],
          canonical_objects=TEMPORAL_OBJECTS),
 ]
 
@@ -2019,9 +2286,9 @@ NARRATIVE_NODES = [
           {"form_id": "ltl", "notation_system": "ascii",
            "expression": "G(planted -> F discharged)",
            "scope_note": "The response pattern of temporal.response.response_pattern, instantiated; the maxim IS a liveness specification"},
-          {"form_id": "converse", "notation_system": "ascii",
-           "expression": "always(discharged(e) implies once(planted(e)))",
-           "scope_note": "The other half of the constraint, which rules out deus ex machina; it needs a PAST modality this corpus does not carry"}],
+           {"form_id": "converse", "notation_system": "ascii",
+            "expression": "historically(discharged(e) implies once(planted(e)))",
+            "scope_note": "The other half is now authored separately as narrative.constraint.no_deus_ex_machina"}],
          "liveness_response_pattern",
          "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))",
          [slot("ELEMENT", "variable", "story_element")],
@@ -2064,7 +2331,8 @@ NARRATIVE_NODES = [
          "formula, not a taste. Second, its most useful half -- the converse "
          "that forbids deus ex machina -- cannot be written at all, because the "
          "grammar has no past modality; the corpus therefore states one "
-         "direction of a two-directional law and says so.",
+          "direction of a two-directional law; the past-facing direction now "
+          "lives in narrative.constraint.no_deus_ex_machina.",
          ["Finite, completed narratives: over an unfinished story every "
           "obligation is merely outstanding, which is the standard reason "
           "serials evade the constraint",
@@ -2093,10 +2361,179 @@ NARRATIVE_NODES = [
              special_case_of=["temporal.response.response_pattern"],
              composed_with=["narrative.structure.setup_introduction",
                             "narrative.structure.resolution_outcome",
+                            "narrative.constraint.no_deus_ex_machina",
                             "temporal.modality.eventually_unfolding"]),
          keywords=["Chekhov's gun", "liveness", "response pattern", "planting",
                    "payoff", "narrative constraint"],
          canonical_objects=NARRATIVE_OBJECTS),
+
+    node("narrative.constraint.no_deus_ex_machina",
+         "No Deus Ex Machina (Inclusive Herald Condition)",
+         "model_specification", "assumed", "narrative_constraints",
+         "narrative_heraldry",
+         "historically(discharged(e) implies once(planted(e)))",
+         "\\mathrm{H}(\\mathrm{Di}(e) \\to \\mathrm{P}\\,\\mathrm{Pl}(e))",
+         [{"form_id": "maxim", "notation_system": "ascii",
+           "expression": "no resolution may depend on an element the story never prepared"}],
+         "liveness_response_pattern",
+         "HISTORICALLY(IMPLIES(DISCHARGED(ELEMENT), ONCE(PLANTED(ELEMENT))))",
+         [slot("ELEMENT", "variable", "story_element")],
+         ["The same element slot recurs in outcome and herald positions; a "
+          "different planted object cannot justify the discharge.",
+          "This is Chekhov's past-facing converse but not its logical "
+          "consequence; a coherent story normally adopts both constraints.",
+          "ONCE includes the current position, so strict narrative preparation "
+          "still requires the executor's event-order check."],
+         [sym("e", "variable", "story_element", "The element used by the plot.")],
+         [PAST_BOX, PAST_DIAMOND, IMPL],
+         "Anything used to resolve the plot must be presented no later than "
+         "the outcome that uses it.",
+         "Turns the anti-deus-ex-machina half from an equivalent-form note into "
+         "a separately checkable constraint.",
+         ["Completed narratives", "Deliberate plot-relevant outcomes"],
+         [CHEKHOV1889, PROPP1928, MANI2010, PRIOR1957], ["narrative"],
+         functionals=[HISTORICALLY_FN, ONCE_FN, IMPLIES_FN, PLANTED_FN, DISCHARGED_FN],
+         failure_modes=[
+             "An element planted at the exact discharge position satisfies "
+             "this inclusive mirror; strict anti-deus ordering needs PREV(ONCE) "
+             "or the executor's event sequence.",
+             "Mystery and surprise can conceal a herald from the audience while "
+             "still making it available in retrospect.",
+             "Coincidence-driven genres may reject the constraint deliberately."],
+         inferential_links=links(
+             special_case_of=["temporal.response.heraldry_pattern"],
+             composed_with=["narrative.constraint.chekhov_gun"]),
+         keywords=["deus ex machina", "heraldry", "setup", "payoff", "once"],
+         canonical_objects=NARRATIVE_OBJECTS),
+
+    node("narrative.frames.cartoon_gravity",
+         "Cartoon Gravity Frame Declaration",
+         "model_specification", "assumed", "fictional_frames",
+         "cartoon_physics",
+         "a body falls eventually after noticing it is unsupported",
+         "\\Box(\\mathrm{notices}(b) \\to \\Diamond\\,\\mathrm{falls}(b))",
+         [{"form_id": "cartoon_rule", "notation_system": "ascii",
+           "expression": "once a body notices it is unsupported, it eventually falls"}],
+         "liveness_response_pattern",
+         "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+         [slot("BODY", "variable", "story_body")],
+         ["The declaration instantiates the same response shape as Chekhov's "
+          "gun while remaining explicitly local to one fictional frame.",
+          "The frame suspends exactly the cited ordinary-world gravity node."],
+         [sym("b", "variable", "story_body", "An unsupported cartoon body.")],
+         [BOX, DIAMOND, IMPL],
+         "Inside this cartoon, awareness rather than loss of support triggers "
+         "the fall.",
+         "The first corpus declaration whose epistemic force is explicitly "
+         "frame-local rather than world-global.",
+         ["The cartoon-gravity frame is open"],
+         [MANI2010, RYAN1991, WALTON1990], ["narrative"],
+         functionals=[ALWAYS_FN, EVENTUALLY_FN, IMPLIES_FN, NOTICES_FN, FALLS_FN],
+         inferential_links=links(
+             special_case_of=["temporal.response.response_pattern"],
+             composed_with=["narrative.frame.frame_consistency"]),
+         keywords=["cartoon gravity", "fictional frame", "suspension"],
+         canonical_objects=NARRATIVE_OBJECTS,
+         scope={
+             "frame": "narrative.frames.cartoon_gravity",
+             "role": "declaration",
+             "frame_title": "Cartoon gravity",
+             "premises": [{
+                 "premise_id": "noticed_fall",
+                 "expression": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+             }],
+             "suspends": ["physics.gravitation.newton_universal_gravitation"],
+             "governed_by": ["narrative.frame.frame_consistency"],
+             "on_exit": "conjectured",
+             "retrieval": "frame_local",
+         }),
+
+    node("narrative.frames.cartoon_gravity_hover",
+         "Cartoon Gravity Frame Assertion",
+         "proposition", "assumed", "fictional_frames", "cartoon_physics",
+         "if the body has not noticed, it does not fall",
+         "\\lnot\\mathrm{notices}(b) \\to \\lnot\\mathrm{falls}(b)",
+         [{"form_id": "gag", "notation_system": "ascii",
+           "expression": "the coyote may stand in mid-air until looking down"}],
+         "frame_local_assertion",
+         "IMPLIES(NEG(NOTICES(BODY)), NEG(FALLS(BODY)))",
+         [slot("BODY", "variable", "story_body")],
+         ["The assertion is licensed only inside the frame that suspends the "
+          "ordinary gravity node.",
+          "Outside that frame it demotes to conjectured rather than becoming a "
+          "claim about physical bodies."],
+         [sym("b", "variable", "story_body", "The same cartoon body.")],
+         [IMPL, NOT],
+         "Before awareness, the unsupported cartoon body remains aloft.",
+         "The assertion half of the first real scope pair and a concrete test "
+         "of declaration/assertion agreement metadata.",
+         ["The cartoon-gravity frame is open", "The body has not yet noticed"],
+         [MANI2010, RYAN1991, WALTON1990], ["narrative"],
+         functionals=[IMPLIES_FN, NEG_FN, NOTICES_FN, FALLS_FN],
+         failure_modes=["Invalid outside the declared frame."],
+         inferential_links=links(
+             composed_with=["narrative.frame.frame_consistency"]),
+         keywords=["cartoon gravity", "hover", "frame-local assertion"],
+         canonical_objects=NARRATIVE_OBJECTS,
+         scope={
+             "frame": "narrative.frames.cartoon_gravity",
+             "role": "assertion",
+             "frame_title": "Cartoon gravity",
+             "premises": [{
+                 "premise_id": "noticed_fall",
+                 "expression": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+             }],
+             "suspends": ["physics.gravitation.newton_universal_gravitation"],
+             "governed_by": ["narrative.frame.frame_consistency"],
+             "on_exit": "conjectured",
+             "retrieval": "frame_local",
+         }),
+
+    node("narrative.frame.premise_persistence",
+         "Opening-Premise Persistence",
+         "axiom", "formal", "fictional_frames", "frame_temporality",
+         "an opening premise remains held and has held since the frame opened",
+         "\\Box(\\mathrm{holds}(p) \\land (\\mathrm{holds}(p)\\,\\mathcal{S}\\,o))",
+         [{"form_id": "session", "notation_system": "ascii",
+           "expression": "premises declared at frame opening remain available until frame exit"}],
+         "frame_premise_persistence",
+         "ALWAYS(MEET(HOLDS(PREMISE), SINCE(HOLDS(PREMISE), FRAMEOPENING)))",
+         [slot("PREMISE", "variable", "frame_premise"),
+          slot("FRAMEOPENING", "constant", "frame_opening_event")],
+         ["The same premise recurs on both sides and SINCE anchors it to the "
+          "frame-opening event.",
+          "The outer MEET keeps HOLDS(PREMISE) positive, so removal violates "
+          "the law instead of making an implication vacuously true.",
+          "Scope metadata supplies the boundary that the temporal template "
+          "alone cannot identify."],
+         [sym("p", "variable", "frame_premise", "A declared local premise."),
+          sym("o", "constant", "frame_opening_event", "The scope boundary.")],
+         [BOX, AND, SINCE_OP],
+         "A premise declared when the frame opens remains available from that "
+         "boundary through the current state.",
+         "Connects mutable session state to the past-time corpus explicitly.",
+         ["One open frame with a distinguished opening event",
+          "PREMISE is an opening declaration, not a later assertion"],
+         [RYAN1991, LEWIS1978, PRIOR1957, MANNA_PNUELI], ["narrative"],
+         functionals=[ALWAYS_FN, MEET_FN, HOLDS_FN, SINCE_FN],
+         inferential_links=links(
+             composed_with=["temporal.past.since_unfolding",
+                            "narrative.frame.frame_consistency"]),
+         keywords=["frame premise", "persistence", "since", "session state"],
+         canonical_objects=NARRATIVE_OBJECTS,
+         scope={
+             "frame": "narrative.frames.premise_persistence",
+             "role": "declaration",
+             "frame_title": "Premise persistence",
+             "premises": [{
+                 "premise_id": "frame_open",
+                 "expression": "HOLDS(PREMISE)",
+             }],
+             "suspends": [],
+             "governed_by": ["narrative.frame.frame_consistency"],
+             "on_exit": "conjectured",
+             "retrieval": "frame_local",
+         }),
 
     node("narrative.frame.frame_consistency",
          "Frame Consistency (A Story May Not Contradict Its Own Premises)",

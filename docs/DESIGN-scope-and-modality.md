@@ -8,8 +8,18 @@ need "this claim holds relative to that premise set"; the past fragment needs
 the irreflexive part of that one"; and the provenance asymmetry is the same
 key name being admissible in one object and not its neighbour.
 
-This is a design and a draft. Nothing here is authored into `data/`, the live
-schema is untouched, and the one schema change proposed is drafted separately
+> **Implementation status (2026-08-08).** This document records the prediction
+> and design baseline at 199 nodes. The scope schema and executor have since
+> shipped, and the payoff in §4 has landed as ten nodes (the cartoon-gravity
+> entry expands to a declaration/assertion pair): 209 nodes total, five
+> mirror-only groups, and the `LT` strict-order correction. Historical baseline
+> measurements below are intentionally retained as the before-state. Review
+> caught one error in that baseline: heraldry/no-deus used an outer `ALWAYS`,
+> only partially reversing the response law. The implemented past forms use
+> `HISTORICALLY`; the matcher reverses the whole tree as one involution.
+
+This was written as a design and draft: at that point nothing here was authored
+into `data/`, the live schema was untouched, and the schema change existed only
 as `docs/schema-drafts/equation-node.scope-draft.json`.
 
 Everything numbered below was measured against the 199 nodes on this branch,
@@ -399,8 +409,9 @@ document if nothing else is:
 
 ## 4. Payoff: nodes that become writable
 
-Nothing in this section is authored. Sections 2 and 3 need no schema change,
-so the payoff is a list, not a diff.
+At design time nothing in this section was authored. Sections 2 and 3 needed no
+schema change, so the payoff was a list, not a diff. The status banner above
+records its later implementation.
 
 **Needs only the past heads (no schema, no grammar, no table change):**
 

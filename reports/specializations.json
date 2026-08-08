@@ -4233,6 +4233,22 @@
       "looseness": 2
     },
     {
+      "general": "temporal.response.heraldry_pattern",
+      "specific": "narrative.constraint.no_deus_ex_machina",
+      "general_template": "HISTORICALLY(IMPLIES(OUTCOME, ONCE(HERALD)))",
+      "specific_template": "HISTORICALLY(IMPLIES(DISCHARGED(ELEMENT), ONCE(PLANTED(ELEMENT))))",
+      "via": "compound",
+      "cost": 4,
+      "structure_cost": 4,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "HERALD": "PLANTED(ELEMENT)",
+        "OUTCOME": "DISCHARGED(ELEMENT)"
+      },
+      "looseness": 2
+    },
+    {
       "general": "temporal.response.response_pattern",
       "specific": "narrative.constraint.chekhov_gun",
       "general_template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))",
@@ -4245,6 +4261,22 @@
       "bindings": {
         "RESPONSE": "DISCHARGED(ELEMENT)",
         "TRIGGER": "PLANTED(ELEMENT)"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "temporal.response.response_pattern",
+      "specific": "narrative.frames.cartoon_gravity",
+      "general_template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))",
+      "specific_template": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+      "via": "compound",
+      "cost": 4,
+      "structure_cost": 4,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "RESPONSE": "FALLS(BODY)",
+        "TRIGGER": "NOTICES(BODY)"
       },
       "looseness": 2
     },
@@ -8276,6 +8308,40 @@
         "EMPTYSET": "NEXT(MEET(PROPA, PROPB))",
         "REGA": "NEXT(PROPA)",
         "REGB": "NEXT(PROPB)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "temporal.order.strict_part_of_order",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "LT(EVENTA, EVENTB) = MEET(LEQ(EVENTA, EVENTB), NEG(LEQ(EVENTB, EVENTA)))",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EMPTYSET": "LT(EVENTA, EVENTB)",
+        "REGA": "LEQ(EVENTA, EVENTB)",
+        "REGB": "NEG(LEQ(EVENTB, EVENTA))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "temporal.past.prev_distributes_over_meet",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "PREV(MEET(PROPA, PROPB)) = MEET(PREV(PROPA), PREV(PROPB))",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EMPTYSET": "PREV(MEET(PROPA, PROPB))",
+        "REGA": "PREV(PROPA)",
+        "REGB": "PREV(PROPB)"
       },
       "looseness": 4
     },

@@ -14,11 +14,18 @@ so `MEET(X, TOP)` and `MEET(TOP, X)` were different skeletons, and a node
 existed (`geotop.predicates.adjacency_symmetry`) purely to state a
 commutativity the tooling could not represent.
 
-Two match levels are reported:
+Four structural match levels plus one relational level are reported:
 
 - shape twins: identical skeletons with slot identity ignored
 - typed twins: identical skeletons after annotating each slot with a coarse
   category (parameter-like vs variable-like) taken from `slot_schema`
+- family twins: typed skeletons after absorbable parameter signs normalize
+- aliased twins: typed skeletons after same-operation spellings normalize
+
+Mirror twins are deliberately separate from that ladder: they are identical
+only after the declared time-reversal involution swaps future and past heads.
+They are related statements, not interchangeable operations, and are never
+counted as typed or aliased twins.
 
 Typed twins are strong cross-discipline analogy candidates; shape twins are
 looser. That word "looser" is a LADDER INVARIANT, checked by this script and
@@ -170,6 +177,29 @@ HEAD_ALGEBRA: dict[str, dict] = {
         # geotop.point_set.interior_boundary_exterior_partition writes a
         # nested JOIN whose three operands are a partition, which is
         # order-independent.
+    },
+    # ---- abstract non-strict and strict orders ---------------------------
+    "LEQ": {
+        "kind": "call",
+        "order": {
+            "reflexive": True, "antisymmetric": True, "transitive": True,
+            "strict_part": "LT",
+        },
+        "provenance": "ASSERTED",
+        # Transitivity is stated by settheory.order.subset_transitivity,
+        # geotop.predicates.containment_transitivity and
+        # temporal.order.precedence_transitivity. The strict-part relation is
+        # stated by temporal.order.strict_part_of_order.
+    },
+    "LT": {
+        "kind": "call",
+        "order": {
+            "irreflexive": True, "asymmetric": True, "transitive": True,
+            "reflexive_closure": "LEQ",
+        },
+        "provenance": "ASSERTED",
+        # temporal.order.strict_precedence_asymmetry supplies asymmetry;
+        # temporal.order.strict_part_of_order relates LT back to LEQ.
     },
     # ---- geospatial predicate ----
     "TOUCHES": {
@@ -639,8 +669,9 @@ PARAMETER_LIKE = {"parameter", "constant"}
 #   that word-level and phrase-level recursion are one skeleton
 #   (docs/DISCOVERIES.md); both are ordered binary composition of a head
 #   with a dependent.
-# - order_le: LEQ and BEFORE -- temporal precedence IS an order relation;
-#   the temporal corpus already twins transitivity through the LEQ shape.
+# - strict_order: LT and BEFORE -- temporal precedence is a strict order.
+#   LEQ is deliberately excluded: strict and reflexive orders are related by
+#   HEAD_ALGEBRA and a corpus node, never substituted for one another.
 # - aggregate: `sum` (the prefix big-operator) and INTEGRAL -- both are
 #   linear aggregation of a family over an index set, differing only in
 #   whether that set is discrete or continuous (a Riemann sum IS the
@@ -651,11 +682,54 @@ PARAMETER_LIKE = {"parameter", "constant"}
 HEAD_ALIASES = {
     "MOD": "ordered_compose",
     "CONCAT": "ordered_compose",
-    "BEFORE": "order_le",
-    "LEQ": "order_le",
+    "BEFORE": "strict_order",
+    "LT": "strict_order",
     "sum": "aggregate",
     "INTEGRAL": "aggregate",
 }
+
+
+# Time reversal is one global involution between DISTINCT operations, not an
+# independent quotient at every head. The whole tree must be reversed: a
+# mixed future/past expression is not the mirror of a merely partially swapped
+# expression. This mapping is consumed only by the separately reported mirror
+# level and never affects the structural ladder.
+TIME_REVERSE_HEADS = {
+    "ALWAYS": "HISTORICALLY",
+    "HISTORICALLY": "ALWAYS",
+    "EVENTUALLY": "ONCE",
+    "ONCE": "EVENTUALLY",
+    "NEXT": "PREV",
+    "PREV": "NEXT",
+    "UNTIL": "SINCE",
+    "SINCE": "UNTIL",
+}
+
+
+def time_reverse_heads(node: tuple) -> tuple:
+    """Apply the future/past involution consistently to an entire tree."""
+
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return node
+    args = tuple(time_reverse_heads(a) for a in node[2])
+    head = node[1]
+    if kind == "call" and head in TIME_REVERSE_HEADS:
+        head = TIME_REVERSE_HEADS[head]
+    return (kind, head, args)
+
+
+def mirror_skeleton(tree: tuple, classes: dict[str, str]) -> str:
+    """Return a canonical key for the two members of a time-reversal orbit."""
+
+    original = skeleton(tree, classes)
+    reversed_tree = canonicalize(
+        time_reverse_heads(tree), COMMUTATIVE_CALL_HEADS
+    )
+    reversed_skeleton = skeleton(
+        reversed_tree, classes, COMMUTATIVE_CALL_HEADS
+    )
+    return min(original, reversed_skeleton)
 
 
 def alias_heads(node: tuple) -> tuple:
@@ -788,6 +862,7 @@ class ParsedNode:
     typed: str
     family: str
     aliased: str
+    mirror: str
     missing_slots: list[str]
     slot_ids: list[str] = field(default_factory=list)
     call_heads: list[str] = field(default_factory=list)
@@ -831,6 +906,7 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                         canonicalize(alias_heads(tree),
                                      ALIASED_COMMUTATIVE_CALL_HEADS),
                         classes, ALIASED_COMMUTATIVE_CALL_HEADS),
+                    mirror=mirror_skeleton(tree, classes),
                     missing_slots=missing,
                     slot_ids=sorted(template_slots(tree) | set(classes)),
                     call_heads=sorted(template_call_heads(tree)),
@@ -939,6 +1015,7 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
     typed_groups = group_by(nodes, "typed")
     family_groups = group_by(nodes, "family")
     aliased_groups = group_by(nodes, "aliased")
+    mirror_groups = group_by(nodes, "mirror")
 
     def group_entries(groups: dict[str, list[ParsedNode]]) -> list[dict]:
         entries = []
@@ -1008,19 +1085,36 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
         and frozenset(m.statement_id for m in members) not in typed_member_sets
     }
 
+    # Mirror is not a rung in the increasingly permissive twin ladder. Report
+    # only groups created by time reversal; typed groups would otherwise be
+    # repeated unchanged under the mirror key.
+    mirror_new = {
+        skel: members
+        for skel, members in mirror_groups.items()
+        if len(members) > 1
+        and frozenset(m.statement_id for m in members) not in typed_member_sets
+    }
+
     return {
         "nodes_analyzed": len(nodes),
         "group_counts": {
-            level: sum(1 for members in groups.values() if len(members) > 1)
-            for level, groups in (("shape", shape_groups), ("typed", typed_groups),
-                                  ("family", family_groups),
-                                  ("aliased", aliased_groups))
+            **{
+                level: sum(1 for members in groups.values() if len(members) > 1)
+                for level, groups in (
+                    ("shape", shape_groups),
+                    ("typed", typed_groups),
+                    ("family", family_groups),
+                    ("aliased", aliased_groups),
+                )
+            },
+            "mirror": len(mirror_new),
         },
         "ladder_violations": ladder_violations(shape_groups, typed_groups),
         "slot_vs_call_head_collisions": slot_vs_call_head_collisions(nodes),
         "typed_twin_groups": group_entries(typed_groups),
         "family_twin_groups_beyond_typed": group_entries(family_new),
         "aliased_twin_groups_beyond_typed": group_entries(aliased_new),
+        "mirror_twin_groups": group_entries(mirror_new),
         "shape_twin_groups": group_entries(shape_groups),
         "archetype_label_drift": label_drift,
         "skeletons_with_split_archetypes": split_labels,
@@ -1033,7 +1127,9 @@ def print_report(report: dict) -> None:
     print(f"Analyzed {report['nodes_analyzed']} statement nodes.")
     counts = report["group_counts"]
     print("Twin groups: " + ", ".join(
-        f"{level} {counts[level]}" for level in ("shape", "typed", "family", "aliased")))
+        f"{level} {counts[level]}"
+        for level in ("shape", "typed", "family", "aliased", "mirror")
+    ))
     violations = report["ladder_violations"]
     print(f"Ladder check (every typed twin pair is a shape twin pair): "
           f"{len(violations)} violations")
@@ -1059,6 +1155,8 @@ def print_report(report: dict) -> None:
                 report["family_twin_groups_beyond_typed"])
     show_groups("Aliased twins (declared head classes, beyond typed)",
                 report["aliased_twin_groups_beyond_typed"])
+    show_groups("Mirror twins (time reversal; never typed or aliased)",
+                report["mirror_twin_groups"])
     show_groups("Shape twins (slot categories ignored)", report["shape_twin_groups"])
 
     if report["archetype_label_drift"]:

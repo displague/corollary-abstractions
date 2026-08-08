@@ -10,7 +10,7 @@ interface. Latest release: [v0.4.0](docs/RELEASE-v0.4.0.md).
 
 ## The two headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 199
+**1. The matcher discovers that sciences repeat one another.** From 209
 hand-authored statement nodes across 21 disciplines, structure alone:
 
 ```
@@ -104,10 +104,10 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (21 disciplines, 199 nodes)
+data/<discipline>/      statement corpora (21 disciplines, 209 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
-  match_signatures.py   twin detection: shape / typed / family skeletons
+  match_signatures.py   twins plus a separate time-reversal mirror relation
   specialize.py         general->specific edges (absorption + identities)
   decompose.py          statements as constructs of named forms + groundedness
   compose_assert.py     grounded assertions: the six-tier epistemic ladder demo
@@ -143,7 +143,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 199 nodes / 21 corpora green
+python scripts/validate_nodes.py            # 209 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats

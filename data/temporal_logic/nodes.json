@@ -1394,7 +1394,7 @@
       },
       "structural_signature": {
         "archetype_id": "strict_order_asymmetry",
-        "anonymized_template": "IMPLIES(BEFORE(EVENTA, EVENTB), NEG(BEFORE(EVENTB, EVENTA)))",
+        "anonymized_template": "IMPLIES(LT(EVENTA, EVENTB), NEG(LT(EVENTB, EVENTA)))",
         "slot_schema": [
           {
             "slot_id": "EVENTA",
@@ -1409,10 +1409,10 @@
         ],
         "invariants": [
           "The two operands swap places between premise and conclusion, so the content is the failure of symmetry -- the exact opposite of geotop.predicates.adjacency_symmetry, which exists only to assert that its head IS symmetric. The two nodes are the positive and negative answers to the same unaskable question, and the graph has no way to say either except by writing a node.",
-          "Authored with the concrete BEFORE head rather than the abstract LEQ, and the choice is forced: LEQ is the reflexive lattice order, and asymmetry is false of any reflexive relation. Spelling this with LEQ would have bought a twin by asserting something false.",
+          "Authored with the abstract strict-order head LT rather than LEQ, because asymmetry is false of any reflexive relation. BEFORE is an honest alias of LT; the former BEFORE-to-LEQ alias asserted a false identity and has been removed.",
           "Singleton at shape, typed and family level. Its neighbour temporal.order.precedence_transitivity, written with LEQ, is a three-discipline typed twin. Same corpus, same author, adjacent nodes, same subject matter -- the entire difference is which head the statement could honestly use.",
-          "BEFORE is shared with data/narrative, where narrative.causality.precedence_causation_bridge uses it in the same reading. Both corpora are authored by scripts/seed_temporal.py, so the head's argument order (earlier first) is fixed once for both.",
-          "Asymmetry plus transitivity makes BEFORE a strict partial order; the reflexive closure is the LEQ of the adjacent node, and the two nodes together are the standard strict/non-strict pair."
+          "The concrete BEFORE spelling remains in data/narrative, where narrative.causality.precedence_causation_bridge uses it in the same reading. Both corpora are authored by scripts/seed_temporal.py, so the head's argument order (earlier first) is fixed once for both.",
+          "Asymmetry plus transitivity makes LT a strict partial order; the reflexive closure is the LEQ of the adjacent node, and the two nodes together are the standard strict/non-strict pair."
         ]
       },
       "symbol_lexicon": {
@@ -1454,10 +1454,10 @@
         ],
         "functionals": [
           {
-            "notation": "BEFORE(earlier, later)",
-            "name": "strict precedence",
+            "notation": "LT(earlier, later)",
+            "name": "abstract strict order",
             "input_arity": 2,
-            "description": "The strict happens-before relation between two events: irreflexive, asymmetric, transitive. Argument order is fixed earlier-first. Deliberately NOT spelled with the lattice head LEQ, because LEQ is the reflexive order and asymmetry is false of a reflexive relation -- the honest spelling costs every twin the head could have bought, which is the point the adjacent transitivity node measures."
+            "description": "The irreflexive strict part of LEQ. BEFORE is temporal logic's concrete spelling and aliases only to LT, never to the reflexive LEQ head."
           },
           {
             "notation": "NEG(.)",
@@ -1482,7 +1482,7 @@
         "regularity_conditions": [
           "Events identified with instants, and distinct events with distinct instants -- simultaneity makes the relation a strict partial order rather than a strict total one",
           "A single consistent timeline, so the relation is acyclic",
-          "Strict reading throughout: BEFORE is irreflexive"
+          "Strict reading throughout: LT is irreflexive"
         ],
         "failure_modes": [
           "Cyclic-time models (recurrence in cosmology, modular clocks in protocols) drop it, and every algorithm that topologically sorts events breaks with them.",
@@ -1498,6 +1498,7 @@
         "generalizes": [],
         "composed_with": [
           "temporal.order.precedence_transitivity",
+          "temporal.order.strict_part_of_order",
           "narrative.causality.precedence_causation_bridge",
           "geotop.predicates.adjacency_symmetry"
         ]
@@ -1882,7 +1883,8 @@
         "equivalent_to": [],
         "special_case_of": [],
         "generalizes": [
-          "narrative.constraint.chekhov_gun"
+          "narrative.constraint.chekhov_gun",
+          "narrative.frames.cartoon_gravity"
         ],
         "composed_with": [
           "temporal.modality.eventually_unfolding",
@@ -1919,6 +1921,944 @@
         "eventually",
         "always",
         "Chekhov"
+      ]
+    },
+    {
+      "statement_id": "temporal.past.since_unfolding",
+      "title": "Expansion Law for Since",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "past_temporal_logic",
+        "topic": "fixpoint_expansion",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(a since b) = b or (a and previous(a since b))",
+        "canonical_latex": "a \\mathbin{\\mathcal{S}} b \\equiv b \\lor (a \\land \\mathrm{Y}(a \\mathbin{\\mathcal{S}} b))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "a S b ≡ b ∨ (a ∧ Y(a S b))",
+            "scope_note": "The standard past-time unfolding"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "fixpoint_expansion_law",
+        "anonymized_template": "SINCE(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, PREV(SINCE(PROPA, PROPB))))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPA",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "PROPB",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "The defined SINCE head recurs under PREV, so groundedness v2 should recognize the same recursive-definition structure as UNTIL.",
+          "Time reversal maps this statement to until_unfolding but does not make SINCE and UNTIL interchangeable operations.",
+          "The recurrence uses strong PREV, false at the trace origin; weak previous would make the base case false."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "A second arbitrary temporal property, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "Y",
+            "name": "previous-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "S",
+            "name": "strong since",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SINCE(hold, origin)",
+            "name": "strong since",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "phi S psi: psi held at some past position and phi has held continuously since; hold-first, origin-second."
+          },
+          {
+            "notation": "PREV(.)",
+            "name": "previous state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Y phi: phi held at the immediately preceding position. This corpus fixes strong previous semantics: Y phi is false at the trace origin. That boundary choice is required by the SINCE and ONCE unfoldings below."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Least upper bound in the Boolean lattice: disjunction, union, and here the union of trace sets. Argument order follows scripts/seed_logic.py's convention, distinguished operand first."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A condition has held since an origin exactly when the origin holds now, or the condition holds now and the same claim held previously.",
+        "statistical_significance": "The recursive past operator that makes premise persistence writable.",
+        "regularity_conditions": [
+          "Finite traces with a distinguished origin",
+          "Strong since semantics",
+          "Strong PREV is false at the origin"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.recurrence.until_unfolding",
+          "temporal.past.once_unfolding"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        },
+        {
+          "citation_key": "baier2008",
+          "bibliographic_entry": "Baier, C., Katoen, J.-P. (2008). Principles of Model Checking. Cambridge, MA: MIT Press."
+        }
+      ],
+      "keywords": [
+        "since",
+        "past time",
+        "fixpoint",
+        "recurrence"
+      ]
+    },
+    {
+      "statement_id": "temporal.past.past_duality",
+      "title": "Past Temporal Duality",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "past_temporal_logic",
+        "topic": "modal_duality",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "historically(p) = not(once(not p))",
+        "canonical_latex": "\\mathrm{H}p \\equiv \\lnot\\mathrm{P}\\lnot p",
+        "equivalent_forms": [
+          {
+            "form_id": "dual",
+            "notation_system": "ascii",
+            "expression": "once(p) = not(historically(not p))"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "de_morgan_duality",
+        "anonymized_template": "HISTORICALLY(PROP) = NEG(ONCE(NEG(PROP)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "HISTORICALLY and ONCE are the universal and existential modalities over the prefix ending now.",
+          "The mirror relation to future duality is time reversal, not aliasing."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "H",
+            "name": "historically modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "P",
+            "name": "once modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "HISTORICALLY(.)",
+            "name": "historically",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "H phi: phi has held at every position from the trace origin through now; the time-reversal mirror of ALWAYS."
+          },
+          {
+            "notation": "ONCE(.)",
+            "name": "once",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "P phi: phi held at some position at or before now; the time-reversal mirror of EVENTUALLY."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A property has always held in the past exactly when it has never failed in the past.",
+        "statistical_significance": "Supplies the past half of temporal De Morgan duality.",
+        "regularity_conditions": [
+          "Classical two-valued semantics",
+          "A trace with a fixed origin"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.temporal_duality"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        }
+      ],
+      "keywords": [
+        "past duality",
+        "historically",
+        "once",
+        "De Morgan"
+      ]
+    },
+    {
+      "statement_id": "temporal.past.prev_distributes_over_meet",
+      "title": "Previous Distributes over Meet",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "past_temporal_logic",
+        "topic": "modal_homomorphism",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "previous(a and b) = previous(a) and previous(b)",
+        "canonical_latex": "\\mathrm{Y}(a \\land b) \\equiv \\mathrm{Y}a \\land \\mathrm{Y}b",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "Y(a ∧ b) ≡ Ya ∧ Yb"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unary_homomorphism_over_meet",
+        "anonymized_template": "PREV(MEET(PROPA, PROPB)) = MEET(PREV(PROPA), PREV(PROPB))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPA",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "PROPB",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "PREV reads both operands at the same preceding position.",
+          "At the origin the equation survives under either uniform weak or strong previous semantics, though PREV is not self-dual there."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "A second arbitrary temporal property, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "Y",
+            "name": "previous-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "PREV(.)",
+            "name": "previous state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Y phi: phi held at the immediately preceding position. This corpus fixes strong previous semantics: Y phi is false at the trace origin. That boundary choice is required by the SINCE and ONCE unfoldings below."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Looking back one step after conjoining is the same as looking back one step for each conjunct.",
+        "statistical_significance": "The time-reversal mirror of NEXT distributing over MEET.",
+        "regularity_conditions": [
+          "One consistent convention for PREV at the trace origin"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.next_distributes_over_meet"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        }
+      ],
+      "keywords": [
+        "previous",
+        "distribution",
+        "meet",
+        "past time"
+      ]
+    },
+    {
+      "statement_id": "temporal.past.once_unfolding",
+      "title": "Expansion Law for Once",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "past_temporal_logic",
+        "topic": "fixpoint_expansion",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "once(p) = p or previous(once(p))",
+        "canonical_latex": "\\mathrm{P}p \\equiv p \\lor \\mathrm{Y}\\mathrm{P}p",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "Pp ≡ p ∨ YPp"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "fixpoint_expansion_law",
+        "anonymized_template": "ONCE(PROP) = JOIN(PROP, PREV(ONCE(PROP)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "ONCE recurs beneath PREV, so the recursive-definition detector has the same evidence it has for eventually_unfolding.",
+          "The base case includes the current position.",
+          "PREV is the strong previous operator and is false at the origin."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition",
+            "mathematical_order": 0,
+            "description": "An arbitrary temporal property: a set of infinite traces over the atomic propositions of the system."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "temporal equivalence (same set of satisfying traces)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "P",
+            "name": "once modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "Y",
+            "name": "previous-state modality",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ONCE(.)",
+            "name": "once",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "P phi: phi held at some position at or before now; the time-reversal mirror of EVENTUALLY."
+          },
+          {
+            "notation": "PREV(.)",
+            "name": "previous state",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Y phi: phi held at the immediately preceding position. This corpus fixes strong previous semantics: Y phi is false at the trace origin. That boundary choice is required by the SINCE and ONCE unfoldings below."
+          },
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Least upper bound in the Boolean lattice: disjunction, union, and here the union of trace sets. Argument order follows scripts/seed_logic.py's convention, distinguished operand first."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Something has happened once if it happens now or had happened by the previous position.",
+        "statistical_significance": "Makes finite past search an explicit recurrence.",
+        "regularity_conditions": [
+          "Finite prefixes with a distinguished origin",
+          "Strong PREV is false at the origin"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.modality.eventually_unfolding",
+          "temporal.past.since_unfolding"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "emerson1990",
+          "bibliographic_entry": "Emerson, E. A. (1990). Temporal and Modal Logic. In J. van Leeuwen (ed.), Handbook of Theoretical Computer Science, Volume B, 995-1072. Amsterdam: Elsevier."
+        }
+      ],
+      "keywords": [
+        "once",
+        "unfolding",
+        "past time",
+        "recurrence"
+      ]
+    },
+    {
+      "statement_id": "temporal.response.heraldry_pattern",
+      "title": "Inclusive Heraldry Pattern (Every Outcome Has a Herald)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "specification_patterns",
+        "topic": "past_response",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "historically(outcome implies once(herald))",
+        "canonical_latex": "\\mathrm{H}(o \\to \\mathrm{P}h)",
+        "equivalent_forms": [
+          {
+            "form_id": "named",
+            "notation_system": "ascii",
+            "expression": "every outcome has a herald at or before it"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "liveness_response_pattern",
+        "anonymized_template": "HISTORICALLY(IMPLIES(OUTCOME, ONCE(HERALD)))",
+        "slot_schema": [
+          {
+            "slot_id": "OUTCOME",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          },
+          {
+            "slot_id": "HERALD",
+            "syntactic_category": "variable",
+            "semantic_role": "temporal_proposition"
+          }
+        ],
+        "invariants": [
+          "The pattern quantifies over every outcome occurrence and demands a witness in its inclusive prefix.",
+          "It is the past-facing structural mirror of response_pattern, not a future liveness requirement.",
+          "Because ONCE includes the current position, this minimal mirror does not by itself enforce strict earlier-than ordering."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "o",
+            "syntactic_category": "variable",
+            "semantic_role": "outcome_condition",
+            "mathematical_order": 0,
+            "description": "An observed outcome."
+          },
+          {
+            "symbol": "h",
+            "syntactic_category": "variable",
+            "semantic_role": "herald_condition",
+            "mathematical_order": 0,
+            "description": "Its required preparation."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "H",
+            "name": "historically modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "P",
+            "name": "once modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "HISTORICALLY(.)",
+            "name": "historically",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "H phi: phi has held at every position from the trace origin through now; the time-reversal mirror of ALWAYS."
+          },
+          {
+            "notation": "ONCE(.)",
+            "name": "once",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "P phi: phi held at some position at or before now; the time-reversal mirror of EVENTUALLY."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Whenever an outcome occurs, some herald holds then or occurred earlier.",
+        "statistical_significance": "The general pattern that makes no-deus-ex-machina an instance rather than an isolated maxim.",
+        "regularity_conditions": [
+          "A trace prefix including the current position",
+          "ONCE ranges over positions at or before the current outcome"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "narrative.constraint.no_deus_ex_machina"
+        ],
+        "composed_with": [
+          "temporal.response.response_pattern"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "dwyer1999",
+          "bibliographic_entry": "Dwyer, M. B., Avrunin, G. S., Corbett, J. C. (1999). Patterns in Property Specifications for Finite-State Verification. Proceedings of the 21st International Conference on Software Engineering (ICSE), 411-420."
+        },
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        }
+      ],
+      "keywords": [
+        "heraldry",
+        "past response",
+        "preparation",
+        "once"
+      ]
+    },
+    {
+      "statement_id": "temporal.order.strict_part_of_order",
+      "title": "Strict Part of a Reflexive Order",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "temporal_logic"
+        ],
+        "subfield": "event_order",
+        "topic": "strict_reflexive_bridge",
+        "canonical_objects": [
+          "infinite trace",
+          "temporal property",
+          "Kripke structure",
+          "linear order of instants"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "a < b = (a <= b) and not(b <= a)",
+        "canonical_latex": "a < b \\iff (a \\leq b \\land \\lnot(b \\leq a))",
+        "equivalent_forms": [
+          {
+            "form_id": "set_order",
+            "notation_system": "ascii",
+            "expression": "A proper-subset B iff A subseteq B and not(B subseteq A)"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "strict_part_of_partial_order",
+        "anonymized_template": "LT(EVENTA, EVENTB) = MEET(LEQ(EVENTA, EVENTB), NEG(LEQ(EVENTB, EVENTA)))",
+        "slot_schema": [
+          {
+            "slot_id": "EVENTA",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          },
+          {
+            "slot_id": "EVENTB",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand"
+          }
+        ],
+        "invariants": [
+          "LT is irreflexive because LEQ in both directions is excluded.",
+          "The equation relates distinct heads; it does not license substituting LT for LEQ in asymmetry statements."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "An event, identified with the instant at which it occurs."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "event_operand",
+            "mathematical_order": 0,
+            "description": "A second event."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "<",
+            "name": "strict temporal precedence",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "<=",
+            "name": "temporal precedence or coincidence",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LT(earlier, later)",
+            "name": "abstract strict order",
+            "input_arity": 2,
+            "description": "The irreflexive strict part of LEQ. BEFORE is temporal logic's concrete spelling and aliases only to LT, never to the reflexive LEQ head."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "lattice order",
+            "input_arity": 2,
+            "description": "The partial order x <= y, equivalently MEET(x, y) = x. Realized as entailment in data/logic, subset inclusion in data/set_theory, region containment in data/geospatial_topology, and here in two readings that the corpus keeps apart on purpose: over instants it is 'occurs no later than' (a genuine partial order, hence reflexive); over properties it is trace-set inclusion, i.e. entailment."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The strict order consists of the non-strict comparisons whose reverse comparison does not hold.",
+        "statistical_significance": "Repairs the false BEFORE-to-LEQ alias with an asserted bridge.",
+        "regularity_conditions": [
+          "LEQ is antisymmetric and reflexive"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.order.strict_precedence_asymmetry",
+          "temporal.order.precedence_transitivity"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "lamport1978",
+          "bibliographic_entry": "Lamport, L. (1978). Time, Clocks, and the Ordering of Events in a Distributed System. Communications of the ACM, 21(7), 558-565."
+        },
+        {
+          "citation_key": "allen1983",
+          "bibliographic_entry": "Allen, J. F. (1983). Maintaining Knowledge about Temporal Intervals. Communications of the ACM, 26(11), 832-843."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "strict order",
+        "partial order",
+        "LT",
+        "LEQ"
       ]
     }
   ]

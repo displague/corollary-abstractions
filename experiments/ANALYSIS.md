@@ -644,6 +644,64 @@ now an explicit negative control rather than being counted as a pass.
 Honest boundary: this is finite obligation accounting at frame close, not a
 general LTL model checker. It executes the one authored
 `ALWAYS(PLANTED(e) -> EVENTUALLY(DISCHARGED(e)))` use case. It neither derives
-past facts nor refutes an unheralded outcome; the heraldry pattern and
-no-deus-ex-machina converse remain item 5 work. No corpus node carries `scope`
-yet, and no learned policy chooses these temporal transitions.
+past facts nor refutes an unheralded outcome; the now-authored heraldry pattern
+and no-deus-ex-machina converse are not yet wired into the executor. Scoped
+corpus nodes now exist, but no learned policy chooses these temporal
+transitions.
+
+## v0.5 past modality, mirror relation, and first scoped nodes
+
+Prediction was registered in `scripts/seed_temporal.py` before authoring,
+regeneration, or matching. The nine design entries expanded to ten nodes
+because cartoon gravity is a declaration/assertion pair. The structural
+prediction fired exactly: 199 -> 209 nodes; the existing
+shape/typed/family/aliased counts stayed 28/29/28/30; and a separately reported
+mirror level contains exactly five mirror-only groups (UNTIL/SINCE,
+EVENTUALLY/ONCE unfolding, NEXT/PREV distribution, future/past duality, and
+response/heraldry). Zero mirror pairs leaked into typed twins. Replacing the
+false `BEFORE ~ LEQ` alias with `LT`, plus strict-part/reflexive-closure entries
+in `HEAD_ALGEBRA`, moved no prior membership.
+
+The groundedness prediction missed in both directions. SINCE unfolding scored
+0.667 and ONCE unfolding 0.500, not 1.000: recursive self-head exclusion leaves
+other unrecognized compounds in the denominator. No-deus-ex-machina scored
+1.000, not 0.500, because its PLANTED/DISCHARGED constituents recur exactly and
+the heraldry pattern covers the whole instance. The corpus mean is now 0.768.
+This is evidence about the metric boundary, not grounds to rewrite the
+prediction after seeing it.
+
+Specialization moved 622 -> 626 edges (538 cross-discipline). Two additions are
+the intended semantic links: response-pattern -> cartoon-gravity and
+heraldry-pattern -> no-deus-ex-machina, each cost 4. Two are noise:
+`de9im_disjoint` -> `strict_part_of_order` and ->
+`prev_distributes_over_meet`, each cost 7. The first scoped nodes validate as a
+shared cartoon-gravity frame plus premise persistence. The matcher deliberately
+ignores scope, so scope changed execution/validation semantics without changing
+structural identity.
+
+Independent review invalidated the first apparent five-group result. The
+initial matcher quotiented each modal head independently, so a partially
+reversed nested formula could look mirrored; the authored heraldry pattern
+also changed EVENTUALLY to ONCE while incorrectly retaining outer ALWAYS.
+With a true whole-tree involution that corpus produced only four groups. The
+past formulas were corrected to HISTORICALLY and the matcher now keys each
+statement by the orbit of its typed skeleton and its globally reversed
+skeleton. An adversarial mixed formula (`HISTORICALLY(EVENTUALLY(P))`) is a
+permanent negative control. The corrected five-group result is the claim; the
+first result is retracted.
+
+The same review refuted a hand-authored entailment in the scoped example:
+`G(notices -> F(falls))` does not entail `not notices -> not falls`. The hover
+is now an independently assumed frame assertion, with no reciprocal entailment
+links. Scope agreement remains the point of the pair; a false causal inference
+is not smuggled in to make it a derivation.
+
+A later semantic pass tightened three more boundaries. PREV is now explicitly
+strong (false at the trace origin), which is required for the authored
+SINCE/ONCE recurrences. The exact response/heraldry mirror is intentionally
+inclusive—ONCE means at or before, so strict earlier preparation remains an
+executor/event-order responsibility. And opening-premise persistence is a
+positive `ALWAYS(MEET(HOLDS(p), SINCE(HOLDS(p), opening)))` obligation; the
+earlier implication became vacuously true if the premise disappeared and is
+retracted. The node is explicitly restricted to opening declarations rather
+than later accepted assertions.

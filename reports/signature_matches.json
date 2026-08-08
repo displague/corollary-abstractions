@@ -1,10 +1,11 @@
 {
-  "nodes_analyzed": 199,
+  "nodes_analyzed": 209,
   "group_counts": {
     "shape": 28,
     "typed": 29,
     "family": 28,
-    "aliased": 30
+    "aliased": 30,
+    "mirror": 5
   },
   "ladder_violations": [],
   "slot_vs_call_head_collisions": [
@@ -1107,6 +1108,114 @@
       ]
     }
   ],
+  "mirror_twin_groups": [
+    {
+      "skeleton": "ALWAYS⟨?0:V⟩ = NEG⟨EVENTUALLY⟨NEG⟨?0:V⟩⟩⟩",
+      "disciplines": [
+        "temporal_logic"
+      ],
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "members": [
+        {
+          "statement_id": "temporal.modality.temporal_duality",
+          "discipline": "temporal_logic",
+          "template": "ALWAYS(PROP) = NEG(EVENTUALLY(NEG(PROP)))"
+        },
+        {
+          "statement_id": "temporal.past.past_duality",
+          "discipline": "temporal_logic",
+          "template": "HISTORICALLY(PROP) = NEG(ONCE(NEG(PROP)))"
+        }
+      ]
+    },
+    {
+      "skeleton": "ALWAYS⟨IMPLIES⟨?0:V, EVENTUALLY⟨?1:V⟩⟩⟩",
+      "disciplines": [
+        "temporal_logic"
+      ],
+      "archetypes": [
+        "liveness_response_pattern"
+      ],
+      "members": [
+        {
+          "statement_id": "temporal.response.response_pattern",
+          "discipline": "temporal_logic",
+          "template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))"
+        },
+        {
+          "statement_id": "temporal.response.heraldry_pattern",
+          "discipline": "temporal_logic",
+          "template": "HISTORICALLY(IMPLIES(OUTCOME, ONCE(HERALD)))"
+        }
+      ]
+    },
+    {
+      "skeleton": "EVENTUALLY⟨?0:V⟩ = JOIN⟨?0:V, NEXT⟨EVENTUALLY⟨?0:V⟩⟩⟩",
+      "disciplines": [
+        "temporal_logic"
+      ],
+      "archetypes": [
+        "fixpoint_expansion_law"
+      ],
+      "members": [
+        {
+          "statement_id": "temporal.modality.eventually_unfolding",
+          "discipline": "temporal_logic",
+          "template": "EVENTUALLY(PROP) = JOIN(PROP, NEXT(EVENTUALLY(PROP)))"
+        },
+        {
+          "statement_id": "temporal.past.once_unfolding",
+          "discipline": "temporal_logic",
+          "template": "ONCE(PROP) = JOIN(PROP, PREV(ONCE(PROP)))"
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN⟨?0:V, MEET⟨?1:V, NEXT⟨UNTIL⟨?1:V, ?0:V⟩⟩⟩⟩ = UNTIL⟨?1:V, ?0:V⟩",
+      "disciplines": [
+        "temporal_logic"
+      ],
+      "archetypes": [
+        "fixpoint_expansion_law"
+      ],
+      "members": [
+        {
+          "statement_id": "temporal.recurrence.until_unfolding",
+          "discipline": "temporal_logic",
+          "template": "UNTIL(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, NEXT(UNTIL(PROPA, PROPB))))"
+        },
+        {
+          "statement_id": "temporal.past.since_unfolding",
+          "discipline": "temporal_logic",
+          "template": "SINCE(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, PREV(SINCE(PROPA, PROPB))))"
+        }
+      ]
+    },
+    {
+      "skeleton": "MEET⟨NEXT⟨?0:V⟩, NEXT⟨?1:V⟩⟩ = NEXT⟨MEET⟨?0:V, ?1:V⟩⟩",
+      "disciplines": [
+        "temporal_logic"
+      ],
+      "archetypes": [
+        "modal_meet_homomorphism",
+        "unary_homomorphism_over_meet"
+      ],
+      "members": [
+        {
+          "statement_id": "temporal.modality.next_distributes_over_meet",
+          "discipline": "temporal_logic",
+          "template": "NEXT(MEET(PROPA, PROPB)) = MEET(NEXT(PROPA), NEXT(PROPB))"
+        },
+        {
+          "statement_id": "temporal.past.prev_distributes_over_meet",
+          "discipline": "temporal_logic",
+          "template": "PREV(MEET(PROPA, PROPB)) = MEET(PREV(PROPA), PREV(PROPB))"
+        }
+      ]
+    }
+  ],
   "shape_twin_groups": [
     {
       "skeleton": "+(^(?0, 2), ^(?1, 2)) = ^(?2, 2)",
@@ -1944,23 +2053,29 @@
       "archetype_id": "de_morgan_duality",
       "distinct_shapes": [
         "ALWAYS⟨?0⟩ = NEG⟨EVENTUALLY⟨NEG⟨?0⟩⟩⟩",
+        "HISTORICALLY⟨?0⟩ = NEG⟨ONCE⟨NEG⟨?0⟩⟩⟩",
         "JOIN⟨NEG⟨?0⟩, NEG⟨?1⟩⟩ = NEG⟨MEET⟨?0, ?1⟩⟩"
       ],
       "members": [
         "logic.boolean_laws.de_morgan_laws",
         "settheory.boolean_laws.de_morgan_laws",
-        "temporal.modality.temporal_duality"
+        "temporal.modality.temporal_duality",
+        "temporal.past.past_duality"
       ]
     },
     {
       "archetype_id": "fixpoint_expansion_law",
       "distinct_shapes": [
         "EVENTUALLY⟨?0⟩ = JOIN⟨?0, NEXT⟨EVENTUALLY⟨?0⟩⟩⟩",
-        "JOIN⟨?0, MEET⟨?1, NEXT⟨UNTIL⟨?1, ?0⟩⟩⟩⟩ = UNTIL⟨?1, ?0⟩"
+        "JOIN⟨?0, MEET⟨?1, NEXT⟨UNTIL⟨?1, ?0⟩⟩⟩⟩ = UNTIL⟨?1, ?0⟩",
+        "JOIN⟨?0, MEET⟨?1, PREV⟨SINCE⟨?1, ?0⟩⟩⟩⟩ = SINCE⟨?1, ?0⟩",
+        "JOIN⟨?0, PREV⟨ONCE⟨?0⟩⟩⟩ = ONCE⟨?0⟩"
       ],
       "members": [
         "temporal.recurrence.until_unfolding",
-        "temporal.modality.eventually_unfolding"
+        "temporal.modality.eventually_unfolding",
+        "temporal.past.since_unfolding",
+        "temporal.past.once_unfolding"
       ]
     },
     {
@@ -2002,11 +2117,17 @@
       "archetype_id": "liveness_response_pattern",
       "distinct_shapes": [
         "ALWAYS⟨IMPLIES⟨?0, EVENTUALLY⟨?1⟩⟩⟩",
-        "ALWAYS⟨IMPLIES⟨PLANTED⟨?0⟩, EVENTUALLY⟨DISCHARGED⟨?0⟩⟩⟩⟩"
+        "ALWAYS⟨IMPLIES⟨NOTICES⟨?0⟩, EVENTUALLY⟨FALLS⟨?0⟩⟩⟩⟩",
+        "ALWAYS⟨IMPLIES⟨PLANTED⟨?0⟩, EVENTUALLY⟨DISCHARGED⟨?0⟩⟩⟩⟩",
+        "HISTORICALLY⟨IMPLIES⟨?0, ONCE⟨?1⟩⟩⟩",
+        "HISTORICALLY⟨IMPLIES⟨DISCHARGED⟨?0⟩, ONCE⟨PLANTED⟨?0⟩⟩⟩⟩"
       ],
       "members": [
         "narrative.constraint.chekhov_gun",
-        "temporal.response.response_pattern"
+        "narrative.constraint.no_deus_ex_machina",
+        "narrative.frames.cartoon_gravity",
+        "temporal.response.response_pattern",
+        "temporal.response.heraldry_pattern"
       ]
     },
     {

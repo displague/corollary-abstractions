@@ -60,9 +60,9 @@ demo and a multi-step derivation remain one milestone in two costumes.
    `frame_consistency`'s prose, and build the runtime state manager that extends
    `compose_assert`'s ladder into a frame-local evaluator for those axioms.
 
-   **PARTIAL — scope and finite obligations execute; scoped nodes open:**
-   the live schema now carries the draft's optional `scope` object (199/199
-   nodes validate unchanged; matcher report byte-identical — `scope` is
+   **PARTIAL — scope and finite obligations execute; first scoped nodes authored:**
+   the live schema now carries the draft's optional `scope` object (the
+   original 199 nodes validated unchanged; matcher report was byte-identical — `scope` is
    invisible to it, as designed). `validate_nodes.py` checks frame-id
    pattern, frame agreement across members (order-insensitive for
    set-valued fields), and suspends/governed_by resolution over the merged
@@ -84,9 +84,10 @@ demo and a multi-step derivation remain one milestone in two costumes.
    `discharge` closes only its matching element, and an outstanding obligation
    REFUSES frame close without state change or demotion. The rendered setup
    must visibly plant the element and the discharge must cite text in the
-   resolution, preventing a hidden-ledger pass. Still open: no corpus node yet
-   carries `scope` (the nine payoff nodes of item 5 are the natural first
-   authors), the check is finite close-time accounting rather than general LTL
+   resolution, preventing a hidden-ledger pass. Item 5 subsequently authored
+   the first shared-scope declaration/assertion pair for cartoon gravity and a
+   scoped premise-persistence declaration. Still open: the check is finite
+   close-time accounting rather than general LTL
    model checking, and `compose_assert`'s demo ladder is not yet wired to
    `frames.py`.
 
@@ -113,10 +114,18 @@ demo and a multi-step derivation remain one milestone in two costumes.
    too broad: accepting a fresh id without recording it allowed that id to
    change event kind later. Idempotence is now exact-event retry only; fresh ids
    are rejected and the corrected prediction is tested explicitly.
-5. **Past modality + mirror level**: author the nine payoff nodes
-   (heraldry pattern before Chekhov's converse), add the
-   separately-reported mirror level, fix order_le → LT with the
-   strict/reflexive relation in HEAD_ALGEBRA.
+5. **DELIVERED — past modality + mirror level.** The nine design entries
+   expanded to ten nodes because cartoon gravity is a declaration/assertion
+   pair: six temporal nodes, four narrative nodes, and the graph's first two
+   practical scope frames. The matcher reports five mirror-only groups
+   separately from the unchanged 28/29/28/30 structural ladder; no mirror is
+   counted as a typed twin. The false `BEFORE ~ LEQ` alias is gone: strict
+   precedence uses `LT`, and `HEAD_ALGEBRA` records strict-part/reflexive-
+   closure relations without claiming identity. Adjudication also exposed two
+   limits: the registered groundedness values missed (0.667/0.500/1.000 for
+   since/once/no-deus, rather than 1.000/1.000/0.500), and specialization rose
+   622 → 626 with two intended temporal/narrative edges plus two algebraic
+   false positives. Full evidence is in `experiments/ANALYSIS.md`.
 6. **Retrieval and durable storage as actions.**
    - **6a — `RETRIEVE(key)`:** wire the ladder's closed-form UNKNOWN trigger to
      a unified query adapter over the lexicon, twin ledger, decomposition index,

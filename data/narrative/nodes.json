@@ -909,8 +909,8 @@
           {
             "form_id": "converse",
             "notation_system": "ascii",
-            "expression": "always(discharged(e) implies once(planted(e)))",
-            "scope_note": "The other half of the constraint, which rules out deus ex machina; it needs a PAST modality this corpus does not carry"
+            "expression": "historically(discharged(e) implies once(planted(e)))",
+            "scope_note": "The other half is now authored separately as narrative.constraint.no_deus_ex_machina"
           }
         ]
       },
@@ -1000,7 +1000,7 @@
       },
       "semantic_interpretation": {
         "statement_meaning": "Anything the story deliberately shows the audience must eventually do narrative work; nothing is introduced for nothing.",
-        "statistical_significance": "The node that makes 'narrative laws are laws' mechanical rather than rhetorical. It is not analogous to a temporal specification -- it is one, instantiated, and carries reciprocal special_case_of / generalizes edges to temporal.response.response_pattern because scripts/seed_temporal.py owns both corpora and could write the reciprocal edge that docs/BACKLOG.md records as unaffordable across corpora authored separately. Two further things it demonstrates. First, the constraint is *falsifiable in the corpus's own terms*: a story that plants an element and never discharges it violates a formula, not a taste. Second, its most useful half -- the converse that forbids deus ex machina -- cannot be written at all, because the grammar has no past modality; the corpus therefore states one direction of a two-directional law and says so.",
+        "statistical_significance": "The node that makes 'narrative laws are laws' mechanical rather than rhetorical. It is not analogous to a temporal specification -- it is one, instantiated, and carries reciprocal special_case_of / generalizes edges to temporal.response.response_pattern because scripts/seed_temporal.py owns both corpora and could write the reciprocal edge that docs/BACKLOG.md records as unaffordable across corpora authored separately. Two further things it demonstrates. First, the constraint is *falsifiable in the corpus's own terms*: a story that plants an element and never discharges it violates a formula, not a taste. Second, its most useful half -- the converse that forbids deus ex machina -- cannot be written at all, because the grammar has no past modality; the corpus therefore states one direction of a two-directional law; the past-facing direction now lives in narrative.constraint.no_deus_ex_machina.",
         "regularity_conditions": [
           "Finite, completed narratives: over an unfinished story every obligation is merely outstanding, which is the standard reason serials evade the constraint",
           "Deliberate planting. Incidental detail is not covered, and the template cannot distinguish the two -- the distinction is the author's intent",
@@ -1023,6 +1023,7 @@
         "composed_with": [
           "narrative.structure.setup_introduction",
           "narrative.structure.resolution_outcome",
+          "narrative.constraint.no_deus_ex_machina",
           "temporal.modality.eventually_unfolding"
         ]
       },
@@ -1056,6 +1057,676 @@
         "payoff",
         "narrative constraint"
       ]
+    },
+    {
+      "statement_id": "narrative.constraint.no_deus_ex_machina",
+      "title": "No Deus Ex Machina (Inclusive Herald Condition)",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "narrative_constraints",
+        "topic": "narrative_heraldry",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "historically(discharged(e) implies once(planted(e)))",
+        "canonical_latex": "\\mathrm{H}(\\mathrm{Di}(e) \\to \\mathrm{P}\\,\\mathrm{Pl}(e))",
+        "equivalent_forms": [
+          {
+            "form_id": "maxim",
+            "notation_system": "ascii",
+            "expression": "no resolution may depend on an element the story never prepared"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "liveness_response_pattern",
+        "anonymized_template": "HISTORICALLY(IMPLIES(DISCHARGED(ELEMENT), ONCE(PLANTED(ELEMENT))))",
+        "slot_schema": [
+          {
+            "slot_id": "ELEMENT",
+            "syntactic_category": "variable",
+            "semantic_role": "story_element"
+          }
+        ],
+        "invariants": [
+          "The same element slot recurs in outcome and herald positions; a different planted object cannot justify the discharge.",
+          "This is Chekhov's past-facing converse but not its logical consequence; a coherent story normally adopts both constraints.",
+          "ONCE includes the current position, so strict narrative preparation still requires the executor's event-order check."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "e",
+            "syntactic_category": "variable",
+            "semantic_role": "story_element",
+            "mathematical_order": 0,
+            "description": "The element used by the plot."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "H",
+            "name": "historically modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "P",
+            "name": "once modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "HISTORICALLY(.)",
+            "name": "historically",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "H phi: phi has held at every position from the trace origin through now; the time-reversal mirror of ALWAYS."
+          },
+          {
+            "notation": "ONCE(.)",
+            "name": "once",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "P phi: phi held at some position at or before now; the time-reversal mirror of EVENTUALLY."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          },
+          {
+            "notation": "PLANTED(.)",
+            "name": "element introduced in the setup",
+            "input_arity": 1,
+            "description": "Holds at a position when the story element has been explicitly presented to the audience. Unary so that the Chekhov constraint is a property of one element rather than a relation between two."
+          },
+          {
+            "notation": "DISCHARGED(.)",
+            "name": "element consumed by the plot",
+            "input_arity": 1,
+            "description": "Holds at a position when the planted element has done narrative work. 'The gun goes off' in Chekhov's own example; 'paid off' in screenwriting usage."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Anything used to resolve the plot must be presented no later than the outcome that uses it.",
+        "statistical_significance": "Turns the anti-deus-ex-machina half from an equivalent-form note into a separately checkable constraint.",
+        "regularity_conditions": [
+          "Completed narratives",
+          "Deliberate plot-relevant outcomes"
+        ],
+        "failure_modes": [
+          "An element planted at the exact discharge position satisfies this inclusive mirror; strict anti-deus ordering needs PREV(ONCE) or the executor's event sequence.",
+          "Mystery and surprise can conceal a herald from the audience while still making it available in retrospect.",
+          "Coincidence-driven genres may reject the constraint deliberately."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "temporal.response.heraldry_pattern"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.constraint.chekhov_gun"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "chekhov1889",
+          "bibliographic_entry": "Chekhov, A. P. (1889). Letter to A. S. Lazarev (Gruzinsky), 1 November 1889. In S. Karlinsky and M. H. Heim (eds., trans., 1973), Anton Chekhov's Life and Thought: Selected Letters and Commentary. Berkeley: University of California Press."
+        },
+        {
+          "citation_key": "propp1928",
+          "bibliographic_entry": "Propp, V. (1928/1968). Morphology of the Folktale (2nd ed., trans. L. Scott, rev. L. A. Wagner). Austin: University of Texas Press."
+        },
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        }
+      ],
+      "keywords": [
+        "deus ex machina",
+        "heraldry",
+        "setup",
+        "payoff",
+        "once"
+      ]
+    },
+    {
+      "statement_id": "narrative.frames.cartoon_gravity",
+      "title": "Cartoon Gravity Frame Declaration",
+      "statement_class": "model_specification",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "fictional_frames",
+        "topic": "cartoon_physics",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "a body falls eventually after noticing it is unsupported",
+        "canonical_latex": "\\Box(\\mathrm{notices}(b) \\to \\Diamond\\,\\mathrm{falls}(b))",
+        "equivalent_forms": [
+          {
+            "form_id": "cartoon_rule",
+            "notation_system": "ascii",
+            "expression": "once a body notices it is unsupported, it eventually falls"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "liveness_response_pattern",
+        "anonymized_template": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+        "slot_schema": [
+          {
+            "slot_id": "BODY",
+            "syntactic_category": "variable",
+            "semantic_role": "story_body"
+          }
+        ],
+        "invariants": [
+          "The declaration instantiates the same response shape as Chekhov's gun while remaining explicitly local to one fictional frame.",
+          "The frame suspends exactly the cited ordinary-world gravity node."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "story_body",
+            "mathematical_order": 0,
+            "description": "An unsupported cartoon body."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "F",
+            "name": "eventually (finally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "EVENTUALLY(.)",
+            "name": "eventually (finally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "F phi: phi holds at some position from now on. Semantically the infinitary JOIN over suffixes, dual to ALWAYS. Liveness properties are the ones that need it; safety properties do not."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          },
+          {
+            "notation": "NOTICES(.)",
+            "name": "notices unsupported state",
+            "input_arity": 1,
+            "description": "Cartoon-frame trigger: the body becomes aware that it is unsupported."
+          },
+          {
+            "notation": "FALLS(.)",
+            "name": "falls",
+            "input_arity": 1,
+            "description": "Cartoon-frame response whose ordinary-world grounding is explicitly suspended inside the frame."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Inside this cartoon, awareness rather than loss of support triggers the fall.",
+        "statistical_significance": "The first corpus declaration whose epistemic force is explicitly frame-local rather than world-global.",
+        "regularity_conditions": [
+          "The cartoon-gravity frame is open"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "temporal.response.response_pattern"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.frame.frame_consistency"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        },
+        {
+          "citation_key": "ryan1991",
+          "bibliographic_entry": "Ryan, M.-L. (1991). Possible Worlds, Artificial Intelligence, and Narrative Theory. Bloomington: Indiana University Press."
+        },
+        {
+          "citation_key": "walton1990",
+          "bibliographic_entry": "Walton, K. L. (1990). Mimesis as Make-Believe: On the Foundations of the Representational Arts. Cambridge, MA: Harvard University Press."
+        }
+      ],
+      "keywords": [
+        "cartoon gravity",
+        "fictional frame",
+        "suspension"
+      ],
+      "scope": {
+        "frame": "narrative.frames.cartoon_gravity",
+        "role": "declaration",
+        "frame_title": "Cartoon gravity",
+        "premises": [
+          {
+            "premise_id": "noticed_fall",
+            "expression": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))"
+          }
+        ],
+        "suspends": [
+          "physics.gravitation.newton_universal_gravitation"
+        ],
+        "governed_by": [
+          "narrative.frame.frame_consistency"
+        ],
+        "on_exit": "conjectured",
+        "retrieval": "frame_local"
+      }
+    },
+    {
+      "statement_id": "narrative.frames.cartoon_gravity_hover",
+      "title": "Cartoon Gravity Frame Assertion",
+      "statement_class": "proposition",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "fictional_frames",
+        "topic": "cartoon_physics",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "if the body has not noticed, it does not fall",
+        "canonical_latex": "\\lnot\\mathrm{notices}(b) \\to \\lnot\\mathrm{falls}(b)",
+        "equivalent_forms": [
+          {
+            "form_id": "gag",
+            "notation_system": "ascii",
+            "expression": "the coyote may stand in mid-air until looking down"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "frame_local_assertion",
+        "anonymized_template": "IMPLIES(NEG(NOTICES(BODY)), NEG(FALLS(BODY)))",
+        "slot_schema": [
+          {
+            "slot_id": "BODY",
+            "syntactic_category": "variable",
+            "semantic_role": "story_body"
+          }
+        ],
+        "invariants": [
+          "The assertion is licensed only inside the frame that suspends the ordinary gravity node.",
+          "Outside that frame it demotes to conjectured rather than becoming a claim about physical bodies."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "story_body",
+            "mathematical_order": 0,
+            "description": "The same cartoon body."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule. Same head and same double reading as scripts/seed_logic.py."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Boolean complement: negation, relative complement, and here complementation of a trace set within the set of all traces. It is the involution that makes the modal duality ALWAYS = NEG . EVENTUALLY . NEG hold."
+          },
+          {
+            "notation": "NOTICES(.)",
+            "name": "notices unsupported state",
+            "input_arity": 1,
+            "description": "Cartoon-frame trigger: the body becomes aware that it is unsupported."
+          },
+          {
+            "notation": "FALLS(.)",
+            "name": "falls",
+            "input_arity": 1,
+            "description": "Cartoon-frame response whose ordinary-world grounding is explicitly suspended inside the frame."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Before awareness, the unsupported cartoon body remains aloft.",
+        "statistical_significance": "The assertion half of the first real scope pair and a concrete test of declaration/assertion agreement metadata.",
+        "regularity_conditions": [
+          "The cartoon-gravity frame is open",
+          "The body has not yet noticed"
+        ],
+        "failure_modes": [
+          "Invalid outside the declared frame."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "narrative.frame.frame_consistency"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "mani2010",
+          "bibliographic_entry": "Mani, I. (2010). The Imagined Moment: Time, Narrative, and Computation. Lincoln: University of Nebraska Press."
+        },
+        {
+          "citation_key": "ryan1991",
+          "bibliographic_entry": "Ryan, M.-L. (1991). Possible Worlds, Artificial Intelligence, and Narrative Theory. Bloomington: Indiana University Press."
+        },
+        {
+          "citation_key": "walton1990",
+          "bibliographic_entry": "Walton, K. L. (1990). Mimesis as Make-Believe: On the Foundations of the Representational Arts. Cambridge, MA: Harvard University Press."
+        }
+      ],
+      "keywords": [
+        "cartoon gravity",
+        "hover",
+        "frame-local assertion"
+      ],
+      "scope": {
+        "frame": "narrative.frames.cartoon_gravity",
+        "role": "assertion",
+        "frame_title": "Cartoon gravity",
+        "premises": [
+          {
+            "premise_id": "noticed_fall",
+            "expression": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))"
+          }
+        ],
+        "suspends": [
+          "physics.gravitation.newton_universal_gravitation"
+        ],
+        "governed_by": [
+          "narrative.frame.frame_consistency"
+        ],
+        "on_exit": "conjectured",
+        "retrieval": "frame_local"
+      }
+    },
+    {
+      "statement_id": "narrative.frame.premise_persistence",
+      "title": "Opening-Premise Persistence",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "narrative"
+        ],
+        "subfield": "fictional_frames",
+        "topic": "frame_temporality",
+        "canonical_objects": [
+          "story",
+          "story part",
+          "story event",
+          "narrative frame"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "an opening premise remains held and has held since the frame opened",
+        "canonical_latex": "\\Box(\\mathrm{holds}(p) \\land (\\mathrm{holds}(p)\\,\\mathcal{S}\\,o))",
+        "equivalent_forms": [
+          {
+            "form_id": "session",
+            "notation_system": "ascii",
+            "expression": "premises declared at frame opening remain available until frame exit"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "frame_premise_persistence",
+        "anonymized_template": "ALWAYS(MEET(HOLDS(PREMISE), SINCE(HOLDS(PREMISE), FRAMEOPENING)))",
+        "slot_schema": [
+          {
+            "slot_id": "PREMISE",
+            "syntactic_category": "variable",
+            "semantic_role": "frame_premise"
+          },
+          {
+            "slot_id": "FRAMEOPENING",
+            "syntactic_category": "constant",
+            "semantic_role": "frame_opening_event"
+          }
+        ],
+        "invariants": [
+          "The same premise recurs on both sides and SINCE anchors it to the frame-opening event.",
+          "The outer MEET keeps HOLDS(PREMISE) positive, so removal violates the law instead of making an implication vacuously true.",
+          "Scope metadata supplies the boundary that the temporal template alone cannot identify."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "frame_premise",
+            "mathematical_order": 0,
+            "description": "A declared local premise."
+          },
+          {
+            "symbol": "o",
+            "syntactic_category": "constant",
+            "semantic_role": "frame_opening_event",
+            "mathematical_order": 0,
+            "description": "The scope boundary."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "G",
+            "name": "always (globally) modality",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "S",
+            "name": "strong since",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ALWAYS(.)",
+            "name": "always (globally)",
+            "input_arity": 1,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "G phi: phi holds at every position of the trace from now on. Semantically the infinitary MEET over all suffixes; the grammar has no binder (docs/BACKLOG.md), so the quantification over suffixes is carried by this opaque head rather than written out. That is exactly why the modal duality below cannot twin the finitary De Morgan law."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "Greatest lower bound in the Boolean lattice: conjunction in data/logic, intersection in data/set_theory, and here the intersection of the trace sets two temporal properties denote. The head is reused rather than renamed so that Boolean sub-structure inside a temporal statement stays visible to the matcher."
+          },
+          {
+            "notation": "HOLDS(.)",
+            "name": "frame proposition holds",
+            "input_arity": 1,
+            "description": "Lifts a declared frame premise into the temporal trace of that frame's evolving state."
+          },
+          {
+            "notation": "SINCE(hold, origin)",
+            "name": "strong since",
+            "input_arity": 2,
+            "codomain": "temporal properties (sets of traces)",
+            "description": "phi S psi: psi held at some past position and phi has held continuously since; hold-first, origin-second."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A premise declared when the frame opens remains available from that boundary through the current state.",
+        "statistical_significance": "Connects mutable session state to the past-time corpus explicitly.",
+        "regularity_conditions": [
+          "One open frame with a distinguished opening event",
+          "PREMISE is an opening declaration, not a later assertion"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "temporal.past.since_unfolding",
+          "narrative.frame.frame_consistency"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "ryan1991",
+          "bibliographic_entry": "Ryan, M.-L. (1991). Possible Worlds, Artificial Intelligence, and Narrative Theory. Bloomington: Indiana University Press."
+        },
+        {
+          "citation_key": "lewis1978",
+          "bibliographic_entry": "Lewis, D. (1978). Truth in Fiction. American Philosophical Quarterly, 15(1), 37-46."
+        },
+        {
+          "citation_key": "prior1957",
+          "bibliographic_entry": "Prior, A. N. (1957). Time and Modality. Oxford: Clarendon Press."
+        },
+        {
+          "citation_key": "manna1992",
+          "bibliographic_entry": "Manna, Z., Pnueli, A. (1992). The Temporal Logic of Reactive and Concurrent Systems: Specification. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "frame premise",
+        "persistence",
+        "since",
+        "session state"
+      ],
+      "scope": {
+        "frame": "narrative.frames.premise_persistence",
+        "role": "declaration",
+        "frame_title": "Premise persistence",
+        "premises": [
+          {
+            "premise_id": "frame_open",
+            "expression": "HOLDS(PREMISE)"
+          }
+        ],
+        "suspends": [],
+        "governed_by": [
+          "narrative.frame.frame_consistency"
+        ],
+        "on_exit": "conjectured",
+        "retrieval": "frame_local"
+      }
     },
     {
       "statement_id": "narrative.frame.frame_consistency",

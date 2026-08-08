@@ -188,7 +188,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -3321,7 +3321,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -3331,7 +3331,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -3340,7 +3340,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -3368,7 +3368,7 @@
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -3469,7 +3469,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -3488,7 +3488,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -3953,7 +3953,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4259,7 +4259,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -4269,7 +4269,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -4292,7 +4292,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4325,7 +4325,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -4337,7 +4337,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -4389,7 +4389,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4473,7 +4473,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4570,7 +4570,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -4580,7 +4580,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4608,7 +4608,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4637,7 +4637,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -4647,7 +4647,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -4656,7 +4656,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -5718,9 +5718,9 @@
     {
       "statement_id": "narrative.causality.precedence_causation_bridge",
       "template": "IMPLIES(MEET(BEFORE(EVENTA, EVENTB), ENABLES(EVENTA, EVENTB)), CAUSES(EVENTA, EVENTB))",
-      "groundedness": 0.5,
+      "groundedness": 0.25,
       "considered": 4,
-      "grounded_exact": 1,
+      "grounded_exact": 0,
       "grounded_via_pattern": 1,
       "constituents": [
         {
@@ -5735,25 +5735,15 @@
             "settheory.boolean_laws.identity_laws"
           ],
           "pattern_recurs_in_n_statements": 2
-        },
-        {
-          "path": [
-            0,
-            0
-          ],
-          "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
-          "grounded_via": "exact",
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 2
         }
       ]
     },
     {
       "statement_id": "narrative.constraint.chekhov_gun",
       "template": "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
       "considered": 4,
-      "grounded_exact": 0,
+      "grounded_exact": 2,
       "grounded_via_pattern": 2,
       "constituents": [
         {
@@ -5771,6 +5761,16 @@
         {
           "path": [
             0,
+            0
+          ],
+          "skeleton": "PLANTED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
             1
           ],
           "skeleton": "EVENTUALLY⟨DISCHARGED⟨?0:V⟩⟩",
@@ -5782,6 +5782,236 @@
             "temporal.response.response_pattern"
           ],
           "pattern_recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "DISCHARGED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "narrative.constraint.no_deus_ex_machina",
+      "template": "HISTORICALLY(IMPLIES(DISCHARGED(ELEMENT), ONCE(PLANTED(ELEMENT))))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "IMPLIES⟨DISCHARGED⟨?0:V⟩, ONCE⟨PLANTED⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "DISCHARGED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "ONCE⟨PLANTED⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "ONCE⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.past.once_unfolding",
+            "temporal.response.heraldry_pattern"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PLANTED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "narrative.frames.cartoon_gravity",
+      "template": "ALWAYS(IMPLIES(NOTICES(BODY), EVENTUALLY(FALLS(BODY))))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "IMPLIES⟨NOTICES⟨?0:V⟩, EVENTUALLY⟨FALLS⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "NOTICES⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "EVENTUALLY⟨FALLS⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "EVENTUALLY⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.modality.eventually_unfolding",
+            "temporal.monotonicity.eventually_monotonicity",
+            "temporal.response.response_pattern"
+          ],
+          "pattern_recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "FALLS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "narrative.frames.cartoon_gravity_hover",
+      "template": "IMPLIES(NEG(NOTICES(BODY)), NEG(FALLS(BODY)))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "NEG⟨NOTICES⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "NOTICES⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨FALLS⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "FALLS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "narrative.frame.premise_persistence",
+      "template": "ALWAYS(MEET(HOLDS(PREMISE), SINCE(HOLDS(PREMISE), FRAMEOPENING)))",
+      "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨HOLDS⟨?0:V⟩, SINCE⟨HOLDS⟨?0:V⟩, ?1:P⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "SINCE⟨HOLDS⟨?0:V⟩, ?1:P⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "SINCE⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "temporal.past.since_unfolding"
+          ],
+          "pattern_recurs_in_n_statements": 1
         }
       ]
     },
@@ -5813,7 +6043,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -6491,7 +6721,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -6501,7 +6731,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -6524,7 +6754,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -6557,7 +6787,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -6569,7 +6799,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -6621,7 +6851,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -6705,7 +6935,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -6755,7 +6985,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -6765,7 +6995,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -6774,7 +7004,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -6884,7 +7114,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -7287,7 +7517,7 @@
             "settheory.boolean_laws.complement_laws",
             "settheory.boolean_laws.de_morgan_laws"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 10
         },
         {
           "path": [
@@ -7313,7 +7543,7 @@
           "skeleton": "NEG⟨?0:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -7487,7 +7717,7 @@
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -7634,7 +7864,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -7644,7 +7874,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -7653,13 +7883,13 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
     {
       "statement_id": "temporal.order.strict_precedence_asymmetry",
-      "template": "IMPLIES(BEFORE(EVENTA, EVENTB), NEG(BEFORE(EVENTB, EVENTA)))",
+      "template": "IMPLIES(LT(EVENTA, EVENTB), NEG(LT(EVENTB, EVENTA)))",
       "groundedness": 1.0,
       "considered": 3,
       "grounded_exact": 2,
@@ -7669,16 +7899,18 @@
           "path": [
             0
           ],
-          "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
+          "skeleton": "LT⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
-          "instance_of_statements": [],
+          "instance_of_statements": [
+            "temporal.order.strict_part_of_order"
+          ],
           "recurs_in_n_statements": 2
         },
         {
           "path": [
             1
           ],
-          "skeleton": "NEG⟨BEFORE⟨?0:V, ?1:V⟩⟩",
+          "skeleton": "NEG⟨LT⟨?0:V, ?1:V⟩⟩",
           "grounded_via": "pattern",
           "instance_of_pattern": "NEG⟨?0:V⟩",
           "pattern_known_from": [
@@ -7691,16 +7923,18 @@
             "settheory.boolean_laws.complement_laws",
             "settheory.boolean_laws.de_morgan_laws"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 11
         },
         {
           "path": [
             1,
             0
           ],
-          "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
+          "skeleton": "LT⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
-          "instance_of_statements": [],
+          "instance_of_statements": [
+            "temporal.order.strict_part_of_order"
+          ],
           "recurs_in_n_statements": 2
         }
       ]
@@ -7720,7 +7954,7 @@
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -7791,6 +8025,280 @@
             "temporal.modality.eventually_unfolding"
           ],
           "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "temporal.past.since_unfolding",
+      "template": "SINCE(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, PREV(SINCE(PROPA, PROPB))))",
+      "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "JOIN⟨?0:V, MEET⟨?1:V, PREV⟨SINCE⟨?1:V, ?0:V⟩⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "MEET⟨?0:V, PREV⟨SINCE⟨?0:V, ?1:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        }
+      ],
+      "recursive": true,
+      "defines_head": "SINCE",
+      "self_headed_constituents_excluded": 2
+    },
+    {
+      "statement_id": "temporal.past.past_duality",
+      "template": "HISTORICALLY(PROP) = NEG(ONCE(NEG(PROP)))",
+      "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨ONCE⟨NEG⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "ONCE⟨NEG⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "ONCE⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.past.once_unfolding",
+            "temporal.response.heraldry_pattern"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 11
+        }
+      ]
+    },
+    {
+      "statement_id": "temporal.past.prev_distributes_over_meet",
+      "template": "PREV(MEET(PROPA, PROPB)) = MEET(PREV(PROPA), PREV(PROPB))",
+      "groundedness": 0.4,
+      "considered": 5,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨PREV⟨?0:V⟩, PREV⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "geotop.predicates.de9im_disjoint"
+          ],
+          "recurs_in_n_statements": 11
+        }
+      ]
+    },
+    {
+      "statement_id": "temporal.past.once_unfolding",
+      "template": "ONCE(PROP) = JOIN(PROP, PREV(ONCE(PROP)))",
+      "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 1,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "JOIN⟨?0:V, PREV⟨ONCE⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        }
+      ],
+      "recursive": true,
+      "defines_head": "ONCE",
+      "self_headed_constituents_excluded": 2
+    },
+    {
+      "statement_id": "temporal.response.heraldry_pattern",
+      "template": "HISTORICALLY(IMPLIES(OUTCOME, ONCE(HERALD)))",
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "IMPLIES⟨?0:V, ONCE⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "ONCE⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "temporal.past.once_unfolding"
+          ],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "temporal.order.strict_part_of_order",
+      "template": "LT(EVENTA, EVENTB) = MEET(LEQ(EVENTA, EVENTB), NEG(LEQ(EVENTB, EVENTA)))",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "LT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, NEG⟨LEQ⟨?1:V, ?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "NEG⟨LEQ⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
         }
       ]
     }

@@ -27,8 +27,27 @@ or commit history. Each item names the evidence that motivated it.
   over an oracle-authored phrase, not a general semantic event binder. Replace
   it with corpus-grounded event structure as the story policy broadens; keep
   the present negative controls so a ledger-only implementation cannot regress.
-  Past-facing heraldry/no-deus-ex-machina remains item 5 and unplanted
-  discharge therefore stays UNKNOWN rather than being silently refuted.
+  The past-facing heraldry/no-deus nodes are now authored, but the executor
+  does not yet evaluate them: unplanted discharge therefore stays UNKNOWN
+  rather than being silently refuted. Wiring that authored law is the open
+  runtime step.
+
+- **Past-mirror payoff exposed two specialization false positives.** The
+  intended new edges are `response_pattern -> cartoon_gravity` and
+  `heraldry_pattern -> no_deus_ex_machina`, both cost 4. The same run also
+  derives `geotop.predicates.de9im_disjoint` as a generalization of
+  `strict_part_of_order` and `prev_distributes_over_meet`, both cost 7. The
+  graph moved 622 -> 626, but only half the delta is signal. Keep these cases
+  in the category-compatibility adjudication rather than counting raw edge
+  growth as progress.
+
+- **Recursive-definition grounding is not a blanket 1.000 guarantee.** The
+  registered payoff prediction expected SINCE and ONCE unfolding to inherit
+  the earlier UNTIL/EVENTUALLY 1.000 results. They instead score 0.667 and
+  0.500 because self-headed terms leave other compound constituents in the
+  denominator that the current inventory does not recognize. Decide whether
+  that is the intended metric or whether definitional grounding should cover
+  the entire right-hand construction; preserve these two nodes as controls.
 
 - **One loop across two domains is not yet generalized model weights.** A
   shared controller API can still hide two bespoke policies. After the oracle
