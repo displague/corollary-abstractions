@@ -470,10 +470,10 @@
     {
       "statement_id": "calculus.differentiation.linearity_of_derivative",
       "template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "groundedness": 0.778,
+      "groundedness": 0.889,
       "considered": 9,
       "grounded_exact": 5,
-      "grounded_via_pattern": 2,
+      "grounded_via_pattern": 3,
       "constituents": [
         {
           "path": [
@@ -523,23 +523,35 @@
         },
         {
           "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:P, D⟨?1:V⟩), *(?2:P, D⟨?3:V⟩))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "pattern_known_from": [
+            "ml.recurrence.linear_ssm_state_update"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
             1,
             0
           ],
           "skeleton": "*(?0:P, D⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "diffgeo.surfaces.gauss_bonnet_theorem"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -561,18 +573,18 @@
           ],
           "skeleton": "*(?0:P, D⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "diffgeo.surfaces.gauss_bonnet_theorem"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -592,10 +604,10 @@
     {
       "statement_id": "calculus.differentiation.product_rule",
       "template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "groundedness": 0.714,
+      "groundedness": 0.857,
       "considered": 7,
       "grounded_exact": 3,
-      "grounded_via_pattern": 2,
+      "grounded_via_pattern": 3,
       "constituents": [
         {
           "path": [
@@ -615,23 +627,36 @@
         },
         {
           "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:V, D⟨?1:V⟩), *(?1:V, D⟨?0:V⟩))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "pattern_known_from": [
+            "calculus.differentiation.linearity_of_derivative",
+            "ml.recurrence.linear_ssm_state_update"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
             1,
             0
           ],
           "skeleton": "*(?0:V, D⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate",
-            "ml.recurrence.mlstm_matrix_memory_update"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -653,18 +678,18 @@
           ],
           "skeleton": "*(?0:V, D⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate",
-            "ml.recurrence.mlstm_matrix_memory_update"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -722,18 +747,18 @@
           ],
           "skeleton": "*(COMPOSE⟨D⟨?0:V⟩, ?1:V⟩, D⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -834,18 +859,18 @@
           ],
           "skeleton": "*(?0:P, EXP⟨*(?0:P, ?1:V)⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "diffgeo.surfaces.gauss_bonnet_theorem"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -1199,18 +1224,18 @@
           ],
           "skeleton": "*(?0:P, EXP⟨neg(*(?1:P, inv(*(?2:P, ?3:V))))⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "diffgeo.surfaces.gauss_bonnet_theorem"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 35
         },
         {
           "path": [
@@ -1521,18 +1546,18 @@
           ],
           "skeleton": "*(?0:P, INTEGRAL⟨^(?1:V, 2)⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -1958,18 +1983,18 @@
           ],
           "skeleton": "*(DEGREE⟨?0:V⟩, DEGREE⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -3734,18 +3759,18 @@
           ],
           "skeleton": "*(?0:P, LOG⟨?1:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 10
+          "pattern_recurs_in_n_statements": 36
         },
         {
           "path": [
@@ -4797,11 +4822,24 @@
     {
       "statement_id": "ml.recurrence.mlstm_matrix_memory_update",
       "template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
-      "groundedness": 0.5,
+      "groundedness": 0.75,
       "considered": 4,
       "grounded_exact": 1,
-      "grounded_via_pattern": 1,
+      "grounded_via_pattern": 2,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(?0:V, ?1:V), *(?2:V, OUTER⟨?3:V, ?4:V⟩))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "pattern_known_from": [
+            "calculus.differentiation.linearity_of_derivative",
+            "ml.recurrence.linear_ssm_state_update"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             1,
@@ -4825,18 +4863,18 @@
           ],
           "skeleton": "*(?0:V, OUTER⟨?1:V, ?2:V⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.policy.ppo_clipped_surrogate"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 36
         }
       ]
     },
@@ -5146,18 +5184,18 @@
           ],
           "skeleton": "*(?0:V, CLIPCALL⟨?1:V, ?2:P, ?3:P⟩)",
           "grounded_via": "pattern",
-          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "instance_of_pattern": "*(?0:P, ?1:V)",
           "pattern_known_from": [
-            "calculus.differentiation.product_rule",
-            "chemistry.thermodynamics.gibbs_free_energy",
-            "chemistry.thermodynamics.helmholtz_free_energy",
-            "diffgeo.surfaces.gaussian_curvature_principal_product",
-            "economics.monetary.equation_of_exchange",
-            "geometry.area_formulas.rectangle_area_formula",
-            "graphtheory.enumeration.complete_bipartite_edge_count",
-            "ml.recurrence.mlstm_matrix_memory_update"
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 36
         }
       ]
     },
