@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 196,
+  "nodes_analyzed": 197,
   "typed_twin_groups": [
     {
       "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
@@ -893,6 +893,29 @@
       ]
     }
   ],
+  "aliased_twin_groups_beyond_typed": [
+    {
+      "skeleton": "?0:V = ordered_compose⟨ordered_compose⟨?1:V, ?2:V⟩, ?3:V⟩",
+      "disciplines": [
+        "morphology"
+      ],
+      "archetypes": [
+        "left_nested_binary_composition"
+      ],
+      "members": [
+        {
+          "statement_id": "morphology.wordformation.iterated_affixation",
+          "discipline": "morphology",
+          "template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)"
+        },
+        {
+          "statement_id": "morphology.syntax.iterated_intensification",
+          "discipline": "morphology",
+          "template": "PHRASE = MOD(MOD(BASE, INTENSIFIER1), INTENSIFIER2)"
+        }
+      ]
+    }
+  ],
   "shape_twin_groups": [
     {
       "skeleton": "+(^(?0, 2), ^(?1, 2)) = ^(?2, 2)",
@@ -1759,6 +1782,17 @@
         "logic.boolean_laws.identity_laws",
         "morphology.wordformation.zero_morpheme_identity",
         "settheory.boolean_laws.identity_laws"
+      ]
+    },
+    {
+      "archetype_id": "left_nested_binary_composition",
+      "distinct_shapes": [
+        "?0 = CONCAT⟨CONCAT⟨?1, ?2⟩, ?3⟩",
+        "?0 = MOD⟨MOD⟨?1, ?2⟩, ?3⟩"
+      ],
+      "members": [
+        "morphology.wordformation.iterated_affixation",
+        "morphology.syntax.iterated_intensification"
       ]
     },
     {

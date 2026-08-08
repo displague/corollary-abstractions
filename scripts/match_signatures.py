@@ -274,6 +274,35 @@ def skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
 
 PARAMETER_LIKE = {"parameter", "constant"}
 
+# Declared head-alias classes for the ALIASED match level. An alias is an
+# assertion that two call heads name one operation family; entries must be
+# argued, not convenient. Current classes:
+# - ordered_compose: modifier application MOD(base, modifier) and
+#   affixation CONCAT(stem, affix) -- the registered morphology prediction
+#   that word-level and phrase-level recursion are one skeleton
+#   (docs/DISCOVERIES.md); both are ordered binary composition of a head
+#   with a dependent.
+# - order_le: LEQ and BEFORE -- temporal precedence IS an order relation;
+#   the temporal corpus already twins transitivity through the LEQ shape.
+HEAD_ALIASES = {
+    "MOD": "ordered_compose",
+    "CONCAT": "ordered_compose",
+    "BEFORE": "order_le",
+    "LEQ": "order_le",
+}
+
+
+def alias_heads(node: tuple) -> tuple:
+    """Rewrite call heads into their declared alias classes."""
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return node
+    args = tuple(alias_heads(a) for a in node[2])
+    head = node[1]
+    if kind == "call" and head in HEAD_ALIASES:
+        head = HEAD_ALIASES[head]
+    return (kind, head, args)
+
 
 def absorb_parameter_signs(node: tuple, slot_class: dict[str, str]) -> tuple:
     """Drop negations whose sign can be absorbed into a free parameter.
@@ -334,6 +363,7 @@ class ParsedNode:
     shape: str
     typed: str
     family: str
+    aliased: str
     missing_slots: list[str]
 
 
@@ -367,6 +397,7 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                     typed=skeleton(tree, classes),
                     family=skeleton(
                         canonicalize(absorb_parameter_signs(tree, classes)), classes),
+                    aliased=skeleton(canonicalize(alias_heads(tree)), classes),
                     missing_slots=missing,
                 )
             )
@@ -384,6 +415,7 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
     shape_groups = group_by(nodes, "shape")
     typed_groups = group_by(nodes, "typed")
     family_groups = group_by(nodes, "family")
+    aliased_groups = group_by(nodes, "aliased")
 
     def group_entries(groups: dict[str, list[ParsedNode]]) -> list[dict]:
         entries = []
@@ -446,10 +478,18 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
         and frozenset(m.statement_id for m in members) not in typed_member_sets
     }
 
+    aliased_new = {
+        skel: members
+        for skel, members in aliased_groups.items()
+        if len(members) > 1
+        and frozenset(m.statement_id for m in members) not in typed_member_sets
+    }
+
     return {
         "nodes_analyzed": len(nodes),
         "typed_twin_groups": group_entries(typed_groups),
         "family_twin_groups_beyond_typed": group_entries(family_new),
+        "aliased_twin_groups_beyond_typed": group_entries(aliased_new),
         "shape_twin_groups": group_entries(shape_groups),
         "archetype_label_drift": label_drift,
         "skeletons_with_split_archetypes": split_labels,
@@ -473,6 +513,8 @@ def print_report(report: dict) -> None:
     show_groups("Typed structural twins", report["typed_twin_groups"])
     show_groups("Family twins (parameter signs absorbed, beyond typed)",
                 report["family_twin_groups_beyond_typed"])
+    show_groups("Aliased twins (declared head classes, beyond typed)",
+                report["aliased_twin_groups_beyond_typed"])
     show_groups("Shape twins (slot categories ignored)", report["shape_twin_groups"])
 
     if report["archetype_label_drift"]:

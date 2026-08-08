@@ -1681,6 +1681,123 @@
         "gender",
         "number"
       ]
+    },
+    {
+      "statement_id": "morphology.syntax.iterated_intensification",
+      "title": "Iterated Intensification (Phrase-Level Recursion)",
+      "statement_class": "model_specification",
+      "epistemic_status": "empirical",
+      "theory_context": {
+        "disciplines": [
+          "morphology",
+          "syntax"
+        ],
+        "subfield": "phrase_structure",
+        "topic": "recursion"
+      },
+      "formal_statement": {
+        "canonical_ascii": "phrase = ((base mod i1) mod i2)",
+        "canonical_latex": "\text{phrase} = ((\text{base}\\ i_1)\\ i_2)",
+        "equivalent_forms": [
+          {
+            "form_id": "example",
+            "notation_system": "ascii",
+            "expression": "very very big = ((big very) very)",
+            "scope_note": "Intensifier stacking in the experiments' toy grammar"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "left_nested_binary_composition",
+        "anonymized_template": "PHRASE = MOD(MOD(BASE, INTENSIFIER1), INTENSIFIER2)",
+        "slot_schema": [
+          {
+            "slot_id": "PHRASE",
+            "syntactic_category": "variable",
+            "semantic_role": "output_form"
+          },
+          {
+            "slot_id": "BASE",
+            "syntactic_category": "variable",
+            "semantic_role": "base"
+          },
+          {
+            "slot_id": "INTENSIFIER1",
+            "syntactic_category": "variable",
+            "semantic_role": "modifier"
+          },
+          {
+            "slot_id": "INTENSIFIER2",
+            "syntactic_category": "variable",
+            "semantic_role": "modifier"
+          }
+        ],
+        "invariants": [
+          "Left-nested ordered composition applied to its own output -- discrete infinity at phrase level, mirroring morphology.wordformation.iterated_affixation at word level.",
+          "MOD is ordered: the modifier attaches to the base, not conversely; the asymmetry is real, as with CONCAT."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "big",
+            "syntactic_category": "variable",
+            "semantic_role": "base",
+            "mathematical_order": 0,
+            "description": "A gradable base adjective."
+          },
+          {
+            "symbol": "very",
+            "syntactic_category": "variable",
+            "semantic_role": "modifier",
+            "mathematical_order": 0,
+            "description": "An intensifier; attaches to its own output without bound."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MOD(x, i)",
+            "name": "modification",
+            "input_arity": 2,
+            "codomain": "phrase",
+            "description": "Ordered application of a modifier to a base."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A modified phrase is its base with a modifier attached; modification applies to its own output without bound.",
+        "statistical_significance": "The phrase-level half of the registered prediction that word-level and phrase-level recursion share one skeleton; twins iterated_affixation at the ALIASED level via the declared ordered_compose head class, while the typed level correctly distinguishes the operations.",
+        "regularity_conditions": [
+          "Intersective, stackable modifiers",
+          "A grammar licensing recursive modification"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "morphology.wordformation.iterated_affixation"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "chomsky1957",
+          "bibliographic_entry": "Chomsky, N. (1957). Syntactic Structures. The Hague: Mouton."
+        }
+      ]
     }
   ]
 }
