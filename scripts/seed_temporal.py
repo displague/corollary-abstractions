@@ -219,8 +219,9 @@ P4  FIRED. Flagship. Three disciplines, one skeleton, verbatim:
     while LEQ is the reflexive lattice order. The node is therefore authored
     over the reflexive relation "occurs no later than", which is a true partial
     order on instants and is what transitivity is a theorem about. Strictness is
-    carried separately by `temporal.order.strict_precedence_asymmetry`, whose
-    BEFORE head is the price: see P8 below.
+    carried separately by `temporal.order.strict_precedence_asymmetry`, which
+    P8 originally recorded as paying a BEFORE-head singleton price -- see the
+    superseded banner on P8 below for how the LT rename cashed that note.
 
 P5  FIRED. Flagship. Three disciplines, one skeleton:
       ?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩
@@ -324,7 +325,13 @@ P10 (unregistered). **Zero specialization edges, and zero specialization
     against that: the corpora it would clean up are exactly the corpora that
     currently get edges.
 
-P8 (unregistered, found while authoring). **The BEFORE head measures what the
+P8 (unregistered, found while authoring). **[SUPERSEDED by the past-mirror
+    slice: `strict_precedence_asymmetry` was renamed to the LT head and now
+    aliases into `strict_order` alongside narrative's BEFORE, so the singleton
+    price described below no longer exists. The paragraph is kept verbatim as
+    the record of what the convention cost before the rename; the retired
+    skeleton it quotes is no longer in any corpus.]**
+    **The BEFORE head measures what the
     LEQ convention is worth, inside one corpus.**
     `temporal.order.precedence_transitivity` (LEQ) is a three-discipline typed
     twin; `temporal.order.strict_precedence_asymmetry` (BEFORE) is
@@ -2221,11 +2228,14 @@ NARRATIVE_NODES = [
           "(0,1)(1,2) to (0,2) while this conjoins two relations over the SAME "
           "pair and concludes a third over that pair. The difference is "
           "genuine, and it is why the shell alone is not a family.",
-          "BEFORE is the head temporal.order.strict_precedence_asymmetry "
-          "introduces, in the same reading and the same argument order. Both "
-          "corpora are authored by scripts/seed_temporal.py, so the sharing is "
-          "an authoring fact rather than a coincidence, recorded with "
-          "reciprocal composed_with edges.",
+          "BEFORE aliases to the strict_order class that "
+          "temporal.order.strict_precedence_asymmetry's LT head also joins, "
+          "in the same strict reading and the same argument order; since the "
+          "LT rename, this narrative node is the only remaining concrete "
+          "BEFORE spelling. Both corpora are authored by "
+          "scripts/seed_temporal.py, so the sharing is an authoring fact "
+          "rather than a coincidence, recorded with reciprocal composed_with "
+          "edges.",
           "ENABLES is strictly weaker than CAUSES: it supplies a precondition "
           "without forcing the outcome. Having both heads is what keeps the "
           "node from being the bare fallacy -- precedence alone is not enough, "

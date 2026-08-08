@@ -32,6 +32,19 @@ or commit history. Each item names the evidence that motivated it.
   rather than being silently refuted. Wiring that authored law is the open
   runtime step.
 
+  **THE OPEN RUNTIME STEP SHIPPED** (branch `feature/no-deus`): the
+  executor evaluates `narrative.constraint.no_deus_ex_machina` as a
+  governance-gated law -- a frame that lists it in `governed_by` REFUTES
+  an unheralded discharge citing the node; a frame that omits it keeps
+  UNKNOWN (the node's own regularity notes say coincidence-driven genres
+  may reject the constraint, so adoption is per-frame, not universal).
+  Adoption implements the STRICT event-order reading the corpus invariant
+  anticipates; the inclusive same-position herald has no runtime
+  representation and that narrowing is documented in frames.py. The
+  golden-chicken frame adopts the law and the demo shows the refuted
+  'sudden magic key' probe. Lawful plant-then-discharge behavior is
+  unchanged (registered predictions P6-P8, all fired; 69/69 tests).
+
 - **SHIPPED — the public epistemic-ladder demo now calls the frame executor.**
   `compose_assert.py` retains its corpus-derived PROVEN, VERIFIED, HYPOTHESIS,
   UNKNOWN, REFUTED, and REFUSED examples, then obtains declaration agreement,
@@ -39,6 +52,20 @@ or commit history. Each item names the evidence that motivated it.
   demotion, and post-close refusal directly from `FrameExecutor`. This closes
   the duplicate-demo gap; it does not claim that global structural-family
   statuses are frame statuses.
+
+- **Frame ids are not node references, and one near-collision invites the
+  confusion.** `narrative.frame.premise_persistence` (a node) declares
+  `scope.frame = "narrative.frames.premise_persistence"` (a frame id) —
+  one character apart — while `narrative.frames.cartoon_gravity`'s frame
+  id happens to coincide exactly with a real node's statement_id. Both are
+  legal: the validator only pattern-checks frame ids, and the schema
+  `$comment` already plans for a frames/ registry that would make them
+  resolvable references. Decide the convention before more scope-bearing
+  nodes are authored: either frame ids must NOT collide with statement_ids
+  (namespace separation, `<discipline>.frames.*` reserved), or they must
+  BE statement_ids of declaration nodes (reference semantics). The
+  post-merge review of the payoff slice surfaced this; today's two
+  precedents point in opposite directions.
 
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and
