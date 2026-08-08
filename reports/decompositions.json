@@ -4,6 +4,9 @@
       "statement_id": "algebra.polynomial_equations.quadratic_formula",
       "template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
       "groundedness": 0.143,
+      "considered": 7,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -12,6 +15,7 @@
             0
           ],
           "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -21,6 +25,9 @@
       "statement_id": "algtop.invariants.euler_characteristic_surface",
       "template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS",
       "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -28,6 +35,7 @@
             1
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -40,6 +48,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -55,12 +64,16 @@
       "statement_id": "algtop.invariants.euler_characteristic_complex",
       "template": "EULERCHAR = VERTICES - EDGES + FACES",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, ?1:V, neg(?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.polyhedra.euler_polyhedron_formula"
           ],
@@ -72,6 +85,7 @@
             2
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -81,12 +95,16 @@
       "statement_id": "algtop.invariants.euler_characteristic_valuation",
       "template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
       "groundedness": 1.0,
+      "considered": 8,
+      "grounded_exact": 8,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.measure.area_inclusion_exclusion",
             "infotheory.mutualinfo.entropy_inclusion_exclusion",
@@ -100,6 +118,7 @@
             0
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         },
@@ -108,6 +127,7 @@
             1
           ],
           "skeleton": "+(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.measure.area_inclusion_exclusion",
             "infotheory.mutualinfo.entropy_inclusion_exclusion",
@@ -121,6 +141,7 @@
             0
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -130,6 +151,7 @@
             1
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -139,6 +161,7 @@
             2
           ],
           "skeleton": "neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -149,6 +172,7 @@
             0
           ],
           "skeleton": "CARD⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -160,6 +184,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -171,12 +196,16 @@
       "statement_id": "algtop.homology.betti_alternating_sum",
       "template": "EULERCHAR = sum_i COEFF_i*BETTI_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geomodel.barycentric.barycentric_point_reconstruction",
             "geomodel.bezier.bernstein_bezier_evaluation",
@@ -190,6 +219,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -205,12 +235,16 @@
       "statement_id": "algtop.homology.betti_number_rank",
       "template": "BETTI = CYCLERANK - BOUNDARYRANK",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -220,6 +254,7 @@
             1
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -229,12 +264,16 @@
       "statement_id": "algtop.homology.chain_rank_nullity",
       "template": "CHAINRANK = CYCLERANK + IMAGERANK",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "economics.macroeconomics.fisher_equation"
           ],
@@ -246,26 +285,65 @@
       "statement_id": "algtop.homotopy.fundamental_group_circle",
       "template": "FUNDGROUP(CIRCLE) = INTEGERS",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "algtop.homotopy.homotopy_invariance",
       "template": "IMPLIES(HOMOTOPYEQUIVALENT(SPACE1, SPACE2), HOMOLOGY(SPACE1) = HOMOLOGY(SPACE2))",
       "groundedness": 0.0,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "calculus.limits.derivative_definition",
       "template": "D(F) = lim_h (F(VAR + STEP) - F(VAR)) / STEP",
-      "groundedness": 0.556,
+      "groundedness": 0.778,
+      "considered": 9,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 2,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(+(F⟨+(?0:V, ?1:V)⟩, neg(F⟨?0:V⟩)), inv(?1:V))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(+(?0:V, neg(?1:P)), inv(?2:P))",
+          "pattern_known_from": [
+            "ml.preference.grpo_group_relative_advantage",
+            "probstat.transform.z_standardization"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "+(F⟨+(?0:V, ?1:V)⟩, neg(F⟨?0:V⟩))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(?0:V, neg(?1:P))",
+          "pattern_known_from": [
+            "ml.preference.grpo_group_relative_advantage",
+            "probstat.transform.z_standardization"
+          ],
+          "pattern_recurs_in_n_statements": 2
         },
         {
           "path": [
@@ -276,6 +354,7 @@
             0
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
@@ -290,6 +369,7 @@
             1
           ],
           "skeleton": "neg(F⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -302,6 +382,7 @@
             0
           ],
           "skeleton": "F⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -312,6 +393,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -321,12 +403,16 @@
       "statement_id": "calculus.differentiation.average_rate_of_change",
       "template": "RATE = QUANTITY / INTERVAL",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.solutions.molarity_definition",
             "economics.microeconomics.price_elasticity_of_demand",
@@ -343,6 +429,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -352,6 +439,9 @@
       "statement_id": "calculus.differentiation.power_rule",
       "template": "D(VAR^EXPONENT) = EXPONENT * VAR^(EXPONENT - 1)",
       "groundedness": 0.333,
+      "considered": 6,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -359,6 +449,7 @@
             0
           ],
           "skeleton": "^(?0:V, ?1:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -370,6 +461,7 @@
             1
           ],
           "skeleton": "neg(1)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -378,7 +470,10 @@
     {
       "statement_id": "calculus.differentiation.linearity_of_derivative",
       "template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
-      "groundedness": 0.556,
+      "groundedness": 0.778,
+      "considered": 9,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 2,
       "constituents": [
         {
           "path": [
@@ -386,6 +481,7 @@
             0
           ],
           "skeleton": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "ml.recurrence.linear_ssm_state_update"
           ],
@@ -398,6 +494,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -414,6 +511,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -426,10 +524,31 @@
         {
           "path": [
             1,
+            0
+          ],
+          "skeleton": "*(?0:P, D⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
             0,
             1
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -438,10 +557,31 @@
         {
           "path": [
             1,
+            1
+          ],
+          "skeleton": "*(?0:P, D⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
             1,
             1
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -452,7 +592,10 @@
     {
       "statement_id": "calculus.differentiation.product_rule",
       "template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
-      "groundedness": 0.429,
+      "groundedness": 0.714,
+      "considered": 7,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
       "constituents": [
         {
           "path": [
@@ -460,6 +603,7 @@
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -472,10 +616,31 @@
         {
           "path": [
             1,
+            0
+          ],
+          "skeleton": "*(?0:V, D⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate",
+            "ml.recurrence.mlstm_matrix_memory_update"
+          ],
+          "pattern_recurs_in_n_statements": 9
+        },
+        {
+          "path": [
+            1,
             0,
             1
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -484,10 +649,31 @@
         {
           "path": [
             1,
+            1
+          ],
+          "skeleton": "*(?0:V, D⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate",
+            "ml.recurrence.mlstm_matrix_memory_update"
+          ],
+          "pattern_recurs_in_n_statements": 9
+        },
+        {
+          "path": [
+            1,
             1,
             1
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -498,16 +684,69 @@
     {
       "statement_id": "calculus.differentiation.chain_rule",
       "template": "D(COMPOSE(OUTER, INNER)) = COMPOSE(D(OUTER), INNER) * D(INNER)",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 3,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "D⟨COMPOSE⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "D⟨?0:V⟩",
+          "pattern_known_from": [
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.differentiation.product_rule",
+            "calculus.integration.ftc_evaluation_part",
+            "calculus.limits.derivative_definition",
+            "diffgeo.stokes.stokes_theorem",
+            "diffgeo.stokes.stokes_zero_form_case"
+          ],
+          "pattern_recurs_in_n_statements": 6
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "COMPOSE⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(COMPOSE⟨D⟨?0:V⟩, ?1:V⟩, D⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "COMPOSE⟨D⟨?0:V⟩, ?1:V⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "COMPOSE⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "difftop.degree.degree_multiplicativity"
+          ],
+          "pattern_recurs_in_n_statements": 1
         },
         {
           "path": [
@@ -516,6 +755,7 @@
             0
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -527,6 +767,7 @@
             1
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -537,14 +778,36 @@
     {
       "statement_id": "calculus.differentiation.exponential_derivative",
       "template": "D(EXP(RATE*VAR)) = RATE * EXP(RATE*VAR)",
-      "groundedness": 0.667,
+      "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 2,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "D⟨EXP⟨*(?0:P, ?1:V)⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "D⟨?0:V⟩",
+          "pattern_known_from": [
+            "calculus.differentiation.chain_rule",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.differentiation.product_rule",
+            "calculus.integration.ftc_evaluation_part",
+            "calculus.limits.derivative_definition",
+            "diffgeo.stokes.stokes_theorem",
+            "diffgeo.stokes.stokes_zero_form_case"
+          ],
+          "pattern_recurs_in_n_statements": 7
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "EXP⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -555,6 +818,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -566,10 +830,30 @@
         },
         {
           "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, EXP⟨*(?0:P, ?1:V)⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
+        {
+          "path": [
             1,
             1
           ],
           "skeleton": "EXP⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -580,6 +864,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -595,12 +880,16 @@
       "statement_id": "calculus.growth.exponential_growth_law",
       "template": "AMOUNT = INITIAL * EXP(RATE * TIME)",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, EXP⟨*(?1:P, ?2:V)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "economics.finance.continuous_compounding"
           ],
@@ -612,6 +901,7 @@
             1
           ],
           "skeleton": "EXP⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -622,6 +912,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -636,14 +927,36 @@
     {
       "statement_id": "calculus.integration.ftc_differentiation_part",
       "template": "D(INTEGRAL(F)) = F",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "D⟨INTEGRAL⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "D⟨?0:V⟩",
+          "pattern_known_from": [
+            "calculus.differentiation.chain_rule",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.differentiation.product_rule",
+            "calculus.integration.ftc_evaluation_part",
+            "calculus.limits.derivative_definition",
+            "diffgeo.stokes.stokes_theorem",
+            "diffgeo.stokes.stokes_zero_form_case"
+          ],
+          "pattern_recurs_in_n_statements": 7
+        },
         {
           "path": [
             1,
             0
           ],
           "skeleton": "INTEGRAL⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.curves.arc_length_functional",
             "diffgeo.surfaces.gauss_bonnet_theorem"
@@ -656,12 +969,16 @@
       "statement_id": "calculus.integration.ftc_evaluation_part",
       "template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
       "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 6,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "INTEGRAL⟨D⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.stokes.stokes_theorem",
             "diffgeo.stokes.stokes_zero_form_case"
@@ -674,6 +991,7 @@
             0
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -684,6 +1002,7 @@
             1
           ],
           "skeleton": "+(F⟨?0:V⟩, neg(F⟨?1:V⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.stokes.stokes_zero_form_case"
           ],
@@ -695,6 +1014,7 @@
             0
           ],
           "skeleton": "F⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -704,6 +1024,7 @@
             1
           ],
           "skeleton": "neg(F⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -714,6 +1035,7 @@
             0
           ],
           "skeleton": "F⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -723,12 +1045,16 @@
       "statement_id": "calculus.approximation.tangent_line_linearization",
       "template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "economics.finance.capm_expected_return",
             "economics.macroeconomics.keynesian_consumption_function",
@@ -744,6 +1070,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -759,6 +1086,9 @@
       "statement_id": "chemistry.kinetics.rate_law_power",
       "template": "RATE = RATECONST * CONCENTRATION^ORDER",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -766,6 +1096,7 @@
             1
           ],
           "skeleton": "^(?0:V, ?1:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -775,12 +1106,16 @@
       "statement_id": "chemistry.kinetics.first_order_integrated_rate_law",
       "template": "AMOUNT = INITIAL * EXP(-(RATECONST * TIME))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, EXP⟨neg(*(?1:P, ?2:V))⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "economics.finance.present_value_continuous",
             "ml.policy.boltzmann_softmax_policy"
@@ -793,6 +1128,7 @@
             1
           ],
           "skeleton": "EXP⟨neg(*(?0:P, ?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -803,6 +1139,7 @@
             0
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -816,6 +1153,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -831,6 +1169,9 @@
       "statement_id": "chemistry.kinetics.half_life_first_order",
       "template": "HALFLIFE = CONSTANT / RATECONST",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -838,6 +1179,7 @@
             1
           ],
           "skeleton": "inv(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         }
@@ -846,8 +1188,30 @@
     {
       "statement_id": "chemistry.kinetics.arrhenius_equation",
       "template": "RATECONST = PREFACTOR * EXP(-(BARRIER / (GASCONST * TEMPERATURE)))",
-      "groundedness": 0.167,
+      "groundedness": 0.333,
+      "considered": 6,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, EXP⟨neg(*(?1:P, inv(*(?2:P, ?3:V))))⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
         {
           "path": [
             1,
@@ -858,6 +1222,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -873,12 +1238,16 @@
       "statement_id": "chemistry.spectroscopy.beer_lambert_law",
       "template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, ?2:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.area_formulas.triangle_area_formula"
           ],
@@ -890,12 +1259,16 @@
       "statement_id": "chemistry.thermodynamics.gibbs_free_energy",
       "template": "FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(*(?1:V, ?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.thermodynamics.helmholtz_free_energy"
           ],
@@ -907,6 +1280,7 @@
             1
           ],
           "skeleton": "neg(*(?0:V, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -917,6 +1291,7 @@
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -932,12 +1307,16 @@
       "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
       "template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(*(?1:V, ?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.thermodynamics.gibbs_free_energy"
           ],
@@ -949,6 +1328,7 @@
             1
           ],
           "skeleton": "neg(*(?0:V, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -959,6 +1339,7 @@
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -974,12 +1355,16 @@
       "statement_id": "chemistry.acid_base.ph_definition",
       "template": "PH = -LOG(ACTIVITY)",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(LOG⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "infotheory.entropy.surprisal"
           ],
@@ -991,6 +1376,7 @@
             0
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -999,14 +1385,35 @@
     {
       "statement_id": "chemistry.acid_base.henderson_hasselbalch",
       "template": "PH = PKA + LOG(BASE / ACID)",
-      "groundedness": 0.75,
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(?0:P, LOG⟨*(?1:V, inv(?2:V))⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.chain_rank_nullity",
+            "calculus.limits.derivative_definition",
+            "economics.macroeconomics.fisher_equation",
+            "geometry.area_formulas.trapezoid_area_formula",
+            "geometry.perimeter_formulas.rectangle_perimeter_formula",
+            "numanalysis.integration.trapezoidal_rule"
+          ],
+          "pattern_recurs_in_n_statements": 6
+        },
         {
           "path": [
             1,
             1
           ],
           "skeleton": "LOG⟨*(?0:V, inv(?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1017,6 +1424,7 @@
             0
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -1036,6 +1444,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -1045,12 +1454,16 @@
       "statement_id": "chemistry.solutions.molarity_definition",
       "template": "CONCENTRATION = AMOUNT / VOLUME",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "economics.microeconomics.price_elasticity_of_demand",
@@ -1067,6 +1480,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -1076,12 +1490,16 @@
       "statement_id": "diffgeo.curves.arc_length_functional",
       "template": "LENGTH = INTEGRAL(SPEED)",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "INTEGRAL⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem"
           ],
@@ -1092,8 +1510,30 @@
     {
       "statement_id": "diffgeo.curves.geodesic_energy_functional",
       "template": "ENERGY = CONSTANT * INTEGRAL(SPEED^2)",
-      "groundedness": 0.333,
+      "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, INTEGRAL⟨^(?1:V, 2)⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
         {
           "path": [
             1,
@@ -1101,6 +1541,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -1115,6 +1556,9 @@
       "statement_id": "diffgeo.curves.circle_curvature",
       "template": "CURVATURE = 1 / RADIUS",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -1122,6 +1566,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -1131,6 +1576,9 @@
       "statement_id": "diffgeo.surfaces.first_fundamental_form",
       "template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
       "groundedness": 0.429,
+      "considered": 7,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -1139,6 +1587,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "geometry.area_formulas.square_area_formula",
@@ -1153,6 +1602,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "geometry.area_formulas.square_area_formula",
@@ -1165,6 +1615,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "geometry.area_formulas.square_area_formula",
@@ -1178,12 +1629,16 @@
       "statement_id": "diffgeo.surfaces.euclidean_line_element",
       "template": "LINEELEMENT^2 = DU^2 + DV^2",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "+(^(?0:V, 2), ^(?1:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.right_triangles.pythagorean_theorem"
           ],
@@ -1195,6 +1650,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula",
@@ -1208,6 +1664,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula",
@@ -1220,6 +1677,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.first_fundamental_form",
             "geometry.area_formulas.square_area_formula",
@@ -1233,12 +1691,16 @@
       "statement_id": "diffgeo.surfaces.gaussian_curvature_principal_product",
       "template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "economics.monetary.equation_of_exchange",
             "geometry.area_formulas.rectangle_area_formula",
@@ -1253,12 +1715,16 @@
       "statement_id": "diffgeo.surfaces.gauss_bonnet_theorem",
       "template": "INTEGRAL(CURVATURE) = CONSTANT * EULERCHAR",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "INTEGRAL⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.curves.arc_length_functional"
           ],
@@ -1269,6 +1735,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.circle_formulas.circle_circumference_formula",
             "numanalysis.floatingpoint.machine_epsilon_bound",
@@ -1283,12 +1750,16 @@
       "statement_id": "diffgeo.stokes.stokes_theorem",
       "template": "INTEGRAL(D(FORM)) = BOUNDARYINTEGRAL(FORM)",
       "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "INTEGRAL⟨D⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.integration.ftc_evaluation_part",
             "diffgeo.stokes.stokes_zero_form_case"
@@ -1301,6 +1772,7 @@
             0
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -1312,12 +1784,16 @@
       "statement_id": "diffgeo.stokes.stokes_zero_form_case",
       "template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
       "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 6,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "INTEGRAL⟨D⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.integration.ftc_evaluation_part",
             "diffgeo.stokes.stokes_theorem"
@@ -1330,6 +1806,7 @@
             0
           ],
           "skeleton": "D⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.limits.derivative_definition"
           ],
@@ -1340,6 +1817,7 @@
             1
           ],
           "skeleton": "+(F⟨?0:V⟩, neg(F⟨?1:V⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.integration.ftc_evaluation_part"
           ],
@@ -1351,6 +1829,7 @@
             0
           ],
           "skeleton": "F⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1360,6 +1839,7 @@
             1
           ],
           "skeleton": "neg(F⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1370,6 +1850,7 @@
             0
           ],
           "skeleton": "F⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -1379,12 +1860,16 @@
       "statement_id": "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
       "template": "EULERCHAR(SOURCE) = EULERCHAR(TARGET)",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "EULERCHAR⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.vectorfields.hairy_ball_theorem",
             "difftop.vectorfields.poincare_hopf_index_theorem"
@@ -1396,6 +1881,7 @@
             1
           ],
           "skeleton": "EULERCHAR⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.vectorfields.hairy_ball_theorem",
             "difftop.vectorfields.poincare_hopf_index_theorem"
@@ -1408,12 +1894,16 @@
       "statement_id": "difftop.degree.degree_regular_value_count",
       "template": "DEGREE(SMOOTHMAP) = sum_i SIGN_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "DEGREE⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -1422,6 +1912,7 @@
             1
           ],
           "skeleton": "sum⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.vectorfields.poincare_hopf_index_theorem",
             "graphtheory.degree.handshake_lemma",
@@ -1434,16 +1925,51 @@
     {
       "statement_id": "difftop.degree.degree_multiplicativity",
       "template": "DEGREE(COMPOSE(OUTER, INNER)) = DEGREE(OUTER) * DEGREE(INNER)",
-      "groundedness": 0.6,
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "DEGREE⟨COMPOSE⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "DEGREE⟨?0:V⟩",
+          "pattern_known_from": [
+            "difftop.degree.degree_regular_value_count"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "COMPOSE⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(DEGREE⟨?0:V⟩, DEGREE⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
         },
         {
           "path": [
@@ -1451,6 +1977,7 @@
             0
           ],
           "skeleton": "DEGREE⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count"
           ],
@@ -1462,6 +1989,7 @@
             1
           ],
           "skeleton": "DEGREE⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count"
           ],
@@ -1473,12 +2001,16 @@
       "statement_id": "difftop.degree.brouwer_fixed_point",
       "template": "FIXEDPOINT = SELFMAP(FIXEDPOINT)",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "SELFMAP⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "numanalysis.rootfinding.fixed_point_iteration"
           ],
@@ -1490,12 +2022,16 @@
       "statement_id": "difftop.vectorfields.poincare_hopf_index_theorem",
       "template": "EULERCHAR(MANIFOLD) = sum_i INDEX_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "EULERCHAR⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
             "difftop.vectorfields.hairy_ball_theorem"
@@ -1507,6 +2043,7 @@
             1
           ],
           "skeleton": "sum⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count",
             "graphtheory.degree.handshake_lemma",
@@ -1520,12 +2057,16 @@
       "statement_id": "difftop.vectorfields.hairy_ball_theorem",
       "template": "EULERCHAR(MANIFOLD) = 0",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "EULERCHAR⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
             "difftop.vectorfields.poincare_hopf_index_theorem"
@@ -1538,12 +2079,16 @@
       "statement_id": "economics.finance.continuous_compounding",
       "template": "VALUE = PRINCIPAL * EXP(RATE * TIME)",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, EXP⟨*(?1:P, ?2:V)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.growth.exponential_growth_law"
           ],
@@ -1555,6 +2100,7 @@
             1
           ],
           "skeleton": "EXP⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1565,6 +2111,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1580,12 +2127,16 @@
       "statement_id": "economics.finance.present_value_continuous",
       "template": "PRESENT = FUTURE * EXP(-(RATE * HORIZON))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, EXP⟨neg(*(?1:P, ?2:V))⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.kinetics.first_order_integrated_rate_law",
             "ml.policy.boltzmann_softmax_policy"
@@ -1598,6 +2149,7 @@
             1
           ],
           "skeleton": "EXP⟨neg(*(?0:P, ?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1608,6 +2160,7 @@
             0
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -1621,6 +2174,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1636,6 +2190,9 @@
       "statement_id": "economics.finance.simple_interest",
       "template": "VALUE = PRINCIPAL * (1 + RATE * TIME)",
       "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -1644,6 +2201,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1659,18 +2217,25 @@
       "statement_id": "economics.finance.compound_interest_discrete",
       "template": "VALUE = PRINCIPAL * (1 + RATE)^PERIODS",
       "groundedness": 0.0,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "economics.microeconomics.price_elasticity_of_demand",
       "template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -1687,6 +2252,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -1696,18 +2262,25 @@
       "statement_id": "economics.macroeconomics.gdp_expenditure_identity",
       "template": "OUTPUT = CONSUMPTION + INVESTMENT + GOVERNMENT + NET_EXPORTS",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "economics.monetary.equation_of_exchange",
       "template": "MONEY * VELOCITY = PRICE_LEVEL * OUTPUT",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "geometry.area_formulas.rectangle_area_formula",
@@ -1721,6 +2294,7 @@
             1
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "geometry.area_formulas.rectangle_area_formula",
@@ -1735,6 +2309,9 @@
       "statement_id": "economics.production.cobb_douglas_production_function",
       "template": "OUTPUT = PRODUCTIVITY * CAPITAL^CAPITAL_SHARE * LABOR^LABOR_SHARE",
       "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -1742,6 +2319,7 @@
             1
           ],
           "skeleton": "^(?0:V, ?1:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -1751,6 +2329,7 @@
             2
           ],
           "skeleton": "^(?0:V, ?1:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -1760,12 +2339,16 @@
       "statement_id": "economics.finance.capm_expected_return",
       "template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.macroeconomics.keynesian_consumption_function",
@@ -1781,6 +2364,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1796,12 +2380,16 @@
       "statement_id": "economics.macroeconomics.keynesian_consumption_function",
       "template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
@@ -1817,6 +2405,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1832,12 +2421,16 @@
       "statement_id": "economics.macroeconomics.fisher_equation",
       "template": "NOMINAL approx REAL + INFLATION",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity"
           ],
@@ -1849,12 +2442,16 @@
       "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
       "template": "POINT = sum_i BASIS_i*CONTROL_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.betti_alternating_sum",
             "geomodel.barycentric.barycentric_point_reconstruction",
@@ -1868,6 +2465,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1883,12 +2481,16 @@
       "statement_id": "geomodel.bezier.de_casteljau_step",
       "template": "INTERMEDIATE = (1 - PARAM)*LEFT + PARAM*RIGHT",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "numanalysis.interpolation.linear_interpolation"
           ],
@@ -1900,6 +2502,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1915,6 +2518,7 @@
             1
           ],
           "skeleton": "*(?0:V, +(1, neg(?1:P)))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -1925,6 +2529,7 @@
             1
           ],
           "skeleton": "+(1, neg(?0:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -1936,6 +2541,7 @@
             1
           ],
           "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -1945,18 +2551,25 @@
       "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
       "template": "sum_i BARY_i = 1",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
       "template": "POINT = sum_i BARY_i*VERTEX_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.betti_alternating_sum",
             "geomodel.bezier.bernstein_bezier_evaluation",
@@ -1970,6 +2583,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -1985,12 +2599,16 @@
       "statement_id": "geomodel.transforms.homogeneous_rigid_transform",
       "template": "POINTNEW = ROTATION*POINT + TRANSLATION",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
@@ -2006,6 +2624,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -2021,12 +2640,18 @@
       "statement_id": "geomodel.surfaces.surface_normal_cross_product",
       "template": "NORMAL = CROSS(TANGENTU, TANGENTV)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "geomodel.quaternions.unit_quaternion_constraint",
       "template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
       "groundedness": 0.8,
+      "considered": 5,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2034,6 +2659,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2048,6 +2674,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2062,6 +2689,7 @@
             2
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2076,6 +2704,7 @@
             3
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2090,12 +2719,16 @@
       "statement_id": "geomodel.bezier.endpoint_tangent",
       "template": "TANGENT = DEGREE*(CONTROLONE - CONTROLZERO)",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, +(?1:V, neg(?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -2105,6 +2738,7 @@
             1
           ],
           "skeleton": "+(?0:V, neg(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.betti_number_rank"
           ],
@@ -2117,6 +2751,7 @@
             1
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -2126,12 +2761,16 @@
       "statement_id": "geometry.right_triangles.pythagorean_theorem",
       "template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "+(^(?0:V, 2), ^(?1:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element"
           ],
@@ -2143,6 +2782,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2156,6 +2796,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2168,6 +2809,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2181,12 +2823,16 @@
       "statement_id": "geometry.area_formulas.rectangle_area_formula",
       "template": "AREA = DIM1 * DIM2",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -2201,6 +2847,9 @@
       "statement_id": "geometry.perimeter_formulas.rectangle_perimeter_formula",
       "template": "PERIMETER = 2 * (DIM1 + DIM2)",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2208,6 +2857,7 @@
             1
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
@@ -2220,12 +2870,16 @@
       "statement_id": "geometry.circle_formulas.circle_circumference_formula",
       "template": "CIRCUMFERENCE = CONSTANT * RADIUS",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "numanalysis.floatingpoint.machine_epsilon_bound",
@@ -2240,12 +2894,16 @@
       "statement_id": "geometry.area_formulas.circle_area_formula",
       "template": "AREA = CONSTANT * RADIUS^2",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ^(?1:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.surface_area_formulas.cube_surface_area",
             "geometry.surface_area_formulas.sphere_surface_area"
@@ -2258,6 +2916,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2272,6 +2931,9 @@
       "statement_id": "geometry.volume_formulas.sphere_volume_formula",
       "template": "VOLUME = CONSTANT * RADIUS^3",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2279,6 +2941,7 @@
             1
           ],
           "skeleton": "^(?0:V, 3)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.volume_formulas.cube_volume_formula"
           ],
@@ -2290,18 +2953,25 @@
       "statement_id": "geometry.volume_formulas.rectangular_prism_volume",
       "template": "VOLUME = DIM1 * DIM2 * DIM3",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "geometry.volume_formulas.cube_volume_formula",
       "template": "VOLUME = SIDE^3",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "^(?0:V, 3)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -2311,12 +2981,16 @@
       "statement_id": "geometry.area_formulas.square_area_formula",
       "template": "AREA = SIDE^2",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2330,12 +3004,16 @@
       "statement_id": "geometry.surface_area_formulas.cube_surface_area",
       "template": "AREA = CONSTANT * SIDE^2",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ^(?1:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.area_formulas.circle_area_formula",
             "geometry.surface_area_formulas.sphere_surface_area"
@@ -2348,6 +3026,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2362,12 +3041,16 @@
       "statement_id": "geometry.surface_area_formulas.sphere_surface_area",
       "template": "AREA = CONSTANT * RADIUS^2",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ^(?1:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.area_formulas.circle_area_formula",
             "geometry.surface_area_formulas.cube_surface_area"
@@ -2380,6 +3063,7 @@
             1
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2394,12 +3078,16 @@
       "statement_id": "geometry.area_formulas.triangle_area_formula",
       "template": "AREA = CONSTANT * BASE * HEIGHT",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, ?2:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.spectroscopy.beer_lambert_law"
           ],
@@ -2411,6 +3099,9 @@
       "statement_id": "geometry.circle_formulas.circle_area_from",
       "template": "AREA = CIRCUMFERENCE^2 / CONSTANT",
       "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2418,6 +3109,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2432,6 +3124,7 @@
             1
           ],
           "skeleton": "inv(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         }
@@ -2441,6 +3134,9 @@
       "statement_id": "geometry.metric_geometry.euclidean_distance_formula",
       "template": "DISTANCE = SQRT(SUM(DELTA^2))",
       "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2449,6 +3145,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -2463,12 +3160,16 @@
       "statement_id": "geometry.area_formulas.trapezoid_area_formula",
       "template": "AREA = CONSTANT * (BASE1 + BASE2) * HEIGHT",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, +(?2:V, ?3:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "numanalysis.integration.trapezoidal_rule"
           ],
@@ -2480,6 +3181,7 @@
             2
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
@@ -2492,12 +3194,16 @@
       "statement_id": "geotop.polyhedra.euler_polyhedron_formula",
       "template": "VERTICES - EDGES + FACES = 2",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, ?1:V, neg(?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_complex"
           ],
@@ -2509,6 +3215,7 @@
             2
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -2517,19 +3224,66 @@
     {
       "statement_id": "geotop.point_set.interior_boundary_exterior_partition",
       "template": "JOIN(INTERIOR(REGION), JOIN(BOUNDARY(REGION), EXTERIOR(REGION))) = UNIVERSE",
-      "groundedness": 0.0,
-      "constituents": []
+      "groundedness": 0.4,
+      "considered": 5,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "JOIN⟨INTERIOR⟨?0:V⟩, JOIN⟨BOUNDARY⟨?0:V⟩, EXTERIOR⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "JOIN⟨BOUNDARY⟨?0:V⟩, EXTERIOR⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        }
+      ]
     },
     {
       "statement_id": "geotop.predicates.containment_transitivity",
       "template": "IMPLIES(MEET(LEQ(REGA, REGB), LEQ(REGB, REGC)), LEQ(REGA, REGC))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -2539,6 +3293,7 @@
             0
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2548,6 +3303,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2556,6 +3312,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -2565,18 +3322,25 @@
       "statement_id": "geotop.predicates.adjacency_symmetry",
       "template": "IMPLIES(TOUCHES(REGA, REGB), TOUCHES(REGB, REGA))",
       "groundedness": 0.0,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "geotop.predicates.de9im_disjoint",
       "template": "MEET(REGA, REGB) = EMPTYSET",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -2586,12 +3350,16 @@
       "statement_id": "geotop.measure.area_inclusion_exclusion",
       "template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
       "groundedness": 1.0,
+      "considered": 8,
+      "grounded_exact": 8,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "infotheory.mutualinfo.entropy_inclusion_exclusion",
@@ -2605,6 +3373,7 @@
             0
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         },
@@ -2613,6 +3382,7 @@
             1
           ],
           "skeleton": "+(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "infotheory.mutualinfo.entropy_inclusion_exclusion",
@@ -2626,6 +3396,7 @@
             0
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2635,6 +3406,7 @@
             1
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2644,6 +3416,7 @@
             2
           ],
           "skeleton": "neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -2654,6 +3427,7 @@
             0
           ],
           "skeleton": "CARD⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -2665,6 +3439,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -2676,12 +3451,16 @@
       "statement_id": "geotop.measure.area_monotonicity",
       "template": "IMPLIES(LEQ(REGA, REGB), CARD(REGA) <= CARD(REGB))",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2691,6 +3470,7 @@
             0
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2700,6 +3480,7 @@
             1
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -2709,12 +3490,16 @@
       "statement_id": "graphtheory.degree.handshake_lemma",
       "template": "sum_i DEGREE_i = 2*EDGES",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "sum⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count",
             "difftop.vectorfields.poincare_hopf_index_theorem",
@@ -2728,6 +3513,9 @@
       "statement_id": "graphtheory.degree.average_degree_from_edge_count",
       "template": "AVGDEGREE = 2*EDGES/VERTICES",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2735,6 +3523,7 @@
             2
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -2744,6 +3533,9 @@
       "statement_id": "graphtheory.enumeration.complete_graph_edge_count",
       "template": "EDGES = VERTICES*(VERTICES - 1)/2",
       "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -2751,6 +3543,7 @@
             1
           ],
           "skeleton": "+(?0:V, neg(1))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "graphtheory.trees.tree_edge_count"
           ],
@@ -2763,6 +3556,7 @@
             1
           ],
           "skeleton": "neg(1)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -2772,6 +3566,7 @@
             2
           ],
           "skeleton": "inv(2)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -2781,12 +3576,16 @@
       "statement_id": "graphtheory.enumeration.complete_bipartite_edge_count",
       "template": "EDGES = PARTONE*PARTTWO",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -2801,12 +3600,16 @@
       "statement_id": "graphtheory.trees.tree_edge_count",
       "template": "EDGES = VERTICES - 1",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(1))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -2816,6 +3619,7 @@
             1
           ],
           "skeleton": "neg(1)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         }
@@ -2825,30 +3629,43 @@
       "statement_id": "graphtheory.enumeration.cayley_formula",
       "template": "TREES = VERTICES^(VERTICES - 2)",
       "groundedness": 0.0,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "graphtheory.walks.adjacency_power_walk_count",
       "template": "WALKS = MATRIXPOWER(ADJACENCY, LENGTH)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "graphtheory.planarity.planar_edge_bound",
       "template": "EDGES <= 3*VERTICES - 6",
       "groundedness": 0.0,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "infotheory.entropy.shannon_entropy",
       "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(*(?0:P, sum⟨*(?1:V, LOG⟨?1:V⟩)⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.thermodynamics.gibbs_entropy"
           ],
@@ -2860,6 +3677,7 @@
             0
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨?1:V⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -2870,6 +3688,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨?0:V⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -2881,6 +3700,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -2893,6 +3713,7 @@
             1
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -2901,14 +3722,37 @@
     {
       "statement_id": "infotheory.entropy.uniform_entropy",
       "template": "INFORMATION = BASESCALE * LOG(ALPHABETSIZE)",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(?0:P, LOG⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 10
+        },
         {
           "path": [
             1,
             1
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -2918,12 +3762,16 @@
       "statement_id": "infotheory.entropy.surprisal",
       "template": "SURPRISAL = -(LOG(WEIGHT))",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(LOG⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.acid_base.ph_definition"
           ],
@@ -2935,6 +3783,7 @@
             0
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -2943,19 +3792,57 @@
     {
       "statement_id": "infotheory.mutualinfo.mutual_information",
       "template": "SHAREDINFORMATION = ENTROPYOF(FIRST) + ENTROPYOF(SECOND) - ENTROPYOF(FIRST, SECOND)",
-      "groundedness": 0.0,
-      "constituents": []
+      "groundedness": 0.4,
+      "considered": 5,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(ENTROPYOF⟨?0:V⟩, ENTROPYOF⟨?1:V⟩, neg(ENTROPYOF⟨?0:V, ?1:V⟩))",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(?0:V, ?1:V, neg(?2:V))",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_complex",
+            "geotop.polyhedra.euler_polyhedron_formula"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "neg(ENTROPYOF⟨?0:V, ?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "neg(?0:P)",
+          "pattern_known_from": [
+            "algebra.polynomial_equations.quadratic_formula",
+            "geomodel.bezier.de_casteljau_step",
+            "ml.preference.grpo_group_relative_advantage",
+            "numanalysis.interpolation.linear_interpolation",
+            "probstat.transform.z_standardization"
+          ],
+          "pattern_recurs_in_n_statements": 5
+        }
+      ]
     },
     {
       "statement_id": "infotheory.mutualinfo.entropy_inclusion_exclusion",
       "template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
       "groundedness": 1.0,
+      "considered": 8,
+      "grounded_exact": 8,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "geotop.measure.area_inclusion_exclusion",
@@ -2969,6 +3856,7 @@
             0
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         },
@@ -2977,6 +3865,7 @@
             1
           ],
           "skeleton": "+(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "geotop.measure.area_inclusion_exclusion",
@@ -2990,6 +3879,7 @@
             0
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -2999,6 +3889,7 @@
             1
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -3008,6 +3899,7 @@
             2
           ],
           "skeleton": "neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -3018,6 +3910,7 @@
             0
           ],
           "skeleton": "CARD⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -3029,6 +3922,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -3040,12 +3934,18 @@
       "statement_id": "infotheory.channel.channel_capacity",
       "template": "CAPACITY = CAPMAX(SHAREDINFORMATION, INPUTDISTRIBUTION)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "infotheory.coding.kraft_inequality",
       "template": "sum_i RADIX^(-(CODELENGTH_i)) <= 1",
       "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -3054,6 +3954,7 @@
             1
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -3063,12 +3964,16 @@
       "statement_id": "infotheory.divergence.cross_entropy",
       "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(*(?0:P, sum⟨*(?1:V, LOG⟨?2:V⟩)⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "ml.objective.token_cross_entropy_loss"
           ],
@@ -3080,6 +3985,7 @@
             0
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨?2:V⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3090,6 +3996,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨?1:V⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3101,6 +4008,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨?1:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3113,6 +4021,7 @@
             1
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -3122,12 +4031,16 @@
       "statement_id": "infotheory.divergence.kl_divergence",
       "template": "DIVERGENCE = BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i / MODELWEIGHT_i)",
       "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 6,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨*(?1:V, inv(?2:V))⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "infotheory.divergence.gibbs_inequality"
           ],
@@ -3139,6 +4052,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨*(?0:V, inv(?1:V))⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3149,6 +4063,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨*(?0:V, inv(?1:V))⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3160,6 +4075,7 @@
             1
           ],
           "skeleton": "LOG⟨*(?0:V, inv(?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -3172,6 +4088,7 @@
             0
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -3193,6 +4110,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -3202,12 +4120,16 @@
       "statement_id": "infotheory.divergence.gibbs_inequality",
       "template": "BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i / MODELWEIGHT_i) >= 0",
       "groundedness": 1.0,
+      "considered": 6,
+      "grounded_exact": 6,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨*(?1:V, inv(?2:V))⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "infotheory.divergence.kl_divergence"
           ],
@@ -3219,6 +4141,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨*(?0:V, inv(?1:V))⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3229,6 +4152,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨*(?0:V, inv(?1:V))⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3240,6 +4164,7 @@
             1
           ],
           "skeleton": "LOG⟨*(?0:V, inv(?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -3252,6 +4177,7 @@
             0
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -3273,6 +4199,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -3282,12 +4209,16 @@
       "statement_id": "logic.boolean_laws.de_morgan_laws",
       "template": "NEG(MEET(PROP1, PROP2)) = JOIN(NEG(PROP1), NEG(PROP2))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.de_morgan_laws"
           ],
@@ -3299,6 +4230,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         },
@@ -3308,6 +4240,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         },
@@ -3316,6 +4249,7 @@
             1
           ],
           "skeleton": "NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.de_morgan_laws"
           ],
@@ -3327,6 +4261,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -3338,12 +4273,16 @@
       "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
       "template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.distributivity_meet_over_join"
           ],
@@ -3355,6 +4294,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -3366,6 +4306,7 @@
             1
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -3376,6 +4317,7 @@
             1
           ],
           "skeleton": "MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.distributivity_meet_over_join"
           ],
@@ -3387,6 +4329,7 @@
             1
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         }
@@ -3396,12 +4339,16 @@
       "statement_id": "logic.boolean_laws.double_negation",
       "template": "NEG(NEG(PROP1)) = PROP1",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "NEG⟨NEG⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.double_negation"
           ],
@@ -3413,6 +4360,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -3422,12 +4370,16 @@
       "statement_id": "logic.boolean_laws.absorption",
       "template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.absorption"
           ],
@@ -3439,6 +4391,7 @@
             1
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         }
@@ -3448,12 +4401,16 @@
       "statement_id": "logic.boolean_laws.identity_laws",
       "template": "MEET(PROP1, TRUTH) = PROP1",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, ?1:P⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.identity_laws"
           ],
@@ -3465,12 +4422,16 @@
       "statement_id": "logic.boolean_laws.complement_laws",
       "template": "MEET(PROP1, NEG(PROP1)) = FALSITY",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, NEG⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "narrative.frame.frame_consistency",
             "settheory.boolean_laws.complement_laws"
@@ -3483,6 +4444,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -3492,12 +4454,16 @@
       "statement_id": "logic.boolean_laws.idempotence",
       "template": "MEET(PROP1, PROP1) = PROP1",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, ?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "settheory.boolean_laws.idempotence"
           ],
@@ -3508,14 +4474,31 @@
     {
       "statement_id": "logic.inference.modus_ponens",
       "template": "IMPLIES(MEET(IMPLIES(PROP1, PROP2), PROP1), PROP2)",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨IMPLIES⟨?0:V, ?1:V⟩, ?0:V⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "IMPLIES⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.inference.contraposition"
           ],
@@ -3526,15 +4509,31 @@
     {
       "statement_id": "logic.inference.contraposition",
       "template": "IMPLIES(PROP1, PROP2) = IMPLIES(NEG(PROP2), NEG(PROP1))",
-      "groundedness": 0.75,
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "IMPLIES⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "IMPLIES⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
         },
         {
           "path": [
@@ -3542,6 +4541,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         },
@@ -3551,6 +4551,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -3560,18 +4561,25 @@
       "statement_id": "logic.inference.ex_falso_quodlibet",
       "template": "IMPLIES(FALSITY, PROP1)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "logic.inference.reductio_ad_absurdum",
       "template": "IMPLIES(IMPLIES(PROP1, FALSITY), NEG(PROP1))",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -3581,6 +4589,9 @@
       "statement_id": "ml.recurrence.elman_rnn_hidden_state",
       "template": "HIDDENNEXT = ACTIVATION(WEIGHTREC*HIDDEN + WEIGHTIN*INPUT + BIAS)",
       "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -3588,6 +4599,7 @@
             0
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V), *(?3:P, ?4:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3598,6 +4610,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3614,6 +4627,7 @@
             2
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3629,6 +4643,9 @@
       "statement_id": "ml.recurrence.lstm_gate_activation",
       "template": "GATE = SIGMOID(WEIGHTIN*INPUT + WEIGHTREC*HIDDEN + BIAS)",
       "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -3636,6 +4653,7 @@
             0
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V), *(?3:P, ?4:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3646,6 +4664,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3662,6 +4681,7 @@
             2
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3677,12 +4697,16 @@
       "statement_id": "ml.recurrence.linear_ssm_state_update",
       "template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3692,6 +4716,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3707,6 +4732,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3721,7 +4747,10 @@
     {
       "statement_id": "ml.recurrence.mlstm_matrix_memory_update",
       "template": "MEMORYNEXT = FORGETGATE*MEMORY + INPUTGATE*OUTER(VALUE, KEY)",
-      "groundedness": 0.25,
+      "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
@@ -3729,6 +4758,7 @@
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -3737,6 +4767,26 @@
             "physics.thermodynamics.ideal_gas_law"
           ],
           "recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:V, OUTER⟨?1:V, ?2:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.policy.ppo_clipped_surrogate"
+          ],
+          "pattern_recurs_in_n_statements": 9
         }
       ]
     },
@@ -3744,18 +4794,25 @@
       "statement_id": "ml.recurrence.belief_state_update",
       "template": "STATENEXT = UPDATE(STATE, OBSERVATION)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "ml.optimization.gradient_descent_step",
       "template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(*(?1:P, ?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "ml.objective.kl_regularized_rl_objective"
           ],
@@ -3767,6 +4824,7 @@
             1
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -3779,6 +4837,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3794,12 +4853,16 @@
       "statement_id": "ml.policy.boltzmann_softmax_policy",
       "template": "PROBABILITY = INVPARTITION * EXP(-(INVTEMPERATURE * ENERGY))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, EXP⟨neg(*(?1:P, ?2:V))⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.kinetics.first_order_integrated_rate_law",
             "economics.finance.present_value_continuous"
@@ -3812,6 +4875,7 @@
             1
           ],
           "skeleton": "EXP⟨neg(*(?0:P, ?1:V))⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -3822,6 +4886,7 @@
             0
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -3835,6 +4900,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3850,12 +4916,16 @@
       "statement_id": "ml.objective.token_cross_entropy_loss",
       "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(*(?0:P, sum⟨*(?1:V, LOG⟨?2:V⟩)⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "infotheory.divergence.cross_entropy"
           ],
@@ -3867,6 +4937,7 @@
             0
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨?2:V⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3877,6 +4948,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨?1:V⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3888,6 +4960,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨?1:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -3900,6 +4973,7 @@
             1
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -3909,12 +4983,16 @@
       "statement_id": "ml.objective.kl_regularized_rl_objective",
       "template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:V, neg(*(?1:P, ?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "ml.optimization.gradient_descent_step"
           ],
@@ -3926,6 +5004,7 @@
             1
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.mechanics.hookes_law"
           ],
@@ -3938,6 +5017,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -3953,12 +5033,16 @@
       "statement_id": "ml.policy.policy_probability_ratio",
       "template": "RATIO = POLICYNEW / POLICYOLD",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -3975,6 +5059,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -3983,7 +5068,10 @@
     {
       "statement_id": "ml.policy.ppo_clipped_surrogate",
       "template": "SURROGATE = MINOF(RATIO*ADVANTAGE, CLIPCALL(RATIO, LOWERBOUND, UPPERBOUND)*ADVANTAGE)",
-      "groundedness": 0.25,
+      "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
@@ -3991,6 +5079,7 @@
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -3999,14 +5088,69 @@
             "physics.thermodynamics.ideal_gas_law"
           ],
           "recurs_in_n_statements": 10
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(?0:V, CLIPCALL⟨?1:V, ?2:P, ?3:P⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "*(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "calculus.differentiation.product_rule",
+            "chemistry.thermodynamics.gibbs_free_energy",
+            "chemistry.thermodynamics.helmholtz_free_energy",
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "ml.recurrence.mlstm_matrix_memory_update"
+          ],
+          "pattern_recurs_in_n_statements": 9
         }
       ]
     },
     {
       "statement_id": "ml.preference.dpo_preference_loss",
       "template": "LOSS = -(LOG(SIGMOID(BETA * (LOGRATIOCHOSEN - LOGRATIOREJECTED))))",
-      "groundedness": 0.5,
+      "groundedness": 0.833,
+      "considered": 6,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "neg(LOG⟨SIGMOID⟨*(?0:P, +(?1:V, neg(?2:V)))⟩⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "neg(LOG⟨?0:V⟩)",
+          "pattern_known_from": [
+            "chemistry.acid_base.ph_definition",
+            "infotheory.entropy.surprisal"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "LOG⟨SIGMOID⟨*(?0:P, +(?1:V, neg(?2:V)))⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "LOG⟨?0:V⟩",
+          "pattern_known_from": [
+            "chemistry.acid_base.ph_definition",
+            "infotheory.divergence.cross_entropy",
+            "infotheory.entropy.shannon_entropy",
+            "infotheory.entropy.surprisal",
+            "infotheory.entropy.uniform_entropy",
+            "ml.objective.token_cross_entropy_loss",
+            "physics.thermodynamics.gibbs_entropy"
+          ],
+          "pattern_recurs_in_n_statements": 7
+        },
         {
           "path": [
             1,
@@ -4015,6 +5159,7 @@
             0
           ],
           "skeleton": "*(?0:P, +(?1:V, neg(?2:V)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geomodel.bezier.endpoint_tangent"
           ],
@@ -4029,6 +5174,7 @@
             1
           ],
           "skeleton": "+(?0:V, neg(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.betti_number_rank"
           ],
@@ -4044,6 +5190,7 @@
             1
           ],
           "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
         }
@@ -4053,12 +5200,16 @@
       "statement_id": "ml.preference.grpo_group_relative_advantage",
       "template": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(+(?0:V, neg(?1:P)), inv(?2:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "probstat.transform.z_standardization"
           ],
@@ -4070,6 +5221,7 @@
             0
           ],
           "skeleton": "+(?0:V, neg(?1:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4080,6 +5232,7 @@
             1
           ],
           "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -4089,6 +5242,7 @@
             1
           ],
           "skeleton": "inv(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         }
@@ -4098,6 +5252,9 @@
       "statement_id": "ml.adaptation.lora_low_rank_update",
       "template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4105,6 +5262,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V, ?2:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "chemistry.spectroscopy.beer_lambert_law",
             "geometry.area_formulas.triangle_area_formula"
@@ -4117,12 +5275,16 @@
       "statement_id": "morphology.wordformation.affixation",
       "template": "WORD = CONCAT(STEM, SUFFIX)",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         }
@@ -4132,12 +5294,16 @@
       "statement_id": "morphology.wordformation.iterated_affixation",
       "template": "WORD = CONCAT(CONCAT(STEM, SUFFIX1), SUFFIX2)",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "CONCAT⟨CONCAT⟨?0:V, ?1:V⟩, ?2:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.concat_associativity"
           ],
@@ -4149,6 +5315,7 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4159,14 +5326,30 @@
     {
       "statement_id": "morphology.wordformation.concat_associativity",
       "template": "CONCAT(CONCAT(FIRST, SECOND), THIRD) = CONCAT(FIRST, CONCAT(SECOND, THIRD))",
-      "groundedness": 0.75,
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "CONCAT⟨?0:V, CONCAT⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "CONCAT⟨?0:V, ?1:P⟩",
+          "pattern_known_from": [
+            "morphology.wordformation.zero_morpheme_identity"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
         {
           "path": [
             0,
             1
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4177,6 +5360,7 @@
             1
           ],
           "skeleton": "CONCAT⟨CONCAT⟨?0:V, ?1:V⟩, ?2:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.iterated_affixation"
           ],
@@ -4188,6 +5372,7 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4199,12 +5384,18 @@
       "statement_id": "morphology.wordformation.zero_morpheme_identity",
       "template": "CONCAT(STEM, EMPTY) = STEM",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "morphology.quantity.morpheme_count_additivity",
       "template": "LENGTH(CONCAT(FIRST, SECOND)) = LENGTH(FIRST) + LENGTH(SECOND)",
-      "groundedness": 0.2,
+      "groundedness": 0.4,
+      "considered": 5,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
@@ -4212,24 +5403,59 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
           "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(LENGTH⟨?0:V⟩, LENGTH⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "+(?0:V, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.chain_rank_nullity",
+            "calculus.limits.derivative_definition",
+            "economics.macroeconomics.fisher_equation",
+            "geometry.area_formulas.trapezoid_area_formula",
+            "geometry.perimeter_formulas.rectangle_perimeter_formula",
+            "numanalysis.integration.trapezoidal_rule"
+          ],
+          "pattern_recurs_in_n_statements": 6
         }
       ]
     },
     {
       "statement_id": "morphology.semantics.compositionality",
       "template": "MEANING(CONCAT(FIRST, SECOND)) = COMPOSE(MEANING(FIRST), MEANING(SECOND))",
-      "groundedness": 0.2,
+      "groundedness": 0.4,
+      "considered": 5,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "COMPOSE⟨MEANING⟨?0:V⟩, MEANING⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "COMPOSE⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "calculus.differentiation.chain_rule",
+            "difftop.degree.degree_multiplicativity"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             1,
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4241,18 +5467,25 @@
       "statement_id": "morphology.inflection.paradigm_realization",
       "template": "SURFACE = REALIZE(LEMMA, FEATURES)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "morphology.inflection.category_preservation",
       "template": "CATEGORY(CONCAT(STEM, INFLECTION)) = CATEGORY(STEM)",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CATEGORY⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.derivation.category_from_affix"
           ],
@@ -4263,6 +5496,7 @@
             1
           ],
           "skeleton": "CATEGORY⟨CONCAT⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.derivation.category_from_affix"
           ],
@@ -4274,6 +5508,7 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4285,12 +5520,16 @@
       "statement_id": "morphology.derivation.category_from_affix",
       "template": "CATEGORY(CONCAT(STEM, DERIVATION)) = CATEGORY(DERIVATION)",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CATEGORY⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.inflection.category_preservation"
           ],
@@ -4301,6 +5540,7 @@
             1
           ],
           "skeleton": "CATEGORY⟨CONCAT⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.inflection.category_preservation"
           ],
@@ -4312,6 +5552,7 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4323,6 +5564,9 @@
       "statement_id": "morphology.agreement.feature_percolation",
       "template": "FEAT(CONCAT(STEM, INFLECTION)) = FEAT(INFLECTION)",
       "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4330,6 +5574,7 @@
             0
           ],
           "skeleton": "CONCAT⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "morphology.wordformation.affixation"
           ],
@@ -4338,40 +5583,78 @@
       ]
     },
     {
+      "statement_id": "morphology.syntax.iterated_intensification",
+      "template": "PHRASE = MOD(MOD(BASE, INTENSIFIER1), INTENSIFIER2)",
+      "groundedness": 0.0,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
+      "constituents": []
+    },
+    {
       "statement_id": "narrative.structure.story_sequence",
       "template": "STORY = SEQUENCE(SETUP, COMPLICATION, RESOLUTION)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "narrative.structure.setup_introduction",
       "template": "SETUP = INTRODUCE(AGENT, DESIRE)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "narrative.structure.complication_obstruction",
       "template": "COMPLICATION = OBSTRUCT(DESIRE, OBSTACLE)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "narrative.structure.resolution_outcome",
       "template": "RESOLUTION = RESOLVE(DESIRE, OUTCOME)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "narrative.causality.precedence_causation_bridge",
       "template": "IMPLIES(MEET(BEFORE(EVENTA, EVENTB), ENABLES(EVENTA, EVENTB)), CAUSES(EVENTA, EVENTB))",
-      "groundedness": 0.25,
+      "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨BEFORE⟨?0:V, ?1:V⟩, ENABLES⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -4380,19 +5663,54 @@
     {
       "statement_id": "narrative.constraint.chekhov_gun",
       "template": "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))",
-      "groundedness": 0.0,
-      "constituents": []
+      "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "IMPLIES⟨PLANTED⟨?0:V⟩, EVENTUALLY⟨DISCHARGED⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "EVENTUALLY⟨DISCHARGED⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "EVENTUALLY⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.modality.eventually_unfolding",
+            "temporal.monotonicity.eventually_monotonicity",
+            "temporal.response.response_pattern"
+          ],
+          "pattern_recurs_in_n_statements": 3
+        }
+      ]
     },
     {
       "statement_id": "narrative.frame.frame_consistency",
       "template": "MEET(FRAMEPREMISE, NEG(FRAMEPREMISE)) = INCONSISTENCY",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, NEG⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.complement_laws",
             "settheory.boolean_laws.complement_laws"
@@ -4405,6 +5723,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -4414,6 +5733,9 @@
       "statement_id": "numanalysis.rootfinding.newton_iteration",
       "template": "XNEXT = X - FVALUE/FDERIV",
       "groundedness": 0.5,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4422,6 +5744,7 @@
             0
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -4441,6 +5764,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -4450,12 +5774,16 @@
       "statement_id": "numanalysis.rootfinding.fixed_point_iteration",
       "template": "XNEXT = SELFMAP(X)",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "SELFMAP⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.brouwer_fixed_point"
           ],
@@ -4467,6 +5795,9 @@
       "statement_id": "numanalysis.rootfinding.bisection_interval_halving",
       "template": "WIDTHNEXT = WIDTH/2",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4474,6 +5805,7 @@
             1
           ],
           "skeleton": "inv(2)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -4483,12 +5815,16 @@
       "statement_id": "numanalysis.integration.trapezoidal_rule",
       "template": "AREA = CONSTANT * (VALUELEFT + VALUERIGHT) * STEPWIDTH",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, +(?2:V, ?3:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geometry.area_formulas.trapezoid_area_formula"
           ],
@@ -4500,6 +5836,7 @@
             2
           ],
           "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
@@ -4512,6 +5849,9 @@
       "statement_id": "numanalysis.ode.euler_method_step",
       "template": "YNEXT = Y + STEPSIZE*SLOPE",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4519,6 +5859,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4534,12 +5875,16 @@
       "statement_id": "numanalysis.interpolation.linear_interpolation",
       "template": "RESULT = (1 - PARAM)*START + PARAM*FINISH",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(*(?0:P, ?1:V), *(?2:V, +(1, neg(?0:P))))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geomodel.bezier.de_casteljau_step"
           ],
@@ -4551,6 +5896,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4566,6 +5912,7 @@
             1
           ],
           "skeleton": "*(?0:V, +(1, neg(?1:P)))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4576,6 +5923,7 @@
             1
           ],
           "skeleton": "+(1, neg(?0:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4587,6 +5935,7 @@
             1
           ],
           "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -4596,12 +5945,16 @@
       "statement_id": "numanalysis.error.relative_condition_number",
       "template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -4618,6 +5971,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -4627,12 +5981,16 @@
       "statement_id": "numanalysis.floatingpoint.machine_epsilon_bound",
       "template": "ROUNDOFF <= UNITROUNDOFF*EXACT",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4647,12 +6005,16 @@
       "statement_id": "physics.mechanics.newton_second_law",
       "template": "FORCE = INERTIA * RESPONSE",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4667,12 +6029,16 @@
       "statement_id": "physics.circuits.ohms_law",
       "template": "POTENTIAL = FLOW * RESISTANCE",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4687,12 +6053,18 @@
       "statement_id": "physics.relativity.mass_energy_equivalence",
       "template": "ENERGY = MASS * SPEEDLIMIT^2",
       "groundedness": 0.0,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "physics.mechanics.kinetic_energy",
       "template": "ENERGY = CONSTANT * MASS * SPEED^2",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -4700,6 +6072,7 @@
             2
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -4714,12 +6087,16 @@
       "statement_id": "physics.mechanics.hookes_law",
       "template": "FORCE = -(STIFFNESS * DISPLACEMENT)",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(*(?0:P, ?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         },
@@ -4729,6 +6106,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -4744,12 +6122,16 @@
       "statement_id": "physics.gravitation.newton_universal_gravitation",
       "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, ?2:V, inv(^(?3:V, 2)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.electromagnetism.coulombs_law"
           ],
@@ -4761,6 +6143,7 @@
             3
           ],
           "skeleton": "inv(^(?0:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4771,6 +6154,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -4785,12 +6169,16 @@
       "statement_id": "physics.electromagnetism.coulombs_law",
       "template": "COUPLING = CONSTANT * SOURCE1 * SOURCE2 / SEPARATION^2",
       "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:P, ?1:V, ?2:V, inv(^(?3:V, 2)))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "physics.gravitation.newton_universal_gravitation"
           ],
@@ -4802,6 +6190,7 @@
             3
           ],
           "skeleton": "inv(^(?0:V, 2))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4812,6 +6201,7 @@
             0
           ],
           "skeleton": "^(?0:V, 2)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.euclidean_line_element",
             "diffgeo.surfaces.first_fundamental_form",
@@ -4826,12 +6216,16 @@
       "statement_id": "physics.thermodynamics.ideal_gas_law",
       "template": "PRESSURE * VOLUME = AMOUNT * CONSTANT * TEMPERATURE",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
             "economics.monetary.equation_of_exchange",
@@ -4846,12 +6240,16 @@
       "statement_id": "physics.kinematics.average_speed",
       "template": "RATE = QUANTITY / INTERVAL",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -4868,6 +6266,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -4877,12 +6276,16 @@
       "statement_id": "physics.materials.mass_density",
       "template": "RATE = QUANTITY / INTERVAL",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(?0:V, inv(?1:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.differentiation.average_rate_of_change",
             "chemistry.solutions.molarity_definition",
@@ -4899,6 +6302,7 @@
             1
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -4908,12 +6312,16 @@
       "statement_id": "physics.thermodynamics.gibbs_entropy",
       "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "neg(*(?0:P, sum⟨*(?1:V, LOG⟨?1:V⟩)⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "infotheory.entropy.shannon_entropy"
           ],
@@ -4925,6 +6333,7 @@
             0
           ],
           "skeleton": "*(?0:P, sum⟨*(?1:V, LOG⟨?1:V⟩)⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4935,6 +6344,7 @@
             1
           ],
           "skeleton": "sum⟨*(?0:V, LOG⟨?0:V⟩)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4946,6 +6356,7 @@
             0
           ],
           "skeleton": "*(?0:V, LOG⟨?0:V⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -4958,6 +6369,7 @@
             1
           ],
           "skeleton": "LOG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
         }
@@ -4967,12 +6379,16 @@
       "statement_id": "settheory.boolean_laws.de_morgan_laws",
       "template": "NEG(MEET(SETA, SETB)) = JOIN(NEG(SETA), NEG(SETB))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.de_morgan_laws"
           ],
@@ -4984,6 +6400,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         },
@@ -4993,6 +6410,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         },
@@ -5001,6 +6419,7 @@
             1
           ],
           "skeleton": "NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.de_morgan_laws"
           ],
@@ -5012,6 +6431,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -5023,12 +6443,16 @@
       "statement_id": "settheory.boolean_laws.distributivity_meet_over_join",
       "template": "MEET(SETA, JOIN(SETB, SETC)) = JOIN(MEET(SETA, SETB), MEET(SETA, SETC))",
       "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.distributivity_meet_over_join"
           ],
@@ -5040,6 +6464,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -5051,6 +6476,7 @@
             1
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -5061,6 +6487,7 @@
             1
           ],
           "skeleton": "MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.distributivity_meet_over_join"
           ],
@@ -5072,6 +6499,7 @@
             1
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         }
@@ -5081,12 +6509,16 @@
       "statement_id": "settheory.boolean_laws.double_negation",
       "template": "NEG(NEG(SETA)) = SETA",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "NEG⟨NEG⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.double_negation"
           ],
@@ -5098,6 +6530,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -5107,12 +6540,16 @@
       "statement_id": "settheory.boolean_laws.absorption",
       "template": "MEET(SETA, JOIN(SETA, SETB)) = SETA",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.absorption"
           ],
@@ -5124,6 +6561,7 @@
             1
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         }
@@ -5133,12 +6571,16 @@
       "statement_id": "settheory.boolean_laws.identity_laws",
       "template": "MEET(SETA, UNIVERSE) = SETA",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, ?1:P⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.identity_laws"
           ],
@@ -5150,12 +6592,16 @@
       "statement_id": "settheory.boolean_laws.complement_laws",
       "template": "MEET(SETA, NEG(SETA)) = EMPTYSET",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, NEG⟨?0:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.complement_laws",
             "narrative.frame.frame_consistency"
@@ -5168,6 +6614,7 @@
             1
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -5177,12 +6624,16 @@
       "statement_id": "settheory.boolean_laws.idempotence",
       "template": "MEET(SETA, SETA) = SETA",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "MEET⟨?0:V, ?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "logic.boolean_laws.idempotence"
           ],
@@ -5194,12 +6645,16 @@
       "statement_id": "settheory.order.subset_transitivity",
       "template": "IMPLIES(MEET(LEQ(SETA, SETB), LEQ(SETB, SETC)), LEQ(SETA, SETC))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -5209,6 +6664,7 @@
             0
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5218,6 +6674,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5226,6 +6683,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -5235,18 +6693,25 @@
       "statement_id": "settheory.order.empty_set_minimality",
       "template": "LEQ(EMPTYSET, SETA)",
       "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
       "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
       "groundedness": 1.0,
+      "considered": 8,
+      "grounded_exact": 8,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "geotop.measure.area_inclusion_exclusion",
@@ -5260,6 +6725,7 @@
             0
           ],
           "skeleton": "JOIN⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 8
         },
@@ -5268,6 +6734,7 @@
             1
           ],
           "skeleton": "+(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.invariants.euler_characteristic_valuation",
             "geotop.measure.area_inclusion_exclusion",
@@ -5281,6 +6748,7 @@
             0
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5290,6 +6758,7 @@
             1
           ],
           "skeleton": "CARD⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5299,6 +6768,7 @@
             2
           ],
           "skeleton": "neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -5309,6 +6779,7 @@
             0
           ],
           "skeleton": "CARD⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         },
@@ -5320,6 +6791,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -5331,12 +6803,16 @@
       "statement_id": "probstat.transform.affine_location_scale",
       "template": "OUT = SCALE*IN + SHIFT",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
@@ -5352,6 +6828,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -5367,6 +6844,9 @@
       "statement_id": "probstat.regression.slr_stochastic_specification",
       "template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -5374,6 +6854,7 @@
             2
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -5389,12 +6870,16 @@
       "statement_id": "probstat.regression.slr_conditional_expectation",
       "template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
       "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "+(?0:P, *(?1:P, ?2:V))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "calculus.approximation.tangent_line_linearization",
             "economics.finance.capm_expected_return",
@@ -5410,6 +6895,7 @@
             1
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -5425,12 +6911,16 @@
       "statement_id": "probstat.transform.z_standardization",
       "template": "STD = (RAW - CENTER)/SCALE",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "*(+(?0:V, neg(?1:P)), inv(?2:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "ml.preference.grpo_group_relative_advantage"
           ],
@@ -5442,6 +6932,7 @@
             0
           ],
           "skeleton": "+(?0:V, neg(?1:P))",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -5452,6 +6943,7 @@
             1
           ],
           "skeleton": "neg(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5461,6 +6953,7 @@
             1
           ],
           "skeleton": "inv(?0:P)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 4
         }
@@ -5470,12 +6963,16 @@
       "statement_id": "probstat.probability.total_probability_partition",
       "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i",
       "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "sum⟨*(?0:P, ?1:V)⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.betti_alternating_sum",
             "geomodel.barycentric.barycentric_point_reconstruction",
@@ -5489,6 +6986,7 @@
             0
           ],
           "skeleton": "*(?0:P, ?1:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "diffgeo.surfaces.gauss_bonnet_theorem",
             "geometry.circle_formulas.circle_circumference_formula",
@@ -5504,6 +7002,9 @@
       "statement_id": "probstat.probability.bayes_rule",
       "template": "POSTERIOR = LIKELIHOOD*PRIOR/NORMALIZER",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -5511,6 +7012,7 @@
             2
           ],
           "skeleton": "inv(?0:V)",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 15
         }
@@ -5520,6 +7022,9 @@
       "statement_id": "probstat.limit.clt_iid_standardized_mean",
       "template": "STANDARDIZE(AGGREGATE_n(DATA_n)) =>_d REFERENCE_LAW",
       "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
@@ -5527,6 +7032,7 @@
             0
           ],
           "skeleton": "AGGREGATE_n⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "probstat.limit.normal_approximation_sample_mean"
           ],
@@ -5538,12 +7044,16 @@
       "statement_id": "probstat.limit.normal_approximation_sample_mean",
       "template": "AGGREGATE_n(DATA) approx REF_LAW(LOC, SCALE(n))",
       "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "AGGREGATE_n⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -5553,18 +7063,25 @@
       "statement_id": "probstat.limit.law_of_large_numbers",
       "template": "LIM(AGGREGATE(SEQUENCE)) = EXPECTED_VALUE",
       "groundedness": 0.0,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
       "constituents": []
     },
     {
       "statement_id": "probstat.probability.probability_normalization",
       "template": "sum_i WEIGHT_i = 1",
       "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             1
           ],
           "skeleton": "sum⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "difftop.degree.degree_regular_value_count",
             "difftop.vectorfields.poincare_hopf_index_theorem",
@@ -5577,17 +7094,55 @@
     {
       "statement_id": "temporal.modality.temporal_duality",
       "template": "ALWAYS(PROP) = NEG(EVENTUALLY(NEG(PROP)))",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "ALWAYS⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.always_idempotence"
           ],
           "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨EVENTUALLY⟨NEG⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 9
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "EVENTUALLY⟨NEG⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "EVENTUALLY⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.modality.eventually_unfolding",
+            "temporal.monotonicity.eventually_monotonicity",
+            "temporal.response.response_pattern"
+          ],
+          "pattern_recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -5596,6 +7151,7 @@
             0
           ],
           "skeleton": "NEG⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 10
         }
@@ -5604,45 +7160,138 @@
     {
       "statement_id": "temporal.recurrence.until_unfolding",
       "template": "UNTIL(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, NEXT(UNTIL(PROPA, PROPB))))",
-      "groundedness": 0.0,
-      "constituents": []
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 3,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "JOIN⟨?0:V, MEET⟨?1:V, NEXT⟨UNTIL⟨?1:V, ?0:V⟩⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "MEET⟨?0:V, NEXT⟨UNTIL⟨?0:V, ?1:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            1
+          ],
+          "skeleton": "NEXT⟨UNTIL⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEXT⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.induction.temporal_induction_axiom",
+            "temporal.modality.next_distributes_over_meet"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        }
+      ],
+      "recursive": true,
+      "defines_head": "UNTIL",
+      "self_headed_constituents_excluded": 2
     },
     {
       "statement_id": "temporal.modality.eventually_unfolding",
       "template": "EVENTUALLY(PROP) = JOIN(PROP, NEXT(EVENTUALLY(PROP)))",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 2,
       "constituents": [
         {
           "path": [
-            0
+            1
           ],
-          "skeleton": "EVENTUALLY⟨?0:V⟩",
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "skeleton": "JOIN⟨?0:V, NEXT⟨EVENTUALLY⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
         },
         {
           "path": [
             1,
-            1,
-            0
+            1
           ],
-          "skeleton": "EVENTUALLY⟨?0:V⟩",
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "skeleton": "NEXT⟨EVENTUALLY⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEXT⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.induction.temporal_induction_axiom",
+            "temporal.modality.next_distributes_over_meet"
+          ],
+          "pattern_recurs_in_n_statements": 2
         }
-      ]
+      ],
+      "recursive": true,
+      "defines_head": "EVENTUALLY",
+      "self_headed_constituents_excluded": 2
     },
     {
       "statement_id": "temporal.modality.next_distributes_over_meet",
       "template": "NEXT(MEET(PROPA, PROPB)) = MEET(NEXT(PROPA), NEXT(PROPB))",
-      "groundedness": 0.6,
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨NEXT⟨?0:V⟩, NEXT⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "MEET⟨?0:V, ?1:P⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             0,
             0
           ],
           "skeleton": "NEXT⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         },
@@ -5652,8 +7301,21 @@
             1
           ],
           "skeleton": "NEXT⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEXT⟨MEET⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEXT⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.induction.temporal_induction_axiom"
+          ],
+          "pattern_recurs_in_n_statements": 1
         },
         {
           "path": [
@@ -5661,6 +7323,7 @@
             0
           ],
           "skeleton": "MEET⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "geotop.predicates.de9im_disjoint"
           ],
@@ -5671,13 +7334,17 @@
     {
       "statement_id": "temporal.modality.always_idempotence",
       "template": "ALWAYS(ALWAYS(PROP)) = ALWAYS(PROP)",
-      "groundedness": 0.667,
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "ALWAYS⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.temporal_duality"
           ],
@@ -5685,10 +7352,24 @@
         },
         {
           "path": [
+            1
+          ],
+          "skeleton": "ALWAYS⟨ALWAYS⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "ALWAYS⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.induction.temporal_induction_axiom",
+            "temporal.modality.temporal_duality"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
             1,
             0
           ],
           "skeleton": "ALWAYS⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.temporal_duality"
           ],
@@ -5699,8 +7380,37 @@
     {
       "statement_id": "temporal.induction.temporal_induction_axiom",
       "template": "IMPLIES(ALWAYS(IMPLIES(PROP, NEXT(PROP))), IMPLIES(PROP, ALWAYS(PROP)))",
-      "groundedness": 0.4,
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 3,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "ALWAYS⟨IMPLIES⟨?0:V, NEXT⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "ALWAYS⟨?0:V⟩",
+          "pattern_known_from": [
+            "temporal.modality.always_idempotence",
+            "temporal.modality.temporal_duality"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "IMPLIES⟨?0:V, NEXT⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
         {
           "path": [
             0,
@@ -5708,8 +7418,21 @@
             1
           ],
           "skeleton": "NEXT⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "IMPLIES⟨?0:V, ALWAYS⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
         },
         {
           "path": [
@@ -5717,6 +7440,7 @@
             1
           ],
           "skeleton": "ALWAYS⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.always_idempotence",
             "temporal.modality.temporal_duality"
@@ -5729,12 +7453,16 @@
       "statement_id": "temporal.order.precedence_transitivity",
       "template": "IMPLIES(MEET(LEQ(EVENTA, EVENTB), LEQ(EVENTB, EVENTC)), LEQ(EVENTA, EVENTC))",
       "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "MEET⟨LEQ⟨?0:V, ?1:V⟩, LEQ⟨?1:V, ?2:V⟩⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 3
         },
@@ -5744,6 +7472,7 @@
             0
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5753,6 +7482,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         },
@@ -5761,6 +7491,7 @@
             1
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
         }
@@ -5769,15 +7500,38 @@
     {
       "statement_id": "temporal.order.strict_precedence_asymmetry",
       "template": "IMPLIES(BEFORE(EVENTA, EVENTB), NEG(BEFORE(EVENTB, EVENTA)))",
-      "groundedness": 0.667,
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨BEFORE⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 10
         },
         {
           "path": [
@@ -5785,6 +7539,7 @@
             0
           ],
           "skeleton": "BEFORE⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 2
         }
@@ -5793,15 +7548,31 @@
     {
       "statement_id": "temporal.monotonicity.eventually_monotonicity",
       "template": "IMPLIES(LEQ(PROPA, PROPB), LEQ(EVENTUALLY(PROPA), EVENTUALLY(PROPB)))",
-      "groundedness": 0.75,
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
       "constituents": [
         {
           "path": [
             0
           ],
           "skeleton": "LEQ⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [],
           "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "LEQ⟨EVENTUALLY⟨?0:V⟩, EVENTUALLY⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "LEQ⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "settheory.order.empty_set_minimality"
+          ],
+          "pattern_recurs_in_n_statements": 1
         },
         {
           "path": [
@@ -5809,6 +7580,7 @@
             0
           ],
           "skeleton": "EVENTUALLY⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.eventually_unfolding"
           ],
@@ -5820,6 +7592,7 @@
             1
           ],
           "skeleton": "EVENTUALLY⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.eventually_unfolding"
           ],
@@ -5830,14 +7603,30 @@
     {
       "statement_id": "temporal.response.response_pattern",
       "template": "ALWAYS(IMPLIES(TRIGGER, EVENTUALLY(RESPONSE)))",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "IMPLIES⟨?0:V, EVENTUALLY⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
         {
           "path": [
             0,
             1
           ],
           "skeleton": "EVENTUALLY⟨?0:V⟩",
+          "grounded_via": "exact",
           "instance_of_statements": [
             "temporal.modality.eventually_unfolding"
           ],

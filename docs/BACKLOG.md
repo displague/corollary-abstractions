@@ -456,8 +456,29 @@ or commit history. Each item names the evidence that motivated it.
   purpose, avoiding near-trivial patterns, is already served by
   `op_count(gtree) < 2`).
 - **`decompose.py` rates a recursive definition as maximally ungrounded, which
-  breaks the epistemic ladder's one graded rung.**
-  `temporal.recurrence.until_unfolding`
+  breaks the epistemic ladder's one graded rung: SHIPPED** (groundedness v2).
+  `decompose.py` now detects a *definiendum* — a bare application of a named
+  head to leaves whose head recurs, under a different head, on the other side
+  of the relation — marks the statement `"recursive": true`, and drops its
+  self-headed constituents from the DENOMINATOR rather than failing them.
+  Measured: `temporal.recurrence.until_unfolding` **0.000 -> 1.000** (2
+  `UNTIL⟨?1, ?0⟩` constituents excluded as definitional; the remaining
+  `JOIN⟨...⟩`, `MEET⟨...⟩`, `NEXT⟨...⟩` all ground),
+  `temporal.modality.eventually_unfolding` **0.500 -> 1.000**. Those two are
+  the only nodes in the 197 the detector fires on, which took three guards to
+  achieve — each was measured firing wrongly first: without a `call`-only
+  restriction the Pythagorean theorem "defines" `^` and the ideal gas law
+  "defines" `*`; without requiring the other side's root head to differ,
+  `ALWAYS(ALWAYS(P)) = ALWAYS(P)`, `CATEGORY(CONCAT(STEM, AFFIX)) =
+  CATEGORY(STEM)` and contraposition all read as definitions of their own head
+  and had their denominators emptied to nothing, scoring 1.000 by vacuity. The
+  loose version inflated the corpus mean to 0.862 on 13 spurious "recursive"
+  nodes. Honest caveat: this fix *alone* would have dropped
+  `eventually_unfolding` 0.500 -> 0.000, because excluding `EVENTUALLY⟨?0⟩`
+  removes its one recognized constituent from the numerator too; it is only
+  safe together with the pattern-membership fix below, and the two shipped
+  together.
+  Original report: `temporal.recurrence.until_unfolding`
   (`UNTIL(PROPA, PROPB) = JOIN(PROPB, MEET(PROPA, NEXT(UNTIL(PROPA, PROPB))))`)
   scores **groundedness 0.000** — the lowest of the seventeen nodes in that
   seeding pass, on an axiom of a fifty-year-old logic. Cause: all five of its
@@ -491,6 +512,36 @@ or commit history. Each item names the evidence that motivated it.
   modality changes the skeleton. The general pattern it instantiates scores
   0.500 on the same formula shape, so an instance grades *lower* than its
   pattern, which inverts what the score is for.
+  **The instance-below-its-pattern half is SHIPPED** (groundedness v2): a
+  constituent that fails exact skeleton lookup is now re-tried with
+  `specialize.py`'s matcher, every known form used AS PATTERN against it, so
+  `EVENTUALLY⟨?0⟩` covers `EVENTUALLY⟨DISCHARGED⟨?0⟩⟩` by binding the slot to
+  the instantiated call. Reported per constituent as `"grounded_via":
+  "pattern"` with the form it instantiates, and counted separately from
+  `grounded_exact`. Evidence gate: the match must bind some slot to a
+  *named-head application*; slot-to-slot renaming is refused (that is a twin,
+  and accepting it would grade P-vs-V category mismatches as grounding), and
+  so are commutative absorption and identity-element binding, which are
+  specialization and where `specialize.py`'s recorded noise lives — allowing
+  them moves the mean by only +0.003 but credits e.g. Beer-Lambert's
+  `?0:P * ?1:V * ?2:V` with grounding `?0:P * D⟨?1:V⟩` by vanishing a factor.
+  Measured, 197 nodes: **corpus mean 0.700 -> 0.761**, 32 statements rise,
+  **zero fall**, scores at 0.000 fall from 28 to 24, at 1.000 rise from 106 to
+  124; 403 constituents ground exactly and 50 via pattern membership.
+  `narrative.constraint.chekhov_gun` **0.000 -> 0.500** and its abstraction
+  `temporal.response.response_pattern` **0.500 -> 1.000** — the inversion is
+  gone (the instance no longer grades *below* its pattern), and the remaining
+  gap is honest rather than mechanical: Chekhov's two ungrounded constituents
+  are exactly `PLANTED⟨?0⟩` and `DISCHARGED⟨?0⟩`, heads that occur in no other
+  statement.
+  **The vocabulary-overlap half stays OPEN.** The four
+  `narrative.structure.*` unit definitions are still 0.000 -> 0.000: they are
+  written entirely in heads no other statement uses, so no pattern can cover
+  them, and nothing short of the epistemic ladder distinguishing "new
+  primitive" from "gibberish" will move them. The rest of that seeding pass
+  did move — every other `data/temporal_logic` node now grades 1.000 — which
+  narrows the quarantine claim to nodes introducing *unshared* heads rather
+  than nodes in a new discipline.
 - **`specialize.py` produces zero edges and zero noise on call-only corpora —
   fifth confirmation, from the other side.** 468 specialization edges over the
   merged graph, none touching either of the 17 new nodes in either direction.
