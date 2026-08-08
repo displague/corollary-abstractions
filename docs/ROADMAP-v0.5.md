@@ -367,3 +367,53 @@ demo and a multi-step derivation remain one milestone in two costumes.
    HEAD_ALGEBRA; atom classification; subterm granularity; license
    confirmation). Real-Spanish follow-ups. LeanDojo extraction scaled
    past the 155-triple seed corpus.
+
+## Cognitive frames program (queued — docs/DESIGN-cognitive-frames.md)
+
+10. The 2026-08-09 direction conversation mapped theory of mind, physical
+    frames of reference, relational frame theory, self-verifying theories,
+    and the BERT/WordNet lineage onto existing machinery; the design doc
+    carries the full mapping, six registered predictions (P-CF1..6), and
+    the sequencing. Queued items, in the design's order:
+
+    - **10a — ASK return channel as ToM entry** (the agreed next slice,
+      reframed): the return path is the user-frame update rule; the user
+      is an owned frame whose bindings arrive via ASK. Multi-turn
+      golden-chicken revision is its acceptance test.
+    - **10b — physics.frames corpus lane**: velocity addition, acceleration
+      invariance, inertial-frame definition, and the rotating frame as a
+      scope that suspends an inertia law and admits centrifugal force —
+      a fictitious force IS a frame-local invention licensed by
+      suspension. Adjudicates P-CF2 (rotating frame lands in one family
+      with cartoon_gravity — first evidence scope generalizes beyond
+      fiction) and P-CF3 (Galilean addition twins an existing composition
+      family). Forces the BACKLOG frame-id convention decision on day one.
+    - **10c — frame ownership + visibility-filtered updates**: `owner` on
+      FrameSpec (additive schema change), `witnessed_by` on temporal
+      events, divergence between an agent's frame and the world *derived*
+      from event visibility rather than authored. Sally–Anne as the
+      executable demo; adjudicates P-CF1. Nested frames follow later with
+      their own leak controls.
+    - **10d — WordNet retrieval store** (parallel-safe slice): Open
+      English WordNet 2025 JSON (72 MB, external, never in git; loader
+      takes a path, feature gracefully absent without it) as a sixth
+      store — synonym bridging for request terms, RFT relations at
+      lexical scale, renderer variety with zero weight growth. Enters at
+      `empirical`, never grounds a frame verdict, never appears in
+      verified_by; the retrieval review's laundering controls gain a
+      wordnet case before shipping. License recorded in the design doc:
+      CC-BY 4.0 (OEWN) + Princeton WordNet license for inherited content;
+      ATTRIBUTION file ships with the adapter. Adjudicates P-CF6.
+    - **10e — masked skeleton modeling** (experiment track, GPU): BERT's
+      masked-LM objective transposed to structure — mask a skeleton node,
+      recover by pointing. Adjudicates P-CF5 (gains should concentrate in
+      depth OOD, not in-distribution, if the objective teaches structure).
+    - **10f — provability corpus** (small, later): GL/Löb, Gödel II,
+      consistency statements, Willard's exception as the boundary case.
+      Adjudicates P-CF4 (Löb vs temporal induction: archetype-shared
+      near-miss, not a typed twin). The companion architectural rule —
+      trust roots stay external; nothing self-attests — is recorded in
+      the design doc §4 and is citable in review.
+    - The RFT coverage table (design doc §3) becomes a living audit,
+      re-adjudicated at each release; its one open cell (deixis) is
+      closed by 10a+10b+past modalities jointly, not by a bespoke corpus.

@@ -3,6 +3,73 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Cognitive frames / lexical stores (queued from docs/DESIGN-cognitive-frames.md)
+
+- **Frame ownership is the missing half of ASK.** ASK already models the
+  user as an agent holding frame-private bindings — a theory-of-mind claim
+  with no frame to land in. `FrameSpec` needs an optional `owner`
+  (additive schema field, same pattern as `scope`); owned frames are
+  belief states that persist and update rather than demoting on exit.
+  Evidence of need: multi-turn revision ("now make the chicken lay silver
+  eggs") has nowhere to record what the user has been told vs what they
+  changed. Registered as P-CF1's substrate.
+
+- **Event visibility is authored nowhere, so false belief cannot be
+  derived.** The obligation ledger sequences events but every frame sees
+  all of them. A `witnessed_by` set per event lets an owned frame update
+  only through witnessed events — making belief/world divergence a
+  *derived* fact (Sally missed the move event) instead of an authored
+  assertion. Sally–Anne is the executable acceptance demo; nested frames
+  (beliefs about beliefs) wait for their own leak controls: grandchild
+  truths must not reach ancestors, and suspension inheritance must be an
+  explicit choice.
+
+- **physics.frames corpus lane, with the scope-generality predictions.**
+  Rotating frame = suspends inertia law + admits centrifugal premise (a
+  fictitious force IS the executor's suspension-licensed invention);
+  Galilean invariance = the world-tier/frame-local seam physics already
+  drew. P-CF2: rotating_frame families with cartoon_gravity (first
+  evidence scope generalizes beyond fiction; a miss localizes what the
+  two scope uses do not share). P-CF3: velocity addition twins an
+  existing composition family. Blocking dependency: the frame-id
+  convention decision (this section, below the fold) must be made when
+  these nodes are authored — they need frame ids on day one.
+
+- **WordNet store adapter (parallel-safe; license obligations recorded).**
+  Open English WordNet 2025 JSON at
+  `C:\Users\displ\Downloads\english-wordnet-2025-json.zip` — 73 files,
+  72 MB uncompressed, entries→senses→synsets with definitions/examples/
+  members/typed relations; shape maps 1:1 onto RetrievalItem (verified by
+  direct read). Three meaningful-extension paths (the gate for using it
+  at all): synonym bridging in the RETRIEVE miss chain (user vocabulary →
+  corpus aliases — "thesaurical twins" made literal), RFT relations at
+  lexical scale, renderer variety with zero weight growth. Hard rules:
+  enters at `empirical`; never grounds a frame verdict; never in
+  verified_by; laundering controls (retrieval review F1) gain a wordnet
+  case before shipping; 72 MB stays external with graceful absence (a
+  reduced CC-BY-permitted extract MAY be committed later, regenerated
+  seed-style). Licenses: CC-BY 4.0 (github.com/globalwordnet/
+  english-wordnet) + Princeton WordNet license for inherited content
+  (wordnet.princeton.edu/license-and-commercial-use); the zip carries no
+  license file, so an ATTRIBUTION note must ship beside any store
+  artifact. P-CF6: request-term coverage improves, zero frame verdicts
+  change.
+
+- **Masked skeleton modeling (experiment track).** BERT's masked-LM
+  objective transposed to structure: mask a skeleton node or path level,
+  recover by pointing, over corpus skeletons + generated instances — a
+  self-supervised pretraining objective the pointer models never had.
+  P-CF5: gains concentrate in depth OOD (0.226 baseline) rather than
+  in-distribution, or the objective taught content, not structure.
+
+- **Provability corpus (small, later).** GL/Löb, Gödel II, a consistency
+  statement, Willard's exception as the boundary case. P-CF4: Löb vs
+  temporal_induction is an archetype-shared near-miss, not a typed twin.
+  Companion architectural rule (design doc §4, citable in review): trust
+  roots stay external — receipts prove freshness, never correctness; no
+  future slice may gate anything on the system attesting to its own
+  soundness.
+
 ## Controller / harness
 
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node
