@@ -5,19 +5,25 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Controller / harness
 
-- **`verified_by` semantic correspondence is unchecked node metadata.** The
+- **PARTIAL — `verified_by` semantic correspondence remains unchecked node
+  metadata; provenance integrity is now validated.** The
   retrieval slice's digest pins Lean artifact BYTES, and its loader checks
   the cited reference exists in the artifact and closes to `no goals` —
   but nothing checks that the theorem PROVES the statement citing it. Any
   committed node could cite `BooleanLaws.modus_ponens` and mint a "proven"
   retrieval record for an unrelated statement (post-merge review of
   5756007, finding F3; mitigated today only by the committed-data trust
-  model). The fix has two rungs: a cheap validate_nodes lint (artifact
-  path exists; reference names a real theorem; one node per theorem
-  reference, flagging shared citations), then the real check — prover
-  phase 2 regenerating the statement's formal template from the Lean
-  theorem and matching skeletons, which turns `verified_by` from
-  provenance prose into a checked edge. Until one of those lands,
+  model). The cheap first rung is SHIPPED: `validate_nodes.py` now requires
+  repository-contained artifacts whose every row is a complete
+  state–tactic–state transition and whose selected theorem reaches `no goals`;
+  resolves explicit or
+  unambiguous reference-free theorem identities; and gives every theorem
+  reference exactly one statement owner. Its capability-blind control pairs a
+  valid Boolean theorem with an unrelated gravity statement and correctly
+  demonstrates that this lint cannot detect the semantic lie. The remaining
+  fix is prover phase 2 regenerating the statement's formal template from the
+  Lean theorem and matching skeletons, which turns `verified_by` from
+  provenance prose into a checked edge. Until that lands,
   "digest-pinned proof trust" must not be read as semantic correspondence
   (retrieval.py's trust-model docstring now says so).
 

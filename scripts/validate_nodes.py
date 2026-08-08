@@ -8,6 +8,8 @@ import json
 import re
 from pathlib import Path
 
+from proof_artifacts import select_closing_transitions
+
 
 # Mirrors $defs.frameScope in schema/equation-node.schema.json. Underscores
 # are allowed in the first segment on purpose (statement_id forbids them;
@@ -24,6 +26,7 @@ FRAME_AGREEMENT_PROPS = (
     "retrieval",
     "on_exit",
 )
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_json(path: Path) -> dict:
@@ -262,6 +265,119 @@ def scope_errors(
     return errors
 
 
+def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
+    """Check that proof links name real, exclusively-owned artifact theorems.
+
+    This is intentionally the cheap provenance-integrity rung, not a proof of
+    semantic correspondence.  A valid theorem cited by the wrong statement is
+    structurally indistinguishable here; prover phase 2 must compare their
+    regenerated formal skeletons.
+    """
+    errors: list[str] = []
+    root = repo_root.resolve()
+    artifact_cache: dict[tuple[Path, str | None], str | None] = {}
+    owners: dict[tuple[str, str], set[str]] = {}
+
+    def resolve_reference(
+        artifact: str, reference: str | None, node_id: str
+    ) -> str | None:
+        artifact_path = Path(artifact)
+        if artifact_path.is_absolute():
+            errors.append(
+                f"{node_id}: verified_by artifact must be repository-relative: "
+                f"`{artifact}`"
+            )
+            return None
+        resolved = (root / artifact_path).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            errors.append(
+                f"{node_id}: verified_by artifact escapes repository root: "
+                f"`{artifact}`"
+            )
+            return None
+        if not resolved.is_file():
+            errors.append(
+                f"{node_id}: verified_by artifact does not exist: `{artifact}`"
+            )
+            return None
+        key = (resolved, reference)
+        if key in artifact_cache:
+            return artifact_cache[key]
+        try:
+            _, resolved_reference = select_closing_transitions(resolved, reference)
+        except ValueError as exc:
+            errors.append(f"{node_id}: {exc}")
+            artifact_cache[key] = None
+            return None
+        artifact_cache[key] = resolved_reference
+        return resolved_reference
+
+    for i, node in enumerate(nodes):
+        node_id = node.get("statement_id", f"<node-{i}>")
+        if "verified_by" not in node:
+            continue
+        links = node["verified_by"]
+        if not isinstance(links, list):
+            errors.append(f"{node_id}: `verified_by` must be a list")
+            continue
+        for link_index, link in enumerate(links):
+            if not isinstance(link, dict):
+                errors.append(
+                    f"{node_id}: verified_by[{link_index}] must be an object"
+                )
+                continue
+            extras = sorted(set(link) - {"system", "artifact", "reference"})
+            if extras:
+                errors.append(
+                    f"{node_id}: verified_by[{link_index}] has unexpected "
+                    f"fields: {', '.join(extras)}"
+                )
+            artifact = link.get("artifact")
+            system = link.get("system")
+            if not isinstance(system, str) or not system.strip():
+                errors.append(
+                    f"{node_id}: verified_by[{link_index}].system must be a "
+                    "non-empty string"
+                )
+                continue
+            if system != "lean4":
+                errors.append(
+                    f"{node_id}: verified_by[{link_index}].system `{system}` "
+                    "is unsupported; native transition parsing supports only "
+                    "`lean4`"
+                )
+                continue
+            if not isinstance(artifact, str) or not artifact.strip():
+                errors.append(
+                    f"{node_id}: verified_by[{link_index}].artifact must be a "
+                    "non-empty string"
+                )
+                continue
+            reference = link.get("reference")
+            if reference is not None and (
+                not isinstance(reference, str) or not reference.strip()
+            ):
+                errors.append(
+                    f"{node_id}: verified_by reference must be a non-empty "
+                    "theorem identity"
+                )
+                continue
+            reference = resolve_reference(artifact, reference, node_id)
+            if reference is None:
+                continue
+            owners.setdefault((system, reference), set()).add(node_id)
+
+    for (system, reference), node_ids in sorted(owners.items()):
+        if len(node_ids) > 1:
+            errors.append(
+                f"verified_by theorem `{system}:{reference}` is claimed by "
+                f"multiple statements: {', '.join(sorted(node_ids))}"
+            )
+    return errors
+
+
 def jsonschema_errors(schema: dict, nodes: list[dict]) -> list[str]:
     try:
         import jsonschema
@@ -281,7 +397,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--schema",
-        default="schema/equation-node.schema.json",
+        default=str(REPO_ROOT / "schema" / "equation-node.schema.json"),
         help="Path to Mathematical Statement Node schema.",
     )
     parser.add_argument(
@@ -294,7 +410,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--data-dir",
-        default="data",
+        default=str(REPO_ROOT / "data"),
         help="Base data directory scanned when --nodes is not given.",
     )
     args = parser.parse_args()
@@ -327,6 +443,12 @@ def main() -> int:
     # resolution -- also over the merged graph, since a frame may suspend
     # or be governed by nodes in another corpus.
     errors.extend(scope_errors(all_nodes))
+    # Proof-link integrity over the merged graph. This checks artifact and
+    # theorem identity plus exclusive statement ownership, but deliberately
+    # does not claim the theorem semantically corresponds to the statement.
+    errors.extend(
+        verified_by_errors(all_nodes, REPO_ROOT)
+    )
 
     if errors:
         print("Validation failed:")

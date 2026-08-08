@@ -281,7 +281,8 @@
             "minLength": 1
           },
           "reference": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       }

@@ -907,3 +907,43 @@ Frame-isolation review then preserved a valid session id and receipt while
 replacing the open frame with a `frame_local` frame. Receipt signatures now
 also cover the immutable `FrameSpec`, so the transplanted context is REFUSED.
 The frame-replay control moves the suite to 106.
+
+## Proof-link integrity lint (v0.5 follow-up)
+
+The retrieval review separated two claims that had previously traveled under
+one phrase. A digest can authenticate artifact bytes, but it cannot authenticate
+the semantic claim that a cited theorem proves the corpus statement pointing
+at it. The first, cheap governance rung is now executable in the merged-graph
+validator: artifacts must stay inside the repository, exist, decode as
+non-empty theorem-bearing JSON, resolve explicit references (or exactly one
+reference-free theorem), and give each `(system, theorem)` identity one
+statement owner.
+
+The registered live-data prediction fired: nine statements carry 16 distinct
+references, all 16 resolve, and none is multiply owned. Twelve fail-closed test
+methods exercise eighteen absent, malformed, escaping, ambiguous, empty,
+dangling, and multiply owned cases. The capability-blind control is the important result: an unrelated
+gravity statement can cite a structurally valid `BooleanLaws.modus_ponens`
+reference and this lint accepts it. The test therefore proves the boundary as
+well as the feature. Suite: 111 -> 126. Full theorem-to-statement skeleton
+comparison remains prover phase 2; until then, `verified_by` is authenticated
+provenance rather than a machine-checked semantic edge.
+
+Adversarial review invalidated the first artifact control: its fixture contained
+only a theorem-name string, so the lint had authenticated no proof transition at
+all. Parsing is now one shared closed-form operation used by validation and
+retrieval; every artifact row carries theorem, tactic, state-before, and
+state-after strings, and the selected theorem must close to `no goals`. The
+false-association control now cites the real digest-pinned extraction. Review
+also reproduced two boundary failures: malformed link shapes passed whenever
+optional `jsonschema` was unavailable, and the default CLI could not find its
+schema/data from a foreign CWD. The fallback now validates link shapes itself,
+and repository-anchored defaults work from any CWD. All three failures are
+retained as regressions.
+
+Re-review found two narrower mismatches: whitespace-only proof states counted
+as complete, and alternate system labels could evade shared ownership even
+though retrieval supports only `lean4`. Completeness now requires nonblank
+theorem, tactic, before-state, and after-state fields. Until a second parser is
+registered, every non-`lean4` system fails validation. The four blank-field
+cases and unsupported-system reproducer are retained.

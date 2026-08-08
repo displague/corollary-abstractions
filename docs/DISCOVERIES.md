@@ -13,6 +13,14 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Proof provenance integrity is cheaper than proof correspondence—and must
+  not be confused with it.** The merged validator can establish that an
+  artifact is repository-contained and well formed, that a cited theorem
+  exists, and that exactly one statement owns its identity. It cannot establish
+  that the theorem proves that statement: a deliberately unrelated gravity
+  node citing valid `BooleanLaws.modus_ponens` passes the lint. *governance rung
+  shipped; semantic edge remains open* (2026-08-08)
+
 - **Retrieval can advance state without promoting knowledge.** A VERIFIED
   RETRIEVE transition now means the exact store operation succeeded; its six
   De-Morgan results retain distinct statuses, including a derived corpus node,

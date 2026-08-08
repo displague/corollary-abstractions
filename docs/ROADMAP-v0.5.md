@@ -292,6 +292,52 @@ demo and a multi-step derivation remain one milestone in two costumes.
      as well as verifier/session/key/material. Authenticated context from an
      open frame cannot be transplanted into a `frame_local` scope, bringing the
      suite to 106 tests.
+
+     **Registered proof-link lint prediction (before implementation or
+     adjudication):** the cheap first rung of semantic-link governance changes
+     no corpus, matcher group, decomposition, or specialization report. The
+     merged-graph validator will fail closed when a `verified_by` artifact is
+     absent or malformed, when an explicit theorem reference is absent from
+     that artifact, when a reference is claimed by more than one statement,
+     when an artifact path escapes the repository, or when a reference-free
+     link does not identify exactly one theorem.
+     Existing data should remain green: all nine proof-linked statements use
+     the committed native artifact, all 16 explicit references resolve, and
+     each theorem reference has exactly one statement owner. Capability-blind
+     controls will deliberately pair a valid theorem with the wrong statement:
+     this cheap lint is predicted to ACCEPT that case, documenting that it
+     checks provenance integrity and exclusive ownership—not theorem/statement
+     semantic correspondence. The latter remains prover phase 2 work.
+
+     **Adjudication — fired, including the predicted blind spot:** the merged
+     corpus has nine proof-linked statements carrying 16 distinct theorem
+     references; every reference resolves in the committed native artifact and
+     every theorem has exactly one statement owner. Twelve fail-closed regression
+     methods exercise eighteen missing/invalid/out-of-root artifact, malformed
+     link/transition, missing or empty reference, ambiguous reference-free link,
+     and shared-theorem cases. The deliberately unrelated gravity node citing valid
+     `BooleanLaws.modus_ponens` remains accepted, as predicted: this rung makes
+     proof provenance auditable but does not manufacture semantic
+     correspondence. The suite moves 111 -> 126 tests; corpus data and all
+     structural reports remain byte-identical.
+
+     **Review corrections:** the first lint treated a theorem-name-only JSON
+     row as a proof artifact, making the capability-blind control itself
+     vacuous. Artifact parsing is now shared with retrieval: every row must be
+     a complete state–tactic–state transition and the selected theorem must
+     reach `no goals`; the false-association control cites the real committed
+     Lean extraction. Review also demonstrated that malformed `verified_by`
+     shapes bypassed the lint when optional `jsonschema` was absent, and that
+     default CLI paths failed outside the repository root. The custom fallback
+     now validates list/entry/system/artifact/field shapes itself, and only
+     default paths are repository-anchored (explicit paths retain normal CWD
+     semantics). All three reproducers are permanent controls.
+
+     Re-review then found that whitespace-only proof states still satisfied the
+     word “complete,” and that case-variant/unsupported system labels could
+     split ownership even though retrieval accepts only `lean4`. All four
+     transition fields are now nonblank, and validation rejects every proof
+     system without a registered parser. Those reproducers are permanent too.
    - **6b — `WRITE(candidate)`:** the read-side symmetry is a PROVEN-gated
      durable write. A Lean-checked or equivalently machine-verified conclusion
      may be staged as a seed-level candidate with its proof and provenance;

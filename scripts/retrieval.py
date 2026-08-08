@@ -40,6 +40,7 @@ from frames import (
     FrameState,
     Literal,
 )
+from proof_artifacts import select_closing_transitions
 from oracle_controller_demo import TRUSTED_TRIPLES_SHA256
 
 
@@ -229,64 +230,13 @@ class UnifiedKnowledgeStore:
                     if reference:
                         detail += f":{reference}"
                     detail += f" ({entry['artifact']})"
-                    if artifact_path.suffix != ".json":
-                        raise ValueError(
-                            "retrieval cannot authenticate non-JSON proof "
-                            f"artifact: {artifact_path}"
-                        )
-                    payload = json.loads(artifact_path.read_text(encoding="utf-8"))
-                    required_transition_fields = (
-                        "theorem",
-                        "tactic",
-                        "stateBefore",
-                        "stateAfter",
+                    transitions, resolved_reference = select_closing_transitions(
+                        artifact_path, reference
                     )
-                    theorem_rows = (
-                        [
-                            row
-                            for row in payload
-                            if isinstance(row, dict)
-                            and all(
-                                isinstance(row.get(field), str)
-                                for field in required_transition_fields
-                            )
-                            and bool(row["theorem"])
-                            and bool(row["tactic"])
-                        ]
-                        if isinstance(payload, list)
-                        else []
-                    )
-                    if not theorem_rows:
-                        raise ValueError(
-                            "verified_by JSON artifact has no complete theorem "
-                            f"transitions: {artifact_path}"
-                        )
-                    theorem_names = {row["theorem"] for row in theorem_rows}
-                    if reference is None and len(theorem_names) != 1:
-                        raise ValueError(
-                            "artifact-only verified_by link is ambiguous across "
-                            f"theorems {sorted(theorem_names)!r}: {artifact_path}"
-                        )
-                    transitions = theorem_rows
-                    if reference:
-                        transitions = [
-                            row
-                            for row in theorem_rows
-                            if row.get("theorem") == reference
-                        ]
-                    if reference and not transitions:
-                        raise ValueError(
-                            f"verified_by reference {reference!r} "
-                            f"is absent from {artifact_path}"
-                        )
-                    if not any(
-                        row["stateAfter"].strip().casefold() == "no goals"
-                        for row in transitions
-                    ):
-                        label = reference or "artifact"
-                        raise ValueError(
-                            f"verified_by {label!r} does not close to no goals "
-                            f"in {artifact_path}"
+                    if reference is None:
+                        detail = (
+                            f"{entry['system']}:{resolved_reference} "
+                            f"({entry['artifact']})"
                         )
                     detail += f" — {len(transitions)} extracted transitions"
                     detail += (
