@@ -21,9 +21,23 @@ Two match levels are reported:
   category (parameter-like vs variable-like) taken from `slot_schema`
 
 Typed twins are strong cross-discipline analogy candidates; shape twins are
-looser. The report also flags archetype-label drift (same skeleton, different
-hand-assigned `archetype_id`, and vice versa) and template slots missing from
-`slot_schema`.
+looser. That word "looser" is a LADDER INVARIANT, checked by this script and
+reported under `ladder_violations`: every typed twin pair must also be a shape
+twin pair. It is not automatic. `shape_key` erases slot identity, so two slot
+arguments of a commutative head compare equal, and a stable sort then preserves
+whatever order the author wrote — which makes `shape` sensitive to an argument
+order that `typed` (whose key distinguishes P from V) normalizes away, i.e.
+STRICTER than typed. `shape_resort` closes that hole by choosing, among the
+argument orders commutativity permits, the one with the lexicographically
+smallest rendering — a canonical form that depends only on the statement's
+structure and its slot-recurrence pattern, never on the authored order. Since
+an equal typed skeleton implies an equal structure-plus-recurrence class, equal
+typed then forces equal shape, and shape groups can only coarsen, never split.
+
+The report also flags archetype-label drift (same skeleton, different
+hand-assigned `archetype_id`, and vice versa), template slots missing from
+`slot_schema`, and identifiers used as a slot id in one statement and as a call
+head in another (`slot_vs_call_head_collisions`).
 
 Twin proposals are written to a report, never into the corpora: structural
 isomorphism is an analogy relation, not the logical `equivalent_to` captured
@@ -36,7 +50,8 @@ import argparse
 import json
 import re
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from itertools import permutations, product
 from pathlib import Path
 
 # --------------------------------------------------------------------------
@@ -355,19 +370,29 @@ class Parser:
 # --------------------------------------------------------------------------
 
 
-def canonicalize(node: tuple) -> tuple:
-    """Flatten and sort commutative operators; keep everything else ordered."""
+def canonicalize(node: tuple, commutative_calls: set[str] | None = None) -> tuple:
+    """Flatten and sort commutative operators; keep everything else ordered.
+
+    `commutative_calls` names the CALL heads whose arguments may be reordered.
+    It is a parameter rather than a constant because the ALIASED match level
+    canonicalizes a tree whose heads have already been rewritten into their
+    alias classes, so the pre-alias spellings in `COMMUTATIVE_CALL_HEADS` no
+    longer match anything; see `ALIASED_COMMUTATIVE_CALL_HEADS`.
+    """
+    if commutative_calls is None:
+        commutative_calls = COMMUTATIVE_CALL_HEADS
     kind = node[0]
     if kind in {"num", "slot"}:
         return node
     if kind == "rel":
         rel, (lhs, rhs) = node[1], node[2]
-        lhs, rhs = canonicalize(lhs), canonicalize(rhs)
+        lhs = canonicalize(lhs, commutative_calls)
+        rhs = canonicalize(rhs, commutative_calls)
         if rel in SYMMETRIC_RELATIONS and shape_key(lhs) > shape_key(rhs):
             lhs, rhs = rhs, lhs
         return ("rel", rel, (lhs, rhs))
     name = node[1]
-    args = [canonicalize(a) for a in node[2]]
+    args = [canonicalize(a, commutative_calls) for a in node[2]]
     if kind == "op" and name in COMMUTATIVE:
         flat: list[tuple] = []
         for a in args:
@@ -377,7 +402,7 @@ def canonicalize(node: tuple) -> tuple:
                 flat.append(a)
         flat.sort(key=shape_key)
         return ("op", name, tuple(flat))
-    if kind == "call" and name in COMMUTATIVE_CALL_HEADS and len(args) > 1:
+    if kind == "call" and name in commutative_calls and len(args) > 1:
         # Sort only. Call heads are binary throughout data/, so ordering two
         # arguments by shape key is the whole of commutativity for them; and
         # flattening would need the separate `associative` declaration, which
@@ -397,10 +422,13 @@ def shape_key(node: tuple) -> str:
     return f"{kind}:{head}({','.join(shape_key(a) for a in node[2])})"
 
 
-def typed_resort(node: tuple, slot_class: dict[str, str]) -> tuple:
+def typed_resort(node: tuple, slot_class: dict[str, str],
+                 commutative_calls: set[str] | None = None) -> tuple:
     """Re-sort commutative args with slot categories visible, so typed
     skeletons are invariant to `P*V` vs `V*P` orderings that the
     category-blind canonical sort leaves arbitrary."""
+    if commutative_calls is None:
+        commutative_calls = COMMUTATIVE_CALL_HEADS
 
     def typed_key(n: tuple) -> str:
         if n[0] == "slot":
@@ -414,26 +442,154 @@ def typed_resort(node: tuple, slot_class: dict[str, str]) -> tuple:
         return node
     if kind == "rel":
         rel, (lhs, rhs) = node[1], node[2]
-        lhs, rhs = typed_resort(lhs, slot_class), typed_resort(rhs, slot_class)
+        lhs = typed_resort(lhs, slot_class, commutative_calls)
+        rhs = typed_resort(rhs, slot_class, commutative_calls)
         if rel in SYMMETRIC_RELATIONS and typed_key(lhs) > typed_key(rhs):
             lhs, rhs = rhs, lhs
         return ("rel", rel, (lhs, rhs))
-    args = [typed_resort(a, slot_class) for a in node[2]]
+    args = [typed_resort(a, slot_class, commutative_calls) for a in node[2]]
     if kind == "op" and node[1] in COMMUTATIVE:
         args.sort(key=typed_key)
-    elif kind == "call" and node[1] in COMMUTATIVE_CALL_HEADS and len(args) > 1:
+    elif kind == "call" and node[1] in commutative_calls and len(args) > 1:
         args.sort(key=typed_key)
     return (kind, node[1], tuple(args))
 
 
-def skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
-    """Render canonicalized tree with slots as position-indexed placeholders.
+# --------------------------------------------------------------------------
+# Shape-level resorting: the ladder invariant
+#
+# `typed_resort` exists because `canonicalize`'s sort key is category-blind and
+# leaves `P*V` vs `V*P` arbitrary. The SHAPE level has the same problem one
+# level down and it had no answer: `shape_key` erases slot identity entirely,
+# so the two slot arguments of `MEET(PROP1, TRUTH)` compare EQUAL, `list.sort`
+# is stable, and the authored order survives into the placeholder numbering.
+# `MEET(PROP1, TRUTH) = PROP1` and `MEET(TRUTH, PROP1) = PROP1` therefore had
+# shape skeletons `?0 = MEET⟨?0, ?1⟩` and `?0 = MEET⟨?1, ?0⟩` while sharing the
+# single typed skeleton `?0:V = MEET⟨?1:P, ?0:V⟩` — shape strictly STRICTER
+# than typed, inverting the ladder the report's own vocabulary promises.
+#
+# The fix is not a better comparison key (there is no order-independent key on
+# a single argument: the distinguishing fact — that one of the two slots RECURS
+# on the other side of the relation — is a property of the whole statement).
+# It is a canonical form: among the argument orders commutativity permits,
+# take the one whose RENDERING is lexicographically smallest.
+#
+# Why that restores the ladder, by construction:
+#   * The permitted orders are the permutations WITHIN runs of equal
+#     `shape_key` — `canonicalize` has already fixed the relative order of
+#     arguments with distinct shape keys, and that ordering is a function of
+#     the argument multiset alone. So the SET of candidate renderings depends
+#     only on the tree's structure and its slot-recurrence pattern, never on
+#     the order the author wrote.
+#   * `min` over an order-independent set is order-independent. Hence the
+#     shape skeleton is a total function of the structure-plus-recurrence
+#     class.
+#   * A shared TYPED skeleton already implies a shared structure-plus-
+#     recurrence class (it is that class, with categories added). So equal
+#     typed forces equal shape: EVERY TYPED TWIN PAIR IS A SHAPE TWIN PAIR.
+#     Verified empirically each run and reported as `ladder_violations`.
+#   * The old skeleton is one of the candidates, so the new one is <= it, and
+#     two statements that agreed before still agree. Shape groups can only
+#     COARSEN under this change; none can split.
+# --------------------------------------------------------------------------
 
-    With `slot_class`, placeholders carry a coarse category (P: parameter-like,
-    V: variable-like), so `CONSTANT * RADIUS` and `DIM1 * DIM2` diverge.
+# Ceiling on candidate orderings per statement. The whole corpus needs 24 at
+# worst (`gdp_expenditure_identity`, a four-slot sum), so this is slack by two
+# orders of magnitude; it exists so that a future statement with a large
+# commutative fan-out degrades to the plain `canonicalize` order rather than
+# hanging. A statement that hits the ceiling can reintroduce a ladder
+# violation, which is exactly what `ladder_violations` will then report.
+SHAPE_ARRANGEMENT_BUDGET = 4096
+
+
+def _tie_blocks(args: tuple) -> list[list[tuple]]:
+    """Split shape-key-sorted arguments into runs of indistinguishable ones.
+
+    Requires `canonicalize`d input, where equal `shape_key`s are already
+    adjacent. Note that rearranging a subtree never changes its `shape_key` —
+    only equal-key siblings are ever permuted — so the blocks are the same
+    whether computed on the original arguments (`_arrangement_count`) or on
+    rearranged ones (`_shape_arrangements`), which is why the two agree on how
+    many orderings exist and the budget guard is sound.
     """
-    if slot_class is not None:
-        node = typed_resort(node, slot_class)
+    blocks: list[list[tuple]] = []
+    for a in args:
+        if blocks and shape_key(blocks[-1][0]) == shape_key(a):
+            blocks[-1].append(a)
+        else:
+            blocks.append([a])
+    return blocks
+
+
+def _is_commutative(kind: str, head: str, commutative_calls: set[str]) -> bool:
+    return ((kind == "op" and head in COMMUTATIVE)
+            or (kind == "call" and head in commutative_calls))
+
+
+def _arrangement_count(node: tuple, commutative_calls: set[str]) -> int:
+    """How many orderings `_shape_arrangements` would enumerate."""
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return 1
+    total = 1
+    for a in node[2]:
+        total *= _arrangement_count(a, commutative_calls)
+    if kind == "rel":
+        if (node[1] in SYMMETRIC_RELATIONS
+                and shape_key(node[2][0]) == shape_key(node[2][1])):
+            total *= 2
+        return total
+    if _is_commutative(kind, node[1], commutative_calls) and len(node[2]) > 1:
+        for block in _tie_blocks(node[2]):
+            for i in range(2, len(block) + 1):
+                total *= i
+    return total
+
+
+def _shape_arrangements(node: tuple, commutative_calls: set[str]) -> list[tuple]:
+    """Every ordering of `node` reachable by declared commutativity alone.
+
+    Only arguments that `shape_key` cannot tell apart are permuted, and a
+    symmetric relation's sides are swapped only when they too are
+    indistinguishable: everything else `canonicalize` has already ordered.
+    """
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return [node]
+    out: list[tuple] = []
+    for combo in product(*(_shape_arrangements(a, commutative_calls)
+                           for a in node[2])):
+        if kind == "rel":
+            out.append(("rel", node[1], combo))
+            if (node[1] in SYMMETRIC_RELATIONS
+                    and shape_key(combo[0]) == shape_key(combo[1])):
+                out.append(("rel", node[1], (combo[1], combo[0])))
+            continue
+        if _is_commutative(kind, node[1], commutative_calls) and len(combo) > 1:
+            for choice in product(*(permutations(b) for b in _tie_blocks(combo))):
+                out.append((kind, node[1],
+                            tuple(a for block in choice for a in block)))
+        else:
+            out.append((kind, node[1], combo))
+    return out
+
+
+def shape_resort(node: tuple, commutative_calls: set[str] | None = None) -> tuple:
+    """Pick the commutativity-permitted ordering with the smallest rendering.
+
+    This is the shape-level counterpart of `typed_resort`, and the reason the
+    report can call `shape` looser than `typed` (see the block comment above).
+    """
+    if commutative_calls is None:
+        commutative_calls = COMMUTATIVE_CALL_HEADS
+    if _arrangement_count(node, commutative_calls) > SHAPE_ARRANGEMENT_BUDGET:
+        return node
+    return min(_shape_arrangements(node, commutative_calls), key=render_skeleton)
+
+
+def render_skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
+    """Render an already-sorted tree; slots become position-indexed
+    placeholders, numbered by first occurrence."""
     indices: dict[str, int] = {}
 
     def render(n: tuple) -> str:
@@ -455,6 +611,22 @@ def skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> str:
         return f"{head}⟨{inner}⟩"
 
     return render(node)
+
+
+def skeleton(node: tuple, slot_class: dict[str, str] | None = None,
+             commutative_calls: set[str] | None = None) -> str:
+    """Render canonicalized tree with slots as position-indexed placeholders.
+
+    With `slot_class`, placeholders carry a coarse category (P: parameter-like,
+    V: variable-like), so `CONSTANT * RADIUS` and `DIM1 * DIM2` diverge, and
+    commutative arguments are re-sorted with those categories visible. Without
+    it, commutative arguments are put in the canonical order of `shape_resort`.
+    """
+    if slot_class is not None:
+        node = typed_resort(node, slot_class, commutative_calls)
+    else:
+        node = shape_resort(node, commutative_calls)
+    return render_skeleton(node, slot_class)
 
 
 PARAMETER_LIKE = {"parameter", "constant"}
@@ -496,6 +668,40 @@ def alias_heads(node: tuple) -> tuple:
     if kind == "call" and head in HEAD_ALIASES:
         head = HEAD_ALIASES[head]
     return (kind, head, args)
+
+
+def _alias_class_members() -> dict[str, list[str]]:
+    members: dict[str, list[str]] = defaultdict(list)
+    for head, cls in HEAD_ALIASES.items():
+        members[cls].append(head)
+    return members
+
+
+# Commutative CALL heads AS THEY ARE SPELLED AFTER `alias_heads`.
+#
+# The aliased level canonicalizes and re-sorts a tree whose heads have already
+# been rewritten, so it must be told about commutativity in the post-alias
+# vocabulary — otherwise a commutative head that joins an alias class silently
+# stops being sorted the moment it is aliased, and the class ends up holding
+# both argument orders of the same statement. That is the "any future opaque-
+# composition alias must normalize order AFTER aliasing" hazard filed against
+# the P-before-V typed sort; it is a real inversion of the pass order, not a
+# hypothetical, and it is cheaper to close now than to remember later.
+#
+# An alias class is commutative only if EVERY head it merges is declared
+# commutative. `ordered_compose` (MOD, CONCAT) is the case that matters: CONCAT
+# is explicitly non-commutative (`re-do` is not `do-re`), so the class must not
+# inherit commutativity from a hypothetical commutative sibling. On today's
+# table no class qualifies — no declared-commutative head is aliased at all —
+# so this set equals COMMUTATIVE_CALL_HEADS and the aliased level is unchanged.
+# It is a guard, and it is where an alias-order bug would otherwise land.
+ALIASED_COMMUTATIVE_CALL_HEADS = (
+    {head for head in COMMUTATIVE_CALL_HEADS if head not in HEAD_ALIASES}
+    | {
+        cls for cls, heads in _alias_class_members().items()
+        if all(HEAD_ALGEBRA.get(h, {}).get("commutative") for h in heads)
+    }
+)
 
 
 def absorb_parameter_signs(node: tuple, slot_class: dict[str, str]) -> tuple:
@@ -543,6 +749,30 @@ def template_slots(tree: tuple) -> set[str]:
     return set().union(*(template_slots(a) for a in tree[2])) if tree[2] else set()
 
 
+def template_call_heads(tree: tuple) -> set[str]:
+    """Every call head occurring in a parsed template."""
+    if tree[0] in {"num", "slot"}:
+        return set()
+    heads = {tree[1]} if tree[0] == "call" else set()
+    for a in tree[2]:
+        heads |= template_call_heads(a)
+    return heads
+
+
+def lint_stem(name: str) -> str:
+    """Comparison stem for the slot-id / call-head collision lint.
+
+    Case is not meaningful across corpora (`sum_i` lowercases its head, every
+    slot id is upper-case), and the bracket-call spelling `E[X|Y]` parses to
+    the head `E[]`, whose trailing marker is grammar and not name. Nothing
+    else is stripped: index suffixes (`WEIGHT_i`) are part of the identifier
+    an author chose, and folding them would invent collisions rather than find
+    them.
+    """
+    stem = name[:-2] if name.endswith("[]") else name
+    return stem.lower()
+
+
 # --------------------------------------------------------------------------
 # Corpus loading and reporting
 # --------------------------------------------------------------------------
@@ -559,6 +789,8 @@ class ParsedNode:
     family: str
     aliased: str
     missing_slots: list[str]
+    slot_ids: list[str] = field(default_factory=list)
+    call_heads: list[str] = field(default_factory=list)
 
 
 def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
@@ -591,8 +823,17 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                     typed=skeleton(tree, classes),
                     family=skeleton(
                         canonicalize(absorb_parameter_signs(tree, classes)), classes),
-                    aliased=skeleton(canonicalize(alias_heads(tree)), classes),
+                    # Alias FIRST, then canonicalize and re-sort — both passes
+                    # reading commutativity in the post-alias vocabulary, so an
+                    # alias class cannot end up holding two argument orders of
+                    # one statement.
+                    aliased=skeleton(
+                        canonicalize(alias_heads(tree),
+                                     ALIASED_COMMUTATIVE_CALL_HEADS),
+                        classes, ALIASED_COMMUTATIVE_CALL_HEADS),
                     missing_slots=missing,
+                    slot_ids=sorted(template_slots(tree) | set(classes)),
+                    call_heads=sorted(template_call_heads(tree)),
                 )
             )
     return parsed, problems
@@ -603,6 +844,94 @@ def group_by(nodes: list[ParsedNode], key: str) -> dict[str, list[ParsedNode]]:
     for n in nodes:
         groups[getattr(n, key)].append(n)
     return groups
+
+
+def twin_pairs(groups: dict[str, list[ParsedNode]]) -> set[tuple[str, str]]:
+    pairs: set[tuple[str, str]] = set()
+    for members in groups.values():
+        ids = sorted(m.statement_id for m in members)
+        for i, a in enumerate(ids):
+            for b in ids[i + 1:]:
+                pairs.add((a, b))
+    return pairs
+
+
+def ladder_violations(shape_groups: dict[str, list[ParsedNode]],
+                      typed_groups: dict[str, list[ParsedNode]]) -> list[dict]:
+    """Typed twin pairs that are not shape twin pairs.
+
+    The report calls `shape` the loosest level, so this list must be empty:
+    annotating slots with a category can only ever SPLIT a group. It was not
+    empty by construction before `shape_resort` — see the block comment there —
+    and it is checked rather than asserted so that a statement large enough to
+    exhaust SHAPE_ARRANGEMENT_BUDGET reports the regression instead of hiding
+    it behind a passing test.
+    """
+    shape_of = {}
+    for skel, members in shape_groups.items():
+        for m in members:
+            shape_of[m.statement_id] = skel
+    typed_of = {}
+    for skel, members in typed_groups.items():
+        for m in members:
+            typed_of[m.statement_id] = skel
+    offenders = twin_pairs(typed_groups) - twin_pairs(shape_groups)
+    return [
+        {
+            "typed_twins": [a, b],
+            "shared_typed_skeleton": typed_of[a],
+            "distinct_shape_skeletons": [shape_of[a], shape_of[b]],
+        }
+        for a, b in sorted(offenders)
+    ]
+
+
+def slot_vs_call_head_collisions(nodes: list[ParsedNode]) -> list[dict]:
+    """Identifiers used as a slot id in one statement and a call head in another.
+
+    A LINT, not a rewrite. The Euler characteristic is a bare slot in
+    `diffgeo.surfaces.gauss_bonnet_theorem` and the call head `EULERCHAR(.)`
+    throughout `data/differential_topology`; both readings are natural, the
+    matcher can relate a slot to a slot and a head to a head but never a slot
+    to a head, and so the two corpora cannot see that they discuss one integer.
+    Choosing a winner is an authoring decision about the corpora — this pass
+    only names the identifiers where the decision is outstanding.
+
+    What counts as a collision is a DISAGREEMENT, not a co-occurrence: some
+    statement must commit to the name as an opaque value while another applies
+    it as an operation. A statement that both takes `F` as a slot and writes
+    `F(ENDPOINT)` is using its own variable as a function, which is ordinary
+    and settles nothing — so a name every one of whose statements uses it both
+    ways (`SELFMAP`, `AGGREGATE_n`) is not reported, while `F` is, because
+    `calculus.integration.ftc_differentiation_part` uses it as a slot only.
+    """
+    slot_uses: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
+    head_uses: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
+    for n in nodes:
+        for name in n.slot_ids:
+            slot_uses[lint_stem(name)][name].add(n.statement_id)
+        for name in n.call_heads:
+            head_uses[lint_stem(name)][name].add(n.statement_id)
+
+    collisions = []
+    for stem in sorted(set(slot_uses) & set(head_uses)):
+        as_slot = {sid for ids in slot_uses[stem].values() for sid in ids}
+        as_head = {sid for ids in head_uses[stem].values() for sid in ids}
+        slot_only, head_only = as_slot - as_head, as_head - as_slot
+        if not slot_only and not head_only:
+            continue  # every statement uses it both ways; nothing disagrees
+        collisions.append(
+            {
+                "name": stem,
+                "slot_spellings": sorted(slot_uses[stem]),
+                "call_head_spellings": sorted(head_uses[stem]),
+                "as_slot_in": sorted(as_slot),
+                "as_call_head_in": sorted(as_head),
+                "as_slot_only_in": sorted(slot_only),
+                "as_call_head_only_in": sorted(head_only),
+            }
+        )
+    return collisions
 
 
 def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
@@ -681,6 +1010,14 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
 
     return {
         "nodes_analyzed": len(nodes),
+        "group_counts": {
+            level: sum(1 for members in groups.values() if len(members) > 1)
+            for level, groups in (("shape", shape_groups), ("typed", typed_groups),
+                                  ("family", family_groups),
+                                  ("aliased", aliased_groups))
+        },
+        "ladder_violations": ladder_violations(shape_groups, typed_groups),
+        "slot_vs_call_head_collisions": slot_vs_call_head_collisions(nodes),
         "typed_twin_groups": group_entries(typed_groups),
         "family_twin_groups_beyond_typed": group_entries(family_new),
         "aliased_twin_groups_beyond_typed": group_entries(aliased_new),
@@ -693,7 +1030,20 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
 
 
 def print_report(report: dict) -> None:
-    print(f"Analyzed {report['nodes_analyzed']} statement nodes.\n")
+    print(f"Analyzed {report['nodes_analyzed']} statement nodes.")
+    counts = report["group_counts"]
+    print("Twin groups: " + ", ".join(
+        f"{level} {counts[level]}" for level in ("shape", "typed", "family", "aliased")))
+    violations = report["ladder_violations"]
+    print(f"Ladder check (every typed twin pair is a shape twin pair): "
+          f"{len(violations)} violations")
+    for v in violations:
+        a, b = v["typed_twins"]
+        print(f"  - {a} / {b}")
+        print(f"    typed {v['shared_typed_skeleton']}")
+        for s in v["distinct_shape_skeletons"]:
+            print(f"    shape {s}")
+    print()
 
     def show_groups(title: str, entries: list[dict]) -> None:
         print(f"## {title} ({len(entries)} groups)")
@@ -721,6 +1071,24 @@ def print_report(report: dict) -> None:
         for d in report["skeletons_with_split_archetypes"]:
             print(f"  - {d['skeleton']}")
             print(f"    labels: {', '.join(d['archetype_ids'])}")
+        print()
+    if report["slot_vs_call_head_collisions"]:
+        print("## Same name used as a slot id and as a call head "
+              f"({len(report['slot_vs_call_head_collisions'])} names)")
+        print("   A lint: the matcher can relate a slot to a slot and a head to")
+        print("   a head, never a slot to a head, so these statements cannot see")
+        print("   that they discuss one object. Which reading wins is an")
+        print("   authoring decision about the corpora, not a rewrite this pass")
+        print("   may make.")
+        for c in report["slot_vs_call_head_collisions"]:
+            print(f"\n  {c['name']}: slot {'/'.join(c['slot_spellings'])} "
+                  f"vs head {'/'.join(h + '⟨...⟩' for h in c['call_head_spellings'])}")
+            for sid in c["as_slot_in"]:
+                mark = "  <-- slot only" if sid in c["as_slot_only_in"] else ""
+                print(f"    as slot     : {sid}{mark}")
+            for sid in c["as_call_head_in"]:
+                mark = "  <-- head only" if sid in c["as_call_head_only_in"] else ""
+                print(f"    as call head: {sid}{mark}")
         print()
     if report["slot_schema_gaps"]:
         print("## Template slots missing from slot_schema")
