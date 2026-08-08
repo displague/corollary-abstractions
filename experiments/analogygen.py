@@ -138,22 +138,29 @@ def main() -> None:
     ap.add_argument("--test", type=int, default=5000)
     ap.add_argument("--ood", type=int, default=3000)
     ap.add_argument("--seed", type=int, default=61)
+    ap.add_argument("--curriculum", action="store_true",
+                    help="train on depths 2-4 (deeper exposure); ood moves "
+                         "to 5-6. Relabels OOD: extrapolation is one level, "
+                         "not two -- report accordingly.")
+    ap.add_argument("--prefix", default="analogy")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
+    tr_d = [2, 3, 4] if args.curriculum else [2, 2, 3]
+    ood_d = [5, 6] if args.curriculum else [4, 5]
     splits = {
-        "train": build_split(args.train, rng, [2, 2, 3], set(), False),
-        "val": build_split(args.val, rng, [2, 2, 3], set(), False),
-        "test": build_split(args.test, rng, [2, 2, 3], set(), True),
-        "ood": build_split(args.ood, rng, [4, 5], set(), True),
+        "train": build_split(args.train, rng, tr_d, set(), False),
+        "val": build_split(args.val, rng, tr_d, set(), False),
+        "test": build_split(args.test, rng, tr_d, set(), True),
+        "ood": build_split(args.ood, rng, ood_d, set(), True),
     }
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for split, rows in splits.items():
-        path = args.out_dir / f"analogy_{split}.jsonl"
+        path = args.out_dir / f"{args.prefix}_{split}.jsonl"
         with path.open("w", encoding="utf-8") as f:
             for r in rows:
                 f.write(json.dumps(r) + "\n")
-        print(f"analogy/{split}: {len(rows)} -> {path}")
+        print(f"{args.prefix}/{split}: {len(rows)} -> {path}")
 
 
 if __name__ == "__main__":

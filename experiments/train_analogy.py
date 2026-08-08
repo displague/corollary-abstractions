@@ -124,6 +124,13 @@ class AnalogyPointer(nn.Module):
             self.sib_shared = nn.Embedding(MAX_SIB + 2, d_model, padding_idx=0)
             self.register_buffer("level_codes",
                                  sinusoidal_level_codes(MAX_LEVELS, d_model))
+        elif level_code == "recurrent":
+            # depth as ITERATION: one shared cell walks the path root->leaf,
+            # so a level-8 address is eight applications of the same learned
+            # step -- no depth-indexed parameter, and the consumer trains the
+            # same transition at every level it ever sees.
+            self.sib_shared = nn.Embedding(MAX_SIB + 2, d_model, padding_idx=0)
+            self.path_cell = nn.GRUCell(d_model, d_model)
         else:
             self.path_emb = nn.Embedding(MAX_LEVELS * (MAX_SIB + 1), d_model)
         self.register_buffer("level_offsets",
@@ -145,8 +152,19 @@ class AnalogyPointer(nn.Module):
     def path_embedding(self, paths):
         if self.level_code == "sinusoidal":
             emb = self.sib_shared(paths) * self.level_codes  # broadcast levels
-        else:
-            emb = self.path_emb(paths + self.level_offsets)
+            return (emb * (paths > 0).unsqueeze(-1)).sum(dim=-2)
+        if self.level_code == "recurrent":
+            B_, L_, K_ = paths.shape
+            flat = paths.reshape(-1, K_)
+            sib = self.sib_shared(flat)                     # (BL, K, d)
+            h = torch.zeros(flat.size(0), sib.size(-1),
+                            device=paths.device)
+            for k in range(K_):
+                step = self.path_cell(sib[:, k], h)
+                active = (flat[:, k] > 0).unsqueeze(-1)
+                h = torch.where(active, step, h)
+            return h.reshape(B_, L_, -1)
+        emb = self.path_emb(paths + self.level_offsets)
         return (emb * (paths > 0).unsqueeze(-1)).sum(dim=-2)
 
     def encode(self, x, coords, mask):
@@ -245,14 +263,16 @@ def main() -> None:
     ap.add_argument("--max-tgt", type=int, default=96)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--save-model", type=Path, default=None)
-    ap.add_argument("--level-code", choices=["table", "sinusoidal"],
+    ap.add_argument("--task-prefix", default="analogy")
+    ap.add_argument("--level-code",
+                    choices=["table", "sinusoidal", "recurrent"],
                     default="table")
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    splits = {s: load_jsonl(args.data_dir / f"analogy_{s}.jsonl")
+    splits = {s: load_jsonl(args.data_dir / f"{args.task_prefix}_{s}.jsonl")
               for s in ["train", "val", "test", "ood"]}
     src_tokens = set()
     for r in splits["train"]:
