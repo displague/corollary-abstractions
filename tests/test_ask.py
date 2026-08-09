@@ -56,7 +56,7 @@ class AskReturnTests(unittest.TestCase):
     def setUp(self) -> None:
         self.executor = FrameExecutor()
         self.frame = self.executor.open_frame(
-            FrameSpec(frame="conversation.frames.test")
+            FrameSpec(frame="runtime.frames.conversation_test")
         )
         self.store = CountingStore()
         self.verifier = RetrievalVerifier(self.store, self.executor)
@@ -137,7 +137,7 @@ class AskReturnTests(unittest.TestCase):
 
     def test_frame_local_scope_explicitly_routes_store_need_to_user(self) -> None:
         frame = self.executor.open_frame(
-            FrameSpec(frame="conversation.frames.private", retrieval="frame_local")
+            FrameSpec(frame="runtime.frames.conversation_private", retrieval="frame_local")
         )
         state = self.make_state(channel="store", frame=frame)
         outcome = self.verifier.evaluate(state, ask_action("tone"))
@@ -190,7 +190,7 @@ class AskReturnTests(unittest.TestCase):
     def test_reply_cannot_cross_frame(self) -> None:
         asked = self.asked_state()
         reply = self.verifier.reply_action(asked, "whimsical")
-        other_spec = replace(asked.frame.spec, frame="conversation.frames.other")
+        other_spec = replace(asked.frame.spec, frame="runtime.frames.conversation_other")
         replay = replace(asked, frame=replace(asked.frame, spec=other_spec))
         outcome = self.verifier.evaluate(replay, reply)
         self.assertIs(outcome.verdict, Verdict.REFUSED)

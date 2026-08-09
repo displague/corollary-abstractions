@@ -46,7 +46,7 @@ class RetrievalTests(unittest.TestCase):
     def setUp(self) -> None:
         self.executor = FrameExecutor()
         self.frame = self.executor.open_frame(
-            FrameSpec(frame="retrieval.tests", retrieval="open")
+            FrameSpec(frame="runtime.frames.retrieval_tests", retrieval="open")
         )
         self.state = RetrievalState.from_unknown(
             self.executor,
@@ -213,7 +213,7 @@ class RetrievalTests(unittest.TestCase):
     def test_retrieval_session_can_only_begin_from_unknown(self) -> None:
         known_frame = self.executor.open_frame(
             FrameSpec(
-                frame="retrieval.known",
+                frame="runtime.frames.retrieval_known",
                 declarations=(("known", Literal("x", "p", "v")),),
             )
         )
@@ -320,7 +320,7 @@ class RetrievalTests(unittest.TestCase):
         world_id = "logic.boolean_laws.de_morgan_laws"
         executor = FrameExecutor({world_id: (pending_literal,)})
         frame = executor.open_frame(
-            FrameSpec(frame="retrieval.mutable", suspends=(world_id,))
+            FrameSpec(frame="runtime.frames.retrieval_mutable", suspends=(world_id,))
         )
         state = RetrievalState.from_unknown(
             executor, frame, "answer", DE_MORGAN, pending_literal
@@ -791,7 +791,7 @@ class RetrievalTests(unittest.TestCase):
                 raise AssertionError(f"frame-local guard leaked query {key!r}")
 
         local_frame = self.executor.open_frame(
-            FrameSpec(frame="story.private", retrieval="frame_local")
+            FrameSpec(frame="runtime.frames.story_private", retrieval="frame_local")
         )
         state = RetrievalState.from_unknown(
             self.executor,
@@ -942,7 +942,7 @@ class RetrievalTests(unittest.TestCase):
         verifier = RetrievalVerifier(self.store, self.executor)
         admitted = verifier.evaluate(self.state, retrieval_action(DE_MORGAN))
         local_frame = self.executor.open_frame(
-            FrameSpec(frame="retrieval.private", retrieval="frame_local")
+            FrameSpec(frame="runtime.frames.retrieval_private", retrieval="frame_local")
         )
         transplanted = replace(admitted.next_state, frame=local_frame)
         result = verifier.evaluate(transplanted, point_action(0))

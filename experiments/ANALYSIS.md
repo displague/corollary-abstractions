@@ -1028,3 +1028,46 @@ nodes. `scope.frame` now resolves to the scoped declaration node with that same
 `statement_id`; missing, unscoped, and assertion-owned ids fail validation.
 This uses declaration nodes as the minimal frame registry and defers a second
 artifact until metadata duplication demonstrates a need. Suite: 155 -> 158.
+
+## Owned frames and visibility-derived false belief (v0.5 item 10c)
+
+P-CF1 fires without a new epistemic verdict. `scope.owner` is the only corpus
+schema addition: an owner-scoped Sally belief declaration and an unscoped
+post-move world assertion validate in the merged graph. Runtime `FrameEvent`
+records explicit effects plus `witnessed_by`; placement reaches Sally, Anne,
+and world, while movement reaches only Anne and world. The resulting query is
+Sally=basket and world=box. World also REFUTES basket because movement carries
+both denial of the old location and assertion of the new one.
+
+Eight focused controls cover the acceptance path, Anne's true belief,
+unwitnessed-event visibility forgery, observed-event idempotence/collision,
+unowned event refusal, persistent owned-frame close refusal, runtime/corpus
+namespace separation, and malformed owner/event metadata. Missed event ids are
+recorded without hidden effects, preventing later witness-set rewriting.
+
+The corpus pair also forms a typed LOCATION twin; that is content evidence,
+not theory-of-mind evidence. Counts move 213 -> 215 nodes and
+29/30/29/31/5 -> 30/31/30/32/5. Specialization remains 655. Retrieval grows
+715 -> 723 items. The suite moves 158 -> 173. ASK bindings deliberately remain
+session-long; owned FrameState beliefs persist until a witnessed event
+supersedes them. Unifying those two stores and nested belief frames remain open.
+
+Adversarial review found three coupled representation defects. A witnessed
+event filtered only `state.asserted`, leaving declaration-backed beliefs stale;
+the validator allowed an assertion to introduce owner when its declaration had
+none; and every positive effect silently replaced all same-predicate values,
+including non-functional traits. The corrected state records superseded
+declaration ids, declaration nodes are the sole origin of corpus ownership,
+and `FrameEvent.functional_predicates` makes replacement explicit and
+validated. Exact declaration-backed movement, assertion-owner introduction,
+multi-valued trait preservation, and invalid functional markers are retained.
+Independent re-review found two additional coherence holes: explicit
+`owner: null` bypassed the dependency-free schema fallback, and an event could
+carry both polarities of one atom with tuple-order semantics. Owner presence is
+now distinguished from omission, and contradictory event effects fail during
+`FrameEvent` construction. Both exact attacks are permanent regressions.
+A final review found the neighboring order-dependence: one event could assign
+two positive values to the same declared functional key. Construction now
+requires a unique positive target per subject and functional predicate while
+still permitting the explicit old-value denial plus new-value assertion used
+by movement events.

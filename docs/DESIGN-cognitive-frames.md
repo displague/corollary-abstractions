@@ -76,6 +76,16 @@ Work items: schema `owner` field (additive, like `scope`); `witnessed_by`
 on temporal events; nested-frame negative controls; Sally–Anne executable
 demo; user-frame persistence (post-ASK-slice).
 
+**Adjudication (v0.5 first cut): P-CF1 fired.** The corpus pair validates with
+`scope.owner` as the only schema addition. At runtime, placement is visible to
+Sally/Anne/world and movement only to Anne/world; the generic frame executor
+therefore answers basket for Sally and box for world without a new verdict.
+The event carries both denial of the old location and assertion of the new one,
+so the world REFUTES basket while Sally locally VERIFIES it. Missed event ids
+are retained without their hidden effects and cannot later be replayed with a
+forged witness set. The pair also twins on LOCATION content, but scope and
+visibility—not that twin—are the theory-of-mind evidence.
+
 ---
 
 ## 2. Physical frames of reference are the same scope construct
@@ -302,7 +312,7 @@ response meaningfully") is met by:
    vocabulary to corpus vocabulary.
 2. **RFT coverage at lexical scale (§3).** Synonymy = coordination,
    antonymy = opposition, hypernymy = hierarchy — the relational-frame
-   taxonomy instantiated over ~120k synsets instead of 213 statements,
+   taxonomy instantiated over ~120k synsets instead of 215 statements,
    giving the neighborhood-fallback real semantic structure instead of
    token overlap.
 3. **Renderer enrichment without weight growth.** The demo's English gloss
@@ -358,8 +368,8 @@ chain; reduced-extract decision; P-CF6 adjudication.
 2. **physics.frames corpus lane — SHIPPED first cut.** P-CF3 fired; P-CF2
    missed for the scope/template boundary described in §2. Frame ids now
    resolve to their declaration nodes.
-3. **Frame ownership + visibility-filtered updates** + Sally–Anne demo
-   (P-CF1) — after ASK, before nesting.
+3. **Frame ownership + visibility-filtered updates — SHIPPED first cut.**
+   P-CF1 fired; nested beliefs remain a later leak-control slice.
 4. **WordNet store adapter** (P-CF6) — independent of 2–3; can run as a
    parallel worktree slice; license/attribution ships with it.
 5. **Masked skeleton modeling** (P-CF5) — experiment track, GPU-bound,

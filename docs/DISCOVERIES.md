@@ -13,6 +13,18 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **False belief is a visibility result, not an authored contradiction.** The
+  same placement and move events update world/Anne but the move is invisible
+  to Sally, so her owned frame retains basket while world holds box and refutes
+  basket. No new verdict was needed. *P-CF1 fired, executable ToM control*
+  (2026-08-09)
+
+- **Belief content can twin world content while scope carries the disagreement.**
+  Sally's `LOCATION(MARBLE)=BASKET` and the world's
+  `LOCATION(MARBLE)=BOX` share `?0:P = LOCATION⟨?1:V⟩`; owner and visibility
+  are deliberately outside the matcher key. *exact content twin, scoped
+  interpretation differs* (2026-08-09)
+
 - **Scope generalizes across domains without implying template equivalence.**
   The rotating-physics frame and cartoon gravity both resolve to declaration
   nodes, suspend an ordinary physics law, and admit local premises. P-CF2

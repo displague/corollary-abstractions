@@ -81,6 +81,7 @@ WORLD = {GRAVITY: (Literal("unsupported objects", "behavior", "fall"),)}
 def cartoon_spec(suspends: tuple[str, ...]) -> FrameSpec:
     return FrameSpec(
         frame="narrative.frames.cartoon_gravity",
+        corpus_backed=True,
         declarations=(
             ("agent", Literal("story", "agent", "the coyote")),
         ),
@@ -90,7 +91,7 @@ def cartoon_spec(suspends: tuple[str, ...]) -> FrameSpec:
 
 def chicken_spec() -> FrameSpec:
     return FrameSpec(
-        frame="narrative.frames.golden_chicken",
+        frame="runtime.frames.golden_chicken",
         declarations=(
             ("golden", Literal("the chicken", "trait", "golden")),
             (
@@ -254,6 +255,7 @@ class FrameLadderTests(unittest.TestCase):
     def test_declaration_cannot_bypass_the_suspension_gate(self) -> None:
         spec = FrameSpec(
             frame="narrative.frames.cartoon_gravity",
+            corpus_backed=True,
             declarations=(
                 (
                     "hover",
@@ -270,6 +272,7 @@ class FrameLadderTests(unittest.TestCase):
         opened = self.executor.open_frame(
             FrameSpec(
                 frame=spec.frame,
+                corpus_backed=spec.corpus_backed,
                 declarations=spec.declarations,
                 suspends=(GRAVITY,),
             )
@@ -324,7 +327,7 @@ class FrameLadderTests(unittest.TestCase):
 
     def test_open_frame_rejects_contradictory_declarations(self) -> None:
         spec = FrameSpec(
-            frame="narrative.frames.broken",
+            frame="runtime.frames.broken",
             declarations=(
                 ("a", Literal("x", "trait", "golden")),
                 ("b", Literal("x", "trait", "golden", polarity=False)),
@@ -354,7 +357,7 @@ class FrameLadderTests(unittest.TestCase):
         self.assertTrue(demoted)
         for claim in demoted:
             self.assertEqual(claim.epistemic_status, "conjectured")
-            self.assertEqual(claim.frame, "narrative.frames.golden_chicken")
+            self.assertEqual(claim.frame, "runtime.frames.golden_chicken")
         late = self.executor.assert_literal(
             closed, "late", Literal("the chicken", "trait", "golden")
         )
@@ -479,7 +482,7 @@ class FrameControllerTests(unittest.TestCase):
         executor = FrameExecutor(WORLD)
         verifier = FrameAssertionVerifier(executor)
         spec = FrameSpec(
-            frame="narrative.frames.golden_chicken",
+            frame="runtime.frames.golden_chicken",
             declarations=chicken_spec().declarations,
             suspends=(GRAVITY,),
         )
@@ -528,7 +531,7 @@ class FrameControllerTests(unittest.TestCase):
     def test_frame_local_retrieval_is_refused(self) -> None:
         executor = FrameExecutor()
         spec = FrameSpec(
-            frame="narrative.frames.golden_chicken",
+            frame="runtime.frames.golden_chicken",
             retrieval="frame_local",
         )
         verifier = FrameAssertionVerifier(executor)
@@ -567,7 +570,7 @@ class FrameControllerTests(unittest.TestCase):
 class StoryAdapterRobustnessTests(unittest.TestCase):
     def test_agentless_frame_refuses_instead_of_crashing(self) -> None:
         verifier = StoryFrameVerifier(
-            spec=FrameSpec(frame="narrative.frames.agentless")
+            spec=FrameSpec(frame="runtime.frames.agentless")
         )
         result = verifier.evaluate(
             verifier.initial_state(),
@@ -639,6 +642,76 @@ class ScopeValidatorTests(unittest.TestCase):
         self.assertTrue(
             any("must identify a scoped declaration node" in e for e in scope_errors(assertion))
         )
+
+    def test_owned_scope_validates_and_owner_is_frame_level(self) -> None:
+        declaration = scoped_node(
+            "narrative.belief.sally",
+            {
+                "frame": "narrative.belief.sally",
+                "owner": "sally",
+                "role": "declaration",
+            },
+        )
+        assertion = scoped_node(
+            "narrative.belief.sally.marble",
+            {
+                "frame": "narrative.belief.sally",
+                "owner": "anne",
+                "role": "assertion",
+            },
+        )
+        self.assertEqual(scope_errors([declaration]), [])
+        errors = scope_errors([declaration, assertion])
+        self.assertTrue(any("disagree on `owner`" in e for e in errors))
+
+    def test_blank_scope_owner_fails_closed(self) -> None:
+        nodes = [
+            scoped_node(
+                "narrative.belief.blank",
+                {
+                    "frame": "narrative.belief.blank",
+                    "owner": " ",
+                    "role": "declaration",
+                },
+            )
+        ]
+        self.assertTrue(
+            any("scope.owner must be a non-empty string" in e for e in scope_errors(nodes))
+        )
+
+    def test_null_scope_owner_fails_closed_without_jsonschema(self) -> None:
+        nodes = [
+            scoped_node(
+                "narrative.belief.null_owner",
+                {
+                    "frame": "narrative.belief.null_owner",
+                    "role": "declaration",
+                    "owner": None,
+                },
+            )
+        ]
+        self.assertTrue(
+            any("scope.owner must be a non-empty string" in e for e in scope_errors(nodes))
+        )
+
+    def test_assertion_cannot_introduce_owner_missing_from_declaration(self) -> None:
+        declaration = scoped_node(
+            "narrative.belief.unowned",
+            {
+                "frame": "narrative.belief.unowned",
+                "role": "declaration",
+            },
+        )
+        assertion = scoped_node(
+            "narrative.belief.unowned.claim",
+            {
+                "frame": "narrative.belief.unowned",
+                "owner": "sally",
+                "role": "assertion",
+            },
+        )
+        errors = scope_errors([declaration, assertion])
+        self.assertTrue(any("must originate on frame declaration" in e for e in errors))
 
     def test_bad_frame_pattern_and_role_are_flagged(self) -> None:
         nodes = [

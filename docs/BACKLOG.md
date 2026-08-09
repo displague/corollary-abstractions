@@ -5,21 +5,23 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Cognitive frames / lexical stores (queued from docs/DESIGN-cognitive-frames.md)
 
-- **Frame ownership is the missing half of ASK.** ASK already models the
+- **SHIPPED first cut — frame ownership is the missing half of ASK.** ASK
+  already models the
   user as an agent holding frame-private bindings — a theory-of-mind claim
   with no frame to land in. `FrameSpec` needs an optional `owner`
   (additive schema field, same pattern as `scope`); owned frames are
   belief states that persist and update rather than demoting on exit.
   Evidence of need: multi-turn revision ("now make the chicken lay silver
   eggs") has nowhere to record what the user has been told vs what they
-  changed. Registered as P-CF1's substrate.
+  changed. `FrameSpec.owner` and persistent owned-frame close semantics now
+  ship; unifying retrieval.UserFrame with FrameState remains open.
 
-- **Event visibility is authored nowhere, so false belief cannot be
-  derived.** The obligation ledger sequences events but every frame sees
+- **SHIPPED first cut — visibility now derives false belief.** The obligation
+  ledger sequences events but every frame sees
   all of them. A `witnessed_by` set per event lets an owned frame update
   only through witnessed events — making belief/world divergence a
   *derived* fact (Sally missed the move event) instead of an authored
-  assertion. Sally–Anne is the executable acceptance demo; nested frames
+  assertion. Sally–Anne is now the executable acceptance demo; nested frames
   (beliefs about beliefs) wait for their own leak controls: grandchild
   truths must not reach ancestors, and suspension inheritance must be an
   explicit choice.
@@ -74,20 +76,20 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Frame registry
 
-- **Runtime frame ids are exempt from the resolution convention, and the
-  exemption was unrecorded until now.** The frame-id convention (RESOLVED
-  below: corpus frame ids ARE statement_ids of declaration nodes, enforced
-  on the merged graph) governs only `data/` — but runtime `FrameSpec`
-  frames squat in the same reference-semantic namespace and resolve to
-  nothing: `narrative.frames.golden_chicken` (oracle demo),
-  `conversation.frames.test/.private` (ASK tests). The validator never
-  sees them (its jurisdiction is corpus data), so golden_chicken
-  "validates" only by being invisible. Decide and enforce one of: (a)
-  runtime-only frames must use a reserved namespace the validator would
-  reject in corpus data (e.g. `runtime.frames.*`), or (b) demo/test frames
-  must grow corpus declaration nodes like the physics frames did. Until
-  decided, a runtime frame that later collides with a real declaration
-  node has no defined semantics. (Post-merge review of 78541cf, F2.)
+- **RESOLVED — runtime-only frame ids use `runtime.frames.*`.** Corpus frame
+  ids remain declaration-node references enforced over `data/`.
+  `FrameSpec.corpus_backed` makes the distinction explicit and fail-closed:
+  corpus-backed frames cannot use the runtime namespace, and synthetic frames
+  cannot squat in the corpus namespace. All demos/tests migrated. (Post-merge
+  review of 78541cf, F2; resolved 10c.)
+
+- **Owned binding lifetime is now explicit at the frame layer, but not yet
+  unified with ASK.** Owned FrameState persists until an observed event
+  supersedes a functional value; it refuses fiction-style exit/demotion.
+  Retrieval `UserBinding` remains session-long and HMAC-attributed. 10c keeps
+  that lifetime deliberately because conversation uses it as session memory;
+  goal-local or expiring bindings require an explicit future policy and must
+  not silently change the current contract.
 
 - **Small filed items from the same review** (nits, no behavior defects):
   `physics.frames.rotating_frame` is governed by

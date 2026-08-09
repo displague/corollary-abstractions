@@ -306,6 +306,11 @@
           "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
           "$comment": "Resolvable reference to this frame's declaration node. The declaration is a scoped node whose statement_id equals scope.frame and whose scope.role is declaration; every assertion in the frame points to it. This makes the declaration the minimal frame registry without a second artifact. Underscores remain accepted for compatibility with the original frame-id draft, although statement_id currently forbids them in its first segment."
         },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "$comment": "Optional agent identifier. Its presence makes this a persistent belief frame rather than an unowned fiction or hypothetical. Ownership attributes beliefs; it does not authenticate a real-world identity."
+        },
         "role": {
           "type": "string",
           "enum": [

@@ -167,7 +167,7 @@ class StoryState:
 
 def golden_chicken_frame_spec() -> FrameSpec:
     return FrameSpec(
-        frame="narrative.frames.golden_chicken",
+        frame="runtime.frames.golden_chicken",
         title="The golden chicken",
         declarations=(
             ("agent", Literal("story", "agent", "the golden chicken")),

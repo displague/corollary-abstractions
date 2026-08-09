@@ -24,6 +24,7 @@ FRAME_ROLES = {"declaration", "assertion"}
 # about different frames under one identifier.
 FRAME_AGREEMENT_PROPS = (
     "frame_title",
+    "owner",
     "suspends",
     "governed_by",
     "retrieval",
@@ -202,6 +203,11 @@ def scope_errors(
                 f"{node_id}: scope.role `{scope.get('role')}` must be one of "
                 f"{sorted(FRAME_ROLES)}"
             )
+        owner = scope.get("owner")
+        if "owner" in scope and (
+            not isinstance(owner, str) or not owner.strip()
+        ):
+            errors.append(f"{node_id}: scope.owner must be a non-empty string")
         for field in ("suspends", "governed_by"):
             refs = scope.get(field, [])
             if not isinstance(refs, list):
@@ -237,6 +243,21 @@ def scope_errors(
             errors.append(
                 f"frame `{frame}` must identify a scoped declaration node"
             )
+        else:
+            declaration_owner = declaration_scope.get("owner")
+            for member_id, member_scope in members:
+                if member_id == frame or "owner" not in member_scope:
+                    continue
+                if declaration_owner is None:
+                    errors.append(
+                        f"{member_id}: scope.owner must originate on frame "
+                        f"declaration `{frame}`"
+                    )
+                elif member_scope["owner"] != declaration_owner:
+                    errors.append(
+                        f"{member_id}: scope.owner disagrees with frame "
+                        f"declaration `{frame}`"
+                    )
         for prop in FRAME_AGREEMENT_PROPS:
             stated: dict[str, list[str]] = {}
             for node_id, scope in members:

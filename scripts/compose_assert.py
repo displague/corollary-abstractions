@@ -52,7 +52,7 @@ def execute_frame_ladder() -> tuple[
     )
     state = executor.open_frame(
         FrameSpec(
-            frame="narrative.frames.compose_assert_demo",
+            frame="runtime.frames.compose_assert_demo",
             title="compose_assert frame ladder",
             declarations=(
                 ("golden", Literal("the chicken", "trait", "golden")),

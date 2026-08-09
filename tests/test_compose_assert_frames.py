@@ -52,7 +52,7 @@ class ComposeAssertFrameTests(unittest.TestCase):
             by_label["suspended contradiction before admission"].evidence,
         )
         self.assertIn(
-            "narrative.frames.compose_assert_demo",
+            "runtime.frames.compose_assert_demo",
             by_label["post-close check"].evidence,
         )
 

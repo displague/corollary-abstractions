@@ -115,12 +115,25 @@ class FrameSpec:
     """A frame's boundary: identity, premises, suspensions, governance."""
 
     frame: str
+    owner: str | None = None
+    corpus_backed: bool = False
     title: str = ""
     declarations: tuple[tuple[str, Literal], ...] = ()
     suspends: tuple[str, ...] = ()
     governed_by: tuple[str, ...] = (FRAME_CONSISTENCY,)
     on_exit: str = "conjectured"
     retrieval: str = "open"
+
+    def __post_init__(self) -> None:
+        if self.owner is not None and not self.owner.strip():
+            raise ValueError("frame owner must be non-empty when supplied")
+        if self.corpus_backed:
+            if self.frame.startswith("runtime.frames."):
+                raise ValueError("a corpus-backed frame cannot use runtime.frames.*")
+        elif not self.frame.startswith("runtime.frames."):
+            raise ValueError(
+                "a runtime-only frame must use the reserved runtime.frames.* namespace"
+            )
 
 
 @dataclass(frozen=True)
@@ -130,11 +143,19 @@ class FrameState:
     spec: FrameSpec
     asserted: tuple[tuple[str, Literal], ...] = ()
     obligations: tuple["TemporalObligation", ...] = ()
+    observed_events: tuple["FrameEvent", ...] = ()
+    processed_event_ids: tuple[str, ...] = ()
+    superseded_declarations: tuple[str, ...] = ()
     closed: bool = False
 
     @property
     def local_truths(self) -> tuple[tuple[str, Literal], ...]:
-        return self.spec.declarations + self.asserted
+        declarations = tuple(
+            pair
+            for pair in self.spec.declarations
+            if pair[0] not in self.superseded_declarations
+        )
+        return declarations + self.asserted
 
 
 @dataclass(frozen=True)
@@ -173,6 +194,59 @@ class TemporalObligation:
     @property
     def outstanding(self) -> bool:
         return self.discharged_by is None
+
+
+@dataclass(frozen=True)
+class FrameEvent:
+    """One state change and the agents allowed to learn from it.
+
+    Only predicates explicitly listed in ``functional_predicates`` replace a
+    prior positive value (location is functional; traits generally are not).
+    """
+
+    event_id: str
+    effects: tuple[Literal, ...]
+    witnessed_by: tuple[str, ...]
+    functional_predicates: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.event_id.strip():
+            raise ValueError("event_id must be non-empty")
+        if not self.effects:
+            raise ValueError("an event must carry at least one effect")
+        if any(not owner.strip() for owner in self.witnessed_by):
+            raise ValueError("witnessed_by owners must be non-empty")
+        if len(set(self.witnessed_by)) != len(self.witnessed_by):
+            raise ValueError("witnessed_by owners must be unique")
+        if any(not predicate.strip() for predicate in self.functional_predicates):
+            raise ValueError("functional_predicates must be non-empty strings")
+        if len(set(self.functional_predicates)) != len(self.functional_predicates):
+            raise ValueError("functional_predicates must be unique")
+        polarities: dict[tuple[str, str, str], bool] = {}
+        for effect in self.effects:
+            atom = (effect.subject, effect.predicate, effect.value)
+            previous = polarities.setdefault(atom, effect.polarity)
+            if previous is not effect.polarity:
+                raise ValueError(
+                    "an event may not carry contradictory effects for one atom"
+                )
+        effect_predicates = {effect.predicate for effect in self.effects}
+        if not set(self.functional_predicates).issubset(effect_predicates):
+            raise ValueError("functional_predicates must name an event effect")
+        functional_values: dict[tuple[str, str], str] = {}
+        for effect in self.effects:
+            if (
+                not effect.polarity
+                or effect.predicate not in self.functional_predicates
+            ):
+                continue
+            key = (effect.subject, effect.predicate)
+            previous = functional_values.setdefault(key, effect.value)
+            if previous != effect.value:
+                raise ValueError(
+                    "an event may not assign competing positive values to a "
+                    "functional predicate"
+                )
 
 
 @dataclass(frozen=True)
@@ -248,6 +322,118 @@ class FrameExecutor:
                             "which the frame does not suspend"
                         )
         return FrameState(spec=spec)
+
+    def observe_event(
+        self, state: FrameState, event: FrameEvent
+    ) -> Verification[FrameState]:
+        """Update an owned belief frame iff its owner witnessed the event."""
+
+        if state.closed:
+            return Verification(
+                Verdict.REFUSED,
+                "frame is closed; it accepts no observed events",
+                evidence=(state.spec.frame, event.event_id),
+            )
+        owner = state.spec.owner
+        if owner is None:
+            return Verification(
+                Verdict.REFUSED,
+                "visibility-filtered events require an owned belief frame",
+                evidence=(state.spec.frame, event.event_id),
+            )
+        for prior in state.observed_events:
+            if prior.event_id != event.event_id:
+                continue
+            if prior == event:
+                return Verification(
+                    Verdict.VERIFIED,
+                    "event was already observed; retry is idempotent",
+                    state,
+                    (owner, event.event_id),
+                )
+            return Verification(
+                Verdict.REFUSED,
+                "event id already identifies different visibility or effects",
+                evidence=(owner, event.event_id),
+            )
+        if event.event_id in state.processed_event_ids:
+            return Verification(
+                Verdict.REFUSED,
+                "event id was already processed outside this owner's visibility; "
+                "visibility cannot be rewritten after the event",
+                evidence=(owner, event.event_id),
+            )
+        if owner not in event.witnessed_by:
+            return Verification(
+                Verdict.VERIFIED,
+                f"event is invisible to owner {owner!r}; belief state is unchanged",
+                replace(
+                    state,
+                    processed_event_ids=(
+                        state.processed_event_ids + (event.event_id,)
+                    ),
+                ),
+                (owner, event.event_id, "not_witnessed"),
+            )
+
+        asserted = list(state.asserted)
+        superseded = set(state.superseded_declarations)
+        for index, effect in enumerate(event.effects):
+            # Functional-predicate update: a witnessed location change replaces
+            # the prior value. Explicit negative and positive effects let the
+            # world refute the old value without inventing exclusivity rules in
+            # the generic Literal checker.
+            functional = effect.predicate in event.functional_predicates
+
+            def supersedes(prior: Literal) -> bool:
+                return (
+                    prior.subject == effect.subject
+                    and prior.predicate == effect.predicate
+                    and (
+                        prior.value == effect.value
+                        or (effect.polarity and functional and prior.polarity)
+                    )
+                )
+
+            asserted = [
+                pair
+                for pair in asserted
+                if not supersedes(pair[1])
+            ]
+            superseded.update(
+                claim_id
+                for claim_id, literal in state.spec.declarations
+                if supersedes(literal)
+            )
+            asserted.append((f"{event.event_id}:{index}", effect))
+        next_state = replace(
+            state,
+            asserted=tuple(asserted),
+            observed_events=state.observed_events + (event,),
+            processed_event_ids=state.processed_event_ids + (event.event_id,),
+            superseded_declarations=tuple(sorted(superseded)),
+        )
+        return Verification(
+            Verdict.VERIFIED,
+            f"owner {owner!r} witnessed the event and updated its belief frame",
+            next_state,
+            (owner, event.event_id),
+        )
+
+    @staticmethod
+    def belief_value(
+        state: FrameState, subject: str, predicate: str
+    ) -> str | None:
+        """Return the latest positive value held for a functional predicate."""
+
+        for _, literal in reversed(state.local_truths):
+            if (
+                literal.subject == subject
+                and literal.predicate == predicate
+                and literal.polarity
+            ):
+                return literal.value
+        return None
 
     def check(self, state: FrameState, literal: Literal) -> Adjudication:
         spec = state.spec
@@ -485,6 +671,13 @@ class FrameExecutor:
             raise ValueError(
                 f"frame {state.spec.frame!r} is already closed; closing "
                 "twice would re-emit its demotions"
+            )
+        if state.spec.owner is not None:
+            return FrameCloseResult(
+                Verdict.REFUSED,
+                "owned belief frames persist and update; they do not demote on exit",
+                state,
+                evidence=(state.spec.owner, state.spec.frame),
             )
         outstanding = tuple(
             obligation for obligation in state.obligations if obligation.outstanding

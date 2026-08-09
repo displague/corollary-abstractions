@@ -11,8 +11,8 @@ key name being admissible in one object and not its neighbour.
 > **Implementation status (2026-08-08).** This document records the prediction
 > and design baseline at 199 nodes. The scope schema and executor have since
 > shipped, and the payoff in §4 has landed as ten nodes (the cartoon-gravity
-> entry expands to a declaration/assertion pair): 213 nodes total after the
-> physics reference-frame first cut, five
+> entry expands to a declaration/assertion pair): 215 nodes total after the
+> physics reference-frame and owned-belief first cuts, five
 > mirror-only groups, and the `LT` strict-order correction. Historical baseline
 > measurements below are intentionally retained as the before-state. Review
 > caught one error in that baseline: heraldry/no-deus used an outer `ALWAYS`,

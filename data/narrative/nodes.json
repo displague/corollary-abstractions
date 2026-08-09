@@ -1911,6 +1911,243 @@
         "epistemic ladder",
         "suspension of disbelief"
       ]
+    },
+    {
+      "statement_id": "narrative.belief.sally_marble_basket",
+      "title": "Sally's Marble-Location Belief",
+      "statement_class": "proposition",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative",
+          "cognitive_science"
+        ],
+        "subfield": "belief_frames",
+        "topic": "false_belief"
+      },
+      "formal_statement": {
+        "canonical_ascii": "in Sally's belief frame, location(marble) = basket",
+        "canonical_latex": "\\operatorname{location}_{Sally}(m)=basket",
+        "equivalent_forms": [
+          {
+            "form_id": "task_statement",
+            "notation_system": "ascii",
+            "expression": "Sally believes the marble is in the basket"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "agent_relative_location",
+        "anonymized_template": "LOCATION(MARBLE) = BASKET",
+        "slot_schema": [
+          {
+            "slot_id": "MARBLE",
+            "syntactic_category": "variable",
+            "semantic_role": "tracked_object"
+          },
+          {
+            "slot_id": "BASKET",
+            "syntactic_category": "constant",
+            "semantic_role": "believed_location"
+          }
+        ],
+        "invariants": [
+          "The owner field, not the LOCATION expression, makes this Sally's belief.",
+          "The belief persists when Sally does not witness the later move event."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "tracked_object",
+            "mathematical_order": 0,
+            "description": "The marble."
+          },
+          {
+            "symbol": "basket",
+            "syntactic_category": "constant",
+            "semantic_role": "believed_location",
+            "mathematical_order": 0,
+            "description": "The original container."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LOCATION(.)",
+            "name": "agent-attributed location",
+            "input_arity": 1,
+            "codomain": "places",
+            "description": "Location value held inside the owning belief frame."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Sally's attributed belief places the marble in the basket.",
+        "statistical_significance": "P-CF1's corpus declaration; the runtime must derive its persistence from missing the move rather than merely trusting this authored sentence.",
+        "regularity_conditions": [
+          "Sally witnessed the placement",
+          "Sally did not witness the move"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "baron_cohen1985",
+          "bibliographic_entry": "Baron-Cohen, S., Leslie, A. M., and Frith, U. (1985). Does the autistic child have a theory of mind? Cognition 21(1), 37-46."
+        }
+      ],
+      "keywords": [
+        "Sally-Anne",
+        "false belief",
+        "theory of mind",
+        "frame owner"
+      ],
+      "scope": {
+        "frame": "narrative.belief.sally_marble_basket",
+        "owner": "sally",
+        "role": "declaration",
+        "frame_title": "Sally's belief about the marble",
+        "premises": [
+          {
+            "premise_id": "sally_saw_placement",
+            "expression": "LOCATION(MARBLE) = BASKET"
+          }
+        ],
+        "suspends": [],
+        "governed_by": [
+          "narrative.frame.frame_consistency"
+        ],
+        "on_exit": "assumed",
+        "retrieval": "frame_local"
+      }
+    },
+    {
+      "statement_id": "narrative.world.marble_moved_box",
+      "title": "Marble Moved to the Box",
+      "statement_class": "proposition",
+      "epistemic_status": "assumed",
+      "theory_context": {
+        "disciplines": [
+          "narrative",
+          "cognitive_science"
+        ],
+        "subfield": "belief_frames",
+        "topic": "false_belief"
+      },
+      "formal_statement": {
+        "canonical_ascii": "after the move, location(marble) = box",
+        "canonical_latex": "\\operatorname{location}(m)=box",
+        "equivalent_forms": [
+          {
+            "form_id": "task_statement",
+            "notation_system": "ascii",
+            "expression": "Anne moves the marble from the basket into the box while Sally is away"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "agent_relative_location",
+        "anonymized_template": "LOCATION(MARBLE) = BOX",
+        "slot_schema": [
+          {
+            "slot_id": "MARBLE",
+            "syntactic_category": "variable",
+            "semantic_role": "tracked_object"
+          },
+          {
+            "slot_id": "BOX",
+            "syntactic_category": "constant",
+            "semantic_role": "world_location"
+          }
+        ],
+        "invariants": [
+          "This is unscoped world state; witnessed_by determines which owned frames receive it."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "tracked_object",
+            "mathematical_order": 0,
+            "description": "The marble."
+          },
+          {
+            "symbol": "box",
+            "syntactic_category": "constant",
+            "semantic_role": "world_location",
+            "mathematical_order": 0,
+            "description": "The marble's new container."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "LOCATION(.)",
+            "name": "object location",
+            "input_arity": 1,
+            "codomain": "places",
+            "description": "Location of an object in the world state."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The marble's post-move world location is the box.",
+        "statistical_significance": "The world half of P-CF1; it has the same expression shape as Sally's belief but different scope and event visibility.",
+        "regularity_conditions": [
+          "The move occurred",
+          "Sally was absent for the move"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "baron_cohen1985",
+          "bibliographic_entry": "Baron-Cohen, S., Leslie, A. M., and Frith, U. (1985). Does the autistic child have a theory of mind? Cognition 21(1), 37-46."
+        }
+      ],
+      "keywords": [
+        "Sally-Anne",
+        "false belief",
+        "world state",
+        "visibility"
+      ]
     }
   ]
 }

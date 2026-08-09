@@ -474,12 +474,37 @@ demo and a multi-step derivation remain one milestone in two costumes.
       the schema/validator, not in signature equivalence. Counts moved
       28/29/28/30/5 → 29/30/29/31/5; specialization 626 → 655, with the
       29 new edges confined to the two additive physics statements.
-    - **10c — frame ownership + visibility-filtered updates**: `owner` on
+    - **SHIPPED (first cut) — 10c, frame ownership + visibility-filtered updates**: `owner` on
       FrameSpec (additive schema change), `witnessed_by` on temporal
       events, divergence between an agent's frame and the world *derived*
       from event visibility rather than authored. Sally–Anne as the
       executable demo; adjudicates P-CF1. Nested frames follow later with
       their own leak controls.
+
+      P-CF1 fired: the owner-scoped Sally declaration and unscoped world
+      assertion validate with `owner` as the only scope-schema addition, and
+      `scripts/theory_of_mind.py` derives Sally→basket while world→box because
+      Sally witnesses placement but not movement. Events carry explicit
+      removal/addition effects; a missed event id cannot later be replayed with
+      forged visibility. Owned frames persist and refuse exit demotion. The
+      two LOCATION statements also form one exact typed twin, but that match is
+      not evidence for the runtime result. Corpus 213 → 215; suite 158 → 173;
+      store 715 → 723. Nested beliefs remain open.
+
+      **Review corrections:** the first event updater superseded only mutable
+      assertions, so a declaration-backed basket belief survived a witnessed
+      move and `check` verified both old and new locations. FrameState now
+      records superseded declaration ids. The same review found assertions
+      could introduce an owner absent from the declaration, and positive event
+      values erased all same-predicate values even when the predicate was not
+      functional. Owner now originates on the declaration; events explicitly
+      declare and validate functional predicates. All three reproducers are
+      permanent controls. Re-review then found two further fail-closed gaps:
+      dependency-free validation treated explicit `owner: null` as absence,
+      and one event could contain opposite effects for the same atom. Both are
+      rejected at their construction boundaries and retained as controls. A
+      final review caught the neighboring case of two positive values for one
+      declared functional key; that ambiguity is likewise rejected.
     - **10d — WordNet retrieval store** (parallel-safe slice): Open
       English WordNet 2025 JSON (72 MB, external, never in git; loader
       takes a path, feature gracefully absent without it) as a sixth

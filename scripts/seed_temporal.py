@@ -115,6 +115,14 @@ P8 (v0.5 payoff, registered before authoring/regeneration/matching).
     no_deus_ex_machina scores 0.500 through heraldry-pattern membership.
     VERDICT: open; adjudicate below only after all required tools run.
 
+P9 / P-CF1 (registered in docs/DESIGN-cognitive-frames.md before authoring).
+    A Sally belief declaration and the later world-location assertion should
+    validate with `scope.owner` as the only schema addition. The executor
+    should derive their divergence from `witnessed_by` event visibility with
+    no new epistemic verdict. Any structural twin is secondary and must not be
+    used as evidence that the false-belief runtime worked.
+    VERDICT: open; adjudicate only after schema, runtime, and matcher controls.
+
 Adjudication (written after running the tools; skeletons quoted verbatim)
 ------------------------------------------------------------------------
 
@@ -309,6 +317,16 @@ P8-payoff  STRUCTURE FIRED; GROUNDEDNESS MISSED.
     formulas now use HISTORICALLY, the matcher applies one global involution,
     and the corrected corpus yields five. The initial five-group result from
     per-head quotienting is retracted as a vacuous implementation of "mirror".
+
+P9 / P-CF1  FIRED at schema and runtime; content twin is secondary.
+    `scope.owner` is the only schema addition needed by the Sally declaration;
+    the unscoped world-location node validates unchanged. Placement reaches
+    Sally/Anne/world while movement reaches only Anne/world, so the executor
+    retains basket for Sally and derives box for world without a new verdict.
+    The two nodes also share `?0:P = LOCATION⟨?1:V⟩`, but that twin cannot
+    adjudicate false belief because owner and witnessed_by are outside its key.
+    Counts move 213 -> 215 and 29/30/29/31/5 -> 30/31/30/32/5;
+    specialization stays 655.
 
 P10 (unregistered). **Zero specialization edges, and zero specialization
     noise.** `specialize.py` produces 468 edges over the merged graph and not
@@ -2649,6 +2667,77 @@ NARRATIVE_NODES = [
          keywords=["fictional frame", "consistency", "possible worlds",
                    "complement law", "epistemic ladder", "suspension of disbelief"],
          canonical_objects=NARRATIVE_OBJECTS),
+
+    node("narrative.belief.sally_marble_basket",
+         "Sally's Marble-Location Belief",
+         "proposition", "assumed", "belief_frames", "false_belief",
+         "in Sally's belief frame, location(marble) = basket",
+         "\\operatorname{location}_{Sally}(m)=basket",
+         [{"form_id": "task_statement", "notation_system": "ascii",
+           "expression": "Sally believes the marble is in the basket"}],
+         "agent_relative_location",
+         "LOCATION(MARBLE) = BASKET",
+         [slot("MARBLE", "variable", "tracked_object"),
+          slot("BASKET", "constant", "believed_location")],
+         ["The owner field, not the LOCATION expression, makes this Sally's belief.",
+          "The belief persists when Sally does not witness the later move event."],
+         [sym("m", "variable", "tracked_object", "The marble."),
+          sym("basket", "constant", "believed_location", "The original container.")],
+         [EQ],
+         "Sally's attributed belief places the marble in the basket.",
+         "P-CF1's corpus declaration; the runtime must derive its persistence from missing the move rather than merely trusting this authored sentence.",
+         ["Sally witnessed the placement", "Sally did not witness the move"],
+         [{"citation_key": "baron_cohen1985",
+           "bibliographic_entry": "Baron-Cohen, S., Leslie, A. M., and Frith, U. (1985). Does the autistic child have a theory of mind? Cognition 21(1), 37-46."}],
+         ["narrative", "cognitive_science"],
+         functionals=[{
+             "notation": "LOCATION(.)", "name": "agent-attributed location",
+             "input_arity": 1, "codomain": "places",
+             "description": "Location value held inside the owning belief frame."
+         }],
+         keywords=["Sally-Anne", "false belief", "theory of mind", "frame owner"],
+         scope={
+             "frame": "narrative.belief.sally_marble_basket",
+             "owner": "sally",
+             "role": "declaration",
+             "frame_title": "Sally's belief about the marble",
+             "premises": [{
+                 "premise_id": "sally_saw_placement",
+                 "expression": "LOCATION(MARBLE) = BASKET",
+             }],
+             "suspends": [],
+             "governed_by": ["narrative.frame.frame_consistency"],
+             "on_exit": "assumed",
+             "retrieval": "frame_local",
+         }),
+
+    node("narrative.world.marble_moved_box",
+         "Marble Moved to the Box",
+         "proposition", "assumed", "belief_frames", "false_belief",
+         "after the move, location(marble) = box",
+         "\\operatorname{location}(m)=box",
+         [{"form_id": "task_statement", "notation_system": "ascii",
+           "expression": "Anne moves the marble from the basket into the box while Sally is away"}],
+         "agent_relative_location",
+         "LOCATION(MARBLE) = BOX",
+         [slot("MARBLE", "variable", "tracked_object"),
+          slot("BOX", "constant", "world_location")],
+         ["This is unscoped world state; witnessed_by determines which owned frames receive it."],
+         [sym("m", "variable", "tracked_object", "The marble."),
+          sym("box", "constant", "world_location", "The marble's new container.")],
+         [EQ],
+         "The marble's post-move world location is the box.",
+         "The world half of P-CF1; it has the same expression shape as Sally's belief but different scope and event visibility.",
+         ["The move occurred", "Sally was absent for the move"],
+         [{"citation_key": "baron_cohen1985",
+           "bibliographic_entry": "Baron-Cohen, S., Leslie, A. M., and Frith, U. (1985). Does the autistic child have a theory of mind? Cognition 21(1), 37-46."}],
+         ["narrative", "cognitive_science"],
+         functionals=[{
+             "notation": "LOCATION(.)", "name": "object location",
+             "input_arity": 1, "codomain": "places",
+             "description": "Location of an object in the world state."
+         }],
+         keywords=["Sally-Anne", "false belief", "world state", "visibility"]),
 ]
 
 

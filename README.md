@@ -10,7 +10,7 @@ interface. Latest release: [v0.4.0](docs/RELEASE-v0.4.0.md).
 
 ## The two headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 213
+**1. The matcher discovers that sciences repeat one another.** From 215
 hand-authored statement nodes across 21 disciplines, structure alone:
 
 ```
@@ -104,7 +104,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (21 disciplines, 213 nodes)
+data/<discipline>/      statement corpora (21 disciplines, 215 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -114,6 +114,7 @@ scripts/
   controller.py         shared v0.5 state/action/verifier loop
   retrieval.py          UNKNOWN -> five-store RETRIEVE -> pointable context
   conversation.py       ASK -> WAITING -> signed user reply -> resumed binding
+  theory_of_mind.py     visibility-derived Sally-Anne false-belief control
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (10.7x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
@@ -145,12 +146,13 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 213 nodes / 21 corpora green
+python scripts/validate_nodes.py            # 215 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
 python scripts/retrieval.py                 # exact five-store lookup then POINT
 python scripts/conversation.py              # two-turn golden-chicken clarification
+python scripts/theory_of_mind.py            # Sally looks in basket; world says box
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)

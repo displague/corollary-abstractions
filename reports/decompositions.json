@@ -6055,6 +6055,48 @@
       ]
     },
     {
+      "statement_id": "narrative.belief.sally_marble_basket",
+      "template": "LOCATION(MARBLE) = BASKET",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "LOCATION⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "narrative.world.marble_moved_box"
+          ],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "narrative.world.marble_moved_box",
+      "template": "LOCATION(MARBLE) = BOX",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "LOCATION⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "narrative.belief.sally_marble_basket"
+          ],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
       "statement_id": "numanalysis.rootfinding.newton_iteration",
       "template": "XNEXT = X - FVALUE/FDERIV",
       "groundedness": 0.5,

@@ -67,18 +67,29 @@ class MirrorReportTests(unittest.TestCase):
         cls.report = build_report(nodes, problems)
 
     def test_registered_group_counts_include_physics_frames_slice(self) -> None:
-        self.assertEqual(self.report["nodes_analyzed"], 213)
+        self.assertEqual(self.report["nodes_analyzed"], 215)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 29,
-                "typed": 30,
-                "family": 29,
-                "aliased": 31,
+                "shape": 30,
+                "typed": 31,
+                "family": 30,
+                "aliased": 32,
                 "mirror": 5,
             },
         )
         self.assertEqual(self.report["ladder_violations"], [])
+
+    def test_sally_belief_and_world_location_share_content_not_scope(self) -> None:
+        expected = {
+            "narrative.belief.sally_marble_basket",
+            "narrative.world.marble_moved_box",
+        }
+        groups = [
+            {member["statement_id"] for member in group["members"]}
+            for group in self.report["typed_twin_groups"]
+        ]
+        self.assertIn(expected, groups)
 
     def test_galilean_addition_fires_and_scope_only_prediction_misses(self) -> None:
         typed_groups = {

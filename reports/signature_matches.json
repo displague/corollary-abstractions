@@ -1,10 +1,10 @@
 {
-  "nodes_analyzed": 213,
+  "nodes_analyzed": 215,
   "group_counts": {
-    "shape": 29,
-    "typed": 30,
-    "family": 29,
-    "aliased": 31,
+    "shape": 30,
+    "typed": 31,
+    "family": 30,
+    "aliased": 32,
     "mirror": 5
   },
   "ladder_violations": [],
@@ -200,6 +200,27 @@
           "statement_id": "geometry.right_triangles.pythagorean_theorem",
           "discipline": "geometry",
           "template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:P = LOCATION⟨?1:V⟩",
+      "disciplines": [
+        "narrative"
+      ],
+      "archetypes": [
+        "agent_relative_location"
+      ],
+      "members": [
+        {
+          "statement_id": "narrative.belief.sally_marble_basket",
+          "discipline": "narrative",
+          "template": "LOCATION(MARBLE) = BASKET"
+        },
+        {
+          "statement_id": "narrative.world.marble_moved_box",
+          "discipline": "narrative",
+          "template": "LOCATION(MARBLE) = BOX"
         }
       ]
     },
@@ -1698,6 +1719,27 @@
           "statement_id": "ml.objective.kl_regularized_rl_objective",
           "discipline": "machine_learning",
           "template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0 = LOCATION⟨?1⟩",
+      "disciplines": [
+        "narrative"
+      ],
+      "archetypes": [
+        "agent_relative_location"
+      ],
+      "members": [
+        {
+          "statement_id": "narrative.belief.sally_marble_basket",
+          "discipline": "narrative",
+          "template": "LOCATION(MARBLE) = BASKET"
+        },
+        {
+          "statement_id": "narrative.world.marble_moved_box",
+          "discipline": "narrative",
+          "template": "LOCATION(MARBLE) = BOX"
         }
       ]
     },

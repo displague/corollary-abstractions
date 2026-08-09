@@ -1253,7 +1253,7 @@ def demo(repo_root: Path, key: str) -> int:
     executor = FrameExecutor()
     frame = executor.open_frame(
         # Retrieval is open here; story-local frames keep their existing guard.
-        FrameSpec(frame="retrieval.demo", retrieval="open")
+        FrameSpec(frame="runtime.frames.retrieval_demo", retrieval="open")
     )
     state = RetrievalState.from_unknown(
         executor,

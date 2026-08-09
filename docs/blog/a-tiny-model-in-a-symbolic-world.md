@@ -314,7 +314,16 @@ one formula. A companion prediction fired exactly—Galilean velocity addition
 has the same typed additive skeleton as rank decomposition in algebraic
 topology. The corpus now has 213 statements; the matcher found the arithmetic
 relationship without being taught that “relative motion” and “chain rank” are
-related words.
+related words. That physics cut brought the corpus to 213 statements; the
+owned-belief pair below brings it to 215.
+
+Owned frames now extend the same mechanism into a minimal theory-of-mind test.
+Sally, Anne, and the world all receive the marble's placement event; only Anne
+and the world witness its move. The executor therefore answers that Sally will
+look in the basket while the world says the marble is in the box. The false
+belief is derived from visibility rather than inserted as a special answer.
+This is still a controlled symbolic task—not general social understanding—but
+it establishes the state distinction that conversational perspective requires.
 
 ## Conversation, clarification, and dead ends
 
@@ -350,7 +359,7 @@ detail of individual tools.
 
 | Capability | Present state |
 |---|---|
-| Cross-discipline symbolic knowledge | Operational: 213 nodes, 21 disciplines |
+| Cross-discipline symbolic knowledge | Operational: 215 nodes, 21 disciplines |
 | Structural twins, specializations, decomposition | Operational and measured |
 | Knowledge supplied in context | Consumed successfully by a tiny pointer |
 | Retrieval initiated by the model | Local oracle adapter operational; learned choice/external tools open |
@@ -400,14 +409,12 @@ knows, assumes, tries, proves, and cannot resolve.
 
 The immediate path is now concrete:
 
-1. Add FrameSpec ownership and visibility-filtered events, then run the
-   Sally–Anne false-belief demo before attempting nested frames.
-2. Add the licensed, external WordNet retrieval adapter with zero frame-verdict
+1. Add the licensed, external WordNet retrieval adapter with zero frame-verdict
    changes, and connect retrieval to external tools.
-3. Implement PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
-4. Replace committed Lean-transition replay with live PyPantograph application
+2. Implement PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
+3. Replace committed Lean-transition replay with live PyPantograph application
    and search.
-5. Make sessions and the existing dead-branch trace serializable with complete terminal
+4. Make sessions and the existing dead-branch trace serializable with complete terminal
    outcomes.
 7. Replace the deterministic oracle with a tiny verifier-coupled policy.
 8. Extend recurrent processing into the consumers that still fail at depth.
