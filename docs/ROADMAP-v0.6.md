@@ -133,6 +133,37 @@ count, and seed distribution. “GRU wins” is not the hypothesis; shared itera
 computation is. If another tied mechanism wins, adopt the mechanism and retire
 the named component claim.
 
+**IN PROGRESS — final-matrix predictions registered before any adjudicating
+run.** The two earlier address-only pilots were invalidated before the control
+changed; no pilot artifact is resumable into the final matrix.
+
+- **P-DC1:** Extending shared path iteration into both the pointer query and
+  decoder memory consumer improves mean depth-OOD exact over recurrent-address
+  only, wins materially on at least two of three paired seeds, and keeps every
+  trained-depth seed at or above 0.99 exact.
+- **P-DC2:** Query-only and memory-only each improve materially over address,
+  each on at least two paired seeds, while both is at least as strong as the
+  better single consumer.
+- **P-DC3:** The parameter-matched, order/level-aware, identity-preserving
+  one-shot MLP consumer with fixed closed-form level codes does not match the
+  both-recurrent consumer. The address encoder remains recurrent in every arm;
+  this compares consumer mechanisms but does not isolate iteration from
+  learned level processing.
+- **P-DC4:** All five arms run seeds 0/1/2 and report parameters, trained-depth
+  exact, conditional depth-OOD exact, teacher-forced per-step/decile failure,
+  inclusion by depth, source/data/config provenance, and checkpoint digests.
+  This is a protocol gate: analysis either satisfies it or refuses to run.
+
+Before-run operationalization: a material improvement or loss is at least
+0.15 absolute mean depth-OOD exact and at least two of three paired-seed
+differences of at least 0.15. “At least as strong” allows at most a 0.01 mean
+deficit. The 0.15 floor exceeds the documented 0.139 cold-seed spread of the
+recurrent address control. Same-seed arms use an explicit identical DataLoader
+shuffle generator, so paired differences share initialization and data order.
+The historical benchmark filters over-length examples; every final row
+must disclose generated/kept/drop counts by depth, and the release must call
+the metric conditional rather than silently treating it as all generated OOD.
+
 ## 5. Corpus-grounded analogy
 
 Replace synthetic-tree-only evaluation with quadruples derived from real twin

@@ -24,6 +24,26 @@ from train_analogy import (AnalogyDataset, AnalogyPointer, GEN_TOKENS,
                            collate, load_jsonl)
 
 
+def restore_model(checkpoint: dict, device: str) -> tuple[AnalogyPointer, Vocab]:
+    vocab = Vocab(set(checkpoint["vocab"]))
+    vocab.itos = checkpoint["vocab"]
+    vocab.stoi = {token: index for index, token in enumerate(vocab.itos)}
+    config = checkpoint["config"]
+    level_code = config.get("level_code")
+    if level_code is None:
+        keys = checkpoint["state_dict"]
+        level_code = ("recurrent" if "path_cell.weight_ih" in keys else
+                      "sinusoidal" if "level_codes" in keys else "table")
+    model = AnalogyPointer(
+        len(vocab.itos), config["d_model"], max_tgt=config["max_tgt"],
+        level_code=level_code,
+        consumer=config.get("consumer", "address"),
+    ).to(device)
+    model.load_state_dict(checkpoint["state_dict"])
+    model.eval()
+    return model, vocab
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--checkpoint", type=Path,
@@ -34,14 +54,8 @@ def main() -> None:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
-    vocab = Vocab(set(ckpt["vocab"]))
-    vocab.itos = ckpt["vocab"]
-    vocab.stoi = {t: i for i, t in enumerate(vocab.itos)}
+    model, vocab = restore_model(ckpt, device)
     cfg = ckpt["config"]
-    model = AnalogyPointer(len(vocab.itos), cfg["d_model"],
-                           max_tgt=cfg["max_tgt"]).to(device)
-    model.load_state_dict(ckpt["state_dict"])
-    model.eval()
     G = len(GEN_TOKENS)
 
     for split in ["test", "ood"]:
@@ -72,6 +86,7 @@ def main() -> None:
                                        mask.to(device), y.to(device),
                                        tc.to(device))
                 memory = model.encode(x, crd, mask)
+                memory = model.prepare_memory(memory, crd[..., 1:])
                 logits = model.decode(memory, mask, y[:, :-1],
                                       tc[:, : y.size(1) - 1])
                 pred = logits.argmax(-1)

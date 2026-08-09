@@ -50,6 +50,7 @@ def decode_one(model: AnalogyPointer, item, vocab: Vocab,
     mask = torch.ones_like(x, dtype=torch.bool)
     with torch.no_grad():
         memory = model.encode(x, coords, mask)
+        memory = model.prepare_memory(memory, coords[..., 1:])
         out = torch.tensor([[BOS]], dtype=torch.long, device=device)
         emitted: list[str] = []
         gen_count = len(GEN_TOKENS)
@@ -109,10 +110,12 @@ def main() -> None:
     vocab = restore_vocab(checkpoint["vocab"])
     cfg = checkpoint["config"]
     level_code = infer_level_code(checkpoint["state_dict"])
+    consumer = cfg.get("consumer", "address")
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = AnalogyPointer(len(vocab), cfg["d_model"],
                            max_tgt=cfg["max_tgt"],
-                           level_code=level_code).to(device)
+                           level_code=level_code,
+                           consumer=consumer).to(device)
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
 
@@ -134,6 +137,7 @@ def main() -> None:
     print(f"checkpoint={args.checkpoint.name} params="
           f"{sum(p.numel() for p in model.parameters()):,} "
           f"addressing={level_code} device={device}")
+    print(f"depth_consumer={consumer}")
     print("Every output token is copied from the input; no generation head "
           "can invent one.")
     run_split("held-out combinations, trained depth", test_data, model,
