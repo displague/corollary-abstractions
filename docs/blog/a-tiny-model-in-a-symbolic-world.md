@@ -369,7 +369,7 @@ detail of individual tools.
 
 | Capability | Present state |
 |---|---|
-| Cross-discipline symbolic knowledge | Operational: 215 nodes, 21 disciplines |
+| Cross-discipline symbolic knowledge | Operational: 221 nodes, 22 disciplines |
 | Structural twins, specializations, decomposition | Operational and measured |
 | Knowledge supplied in context | Consumed successfully by a tiny pointer |
 | Retrieval initiated by the model | Local oracle adapter plus optional WordNet bridge operational; learned choice/general tools open |
@@ -378,8 +378,8 @@ detail of individual tools.
 | Narrative grammar and axioms | Authored and matcher-visible |
 | Runtime fictional frame | Scope executor, two-sided temporal laws, scoped corpus nodes, and finite obligations operational |
 | Lean training transitions | Phase 1 delivered: 155 transitions |
-| Learned tactic policy and proof search | Unbuilt |
-| Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT/ASK adapters implemented; learned policy unbuilt |
+| Learned tactic policy and proof search | Bounded live search ships; a 27,688-parameter ranker learns held-out schemas but its 65.0-proposal mean loses to the state-blind frequency order at 64 |
+| Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT/ASK adapters implemented; learned five-action choice unbuilt |
 | Conversational clarification | Parsed ASK pauses as WAITING, accepts a channel-signed reply, and resumes persistent user-frame state |
 | Expressive LLM-like prose | Far from the present renderer |
 | Oracle golden-chicken integration baseline | 1/1, three checked beats plus visible plant/discharge accounting |

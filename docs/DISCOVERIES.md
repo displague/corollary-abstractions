@@ -13,6 +13,15 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Held-out tactic classification does not guarantee a search gain.** Three
+  27,688-parameter byte-GRU rankers all score 0.8125 on four theorem-held-out
+  groups (frequency 0.4375; shuffled-label controls 0.25–0.375) and solve live
+  in 71/63/61 proposals. The arbitrary palette needs 86, but the stronger
+  state-blind frequency order needs only 64—one better than the learned mean.
+  Two seeds win and one loses; no mean learned advantage survives. *P-TP1–4
+  fired against registered controls; corrective P-TP5 refuted the live-gain
+  interpretation* (2026-08-09)
+
 - **An accepted proof step can be a dead branch.** In live Lean search,
   ``clear h`` is kernel-accepted after introducing a conjunction hypothesis,
   but removes the only evidence needed to build the reversed conjunction.

@@ -24,6 +24,25 @@ project loading is also still blocked by PyPantograph 0.3.15's POSIX
 ``printenv`` call during ``LEAN_PATH`` discovery; the base ``Init`` path does
 not exercise imports from the extracted Boolean-laws project.
 
+The first learned rung is also PARTIAL. ``experiments/train_tactic_policy.py``
+trains a 27,688-parameter byte-GRU over 60 atomic schema-mapped transitions.
+Three theorem-held-out seeds reach 0.8125 top-1 against a 0.4375 frequency
+baseline and 0.25–0.375 shuffled controls; their live searches use 71/63/61
+proposals versus arbitrary order 86 at the same budget. A stronger state-blind
+frequency order uses 64, beating the learned mean of 65.0, so no live learned
+gain is claimed. Checkpoints are gitignored and
+ship only as release assets. To demonstrate a downloaded checkpoint:
+
+```powershell
+$env:PYTHONPATH = '<pantograph-venv>\Lib\site-packages'
+$env:Path = "$env:USERPROFILE\.elan\toolchains\leanprover--lean4---v4.29.1\bin;$env:Path"
+python experiments\train_tactic_policy.py --live `
+  --demo-checkpoint experiments\results\tactic_policy_s1.pt
+```
+
+This is learned ordering over a fixed palette, not tactic generation or a
+miniF2F solved-rate result.
+
 ## Thesis
 
 A small model cannot match a large model's stored knowledge, but it does not
@@ -77,9 +96,11 @@ evidence says stop.
 - Use the native Windows path documented in `FEASIBILITY.md`: extraction via
   the patched Lean tracer and interactive proving via PyPantograph (tactic
   application over the Python RPC, `is_solved: True` on a real theorem) have
-  both been demonstrated without WSL2. A capability-blind automated search
-  loop now exists for an ``Init`` theorem; learned ranking and imported-project
-  search remain phase 2 deliverables. The `lean-dojo-v2` Python package
+  both been demonstrated without WSL2. Capability-blind automated search and
+  one bounded learned-ranking experiment now exist for an ``Init`` theorem;
+  imported-project search, a many-theorem solved-rate evaluation, and a
+  learned gain over the strongest state-blind order remain phase 2
+  deliverables. The `lean-dojo-v2` Python package
   remains unavailable here because of its `deepspeed` dependency; introduce a
   Linux/WSL2 path only if a later phase actually requires that package.
 - Phases 2-4 need GPU time (rentable; single consumer GPU is enough for a

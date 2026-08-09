@@ -40,8 +40,22 @@ Removing the two projection tactics exhausts at 10 states / 80 proposals.
 The first registered palette prediction missed because bare ``intro`` produced
 pretty-printed names that tactics could not call; that miss and the corrective
 named-intro run remain in the ledger.  This is real live search and
-backtracking, not learned choice: milestone 3 and the learned-policy release
-gate remain open.
+backtracking, not learned choice; the learned milestone is adjudicated
+separately below.
+
+**PARTIAL — milestone 3 has its first result, and the strongest control wins.** A
+27,688-parameter byte-GRU ranks eight tactic schemas while the existing
+controller and Lean retain search and truth. Across three cold seeds,
+theorem-held-out top-1 is 0.8125 (frequency 0.4375; shuffled labels
+0.25/0.375/0.375). At the identical 64-state / 512-proposal live budget, all
+three checkpoints close the held-out theorem in 71/63/61 proposals (mean
+65.0, arbitrary palette 86); every projection ablation still exhausts at 80.
+But the post-review state-blind frequency order closes in 64 proposals, one
+better than the learned mean. P-TP5 is missed and the live learned-gain claim
+is retracted. This clears the learned-policy *result* gate as a negative result,
+not a win. It does not clear
+milestone 5, five-action choice, imported-project search, or any solved-rate
+benchmark; the shared story-policy rung remains open.
 
 The policy may choose among admissible actions, arguments, and ranking. It may
 not learn equality, frame consistency, receipt verification, theorem checking,

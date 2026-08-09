@@ -1,0 +1,134 @@
+{
+  "experiment": "tactic-policy-v0.6",
+  "device": "cuda",
+  "examples": 60,
+  "train_examples": 44,
+  "heldout_examples": 16,
+  "heldout_theorems": [
+    "BooleanLaws.distrib_and_or",
+    "BooleanLaws.double_negation",
+    "BooleanLaws.identity_and_true",
+    "BooleanLaws.modus_ponens"
+  ],
+  "schemas": [
+    "clear",
+    "intro",
+    "constructor",
+    "assumption",
+    "projection",
+    "left",
+    "right",
+    "trivial"
+  ],
+  "parameters": 27688,
+  "epochs": 120,
+  "frequency_top1": 0.4375,
+  "runs": [
+    {
+      "seed": 0,
+      "checkpoint": "tactic_policy_s0.pt",
+      "heldout_top1": 0.8125,
+      "shuffled_top1": 0.25,
+      "checkpoint_bytes": 114433,
+      "live": {
+        "solved": true,
+        "nodes": 8,
+        "states": 11,
+        "proposals": 71,
+        "accepted": 10,
+        "rejected": 61,
+        "solution": [
+          "intro P Q h",
+          "constructor",
+          "exact h.right",
+          "exact h.left"
+        ],
+        "ablation_solved": false,
+        "ablation_stop": "exhausted",
+        "ablation_nodes": 10,
+        "ablation_proposals": 80
+      }
+    },
+    {
+      "seed": 1,
+      "checkpoint": "tactic_policy_s1.pt",
+      "heldout_top1": 0.8125,
+      "shuffled_top1": 0.375,
+      "checkpoint_bytes": 114433,
+      "live": {
+        "solved": true,
+        "nodes": 7,
+        "states": 11,
+        "proposals": 63,
+        "accepted": 10,
+        "rejected": 53,
+        "solution": [
+          "intro P Q h",
+          "constructor",
+          "exact h.right",
+          "exact h.left"
+        ],
+        "ablation_solved": false,
+        "ablation_stop": "exhausted",
+        "ablation_nodes": 10,
+        "ablation_proposals": 80
+      }
+    },
+    {
+      "seed": 2,
+      "checkpoint": "tactic_policy_s2.pt",
+      "heldout_top1": 0.8125,
+      "shuffled_top1": 0.375,
+      "checkpoint_bytes": 114433,
+      "live": {
+        "solved": true,
+        "nodes": 7,
+        "states": 11,
+        "proposals": 61,
+        "accepted": 10,
+        "rejected": 51,
+        "solution": [
+          "intro P Q h",
+          "constructor",
+          "exact h.right",
+          "exact h.left"
+        ],
+        "ablation_solved": false,
+        "ablation_stop": "exhausted",
+        "ablation_nodes": 10,
+        "ablation_proposals": 80
+      }
+    }
+  ],
+  "seconds": 34.2,
+  "blind_live": {
+    "solved": true,
+    "stop": "solved",
+    "nodes": 9,
+    "states": 12,
+    "proposals": 86,
+    "accepted": 11,
+    "rejected": 75
+  },
+  "frequency_live": {
+    "solved": true,
+    "stop": "solved",
+    "nodes": 7,
+    "states": 11,
+    "proposals": 64,
+    "accepted": 10,
+    "rejected": 54,
+    "tactics": [
+      "intro P Q h",
+      "intro",
+      "constructor",
+      "exact h.left",
+      "exact h.right",
+      "left",
+      "right",
+      "clear h",
+      "assumption",
+      "trivial"
+    ]
+  }
+}

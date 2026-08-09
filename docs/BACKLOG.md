@@ -79,6 +79,21 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
 ## Controller / harness
 
+- **PARTIAL — learned tactic classification works; live ranking does not beat
+  the strongest blind order.** The 27,688-parameter byte-GRU has a real
+  theorem-level holdout and three-seed controls, scoring 0.8125 against
+  frequency 0.4375 and shuffled 0.25–0.375. Live runs take 71/63/61 proposals
+  versus 86 for the arbitrary palette, but a state-blind global frequency
+  order takes 64; the learned mean is 65.0. P-TP5 records the miss. Only 60 of
+  155 extraction rows map to its eight-schema
+  vocabulary; the live target is one `Init` theorem; concrete binder and
+  projection candidates are supplied symbolically; and no model chooses among
+  POINT/RETRIEVE/ASK/WRITE. Expand the atomic extractor, repair native project
+  imports, report held-out solved rate over many theorems and fixed budget
+  curves, then test the same policy interface on story actions. Do not call
+  top-1 schema accuracy a proof-success rate or compare only to arbitrary
+  palette order.
+
 - **PARTIAL — live Lean application and branch search ship; learned ranking
   and native project imports remain open.** ``SearchController`` now explores
   verifier-accepted branches under independent node/proposal budgets, and the

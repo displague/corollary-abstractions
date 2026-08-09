@@ -1189,3 +1189,64 @@ A re-review found that solved children were returned before entering the
 distinct-state set (11 reported instead of 12) and that the source pin omitted
 the post-checkout submodule update; both the metric and reproduction recipe are
 corrected here rather than preserving a favorable undercount.
+
+## Tiny tactic ranking (v0.6 item 1, learned rung)
+
+The learned residual is intentionally narrow. A 27,688-parameter byte-GRU
+reads at most the final 512 UTF-8 bytes of a rendered proof state and ranks
+eight tactic schemas. It cannot apply a tactic, certify a proof, enumerate a
+branch, synthesize a binder, or change the candidate vocabulary. Those remain
+the live verifier and symbolic controller's work.
+
+Training uses 60 atomic rows mapped from the 155 committed transitions;
+multi-tactic blocks and tactics outside the bounded schema set are excluded.
+Four complete theorem identities (16 mapped rows) are held out. Three cold
+seeds use the same split. The capability-blind controls are the most-frequent
+training label and independently shuffled training labels.
+
+| seed | held-out top-1 | shuffled top-1 | live nodes | live proposals | no-projection |
+|---:|---:|---:|---:|---:|---|
+| 0 | 0.8125 | 0.250 | 8 | 71 | exhausted, 10 / 80 |
+| 1 | 0.8125 | 0.375 | 7 | 63 | exhausted, 10 / 80 |
+| 2 | 0.8125 | 0.375 | 7 | 61 | exhausted, 10 / 80 |
+| global frequency order | 0.4375 | — | 7 | **64** | not rerun (same projection removal) |
+| arbitrary palette | — | — | 9 | 86 | exhausted, 10 / 80 |
+
+P-TP1 through P-TP4 fire against their registered controls. Learned ordering
+reduces live proposals from the arbitrary palette's 86 to a three-seed mean of
+65.0 at the same 64-state / 512-proposal budget. Every seed finds the same
+four-step kernel-checked proof. Each
+checkpoint is 114,433 bytes, far below both the 1 MiB registered ceiling and
+the project's 64 MB aspiration.
+
+**Corrective P-TP5 MISSED; live learned-gain claim retracted.** Review asked
+the cheapest stronger question: what if the training-label frequencies rank
+the same palette globally, with no access to the current state? That policy
+solves in 64 proposals. Two learned seeds beat it (63, 61), one loses badly
+(71), and the learned mean (65.0) is one proposal worse. There is no
+three-seed live efficiency gain attributable to state-conditioned weights.
+The 86→65 comparison measured a weak arbitrary ordering control. The 0.8125
+theorem-held-out classification result remains real, as do the shuffled and
+projection controls, but it did not translate into a mean search win here.
+
+The important limitation is breadth. The live palette is ten concrete tactics
+grouped into eight schemas, the theorem is one small `Init` proposition, and
+the all-data checkpoint has seen only 60 usable states from 16 Boolean-law
+theorems. Stable seed agreement does not turn this into a general prover. The
+result establishes something narrower: the tiny model learns held-out schema
+regularities, while a one-table frequency prior is at least as effective on
+this single live proof. Next evidence must add project imports, many
+held-out theorems, solved-rate curves at fixed budgets, and eventually action
+choice beyond `GEN(lean_tactic)`.
+
+Pre-commit review found that the first runner serialized the earlier blind
+number instead of recomputing it beside each live experiment. The number was
+correct here, but the comparison path was not self-auditing and could drift
+under another budget. The runner now executes blind search in the same live
+invocation and records its full trace counts. Review also found that a default
+non-live run could overwrite the canonical live artifact; live and non-live
+defaults now have distinct paths. Both attacks are permanent regressions.
+Re-review then found the missing frequency-ranked live control; it beat the
+learned mean and forced the public P-TP5 miss above. This is why capability-
+blind baselines are run before model conclusions, even when the model metric
+itself looks strong.

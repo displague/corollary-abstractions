@@ -539,8 +539,9 @@ def main() -> int:
         )
     print(
         "\nLIMIT: this demo's Lean steps are exact committed extraction "
-        "replay. A separate capability-blind PyPantograph search now applies "
-        "tactics live, but learned tactic ranking remains unbuilt. The frame "
+        "replay. Separate PyPantograph paths now compare capability-blind "
+        "search with a learned eight-schema tactic ranker; this demo invokes "
+        "neither, and learned five-action choice remains unbuilt. The frame "
         "executor "
         "checks declarations, denials, suspensions, finite Chekhov-style "
         "obligations at frame close, and -- where a frame adopts the "
