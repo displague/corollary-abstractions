@@ -22,8 +22,11 @@ bindings), **near-miss** (informative failure, kept deliberately).
   induction along a well-founded step relation — and twin at no level.
   The trees differ in exactly the axiom that separates the logics: Löb
   discharges reflection (□p→p) only under a box, LTL validates it
-  outright. A discipline-named archetype now provably spans a second
-  discipline. *P-CF4 fired, archetype-shared near-miss* (2026-08-08)
+  outright. A discipline-named archetype now spans a second
+  discipline — by argued adoption in the seed, an authoring claim the
+  drift report carries, not a tool-discovered fact; only the no-twin
+  half is a matcher outcome. *P-CF4 fired, archetype-shared near-miss*
+  (2026-08-08)
 
 - **A six-node corpus can self-certify perfect groundedness on a head the
   graph has never seen.** Every `data/provability` node grounds at 1.000

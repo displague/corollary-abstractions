@@ -623,7 +623,7 @@ PROVABILITY_NODES = [
           "once, INSIDE the box, as the hypothesis being discharged — "
           "P-CF4's registered near-miss, adjudicated in this file's "
           "docstring.",
-          "One free operand occurring four times at three depths, the "
+          "One free operand occurring three times at three depths, the "
           "same recurrence-is-the-content pattern the induction and "
           "transitivity families carry.",
           "Adding reflection to GL as an axiom collapses it: "
@@ -799,7 +799,7 @@ PROVABILITY_NODES = [
           "Read positively rather than as a limitation: self-certified "
           "consistency is worthless, because producing the certificate "
           "is the one act that would refute it. This is the corpus-level "
-          "statement of AGENTS.md's external-trust-roots rule, and "
+          "statement of the external-trust-roots rule, and "
           "DESIGN-cognitive-frames §4 records the architectural "
           "principle it grounds."],
          [sym("bottom", "constant", "refutable_sentence",
