@@ -214,8 +214,9 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   retrieval as an UNKNOWN-triggered action
 - `docs/DESIGN-cognitive-frames.md` — theory of mind, reference frames,
   relational frames, provability, masked structure, and WordNet
-- `docs/DESIGN-affect.md` — emotion maps as structure (discrete relations,
-  named dimensions, owned-frame obligations); rejects weight-space sentiment
+- `docs/DESIGN-affect.md` — source-qualified emotion maps, attributed
+  belief/story claims, and narrative obligations; weights may propose but do
+  not certify affect
 - `docs/DESIGN-visual-structure.md` — the parse-first multimodal plan:
   formula/diagram twins, SVG structure, and a pixel control
 - `docs/blog/` — accessible project narratives, including the v0.5 story

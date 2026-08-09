@@ -1,4 +1,4 @@
-# Design: affect as structure — emotion maps without weight-space sentiment
+# Design: affect as attributed structure — emotion maps without pretending to read minds
 
 Source conversation: 2026-08-09, prompted by emotion-classification diagrams
 and maps ([Emotion classification](https://en.wikipedia.org/wiki/Emotion_classification)),
@@ -6,8 +6,8 @@ and by the question of whether continuous “emotion vectors” belong in the
 same program as math/science corpora, multiplanar oscillators, and the
 symbolic controller. The finding that motivates this document: **the
 competitive claim of this repository is exact structure outside weights;
-affect enters only where it is structure with verifiers, not as a continuous
-vibe table inside the model.** What follows is the mapping, the non-goals,
+affect enters as attributed claims, theory-relative maps, and graded
+proposals—not as a continuous vibe table mistaken for truth.** What follows is the mapping, the non-goals,
 the staged work, and registered predictions that keep the mapping
 falsifiable rather than decorative.
 
@@ -22,7 +22,7 @@ lane) and from `docs/DESIGN-cognitive-frames.md` sequencing.
 
 ## 1. Why this is easy to get wrong
 
-Frontier LLMs already produce fluent affect language. A natural temptation is
+Large language models already produce fluent affect language. A natural temptation is
 to treat “emotion understanding” as continuous coordinates (valence–arousal,
 PAD, or a learned embedding) and train a small model to regress them. That
 path fights this project’s thesis on three fronts:
@@ -35,31 +35,48 @@ path fights this project’s thesis on three fronts:
 3. **The blog already states the honest limit.** Controlled theory of mind
    ships without “a rich model of motives, emotion, deception, or cultural
    context” (`docs/blog/the-world-outside-the-weights.md`). Filling that
-   limit with embeddings would look like progress while abandoning the
-   harness.
+   limit with unaudited embeddings would look like progress while abandoning
+   the harness. A learned embedding can still be a useful graded proposer;
+   it simply cannot adjudicate the claim it proposes.
 
 The useful question is therefore not “can we store emotion vectors?” but
-“which parts of emotion taxonomies are exact relations, owned state, diagram
-structure, or empirical observations with provenance?”
+“which parts of an explicitly named emotion theory are computable relations,
+which affect statements are attributable reports or beliefs, and which are
+empirical observations with provenance?”
 
 ---
 
 ## 2. What the literature offers (project-usable cut)
 
-Emotion classification is not one representation. Three families matter here:
+Emotion classification is not one agreed representation. Three families
+matter here:
 
-| Family | Examples | Closed form available? |
+| Family | Examples | What is computable after declaring a model? |
 |---|---|---|
-| Discrete taxonomies | Ekman basics; Plutchik wheel (opposites, intensity rings, blends) | Yes: labels, opposition, order, licensed blends as edges |
-| Dimensional spaces | Russell circumplex (valence × arousal); PAD | Partial: named axes, quadrants, polar/Cartesian slot transforms |
-| Constructionist / appraisal | Emotion as assembled components under context | Harder: mostly procedural; late if at all |
+| Discrete taxonomies | Plutchik's psychoevolutionary wheel (opposites, intensity rings, blends) | Membership and graph relations *inside that declared theory* |
+| Dimensional spaces | Russell's circumplex (valence × arousal); PAD | Axes, quadrants, distances, and coordinate transforms *inside that declared measurement model* |
+| Constructionist / appraisal | Emotion assembled from components under context | Mostly procedural and empirical; late if at all |
 
-Wikipedia-style “emotion vectors” usually mean continuous coordinates from
-the second family or learned text embeddings. Only discrete relations and
-**named** dimensional structure fit seeds, twins, frames, and diagram
-oracles. Continuous coordinates may later enter as **empirical
-observations** (tool or human rating), never as verified corpus truth and
-never as the core vocabulary of the tiny model
+Primary anchors are Plutchik's
+[psychoevolutionary theory](https://doi.org/10.1177/053901882021004003)
+and Russell's
+[circumplex model](https://doi.org/10.1037/h0077714), with Mehrabian's
+[PAD review](https://doi.org/10.1007/BF02686918) and Barrett's
+[constructionist account](https://doi.org/10.1093/scan/nsw154) marking two
+further positions. They are models with
+empirical and theoretical commitments, not machine-verifiable laws of every
+person or culture. If seeded, every relation names its source model and enters
+at an epistemic status justified by that source. The harness may verify that
+“Plutchik places joy opposite sadness” or that a point lies in a declared
+quadrant; it cannot thereby verify that joy and sadness are universal
+psychological negations or that a person occupies that point.
+
+“Emotion vectors” may mean coordinates in a named dimensional model or
+learned text/audio/vision representations. Discrete theory relations and
+**named** dimensional structure fit seeds, frames, and diagram oracles.
+Continuous coordinates may later enter as **empirical observations or
+graded proposals** (tool, model, or human rating), never as verified corpus
+truth and never as the core vocabulary of the tiny model
 (`docs/DESIGN-concept-tokens.md` remains concept/pointer oriented).
 
 This is a different psychology slice from Relational Frame Theory. RFT is
@@ -72,38 +89,41 @@ feeling/intensity, optionally constrained by narrative obligations.
 
 ## 3. Correct treatment: layers with verifiers
 
-Treat affect as **structure with verifiers**, parallel to belief and fiction
-scopes—not as weight-space sentiment.
+Treat affect as **attributed structure plus graded proposals**, reusing belief
+and fiction scopes without claiming that either scope reveals private feeling.
 
 | Layer | Representation | Outside weights | Learned residual (only later) |
 |---|---|---|---|
 | Discrete labels | Typed symbols or statement ids (`affect.basic.anger`, …) | Identity; membership in a declared basic set | Point to a label given structured cues |
-| Plutchik-style relations | Opposite / adjacent / blend as explicit edges | Mirror-style opposition; composition rules | Rank which blend is licensed under a rule set |
+| Plutchik-style relations | Theory-qualified opposite / adjacent / blend edges | Graph lookup and involution/order checks inside the declared theory | Rank which theory-qualified relation is useful in context |
 | Dimensional map | Valence–arousal as exact polar or Cartesian slots with named quadrants | Coordinate transforms; quadrant membership predicates | Soft map from noisy text → nearest named region, then verify |
 | Diagram twins | SVG circumplex / wheel with scene-graph ids | Sector geometry; label↔sector alignment; inconsistent-sector negatives | Style-robust pointing under redraw (`DESIGN-visual-structure.md`) |
-| Narrative use | Character `owner` frame holds local affect literals | Consistency; update on witnessed events; no world leak | Propose next story action under obligations |
+| Narrative use | Belief frames hold propositions about affect; fiction may declare narrator-level character state | Attribution, consistency, event visibility, no world leak | Propose an affect claim or next story action; never certify inner state |
 | Empirical scores | Continuous VAD or model scores from tools/humans | Provenance, epistemic rung (empirical/conjectured), never PROVEN by fluency | Optional ranking among already-admitted structured options |
 
-Belief remains distinct: Sally’s false belief is about `located_in`, not about
-`feels`. Affect may *coexist* on an owned frame (`marble located_in basket`
-and `sally feels surprise` after a witnessed event) without collapsing the
-two predicates into one mechanism.
+An owned `FrameSpec` is an agent's **belief model**, not a generic private-state
+container. Thus `sally feels surprise` in Sally's owned frame means “Sally
+believes/reports that Sally feels surprise”; in Anne's nested model it means
+“Anne believes Sally feels surprise.” Neither is privileged ground truth about
+Sally's experience. A fiction frame may instead declare narrator-authoritative
+story content, still local to that fiction.
 
 ### Frame semantics (reuse, do not fork)
 
-- An **owned** frame may carry affect literals the way it carries location
-  beliefs. Fiction frames may invent affect as premises; on exit they demote
-  under existing `on_exit` rules.
-- Updates follow **visibility**: a character’s affect changes only through
-  events they witness (or through explicit self-report events with declared
-  authority). Unwitnessed insults do not update the target’s frame any more
-  than unwitnessed moves update Sally.
+- An **owned** frame may carry beliefs or attributable self-reports about
+  affect. Fiction frames may declare affect as narrator-level premises; on
+  exit those premises demote under existing `on_exit` rules.
+- `witnessed_by` controls **information delivery only**. A witnessed insult
+  does not deterministically create anger, and the executor must not synthesize
+  an affect literal from event type. It may deliver an explicitly authored
+  affect proposition, expression, or self-report effect; a learned policy may
+  propose a response; provenance and consistency remain symbolic.
 - Nested models: “Anne believes Sally is angry” is nested-frame content, not
   a special emotion modal. Graft-back API gaps already filed under Nested
   frames still apply.
-- World tier does not absorb private affect. Public story state may record
-  witnessed expressions; private felt state stays owner-local unless an
-  event makes it public.
+- World/story state may record observable expressions and attributed reports.
+  It does not convert those observations into verified private feeling. A
+  narrator-authored fiction premise can settle story canon, not human truth.
 
 ### Narrative obligations (first useful cut)
 
@@ -111,15 +131,16 @@ Before any affect corpus, the highest-value executable slice is plant /
 discharge of character-affect obligations, reusing temporal machinery
 already shipping for Chekhov and no-deus:
 
-1. Plant: witnessed slight, promised comfort, declared fear of X.
+1. Plant: an authored narrative commitment (a witnessed slight that the story
+   marks for response, promised comfort, or narrator-declared fear of X).
 2. Advance story time / beats.
 3. Discharge: apology, revenge, comfort, or explicit cancellation with
    provenance.
 4. Anti-vacuity: close or resolution fails if a planted affect obligation
    remains open (same refusal pattern as undischarged Chekhov elements).
 
-That is comprehension as **constraint satisfaction under ownership**, not as
-sentiment F1.
+That is comprehension as **constraint satisfaction under attribution**, not
+sentiment F1 and not proof that one reaction psychologically follows another.
 
 ---
 
@@ -151,14 +172,17 @@ visual structure**, not affect:
 - `physics.mechanics.hookes_law` already notes itself as generator of
   harmonic motion; SHM / ω / period / resonance nodes are the natural next
   physics seeds (see BACKLOG “Physics oscillation / multiplanar ladder”).
-- Multiplanar dynamics (orthogonal components, coupling, Lissajous) and
+- Multiplanar dynamics (independent orthogonal components, genuinely coupled
+  modes, and their distinction) and
   multiplanar *frames* (rotating-frame corrections already authored) compose
   under the cognitive-frames program.
 - Diagram payoff (phase portraits, Lissajous) reuses
   `DESIGN-visual-structure.md` after the deferred triangle oracle exists.
 
 Affect diagrams (Plutchik wheel, circumplex) may later share the **visual
-protocol** with Lissajous and SHM plots. They do not share equations. Do not
+protocol** with Lissajous and SHM plots. A Lissajous curve may arise from
+independent perpendicular oscillations; it is not by itself evidence of
+coupling or a normal mode. Affect maps do not share these equations. Do not
 author a single blended “emotion oscillator” archetype unless a real
 structural twin is predicted and adjudicated honestly.
 
@@ -178,41 +202,49 @@ finding that analogy training is synthetic trees only):
 
 ---
 
-## 6. Registered predictions (before any adjudicating implementation)
+## 6. Registered gates and predictions (before implementation)
 
-Predictions are registered here **before** seeds, obligations, or classifiers
-exist. Fired and missed are both reportable; do not edit prediction text
-after the fact—attach adjudication notes.
+The IDs below deliberately separate empirical/structural predictions from
+governance gates. P-AFF1–P-AFF3 need a frozen representation or dataset before
+they become adjudicable; their implementation docstring must register those
+details before the first judging run. G-AFF4–G-AFF5 are invariants tested by
+controls, not empirical forecasts. Fired, missed, and refused adjudications are
+all reportable; never retrofit thresholds after seeing results.
 
-**P-AFF1 — opposition reuses mirror/opposition machinery.**
-When Plutchik-style opposite pairs are authored as discrete relations (or as
-mirror-involutive heads if a head form is justified), they twin or
-mirror-group without inventing a new structural archetype solely for
-emotion. A miss localizes what emotion opposition does not share with
-existing NEG/mirror groups.
+**P-AFF1 — theory-qualified opposition reuses a general relation.**
+Before authoring, freeze one representation for Plutchik's four named opposite
+pairs and name at least one existing cross-domain candidate family in the seed
+docstring. The prediction is that the emotion nodes join that pre-named family
+without an affect-only alias. A within-affect group created by spelling all
+four nodes alike is the capability-blind floor, not a fired cross-domain
+prediction. If no honest candidate skeleton exists, refuse the corpus slice
+rather than manufacture a match.
 
-**P-AFF2 — affect obligations reuse temporal plant/discharge.**
-A character-affect obligation (plant insult or fear → eventually response or
-comfort) is executable with existing temporal eventually/once plant–discharge
-and owned-frame visibility, without a new verdict enum. A miss means either
-visibility rules or obligation close semantics need an explicit extension—and
-that extension must be named, not smuggled into prose.
+**P-AFF2 — attributed narrative obligations reuse temporal plant/discharge.**
+One authored response obligation must execute with the existing verdict enum:
+a visible plant opens it, premature close is REFUSED, a matching discharge
+closes it, and an event hidden from the relevant belief owner does not update
+that owner's model. Load-bearing negative: the same visible event with no
+explicit affect/report effect creates **no** affect literal. A miss means the
+required extension must be named rather than smuggled into prose.
 
-**P-AFF3 — free-text emotion tags are a vacuous early benchmark.**
-At this parameter scale, a lexicon or frequency baseline will match or beat a
-tiny learned classifier on unstructured emotion labels unless the task
-supplies structured cues (frame state, event history, diagram sector). The
-expected “win” for the project is structured navigation, not VAD regression.
-If a learned arm beats strong blind baselines on free text without structure,
-re-open the claim; until then treat free-text sentiment as out of scope.
+**P-AFF3 — free-text emotion tags are expected to be a shallow early
+benchmark.** No result may adjudicate this sentence until a benchmark plan
+fixes corpus/license, train/validation/test counts, label balance, lexical and
+frequency baselines, parameter budget, seeds, metric, and a material-effect
+threshold. The directional prediction is that a tiny free-text classifier
+will not materially beat the strongest blind baseline on a lexical holdout;
+the structured arm adds event/frame or diagram state under a paired split.
+Until that protocol exists, this is a queued prediction—not evidence that
+free-text emotion is already proven vacuous.
 
-**P-AFF4 — continuous scores stay empirical.**
+**G-AFF4 — continuous scores stay empirical (governance invariant).**
 Any continuous valence/arousal observation that enters the harness is stored
 with provenance at an empirical or conjectured rung and cannot alone verify a
 discrete affect literal. If a pipeline ever promotes a float to VERIFIED
 without an external adjudicator, that is a REFUTED governance finding.
 
-**P-AFF5 — visual circumplex/wheel follows V1 ordering.**
+**G-AFF5 — visual circumplex/wheel follows V1 ordering (sequencing gate).**
 Emotion-map diagram twins are not started until a deterministic renderer,
 source scene graph, and inconsistent-pair geometry checks exist for at least
 one simpler family (right triangle first, per visual deferral). Starting
@@ -231,8 +263,8 @@ already adjudicated in v0.6.
    SHM → ω/T/f → resonance → multiplanar components; twin predictions in
    seed docstrings before regenerate.
 4. **Narrative-affect obligation demo** after belief/visibility remains
-   stable: one plant/discharge pair with visibility negative controls and a
-   close-refusal when undischarged.
+   stable: one attributed plant/discharge pair, a visible-event/no-affect
+   negative, a visibility negative, and close-refusal when undischarged.
 5. **Optional discrete `affect` corpus** only if P-AFF1-style edges are worth
    matcher adjudication; seeds only, never hand-edited `nodes.json`.
 6. **Diagram families** only after visual oracle: SHM/Lissajous before or
@@ -241,17 +273,21 @@ already adjudicated in v0.6.
    always report lexicon/frequency/copy baselines on the same split.
 
 Acceptance for “affect is in the system” is **not** sentiment-F1 against an
-LLM. It is: the same controller can discharge a planted character-affect
-obligation under owned-frame rules while a physics derivation involving ω
-from Hooke remains checkable—neither fact living only in weights.
+LLM. It is: the same controller can track and discharge an attributed
+character-response obligation while refusing to infer an unasserted emotion,
+and a physics derivation involving ω from Hooke remains separately
+checkable—neither closed-form result living only in weights.
 
 ---
 
 ## 8. Epistemic and schema notes
 
-- Discrete affect literals on frames use the existing verdict ladder
-  (`docs/DESIGN-epistemic-ladder.md`). Frame-local VERIFIED affect can be
-  world-UNKNOWN or world-REFUTED (actor dissembling) without new tiers.
+- Affect propositions on belief frames use the existing verdict ladder
+  (`docs/DESIGN-epistemic-ladder.md`), where VERIFIED means verified *inside
+  that attributed model*. The world can contradict a public report or
+  expression, but absent an explicit story authority it does not REFUTE a
+  private feeling. Dissembling is a relation between attributed report,
+  behavior, and story-canon premise—not automatic mind reading.
 - Dimensional coordinates, when present, are either (a) exact symbolic slots
   in a dimensional-map statement, or (b) empirical observations. Do not add a
   float embedding table to concept vocabulary.
@@ -275,6 +311,7 @@ Insert after nested belief and conversation lifetime work, not before:
 6. Discrete affect corpus and visual emotion maps — only with predictions and
    oracle ordering above.
 
-Every prediction P-AFF1..5 follows the house rule: registered before the
-adjudicating tool runs; fired and missed are both reportable; misses land in
-`docs/DISCOVERIES.md` with the same prominence as hits.
+P-AFF1–P-AFF3 follow the predict-then-adjudicate rule once their concrete
+protocols are frozen; G-AFF4–G-AFF5 are enforced governance gates. Fired,
+missed, and refused outcomes land in `docs/DISCOVERIES.md` with equal
+prominence.

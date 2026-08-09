@@ -430,14 +430,16 @@ chain; reduced-extract decision; P-CF6 adjudication.
    “Physics oscillation / multiplanar ladder.” Distinct from §2's reference
    frames: dynamics statements versus measurement frames.
 8. **Affect as structure (design only).** Emotion maps/vectors are admitted
-   only as discrete relations, named dimensional slots, owned-frame
-   literals, diagram twins, or empirical observations with provenance—not
-   as continuous embeddings in weights. Full mapping, non-goals, and
-   predictions P-AFF1–P-AFF5: `docs/DESIGN-affect.md`. First executable cut
-   is narrative affect obligations after the oscillation ladder and stable
+   only as source-qualified discrete relations, named dimensional slots,
+   attributed belief/story propositions, diagram twins, or empirical
+   observations with provenance—not as embeddings that adjudicate their own
+   claims. Full mapping, non-goals, predictions P-AFF1–P-AFF3, and governance
+   gates G-AFF4–G-AFF5: `docs/DESIGN-affect.md`. First executable cut
+   is an attributed narrative-response obligation after the oscillation ladder and stable
    belief/visibility path; not a free-text sentiment benchmark.
 
 Every prediction P-CF1..6 follows the house rule: registered here before
 any adjudicating tool runs; fired and missed are both reportable; misses
 are recorded in DISCOVERIES with the same prominence as hits. Affect
-predictions live in DESIGN-affect.md under the same rule.
+predictions and governance gates live in DESIGN-affect.md under the rules
+stated there.

@@ -197,8 +197,10 @@ returned.
   coupling seeds extending Hooke, kept distinct from Kepler and from
   rotating-frame scope; see BACKLOG “Physics oscillation / multiplanar ladder.”
 - Affect enters only under `docs/DESIGN-affect.md` (design-only in this
-  cycle): owned-frame obligations and discrete relations later; no continuous
-  emotion embeddings and no free-text sentiment benchmark mid-matrix.
+  cycle): attributed belief/story propositions and source-qualified relations
+  later; continuous representations may propose empirical observations but
+  cannot verify them, and no free-text sentiment benchmark interrupts the
+  matrix.
 - Re-adjudicate the Relational Frame Theory coverage table; deixis must arise
   from owner/here/now frames rather than a bespoke label.
 - Keep trust roots external. Provability-logic nodes describe why the harness

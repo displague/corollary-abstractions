@@ -38,12 +38,14 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   adjudicate P-V1–P-V4.
 - **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
   asked whether emotion classification maps/vectors belong beside math/science
-  corpora. The answer is recorded in `docs/DESIGN-affect.md`: discrete relations,
-  named dimensional slots, owned-frame affect literals, and diagram twins are
-  in-scope; continuous PAD/VAD or learned sentiment tables in weights are not.
+  corpora. The answer is recorded in `docs/DESIGN-affect.md`: source-qualified
+  relations, named dimensional slots, attributed affect propositions, and
+  diagram twins are in-scope; continuous representations are graded
+  observations/proposers, never truth stores.
   Do not open a free-text emotion benchmark or alter analogy train data until
-  P-AFF1–P-AFF5 have an implementation path and vacuity baselines. First
-  executable cut is narrative plant/discharge of character-affect obligations
+  P-AFF1–P-AFF3 have frozen protocols and G-AFF4–G-AFF5 have load-bearing
+  controls. First executable cut is narrative plant/discharge of an attributed
+  character-response obligation
   under existing visibility rules, after the physics oscillation ladder and
   after belief/nested lifetime friction above is not the active critical path.
 
@@ -63,7 +65,8 @@ regenerate, not as mid-matrix train dilution.
   disjoint worktree that does not touch experiment generators).** Minimal
   first cut in `scripts/seed_physics.py`: angular frequency ω=√(k/m),
   period–frequency relations (T=2π/ω, ω=2πf), and a displacement form
-  x=A cos(ωt+φ) or energy partition, each with citations (Hooke 1678 already
+  x=A cos(ωt+φ) or energy partition, each under the explicit assumptions of an
+  undamped linear mass–spring oscillator and with citations (Hooke 1678 already
   present; Fitzpatrick Waves / standard classical mechanics acceptable).
   Register twin and specialization predictions in the seed docstring before
   any matcher run—candidates include scaled-root forms, reciprocal scale
@@ -71,8 +74,10 @@ regenerate, not as mid-matrix train dilution.
   `physics.mechanics.kinetic_energy`. Do not resspell Kepler III as SHM to
   force a twin; period–amplitude independence vs P²∝a³ is a contrast to keep
   honest.
-- **Keep multiplanar dynamics distinct from multiplanar frames.** Orthogonal
-  plane oscillations and coupling parameters are statement structure; pitch/
+- **Keep independent superposition, coupled modes, and reference frames
+  distinct.** Orthogonal plane oscillations can form Lissajous figures without
+  coupling; coupling parameters and normal-mode coordinates are a separate
+  statement layer; pitch/
   roll/yaw-style measurement in a rotating frame is scope + local corrections
   already begun in `physics.frames.rotating_frame`. A composition demo
   (multi-axis oscillator described under a rotating frame) is valuable only
@@ -103,29 +108,33 @@ in DESIGN-cognitive-frames maps relational operants, not affect. Analogy
 training (50k synthetic root transforms; ID exact 1.000; depth-OOD the real
 wall) must not be redirected into sentiment tags mid-experiment.
 
-- **DESIGN-affect.md is the admission document.** Any proposal to add emotion
+- **DESIGN-affect.md is the admission document.** It treats Plutchik, Russell,
+  and other maps as source-qualified models, not universal emotional laws. Any proposal to add emotion
   vectors, sentiment heads, or continuous affect embeddings must either fit
-  that design’s layers (discrete / named dimensional / frame-local /
+  that design’s layers (discrete / named dimensional / attributed /
   empirical-with-provenance) or be rejected as off-thesis. Predictions
-  P-AFF1–P-AFF5 are registered there before implementation.
-- **First executable cut: character-affect obligations, not a corpus.** Reuse
+  P-AFF1–P-AFF3 and gates G-AFF4–G-AFF5 are registered there before implementation.
+- **First executable cut: attributed character-response obligations, not a
+  corpus.** Reuse
   temporal plant/discharge and owned-frame visibility (Chekhov-shaped
   anti-vacuity: resolution refuses while a planted slight/fear/promise remains
-  open). Negative controls: unwitnessed events do not update the target’s
-  affect; nested “Anne believes Sally is angry” uses nested frames without a
+  open). Negative controls: `witnessed_by` delivers information but a visible
+  event with no explicit affect/report effect creates no emotion; unwitnessed
+  events do not update the target's belief model; nested “Anne believes Sally
+  is angry” uses nested frames without a
   new emotion modal. Depends on graft-back / lifetime clarity only insofar as
   the demo mutates nested models directly—prefer event-flow like Sally–Anne.
 - **Optional discrete affect corpus only with matcher bets.** Plutchik
   opposites as mirror/opposition candidates (P-AFF1); intensity as order
   family only if templates are real. Seeds only; never hand-edit
   `data/*/nodes.json`.
-- **No free-text emotion benchmark early.** P-AFF3 expects lexicon/frequency
-  baselines to match or beat tiny classifiers without structured cues. If a
-  sentiment split is ever opened, ship those baselines in the same artifact
-  or refuse the claim.
+- **No free-text emotion benchmark early.** P-AFF3 remains directional until
+  its dataset, lexical holdout, baselines, seeds, metric, and effect threshold
+  are frozen before training. If a sentiment split is ever opened, ship those
+  baselines in the same artifact or refuse the claim.
 - **Visual emotion maps share the visual protocol, not the physics equations.**
   Circumplex/wheel diagram twins wait on the same oracle ordering as
-  Lissajous (P-AFF5). Inconsistent-sector negatives must make the geometry
+  Lissajous (G-AFF5). Inconsistent-sector negatives must make the geometry
   verifier load-bearing.
 - **Do not merge affect with SHM by metaphor.** “Emotional resonance” remains
   prose until a registered structural prediction fires and is adjudicated.
