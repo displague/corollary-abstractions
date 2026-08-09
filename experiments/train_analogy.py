@@ -267,6 +267,9 @@ def main() -> None:
     ap.add_argument("--level-code",
                     choices=["table", "sinusoidal", "recurrent"],
                     default="table")
+    ap.add_argument("--init-encoder", type=Path, default=None,
+                    help="warm-start encoder weights from "
+                         "pretrain_maskskel.py's --save-encoder artifact")
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -287,6 +290,27 @@ def main() -> None:
 
     model = AnalogyPointer(len(vocab), args.d_model, max_tgt=args.max_tgt,
                            level_code=args.level_code).to(device)
+    if args.init_encoder is not None:
+        ckpt = torch.load(args.init_encoder, map_location="cpu",
+                          weights_only=False)
+        if ckpt["itos"] != vocab.itos:
+            raise ValueError(
+                "pretrained encoder vocabulary does not match this run's "
+                "vocabulary; encoder rows would silently misalign")
+        if ckpt["level_code"] != args.level_code:
+            raise ValueError(
+                f"pretrained encoder used level_code={ckpt['level_code']!r}, "
+                f"this run uses {args.level_code!r}")
+        state = dict(ckpt["encoder_state"])
+        # The pretrain embedding has one extra trailing row for <mask>;
+        # the fine-tune vocabulary does not contain it.
+        state["embed.weight"] = state["embed.weight"][: len(vocab)]
+        missing, unexpected = model.load_state_dict(state, strict=False)
+        loaded = sorted({k.split(".")[0] for k in state})
+        assert not unexpected, unexpected
+        print(f"init-encoder loaded modules: {loaded}; "
+              f"cold-start modules: "
+              f"{sorted({k.split('.')[0] for k in missing})}", flush=True)
     n_params = sum(p.numel() for p in model.parameters())
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     total_steps = args.epochs * math.ceil(len(datasets["train"]) / args.batch_size)
