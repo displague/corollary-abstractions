@@ -4,6 +4,8 @@
 The store is deliberately read-only and symbolic. It unifies five committed
 sources into one query surface: corpus statements, their lexica, structural
 twin/mirror groups, decomposition entries, and machine-proof links. Retrieval
+may add Open English WordNet as a sixth, external source when the caller names
+an archive; absence leaves the five-store behavior byte-for-byte unchanged.
 does not answer a slot by itself; it appends stable, indexed material to the
 session context, and a later POINT action binds one item to the pending slot.
 
@@ -45,14 +47,16 @@ from proof_artifacts import (
     select_closing_transitions,
 )
 from oracle_controller_demo import TRUSTED_TRIPLES_SHA256
+from wordnet_store import WordNetIndex, WordNetSynset, lemma_key
 
 
 SOURCE_ORDER = {
     "corpus": 0,
     "lexicon": 1,
-    "twin_ledger": 2,
-    "decomposition": 3,
-    "proof": 4,
+    "wordnet": 2,
+    "twin_ledger": 3,
+    "decomposition": 4,
+    "proof": 5,
 }
 _TOKEN = re.compile(r"[a-z0-9]+")
 _WHITESPACE = re.compile(r"\s+")
@@ -113,9 +117,10 @@ class RetrievalItem:
     epistemic_status: str
     source_ids: tuple[str, ...]
     aliases: tuple[str, ...]
-    # Structured trust marker (review finding: trust lived only in a text
-    # substring). False exactly when a proof record's artifact digest failed
-    # authentication; consumers must not rely on parsing item.text for this.
+    # Structured provenance marker (review finding: trust lived only in a text
+    # substring). For proofs it authenticates the expected artifact digest;
+    # for external lexical data it means the source bytes were digested and
+    # parsed, never that their semantics were formally verified.
     trusted: bool = True
 
 
@@ -143,16 +148,26 @@ class UnifiedKnowledgeStore:
     any such collision on the merged graph.
     """
 
-    def __init__(self, items: tuple[RetrievalItem, ...] = ()):
+    def __init__(
+        self,
+        items: tuple[RetrievalItem, ...] = (),
+        wordnet: WordNetIndex | None = None,
+    ):
         ids = [item.item_id for item in items]
         if len(ids) != len(set(ids)):
             raise ValueError("retrieval item ids must be unique")
         self.items = tuple(
             sorted(items, key=lambda item: (SOURCE_ORDER[item.source], item.item_id))
         )
+        self.wordnet = wordnet
 
     @classmethod
-    def load(cls, data_dir: Path, reports_dir: Path) -> "UnifiedKnowledgeStore":
+    def load(
+        cls,
+        data_dir: Path,
+        reports_dir: Path,
+        wordnet_path: Path | None = None,
+    ) -> "UnifiedKnowledgeStore":
         repo_root = data_dir.parent
         nodes: dict[str, dict] = {}
         for path in sorted(data_dir.glob("*/nodes.json")):
@@ -351,7 +366,81 @@ class UnifiedKnowledgeStore:
                     aliases=(statement_id, nodes[statement_id]["title"], *constituents),
                 )
             )
-        return cls(tuple(items))
+        wordnet = (
+            WordNetIndex.load(wordnet_path)
+            if wordnet_path is not None and wordnet_path.is_file()
+            else None
+        )
+        return cls(tuple(items), wordnet)
+
+    def _wordnet_item(self, synset: WordNetSynset) -> RetrievalItem:
+        if self.wordnet is None:
+            raise ValueError("WordNet is not loaded")
+        relation_text = "; ".join(
+            f"{relation}={','.join(targets)}"
+            for relation, targets in synset.relations
+        )
+        text = " | ".join(synset.definitions)
+        if synset.examples:
+            text += " Examples: " + " | ".join(synset.examples)
+        if relation_text:
+            text += " Relations: " + relation_text
+        return RetrievalItem(
+            item_id=f"wordnet:{synset.synset_id}",
+            source="wordnet",
+            title="WordNet: " + ", ".join(synset.members),
+            text=text,
+            epistemic_status="empirical",
+            source_ids=(
+                f"oewn:2025:{synset.synset_id}",
+                f"sha256:{self.wordnet.archive_sha256}",
+            ),
+            aliases=synset.members,
+            trusted=True,
+        )
+
+    def _wordnet_resolution(
+        self, key: str
+    ) -> tuple[tuple[RetrievalItem, ...], tuple[RetrievalItem, ...]]:
+        if self.wordnet is None:
+            return (), ()
+        synsets = self.wordnet.lookup(key)
+        lexical = tuple(self._wordnet_item(synset) for synset in synsets)
+        synonyms = {
+            lemma_key(member)
+            for synset in synsets
+            for member in synset.members
+            if lemma_key(member) != lemma_key(key)
+        }
+        bridged = tuple(
+            item
+            for item in self.items
+            if item.source in {"corpus", "lexicon", "proof"}
+            and any(
+                lemma_key(alias) in synonyms
+                for alias in item.aliases
+            )
+        )
+        return bridged, lexical
+
+    def _wordnet_supporting_synsets(
+        self, item: RetrievalItem, key: str
+    ) -> tuple[str, ...]:
+        """Name the exact senses that bridge one key to one project item."""
+
+        if self.wordnet is None:
+            return ()
+        item_aliases = {lemma_key(alias) for alias in item.aliases}
+        support = []
+        for synset in self.wordnet.lookup(key):
+            synonyms = {
+                lemma_key(member)
+                for member in synset.members
+                if lemma_key(member) != lemma_key(key)
+            }
+            if item_aliases & synonyms:
+                support.append(synset.synset_id)
+        return tuple(support)
 
     def query(self, key: str, limit: int = 24) -> QueryResult:
         exact = tuple(
@@ -377,6 +466,22 @@ class UnifiedKnowledgeStore:
                 neighborhood[:limit],
                 total=len(neighborhood),
             )
+        bridged, lexical = self._wordnet_resolution(key)
+        if bridged:
+            resolved = bridged + lexical
+            return QueryResult(
+                "synonym",
+                key,
+                resolved[:limit],
+                total=len(resolved),
+            )
+        if lexical:
+            return QueryResult(
+                "lexical",
+                key,
+                lexical[:limit],
+                total=len(lexical),
+            )
         return QueryResult("miss", key)
 
     def contains_item(self, item: RetrievalItem) -> bool:
@@ -387,7 +492,15 @@ class UnifiedKnowledgeStore:
         git-anchored proof of commit membership.
         """
 
-        return item in self.items
+        if item in self.items:
+            return True
+        if item.source != "wordnet" or self.wordnet is None:
+            return False
+        prefix = "wordnet:"
+        if not item.item_id.startswith(prefix):
+            return False
+        synset = self.wordnet.synsets.get(item.item_id[len(prefix) :])
+        return synset is not None and self._wordnet_item(synset) == item
 
     def binding_match_mode(self, item: RetrievalItem, key: str) -> str | None:
         """Return a match only when the key resolves to one corpus owner.
@@ -399,8 +512,32 @@ class UnifiedKnowledgeStore:
         """
 
         mode = item_match_mode(item, key)
-        if mode is None:
-            return None
+        if item.source != "wordnet" and mode is not None:
+            project_mode = self._project_binding_match_mode(item, key, mode)
+            if project_mode is not None:
+                return project_mode
+
+        bridged, lexical = self._wordnet_resolution(key)
+        if item in lexical:
+            # A bare lexical binding needs one sense. Polysemous records remain
+            # pointable context until another constraint disambiguates them.
+            return "lexical" if len(lexical) == 1 else None
+        if item in bridged:
+            owners = {candidate.source_ids[0] for candidate in bridged}
+            support = self._wordnet_supporting_synsets(item, key)
+            if (
+                len(owners) == 1
+                and item.source_ids[0] in owners
+                and len(support) == 1
+            ):
+                return "synonym"
+        return None
+
+    def _project_binding_match_mode(
+        self, item: RetrievalItem, key: str, mode: str
+    ) -> str | None:
+        """Apply the pre-WordNet exact/neighborhood ownership contract."""
+
         exact_owners = {
             candidate.source_ids[0]
             for candidate in self.items
@@ -877,7 +1014,7 @@ class RetrievalVerifier:
         if not result.items:
             return Verification(
                 Verdict.UNKNOWN,
-                "exact and neighborhood retrieval both missed; UNKNOWN stays "
+                "exact, neighborhood, and lexical retrieval all missed; UNKNOWN stays "
                 "open and the controller must abstain rather than confabulate",
                 evidence=(key, "ABSTAIN"),
             )
@@ -1249,7 +1386,7 @@ def point_action(position: int) -> Action:
     return Action.build(ActionKind.POINT, "bind", {"position": str(position)})
 
 
-def demo(repo_root: Path, key: str) -> int:
+def demo(repo_root: Path, key: str, wordnet_path: Path | None = None) -> int:
     executor = FrameExecutor()
     frame = executor.open_frame(
         # Retrieval is open here; story-local frames keep their existing guard.
@@ -1262,7 +1399,9 @@ def demo(repo_root: Path, key: str) -> int:
         key,
         Literal("request", "needs", key),
     )
-    store = UnifiedKnowledgeStore.load(repo_root / "data", repo_root / "reports")
+    store = UnifiedKnowledgeStore.load(
+        repo_root / "data", repo_root / "reports", wordnet_path
+    )
     verifier = RetrievalVerifier(store, executor)
     run = Controller[RetrievalState](max_steps=2).run(
         state,
@@ -1289,8 +1428,13 @@ def main() -> int:
     parser.add_argument(
         "key", nargs="?", default="logic.boolean_laws.de_morgan_laws"
     )
+    parser.add_argument(
+        "--wordnet",
+        type=Path,
+        help="optional external Open English WordNet 2025 JSON zip",
+    )
     args = parser.parse_args()
-    return demo(Path(__file__).resolve().parent.parent, args.key)
+    return demo(Path(__file__).resolve().parent.parent, args.key, args.wordnet)
 
 
 if __name__ == "__main__":

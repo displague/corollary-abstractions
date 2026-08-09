@@ -505,7 +505,7 @@ demo and a multi-step derivation remain one milestone in two costumes.
       rejected at their construction boundaries and retained as controls. A
       final review caught the neighboring case of two positive values for one
       declared functional key; that ambiguity is likewise rejected.
-    - **10d — WordNet retrieval store** (parallel-safe slice): Open
+    - **SHIPPED (external first cut) — 10d, WordNet retrieval store**: Open
       English WordNet 2025 JSON (72 MB, external, never in git; loader
       takes a path, feature gracefully absent without it) as a sixth
       store — synonym bridging for request terms, RFT relations at
@@ -514,7 +514,28 @@ demo and a multi-step derivation remain one milestone in two costumes.
       verified_by; the retrieval review's laundering controls gain a
       wordnet case before shipping. License recorded in the design doc:
       CC-BY 4.0 (OEWN) + Princeton WordNet license for inherited content;
-      ATTRIBUTION file ships with the adapter. Adjudicates P-CF6.
+      ATTRIBUTION file ships with the adapter. P-CF6 fired on eight fixed
+      held-out request terms: the five-store control resolved 0/8 and the
+      WordNet synonym rung resolved 8/8 to their expected corpus owners, with
+      zero frame-verdict changes on the actual verifier path. Safe POINT
+      binding is 7/8: `perseverance` reaches the right owner through two
+      supporting synsets and is deliberately left unbound pending a sense cue.
+      A capability-blind injected frame mutation is detected 8/8. The archive
+      remains external; the loader
+      indexes 107,519 synsets / 127,311 entry lemmas and records its SHA-256.
+      Exact and token-neighborhood corpus retrieval retain precedence;
+      ambiguous synonym bridges may be retrieved but cannot POINT-bind. No
+      reduced extract ships. Suite 173 → 183.
+
+      **Review correction:** the first binding rule pooled every sense of a
+      lemma, and the first zero-verdict experiment compared an untouched frame
+      to itself. Binding now requires exactly one supporting synset (bare
+      lexical binding requires a monosemous lookup); the adjudicator executes
+      RETRIEVE→POINT/REFUSED and must detect the injected mutation. Re-review
+      found the ambiguity check could shadow an existing exact project match
+      and the evaluator dereferenced missing next-state on a falsified case.
+      Project exact/neighborhood ownership now runs first, and misses are
+      counted rather than crashing.
     - **10e — masked skeleton modeling** (experiment track, GPU): BERT's
       masked-LM objective transposed to structure — mask a skeleton node,
       recover by pointing. Adjudicates P-CF5 (gains should concentrate in

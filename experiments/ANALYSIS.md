@@ -1071,3 +1071,36 @@ two positive values to the same declared functional key. Construction now
 requires a unique positive target per subject and functional predicate while
 still permitting the explicit old-value denial plus new-value assertion used
 by movement events.
+## Optional WordNet retrieval store (v0.5 item 10d)
+
+P-CF6 tests whether an external lexical graph increases request-term coverage
+without changing symbolic truth. `scripts/wordnet_eval.py` fixes eight held-out
+terms and expected corpus owners. The five committed stores score 0/8; the
+Open English WordNet 2025 same-synset bridge puts the expected owner in context
+for 8/8. Safe binding is 7/8: `perseverance` has two supporting synsets and is
+refused without a sense cue. Across the same eight actual RETRIEVE→POINT (or
+ambiguity-refusal) paths the frame executor changes 0 verdicts and 0 evidence
+tuples. A capability-blind injected frame mutation is detected 8/8.
+
+The external archive (SHA-256
+`7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51`)
+contains 107,519 parsed synsets and 127,311 indexed entry lemmas. It is never
+copied into git. Each dynamic retrieval record is `empirical`, includes the
+archive digest as provenance, and remains weaker than adjacent corpus/proof
+records. Exact and token-neighborhood project matches run first. A unique
+same-synset bridge may POINT-bind; an ambiguous bridge only expands context.
+The five-store absence control is object-identical when the optional path is
+missing. This is lexical coverage, not proof and not general semantic search.
+The regression suite moves 173 -> 183.
+
+Adversarial review found that the first implementation pooled senses and the
+first verdict counter compared an untouched frame to itself. The corrected
+binding rule requires one supporting synset (and one sense for a bare lexical
+binding); the corrected adjudicator exercises the verifier and keeps the 7/8
+safe-bind result public.
+Re-review found two failure-path defects: WordNet ambiguity could shadow an
+existing exact project alias during POINT, and the evaluator crashed when a
+valid archive missed. The pre-WordNet binding contract now runs first for
+project items; a fixture where the same item is both exact and lexically
+bridged is retained. Missing results now remain reportable failed
+adjudications.

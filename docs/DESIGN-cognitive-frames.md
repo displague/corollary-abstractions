@@ -9,9 +9,9 @@ the storage bet the repository exists to test.** What follows is the mapping
 in full, the staged work it implies, and the registered predictions that make
 the mapping falsifiable rather than decorative.
 
-Status: ASK's runtime user frame and return channel are now executable
-(`scripts/conversation.py`); physical frames, FrameSpec ownership/visibility,
-WordNet, masked skeletons, provability, and nesting remain queued. Each section
+Status: ASK's runtime user frame and return channel, physical frames,
+FrameSpec ownership/visibility, and the optional WordNet synonym bridge are
+executable. Masked skeletons, provability, and nesting remain queued. Each section
 ends with its work items; ROADMAP-v0.5 section 10 and BACKLOG's "Cognitive
 frames / lexical stores" section index them.
 
@@ -353,6 +353,27 @@ paraphrase terms that resolve to a corpus alias through synonym bridging)
 without changing a single frame verdict — if any verdict changes, the
 laundering controls failed and the slice is rejected.
 
+**Adjudication (v0.5): fired.** Eight fixed held-out request terms
+(`euclidian`, `perseverance`, `quickening`, `geodetic`, `earlier`, `solving`,
+`reverse`, `repeating`) were all misses for the five committed stores and all
+eight reached their expected corpus owner through same-synset aliases. The
+safe binding result is 7/8: `perseverance` has two distinct supporting synsets,
+so its context expands but POINT refuses without a sense cue. The frame
+executor returned the identical UNKNOWN verdict/evidence before and after the
+actual RETRIEVE→POINT (or ambiguity-refusal) path, while an injected frame
+mutation was detected 8/8. WordNet records remained `empirical` beside stronger
+corpus neighbors, and a forged stronger copy failed authoritative-store
+membership. This establishes lexical coverage, not semantic equivalence:
+ambiguous bridges are pointable context but cannot bind a slot. The live 2025
+archive contains 107,519 synsets and 127,311 indexed entry lemmas; it remains
+external and is represented only by its per-load SHA-256 in provenance.
+
+Review correction: the first implementation pooled senses and the first
+zero-verdict counter compared an untouched frame to itself. The shipped rule
+requires one supporting synset for a bridge and one sense for bare lexical
+binding. The executable control now traverses the verifier and retains the
+polysemous refusal as a measured result rather than swapping the term out.
+
 Work items: `wordnet` store adapter behind the existing
 `UnifiedKnowledgeStore` interface with graceful absence; laundering
 negative controls; ATTRIBUTION file; synonym-bridging rung in the miss
@@ -370,8 +391,8 @@ chain; reduced-extract decision; P-CF6 adjudication.
    resolve to their declaration nodes.
 3. **Frame ownership + visibility-filtered updates — SHIPPED first cut.**
    P-CF1 fired; nested beliefs remain a later leak-control slice.
-4. **WordNet store adapter** (P-CF6) — independent of 2–3; can run as a
-   parallel worktree slice; license/attribution ships with it.
+4. **WordNet store adapter — SHIPPED external first cut** (P-CF6 fired);
+   license/attribution ships with it and no source data enters git.
 5. **Masked skeleton modeling** (P-CF5) — experiment track, GPU-bound,
    schedulable whenever the GPU is free.
 6. **Provability corpus** (P-CF4) and **nested frames** — later; smaller;

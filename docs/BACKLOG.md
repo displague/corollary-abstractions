@@ -39,7 +39,8 @@ or commit history. Each item names the evidence that motivated it.
   shipped; deeper boost transformations and executable physics-verifier
   semantics remain open.
 
-- **WordNet store adapter (parallel-safe; license obligations recorded).**
+- **SHIPPED (external first cut) — WordNet store adapter; deeper lexical
+  traversal remains open.**
   Open English WordNet 2025 JSON at
   `C:\Users\displ\Downloads\english-wordnet-2025-json.zip` — 73 files,
   72 MB uncompressed, entries→senses→synsets with definitions/examples/
@@ -56,8 +57,16 @@ or commit history. Each item names the evidence that motivated it.
   english-wordnet) + Princeton WordNet license for inherited content
   (wordnet.princeton.edu/license-and-commercial-use); the zip carries no
   license file, so an ATTRIBUTION note must ship beside any store
-  artifact. P-CF6: request-term coverage improves, zero frame verdicts
-  change.
+  artifact. P-CF6 fired: fixed held-out request-term coverage moved 0/8 →
+  8/8, while the executor produced zero frame-verdict changes. The adapter
+  indexes 107,519 synsets and 127,311 entry lemmas lazily into pointable
+  records, records the archive digest, refuses ambiguous bridge binding, and
+  is byte-for-byte absent when no archive path exists.
+  `docs/ATTRIBUTION-wordnet.md` records the release boundary. Still open:
+  graph traversal beyond
+  same-synset coordination (hypernyms/antonyms as neighborhood expansion),
+  renderer selection, and any seed-regenerated reduced extract; none is needed
+  for the first-cut bridge and the 72 MB source remains outside git.
 
 - **Masked skeleton modeling (experiment track).** BERT's masked-LM
   objective transposed to structure: mask a skeleton node or path level,

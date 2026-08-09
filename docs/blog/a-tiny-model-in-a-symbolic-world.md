@@ -258,8 +258,18 @@ Lean proof artifacts, and returns indexed material that POINT can bind. The
 canonical target key must already be the unresolved literal's value; this
 prevents a caller from “answering” one request with an unrelated lookup, while
 making open-language request parsing an honest upstream gap. Choosing useful
-queries and items remains oracle-driven today, and external tools are not
+queries and items remains oracle-driven today; general external tools are not
 connected.
+
+**Open-vocabulary synonym bridging is now measured.** When an optional Open
+English WordNet 2025 archive is supplied, same-synset members form a sixth,
+external retrieval rung. On eight fixed request terms absent from the five
+committed stores, coverage moves from 0/8 to 8/8 expected corpus owners, with
+7/8 safely bindable. The eighth is deliberately refused because two WordNet
+senses support the same bridge. That gain carries no truth promotion: every
+lexical record stays empirical and the frame executor changes zero verdicts
+across the actual verifier path. The 72 MB archive remains outside the repository; its
+107,519 synsets add vocabulary without adding weights or retraining.
 
 **Local miss handling and parsed clarification are executable.** A direct miss
 widens to deterministic token-neighborhood search. A durable miss leaves
@@ -362,7 +372,7 @@ detail of individual tools.
 | Cross-discipline symbolic knowledge | Operational: 215 nodes, 21 disciplines |
 | Structural twins, specializations, decomposition | Operational and measured |
 | Knowledge supplied in context | Consumed successfully by a tiny pointer |
-| Retrieval initiated by the model | Local oracle adapter operational; learned choice/external tools open |
+| Retrieval initiated by the model | Local oracle adapter plus optional WordNet bridge operational; learned choice/general tools open |
 | Durable human/agent-authored storage | Operational through seeds and validation |
 | Model-initiated durable write | Newly specified; unbuilt |
 | Narrative grammar and axioms | Authored and matcher-visible |

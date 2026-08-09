@@ -554,3 +554,16 @@ bindings), **near-miss** (informative failure, kept deliberately).
   design's measurement pass; fix queued (LT strict head, the
   strict/reflexive relation into HEAD_ALGEBRA). The epistemic ladder's
   REFUTED rung, applied to the tooling itself. *self-audit* (2026-08-07)
+
+- **WordNet increases lexical reach without acquiring epistemic authority.**
+  P-CF6 fired on its capability-blind control. Eight request terms absent from
+  the five committed retrieval stores (0/8) reached their expected corpus
+  owner through Open English WordNet same-synset aliases (8/8). This was
+  context expansion only: the frame executor's UNKNOWN verdict/evidence
+  changed 0/8 times across the real verifier path, and an injected mutation
+  was detected 8/8. WordNet records stayed `empirical` beside formal/proven
+  neighbors. Safe binding was 7/8: the two senses supporting `perseverance` →
+  `persistence` remain context until disambiguated. The useful boundary
+  is sharper than “add a dictionary”: lexical coordination can propose where
+  to look without becoming evidence that the pointed formal statement is
+  true. *retrieval / epistemic boundary* (2026-08-09)
