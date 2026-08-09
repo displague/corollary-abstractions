@@ -1,6 +1,7 @@
 # Visual structure — a parse-first multimodal lane
 
-Status: post-v0.5 design; first experiment queued in ROADMAP-v0.6 item 8.
+Status: v0.6 oracle-gate deferral; the data-first foundation is queued in
+ROADMAP-v0.7 item 8 before any learned visual arm.
 
 ## Why vision belongs here
 

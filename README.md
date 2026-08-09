@@ -6,7 +6,7 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.5.0](docs/RELEASE-v0.5.0.md).
+interface. Latest release: [v0.6.0](docs/RELEASE-v0.6.0.md).
 
 ## Three headline demonstrations
 
@@ -23,6 +23,7 @@ $ python scripts/match_signatures.py
     - chemistry.kinetics.first_order_integrated_rate_law
     - economics.finance.continuous_compounding
     - economics.finance.present_value_continuous
+    - ml.policy.boltzmann_softmax_policy
 ```
 
 Coulomb's law *is* gravitation; compound interest, population growth, and
@@ -56,28 +57,37 @@ either pointed-at by the model or produced by exact code, so surface
 hallucination is structurally impossible. First run self-bootstraps
 (generates data, trains the ~800k-param pointer, ~4 min on GPU).
 
-**3. One verified loop runs a proof and a story — then asks back.** The v0.5
-controller uses the same typed state/action/branch protocol for three
-authenticated Lean transitions and a three-beat golden-chicken story. The story
-executor enforces scoped premises, Chekhov setup/payoff obligations, and
-no-deus heralding. A second-turn demo pauses on a frame-private UNKNOWN, accepts
-a signed user reply, and resumes without promoting that testimony into world
+**3. One verified loop searches a live proof and maintains a private story
+revision.** The controller now asks Lean to apply tactics live and backtracks
+from an accepted dead branch. The conversation runtime keeps Alice's and Bob's
+egg-color revisions separate over one public golden-chicken story; Alice can
+later supersede silver with copper without promoting any preference into world
 truth:
 
 ```console
-$ python scripts/oracle_controller_demo.py
-LEAN TRANSITION REPLAY: solved
-GOLDEN CHICKEN: solved
+# This first command additionally needs PyPantograph + Lean; see the note
+# immediately below this block.
+$ python prover/live_search.py
+blind palette: solved; nodes=9 ... proposals=86 ...
+projection ablation: exhausted; nodes=10 ... proposals=80 ...
 
 $ python scripts/conversation.py
-SYSTEM: What value should fill 'egg_color' for the golden chicken's eggs color?
-USER: silver
-SYSTEM: ... Now the golden chicken laid silver eggs.
+SYSTEM/ALICE: ... Now the golden chicken laid silver eggs.
+SYSTEM/BOB: ... Now the golden chicken laid blue eggs.
+SYSTEM/ALICE: ... Now the golden chicken laid copper eggs.
 ```
 
 `scripts/theory_of_mind.py` derives Sally's false belief from event visibility:
-Sally answers basket while the world answers box. These are controlled symbolic
-demonstrations, not yet an open-language learned policy.
+Sally answers basket while the world answers box. Separate all-data tactic
+ranker checkpoints are also shipped, but their mean live search uses 65
+proposals versus 64 for a state-blind frequency order. The architecture's
+0.8125 theorem-heldout score comes from separately trained evaluation models,
+not those live checkpoints. These are controlled results, not yet an
+open-language or general proof policy.
+
+Live proof search requires PyPantograph 0.3.15 and the matching Lean toolchain;
+follow [`prover/FEASIBILITY.md`](prover/FEASIBILITY.md). The conversation and
+theory-of-mind demos require only the ordinary project environment.
 
 ## The models
 
@@ -91,7 +101,8 @@ model trains from scratch in minutes on one consumer GPU.
 | `TinyTransformer` | `experiments/train.py` | 4-layer encoder + CLS-pool MLP pair-classifier head | ~0.88M | twins / equiv / xlang / qa / syn / realsyn |
 | `SpanPointer` | `experiments/train_span.py` | 4-layer encoder + per-position start/end span head | 0.82–0.91M (by positional variant) | solve-for-X answering; the demo checkpoint |
 | `TreeSeq2Seq` | `experiments/train_gen.py` | 4-layer encoder + 2-layer autoregressive decoder | ~1.45M | the failed naive generator (kept as the negative result) |
-| `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M | generation-by-pointing; analogy completion |
+| `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M base; 1.58M depth-consumer arms | generation-by-pointing; analogy completion and address-consumer ablations |
+| `TacticPolicy` | `experiments/train_tactic_policy.py` | byte embedding + one shared GRU + schema head | 27,688 | held-out Lean tactic ranking inside live verified search |
 
 Positional encoding is a first-class experimental variable, not a fixed
 choice: absolute learned positions, tree-path addresses (per-level
@@ -100,9 +111,11 @@ shared GRU cell walking each path) are selectable variants — the
 positional ladder results in ANALYSIS.md come from exactly these
 switches. The scaling grid varies encoder width 32–256 at fixed depth.
 
-At fp32 these are 1.8–6.0 MB of weights (fp16 halves that at zero
-accuracy cost — see the quantization ladder). Twenty-two claim-bearing
-checkpoints ship across releases v0.3–v0.5. The smallness is the thesis: every
+The fp32 model states are roughly 0.11–6.4 MB. The earlier pointer-model
+quantization ladder found fp16 halved its weight footprint without measured
+accuracy loss; that result is not silently generalized to every newer
+architecture. Claim-bearing checkpoints ship as release assets rather than in
+git. The smallness is the thesis: every
 exact operation lives outside the weights, so the weights only carry
 the graded residual.
 
@@ -120,6 +133,10 @@ the graded residual.
 | Frames make local truth executable | one executor handles fictional premises, temporal obligations, owned belief, visibility-derived false belief, and nested models without leaking them into world truth |
 | Retrieval does not promote its results | exact/neighborhood retrieval and POINT are receipt-bound; returned items retain their epistemic status, and misses ASK or abstain |
 | Creating = pointing + realization | both learned decoders failed informatively (memorize, can't copy); pointing plus closed-form realization generates perfectly for any answer present in the input |
+| Live search makes dead ends real | Lean accepts `clear h`, but the branch destroys the only conjunction evidence; bounded search retains and abandons it before solving elsewhere |
+| Learned classification is not search gain | theorem-heldout evaluation models score 0.8125; separate all-data live checkpoints average 65 proposals and lose to a 64-proposal state-blind frequency order |
+| Private conversation needs revocation | Alice and Bob maintain divergent revisions over one story; authenticated supersession changes Alice's silver eggs to copper without changing world truth |
+| Corpus grounding is not task difficulty | 40 grounded analogy rows reduce to five targets in one ratio family; symbolic and blind last-slot number transfer both score 1.000 |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -144,18 +161,22 @@ scripts/
   conversation.py       ASK -> WAITING -> signed user reply -> resumed binding
   theory_of_mind.py     visibility-derived Sally-Anne false-belief control
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
-  measure_compression.py concept-token compression (10.7x on the real corpus)
+  measure_compression.py concept-token compression (11.24x on the real corpus)
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
   train.py / train_span.py / train_gen.py / train_pgen.py   trainers
   pretrain_maskskel.py  masked-node pointer pretraining for analogy
+  train_tactic_policy.py  27k-param Lean tactic ranker + live controls
+  corpus_analogy.py     twin + specialization -> verified real quadruples
   demo_analogy_checkpoint.py  released model on fresh shallow + deep analogies
   demo_answer.py        the end-to-end demo above (self-bootstrapping)
   run_grid.py           scaling-curve grid
   ANALYSIS.md           every result, prediction, and retraction
   data_real/            (gitignored) licensed corpus samples, user-supplied
-prover/                 phase-gated Lean prover roadmap (see README there)
+prover/
+  live_search.py        bounded PyPantograph search with real dead branches
+  README.md             phase status, artifacts, and trust boundary
 docs/                   design docs, release notes, BACKLOG
 reports/                generated twin/specialization ledgers (committed)
 ```
@@ -171,6 +192,12 @@ uv pip install --python .venv/Scripts/python.exe torch numpy --index-url https:/
 uv pip install --python .venv/Scripts/python.exe jsonschema
 ```
 
+Live Lean search has one additional native dependency boundary: PyPantograph
+0.3.15 plus the matching Lean toolchain. They are not installed by the commands
+above. Follow [`prover/FEASIBILITY.md`](prover/FEASIBILITY.md), then set the
+`PYTHONPATH` and Lean-toolchain `Path` shown in [`prover/README.md`](prover/README.md)
+before running `live_search.py` or `train_tactic_policy.py --live`.
+
 Everything headline is deterministic from committed seeds — no external
 data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
@@ -185,6 +212,10 @@ python scripts/retrieval.py quickening --wordnet C:\path\to\english-wordnet-2025
 python scripts/wordnet_eval.py C:\path\to\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
+python prover/live_search.py                # live Lean search + projection ablation
+python experiments/train_tactic_policy.py --live  # learned vs strong blind order
+python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_repro.json
+                                             # grounded rows + trivial blind baseline
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
@@ -192,10 +223,10 @@ python solvex2.py --out-dir data            # regenerate any dataset
 python train_span.py --arm struct --task-prefix solvex2 --positions tree \
     --data-dir data --out results/repro.json   # re-verify the 1.000 result
 
-# after: gh release download v0.5.0 --pattern \
-#   analogy-masked-skeleton-warm-s0.pt --dir results
+# after: gh release download v0.6.0 --pattern \
+#   <depth-demo-asset>.pt --dir results
 python demo_analogy_checkpoint.py --checkpoint \
-    results/analogy-masked-skeleton-warm-s0.pt  # fresh shallow + deep examples
+    results/<depth-demo-asset>.pt  # fresh shallow + deep examples
 ```
 
 On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
@@ -219,7 +250,7 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   not certify affect
 - `docs/DESIGN-visual-structure.md` — the parse-first multimodal plan:
   formula/diagram twins, SVG structure, and a pixel control
-- `docs/blog/` — accessible project narratives, including the v0.5 story
+- `docs/blog/` — accessible project narratives, including the v0.6 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence

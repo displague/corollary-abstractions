@@ -237,13 +237,16 @@ wall) must not be redirected into sentiment tags mid-experiment.
   top-1 schema accuracy a proof-success rate or compare only to arbitrary
   palette order.
 
-- **PARTIAL — live Lean application and branch search ship; learned ranking
-  and native project imports remain open.** ``SearchController`` now explores
+- **PARTIAL — live Lean application, branch search, and the first learned-
+  ranking result ship; breadth and native project imports remain open.**
+  ``SearchController`` now explores
   verifier-accepted branches under independent node/proposal budgets, and the
   PyPantograph adapter closes one held-out ``Init`` proposition with an
   unranked fixed palette. The projection ablation is exhausted, making the
-  tactic capability load-bearing. This is the capability-blind baseline, not
-  a tactic-policy result. On native Windows, PyPantograph 0.3.15's project
+  tactic capability load-bearing. A separate tactic-policy slice now records a
+  real theorem-heldout classification signal but loses live on mean to the
+  state-blind frequency order; multi-theorem solved-rate curves remain open.
+  On native Windows, PyPantograph 0.3.15's project
   loader invokes POSIX ``printenv`` while resolving ``lake env``; the bundled
   ``BooleanLaws`` project therefore fails to populate ``LEAN_PATH`` even
   though base ``Init`` RPC works. Add a Windows path resolver or pass a
@@ -285,8 +288,10 @@ wall) must not be redirected into sentiment tags mid-experiment.
   `GEN` has proof/story/frame semantics, and `retrieval.RetrievalVerifier`
   layers executable `RETRIEVE` plus exact `POINT(position)` over the unchanged
   frame verifier. ASK now adds an authenticated pause/return adapter with a
-  runtime user frame; `WRITE` remains vocabulary without an adapter. Lean
-  replay is not live tactic application or search.
+  runtime user frame; `WRITE` remains vocabulary without an adapter. A live
+  PyPantograph verifier now plugs into the same controller for one bounded
+  theorem search, but project-backed breadth and a shared proof/story learned
+  policy remain open.
 
 - **Temporal event grounding remains demo-specific.** Chekhov close-time
   obligations and governance-gated no-deus heralding both execute. The
