@@ -1,0 +1,53 @@
+{
+  "task": "corpus_grounded_analogy",
+  "quadruples": 40,
+  "families": 1,
+  "source_disciplines": 6,
+  "target_disciplines": 6,
+  "novel_target_rows": 40,
+  "distinct_novel_targets": 5,
+  "symbolic_exact": 1.0,
+  "capability_blind": {
+    "last_slot_number_transfer_exact": 1.0
+  },
+  "novelty_sanity_controls": {
+    "copy_c_exact": 0.0,
+    "nearest_authored_exact": 0.0,
+    "nearest_authored_mean_similarity": 0.7728664019817435
+  },
+  "split_coverage": {
+    "family": "REFUSED_ONE_ELIGIBLE_FAMILY",
+    "discipline": {
+      "mode": "all corpus disciplines are OOD to synthetic training",
+      "count": 6
+    },
+    "literal_vocabulary": {
+      "status": "REFUSED_FIXED_CHECKPOINT_VOCAB",
+      "missing_count": 16,
+      "missing_sample": [
+        "=(",
+        "AMOUNT",
+        "CONCENTRATION",
+        "CONDITION",
+        "ELASTICITY",
+        "INPUTPERTURB",
+        "INTERVAL",
+        "OUTPUTPERTURB",
+        "PCT_PRICE",
+        "PCT_QUANTITY",
+        "POLICYNEW",
+        "POLICYOLD"
+      ]
+    }
+  },
+  "example": {
+    "A": "calculus.differentiation.average_rate_of_change",
+    "B": "numanalysis.rootfinding.bisection_interval_halving",
+    "C": "chemistry.solutions.molarity_definition",
+    "D": "CONCENTRATION = *(AMOUNT, inv(2))"
+  },
+  "model_rhs_exact": 0.0,
+  "model_scope": "RHS residual; equality shell is symbolic",
+  "checkpoint": "analogy_maskskel_s0.pt",
+  "checkpoint_sha256": "d634e7635cfd716410c752a97c06a44885285b5432bf9587dbe4b360a6a26e79"
+}

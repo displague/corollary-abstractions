@@ -149,6 +149,20 @@ The first target is modest: demonstrate one held-out cross-discipline
 recombination whose output exists nowhere verbatim in context and whose every
 step can be checked. Do not call synthetic 1.000 corpus generalization.
 
+**DELIVERED — first narrow corpus evaluation, with the domain gap exposed.**
+Forty A:B::C:D rows combine a committed cheapest-specialization edge with a
+typed cross-discipline twin. They contain five distinct D equations, all
+absent from the 221-node corpus and independently accepted as specializations
+of C. The symbolic resolver scores 1.000—but so does a capability-blind rule
+that copies B's new number into C's last slot. The computed copy-C and nearest-
+authored exact scores are 0.000 novelty sanity checks, not meaningful
+baselines. The v0.5 masked-skeleton checkpoint scores 0.000 exact on the RHS
+residual. P-CA1–P-CA4 are retrospective labels, not auditable
+preregistrations. Honest limit: strict admission leaves one family and a
+trivial blind solution, so family holdout is refused; literal vocabulary is
+also refused after measuring 16 missing checkpoint tokens. The release gate's
+one verifiable recombination is met, while learned corpus analogy remains open.
+
 ## 6. Retrieval grows from stores into tools
 
 Current RETRIEVE is exact-first and deterministic over local stores. Extend it

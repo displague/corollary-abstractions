@@ -79,6 +79,18 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
 ## Controller / harness
 
+- **Corpus analogy has depth one and family breadth one.** The first grounded
+  evaluation admits 40 rows but only five distinct novel targets, all from the
+  typed ratio family. A blind “put B's new number in C's last slot” rule scores
+  1.000, so the current lane is a construction demo, not a learning challenge:
+  strict slot-renaming plus numeric-substitution constraints correctly refuse
+  ambiguous compound bindings. Expand the corpus/evaluator until family,
+  discipline, and literal-vocabulary holdouts are all non-empty; introduce
+  explicit source leaves for compound expansions; then train on grounded rows.
+  The v0.5 synthetic checkpoint scores 0.000 on the current RHS residual, but
+  the blind win means that failure is not evidence of a hard task. Its
+  synthetic 1.000 must never be cited as corpus transfer.
+
 - **PARTIAL — conversation state is maintained and revisable in-process;
   durable authenticated resume remains open.** Owner-isolated sessions now
   reopen a private slot, explicitly supersede an earlier answer, preserve both

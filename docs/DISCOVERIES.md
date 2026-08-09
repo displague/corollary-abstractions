@@ -13,6 +13,15 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Synthetic recombinant pointing does not transfer to corpus
+  specialization.** Forty real A:B::C:D rows span six source and six target
+  disciplines but only five distinct targets in one ratio family. Every D is
+  rechecked by the specializer. Symbolic resolution and a blind last-slot
+  number-transfer rule both score 1.000; the released synthetic checkpoint is
+  0.000 exact on the RHS residual. The lane demonstrates verifiable corpus
+  construction, not learned analogy. *P-CA1–P-CA4 retrospective labels;
+  post-review corpus-grounded evaluation* (2026-08-09)
+
 - **Conversation memory needs revocation, not just attribution.** A signed
   answer remains authentic after the user changes their mind. The maintained
   user frame therefore keeps both answers as provenance while a verifier-

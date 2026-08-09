@@ -1281,3 +1281,48 @@ from forgeable public metadata. The exact current-request cross-slot forgery
 now has a regression. `commit_run` derives the slot only from the authentic
 new binding, then revokes only authentic older bindings for that slot. The
 second review reproduced both forgery variants and found no remaining defect.
+
+## Corpus-grounded analogy (v0.6 item 5)
+
+The first grounded lane composes two facts already in the audited graph. A:B
+is one committed cheapest-specialization edge; A:C is one typed twin crossing
+disciplines. The transfer renames B's surviving slots into C's vocabulary,
+forming D, and then asks the specializer afresh whether C:D holds. Rows are
+admitted only when bindings are unambiguous slot renames plus numeric
+substitutions and D is absent from every authored template.
+
+That produces 40 quadruple rows spanning six source and six target disciplines,
+but only one structural family (the ratio skeleton) and five distinct D
+equations. All five are novel and every row is independently specialization-
+accepted. The full symbolic resolver is 1.000 exact by checked construction.
+Crucially, a capability-blind rule—take the one number newly visible in B and
+replace C's last slot—also scores **1.000**. This first lane is therefore too
+regular to test learned analogy. Copying C and retrieving the nearest authored
+template score 0.000 exact, but review correctly identified those as novelty
+sanity checks forced by admission, not capability baselines; nearest mean
+character similarity is 0.773. The specialization ledger is load-bearing:
+replacing it with an empty control yields zero quadruples.
+
+The released `analogy_maskskel_s0` checkpoint is missing 16 literal corpus
+tokens including the equality head. The evaluator derives that refusal from
+the loaded vocabulary (a complete synthetic vocabulary control returns
+AVAILABLE) rather than hard-coding it. For the legitimate learned
+residual, the equality shell remains symbolic and the checkpoint sees
+normalized A/B/C right-hand expression trees using only its exact training
+vocabulary. Its exact score is **0.000**, versus 1.000 on its synthetic heldout
+task. Retrospective P-CA3 is supported as a negative result: five learned synthetic
+whole-tree transforms did not teach numeric slot specialization, even though
+both tasks share the pointer realization mechanism. Because the blind baseline
+solves this lane, the zero is a domain-gap observation, not evidence that the
+corpus task is intrinsically hard.
+
+P-CA1–P-CA4 are retained as retrospective labels: they were written in the
+working tree before the run but not committed separately, so there is no
+auditable preregistration and the ledger does not call them predictions. The
+observed results meet the modest release gate—one
+cross-discipline recombination whose absent output is checkable—but not the
+roadmap's broader split ambition. Family holdout is refused because only one
+family survives the strict admission rules; literal-vocabulary evaluation is
+refused because the fixed checkpoint vocabulary has no honest unknown token.
+The next grounded dataset must add compound-expansion source leaves and enough
+families to train and hold out families separately.
