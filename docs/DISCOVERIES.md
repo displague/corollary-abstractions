@@ -13,6 +13,19 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Conversation memory needs revocation, not just attribution.** A signed
+  answer remains authentic after the user changes their mind. The maintained
+  user frame therefore keeps both answers as provenance while a verifier-
+  private committed supersession ledger makes the old one non-current. A
+  public `superseded` tuple alone is forgeable and deletable. *P-CR2 fired;
+  authenticated mutable-session result* (2026-08-09)
+
+- **Two private perspectives can share one story without becoming story
+  facts.** Alice's silver eggs and Bob's blue eggs render from owner-isolated
+  bindings over an identical accepted golden-chicken state; neither value
+  enters `frame.asserted`. *P-CR1/P-CR3 fired; maintained user-frame demo*
+  (2026-08-09)
+
 - **Held-out tactic classification does not guarantee a search gain.** Three
   27,688-parameter byte-GRU rankers all score 0.8125 on four theorem-held-out
   groups (frequency 0.4375; shuffled-label controls 0.25–0.375) and solve live

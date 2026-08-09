@@ -79,6 +79,17 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
 ## Controller / harness
 
+- **PARTIAL — conversation state is maintained and revisable in-process;
+  durable authenticated resume remains open.** Owner-isolated sessions now
+  reopen a private slot, explicitly supersede an earlier answer, preserve both
+  signed bindings as provenance, and refuse resurrection by public-state
+  surgery. The binding lifetime is `session`. The verifier's HMAC key,
+  consumed-request set, and supersession ledger are deliberately process-local,
+  so serializing the dataclasses is not a supported restart. Design key
+  versioning/rotation or a host-kept durable authority before persistence; do
+  not serialize the ambient secret into user-visible state. Open-English goal
+  parsing and transport/UI integration also remain open.
+
 - **PARTIAL — learned tactic classification works; live ranking does not beat
   the strongest blind order.** The 27,688-parameter byte-GRU has a real
   theorem-level holdout and three-seed controls, scoring 0.8125 against

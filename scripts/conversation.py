@@ -1,9 +1,23 @@
 #!/usr/bin/env python3
-"""Two-turn ASK demonstration: a user-private UNKNOWN pauses and resumes."""
+"""Maintained user-frame demonstration over repeated ASK turns.
+
+Registered predictions (P-CR, before executing the expanded demo):
+
+P-CR1. Two owners starting from one identical public golden-chicken state can
+    answer the same private slot differently; each renderer uses only its own
+    signed binding and neither session mutates the shared story or the other.
+P-CR2. A later reply for the same owner and slot explicitly supersedes the
+    earlier request id, preserves both bindings as provenance, and renders only
+    the new value. Session identity and accepted story beats remain stable.
+P-CR3. Across all turns, user testimony clears the pending UNKNOWN but never
+    enters ``frame.asserted`` or corpus state. Dropping the verifier still drops
+    the signing authority; this is maintained in-process state, not a durable
+    authenticated restart format.
+"""
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from controller import Controller, RunResult, SequencePolicy, StopReason
 from frames import FrameExecutor, Literal
@@ -37,6 +51,7 @@ class ConversationSession:
         default_factory=lambda: Controller(max_steps=8)
     )
     turns: list[RunResult[RetrievalState]] = field(default_factory=list)
+    active_slot: str = "egg_color"
 
     def run_turn(self, actions) -> RunResult[RetrievalState]:
         result = self.controller.run(
@@ -45,7 +60,8 @@ class ConversationSession:
             self.verifier,
             is_complete=lambda state: (
                 state.pending is None
-                and self.verifier.binding_value(state, "egg_color") is not None
+                and self.verifier.binding_value(state, self.active_slot)
+                is not None
             ),
             is_waiting=lambda state: state.awaiting is not None,
         )
@@ -53,8 +69,41 @@ class ConversationSession:
         self.turns.append(result)
         return result
 
+    def request_private_slot(self, slot: str) -> None:
+        """Open a new goal while retaining this owner's session memory."""
+        if self.state.pending is not None or self.state.awaiting is not None:
+            raise ValueError("cannot open a new goal while another is unresolved")
+        fresh = RetrievalState.from_unknown(
+            self.verifier.frame_executor,
+            self.state.frame,
+            slot,
+            slot,
+            Literal("the golden chicken's eggs", "color", slot),
+            resolution_channel="user",
+            user_owner=self.state.user_frame.owner,
+        )
+        self.state = replace(
+            fresh,
+            session_id=self.state.session_id,
+            user_frame=self.state.user_frame,
+        )
+        self.active_slot = slot
 
-def golden_chicken_revision_session() -> ConversationSession:
+    def ask_and_reply(self, slot: str, value: str) -> None:
+        if self.state.pending is None:
+            self.request_private_slot(slot)
+        asked = self.run_turn((ask_action(slot),))
+        if asked.stop_reason is not StopReason.WAITING:
+            raise AssertionError("ASK did not pause for user input")
+        reply = self.verifier.reply_action(self.state, value)
+        answered = self.run_turn((reply,))
+        if not answered.solved:
+            raise AssertionError("authenticated reply did not resume the goal")
+
+
+def golden_chicken_revision_session(
+    owner: str = "interlocutor",
+) -> ConversationSession:
     executor = FrameExecutor()
     accepted_story = story_oracle_run().final_state
     frame = accepted_story.frame_state
@@ -65,7 +114,7 @@ def golden_chicken_revision_session() -> ConversationSession:
         "egg_color",
         Literal("the golden chicken's eggs", "color", "egg_color"),
         resolution_channel="user",
-        user_owner="interlocutor",
+        user_owner=owner,
     )
     return ConversationSession(
         state=state,
@@ -86,19 +135,27 @@ def render_revision(session: ConversationSession) -> str:
 
 
 def main() -> int:
-    session = golden_chicken_revision_session()
-    first = session.run_turn((ask_action("egg_color"),))
-    assert first.stop_reason is StopReason.WAITING
-    assert session.state.awaiting is not None
-    print("USER: Now make the golden chicken lay eggs.")
-    print(f"SYSTEM: {session.state.awaiting.prompt}")
+    alice = golden_chicken_revision_session("alice")
+    bob = golden_chicken_revision_session("bob")
+    assert alice.story_state == bob.story_state
 
-    reply = session.verifier.reply_action(session.state, "silver")
-    second = session.run_turn((reply,))
-    assert second.solved
-    print("USER: silver")
-    print(f"SYSTEM: {render_revision(session)}")
-    print("STATUS: user binding is frame-private VERIFIED provenance, not world truth")
+    alice.ask_and_reply("egg_color", "silver")
+    bob.ask_and_reply("egg_color", "blue")
+    print("ALICE: Now make the golden chicken lay silver eggs.")
+    print(f"SYSTEM/ALICE: {render_revision(alice)}")
+    print("BOB: In my version, make the eggs blue.")
+    print(f"SYSTEM/BOB: {render_revision(bob)}")
+
+    first_request = alice.state.user_frame.bindings[-1].request_id
+    alice.request_private_slot("egg_color")
+    alice.ask_and_reply("egg_color", "copper")
+    assert first_request in alice.state.user_frame.superseded_request_ids
+    print("ALICE: Change mine: make the eggs copper instead.")
+    print(f"SYSTEM/ALICE: {render_revision(alice)}")
+    print(
+        "STATUS: owner-isolated session bindings; the silver request is "
+        "explicitly superseded, and no user reply enters world truth"
+    )
     return 0
 
 

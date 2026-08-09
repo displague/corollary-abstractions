@@ -81,6 +81,17 @@ Acceptance demo: two users with different private preferences produce different
 story revisions from the same public story state; neither preference changes
 the corpus or the other user's frame.
 
+**DELIVERED — maintained in-process user frames.** Alice and Bob start from an
+identical accepted three-beat story, bind the same `egg_color` UNKNOWN to
+silver and blue in owner-isolated signed frames, and render different
+revisions without changing either public story or `frame.asserted`. Alice then
+reopens the slot and changes silver to copper: both bindings remain as
+provenance, the earlier request id is explicitly superseded, and verifier-
+private committed state prevents public tuple surgery from resurrecting it.
+P-CR1–P-CR3 fire. Durable authenticated restart and open-English request
+parsing remain open; the signing secret and supersession authority are still
+process-local by design.
+
 ## 3. PROVEN-gated WRITE
 
 Implement the fifth controller action as staged storage, symmetric with

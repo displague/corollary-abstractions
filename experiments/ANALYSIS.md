@@ -1250,3 +1250,34 @@ Re-review then found the missing frequency-ranked live control; it beat the
 learned mean and forced the public P-TP5 miss above. This is why capability-
 blind baselines are run before model conclusions, even when the model metric
 itself looks strong.
+
+## Maintained user frames (v0.6 item 2)
+
+The v0.5 ASK demo proved one pause and signed return. The v0.6 runtime retains
+that verifier and accepted state across goals. Two owners begin from the same
+public golden-chicken story; Alice binds `egg_color=silver`, Bob binds
+`egg_color=blue`, and their renderers diverge while both copies of the public
+story and both `frame.asserted` tuples remain byte-for-byte unchanged. This is
+the release gate's maintained multi-turn demonstration, not two independent
+prompt wrappers.
+
+A third turn tests correction rather than accumulation. Alice reopens the same
+UNKNOWN and replies `copper`. Her session id and story beats remain fixed;
+both signed answers stay in her user-frame history; the silver request id moves
+to an explicit superseded ledger; rendering selects copper. Supersession is
+not trusted merely because its id appears in public state: `commit_run` records
+it in verifier-private state, and a regression deletes the public marker and
+new binding yet still cannot resurrect the old signed answer.
+
+P-CR1–P-CR3 fire. The honest boundary is restart: bindings have an explicit
+`session` lifetime, but signatures and the authoritative supersession ledger
+are process-local. Serializing dataclasses without a key-lifecycle protocol
+would create plausible-looking but unauthenticated memory, so durable resume
+remains open rather than silently pickling the secret.
+
+Adversarial review found that authenticating the bindings being revoked was
+not enough: the first implementation still selected *which slot* to revoke
+from forgeable public metadata. The exact current-request cross-slot forgery
+now has a regression. `commit_run` derives the slot only from the authentic
+new binding, then revokes only authentic older bindings for that slot. The
+second review reproduced both forgery variants and found no remaining defect.

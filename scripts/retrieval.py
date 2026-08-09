@@ -648,16 +648,23 @@ class UserBinding:
     slot: str
     value: str
     signature: str
+    lifetime: str = "session"
 
 
 @dataclass(frozen=True)
 class UserFrame:
-    """Runtime-owned interlocutor state; never promoted to corpus truth."""
+    """Runtime-owned interlocutor state; never promoted to corpus truth.
+
+    ``superseded_request_ids`` is auditable state, not authority. The verifier's
+    private committed ledger prevents a caller from deleting this tuple to
+    resurrect an earlier signed answer.
+    """
 
     owner: str = "user"
     questions: tuple[ClarificationRequest, ...] = ()
     bindings: tuple[UserBinding, ...] = ()
     consumed_request_ids: tuple[str, ...] = ()
+    superseded_request_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -734,6 +741,7 @@ class RetrievalVerifier:
         self._receipt_secret = secrets.token_bytes(32)
         self._ask_secret = secrets.token_bytes(32)
         self._consumed_ask_requests: set[tuple[str, str]] = set()
+        self._superseded_ask_bindings: set[tuple[str, str]] = set()
 
     def _ask_signature(self, domain: str, *parts: object) -> str:
         payload = repr((domain, *parts)).encode("utf-8")
@@ -788,22 +796,33 @@ class RetrievalVerifier:
         for binding in reversed(state.user_frame.bindings):
             if binding.slot != slot:
                 continue
-            expected = self._ask_signature(
-                "binding",
-                state.session_id,
-                repr(state.frame.spec),
-                state.user_frame.owner,
-                binding.request_id,
-                binding.slot,
-                binding.value,
-            )
-            if hmac.compare_digest(binding.signature, expected):
+            if (state.session_id, binding.request_id) in (
+                self._superseded_ask_bindings
+            ):
+                continue
+            if self._valid_binding(state, binding):
                 return binding.value
         return None
+
+    def _valid_binding(
+        self, state: RetrievalState, binding: UserBinding
+    ) -> bool:
+        expected = self._ask_signature(
+            "binding",
+            state.session_id,
+            repr(state.frame.spec),
+            state.user_frame.owner,
+            binding.request_id,
+            binding.slot,
+            binding.value,
+            binding.lifetime,
+        )
+        return hmac.compare_digest(binding.signature, expected)
 
     def commit_run(self, trace: tuple[object, ...]) -> None:
         """Atomically consume replies only when Controller returns the run."""
         consumed: set[tuple[str, str]] = set()
+        superseded: set[tuple[str, str]] = set()
         for entry in trace:
             action = entry.action
             if (
@@ -814,7 +833,30 @@ class RetrievalVerifier:
                 request_id = action.argument("request_id")
                 if request_id is not None:
                     consumed.add((entry.state_after.session_id, request_id))
+                    slot = next(
+                        (
+                            binding.slot
+                            for binding in reversed(
+                                entry.state_after.user_frame.bindings
+                            )
+                            if binding.request_id == request_id
+                            and self._valid_binding(
+                                entry.state_after, binding
+                            )
+                        ),
+                        None,
+                    )
+                    if slot is not None:
+                        superseded.update(
+                            (entry.state_before.session_id, binding.request_id)
+                            for binding in entry.state_before.user_frame.bindings
+                            if binding.slot == slot
+                            and self._valid_binding(
+                                entry.state_before, binding
+                            )
+                        )
         self._consumed_ask_requests.update(consumed)
+        self._superseded_ask_bindings.update(superseded)
 
     def _receipt_signature(
         self,
@@ -1358,7 +1400,15 @@ class RetrievalVerifier:
                 request.request_id,
                 request.slot,
                 value,
+                "session",
             ),
+        )
+        superseded = tuple(
+            prior.request_id for prior in state.user_frame.bindings
+            if prior.slot == request.slot
+            and prior.request_id
+                not in state.user_frame.superseded_request_ids
+            and self._valid_binding(state, prior)
         )
         return Verification(
             Verdict.VERIFIED,
@@ -1374,6 +1424,9 @@ class RetrievalVerifier:
                     consumed_request_ids=(
                         state.user_frame.consumed_request_ids
                         + (request.request_id,)
+                    ),
+                    superseded_request_ids=(
+                        state.user_frame.superseded_request_ids + superseded
                     ),
                 ),
             ),

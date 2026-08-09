@@ -380,10 +380,10 @@ detail of individual tools.
 | Lean training transitions | Phase 1 delivered: 155 transitions |
 | Learned tactic policy and proof search | Bounded live search ships; a 27,688-parameter ranker learns held-out schemas but its 65.0-proposal mean loses to the state-blind frequency order at 64 |
 | Multi-step shared controller | Deterministic GEN/RETRIEVE/POINT/ASK adapters implemented; learned five-action choice unbuilt |
-| Conversational clarification | Parsed ASK pauses as WAITING, accepts a channel-signed reply, and resumes persistent user-frame state |
+| Conversational clarification | Maintained owner-isolated user frames support repeated ASK, different users, and explicit revision/supersession; durable restart and open English remain open |
 | Expressive LLM-like prose | Far from the present renderer |
 | Oracle golden-chicken integration baseline | 1/1, three checked beats plus visible plant/discharge accounting |
-| Parsed two-turn golden-chicken revision | 1/1: accepted three-beat story preserved, clarified, and revised |
+| Parsed multi-turn golden-chicken revision | 1/1: two owners diverge over one public story; one revises a prior answer without leaking it into world truth |
 | Open-English conversational golden-chicken story | 0/1 |
 
 That final zero prevents the component inventory from becoming self-congratulatory.
