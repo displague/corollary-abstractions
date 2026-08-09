@@ -67,7 +67,7 @@ class MirrorReportTests(unittest.TestCase):
         cls.report = build_report(nodes, problems)
 
     def test_registered_group_counts_include_physics_frames_slice(self) -> None:
-        self.assertEqual(self.report["nodes_analyzed"], 215)
+        self.assertEqual(self.report["nodes_analyzed"], 221)
         self.assertEqual(
             self.report["group_counts"],
             {

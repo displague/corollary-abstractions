@@ -1,0 +1,1031 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "provability.goedel_loeb.v1",
+  "discipline": "provability",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "provability.modal.k_distribution",
+      "title": "Distribution Axiom (K) for Provability",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "provability_logic",
+        "topic": "modal_distribution",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "provable(p implies q) implies (provable(p) implies provable(q))",
+        "canonical_latex": "\\Box(p \\to q) \\to (\\Box p \\to \\Box q)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "□(p→q) → (□p→□q)",
+            "scope_note": "Modal-logic notation; K is what makes a modality normal"
+          },
+          {
+            "form_id": "derivability_condition",
+            "notation_system": "ascii",
+            "expression": "Bew([p implies q]) implies (Bew([p]) implies Bew([q]))",
+            "scope_note": "The second Hilbert-Bernays-Loeb derivability condition D2: T's theorems are provably closed under modus ponens"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "from |- box(p implies q) and |- box(p), infer |- box(q)",
+            "scope_note": "The detached reading; K internalizes modus ponens one box down"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "modal_distribution_axiom",
+        "anonymized_template": "IMPLIES(BOX(IMPLIES(PROPP, PROPQ)), IMPLIES(BOX(PROPP), BOX(PROPQ)))",
+        "slot_schema": [
+          {
+            "slot_id": "PROPP",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence"
+          },
+          {
+            "slot_id": "PROPQ",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence"
+          }
+        ],
+        "invariants": [
+          "K is the axiom that makes BOX a normal modality; every normal modal logic — including LTL under its ALWAYS reading — carries it verbatim. The temporal corpus has no ALWAYS-distribution node, so the obvious cross-discipline twin for this statement is a corpus gap, not a matcher miss: the same gap-shape temporal.induction.temporal_induction_axiom records for the absent arithmetic-induction node.",
+          "One-directional: K distributes the box over an implication and never collects it back. That is why the archetype is a minted `modal_distribution_axiom` rather than an adoption of temporal's `modal_meet_homomorphism`, which asserts a two-sided equation onto MEET (PV1's honesty boundary).",
+          "Under the arithmetic reading this is derivability condition D2, one of the three conditions Goedel II needs; D1 is the necessitation node and D3 the formalized-necessitation form on that node. The corpus therefore carries the Hilbert-Bernays conditions as statements, not as prose.",
+          "Head literalism quarantines BOX from ALWAYS at every match level by design; the refused alias is argued in the BOX functional's description and its price is registered as PV2."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence",
+            "mathematical_order": 0,
+            "description": "An arbitrary sentence of the language of T, closed under the arithmetization that gives every sentence a numeral name."
+          },
+          {
+            "symbol": "q",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence",
+            "mathematical_order": 0,
+            "description": "A second arbitrary sentence, independent of p."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability in the theory T",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula under the box, and the meta-level 'if ... then' where the statement is a rule or a metatheorem. Same head and same documented double reading as scripts/seed_logic.py and seed_temporal.py; the necessitation node is the extreme case of the ambiguity and records it in its invariants."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If the theory proves an implication, then provability of the antecedent yields provability of the consequent: proof search composes across modus ponens, and the box records that fact inside the object language.",
+        "statistical_significance": "The distribution axiom is half of what 'provable' shares with every other necessity-like operator; the corpus states it so that the SHARED half of GL and LTL is a statement in the graph rather than folklore, while the UNSHARED half (Loeb vs reflection) is carried by the adjacent axiom. Registered prediction PV1: singleton at every level, with the LTL K-analog recorded as the graph's missing counterpart — the cheapest future connectivity fix is authoring ALWAYS-distribution in the temporal corpus, not respelling this node.",
+        "regularity_conditions": [
+          "T is recursively enumerable and interprets enough arithmetic to arithmetize its own proof relation",
+          "BOX is the standard Goedel proof predicate for T (Feferman intensionality: a deviant predicate can break the conditions)",
+          "Classical object logic"
+        ],
+        "failure_modes": [
+          "Fails for Rosser-style provability predicates: Rosser's ordered proof search is not provably closed under modus ponens, so D2 breaks — which is exactly why Rosser consistency escapes Goedel II and why 'which predicate' is part of the theorem's hypotheses.",
+          "Fails for resource-bounded provability ('provable in at most n steps'): combining two short proofs can exceed the bound, so the boxed closure is lost.",
+          "Fails for Willard's self-verifying systems at the arithmetization stage: without total multiplication the standard coding of proof sequences is unavailable, and K for the standard predicate is not internally derivable."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "provability.modal.necessitation",
+          "provability.modal.loeb_axiom",
+          "logic.inference.modus_ponens",
+          "temporal.modality.next_distributes_over_meet"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hilbert_bernays1939",
+          "bibliographic_entry": "Hilbert, D., Bernays, P. (1939). Grundlagen der Mathematik, Band II. Berlin: Springer."
+        },
+        {
+          "citation_key": "loeb1955",
+          "bibliographic_entry": "Loeb, M. H. (1955). Solution of a Problem of Leon Henkin. Journal of Symbolic Logic, 20(2), 115-118."
+        },
+        {
+          "citation_key": "segerberg1971",
+          "bibliographic_entry": "Segerberg, K. (1971). An Essay in Classical Modal Logic. Filosofiska Studier 13. Uppsala: University of Uppsala."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "distribution axiom",
+        "normal modal logic",
+        "K axiom",
+        "derivability conditions",
+        "provability logic"
+      ]
+    },
+    {
+      "statement_id": "provability.modal.necessitation",
+      "title": "Necessitation for Provability",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "provability_logic",
+        "topic": "necessitation",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "from |- p, infer |- provable(p)",
+        "canonical_latex": "\\dfrac{\\vdash p}{\\vdash \\Box p}",
+        "equivalent_forms": [
+          {
+            "form_id": "derivability_condition",
+            "notation_system": "ascii",
+            "expression": "if T |- p then T |- Bew([p])",
+            "scope_note": "The first Hilbert-Bernays-Loeb derivability condition D1: every theorem is provably a theorem"
+          },
+          {
+            "form_id": "formalized",
+            "notation_system": "ascii",
+            "expression": "provable(p) implies provable(provable(p))",
+            "scope_note": "Derivability condition D3 / modal axiom 4, the FORMALIZED necessitation; in GL it is derivable from K and Loeb rather than postulated, so this corpus carries it as a form of the rule it internalizes, not as a seventh node"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "theoremhood_internalization",
+        "anonymized_template": "IMPLIES(PROP, BOX(PROP))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence"
+          }
+        ],
+        "invariants": [
+          "The root IMPLIES is META-LEVEL: the template is a rule (from a proof of p, a proof of box p), the same double reading scripts/seed_logic.py documents for modus ponens and seed_temporal.py for temporal induction. This node is the extreme case of that inherited ambiguity, because the OBJECT-level reading of the same template — truth implies provability, the converse of reflection — is FALSE for every consistent T (there are true unprovable sentences; that is Goedel I). The matcher cannot tell the two readings apart and would group this rule with a formula of the same shape; no such formula exists in the graph today, and this invariant is the tripwire for the day one arrives.",
+          "Necessitation applies to THEOREMS only, never under open assumptions: the deduction theorem does not commute with the box, which is the standard error the rule form guards against.",
+          "With K, necessitation is what 'normal modal logic' means; GL is K + Loeb + necessitation, and both shared components are now graph statements."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence",
+            "mathematical_order": 0,
+            "description": "An arbitrary sentence of the language of T, closed under the arithmetization that gives every sentence a numeral name."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability in the theory T",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula under the box, and the meta-level 'if ... then' where the statement is a rule or a metatheorem. Same head and same documented double reading as scripts/seed_logic.py and seed_temporal.py; the necessitation node is the extreme case of the ambiguity and records it in its invariants."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Whatever the theory actually proves, it also proves that it proves: theoremhood is verifiable by exhibiting the proof, and the proof predicate is strong enough to check exhibited proofs.",
+        "statistical_significance": "D1 of the derivability conditions, and the second half of the GL/LTL shared core. Structurally a predicted singleton: IMPLIES(?0:V, BOX(?0:V)) has no counterpart shape in the graph (PV2). Its decompose behaviour was PV3's sharpest probe: the node's only non-trivial constituent is BOX(PROP) itself, so its groundedness measures whether sibling-node box recurrence counts as a known form. Adjudicated: it does, unconditionally — the node scores 1.000 on box recurrence alone, the cleanest single exhibit of the self-grounding finding in the docstring.",
+        "regularity_conditions": [
+          "p ranges over sentences actually derivable in T (the rule has a proof of p as its premise, not the truth of p)",
+          "The proof predicate is Sigma-1: exhibited proofs are provably proofs, which is what makes D1 hold",
+          "T recursively enumerable"
+        ],
+        "failure_modes": [
+          "Read object-level it is false outright: truth does not imply provability in any consistent T extending arithmetic (Goedel I); the meta reading is load-bearing, not a nicety.",
+          "Fails under open assumptions: from p |- q one may NOT infer p |- box(q); necessitation and the deduction theorem do not commute.",
+          "Fails for provability-in-a-weaker-theory read into a stronger box or vice versa: D1 is a property of ONE fixed predicate for ONE fixed T."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "provability.modal.k_distribution",
+          "provability.modal.loeb_axiom",
+          "logic.inference.modus_ponens"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hilbert_bernays1939",
+          "bibliographic_entry": "Hilbert, D., Bernays, P. (1939). Grundlagen der Mathematik, Band II. Berlin: Springer."
+        },
+        {
+          "citation_key": "loeb1955",
+          "bibliographic_entry": "Loeb, M. H. (1955). Solution of a Problem of Leon Henkin. Journal of Symbolic Logic, 20(2), 115-118."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "smorynski1985",
+          "bibliographic_entry": "Smorynski, C. (1985). Self-Reference and Modal Logic. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "necessitation",
+        "derivability condition",
+        "D1",
+        "normal modal logic",
+        "rule vs formula"
+      ]
+    },
+    {
+      "statement_id": "provability.modal.loeb_axiom",
+      "title": "Loeb's Axiom (GL)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "provability_logic",
+        "topic": "loeb_induction",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "provable(provable(p) implies p) implies provable(p)",
+        "canonical_latex": "\\Box(\\Box p \\to p) \\to \\Box p",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "□(□p→p) → □p",
+            "scope_note": "The axiom that turns K4 into GL"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "from |- provable(p) implies p, infer |- p",
+            "scope_note": "Loeb's theorem as a rule over T: reflection is provable only for theorems. Loeb 1955's answer to Henkin's 1952 question about the sentence asserting its own provability"
+          },
+          {
+            "form_id": "wellfounded_induction",
+            "notation_system": "ascii",
+            "expression": "valid on a transitive frame iff the accessibility relation is converse well-founded",
+            "scope_note": "Segerberg completeness: GL is the logic of finite, transitive, irreflexive frames, so Loeb IS induction along the accessibility relation"
+          },
+          {
+            "form_id": "arithmetic_completeness",
+            "notation_system": "ascii",
+            "expression": "GL proves exactly the schemata PA proves under every arithmetic realization of the box",
+            "scope_note": "Solovay 1976; the reason this modal axiom is a fact about arithmetic rather than a stipulation"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "temporal_induction",
+        "anonymized_template": "IMPLIES(BOX(IMPLIES(BOX(PROP), PROP)), BOX(PROP))",
+        "slot_schema": [
+          {
+            "slot_id": "PROP",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence"
+          }
+        ],
+        "invariants": [
+          "The archetype_id `temporal_induction` is ADOPTED from temporal.induction.temporal_induction_axiom on purpose, and the adoption is a claim, not a convenience: Loeb's axiom is well-founded induction along the accessibility relation (Segerberg: valid on transitive frames exactly when no infinite ascending chain exists), and temporal induction is the same principle along NEXT/successor. Nested implication under a modality internalizing induction — one archetype, two disciplines. The label being named for ONE of them is recorded drift evidence for docs/BACKLOG.md's rename/promotion proposal, exactly as `de_morgan_duality` spanning three skeletons was.",
+          "What the archetype shares, the skeletons refuse: Loeb boxes its whole hypothesis AND the hypothesis's own antecedent, and its conclusion is a bare boxed slot; temporal induction's conclusion is itself an implication and its step is unboxed on the antecedent side. The difference is reflection. LTL validates ALWAYS(p) -> p; in GL, reflection appears exactly once, INSIDE the box, as the hypothesis being discharged — P-CF4's registered near-miss, adjudicated in this file's docstring.",
+          "One free operand occurring four times at three depths, the same recurrence-is-the-content pattern the induction and transitivity families carry.",
+          "Adding reflection to GL as an axiom collapses it: box(p) -> p for all p plus Loeb yields |- p for all p by modus ponens inside the box. The axiom and reflection are not merely different, they are incompatible company.",
+          "With p := FALSITY and the definitional rewrite NEG(x) = IMPLIES(x, FALSITY), this axiom yields the formalized second incompleteness theorem — the hand-authored generalizes/special_case_of pair, blocked from mechanical discovery by three independent recorded filters (PV4)."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "arithmetic_sentence",
+            "mathematical_order": 0,
+            "description": "An arbitrary sentence of the language of T, closed under the arithmetization that gives every sentence a numeral name."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability in the theory T",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula under the box, and the meta-level 'if ... then' where the statement is a rule or a metatheorem. Same head and same documented double reading as scripts/seed_logic.py and seed_temporal.py; the necessitation node is the extreme case of the ambiguity and records it in its invariants."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If the theory proves that provability of p would already settle p, then the theory proves p outright: provability admits no useful self-trust below actual proof. Soundness-about-itself is purchasable only at the price of the theorem itself.",
+        "statistical_significance": "The axiom that separates provability from every reflection-validating necessity, and the corpus's cross-discipline hinge: P-CF4 predicts (and this file adjudicates) that it shares an archetype with temporal induction while twinning nothing at any structural level. GL's completeness for PA (Solovay) makes it the discipline where a future Lean verified_by anchor is most wanted; none is claimed yet because prover/ carries no GL artifact.",
+        "regularity_conditions": [
+          "T recursively enumerable, interpreting enough arithmetic for the diagonal lemma (the proof of Loeb's theorem runs through the fixed point of 'if this sentence is provable then p')",
+          "BOX satisfies the Hilbert-Bernays-Loeb conditions D1-D3",
+          "Classical object logic"
+        ],
+        "failure_modes": [
+          "Fails read as truth: if the box were a truth predicate, Loeb plus the tautology box(p) -> p would prove every p — the modal shadow of the liar/Curry collapse, and the sharpest reason box-as-provable and box-as-true must never alias.",
+          "Fails for Rosser provability: the diagonal argument needs D1-D3, and Rosser's predicate breaks D2, so Loeb's theorem does not transfer.",
+          "Fails on non-transitive or non-well-founded frames: over reflexive frames (S4, where reflection holds) the axiom is simply false; well-foundedness of the frame is not a convenience but the semantic content of the axiom."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "provability.incompleteness.formalized_second_incompleteness"
+        ],
+        "composed_with": [
+          "provability.modal.k_distribution",
+          "provability.modal.necessitation",
+          "provability.consistency.consistency_definition",
+          "temporal.induction.temporal_induction_axiom"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "loeb1955",
+          "bibliographic_entry": "Loeb, M. H. (1955). Solution of a Problem of Leon Henkin. Journal of Symbolic Logic, 20(2), 115-118."
+        },
+        {
+          "citation_key": "henkin1952",
+          "bibliographic_entry": "Henkin, L. (1952). A Problem Concerning Provability (problem 3). Journal of Symbolic Logic, 17(2), 160."
+        },
+        {
+          "citation_key": "segerberg1971",
+          "bibliographic_entry": "Segerberg, K. (1971). An Essay in Classical Modal Logic. Filosofiska Studier 13. Uppsala: University of Uppsala."
+        },
+        {
+          "citation_key": "solovay1976",
+          "bibliographic_entry": "Solovay, R. M. (1976). Provability Interpretations of Modal Logic. Israel Journal of Mathematics, 25, 287-304."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "Loeb's axiom",
+        "GL",
+        "well-founded induction",
+        "reflection",
+        "Henkin's problem",
+        "provability logic"
+      ]
+    },
+    {
+      "statement_id": "provability.consistency.consistency_definition",
+      "title": "Consistency as Unprovability of Falsum",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "arithmetization",
+        "topic": "consistency",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "Con(T) := not(provable(falsum))",
+        "canonical_latex": "\\mathrm{Con}(T) :\\equiv \\lnot\\,\\Box\\bot",
+        "equivalent_forms": [
+          {
+            "form_id": "no_contradiction",
+            "notation_system": "ascii",
+            "expression": "Con(T) iff for no p are both p and not(p) provable",
+            "scope_note": "Equivalent under D2 plus ex falso quodlibet: from a contradiction the falsum is provable, and from falsum everything"
+          },
+          {
+            "form_id": "something_unprovable",
+            "notation_system": "ascii",
+            "expression": "Con(T) iff there exists a sentence T does not prove",
+            "scope_note": "The Post-consistency reading; equivalent classically because an inconsistent theory proves everything. Existential, hence prose: the grammar has no binder"
+          },
+          {
+            "form_id": "arithmetized",
+            "notation_system": "ascii",
+            "expression": "Con(T) is itself a sentence of T's language, via Goedel numbering",
+            "scope_note": "The move that makes Goedel II expressible at all: consistency becomes a statement the theory can be asked about"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unprovability_of_falsum",
+        "anonymized_template": "CONSISTENCY = NEG(BOX(FALSITY))",
+        "slot_schema": [
+          {
+            "slot_id": "CONSISTENCY",
+            "syntactic_category": "constant",
+            "semantic_role": "consistency_statement"
+          },
+          {
+            "slot_id": "FALSITY",
+            "syntactic_category": "constant",
+            "semantic_role": "refutable_sentence"
+          }
+        ],
+        "invariants": [
+          "FALSITY is deliberately the SAME constant token logic.boolean_laws.complement_laws binds as its result and HEAD_ALGEBRA lists as a MEET annihilator; the arithmetized falsum and the Boolean falsum are one name in the graph. The node is nevertheless a predicted singleton (PV2): shared constants feed specialize.py's identity machinery, not the twin ladder, so one NEG and one BOX around a shared token buy no group membership — the registered nearest-miss measurement.",
+          "Intensionality (Feferman 1960): Con(T) depends on WHICH proof predicate is arithmetized, not only on the set of theorems. A Rosser-style predicate yields a different Con(T) that T CAN prove; every downstream node in this corpus inherits this hypothesis from here, where the definition lives.",
+          "Definitional equality, not a discovered identity: the `=` is the corpus's one rel-rooted provability template, and PV4 predicts (correctly) that specialize.py finds nothing in it — no commutative arithmetic op, nothing for the noise mechanism to bite."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Con(T)",
+            "syntactic_category": "constant",
+            "semantic_role": "consistency_statement",
+            "mathematical_order": 0,
+            "description": "The arithmetized consistency sentence being defined."
+          },
+          {
+            "symbol": "bottom",
+            "syntactic_category": "constant",
+            "semantic_role": "refutable_sentence",
+            "mathematical_order": 0,
+            "description": "Falsum: the canonical refutable sentence 0=1."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "definitional equality of arithmetic sentences",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "negation",
+            "input_arity": 1,
+            "description": "Boolean negation, reused verbatim from scripts/seed_logic.py. Definitionally NEG(x) = IMPLIES(x, FALSITY), the rewrite that turns Loeb's axiom at falsum into the formalized second incompleteness theorem — a rewrite no matcher pass performs, which is one of the three recorded reasons the Loeb->Goedel-II edge must be hand-authored."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "Con(T)",
+            "description": "The arithmetized consistency statement of T: the sentence NEG(BOX(FALSITY)). A constant of the corpus because T is fixed throughout; intensionality (which proof predicate arithmetizes 'proves') is recorded in the defining node's invariants, after Feferman 1960."
+          },
+          {
+            "symbol": "bottom",
+            "description": "The refutable sentence 0=1 (falsum). Spelled FALSITY in slot schemas — the same token logic.boolean_laws.complement_laws binds and HEAD_ALGEBRA lists as a MEET annihilator — so the Boolean falsum and the arithmetized falsum land on one name."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A theory is consistent exactly when it cannot prove the absurd sentence; arithmetization turns that meta-level property into a single sentence of the theory's own language.",
+        "statistical_significance": "The definitional hinge of the corpus: both incompleteness nodes consume this constant, and the formalized one contains this node's entire expression side as a subterm — the one intra-corpus grounding channel PV3 predicted correctly, inside an adjudication PV3 otherwise missed (the corpus self-grounds to 1.000 throughout; see the docstring).",
+        "regularity_conditions": [
+          "Goedel numbering fixed; Con(T) is standard, built from the standard proof predicate",
+          "Classical logic (ex falso quodlibet), so falsum-unprovability and no-contradiction coincide",
+          "T recursively enumerable"
+        ],
+        "failure_modes": [
+          "Intensional failure: Feferman's deviant consistency predicates are provable or refutable at will while the theorem set stays fixed; 'Con(T)' without naming the predicate is not yet a sentence.",
+          "In paraconsistent logics unprovability-of-falsum and absence-of-contradiction come apart; the definition is classical.",
+          "For theories too weak to arithmetize syntax (or Willard's self-verifying systems, which weaken multiplication totality precisely to dodge the standard coding), the definition's premise — that Con(T) is a sentence OF T — needs a different, weaker coding, and the downstream incompleteness machinery changes with it."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "provability.incompleteness.formalized_second_incompleteness",
+          "provability.incompleteness.second_incompleteness",
+          "logic.boolean_laws.complement_laws",
+          "logic.inference.ex_falso_quodlibet"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "goedel1931",
+          "bibliographic_entry": "Goedel, K. (1931). Ueber formal unentscheidbare Saetze der Principia Mathematica und verwandter Systeme I. Monatshefte fuer Mathematik und Physik, 38, 173-198."
+        },
+        {
+          "citation_key": "hilbert_bernays1939",
+          "bibliographic_entry": "Hilbert, D., Bernays, P. (1939). Grundlagen der Mathematik, Band II. Berlin: Springer."
+        },
+        {
+          "citation_key": "feferman1960",
+          "bibliographic_entry": "Feferman, S. (1960). Arithmetization of Metamathematics in a General Setting. Fundamenta Mathematicae, 49, 35-92."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "consistency",
+        "Con(T)",
+        "arithmetization",
+        "falsum",
+        "intensionality"
+      ]
+    },
+    {
+      "statement_id": "provability.incompleteness.formalized_second_incompleteness",
+      "title": "Formalized Second Incompleteness (Loeb at Falsum)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "incompleteness",
+        "topic": "second_incompleteness",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "provable(not(provable(falsum))) implies provable(falsum)",
+        "canonical_latex": "\\Box\\lnot\\Box\\bot \\to \\Box\\bot",
+        "equivalent_forms": [
+          {
+            "form_id": "con_spelling",
+            "notation_system": "ascii",
+            "expression": "provable(Con(T)) implies provable(falsum)",
+            "scope_note": "The same statement through the consistency definition: if T proves its own consistency, T is inconsistent"
+          },
+          {
+            "form_id": "loeb_instance",
+            "notation_system": "ascii",
+            "expression": "provable(provable(falsum) implies falsum) implies provable(falsum)",
+            "scope_note": "Loeb's axiom with p := falsum, before the definitional rewrite NEG(x) = IMPLIES(x, FALSITY); the substitution plus that one rewrite is the whole derivation"
+          },
+          {
+            "form_id": "contrapositive",
+            "notation_system": "ascii",
+            "expression": "not(provable(falsum)) implies not(provable(not(provable(falsum))))",
+            "scope_note": "Con(T) implies not provable(Con(T)) — the shape Goedel II takes one node later, still entirely inside GL"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "formalized_incompleteness",
+        "anonymized_template": "IMPLIES(BOX(NEG(BOX(FALSITY))), BOX(FALSITY))",
+        "slot_schema": [
+          {
+            "slot_id": "FALSITY",
+            "syntactic_category": "constant",
+            "semantic_role": "refutable_sentence"
+          }
+        ],
+        "invariants": [
+          "Derived, in one visible step, from Loeb's axiom: substitute FALSITY for the free slot and rewrite IMPLIES(x, FALSITY) as NEG(x). The special_case_of edge to the Loeb node is hand-authored because each of three recorded tool filters blocks mechanical discovery: specialize.py skips non-rel-rooted generals (both templates are IMPLIES calls), suppresses plain slot bindings (PROP -> FALSITY is one), and performs no definitional NEG rewrite at all. PV4 registers this and the matcher run confirms zero mechanical provability edges.",
+          "The node's antecedent BOX(NEG(BOX(FALSITY))) contains, verbatim, the consistency definition's entire expression side NEG(BOX(FALSITY)) — definitional compression is recorded via composed_with rather than inline expansion, so the graph keeps one spelling of Con(T).",
+          "Entirely object-level: unlike Goedel II one node later, no connective here is meta — both boxes and the implication are sentences of T, which is why this form is derivable inside GL with no consistency hypothesis at all.",
+          "Read positively rather than as a limitation: self-certified consistency is worthless, because producing the certificate is the one act that would refute it. This is the corpus-level statement of AGENTS.md's external-trust-roots rule, and DESIGN-cognitive-frames §4 records the architectural principle it grounds."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "bottom",
+            "syntactic_category": "constant",
+            "semantic_role": "refutable_sentence",
+            "mathematical_order": 0,
+            "description": "Falsum, the instantiated slot: the entire theorem is Loeb's axiom pinned to the worst-case sentence."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula under the box, and the meta-level 'if ... then' where the statement is a rule or a metatheorem. Same head and same documented double reading as scripts/seed_logic.py and seed_temporal.py; the necessitation node is the extreme case of the ambiguity and records it in its invariants."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "negation",
+            "input_arity": 1,
+            "description": "Boolean negation, reused verbatim from scripts/seed_logic.py. Definitionally NEG(x) = IMPLIES(x, FALSITY), the rewrite that turns Loeb's axiom at falsum into the formalized second incompleteness theorem — a rewrite no matcher pass performs, which is one of the three recorded reasons the Loeb->Goedel-II edge must be hand-authored."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "bottom",
+            "description": "The refutable sentence 0=1 (falsum). Spelled FALSITY in slot schemas — the same token logic.boolean_laws.complement_laws binds and HEAD_ALGEBRA lists as a MEET annihilator — so the Boolean falsum and the arithmetized falsum land on one name."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If the theory proves its own consistency sentence, then the theory proves falsum: a consistency certificate issued by the certified party is self-defeating.",
+        "statistical_significance": "The GL-internal form of Goedel II and the corpus's one general->specific edge, deliberately hand-authored (PV4). Its decompose readout carries PV3's one correct channel — the NEG(BOX(FALSITY)) constituent grounds verbatim on the consistency definition's expression side — inside PV3's headline miss: the whole corpus self-grounds to 1.000, because groundedness counts recurrence without provenance. A new head's vocabulary can certify itself within one authoring act; the docstring adjudication and docs/BACKLOG.md carry the finding.",
+        "regularity_conditions": [
+          "Derivable in GL from K, necessitation and Loeb alone; no assumption about T's actual consistency is used",
+          "Transfers to T through Solovay's arithmetic completeness: every arithmetic realization of the schema is a theorem of PA",
+          "Standard proof predicate throughout (intensionality inherited from the consistency definition)"
+        ],
+        "failure_modes": [
+          "Everything the Loeb node lists, instantiated: Rosser predicates, truth-reading of the box, non-well-founded frames.",
+          "The con_spelling form silently assumes the STANDARD Con(T); for a deviant consistency sentence the implication can fail while this node's falsum spelling still holds for the standard predicate."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "provability.incompleteness.second_incompleteness"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [
+          "provability.modal.loeb_axiom"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "provability.consistency.consistency_definition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "loeb1955",
+          "bibliographic_entry": "Loeb, M. H. (1955). Solution of a Problem of Leon Henkin. Journal of Symbolic Logic, 20(2), 115-118."
+        },
+        {
+          "citation_key": "goedel1931",
+          "bibliographic_entry": "Goedel, K. (1931). Ueber formal unentscheidbare Saetze der Principia Mathematica und verwandter Systeme I. Monatshefte fuer Mathematik und Physik, 38, 173-198."
+        },
+        {
+          "citation_key": "solovay1976",
+          "bibliographic_entry": "Solovay, R. M. (1976). Provability Interpretations of Modal Logic. Israel Journal of Mathematics, 25, 287-304."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "smorynski1985",
+          "bibliographic_entry": "Smorynski, C. (1985). Self-Reference and Modal Logic. New York: Springer."
+        }
+      ],
+      "keywords": [
+        "second incompleteness",
+        "formalized",
+        "Loeb's theorem",
+        "self-certification",
+        "GL theorem"
+      ]
+    },
+    {
+      "statement_id": "provability.incompleteness.second_incompleteness",
+      "title": "Goedel's Second Incompleteness Theorem",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "provability"
+        ],
+        "subfield": "incompleteness",
+        "topic": "second_incompleteness",
+        "canonical_objects": [
+          "recursively enumerable theory",
+          "arithmetized proof predicate",
+          "arithmetic sentence",
+          "GL Kripke frame (finite, transitive, irreflexive)"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "assuming Con(T): not(provable(Con(T)))",
+        "canonical_latex": "\\mathrm{Con}(T) \\;\\Longrightarrow\\; T \\nvdash \\mathrm{Con}(T)",
+        "equivalent_forms": [
+          {
+            "form_id": "expanded",
+            "notation_system": "ascii",
+            "expression": "not(provable(not(provable(falsum))))",
+            "scope_note": "Con(T) expanded per the consistency definition; the template keeps the defined constant instead"
+          },
+          {
+            "form_id": "original",
+            "notation_system": "ascii",
+            "expression": "in any consistent formal system containing enough arithmetic, the consistency of the system is not provable in the system",
+            "scope_note": "Goedel 1931, Theorem XI, modern hypotheses (r.e., derivability conditions)"
+          },
+          {
+            "form_id": "hilbert_program",
+            "notation_system": "ascii",
+            "expression": "no finitary fragment of mathematics can certify the whole",
+            "scope_note": "The reading that ended Hilbert's program in its original form: the certifying theory always needs strictly more than the certified one"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unprovable_self_consistency",
+        "anonymized_template": "NEG(BOX(CONSISTENCY))",
+        "slot_schema": [
+          {
+            "slot_id": "CONSISTENCY",
+            "syntactic_category": "constant",
+            "semantic_role": "consistency_statement"
+          }
+        ],
+        "invariants": [
+          "TEMPLATE CHOICE, documented as required: the honest statement is meta-level — the outer NEG is the METATHEORY's 'T does not prove', while BOX and everything under it is object-level. Two authorings were considered. (a) IMPLIES(CONSISTENCY, NEG(BOX(CONSISTENCY))) puts the consistency hypothesis into the template, but stacks a second meta-level connective and manufactures an implication shape whose antecedent is not an object sentence of the graph's grammar in the same sense as its consequent. (b) The bare NEG(BOX(CONSISTENCY)) with the hypothesis in regularity_conditions — CHOSEN, following the two standing precedents: narrative.frame.frame_consistency keeps 'within a frame' in prose because the grammar has no scope construct, and temporal induction's root IMPLIES carries a documented meta reading. Exactly one operator here is meta (the outer NEG), and this invariant is the record of where the object/meta seam runs.",
+          "The unprovable sentence is the consistency definition's definiendum: expanding CONSISTENCY would give NEG(BOX(NEG(BOX(FALSITY)))) — one NEG away from the formalized node's antecedent. The template keeps the defined constant so the graph carries one spelling of Con(T) and the compression stays visible in composed_with.",
+          "WILLARD BOUNDARY (deliberately an invariant, not a node): self-verifying theories (Willard 2001) prove their own consistency by weakening multiplication totality until the Hilbert-Bernays derivability conditions fail for the standard coding; 'contains enough arithmetic' is load-bearing, not decorative. Not authored as a template because its honest content is existential over a family of theories and the grammar has no existential binder (the recorded quantifier gap); a forced template would assert BOX(CONSISTENCY) as a law, stripped of the side conditions — the negation of this very node, one line below it.",
+          "The consistency HYPOTHESIS is not removable: an inconsistent T proves everything, including Con(T). What survives without the hypothesis is the formalized node, which is why the entailed_by edge points there and why the two are distinct statements rather than spellings of one."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "Con(T)",
+            "syntactic_category": "constant",
+            "semantic_role": "consistency_statement",
+            "mathematical_order": 0,
+            "description": "The standard arithmetized consistency sentence, defined one node earlier."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "[]",
+            "name": "provability modality (arithmetized Bew_T)",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "|-",
+            "name": "derivability in the theory T",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BOX(.)",
+            "name": "provability modality",
+            "input_arity": 1,
+            "codomain": "arithmetic sentences",
+            "description": "Goedel's arithmetized provability predicate read as a modal operator: BOX(p) is the sentence Bew_T([p]) saying 'the theory T proves p'. The ONE spelling of the box in this corpus; PROVABLE was rejected as a second name for the same head. Deliberately NOT spelled ALWAYS, and no HEAD_ALIASES entry relates the two: GL and LTL share K and necessitation, but LTL validates reflection (ALWAYS(p) -> p) while Loeb's theorem makes reflection provable in GL only for theorems. An alias asserts one operation family, and that assertion would be false in exactly the axiom that matters. The head-literal quarantine this costs is registered (PV2) and measured."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "negation",
+            "input_arity": 1,
+            "description": "Boolean negation, reused verbatim from scripts/seed_logic.py. Definitionally NEG(x) = IMPLIES(x, FALSITY), the rewrite that turns Loeb's axiom at falsum into the formalized second incompleteness theorem — a rewrite no matcher pass performs, which is one of the three recorded reasons the Loeb->Goedel-II edge must be hand-authored."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "Con(T)",
+            "description": "The arithmetized consistency statement of T: the sentence NEG(BOX(FALSITY)). A constant of the corpus because T is fixed throughout; intensionality (which proof predicate arithmetizes 'proves') is recorded in the defining node's invariants, after Feferman 1960."
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A consistent theory that can talk about its own proofs can never prove its own consistency sentence: the certificate of freedom from contradiction is always issued by a strictly stronger authority, or not at all.",
+        "statistical_significance": "The statement DESIGN-cognitive-frames §4 built this corpus to hold, and the mathematical warrant for the repository's architectural rule that trust roots stay external (receipts prove freshness, never correctness; no slice may gate on self-attestation). Epistemic status `derived`, and the choice is argued: within this corpus its warrant flows from the formalized node by one metatheoretic step (if T proved Con(T), the formalized theorem would make T inconsistent, contradicting the hypothesis), matching the graph-wide convention that axioms are `formal` and theorems with in-graph derivations are `derived` — the same status subset_transitivity and ex_falso_quodlibet carry.",
+        "regularity_conditions": [
+          "Con(T) holds (the metatheoretic hypothesis; without it the statement is false, since an inconsistent T proves everything)",
+          "T is recursively enumerable and interprets enough arithmetic for the derivability conditions D1-D3",
+          "Standard proof predicate and standard Con(T) (Feferman intensionality, inherited from the consistency definition)"
+        ],
+        "failure_modes": [
+          "Fails for self-verifying theories: Willard 2001 constructs consistent r.e. theories proving their own consistency by weakening multiplication totality; the boundary case that DESIGN-cognitive-frames §4 keeps as an architectural warning against reading Goedel II as unconditional.",
+          "Fails for deviant consistency predicates: Rosser-style consistency IS provable (Rosser 1936 via Feferman 1960's analysis); the theorem is about the standard predicate.",
+          "Fails for theories without enough arithmetic: Presburger arithmetic is consistent, complete and decidable — it cannot even express Con, so the theorem says nothing about it.",
+          "Does not say consistency is unknowable: PA's consistency is provable in ZFC and in PA + epsilon_0-induction (Gentzen); the bar is 'in T itself', not 'anywhere'."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "provability.incompleteness.formalized_second_incompleteness"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "provability.consistency.consistency_definition"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "goedel1931",
+          "bibliographic_entry": "Goedel, K. (1931). Ueber formal unentscheidbare Saetze der Principia Mathematica und verwandter Systeme I. Monatshefte fuer Mathematik und Physik, 38, 173-198."
+        },
+        {
+          "citation_key": "hilbert_bernays1939",
+          "bibliographic_entry": "Hilbert, D., Bernays, P. (1939). Grundlagen der Mathematik, Band II. Berlin: Springer."
+        },
+        {
+          "citation_key": "feferman1960",
+          "bibliographic_entry": "Feferman, S. (1960). Arithmetization of Metamathematics in a General Setting. Fundamenta Mathematicae, 49, 35-92."
+        },
+        {
+          "citation_key": "willard2001",
+          "bibliographic_entry": "Willard, D. E. (2001). Self-Verifying Axiom Systems, the Incompleteness Theorem and Related Reflection Principles. Journal of Symbolic Logic, 66(2), 536-596."
+        },
+        {
+          "citation_key": "boolos1993",
+          "bibliographic_entry": "Boolos, G. (1993). The Logic of Provability. Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "Goedel's second incompleteness theorem",
+        "consistency",
+        "self-verification boundary",
+        "Willard",
+        "Hilbert's program",
+        "external trust roots"
+      ]
+    }
+  ]
+}

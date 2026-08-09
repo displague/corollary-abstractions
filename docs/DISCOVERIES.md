@@ -13,6 +13,38 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Löb's axiom and temporal induction are one archetype and refuse to be
+  one skeleton.** `provability.modal.loeb_axiom`
+  (`IMPLIES⟨BOX⟨IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩⟩, BOX⟨?0:V⟩⟩`) and
+  `temporal.induction.temporal_induction_axiom`
+  (`IMPLIES⟨ALWAYS⟨IMPLIES⟨?0:V, NEXT⟨?0:V⟩⟩⟩, IMPLIES⟨?0:V, ALWAYS⟨?0:V⟩⟩⟩`)
+  share `temporal_induction` in the drift report — both internalize
+  induction along a well-founded step relation — and twin at no level.
+  The trees differ in exactly the axiom that separates the logics: Löb
+  discharges reflection (□p→p) only under a box, LTL validates it
+  outright. A discipline-named archetype now provably spans a second
+  discipline. *P-CF4 fired, archetype-shared near-miss* (2026-08-08)
+
+- **A six-node corpus can self-certify perfect groundedness on a head the
+  graph has never seen.** Every `data/provability` node grounds at 1.000
+  on arrival: BOX recurrence across sibling nodes counts as known form,
+  and the pattern channel lets ex falso's `IMPLIES⟨?0:P, ?1:V⟩` swallow
+  Löb's boxed premise whole. Registered prediction PV3 expected quarantine
+  (no node at 1.000, corpus below graph mean) and was refuted in full —
+  the groundedness rung fails open for dense new vocabulary just as it
+  fails closed for self-referential axioms (until_unfolding, 0.000). On a
+  corpus about the vacuity of self-certification, the ladder accepted a
+  self-certificate. *PV3 refuted; measured defect in the graded rung*
+  (2026-08-08)
+
+- **Gödel's box and Sally's box now share a namespace.** The slot/head
+  collision lint gained `box: slot BOX vs head BOX⟨...⟩` —
+  `narrative.world.marble_moved_box` binds BOX as the marble's container
+  constant while the provability corpus uses BOX as the provability
+  modality. Harmless (slots never match heads) and kept: the lint doing
+  its job across maximally distant disciplines. *lint working as designed*
+  (2026-08-08)
+
 - **False belief is a visibility result, not an authored contradiction.** The
   same placement and move events update world/Anne but the move is invisible
   to Sally, so her owned frame retains basket while world holds box and refutes

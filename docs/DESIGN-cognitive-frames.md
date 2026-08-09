@@ -11,7 +11,8 @@ the mapping falsifiable rather than decorative.
 
 Status: ASK's runtime user frame and return channel, physical frames,
 FrameSpec ownership/visibility, and the optional WordNet synonym bridge are
-executable. Masked skeletons, provability, and nesting remain queued. Each section
+executable; the provability corpus is authored and P-CF4 adjudicated (§4).
+Masked skeletons and nesting remain queued. Each section
 ends with its work items; ROADMAP-v0.5 section 10 and BACKLOG's "Cognitive
 frames / lexical stores" section index them.
 
@@ -230,6 +231,26 @@ Work items: provability corpus lane (post-physics.frames; smaller);
 P-CF4 adjudication; the architectural principle recorded here is itself the
 deliverable for the trust boundary.
 
+**Adjudication (v0.5): P-CF4 fired, both halves.** The six-node
+`data/provability` corpus (`scripts/seed_provability.py`) authors K,
+necessitation, Löb, Con(T) as ¬□⊥, and Gödel II twice — formalized
+(□¬□⊥→□⊥, the hand-authored Löb-at-falsum special case) and as the
+meta-level statement. Löb adopts the `temporal_induction` archetype
+(well-founded induction along GL's converse well-founded accessibility
+relation vs the same principle along successor) and the drift report
+prints the predicted two-discipline span, while no twin fires at any
+level: the skeletons differ in exactly the reflection GL forbids — Löb's
+inner implication is □p→p discharged under a box, temporal induction's
+conclusion is an implication in a logic where reflection is valid.
+Willard's boundary case is an invariant plus failure mode on the Gödel II
+node, not a template: its content is existential over a family of
+theories and the grammar has no binder. Unregistered result worth the
+line: the corpus self-grounded to 1.000 across all six nodes
+(registered prediction PV3 in the seed expected quarantine and was
+refuted), so the epistemic ladder accepted a self-certificate from the
+very corpus that states why self-certificates are worthless —
+the defect and fix shape are filed in BACKLOG's groundedness entry.
+
 ---
 
 ## 5. BERT, BookCorpus, and WordNet: the storage bet, named
@@ -395,8 +416,8 @@ chain; reduced-extract decision; P-CF6 adjudication.
    license/attribution ships with it and no source data enters git.
 5. **Masked skeleton modeling** (P-CF5) — experiment track, GPU-bound,
    schedulable whenever the GPU is free.
-6. **Provability corpus** (P-CF4) and **nested frames** — later; smaller;
-   both benefit from the earlier slices' conventions.
+6. **Provability corpus — SHIPPED** (P-CF4 fired both halves; see §4's
+   adjudication). **Nested frames** remain queued.
 
 Every prediction P-CF1..6 follows the house rule: registered here before
 any adjudicating tool runs; fired and missed are both reportable; misses

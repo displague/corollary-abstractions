@@ -540,12 +540,23 @@ demo and a multi-step derivation remain one milestone in two costumes.
       masked-LM objective transposed to structure — mask a skeleton node,
       recover by pointing. Adjudicates P-CF5 (gains should concentrate in
       depth OOD, not in-distribution, if the objective teaches structure).
-    - **10f — provability corpus** (small, later): GL/Löb, Gödel II,
-      consistency statements, Willard's exception as the boundary case.
-      Adjudicates P-CF4 (Löb vs temporal induction: archetype-shared
-      near-miss, not a typed twin). The companion architectural rule —
-      trust roots stay external; nothing self-attests — is recorded in
-      the design doc §4 and is citable in review.
+    - **10f — provability corpus: SHIPPED.** Six nodes in
+      `data/provability` (K, necessitation, Löb, Con(T) := ¬□⊥,
+      formalized Gödel II as the hand-authored Löb-at-falsum special
+      case, Gödel II as the meta statement); Willard's exception is an
+      invariant, not a node (existential content, no binder in the
+      grammar). **P-CF4 fired both halves**: no twin at any level and
+      `temporal_induction` spans two disciplines in the drift report.
+      PV1/PV2/PV4 fired (all six singletons; 215 → 221 nodes with group
+      counts frozen at 30/31/30/32/5, zero ladder violations; zero
+      mechanical specialization edges, 655 stays 655). **PV3 missed and
+      the miss is the finding**: the corpus self-grounds to 1.000 —
+      groundedness accepts intra-corpus recurrence and pattern
+      absorption as certification, filed in BACKLOG. The companion
+      architectural rule — trust roots stay external; nothing
+      self-attests — is recorded in the design doc §4, citable in
+      review, and now stated by the corpus itself
+      (□Con(T) → □⊥). Suite 183 tests green.
     - The RFT coverage table (design doc §3) becomes a living audit,
       re-adjudicated at each release; its one open cell (deixis) is
       closed by 10a+10b+past modalities jointly, not by a bespoke corpus.

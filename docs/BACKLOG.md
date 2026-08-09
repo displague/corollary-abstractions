@@ -75,13 +75,26 @@ or commit history. Each item names the evidence that motivated it.
   P-CF5: gains concentrate in depth OOD (0.226 baseline) rather than
   in-distribution, or the objective taught content, not structure.
 
-- **Provability corpus (small, later).** GL/Löb, Gödel II, a consistency
-  statement, Willard's exception as the boundary case. P-CF4: Löb vs
-  temporal_induction is an archetype-shared near-miss, not a typed twin.
+- **SHIPPED — Provability corpus (10f).** Six nodes in `data/provability`
+  (`scripts/seed_provability.py`): K, necessitation, Löb, Con(T) :=
+  NEG(BOX(FALSITY)), formalized Gödel II (= Löb at falsum, the corpus's one
+  hand-authored special_case_of edge), and Gödel II as the honest meta
+  statement `NEG(BOX(CONSISTENCY))` with the consistency hypothesis in
+  regularity_conditions. Willard's exception is an invariant + failure
+  mode on the Gödel II node, deliberately NOT a node: its content is
+  existential over a family of theories and the grammar has no binder.
+  **P-CF4 fired both halves** — no twin at any level, and
+  `temporal_induction` now spans two disciplines in the drift report
+  (evidence appended to the drift-promotion entry under Parser/matcher).
+  PV1/PV2/PV4 fired (all six nodes singletons, 215 → 221 with group counts
+  frozen at 30/31/30/32/5, zero provability specialization edges, 655
+  stays 655). **PV3 missed**: the corpus self-grounds to 1.000 throughout —
+  filed as new evidence under the groundedness vocabulary-overlap entry.
   Companion architectural rule (design doc §4, citable in review): trust
   roots stay external — receipts prove freshness, never correctness; no
   future slice may gate anything on the system attesting to its own
-  soundness.
+  soundness. The corpus now states the mathematical warrant for that rule
+  (`provability.incompleteness.formalized_second_incompleteness`).
 
 ## Frame registry
 
@@ -557,6 +570,16 @@ or commit history. Each item names the evidence that motivated it.
   deliberate. Fix: promote "same archetype_id, skeletons differing only by call
   heads" from a drift warning to a *proposed head alias* output, which turns
   the lint into the discovery channel the previous item asks for.
+  New strongest evidence (provability corpus, P-CF4):
+  `provability.modal.loeb_axiom` adopts `temporal_induction` — argued, not
+  convenient: Löb is well-founded induction along GL's accessibility
+  relation (Segerberg), temporal induction is the same principle along
+  successor — so a *discipline-named* label now spans a second discipline.
+  The drift report is the only channel that carries the relationship (the
+  skeletons cannot twin: BOX vs ALWAYS/NEXT heads, and the trees differ in
+  exactly the reflection GL forbids). The label itself is now demonstrably
+  too narrow for its extension; the promotion fix should also consider a
+  rename pass for discipline-named archetype ids.
 - **Per-head identity elements: third motivated head, and a new wrinkle.**
   `IDENTITY = {"+": 0, "*": 1}` in `specialize.py` is still arithmetic-only
   (recorded above for logic/set_theory). `morphology.wordformation.zero_morpheme_identity`
@@ -963,6 +986,25 @@ or commit history. Each item names the evidence that motivated it.
   did move — every other `data/temporal_logic` node now grades 1.000 — which
   narrows the quarantine claim to nodes introducing *unshared* heads rather
   than nodes in a new discipline.
+  **Counterexample from the other direction (provability corpus, PV3
+  missed): the score also fails OPEN.** All six `data/provability` nodes
+  ground at **1.000** on arrival, though BOX occurs nowhere else in the
+  graph: intra-corpus recurrence is unconditionally sufficient (BOX⟨?0:V⟩
+  recurs across three sibling nodes, BOX⟨?0:P⟩ across the other three, and
+  NEG⟨BOX⟨?0:P⟩⟩ is verbatim the consistency definition's expression side),
+  and the pattern channel absorbs the box entirely (Löb's reflection
+  premise IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩ grounds as an instance of ex falso's
+  IMPLIES⟨?0:P, ?1:V⟩ by a slot swallowing the boxed subtree). So
+  "unshared" in the quarantine claim means *occurring in one statement*,
+  not *new to the graph*: a hermetic six-node corpus that reuses one new
+  head densely self-certifies to the score's maximum in a single authoring
+  act, while temporal's singleton narrative heads stay at 0.000. Combined
+  with the until_unfolding self-reference defect, the ladder's one graded
+  rung has now been measured failing in both directions (correct axiom at
+  0.000; brand-new vocabulary at 1.000). Fix shape: report intra-corpus
+  and extra-corpus grounding separately (provenance is in the inventory
+  already), and gate the pattern channel's slot-swallows-call credit on
+  the swallowed head being known outside the statement's own corpus.
 - **`specialize.py` produces zero edges and zero noise on call-only corpora —
   fifth confirmation, from the other side.** 468 specialization edges over the
   merged graph, none touching either of the 17 new nodes in either direction.
