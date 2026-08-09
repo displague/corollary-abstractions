@@ -40,9 +40,11 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import time
 from collections import defaultdict
 from pathlib import Path
+from typing import Callable
 
 import torch
 import torch.nn as nn
@@ -50,6 +52,9 @@ from torch.utils.data import DataLoader, Dataset
 
 from tokenizers import Vocab
 from train_span import MAX_LEVELS, MAX_SIB, tree_paths
+from depth_consumer_protocol import (MAX_DEVICE_FOOTPRINT_FRACTION,
+                                     PER_PROCESS_MEMORY_FRACTION,
+                                     atomic_write_json)
 
 GEN_TOKENS = ["<pad>", "<bos>", "<eos>"]
 BOS, EOS = 1, 2
@@ -59,6 +64,16 @@ N_SEG = 3
 def load_jsonl(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as f:
         return [json.loads(line) for line in f]
+
+
+def save_checkpoint_atomic(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    with temporary.open("wb") as stream:
+        torch.save(payload, stream)
+        stream.flush()
+        os.fsync(stream.fileno())
+    temporary.replace(path)
 
 
 def seg_coords(tokens: list[str]) -> list[list[int]]:
@@ -308,7 +323,9 @@ class AnalogyPointer(nn.Module):
         return torch.cat([gen_logits, ptr], dim=-1)
 
 
-def teacher_forced_diagnostics(model, loader, device, itos) -> dict:
+def teacher_forced_diagnostics(
+        model, loader, device, itos,
+        memory_observer: Callable[[], None] | None = None) -> dict:
     """Locate failures without autoregressive drift.
 
     Report absolute-step and normalized-decile action accuracy, first-error
@@ -369,6 +386,8 @@ def teacher_forced_diagnostics(model, loader, device, itos) -> dict:
                 else:
                     perfect += 1
                 total += 1
+            if memory_observer is not None:
+                memory_observer()
 
     def rates(counts: dict) -> dict:
         return {
@@ -399,7 +418,8 @@ def teacher_forced_diagnostics(model, loader, device, itos) -> dict:
     }
 
 
-def greedy_exact(model, loader, device, max_tgt: int, itos) -> float:
+def greedy_exact(model, loader, device, max_tgt: int, itos,
+                 memory_observer: Callable[[], None] | None = None) -> float:
     model.eval()
     G = len(GEN_TOKENS)
     correct = total = 0
@@ -446,7 +466,64 @@ def greedy_exact(model, loader, device, max_tgt: int, itos) -> float:
                     recon.append(itos[int(xs[i, a - G])])
                 correct += int(ok and recon == tgts[i])
                 total += 1
+            if memory_observer is not None:
+                memory_observer()
     return correct / max(total, 1)
+
+
+def build_loaders(datasets, batch_size: int, eval_batch_size: int,
+                  seed: int) -> dict[str, DataLoader]:
+    """Keep one logical training batch while bounding every eval split."""
+    if batch_size < 1 or eval_batch_size < 1:
+        raise ValueError("batch sizes must be positive")
+    train_generator = torch.Generator().manual_seed(seed)
+    return {
+        split: DataLoader(
+            dataset,
+            batch_size=(batch_size if split == "train" else eval_batch_size),
+            shuffle=(split == "train"), collate_fn=collate,
+            generator=train_generator if split == "train" else None,
+        )
+        for split, dataset in datasets.items()
+    }
+
+
+def cuda_memory_snapshot(device: str) -> dict[str, int]:
+    """Measure allocator and whole-device footprints in one snapshot."""
+    torch.cuda.synchronize(device)
+    free_bytes, total_bytes = torch.cuda.mem_get_info(device)
+    return {
+        "allocated_bytes": torch.cuda.memory_allocated(device),
+        "reserved_bytes": torch.cuda.memory_reserved(device),
+        "device_footprint_bytes": total_bytes - free_bytes,
+    }
+
+
+def backward_logical_batch(model, batch, microbatch_size: int, loss_fn,
+                           device: str) -> float:
+    """Accumulate one logical-batch mean loss over bounded GPU slices."""
+    x, crd, mask, y, tc, _ = batch
+    valid_targets = int((y[:, 1:] != 0).sum())
+    if not valid_targets:
+        raise ValueError("logical training batch has no target actions")
+    logical_loss = 0.0
+    for start in range(0, x.size(0), microbatch_size):
+        stop = min(start + microbatch_size, x.size(0))
+        x_mb, crd_mb, mask_mb, y_mb, tc_mb = (
+            tensor[start:stop].to(device)
+            for tensor in (x, crd, mask, y, tc)
+        )
+        memory = model.encode(x_mb, crd_mb, mask_mb)
+        memory = model.prepare_memory(memory, crd_mb[..., 1:])
+        logits = model.decode(
+            memory, mask_mb, y_mb[:, :-1],
+            tc_mb[:, : y_mb.size(1) - 1])
+        loss = loss_fn(
+            logits.reshape(-1, logits.size(-1)),
+            y_mb[:, 1:].reshape(-1)) / valid_targets
+        loss.backward()
+        logical_loss += loss.item()
+    return logical_loss
 
 
 def main() -> None:
@@ -455,6 +532,14 @@ def main() -> None:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--epochs", type=int, default=10)
     ap.add_argument("--batch-size", type=int, default=192)
+    ap.add_argument(
+        "--microbatch-size", type=int, default=None,
+        help="GPU training microbatch; optimizer steps remain --batch-size")
+    ap.add_argument(
+        "--eval-batch-size", type=int, default=None,
+        help="batch size for validation, test/OOD, and diagnostics; defaults "
+             "to --batch-size")
+    ap.add_argument("--memory-fraction", type=float, default=1.0)
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--d-model", type=int, default=128)
     ap.add_argument("--max-len", type=int, default=512)
@@ -473,8 +558,46 @@ def main() -> None:
                          "pretrain_maskskel.py's --save-encoder artifact")
     args = ap.parse_args()
 
+    eval_batch_size = (args.batch_size if args.eval_batch_size is None
+                       else args.eval_batch_size)
+    microbatch_size = (args.batch_size if args.microbatch_size is None
+                       else args.microbatch_size)
+    if args.batch_size < 1 or eval_batch_size < 1:
+        raise ValueError("batch sizes must be positive")
+    if microbatch_size < 1 or microbatch_size > args.batch_size:
+        raise ValueError("microbatch size must be between 1 and batch size")
+
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    if not 0 < args.memory_fraction <= 1:
+        raise ValueError("memory fraction must be in (0, 1]")
+    if device == "cuda":
+        torch.cuda.set_per_process_memory_fraction(args.memory_fraction)
+        pre_model_device_footprint = cuda_memory_snapshot(device)[
+            "device_footprint_bytes"]
+        device_total_bytes = torch.cuda.get_device_properties(
+            torch.cuda.current_device()).total_memory
+    else:
+        pre_model_device_footprint = None
+        device_total_bytes = None
+    absolute_safety_active = (
+        device == "cuda"
+        and args.memory_fraction == PER_PROCESS_MEMORY_FRACTION)
+
+    def assert_absolute_safety(snapshot: dict[str, int]) -> None:
+        if not absolute_safety_active:
+            return
+        reserved_limit = int(device_total_bytes * args.memory_fraction)
+        device_limit = int(
+            device_total_bytes * MAX_DEVICE_FOOTPRINT_FRACTION)
+        if snapshot["reserved_bytes"] > reserved_limit:
+            raise RuntimeError(
+                f"CUDA reserved safety breach: {snapshot['reserved_bytes']} "
+                f"> {reserved_limit}")
+        if snapshot["device_footprint_bytes"] >= device_limit:
+            raise RuntimeError(
+                f"CUDA whole-device safety breach: "
+                f"{snapshot['device_footprint_bytes']} >= {device_limit}")
 
     splits = {s: load_jsonl(args.data_dir / f"{args.task_prefix}_{s}.jsonl")
               for s in ["train", "val", "test", "ood"]}
@@ -495,11 +618,8 @@ def main() -> None:
         }
         for split, dataset in datasets.items()
     }
-    train_generator = torch.Generator().manual_seed(args.seed)
-    loaders = {s: DataLoader(
-        ds, batch_size=args.batch_size, shuffle=(s == "train"),
-        collate_fn=collate, generator=train_generator if s == "train" else None)
-        for s, ds in datasets.items()}
+    loaders = build_loaders(datasets, args.batch_size, eval_batch_size,
+                            args.seed)
 
     model = AnalogyPointer(len(vocab), args.d_model, max_tgt=args.max_tgt,
                            level_code=args.level_code,
@@ -530,33 +650,45 @@ def main() -> None:
     total_steps = args.epochs * math.ceil(len(datasets["train"]) / args.batch_size)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=args.lr,
                                                 total_steps=total_steps)
-    loss_fn = nn.CrossEntropyLoss(ignore_index=0)
+    loss_fn = nn.CrossEntropyLoss(ignore_index=0, reduction="sum")
 
     print(f"analogy vocab={len(vocab)} params={n_params:,} "
-          f"train={len(datasets['train'])} device={device}", flush=True)
+          f"train={len(datasets['train'])} device={device} "
+          f"batch={args.batch_size} microbatch={microbatch_size} "
+          f"eval_batch={eval_batch_size} "
+          f"memory_fraction={args.memory_fraction}", flush=True)
 
     best_val, best_state = 0.0, None
     t0 = time.time()
+    train_val_device_peak = 0
+    if device == "cuda":
+        torch.cuda.reset_peak_memory_stats(device)
+
+    def observe_train_val_memory() -> None:
+        nonlocal train_val_device_peak
+        snapshot = cuda_memory_snapshot(device)
+        assert_absolute_safety(snapshot)
+        train_val_device_peak = max(
+            train_val_device_peak,
+            snapshot["device_footprint_bytes"])
+
     for epoch in range(args.epochs):
         model.train()
         running = 0.0
-        for x, crd, mask, y, tc, _ in loaders["train"]:
-            x, crd, mask, y, tc = (x.to(device), crd.to(device),
-                                   mask.to(device), y.to(device),
-                                   tc.to(device))
+        for batch in loaders["train"]:
             opt.zero_grad()
-            memory = model.encode(x, crd, mask)
-            memory = model.prepare_memory(memory, crd[..., 1:])
-            logits = model.decode(memory, mask, y[:, :-1], tc[:, : y.size(1) - 1])
-            loss = loss_fn(logits.reshape(-1, logits.size(-1)),
-                           y[:, 1:].reshape(-1))
-            loss.backward()
+            logical_loss = backward_logical_batch(
+                model, batch, microbatch_size, loss_fn, device)
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
             sched.step()
-            running += loss.item()
+            running += logical_loss
+            if device == "cuda":
+                observe_train_val_memory()
         val = greedy_exact(model, loaders["val"], device, args.max_tgt,
-                           vocab.itos)
+                           vocab.itos,
+                           observe_train_val_memory if device == "cuda"
+                           else None)
         print(f"  epoch {epoch}: loss={running/len(loaders['train']):.4f} "
               f"val_exact={val:.4f}", flush=True)
         if val > best_val:
@@ -566,38 +698,83 @@ def main() -> None:
 
     if best_state is not None:
         model.load_state_dict(best_state)
+    if args.save_model:
+        args.save_model.parent.mkdir(parents=True, exist_ok=True)
+        save_checkpoint_atomic(args.save_model, {
+            "state_dict": model.state_dict(), "vocab": vocab.itos,
+            "seed": args.seed,
+            "config": {"d_model": args.d_model,
+                       "max_tgt": args.max_tgt,
+                       "max_len": args.max_len,
+                       "level_code": args.level_code,
+                       "consumer": args.consumer,
+                       "batch_size": args.batch_size,
+                       "microbatch_size": microbatch_size,
+                       "eval_batch_size": eval_batch_size,
+                       "memory_fraction": args.memory_fraction}})
+    cuda_memory = None
+    if device == "cuda":
+        train_val_memory = {
+            "peak_allocated_bytes": torch.cuda.max_memory_allocated(device),
+            "peak_reserved_bytes": torch.cuda.max_memory_reserved(device),
+            "peak_device_footprint_bytes": train_val_device_peak,
+        }
+        torch.cuda.reset_peak_memory_stats(device)
+        evaluation_device_peak = cuda_memory_snapshot(device)[
+            "device_footprint_bytes"]
+
+    def observe_evaluation_memory() -> None:
+        nonlocal evaluation_device_peak
+        snapshot = cuda_memory_snapshot(device)
+        assert_absolute_safety(snapshot)
+        evaluation_device_peak = max(
+            evaluation_device_peak,
+            snapshot["device_footprint_bytes"])
+
     test_exact = greedy_exact(model, loaders["test"], device,
-                              args.max_tgt, vocab.itos)
+                              args.max_tgt, vocab.itos,
+                              observe_evaluation_memory if device == "cuda"
+                              else None)
     ood_exact = greedy_exact(model, loaders["ood"], device,
-                             args.max_tgt, vocab.itos)
+                             args.max_tgt, vocab.itos,
+                             observe_evaluation_memory if device == "cuda"
+                             else None)
+    test_diagnostics = teacher_forced_diagnostics(
+        model, loaders["test"], device, vocab.itos,
+        observe_evaluation_memory if device == "cuda" else None)
+    ood_diagnostics = teacher_forced_diagnostics(
+        model, loaders["ood"], device, vocab.itos,
+        observe_evaluation_memory if device == "cuda" else None)
+    if device == "cuda":
+        cuda_memory = {
+            "pre_model_device_footprint_bytes": pre_model_device_footprint,
+            "train_validation": train_val_memory,
+            "final_evaluation": {
+                "peak_allocated_bytes": torch.cuda.max_memory_allocated(device),
+                "peak_reserved_bytes": torch.cuda.max_memory_reserved(device),
+                "peak_device_footprint_bytes": evaluation_device_peak,
+            },
+        }
     result = {
         "task": "analogy", "params": n_params, "seed": args.seed,
         "level_code": args.level_code,
         "consumer": args.consumer,
+        "batch_size": args.batch_size,
+        "microbatch_size": microbatch_size,
+        "eval_batch_size": eval_batch_size,
+        "memory_fraction": args.memory_fraction,
         "inclusion": inclusion,
         "val_exact_best": best_val,
         "test_exact": test_exact,
         "ood_exact": ood_exact,
-        "test_diagnostics": teacher_forced_diagnostics(
-            model, loaders["test"], device, vocab.itos),
-        "ood_diagnostics": teacher_forced_diagnostics(
-            model, loaders["ood"], device, vocab.itos),
+        "test_diagnostics": test_diagnostics,
+        "ood_diagnostics": ood_diagnostics,
         "seconds": round(time.time() - t0, 1),
+        "cuda_memory": cuda_memory,
     }
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    atomic_write_json(args.out, result)
     print(f"DONE {json.dumps({k: result[k] for k in ['test_exact','ood_exact','seconds']})}",
           flush=True)
-    if args.save_model:
-        args.save_model.parent.mkdir(parents=True, exist_ok=True)
-        torch.save({"state_dict": model.state_dict(), "vocab": vocab.itos,
-                    "seed": args.seed,
-                    "config": {"d_model": args.d_model,
-                               "max_tgt": args.max_tgt,
-                               "max_len": args.max_len,
-                               "level_code": args.level_code,
-                               "consumer": args.consumer}},
-                   args.save_model)
 
 
 if __name__ == "__main__":

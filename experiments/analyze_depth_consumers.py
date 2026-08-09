@@ -10,9 +10,17 @@ from pathlib import Path
 
 import torch
 
+from depth_consumer_protocol import (EVAL_BATCH_SIZE, LOGICAL_BATCH_SIZE,
+                                     MAX_DEVICE_FOOTPRINT_FRACTION,
+                                     MAX_EVAL_INCREMENT_BYTES,
+                                     MICROBATCH_SIZE, P_DC5, P_DC6, P_DC7,
+                                     PER_PROCESS_MEMORY_FRACTION,
+                                     atomic_write_json)
+
 
 ARMS = ("address", "query", "memory", "both", "mlp")
 SEEDS = (0, 1, 2)
+ROOT = Path(__file__).resolve().parent.parent
 MIN_EFFECT = 0.15
 EQUIVALENCE_TOLERANCE = 0.01
 PREDICTIONS = {
@@ -41,6 +49,9 @@ PREDICTIONS = {
         "checkpoint digests. This is a protocol gate: analysis either "
         "satisfies it or refuses to run."
     ),
+    "P-DC5": P_DC5,
+    "P-DC6": P_DC6,
+    "P-DC7": P_DC7,
 }
 
 
@@ -138,16 +149,54 @@ def load_matrix(results_dir: Path) -> dict[str, dict[int, dict]]:
             common = {
                 key: provenance.get(key)
                 for key in ("task_prefix", "data_sha256", "epochs", "level_code",
-                            "max_tgt", "max_len", "implementation_sha256")
+                            "max_tgt", "max_len", "batch_size",
+                            "microbatch_size", "eval_batch_size",
+                            "memory_fraction", "runtime_environment",
+                            "implementation_sha256")
             }
             if any(value is None for value in common.values()):
                 raise ValueError(f"incomplete provenance in {path.name}")
             if provenance["level_code"] != "recurrent":
                 raise ValueError(f"non-recurrent depth matrix row {path.name}")
+            if (provenance["batch_size"] != LOGICAL_BATCH_SIZE
+                    or provenance["microbatch_size"] != MICROBATCH_SIZE
+                    or provenance["eval_batch_size"] != EVAL_BATCH_SIZE
+                    or provenance["memory_fraction"] !=
+                    PER_PROCESS_MEMORY_FRACTION):
+                raise ValueError(f"unsafe batch protocol in {path.name}")
+            if any(row.get(key) != provenance[key] for key in
+                   ("batch_size", "microbatch_size", "eval_batch_size",
+                    "memory_fraction")):
+                raise ValueError(f"result batch binding mismatch in {path.name}")
+            environment = provenance["runtime_environment"]
+            if (environment.get("cuda_available") is not True
+                    or not environment.get("driver_version")
+                    or not environment.get("device_name")):
+                raise ValueError(f"incomplete GPU environment in {path.name}")
+            memory = row.get("cuda_memory")
+            if not isinstance(memory, dict):
+                raise ValueError(f"missing CUDA memory evidence in {path.name}")
+            baseline = memory.get("pre_model_device_footprint_bytes")
+            if type(baseline) is not int or baseline < 1:
+                raise ValueError(f"missing pre-model GPU baseline in {path.name}")
+            for phase in ("train_validation", "final_evaluation"):
+                phase_memory = memory.get(phase, {})
+                for key in ("peak_allocated_bytes", "peak_reserved_bytes",
+                            "peak_device_footprint_bytes"):
+                    if type(phase_memory.get(key)) is not int or phase_memory[key] < 1:
+                        raise ValueError(
+                            f"missing {phase} {key} in {path.name}")
             if common_provenance is None:
                 common_provenance = common
             elif common != common_provenance:
                 raise ValueError(f"mixed experiment provenance in {path.name}")
+    if common_provenance is None:
+        raise ValueError("empty depth-consumer matrix")
+    for relative, recorded_digest in common_provenance[
+            "implementation_sha256"].items():
+        implementation = ROOT / relative
+        if not implementation.exists() or sha256(implementation) != recorded_digest:
+            raise ValueError(f"implementation drift: {relative}")
     return matrix
 
 
@@ -235,16 +284,25 @@ def adjudicate(results_dir: Path) -> dict:
             and material_gain(arms["both"]["ood_mean"], arms["mlp"]["ood_mean"])
             and mlp_material_losses >= 2)
     checkpoints = []
+    safety_memory = []
     for arm in ARMS:
         for seed in SEEDS:
             path = results_dir / f"depth_{arm}_s{seed}.pt"
             if not path.exists():
                 raise ValueError(f"missing requested checkpoint {path.name}")
-            saved = torch.load(path, map_location="cpu", weights_only=False)
+            saved = torch.load(path, map_location="cpu", weights_only=True)
             if (saved.get("config", {}).get("consumer") != arm
                     or saved.get("seed") != seed
                     or saved.get("config", {}).get("level_code") !=
-                    matrix[arm][seed]["run_provenance"]["level_code"]):
+                    matrix[arm][seed]["run_provenance"]["level_code"]
+                    or saved.get("config", {}).get("batch_size") !=
+                    LOGICAL_BATCH_SIZE
+                    or saved.get("config", {}).get("microbatch_size") !=
+                    MICROBATCH_SIZE
+                    or saved.get("config", {}).get("eval_batch_size") !=
+                    EVAL_BATCH_SIZE
+                    or saved.get("config", {}).get("memory_fraction") !=
+                    PER_PROCESS_MEMORY_FRACTION):
                 raise ValueError(f"mislabelled checkpoint {path.name}")
             digest = sha256(path)
             if matrix[arm][seed]["checkpoint_sha256"] != digest:
@@ -256,6 +314,42 @@ def adjudicate(results_dir: Path) -> dict:
                 "bytes": path.stat().st_size,
                 "sha256": digest,
             })
+            memory_evidence = matrix[arm][seed]["cuda_memory"]
+            train_val = memory_evidence["train_validation"]
+            evaluation = memory_evidence["final_evaluation"]
+            safety_memory.append({
+                "consumer": arm,
+                "seed": seed,
+                "train_validation": train_val,
+                "final_evaluation": evaluation,
+                "pre_model_device_footprint_bytes":
+                memory_evidence["pre_model_device_footprint_bytes"],
+                "reserved_increment_bytes": (
+                    evaluation["peak_reserved_bytes"]
+                    - train_val["peak_reserved_bytes"]),
+                "device_footprint_increment_bytes": (
+                    evaluation["peak_device_footprint_bytes"]
+                    - train_val["peak_device_footprint_bytes"]),
+            })
+
+    pdc6_relative = all(
+        item["reserved_increment_bytes"] <= MAX_EVAL_INCREMENT_BYTES
+        and item["device_footprint_increment_bytes"] <=
+        MAX_EVAL_INCREMENT_BYTES
+        for item in safety_memory)
+    environment = matrix["address"][0]["run_provenance"][
+        "runtime_environment"]
+    device_total = environment["device_total_bytes"]
+    reserved_limit = int(device_total * PER_PROCESS_MEMORY_FRACTION)
+    device_limit = int(device_total * MAX_DEVICE_FOOTPRINT_FRACTION)
+    pdc7_reserved_observed = all(
+        phase["peak_reserved_bytes"] <= reserved_limit
+        for item in safety_memory
+        for phase in (item["train_validation"], item["final_evaluation"]))
+    pdc7_whole_device = all(
+        phase["peak_device_footprint_bytes"] < device_limit
+        for item in safety_memory
+        for phase in (item["train_validation"], item["final_evaluation"]))
 
     return {
         "experiment": "depth-consumers-v0.6",
@@ -288,6 +382,39 @@ def adjudicate(results_dir: Path) -> dict:
             "P-DC4": {"prediction": PREDICTIONS["P-DC4"],
                        "status": "SATISFIED",
                        "adjudication_kind": "protocol_gate"},
+            "P-DC5": {"prediction": PREDICTIONS["P-DC5"],
+                       "status": "RETRACTED",
+                       "reason": ("registered measurand cleared allocator state "
+                                  "and could not observe the crash condition"),
+                       "adjudication_kind": "pre-run correction"},
+            "P-DC6": {"prediction": PREDICTIONS["P-DC6"],
+                       "status": "FIRED" if pdc6_relative else "MISSED",
+                       "maximum_allowed_increment_bytes":
+                       MAX_EVAL_INCREMENT_BYTES,
+                       "rows": safety_memory,
+                       "clauses": {
+                           "complete_matrix": "SATISFIED",
+                           "batch_binding": "SATISFIED",
+                           "memory_evidence": "SATISFIED",
+                           "relative_increment": (
+                               "FIRED" if pdc6_relative else "MISSED"),
+                       },
+                       "adjudication_kind": "safety_protocol"},
+            "P-DC7": {"prediction": PREDICTIONS["P-DC7"],
+                       "status": ("FIRED" if pdc7_whole_device
+                                  and pdc7_reserved_observed else "MISSED"),
+                       "reserved_limit_bytes": reserved_limit,
+                       "device_footprint_limit_bytes": device_limit,
+                       "rows": safety_memory,
+                       "clauses": {
+                           "allocator_cap": "MECHANISM_ENFORCED",
+                           "completed_rows_within_reserved_cap": (
+                               "OBSERVED" if pdc7_reserved_observed
+                               else "INVARIANT_BROKEN"),
+                           "whole_device_absolute": (
+                               "FIRED" if pdc7_whole_device else "MISSED"),
+                       },
+                       "adjudication_kind": "absolute_safety_protocol"},
         },
         "checkpoints": checkpoints,
     }
@@ -301,7 +428,7 @@ def main() -> None:
     args = parser.parse_args()
     result = adjudicate(args.results_dir)
     out = args.out or args.results_dir / "depth_consumers.json"
-    out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    atomic_write_json(out, result)
     print(json.dumps(result, indent=2))
 
 

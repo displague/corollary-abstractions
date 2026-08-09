@@ -153,6 +153,56 @@ changed; no pilot artifact is resumable into the final matrix.
   exact, conditional depth-OOD exact, teacher-forced per-step/decile failure,
   inclusion by depth, source/data/config provenance, and checkpoint digests.
   This is a protocol gate: analysis either satisfies it or refuses to run.
+- **P-DC5 (safety correction, registered after the fault and before the
+  replacement run):** Two identical Windows bugchecks occurred after all ten
+  epochs of the combined arm, at the final-evaluation boundary, while the GPU
+  held about 15.76/16.30 GiB. The replacement matrix keeps training batch 192,
+  uses final test/OOD evaluation batch 32, binds both values into every result
+  and checkpoint, and records final-evaluation peak below 12 GiB for every
+  arm. A breach stops the matrix; it is not permission to retry the unsafe
+  protocol. The nine pre-correction rows are archived as interrupted-protocol
+  evidence and are not mixed into adjudication.
+
+  **RETRACTED before the replacement run:** the review showed that P-DC5's
+  proposed peak was live allocated tensors after clearing the CUDA cache. It
+  could not observe the reserved/context/workspace footprint behind the
+  15.76-GiB reading, so its 12-GiB clause was practically unfalsifiable. The
+  registered text remains above; P-DC6 replaces its measurand.
+- **Unit correction:** P-DC5 used GiB where the observed `nvidia-smi` figures
+  were MiB: 15,760/16,303 MiB is about 15.39/15.92 GiB. The retracted text
+  remains verbatim above; the byte-based replacement gates are unaffected.
+- **P-DC6 (registered before the replacement run):** Keep logical batch 192
+  and paired data order, but accumulate gradients over 64-example GPU
+  microbatches; use batch 32 for validation, test, OOD, and diagnostics. Every
+  row binds all three values and records peak allocated, reserved, and
+  whole-device footprint separately for train/validation and final evaluation.
+  All fifteen rows complete, and final evaluation adds no more than 512 MiB
+  above the train/validation reserved or whole-device high-water mark. A breach
+  is a missed safety prediction and stops release adjudication.
+- **P-DC7 (registered before the replacement run):** Before model
+  construction, cap the PyTorch caching allocator at 70% of device memory.
+  Treat that cap as a mechanism-enforced clause, report whether every
+  completed phase stayed within it, and require every observed whole-device
+  footprint to stay below 80%; a breach is a missed safety prediction and
+  stops the matrix.
+
+Unlike P-DC6's relative clause, P-DC7's absolute whole-device gate rejects the
+original 15,760/16,303-MiB crash state even if final evaluation adds nothing.
+
+Microbatching preserves the logical mean-loss gradient and one
+optimizer/scheduler step per 192 examples, but it changes the dropout random
+mask schedule relative to the unsafe archived runs. That is why all fifteen
+adjudicating rows rerun under the corrected implementation; no old/new numeric
+mix is permitted.
+
+The archived interrupted rows, checkpoint/log hashes, driver/CUDA versions,
+TDR defaults, and clock-event state are recorded in
+`experiments/results/interrupted-2026-08-09/MANIFEST.md`.
+
+Operating condition for the replacement run: close browsers and other GPU
+applications. The 80% whole-device gate intentionally includes WDDM and other
+processes; unrelated GPU pressure may conservatively stop the matrix rather
+than be misattributed to the model.
 
 Before-run operationalization: a material improvement or loss is at least
 0.15 absolute mean depth-OOD exact and at least two of three paired-seed

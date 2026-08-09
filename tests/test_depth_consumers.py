@@ -11,12 +11,81 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "experiments"))
 
-from train_analogy import (AnalogyPointer, AnalogyDataset, Vocab, collate,
-                           teacher_forced_diagnostics)  # noqa: E402
+from train_analogy import (AnalogyPointer, AnalogyDataset, Vocab,  # noqa: E402
+                           backward_logical_batch, build_loaders, collate,
+                           save_checkpoint_atomic,
+                           teacher_forced_diagnostics)
 from diagnose_analogy import restore_model  # noqa: E402
 
 
 class DepthConsumerTests(unittest.TestCase):
+    @staticmethod
+    def sample_row(leaf: str = "z") -> dict:
+        return {
+            "tokens_struct": ["f", "(", "x", ")", "<sep>", "f", "(",
+                              "y", ")", "<sep>", leaf],
+            "target_positions": [5, 6, 10, 8],
+            "target_tokens": ["f", "(", leaf, ")"],
+            "depth": 2,
+        }
+
+    def test_loader_batches_bound_every_evaluation_split(self) -> None:
+        datasets = {
+            split: torch.utils.data.TensorDataset(torch.arange(4))
+            for split in ("train", "val", "test", "ood")
+        }
+        loaders = build_loaders(datasets, 192, 32, seed=7)
+        self.assertEqual(loaders["train"].batch_size, 192)
+        for split in ("val", "test", "ood"):
+            self.assertEqual(loaders[split].batch_size, 32)
+        with self.assertRaisesRegex(ValueError, "positive"):
+            build_loaders(datasets, 192, 0, seed=7)
+
+    def test_microbatch_gradient_matches_unsplit_logical_batch(self) -> None:
+        rows = [self.sample_row("z"), self.sample_row("w")]
+        vocab = Vocab({token for row in rows for token in row["tokens_struct"]})
+        dataset = AnalogyDataset(rows, vocab, 32, 16)
+        batch = next(iter(torch.utils.data.DataLoader(
+            dataset, batch_size=2, collate_fn=collate)))
+        full = AnalogyPointer(len(vocab), d_model=16, n_layers=1, n_dec=1,
+                              n_heads=4, max_tgt=16,
+                              level_code="recurrent", consumer="both")
+        split = AnalogyPointer(len(vocab), d_model=16, n_layers=1, n_dec=1,
+                               n_heads=4, max_tgt=16,
+                               level_code="recurrent", consumer="both")
+        split.load_state_dict(full.state_dict())
+        full.eval()
+        split.eval()
+        x, crd, mask, y, tc, _ = batch
+        memory = full.encode(x, crd, mask)
+        memory = full.prepare_memory(memory, crd[..., 1:])
+        logits = full.decode(memory, mask, y[:, :-1], tc[:, : y.size(1) - 1])
+        reference_loss = torch.nn.CrossEntropyLoss(ignore_index=0)(
+            logits.reshape(-1, logits.size(-1)), y[:, 1:].reshape(-1))
+        reference_loss.backward()
+        full_loss = reference_loss.item()
+        split_loss = backward_logical_batch(
+            split, batch, 1,
+            torch.nn.CrossEntropyLoss(ignore_index=0, reduction="sum"),
+            "cpu")
+        self.assertAlmostEqual(full_loss, split_loss, places=5)
+        for full_parameter, split_parameter in zip(
+                full.parameters(), split.parameters()):
+            if full_parameter.grad is None or split_parameter.grad is None:
+                self.assertIsNone(full_parameter.grad)
+                self.assertIsNone(split_parameter.grad)
+                continue
+            self.assertTrue(torch.allclose(
+                full_parameter.grad, split_parameter.grad,
+                atol=1e-5, rtol=1e-5))
+        split.zero_grad(set_to_none=True)
+        split.train()
+        backward_logical_batch(
+            split, batch, 1,
+            torch.nn.CrossEntropyLoss(ignore_index=0, reduction="sum"),
+            "cpu")
+        self.assertTrue(split.training)
+
     def test_consumer_ladder_preserves_shapes(self) -> None:
         source = torch.randint(1, 8, (2, 7))
         coords = torch.zeros(2, 7, 1 + 10, dtype=torch.long)
@@ -99,13 +168,7 @@ class DepthConsumerTests(unittest.TestCase):
         self.assertTrue(torch.equal(model.prepare_memory(base, zero), base))
 
     def test_teacher_forced_diagnostics_name_steps_and_deciles(self) -> None:
-        row = {
-            "tokens_struct": ["f", "(", "x", ")", "<sep>", "f", "(",
-                              "y", ")", "<sep>", "z"],
-            "target_positions": [5, 6, 10, 8],
-            "target_tokens": ["f", "(", "z", ")"],
-            "depth": 2,
-        }
+        row = self.sample_row()
         vocab = Vocab(set(row["tokens_struct"]))
         dataset = AnalogyDataset([row], vocab, 32, 16)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1,
@@ -132,6 +195,21 @@ class DepthConsumerTests(unittest.TestCase):
                                       level_code="recurrent", consumer=consumer)
             restored.load_state_dict(checkpoint["state_dict"])
             self.assertEqual(checkpoint["config"]["consumer"], consumer)
+
+    def test_atomic_checkpoint_round_trips_with_weights_only(self) -> None:
+        model = AnalogyPointer(8, d_model=16, max_tgt=8,
+                               level_code="recurrent", consumer="address")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "checkpoint.pt"
+            save_checkpoint_atomic(path, {
+                "state_dict": model.state_dict(),
+                "vocab": ["<pad>", "x"],
+                "seed": 0,
+                "config": {"consumer": "address"},
+            })
+            restored = torch.load(path, map_location="cpu", weights_only=True)
+            self.assertFalse(path.with_suffix(".pt.tmp").exists())
+        self.assertEqual(restored["vocab"], ["<pad>", "x"])
 
     def test_diagnostic_loader_restores_every_consumer(self) -> None:
         for consumer in ("address", "query", "memory", "both", "mlp"):

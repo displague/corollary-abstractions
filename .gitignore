@@ -43,7 +43,10 @@ htmlcov/
 # Experiment artifacts: generated datasets, model checkpoints, run logs
 experiments/data/
 experiments/data_smoke/
-experiments/results/*.pt
+experiments/results/**/*.pt
+experiments/results/**/*.log
+experiments/results/**/*.pt.tmp
+experiments/results/**/*.json.tmp
 experiments/*.log
 
 # Real corpus samples (licensed downloads, user-provided; never commit)

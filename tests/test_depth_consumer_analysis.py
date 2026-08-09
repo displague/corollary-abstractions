@@ -15,10 +15,14 @@ sys.path.insert(0, str(ROOT / "experiments"))
 
 from analyze_depth_consumers import (ARMS, SEEDS, adjudicate,  # noqa: E402
                                      material_gain)
+from depth_consumer_protocol import P_DC5, P_DC6, P_DC7  # noqa: E402
 
 
 class DepthConsumerAnalysisTests(unittest.TestCase):
     def write_matrix(self, root: Path) -> None:
+        implementation = ROOT / "experiments" / "analyze_depth_consumers.py"
+        implementation_digest = hashlib.sha256(
+            implementation.read_bytes()).hexdigest()
         scores = {
             "address": (0.10, 0.11, 0.12),
             "query": (0.26, 0.27, 0.28),
@@ -41,9 +45,24 @@ class DepthConsumerAnalysisTests(unittest.TestCase):
                 }
                 row = {"consumer": arm, "seed": seed, "params": 100,
                        "level_code": "recurrent",
+                       "batch_size": 192, "microbatch_size": 64,
+                       "eval_batch_size": 32, "memory_fraction": 0.70,
                        "test_exact": 1.0, "ood_exact": score,
                        "test_diagnostics": diagnostics,
                        "ood_diagnostics": diagnostics,
+                       "cuda_memory": {
+                           "pre_model_device_footprint_bytes": 500,
+                           "train_validation": {
+                               "peak_allocated_bytes": 1000,
+                               "peak_reserved_bytes": 2000,
+                               "peak_device_footprint_bytes": 3000,
+                           },
+                           "final_evaluation": {
+                               "peak_allocated_bytes": 1100,
+                               "peak_reserved_bytes": 2100,
+                               "peak_device_footprint_bytes": 3100,
+                           },
+                       },
                        "inclusion": {
                            split: {"generated": 10, "kept": 8,
                                    "dropped_max_len": 1,
@@ -62,11 +81,27 @@ class DepthConsumerAnalysisTests(unittest.TestCase):
                            "epochs": 10, "level_code": "recurrent",
                            "max_tgt": 96,
                            "max_len": 512,
-                           "implementation_sha256": {"train.py": "source"},
+                           "batch_size": 192,
+                           "microbatch_size": 64,
+                           "eval_batch_size": 32,
+                           "memory_fraction": 0.70,
+                           "runtime_environment": {
+                               "cuda_available": True,
+                               "driver_version": "test-driver",
+                               "device_name": "test-gpu",
+                               "device_total_bytes": 10000,
+                           },
+                           "implementation_sha256": {
+                               "experiments/analyze_depth_consumers.py":
+                               implementation_digest},
                        }}
                 torch.save({"seed": seed,
                             "config": {"consumer": arm,
-                                       "level_code": "recurrent"}},
+                                       "level_code": "recurrent",
+                                       "batch_size": 192,
+                                       "microbatch_size": 64,
+                                       "eval_batch_size": 32,
+                                       "memory_fraction": 0.70}},
                            root / f"depth_{arm}_s{seed}.pt")
                 raw = (root / f"depth_{arm}_s{seed}.pt").read_bytes()
                 row["checkpoint_sha256"] = hashlib.sha256(raw).hexdigest()
@@ -89,6 +124,13 @@ class DepthConsumerAnalysisTests(unittest.TestCase):
         self.assertTrue(all(
             item["prediction"]
             for item in result["adjudication"].values()))
+
+    def test_machine_predictions_quote_registered_roadmap_wording(self) -> None:
+        roadmap = (ROOT / "docs" / "ROADMAP-v0.6.md").read_text(
+            encoding="utf-8")
+        normalized_roadmap = " ".join(roadmap.split())
+        for prediction in (P_DC5, P_DC6, P_DC7):
+            self.assertIn(" ".join(prediction.split()), normalized_roadmap)
 
     def test_pdc1_misses_when_in_distribution_collapses(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -185,6 +227,108 @@ class DepthConsumerAnalysisTests(unittest.TestCase):
             row["run_provenance"]["data_sha256"]["train"] = "changed"
             path.write_text(json.dumps(row), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "mixed experiment provenance"):
+                adjudicate(root)
+
+    def test_matrix_refuses_unsafe_evaluation_batch(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            row["run_provenance"]["eval_batch_size"] = 192
+            path.write_text(json.dumps(row), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "unsafe batch protocol"):
+                adjudicate(root)
+
+    def test_matrix_refuses_result_batch_binding_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            row["eval_batch_size"] = 64
+            path.write_text(json.dumps(row), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "result batch binding"):
+                adjudicate(root)
+
+    def test_matrix_refuses_incomplete_gpu_environment(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            del row["run_provenance"]["runtime_environment"]["driver_version"]
+            path.write_text(json.dumps(row), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "incomplete GPU environment"):
+                adjudicate(root)
+
+    def test_matrix_refuses_missing_cuda_memory_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            del row["cuda_memory"]
+            path.write_text(json.dumps(row), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "missing CUDA memory"):
+                adjudicate(root)
+
+    def test_pdc6_misses_when_evaluation_adds_over_half_gib(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            row["cuda_memory"]["final_evaluation"][
+                "peak_device_footprint_bytes"] = 3000 + 512 * 1024 ** 2 + 1
+            path.write_text(json.dumps(row), encoding="utf-8")
+            result = adjudicate(root)
+        self.assertEqual(result["adjudication"]["P-DC5"]["status"],
+                         "RETRACTED")
+        self.assertEqual(result["adjudication"]["P-DC6"]["status"],
+                         "MISSED")
+
+    def test_pdc6_fires_at_exact_increment_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            increment = 512 * 1024 ** 2
+            row["cuda_memory"]["final_evaluation"][
+                "peak_reserved_bytes"] = 2000 + increment
+            row["cuda_memory"]["final_evaluation"][
+                "peak_device_footprint_bytes"] = 3000 + increment
+            path.write_text(json.dumps(row), encoding="utf-8")
+            result = adjudicate(root)
+        self.assertEqual(result["adjudication"]["P-DC6"]["status"], "FIRED")
+
+    def test_pdc7_misses_original_high_absolute_footprint_shape(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            path = root / "depth_both_s0.json"
+            row = json.loads(path.read_text(encoding="utf-8"))
+            row["cuda_memory"]["train_validation"][
+                "peak_device_footprint_bytes"] = 8000
+            path.write_text(json.dumps(row), encoding="utf-8")
+            result = adjudicate(root)
+        self.assertEqual(result["adjudication"]["P-DC7"]["status"], "MISSED")
+
+    def test_implementation_drift_refuses_adjudication(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            for arm in ARMS:
+                for seed in SEEDS:
+                    path = root / f"depth_{arm}_s{seed}.json"
+                    row = json.loads(path.read_text(encoding="utf-8"))
+                    key = next(iter(
+                        row["run_provenance"]["implementation_sha256"]))
+                    row["run_provenance"]["implementation_sha256"][key] = (
+                        "0" * 64)
+                    path.write_text(json.dumps(row), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "implementation drift"):
                 adjudicate(root)
 
     def test_incomplete_matrix_refuses_instead_of_summarizing(self) -> None:
