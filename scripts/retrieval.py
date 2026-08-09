@@ -6,8 +6,9 @@ sources into one query surface: corpus statements, their lexica, structural
 twin/mirror groups, decomposition entries, and machine-proof links. Retrieval
 may add Open English WordNet as a sixth, external source when the caller names
 an archive; absence leaves the five-store behavior byte-for-byte unchanged.
-does not answer a slot by itself; it appends stable, indexed material to the
-session context, and a later POINT action binds one item to the pending slot.
+RETRIEVE does not answer a slot by itself; it appends stable, indexed material
+to the session context, and a later POINT action binds one item to the pending
+slot.
 
 Exact lookup is attempted first. A miss falls back to deterministic token
 neighborhood search. A durable miss remains UNKNOWN and records ABSTAIN rather
@@ -366,9 +367,15 @@ class UnifiedKnowledgeStore:
                     aliases=(statement_id, nodes[statement_id]["title"], *constituents),
                 )
             )
+        if wordnet_path is not None and not wordnet_path.is_file():
+            # Graceful absence covers the UNNAMED default only. A caller
+            # who explicitly named an archive meant to use it; silently
+            # degrading to five stores would hide a typo (review nit 2).
+            raise FileNotFoundError(
+                f"named WordNet archive does not exist: {wordnet_path}"
+            )
         wordnet = (
-            WordNetIndex.load(wordnet_path)
-            if wordnet_path is not None and wordnet_path.is_file()
+            WordNetIndex.load(wordnet_path) if wordnet_path is not None
             else None
         )
         return cls(tuple(items), wordnet)

@@ -9,6 +9,17 @@ the frame's `on_exit` epistemic status. Frame truths never leak.
 
 Adjudication order and semantics (each is a deliberate design decision):
 
+-1. Ownership splits the semantics in two (post-merge review of 4cc2194):
+   FICTION (unowned) rewrites the world, so it must suspend what it
+   overwrites -- the boundary rule and world-grounding below apply to it.
+   BELIEF (owned) diverges from the world without touching it: an owned
+   frame adjudicates ONLY its local truths (declarations + witnessed
+   events + accepted assertions), world truths never ground or refute a
+   belief unwitnessed (no telepathy), world-false initial beliefs are
+   legitimate declarations needing no suspension, and the
+   suspension-invention channel does not exist for it (belief acquires
+   content by witnessing, fiction by inventing). Rules 0 and 3-4 below
+   therefore apply only to unowned frames.
 0. The boundary rule: a frame OPENS only if its declarations contradict no
    unsuspended world truth. "Invention is unlimited at the boundary" means
    unlimited once the contradicted truths are explicitly suspended -- a
@@ -308,6 +319,13 @@ class FrameExecutor:
             # only if the frame explicitly suspends that truth. Otherwise a
             # declaration would be a side door around `suspends` -- the
             # blocking finding of this slice's adversarial review.
+            # OWNED frames are exempt on principle, not oversight: fiction
+            # REWRITES the world and must suspend what it overwrites; a
+            # belief frame DIVERGES from the world without touching it, so
+            # a world-false initial belief is legitimate content (the same
+            # rule that keeps world truths from grounding belief checks).
+            if spec.owner is not None:
+                continue
             for statement_id, truths in self.world.items():
                 if statement_id in spec.suspends:
                     continue
@@ -424,16 +442,32 @@ class FrameExecutor:
     def belief_value(
         state: FrameState, subject: str, predicate: str
     ) -> str | None:
-        """Return the latest positive value held for a functional predicate."""
+        """Return the single positive value held for a functional predicate.
 
+        Refuses to guess: if the frame simultaneously holds more than one
+        distinct positive value for (subject, predicate) -- which can only
+        happen when the predicate was never marked functional in any
+        observed event -- there is no "the" belief, and silently answering
+        the latest one would invent a preference the frame does not hold
+        (post-merge review of 4cc2194, finding 4).
+        """
+
+        values: list[str] = []
         for _, literal in reversed(state.local_truths):
             if (
                 literal.subject == subject
                 and literal.predicate == predicate
                 and literal.polarity
+                and literal.value not in values
             ):
-                return literal.value
-        return None
+                values.append(literal.value)
+        if len(values) > 1:
+            raise ValueError(
+                f"belief_value({subject!r}, {predicate!r}) is ambiguous: the "
+                f"frame holds {len(values)} distinct positive values "
+                f"{values!r}; the predicate was not treated as functional"
+            )
+        return values[0] if values else None
 
     def check(self, state: FrameState, literal: Literal) -> Adjudication:
         spec = state.spec
@@ -464,6 +498,19 @@ class FrameExecutor:
                 Verdict.REFUTED,
                 f"candidate contradicts frame premise {premise_id!r}",
                 (FRAME_CONSISTENCY, premise_id),
+            )
+
+        if spec.owner is not None:
+            # Owned frames are BELIEF states and adjudicate only local
+            # truths: world facts the owner never witnessed must not ground
+            # or refute the owner's beliefs (the telepathy the visibility
+            # design exists to prevent -- post-merge review of 4cc2194, F1).
+            # Divergence from the world is the phenomenon, not an error.
+            return Adjudication(
+                Verdict.UNKNOWN,
+                f"owner {spec.owner!r} holds no belief about this; world "
+                "truths do not reach a belief frame unwitnessed",
+                (spec.frame, spec.owner),
             )
 
         suspended_grounds: list[str] = []

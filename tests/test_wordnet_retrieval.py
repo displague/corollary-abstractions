@@ -226,18 +226,22 @@ class WordNetRetrievalTests(unittest.TestCase):
         self.assertNotIn("Traceback", run.stderr)
         self.assertIn("binding expectation mismatches", run.stdout)
 
-    def test_missing_archive_preserves_five_store_baseline(self) -> None:
+    def test_unnamed_archive_preserves_five_store_baseline(self) -> None:
+        """Graceful absence is the UNNAMED default's behavior only."""
         baseline = UnifiedKnowledgeStore.load(
             REPO_ROOT / "data", REPO_ROOT / "reports"
         )
-        absent = UnifiedKnowledgeStore.load(
-            REPO_ROOT / "data",
-            REPO_ROOT / "reports",
-            Path(self.temp.name) / "absent.zip",
-        )
-        self.assertIsNone(absent.wordnet)
-        self.assertEqual(absent.items, baseline.items)
-        self.assertEqual(absent.query("quickening"), baseline.query("quickening"))
+        self.assertIsNone(baseline.wordnet)
+
+    def test_explicitly_named_missing_archive_is_loud(self) -> None:
+        """Post-review behavior: a typo'd --wordnet path must not silently
+        degrade to five stores -- the caller named an archive on purpose."""
+        with self.assertRaisesRegex(FileNotFoundError, "does not exist"):
+            UnifiedKnowledgeStore.load(
+                REPO_ROOT / "data",
+                REPO_ROOT / "reports",
+                Path(self.temp.name) / "absent.zip",
+            )
 
     def test_existing_malformed_archive_fails_closed(self) -> None:
         malformed = Path(self.temp.name) / "malformed.zip"

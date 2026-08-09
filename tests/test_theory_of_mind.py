@@ -113,6 +113,79 @@ class TheoryOfMindTests(unittest.TestCase):
             Verdict.VERIFIED,
         )
 
+    def test_ambiguous_nonfunctional_belief_value_refuses_to_guess(self) -> None:
+        """Review finding 4: with two accumulated positives, there is no
+        'the' belief -- belief_value must raise, not answer the latest."""
+        executor, sally = belief("sally")
+        red = FrameEvent(
+            "red", (Literal("marble", "has_trait", "red"),), ("sally",)
+        )
+        round_ = FrameEvent(
+            "round", (Literal("marble", "has_trait", "round"),), ("sally",)
+        )
+        sally = executor.observe_event(sally, red).next_state
+        sally = executor.observe_event(sally, round_).next_state
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            executor.belief_value(sally, "marble", "has_trait")
+
+    def test_world_truths_do_not_reach_belief_frames_unwitnessed(self) -> None:
+        """Review F1 (telepathy): an owned frame adjudicates only local
+        truths -- a corpus world truth must not verify or refute a belief
+        the owner never witnessed."""
+        executor = FrameExecutor(
+            {"physics.test.marble_location": (BOX,)}
+        )
+        state = executor.open_frame(
+            FrameSpec(frame="runtime.frames.belief_sally", owner="sally")
+        )
+        state = executor.observe_event(state, PLACE).next_state
+        finding = executor.check(state, BOX)
+        self.assertIs(finding.verdict, Verdict.UNKNOWN)
+        self.assertIn("unwitnessed", finding.reason)
+        # The unowned control keeps world grounding.
+        fiction = executor.open_frame(FrameSpec(frame="runtime.frames.tale"))
+        self.assertIs(executor.check(fiction, BOX).verdict, Verdict.VERIFIED)
+
+    def test_owned_declarations_may_diverge_from_world_without_suspension(self) -> None:
+        """Review F1 companion: belief diverges, fiction rewrites. A
+        world-false initial belief opens without suspension; the identical
+        unowned declaration is still boundary-rule rejected."""
+        executor = FrameExecutor(
+            {"physics.test.marble_location": (BOX,)}
+        )
+        believed = FrameSpec(
+            frame="runtime.frames.belief_sally",
+            owner="sally",
+            declarations=(("initial", BOX.negated),),
+        )
+        opened = executor.open_frame(believed)
+        self.assertIs(executor.check(opened, BOX.negated).verdict,
+                      Verdict.VERIFIED)
+        with self.assertRaisesRegex(ValueError, "does not suspend"):
+            executor.open_frame(
+                FrameSpec(
+                    frame="runtime.frames.tale",
+                    declarations=(("premise", BOX.negated),),
+                )
+            )
+
+    def test_owned_frames_have_no_suspension_invention_channel(self) -> None:
+        """Belief acquires content by witnessing, fiction by inventing:
+        assert_literal on an owned frame must not admit through suspends."""
+        executor = FrameExecutor(
+            {"physics.test.marble_location": (BOX,)}
+        )
+        state = executor.open_frame(
+            FrameSpec(
+                frame="runtime.frames.belief_sally",
+                owner="sally",
+                suspends=("physics.test.marble_location",),
+            )
+        )
+        result = executor.assert_literal(state, "guess", BOX.negated)
+        self.assertIs(result.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(result.next_state)
+
     def test_unowned_frame_cannot_consume_attributed_events(self) -> None:
         executor = FrameExecutor()
         state = executor.open_frame(FrameSpec(frame="runtime.frames.unowned"))

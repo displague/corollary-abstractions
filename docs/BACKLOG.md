@@ -113,6 +113,16 @@ or commit history. Each item names the evidence that motivated it.
   would lose a fully-callbacked RunResult — theoretical, but the protocol
   should own the name.
 
+## Retrieval stores
+
+- **The WordNet archive digest is provenance, not tamper-evidence.**
+  `WordNetIndex.load` records a per-load SHA-256, but nothing pins it: a
+  re-zipped or edited archive loads with a fresh digest and no complaint.
+  This is fine under the empirical-only trust model (WordNet records can
+  never ground verdicts or enter verified_by), and no doc overclaims it —
+  filed so that if lexical records ever gain more authority, digest
+  pinning must arrive first. (Post-merge review of 745a46b, informational.)
+
 ## Controller / harness
 
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node
