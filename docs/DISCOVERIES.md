@@ -350,6 +350,17 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ## Informative near-misses (kept deliberately)
 
+- **Our headline depth number was a lucky seed, and pretraining is a
+  stabilizer, not a lever.** Running the cold recurrent arm at seed 1
+  (0.087 OOD) retired "0.226" as a point estimate: the honest 2-seed
+  statement is 0.16 +/- 0.07 (fork verdict intact -- both seeds beat
+  lookup/curriculum by an order of magnitude). Masked-skeleton
+  pretraining (10e) collapsed that seed spread to 0.029 and lifted the
+  weak seed +0.100 while leaving the strong seed roughly unchanged --
+  gains the no-single-seed rule can call variance stabilization but not
+  mean improvement at n=2. *P-CF5a partial, P-CF5b fired; single-seed
+  rule applied to our own result* (2026-08-09)
+
 - **Textbook mutual information does not twin its own I-measure form** —
   call heads are read literally. Shows precisely what adopting a shared
   abstraction (lattice heads) buys. (2026-08-07)

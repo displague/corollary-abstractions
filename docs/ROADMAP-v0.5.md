@@ -536,7 +536,18 @@ demo and a multi-step derivation remain one milestone in two costumes.
       and the evaluator dereferenced missing next-state on a falsified case.
       Project exact/neighborhood ownership now runs first, and misses are
       counted rather than crashing.
-    - **10e — masked skeleton modeling** (experiment track, GPU): BERT's
+    - **10e — DELIVERED, with a correction to our own headline.** Masked
+      skeleton modeling ran (pretrain_maskskel.py, 51.8% held-out masked
+      recovery, encoder warm-start into the recurrent analogy arm, 2v2
+      seeds). P-CF5a PARTIAL: warm mean OOD 0.201 vs cold 0.157, but the
+      delta is inside the cold arm's own seed spread — the supportable
+      claim is variance stabilization (spread 0.139 → 0.029, weak seed
+      +0.100), not a mean lift. P-CF5b FIRED (trained-depth-only control
+      held). The larger result: the new cold seed (0.087) retires 0.226
+      as a point estimate — the recurrent arm is honestly 0.16 ± 0.07,
+      though the fork verdict stands (both seeds beat lookup/curriculum
+      by an order of magnitude). Full table in ANALYSIS.
+      Original spec: BERT's
       masked-LM objective transposed to structure — mask a skeleton node,
       recover by pointing. Adjudicates P-CF5 (gains should concentrate in
       depth OOD, not in-distribution, if the objective teaches structure).

@@ -1104,3 +1104,39 @@ valid archive missed. The pre-WordNet binding contract now runs first for
 project items; a fixture where the same item is both exact and lexically
 bridged is retained. Missing results now remain reportable failed
 adjudications.
+
+
+## Masked skeleton modeling (10e): a stabilizer, not a lever -- and a seed correction
+
+BERT's masked-LM objective transposed to structure: mask one tree node,
+recover it by pointing into a candidate bag (pretrain_maskskel.py); the
+pretrained encoder (embeddings, recurrent path cell, transformer, pointer
+query) warm-starts the recurrent analogy arm via --init-encoder.
+Pretraining data was ONLY trained-depth trees (the P-CF5b contamination
+control). 150k trees, 3 epochs, 51.8% held-out masked recovery, 137s.
+
+| arm | seed | test | depth OOD |
+|---|---|---|---|
+| cold recurrent (committed v0.4) | 0 | 1.000 | 0.226 |
+| cold recurrent (new) | 1 | 1.000 | **0.087** |
+| warm (maskskel init) | 0 | 1.000 | 0.215 |
+| warm (maskskel init) | 1 | 1.000 | 0.187 |
+
+**Adjudication of P-CF5a -- PARTIAL, and the honest reading cuts both
+ways.** In-distribution is at ceiling everywhere, so any effect is OOD by
+construction. The warm mean (0.201) exceeds the cold mean (0.157), but
+the difference (+0.044) is smaller than the cold arm's own seed spread
+(0.139), so NO mean-improvement claim survives the no-single-seed rule at
+n=2. What the data does support: pretraining collapsed the seed spread
+from 0.139 to 0.029 and lifted the weak seed by +0.100 -- masked skeleton
+modeling is a **variance stabilizer**, not a wall-mover. P-CF5b FIRED:
+the control held (no deeper exposure anywhere in pretraining).
+
+**The correction that matters more than the experiment:** cold seed 1 at
+0.087 shows the committed 0.226 was a favorable seed. The recurrent arm's
+honest 2-seed statement is **0.16 +/- 0.07**. The v0.4 fork VERDICT
+stands -- both cold seeds still beat lookup (0.014) and curriculum
+(0.006) by an order of magnitude, so iteration-over-exposure is intact --
+but "0.226" as a point estimate is retired; the wall's height is noisier
+than one seed made it look. This is the house single-seed rule doing
+exactly what it exists to do, to our own headline number.

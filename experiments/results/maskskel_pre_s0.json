@@ -1,0 +1,26 @@
+{
+  "task": "maskskel_pretrain",
+  "params": 1482115,
+  "seed": 0,
+  "level_code": "recurrent",
+  "n_trees": 150000,
+  "history": [
+    {
+      "epoch": 0,
+      "loss": 2.1932805436869938,
+      "val_mask_acc": 0.492
+    },
+    {
+      "epoch": 1,
+      "loss": 1.3856729287336305,
+      "val_mask_acc": 0.49673333333333336
+    },
+    {
+      "epoch": 2,
+      "loss": 1.2960241719724375,
+      "val_mask_acc": 0.5176
+    }
+  ],
+  "final_val_mask_acc": 0.5176,
+  "seconds": 136.9
+}
