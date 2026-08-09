@@ -60,7 +60,12 @@ available.
 
 Select corpus families that have natural visual realizations: right triangles,
 circle measurements, affine transforms, graph connectivity, set relations,
-coordinate frames, and simple plots. A deterministic renderer produces:
+coordinate frames, and simple plots. After the triangle oracle exists, natural
+follow-on families include SHM phase portraits, multi-frequency Lissajous
+figures (parametric from exact ω ratios and phase), and—only under
+`docs/DESIGN-affect.md` admission rules—discrete emotion wheels or valence–
+arousal circumplex diagrams with inconsistent-sector negatives. A deterministic
+renderer produces:
 
 1. the source formula skeleton;
 2. an SVG or scene graph with stable object identities;

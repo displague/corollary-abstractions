@@ -10,11 +10,13 @@ in full, the staged work it implies, and the registered predictions that make
 the mapping falsifiable rather than decorative.
 
 Status: ASK's runtime user frame and return channel, physical frames,
-FrameSpec ownership/visibility, and the optional WordNet synonym bridge are
-executable; the provability corpus is authored and P-CF4 adjudicated (§4).
-Masked skeletons and nesting remain queued. Each section
-ends with its work items; ROADMAP-v0.5 section 10 and BACKLOG's "Cognitive
-frames / lexical stores" section index them.
+FrameSpec ownership/visibility, nested belief, and the optional WordNet
+synonym bridge are executable; the provability corpus is authored and P-CF4
+adjudicated (§4). Masked skeletons adjudicated as variance stabilizers;
+depth-consumer follow-on is the live experiment track. Affect is design-only
+(`docs/DESIGN-affect.md`). Each section ends with its work items; current
+roadmap and BACKLOG's "Cognitive frames / lexical stores", physics
+oscillation, and affect sections index remaining work.
 
 ---
 
@@ -415,10 +417,27 @@ chain; reduced-extract decision; P-CF6 adjudication.
 4. **WordNet store adapter — SHIPPED external first cut** (P-CF6 fired);
    license/attribution ships with it and no source data enters git.
 5. **Masked skeleton modeling** (P-CF5) — experiment track, GPU-bound,
-   schedulable whenever the GPU is free.
+   schedulable whenever the GPU is free. v0.5 adjudication: variance
+   stabilizer, not a wall-mover; depth-consumer follow-on is the live
+   experiment track.
 6. **Provability corpus — SHIPPED** (P-CF4 fired both halves; see §4's
-   adjudication). **Nested frames** remain queued.
+   adjudication). **Nested frames — SHIPPED first cut**; graft-back API
+   remains queued in BACKLOG.
+7. **Physics SHM / multiplanar corpus (queued, not frames-of-reference
+   alone).** Hooke's law already marks itself as generator of harmonic
+   motion; SHM, ω/T/f, resonance, and multi-axis coupling are the science
+   ladder that feeds later controller and visual work. Filed under BACKLOG
+   “Physics oscillation / multiplanar ladder.” Distinct from §2's reference
+   frames: dynamics statements versus measurement frames.
+8. **Affect as structure (design only).** Emotion maps/vectors are admitted
+   only as discrete relations, named dimensional slots, owned-frame
+   literals, diagram twins, or empirical observations with provenance—not
+   as continuous embeddings in weights. Full mapping, non-goals, and
+   predictions P-AFF1–P-AFF5: `docs/DESIGN-affect.md`. First executable cut
+   is narrative affect obligations after the oscillation ladder and stable
+   belief/visibility path; not a free-text sentiment benchmark.
 
 Every prediction P-CF1..6 follows the house rule: registered here before
 any adjudicating tool runs; fired and missed are both reportable; misses
-are recorded in DISCOVERIES with the same prominence as hits.
+are recorded in DISCOVERIES with the same prominence as hits. Affect
+predictions live in DESIGN-affect.md under the same rule.

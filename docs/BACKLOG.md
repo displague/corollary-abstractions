@@ -36,6 +36,99 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   than building oracle and learned arms together. First land a deterministic
   right-triangle data generator plus inconsistent-pair verifier; only then
   adjudicate P-V1–P-V4.
+- **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
+  asked whether emotion classification maps/vectors belong beside math/science
+  corpora. The answer is recorded in `docs/DESIGN-affect.md`: discrete relations,
+  named dimensional slots, owned-frame affect literals, and diagram twins are
+  in-scope; continuous PAD/VAD or learned sentiment tables in weights are not.
+  Do not open a free-text emotion benchmark or alter analogy train data until
+  P-AFF1–P-AFF5 have an implementation path and vacuity baselines. First
+  executable cut is narrative plant/discharge of character-affect obligations
+  under existing visibility rules, after the physics oscillation ladder and
+  after belief/nested lifetime friction above is not the active critical path.
+
+## Physics oscillation / multiplanar ladder
+
+Evidence motivating this section: Hooke's law is already authored
+(`physics.mechanics.hookes_law`) and its statistical_significance text calls it
+the generator of harmonic motion, but no SHM, angular-frequency, period,
+resonance, normal-mode, or multi-axis coupling node exists. Rotating-frame and
+Galilean nodes ship as scope declarations without an executable multiplanar
+dynamics companion. Side-channel analysis of the depth-consumer analogy run
+confirms neural training is synthetic expression trees only—physics expansion
+must enter the symbolic harness first, with twin predictions registered before
+regenerate, not as mid-matrix train dilution.
+
+- **Author the SHM / frequency seed slice (post depth-consumer matrix, or a
+  disjoint worktree that does not touch experiment generators).** Minimal
+  first cut in `scripts/seed_physics.py`: angular frequency ω=√(k/m),
+  period–frequency relations (T=2π/ω, ω=2πf), and a displacement form
+  x=A cos(ωt+φ) or energy partition, each with citations (Hooke 1678 already
+  present; Fitzpatrick Waves / standard classical mechanics acceptable).
+  Register twin and specialization predictions in the seed docstring before
+  any matcher run—candidates include scaled-root forms, reciprocal scale
+  pairs with existing ratio definitions, and energy kinship with
+  `physics.mechanics.kinetic_energy`. Do not resspell Kepler III as SHM to
+  force a twin; period–amplitude independence vs P²∝a³ is a contrast to keep
+  honest.
+- **Keep multiplanar dynamics distinct from multiplanar frames.** Orthogonal
+  plane oscillations and coupling parameters are statement structure; pitch/
+  roll/yaw-style measurement in a rotating frame is scope + local corrections
+  already begun in `physics.frames.rotating_frame`. A composition demo
+  (multi-axis oscillator described under a rotating frame) is valuable only
+  after single-plane SHM exists and after “Deepen physical reference frames”
+  above has executable terms—not a neural multi-body simulator in weights.
+- **Resonance and normal modes are second rung.** Driven-frequency equality
+  checks and two-mass modal coordinates need clear closed forms and
+  vacuity-resistant tests (a constant “always resonate” baseline must fail).
+  File matcher predictions separately; do not batch them into the first SHM
+  slice if that would make adjudication unreadable.
+- **Diagram families after the visual oracle, not before.** Lissajous figures,
+  phase portraits (x,v), and spring–mass free-body + x(t) plots are natural
+  V1 follow-ons once the right-triangle renderer, source graph, and
+  inconsistent-pair checks exist. Starting Lissajous before that oracle
+  repeats the v0.6 visual deferral failure mode.
+- **Controller actions over oscillator state are oracle-first.** When a
+  physics-shaped verifier can check “period computed” or “drive frequency
+  matches natural frequency,” add POINT/GEN proposals under the generic
+  controller; only then consider a tiny ranking policy. Do not train a
+  freestanding “physics LM.”
+
+## Affect / emotion structure
+
+Evidence: directional conversation on emotion classification
+(discrete taxonomies, Russell circumplex, PAD, Plutchik) plus the explicit
+blog limit that ToM ships without rich motives/emotion/culture. RFT coverage
+in DESIGN-cognitive-frames maps relational operants, not affect. Analogy
+training (50k synthetic root transforms; ID exact 1.000; depth-OOD the real
+wall) must not be redirected into sentiment tags mid-experiment.
+
+- **DESIGN-affect.md is the admission document.** Any proposal to add emotion
+  vectors, sentiment heads, or continuous affect embeddings must either fit
+  that design’s layers (discrete / named dimensional / frame-local /
+  empirical-with-provenance) or be rejected as off-thesis. Predictions
+  P-AFF1–P-AFF5 are registered there before implementation.
+- **First executable cut: character-affect obligations, not a corpus.** Reuse
+  temporal plant/discharge and owned-frame visibility (Chekhov-shaped
+  anti-vacuity: resolution refuses while a planted slight/fear/promise remains
+  open). Negative controls: unwitnessed events do not update the target’s
+  affect; nested “Anne believes Sally is angry” uses nested frames without a
+  new emotion modal. Depends on graft-back / lifetime clarity only insofar as
+  the demo mutates nested models directly—prefer event-flow like Sally–Anne.
+- **Optional discrete affect corpus only with matcher bets.** Plutchik
+  opposites as mirror/opposition candidates (P-AFF1); intensity as order
+  family only if templates are real. Seeds only; never hand-edit
+  `data/*/nodes.json`.
+- **No free-text emotion benchmark early.** P-AFF3 expects lexicon/frequency
+  baselines to match or beat tiny classifiers without structured cues. If a
+  sentiment split is ever opened, ship those baselines in the same artifact
+  or refuse the claim.
+- **Visual emotion maps share the visual protocol, not the physics equations.**
+  Circumplex/wheel diagram twins wait on the same oracle ordering as
+  Lissajous (P-AFF5). Inconsistent-sector negatives must make the geometry
+  verifier load-bearing.
+- **Do not merge affect with SHM by metaphor.** “Emotional resonance” remains
+  prose until a registered structural prediction fires and is adjudicated.
 
 ## Frame registry
 

@@ -193,6 +193,12 @@ returned.
   protocols.
 - Explore deeper reference-frame physics: Galilean boosts as transformations,
   acceleration invariance, and rotating-frame terms with a physics verifier.
+- Post-matrix science lane (not a v0.6 gate): SHM / frequency / multiplanar
+  coupling seeds extending Hooke, kept distinct from Kepler and from
+  rotating-frame scope; see BACKLOG “Physics oscillation / multiplanar ladder.”
+- Affect enters only under `docs/DESIGN-affect.md` (design-only in this
+  cycle): owned-frame obligations and discrete relations later; no continuous
+  emotion embeddings and no free-text sentiment benchmark mid-matrix.
 - Re-adjudicate the Relational Frame Theory coverage table; deixis must arise
   from owner/here/now frames rather than a bespoke label.
 - Keep trust roots external. Provability-logic nodes describe why the harness
