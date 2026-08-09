@@ -25,6 +25,20 @@ because one branch owns both of them; see docs/BACKLOG.md on cross-corpus
 reciprocity. Do not "simplify" either template without editing the other --
 folding the constant into the logarithm's base on one side alone silently
 breaks the twin.
+
+Reference-frame predictions were registered before their adjudicating matcher
+run in docs/DESIGN-cognitive-frames.md as P-CF2 and P-CF3.  This seed repeats
+them at the source-of-truth boundary:
+
+* P-CF2: the rotating-frame declaration may family with
+  narrative.frames.cartoon_gravity because both scopes suspend an ordinary
+  physics law and admit a local dynamics premise.  The matcher cannot read
+  scope, so the prediction is deliberately at risk: the physical equation is
+  not to be respelled as a temporal liveness law to make it fire.
+* P-CF3: Galilean velocity addition should join an existing additive or
+  composition family rather than create a new structural archetype.
+
+Both outcomes, including a scope-invisible P-CF2 miss, are findings.
 """
 
 from __future__ import annotations
@@ -47,6 +61,8 @@ MUL = op("*", "multiplication", 2, "arithmetic")
 DIV = op("/", "division", 2, "arithmetic")
 POW = op("^", "exponentiation", 2, "arithmetic")
 NEG = op("-", "negation", 1, "arithmetic")
+ADD = op("+", "addition", 2, "arithmetic")
+IMPL = op("implies", "implication", 2, "logical")
 
 
 def slot(sid, cat, role):
@@ -66,7 +82,7 @@ def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
          archetype, template, slots, invariants, symbols, operators,
          meaning, significance, conditions, provenance, disciplines=None,
          functionals=None, constants=None, index_sets=None, failure_modes=None,
-         inferential_links=None, keywords=None):
+         inferential_links=None, keywords=None, scope=None):
     interpretation = {"statement_meaning": meaning,
                       "statistical_significance": significance,
                       "regularity_conditions": conditions}
@@ -92,6 +108,8 @@ def node(sid, title, cls, status, subfield, topic, ascii_, latex, forms,
     }
     if keywords:
         out["keywords"] = keywords
+    if scope is not None:
+        out["scope"] = scope
     return out
 
 
@@ -426,6 +444,131 @@ NODES = [
              equivalent_to=["infotheory.entropy.shannon_entropy"]),
          keywords=["entropy", "Gibbs", "Boltzmann", "statistical mechanics",
                    "microstates", "information", "Landauer"]),
+
+    node("physics.frames.inertial_frame_definition",
+         "Inertial Frame Definition",
+         "model_specification", "formal", "classical_mechanics",
+         "frames_of_reference",
+         "net_force = 0 implies acceleration = 0",
+         "\\mathbf{F}_{\\mathrm{net}}=0 \\Rightarrow \\mathbf{a}=0",
+         [{"form_id": "newton_first_law", "notation_system": "ascii",
+           "expression": "a free body remains at rest or in uniform straight-line motion"}],
+         "zero_response_under_zero_input",
+         "IMPLIES(NET_FORCE = ZERO, ACCELERATION = ZERO)",
+         [slot("NET_FORCE", "variable", "net_force"),
+          slot("ACCELERATION", "variable", "acceleration"),
+          slot("ZERO", "constant", "additive_identity")],
+         ["The same zero denotes the additive identity in force and acceleration spaces; the implication is the frame criterion, not a claim that every body is force-free."],
+         [sym("F_net", "variable", "net_force", "Net external force."),
+          sym("a", "variable", "acceleration", "Acceleration measured in the candidate frame."),
+          sym("0", "constant", "additive_identity", "The relevant zero vector.")],
+         [EQ, IMPL],
+         "A reference frame is inertial when a force-free body has zero acceleration in that frame.",
+         "Makes the law suspended by a non-inertial frame an explicit corpus node rather than prose attached to Newton's second law.",
+         ["Classical mechanics", "Force-free test body", "Speeds far below c"],
+         [{"citation_key": "mit801_ch11",
+           "bibliographic_entry": "MIT OpenCourseWare. 8.01SC Classical Mechanics, Chapter 11: Reference Frames.",
+           "url": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/mit8_01scs22_chapter11.pdf"}],
+         keywords=["inertial frame", "Newton first law", "reference frame"]),
+
+    node("physics.frames.galilean_velocity_addition",
+         "Galilean Velocity Addition",
+         "transformation", "derived", "classical_mechanics",
+         "frames_of_reference",
+         "object_velocity = relative_velocity + frame_velocity",
+         "\\mathbf{u}=\\mathbf{u}' + \\mathbf{v}",
+         [{"form_id": "subtractive", "notation_system": "ascii",
+           "expression": "relative_velocity = object_velocity - frame_velocity",
+           "scope_note": "The equivalent form usually written as u' = u - v."}],
+         "additive_frame_transformation",
+         "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+         [slot("OBJECT_VELOCITY", "variable", "velocity_in_base_frame"),
+          slot("RELATIVE_VELOCITY", "variable", "velocity_in_moving_frame"),
+          slot("FRAME_VELOCITY", "variable", "frame_velocity")],
+         ["The same frame-velocity term transforms every object's velocity.",
+          "Composition is additive only between inertial frames in Galilean mechanics."],
+         [sym("u", "variable", "velocity_in_base_frame", "Object velocity in the base frame."),
+          sym("u_prime", "variable", "velocity_in_moving_frame", "Object velocity in the translating frame."),
+          sym("v", "variable", "frame_velocity", "Velocity of the translating frame.")],
+         [EQ, ADD],
+         "An object's velocity in the base inertial frame is the sum of its velocity relative to a translating inertial frame and that frame's velocity.",
+         "P-CF3's test: relative motion should reuse an existing additive skeleton rather than require a frame-specific learned operation.",
+         ["Frames translate uniformly without rotation", "Galilean, not relativistic, kinematics"],
+         [{"citation_key": "mit801_ch11",
+           "bibliographic_entry": "MIT OpenCourseWare. 8.01SC Classical Mechanics, Chapter 11: Reference Frames.",
+           "url": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/mit8_01scs22_chapter11.pdf"},
+          {"citation_key": "fowler_galilean",
+           "bibliographic_entry": "Fowler, M. Galileo and Einstein, Lecture 1: Space and Time in Newtonian Physics. University of Virginia.",
+           "url": "https://galileo.phys.virginia.edu/classes/252/lecture1.htm"}],
+         keywords=["Galilean transformation", "velocity addition", "relative motion"]),
+
+    node("physics.frames.galilean_acceleration_invariance",
+         "Galilean Acceleration Invariance",
+         "transformation", "derived", "classical_mechanics",
+         "frames_of_reference",
+         "moving_frame_acceleration = base_frame_acceleration",
+         "\\mathbf{a}'=\\mathbf{a}",
+         [{"form_id": "derivative", "notation_system": "ascii",
+           "expression": "d(relative_velocity)/dt = d(object_velocity)/dt when frame_velocity is constant"}],
+         "invariant_under_frame_transformation",
+         "MOVING_ACCELERATION = BASE_ACCELERATION",
+         [slot("MOVING_ACCELERATION", "variable", "moving_frame_measurement"),
+          slot("BASE_ACCELERATION", "variable", "base_frame_measurement")],
+         ["Differentiating the velocity transformation removes the constant boost velocity."],
+         [sym("a_prime", "variable", "moving_frame_measurement", "Acceleration in the translating frame."),
+          sym("a", "variable", "base_frame_measurement", "Acceleration in the base frame.")],
+         [EQ],
+         "Uniformly translating inertial observers measure the same acceleration.",
+         "Exhibits the world-tier/frame-local seam: velocities change under a Galilean boost while acceleration and Newtonian dynamics are invariant.",
+         ["Constant relative frame velocity", "No relative rotation"],
+         [{"citation_key": "mit801_ch11",
+           "bibliographic_entry": "MIT OpenCourseWare. 8.01SC Classical Mechanics, Chapter 11: Reference Frames.",
+           "url": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/mit8_01scs22_chapter11.pdf"}],
+         keywords=["Galilean invariance", "acceleration", "inertial frame"]),
+
+    node("physics.frames.rotating_frame",
+         "Uniformly Rotating Reference Frame Declaration",
+         "transformation", "derived", "classical_mechanics",
+         "non_inertial_frames",
+         "apparent_acceleration = inertial_acceleration + centrifugal_acceleration + coriolis_acceleration",
+         "\\mathbf{a}_{\\mathrm{rot}}=\\mathbf{a}_{\\mathrm{in}}+\\mathbf{a}_{\\mathrm{cf}}+\\mathbf{a}_{\\mathrm{cor}}",
+         [{"form_id": "force_form", "notation_system": "ascii",
+           "expression": "apparent_force = real_force + centrifugal_force + coriolis_force"}],
+         "non_inertial_additive_correction",
+         "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+         [slot("APPARENT_ACCELERATION", "variable", "rotating_frame_measurement"),
+          slot("INERTIAL_ACCELERATION", "variable", "inertial_frame_measurement"),
+          slot("CENTRIFUGAL_ACCELERATION", "variable", "frame_local_correction"),
+          slot("CORIOLIS_ACCELERATION", "variable", "velocity_dependent_correction")],
+         ["The correction terms are frame-local: they disappear when the same motion is described in an inertial frame.",
+          "Uniform rotation removes the Euler-acceleration term; changing angular velocity requires one more summand."],
+         [sym("a_rot", "variable", "rotating_frame_measurement", "Acceleration measured in the rotating frame."),
+          sym("a_in", "variable", "inertial_frame_measurement", "Acceleration described in an inertial frame."),
+          sym("a_cf", "variable", "frame_local_correction", "Centrifugal acceleration admitted locally."),
+          sym("a_cor", "variable", "velocity_dependent_correction", "Coriolis acceleration admitted locally.")],
+         [EQ, ADD],
+         "A uniformly rotating observer recovers Newtonian form by adding centrifugal and Coriolis accelerations to the inertial description.",
+         "P-CF2's cross-domain scope test. The scope mechanism matches cartoon gravity, but the physical equation remains an additive correction law rather than being authored into a temporal liveness shape.",
+         ["Uniform angular velocity", "Classical mechanics", "A declared rotating coordinate frame"],
+         [{"citation_key": "mit801_ch11",
+           "bibliographic_entry": "MIT OpenCourseWare. 8.01SC Classical Mechanics, Chapter 11: Reference Frames.",
+           "url": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/mit8_01scs22_chapter11.pdf"}],
+         inferential_links=links(
+             composed_with=["physics.frames.inertial_frame_definition"]),
+         keywords=["rotating frame", "centrifugal", "Coriolis", "fictitious force"],
+         scope={
+             "frame": "physics.frames.rotating_frame",
+             "role": "declaration",
+             "frame_title": "Uniformly rotating reference frame",
+             "premises": [{
+                 "premise_id": "rotating_corrections",
+                 "expression": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+             }],
+             "suspends": ["physics.frames.inertial_frame_definition"],
+             "governed_by": ["narrative.frame.frame_consistency"],
+             "on_exit": "conjectured",
+             "retrieval": "open",
+         }),
 ]
 
 

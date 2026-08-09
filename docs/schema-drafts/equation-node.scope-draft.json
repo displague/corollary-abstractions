@@ -566,7 +566,7 @@
         "frame": {
           "type": "string",
           "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
-          "$comment": "Frame identifier, conventionally <discipline>.frames.<name> (e.g. narrative.frames.cartoon_gravity). Underscores are allowed in the FIRST segment, unlike statement_id, whose pattern forbids them -- docs/BACKLOG.md records that asymmetry as a defect and this draft declines to reproduce it. Today the validator checks the pattern and that nodes sharing a frame agree on the frame's properties; when a frames/ registry lands this becomes a resolvable reference and no node has to change."
+          "$comment": "HISTORICAL DRAFT: originally an opaque <discipline>.frames.<name> identifier. The implemented v0.5 convention now requires this value to resolve to the scoped declaration node with the same statement_id; see the live schema and docs/DESIGN-scope-and-modality.md amendment."
         },
         "role": {
           "type": "string",

@@ -14,9 +14,9 @@ from proof_artifacts import (
 )
 
 
-# Mirrors $defs.frameScope in schema/equation-node.schema.json. Underscores
-# are allowed in the first segment on purpose (statement_id forbids them;
-# BACKLOG records that asymmetry as a defect, not a convention to copy).
+# Mirrors $defs.frameScope in schema/equation-node.schema.json. The syntax is
+# retained for compatibility; scope_errors additionally requires the value to
+# resolve to the declaration node that owns the frame.
 FRAME_ID_RE = re.compile(r"^[a-z0-9_]+(\.[a-z0-9_]+)+\Z")
 FRAME_ROLES = {"declaration", "assertion"}
 # Frame-level properties every member of a frame must agree on: they describe
@@ -170,14 +170,15 @@ def scope_errors(
     """Closed-form checks for the optional `scope` object.
 
     Runs even when jsonschema is absent (pattern/role fallback), and adds
-    the two checks jsonschema cannot express: suspends/governed_by must
-    resolve against the merged graph, and nodes sharing a frame identifier
-    must agree on the frame's properties.
+    checks jsonschema cannot express: suspends/governed_by must resolve
+    against the merged graph, the frame id must identify its declaration
+    node, and nodes sharing a frame must agree on frame properties.
     """
     errors: list[str] = []
-    resolvable = {
-        n.get("statement_id") for n in nodes if n.get("statement_id")
-    } | (known_ids or set())
+    node_by_id = {
+        n.get("statement_id"): n for n in nodes if n.get("statement_id")
+    }
+    resolvable = set(node_by_id) | (known_ids or set())
     frames: dict[str, list[tuple[str, dict]]] = {}
 
     for i, node in enumerate(nodes):
@@ -220,6 +221,22 @@ def scope_errors(
             frames.setdefault(frame, []).append((node_id, scope))
 
     for frame, members in sorted(frames.items()):
+        declaration = node_by_id.get(frame)
+        declaration_scope = (
+            declaration.get("scope") if isinstance(declaration, dict) else None
+        )
+        if declaration is None:
+            errors.append(
+                f"frame `{frame}` must resolve to its declaration node"
+            )
+        elif not (
+            isinstance(declaration_scope, dict)
+            and declaration_scope.get("frame") == frame
+            and declaration_scope.get("role") == "declaration"
+        ):
+            errors.append(
+                f"frame `{frame}` must identify a scoped declaration node"
+            )
         for prop in FRAME_AGREEMENT_PROPS:
             stated: dict[str, list[str]] = {}
             for node_id, scope in members:

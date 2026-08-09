@@ -996,3 +996,35 @@ and WAITING callbacks run first, then the retrieval verifier atomically commits
 all accepted reply ids immediately before `RunResult` returns. The exact
 exception-and-retry control proves an uncommitted answer remains usable while a
 returned run remains replay-resistant. Suite: 155.
+
+## Physical reference frames (v0.5 item 10b, first cut)
+
+Four source-grounded physics nodes move the corpus 209 -> 213: inertial-frame
+definition, Galilean velocity addition, Galilean acceleration invariance, and
+a uniformly rotating-frame declaration. Only the rotating statement is scoped;
+the two Galilean transformations are claims *about* relationships among frames,
+not claims local to one frame. The rotating declaration suspends the explicit
+inertial-frame criterion and admits centrifugal/Coriolis corrections locally.
+
+The two registered predictions split. P-CF3 fired exactly: Galilean velocity
+addition and `algtop.homology.chain_rank_nullity` share the typed skeleton
+`?0:V = +(?1:V, ?2:V)`. P-CF2 missed at shape, typed, family, aliased, and
+mirror levels. The miss is load-bearing: rotating dynamics is honestly a
+three-term additive correction; cartoon gravity is honestly a temporal
+liveness rule. Their commonality lives in scope metadata and executor rules,
+which the signature matcher deliberately ignores. Rewriting either template
+to force a twin would erase the result.
+
+Matcher counts move 28/29/28/30/5 -> 29/30/29/31/5, entirely from the new
+Galilean pair; mirror remains 5 and ladder violations remain zero. Decomposition
+reports 185/213 statements with known forms and mean groundedness 0.762.
+Specialization moves 626 -> 655 edges (566 cross-discipline). All 29 new edges
+touch Galilean addition or the rotating-frame additive law; their cheapest
+members are reasonable additive-arity specializations, while the costlier tail
+remains analogy-like and is not counted as proof of physics transfer.
+
+The slice also resolves the frame-id ambiguity exposed by the first scoped
+nodes. `scope.frame` now resolves to the scoped declaration node with that same
+`statement_id`; missing, unscoped, and assertion-owned ids fail validation.
+This uses declaration nodes as the minimal frame registry and defers a second
+artifact until metadata duplication demonstrates a need. Suite: 155 -> 158.

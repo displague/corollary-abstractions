@@ -1605,6 +1605,23 @@
       "looseness": 1
     },
     {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "physics.frames.rotating_frame",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "via": "absorption",
+      "cost": 3,
+      "structure_cost": 2,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "CHAINRANK": "APPARENT_ACCELERATION",
+        "CYCLERANK": "INERTIAL_ACCELERATION",
+        "IMAGERANK": "+(CENTRIFUGAL_ACCELERATION, CORIOLIS_ACCELERATION)"
+      },
+      "looseness": 1
+    },
+    {
       "general": "calculus.approximation.tangent_line_linearization",
       "specific": "ml.adaptation.lora_low_rank_update",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
@@ -2412,6 +2429,59 @@
         "FLOW": "2",
         "POTENTIAL": "sum(DEGREE_i)",
         "RESISTANCE": "EDGES"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "physics.frames.rotating_frame",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "via": "absorption",
+      "cost": 3,
+      "structure_cost": 2,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(CENTRIFUGAL_ACCELERATION, CORIOLIS_ACCELERATION)",
+        "OBJECT_VELOCITY": "APPARENT_ACCELERATION",
+        "RELATIVE_VELOCITY": "INERTIAL_ACCELERATION"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "economics.macroeconomics.gdp_expenditure_identity",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "OUTPUT = CONSUMPTION + INVESTMENT + GOVERNMENT + NET_EXPORTS",
+      "via": "absorption",
+      "cost": 3,
+      "structure_cost": 2,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "OUTPUT",
+        "CENTRIFUGAL_ACCELERATION": "INVESTMENT",
+        "CORIOLIS_ACCELERATION": "+(GOVERNMENT, NET_EXPORTS)",
+        "INERTIAL_ACCELERATION": "CONSUMPTION"
+      },
+      "looseness": 1
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "geotop.polyhedra.euler_polyhedron_formula",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "VERTICES - EDGES + FACES = 2",
+      "via": "compound",
+      "cost": 3,
+      "structure_cost": 3,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "2",
+        "CENTRIFUGAL_ACCELERATION": "FACES",
+        "CORIOLIS_ACCELERATION": "neg(EDGES)",
+        "INERTIAL_ACCELERATION": "VERTICES"
       },
       "looseness": 1
     },
@@ -3564,6 +3634,23 @@
       "looseness": 1
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "economics.macroeconomics.gdp_expenditure_identity",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "OUTPUT = CONSUMPTION + INVESTMENT + GOVERNMENT + NET_EXPORTS",
+      "via": "absorption",
+      "cost": 4,
+      "structure_cost": 2,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(INVESTMENT, GOVERNMENT, NET_EXPORTS)",
+        "OBJECT_VELOCITY": "OUTPUT",
+        "RELATIVE_VELOCITY": "CONSUMPTION"
+      },
+      "looseness": 1
+    },
+    {
       "general": "physics.mechanics.kinetic_energy",
       "specific": "geometry.circle_formulas.circle_area_from",
       "general_template": "ENERGY = CONSTANT * MASS * SPEED^2",
@@ -4126,6 +4213,57 @@
         "FLOW": "LIKELIHOOD",
         "POTENTIAL": "POSTERIOR",
         "RESISTANCE": "*(PRIOR, inv(NORMALIZER))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "algtop.invariants.euler_characteristic_complex",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "EULERCHAR = VERTICES - EDGES + FACES",
+      "via": "absorption",
+      "cost": 4,
+      "structure_cost": 3,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(FACES, neg(EDGES))",
+        "OBJECT_VELOCITY": "EULERCHAR",
+        "RELATIVE_VELOCITY": "VERTICES"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "probstat.regression.slr_conditional_expectation",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "E[RV|COND] = INTERCEPT + SLOPE*INPUT",
+      "via": "compound",
+      "cost": 4,
+      "structure_cost": 4,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "*(SLOPE, INPUT)",
+        "OBJECT_VELOCITY": "E[](RV, COND)",
+        "RELATIVE_VELOCITY": "INTERCEPT"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "probstat.regression.slr_stochastic_specification",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "via": "absorption",
+      "cost": 4,
+      "structure_cost": 3,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(NOISE_i, *(SLOPE, PRED_i))",
+        "OBJECT_VELOCITY": "RV_i",
+        "RELATIVE_VELOCITY": "INTERCEPT"
       },
       "looseness": 2
     },
@@ -4799,6 +4937,23 @@
         "SCALING": "1",
         "WEIGHT": "MEMORYNEXT",
         "WEIGHTFROZEN": "*(INPUTGATE, OUTER(VALUE, KEY))"
+      },
+      "looseness": 2
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "geotop.polyhedra.euler_polyhedron_formula",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "VERTICES - EDGES + FACES = 2",
+      "via": "absorption+compound",
+      "cost": 5,
+      "structure_cost": 4,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(FACES, neg(EDGES))",
+        "OBJECT_VELOCITY": "2",
+        "RELATIVE_VELOCITY": "VERTICES"
       },
       "looseness": 2
     },
@@ -7213,6 +7368,40 @@
       "looseness": 3
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "diffgeo.surfaces.euclidean_line_element",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "LINEELEMENT^2 = DU^2 + DV^2",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "^(DV, 2)",
+        "OBJECT_VELOCITY": "^(LINEELEMENT, 2)",
+        "RELATIVE_VELOCITY": "^(DU, 2)"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "geometry.right_triangles.pythagorean_theorem",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "SIDE1^2 + SIDE2^2 = HYPOTENUSE^2",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "^(SIDE2, 2)",
+        "OBJECT_VELOCITY": "^(HYPOTENUSE, 2)",
+        "RELATIVE_VELOCITY": "^(SIDE1, 2)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "physics.kinematics.average_speed",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATE = QUANTITY / INTERVAL",
@@ -8395,6 +8584,23 @@
         "FLOW": "DEGREE(OUTER)",
         "POTENTIAL": "DEGREE(COMPOSE(OUTER, INNER))",
         "RESISTANCE": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "morphology.quantity.morpheme_count_additivity",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "LENGTH(CONCAT(FIRST, SECOND)) = LENGTH(FIRST) + LENGTH(SECOND)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "LENGTH(SECOND)",
+        "OBJECT_VELOCITY": "LENGTH(CONCAT(FIRST, SECOND))",
+        "RELATIVE_VELOCITY": "LENGTH(FIRST)"
       },
       "looseness": 4
     },
@@ -9607,6 +9813,57 @@
       "looseness": 5
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "calculus.integration.ftc_evaluation_part",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "INTEGRAL(D(F)) = F(UPPER) - F(LOWER)",
+      "via": "compound",
+      "cost": 8,
+      "structure_cost": 8,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "neg(F(LOWER))",
+        "OBJECT_VELOCITY": "INTEGRAL(D(F))",
+        "RELATIVE_VELOCITY": "F(UPPER)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "diffgeo.stokes.stokes_zero_form_case",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "INTEGRAL(D(F)) = F(ENDPOINT) - F(STARTPOINT)",
+      "via": "compound",
+      "cost": 8,
+      "structure_cost": 8,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "neg(F(STARTPOINT))",
+        "OBJECT_VELOCITY": "INTEGRAL(D(F))",
+        "RELATIVE_VELOCITY": "F(ENDPOINT)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "infotheory.mutualinfo.mutual_information",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "SHAREDINFORMATION = ENTROPYOF(FIRST) + ENTROPYOF(SECOND) - ENTROPYOF(FIRST, SECOND)",
+      "via": "absorption",
+      "cost": 8,
+      "structure_cost": 7,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(ENTROPYOF(SECOND), neg(ENTROPYOF(FIRST, SECOND)))",
+        "OBJECT_VELOCITY": "SHAREDINFORMATION",
+        "RELATIVE_VELOCITY": "ENTROPYOF(FIRST)"
+      },
+      "looseness": 5
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "calculus.differentiation.chain_rule",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -10148,6 +10405,23 @@
       "looseness": 6
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "calculus.differentiation.product_rule",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "D(FUNC1*FUNC2) = D(FUNC1)*FUNC2 + FUNC1*D(FUNC2)",
+      "via": "compound",
+      "cost": 9,
+      "structure_cost": 9,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "*(FUNC1, D(FUNC2))",
+        "OBJECT_VELOCITY": "D(*(FUNC1, FUNC2))",
+        "RELATIVE_VELOCITY": "*(FUNC2, D(FUNC1))"
+      },
+      "looseness": 6
+    },
+    {
       "general": "algtop.homology.chain_rank_nullity",
       "specific": "geomodel.quaternions.unit_quaternion_constraint",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
@@ -10254,6 +10528,41 @@
         "STEPWIDTH": "inv(*(2, COEFF0))",
         "VALUELEFT": "neg(COEFF1)",
         "VALUERIGHT": "pm(SQRT(DISC))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "geomodel.quaternions.unit_quaternion_constraint",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+      "via": "absorption+compound",
+      "cost": 10,
+      "structure_cost": 8,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(^(IMAGI, 2), ^(IMAGJ, 2), ^(IMAGK, 2))",
+        "OBJECT_VELOCITY": "1",
+        "RELATIVE_VELOCITY": "^(REALPART, 2)"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "geomodel.quaternions.unit_quaternion_constraint",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "REALPART^2 + IMAGI^2 + IMAGJ^2 + IMAGK^2 = 1",
+      "via": "absorption+compound",
+      "cost": 10,
+      "structure_cost": 9,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "1",
+        "CENTRIFUGAL_ACCELERATION": "^(IMAGI, 2)",
+        "CORIOLIS_ACCELERATION": "+(^(IMAGJ, 2), ^(IMAGK, 2))",
+        "INERTIAL_ACCELERATION": "^(REALPART, 2)"
       },
       "looseness": 5
     },
@@ -10543,6 +10852,24 @@
       "looseness": 6
     },
     {
+      "general": "physics.frames.rotating_frame",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "compound",
+      "cost": 10,
+      "structure_cost": 10,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "^(LINEELEMENT, 2)",
+        "CENTRIFUGAL_ACCELERATION": "*(COEFFE, ^(DU, 2))",
+        "CORIOLIS_ACCELERATION": "*(COEFFG, ^(DV, 2))",
+        "INERTIAL_ACCELERATION": "*(2, COEFFF, DU, DV)"
+      },
+      "looseness": 6
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "chemistry.kinetics.arrhenius_equation",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -10822,6 +11149,95 @@
       "looseness": 7
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "diffgeo.surfaces.first_fundamental_form",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "LINEELEMENT^2 = COEFFE*DU^2 + 2*COEFFF*DU*DV + COEFFG*DV^2",
+      "via": "absorption+compound",
+      "cost": 11,
+      "structure_cost": 10,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(*(COEFFE, ^(DU, 2)), *(COEFFG, ^(DV, 2)))",
+        "OBJECT_VELOCITY": "^(LINEELEMENT, 2)",
+        "RELATIVE_VELOCITY": "*(2, COEFFF, DU, DV)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "algtop.invariants.euler_characteristic_valuation",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "CARD(JOIN(SPACEA, SPACEB))",
+        "CENTRIFUGAL_ACCELERATION": "CARD(SPACEB)",
+        "CORIOLIS_ACCELERATION": "neg(CARD(MEET(SPACEA, SPACEB)))",
+        "INERTIAL_ACCELERATION": "CARD(SPACEA)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "geotop.measure.area_inclusion_exclusion",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "CARD(JOIN(REGA, REGB))",
+        "CENTRIFUGAL_ACCELERATION": "CARD(REGB)",
+        "CORIOLIS_ACCELERATION": "neg(CARD(MEET(REGA, REGB)))",
+        "INERTIAL_ACCELERATION": "CARD(REGA)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "CARD(JOIN(FIRST, SECOND))",
+        "CENTRIFUGAL_ACCELERATION": "CARD(SECOND)",
+        "CORIOLIS_ACCELERATION": "neg(CARD(MEET(FIRST, SECOND)))",
+        "INERTIAL_ACCELERATION": "CARD(FIRST)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "physics.frames.rotating_frame",
+      "specific": "settheory.cardinality.inclusion_exclusion_two_sets",
+      "general_template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "specific_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "APPARENT_ACCELERATION": "CARD(JOIN(SETA, SETB))",
+        "CENTRIFUGAL_ACCELERATION": "CARD(SETB)",
+        "CORIOLIS_ACCELERATION": "neg(CARD(MEET(SETA, SETB)))",
+        "INERTIAL_ACCELERATION": "CARD(SETA)"
+      },
+      "looseness": 7
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "algebra.polynomial_equations.quadratic_formula",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -10852,6 +11268,23 @@
         "CHAINRANK": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "CYCLERANK": "*(SCALAR1, D(FUNC1))",
         "IMAGERANK": "*(SCALAR2, D(FUNC2))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "calculus.differentiation.linearity_of_derivative",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "D(SCALAR1*FUNC1 + SCALAR2*FUNC2) = SCALAR1*D(FUNC1) + SCALAR2*D(FUNC2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "*(SCALAR2, D(FUNC2))",
+        "OBJECT_VELOCITY": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
+        "RELATIVE_VELOCITY": "*(SCALAR1, D(FUNC1))"
       },
       "looseness": 8
     },
@@ -11014,6 +11447,74 @@
         "CHAINRANK": "CARD(JOIN(SETA, SETB))",
         "CYCLERANK": "CARD(SETA)",
         "IMAGERANK": "+(CARD(SETB), neg(CARD(MEET(SETA, SETB))))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "algtop.invariants.euler_characteristic_valuation",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "CARD(JOIN(SPACEA, SPACEB)) = CARD(SPACEA) + CARD(SPACEB) - CARD(MEET(SPACEA, SPACEB))",
+      "via": "absorption+compound",
+      "cost": 12,
+      "structure_cost": 11,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(CARD(SPACEB), neg(CARD(MEET(SPACEA, SPACEB))))",
+        "OBJECT_VELOCITY": "CARD(JOIN(SPACEA, SPACEB))",
+        "RELATIVE_VELOCITY": "CARD(SPACEA)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "geotop.measure.area_inclusion_exclusion",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "CARD(JOIN(REGA, REGB)) = CARD(REGA) + CARD(REGB) - CARD(MEET(REGA, REGB))",
+      "via": "absorption+compound",
+      "cost": 12,
+      "structure_cost": 11,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(CARD(REGB), neg(CARD(MEET(REGA, REGB))))",
+        "OBJECT_VELOCITY": "CARD(JOIN(REGA, REGB))",
+        "RELATIVE_VELOCITY": "CARD(REGA)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "infotheory.mutualinfo.entropy_inclusion_exclusion",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "CARD(JOIN(FIRST, SECOND)) = CARD(FIRST) + CARD(SECOND) - CARD(MEET(FIRST, SECOND))",
+      "via": "absorption+compound",
+      "cost": 12,
+      "structure_cost": 11,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(CARD(SECOND), neg(CARD(MEET(FIRST, SECOND))))",
+        "OBJECT_VELOCITY": "CARD(JOIN(FIRST, SECOND))",
+        "RELATIVE_VELOCITY": "CARD(FIRST)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "settheory.cardinality.inclusion_exclusion_two_sets",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))",
+      "via": "absorption+compound",
+      "cost": 12,
+      "structure_cost": 11,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "+(CARD(SETB), neg(CARD(MEET(SETA, SETB))))",
+        "OBJECT_VELOCITY": "CARD(JOIN(SETA, SETB))",
+        "RELATIVE_VELOCITY": "CARD(SETA)"
       },
       "looseness": 8
     }

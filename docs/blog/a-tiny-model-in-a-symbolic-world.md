@@ -304,6 +304,18 @@ not leak into the global corpus; they revert to claims under that premise set.
 That is as important for a fictional golden chicken as it is for a temporary
 assumption in a proof.
 
+The first non-fiction scope test now makes that comparison literal. A rotating
+reference frame locally suspends the inertial-frame criterion and admits
+centrifugal and Coriolis corrections. It uses the same declaration ownership
+and suspension contract as cartoon gravity, but its equation does not match
+the cartoon's temporal story rule. That registered prediction missed, usefully:
+scope is shared control structure, not a promise that all scoped content has
+one formula. A companion prediction fired exactly—Galilean velocity addition
+has the same typed additive skeleton as rank decomposition in algebraic
+topology. The corpus now has 213 statements; the matcher found the arithmetic
+relationship without being taught that “relative motion” and “chain rank” are
+related words.
+
 ## Conversation, clarification, and dead ends
 
 Not every incomplete request should trigger a database lookup. “Make the story
@@ -338,7 +350,7 @@ detail of individual tools.
 
 | Capability | Present state |
 |---|---|
-| Cross-discipline symbolic knowledge | Operational: 209 nodes, 21 disciplines |
+| Cross-discipline symbolic knowledge | Operational: 213 nodes, 21 disciplines |
 | Structural twins, specializations, decomposition | Operational and measured |
 | Knowledge supplied in context | Consumed successfully by a tiny pointer |
 | Retrieval initiated by the model | Local oracle adapter operational; learned choice/external tools open |
@@ -388,16 +400,14 @@ knows, assumes, tries, proves, and cannot resolve.
 
 The immediate path is now concrete:
 
-1. Author the `physics.frames` lane and adjudicate the rotating-frame/cartoon-
-   gravity and Galilean-composition predictions.
-2. Add FrameSpec ownership and visibility-filtered events, then run the
+1. Add FrameSpec ownership and visibility-filtered events, then run the
    Sally–Anne false-belief demo before attempting nested frames.
-3. Add the licensed, external WordNet retrieval adapter with zero frame-verdict
+2. Add the licensed, external WordNet retrieval adapter with zero frame-verdict
    changes, and connect retrieval to external tools.
-4. Implement PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
-5. Replace committed Lean-transition replay with live PyPantograph application
+3. Implement PROVEN-gated `WRITE`; generalize POINT beyond retrieved context.
+4. Replace committed Lean-transition replay with live PyPantograph application
    and search.
-6. Make sessions and the existing dead-branch trace serializable with complete terminal
+5. Make sessions and the existing dead-branch trace serializable with complete terminal
    outcomes.
 7. Replace the deterministic oracle with a tiny verifier-coupled policy.
 8. Extend recurrent processing into the consumers that still fail at depth.

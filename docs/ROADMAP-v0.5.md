@@ -164,7 +164,7 @@ demo and a multi-step derivation remain one milestone in two costumes.
      escalation. Non-retrieval frame actions delegated through the wrapper are
      byte-for-byte verdict/evidence equivalent to `FrameAssertionVerifier`.
 
-     **Adjudication — fired:** the store exposes 702 attributable items
+     **Adjudication — fired:** the initial store exposed 702 attributable items
      (209 corpus, 209 lexicon, 67 structural groups, 208 decomposition entries,
      9 proof-linked summaries). The exact query returns six items spanning all
      five kinds; the truncated query takes the neighborhood path. RETRIEVE then
@@ -179,6 +179,10 @@ demo and a multi-step derivation remain one milestone in two costumes.
      token-neighborhood search is deterministic but unranked taste, and no
      learned policy chooses the point; open-language parsing into the canonical
      key remains unbuilt.
+
+     The physics.frames slice grows the same loader without adapter changes to
+     715 items (213 corpus, 213 lexicon, 69 structural groups, 211
+     decomposition entries, 9 proof-linked summaries).
 
      **Review corrections:** the first POINT implementation checked only that a
      position existed, so an unrelated retrieval could vacuously close the
@@ -447,14 +451,29 @@ demo and a multi-step derivation remain one milestone in two costumes.
       optional run-level commit hook only after goal/waiting callbacks succeed;
       ASK consumption moves there atomically. The exception-and-retry reproducer
       is the twenty-fifth control.
-    - **10b — physics.frames corpus lane**: velocity addition, acceleration
+    - **SHIPPED (first cut) — 10b, physics.frames corpus lane**: velocity addition, acceleration
       invariance, inertial-frame definition, and the rotating frame as a
       scope that suspends an inertia law and admits centrifugal force —
       a fictitious force IS a frame-local invention licensed by
       suspension. Adjudicates P-CF2 (rotating frame lands in one family
       with cartoon_gravity — first evidence scope generalizes beyond
       fiction) and P-CF3 (Galilean addition twins an existing composition
-      family). Forces the BACKLOG frame-id convention decision on day one.
+      family). The slice added four nodes (209 → 213) from the MIT 8.01 and
+      UVA Galilean references and resolved the frame-id convention: a frame id
+      is the statement id of its scoped declaration node, so assertions point
+      to a checked owner rather than an opaque near-collision.
+
+      P-CF3 fired exactly at shape and typed levels:
+      `physics.frames.galilean_velocity_addition` joined
+      `algtop.homology.chain_rank_nullity` on `?0:V = +(?1:V, ?2:V)`.
+      P-CF2 missed at every matcher level. That miss is the sharper result:
+      rotating-frame scope and cartoon-fiction scope share the executable
+      suspension contract, but the matcher reads only templates, and the
+      physically honest rotating-frame template is a three-term additive
+      correction rather than a temporal response law. Scope generalized in
+      the schema/validator, not in signature equivalence. Counts moved
+      28/29/28/30/5 → 29/30/29/31/5; specialization 626 → 655, with the
+      29 new edges confined to the two additive physics statements.
     - **10c — frame ownership + visibility-filtered updates**: `owner` on
       FrameSpec (additive schema change), `witnessed_by` on temporal
       events, divergence between an agent's frame and the world *derived*

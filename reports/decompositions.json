@@ -275,9 +275,10 @@
           "skeleton": "+(?0:V, ?1:V)",
           "grounded_via": "exact",
           "instance_of_statements": [
-            "economics.macroeconomics.fisher_equation"
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -357,9 +358,10 @@
           "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
-            "economics.macroeconomics.fisher_equation"
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -1428,9 +1430,10 @@
             "economics.macroeconomics.fisher_equation",
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
-            "numanalysis.integration.trapezoidal_rule"
+            "numanalysis.integration.trapezoidal_rule",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "pattern_recurs_in_n_statements": 6
+          "pattern_recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -2457,9 +2460,10 @@
           "skeleton": "+(?0:V, ?1:V)",
           "grounded_via": "exact",
           "instance_of_statements": [
-            "algtop.homology.chain_rank_nullity"
+            "algtop.homology.chain_rank_nullity",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -2886,9 +2890,10 @@
           "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
-            "economics.macroeconomics.fisher_equation"
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -3210,9 +3215,10 @@
           "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
-            "economics.macroeconomics.fisher_equation"
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -5510,9 +5516,10 @@
             "economics.macroeconomics.fisher_equation",
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
-            "numanalysis.integration.trapezoidal_rule"
+            "numanalysis.integration.trapezoidal_rule",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "pattern_recurs_in_n_statements": 6
+          "pattern_recurs_in_n_statements": 7
         }
       ]
     },
@@ -6157,9 +6164,10 @@
           "grounded_via": "exact",
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
-            "economics.macroeconomics.fisher_equation"
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -6693,6 +6701,46 @@
           "recurs_in_n_statements": 7
         }
       ]
+    },
+    {
+      "statement_id": "physics.frames.inertial_frame_definition",
+      "template": "IMPLIES(NET_FORCE = ZERO, ACCELERATION = ZERO)",
+      "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
+      "constituents": []
+    },
+    {
+      "statement_id": "physics.frames.galilean_velocity_addition",
+      "template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation"
+          ],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.frames.rotating_frame",
+      "template": "APPARENT_ACCELERATION = INERTIAL_ACCELERATION + CENTRIFUGAL_ACCELERATION + CORIOLIS_ACCELERATION",
+      "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
+      "constituents": []
     },
     {
       "statement_id": "settheory.boolean_laws.de_morgan_laws",

@@ -11,12 +11,17 @@ key name being admissible in one object and not its neighbour.
 > **Implementation status (2026-08-08).** This document records the prediction
 > and design baseline at 199 nodes. The scope schema and executor have since
 > shipped, and the payoff in §4 has landed as ten nodes (the cartoon-gravity
-> entry expands to a declaration/assertion pair): 209 nodes total, five
+> entry expands to a declaration/assertion pair): 213 nodes total after the
+> physics reference-frame first cut, five
 > mirror-only groups, and the `LT` strict-order correction. Historical baseline
 > measurements below are intentionally retained as the before-state. Review
 > caught one error in that baseline: heraldry/no-deus used an outer `ALWAYS`,
 > only partially reversing the response law. The implemented past forms use
 > `HISTORICALLY`; the matcher reverses the whole tree as one involution.
+> Frame identifiers have also graduated from opaque registry-ready strings:
+> each now resolves to the scoped declaration node whose `statement_id` owns
+> the frame. The former `narrative.frames.premise_persistence` near-collision
+> now points to `narrative.frame.premise_persistence` itself.
 
 This was written as a design and draft: at that point nothing here was authored
 into `data/`, the live schema was untouched, and the schema change existed only
@@ -139,7 +144,16 @@ not an entailment, "reciprocal" has no meaning for it, and there is nowhere to
 put `on_exit` or `retrieval`, which are properties of the frame rather than of
 any edge. Rejected.
 
-### 1.4 Recommendation: (A) now, (B) later, and (A)→(B) costs zero node edits
+### 1.4 Historical recommendation: (A) now, (B) later
+
+> **Implemented amendment (physics.frames slice).** The first two live frames
+> exposed conflicting precedents, so the reserved opaque namespace below was
+> not retained. A frame id now resolves to its declaration node: the node's
+> `statement_id` equals its own `scope.frame`, and assertions reference that
+> declaration. This is still option (A)'s additive node-local representation,
+> but it gains referential integrity without option (B)'s second schema. The
+> original zero-edit migration claim below is preserved as the prediction that
+> was later corrected; one near-collision required migration.
 
 Adopt **(A)**, with `scope.frame` specified from day one as an identifier in a
 reserved namespace (`<discipline>.frames.<name>`) rather than free text. Then

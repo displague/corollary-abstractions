@@ -13,6 +13,20 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Scope generalizes across domains without implying template equivalence.**
+  The rotating-physics frame and cartoon gravity both resolve to declaration
+  nodes, suspend an ordinary physics law, and admit local premises. P-CF2
+  nevertheless misses at every matcher level because the former is an
+  additive correction and the latter a temporal response. The executor-level
+  sameness and signature-level difference are both real. *near-miss,
+  scope/template boundary* (2026-08-09)
+
+- **Galilean velocity addition is rank decomposition in another vocabulary.**
+  `OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY` and algebraic
+  topology's `CHAINRANK = CYCLERANK + IMAGERANK` share the exact typed skeleton
+  `?0:V = +(?1:V, ?2:V)`. P-CF3 fired without respelling the standard law.
+  *exact, cross-discipline* (2026-08-09)
+
 - **Waiting is a controller outcome, not a failed proof search.** A valid ASK
   records one signed question and stops the generic controller as WAITING;
   EXHAUSTED still means policy had nothing more to propose, and SOLVED still

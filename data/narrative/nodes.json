@@ -1711,7 +1711,7 @@
         "session state"
       ],
       "scope": {
-        "frame": "narrative.frames.premise_persistence",
+        "frame": "narrative.frame.premise_persistence",
         "role": "declaration",
         "frame_title": "Premise persistence",
         "premises": [

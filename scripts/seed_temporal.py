@@ -2532,7 +2532,7 @@ NARRATIVE_NODES = [
          keywords=["frame premise", "persistence", "since", "session state"],
          canonical_objects=NARRATIVE_OBJECTS,
          scope={
-             "frame": "narrative.frames.premise_persistence",
+             "frame": "narrative.frame.premise_persistence",
              "role": "declaration",
              "frame_title": "Premise persistence",
              "premises": [{

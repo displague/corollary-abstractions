@@ -66,19 +66,52 @@ class MirrorReportTests(unittest.TestCase):
         nodes, problems = load_nodes(REPO_ROOT / "data")
         cls.report = build_report(nodes, problems)
 
-    def test_registered_group_counts_fire_without_typed_inflation(self) -> None:
-        self.assertEqual(self.report["nodes_analyzed"], 209)
+    def test_registered_group_counts_include_physics_frames_slice(self) -> None:
+        self.assertEqual(self.report["nodes_analyzed"], 213)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 28,
-                "typed": 29,
-                "family": 28,
-                "aliased": 30,
+                "shape": 29,
+                "typed": 30,
+                "family": 29,
+                "aliased": 31,
                 "mirror": 5,
             },
         )
         self.assertEqual(self.report["ladder_violations"], [])
+
+    def test_galilean_addition_fires_and_scope_only_prediction_misses(self) -> None:
+        typed_groups = {
+            frozenset(member["statement_id"] for member in group["members"])
+            for group in self.report["typed_twin_groups"]
+        }
+        self.assertIn(
+            frozenset(
+                {
+                    "algtop.homology.chain_rank_nullity",
+                    "physics.frames.galilean_velocity_addition",
+                }
+            ),
+            typed_groups,
+        )
+        rotating = "physics.frames.rotating_frame"
+        cartoon = "narrative.frames.cartoon_gravity"
+        for level in (
+            "shape_twin_groups",
+            "typed_twin_groups",
+            "family_twin_groups_beyond_typed",
+            "aliased_twin_groups_beyond_typed",
+            "mirror_twin_groups",
+        ):
+            self.assertFalse(
+                any(
+                    {rotating, cartoon}.issubset(
+                        {member["statement_id"] for member in group["members"]}
+                    )
+                    for group in self.report[level]
+                ),
+                level,
+            )
 
     def test_only_the_five_registered_mirror_groups_are_reported(self) -> None:
         actual = {

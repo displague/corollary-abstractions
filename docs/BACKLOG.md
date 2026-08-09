@@ -24,16 +24,18 @@ or commit history. Each item names the evidence that motivated it.
   truths must not reach ancestors, and suspension inheritance must be an
   explicit choice.
 
-- **physics.frames corpus lane, with the scope-generality predictions.**
+- **SHIPPED first cut — physics.frames corpus lane and scope predictions.**
   Rotating frame = suspends inertia law + admits centrifugal premise (a
   fictitious force IS the executor's suspension-licensed invention);
   Galilean invariance = the world-tier/frame-local seam physics already
   drew. P-CF2: rotating_frame families with cartoon_gravity (first
   evidence scope generalizes beyond fiction; a miss localizes what the
   two scope uses do not share). P-CF3: velocity addition twins an
-  existing composition family. Blocking dependency: the frame-id
-  convention decision (this section, below the fold) must be made when
-  these nodes are authored — they need frame ids on day one.
+  existing composition family. P-CF3 fired against algebraic topology's
+  rank decomposition. P-CF2 missed: shared scope metadata does not make an
+  additive correction equation twin a temporal liveness rule. Four nodes
+  shipped; deeper boost transformations and executable physics-verifier
+  semantics remain open.
 
 - **WordNet store adapter (parallel-safe; license obligations recorded).**
   Open English WordNet 2025 JSON at
@@ -144,19 +146,17 @@ or commit history. Each item names the evidence that motivated it.
   the duplicate-demo gap; it does not claim that global structural-family
   statuses are frame statuses.
 
-- **Frame ids are not node references, and one near-collision invites the
-  confusion.** `narrative.frame.premise_persistence` (a node) declares
+- **RESOLVED — frame ids are declaration-node references.**
+  `narrative.frame.premise_persistence` (a node) formerly declared
   `scope.frame = "narrative.frames.premise_persistence"` (a frame id) —
   one character apart — while `narrative.frames.cartoon_gravity`'s frame
   id happens to coincide exactly with a real node's statement_id. Both are
-  legal: the validator only pattern-checks frame ids, and the schema
-  `$comment` already plans for a frames/ registry that would make them
-  resolvable references. Decide the convention before more scope-bearing
-  nodes are authored: either frame ids must NOT collide with statement_ids
-  (namespace separation, `<discipline>.frames.*` reserved), or they must
-  BE statement_ids of declaration nodes (reference semantics). The
-  post-merge review of the payoff slice surfaced this; today's two
-  precedents point in opposite directions.
+  legal. The physics-frame slice chose reference semantics: `scope.frame`
+  MUST resolve to a scoped declaration node with the same `statement_id`.
+  The premise-persistence value migrated to its declaration id; cartoon
+  gravity was already correct. Validator controls reject missing, unscoped,
+  or assertion-owned frame ids. A separate frames registry is deferred until
+  duplication pressure demonstrates that it is needed.
 
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and
@@ -208,7 +208,7 @@ or commit history. Each item names the evidence that motivated it.
   evaluation on deeper distractor-bearing stores rather than the deterministic
   oracle.
 
-- **Retrieval is currently a linear scan over a committed snapshot.** The 702
+- **Retrieval is currently a linear scan over a committed snapshot.** The 715
   items are small enough that exact and token-neighborhood lookup need no
   index. Growth will require a regenerated query index with the same coherence
   discipline as reports; otherwise retrieval can silently lag the seeds. Any

@@ -123,6 +123,17 @@ with scope objects; P-CF2/P-CF3 adjudication; a frame-transformation note
 in DESIGN-scope-and-modality if the boost-as-declared-transformation idea
 graduates to a matcher level.
 
+**Adjudication (v0.5 first cut):** P-CF3 fired and P-CF2 missed. Galilean
+velocity addition joined `algtop.homology.chain_rank_nullity` at shape and
+typed levels on the exact additive skeleton `?0:V = +(?1:V, ?2:V)`. The
+rotating-frame declaration did not group with cartoon gravity at any level:
+its honest equation is a three-term apparent-acceleration correction, whereas
+cartoon gravity is a temporal liveness rule. The shared content is in
+`scope.suspends`, declaration ownership, and frame-local premise admission —
+fields the signature matcher intentionally does not read. This is evidence
+that the scope executor generalizes across domains, not evidence that every
+scope declaration has one mathematical skeleton.
+
 ---
 
 ## 3. Relational frame theory is our matcher described as psychology
@@ -140,7 +151,7 @@ transfers to B through the relation). Read against this repository:
 | Opposition | Mirror level; NEG handling; denied premises | SHIPPED (mirror: 5 groups) |
 | Distinction | Slot-vs-head lint; typed slot categories | SHIPPED |
 | Comparison | Order corpora; LT/LEQ strict/reflexive relation | SHIPPED (post-order_le fix) |
-| Hierarchy | subset/containment/generalizes; specialization edges | SHIPPED (626 edges) |
+| Hierarchy | subset/containment/generalizes; specialization edges | SHIPPED (655 edges) |
 | Temporal | temporal_logic corpus; past modalities; obligations | SHIPPED |
 | Causal | precedence_causation_bridge (precedence + enablement) | SHIPPED |
 | **Deictic (I/you, here/there, now/then)** | — | **OPEN — the one empty cell** |
@@ -283,7 +294,7 @@ response meaningfully") is met by:
    vocabulary to corpus vocabulary.
 2. **RFT coverage at lexical scale (§3).** Synonymy = coordination,
    antonymy = opposition, hypernymy = hierarchy — the relational-frame
-   taxonomy instantiated over ~120k synsets instead of 209 statements,
+   taxonomy instantiated over ~120k synsets instead of 213 statements,
    giving the neighborhood-fallback real semantic structure instead of
    token overlap.
 3. **Renderer enrichment without weight growth.** The demo's English gloss
@@ -336,9 +347,9 @@ chain; reduced-extract decision; P-CF6 adjudication.
 1. **ASK return channel — SHIPPED executable first cut.** Its return path is
    the runtime user-frame update rule; schema-level FrameSpec ownership remains
    in step 3.
-2. **physics.frames corpus lane** + P-CF2/P-CF3 — cheapest high-yield test
-   of scope generality; also unblocks the frame-id convention decision
-   already in BACKLOG (these nodes need frame ids on day one).
+2. **physics.frames corpus lane — SHIPPED first cut.** P-CF3 fired; P-CF2
+   missed for the scope/template boundary described in §2. Frame ids now
+   resolve to their declaration nodes.
 3. **Frame ownership + visibility-filtered updates** + Sally–Anne demo
    (P-CF1) — after ASK, before nesting.
 4. **WordNet store adapter** (P-CF6) — independent of 2–3; can run as a

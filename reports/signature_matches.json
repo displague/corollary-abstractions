@@ -1,10 +1,10 @@
 {
-  "nodes_analyzed": 209,
+  "nodes_analyzed": 213,
   "group_counts": {
-    "shape": 28,
-    "typed": 29,
-    "family": 28,
-    "aliased": 30,
+    "shape": 29,
+    "typed": 30,
+    "family": 29,
+    "aliased": 31,
     "mirror": 5
   },
   "ladder_violations": [],
@@ -565,6 +565,29 @@
           "statement_id": "probstat.transform.affine_location_scale",
           "discipline": "statistics",
           "template": "OUT = SCALE*IN + SHIFT"
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "disciplines": [
+        "algebraic_topology",
+        "physics"
+      ],
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "members": [
+        {
+          "statement_id": "algtop.homology.chain_rank_nullity",
+          "discipline": "algebraic_topology",
+          "template": "CHAINRANK = CYCLERANK + IMAGERANK"
+        },
+        {
+          "statement_id": "physics.frames.galilean_velocity_addition",
+          "discipline": "physics",
+          "template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY"
         }
       ]
     },
@@ -1615,6 +1638,29 @@
       ]
     },
     {
+      "skeleton": "?0 = +(?1, ?2)",
+      "disciplines": [
+        "algebraic_topology",
+        "physics"
+      ],
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "members": [
+        {
+          "statement_id": "algtop.homology.chain_rank_nullity",
+          "discipline": "algebraic_topology",
+          "template": "CHAINRANK = CYCLERANK + IMAGERANK"
+        },
+        {
+          "statement_id": "physics.frames.galilean_velocity_addition",
+          "discipline": "physics",
+          "template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY"
+        }
+      ]
+    },
+    {
       "skeleton": "?0 = +(?1, neg(*(?2, ?3)))",
       "disciplines": [
         "algebraic_topology",
@@ -2232,6 +2278,17 @@
         "geomodel.transforms.homogeneous_rigid_transform",
         "numanalysis.ode.euler_method_step",
         "probstat.transform.affine_location_scale"
+      ]
+    },
+    {
+      "skeleton": "?0 = +(?1, ?2)",
+      "archetype_ids": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "members": [
+        "algtop.homology.chain_rank_nullity",
+        "physics.frames.galilean_velocity_addition"
       ]
     },
     {

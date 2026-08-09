@@ -589,7 +589,7 @@ class ScopeValidatorTests(unittest.TestCase):
             {"statement_id": "narrative.frame.frame_consistency"},
             {"statement_id": GRAVITY},
             scoped_node(
-                "narrative.stories.golden_chicken_setup",
+                "narrative.frames.golden_chicken",
                 {
                     "frame": "narrative.frames.golden_chicken",
                     "role": "declaration",
@@ -599,6 +599,46 @@ class ScopeValidatorTests(unittest.TestCase):
             ),
         ]
         self.assertEqual(scope_errors(nodes), [])
+
+    def test_frame_id_must_resolve_to_its_declaration_node(self) -> None:
+        nodes = [
+            scoped_node(
+                "narrative.stories.golden_chicken_setup",
+                {
+                    "frame": "narrative.frames.golden_chicken",
+                    "role": "declaration",
+                },
+            )
+        ]
+        errors = scope_errors(nodes)
+        self.assertTrue(any("must resolve to its declaration node" in e for e in errors))
+
+    def test_frame_id_cannot_name_an_unscoped_or_assertion_node(self) -> None:
+        unscoped = [
+            {"statement_id": "narrative.frames.golden_chicken"},
+            scoped_node(
+                "narrative.stories.golden_chicken_setup",
+                {
+                    "frame": "narrative.frames.golden_chicken",
+                    "role": "declaration",
+                },
+            ),
+        ]
+        assertion = [
+            scoped_node(
+                "narrative.frames.golden_chicken",
+                {
+                    "frame": "narrative.frames.golden_chicken",
+                    "role": "assertion",
+                },
+            )
+        ]
+        self.assertTrue(
+            any("must identify a scoped declaration node" in e for e in scope_errors(unscoped))
+        )
+        self.assertTrue(
+            any("must identify a scoped declaration node" in e for e in scope_errors(assertion))
+        )
 
     def test_bad_frame_pattern_and_role_are_flagged(self) -> None:
         nodes = [
@@ -631,7 +671,7 @@ class ScopeValidatorTests(unittest.TestCase):
         nodes = [
             {"statement_id": GRAVITY},
             scoped_node(
-                "narrative.stories.one",
+                "narrative.frames.golden_chicken",
                 {
                     "frame": "narrative.frames.golden_chicken",
                     "role": "declaration",
@@ -700,7 +740,7 @@ class ScopeValidatorTests(unittest.TestCase):
             {"statement_id": GRAVITY},
             {"statement_id": "narrative.frame.frame_consistency"},
             scoped_node(
-                "narrative.stories.one",
+                "narrative.frames.golden_chicken",
                 {
                     "frame": "narrative.frames.golden_chicken",
                     "role": "declaration",

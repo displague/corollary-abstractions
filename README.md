@@ -10,7 +10,7 @@ interface. Latest release: [v0.4.0](docs/RELEASE-v0.4.0.md).
 
 ## The two headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 209
+**1. The matcher discovers that sciences repeat one another.** From 213
 hand-authored statement nodes across 21 disciplines, structure alone:
 
 ```
@@ -104,7 +104,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (21 disciplines, 209 nodes)
+data/<discipline>/      statement corpora (21 disciplines, 213 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -145,7 +145,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 209 nodes / 21 corpora green
+python scripts/validate_nodes.py            # 213 nodes / 21 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
