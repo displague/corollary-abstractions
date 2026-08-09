@@ -234,5 +234,236 @@ class TheoryOfMindTests(unittest.TestCase):
             )
 
 
+class NestedBeliefTests(unittest.TestCase):
+    """Nested belief models (the last queued v0.5 cognitive slice).
+
+    Registered predictions (written before adjudication, house rule):
+
+    P-NF1. Second-order false belief is DERIVED purely from witnessed_by
+        sets with no new verdict logic: after Anne alone witnesses the
+        move, Anne's own frame answers box while Anne's embedded model of
+        Sally answers basket -- and check() on the model refutes box.
+        (ADJUDICATED: fired in substance, one clause MIS-REGISTERED and
+        corrected on the record -- check() on the model leaves box
+        UNKNOWN, not REFUTED, and that is the correct semantics: missing
+        information is never REFUTED, and a belief model never refutes
+        what the modeled agent lacks grounds against. The review caught
+        the registered text contradicting its own adjudicating test.)
+    P-NF2. Isolation is bidirectional by construction: a parent truth
+        never grounds a check inside the child model, and a child truth
+        never grounds a check in the parent, using the unchanged check().
+    P-NF3. Mutual visibility gates model updates: an event witnessed by
+        the parent but not the modeled agent updates the parent and
+        leaves the model untouched -- the parent knowingly diverges from
+        its model of the other agent.
+    """
+
+    def _anne_modeling_sally(self):
+        executor = FrameExecutor()
+        anne = executor.open_frame(
+            FrameSpec(frame="runtime.frames.belief_anne", owner="anne")
+        )
+        anne = executor.open_nested(
+            anne, FrameSpec(frame="runtime.frames.anne_models_sally",
+                            owner="sally")
+        )
+        return executor, anne
+
+    def test_second_order_false_belief_is_derived(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        anne = executor.observe_event(anne, PLACE).next_state
+        move_without_sally = FrameEvent(
+            "move", (NOT_BASKET, BOX), ("anne", "world"), ("located_in",)
+        )
+        anne = executor.observe_event(anne, move_without_sally).next_state
+
+        self.assertEqual(
+            executor.belief_value(anne, "marble", "located_in"), "box"
+        )
+        model_of_sally = executor.nested(anne, ("sally",))
+        self.assertEqual(
+            executor.belief_value(model_of_sally, "marble", "located_in"),
+            "basket",
+        )
+        self.assertIs(
+            executor.check(model_of_sally, BOX).verdict, Verdict.UNKNOWN
+        )
+        self.assertIs(
+            executor.check(model_of_sally, BASKET).verdict, Verdict.VERIFIED
+        )
+
+    def test_isolation_is_bidirectional(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        anne_only = FrameEvent(
+            "secret", (Literal("key", "located_in", "drawer"),),
+            ("anne",), ("located_in",)
+        )
+        anne = executor.observe_event(anne, anne_only).next_state
+        model_of_sally = executor.nested(anne, ("sally",))
+        self.assertIs(
+            executor.check(
+                model_of_sally, Literal("key", "located_in", "drawer")
+            ).verdict,
+            Verdict.UNKNOWN,
+        )
+        # Review should-fix 5: the child-to-parent half through a REAL
+        # flow -- the child opens with a declaration the parent never
+        # holds; no state surgery required.
+        executor2 = FrameExecutor()
+        parent = executor2.open_frame(
+            FrameSpec(frame="runtime.frames.belief_anne", owner="anne")
+        )
+        parent = executor2.open_nested(
+            parent,
+            FrameSpec(
+                frame="runtime.frames.anne_models_sally",
+                owner="sally",
+                declarations=(
+                    ("d1", Literal("door", "located_in", "hall")),
+                ),
+            ),
+        )
+        self.assertIs(
+            executor2.check(
+                parent, Literal("door", "located_in", "hall")
+            ).verdict,
+            Verdict.UNKNOWN,
+        )
+        self.assertIs(
+            executor2.check(
+                executor2.nested(parent, ("sally",)),
+                Literal("door", "located_in", "hall"),
+            ).verdict,
+            Verdict.VERIFIED,
+        )
+
+    def test_mutual_visibility_gates_model_updates(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        anne = executor.observe_event(anne, PLACE).next_state
+        before = executor.nested(anne, ("sally",))
+        anne_only_move = FrameEvent(
+            "move", (NOT_BASKET, BOX), ("anne",), ("located_in",)
+        )
+        anne = executor.observe_event(anne, anne_only_move).next_state
+        after = executor.nested(anne, ("sally",))
+        self.assertEqual(before.asserted, after.asserted)
+        self.assertEqual(
+            executor.belief_value(anne, "marble", "located_in"), "box"
+        )
+
+    def test_grandchild_needs_every_owner_on_the_path(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        model_of_sally = executor.nested(anne, ("sally",))
+        nested_model = executor.open_nested(
+            model_of_sally,
+            FrameSpec(frame="runtime.frames.sally_models_ben", owner="ben"),
+        )
+        anne = replace(anne, children=(("sally", nested_model),))
+        partial = FrameEvent(
+            "partial", (BASKET,), ("anne", "sally"), ("located_in",)
+        )
+        anne = executor.observe_event(anne, partial).next_state
+        grandchild = executor.nested(anne, ("sally", "ben"))
+        self.assertEqual(grandchild.asserted, ())
+        # The cut is exactly at ben's tier: sally's model DID update.
+        self.assertEqual(
+            executor.belief_value(
+                executor.nested(anne, ("sally",)), "marble", "located_in"
+            ),
+            "basket",
+        )
+        # Review should-fix 2: the leaf-only-bug discriminator -- ben
+        # witnessed but the INTERMEDIATE sally did not; nothing below the
+        # break in the path may update.
+        skip_middle = FrameEvent(
+            "skip", (BOX,), ("anne", "ben"), ("located_in",)
+        )
+        anne = executor.observe_event(anne, skip_middle).next_state
+        self.assertEqual(
+            executor.nested(anne, ("sally", "ben")).asserted, ()
+        )
+        self.assertEqual(
+            executor.belief_value(
+                executor.nested(anne, ("sally",)), "marble", "located_in"
+            ),
+            "basket",
+        )
+        full = FrameEvent(
+            "full", (BOX,), ("anne", "sally", "ben"), ("located_in",)
+        )
+        anne = executor.observe_event(anne, full).next_state
+        grandchild = executor.nested(anne, ("sally", "ben"))
+        self.assertEqual(
+            executor.belief_value(grandchild, "marble", "located_in"), "box"
+        )
+
+    def test_parent_cannot_learn_through_eyes_it_does_not_have(self) -> None:
+        """Review should-fix 3: an event invisible to the parent leaves
+        the model untouched even when the modeled agent witnessed it, and
+        the visibility-rewrite guard keeps parent and child consistent."""
+        executor, anne = self._anne_modeling_sally()
+        sally_only = FrameEvent(
+            "sally_only", (BASKET,), ("sally",), ("located_in",)
+        )
+        anne = executor.observe_event(anne, sally_only).next_state
+        model = executor.nested(anne, ("sally",))
+        self.assertEqual(model.asserted, ())
+        self.assertEqual(model.processed_event_ids, ())
+        rewrite = FrameEvent(
+            "sally_only", (BASKET,), ("anne", "sally"), ("located_in",)
+        )
+        replay = executor.observe_event(anne, rewrite)
+        self.assertIs(replay.verdict, Verdict.REFUSED)
+        self.assertIn("cannot be rewritten", replay.reason)
+
+    def test_cannot_nest_inside_a_closed_frame(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        closed = replace(anne, closed=True)
+        with self.assertRaisesRegex(ValueError, "closed frame"):
+            executor.open_nested(
+                closed, FrameSpec(frame="runtime.frames.x", owner="ben")
+            )
+
+    def test_broken_subset_invariant_fails_loudly(self) -> None:
+        """Review should-fix 6: a child refusal inside recursion must
+        surface, not silently fork parent and model histories."""
+        executor, anne = self._anne_modeling_sally()
+        poisoned_child = replace(
+            executor.nested(anne, ("sally",)),
+            processed_event_ids=("z",),
+        )
+        anne = replace(anne, children=(("sally", poisoned_child),))
+        event = FrameEvent("z", (BASKET,), ("anne", "sally"), ("located_in",))
+        with self.assertRaisesRegex(RuntimeError, "subset invariant"):
+            executor.observe_event(anne, event)
+
+    def test_nesting_refusals_are_principled(self) -> None:
+        executor = FrameExecutor()
+        fiction = executor.open_frame(FrameSpec(frame="runtime.frames.tale"))
+        anne = executor.open_frame(
+            FrameSpec(frame="runtime.frames.belief_anne", owner="anne")
+        )
+        with self.assertRaisesRegex(ValueError, "OWNED parent"):
+            executor.open_nested(
+                fiction,
+                FrameSpec(frame="runtime.frames.x", owner="sally"),
+            )
+        with self.assertRaisesRegex(ValueError, "must be owned"):
+            executor.open_nested(
+                anne, FrameSpec(frame="runtime.frames.inner_tale")
+            )
+        with self.assertRaisesRegex(ValueError, "itself"):
+            executor.open_nested(
+                anne, FrameSpec(frame="runtime.frames.self", owner="anne")
+            )
+        nested = executor.open_nested(
+            anne, FrameSpec(frame="runtime.frames.m", owner="sally")
+        )
+        with self.assertRaisesRegex(ValueError, "already embeds"):
+            executor.open_nested(
+                nested, FrameSpec(frame="runtime.frames.m2", owner="sally")
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -20,6 +20,15 @@ Adjudication order and semantics (each is a deliberate design decision):
    suspension-invention channel does not exist for it (belief acquires
    content by witnessing, fiction by inventing). Rules 0 and 3-4 below
    therefore apply only to unowned frames.
+   Belief frames NEST: an owned frame may embed a model of another agent
+   (`open_nested`), whose truths are the parent owner's beliefs about
+   the modeled agent's beliefs. Tiers are isolated by construction --
+   ancestors and descendants adjudicate only their own local truths --
+   and models update under MUTUAL visibility: every owner on the path
+   must be in the event's witnessed_by, so a parent that witnesses alone
+   knowingly diverges from its model of the other. Fiction does not nest
+   (no owner to attribute a model to; suspension inheritance undesigned)
+   and self-models are refused (an owner's own frame holds its beliefs).
 0. The boundary rule: a frame OPENS only if its declarations contradict no
    unsuspended world truth. "Invention is unlimited at the boundary" means
    unlimited once the contradicted truths are explicitly suspended -- a
@@ -158,6 +167,18 @@ class FrameState:
     processed_event_ids: tuple[str, ...] = ()
     superseded_declarations: tuple[str, ...] = ()
     closed: bool = False
+    # Nested belief models, keyed by the modeled agent's owner id: Sally's
+    # frame may embed her model of Anne. A child's truths are the PARENT
+    # OWNER'S beliefs about the child owner's beliefs -- they live only
+    # here, never in local_truths, so ancestor and descendant tiers cannot
+    # ground or refute each other by construction.
+    children: tuple[tuple[str, "FrameState"], ...] = ()
+
+    def child(self, owner: str) -> "FrameState | None":
+        for child_owner, child_state in self.children:
+            if child_owner == owner:
+                return child_state
+        return None
 
     @property
     def local_truths(self) -> tuple[tuple[str, Literal], ...]:
@@ -341,10 +362,72 @@ class FrameExecutor:
                         )
         return FrameState(spec=spec)
 
+    def open_nested(
+        self, parent: FrameState, child_spec: FrameSpec
+    ) -> FrameState:
+        """Embed a belief model of another agent inside an owned frame.
+
+        Belief nesting only: fiction has no owner to attribute a model to,
+        and nested fiction's suspension-inheritance rules are undesigned --
+        both refuse rather than guess. Self-models are refused too: an
+        owner's model of itself is just its frame.
+        """
+        if parent.closed:
+            raise ValueError("cannot nest inside a closed frame")
+        if parent.spec.owner is None:
+            raise ValueError(
+                "nested frames require an OWNED parent: nested fiction's "
+                "suspension-inheritance rules are undesigned (leak controls "
+                "exist for belief nesting only)"
+            )
+        if child_spec.owner is None:
+            raise ValueError(
+                "a nested frame models an agent's beliefs and must be owned"
+            )
+        if child_spec.owner == parent.spec.owner:
+            raise ValueError(
+                f"owner {parent.spec.owner!r} cannot nest a model of "
+                "itself; its own frame already holds its beliefs"
+            )
+        if parent.child(child_spec.owner) is not None:
+            raise ValueError(
+                f"parent already embeds a model of {child_spec.owner!r}"
+            )
+        # Models start blank: an event delivered BEFORE this model was
+        # opened is not back-filled, and an idempotent retry of it after
+        # opening is a global no-op (review note 9, deliberate).
+        child_state = self.open_frame(child_spec)
+        return replace(
+            parent,
+            children=parent.children + ((child_spec.owner, child_state),),
+        )
+
+    def nested(self, state: FrameState, owner_path: tuple[str, ...]) -> FrameState:
+        """Navigate to the embedded model at owner_path (may be empty)."""
+        current = state
+        for owner in owner_path:
+            child_state = current.child(owner)
+            if child_state is None:
+                raise KeyError(
+                    f"no embedded model of {owner!r} at this level"
+                )
+            current = child_state
+        return current
+
     def observe_event(
         self, state: FrameState, event: FrameEvent
     ) -> Verification[FrameState]:
-        """Update an owned belief frame iff its owner witnessed the event."""
+        """Update an owned belief frame iff its owner witnessed the event.
+
+        Nested models update under MUTUAL visibility: the parent's model
+        of a child agent updates only when the parent witnessed the event
+        AND the child agent is also in its witnessed_by set -- the parent
+        may attribute the observation to the child. An event the parent
+        witnessed alone updates the parent and leaves its models unchanged
+        (the parent now knowingly diverges from its model of the other).
+        Delivery recurses, so grandchild models need every owner on the
+        path to have witnessed.
+        """
 
         if state.closed:
             return Verification(
@@ -424,12 +507,36 @@ class FrameExecutor:
                 if supersedes(literal)
             )
             asserted.append((f"{event.event_id}:{index}", effect))
+        children = state.children
+        if children:
+            updated_children = []
+            for child_owner, child_state in children:
+                if child_owner in event.witnessed_by:
+                    delivered = self.observe_event(child_state, event)
+                    if delivered.next_state is None:
+                        # Unreachable through real flows: a child's event
+                        # history is a subset of its parent's, so the
+                        # parent's guards fire first. If it fires, the
+                        # subset invariant is broken and continuing would
+                        # silently fork parent and model histories.
+                        raise RuntimeError(
+                            "nested delivery refused; the child's event "
+                            "subset invariant is broken: "
+                            + delivered.reason
+                        )
+                    updated_children.append(
+                        (child_owner, delivered.next_state)
+                    )
+                else:
+                    updated_children.append((child_owner, child_state))
+            children = tuple(updated_children)
         next_state = replace(
             state,
             asserted=tuple(asserted),
             observed_events=state.observed_events + (event,),
             processed_event_ids=state.processed_event_ids + (event.event_id,),
             superseded_declarations=tuple(sorted(superseded)),
+            children=children,
         )
         return Verification(
             Verdict.VERIFIED,

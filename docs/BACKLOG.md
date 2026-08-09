@@ -136,6 +136,18 @@ or commit history. Each item names the evidence that motivated it.
   filed so that if lexical records ever gain more authority, digest
   pinning must arrive first. (Post-merge review of 745a46b, informational.)
 
+## Nested frames
+
+- **No graft-back API for nested-model mutation.** `nested()` navigates
+  read-only, and `assert_literal`/`plant`/`discharge` on a navigated
+  child return a detached state with no path back into the parent; deep
+  tests resort to `replace(parent, children=...)` surgery. Events are
+  the only real-flow channel that updates models in place. Add a
+  `with_nested(parent, owner_path, new_child)` grafting helper (or
+  routed variants of the mutators) before any consumer needs to mutate a
+  model directly. (Nested-frames review, note 8; the test surgery is the
+  evidence.)
+
 ## Controller / harness
 
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node

@@ -568,6 +568,20 @@ demo and a multi-step derivation remain one milestone in two costumes.
       self-attests — is recorded in the design doc §4, citable in
       review, and now stated by the corpus itself
       (□Con(T) → □⊥). Suite 183 tests green.
+    - **10g — DELIVERED: nested belief frames.** `open_nested` embeds a
+      model of another agent inside an owned frame; tier isolation is by
+      construction (each level adjudicates only its own local truths,
+      P-NF2), models update under mutual visibility (every owner on the
+      path must have witnessed, P-NF3, including grandchildren), and
+      second-order false belief -- Anne's model of Sally answering
+      "basket" while Anne answers "box" -- is derived purely from
+      witnessed_by sets with no new verdict logic (P-NF1 fired in
+      substance with one MIS-REGISTERED clause corrected on the record:
+      the model leaves box UNKNOWN rather than refuting it, which is the
+      correct missing-information semantics -- the review caught the
+      registered text contradicting its own test; P-NF2 and P-NF3
+      fired). Fiction does not nest
+      and self-models are refused, both on stated principle.
     - The RFT coverage table (design doc §3) becomes a living audit,
       re-adjudicated at each release; its one open cell (deixis) is
       closed by 10a+10b+past modalities jointly, not by a bespoke corpus.
