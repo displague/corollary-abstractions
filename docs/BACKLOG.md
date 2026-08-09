@@ -3,107 +3,36 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
-## Cognitive frames / lexical stores (queued from docs/DESIGN-cognitive-frames.md)
+## Cognitive frames / lexical stores
 
-- **SHIPPED first cut — frame ownership is the missing half of ASK.** ASK
-  already models the
-  user as an agent holding frame-private bindings — a theory-of-mind claim
-  with no frame to land in. `FrameSpec` needs an optional `owner`
-  (additive schema field, same pattern as `scope`); owned frames are
-  belief states that persist and update rather than demoting on exit.
-  Evidence of need: multi-turn revision ("now make the chicken lay silver
-  eggs") has nowhere to record what the user has been told vs what they
-  changed. `FrameSpec.owner` and persistent owned-frame close semantics now
-  ship; unifying retrieval.UserFrame with FrameState remains open.
+The delivered first cuts (frame ownership, visibility-derived and nested
+belief, physics frames, WordNet bridging, masked-skeleton pretraining, and the
+provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
-- **SHIPPED first cut — visibility now derives false belief.** The obligation
-  ledger sequences events but every frame sees
-  all of them. A `witnessed_by` set per event lets an owned frame update
-  only through witnessed events — making belief/world divergence a
-  *derived* fact (Sally missed the move event) instead of an authored
-  assertion. Sally–Anne is now the executable acceptance demo; nested frames
-  (beliefs about beliefs) wait for their own leak controls: grandchild
-  truths must not reach ancestors, and suspension inheritance must be an
-  explicit choice.
-
-- **SHIPPED first cut — physics.frames corpus lane and scope predictions.**
-  Rotating frame = suspends inertia law + admits centrifugal premise (a
-  fictitious force IS the executor's suspension-licensed invention);
-  Galilean invariance = the world-tier/frame-local seam physics already
-  drew. P-CF2: rotating_frame families with cartoon_gravity (first
-  evidence scope generalizes beyond fiction; a miss localizes what the
-  two scope uses do not share). P-CF3: velocity addition twins an
-  existing composition family. P-CF3 fired against algebraic topology's
-  rank decomposition. P-CF2 missed: shared scope metadata does not make an
-  additive correction equation twin a temporal liveness rule. Four nodes
-  shipped; deeper boost transformations and executable physics-verifier
-  semantics remain open.
-
-- **SHIPPED (external first cut) — WordNet store adapter; deeper lexical
-  traversal remains open.**
-  Open English WordNet 2025 JSON at
-  `C:\Users\displ\Downloads\english-wordnet-2025-json.zip` — 73 files,
-  72 MB uncompressed, entries→senses→synsets with definitions/examples/
-  members/typed relations; shape maps 1:1 onto RetrievalItem (verified by
-  direct read). Three meaningful-extension paths (the gate for using it
-  at all): synonym bridging in the RETRIEVE miss chain (user vocabulary →
-  corpus aliases — "thesaurical twins" made literal), RFT relations at
-  lexical scale, renderer variety with zero weight growth. Hard rules:
-  enters at `empirical`; never grounds a frame verdict; never in
-  verified_by; laundering controls (retrieval review F1) gain a wordnet
-  case before shipping; 72 MB stays external with graceful absence (a
-  reduced CC-BY-permitted extract MAY be committed later, regenerated
-  seed-style). Licenses: CC-BY 4.0 (github.com/globalwordnet/
-  english-wordnet) + Princeton WordNet license for inherited content
-  (wordnet.princeton.edu/license-and-commercial-use); the zip carries no
-  license file, so an ATTRIBUTION note must ship beside any store
-  artifact. P-CF6 fired: fixed held-out request-term coverage moved 0/8 →
-  8/8, while the executor produced zero frame-verdict changes. The adapter
-  indexes 107,519 synsets and 127,311 entry lemmas lazily into pointable
-  records, records the archive digest, refuses ambiguous bridge binding, and
-  is byte-for-byte absent when no archive path exists.
-  `docs/ATTRIBUTION-wordnet.md` records the release boundary. Still open:
-  graph traversal beyond
-  same-synset coordination (hypernyms/antonyms as neighborhood expansion),
-  renderer selection, and any seed-regenerated reduced extract; none is needed
-  for the first-cut bridge and the 72 MB source remains outside git.
-
-- **Masked skeleton modeling (experiment track).** BERT's masked-LM
-  objective transposed to structure: mask a skeleton node or path level,
-  recover by pointing, over corpus skeletons + generated instances — a
-  self-supervised pretraining objective the pointer models never had.
-  P-CF5: gains concentrate in depth OOD (0.226 baseline) rather than
-  in-distribution, or the objective taught content, not structure.
-
-- **SHIPPED — Provability corpus (10f).** Six nodes in `data/provability`
-  (`scripts/seed_provability.py`): K, necessitation, Löb, Con(T) :=
-  NEG(BOX(FALSITY)), formalized Gödel II (= Löb at falsum, the corpus's one
-  hand-authored special_case_of edge), and Gödel II as the honest meta
-  statement `NEG(BOX(CONSISTENCY))` with the consistency hypothesis in
-  regularity_conditions. Willard's exception is an invariant + failure
-  mode on the Gödel II node, deliberately NOT a node: its content is
-  existential over a family of theories and the grammar has no binder.
-  **P-CF4 fired both halves** — no twin at any level, and
-  `temporal_induction` now spans two disciplines in the drift report
-  (evidence appended to the drift-promotion entry under Parser/matcher).
-  PV1/PV2/PV4 fired (all six nodes singletons, 215 → 221 with group counts
-  frozen at 30/31/30/32/5, zero provability specialization edges, 655
-  stays 655). **PV3 missed**: the corpus self-grounds to 1.000 throughout —
-  filed as new evidence under the groundedness vocabulary-overlap entry.
-  Companion architectural rule (design doc §4, citable in review): trust
-  roots stay external — receipts prove freshness, never correctness; no
-  future slice may gate anything on the system attesting to its own
-  soundness. The corpus now states the mathematical warrant for that rule
-  (`provability.incompleteness.formalized_second_incompleteness`).
+- **Unify ASK memory with owned frames.** `retrieval.UserBinding` remains
+  session-long and HMAC-attributed while owned `FrameState` has functional-value
+  supersession. Define one explicit lifetime and persistence contract before
+  longer conversations.
+- **Deepen physical reference frames.** Add executable Galilean boosts,
+  acceleration invariance, and rotating-frame terms without asserting that
+  shared scope semantics imply template equivalence.
+- **Traverse WordNet relations safely.** Hypernym, antonym, and entailment
+  expansion need sense-level ambiguity, project-exact precedence, announced
+  ranking/caps, and the existing empirical-only authority boundary. Renderer
+  selection and any seed-regenerated reduced extract remain open.
+- **Treat masked pretraining as stabilization, not a wall-mover.** The v0.5
+  result narrowed two-seed spread `0.139 → 0.029` but did not support a mean
+  lift. The next experiment belongs in recurrent address consumers with at
+  least three seeds per arm.
+- **Split grounding provenance.** The six-node provability corpus self-grounded
+  at 1.000 through same-corpus BOX recurrence and broad pattern absorption.
+  Report external/prior, same-corpus, recursive, and pattern channels
+  separately before using groundedness as an admission signal.
+- **Visual structure lane.** Run the formula–diagram twins experiment in
+  `docs/DESIGN-visual-structure.md`: source scene-graph oracle, parsed SVG arm,
+  parameter-matched pixel control, and exact geometry verification.
 
 ## Frame registry
-
-- **RESOLVED — runtime-only frame ids use `runtime.frames.*`.** Corpus frame
-  ids remain declaration-node references enforced over `data/`.
-  `FrameSpec.corpus_backed` makes the distinction explicit and fail-closed:
-  corpus-backed frames cannot use the runtime namespace, and synthetic frames
-  cannot squat in the corpus namespace. All demos/tests migrated. (Post-merge
-  review of 78541cf, F2; resolved 10c.)
 
 - **Owned binding lifetime is now explicit at the frame layer, but not yet
   unified with ASK.** Owned FrameState persists until an observed event
@@ -187,52 +116,13 @@ or commit history. Each item names the evidence that motivated it.
   runtime user frame; `WRITE` remains vocabulary without an adapter. Lean
   replay is not live tactic application or search.
 
-- **PARTIAL — Chekhov's law executes at frame close, but event grounding is
-  still demo-specific.** `FrameState` now records planted/discharged elements;
-  an outstanding element REFUSES close without mutation or demotion. The
-  golden-chicken adapter also prevents a hidden-ledger pass by requiring the
-  plant to alter a visible beat and the discharge to cite resolution text.
-  That last grounding is currently an exact case-insensitive substring check
-  over an oracle-authored phrase, not a general semantic event binder. Replace
-  it with corpus-grounded event structure as the story policy broadens; keep
-  the present negative controls so a ledger-only implementation cannot regress.
-  The past-facing heraldry/no-deus nodes are now authored, but the executor
-  does not yet evaluate them: unplanted discharge therefore stays UNKNOWN
-  rather than being silently refuted. Wiring that authored law is the open
-  runtime step.
-
-  **THE OPEN RUNTIME STEP SHIPPED** (branch `feature/no-deus`): the
-  executor evaluates `narrative.constraint.no_deus_ex_machina` as a
-  governance-gated law -- a frame that lists it in `governed_by` REFUTES
-  an unheralded discharge citing the node; a frame that omits it keeps
-  UNKNOWN (the node's own regularity notes say coincidence-driven genres
-  may reject the constraint, so adoption is per-frame, not universal).
-  Adoption implements the STRICT event-order reading the corpus invariant
-  anticipates; the inclusive same-position herald has no runtime
-  representation and that narrowing is documented in frames.py. The
-  golden-chicken frame adopts the law and the demo shows the refuted
-  'sudden magic key' probe. Lawful plant-then-discharge behavior is
-  unchanged (registered predictions P6-P8, all fired; 69/69 tests).
-
-- **SHIPPED — the public epistemic-ladder demo now calls the frame executor.**
-  `compose_assert.py` retains its corpus-derived PROVEN, VERIFIED, HYPOTHESIS,
-  UNKNOWN, REFUTED, and REFUSED examples, then obtains declaration agreement,
-  contradiction, missing information, suspension-gated invention, close,
-  demotion, and post-close refusal directly from `FrameExecutor`. This closes
-  the duplicate-demo gap; it does not claim that global structural-family
-  statuses are frame statuses.
-
-- **RESOLVED — frame ids are declaration-node references.**
-  `narrative.frame.premise_persistence` (a node) formerly declared
-  `scope.frame = "narrative.frames.premise_persistence"` (a frame id) —
-  one character apart — while `narrative.frames.cartoon_gravity`'s frame
-  id happens to coincide exactly with a real node's statement_id. Both are
-  legal. The physics-frame slice chose reference semantics: `scope.frame`
-  MUST resolve to a scoped declaration node with the same `statement_id`.
-  The premise-persistence value migrated to its declaration id; cartoon
-  gravity was already correct. Validator controls reject missing, unscoped,
-  or assertion-owned frame ids. A separate frames registry is deferred until
-  duplication pressure demonstrates that it is needed.
+- **Temporal event grounding remains demo-specific.** Chekhov close-time
+  obligations and governance-gated no-deus heralding both execute. The
+  golden-chicken adapter's visible plant/discharge evidence is still an exact
+  case-insensitive substring over oracle-authored prose rather than a general
+  semantic event binder. Replace it with corpus-grounded event structure while
+  retaining the hidden-ledger, unrelated-mention, order, and idempotence
+  controls.
 
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and

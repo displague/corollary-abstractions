@@ -1,3 +1,12 @@
+> **Closed at v0.5.0.** Delivered outcomes and corrections are recorded in
+> [RELEASE-v0.5.0.md](RELEASE-v0.5.0.md). Items 1 and 4–6 shipped their first
+> executable cuts; item 5 shipped fully. The learned-policy/live-search half of
+> item 1, depth consumers (2), corpus-grounded analogy (3), WRITE (6b), richer
+> rendering/attunement (7), remaining tooling/data lanes (8–9), and deeper
+> cognitive/lexical work from item 10 carry to
+> [ROADMAP-v0.6.md](ROADMAP-v0.6.md). This file remains the historical
+> plan-of-record, including predictions, misses, and corrections.
+
 # v0.5 roadmap — chains and frames
 
 Theme: chained composition with the prover as verifier — each proposal

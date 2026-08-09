@@ -4535,7 +4535,7 @@
           "instance_of_statements": [
             "logic.inference.contraposition"
           ],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         }
       ]
     },
@@ -4554,7 +4554,7 @@
           "skeleton": "IMPLIES⟨?0:V, ?1:V⟩",
           "grounded_via": "exact",
           "instance_of_statements": [],
-          "recurs_in_n_statements": 2
+          "recurs_in_n_statements": 3
         },
         {
           "path": [
@@ -6783,6 +6783,256 @@
       "grounded_exact": 0,
       "grounded_via_pattern": 0,
       "constituents": []
+    },
+    {
+      "statement_id": "provability.modal.k_distribution",
+      "template": "IMPLIES(BOX(IMPLIES(PROPP, PROPQ)), IMPLIES(BOX(PROPP), BOX(PROPQ)))",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "BOX⟨IMPLIES⟨?0:V, ?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "BOX⟨?0:P⟩",
+          "pattern_known_from": [
+            "provability.consistency.consistency_definition",
+            "provability.incompleteness.formalized_second_incompleteness",
+            "provability.incompleteness.second_incompleteness"
+          ],
+          "pattern_recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "IMPLIES⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "logic.inference.contraposition"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "IMPLIES⟨BOX⟨?0:V⟩, BOX⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "BOX⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "BOX⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "provability.modal.necessitation",
+      "template": "IMPLIES(PROP, BOX(PROP))",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "BOX⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "provability.modal.loeb_axiom",
+      "template": "IMPLIES(BOX(IMPLIES(BOX(PROP), PROP)), BOX(PROP))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "BOX⟨IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "BOX⟨?0:P⟩",
+          "pattern_known_from": [
+            "provability.consistency.consistency_definition",
+            "provability.incompleteness.formalized_second_incompleteness",
+            "provability.incompleteness.second_incompleteness"
+          ],
+          "pattern_recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            0,
+            0,
+            0
+          ],
+          "skeleton": "BOX⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "BOX⟨?0:V⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "provability.consistency.consistency_definition",
+      "template": "CONSISTENCY = NEG(BOX(FALSITY))",
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨BOX⟨?0:P⟩⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "provability.incompleteness.second_incompleteness"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "BOX⟨?0:P⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "provability.incompleteness.formalized_second_incompleteness",
+      "template": "IMPLIES(BOX(NEG(BOX(FALSITY))), BOX(FALSITY))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "BOX⟨NEG⟨BOX⟨?0:P⟩⟩⟩",
+          "grounded_via": "pattern",
+          "instance_of_pattern": "BOX⟨?0:P⟩",
+          "pattern_known_from": [
+            "provability.consistency.consistency_definition",
+            "provability.incompleteness.second_incompleteness"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "NEG⟨BOX⟨?0:P⟩⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [
+            "provability.consistency.consistency_definition",
+            "provability.incompleteness.second_incompleteness"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            0,
+            0
+          ],
+          "skeleton": "BOX⟨?0:P⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "BOX⟨?0:P⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
+    },
+    {
+      "statement_id": "provability.incompleteness.second_incompleteness",
+      "template": "NEG(BOX(CONSISTENCY))",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "BOX⟨?0:P⟩",
+          "grounded_via": "exact",
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
     },
     {
       "statement_id": "settheory.boolean_laws.de_morgan_laws",

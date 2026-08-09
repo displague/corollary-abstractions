@@ -6,12 +6,12 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.4.0](docs/RELEASE-v0.4.0.md).
+interface. Latest release: [v0.5.0](docs/RELEASE-v0.5.0.md).
 
-## The two headline demonstrations
+## Three headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 215
-hand-authored statement nodes across 21 disciplines, structure alone:
+**1. The matcher discovers that sciences repeat one another.** From 221
+hand-authored statement nodes across 22 disciplines, structure alone:
 
 ```
 $ python scripts/match_signatures.py
@@ -56,6 +56,29 @@ either pointed-at by the model or produced by exact code, so surface
 hallucination is structurally impossible. First run self-bootstraps
 (generates data, trains the ~800k-param pointer, ~4 min on GPU).
 
+**3. One verified loop runs a proof and a story — then asks back.** The v0.5
+controller uses the same typed state/action/branch protocol for three
+authenticated Lean transitions and a three-beat golden-chicken story. The story
+executor enforces scoped premises, Chekhov setup/payoff obligations, and
+no-deus heralding. A second-turn demo pauses on a frame-private UNKNOWN, accepts
+a signed user reply, and resumes without promoting that testimony into world
+truth:
+
+```console
+$ python scripts/oracle_controller_demo.py
+LEAN TRANSITION REPLAY: solved
+GOLDEN CHICKEN: solved
+
+$ python scripts/conversation.py
+SYSTEM: What value should fill 'egg_color' for the golden chicken's eggs color?
+USER: silver
+SYSTEM: ... Now the golden chicken laid silver eggs.
+```
+
+`scripts/theory_of_mind.py` derives Sally's false belief from event visibility:
+Sally answers basket while the world answers box. These are controlled symbolic
+demonstrations, not yet an open-language learned policy.
+
 ## The models
 
 Four small architectures, one shared recipe: a **4-layer pre-norm
@@ -77,9 +100,9 @@ shared GRU cell walking each path) are selectable variants — the
 positional ladder results in ANALYSIS.md come from exactly these
 switches. The scaling grid varies encoder width 32–256 at fixed depth.
 
-At fp32 these are 1.8–3.5 MB of weights (fp16 halves that at zero
-accuracy cost — see the quantization ladder). Thirteen trained
-checkpoints ship as release assets. The smallness is the thesis: every
+At fp32 these are 1.8–6.0 MB of weights (fp16 halves that at zero
+accuracy cost — see the quantization ladder). Twenty-two claim-bearing
+checkpoints ship across releases v0.3–v0.5. The smallness is the thesis: every
 exact operation lives outside the weights, so the weights only carry
 the graded residual.
 
@@ -92,7 +115,10 @@ the graded residual.
 | The lexicon lives outside the weights | weight-induced lexica reach ⅔ of ceiling in-distribution and collapse to chance OOD; the same lexicon supplied symbolically loses nothing |
 | Composition needs addresses | with tree-path positions, held-out verb×noun combinations answer at 1.000 (both seeds); with learned positions the same model cannot even fit seen data |
 | Scale does not buy generalization | across 8× width and 10× data, depth-OOD under learned positions is flat (~0.05–0.19); with symbolic addresses it is ≥0.95 in every cell, including 32-wide on 5k examples |
-| Exposure does not generalize; iteration does | curriculum training moved the depth cliff without removing it (0.006 OOD); a shared recurrent cell per tree level extrapolates at 16× the lookup baseline |
+| Exposure does not generalize; iteration does | curriculum moved the depth cliff without removing it (0.006 OOD); a shared recurrent cell is the only mechanism to extrapolate, now honestly 0.16±0.07 across two seeds |
+| Masked structure stabilizes, but does not solve depth | trained-depth-only masked-skeleton pretraining narrows recurrent seed spread 0.139→0.029; at n=2 it cannot claim a mean lift |
+| Frames make local truth executable | one executor handles fictional premises, temporal obligations, owned belief, visibility-derived false belief, and nested models without leaking them into world truth |
+| Retrieval does not promote its results | exact/neighborhood retrieval and POINT are receipt-bound; returned items retain their epistemic status, and misses ASK or abstain |
 | Creating = pointing + realization | both learned decoders failed informatively (memorize, can't copy); pointing plus closed-form realization generates perfectly for any answer present in the input |
 
 Two retractions are part of the record (a too-easy test caught by external
@@ -104,7 +130,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (21 disciplines, 215 nodes)
+data/<discipline>/      statement corpora (22 disciplines, 221 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -123,6 +149,8 @@ scripts/
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
   train.py / train_span.py / train_gen.py / train_pgen.py   trainers
+  pretrain_maskskel.py  masked-node pointer pretraining for analogy
+  demo_analogy_checkpoint.py  released model on fresh shallow + deep analogies
   demo_answer.py        the end-to-end demo above (self-bootstrapping)
   run_grid.py           scaling-curve grid
   ANALYSIS.md           every result, prediction, and retraction
@@ -148,7 +176,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 215 nodes / 21 corpora green
+python scripts/validate_nodes.py            # 221 nodes / 22 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
@@ -163,6 +191,11 @@ python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
 python train_span.py --arm struct --task-prefix solvex2 --positions tree \
     --data-dir data --out results/repro.json   # re-verify the 1.000 result
+
+# after: gh release download v0.5.0 --pattern \
+#   analogy-masked-skeleton-warm-s0.pt --dir results
+python demo_analogy_checkpoint.py --checkpoint \
+    results/analogy-masked-skeleton-warm-s0.pt  # fresh shallow + deep examples
 ```
 
 On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
@@ -179,6 +212,11 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   closed form; status is symbolic, never learned
 - `docs/DESIGN-frames-and-retrieval.md` — fiction as scoped premises;
   retrieval as an UNKNOWN-triggered action
+- `docs/DESIGN-cognitive-frames.md` — theory of mind, reference frames,
+  relational frames, provability, masked structure, and WordNet
+- `docs/DESIGN-visual-structure.md` — the parse-first multimodal plan:
+  formula/diagram twins, SVG structure, and a pixel control
+- `docs/blog/` — accessible project narratives, including the v0.5 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence

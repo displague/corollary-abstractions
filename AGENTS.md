@@ -4,8 +4,8 @@ Project-level agent instructions for `corollary-abstractions`.
 
 ## Objective
 
-Cross-discipline ontology of mathematical statements (21 disciplines,
-seed-generated corpora) + symbolic matchers (twins, specializations,
+Cross-discipline ontology of mathematical statements (seed-generated corpora)
++ symbolic matchers (twins, specializations,
 decomposition) + a measured experiment suite showing tiny models do
 compositional work when every closed-form operation lives outside the
 weights. Release notes and roadmaps live in `docs/RELEASE-v*.md` and
@@ -65,8 +65,9 @@ experiments, tooling, prover, or docs.
 6. **Parallelize from the BACKLOG.** Independent items with disjoint
    file ownership go to concurrent worktree agents; each delivery
    arrives with predictions adjudicated, BACKLOG entries updated in
-   place (SHIPPED/PARTIAL, never silently deleted), and new friction
-   filed with evidence.
+   place (SHIPPED/PARTIAL during the live cycle), and new friction
+   filed with evidence. Release rotation archives shipped outcomes in
+   the release notes and prunes them from the actionable backlog.
 7. **Statuses land as work lands.** Update the roadmap item the moment
    its work ships, with the one-line result attached — release triage
    should be a read-through, not archaeology.

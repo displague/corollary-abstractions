@@ -1,5 +1,5 @@
 {
-  "nodes_analyzed": 215,
+  "nodes_analyzed": 221,
   "group_counts": {
     "shape": 30,
     "typed": 31,
@@ -9,6 +9,37 @@
   },
   "ladder_violations": [],
   "slot_vs_call_head_collisions": [
+    {
+      "name": "box",
+      "slot_spellings": [
+        "BOX"
+      ],
+      "call_head_spellings": [
+        "BOX"
+      ],
+      "as_slot_in": [
+        "narrative.world.marble_moved_box"
+      ],
+      "as_call_head_in": [
+        "provability.consistency.consistency_definition",
+        "provability.incompleteness.formalized_second_incompleteness",
+        "provability.incompleteness.second_incompleteness",
+        "provability.modal.k_distribution",
+        "provability.modal.loeb_axiom",
+        "provability.modal.necessitation"
+      ],
+      "as_slot_only_in": [
+        "narrative.world.marble_moved_box"
+      ],
+      "as_call_head_only_in": [
+        "provability.consistency.consistency_definition",
+        "provability.incompleteness.formalized_second_incompleteness",
+        "provability.incompleteness.second_incompleteness",
+        "provability.modal.k_distribution",
+        "provability.modal.loeb_axiom",
+        "provability.modal.necessitation"
+      ]
+    },
     {
       "name": "degree",
       "slot_spellings": [
@@ -2240,6 +2271,17 @@
         "geometry.surface_area_formulas.cube_surface_area",
         "geometry.surface_area_formulas.sphere_surface_area",
         "physics.mechanics.kinetic_energy"
+      ]
+    },
+    {
+      "archetype_id": "temporal_induction",
+      "distinct_shapes": [
+        "IMPLIES⟨ALWAYS⟨IMPLIES⟨?0, NEXT⟨?0⟩⟩⟩, IMPLIES⟨?0, ALWAYS⟨?0⟩⟩⟩",
+        "IMPLIES⟨BOX⟨IMPLIES⟨BOX⟨?0⟩, ?0⟩⟩, BOX⟨?0⟩⟩"
+      ],
+      "members": [
+        "provability.modal.loeb_axiom",
+        "temporal.induction.temporal_induction_axiom"
       ]
     }
   ],
