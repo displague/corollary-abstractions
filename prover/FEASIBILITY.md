@@ -187,6 +187,8 @@ Artifacts produced:
 ### 9. PyPantograph (phase 2 RPC) — also native
 ```powershell
 git clone --recurse-submodules https://github.com/stanford-centaur/PyPantograph.git
+git -C PyPantograph checkout f8aee320ee5550ea2677e414534618a61e7e1497
+git -C PyPantograph submodule update --init --recursive
 cd PyPantograph\src && lake build repl      # EXIT=0 -> .lake/build/bin/repl.exe (3,024,896 bytes)
 cd .. && pip install .                      # -> pantograph-0.3.15-cp313-cp313-win_amd64.whl
 ```
@@ -218,6 +220,12 @@ is_solved: True
 9. **elan via winget installs only the stub**; run `elan-init.exe -y` yourself.
 10. **Lean DLL directory must be on `PATH`** to run any Lean-built `.exe` outside `lake env`.
 11. Set `PYTHONIOENCODING=utf-8` — proof states contain `⊢` and Windows defaults to cp1252.
+12. **Project discovery is not native-Windows-safe in PyPantograph 0.3.15.**
+    Its Lake environment loader invokes POSIX `printenv LEAN_PATH`; base
+    `Init` interaction works, but `Server(project_path=...)` does not discover
+    imports from a Windows Lake project. Resolve `LEAN_PATH` without
+    `printenv`, or pass a validated explicit path, before claiming
+    project-backed live search.
 
 ---
 
@@ -266,6 +274,8 @@ Get-ChildItem -Recurse -Filter *.ast.json
 **For phase 2 (interactive proof search), use PyPantograph, which is fully native:**
 ```powershell
 git clone --recurse-submodules https://github.com/stanford-centaur/PyPantograph.git
+git -C PyPantograph checkout f8aee320ee5550ea2677e414534618a61e7e1497
+git -C PyPantograph submodule update --init --recursive
 cd PyPantograph\src; lake build repl; cd ..
 pip install .
 # every shell that starts a Server needs the Lean DLLs:

@@ -538,8 +538,10 @@ def main() -> int:
             f"outside {claim.frame}"
         )
     print(
-        "\nLIMIT: Lean steps are exact committed extraction replay; "
-        "live PyPantograph search remains unbuilt. The frame executor "
+        "\nLIMIT: this demo's Lean steps are exact committed extraction "
+        "replay. A separate capability-blind PyPantograph search now applies "
+        "tactics live, but learned tactic ranking remains unbuilt. The frame "
+        "executor "
         "checks declarations, denials, suspensions, finite Chekhov-style "
         "obligations at frame close, and -- where a frame adopts the "
         "no-deus law -- refutes unheralded discharges under the strict "

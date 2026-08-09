@@ -13,10 +13,11 @@ state/action/verifier contract proved here.
 
 from __future__ import annotations
 
+from collections import deque
 from copy import deepcopy
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Generic, Protocol, TypeVar
+from typing import Generic, Iterable, Protocol, TypeVar
 
 
 StateT = TypeVar("StateT")
@@ -130,6 +131,14 @@ class VerifierAdapter(Protocol[StateT]):
     def evaluate(self, state: StateT, action: Action) -> Verification[StateT]: ...
 
 
+class BranchPolicy(Protocol[StateT]):
+    """Enumerate candidate actions for one state, in policy order."""
+
+    def propose_all(
+        self, state: StateT, trace: tuple["SearchTraceEntry[StateT]", ...]
+    ) -> Iterable[Action]: ...
+
+
 class Goal(Protocol[StateT]):
     def __call__(self, state: StateT) -> bool: ...
 
@@ -152,6 +161,66 @@ class RunResult(Generic[StateT]):
     @property
     def rejected_steps(self) -> int:
         return len(self.trace) - self.accepted_steps
+
+
+@dataclass(frozen=True)
+class SearchTraceEntry(Generic[StateT]):
+    """One proposal in a branching search, linked to its parent transition."""
+
+    index: int
+    parent: int | None
+    depth: int
+    state_before: StateT
+    action: Action
+    verification: Verification[StateT]
+    state_after: StateT
+    queued: bool
+
+    @property
+    def accepted(self) -> bool:
+        return self.verification.verdict.accepts
+
+
+@dataclass(frozen=True)
+class SearchResult(Generic[StateT]):
+    """Auditable outcome of bounded breadth-first branch search."""
+
+    initial_state: StateT
+    final_state: StateT | None
+    trace: tuple[SearchTraceEntry[StateT], ...]
+    solution_tail: int | None
+    stop_reason: StopReason
+    nodes_expanded: int
+    states_seen: int
+
+    @property
+    def solved(self) -> bool:
+        return self.stop_reason is StopReason.SOLVED
+
+    @property
+    def proposals(self) -> int:
+        return len(self.trace)
+
+    @property
+    def accepted_proposals(self) -> int:
+        return sum(entry.accepted for entry in self.trace)
+
+    @property
+    def rejected_proposals(self) -> int:
+        return self.proposals - self.accepted_proposals
+
+    @property
+    def solution_trace(self) -> tuple[SearchTraceEntry[StateT], ...]:
+        if self.solution_tail is None:
+            return ()
+        path: list[SearchTraceEntry[StateT]] = []
+        cursor: int | None = self.solution_tail
+        while cursor is not None:
+            entry = self.trace[cursor]
+            path.append(entry)
+            cursor = entry.parent
+        path.reverse()
+        return tuple(path)
 
 
 @dataclass
@@ -264,3 +333,126 @@ class Controller(Generic[StateT]):
                 rejected.add(branch_key)
 
         return finish(StopReason.BUDGET)
+
+
+class SearchController(Generic[StateT]):
+    """Bounded breadth-first propose -> verify -> branch search.
+
+    This is the branching counterpart of :class:`Controller`, not Lean search
+    hidden in a prover adapter.  Verifiers still own domain truth, policies
+    still own candidate order, and only VERIFIED/PROVEN transitions enter the
+    frontier.  Rejections and accepted-but-cyclic transitions remain in the
+    trace but cannot mutate another branch.
+
+    ``max_nodes`` counts states whose action set is expanded.  The independent
+    ``max_proposals`` ceiling prevents one policy call from hiding an unbounded
+    action bag inside a small node budget.
+    """
+
+    def __init__(self, max_nodes: int = 64, max_proposals: int = 1024):
+        if max_nodes < 1:
+            raise ValueError("max_nodes must be positive")
+        if max_proposals < 1:
+            raise ValueError("max_proposals must be positive")
+        self.max_nodes = max_nodes
+        self.max_proposals = max_proposals
+
+    def run(
+        self,
+        initial_state: StateT,
+        policy: BranchPolicy[StateT],
+        verifier: VerifierAdapter[StateT],
+        is_complete: Goal[StateT],
+    ) -> SearchResult[StateT]:
+        initial_snapshot = deepcopy(initial_state)
+        root = deepcopy(initial_state)
+        entries: list[SearchTraceEntry[StateT]] = []
+        frontier: deque[tuple[StateT, int | None, int]] = deque(
+            [(root, None, 0)]
+        )
+        seen_states = {verifier.state_key(deepcopy(root))}
+        attempted: set[tuple[str, tuple[object, ...]]] = set()
+        nodes_expanded = 0
+
+        def finish(
+            reason: StopReason,
+            final_state: StateT | None = None,
+            solution_tail: int | None = None,
+        ) -> SearchResult[StateT]:
+            return SearchResult(
+                initial_state=initial_snapshot,
+                final_state=deepcopy(final_state),
+                trace=deepcopy(tuple(entries)),
+                solution_tail=solution_tail,
+                stop_reason=reason,
+                nodes_expanded=nodes_expanded,
+                states_seen=len(seen_states),
+            )
+
+        if is_complete(deepcopy(root)):
+            return finish(StopReason.SOLVED, root)
+
+        while frontier:
+            if nodes_expanded >= self.max_nodes:
+                return finish(StopReason.BUDGET)
+            if len(entries) >= self.max_proposals:
+                return finish(StopReason.BUDGET)
+            state, parent, depth = frontier.popleft()
+            nodes_expanded += 1
+            actions = policy.propose_all(
+                deepcopy(state), deepcopy(tuple(entries))
+            )
+
+            for action in actions:
+                if len(entries) >= self.max_proposals:
+                    return finish(StopReason.BUDGET)
+                state_key = verifier.state_key(deepcopy(state))
+                branch_key = (state_key, action.fingerprint)
+                if branch_key in attempted:
+                    verification = Verification[StateT](
+                        Verdict.REFUSED,
+                        "duplicate action pruned for this search state",
+                        evidence=(verifier.name,),
+                    )
+                else:
+                    attempted.add(branch_key)
+                    raw = verifier.evaluate(deepcopy(state), action)
+                    raw.validate()
+                    verification = deepcopy(raw)
+
+                next_state = (
+                    deepcopy(verification.next_state)
+                    if verification.verdict.accepts
+                    else deepcopy(state)
+                )
+                assert next_state is not None
+                child_key = verifier.state_key(deepcopy(next_state))
+                queued = verification.verdict.accepts and child_key not in seen_states
+                index = len(entries)
+                entries.append(
+                    SearchTraceEntry(
+                        index=index,
+                        parent=parent,
+                        depth=depth + 1,
+                        state_before=deepcopy(state),
+                        action=action,
+                        verification=verification,
+                        state_after=deepcopy(next_state),
+                        queued=queued,
+                    )
+                )
+
+                if not verification.verdict.accepts:
+                    if len(entries) >= self.max_proposals:
+                        return finish(StopReason.BUDGET)
+                    continue
+                seen_states.add(child_key)
+                if is_complete(deepcopy(next_state)):
+                    return finish(StopReason.SOLVED, next_state, index)
+                if queued:
+                    frontier.append((next_state, index, depth + 1))
+
+                if len(entries) >= self.max_proposals:
+                    return finish(StopReason.BUDGET)
+
+        return finish(StopReason.EXHAUSTED)

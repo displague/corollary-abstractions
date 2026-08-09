@@ -1140,3 +1140,52 @@ stands -- both cold seeds still beat lookup (0.014) and curriculum
 but "0.226" as a point estimate is retired; the wall's height is noisier
 than one seed made it look. This is the house single-seed rule doing
 exactly what it exists to do, to our own headline number.
+
+## Live Lean search (v0.6 item 1, capability-blind rung)
+
+The v0.5 proof demo replayed authenticated, committed transitions. This run
+replaces replay with live PyPantograph tactic application and puts bounded
+breadth-first branch search in the same domain-neutral controller module used
+by the other action adapters. The public state contains only a verifier-minted
+opaque handle and rendered goal; mutable Lean goal objects remain private.
+
+Held-out target: ``forall (P Q : Prop) (h : P ∧ Q), Q ∧ P``. Its theorem name
+is absent from all 155 phase-1 extraction rows. The capability-blind policy is
+a fixed, unranked ten-tactic bag, repeated at every state; it is deliberately
+not presented as a learned or general enumeration policy.
+
+| arm | solved | expanded states | distinct states | proposals | accepted / rejected |
+|---|---:|---:|---:|---:|---:|
+| full fixed palette | yes | 9 | 12 | 86 | 11 / 75 |
+| no ``h.left`` / ``h.right`` | no (exhausted) | 10 | 10 | 80 | 9 / 71 |
+
+The solution is ``intro P Q h`` → ``constructor`` → ``exact h.right`` →
+``exact h.left``. Three ``clear h`` proposals are accepted by Lean but sit
+outside the solution path: the search genuinely abandons legal dead branches.
+The projection ablation makes the two proof-producing actions load-bearing.
+
+The first registered run missed. With only bare ``intro``, Pantograph rendered
+inaccessible names ``P✝``, ``Q✝``, and ``h✝``; both arms exhausted after five
+states (45 / 35 proposals). P-LS2 remains recorded as missed. P-LS6 was then
+registered before adding ``intro P Q h`` and fired with the table above. The
+lesson is an interface result, not a post-hoc success edit: pretty-printed
+state text is not necessarily a callable tactic vocabulary.
+
+This clears the live-application, blind-baseline, backtracking, and unseen-chain
+rungs. It does not clear v0.6's learned-ranking gate, project-backed imports,
+or a benchmark solved-rate claim. On native Windows, PyPantograph 0.3.15's
+project loader currently calls POSIX ``printenv`` during ``LEAN_PATH``
+discovery; base ``Init`` RPC is live, but the extracted Boolean-laws project
+is not yet a live-search environment.
+
+Pre-commit adversarial review found three boundary defects, all fixed with
+regressions: eager tuple conversion could materialize an unbounded candidate
+bag before enforcing the proposal budget; ignored extra tactic arguments could
+change fingerprints and bypass duplicate pruning; and deduplicating only by
+rendered goal discarded histories that a learned policy may legitimately use.
+Candidate streams are now consumed only up to budget, tactic actions accept
+exactly one named argument, and the Lean search key retains tactic history.
+A re-review found that solved children were returned before entering the
+distinct-state set (11 reported instead of 12) and that the source pin omitted
+the post-checkout submodule update; both the metric and reproduction recipe are
+corrected here rather than preserving a favorable undercount.

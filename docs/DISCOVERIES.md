@@ -13,6 +13,24 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **An accepted proof step can be a dead branch.** In live Lean search,
+  ``clear h`` is kernel-accepted after introducing a conjunction hypothesis,
+  but removes the only evidence needed to build the reversed conjunction.
+  Breadth-first search retains that accepted transition as branch evidence and
+  reaches the proof through another branch. This is the first controller trace
+  in which backtracking is load-bearing rather than simulated by rejecting a
+  no-op. *P-LS2 fired after a registered palette correction; live verifier
+  result* (2026-08-09)
+
+- **Rendered proof-state names are not necessarily callable proof-state
+  names.** The first blind palette exhausted because Pantograph's bare
+  ``intro`` rendered ``P✝``, ``Q✝``, and ``h✝`` while ``h.left`` and
+  ``h.right`` failed as unknown identifiers. The registered prediction stays
+  missed; a subsequent prediction added the ordinary ``intro P Q h`` tactic
+  and the same search closed the theorem. A proof UI's text is an observation,
+  not a lossless action interface. *P-LS2 initial form missed; P-LS6 fired*
+  (2026-08-09)
+
 - **Löb's axiom and temporal induction are one archetype and refuse to be
   one skeleton.** `provability.modal.loeb_axiom`
   (`IMPLIES⟨BOX⟨IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩⟩, BOX⟨?0:V⟩⟩`) and

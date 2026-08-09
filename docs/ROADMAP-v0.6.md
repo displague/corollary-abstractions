@@ -30,6 +30,19 @@ Milestones:
 5. Run the same policy interface over story actions. A domain-specific policy
    is acceptable for this release; a second bespoke controller is not.
 
+**PARTIAL — milestones 1, 2, and 4 now have a live capability-blind rung.**
+The generic controller performs bounded breadth-first branch search while a
+PyPantograph adapter keeps verifier state private and asks Lean to adjudicate
+each proposed tactic.  A fixed, unranked palette closes the held-out
+``forall (P Q : Prop) (h : P ∧ Q), Q ∧ P`` in 9 expanded states / 86
+proposals, after exploring accepted dead branches including ``clear h``.
+Removing the two projection tactics exhausts at 10 states / 80 proposals.
+The first registered palette prediction missed because bare ``intro`` produced
+pretty-printed names that tactics could not call; that miss and the corrective
+named-intro run remain in the ledger.  This is real live search and
+backtracking, not learned choice: milestone 3 and the learned-policy release
+gate remain open.
+
 The policy may choose among admissible actions, arguments, and ranking. It may
 not learn equality, frame consistency, receipt verification, theorem checking,
 or closed-form dispatch predicates.

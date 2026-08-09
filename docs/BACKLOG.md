@@ -79,6 +79,20 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
 ## Controller / harness
 
+- **PARTIAL — live Lean application and branch search ship; learned ranking
+  and native project imports remain open.** ``SearchController`` now explores
+  verifier-accepted branches under independent node/proposal budgets, and the
+  PyPantograph adapter closes one held-out ``Init`` proposition with an
+  unranked fixed palette. The projection ablation is exhausted, making the
+  tactic capability load-bearing. This is the capability-blind baseline, not
+  a tactic-policy result. On native Windows, PyPantograph 0.3.15's project
+  loader invokes POSIX ``printenv`` while resolving ``lake env``; the bundled
+  ``BooleanLaws`` project therefore fails to populate ``LEAN_PATH`` even
+  though base ``Init`` RPC works. Add a Windows path resolver or pass a
+  validated explicit Lean path, and reconcile the current 4.29.1 Pantograph
+  build with the extraction project's 4.32.2 toolchain before claiming live
+  project-backed search.
+
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node
   metadata; provenance integrity is now validated.** The
   retrieval slice's digest pins Lean artifact BYTES, and its loader checks

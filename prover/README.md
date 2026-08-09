@@ -14,6 +14,16 @@ tactic-prediction policy) may begin; the extraction's premises field
 already provides the retrieval index phase 5 will want. WSL2 remains
 unnecessary.
 
+Phase 2's first rung is now PARTIAL: ``live_search.py`` applies tactics through
+PyPantograph and the domain-neutral ``SearchController`` performs bounded
+breadth-first search over verifier-accepted states. A fixed, unranked palette
+closes a held-out ``Init`` proposition in 9 expanded states / 86 proposals;
+removing its projection tactics exhausts in 10 / 80. This proves live
+application and real branch abandonment, not learned tactic ranking. Native
+project loading is also still blocked by PyPantograph 0.3.15's POSIX
+``printenv`` call during ``LEAN_PATH`` discovery; the base ``Init`` path does
+not exercise imports from the extracted Boolean-laws project.
+
 ## Thesis
 
 A small model cannot match a large model's stored knowledge, but it does not
@@ -67,8 +77,9 @@ evidence says stop.
 - Use the native Windows path documented in `FEASIBILITY.md`: extraction via
   the patched Lean tracer and interactive proving via PyPantograph (tactic
   application over the Python RPC, `is_solved: True` on a real theorem) have
-  both been demonstrated without WSL2. Proof *search* — the automated loop —
-  is phase 2's deliverable, not yet built. The `lean-dojo-v2` Python package
+  both been demonstrated without WSL2. A capability-blind automated search
+  loop now exists for an ``Init`` theorem; learned ranking and imported-project
+  search remain phase 2 deliverables. The `lean-dojo-v2` Python package
   remains unavailable here because of its `deepspeed` dependency; introduce a
   Linux/WSL2 path only if a later phase actually requires that package.
 - Phases 2-4 need GPU time (rentable; single consumer GPU is enough for a
