@@ -72,6 +72,36 @@ or commit history. Each item names the evidence that motivated it.
   future slice may gate anything on the system attesting to its own
   soundness.
 
+## Frame registry
+
+- **Runtime frame ids are exempt from the resolution convention, and the
+  exemption was unrecorded until now.** The frame-id convention (RESOLVED
+  below: corpus frame ids ARE statement_ids of declaration nodes, enforced
+  on the merged graph) governs only `data/` — but runtime `FrameSpec`
+  frames squat in the same reference-semantic namespace and resolve to
+  nothing: `narrative.frames.golden_chicken` (oracle demo),
+  `conversation.frames.test/.private` (ASK tests). The validator never
+  sees them (its jurisdiction is corpus data), so golden_chicken
+  "validates" only by being invisible. Decide and enforce one of: (a)
+  runtime-only frames must use a reserved namespace the validator would
+  reject in corpus data (e.g. `runtime.frames.*`), or (b) demo/test frames
+  must grow corpus declaration nodes like the physics frames did. Until
+  decided, a runtime frame that later collides with a real declaration
+  node has no defined semantics. (Post-merge review of 78541cf, F2.)
+
+- **Small filed items from the same review** (nits, no behavior defects):
+  `physics.frames.rotating_frame` is governed by
+  `narrative.frame.frame_consistency`, whose TITLE says "A Story May Not
+  Contradict Its Own Premises" — content is generic, title is not; either
+  generalize the title (seed edit, ripples into report/store text) or add
+  an invariant note recording the deliberate cross-domain reuse.
+  `resolution_channel` on RetrievalNeed is a validated string where the
+  house pattern is Enum (Verdict, StopReason) — no laundering path exists,
+  consistency only. `commit_run` is duck-typed via getattr rather than an
+  optional VerifierAdapter protocol method, and an exception inside it
+  would lose a fully-callbacked RunResult — theoretical, but the protocol
+  should own the name.
+
 ## Controller / harness
 
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node

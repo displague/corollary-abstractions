@@ -125,7 +125,15 @@ graduates to a matcher level.
 
 **Adjudication (v0.5 first cut):** P-CF3 fired and P-CF2 missed. Galilean
 velocity addition joined `algtop.homology.chain_rank_nullity` at shape and
-typed levels on the exact additive skeleton `?0:V = +(?1:V, ?2:V)`. The
+typed levels on the exact additive skeleton `?0:V = +(?1:V, ?2:V)`.
+Precision the fired verdict owes (post-merge review): **neither named
+candidate matched** — the convex-combination family's skeleton
+(`?0 = +(*(?1,?2), *(?3,+(1,neg(?1))))`) is structurally incompatible with
+the bare additive form, and no vector-addition family existed at all. The
+class prediction (existing composition/addition skeleton, no new
+archetype) fired via a skeleton that was not on the candidate list, around
+a node that had been a SINGLETON until this pair formed. Fired-in-class,
+missed-in-candidates: both halves are the record. The
 rotating-frame declaration did not group with cartoon gravity at any level:
 its honest equation is a three-term apparent-acceleration correction, whereas
 cartoon gravity is a temporal liveness rule. The shared content is in

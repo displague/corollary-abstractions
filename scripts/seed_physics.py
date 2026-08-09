@@ -36,7 +36,11 @@ them at the source-of-truth boundary:
   scope, so the prediction is deliberately at risk: the physical equation is
   not to be respelled as a temporal liveness law to make it fire.
 * P-CF3: Galilean velocity addition should join an existing additive or
-  composition family rather than create a new structural archetype.
+  composition family rather than create a new structural archetype. The
+  registered form named convex-combination/vector-addition as candidates.
+  ADJUDICATED: fired in class, missed in candidates -- the twin formed
+  with chain_rank_nullity (previously a singleton), a skeleton not on the
+  candidate list; neither named candidate matched structurally.
 
 Both outcomes, including a scope-invisible P-CF2 miss, are findings.
 """

@@ -24,8 +24,12 @@ bindings), **near-miss** (informative failure, kept deliberately).
 - **Galilean velocity addition is rank decomposition in another vocabulary.**
   `OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY` and algebraic
   topology's `CHAINRANK = CYCLERANK + IMAGERANK` share the exact typed skeleton
-  `?0:V = +(?1:V, ?2:V)`. P-CF3 fired without respelling the standard law.
-  *exact, cross-discipline* (2026-08-09)
+  `?0:V = +(?1:V, ?2:V)`. P-CF3 fired without respelling the standard law
+  -- though neither of the prediction's NAMED candidates (convex
+  combination, vector addition) matched: the class fired through a
+  skeleton not on the candidate list, joining a previously-singleton
+  node. The candidate miss is recorded beside the class hit, per house
+  precision discipline. *exact, cross-discipline* (2026-08-09)
 
 - **Waiting is a controller outcome, not a failed proof search.** A valid ASK
   records one signed question and stops the generic controller as WAITING;
