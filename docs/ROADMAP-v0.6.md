@@ -215,6 +215,20 @@ First experiment: formula–diagram structural twins.
 - include deliberately inconsistent diagrams so the geometry verifier is
   load-bearing.
 
+**DEFERRED WITH EVIDENCE — the oracle layer does not exist yet.** A repository
+inventory at the v0.6 release gate finds no SVG/TikZ assets, scene-graph
+schema, diagram renderer, or geometry-verifier implementation. Diagram mentions
+elsewhere are roadmap/design/blog prose; the only corpus occurrence is itself a
+prose warning about three-variable Venn intuition.
+Running a parsed-vector/raster contest now would require inventing the source
+graph and the learned arms in one slice, leaving no independent oracle and no
+load-bearing negative verifier. That would violate V1's own ordering. v0.6
+therefore ships the fully specified protocol and explicit deferral permitted by
+item 11, not a toy pixel result. The first v0.7 visual milestone is data-only:
+one deterministic right-triangle renderer, source graph, inconsistent-pair
+generator, and exact geometry tests before either learned arm runs. P-V1–P-V4
+remain registered and unadjudicated.
+
 The expected advantage is not “general vision from synthetic diagrams.” It is
 an auditable first third modality: structure from source files, learned soft
 correspondence under style variation, and exact verification afterward. A

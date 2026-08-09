@@ -31,6 +31,11 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 - **Visual structure lane.** Run the formula–diagram twins experiment in
   `docs/DESIGN-visual-structure.md`: source scene-graph oracle, parsed SVG arm,
   parameter-matched pixel control, and exact geometry verification.
+  v0.6 inventory found no visual assets, renderer, scene-graph schema, or
+  geometry verifier, so the release explicitly deferred the experiment rather
+  than building oracle and learned arms together. First land a deterministic
+  right-triangle data generator plus inconsistent-pair verifier; only then
+  adjudicate P-V1–P-V4.
 
 ## Frame registry
 

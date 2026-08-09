@@ -1326,3 +1326,23 @@ family survives the strict admission rules; literal-vocabulary evaluation is
 refused because the fixed checkpoint vocabulary has no honest unknown token.
 The next grounded dataset must add compound-expansion source leaves and enough
 families to train and hold out families separately.
+
+## Visual-structure release-gate adjudication (v0.6 item 8)
+
+The release gate permits either the first experiment or an evidence-backed
+deferral. v0.6 takes the deferral. A repository-wide inventory found no SVG or
+TikZ assets, no diagram renderer, no source-scene-graph schema, and no exact
+geometry verifier. README, design, roadmap, and blog text discuss the proposed
+lane; the only corpus occurrence is prose explaining why a three-variable
+information diagram can mislead. In other words, none of V1's ground-truth
+layer exists yet.
+
+The protocol requires the source graph and deliberately inconsistent diagrams
+before the parsed-vector and raster arms, because those artifacts define both
+the oracle ceiling and the verifier ablation. Building all four together just
+to satisfy a release checkbox would make the tests self-confirming. P-V1–P-V4
+remain registered and unadjudicated. The next milestone is intentionally
+non-neural: render one right-triangle family deterministically, preserve its
+slot-to-element graph, generate one controlled-invalid counterpart, and prove
+the exact geometry checks distinguish them. Model comparison begins only after
+that foundation survives review.
