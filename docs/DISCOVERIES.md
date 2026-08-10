@@ -153,6 +153,41 @@ bindings), **near-miss** (informative failure, kept deliberately).
   0.000 to 1.000 is 3/3 absorption. The `recursive` channel, meanwhile, is
   empty across the whole graph. *GC1–GC5 all fired, including the named
   same-corpus guess; two unpredicted results recorded* (2026-08-09)
+  **CORRECTED 2026-08-09 (independent review of the channel-split delivery).
+  The text above is the entry as filed and is left standing; three of its
+  claims do not survive.**
+  1. *The absorption headline is RETRACTED.* "62 of 75" counts each absorbed
+     pattern's MOST INDEPENDENT owner; with ALL owners outside the discipline
+     it is 36 of 75, the other 26 carrying a same-corpus (25) or prior-corpus
+     (1) co-owner. Worse, the inference drawn from it never ran its own
+     baseline: the exact channel is 352 of 440 (80.0%) best-owner external and
+     162 of 440 (36.8%) all-owner external — statistically a wash against
+     absorption's 82.7% / 48.0% under either reading, and 5.7:1 larger by
+     absolute count. **Absorption is not where cross-discipline-looking credit
+     concentrates; it is where such credit is quarantined**, which was the
+     design intent all along. The narrow fact survives (most absorbed patterns
+     do have an out-of-discipline owner, and the aggregate silently claimed
+     that provenance); the "graph-wide leak" reading does not, and the BACKLOG
+     entry that called it "the measurement that would justify" gating the
+     pattern channel is demoted accordingly.
+  2. *The empty `recursive` channel is a DESIGN consequence, not a data
+     observation.* `analyze` subtracts the statement from every owner set, so
+     at `min_family >= 2` the only path into the channel — `best_channel`'s
+     empty-tally fallback — is unreachable and no corpus of any shape could
+     have landed there. (An `owner == sid` branch in `owner_channel` looked
+     like the mechanism and took zero calls at every `--min-family`; it is now
+     an enforced precondition instead.) The channel is reachable at
+     `--min-family 1`: 200 constituents over 105 statements, mean 0.316.
+  3. *"Four same-corpus-dominant corpora" is a LOWER bound, and every
+     `external` share is an UPPER bound.* Exact constituents take their most
+     independent owner and 190 of 440 are multi-owner — all 190 credited
+     `external`. Under the least-independent rule graph external falls
+     0.535 → 0.246 (352 → 162 constituents), `logic` 0.812 → 0.442, `algebra`
+     0.143 → 0.000, and the same-corpus-dominant list grows from 5 corpora to
+     12. `channel_summary` now publishes both bounds. The headline is
+     rule-invariant: provability's external is 0.033 either way and it is the
+     only corpus flagged `self_certifying` under either rule. *GC6 registered
+     and fired* (2026-08-09)
 
 - **Löb's axiom and temporal induction are one archetype and refuse to be
   one skeleton.** `provability.modal.loeb_axiom`

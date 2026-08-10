@@ -63,28 +63,62 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   renderer/verifier pair built to the same render/parse/invalidate/verify
   protocol. Do not name a family split until at least two non-isomorphic
   families exist — the same defect the v0.6 analogy lane was corrected for.
-- **Split grounding provenance. SHIPPED** (branch `feature/grounding-channels`):
+- **Split grounding provenance. SHIPPED (reporting half; the gate is not
+  shipped and is not yet justified)** — branch `feature/grounding-channels`.
   `decompose.py` attributes every grounded constituent to one of `external`,
   `prior_corpus`, `same_corpus`, `recursive`, `pattern_absorption` and prints a
-  per-corpus channel table; the report gains `channels`/`channel_scores` per
-  statement and a `channel_summary` block. The aggregate is untouched (graph
-  mean 0.770, 440 exact / 75 pattern, all 219 entries field-identical), because
-  the split is attribution first. The regression case now reads out as
-  intended: `provability.goedel_loeb.v1` keeps its 1.000 but resolves to
-  `same_corpus` 0.775 + `pattern_absorption` 0.192 against `external` 0.033 —
-  a single constituent (`IMPLIES⟨?0:V, ?1:V⟩` from `logic.inference.
-  contraposition`) is the corpus's entire extra-disciplinary content, and it is
-  the only corpus the new `self_certifying` flag raises. Pinned by
-  `tests/test_decompose_channels.py`.
-  **Still open before groundedness is used as an admission signal:** the
-  channel split reports, it does not gate. Nothing consumes `self_certifying`,
-  and the BACKLOG's proposed remedy — gating the pattern channel's
-  slot-swallows-call credit on the swallowed head being known outside the
-  statement's own corpus — was deliberately NOT implemented here, since it
-  would move aggregate scores and needs its own registered prediction. The
-  measurement that would justify it now exists: 62 of the graph's 75
-  pattern-absorption constituents absorb a pattern owned outside the absorbing
-  statement's discipline.
+  per-corpus channel table. The CLI now emits `channels`/`channel_scores` per
+  statement and a `channel_summary` block; **`reports/decompositions.json` as
+  committed PREDATES the split and has neither** — it is the pre-split file,
+  kept byte-stable on purpose, so "all 219 entries field-identical" is a
+  statement about the pre-existing fields of a freshly generated report
+  compared against it, not a description of the committed file's contents. See
+  the report-regeneration item below. The aggregate is untouched (graph mean
+  0.770, 440 exact / 75 pattern), because the split is attribution first. The
+  regression case now reads out as intended: `provability.goedel_loeb.v1` keeps
+  its 1.000 but resolves to `same_corpus` 0.775 + `pattern_absorption` 0.192
+  against `external` 0.033 — a single constituent (`IMPLIES⟨?0:V, ?1:V⟩` from
+  `logic.inference.contraposition`) is the corpus's entire extra-disciplinary
+  content, and it is the only corpus the new `self_certifying` flag raises,
+  under either owner rule. Pinned by `tests/test_decompose_channels.py`.
+  **Still open before groundedness is used as an admission signal:**
+  - The channel split reports, it does not gate. Nothing consumes
+    `self_certifying`.
+  - The BACKLOG's proposed remedy — gating the pattern channel's
+    slot-swallows-call credit on the swallowed head being known outside the
+    statement's own corpus — was deliberately NOT implemented here, since it
+    would move aggregate scores and needs its own registered prediction.
+    **The gating decision is still unjustified by measurement.** This entry
+    previously claimed "the measurement that would justify it now exists: 62
+    of the graph's 75 pattern-absorption constituents absorb a pattern owned
+    outside the absorbing statement's discipline." That number is real but it
+    justifies nothing on its own, because it was never put beside a baseline
+    (AGENTS.md working method 3). Both readings, with the baseline: absorption
+    is 62/75 (82.7%) by most-independent owner and 36/75 (48.0%) with ALL
+    owners external — the other 26 have a same-corpus (25) or prior-corpus (1)
+    co-owner. The exact channel, measured identically, is 352/440 (80.0%) and
+    162/440 (36.8%). A wash by rate under either reading, and the exact
+    channel dominates 5.7:1 by absolute count. What would justify the gate is
+    a measurement that *survives* that comparison — e.g. that absorbed credit
+    is disproportionately load-bearing for the scores a gate would move, or a
+    registered prediction about the score movement itself. Both are unrun.
+  - `external` shares are UPPER bounds (190 of 440 exact constituents are
+    multi-owner and all are credited `external`). A gate must be argued
+    against `external_lower` / `independent_lower`, now reported beside them:
+    graph external 0.535 generous vs 0.246 conservative.
+  - The `recursive` channel is structurally empty at the shipped defaults —
+    a design consequence, not a corpus fact — so the split has four live
+    channels. Reachable at `--min-family 1` (200 constituents, mean 0.316).
+- **Regenerate `reports/decompositions.json` and check report coherence.**
+  The committed report predates the channel split: it lacks `channels`,
+  `channel_scores` and `channel_summary`, so the shipped file and the shipped
+  CLI disagree about the schema of their own output, and nothing detects it.
+  The adjudication numbers in this entry came from a scratch-directory run.
+  Regenerating is not free — it is a large diff and wants the same
+  byte-identity discipline the seeds get — so it belongs with ROADMAP-v0.7
+  item 10's "report regeneration/coherence checks parallel to seed coherence"
+  bullet and should land with it, not before it. Until then, treat every
+  `reports/*.json` as a build artifact of an unknown commit.
 - **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
   asked whether emotion classification maps/vectors belong beside math/science
   corpora. The answer is recorded in `docs/DESIGN-affect.md`: source-qualified
@@ -1259,22 +1293,34 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   and extra-corpus grounding separately (provenance is in the inventory
   already), and gate the pattern channel's slot-swallows-call credit on
   the swallowed head being known outside the statement's own corpus.
-  **HALF SHIPPED** (branch `feature/grounding-channels`): the reporting half
-  is delivered. `decompose.py` now attributes every grounded constituent to
-  `external` / `prior_corpus` / `same_corpus` / `recursive` /
+  **HALF SHIPPED** (branch `feature/grounding-channels`) — the reporting half
+  of a two-half fix, which is why ROADMAP-v0.7 item 10's first bullet reads
+  SHIPPED (its own scope was the split) while this entry reads HALF SHIPPED
+  (its scope includes the gate). `decompose.py` now attributes every grounded
+  constituent to `external` / `prior_corpus` / `same_corpus` / `recursive` /
   `pattern_absorption`, and the fails-open corpus reads out as
   `same_corpus` 0.775 + `pattern_absorption` 0.192 + `external` 0.033 — the
   1.000 stands, but nothing about it is external any more, and the run flags
   `provability.goedel_loeb.v1` as the graph's only `self_certifying` corpus
   (aggregate >= 0.9 with external + prior <= 0.1; two other corpora at
   aggregate >= 0.9 are correctly not flagged, so the flag is not a restatement
-  of the aggregate). The gating half is untouched on purpose: it changes
-  scores and therefore needs its own registered prediction. Recorded en route:
-  the pattern channel is where cross-discipline-looking credit concentrates
+  of the aggregate), under both the generous and the conservative owner rule.
+  The gating half is untouched on purpose: it changes scores and therefore
+  needs its own registered prediction. Recorded en route:
+  `temporal.recurrence.until_unfolding`'s v2 repair from 0.000 to 1.000 is 3/3
+  pattern absorption — the second fails-open half is bigger than the
+  provability corpus.
+  **Correction (2026-08-09, review).** This entry also recorded that "the
+  pattern channel is where cross-discipline-looking credit concentrates
   graph-wide (62 of 75 absorbed patterns are owned outside the absorbing
-  statement's discipline), and `temporal.recurrence.until_unfolding`'s v2
-  repair from 0.000 to 1.000 is 3/3 pattern absorption — the second fails-open
-  half is bigger than the provability corpus.
+  statement's discipline)". The 62/75 counts most-independent owners; with ALL
+  owners external it is 36/75, the other 26 having a same-corpus (25) or
+  prior-corpus (1) co-owner. The *inference* is withdrawn: the exact channel
+  scores 352/440 (80.0%) and 162/440 (36.8%) on the same two readings, so
+  absorption does not concentrate such credit — it is a wash by rate and the
+  exact channel is 5.7:1 larger by count. Absorption is where that credit is
+  *quarantined*, which was the design intent. See docs/DISCOVERIES.md for the
+  retraction as filed.
 - **`specialize.py` produces zero edges and zero noise on call-only corpora —
   fifth confirmation, from the other side.** 468 specialization edges over the
   merged graph, none touching either of the 17 new nodes in either direction.

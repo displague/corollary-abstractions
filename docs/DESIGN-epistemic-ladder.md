@@ -33,9 +33,38 @@ authored in the same act), `recursive` (self/definitional), and
 constituent's structure). Channel counts partition the same numerator over
 the same denominator, so the aggregate is unchanged and only its
 attribution is new. Any future use of groundedness as an *admission*
-signal must read the channels, not the aggregate: a corpus can reach 1.000
-on `same_corpus` + `pattern_absorption` alone, and one in the corpus does
-(`data/provability`).
+signal must read the channels, not the aggregate.
+
+**Corrected 2026-08-09 after review.** This paragraph originally read "a
+corpus can reach 1.000 on `same_corpus` + `pattern_absorption` alone, and
+one in the corpus does (`data/provability`)". That is false of corpora.
+What was measured: `data/provability` grades 1.000 aggregate while taking
+0.967 of it from `same_corpus` (0.775) + `pattern_absorption` (0.192),
+against `external` 0.033 — five of its six statements take *no* external
+credit at all, and 26 individual statements graph-wide do reach 1.000 on
+those two channels alone (5 of provability's 6, the rest spread over
+`temporal_logic`, `narrative`, `morphology`, `differential_topology` and
+`geometry`). No *corpus* mean reaches 1.000 on them; provability's
+0.967 is the highest, and the only other corpus grading 1.000 aggregate
+(`differential_topology`) takes 0.634 there against 0.367 external. The
+conclusion survives the correction — a near-perfect aggregate can be almost
+entirely self- and absorption-supplied, which is exactly why an admission
+gate must read channels — but the number was wrong and is now stated as
+measured.
+
+Two further readings the channels demand:
+
+- **`external` is an upper bound, not a point.** A constituent with owners
+  in several channels is credited to the most independent one, and 190 of
+  the graph's 440 exact constituents are multi-owner (all 190 credited
+  `external`). `channel_summary` therefore publishes the least-independent
+  counterpart beside every figure (`external_lower`, `independent_lower`,
+  `self_certifying_lower`): graph external is 0.535 generously and 0.246
+  conservatively. A gate must be argued against the *lower* bound. The
+  provability readout is rule-invariant (0.033 either way) and it is the
+  only corpus flagged `self_certifying` under either rule.
+- **`recursive` is structurally empty at the shipped defaults**, so the rung
+  has four live channels, not five. See `scripts/decompose.py`.
 
 ## Where each concept already lives
 

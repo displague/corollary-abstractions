@@ -15,6 +15,26 @@ The provability corpus is the regression case the item names. Its 1.000 must
 keep resolving into same-corpus + pattern-absorption with a near-zero external
 channel; if a future change lets that corpus claim external grounding, this
 file fails and the claim has to be argued rather than absorbed.
+
+Five further pins were added after the channel-split review, each guarding a
+claim the review found unguarded:
+
+- the `recursive` channel is structurally empty at the shipped defaults and
+  reachable only at `--min-family 1`. Both halves are pinned, because a unit
+  test over synthetic provenance cannot see either: the emptiness is a
+  property of how `analyze` builds owner sets, not of `owner_channel`.
+- the `prior_corpus` rule earns its four constituents. Deleting the shared-
+  discipline test would silently reclassify them as `external` evidence,
+  which is precisely the umbrella laundering the rule exists to stop, and no
+  aggregate would move.
+- `channel_scores` is the ROUNDED field; the exact partition identity lives on
+  `channel_shares`. Three shipped rows differ in the last digit and the
+  assertion says so rather than pretending otherwise.
+- owner precedence is the flattering direction, so the conservative rollup
+  must stay reported beside it and provability must self-certify under both.
+- absorption's out-of-discipline share must stay next to the exact-channel
+  baseline it fails to beat, so the retracted "concentrates in absorption"
+  inference cannot creep back in as an unbaselined number.
 """
 
 from __future__ import annotations
@@ -32,6 +52,8 @@ from decompose import (  # noqa: E402
     analyze,
     best_channel,
     channel_shares,
+    conservative_channel_shares,
+    least_independent_channel,
     owner_channel,
 )
 
@@ -62,8 +84,17 @@ class ChannelClassification(unittest.TestCase):
     def test_disjoint_discipline_is_external(self):
         self.assertEqual(self.channel("a", "d"), "external")
 
-    def test_self_support_is_recursive(self):
-        self.assertEqual(self.channel("a", "a"), "recursive")
+    def test_self_ownership_is_rejected_not_silently_recursive(self):
+        """`analyze` subtracts the statement, so this call is a caller bug.
+
+        It used to return "recursive", and the module docstring cited that
+        branch as the source of recursive credit. Review measured zero calls
+        to it at every `--min-family` — a dead branch impersonating the real
+        mechanism (`best_channel`'s empty tally). Failing loudly is what makes
+        the precondition checkable instead of merely asserted in prose.
+        """
+        with self.assertRaises(ValueError):
+            self.channel("a", "a")
 
     def test_precedence_prefers_the_most_independent_owner(self):
         # Attribution is generous on purpose: a low external share must not be
@@ -74,6 +105,17 @@ class ChannelClassification(unittest.TestCase):
             best_channel({"same_corpus": 9, "prior_corpus": 1}), "prior_corpus")
         self.assertEqual(best_channel({"recursive": 1}), "recursive")
         self.assertEqual(best_channel({}), "recursive")
+
+    def test_conservative_rule_prefers_the_least_independent_owner(self):
+        # The published bracket's other end. Same tallies, opposite tie-break.
+        self.assertEqual(
+            least_independent_channel({"same_corpus": 1, "external": 9}),
+            "same_corpus")
+        self.assertEqual(
+            least_independent_channel({"prior_corpus": 1, "external": 9}),
+            "prior_corpus")
+        self.assertEqual(least_independent_channel({"external": 3}), "external")
+        self.assertEqual(least_independent_channel({}), "recursive")
 
 
 class ChannelSplitOverCorpus(unittest.TestCase):
@@ -190,6 +232,178 @@ class ChannelSplitOverCorpus(unittest.TestCase):
                     self.assertEqual(c["channel"], "same_corpus",
                                      f"{d['statement_id']} {c['skeleton']}")
         self.assertGreaterEqual(seen_bare, 3)
+
+    # -- the recursive channel is EMPTY BY DESIGN, not by data -------------
+
+    def test_recursive_channel_is_structurally_empty_at_defaults(self):
+        """0 everywhere, and the reason is the owner construction, not `data/`.
+
+        `analyze` subtracts the statement from both owner sets, so at
+        `min_family >= 2` no constituent can pass the grounding test with an
+        empty tally. Nothing in the corpus could land here. Pinning it at the
+        corpus level (not just as a unit assertion on `best_channel`) is what
+        catches a change that starts minting self-grounding.
+        """
+        self.assertEqual(
+            sum(d["channels"]["recursive"] for d in self.decompositions), 0)
+        self.assertEqual(
+            self.summary["graph"]["channel_means"]["recursive"], 0.0)
+        # The v2 route into the channel — a statement whose denominator is
+        # emptied by self-headed exclusion — is also unused; all four
+        # recursive definitions keep surviving constituents.
+        self.assertEqual(
+            [d["statement_id"] for d in self.decompositions
+             if d["considered"] == 0], [])
+        self.assertEqual(
+            sorted(d["defines_head"] for d in self.decompositions
+                   if d.get("recursive")),
+            ["EVENTUALLY", "ONCE", "SINCE", "UNTIL"])
+
+    def test_recursive_channel_is_reachable_at_min_family_one(self):
+        """The sensitivity that makes the emptiness a design fact, pinned.
+
+        At `--min-family 1` a subterm family of size one — the statement
+        itself — passes the grounding test with no other owner, so
+        `best_channel`'s empty-tally fallback fires. If someone deletes that
+        fallback, the defaults keep reading 0 and every other test still
+        passes; only this one notices.
+        """
+        result = analyze(REPO_ROOT / "data", min_family=1)
+        decs = result["decompositions"]
+        self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 200)
+        self.assertEqual(
+            result["channel_summary"]["graph"]["channel_means"]["recursive"],
+            0.316)
+        self.assertEqual(
+            sum(1 for d in decs if d["channels"]["recursive"]), 105)
+
+    # -- the prior_corpus rule earns its (small) keep ----------------------
+
+    def test_prior_corpus_constituents_are_pinned(self):
+        """Four constituents, all on the umbrella label `mathematics`.
+
+        Small, but the rule is not decorative: without the shared-discipline
+        test these four become `external` evidence, and no aggregate moves to
+        show it. A unit test on `owner_channel` cannot catch that deletion at
+        corpus level — this can.
+        """
+        found = sorted(
+            (d["statement_id"], c["skeleton"], tuple(c["shared_disciplines"]))
+            for d in self.decompositions for c in d["constituents"]
+            if c["channel"] == "prior_corpus")
+        self.assertEqual(found, [
+            ("geometry.area_formulas.trapezoid_area_formula",
+             "*(?0:P, ?1:V, +(?2:V, ?3:V))", ("mathematics",)),
+            ("graphtheory.enumeration.complete_graph_edge_count",
+             "inv(2)", ("mathematics",)),
+            ("numanalysis.integration.trapezoidal_rule",
+             "*(?0:P, ?1:V, +(?2:V, ?3:V))", ("mathematics",)),
+            ("numanalysis.rootfinding.bisection_interval_halving",
+             "inv(2)", ("mathematics",)),
+        ])
+        self.assertGreater(
+            self.summary["graph"]["channel_means"]["prior_corpus"], 0.0)
+
+    # -- the shipped rounded field, honestly bounded -----------------------
+
+    def test_shipped_channel_scores_sum_within_rounding(self):
+        """`channel_scores` is rounded; `channel_shares` is exact.
+
+        Three of the 219 shipped rows sum to 0.001 off `groundedness` because
+        each channel is rounded independently. The module docstring says so
+        and this asserts the bound the docstring promises, so a real partition
+        break cannot hide behind "it's just rounding".
+        """
+        off = 0
+        for d in self.decompositions:
+            total = sum(d["channel_scores"].values())
+            self.assertAlmostEqual(total, d["groundedness"], delta=0.002,
+                                   msg=d["statement_id"])
+            if abs(total - d["groundedness"]) > 1e-9:
+                off += 1
+        self.assertEqual(off, 3)
+
+    # -- owner precedence is the flattering direction ----------------------
+
+    def test_external_precedence_is_load_bearing_not_a_tie_break(self):
+        exact = [c for d in self.decompositions for c in d["constituents"]
+                 if c["grounded_via"] == "exact"]
+        multi = [c for c in exact if len(c["owner_channels"]) > 1]
+        self.assertEqual(len(exact), 440)
+        self.assertEqual(len(multi), 190)
+        # Every multi-owner constituent takes `external`; the generous rule is
+        # doing real work, so `external` must be published as an upper bound.
+        self.assertTrue(all(c["channel"] == "external" for c in multi))
+
+    def test_conservative_rollup_brackets_the_external_share(self):
+        graph = self.summary["graph"]
+        self.assertEqual(graph["channel_means"]["external"], 0.535)
+        self.assertEqual(graph["channel_means_lower"]["external"], 0.246)
+        self.assertEqual(graph["external_lower"], 0.246)
+        self.assertLessEqual(graph["external_lower"],
+                             graph["channel_means"]["external"])
+        exact = [c for d in self.decompositions for c in d["constituents"]
+                 if c["grounded_via"] == "exact"]
+        self.assertEqual(sum(1 for c in exact if c["channel"] == "external"),
+                         352)
+        self.assertEqual(
+            sum(1 for c in exact
+                if least_independent_channel(c["owner_channels"]) == "external"),
+            162)
+        # The conservative shares are still a partition of the same numerator.
+        for d in self.decompositions:
+            self.assertAlmostEqual(
+                sum(conservative_channel_shares(d).values()),
+                d["groundedness"], places=3, msg=d["statement_id"])
+
+    def test_provability_self_certifies_under_both_owner_rules(self):
+        """GC6, registered in the decompose.py docstring before this rollup."""
+        block = self.summary["corpora"][PROVABILITY]
+        self.assertTrue(block["self_certifying"])
+        self.assertTrue(block["self_certifying_lower"])
+        self.assertEqual(block["channel_means_lower"]["external"], 0.033)
+        self.assertEqual(block["independent_lower"], 0.033)
+        both = [cid for cid, blk in self.summary["corpora"].items()
+                if blk["self_certifying"] or blk["self_certifying_lower"]]
+        self.assertEqual(both, [PROVABILITY])
+
+    def test_same_corpus_dominance_is_a_lower_bound(self):
+        """GC3 counted four non-provability corpora; generosity hid the rest."""
+        generous = [cid for cid, blk in self.summary["corpora"].items()
+                    if blk["same_corpus_dominant"]]
+        conservative = [cid for cid, blk in self.summary["corpora"].items()
+                        if blk["same_corpus_dominant_lower"]]
+        self.assertEqual(len(generous), 5)
+        self.assertEqual(len(conservative), 12)
+        self.assertTrue(set(generous) <= set(conservative))
+
+    # -- the retracted inference stays next to its baseline ----------------
+
+    def test_absorption_cross_discipline_share_does_not_beat_the_baseline(self):
+        """The 62-of-75 number, both readings, beside the exact channel.
+
+        The commit that shipped the split inferred from 62/75 that absorption
+        is where cross-discipline-looking credit concentrates graph-wide. It
+        does not: the exact channel scores the same way by rate and 5.7:1
+        higher by count. Pinned so the inference cannot return unbaselined.
+        """
+        absorbed = [c for d in self.decompositions for c in d["constituents"]
+                    if c["channel"] == "pattern_absorption"]
+        exact = [c for d in self.decompositions for c in d["constituents"]
+                 if c["grounded_via"] == "exact"]
+        a_best = sum(1 for c in absorbed
+                     if c["absorbed_from_channel"] == "external")
+        a_all = sum(1 for c in absorbed
+                    if set(c["absorbed_owner_channels"]) == {"external"})
+        e_best = sum(1 for c in exact if c["channel"] == "external")
+        e_all = sum(1 for c in exact
+                    if set(c["owner_channels"]) == {"external"})
+        self.assertEqual((a_best, a_all, len(absorbed)), (62, 36, 75))
+        self.assertEqual((e_best, e_all, len(exact)), (352, 162, 440))
+        # Neither reading separates the channels by more than 12 points, and
+        # the exact channel wins outright on absolute count.
+        self.assertLess(abs(a_best / len(absorbed) - e_best / len(exact)), 0.12)
+        self.assertGreater(e_best, 5 * a_best)
 
     # -- the flag must discriminate, not just restate the aggregate --------
 

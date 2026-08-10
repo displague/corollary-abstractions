@@ -53,17 +53,34 @@ Every grounded constituent is therefore attributed to exactly one channel:
   of grounding in knowledge the statement's authoring act did not bring with
   it.
 - `prior_corpus` — another corpus, but the two statements share a discipline
-  label (`theory_context.disciplines`; 57 nodes carry more than one, and six
-  labels span corpora, so this is a real channel and not a formality). Same
-  discipline, separately authored.
+  label (`theory_context.disciplines`; 57 nodes carry more than one and six
+  labels span corpora). Same discipline, separately authored. MEASURED, and
+  smaller than the first draft of this docstring claimed: 4 of 440 exact
+  constituents, graph mean 0.008, and all four share the umbrella label
+  `mathematics`. The *mechanism* is necessary — without it those four would
+  be counted as external evidence, which is exactly the umbrella laundering
+  `shared_disciplines` exists to expose — but the channel is not today a
+  substantive source of credit, and "a real channel rather than a formality"
+  overstated what was measured.
 - `same_corpus` — the supporting statements are siblings in this statement's
   own `nodes.json`, i.e. authored in the same act. This is the channel that
   lets a hermetic corpus self-certify.
-- `recursive` — self/definitional. Holds (a) grounded constituents whose only
-  support is the statement itself, and (b) the entire share of a statement
-  whose constituents were *all* definitional (the v2 self-headed exclusions,
-  which leave the denominator; such a statement scores 1.000 with nothing
-  external about it, and the channel now says so).
+- `recursive` — self/definitional, and STRUCTURALLY EMPTY at the shipped
+  defaults. The only path that produces recursive credit is `best_channel`'s
+  empty-tally fallback: a constituent that passes the grounding test with no
+  *other* statement supporting it. `analyze` subtracts the statement from
+  both owner sets before classifying (`named` at the exact-lookup site, and
+  `hosts` via `- {n.statement_id}`), so at `min_family >= 2` a constituent
+  can only pass by recurring in some other statement and the fallback is
+  unreachable. The channel's emptiness across all 22 corpora is therefore a
+  consequence of the design, not a fact about the data; an earlier draft of
+  this docstring and of docs/DISCOVERIES.md attributed it to the data and was
+  wrong. It is reachable, and large, at `--min-family 1`: 200 constituents
+  over 105 statements, graph mean 0.316, because a subterm family of size one
+  (the statement itself) then passes the test with an empty owner set. The v2
+  self-headed exclusion can also route a whole statement here by emptying its
+  denominator; measured, none does — all four recursive definitions keep two
+  or three surviving constituents.
 - `pattern_absorption` — the v2 slot-swallows-structure channel. Credit here
   is quarantined regardless of who owns the pattern: a slot binding a call
   subtree says the constituent is an *instance* of a known shape, not that
@@ -74,9 +91,31 @@ Every grounded constituent is therefore attributed to exactly one channel:
 
 Precedence for exact matches is the most independent owner present
 (external > prior_corpus > same_corpus > recursive): attribution is generous
-to the statement, so a near-zero `external` channel is a strong reading. Per
-statement the channel counts partition the grounded numerator over the
-unchanged denominator, so channel shares sum to `groundedness` exactly.
+to the statement, so a near-zero `external` channel is a strong reading. That
+generosity is the FLATTERING direction and it is load-bearing, not a
+tie-break detail: 190 of the graph's 440 exact constituents have owners in
+more than one channel, and all 190 are credited `external`. **Every reported
+`external` share, and every `independent_mean`, is therefore an UPPER BOUND.**
+`channel_summary` reports the least-independent counterpart beside it
+(`channel_means_lower`, `external_lower`, `independent_lower`,
+`self_certifying_lower`, `same_corpus_dominant_lower`) rather than replacing
+it, so both readings stay on the record. Under the conservative rule graph
+external falls 0.535 -> 0.246 (352 -> 162 constituents), with per-corpus
+swings as large as `logic.boolean_foundations.v1` 0.812 -> 0.442 and
+`algebra.foundations.v1` 0.143 -> 0.000; eight constituents are credited
+`external` while their same-corpus owners outnumber their external ones (all
+eight the `D⟨?0:V⟩` of `calculus`, two external owners against four
+siblings). The headline is robust to the choice: `data/provability`'s
+external share is 0.033 under both rules, because none of its exact
+constituents is multi-owner.
+
+Per statement the channel counts partition the grounded numerator over the
+unchanged denominator, so the unrounded shares (`channel_shares`) sum to
+`groundedness` exactly *before rounding*. The report's `channel_scores` are
+those shares rounded to three places and may differ from `groundedness` in
+the last digit: 3 of the 219 shipped rows do, by 0.001. Consumers that need
+the identity must use `channel_shares`, and the shipped fields are asserted
+only to within 0.002.
 
 REGISTERED PREDICTIONS (2026-08-09, written before the first channel run;
 adjudication appended below, per AGENTS.md working method 2):
@@ -114,7 +153,11 @@ ADJUDICATION (2026-08-09, first channel run over all 22 corpora):
   — the named guess, and the cleanest case as guessed — `narrative` 0.308 vs
   0.077 (the runner-up guess), `temporal_logic` 0.255 vs 0.159, and
   `differential_topology` 0.567 vs 0.367, which was not anticipated and is
-  the one corpus besides provability that grades 1.000.
+  the one corpus besides provability that grades 1.000. **Four is a LOWER
+  BOUND**, because the owner precedence is generous to `external`: under the
+  conservative rule the same test names 12 corpora, 11 of them
+  non-provability. Generosity suppresses same-corpus dominance; it cannot
+  manufacture it, so the direction of GC3's result is safe under both rules.
 - GC4 **FIRED.** All 219 emitted entries are field-for-field identical to the
   pre-split report on `groundedness`, `considered`, `grounded_exact`,
   `grounded_via_pattern` and every pre-existing constituent key; graph mean
@@ -125,17 +168,60 @@ ADJUDICATION (2026-08-09, first channel run over all 22 corpora):
   prediction said 221, the node count; two nodes have no non-trivial
   constituent at all and emit no entry, as before the split.)
 
-Two unpredicted results, recorded because they were not predicted:
+Two unpredicted results were recorded because they were not predicted. BOTH
+were CORRECTED under review on 2026-08-09; the original wording is kept in
+docs/DISCOVERIES.md with the correction attached, per the retraction
+discipline (AGENTS.md working method 2).
 
 - The `recursive` channel is empty across the whole graph (0.000 everywhere).
-  The four self-referential definitions kept non-empty denominators after the
-  v2 exclusion, so nothing lands in it. `temporal.recurrence.until_unfolding`
-  in particular grades 1.000 with all three surviving constituents in
-  `pattern_absorption`: v2 moved it off 0.000 entirely by slot absorption, a
-  fact the aggregate could not show.
-- 62 of the graph's 75 pattern-absorption constituents absorb a pattern owned
-  outside the absorbing statement's discipline. Absorption is where
-  external-looking credit concentrates graph-wide, not a provability quirk.
+  ORIGINALLY recorded as an observation about the corpus — "the four
+  self-referential definitions kept non-empty denominators after the v2
+  exclusion, so nothing lands in it." That sentence is true of those four
+  definitions but it is not the reason, and stating it as the reason
+  concealed the real one: at `min_family >= 2` the channel is structurally
+  unreachable (see the `recursive` bullet above), so no corpus of any shape
+  could have landed in it. **The emptiness is a design consequence, not a
+  data observation**, and it is sensitive to one flag: at `--min-family 1`
+  the channel carries 200 constituents and a graph mean of 0.316.
+  `temporal.recurrence.until_unfolding` grading 1.000 with all three
+  surviving constituents in `pattern_absorption` stands exactly as measured:
+  v2 moved it off 0.000 entirely by slot absorption, a fact the aggregate
+  could not show.
+- 62 of the graph's 75 pattern-absorption constituents absorb a pattern whose
+  MOST INDEPENDENT owner is outside the absorbing statement's discipline
+  (82.7%). Under the all-owners reading it is 36 of 75 (48.0%); the other 26
+  also have a same-corpus owner (25) or a prior-corpus one (1). The
+  *inference* originally drawn — "absorption is where external-looking credit
+  concentrates graph-wide, not a provability quirk" — **is RETRACTED: it
+  failed the capability-blind baseline it never ran** (AGENTS.md working
+  method 3). The exact channel, measured the same two ways, is 352 of 440
+  best-owner external (80.0%) and 162 of 440 all-owner external (36.8%) — a
+  wash against absorption by rate under either reading, and 5.7:1 in
+  absorption's disfavour by absolute count (352 constituents against 62).
+  Absorption is not where cross-discipline-looking credit concentrates; it is
+  where such credit is *quarantined*, which was the design intent all along.
+  What survives is the narrow fact and nothing more: most absorbed patterns
+  have an out-of-discipline owner, and the aggregate silently claimed that
+  provenance for them.
+
+REGISTERED PREDICTION GC6 (2026-08-09, written before the conservative
+rollup was implemented, in response to the channel-split review's finding
+that owner precedence is the flattering direction):
+
+- GC6: `data/provability` is flagged `self_certifying` under BOTH owner rules
+  — the generous most-independent one and the conservative least-independent
+  one — and remains the only corpus so flagged under either. This is a weak
+  prediction and is registered as one: the review had already reported that
+  provability's `external` is rule-invariant at 0.033. The live risk is the
+  other leg of `independent_mean`, since the conservative rule moves credit
+  toward `prior_corpus` as well as `same_corpus`, and a corpus can lose the
+  flag by gaining prior-corpus credit.
+
+ADJUDICATION (2026-08-09): GC6 **FIRED.** Under the conservative rule
+provability's `external` stays 0.033 and its `prior_corpus` stays 0.000, so
+`independent_lower` is 0.033 and it is the only corpus flagged under either
+rule. The rule change is not cosmetic elsewhere: graph `external` falls
+0.535 -> 0.246 and the same-corpus-dominant list grows from 5 corpora to 12.
 """
 
 from __future__ import annotations
@@ -231,6 +317,13 @@ def defined_head(t: tuple) -> tuple | None:
 OWNER_CHANNELS = ("external", "prior_corpus", "same_corpus", "recursive")
 CHANNELS = OWNER_CHANNELS + ("pattern_absorption",)
 
+# The opposite tie-break, reported beside the shipped one so that every
+# `external` share is bracketed rather than asserted. 190 of 440 exact
+# constituents are multi-owner and all 190 are credited `external` under
+# OWNER_CHANNELS; under this order the graph's external constituents fall
+# 352 -> 162. Neither order is "the truth" — the pair is.
+CONSERVATIVE_OWNER_CHANNELS = tuple(reversed(OWNER_CHANNELS))
+
 # Thresholds for the `self_certifying` readout: a corpus that grades near the
 # top of the scale while nearly none of the credit comes from outside its own
 # authoring act. Chosen to bracket the recorded regression case (provability,
@@ -251,9 +344,21 @@ def owner_channel(sid: str, owner: str, corpus_of: dict[str, str],
     per corpus, because nodes claim more disciplines than their corpus header
     does and an umbrella label like `mathematics` is exactly the kind of shared
     ground that must not be counted as external evidence.
+
+    PRECONDITION: `owner != sid`. `analyze` subtracts the statement from every
+    owner set before classifying, so a statement is never its own owner here.
+    This function used to answer `"recursive"` for the self case; review
+    measured that branch taking zero calls at every `--min-family`, while the
+    docstring cited it as the source of recursive credit — a dead branch
+    standing in for the real mechanism (`best_channel`'s empty-tally
+    fallback). It is now an enforced invariant rather than a silent one, so
+    that a future caller which stops subtracting the statement fails loudly
+    instead of quietly minting self-grounding.
     """
     if owner == sid:
-        return "recursive"
+        raise ValueError(
+            f"owner_channel called with owner == sid ({sid!r}); owner sets "
+            "must have the statement subtracted before attribution")
     if corpus_of.get(owner) == corpus_of.get(sid):
         return "same_corpus"
     if disciplines_of.get(owner, frozenset()) & disciplines_of.get(sid, frozenset()):
@@ -262,7 +367,29 @@ def owner_channel(sid: str, owner: str, corpus_of: dict[str, str],
 
 
 def best_channel(channels) -> str:
+    """Most independent owner channel present; `recursive` if there is none.
+
+    The final `return` is not a defensive default — it is the ONLY path by
+    which the `recursive` channel is ever populated. An empty tally means a
+    constituent passed the grounding test with no supporting statement other
+    than its own, which at `min_family >= 2` cannot happen (see the module
+    docstring's `recursive` bullet) and at `--min-family 1` happens 200 times.
+    """
     for ch in OWNER_CHANNELS:
+        if ch in channels:
+            return ch
+    return "recursive"
+
+
+def least_independent_channel(channels) -> str:
+    """`best_channel`'s conservative counterpart: the least independent owner.
+
+    Used only by the `*_lower` rollup, never to score a constituent. It exists
+    so that the shipped `external` share is published as an upper bound with
+    its lower bound beside it, rather than as a point estimate whose value
+    depends on an undisclosed tie-break.
+    """
+    for ch in CONSERVATIVE_OWNER_CHANNELS:
         if ch in channels:
             return ch
     return "recursive"
@@ -532,6 +659,26 @@ def channel_shares(entry: dict) -> dict[str, float]:
     return {ch: entry["channels"][ch] / considered for ch in CHANNELS}
 
 
+def conservative_channel_shares(entry: dict) -> dict[str, float]:
+    """The same statement re-attributed under the least-independent owner rule.
+
+    Recomputed from each constituent's recorded `owner_channels` tally, so it
+    needs no second pass over the corpus and cannot drift from the shipped
+    attribution. `pattern_absorption` is unaffected: absorbed credit is
+    quarantined by the channel it lands in, not by who owns the pattern.
+    """
+    considered = entry["considered"]
+    if not considered:
+        return {ch: (1.0 if ch == "recursive" else 0.0) for ch in CHANNELS}
+    counts = dict.fromkeys(CHANNELS, 0)
+    for c in entry["constituents"]:
+        if c["grounded_via"] == "pattern":
+            counts["pattern_absorption"] += 1
+        else:
+            counts[least_independent_channel(c["owner_channels"])] += 1
+    return {ch: counts[ch] / considered for ch in CHANNELS}
+
+
 def channel_summary(decompositions: list[dict]) -> dict:
     """Per-corpus and whole-graph channel means.
 
@@ -539,6 +686,12 @@ def channel_summary(decompositions: list[dict]) -> dict:
     a corpus that grades near-perfect while almost none of the credit comes
     from outside its own authoring act. It is a reporting flag, not a gate —
     nothing consumes it yet, and the provability corpus is its regression case.
+
+    Every `external`/`independent` figure here is an UPPER bound: exact
+    constituents take their most independent owner, and 190 of 440 are
+    multi-owner. The `*_lower` keys carry the least-independent counterpart so
+    both bounds are published together; the flag survives under both, which is
+    GC6 in the module docstring.
     """
     by_corpus: dict[str, list[dict]] = defaultdict(list)
     for d in decompositions:
@@ -552,6 +705,10 @@ def channel_summary(decompositions: list[dict]) -> dict:
         counts = {ch: sum(e["channels"][ch] for e in entries) for ch in CHANNELS}
         mean_g = sum(e["groundedness"] for e in entries) / n if n else 0.0
         independent = means["external"] + means["prior_corpus"]
+        lower_shares = [conservative_channel_shares(e) for e in entries]
+        lower = {ch: (sum(s[ch] for s in lower_shares) / n if n else 0.0)
+                 for ch in CHANNELS}
+        independent_lower = lower["external"] + lower["prior_corpus"]
         blk = {
             "statements": n,
             "mean_groundedness": round(mean_g, 3),
@@ -561,6 +718,16 @@ def channel_summary(decompositions: list[dict]) -> dict:
             "same_corpus_dominant": means["same_corpus"] > independent,
             "self_certifying": (mean_g >= SELF_CERTIFYING_AGGREGATE
                                 and independent <= SELF_CERTIFYING_INDEPENDENT),
+            # Conservative counterpart: same constituents, least independent
+            # owner. Reported beside the shipped figures, never replacing
+            # them, so that `external` is read as a bracket and not a point.
+            "channel_means_lower": {ch: round(lower[ch], 3) for ch in CHANNELS},
+            "external_lower": round(lower["external"], 3),
+            "independent_lower": round(independent_lower, 3),
+            "same_corpus_dominant_lower": lower["same_corpus"] > independent_lower,
+            "self_certifying_lower": (
+                mean_g >= SELF_CERTIFYING_AGGREGATE
+                and independent_lower <= SELF_CERTIFYING_INDEPENDENT),
         }
         if discipline is not None:
             blk["discipline"] = discipline
@@ -667,14 +834,51 @@ def report(result: dict, write_report: Path | None = None) -> None:
                 if blk["same_corpus_dominant"]]
     print(f"  Same-corpus-dominant corpora (same_corpus mean above external + "
           f"prior_corpus): {', '.join(dominant) if dominant else 'none'}")
-    absorbed_external = sum(
-        1 for d in decompositions for c in d["constituents"]
-        if c["channel"] == "pattern_absorption"
-        and c["absorbed_from_channel"] == "external")
-    print(f"  Pattern-absorption constituents whose absorbed pattern is owned "
-          f"outside the discipline: {absorbed_external} of "
-          f"{g['channel_constituents']['pattern_absorption']} — credit the "
-          f"aggregate reported as ordinary grounding.")
+
+    # Every external figure above is an upper bound (exact constituents take
+    # their most independent owner). Publish the bracket, not the point.
+    flagged_lo = [cid for cid, blk in summary["corpora"].items()
+                  if blk["self_certifying_lower"]]
+    dominant_lo = [cid for cid, blk in summary["corpora"].items()
+                   if blk["same_corpus_dominant_lower"]]
+    print(f"  Conservative (least-independent owner) counterpart — every "
+          f"`extern` above is an UPPER BOUND:")
+    print(f"    graph external {gm['external']:.3f} -> "
+          f"{g['channel_means_lower']['external']:.3f}, independent "
+          f"{g['independent_mean']:.3f} -> {g['independent_lower']:.3f}")
+    print(f"    self-certifying under both rules: "
+          f"{', '.join(sorted(set(flagged) & set(flagged_lo))) or 'none'}"
+          f"; same-corpus-dominant grows {len(dominant)} -> "
+          f"{len(dominant_lo)} corpora (the shipped count is a lower bound)")
+
+    # Absorption's cross-discipline share, stated both ways and beside the
+    # capability-blind baseline it has to beat. It does not beat it: the
+    # original "absorption is where such credit concentrates" reading is
+    # retracted in the module docstring and docs/DISCOVERIES.md.
+    def _ext(rows, key, tally_key):
+        best = sum(1 for c in rows if c[key] == "external")
+        allx = sum(1 for c in rows if set(c[tally_key]) == {"external"})
+        return best, allx
+
+    absorbed = [c for d in decompositions for c in d["constituents"]
+                if c["channel"] == "pattern_absorption"]
+    exact = [c for d in decompositions for c in d["constituents"]
+             if c["grounded_via"] == "exact"]
+    a_best, a_all = _ext(absorbed, "absorbed_from_channel",
+                         "absorbed_owner_channels")
+    e_best, e_all = _ext(exact, "channel", "owner_channels")
+    n_abs, n_ex = len(absorbed) or 1, len(exact) or 1
+    print(f"  Out-of-discipline ownership, absorption vs the exact-channel "
+          f"baseline (best owner / all owners):")
+    print(f"    pattern_absorption {a_best}/{len(absorbed)} "
+          f"({a_best / n_abs:.1%}) / {a_all}/{len(absorbed)} "
+          f"({a_all / n_abs:.1%})")
+    print(f"    exact              {e_best}/{len(exact)} "
+          f"({e_best / n_ex:.1%}) / {e_all}/{len(exact)} "
+          f"({e_all / n_ex:.1%})")
+    print(f"    A wash by rate; the exact channel dominates by absolute count "
+          f"({e_best / (a_best or 1):.1f}:1). Absorption is where such credit "
+          f"is quarantined, not where it concentrates.")
     print()
 
     if write_report:

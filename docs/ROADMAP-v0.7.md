@@ -308,15 +308,39 @@ fluency is a separate measured axis.
 - Split grounding into external, prior-corpus, same-corpus, recursive, and
   pattern-absorption channels; the provability corpus's 1.000 self-grounding is
   the regression case.
-  **SHIPPED** (`feature/grounding-channels`): `decompose.py` attributes every
-  grounded constituent to one channel and prints a per-corpus table;
-  aggregates unchanged (graph mean 0.770, 440 exact / 75 pattern). Regression
-  case reads out as `same_corpus` 0.775 + `pattern_absorption` 0.192 vs
-  `external` 0.033, and provability is the only corpus flagged
-  `self_certifying`. GC1–GC5 all fired. Open: the channels report but do not
-  gate, and the graph-wide finding that 62 of 75 absorbed patterns are owned
-  outside the absorbing statement's discipline is unaddressed.
-- Add report regeneration/coherence checks parallel to seed coherence.
+  **SHIPPED** (`feature/grounding-channels`) — this bullet's scope is the
+  split itself, which is delivered; docs/BACKLOG.md's older entry reads HALF
+  SHIPPED because its scope also covers the *gate*, which is not shipped and
+  is not yet justified. `decompose.py` attributes every grounded constituent
+  to one channel and prints a per-corpus table; aggregates unchanged (graph
+  mean 0.770, 440 exact / 75 pattern). Regression case reads out as
+  `same_corpus` 0.775 + `pattern_absorption` 0.192 vs `external` 0.033, and
+  provability is the only corpus flagged `self_certifying` under either owner
+  rule. GC1–GC5 all fired; GC6 (registered after review) fired.
+  Open:
+  - The channels report but do not gate.
+  - `reports/decompositions.json` is STALE — it predates the split and lacks
+    `channels` / `channel_scores` / `channel_summary`, so the committed report
+    and the shipped CLI disagree about the output schema. Closes with the
+    report-coherence bullet below.
+  - The `recursive` channel is structurally empty at the shipped defaults (a
+    consequence of subtracting the statement from every owner set, not a fact
+    about `data/`), so the split has four live channels; it is reachable at
+    `--min-family 1`.
+  - Every per-corpus `external` is an UPPER bound under the most-independent
+    owner rule (190 of 440 exact constituents are multi-owner, all credited
+    `external`; graph external 0.535 generous vs 0.246 conservative). The
+    conservative counterpart is now reported beside it and any future gate
+    must be argued against the lower bound.
+  - The "62 of 75 absorbed patterns are owned outside the absorbing
+    statement's discipline" finding is CORRECTED, not merely unaddressed: it
+    is 62/75 by best owner and 36/75 by all owners, and the inference that
+    absorption concentrates such credit failed its own baseline — the exact
+    channel is 352/440 and 162/440, a wash by rate and 5.7:1 by count.
+    Retraction filed in docs/DISCOVERIES.md.
+- Add report regeneration/coherence checks parallel to seed coherence. First
+  claim on this bullet: `reports/decompositions.json`, stale since the channel
+  split (see above and the named BACKLOG item).
 - Keep runtime frame ids under `runtime.frames.*`; corpus frames remain node
   references.
 - Preserve every registered prediction and attach corrections rather than
