@@ -118,6 +118,22 @@ bindings), **near-miss** (informative failure, kept deliberately).
   each domain, because the search regime, not the policy, decides whether
   there is anything for a ranking to buy.
 
+- **Off the winning path is not the same as dead.** The first proof/story
+  curve artifact classified every accepted transition outside the first BFS
+  solution as a dead branch. That silently included siblings still waiting in
+  the frontier when another branch solved. Independent review blocked the
+  resulting 1,552-branch claim. The repaired controller records which child
+  states were actually expanded and closes a branch only when its complete
+  queued subtree was exhausted without proof. The valid proof count is 227,
+  not 1,552; story runs preserve 96 closed transitions per arm, not 496. The
+  substantive result survives on stronger evidence: learned pooled re-proposal
+  share is 0.2063 versus syntax's 0.2053, no measurable avoidance. The general
+  rule is broader than search: **a negative outcome needs evidence of
+  exhaustion; non-selection only proves that something else finished first.**
+  *v0.7 item 1 post-rebase adversarial review; regression:
+  `SearchControllerTests::test_queued_but_unexpanded_sibling_is_not_called_dead`*
+  (2026-08-10)
+
 - **The learned ranker overtook the baseline that beat it and lost anyway.**
   v0.6 publicly retracted its live learned-gain claim when a state-blind
   frequency order solved its one theorem in 64 proposals against a learned
@@ -126,23 +142,22 @@ bindings), **near-miss** (informative failure, kept deliberately).
   retraction's specific comparison reversed with breadth. The verdict did not
   move, because the arm added this cycle is neither: a closed-form
   syntax-aware order reading the rendered goal takes 48.29, solves 21/24 at
-  the middle budget against the learned mean of 19.33, and wins on wall clock
-  by a wider margin still. Two things follow. First, a negative result stated
+  the middle budget against the learned mean of 19.33. In the one recorded,
+  fixed-order host run it also finishes sooner, but that timing evidence is
+  observational rather than counterbalanced. Two things follow. First, a negative result stated
   against one baseline is only as durable as that baseline — "learned loses"
   survived here, but "learned loses to frequency" did not. Second, the
   cheapest strong control is often the one nobody wrote yet: the syntax arm is
   forty lines of rules over text the verifier already renders.
 
-- **Wall clock and proposal count disagree about which ranker is better, and
-  only one of them is what anyone waits for.** The learned arms need fewer
-  Lean calls than the arbitrary and frequency orders and finish LATER: at a
-  0.02 s budget the blind arms solve 17/24 and the learned arms 13-14/24,
-  because a 27,688-parameter forward pass costs more than the sub-millisecond
-  local Pantograph round trip it saves. The proposal-count metric silently
-  assumes the verifier is the expensive part. That assumption is a property of
-  the deployment, not of the policy, and every solved-rate-per-node figure in
-  the formal-proving literature inherits it. Reporting both axes is cheap; the
-  lane that only reports nodes cannot see this at all.
+- **Wall clock and proposal count can disagree, but one fixed-order run cannot
+  explain why.** The learned arms need fewer Lean calls than arbitrary and
+  frequency yet finish later in this recorded host run: at 0.02 s the blind
+  arms solve 17/24 and learned solves 14/13/14. The first write-up attributed
+  that gap to forward-pass cost. Independent review correctly narrowed it:
+  fixed arm order and one sample leave warm-up and host drift confounded. The
+  useful result is that proposal count is not a latency proxy; a causal timing
+  claim needs repeated randomized or counterbalanced runs.
 
 - **PyPantograph's Windows project blocker was a call that did not have to
   happen.** `prover/FEASIBILITY.md` recorded native project loading as broken

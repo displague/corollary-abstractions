@@ -38,9 +38,9 @@ multi-theorem held-out solved-rate curve, not a trace.
   syntax-aware blind 21/24, frequency 20/24, learned 18/21/19, arbitrary
   17/24; all arms 24/24 at v0.6's own maximum budget. Mean proposals 48.29 /
   51.58 / 49.00 / 55.96. The learned checkpoints overtook v0.6's frequency
-  winner and still lost to a closed-form order — and lost by more on wall
-  clock, where a 27,688-parameter forward pass costs more than the
-  sub-millisecond Lean round trip it saves.
+  winner and still lost to a closed-form order. The learned arms were also
+  slower in the recorded fixed-order host run; that timing is observational,
+  not a counterbalanced latency claim.
 - ``prover/lean/proofcurve/`` — a Lake project (run ``lake build`` once) that
   makes ``project_import`` a real family: an ``Init``-only server cannot even
   state its propositions. Native Windows project loading works by passing

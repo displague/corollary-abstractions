@@ -234,6 +234,8 @@ class SearchResult(Generic[StateT]):
     stop_reason: StopReason
     nodes_expanded: int
     states_seen: int
+    expanded_tails: tuple[int | None, ...]
+    fully_expanded_tails: tuple[int | None, ...]
 
     @property
     def solved(self) -> bool:
@@ -263,6 +265,37 @@ class SearchResult(Generic[StateT]):
             cursor = entry.parent
         path.reverse()
         return tuple(path)
+
+    @property
+    def closed_branch_trace(self) -> tuple[SearchTraceEntry[StateT], ...]:
+        """Accepted transitions whose queued subtree was fully exhausted.
+
+        An accepted off-solution transition is not necessarily dead: breadth-
+        first search may stop while that transition is still waiting in the
+        frontier.  A transition is closed only when its child state was
+        actually expanded and every newly queued child below it is closed.
+        Cyclic accepted transitions do not create a branch and are excluded.
+        """
+        expanded = {
+            tail for tail in self.fully_expanded_tails if tail is not None
+        }
+        queued = {entry.index: entry for entry in self.trace if entry.queued}
+        children: dict[int, list[int]] = {index: [] for index in queued}
+        for entry in queued.values():
+            if entry.parent in children:
+                children[entry.parent].append(entry.index)
+
+        closed: set[int] = set()
+        changed = True
+        while changed:
+            changed = False
+            for index in queued:
+                if index in closed or index not in expanded:
+                    continue
+                if all(child in closed for child in children[index]):
+                    closed.add(index)
+                    changed = True
+        return tuple(self.trace[index] for index in sorted(closed))
 
 
 @dataclass
@@ -414,6 +447,8 @@ class SearchController(Generic[StateT]):
         seen_states = {verifier.state_key(deepcopy(root))}
         attempted: set[tuple[str, tuple[object, ...]]] = set()
         nodes_expanded = 0
+        expanded_tails: list[int | None] = []
+        fully_expanded_tails: list[int | None] = []
 
         def finish(
             reason: StopReason,
@@ -428,6 +463,8 @@ class SearchController(Generic[StateT]):
                 stop_reason=reason,
                 nodes_expanded=nodes_expanded,
                 states_seen=len(seen_states),
+                expanded_tails=tuple(expanded_tails),
+                fully_expanded_tails=tuple(fully_expanded_tails),
             )
 
         if is_complete(deepcopy(root)):
@@ -440,6 +477,7 @@ class SearchController(Generic[StateT]):
                 return finish(StopReason.BUDGET)
             state, parent, depth = frontier.popleft()
             nodes_expanded += 1
+            expanded_tails.append(parent)
             actions = policy.propose_all(
                 deepcopy(state), deepcopy(tuple(entries))
             )
@@ -495,5 +533,9 @@ class SearchController(Generic[StateT]):
 
                 if len(entries) >= self.max_proposals:
                     return finish(StopReason.BUDGET)
+
+            # Reaching this point, rather than merely popping the state,
+            # proves that its complete candidate stream was enumerated.
+            fully_expanded_tails.append(parent)
 
         return finish(StopReason.EXHAUSTED)

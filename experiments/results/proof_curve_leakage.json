@@ -1,152 +1,970 @@
 {
-  "arm": "syntax",
-  "distinct_states_across_set": 149,
-  "states_in_training_extraction": 0,
-  "training_states_compared": 137,
-  "per_theorem": [
-    {
-      "theorem": "curve.conjunction.and_commute",
-      "distinct_states": 8,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.conjunction.and_left",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.conjunction.and_nested_middle",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.conjunction.and_reassociate",
-      "distinct_states": 8,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.conjunction.and_duplicate",
-      "distinct_states": 23,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.conjunction.and_with_true",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.identity",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.constant",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.pair_from_arrows",
-      "distinct_states": 1,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.triple_middle",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.mixed_premises",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.chain_to_triple",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.implication_chain.chain_swap_pair",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.disjunction.or_intro_left",
-      "distinct_states": 4,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.disjunction.or_intro_right",
-      "distinct_states": 5,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.disjunction.or_from_and",
-      "distinct_states": 4,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.disjunction.or_both_sides",
-      "distinct_states": 29,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.disjunction.or_choose_from_and",
-      "distinct_states": 28,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.both_commute",
-      "distinct_states": 8,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.both_left",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.holds_to_either",
-      "distinct_states": 4,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.both_diagonal",
-      "distinct_states": 2,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.either_from_both",
-      "distinct_states": 4,
-      "states_in_training_extraction": 0,
-      "examples": []
-    },
-    {
-      "theorem": "curve.project_import.both_nested",
-      "distinct_states": 8,
-      "states_in_training_extraction": 0,
-      "examples": []
+  "experiment": "proof-search-state-leakage-v0.7",
+  "theorem_set": {
+    "set_id": "prover.curve",
+    "version": 1,
+    "file": "theorems_v1.json",
+    "sha256": "af6f6cb73a06474f8e63a4c899028cf02149a7e0cc3c67b17eb4aa14f565b043",
+    "theorems": 24,
+    "families": {
+      "conjunction": 6,
+      "implication_chain": 7,
+      "disjunction": 5,
+      "project_import": 6
     }
-  ]
+  },
+  "selected_theorem_ids": [
+    "curve.conjunction.and_commute",
+    "curve.conjunction.and_left",
+    "curve.conjunction.and_nested_middle",
+    "curve.conjunction.and_reassociate",
+    "curve.conjunction.and_duplicate",
+    "curve.conjunction.and_with_true",
+    "curve.implication_chain.identity",
+    "curve.implication_chain.constant",
+    "curve.implication_chain.pair_from_arrows",
+    "curve.implication_chain.triple_middle",
+    "curve.implication_chain.mixed_premises",
+    "curve.implication_chain.chain_to_triple",
+    "curve.implication_chain.chain_swap_pair",
+    "curve.disjunction.or_intro_left",
+    "curve.disjunction.or_intro_right",
+    "curve.disjunction.or_from_and",
+    "curve.disjunction.or_both_sides",
+    "curve.disjunction.or_choose_from_and",
+    "curve.project_import.both_commute",
+    "curve.project_import.both_left",
+    "curve.project_import.holds_to_either",
+    "curve.project_import.both_diagonal",
+    "curve.project_import.either_from_both",
+    "curve.project_import.both_nested"
+  ],
+  "training_extraction": {
+    "file": "sample_triples.json",
+    "sha256": "8ab2d21f8705ae42b077eeceaa1714374afc9bac90eee49ded77ffd9e60606d6",
+    "distinct_states": 137
+  },
+  "checkpoints": {
+    "learned_s0": "23b2586a08617b3c98cb1b20a98611905d8abe9ad7e8c79957f2351a7f69b82e",
+    "learned_s1": "098880070db5c7c9bfa4c0103fd50e55360b6dc02ca67bcd83ea3679469bd7d8",
+    "learned_s2": "641cd371431fc227e72e3130cdc15581382fd0387c60f358f145ac95d68f7df7"
+  },
+  "budgets": {
+    "max_nodes": 64,
+    "max_proposals": 512
+  },
+  "arms": {
+    "arbitrary": {
+      "arm": "arbitrary",
+      "distinct_states_across_set": 162,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 10,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 10,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 25,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 6,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 30,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 29,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 10,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 10,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    },
+    "frequency": {
+      "arm": "frequency",
+      "distinct_states_across_set": 149,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 23,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 29,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 28,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    },
+    "syntax": {
+      "arm": "syntax",
+      "distinct_states_across_set": 149,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 23,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 29,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 28,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    },
+    "learned_s0": {
+      "arm": "learned_s0",
+      "distinct_states_across_set": 153,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 9,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 24,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 30,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 28,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 9,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 9,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    },
+    "learned_s1": {
+      "arm": "learned_s1",
+      "distinct_states_across_set": 151,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 24,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 30,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 28,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    },
+    "learned_s2": {
+      "arm": "learned_s2",
+      "distinct_states_across_set": 151,
+      "states_in_training_extraction": 0,
+      "training_states_compared": 137,
+      "per_theorem": [
+        {
+          "theorem": "curve.conjunction.and_commute",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_nested_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_reassociate",
+          "distinct_states": 8,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_duplicate",
+          "distinct_states": 23,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.conjunction.and_with_true",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.identity",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.constant",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.pair_from_arrows",
+          "distinct_states": 1,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.triple_middle",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.mixed_premises",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_to_triple",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.implication_chain.chain_swap_pair",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_left",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_intro_right",
+          "distinct_states": 5,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_from_and",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_both_sides",
+          "distinct_states": 29,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.disjunction.or_choose_from_and",
+          "distinct_states": 28,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_commute",
+          "distinct_states": 9,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_left",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.holds_to_either",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_diagonal",
+          "distinct_states": 2,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.either_from_both",
+          "distinct_states": 4,
+          "states_in_training_extraction": 0,
+          "examples": []
+        },
+        {
+          "theorem": "curve.project_import.both_nested",
+          "distinct_states": 9,
+          "states_in_training_extraction": 0,
+          "examples": []
+        }
+      ]
+    }
+  }
 }

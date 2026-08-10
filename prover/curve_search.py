@@ -10,8 +10,9 @@ module turns that single point into a curve:
 * four ranking arms over the SAME candidate generator
   (:mod:`tactic_grammar`), so the only thing that varies is schema order;
 * solved-rate at fixed state / proposal / wall-time budgets;
-* accepted dead branches preserved per run, so "did learned ranking avoid
-  branches that died elsewhere?" is a measurement rather than an anecdote.
+* fully exhausted accepted subtrees preserved per run, so "did learned
+  ranking avoid branches proved dead elsewhere?" is a measurement rather
+  than an anecdote.
 
 Lean stays the sole transition authority.  Nothing here decides whether a
 tactic works: :class:`~live_search.LiveLeanVerifier` asks Pantograph, and a
@@ -34,6 +35,7 @@ from __future__ import annotations
 
 import sys
 import time
+import subprocess
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -161,7 +163,7 @@ class RankedSchemaPolicy:
 
 @dataclass(frozen=True)
 class DeadBranch:
-    """One accepted transition that led nowhere within this run's budget."""
+    """One accepted transition whose queued subtree was fully exhausted."""
 
     signature: tuple[str, str]
     tactic: str
@@ -200,7 +202,8 @@ class RunRecord:
             "proposals": self.proposals,
             "accepted": self.accepted,
             "rejected": self.rejected,
-            "seconds": round(self.seconds, 3),
+            # Preserve enough precision to recompute thresholded time curves.
+            "seconds": self.seconds,
             "solution": list(self.solution),
             "dead_branches": [
                 {
@@ -220,17 +223,14 @@ def _signature(entry) -> tuple[str, str]:
 
 
 def dead_branches(result: SearchResult[LiveLeanState]) -> tuple[DeadBranch, ...]:
-    """Accepted transitions that are NOT on the returned solution path.
+    """Accepted transitions whose entire queued subtree was explored and died.
 
-    For an unsolved run every accepted transition qualifies: nothing this run
-    accepted reached a proof inside its budget.  Both cases are preserved --
-    the roadmap asks for the evidence, not for a flattering subset.
+    Merely being off the first solution path is insufficient: siblings can
+    remain queued when BFS returns.  ``SearchResult.closed_branch_trace``
+    performs the frontier-aware accounting.
     """
-    on_path = {entry.index for entry in result.solution_trace}
     found: list[DeadBranch] = []
-    for entry in result.trace:
-        if not entry.accepted or entry.index in on_path:
-            continue
+    for entry in result.closed_branch_trace:
         tactic = entry.action.argument("tactic") or ""
         shape, schema = _signature(entry)
         found.append(
@@ -297,20 +297,24 @@ class BackendPool:
 
     def get(self, backend: Backend) -> PantographBackend:
         if backend.name not in self._backends:
-            if backend.lean_path is not None and not any(
-                backend.lean_path.glob("*.olean")
-            ):
-                # Without this, Pantograph fails with a generic "Server failed
-                # to emit ready signal" whose own text blames a Lean version
-                # mismatch.  Checking for compiled oleans (not merely for the
-                # directory) also catches a half-finished or cleaned build,
-                # which is the case that would otherwise start a server that
-                # cannot resolve the imports.
-                raise RuntimeError(
-                    f"backend {backend.name!r} needs a built Lake project: no "
-                    f"*.olean under {backend.lean_path}. Run `lake build` in "
-                    f"{backend.project} first (prover/README.md)."
+            if backend.lean_path is not None:
+                olean = backend.lean_path / "ProofCurve.olean"
+                assert backend.project is not None
+                build = subprocess.run(
+                    ["lake", "build"], cwd=backend.project,
+                    capture_output=True, text=True, timeout=120, check=False,
                 )
+                if build.returncode != 0:
+                    detail = (build.stderr or build.stdout).strip()[-500:]
+                    raise RuntimeError(
+                        f"backend {backend.name!r} failed `lake build`: {detail}"
+                    )
+                if not olean.is_file():
+                    raise RuntimeError(
+                        f"backend {backend.name!r} needs its compiled module: "
+                        f"missing {olean}. Run `lake build` in "
+                        f"{backend.project} first (prover/README.md)."
+                    )
             self._backends[backend.name] = PantographBackend(
                 backend.project,
                 backend.imports,

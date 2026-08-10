@@ -63,11 +63,14 @@ committed with no results attached before the adjudicating runs.
   outright, recorded as a live control. FEASIBILITY landmine 12 is bypassed
   rather than patched — PyPantograph only shells out to POSIX `printenv` when
   `project_path` is supplied without `lean_path`.
-- **Dead branches preserved, cross-task avoidance measured and absent.**
-  1,552 accepted dead branches, scored leave-one-theorem-out and against a
-  pooled ledger. Under the pooled yardstick the learned arms re-propose
-  known-dead signatures at 0.4983 versus the syntax arm's 0.4901. The answer
-  to "does learned ranking avoid branches that died across tasks" is no.
+- **Exhausted branches preserved, cross-task avoidance measured and absent.**
+  The first artifact wrongly counted every accepted off-path sibling as dead,
+  including siblings still queued when BFS found a proof. Independent review
+  blocked that claim. Frontier-aware accounting now records only 227 accepted
+  transitions whose complete queued subtrees were expanded without a proof
+  (`clear` 101, the plurality). Under the pooled yardstick the learned arms
+  re-propose known-dead signatures at 0.2063 versus syntax's 0.2053: still no
+  measurable avoidance, now over branches actually shown dead.
 - **Story family: same protocol, no lever.** `experiments/story_curve.py`
   drives eight briefs (four held out by story identity) through the *same*
   `SearchController` with domain weights and a disjoint five-schema
@@ -91,9 +94,11 @@ is reproducible only where PyPantograph + the pinned Lean toolchain are
 installed. The recorded `proof_curve.json` carries live provenance (host,
 torch/GPU footprint, a real Pantograph elaboration-error dict) and no code
 path advances state from a committed transition — liveness rests on that,
-not on the suite. Cross-task dead-branch shares are consistent with the
-prose but not recomputable from published `runs[]` alone (signatures are
-dropped from `as_json`); filed in BACKLOG.
+not on the suite. Aggregate cross-task shares are recomputable from the
+published hit counts and denominators; raw signature attribution still needs
+a re-run because `runs[]` omits proposal signatures. The separate leakage
+artifact is digest-bound to both theorem set and extraction and measures all
+six traversal orders, not a syntax-only proxy.
 
 ## 2. Conversation survives process boundaries — SHIPPED
 

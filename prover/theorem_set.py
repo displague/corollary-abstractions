@@ -38,6 +38,22 @@ class Backend:
     def needs_project(self) -> bool:
         return self.project is not None
 
+    def project_provenance(self) -> dict[str, object] | None:
+        """Digest the source, toolchain, and exact compiled module in use."""
+        if self.project is None or self.lean_path is None:
+            return None
+        source = self.project / "ProofCurve.lean"
+        toolchain = self.project / "lean-toolchain"
+        lakefile = self.project / "lakefile.toml"
+        olean = self.lean_path / "ProofCurve.olean"
+        return {
+            "project": self.project.relative_to(REPO_ROOT).as_posix(),
+            "source_sha256": digest(source),
+            "toolchain_sha256": digest(toolchain),
+            "lakefile_sha256": digest(lakefile),
+            "olean_sha256": hashlib.sha256(olean.read_bytes()).hexdigest(),
+        }
+
 
 @dataclass(frozen=True)
 class Theorem:
@@ -84,7 +100,9 @@ class TheoremSet:
 
 
 def digest(path: Path = DEFAULT_SET) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """Content digest stable across Git's LF/CRLF checkout conversion."""
+    normalized = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
 def load(path: Path = DEFAULT_SET) -> TheoremSet:

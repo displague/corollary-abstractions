@@ -628,22 +628,24 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   re-extract at 4.29.1 before claiming the trained policy and the live search
   share a project.
 
-- **Cross-task dead-branch avoidance was measured and is absent.** Accepted
-  dead branches are preserved per run (1,552 across 144 runs; `clear` 419,
-  `intro` 378, `constructor` 353) and scored leave-one-theorem-out. Under the
-  pooled ledger the learned arms re-propose known-dead signatures at 0.4983
-  against the syntax arm's 0.4901 — no avoidance. The ledger is also
+- **Cross-task dead-branch avoidance was measured and is absent.** The first
+  artifact mislabeled every accepted off-path sibling as dead, including
+  unexpanded frontier entries; independent review blocked it. The corrected
+  frontier-aware ledger preserves 227 transitions whose complete queued
+  subtrees were exhausted (`clear` 101, `constructor` 66), scored
+  leave-one-theorem-out. Under the pooled ledger the learned arms re-propose
+  known-dead signatures at 0.2063 against syntax's 0.2053 — no measurable
+  avoidance. The ledger is also
   RUN-LOCAL: nothing carries it between runs, so no arm can actually use it.
   Making the dead-branch ledger an input to ranking (rather than only an
-  output) is the obvious next experiment and is not built. Reproducibility
-  gap (review disclosure): `RunRecord.as_json()` drops
-  `proposal_signatures`/`accepted_signatures`, so the pooled 0.4983/0.4901
-  shares cannot be recomputed from `proof_curve.json` alone — a reader must
-  re-run to audit them. Serialize per-theorem hit counts or the signatures
-  themselves before this measurement is cited in a release. Related: the
-  state-leakage control (`test_state_level_leakage_control_stays_at_zero`)
-  silently skips if its artifact is absent, so a deleted artifact turns the
-  anti-leakage guard into a no-op — make it fail-closed.
+  output) is the obvious next experiment and is not built. The published
+  aggregate shares are reproducible from `cross_task_dead_branches.arms`:
+  it serializes each arm's hit counts, proposal denominator, share, and
+  per-theorem counts. `RunRecord.as_json()` does omit the raw proposal and
+  accepted signatures, however, so auditing *which* signatures contributed
+  still requires a re-run; serialize those if signature-level inspection
+  becomes a release claim. The committed state-leakage artifact is guarded
+  fail-closed by `test_state_level_leakage_control_stays_at_zero`.
 
 - **Breadth-first search leaves almost no ranking headroom in the story
   domain.** ROADMAP-v0.7 item 1's story arm (`experiments/story_curve.py`, 48

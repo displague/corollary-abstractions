@@ -1904,10 +1904,13 @@ statement, which is *not* the same as state-level novelty: two different
 theorems can pass through the same rendered proof state, and the v0.6
 checkpoint was trained on rendered `stateBefore` strings. So the second level
 is measured live rather than assumed —
-`experiments/results/proof_curve_leakage.json`: **0 of the 149 distinct proof
-states search actually visits across the whole set appear among the 137
-extracted training states.** The checkpoints had seen neither these theorems
-nor any state they pass through.
+`experiments/results/proof_curve_leakage.json`: **zero overlaps for every
+arm** against 137 extracted training states. The six traversal-specific state
+sets contain 162 / 149 / 149 / 153 / 151 / 151 distinct states for arbitrary,
+frequency, syntax, and learned seeds 0/1/2 respectively. The first artifact
+measured syntax alone and over-generalized it to the learned traversals;
+independent review blocked that claim. The replacement is bound to the theorem
+set digest, extraction digest, theorem ids, budgets, and all six arms.
 
 The control ships in its own file on purpose: adding it after publication must
 not perturb `proof_curve.json`, and the set file itself could not be amended to
@@ -1992,56 +1995,57 @@ order, not more theorems of the same shape.
 
 | arm | 0.02 s | 0.05 s | 0.20 s | 1.00 s | 5.00 s |
 |---|---:|---:|---:|---:|---:|
-| arbitrary / frequency / syntax (identical in this run) | 17 | 21 | 22 | 24 | 24 |
-| learned_s0 | 13 | 17 | 21 | 24 | 24 |
-| learned_s1 | 14 | 19 | 22 | 24 | 24 |
-| learned_s2 | 14 | 18 | 22 | 24 | 24 |
+| arbitrary | 17 | 21 | 22 | 24 | 24 |
+| frequency / syntax | 17 | 21 | 23 | 24 | 24 |
+| learned_s0 | 14 | 17 | 21 | 24 | 24 |
+| learned_s1 | 13 | 20 | 22 | 24 | 24 |
+| learned_s2 | 14 | 19 | 22 | 24 | 24 |
 
-A 27,688-parameter forward pass costs more than the sub-millisecond Lean round
-trip it saves. **Proposal count and wall time disagree about the ranking, and
-only wall time is what a user waits for.** Total search seconds: syntax 0.784,
-frequency 0.821, arbitrary 0.885, learned 1.19-1.53.
+A 27,688-parameter forward pass cost more than the local Lean round trip in
+this recorded host run. Proposal count and observed wall time disagree about
+the ranking; total search seconds were lower for the blind arms. This is an
+observational result, not a stable timing estimate: arms ran in fixed order,
+one timing sample each, and the committed evidence is not counterbalanced.
 
-Two controls, because a wall-clock claim is the easiest one to fake. **Per
-proposal**: arbitrary 0.659 ms, frequency 0.663 ms, syntax 0.676 ms,
-learned 1.296 / 1.007 / 1.054 ms. The learned penalty is ~2x and does not
-depend on how many proposals an arm made. **Arm order**: arms run in a fixed
-order per theorem (arbitrary first, learned last), so a server that slowed as
-goal states accumulated would fake exactly this result. It did not — the three
-blind arms drift by 2.5% in the *increasing* direction across positions 1-3,
-which is an order of magnitude smaller than the effect and points the same way
-for the wrong reason, so the effect is not an artifact of it.
+For reference, observed per-proposal times were arbitrary 0.631 ms, frequency
+0.637 ms, syntax 0.651 ms, and learned 1.226 / 0.986 / 0.983 ms. These are
+useful diagnostics, not a controlled performance comparison: fixed arm order
+and one observation per cell leave warm-up and host drift confounded.
 
 **Reproducibility caveat, stated rather than hidden.** Re-running the whole
 lane reproduces every deterministic field exactly — solved, nodes, proposals,
-solution path, dead branches, the full budget curve and every mean — but
-**10 of the 30 wall-clock curve cells moved**. The time ladder is a
-measurement of this host on this run, not a reproducible constant, and no
-conclusion here rests on a single time cell: the claim is the ~2x per-proposal
-gap, which is stable.
+solution path, dead branches, the full budget curve and every mean — but six
+of the 30 all-family wall-clock cells differ from the first committed
+artifact. The time ladder is a
+measurement of this host on this run, not a reproducible constant. A stable
+latency claim requires repeated, randomized or counterbalanced arm order.
 
-## Dead branches preserved, and cross-task avoidance measured
+## Exhausted branches preserved, and cross-task avoidance measured
 
-1,552 accepted dead branches across 144 runs (`clear` 419, `intro` 378,
-`constructor` 353, `right` 165, `left` 153, `projection` 42, `trivial` 22,
-`assumption` 20). Signatures are `(goal shape, schema)`, coarse on purpose so
-that a branch that died on one theorem is recognizable on another.
+The first artifact incorrectly treated every accepted transition outside the
+first solution path as dead. In BFS, some are merely queued siblings that the
+search never expanded. Independent review blocked the claim. The corrected
+accounting recursively marks a transition only when its child was expanded
+and every queued descendant was exhausted without a proof. It records 227
+such transitions across 144 runs (`clear` 101, `constructor` 66, `right` 30,
+`left` 24, `intro` 6). Signatures remain `(goal shape, schema)`.
 
 | arm | dead branches | proposals | own-ledger share | pooled-ledger share |
 |---|---:|---:|---:|---:|
-| arbitrary | 297 | 1343 | 0.5257 | 0.5257 |
-| frequency | 264 | 1238 | 0.5073 | 0.5073 |
-| syntax | 243 | 1159 | 0.4901 | 0.4901 |
-| learned_s0 | 248 | 1177 | 0.4503 | 0.5030 |
-| learned_s1 | 252 | 1183 | 0.4928 | 0.4928 |
-| learned_s2 | 248 | 1168 | 0.4478 | 0.4991 |
+| arbitrary | 48 | 1343 | 0.2338 | 0.2338 |
+| frequency | 33 | 1238 | 0.1616 | 0.2221 |
+| syntax | 33 | 1159 | 0.1553 | 0.2053 |
+| learned_s0 | 41 | 1177 | 0.2065 | 0.2065 |
+| learned_s1 | 35 | 1183 | 0.1589 | 0.2063 |
+| learned_s2 | 37 | 1168 | 0.2063 | 0.2063 |
 
 The *own* ledger is built leave-one-theorem-out from that arm's own runs; the
 *pooled* ledger is the union over all arms and is the fair yardstick, because
 an arm that accepts fewer dead branches shrinks its own ledger and then looks
 virtuous for not revisiting it. Under the pooled ledger the learned mean is
-0.4983 against syntax's 0.4901. **Learned ranking does not avoid branches that
-died on other tasks.** The ledger is also run-local: nothing carries it
+0.2063 against syntax's 0.2053. **Learned ranking does not measurably avoid
+branches proved dead on other tasks.** Its own-ledger aggregate is likewise
+higher (0.1905 vs 0.1553). The ledger is run-local: nothing carries it
 between runs, so no arm could have used it even in principle (BACKLOG).
 
 ## Prediction adjudication
@@ -2058,12 +2062,14 @@ between runs, so no arm could have used it even in principle (BACKLOG).
   opacity mechanism is real and separately tested; it costs the blind arm the
   interior states, not the entrance, because every project theorem still opens
   on a visible universal quantifier.
-- **P-PC4 FIRED** (blind) — `clear` is the plurality of dead branches, and
+- **P-PC4 FIRED after correction** (blind) — `clear` is the plurality of
+  fully exhausted branches, and
   arbitrary's known-dead proposal share exceeds syntax's under both ledgers.
-- **P-PC5 SPLIT, prediction under-specified** — missed on the own ledger
-  (0.4636 < 0.4901), fired on the pooled one (0.4983 >= 0.4901). The
-  registered text never named which ledger adjudicates; that defect is
-  recorded, not resolved in hindsight. Substantively: no avoidance.
+- **P-PC5 FIRED after correction, prediction under-specified** — learned is
+  higher on both own (0.1905 > 0.1553) and pooled (0.2063 > 0.2053) ledgers.
+  The earlier split verdict is retracted because it used the invalid
+  off-path-is-dead definition. Substantively the 0.001 pooled margin supports
+  no measurable avoidance, not a meaningful learned disadvantage.
 - **P-PC6 FIRED** (blind) — 24/24 monotonicity re-runs agreed.
 - **P-PC7 FIRED** — `Init`-only elaboration refused, live.
 
@@ -2076,7 +2082,7 @@ Every prediction is marked blind or pilot-informed in
 ## Story family: same protocol, no lever
 
 `experiments/story_curve.py`, 8 authored briefs (4 train / 4 held out by story
-identity), 6 arms, 48 runs, 95.1 s. The **same** `SearchController` (asserted
+identity), 6 arms, 48 runs. The **same** `SearchController` (asserted
 by object identity, not by name), the same ranker/argument-generator split,
 `StoryFrameVerifier` as sole authority, a disjoint five-schema vocabulary and
 its own weights — domain weights, not a second controller.
@@ -2097,8 +2103,8 @@ depth five, so all 31 nodes above it are expanded whatever the order — ranking
 can only save part of one node. P-SC1 (blind) fired, as did P-SC2 (learned
 ties twice, loses once), P-SC3 (each schema fires exactly 4 times in the 20
 training rows, so the frequency arm is byte-identical to `arbitrary` — a
-baseline that cannot differ is not a control), P-SC4, P-SC5 (496 accepted dead
-branches per arm; shares 0.1823 vs 0.1804) and P-SC6.
+  baseline that cannot differ is not a control), P-SC4, P-SC5 (96 fully
+  exhausted transitions per arm; shares 0.1180 vs 0.1167) and P-SC6.
 
 **"One shared policy protocol works in both domains" is true and nearly empty
 as stated.** The protocol ports; the thing it buys does not. The story-side
@@ -2120,8 +2126,9 @@ this comparison.
 The v0.6 headline survives breadth and gets sharper. Across 24 held-out
 theorems the learned checkpoints **overtook v0.6's own winner** (49.00 vs
 51.58 mean proposals) and still lost to a closed-form syntax-aware order
-(48.29) on proposals, on middle-budget solved rate (19.33 vs 21 of 24), and
-decisively on wall clock. Live project-backed search works natively on
+(48.29) on proposals and on middle-budget solved rate (19.33 vs 21 of 24).
+It was also faster in this one fixed-order host run, an observational result
+that requires counterbalancing before becoming a latency claim. Live project-backed search works natively on
 Windows. Dead branches are preserved and the cross-task avoidance question now
 has a measured answer: no. The next honest move is not a bigger ranker; it is
 a search that can actually spend a ranking — and a family whose premises must

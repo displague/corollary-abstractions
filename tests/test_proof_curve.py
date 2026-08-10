@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -57,6 +58,15 @@ class TheoremSetTests(unittest.TestCase):
         self.assertEqual(
             self.theorems.sha256, theorem_set.digest(self.theorems.path)
         )
+
+    def test_digest_is_checkout_newline_invariant(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            lf = root / "lf.json"
+            crlf = root / "crlf.json"
+            lf.write_bytes(b'{\n  "x": 1\n}\n')
+            crlf.write_bytes(b'{\r\n  "x": 1\r\n}\r\n')
+            self.assertEqual(theorem_set.digest(lf), theorem_set.digest(crlf))
 
     def test_two_proof_families_at_minimum_each_with_members(self) -> None:
         sizes = {
@@ -103,16 +113,99 @@ class TheoremSetTests(unittest.TestCase):
         "held out" label could still be false after every other check passes.
         """
         report = ROOT / "experiments" / "results" / "proof_curve_leakage.json"
-        if not report.exists():
-            self.skipTest("run experiments/tactic_curve.py to produce it")
+        self.assertTrue(
+            report.is_file(),
+            "committed leakage evidence is missing; rerun experiments/tactic_curve.py",
+        )
         payload = json.loads(report.read_text(encoding="utf-8"))
-        self.assertGreater(payload["distinct_states_across_set"], 0)
-        self.assertGreater(payload["training_states_compared"], 0)
-        self.assertEqual(payload["states_in_training_extraction"], 0)
-        for row in payload["per_theorem"]:
-            self.assertEqual(
-                row["states_in_training_extraction"], 0, row["theorem"]
+        self.assertEqual(payload["theorem_set"], self.theorems.provenance())
+        self.assertEqual(
+            payload["selected_theorem_ids"],
+            [item.id for item in self.theorems.theorems],
+        )
+        self.assertEqual(
+            payload["training_extraction"]["sha256"],
+            theorem_set.digest(theorem_set.TRAINING_EXTRACTION),
+        )
+        trained_states = theorem_set.training_states()
+        self.assertEqual(
+            payload["training_extraction"]["distinct_states"],
+            len(trained_states),
+        )
+        expected_arms = {
+            "arbitrary", "frequency", "syntax",
+            "learned_s0", "learned_s1", "learned_s2",
+        }
+        self.assertEqual(set(payload["arms"]), expected_arms)
+        primary = json.loads(
+            (ROOT / "experiments" / "results" / "proof_curve.json").read_text(
+                encoding="utf-8"
             )
+        )
+        self.assertEqual(payload["checkpoints"], primary["checkpoints"])
+        for arm, arm_payload in payload["arms"].items():
+            self.assertEqual(arm_payload["arm"], arm)
+            self.assertGreater(arm_payload["distinct_states_across_set"], 0)
+            self.assertEqual(
+                arm_payload["training_states_compared"], len(trained_states)
+            )
+            self.assertEqual(arm_payload["states_in_training_extraction"], 0)
+            self.assertEqual(
+                {row["theorem"] for row in arm_payload["per_theorem"]},
+                {item.id for item in self.theorems.theorems},
+            )
+            for row in arm_payload["per_theorem"]:
+                self.assertEqual(
+                    row["states_in_training_extraction"], 0,
+                    f"{arm}: {row['theorem']}",
+                )
+
+    def test_primary_artifact_binds_theorem_and_project_sources(self) -> None:
+        report = ROOT / "experiments" / "results" / "proof_curve.json"
+        payload = json.loads(report.read_text(encoding="utf-8"))
+        self.assertEqual(payload["theorem_set"], self.theorems.provenance())
+        backend = self.theorems.backends["proofcurve"]
+        recorded = payload["backend_projects"]["proofcurve"]
+        assert backend.project is not None
+        for field, filename in (
+            ("source_sha256", "ProofCurve.lean"),
+            ("toolchain_sha256", "lean-toolchain"),
+            ("lakefile_sha256", "lakefile.toml"),
+        ):
+            self.assertEqual(
+                recorded[field], theorem_set.digest(backend.project / filename)
+            )
+        self.assertEqual(len(recorded["olean_sha256"]), 64)
+
+    def test_published_time_curves_recompute_from_serialized_runs(self) -> None:
+        for filename, group_field in (
+            ("proof_curve.json", "family"),
+            ("story_curve.json", "split"),
+        ):
+            payload = json.loads(
+                (ROOT / "experiments" / "results" / filename).read_text(
+                    encoding="utf-8"
+                )
+            )
+            for group, arms in payload["curve"].items():
+                for arm, curve_payload in arms.items():
+                    runs = [
+                        run for run in payload["runs"]
+                        if run["arm"] == arm
+                        and (group == "ALL" or run[group_field] == group)
+                    ]
+                    recomputed = [
+                        sum(
+                            run["solved"] and run["seconds"] <= rung["seconds"]
+                            for run in runs
+                        )
+                        for rung in curve_payload["time_curve"]
+                    ]
+                    self.assertEqual(
+                        recomputed,
+                        [rung["solved"] for rung in curve_payload["time_curve"]],
+                        f"{filename}: {group}/{arm}",
+                    )
 
 
 class FrequencyBaselineTests(unittest.TestCase):
@@ -318,6 +411,18 @@ class StoryArmTests(unittest.TestCase):
 
         self.story = story_curve
 
+    def test_story_run_json_preserves_threshold_adjacent_time(self) -> None:
+        """The old 4-decimal rounding turned 0.99996 into 1.0000."""
+        run = self.story.StoryRun(
+            brief="b", split="heldout", arm="a", solved=True,
+            stop="solved", nodes=1, states=1, proposals=1, accepted=1,
+            rejected=0, seconds=0.99996, solution=(), dead_branches=(),
+            proposal_signatures=(),
+        )
+        serialized = run.as_json()["seconds"]
+        self.assertEqual(serialized, run.seconds)
+        self.assertLess(serialized, 1.0)
+
     def test_story_vocabulary_is_disjoint_from_the_tactic_vocabulary(self) -> None:
         self.assertFalse(set(self.story.STORY_SCHEMAS) & set(tg.SCHEMAS))
 
@@ -402,6 +507,20 @@ class StoryArmTests(unittest.TestCase):
 
 
 class BudgetDerivationTests(unittest.TestCase):
+    def test_run_json_preserves_threshold_adjacent_time(self) -> None:
+        """The old 3-decimal rounding turned 0.0199996 into 0.020."""
+        from curve_search import RunRecord  # noqa: PLC0415
+
+        record = RunRecord(
+            theorem="t", family="f", arm="a", solved=True,
+            stop_reason="solved", nodes=1, states=1, proposals=1,
+            accepted=1, rejected=0, seconds=0.0199996, solution=(),
+            dead_branches=(), accepted_signatures=(), proposal_signatures=(),
+        )
+        serialized = record.as_json()["seconds"]
+        self.assertEqual(serialized, record.seconds)
+        self.assertLess(serialized, 0.02)
+
     def test_solved_at_thresholds_both_axes(self) -> None:
         from curve_search import RunRecord, solved_at, solved_by_time  # noqa: PLC0415
 

@@ -74,6 +74,37 @@ class SearchControllerTests(unittest.TestCase):
         self.assertEqual(len(dead), 1)
         self.assertNotIn(dead[0].index,
                          [entry.index for entry in result.solution_trace])
+        self.assertEqual(
+            [entry.action.name for entry in result.closed_branch_trace],
+            ["bad"],
+        )
+
+    def test_queued_but_unexpanded_sibling_is_not_called_dead(self) -> None:
+        result = SearchController[GraphState](1, 100).run(
+            GraphState("root"), GraphPolicy(), GraphVerifier(),
+            lambda state: state.node == "solved",
+        )
+        self.assertEqual(result.stop_reason.value, "budget")
+        self.assertEqual(result.closed_branch_trace, ())
+        queued = [entry.action.name for entry in result.trace if entry.queued]
+        self.assertEqual(queued, ["bad", "good"])
+
+    def test_mid_enumeration_budget_is_not_called_exhaustion(self) -> None:
+        class TwoStagePolicy:
+            def propose_all(self, state, trace):
+                del trace
+                names = ("bad",) if state.node == "root" else ("try1", "try2")
+                return tuple(Action.build(ActionKind.GEN, name) for name in names)
+
+        result = SearchController[GraphState](20, 2).run(
+            GraphState("root"), TwoStagePolicy(), GraphVerifier(),
+            lambda state: False,
+        )
+        self.assertEqual(result.stop_reason.value, "budget")
+        self.assertEqual(
+            [entry.action.name for entry in result.trace], ["bad", "try1"]
+        )
+        self.assertEqual(result.closed_branch_trace, ())
 
     def test_accepted_cycle_is_traced_but_not_requeued(self) -> None:
         result = SearchController[GraphState](20, 100).run(

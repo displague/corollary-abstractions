@@ -71,7 +71,7 @@ finer-grained comparator.
 
 ADJUDICATION (appended after the run; the text above is unedited)
 -----------------------------------------------------------------
-48 runs, 8 briefs x 6 arms, 95.1 s, 20 training rows, three seeds.
+48 runs, 8 briefs x 6 arms, 20 training rows, three seeds.
 
 P-SC1 **FIRED**, and it is the result of this arm.  The largest
     best-to-worst proposal spread on any brief is **1.07%** (373 vs 377),
@@ -93,9 +93,10 @@ P-SC3 **FIRED.**  Each of the five schemas occurs exactly 4 times in the 20
 P-SC4 **FIRED.**  8/8 briefs solved by every arm at (64, 512); 0/8 at every
     lower rung, for every arm.  The curve is a single step, exactly as
     P-SC1's mechanism predicts.
-P-SC5 **FIRED.**  Every arm records 496 accepted dead branches -- the decoy
-    plant strands an obligation no outcome discharges -- and the cross-brief
-    dead-signature share is 0.1823 for five arms and 0.1804 for the sixth.
+P-SC5 **FIRED AFTER A BLOCKING ACCOUNTING CORRECTION.**  Every arm records 96
+    transitions whose complete queued subtrees were exhausted -- including
+    decoy plants that strand obligations -- and the cross-brief signature
+    share is 0.1180 for five arms and 0.1167 for the sixth.
     No arm is within a factor of two of any other because no arm differs at
     all.  Dead-branch avoidance has the same non-existent headroom that
     ranking does.
@@ -116,6 +117,7 @@ have to come from.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import platform
 import random
@@ -473,7 +475,8 @@ class StoryRun:
             "proposals": self.proposals,
             "accepted": self.accepted,
             "rejected": self.rejected,
-            "seconds": round(self.seconds, 4),
+            # Preserve enough precision to recompute thresholded time curves.
+            "seconds": self.seconds,
             "solution": list(self.solution),
             "dead_branches": [list(item) for item in self.dead_branches],
         }
@@ -494,11 +497,9 @@ def run_brief(
         max_nodes, max_proposals
     ).run(verifier.initial_state(), policy, verifier, story_complete)
     elapsed = time.perf_counter() - started
-    on_path = {entry.index for entry in result.solution_trace}
     dead = tuple(
         _story_signature(entry)
-        for entry in result.trace
-        if entry.accepted and entry.index not in on_path
+        for entry in result.closed_branch_trace
     )
     return StoryRun(
         brief=brief.id,
@@ -549,6 +550,7 @@ def train_story_ranker(
     """Domain weights over the SAME architecture as the tactic ranker."""
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+    torch.use_deterministic_algorithms(True)
     random.seed(seed)
     model = TacticRanker(classes=len(STORY_SCHEMAS)).to(device)
     data, lengths = encode([row[0] for row in rows])
@@ -810,7 +812,12 @@ def main() -> None:
             path,
         )
         checkpoints[f"learned_s{seed}"] = {
-            "file": path.name, "bytes": path.stat().st_size
+            "file": path.name,
+            "bytes": path.stat().st_size,
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "seed": seed,
+            "epochs": args.epochs,
+            "deterministic_algorithms": True,
         }
         rankers.append(LearnedStoryRanker(model, device, f"learned_s{seed}"))
 
@@ -834,7 +841,9 @@ def main() -> None:
     payload = {
         "experiment": "story-policy-curve-v0.7",
         "roadmap_item": "ROADMAP-v0.7 item 1, story-family arm",
-        "controller": "scripts/controller.SearchController (shared, unmodified)",
+        "controller": (
+            "scripts/controller.SearchController (shared; no story-specific fork)"
+        ),
         "verifier": "scripts/oracle_controller_demo.StoryFrameVerifier",
         "schemas": list(STORY_SCHEMAS),
         "vocabulary_disjoint_from_tactics": sorted(

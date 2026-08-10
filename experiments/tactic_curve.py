@@ -102,7 +102,7 @@ wall-time budgets 0.02/0.05/0.20/1.00/5.00 s.
 
 ADJUDICATION (appended after the run; the text above is unedited)
 -----------------------------------------------------------------
-144 live runs, 24 theorems x 6 arms, 7.9 s, theorem set sha256 af6f6cb7...
+144 live runs, 24 theorems x 6 arms, theorem set sha256 af6f6cb7...
 
 P-PC1 **FIRED** on all four families.  Syntax-aware blind solved-rate at
     (8, 64) vs the learned mean: conjunction 5 vs 4.67, implication_chain
@@ -133,22 +133,20 @@ P-PC3 **FIRED ON ITS LETTER, REFUTED IN SUBSTANCE.**  The registered
     is small because the FIRST step of every project theorem is still a
     visible ``∀`` goal where the syntax rule fires normally.  Opacity costs
     the blind arm the interior states, not the entrance.
-P-PC4 **FIRED.**  ``clear`` supplies 419 of 1,552 accepted dead branches, the
-    plurality (next: ``intro`` 378, ``constructor`` 353).  The arbitrary arm
-    spends 0.5257 of its proposals on signatures already recorded dead on
-    other theorems against the syntax arm's 0.4901, under both the own-ledger
-    and the pooled ledger.
-P-PC5 **SPLIT, and the prediction was under-specified.**  Under each arm's
-    OWN leave-one-theorem-out ledger the learned arms re-propose known-dead
-    signatures LESS than syntax (mean 0.4636 vs 0.4901) -- missed.  Under the
-    POOLED ledger, the common yardstick this module already argued was the
-    fairer one, they re-propose them MORE (mean 0.4983 vs 0.4901) -- fired.
-    The divergence is exactly the artifact the pooled ledger exists to
-    expose: an arm that accepts fewer dead branches shrinks its own ledger
-    and then looks virtuous for not revisiting it.  Per seed the pooled
-    shares are 0.5030 / 0.4928 / 0.4991, so one seed of three beats syntax.
-    The registered text failed to name which ledger adjudicates; that is a
-    defect in the prediction, recorded rather than resolved in hindsight.
+P-PC4 **FIRED AFTER A BLOCKING ACCOUNTING CORRECTION.**  The first run called
+    every accepted off-path sibling dead, even when BFS stopped while it was
+    still queued.  Frontier-aware accounting now requires the entire queued
+    subtree to have been expanded without proof.  Of 227 such transitions,
+    ``clear`` supplies 101, the plurality (next: ``constructor`` 66).
+    Arbitrary's known-dead share (0.2338) exceeds syntax's (0.2053 pooled).
+P-PC5 **FIRED AFTER THAT CORRECTION.**  The registered prediction remains
+    under-specified because it did not name a ledger.  On the corrected
+    evidence the learned aggregate exceeds syntax under both the own ledger
+    (0.1905 vs 0.1553) and pooled ledger (0.2063 vs 0.2053), though the pooled
+    margin is only 0.0010 and is not practically meaningful.  The substantive
+    answer is still no measurable cross-task avoidance.  The earlier split
+    verdict (own missed / pooled fired) is retracted because it rested on the
+    invalid off-path-is-dead definition; the prediction text above is kept.
     The substantive answer to the roadmap's question -- "does learned ranking
     avoid branches that died on other tasks?" -- is **no, not measurably**.
 P-PC6 **FIRED.**  24 fresh live re-runs at (8, 64), zero disagreements with
@@ -166,11 +164,11 @@ Two findings nobody registered, both worth more than the predictions:
    24 theorems the learned checkpoints now beat it by 2.6 proposals.  The
    ranking result moved; the VERDICT did not, because the syntax-aware order
    this cycle adds is stronger than either.
-2. **On the wall-clock axis the learned arms lose to every blind arm.**  At
-   0.02 s: blind 17/24, learned 13-14/24.  A 27,688-parameter forward pass
-   costs more than the Lean round trip it saves, because a local Pantograph
-   tactic application here is sub-millisecond.  Proposal count and wall time
-   disagree about the ranking, and only wall time is what a user waits for.
+2. **On this recorded wall-clock run the learned arms trail every blind arm.**
+   At 0.02 s: blind 17/24, learned 14/13/14. Proposal count and observed time
+   disagree, but fixed arm order and one timing sample confound warm-up and
+   host drift. Treat this as a diagnostic that motivates counterbalanced
+   latency measurement, not a causal or stable performance claim.
 """
 
 from __future__ import annotations
@@ -366,8 +364,13 @@ def cross_task_dead(records: list[RunRecord]) -> dict[str, object]:
     return summary
 
 
-def curve(records: list[RunRecord], families: list[str], arms: list[str]) -> dict:
+def curve(
+    records: list[RunRecord], families: list[str], arms: list[str],
+    budget_pairs: tuple[tuple[int, int], ...] | None = None,
+) -> dict:
     """Solved-rate at every (state, proposal) rung and every time rung."""
+    if budget_pairs is None:
+        budget_pairs = tuple(zip(NODE_BUDGETS, PROPOSAL_BUDGETS))
     table: dict[str, object] = {}
     for family in ["ALL", *families]:
         family_rows = [
@@ -389,7 +392,7 @@ def curve(records: list[RunRecord], families: list[str], arms: list[str]) -> dic
                             solved_at(item, nodes, proposals) for item in runs
                         ),
                     }
-                    for nodes, proposals in zip(NODE_BUDGETS, PROPOSAL_BUDGETS)
+                    for nodes, proposals in budget_pairs
                 ],
                 "time_curve": [
                     {
@@ -432,6 +435,14 @@ def main() -> None:
         help="separate file: state-level overlap with the training extraction",
     )
     args = parser.parse_args()
+
+    budget_pairs = tuple(
+        (nodes, proposals)
+        for nodes, proposals in zip(NODE_BUDGETS, PROPOSAL_BUDGETS)
+        if nodes <= args.max_nodes and proposals <= args.max_proposals
+    )
+    if not budget_pairs:
+        budget_pairs = ((args.max_nodes, args.max_proposals),)
 
     theorems = theorem_set.load(args.theorems)
     selected = list(theorems.theorems)
@@ -498,6 +509,9 @@ def main() -> None:
             seen.add(key)
             theorem = next(t for t in selected if t.id == record.theorem)
             ranker = next(r for r in rankers if r.name == record.arm)
+            if (NODE_BUDGETS[MIDDLE] > args.max_nodes
+                    or PROPOSAL_BUDGETS[MIDDLE] > args.max_proposals):
+                continue
             checks.append(
                 verify_budget_monotonicity(
                     pool, theorems, theorem, ranker,
@@ -506,13 +520,33 @@ def main() -> None:
                               PROPOSAL_BUDGETS[MIDDLE]),
                 )
             )
-        # State-level holdout control.  Written to its OWN file so that adding
-        # it can never perturb an already-published curve.
-        leakage = state_leakage(
-            pool, theorems, SyntaxRanker(),
-            theorem_set.training_states(),
-            args.max_nodes, args.max_proposals,
-        )
+        # State-level holdout control.  Every arm is measured because schema
+        # order changes which accepted states BFS reaches before its first
+        # proof.  It lives in its OWN file so adding provenance does not
+        # perturb the primary curve artifact.
+        training_states = theorem_set.training_states()
+        leakage = {
+            "experiment": "proof-search-state-leakage-v0.7",
+            "theorem_set": theorems.provenance(),
+            "selected_theorem_ids": [item.id for item in selected],
+            "training_extraction": {
+                "file": theorem_set.TRAINING_EXTRACTION.name,
+                "sha256": theorem_set.digest(theorem_set.TRAINING_EXTRACTION),
+                "distinct_states": len(training_states),
+            },
+            "checkpoints": checkpoints,
+            "budgets": {
+                "max_nodes": args.max_nodes,
+                "max_proposals": args.max_proposals,
+            },
+            "arms": {
+                ranker.name: state_leakage(
+                    pool, theorems, ranker, training_states,
+                    args.max_nodes, args.max_proposals,
+                )
+                for ranker in rankers
+            },
+        }
     finally:
         pool.close()
     elapsed = time.perf_counter() - started
@@ -522,12 +556,14 @@ def main() -> None:
             json.dumps(leakage, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
+        overlaps = {
+            arm: row["states_in_training_extraction"]
+            for arm, row in leakage["arms"].items()
+        }
         print(
-            f"state-leakage control: "
-            f"{leakage['states_in_training_extraction']} of "
-            f"{leakage['distinct_states_across_set']} distinct live states "
-            f"appear among {leakage['training_states_compared']} extracted "
-            f"training states -> {args.leakage_out}"
+            "state-leakage control by arm: "
+            f"{overlaps}; {len(training_states)} extracted training states "
+            f"-> {args.leakage_out}"
         )
 
     families = sorted({item.family for item in selected})
@@ -537,19 +573,30 @@ def main() -> None:
         "roadmap_item": "ROADMAP-v0.7 item 1",
         "authority": "Lean/PyPantograph (live); no replayed transition in any arm",
         "theorem_set": theorems.provenance(),
+        "backend_projects": {
+            name: backend.project_provenance()
+            for name, backend in theorems.backends.items()
+            if backend.needs_project
+        },
         "checkpoints": checkpoints,
         "frequency_counts": counts,
         "frequency_order": list(frequency_order(counts)),
         "budgets": {
-            "nodes": list(NODE_BUDGETS),
-            "proposals": list(PROPOSAL_BUDGETS),
+            "nodes": [nodes for nodes, _ in budget_pairs],
+            "proposals": [proposals for _, proposals in budget_pairs],
             "seconds": list(TIME_BUDGETS),
-            "middle_index": MIDDLE,
+            "middle_index": (
+                budget_pairs.index((NODE_BUDGETS[MIDDLE], PROPOSAL_BUDGETS[MIDDLE]))
+                if (NODE_BUDGETS[MIDDLE], PROPOSAL_BUDGETS[MIDDLE]) in budget_pairs
+                else None
+            ),
+            "run_max_nodes": args.max_nodes,
+            "run_max_proposals": args.max_proposals,
         },
         "registered_guesses_middle_budget": REGISTERED_GUESSES,
         "import_control": control,
         "budget_monotonicity": checks,
-        "curve": curve(records, families, arms),
+        "curve": curve(records, families, arms, budget_pairs),
         "cross_task_dead_branches": cross_task_dead(records),
         "runs": [item.as_json() for item in records],
         "gpu": gpu_footprint(),
