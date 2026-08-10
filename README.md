@@ -270,7 +270,7 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   formula/diagram twins, SVG structure, and a pixel control. Its oracle layer
   is built (`experiments/visual/`); P-V1–P-V4 stay registered until the
   learned arms run
-- `docs/blog/` — accessible project narratives, including the v0.6 story
+- `docs/blog/` — accessible project narratives, including the v0.7 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence

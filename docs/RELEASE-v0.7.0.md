@@ -4,7 +4,8 @@ Baseline: [v0.6.0](RELEASE-v0.6.0.md). Plan of record:
 [ROADMAP-v0.7.md](ROADMAP-v0.7.md) (closed); carried work:
 [ROADMAP-v0.8.md](ROADMAP-v0.8.md). Findings:
 [DISCOVERIES.md](DISCOVERIES.md). Adjudications and numbers:
-[experiments/ANALYSIS.md](../experiments/ANALYSIS.md).
+[experiments/ANALYSIS.md](../experiments/ANALYSIS.md). Public narrative:
+[When the honest baseline wins](blog/when-the-honest-baseline-wins.md).
 
 ## The headline: single demonstrations became families with baselines
 
