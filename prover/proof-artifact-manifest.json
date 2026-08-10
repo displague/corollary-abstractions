@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "trust_model": "local-files trust root; digest authenticates committed extraction bytes, not theorem-to-statement correspondence",
+  "artifacts": {
+    "prover/sample_triples.json": {
+      "sha256": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7",
+      "authority": "native Lean extraction described in prover/PHASE1_NOTES.md"
+    }
+  }
+}

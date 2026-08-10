@@ -234,15 +234,17 @@ refusal).
 
 No runtime action may write `data/*/nodes.json` directly.
 
-**DELIVERED — all four bullets, with two limits that are structural rather than
-unfinished.** `scripts/proof_correspondence.py` regenerates a formal skeleton
+**DELIVERED for authenticated staging of a new seed/new corpus pair; existing-
+corpus edits and acceptance remain open.** `scripts/proof_correspondence.py`
+regenerates a formal skeleton
 from every `verified_by` theorem's opening goal and matches it against the
 citing statement: **15 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH** over the 16
 committed links, and the capability-blind control the provenance lint passes (a
 gravity statement citing `BooleanLaws.modus_ponens`) is MISMATCH here.
 `scripts/write_stage.py` stages a PROVEN candidate through path containment,
-digest pin, closure, transition trace, exclusive ownership, scratch
-regeneration, regeneration confinement, correspondence, structural
+trusted-manifest plus candidate digest pins, closure, transition trace,
+exclusive ownership, scratch regeneration, regeneration confinement,
+correspondence, structural
 unambiguity, schema/link validation, declared-versus-measured matcher delta and
 durable byte-identity; VERIFIED stages a content-free review request;
 CONJECTURED and frame-local are REFUSED. Refusals write a deterministic,
@@ -253,12 +255,15 @@ the ordinary controller loop; the state it advances is a receipt ledger of
 `(record_id, outcome)` pairs, so an accepted WRITE means a receipt exists, not
 that anything was learned.
 
-The two limits: correspondence certifies STRUCTURE, and 12 of the 15
+The remaining semantic limit: correspondence certifies STRUCTURE, and 12 of the 15
 translatable links have a committed structural twin that declares the same
 skeleton, so exclusive ownership is what keeps one claimant (`ambiguous_with`
 reports the rest; the WRITE gate refuses to create new instances). And
-executing a candidate seed is contained by construction and screened, but not
-sandboxed. Both are filed in `docs/BACKLOG.md` with the fixes they need.
+candidate seed code is no longer executed: after review proved scratch cwd plus
+post-hoc digests were detection without containment, WRITE was narrowed to a
+canonical literal-data envelope materialized by trusted code. Proof artifacts
+must independently match `prover/proof-artifact-manifest.json` and are read once
+for every downstream check. The semantic limit is filed in `docs/BACKLOG.md`.
 
 ### Registered predictions (P-PW1 – P-PW8), committed before the adjudicating run
 
@@ -400,6 +405,37 @@ statement DECLARES. It does not say the statement is true, and it does not say
 this statement rather than its structural twin is what the theorem proves. "Byte
 integrity alone is not semantic ownership" is the floor this rung clears, not the
 ceiling it reaches, and no receipt text may be read as certifying truth.
+
+### Second re-adjudication: the sandbox and trust-root claims failed
+
+The next independent review found four blocking failures in the implementation,
+not in the registered gate matrix: candidate Python could rewrite the scratch
+validator and schema, could reach and damage the real repository before the
+after-digest noticed, and could supply both a proof artifact and the digest that
+purported to authenticate it; receipt paths also admitted link-based overwrite
+attacks. These findings retract the implementation claim that scratch execution
+was contained. Detection after arbitrary code runs is not containment.
+
+The repaired gate accepts only a **new seed/new corpus pair** using the exact AST of a canonical seed envelope whose
+`CORPUS` value is literal JSON. It never executes candidate code; trusted code
+materializes the payload and trusted validator/schema files check it. Existing
+target-corpus metadata and nodes must remain exactly equal and the candidate may
+append one node only. A repository-owned proof manifest supplies the independent
+artifact pin, the artifact is snapshotted once for all proof/correspondence
+checks, receipts are confined to the repository's real `staging/` and replaced
+atomically, and the working digest covers repository-relevant state recursively,
+excluding generated/licensed experiment data and other runtime-owned paths that
+can change independently. P-PW7's matrix still fires, but its PROVEN
+input now has an actual trust root; P-PW8's no-runtime-write clause now holds by
+construction rather than by noticing damage afterward.
+
+A fourth review exposed why this restriction is load-bearing: existing seeds
+may own several corpora (`seed_logic.py` owns logic and set theory), so replacing
+one with a single-corpus declarative envelope can validate the named corpus while
+orphaning another. Tracked existing seed or existing corpus targets therefore
+refuse at `seed_ownership` (an untracked new seed source is allowed); a seed-aware
+declarative patch format is carried forward. The
+v0.7 gate demonstrates authenticated staging, not generic automatic seed surgery.
 
 ## 4. Depth follows the v0.6 consumer verdict
 

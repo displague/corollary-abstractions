@@ -15,8 +15,9 @@
 > not independent policy metadata; parsing that value from open language is an
 > upstream capability. ASK's parsed return channel now pauses as WAITING and
 > resumes persistent user-frame state from a channel-signed reply. External
-> tools, learned parsing and item choice, durable sessions, and WRITE remain
-> open. Interactive multi-subsystem session design (WAITING as the user
+> tools and learned parsing/item choice remain open. WRITE now stages a
+> declarative, PROVEN-gated candidate with independently manifest-pinned proof
+> bytes; promotion still remains human-only. Interactive multi-subsystem session design (WAITING as the user
 > channel, boot capability matrix, no demo zoo) lives in
 > `docs/DESIGN-interactive-harness.md`. RETRIEVE cannot substitute a
 > different key after session construction. The sections below retain the original

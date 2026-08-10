@@ -9,6 +9,7 @@ declared fragment and the ownership ambiguity structural matching cannot resolve
 from __future__ import annotations
 
 import json
+import shutil
 import sys
 import tempfile
 import unittest
@@ -119,6 +120,50 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
         self.assertEqual(self.report.count(CORRESPONDS), 15)
         self.assertEqual(self.report.count(UNTRANSLATABLE), 1)
         self.assertEqual(self.report.count(MISMATCH), 0)
+
+    def test_committed_report_is_regenerable_from_digest_named_inputs(self) -> None:
+        committed = json.loads(
+            (REPO_ROOT / "reports" / "proof_correspondence.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(committed, self.report.as_dict())
+        self.assertIn("prover/sample_triples.json", committed["inputs"])
+        self.assertIn("prover/proof-artifact-manifest.json", committed["inputs"])
+
+    def test_external_data_dir_gets_stable_data_relative_input_labels(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            data_dir = Path(temporary) / "external-data"
+            (data_dir / "logic").mkdir(parents=True)
+            shutil.copy2(
+                REPO_ROOT / "data" / "logic" / "nodes.json",
+                data_dir / "logic" / "nodes.json",
+            )
+            report = check_corpus(data_dir, REPO_ROOT)
+        self.assertIn("data/logic/nodes.json", report.inputs)
+        self.assertEqual(len(report.results), 16)
+
+    def test_missing_artifact_is_one_untranslatable_link_not_a_sweep_crash(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            data_dir = Path(temporary) / "external-data"
+            (data_dir / "logic").mkdir(parents=True)
+            corpus = json.loads(
+                (REPO_ROOT / "data" / "logic" / "nodes.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            corpus["statement_nodes"][0]["verified_by"][0]["artifact"] = (
+                "prover/missing.json"
+            )
+            (data_dir / "logic" / "nodes.json").write_text(
+                json.dumps(corpus, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            report = check_corpus(data_dir, REPO_ROOT)
+        missing = [r for r in report.results if r.artifact == "prover/missing.json"]
+        self.assertEqual(len(missing), 1)
+        self.assertEqual(missing[0].verdict, UNTRANSLATABLE)
+        self.assertIn("does not exist", missing[0].reason)
 
     def test_p_pw5_six_links_are_carried_by_the_declared_dual(self) -> None:
         duals = sorted(

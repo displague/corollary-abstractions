@@ -109,6 +109,7 @@ that.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -129,8 +130,10 @@ from match_signatures import (  # noqa: E402
     tokenize,
 )
 from proof_artifacts import (  # noqa: E402
+    read_regular_file_once,
     resolve_contained_artifact,
     select_closing_transitions,
+    select_closing_transitions_bytes,
 )
 
 
@@ -762,11 +765,26 @@ def theorem_skeleton(
     return resolved, text, template_skeleton(text, classes)
 
 
+def theorem_skeleton_bytes(
+    artifact_bytes: bytes, reference: str | None, label: str
+) -> tuple[str, str, str]:
+    """Regenerate a skeleton from bytes captured by the caller exactly once."""
+    transitions, resolved = select_closing_transitions_bytes(
+        artifact_bytes, reference, label
+    )
+    goal, names = read_goal(initial_goal_state(transitions))
+    tree = parse_fragment(goal, names)
+    text, classes = emit_template(tree)
+    return resolved, text, template_skeleton(text, classes)
+
+
 def check_link(
     node: dict,
     link: dict,
     repo_root: Path,
     corpus_forms: dict[str, FormSet] | None = None,
+    artifact_bytes: bytes | None = None,
+    artifact_error: str | None = None,
 ) -> CorrespondenceResult:
     """Adjudicate one `verified_by` link."""
 
@@ -788,9 +806,21 @@ def check_link(
 
     if system != "lean4":
         return fail(UNTRANSLATABLE, f"unsupported proof system {system!r}")
+    if Path(artifact).suffix.casefold() != ".json":
+        return fail(
+            UNTRANSLATABLE,
+            f"artifact is unreadable: cannot authenticate non-JSON proof artifact: {artifact}",
+        )
+    if artifact_error is not None:
+        return fail(UNTRANSLATABLE, f"artifact is unreadable: {artifact_error}")
     try:
-        artifact_path = resolve_contained_artifact(repo_root, artifact)
-        resolved, text, target = theorem_skeleton(artifact_path, reference)
+        if artifact_bytes is None:
+            artifact_path = resolve_contained_artifact(repo_root, artifact)
+            resolved, text, target = theorem_skeleton(artifact_path, reference)
+        else:
+            resolved, text, target = theorem_skeleton_bytes(
+                artifact_bytes, reference, artifact
+            )
     except Untranslatable as exc:
         return fail(UNTRANSLATABLE, f"theorem is outside the fragment: {exc}")
     except ValueError as exc:
@@ -848,6 +878,7 @@ def check_link(
 @dataclass
 class CorrespondenceReport:
     results: list[CorrespondenceResult] = field(default_factory=list)
+    inputs: dict[str, str] = field(default_factory=dict)
 
     def count(self, verdict: str) -> int:
         return sum(1 for r in self.results if r.verdict == verdict)
@@ -858,6 +889,7 @@ class CorrespondenceReport:
 
     def as_dict(self) -> dict:
         return {
+            "inputs": self.inputs,
             "links": len(self.results),
             "corresponds": self.count(CORRESPONDS),
             "mismatch": self.count(MISMATCH),
@@ -875,19 +907,64 @@ def load_corpus_nodes(data_dir: Path) -> list[dict]:
 
 
 def check_corpus(data_dir: Path, repo_root: Path) -> CorrespondenceReport:
-    nodes = load_corpus_nodes(data_dir)
+    data_snapshots = {
+        path: read_regular_file_once(path)
+        for path in sorted(data_dir.glob("*/nodes.json"))
+    }
+    nodes: list[dict] = []
+    for path, payload in data_snapshots.items():
+        corpus = json.loads(payload.decode("utf-8"))
+        nodes.extend(corpus.get("statement_nodes", []))
     corpus_forms = {
         node["statement_id"]: declared_forms(node)
         for node in nodes
         if node.get("statement_id")
     }
-    report = CorrespondenceReport()
+    artifact_names = {
+        link["artifact"]
+        for node in nodes
+        for link in node.get("verified_by", []) or []
+        if isinstance(link, dict) and isinstance(link.get("artifact"), str)
+    }
+    artifact_snapshots: dict[str, bytes] = {}
+    artifact_errors: dict[str, str] = {}
+    for name in sorted(artifact_names):
+        try:
+            path = resolve_contained_artifact(repo_root, name)
+            artifact_snapshots[name] = read_regular_file_once(path)
+        except ValueError as exc:
+            artifact_errors[name] = str(exc)
+    manifest_name = "prover/proof-artifact-manifest.json"
+    manifest = repo_root / manifest_name
+    manifest_bytes = read_regular_file_once(manifest) if manifest.is_file() else None
+    input_digests = {
+        f"data/{path.relative_to(data_dir).as_posix()}": hashlib.sha256(payload).hexdigest()
+        for path, payload in data_snapshots.items()
+    }
+    input_digests.update(
+        {
+            name: hashlib.sha256(payload).hexdigest()
+            for name, payload in artifact_snapshots.items()
+        }
+    )
+    if manifest_bytes is not None:
+        input_digests[manifest_name] = hashlib.sha256(manifest_bytes).hexdigest()
+    report = CorrespondenceReport(
+        inputs=dict(sorted(input_digests.items()))
+    )
     for node in nodes:
         for link in node.get("verified_by", []) or []:
             if not isinstance(link, dict):
                 continue
             report.results.append(
-                check_link(node, link, repo_root, corpus_forms)
+                check_link(
+                    node,
+                    link,
+                    repo_root,
+                    corpus_forms,
+                    artifact_bytes=artifact_snapshots.get(link.get("artifact", "")),
+                    artifact_error=artifact_errors.get(link.get("artifact", "")),
+                )
             )
     return report
 

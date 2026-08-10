@@ -13,6 +13,25 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A digest supplied by the claimant is a checksum, not a trust root; a
+  post-hoc digest is detection, not containment.** The first PROVEN-WRITE
+  implementation executed candidate Python in a scratch cwd, screened obvious
+  paths, and digested the repository afterward. Independent review showed both
+  category errors directly: the candidate could supply arbitrary proof bytes
+  plus their matching digest, and code could damage the real repository before
+  the after-digest reported the loss. The corrected boundary is declarative:
+  candidate seed text must be the exact AST of a canonical literal-JSON
+  envelope and is never executed; trusted code materializes it. Proof bytes
+  must also match the independently maintained
+  `prover/proof-artifact-manifest.json`, and one immutable snapshot feeds the
+  digest, closure, trace, and correspondence checks. The reusable rule is that
+  evidence and the authority authenticating it cannot arrive through the same
+  untrusted channel. A later review added the source-of-truth corollary: a
+  materialized corpus is not evidence that a replacement seed preserves every
+  output of the original (one seed can own several corpora), so the v0.7 lane
+  accepts new seed/new corpus pairs only. *v0.7 item 3 re-review; regressions in
+  `tests/test_write_stage.py`* (2026-08-10)
+
 - **Signing the envelope would have made the acceptance test prove nothing.**
   ROADMAP-v0.7 item 2's gate is "a stale or forged pre-restart binding is
   refused". The natural implementation puts a MAC over the whole session file,

@@ -7,12 +7,10 @@ corrupt the durable store to discover it. The real repository's digest is also
 asserted unchanged around every class, so the isolation itself is checked rather
 than assumed.
 
-That control was itself two notches weaker than it advertised, and both are
-fixed here. It digested `data/` alone while the fixture copies four trees, so an
-escape into `scripts/` or `prover/` was invisible to the very guard whose job is
-to see it; and it was a bare `assert`, which `python -O` deletes, so the guard
-could be compiled out of existence. It now digests every copied tree and raises
-unconditionally.
+The final boundary does not execute candidate Python. The mini-repository tests
+therefore attack a declarative envelope, an independent proof manifest, exact
+append-only corpus materialization, immutable proof snapshots, and confined
+atomic receipts. The recursive digest remains a concurrent-change backstop.
 
 The candidate exercised is a real Boolean law the corpus does not yet carry --
 the domination law `P and false = false` -- proved by a real closing Lean
@@ -26,13 +24,19 @@ The last class runs the same gate through `controller.py`'s ordinary loop.
 from __future__ import annotations
 
 import copy
+import hashlib
+import io
 import json
+import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
+from contextlib import redirect_stdout
+from unittest.mock import patch
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -48,7 +52,10 @@ from write_stage import (  # noqa: E402
     WriteCandidate,
     durable_digest,
     stage_write,
+    main as write_stage_main,
     working_tree_digest,
+    _held_staging_directory,
+    _write_all,
 )
 
 
@@ -178,25 +185,13 @@ NODE = {
 }
 
 
-def seed_source(node: dict, corpus: str = CORPUS) -> str:
-    """A complete, self-contained seed script emitting one corpus."""
-
-    payload = json.dumps(
-        {
-            "schema": "equation-node.schema.json",
-            "corpus_id": corpus,
-            "discipline": corpus,
-            "version": "0.1.0",
-            "statement_nodes": [node],
-        },
-        ensure_ascii=False,
-        indent=2,
-    )
+def corpus_seed_source(corpus_payload: dict, corpus: str) -> str:
+    payload = json.dumps(corpus_payload, ensure_ascii=False, indent=2)
     return (
         "import json\n"
         "from pathlib import Path\n"
         "\n"
-        "CORPUS = json.loads(r'''\n" + payload + "\n''')\n"
+        f"CORPUS = json.loads({payload!r})\n"
         "\n"
         "def main() -> None:\n"
         f"    out = Path('data') / {corpus!r} / 'nodes.json'\n"
@@ -207,6 +202,19 @@ def seed_source(node: dict, corpus: str = CORPUS) -> str:
         "    )\n"
         "\n"
         "main()\n"
+    )
+
+
+def seed_source(node: dict, corpus: str = CORPUS) -> str:
+    """The canonical declarative envelope for a one-node corpus."""
+    return corpus_seed_source(
+        {
+            "schema": "../../schema/equation-node.schema.json",
+            "corpus_id": f"{corpus}.foundations.v1",
+            "discipline": corpus,
+            "version": "0.1.0",
+            "statement_nodes": [node],
+        }, corpus
     )
 
 
@@ -226,12 +234,28 @@ class MiniRepo:
             json.dumps(TRANSITIONS, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        self.trust_artifact(ARTIFACT)
         self.staging = self.root / "staging"
+        self.staging.mkdir()
+        (self.staging / ".gitignore").write_text("*.json\n", encoding="utf-8")
+
+    def trust_artifact(self, artifact: str) -> None:
+        """Model the independent/human act that updates the trust manifest."""
+        manifest_path = self.root / "prover" / "proof-artifact-manifest.json"
+        manifest = (
+            json.loads(manifest_path.read_text(encoding="utf-8"))
+            if manifest_path.is_file()
+            else {"schema_version": 1, "artifacts": {}}
+        )
+        manifest.setdefault("artifacts", {})[artifact] = {
+            "sha256": hashlib.sha256((self.root / artifact).read_bytes()).hexdigest()
+        }
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+        )
 
     @property
     def artifact_sha256(self) -> str:
-        import hashlib
-
         return hashlib.sha256((self.root / ARTIFACT).read_bytes()).hexdigest()
 
     def close(self) -> None:
@@ -306,6 +330,74 @@ EXPECTED_DELTA = {
 
 
 class AcceptedCandidateTests(WriteStageTestCase):
+    def test_receipt_writer_retries_partial_os_writes(self) -> None:
+        chunks: list[bytes] = []
+
+        def partial(_descriptor: int, view: memoryview) -> int:
+            count = min(3, len(view))
+            chunks.append(bytes(view[:count]))
+            return count
+
+        with patch("write_stage.os.write", side_effect=partial):
+            _write_all(99, b"complete receipt")
+        self.assertEqual(b"".join(chunks), b"complete receipt")
+
+    def test_canonical_envelope_round_trips_any_valid_json_string(self) -> None:
+        node = copy.deepcopy(NODE)
+        node["title"] = "A valid title containing ''' triple quotes"
+        record = self.stage(self.candidate(seed_source=seed_source(node)))
+        self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
+        self.assertEqual(record.staged["node"]["title"], node["title"])
+
+    def test_corpus_envelope_metadata_is_part_of_the_gate(self) -> None:
+        base = {
+            "schema": "../../schema/equation-node.schema.json",
+            "corpus_id": f"{CORPUS}.foundations.v1",
+            "discipline": CORPUS,
+            "version": "0.1.0",
+            "statement_nodes": [NODE],
+        }
+        mutations = (
+            {**base, "schema": "wrong.json"},
+            {**base, "corpus_id": "not-a-corpus-id"},
+            {key: value for key, value in base.items() if key != "discipline"},
+        )
+        for payload in mutations:
+            with self.subTest(keys=sorted(payload), schema=payload.get("schema")):
+                record = self.stage(
+                    self.candidate(seed_source=corpus_seed_source(payload, CORPUS))
+                )
+                self.assertRefusedBy(record, "declarative_seed")
+
+    def test_cli_default_staging_follows_alternate_repo_root(self) -> None:
+        candidate = self.candidate()
+        proposal = {
+            "statement_id": candidate.statement_id,
+            "corpus": candidate.corpus,
+            "seed_script": candidate.seed_script,
+            "seed_source": candidate.seed_source,
+            "rung": candidate.rung,
+            "rationale": candidate.rationale,
+            "artifact": candidate.artifact,
+            "artifact_sha256": candidate.artifact_sha256,
+            "reference": candidate.reference,
+            "transition_trace": list(candidate.transition_trace),
+            "expected_matcher_delta": candidate.expected_matcher_delta,
+            "frame_local": candidate.frame_local,
+        }
+        proposal_path = self.repo.root / "proposal.json"
+        proposal_path.write_text(json.dumps(proposal), encoding="utf-8")
+        argv = [
+            "write_stage.py",
+            str(proposal_path),
+            "--repo-root",
+            str(self.repo.root),
+        ]
+        with patch("sys.argv", argv), redirect_stdout(io.StringIO()):
+            result = write_stage_main()
+        self.assertEqual(result, 0)
+        self.assertTrue((self.repo.staging / f"{candidate.record_id}.json").is_file())
+
     def test_proven_correspondent_candidate_stages(self) -> None:
         record = self.stage(self.candidate())
         self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
@@ -319,11 +411,13 @@ class AcceptedCandidateTests(WriteStageTestCase):
             [
                 "path_containment",
                 "epistemic_rung",
+                "seed_ownership",
+                "proof_trust_manifest",
                 "artifact_digest_pin",
                 "theorem_closure",
                 "transition_trace",
                 "exclusive_theorem_ownership",
-                "seed_source_screen",
+                "declarative_seed",
                 "scratch_regeneration",
                 "regeneration_confinement",
                 "semantic_correspondence",
@@ -376,7 +470,7 @@ class AcceptedCandidateTests(WriteStageTestCase):
         self.assertTrue(payload["working_tree_integrity"]["byte_identical"])
         self.assertEqual(
             payload["working_tree_integrity"]["covers"],
-            ["<repository root files>", "data", "prover", "schema", "scripts"],
+            ["<repository recursively>"],
         )
         self.assertEqual(payload["approval_granted"], [])
 
@@ -384,6 +478,41 @@ class AcceptedCandidateTests(WriteStageTestCase):
         before = durable_digest(self.repo.root / "data")
         self.stage(self.candidate())
         self.assertEqual(durable_digest(self.repo.root / "data"), before)
+
+    def test_receipt_replaces_a_hardlink_instead_of_overwriting_its_target(self) -> None:
+        sentinel = self.repo.root / "sentinel.txt"
+        sentinel.write_text("do not overwrite\n", encoding="utf-8")
+        candidate = self.candidate()
+        self.repo.staging.mkdir(exist_ok=True)
+        receipt = self.repo.staging / f"{candidate.record_id}.json"
+        try:
+            receipt.hardlink_to(sentinel)
+        except OSError as exc:
+            self.skipTest(f"hardlinks unavailable: {exc}")
+        record = stage_write(candidate, self.repo.root, self.repo.staging)
+        self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
+        self.assertEqual(sentinel.read_text(encoding="utf-8"), "do not overwrite\n")
+        self.assertEqual(
+            json.loads(receipt.read_text(encoding="utf-8"))["record_id"],
+            record.record_id,
+        )
+
+    def test_preplanted_predictable_temp_link_is_never_opened(self) -> None:
+        sentinel = self.repo.root / "temp-sentinel.txt"
+        sentinel.write_text("intact\n", encoding="utf-8")
+        candidate = self.candidate()
+        self.repo.staging.mkdir(exist_ok=True)
+        old_predictable = (
+            self.repo.staging / f".{candidate.record_id}.{os.getpid()}.tmp"
+        )
+        try:
+            old_predictable.hardlink_to(sentinel)
+        except OSError as exc:
+            self.skipTest(f"hardlinks unavailable: {exc}")
+        record = stage_write(candidate, self.repo.root, self.repo.staging)
+        self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
+        self.assertEqual(sentinel.read_text(encoding="utf-8"), "intact\n")
+        self.assertTrue(old_predictable.exists())
         self.assertFalse((self.repo.root / "data" / CORPUS).exists())
 
 
@@ -458,6 +587,7 @@ class GateMatrixTests(WriteStageTestCase):
             json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        self.repo.trust_artifact(ARTIFACT)
         record = self.stage(
             self.candidate(
                 artifact_sha256=self.repo.artifact_sha256,
@@ -477,9 +607,20 @@ class MaliciousPathTests(WriteStageTestCase):
             self.candidate(seed_script="data/logic/nodes.json")
         )
         self.assertRefusedBy(record, "path_containment")
-        self.assertIn("durable store is never a WRITE target",
-                      record.refusal["detail"])
+        self.assertIn(
+            "durable store is never a WRITE target", record.refusal["detail"]
+        )
 
+    def test_absolute_or_traversing_corpus_cannot_escape_scratch(self) -> None:
+        outside = self.repo.root.parent / "outside-corpus"
+        for corpus in (outside.as_posix(), "../outside-corpus"):
+            with self.subTest(corpus=corpus):
+                candidate = self.candidate(
+                    corpus=corpus,
+                    seed_source=seed_source(NODE, corpus),
+                )
+                self.assertRefusedBy(self.stage(candidate), "path_containment")
+                self.assertFalse((outside / "nodes.json").exists())
     def test_receipts_may_not_be_written_into_the_durable_store(self) -> None:
         """Self-review: every candidate-controlled path was contained; the
         caller-supplied receipt directory was not."""
@@ -500,10 +641,43 @@ class MaliciousPathTests(WriteStageTestCase):
                 stage_write(self.candidate(), self.repo.root, target)
             self.assertIs(type(caught.exception), ValueError)
             self.assertIn(
-                "staging directory may not live under the durable store",
+                "staging directory must be the repository's non-symlink",
                 str(caught.exception),
             )
         self.assertEqual(durable_digest(self.repo.root / "data"), before)
+
+    def test_windows_junction_cannot_redirect_receipts_outside_repo(self) -> None:
+        if sys.platform != "win32" or not hasattr(Path(), "is_junction"):
+            self.skipTest("Windows junction control")
+        outside = self.repo.root.parent / "outside-staging"
+        outside.mkdir()
+        (self.repo.staging / ".gitignore").unlink()
+        os.rmdir(self.repo.staging)
+        result = subprocess.run(
+            ["cmd", "/c", "mklink", "/J", str(self.repo.staging), str(outside)],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            self.skipTest(f"junction creation unavailable: {result.stderr}")
+        try:
+            self.assertTrue(self.repo.staging.is_junction())
+            with self.assertRaisesRegex(ValueError, "non-symlink"):
+                stage_write(self.candidate(), self.repo.root, self.repo.staging)
+            self.assertEqual(list(outside.iterdir()), [])
+        finally:
+            os.rmdir(self.repo.staging)
+
+    def test_windows_staging_handle_blocks_directory_swap_during_write(self) -> None:
+        if sys.platform != "win32":
+            self.skipTest("Windows no-delete handle control")
+        self.repo.staging.mkdir(exist_ok=True)
+        moved = self.repo.root / "staging-moved"
+        with _held_staging_directory(self.repo.staging, self.repo.staging):
+            with self.assertRaises(OSError):
+                os.replace(self.repo.staging, moved)
+        self.assertTrue(self.repo.staging.is_dir())
+        self.assertFalse(moved.exists())
 
     def test_refusal_leaves_the_working_tree_byte_identical(self) -> None:
         before_data = durable_digest(self.repo.root / "data")
@@ -543,12 +717,19 @@ class MaliciousPathTests(WriteStageTestCase):
                 )
 
     def proposal_payload(self, source_path: str) -> dict:
+        candidate = self.candidate()
         return {
             "statement_id": STATEMENT_ID,
             "corpus": CORPUS,
             "seed_script": SEED,
             "seed_source_path": source_path,
             "rung": PROVEN,
+            "rationale": candidate.rationale,
+            "artifact": candidate.artifact,
+            "artifact_sha256": candidate.artifact_sha256,
+            "reference": candidate.reference,
+            "transition_trace": list(candidate.transition_trace),
+            "expected_matcher_delta": candidate.expected_matcher_delta,
         }
 
     def test_proposal_seed_source_path_must_be_a_contained_seed_script(
@@ -591,30 +772,20 @@ class MaliciousPathTests(WriteStageTestCase):
         )
         self.assertEqual(candidate.seed_source, seed_source(NODE))
         self.assertEqual(candidate.seed_script, SEED)
+        record = self.stage(candidate)
+        self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
 
-    def test_seed_naming_a_path_outside_the_scratch_is_screened(self) -> None:
+    def test_noncanonical_seed_path_logic_is_rejected_as_code(self) -> None:
         source = seed_source(NODE).replace(
             "Path('data')", "Path('../data')"
         )
         self.assertRefusedBy(
-            self.stage(self.candidate(seed_source=source)), "seed_source_screen"
+            self.stage(self.candidate(seed_source=source)), "declarative_seed"
         )
 
 
 class WorkingTreeIntegrityTests(WriteStageTestCase):
-    """The integrity digest covered `data/` while the fixture copies FOUR trees.
-
-    A candidate seed that reached `scripts/`, `prover/`, `schema/` or the
-    repository root therefore landed its file AND collected a receipt saying
-    `byte_identical: true` -- it could have rewritten `scripts/write_stage.py`
-    to own the next run, or poisoned the `prover/` artifacts that every
-    `artifact_sha256` pin in the corpus resolves against.
-
-    The seeds below defeat `_screen_seed_source` on purpose, by assembling the
-    path at runtime instead of writing a literal. That is the point: the screen
-    is documented as catching non-adversarial mistakes, so the digest is the
-    only thing standing behind the boundary and it must be shown standing.
-    """
+    """Untrusted Python is rejected as data; it never gets a chance to escape."""
 
     def escaping_seed(self, relative: str, payload: str) -> str:
         """A seed that writes `relative` inside the REAL mini-repo root.
@@ -639,38 +810,36 @@ class WorkingTreeIntegrityTests(WriteStageTestCase):
         record = self.stage(
             self.candidate(seed_source=self.escaping_seed(relative, "# owned\n"))
         )
-        self.assertRefusedBy(record, "working_tree_byte_identity")
+        self.assertRefusedBy(record, "declarative_seed")
         self.assertIsNone(record.staged)
-        self.assertNotEqual(
+        self.assertEqual(
             record.working_tree_digest_before,
             record.working_tree_digest_after,
         )
-        # The escape really happened -- the digest is catching a real write,
-        # not refusing a hypothetical one.
-        self.assertTrue((self.repo.root / relative).is_file())
-        self.assertNotEqual(working_tree_digest(self.repo.root), before_tree)
-        # ... and it is invisible to the `data/`-only digest the gate used to
-        # enforce, which is why that digest was the wrong cover.
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
         self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        if relative not in {"scripts/write_stage.py", "prover/sample_triples.json",
+                            "schema/equation-node.schema.json", "AGENTS.md"}:
+            self.assertFalse((self.repo.root / relative).exists())
         payload = json.loads(
             (self.repo.staging / f"{record.record_id}.json").read_text(
                 encoding="utf-8"
             )
         )
-        self.assertFalse(payload["working_tree_integrity"]["byte_identical"])
+        self.assertTrue(payload["working_tree_integrity"]["byte_identical"])
 
-    def test_a_seed_that_escapes_into_scripts_is_caught_by_the_digest(self) -> None:
+    def test_candidate_code_targeting_scripts_never_executes(self) -> None:
         """The worst case: overwrite the gate itself for the next run."""
         self.assertEscapeCaught("scripts/write_stage.py")
 
-    def test_a_seed_that_escapes_into_prover_is_caught_by_the_digest(self) -> None:
+    def test_candidate_code_targeting_prover_never_executes(self) -> None:
         """Poison the artifacts every `artifact_sha256` pin resolves against."""
         self.assertEscapeCaught("prover/sample_triples.json")
 
-    def test_a_seed_that_escapes_into_the_repository_root_is_caught(self) -> None:
+    def test_candidate_code_targeting_root_never_executes(self) -> None:
         self.assertEscapeCaught("AGENTS.md")
 
-    def test_a_seed_that_escapes_into_schema_is_caught(self) -> None:
+    def test_candidate_code_targeting_schema_never_executes(self) -> None:
         self.assertEscapeCaught("schema/equation-node.schema.json")
 
     def test_the_digest_ignores_this_gates_own_receipts(self) -> None:
@@ -686,6 +855,21 @@ class WorkingTreeIntegrityTests(WriteStageTestCase):
         )
         self.assertEqual(second.outcome, STAGED_CANDIDATE, second.refusal)
 
+    def test_digest_excludes_runtime_experiments_but_covers_source(self) -> None:
+        """GPU/runtime churn cannot refuse WRITE; trusted source still can."""
+        checkpoint = self.repo.root / "experiments" / "results" / "run" / "model.pt"
+        checkpoint.parent.mkdir(parents=True)
+        checkpoint.write_bytes(b"first")
+        before = working_tree_digest(self.repo.root)
+        checkpoint.write_bytes(b"second")
+        self.assertEqual(working_tree_digest(self.repo.root), before)
+
+        source = self.repo.root / "experiments" / "train_claim.py"
+        source.write_text("print('first')\n", encoding="utf-8")
+        with_source = working_tree_digest(self.repo.root)
+        source.write_text("print('second')\n", encoding="utf-8")
+        self.assertNotEqual(working_tree_digest(self.repo.root), with_source)
+
 
 class RegenerationConfinementTests(WriteStageTestCase):
     def test_seed_touching_another_corpus_is_refused(self) -> None:
@@ -700,32 +884,20 @@ class RegenerationConfinementTests(WriteStageTestCase):
         record = self.stage(
             self.candidate(seed_source=seed_source(NODE) + extra)
         )
-        self.assertRefusedBy(record, "regeneration_confinement")
-        self.assertIn("logic/nodes.json", record.refusal["detail"])
+        self.assertRefusedBy(record, "declarative_seed")
 
     def test_seed_adding_an_undeclared_statement_is_refused(self) -> None:
         second = copy.deepcopy(NODE)
         second["statement_id"] = "writestagedemo.boolean_laws.smuggled"
         second["verified_by"] = []
-        payload = json.dumps(
-            {
-                "schema": "equation-node.schema.json",
-                "corpus_id": CORPUS,
+        payload = {
+                "schema": "../../schema/equation-node.schema.json",
+                "corpus_id": f"{CORPUS}.foundations.v1",
                 "discipline": CORPUS,
                 "version": "0.1.0",
                 "statement_nodes": [NODE, second],
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        source = (
-            "import json\nfrom pathlib import Path\n"
-            "CORPUS = json.loads(r'''\n" + payload + "\n''')\n"
-            f"out = Path('data') / {CORPUS!r} / 'nodes.json'\n"
-            "out.parent.mkdir(parents=True, exist_ok=True)\n"
-            "out.write_text(json.dumps(CORPUS, indent=2, ensure_ascii=False)"
-            " + '\\n', encoding='utf-8')\n"
-        )
+            }
+        source = corpus_seed_source(payload, CORPUS)
         record = self.stage(self.candidate(seed_source=source))
         self.assertRefusedBy(record, "regeneration_confinement")
         self.assertIn("smuggled", record.refusal["detail"])
@@ -734,9 +906,7 @@ class RegenerationConfinementTests(WriteStageTestCase):
         record = self.stage(
             self.candidate(seed_source="raise SystemExit('seed exploded')\n")
         )
-        self.assertRefusedBy(record, "scratch_regeneration")
-        self.assertIn("seed exploded", record.refusal["detail"])
-        self.assertNotIn("write-stage-", record.refusal["detail"])
+        self.assertRefusedBy(record, "declarative_seed")
 
     def test_seed_runs_with_its_cwd_inside_the_scratch_tree(self) -> None:
         """What the containment actually is: cwd, argv and environment.
@@ -759,9 +929,7 @@ class RegenerationConfinementTests(WriteStageTestCase):
                 )
             )
         )
-        self.assertRefusedBy(record, "scratch_regeneration")
-        self.assertIn("cwd=<scratch>", record.refusal["detail"])
-        self.assertNotIn(str(self.repo.root), record.refusal["detail"])
+        self.assertRefusedBy(record, "declarative_seed")
 
     def test_the_seed_is_handed_one_absolute_path_the_interpreters(self) -> None:
         """The honest half, asserted rather than admitted only in prose.
@@ -780,29 +948,18 @@ class RegenerationConfinementTests(WriteStageTestCase):
                 )
             )
         )
-        self.assertRefusedBy(record, "scratch_regeneration")
-        detail = record.refusal["detail"]
-        self.assertIn("exe=", detail)
-        # Not scrubbed to `<scratch>`, because it is not in the scratch tree.
-        self.assertNotIn("exe=<scratch>", detail)
+        self.assertRefusedBy(record, "declarative_seed")
 
-    def test_extending_an_existing_corpus_is_confined_too(self) -> None:
-        """The other regeneration shape: add one node to a committed corpus."""
+    def test_existing_multi_output_seed_is_refused_before_replacement(self) -> None:
         node = copy.deepcopy(NODE)
         node["statement_id"] = "logic.boolean_laws.domination_laws"
-        source = (
-            "import json\nfrom pathlib import Path\n"
-            "NODE = json.loads(r'''\n"
-            + json.dumps(node, ensure_ascii=False, indent=2)
-            + "\n''')\n"
-            "path = Path('data') / 'logic' / 'nodes.json'\n"
-            "corpus = json.loads(path.read_text(encoding='utf-8'))\n"
-            "corpus['statement_nodes'].append(NODE)\n"
-            "path.write_text(\n"
-            "    json.dumps(corpus, indent=2, ensure_ascii=False) + '\\n',\n"
-            "    encoding='utf-8',\n"
-            ")\n"
+        corpus = json.loads(
+            (self.repo.root / "data" / "logic" / "nodes.json").read_text(
+                encoding="utf-8"
+            )
         )
+        corpus["statement_nodes"].append(node)
+        source = corpus_seed_source(corpus, "logic")
         record = self.stage(
             self.candidate(
                 statement_id="logic.boolean_laws.domination_laws",
@@ -811,25 +968,19 @@ class RegenerationConfinementTests(WriteStageTestCase):
                 seed_source=source,
             )
         )
-        self.assertEqual(record.outcome, STAGED_CANDIDATE, record.refusal)
-        self.assertEqual(
-            record.staged["node"]["statement_id"],
-            "logic.boolean_laws.domination_laws",
-        )
+        self.assertRefusedBy(record, "seed_ownership")
+        self.assertIn("orphan another corpus", record.refusal["detail"])
 
     def test_extending_an_existing_corpus_may_not_drop_its_statements(
         self,
     ) -> None:
-        source = (
-            "import json\nfrom pathlib import Path\n"
-            "path = Path('data') / 'logic' / 'nodes.json'\n"
-            "corpus = json.loads(path.read_text(encoding='utf-8'))\n"
-            "corpus['statement_nodes'] = corpus['statement_nodes'][:2]\n"
-            "path.write_text(\n"
-            "    json.dumps(corpus, indent=2, ensure_ascii=False) + '\\n',\n"
-            "    encoding='utf-8',\n"
-            ")\n"
+        corpus = json.loads(
+            (self.repo.root / "data" / "logic" / "nodes.json").read_text(
+                encoding="utf-8"
+            )
         )
+        corpus["statement_nodes"] = corpus["statement_nodes"][:2]
+        source = corpus_seed_source(corpus, "logic")
         record = self.stage(
             self.candidate(
                 corpus="logic",
@@ -837,8 +988,27 @@ class RegenerationConfinementTests(WriteStageTestCase):
                 seed_source=source,
             )
         )
-        self.assertRefusedBy(record, "regeneration_confinement")
-        self.assertIn("removes existing statements", record.refusal["detail"])
+        self.assertRefusedBy(record, "seed_ownership")
+
+    def test_extending_an_existing_corpus_may_not_rewrite_a_prior_node(self) -> None:
+        corpus = json.loads(
+            (self.repo.root / "data" / "logic" / "nodes.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        corpus["statement_nodes"][0]["title"] = "silently rewritten"
+        node = copy.deepcopy(NODE)
+        node["statement_id"] = "logic.boolean_laws.domination_laws"
+        corpus["statement_nodes"].append(node)
+        record = self.stage(
+            self.candidate(
+                statement_id=node["statement_id"],
+                corpus="logic",
+                seed_script="scripts/seed_logic.py",
+                seed_source=corpus_seed_source(corpus, "logic"),
+            )
+        )
+        self.assertRefusedBy(record, "seed_ownership")
 
     def test_seed_writing_malformed_json_is_refused_with_a_receipt(self) -> None:
         """`stage_write` caught only its own `Refusal`, so a seed emitting a
@@ -853,8 +1023,7 @@ class RegenerationConfinementTests(WriteStageTestCase):
             "out.write_text('{\"statement_nodes\": [', encoding='utf-8')\n"
         )
         record = self.stage(self.candidate(seed_source=source))
-        self.assertRefusedBy(record, "regeneration_confinement")
-        self.assertIn("not a corpus document", record.refusal["detail"])
+        self.assertRefusedBy(record, "declarative_seed")
         self.assertTrue(
             (self.repo.staging / f"{record.record_id}.json").is_file()
         )
@@ -879,8 +1048,7 @@ class RegenerationConfinementTests(WriteStageTestCase):
             " encoding='utf-8')\n"
         )
         record = self.stage(self.candidate(seed_source=source))
-        self.assertRefusedBy(record, "staging_crashed")
-        self.assertIn("AttributeError", record.refusal["detail"])
+        self.assertRefusedBy(record, "declarative_seed")
         # Receipts stay diffable even when the gate is surprised.
         self.assertNotIn("write-stage-", record.refusal["detail"])
         self.assertNotIn(str(self.repo.root), record.refusal["detail"])
@@ -903,6 +1071,47 @@ class RegenerationConfinementTests(WriteStageTestCase):
 
 
 class ProofGateTests(WriteStageTestCase):
+    def test_manifested_non_json_artifact_is_still_refused(self) -> None:
+        artifact = "prover/candidate_proof.txt"
+        (self.repo.root / artifact).write_text(
+            json.dumps(TRANSITIONS, ensure_ascii=False), encoding="utf-8"
+        )
+        self.repo.trust_artifact(artifact)
+        node = copy.deepcopy(NODE)
+        node["verified_by"][0]["artifact"] = artifact
+        record = self.stage(
+            self.candidate(
+                artifact=artifact,
+                artifact_sha256=_sha256(self.repo.root / artifact),
+                seed_source=seed_source(node),
+            )
+        )
+        self.assertRefusedBy(record, "proof_artifact")
+
+    def test_candidate_digest_cannot_authenticate_an_untrusted_artifact(self) -> None:
+        manifest_path = self.repo.root / "prover" / "proof-artifact-manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        del manifest["artifacts"][ARTIFACT]
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+        )
+        self.assertRefusedBy(self.stage(self.candidate()), "proof_trust_manifest")
+
+    def test_changed_artifact_is_refused_even_if_candidate_pins_new_bytes(self) -> None:
+        rows = copy.deepcopy(TRANSITIONS)
+        rows[0]["tactic"] = "exact False.elim (by assumption)"
+        (self.repo.root / ARTIFACT).write_text(
+            json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        record = self.stage(
+            self.candidate(
+                artifact_sha256=self.repo.artifact_sha256,
+                transition_trace=tuple(rows),
+            )
+        )
+        self.assertRefusedBy(record, "proof_trust_manifest")
+
     def test_unpinned_artifact_digest_is_refused(self) -> None:
         self.assertRefusedBy(
             self.stage(self.candidate(artifact_sha256="")),
@@ -922,6 +1131,7 @@ class ProofGateTests(WriteStageTestCase):
             json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        self.repo.trust_artifact(ARTIFACT)
         self.assertRefusedBy(
             self.stage(
                 self.candidate(
@@ -975,6 +1185,7 @@ class ProofGateTests(WriteStageTestCase):
             json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        self.repo.trust_artifact(ARTIFACT)
         record = self.stage(
             self.candidate(
                 artifact_sha256=self.repo.artifact_sha256,
@@ -1138,6 +1349,7 @@ class ValidationAndDeltaTests(WriteStageTestCase):
             json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        self.repo.trust_artifact(ARTIFACT)
         record = self.stage(
             self.candidate(
                 seed_source=seed_source(node),

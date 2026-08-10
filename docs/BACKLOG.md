@@ -869,12 +869,14 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   candidate content and executing no seed; CONJECTURED and frame-local are
   REFUSED; PROVEN with a MISMATCH **or** UNTRANSLATABLE correspondence is
   REFUSED, failing closed where the lint fails open. Acceptance pipeline, each
-  step able to refuse: path containment, rung, artifact digest pin, theorem
+  step able to refuse: path containment, rung, new-seed/new-corpus ownership,
+  repository-owned proof-manifest
+  pin plus candidate digest pin, theorem
   closure, transition-trace membership, exclusive theorem ownership, scratch
   regeneration outside the repository, regeneration confinement (every other
   corpus byte-identical; exactly the declared statement added), semantic
   correspondence, structural unambiguity, schema/link validation of the merged
-  scratch graph, declared-versus-measured matcher delta, durable byte-identity.
+  scratch graph, declared-versus-measured matcher delta, repository byte-identity.
   Nothing accepts: a staged record carries `approval_granted: []` and
   promotion is a human editing the seed and running the ordinary loop.
   Receipts are deterministic and are written for refusals too.
@@ -884,33 +886,38 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   corpus content — so accepting a WRITE means a receipt exists, not that
   anything was learned. STAGED_CANDIDATE maps to PROVEN, STAGED_REVIEW_REQUEST
   to VERIFIED, everything else to REFUSED with no next state. Still open:
-  - **executing a candidate seed is not sandboxed, and the interpreter path
-    leaks the project root.** Regeneration is real, so the candidate's code
-    runs. Containment covers CWD, ARGV and ENVIRONMENT only: the scratch tree
-    is outside the repository, argv is relative, and the environment carries no
-    repository path (a test proves the seed's `cwd` is only `<scratch>`), plus
-    a screen for absolute and parent-directory path literals. It does **not**
-    cover `sys.executable`, which is this project's own
-    `.venv/Scripts/python.exe` — a seed that walks up from its own interpreter
-    reaches the project root and can enumerate the real tree, and no argument
-    list can close that. The delivered claim that "the subprocess is given no
-    repository path in argv or environment" was true and was being read as
-    "the seed cannot find the repository", which is false; both the module
-    docstring and the test name now say what is actually checked. What stands
-    behind the residual threat is after the fact: the WHOLE WORKING TREE (root
-    files plus `scripts/`, `data/`, `prover/`, `schema/`) is digested before
-    and after every attempt and both digests go in the receipt. That cover is
-    itself a fix — the digest used to be `data/`-only, so a seed that wrote
-    into `scripts/` or `prover/` landed the file and still collected
-    `byte_identical: true`. `staging/` is excluded by design (the gate writes
-    its own receipts there), which is a declared, bounded gap. A real answer
-    is an OS-level sandbox or a seed DSL that is data rather than code.
+  - **RETRACTED AND FIXED — candidate code no longer executes.** Independent
+    review showed that scratch cwd plus a post-hoc digest detects damage but
+    cannot prevent or restore it. A candidate seed is now accepted only when
+    its AST is the exact canonical envelope around a literal JSON corpus;
+    trusted staging code materializes that data. Extra imports, callbacks,
+    validator rewrites, and path tricks refuse at `declarative_seed` before
+    any candidate-controlled action. The working digest now covers the
+    repository-relevant state recursively (excluding `.git`, `.venv`,
+    `.worktrees`, caches, the confined receipt directory, and ignored runtime
+    experiment artifacts) as a concurrent-change backstop, not as a sandbox.
+    The experiment exclusion is load-bearing: an unrelated checkpoint or log
+    may be large and may change during a gate run, while committed experiment
+    source and result JSON remain covered. Likewise, a candidate-supplied proof
+    digest is no longer a
+    trust root: `prover/proof-artifact-manifest.json` independently pins allowed
+    artifacts, whose bytes are captured once and reused for digest, closure,
+    trace, and correspondence.
   - **structural unambiguity is stricter than the corpus.** A candidate whose
     skeleton some committed statement already declares is refused, because
     correspondence cannot say which of them the theorem proves. That is right
     for new content and would reject a genuine second reading of a shared law;
     a disambiguating signal (discipline-typed slots, canonical objects) would
     let such candidates through honestly.
+  - **Existing-corpus write-back remains open.** The declarative envelope is a
+    complete single-corpus seed. It can safely stage a new seed/new corpus pair,
+    but it cannot replace `seed_logic.py` (which owns logic and set theory) or
+    another existing authoring program without potentially orphaning outputs.
+    Such proposals now refuse at `seed_ownership`; an untracked new seed supplied
+    through `seed_source_path` remains valid. The next rung needs a trusted,
+    seed-aware patch format that preserves every output owned by the original
+    seed; executing candidate code or treating a materialized JSON file as proof
+    of the replacement seed is explicitly not that format.
   - **no acceptance path at all.** Reviewing a staged receipt and applying it
     is unautomated by design for now; a `--apply` that ran the ordinary loop
     under a human's signature is the obvious next rung and needs its own

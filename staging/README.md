@@ -40,7 +40,7 @@ and a receipt diff shows a real change. Key fields:
 | `working_tree_integrity` | digest of the whole working tree before and after, with what it `covers` and `excludes`; `byte_identical` must be true |
 | `approval_granted` | always empty — this tool never accepts |
 
-`record_id` is the SHA-256 prefix of the candidate's canonical payload —
+`record_id` is the full SHA-256 of the candidate's canonical payload —
 including a digest of the `rationale`, so two candidates with the same proof and
 different justifications get two receipts instead of overwriting one. The same
 candidate always writes the same filename and a re-run overwrites rather than
@@ -48,7 +48,7 @@ accumulates.
 
 ### What a `STAGED_CANDIDATE` is not
 
-A staged receipt says a proposal survived fourteen checks. It does **not** say
+A staged receipt says a proposal survived sixteen checks. It does **not** say
 the statement is true, and it does not say this statement rather than a
 structural twin is what the theorem proves. `semantic_correspondence` compares
 SKELETONS: the theorem's opening goal, translated into the corpus template
@@ -68,7 +68,7 @@ placeholders: `BooleanLaws.domination_and_false` is not in
 `prover/sample_triples.json` and `scripts/seed_logic_candidate.py` does not
 exist — a candidate names a seed script it proposes the CONTENT of, and
 `seed_source_path` must resolve to an existing `scripts/seed_<name>.py`. For a
-worked end-to-end candidate that really runs, read
+worked end-to-end candidate that really stages, read
 `tests/test_write_stage.py`, whose fixture stages the domination law
 `P and false = false` against a real closing transition.
 
@@ -107,8 +107,16 @@ all nine, plus `new_typed_twin_partners` — and no others. An omitted key is
 refused: a counter left ungated is a prediction nobody registered.
 
 `seed_source` may be given inline instead of `seed_source_path`; it is the FULL
-text the seed script should have after the edit, because the node judged is the
-one the scratch regeneration EMITS, not one the proposal asserts.
+text the seed script should have after the edit. It must be the canonical
+`CORPUS = json.loads(<literal>)` envelope emitted by the gate's own formatter.
+The source is parsed as data and never executed; any extra statement is refused.
+The proof artifact must independently appear with the same digest in
+`prover/proof-artifact-manifest.json`; a candidate pin alone is not authority.
+This v0.7 lane accepts only a seed path not tracked by git (an untracked proposed
+file at that same path is allowed) and a corpus directory that does not already
+exist. Existing seeds may own multiple corpora, so replacing one with this
+single-corpus envelope could orphan an output even if the named corpus validates.
+Existing-corpus write-back waits for a trusted seed-aware patch format.
 
 `expected_matcher_delta` is mandatory for a PROVEN candidate and is a
 REGISTERED PREDICTION in the house sense: it is compared against the delta
