@@ -34,7 +34,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Protocol, runtime_checkable
 
@@ -45,6 +45,14 @@ from text_keys import alias_covered, exact_key, query_tokens
 #: whole trust model in one tuple: unverified outside text is at best a
 #: reported observation, and more often a conjecture.
 EXTERNAL_RUNG_CEILING = ("conjectured", "empirical")
+
+#: How far ahead of this process's clock a source's declared ``recorded_at``
+#: may sit before the file is refused. Small and non-zero on purpose: two
+#: honest machines disagree by seconds, and nothing in the contract is worth
+#: refusing a real record over clock drift. A record dated *hours* ahead is
+#: not drift, and "recorded in the future" is a provenance claim no source
+#: is entitled to make.
+CLOCK_SKEW_TOLERANCE = timedelta(minutes=5)
 
 
 @dataclass(frozen=True)
@@ -138,7 +146,11 @@ class LocalObservationAdapter:
     Malformed files fail loudly at construction with the file named: an
     external source that silently drops records is worse than one that is
     absent, because the caller cannot tell a miss from a swallowed parse
-    error. This mirrors the WordNet adapter's named-archive rule.
+    error. This mirrors the WordNet adapter's named-archive rule. "Malformed"
+    includes a ``recorded_at`` in the future and a rung above the ceiling, and
+    the file set is ``*.json`` **case-insensitively on every platform** (see
+    :meth:`_observation_files`) so that a ``.JSON`` forgery is refused rather
+    than ignored on Linux.
     """
 
     def __init__(
@@ -157,10 +169,43 @@ class LocalObservationAdapter:
             return
         self._records = tuple(self._load_all())
 
+    @staticmethod
+    def _as_utc(moment: str) -> datetime:
+        """Parse an ISO-8601 stamp, reading a naive one as UTC.
+
+        A source that omits its offset has not told us its zone; assuming UTC
+        is the only reading that does not silently pick a favourable one.
+        """
+
+        parsed = datetime.fromisoformat(moment)
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=timezone.utc)
+        return parsed
+
+    def _observation_files(self) -> list[Path]:
+        """Every ``*.json`` file, case-insensitively, on every platform.
+
+        ``root.glob("*.json")`` is case-*insensitive* on Windows and
+        case-*sensitive* on Linux, so a ``forgery.JSON`` dropped into the
+        folder was read and validated on one platform and silently skipped on
+        the other. Both halves of that are wrong for this module: a source
+        that silently drops records is the exact failure the class docstring
+        refuses, and a rule that means different things per platform is not a
+        rule. Suffix comparison, sorted by name, so the load order is the
+        platform-independent one the digests are recorded against.
+        """
+
+        return sorted(
+            path
+            for path in self.root.iterdir()
+            if path.is_file() and path.suffix.lower() == ".json"
+        )
+
     def _load_all(self) -> list[dict[str, object]]:
         records: list[dict[str, object]] = []
         seen: set[str] = set()
-        for path in sorted(self.root.glob("*.json")):
+        now = self._as_utc(self._clock())
+        for path in self._observation_files():
             # One read: the digest must cover the exact bytes that were
             # parsed, not a second read that could differ.
             raw = path.read_bytes()
@@ -188,12 +233,22 @@ class LocalObservationAdapter:
                     )
             assert isinstance(recorded_at, str) and isinstance(rung, str)
             try:
-                datetime.fromisoformat(recorded_at)
+                declared = self._as_utc(recorded_at)
             except ValueError as exc:
                 raise ValueError(
                     f"observation {path} has a non-ISO-8601 recorded_at "
                     f"{recorded_at!r}"
                 ) from exc
+            if declared > now + CLOCK_SKEW_TOLERANCE:
+                # "Recorded at" is a provenance claim, and a claim about the
+                # future is not one this adapter can have witnessed. Refusing
+                # it here keeps the fetched_at/recorded_at pair readable as an
+                # ordering rather than as two unrelated strings.
+                raise ValueError(
+                    f"observation {path} declares recorded_at {recorded_at!r} "
+                    f"in the future (fetch clock {now.isoformat()}, tolerance "
+                    f"{CLOCK_SKEW_TOLERANCE})"
+                )
             if rung not in EXTERNAL_RUNG_CEILING:
                 # The laundering attempt this whole module exists to refuse:
                 # an outside file cannot declare itself derived/formal/proven.

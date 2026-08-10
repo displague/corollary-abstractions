@@ -25,17 +25,70 @@ bindings), **near-miss** (informative failure, kept deliberately).
   already owned. The miss chain would never have reached the tool rung for
   that key — but a verifier that depends on the policy walking the ladder in
   order has delegated its authority to the policy. The repair puts the
-  outranking test where POINT is adjudicated, not where the chain is walked:
-  an external record binds only if nothing committed and nothing derivable
-  matches the key at all. The general lesson is that an epistemic ladder
-  needs two independent guards — one on what a record may *claim*, one on
-  what it may *answer* — and that a "rank" ordering only constrains the
-  second if it is enforced at the binding boundary. *Found by adversarial
-  self-review of v0.7 item 6, after all six deliverables' own tests were
-  green; regression:
+  outranking test where POINT is adjudicated, not where the chain is walked.
+  The general lesson is that an epistemic ladder needs two independent guards
+  — one on what a record may *claim*, one on what it may *answer* — and that
+  a "rank" ordering only constrains the second if it is enforced at the
+  binding boundary. *Found by adversarial self-review of v0.7 item 6, after
+  all six deliverables' own tests were green; regression:
   `tests/test_retrieval_tools.py::ObservationAdapterTests::
   test_outside_record_cannot_answer_a_slot_a_committed_record_owns`*
   (2026-08-09)
+
+  **CORRECTION (2026-08-10, external review).** The sentence originally
+  printed here — "an external record binds only if nothing committed and
+  nothing derivable matches the key at all" — was **false when written**, and
+  the way it was false is the more useful finding. It described the *code*
+  accurately: the outranking test consulted `item_match_mode` over
+  `items + derivations`. It did not describe the *store*, because the WordNet
+  synonym bridge reaches committed records through shared synset members,
+  and no alias comparison can see that. With an archive loaded, one TOOL
+  transaction emitted `[corpus:proven, wordnet:empirical,
+  observation:conjectured]` for a single key and POINT bound **any** of the
+  three: a conjectured outside note answered the slot a proven statement
+  answers. A synset id impersonation (`observation_id: "a-n"`) bound for the
+  same reason from the other side — a synset id is not a lemma, so the key
+  reached nothing and looked unowned. The claim is now true, and true because
+  the test enumerates the doors rather than describing one: alias,
+  twin_ledger, WordNet bridge, synset-id impersonation, and the original
+  `observation_id` case each have their own regression in
+  `ObservationAuthorityDoorTests`. **The lesson worth more than the fix: the
+  author's own repair was the unprobed boundary.** A guard written in
+  response to a finding gets tested against *that* finding's path, and the
+  test passes, and the passing test is then read as covering the guard. It
+  covers one door. The discipline that follows is to enumerate every way a
+  key can be *reached* before claiming what may *answer* it, and to write one
+  regression per way rather than one per bug.
+
+- **A prediction can be adjudicated FIRED while its own stated miss
+  condition has already fired.** P-RT6 (session pruning) named its miss in
+  advance and in writing: "*Miss* if pruning refuses a branch that would
+  otherwise have been VERIFIED." The delivering commit recorded it FIRED. It
+  had missed. `RetrievalVerifier.state_key` delegated its frame half to
+  `FrameAssertionVerifier.state_key`, which keys on the frame's **name** plus
+  its asserted claim ids, obligations and closed flag — omitting
+  `declarations`, `suspends` and `owner`. Two same-named frames with
+  contradictory premises therefore shared a pruning key, so a REFUTED dead
+  end in one returned REFUSED for the other, whose branch evaluated fresh was
+  VERIFIED; in belief frames that is Sally's dead end refusing Anne's branch
+  and citing Sally's premise as the reason. The delegation is correct where
+  it lives — `Controller.run`'s `rejected` set is run-local and one run holds
+  one frame — and it is unchanged in `frames.py`; what was wrong was
+  inheriting a run-local key for evidence that deliberately outlives the run.
+  The mechanism of the mis-adjudication is the part to keep: all three cases
+  the commit *did* exercise (a second dispatcher hop, another session, an
+  advanced state) are cases where the key is supposed to differ or to match,
+  and **none of them constructs two states that must not share a key**.
+  Confirming a cache's hits is not testing a cache; the miss condition was
+  about its collisions, and no probe went there. A registered prediction only
+  does its job if something deliberately walks at its *miss* clause — writing
+  the clause is not the same as testing it. Re-adjudicated MISSED-then-repaired
+  (`repr(state.frame.spec)` joins the key, the same frame scope receipts are
+  signed against); regressions:
+  `tests/test_retrieval_tools.py::SessionPruningTests::
+  test_same_named_frames_with_contradictory_premises_do_not_share_a_prune`
+  and `::test_same_named_belief_frames_of_different_owners_do_not_share_a_prune`.
+  *Found by external adversarial review of v0.7 item 6.* (2026-08-10)
 
 - **Ranking a result set is safe exactly when ties keep the old order.**
   Adding a relevance score to neighborhood retrieval looked like a

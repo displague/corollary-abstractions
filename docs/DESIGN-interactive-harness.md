@@ -572,6 +572,21 @@ deliberately **not** — it is an authority or well-formedness answer whose
 re-check costs one predicate, and caching authority answers is how a stale
 refusal becomes a policy.
 
+**Two limits of that key, for whoever builds Phase 1 on it.** External review
+found the first as a live bug: the key delegated its frame half to
+`FrameAssertionVerifier.state_key`, which keys on the frame *name* and omits
+`declarations`/`suspends`/`owner`, so two same-named frames with contradictory
+premises shared a prune and one's dead end closed the other's live branch. The
+frame **scope** (`repr(state.frame.spec)`) is in the key now. The general form
+matters more than the instance: a run-local dedup key is not automatically a
+session-scoped evidence key, and evidence that outlives a run must be keyed on
+everything the run was allowed to assume constant. The second limit is still
+open and is an *assumption*, not an omission — the key describes the
+conversation, never the stores, so a source that goes live mid-session leaves
+an earlier branch REFUSED. A dispatcher that registers subsystems lazily will
+hit this before the retrieval layer does; the shape filed in BACKLOG is a
+probe-generation stamp on TOOL-rung evidence, not a wider state key.
+
 ---
 
 ## 7. Offline and optional dependencies (reshaped by the harness)

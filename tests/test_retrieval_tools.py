@@ -64,6 +64,36 @@ with the original reason cited; the same action in the same session from a
 **different** state is re-evaluated normally; and a different session is
 never pruned. *Miss* if pruning refuses a branch that would otherwise have
 been VERIFIED, or if a speculative (uncommitted) evaluation writes evidence.
+
+---
+
+**RE-ADJUDICATION (P-RT6): MISSED, then repaired.** The prediction texts
+above are kept exactly as registered; this note is appended, not edited in.
+
+The delivering commit recorded P-RT6 as FIRED. That was wrong, and wrong
+against the prediction's *own* stated miss condition — "pruning refuses a
+branch that would otherwise have been VERIFIED" — which had already fired.
+``RetrievalVerifier.state_key`` delegated its frame half to
+``FrameAssertionVerifier.state_key``, which keys on the frame's **name** and
+omits ``declarations``, ``suspends`` and ``owner``. Two same-named frames
+with contradictory premises therefore shared a pruning key, and a REFUTED
+dead end in one returned REFUSED for the other, whose branch was VERIFIED
+when evaluated fresh. In belief frames that is Sally's dead end refusing
+Anne's branch and citing Sally's premise as the reason.
+
+What made the mis-adjudication possible is worth as much as the bug: the
+three cases the commit *did* check (a second hop, another session, an
+advanced state) are all cases where the state key is meant to differ or
+match, and none of them constructs two states that must NOT share a key.
+Confirming a cache's hits is not testing a cache; the miss condition was
+about its collisions, and no probe went there.
+
+Now MISSED-then-repaired: ``repr(state.frame.spec)`` joins the key (the same
+frame scope receipts are signed against), and the two collision cases are
+regressions below —
+``SessionPruningTests::test_same_named_frames_with_contradictory_premises_do_not_share_a_prune``
+and ``::test_same_named_belief_frames_of_different_owners_do_not_share_a_prune``.
+The other three clauses of P-RT6 stand as originally adjudicated.
 """
 
 from __future__ import annotations
@@ -90,7 +120,12 @@ from controller import (  # noqa: E402
     Verdict,
     Verification,
 )
-from frames import FrameExecutor, FrameSpec, Literal  # noqa: E402
+from frames import (  # noqa: E402
+    FrameAssertionVerifier,
+    FrameExecutor,
+    FrameSpec,
+    Literal,
+)
 from observation_adapter import (  # noqa: E402
     EXTERNAL_RUNG_CEILING,
     LocalObservationAdapter,
@@ -106,6 +141,7 @@ from retrieval import (  # noqa: E402
     Rung,
     UnifiedKnowledgeStore,
     ask_action,
+    item_match_mode,
     item_score,
     miss_chain_actions,
     point_action,
@@ -426,12 +462,59 @@ class WordNetRelationTests(unittest.TestCase):
         )
 
     def test_tool_rung_orders_project_material_before_outside_material(self) -> None:
-        bridged = corpus_item("physics.acceleration", ("acceleration",))
-        result = self.store(bridged).attempt(Rung.TOOL, "quickening")
+        """The intra-transaction authority order, with real outside material.
+
+        Rewritten after external review: the original registered **no**
+        observation source, so "before outside material" asserted a property
+        of an empty tail. A test whose subject is absent cannot fail, and
+        this one was guarding the ordering claim that the POINT-time
+        outranking rule is built on.
+        """
+
+        outside = Path(self.temp.name) / "observations"
+        outside.mkdir()
+        (outside / "note.json").write_text(
+            json.dumps(
+                {
+                    "observation_id": "note.outside",
+                    "title": "Somebody's note on quickening",
+                    "text": "An outside remark.",
+                    "keywords": ["quickening"],
+                    "recorded_at": "2026-07-01T00:00:00+00:00",
+                    "epistemic_rung": "conjectured",
+                }
+            ),
+            encoding="utf-8",
+        )
+        adapter = LocalObservationAdapter(outside, clock=lambda: FROZEN_CLOCK)
+        bridged = corpus_item(
+            "physics.acceleration", ("acceleration",), status="proven"
+        )
+        store = UnifiedKnowledgeStore((bridged,), self.index, (), (adapter,))
+        result = store.attempt(Rung.TOOL, "quickening")
         sources = [item.source for item in result.items]
+
+        # Authority order, not score order: bridged project material, then
+        # the senses that bridged it, then the walked edges, then outside.
         self.assertEqual(sources[0], "corpus")
         self.assertEqual(sources[1:3], ["wordnet", "wordnet"])
-        self.assertTrue(all(source == "wordnet_relation" for source in sources[3:]))
+        self.assertEqual(sources[-1], "observation")
+        self.assertTrue(
+            all(source == "wordnet_relation" for source in sources[3:-1])
+        )
+        self.assertGreater(sources.count("wordnet_relation"), 0)
+        # Every rung keeps the status it entered with; ordering is not
+        # promotion and proximity is not authority.
+        self.assertEqual(
+            [item.epistemic_status for item in result.items],
+            ["proven"] + ["empirical"] * (len(result.items) - 2) + ["conjectured"],
+        )
+        # And the order is an authority claim, enforced at POINT: the outside
+        # record cannot answer the key its neighbours in this very
+        # transaction already own.
+        observation = result.items[-1]
+        self.assertIsNone(store.binding_match_mode(observation, "quickening"))
+        self.assertEqual(store.binding_match_mode(bridged, "quickening"), "synonym")
 
 
 class ObservationAdapterTests(unittest.TestCase):
@@ -496,6 +579,50 @@ class ObservationAdapterTests(unittest.TestCase):
         self.write("a.json", recorded_at="last tuesday")
         with self.assertRaisesRegex(ValueError, "non-ISO-8601 recorded_at"):
             self.adapter()
+
+    def test_recorded_at_in_the_future_is_refused_with_the_file_named(self) -> None:
+        """A claim about the future is not a provenance this adapter witnessed."""
+
+        path = self.write("a.json", recorded_at="2026-08-09T13:00:00+00:00")
+        with self.assertRaisesRegex(ValueError, "in the future") as caught:
+            self.adapter()
+        self.assertIn(path.name, str(caught.exception))
+
+    def test_small_clock_skew_is_tolerated_rather_than_refused(self) -> None:
+        """Two honest machines disagree by seconds; that is not a forgery."""
+
+        self.write("a.json", recorded_at="2026-08-09T12:00:30+00:00")
+        self.assertEqual(self.adapter().probe().record_count, 1)
+
+    def test_a_naive_timestamp_is_read_as_utc_not_as_local(self) -> None:
+        self.write("a.json", recorded_at="2026-08-09T13:00:00")
+        with self.assertRaisesRegex(ValueError, "in the future"):
+            self.adapter()
+
+    def test_uppercase_json_suffix_is_read_and_refused_not_ignored(self) -> None:
+        """``root.glob("*.json")`` was case-sensitive on Linux only.
+
+        The module's own rule is that a source silently dropping records is
+        worse than an absent one, and a rule that means different things per
+        platform is not a rule. A ``.JSON`` forgery must be refused loudly
+        everywhere, so the suffix comparison replaces the glob.
+
+        Stated so nobody mistakes it for stronger evidence than it is: on a
+        case-INsensitive filesystem (Windows, default macOS) the old glob
+        already matched this file, so the test is green either way there. It
+        can only *fail* where the bug lived, which is the platform this fix
+        is for. Running the suite on Linux is what actually adjudicates it.
+        """
+
+        (self.root / "forgery.JSON").write_text("{not json", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "invalid observation JSON"):
+            self.adapter()
+
+    def test_a_wellformed_uppercase_file_is_admitted_on_every_platform(self) -> None:
+        self.write("a.JSON")
+        self.assertEqual(self.adapter().probe().record_count, 1)
+        (record,) = self.adapter().fetch("note.tide_gauge")
+        self.assertEqual(record.location, "a.JSON")
 
     def test_absent_root_probes_off_and_fetches_nothing(self) -> None:
         adapter = LocalObservationAdapter(self.root / "missing")
@@ -607,6 +734,179 @@ class ObservationAdapterTests(unittest.TestCase):
         self.assertIs(pointed.verdict, Verdict.VERIFIED)
         assert pointed.next_state is not None
         self.assertTrue(pointed.next_state.bindings[-1][1].startswith("observation:"))
+
+
+class ObservationAuthorityDoorTests(unittest.TestCase):
+    """One test per door into the slot an outside record may not answer.
+
+    External review's second blocking finding: the first authority fix
+    covered one door. ``_observation_binding_match_mode``'s outranking test
+    consulted ``item_match_mode`` over ``items + derivations`` only, which
+    sees a key's *literal* reach. The WordNet synonym bridge reaches
+    committed records through shared synset members, which no alias
+    comparison can see, so with an archive loaded a single TOOL transaction
+    emitted ``[corpus:proven, wordnet:empirical, observation:conjectured]``
+    for one key and POINT bound **any** of the three.
+
+    The lesson is that the author's own fix was the unprobed boundary, so
+    the doors are now enumerated and each has its own regression:
+
+    1. ``observation_id`` impersonating a committed statement id —
+       ``ObservationAdapterTests::
+       test_outside_record_cannot_answer_a_slot_a_committed_record_owns``
+       (the original finding; kept where it was written).
+    2. an **alias** of a committed record — below.
+    3. a **twin_ledger** group record — below.
+    4. the **WordNet synonym bridge** — below; this is the one that was open.
+    5. an ``observation_id`` impersonating a loaded **synset id** — below;
+       also open, because a synset id is not a lemma and so the bridge in
+       (4) cannot see it either.
+    """
+
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name) / "observations"
+        self.root.mkdir()
+        self.executor = FrameExecutor()
+
+    def write(self, name: str, **payload: object) -> None:
+        record: dict[str, object] = {
+            "observation_id": "note.outside",
+            "title": "Somebody's note",
+            "text": "An outside remark.",
+            "keywords": [],
+            "recorded_at": "2026-07-01T00:00:00+00:00",
+            "epistemic_rung": "conjectured",
+        }
+        record.update(payload)
+        (self.root / name).write_text(json.dumps(record), encoding="utf-8")
+
+    def adapter(self) -> LocalObservationAdapter:
+        return LocalObservationAdapter(self.root, clock=lambda: FROZEN_CLOCK)
+
+    def wordnet(self) -> WordNetIndex:
+        archive = Path(self.temp.name) / "oewn.zip"
+        write_polysemy_fixture(archive)
+        return WordNetIndex.load(archive)
+
+    def assert_refused_and_pointing_refused(
+        self, store: UnifiedKnowledgeStore, key: str
+    ) -> RetrievalItem:
+        """The record is admitted as context and refused as an answer."""
+
+        (outside,) = store.observation_records(key)
+        self.assertIn(outside.epistemic_status, EXTERNAL_RUNG_CEILING)
+        self.assertIsNone(store.binding_match_mode(outside, key))
+
+        state = open_state(self.executor, key)
+        verifier = RetrievalVerifier(store, self.executor)
+        retrieved = verifier.evaluate(state, retrieval_action(key, Rung.TOOL))
+        self.assertIs(retrieved.verdict, Verdict.VERIFIED)
+        assert retrieved.next_state is not None
+        position = next(
+            material.position
+            for material in retrieved.next_state.context
+            if material.item.item_id == outside.item_id
+        )
+        pointed = verifier.evaluate(retrieved.next_state, point_action(position))
+        self.assertIs(pointed.verdict, Verdict.REFUSED)
+        self.assertIn("key constraint", pointed.reason)
+        return outside
+
+    def test_alias_door_an_outside_note_cannot_answer_a_committed_alias(self) -> None:
+        """Door 2: the key reaches a committed record by ALIAS, not by id."""
+
+        self.write("a.json", keywords=["harmonic mean"])
+        owned = corpus_item("stats.central_tendency", ("harmonic mean",))
+        store = UnifiedKnowledgeStore((owned,), None, (), (self.adapter(),))
+        self.assertEqual(
+            store.binding_match_mode(owned, "harmonic mean"), "exact"
+        )
+        self.assert_refused_and_pointing_refused(store, "harmonic mean")
+
+    def test_twin_ledger_door_an_outside_note_cannot_answer_a_group(self) -> None:
+        """Door 3: the owner of the key is a structural twin group."""
+
+        self.write("a.json", keywords=["absorption pair"])
+        group = corpus_item(
+            "twin.absorption", ("absorption pair",), source="twin_ledger"
+        )
+        store = UnifiedKnowledgeStore((group,), None, (), (self.adapter(),))
+        self.assertEqual(
+            store.binding_match_mode(group, "absorption pair"), "exact"
+        )
+        self.assert_refused_and_pointing_refused(store, "absorption pair")
+
+    def test_wordnet_bridge_door_is_the_one_the_first_fix_left_open(self) -> None:
+        """Door 4: reached through shared synset members, invisible to aliases.
+
+        ``quickening`` shares sense ``a-n`` with ``acceleration``, so the
+        committed statement aliased ``acceleration`` answers the key through
+        the bridge — while ``item_match_mode(owned, "quickening")`` is
+        ``None``, which is exactly why the alias-only outranking test let the
+        outside note through. The transaction really does emit a proven
+        statement and a conjectured note under one key.
+        """
+
+        self.write("a.json", keywords=["quickening"])
+        owned = corpus_item("physics.acceleration", ("acceleration",), status="proven")
+        store = UnifiedKnowledgeStore(
+            (owned,), self.wordnet(), (), (self.adapter(),)
+        )
+        # The door: no literal alias reach, but a real bridged owner.
+        self.assertIsNone(item_match_mode(owned, "quickening"))
+        self.assertEqual(store.binding_match_mode(owned, "quickening"), "synonym")
+
+        result = store.attempt(Rung.TOOL, "quickening")
+        statuses = [
+            (item.source, item.epistemic_status)
+            for item in result.items
+            if item.source in {"corpus", "observation"}
+        ]
+        self.assertEqual(
+            statuses, [("corpus", "proven"), ("observation", "conjectured")]
+        )
+        self.assert_refused_and_pointing_refused(store, "quickening")
+
+    def test_lexical_only_reach_still_outranks_an_outside_note(self) -> None:
+        """Door 4, no committed owner: the senses themselves still outrank.
+
+        Reachability outranks, not bindability. ``quickening`` reaches two
+        senses and binds neither; the honest reading is that the key's answer
+        is unresolved, not that it is available to outside material.
+        """
+
+        self.write("a.json", keywords=["quickening"])
+        store = UnifiedKnowledgeStore((), self.wordnet(), (), (self.adapter(),))
+        bridged, lexical = store._wordnet_resolution("quickening")
+        self.assertEqual(bridged, ())
+        self.assertEqual(len(lexical), 2)
+        self.assert_refused_and_pointing_refused(store, "quickening")
+
+    def test_synset_id_impersonation_door(self) -> None:
+        """Door 5: the record's own id names a loaded sense.
+
+        A synset id is not a lemma, so ``a-n`` reaches nothing through the
+        bridge and looked like a key nobody owned. Refused at the binding
+        boundary rather than raised at mint time: the RETRIEVE that mints it
+        is an action the verifier must be able to *answer*.
+        """
+
+        self.write("a.json", observation_id="a-n", keywords=[])
+        store = UnifiedKnowledgeStore((), self.wordnet(), (), (self.adapter(),))
+        (impostor,) = store.observation_records("a-n")
+        self.assertEqual(store._wordnet_resolution("a-n"), ((), ()))
+        self.assert_refused_and_pointing_refused(store, "a-n")
+        # And the honest form of the same record, under a name it may own,
+        # still binds — the refusal is about impersonation, not about the file.
+        self.write("a.json", observation_id="note.a_n", keywords=[])
+        honest = UnifiedKnowledgeStore((), self.wordnet(), (), (self.adapter(),))
+        (record,) = honest.observation_records("note.a_n")
+        self.assertEqual(
+            honest.binding_match_mode(record, "note.a_n"), "observation"
+        )
+        self.assertNotEqual(impostor.item_id, record.item_id)
 
 
 class MissChainTests(unittest.TestCase):
@@ -896,6 +1196,128 @@ class SessionPruningTests(unittest.TestCase):
         self.assertIs(run.trace[0].verification.verdict, Verdict.VERIFIED)
         self.assertEqual(
             self.verifier.session_pruning_evidence(state.session_id), ()
+        )
+
+    def assert_frames_are_separated(
+        self,
+        spec_refuted: FrameSpec,
+        spec_verified: FrameSpec,
+        action: Action,
+    ) -> None:
+        """One session, two frames: the dead end must not close the live one.
+
+        The shape is the same for both collision cases. ``spec_refuted``
+        REFUTES ``action`` and ``spec_verified`` accepts it, and the two
+        states share a session id because a dispatcher carrying one
+        conversation across frames is exactly the situation session-scoped
+        evidence exists for.
+        """
+
+        executor = FrameExecutor()
+        verifier = RetrievalVerifier(UnifiedKnowledgeStore(()), executor)
+
+        def state_for(spec: FrameSpec) -> RetrievalState:
+            return RetrievalState.from_unknown(
+                executor,
+                executor.open_frame(spec),
+                "answer",
+                self.key,
+                Literal("request", "needs", self.key),
+            )
+
+        dead_end = state_for(spec_refuted)
+        live = replace(state_for(spec_verified), session_id=dead_end.session_id)
+
+        # The frame-local key does NOT separate them, and is not asked to:
+        # it is run-local by design and frames.py keeps it. The retrieval
+        # verifier's key must, because pruning evidence outlives the run.
+        frame_keys = FrameAssertionVerifier(executor)
+        self.assertEqual(
+            frame_keys.state_key(dead_end.frame),
+            frame_keys.state_key(live.frame),
+        )
+        self.assertNotEqual(verifier.state_key(dead_end), verifier.state_key(live))
+
+        def run(state: RetrievalState):
+            return Controller[RetrievalState](max_steps=1).run(
+                state, SequencePolicy((action,)), verifier, lambda current: False
+            )
+
+        self.assertIs(
+            verifier.evaluate(live, action).verdict, Verdict.VERIFIED
+        )
+        self.assertIs(run(dead_end).trace[0].verification.verdict, Verdict.REFUTED)
+        outcome = run(live).trace[0].verification
+        self.assertIs(outcome.verdict, Verdict.VERIFIED)
+        self.assertNotIn("already closed", outcome.reason)
+        self.assertEqual(
+            len(verifier.session_pruning_evidence(dead_end.session_id)), 1
+        )
+
+    def test_same_named_frames_with_contradictory_premises_do_not_share_a_prune(
+        self,
+    ) -> None:
+        """P-RT6 re-adjudicated: MISSED here, then repaired.
+
+        The prediction's own miss condition was "pruning refuses a branch
+        that would otherwise have been VERIFIED". It had fired and the commit
+        called P-RT6 FIRED anyway. ``RetrievalVerifier.state_key`` delegated
+        the frame half to ``FrameAssertionVerifier.state_key``, which keys on
+        the frame NAME and omits ``declarations``/``suspends``/``owner``, so
+        two frames named alike but premised oppositely shared a pruning key:
+        the REFUTED branch under ``NOT wet`` closed the VERIFIED branch under
+        ``wet``, citing the other frame's premise as its reason.
+        """
+
+        wet = Literal("ground", "state", "wet")
+        name = "runtime.frames.item6_collision"
+        self.assert_frames_are_separated(
+            FrameSpec(frame=name, declarations=(("p.ground", replace(wet, polarity=False)),)),
+            FrameSpec(frame=name, declarations=(("p.ground", wet),)),
+            Action.build(
+                ActionKind.GEN,
+                "assert_fact",
+                {
+                    "claim_id": "c.ground",
+                    "subject": "ground",
+                    "predicate": "state",
+                    "value": "wet",
+                },
+            ),
+        )
+
+    def test_same_named_belief_frames_of_different_owners_do_not_share_a_prune(
+        self,
+    ) -> None:
+        """The same collision as false-belief attribution, which is worse.
+
+        Sally and Anne hold the same-named frame with opposite beliefs about
+        the marble. Under the old key Sally's dead end refused Anne's branch
+        and reported Sally's premise as the reason — one agent's model
+        answering for another's is the precise failure the nested-frame work
+        exists to prevent, arriving through the pruning cache instead of
+        through the frame ladder.
+        """
+
+        marble = Literal("marble", "in", "basket")
+        name = "runtime.frames.item6_belief_collision"
+        self.assert_frames_are_separated(
+            FrameSpec(
+                frame=name,
+                owner="sally",
+                declarations=(("p.marble", replace(marble, polarity=False)),),
+            ),
+            FrameSpec(frame=name, owner="anne", declarations=(("p.marble", marble),)),
+            Action.build(
+                ActionKind.GEN,
+                "assert_fact",
+                {
+                    "claim_id": "c.marble",
+                    "subject": "marble",
+                    "predicate": "in",
+                    "value": "basket",
+                },
+            ),
         )
 
     def test_refused_branches_are_not_recorded(self) -> None:

@@ -1072,16 +1072,56 @@ class UnifiedKnowledgeStore:
         the exact rung, but a verifier may not rely on a policy walking the
         ladder in order. The outranking test is therefore enforced here,
         where POINT is adjudicated.
+
+        **That first fix covered one door.** External review found the other:
+        ``item_match_mode`` only sees the key's *literal* reach into
+        ``items``/``derivations``, and the WordNet synonym bridge reaches
+        committed records through shared synset members, which no alias
+        comparison can see. With an archive loaded, one TOOL transaction
+        emits ``[corpus:proven, wordnet:empirical, observation:conjectured]``
+        for a single key and POINT bound any of the three: a conjectured
+        outside note answered the slot a proven statement answers. The
+        outranking test now also consults :meth:`_wordnet_resolution`.
+
+        Two ordering decisions are stated rather than inherited:
+
+        * **Bridged committed records and the senses themselves outrank
+          observations.** This is exactly the order :meth:`attempt` already
+          emits at the TOOL rung (``bridged + lexical + relations +
+          observations``); enforcing it at POINT is what makes the emission
+          order an authority claim instead of a presentation detail.
+        * **Reachability outranks, not bindability.** A polysemous lemma
+          reaches two senses and binds neither; the honest reading is that
+          the key's answer is *unresolved*, not that it is available to
+          outside material. The pre-existing ``items``/``derivations`` test
+          already worked this way, and splitting the two would mean an
+          ambiguous corpus neighbourhood was easier for an external record
+          to usurp than an unambiguous one.
+
+        Walked ``wordnet_relation`` records deliberately do NOT outrank: they
+        can never bind at all (see :meth:`binding_match_mode`), so treating
+        them as an owner would leave the key answerable by nothing while
+        claiming somebody owned it.
+
+        The last clause refuses an ``observation_id`` that names a loaded
+        synset. A synset id is not an alias, so the bridge above cannot see
+        that impersonation either -- ``a-n`` reaches no lemma and therefore
+        looked like a key nothing owned.
         """
 
         if item not in self._minted_observations.get(item.item_id, ()):
             return None
         if f"query:{exact_key(key)}" not in item.source_ids:
             return None
+        if self._impersonates_a_synset(item):
+            return None
         outranked = any(
             item_match_mode(candidate, key) is not None
             for candidate in self.items + self.derivations
         )
+        if not outranked:
+            bridged, lexical = self._wordnet_resolution(key)
+            outranked = bool(bridged or lexical)
         if outranked:
             return None
         # Ask the sources directly rather than through observation_records():
@@ -1094,6 +1134,23 @@ class UnifiedKnowledgeStore:
         if len(ids) != 1 or item.item_id not in ids:
             return None
         return "observation"
+
+    def _impersonates_a_synset(self, item: RetrievalItem) -> bool:
+        """True when an external record's own id names a loaded sense.
+
+        Refused rather than raised: minting happens inside a RETRIEVE the
+        verifier must be able to *answer*, and the record is still honest
+        pointable context. What it may not do is own the key.
+        """
+
+        if self.wordnet is None:
+            return False
+        declared = tuple(
+            part.split(":", 1)[1]
+            for part in item.source_ids
+            if part.startswith("observation:")
+        )
+        return any(name in self.wordnet.synsets for name in declared)
 
     def _project_binding_match_mode(
         self, item: RetrievalItem, key: str, mode: str
@@ -1322,8 +1379,15 @@ class PruningEvidence:
     The key is ``(session_id, verifier state_key, action fingerprint)``. All
     three parts are load-bearing: the session id keeps one conversation's dead
     ends out of another's, the state key means a branch is pruned only when
-    the state is *identical* (so progress anywhere re-opens it), and the
+    the state key *matches* (so progress anywhere re-opens it), and the
     fingerprint pins the exact action including its arguments.
+
+    "Matches" is deliberately weaker than "is identical", and the difference
+    is the whole safety argument. See :meth:`RetrievalVerifier.state_key` for
+    exactly what the key distinguishes and what it does not: two states this
+    key cannot tell apart share a verdict whether or not that is sound, so a
+    key that omits an authority-relevant field is a wrong-answer bug, not a
+    cache-efficiency one. It was one, once (P-RT6, re-adjudicated).
     """
 
     session_id: str
@@ -1553,6 +1617,40 @@ class RetrievalVerifier:
         return hmac.compare_digest(receipt.signature, expected)
 
     def state_key(self, state: RetrievalState) -> str:
+        """Distinguish two states that must not share a pruning verdict.
+
+        ``repr(state.frame.spec)`` is here because of a review finding, and
+        the reason it was missing is worth keeping: this key delegated the
+        frame half to :meth:`FrameAssertionVerifier.state_key`, which keys on
+        the frame's **name** plus its asserted claim ids, obligations and
+        closed flag -- and omits ``declarations``, ``suspends`` and ``owner``.
+        That is fine where it lives (``Controller.run``'s ``rejected`` set is
+        run-local, and one run holds one frame), and it is NOT changed there.
+        It is wrong here, because pruning evidence outlives the run: two
+        same-named frames with contradictory premises produced the *same*
+        key, so a REFUTED dead end in one returned REFUSED for the other,
+        whose branch would have been VERIFIED. With belief frames that reads
+        as Sally's dead end refusing Anne's branch and citing Sally's premise.
+        The frame **scope** -- the spec, exactly the scope receipts are signed
+        against in :meth:`_retrieve` -- is what separates them.
+
+        What this key therefore distinguishes: the session, the frame scope
+        (name, owner, declarations, suspends, governance, exit tier, retrieval
+        policy), the frame's accepted claim ids / obligations / closed flag,
+        the pending need, the retrieved context, bindings, resolutions,
+        receipts, the user frame, and any outstanding question.
+
+        What it does NOT distinguish, stated rather than implied: the frame's
+        event history, its superseded declarations, its nested belief models,
+        and -- the one that is a live assumption rather than an omission --
+        the *contents of the store*. Pruning assumes the rung stores are
+        static for a session, which the TOOL rung violates by design: a source
+        that goes live mid-session leaves an earlier branch REFUSED. Filed as
+        a v0.7 item 2/6 follow-up (BACKLOG, "session pruning assumes a static
+        rung store"); it is a stale-refusal bug, not a wrong-binding one, and
+        the honest fix is a re-consult policy rather than a wider key.
+        """
+
         pending = None if state.pending is None else (
             state.pending.slot,
             state.pending.suggested_key,
@@ -1561,6 +1659,7 @@ class RetrievalVerifier:
         return repr(
             (
                 self.frame_verifier.state_key(state.frame),
+                repr(state.frame.spec),
                 state.session_id,
                 pending,
                 tuple(material.item.item_id for material in state.context),
@@ -1578,11 +1677,14 @@ class RetrievalVerifier:
         pruned = self._pruned(state, action)
         if pruned is not None:
             # Reusing evidence, not inventing a new judgment: this exact
-            # action, in this exact state, in this session, was already walked
-            # to a close. Nothing that could have changed the answer can have
-            # happened, because the state key covers everything the answer
-            # depends on -- so the honest response is to charge nothing for it
-            # and cite the original.
+            # action, in this session, from a state this verifier's state_key
+            # cannot tell apart from the closed one, was already walked to a
+            # close. The strength of that claim is exactly the strength of
+            # state_key -- read its docstring for what it separates and for
+            # the one assumption it still makes (a static rung store). It is
+            # not, and should not be described as, "everything the answer
+            # depends on": that phrasing is what let a state key missing the
+            # frame scope look sound (P-RT6, re-adjudicated).
             return Verification(
                 Verdict.REFUSED,
                 "branch already closed in this session as "

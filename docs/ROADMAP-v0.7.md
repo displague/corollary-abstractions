@@ -207,6 +207,34 @@ true.
   registry-shaped handles §3.2 asks for. All 339 pre-existing tests — receipt,
   forgery, replay, supersession included — pass **unmodified**.
 
+**External review repairs** (2026-08-10), both against claims this section
+made:
+
+- The session-pruning bullet above was delivered with **P-RT6 adjudicated
+  FIRED while its own stated miss condition had fired.**
+  `RetrievalVerifier.state_key` delegated its frame half to
+  `FrameAssertionVerifier.state_key`, which keys on the frame *name* and omits
+  `declarations`/`suspends`/`owner`, so two same-named frames with
+  contradictory premises shared a pruning key and one's REFUTED dead end
+  returned REFUSED for the other's VERIFIED branch. Repaired by adding
+  `repr(state.frame.spec)` — the same frame scope receipts are signed against
+  — and re-adjudicated **MISSED-then-repaired** on the record (DISCOVERIES,
+  the prediction module's appended adjudication note, and the repairing
+  commit). `frames.py`'s own key is unchanged: it is run-local and correct
+  there. One assumption stays open and is now stated rather than implied —
+  pruning treats the rung stores as static, which the TOOL rung violates by
+  design (BACKLOG, "session pruning assumes a static rung store").
+- The self-review's authority fix **covered one door.** POINT's outranking
+  test consulted only `item_match_mode` over `items + derivations`, while the
+  WordNet synonym bridge reaches committed records through shared synset
+  members. One TOOL transaction emitted a proven statement and a conjectured
+  outside note under one key, and POINT bound either. The test now also
+  consults `_wordnet_resolution` (bridged committed records and the senses
+  themselves outrank observations, matching the order `attempt` already
+  emits; walked relation records do not, because they can never bind at all)
+  and refuses an `observation_id` that names a loaded synset. Five doors,
+  five regressions, in `ObservationAuthorityDoorTests`.
+
 ## 7. Frames generalize without leaking semantics
 
 - Add routed nested-frame mutation and graft-back with explicit owner paths.

@@ -155,6 +155,19 @@ class RunCommitter(Protocol[StateT]):
       have its failure swallowed while the caller receives a run that claims
       the commit happened. Losing the result is the honest outcome; the fix
       belongs in the committer, which is why the protocol states the duty.
+
+    One behaviour change from the ``getattr`` version is deliberate and is
+    recorded here rather than repaired. The old code paired the lookup with
+    ``callable(...)``; ``isinstance`` against a ``runtime_checkable``
+    ``Protocol`` checks that the attribute *exists*, not that it is callable,
+    so a verifier declaring ``commit_run`` as a non-callable now raises
+    ``TypeError`` at commit time instead of being skipped. That is the point.
+    Skipping is precisely the silent no-op this protocol was introduced to
+    abolish, and a verifier that owns the name without implementing it is
+    malformed in the same way as one whose commit raises: the loud failure
+    names the offender, and a swallowed one hands back a run claiming a commit
+    that never ran. A ``callable`` guard would have restored the silence under
+    a different spelling.
     """
 
     def commit_run(self, trace: tuple["TraceEntry[StateT]", ...]) -> None: ...

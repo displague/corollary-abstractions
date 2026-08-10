@@ -324,6 +324,30 @@ wall) must not be redirected into sentiment tags mid-experiment.
   explicit retention rule before a long-lived session ships. (v0.7
   item 6.)
 
+- **Session pruning assumes a static rung store, and the TOOL rung breaks
+  that by design.** `RetrievalVerifier._pruning` is keyed on
+  `(session_id, state_key, action fingerprint)`, and `state_key` describes
+  the *conversation*, never the *stores*. For the five committed sources
+  that is sound — they are loaded once and read-only for the session's
+  lifetime. It is not sound for the TOOL rung, whose whole point is
+  reaching material this process does not own: an observation folder that
+  gains a file, or a source that was down at the first fetch and up at the
+  second, leaves the branch REFUSED from a dead end that is no longer dead.
+  Probe: a source registered mid-session leaves the earlier rung refused
+  for the rest of it. Deliberately **not** fixed by widening the key —
+  hashing external source contents into a state key would make the key a
+  liveness probe, re-query every source on every transition, and still race.
+  The honest shape is a re-consult policy: pruning evidence for the TOOL
+  rung carries the source probe generation it was recorded under, and a
+  changed generation re-opens the branch rather than re-querying eagerly.
+  Filed as a v0.7 **item 2 / item 6** follow-up because it must be settled
+  together with durable sessions — a stale refusal that survives
+  serialization is worse than one that dies with the process. Note the
+  failure direction: this is a *stale refusal* (an answerable branch stays
+  closed), not a wrong binding. `RetrievalVerifier.state_key`'s docstring
+  states the assumption rather than implying soundness. (v0.7 item 6,
+  external review 2026-08-10.)
+
 ## Nested frames
 
 - **No graft-back API for nested-model mutation: SHIPPED** (branch
