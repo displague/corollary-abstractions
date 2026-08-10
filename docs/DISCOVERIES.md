@@ -880,3 +880,56 @@ bindings), **near-miss** (informative failure, kept deliberately).
   is sharper than “add a dictionary”: lexical coordination can propose where
   to look without becoming evidence that the pointed formal statement is
   true. *retrieval / epistemic boundary* (2026-08-09)
+
+- **A compound expansion needs no counterpart vocabulary, because the source
+  statement is already in the input.** v0.6's analogy lane refused compound
+  specialization bindings on the grounds that leaves like `MASS` in
+  `*(MASS, ^(SPEED, 2))` have no image in the target statement's vocabulary,
+  and inventing one is inventing vocabulary. That framing was the whole
+  limitation: B sits in the input beside A and C, so those leaves are pointable
+  where they stand, and the target only needs the leaves the twin alignment
+  covers to be translated. Replacing the argument with a literal gate — every
+  token of D must occur in `A <sep> B <sep> C` — took the lane from one family
+  and five targets to **11 families and 398 targets, 376 of them carrying a
+  compound expansion**, and the same gate then answered two questions nobody
+  had asked it: head-identity collapses are inadmissible (the collapse removes
+  the element from B, so it exists only in `HEAD_ALGEBRA`), and B's
+  identity-free form beats the re-substituted `*(1, …)` because a `1` the
+  matcher supplied is not pointable either. *analogy / representation*
+  (2026-08-10)
+
+- **The residual in the grounded analogy lane is a declared slot class, not
+  difficulty.** A symbolic solver reading only the token stream reaches
+  0.458 / 0.545 / 0.651 exact across the three holdouts. Handing it exactly two
+  corpus declarations — each slot's parameter/variable class and the identity
+  table — takes the SAME solver to 1.000 on all three, because
+  `specialize.Search` gates its arithmetic-identity rule on the class being
+  `P`, which no reader of the tokens can recover. This falsified the registered
+  P-CS2 ("closed-form from the input alone") in the useful direction: the gap
+  between a token reader and a closed form is nameable and small, so the lane
+  measures the pointing mechanism and a model result from it may never be
+  reported as reasoning. *analogy / closed forms* (2026-08-10)
+
+- **Our own family holdout leaked through the quotient we chose to name it
+  with, and the leak WAS the ceiling.** Families are the matcher's TYPED
+  skeletons, so `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)` are two families and one
+  head/arity shape. Splitting the strongest blind control on that single bit:
+  nearest-template replay scores **1.000** on held-out rows whose untyped shape
+  is still in training and **0.106** where it is not, and the family holdout's
+  headline 0.400 decomposes exactly as `51/155 × 1.000 + 104/155 × 0.106`. The
+  discipline holdout's 0.932 is the same effect at 162 of 176 rows. The strict
+  ceiling is ≈0.10–0.14. Recorded rather than repaired: an untyped-shape
+  holdout is queued, not substituted, because re-rolling a split against a
+  ceiling you have already measured is how a lane launders its own result.
+  *analogy / split design / self-audit* (2026-08-10)
+
+- **"Distinct families are non-isomorphic" is a tautology when family is
+  defined by the isomorphism.** Two of this branch's tests were written to
+  check the roadmap's "at least three non-isomorphic structural families" and
+  both were initially vacuous — the first because it compared typed keys to
+  themselves, the second because its independent witness keyed on operator
+  heads and `*` is n-ary after canonicalization, so a two-factor and a
+  three-factor product read as one shape. Only the arity-aware, class-blind
+  witness can fail, and it is the one that exposed the P-vs-V collision above.
+  A test of a definition needs a coarser instrument than the definition.
+  *methodology* (2026-08-10)

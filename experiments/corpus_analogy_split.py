@@ -111,7 +111,7 @@ import hashlib
 import json
 import sys
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -129,6 +129,7 @@ from match_signatures import (  # noqa: E402
     tokenize,
     typed_resort,
 )
+from match_signatures import identity_terms  # noqa: E402
 from specialize import Search, op_count, render, spelling_ranker  # noqa: E402
 from analogygen import SEP, is_leaf_token, serialize  # noqa: E402
 
@@ -729,9 +730,7 @@ def leakage_surfaces(quads: list[Quadruple],
     the three are not three names for one partition.
     """
     axes = {"family": lambda q: q.family,
-            "discipline": lambda q: q.c_discipline,
-            "vocabulary": lambda q: tuple(sorted(
-                {t for t in serialize(q.d_tree) if is_leaf_token(t)}))}
+            "discipline": lambda q: q.c_discipline}
     out: dict[str, dict] = {}
     for name, assignment in splits.items():
         train = [q for q in quads if assignment[q.target] == "train"]
@@ -932,6 +931,52 @@ def ctl_symbolic_input_only(quad: Quadruple, ctx: dict) -> tuple | None:
     return canonicalize(substitute(c, terms))
 
 
+def _declared_idents(head: str) -> tuple:
+    return tuple((term, "sole") for term in identity_terms(head))
+
+
+def ctl_symbolic_typed_input(quad: Quadruple, ctx: dict) -> tuple | None:
+    """The same solver, plus the corpus's DECLARED slot classes and identities.
+
+    This exists to attribute `symbolic_input_only`'s shortfall rather than
+    merely report it. The two solvers differ in exactly two inputs: the
+    parameter/variable class of each slot, and the identity table. Both are
+    corpus declarations, not facts a reader of the token stream could recover,
+    and `Search` gates its arithmetic-identity rule on the class being `P`. If
+    this control reaches 1.000 while the input-only one does not, the residual
+    the lane leaves to something other than the token stream IS that
+    declaration -- which is a far more specific claim than "the task is hard".
+    """
+    corpus: Corpus = ctx["corpus"]
+    tokens = ctx.get("tokens", input_tokens(quad))
+    first = tokens.index(SEP)
+    second = tokens.index(SEP, first + 1)
+    try:
+        a = deserialize(tokens[:first])
+        b = deserialize(tokens[first + 1:second])
+        c = deserialize(tokens[second + 1:])
+    except (ValueError, IndexError):
+        return None
+    a_cls = corpus.classes[quad.a_id]
+    rho = align_twin_slots(a, c, a_cls, corpus.classes[quad.c_id])
+    if rho is None:
+        return None
+    best = Search(a_cls, op_count(a), _declared_idents).run(a, b)
+    if best is None or best.head_collapses:
+        return None
+    sigma = dict(best.binds)
+    if any(name not in rho for name in sigma):
+        return None
+    tau: dict[str, str] = {}
+    for a_slot, term in sigma.items():
+        if term[0] == "slot":
+            if term[1] in tau and tau[term[1]] != a_slot:
+                return None
+            tau[term[1]] = a_slot
+    translate = {b_slot: rho[a_slot] for b_slot, a_slot in tau.items()}
+    return canonicalize(rename(b, translate))
+
+
 def ctl_symbolic_oracle(quad: Quadruple, ctx: dict) -> tuple | None:
     """The construction itself: full corpus metadata, 1.000 by definition."""
     return quad.d_tree
@@ -950,6 +995,7 @@ BLIND_CONTROLS = {
 # Not blind: they are the capability, reported so the ceiling has a roof.
 SIGHTED_CONTROLS = {
     "symbolic_input_only": ctl_symbolic_input_only,
+    "symbolic_typed_input": ctl_symbolic_typed_input,
     "symbolic_oracle": ctl_symbolic_oracle,
 }
 # Sanity controls forced by admission: they CANNOT score above zero, so they
@@ -1003,18 +1049,33 @@ def score(control, quads: list[Quadruple], ctx: dict) -> float:
     return hits / len(quads)
 
 
-def build_context(train: list[Quadruple], corpus: Corpus) -> dict:
+def build_context(train: list[Quadruple], corpus: Corpus) -> tuple[dict, dict]:
+    """Build the blind context and the sighted one, as two separate objects.
+
+    A blind control must not be able to reach corpus metadata, and "we checked
+    that none of them do" is the kind of assurance this project does not
+    accept. Review of this file found the `Corpus` handle sitting in the single
+    shared context, one attribute access away from every capability-blind
+    scorer -- inert, but only by convention. The blind dict now physically does
+    not contain it, so a control that wanted the answer would have to change
+    this function to get it.
+
+    `authored_pairs` stays on the blind side because
+    `nearest_authored_template` needs it and is a NOVELTY SANITY control: it is
+    pinned at zero by admission and excluded from the ceiling.
+    """
     # Token-level, not character-level: the neighbourhood a template baseline
     # should search is "same shape, different words", and character distance
     # would let a long slot name outvote a whole missing subtree.
     patterns = [(tuple(input_tokens(q)), _action_pattern(q)) for q in train]
     modal = Counter(p for _, p in patterns).most_common(1)
-    return {
+    blind = {
         "train_patterns": patterns,
         "modal_pattern": modal[0][0] if modal else None,
         "authored_pairs": [(render(t), t) for t in
                            sorted(set(corpus.trees.values()), key=render)],
     }
+    return blind, {**blind, "corpus": corpus}
 
 
 def ceiling_table(quads: list[Quadruple], splits: dict[str, dict[str, str]],
@@ -1023,22 +1084,23 @@ def ceiling_table(quads: list[Quadruple], splits: dict[str, dict[str, str]],
     for name, assignment in splits.items():
         train = [q for q in quads if assignment[q.target] == "train"]
         held = [q for q in quads if assignment[q.target] == "holdout"]
-        ctx = build_context(train, corpus)
+        blind_ctx, sighted_ctx = build_context(train, corpus)
         entry: dict[str, object] = {"train_n": len(train), "holdout_n": len(held)}
         blind: dict[str, float] = {}
         for ctl_name, control in BLIND_CONTROLS.items():
-            blind[ctl_name] = score(control, held, ctx)
+            blind[ctl_name] = score(control, held, blind_ctx)
         entry["blind"] = blind
-        entry["sighted"] = {n: score(c, held, ctx)
+        entry["sighted"] = {n: score(c, held, sighted_ctx)
                             for n, c in SIGHTED_CONTROLS.items()}
         # Shuffled-input controls: same scorers, C's leaves permuted.
         shuffled = {}
         for ctl_name in ("symbolic_input_only", "positional_rename",
                          "nearest_template_transfer"):
             control = {**BLIND_CONTROLS, **SIGHTED_CONTROLS}[ctl_name]
+            base = (sighted_ctx if ctl_name in SIGHTED_CONTROLS else blind_ctx)
             hits = 0
             for quad in held:
-                sctx = dict(ctx)
+                sctx = dict(base)
                 sctx["tokens"] = shuffle_c_leaves(quad)
                 try:
                     guess = control(_shuffled_quad(quad), sctx)
@@ -1053,10 +1115,38 @@ def ceiling_table(quads: list[Quadruple], splits: dict[str, dict[str, str]],
         entry["blind_ceiling_control"] = best[0]
         entry["per_family_nearest_template"] = {
             family: score(ctl_nearest_template_transfer,
-                          [q for q in held if q.family == family], ctx)
+                          [q for q in held if q.family == family], blind_ctx)
             for family in sorted({q.family for q in held})}
+        entry["shape_leak"] = _shape_leak(train, held, blind_ctx)
         table[name] = entry
     return table
+
+
+def _shape_leak(train: list[Quadruple], held: list[Quadruple],
+                ctx: dict) -> dict:
+    """Does a holdout leak through the UNTYPED shape?
+
+    Families are TYPED skeletons, so two of them can share a head/arity shape
+    and differ only in a slot class. If the strongest blind control scores
+    where that happens and not where it does not, then the family holdout is
+    holding out a NAME while leaving the structure in training -- a weaker
+    holdout than the file's title claims. Splitting the same control on that
+    one bit is the cheapest way to find out.
+    """
+    def shape(quad: Quadruple) -> tuple:
+        return tuple(sorted(_op_multiset(quad.c_tree).items()))
+
+    train_shapes = {shape(q) for q in train}
+    leaky = [q for q in held if shape(q) in train_shapes]
+    clean = [q for q in held if shape(q) not in train_shapes]
+    return {
+        "holdout_rows_whose_shape_is_in_train": len(leaky),
+        "holdout_rows_with_an_unseen_shape": len(clean),
+        "nearest_template_on_leaky_shapes": score(
+            ctl_nearest_template_transfer, leaky, ctx),
+        "nearest_template_on_unseen_shapes": score(
+            ctl_nearest_template_transfer, clean, ctx),
+    }
 
 
 def _shuffled_quad(quad: Quadruple) -> Quadruple:
@@ -1113,6 +1203,44 @@ def _op_multiset(tree: tuple) -> dict[str, int]:
     return dict(sorted(counter.items()))
 
 
+def split_lines(quads: list[Quadruple], assignment: dict[str, str],
+                name: str) -> list[str]:
+    """The exact JSONL body of one split file, as lines.
+
+    Factored out of `run` so the determinism test can assert "regenerates
+    exactly" against the SAME code path the CLI writes with, rather than
+    against a reimplementation of it that could drift into agreement.
+    """
+    lines = []
+    for quad in quads:
+        row = pointer_row(quad)
+        row["split"] = assignment[quad.target]
+        row["holdout_axis"] = name
+        lines.append(json.dumps(row, sort_keys=True))
+    return lines
+
+
+def write_split_files(quads: list[Quadruple],
+                      splits: dict[str, dict[str, str]],
+                      split_dir: Path) -> list[Path]:
+    """Write the three holdout files. `experiments/data/` is gitignored.
+
+    Repo policy: generated datasets are regenerated from committed generators,
+    not stored in git. These files qualify only because the split rule takes no
+    seed and no threshold to search over -- see `build_splits` -- so there is
+    nothing a re-run could re-roll. The committed artifact is the ceiling table
+    at `experiments/results/corpus_analogy_v07_ceilings.json`.
+    """
+    split_dir.mkdir(parents=True, exist_ok=True)
+    written = []
+    for name, assignment in splits.items():
+        path = split_dir / f"{SPLIT_PREFIX}_{name}.jsonl"
+        body = "".join(line + "\n" for line in split_lines(quads, assignment, name))
+        path.write_text(body, encoding="utf-8", newline="\n")
+        written.append(path)
+    return written
+
+
 def run(data_dir: Path, specialization_path: Path, split_dir: Path,
         out: Path | None, write_splits: bool) -> dict:
     ledger: Counter = Counter()
@@ -1141,15 +1269,7 @@ def run(data_dir: Path, specialization_path: Path, split_dir: Path,
         "ceilings": ceiling_table(quads, splits, corpus),
     }
     if write_splits:
-        split_dir.mkdir(parents=True, exist_ok=True)
-        for name, assignment in splits.items():
-            path = split_dir / f"{SPLIT_PREFIX}_{name}.jsonl"
-            with path.open("w", encoding="utf-8", newline="\n") as handle:
-                for quad in quads:
-                    row = pointer_row(quad)
-                    row["split"] = assignment[quad.target]
-                    row["holdout_axis"] = name
-                    handle.write(json.dumps(row, sort_keys=True) + "\n")
+        write_split_files(quads, splits, split_dir)
         result["split_files"] = [f"{SPLIT_PREFIX}_{n}.jsonl" for n in SPLIT_NAMES]
     if out is not None:
         out.parent.mkdir(parents=True, exist_ok=True)

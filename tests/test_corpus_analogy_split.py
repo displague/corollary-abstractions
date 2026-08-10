@@ -248,6 +248,19 @@ class DedupTests(Fixture):
         backward = [q.key for q in cas.dedup_by_target(list(reversed(self.raw)))]
         self.assertEqual(forward, backward)
 
+    def test_the_task_is_a_function_of_its_input(self) -> None:
+        """No two distinct targets may share one `A <sep> B <sep> C`.
+
+        Dedup is by TARGET, so nothing in it forbids two rows with different
+        Ds from carrying byte-identical inputs -- and if any did, the lane
+        would be ill-posed (no reader of the input could choose between them)
+        and a retrieval baseline could score by exact-input lookup while
+        looking like structure transfer. 398 targets over 398 distinct inputs;
+        this is the assertion that keeps it that way.
+        """
+        inputs = [tuple(cas.input_tokens(q)) for q in self.quads]
+        self.assertEqual(len(inputs), len(set(inputs)))
+
     def test_dedup_holds_across_every_split(self) -> None:
         """A target may not appear on both sides of any holdout."""
         for name, assignment in self.splits.items():
@@ -314,19 +327,199 @@ class DeterminismTests(Fixture):
         second = [json.dumps(cas.pointer_row(q), sort_keys=True) for q in self.quads]
         self.assertEqual(first, second)
 
-    def test_committed_split_files_match_a_fresh_build(self) -> None:
+    def test_split_files_regenerate_byte_identically(self) -> None:
+        """The three split files are generated, not committed.
+
+        `experiments/data/` is gitignored by repo policy, so the splits are
+        reproduced from this generator rather than stored. That is only safe
+        because the split rule takes no seed, and this test is what makes
+        "regenerates exactly" a checked claim instead of a hope -- so it must
+        not be skippable. An earlier version skipped when the CLI had not been
+        run yet, which meant the one guarantee standing in for a committed
+        dataset was unchecked on a fresh clone, exactly where it matters most.
+        Two independent writes into scratch directories are compared byte for
+        byte; the checkout's own files, when present, are compared as well.
+        """
+        with tempfile.TemporaryDirectory() as one, tempfile.TemporaryDirectory() as two:
+            first = cas.write_split_files(self.quads, self.splits, Path(one))
+            second = cas.write_split_files(
+                cas.dedup_by_target(cas.build_quadruples()), self.splits, Path(two))
+            for a, b in zip(first, second):
+                self.assertEqual(a.read_bytes(), b.read_bytes(), msg=a.name)
+            for path in first:
+                live = cas.SPLIT_DIR / path.name
+                if live.exists():  # the checkout's copy, if the CLI has run
+                    self.assertEqual(live.read_bytes(), path.read_bytes(),
+                                     msg=path.name)
+
+    def test_written_rows_carry_the_split_assignment(self) -> None:
+        """The file body is the pointer rows plus exactly two split columns."""
         for name, assignment in self.splits.items():
-            path = cas.SPLIT_DIR / f"{cas.SPLIT_PREFIX}_{name}.jsonl"
-            if not path.exists():  # built by the CLI; skip before first run
-                self.skipTest(f"{path.name} not built yet")
-            expected = []
-            for quad in self.quads:
-                row = cas.pointer_row(quad)
-                row["split"] = assignment[quad.target]
-                row["holdout_axis"] = name
-                expected.append(json.dumps(row, sort_keys=True))
-            actual = path.read_text(encoding="utf-8").splitlines()
-            self.assertEqual(actual, expected, msg=name)
+            lines = cas.split_lines(self.quads, assignment, name)
+            self.assertEqual(len(lines), len(self.quads), msg=name)
+            for quad, line in zip(self.quads, lines):
+                row = json.loads(line)
+                self.assertEqual(row["holdout_axis"], name)
+                self.assertEqual(row["split"], assignment[quad.target])
+                self.assertEqual(row["target_tokens"],
+                                 list(cas.serialize(quad.d_tree)))
+
+
+# ---------------------------------------------------------------------------
+# bullet 5: the controls, pinned
+# ---------------------------------------------------------------------------
+
+class ControlTests(unittest.TestCase):
+    """Regression pins for every number in the committed ceiling table.
+
+    These are the tests that would have caught v0.6 a cycle earlier. A split
+    can rot silently -- a corpus edit adds one statement, a family stops being
+    held out, and a blind rule quietly starts solving the task again -- and the
+    only defence is pinning the control scores themselves, not just the shapes.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.corpus = cas.load_corpus(cas.DATA_DIR)
+        cls.quads = cas.dedup_by_target(cas.build_quadruples())
+        cls.splits = cas.build_splits(cls.quads)
+        cls.table = cas.ceiling_table(cls.quads, cls.splits, cls.corpus)
+
+    def test_the_v06_killer_fails_on_every_holdout(self) -> None:
+        """P-CS1. The rule that scored 1.000 on the v0.6 lane.
+
+        This is the single assertion that says the replacement worked. If it
+        ever rises, the lane has regressed to a positional trick and must be
+        reported as such rather than repaired in place.
+        """
+        for name, entry in self.table.items():
+            self.assertLessEqual(entry["blind"]["last_slot_number_transfer"],
+                                 0.05, msg=name)
+
+    def test_blind_ceiling_is_below_one_on_every_holdout(self) -> None:
+        """P-CS7 and the roadmap's acceptance condition."""
+        for name, entry in self.table.items():
+            self.assertLess(entry["blind_ceiling"], 1.0, msg=name)
+
+    def test_ceilings_match_the_committed_numbers(self) -> None:
+        expected = {
+            "family": (0.4000, "nearest_template_transfer"),
+            "discipline": (0.9318, "nearest_template_transfer"),
+            "vocabulary": (0.3976, "nearest_template_transfer"),
+        }
+        for name, (value, control) in expected.items():
+            self.assertAlmostEqual(self.table[name]["blind_ceiling"], value,
+                                   places=3, msg=name)
+            self.assertEqual(self.table[name]["blind_ceiling_control"], control)
+
+    def test_the_symbolic_roof_is_exactly_the_declared_slot_classes(self) -> None:
+        """P-CS2 adjudicated. The residual is metadata, not difficulty.
+
+        `symbolic_typed_input` differs from `symbolic_input_only` in exactly
+        two corpus declarations -- the parameter/variable class of each slot
+        and the identity table -- and reaching 1.000 with them while falling
+        to 0.46-0.65 without them locates the whole gap there.
+        """
+        for name, entry in self.table.items():
+            self.assertEqual(entry["sighted"]["symbolic_oracle"], 1.0, msg=name)
+            self.assertEqual(entry["sighted"]["symbolic_typed_input"], 1.0,
+                             msg=name)
+            self.assertLess(entry["sighted"]["symbolic_input_only"], 0.70,
+                            msg=name)
+            self.assertGreater(entry["sighted"]["symbolic_input_only"], 0.40,
+                               msg=name)
+
+    def test_shuffling_c_collapses_every_control(self) -> None:
+        """P-CS5. A control that survives the shuffle was not reading C."""
+        for name, entry in self.table.items():
+            for control, value in entry["shuffled_c_leaves"].items():
+                self.assertLessEqual(value, 0.05, msg=f"{name}/{control}")
+
+    def test_novelty_sanity_controls_are_pinned_at_zero(self) -> None:
+        """They CANNOT exceed zero: admission forbids it.
+
+        v0.6 reported these as capability baselines and review corrected it.
+        They are kept, at zero, as vacuity checks, and excluded from the
+        ceiling so the correction cannot be un-made by accident.
+        """
+        for name, entry in self.table.items():
+            for control in sorted(cas.NOVELTY_SANITY):
+                self.assertEqual(entry["blind"][control], 0.0,
+                                 msg=f"{name}/{control}")
+
+    def test_no_blind_control_can_see_the_answer(self) -> None:
+        """The capability-blind claim, executed rather than asserted.
+
+        Every control is handed the whole `Quadruple`, and a `Quadruple` owns
+        `d_tree` -- so "blind" was, structurally, a promise about what the eight
+        functions happen to read. Reading them is not proof. This poisons the
+        answer on every HELD row (D replaced by another row's D, which also
+        poisons the derived `target`, plus both leaf-provenance tuples) and
+        requires the guesses to be unchanged token for token. A control that
+        peeked at the label -- directly, or through `pointer_row`, which is how
+        a training-pattern control could leak if it were ever pointed at the
+        query row -- returns something different here and fails.
+
+        Training rows are left intact: replaying a training row's realization
+        is the baseline's whole point, and those labels are legitimately theirs.
+        """
+        for name, assignment in self.splits.items():
+            train = [q for q in self.quads if assignment[q.target] == "train"]
+            held = [q for q in self.quads if assignment[q.target] == "holdout"]
+            blind_ctx, _ = cas.build_context(train, self.corpus)
+            poisoned = [
+                cas.Quadruple(**{**q.__dict__,
+                                 "d_tree": held[(i + 1) % len(held)].d_tree,
+                                 "expansion_leaves": (),
+                                 "renamed_leaves": ()})
+                for i, q in enumerate(held)]
+            for clean_q, dirty_q in zip(held, poisoned):
+                # EVERY row must be poisoned, not merely the list as a whole:
+                # one unpoisoned row is one row where the check is vacuous.
+                self.assertNotEqual(clean_q.target, dirty_q.target, msg=name)
+            for ctl_name, control in cas.BLIND_CONTROLS.items():
+                clean = [control(q, blind_ctx) for q in held]
+                dirty = [control(q, blind_ctx) for q in poisoned]
+                self.assertEqual(clean, dirty, msg=f"{name}/{ctl_name}")
+
+    def test_the_blind_context_does_not_carry_corpus_metadata(self) -> None:
+        """The blind context is a different object, not the same one trusted."""
+        train = [q for q in self.quads
+                 if self.splits["family"][q.target] == "train"]
+        blind_ctx, sighted_ctx = cas.build_context(train, self.corpus)
+        self.assertNotIn("corpus", blind_ctx)
+        self.assertIs(sighted_ctx["corpus"], self.corpus)
+
+    def test_the_blind_ceiling_is_untyped_shape_leakage(self) -> None:
+        """The finding that explains all three ceilings.
+
+        Families are TYPED skeletons, so `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)`
+        are two families and one shape. Nearest-template replay scores 1.000
+        exactly where a holdout row's untyped shape is still in training and
+        ~0.10 where it is not -- so the ceiling is measuring a hole in the
+        split, not a capability. The strict ceiling is the unseen-shape column.
+        """
+        for name, entry in self.table.items():
+            leak = entry["shape_leak"]
+            self.assertGreater(leak["nearest_template_on_leaky_shapes"],
+                               leak["nearest_template_on_unseen_shapes"],
+                               msg=name)
+            self.assertLessEqual(leak["nearest_template_on_unseen_shapes"],
+                                 0.15, msg=name)
+
+    def test_committed_ceiling_report_is_not_stale(self) -> None:
+        path = (ROOT / "experiments" / "results" /
+                "corpus_analogy_v07_ceilings.json")
+        if not path.exists():
+            self.skipTest("ceiling report not built yet")
+        committed = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(committed["distinct_targets"], len(self.quads))
+        self.assertEqual(committed["rows_before_dedup"], 914)
+        self.assertEqual(committed["families"], 11)
+        self.assertEqual(committed["untyped_shapes"], 10)
+        for name, entry in self.table.items():
+            self.assertAlmostEqual(committed["ceilings"][name]["blind_ceiling"],
+                                   entry["blind_ceiling"], places=9, msg=name)
 
 
 if __name__ == "__main__":

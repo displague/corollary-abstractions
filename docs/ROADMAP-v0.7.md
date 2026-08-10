@@ -136,6 +136,51 @@ last-slot rule scored 1.000. Replace it with a task where that rule fails:
 Acceptance: a non-trivial capability-blind ceiling below 1.000 and a model
 result reported against it. Synthetic 1.000 remains a mechanism result only.
 
+**SHIPPED (the split and the ceilings; the model arm is still open).**
+`experiments/corpus_analogy_split.py` replaces the v0.6 lane. Compound
+expansions are admitted because B is IN THE INPUT, so its leaves are pointable
+where they stand; the gate is literal — every token of D must occur in
+`A <sep> B <sep> C` — and it is what refuses head-identity collapses and
+decides that B's identity-free form, not the re-substituted `*(1, …)`, is the
+target. 914 admitted rows dedup to **398 distinct targets** (2.30x, against
+v0.6's 8.0x) over **11 typed families / 10 untyped shapes**, 13 source and 15
+target disciplines, **376 of 398 carrying a compound-expansion leaf**. Three
+holdout files cut on three keys, deterministic and seedless (pairwise holdout
+Jaccard 0.111 / 0.139 / 0.257). Every D is specializer-accepted from C, absent
+from every authored template, and absent from its own input as a sequence.
+
+Blind ceilings **0.400 / 0.932 / 0.398** (family / discipline / vocabulary),
+all below 1.000, so acceptance is met. **The v0.6 killer is dead: the last-slot
+number rule scores 0.000 / 0.011 / 0.048** (P-CS1 fired). P-CS1 and P-CS7
+fired; P-CS3 half-fired; P-CS4 and P-CS5 missed and are recorded as missed.
+
+Two results matter more than the headline:
+
+- **P-CS2's second clause was falsified, usefully.** The task is NOT closed-form
+  from the token stream alone (0.458 / 0.545 / 0.651). Adding exactly two corpus
+  declarations — each slot's parameter/variable class and the identity table —
+  takes the same solver to 1.000 on all three holdouts, because `Search` gates
+  its arithmetic-identity rule on the class being `P`. The residual is a named
+  piece of declared structure, not difficulty. With it in hand the task is
+  closed-form, so this lane measures the POINTING MECHANISM and no model number
+  from it may be sold as reasoning.
+- **The headline ceiling is inflated by a hole in our own split.** Adversarial
+  review found that families are TYPED skeletons, so `*(?1:P, ?2:V)` and
+  `*(?1:V, ?2:V)` are two families and one shape. Nearest-template replay
+  scores 1.000 exactly where a held-out row's untyped shape is still in
+  training and ~0.10 where it is not; the family holdout's 0.400 is exactly
+  `51/155 × 1.000 + 104/155 × 0.106`. The **strict ceiling is ≈0.10–0.14**.
+
+Still open, and required before the model arm is worth running:
+- an **untyped-shape holdout**, which is the split this one should have been.
+  It was NOT substituted after the fact, because re-rolling a split against a
+  measured ceiling is how a lane launders its own result;
+- the discipline holdout is **near-vacuous** (0.932; 162 of 176 rows keep their
+  shape in training) and must not be cited alone as difficulty;
+- the three axes are not fully orthogonal — holding out whole families empties
+  five of ten disciplines out of training at this corpus size;
+- no model has been trained; every number here is a control.
+
 ## 6. Retrieval becomes tool use
 
 - Add ranked neighborhood search with announced scores and caps.

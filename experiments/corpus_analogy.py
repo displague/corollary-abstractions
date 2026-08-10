@@ -1,5 +1,13 @@
 """Corpus-grounded analogy evaluation for v0.6.
 
+SUPERSEDED by `experiments/corpus_analogy_split.py` (v0.7 item 5). This module
+is kept, unchanged and still tested, because it is the evidence for the finding
+that replaced it -- one ratio family, five distinct targets, and a blind
+last-slot number rule at 1.000 -- and because `docs/RELEASE-v0.6.0.md` cites it
+as a reproduction command. Read it as the record of a vacuous lane, not as the
+current task; the v0.7 module admits compound expansions, deduplicates targets
+before counting, and ships three holdouts with a measured ceiling table.
+
 The synthetic analogy task proved recombinant pointing, not corpus transfer.
 This evaluation constructs A:B::C:D only when three independent corpus facts
 agree: A:C is a typed twin, A:B is a committed cheapest-specialization edge,

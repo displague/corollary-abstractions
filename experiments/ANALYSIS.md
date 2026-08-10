@@ -1603,3 +1603,263 @@ belongs at the interface and evaluation boundary: score all generated OOD
 rows, localize capacity/decode failures by depth and step, add non-root and
 composed transformations with shortcut controls, and test another shared
 iterative mechanism before making a GRU-specific claim.
+
+## Corpus analogy becomes a real split (v0.7 item 5)
+
+The v0.6 lane reported its own vacuity: 40 rows, five distinct targets, one
+ratio family, and a capability-blind rule — take the one number newly visible
+in B and overwrite C's last slot — scoring **1.000**. This is the replacement.
+No model is trained here; the split and the ceiling table are the slice, and
+the model arm runs later against these ceilings as its bar.
+
+### What changed in the construction
+
+v0.6 admitted a row only when every binding was a bare slot rename or a
+number, which is why compound expansions were excluded and why one family
+survived. The unlock is that a compound expansion does not need a counterpart
+in C's vocabulary, because **B is in the input**: its leaves are pointable
+where they stand. D is B rewritten into C's vocabulary for the slots the twin
+alignment covers, with expansion leaves carried verbatim, and the admission
+gate is literal rather than argued — every token of D must occur in
+`A <sep> B <sep> C` or the row is refused.
+
+That single gate decided three questions that would otherwise have been
+matters of taste:
+
+- **head-identity collapses are refused** (4 rows), because the collapse
+  *removes* the node from B, so the element it binds (`FALSITY`, `EMPTYSET`)
+  appears nowhere in the input and would be conjured from `HEAD_ALGEBRA`;
+- **arithmetic identities decide a representation question.** Substituting the
+  pattern into C re-inserts `*(1, …)`; B, which is what the corpus writes, does
+  not have it. B's form wins because a `1` the matcher supplied is not
+  pointable. Fixing this moved the build from 581 to 914 rows — the earlier
+  construction was refusing its own valid rows;
+- **`=` orientation** is normalized away in the cross-check, because
+  `Search.gen_direct` matches equalities in both directions.
+
+Both constructions — specialize C directly, and translate B — are computed for
+every row and must agree modulo those two normalizations. 20 rows still
+disagree and are refused rather than explained.
+
+### The split
+
+914 admitted rows collapse to **398 distinct targets** (2.30x, against v0.6's
+8.0x) over **11 typed families** and **10 untyped shapes**, 13 source and 15
+target disciplines; **376 of 398** carry at least one compound-expansion leaf,
+the thing v0.6 could not represent at all. Every D is specializer-accepted from
+C under the same acceptability bar edge reporting uses, absent from every
+authored template, and absent from its own input as a token sequence.
+
+| family (typed skeleton of A and C) | n | disc. | example D |
+|---|---:|---:|---|
+| `?0:V = *(?1:P, ?2:V)` | 142 | 2 | `*(INERTIA, RESPONSE) = *(AMOUNT, CONSTANT, TEMPERATURE)` |
+| `?0:V = *(?1:P, ?2:V, ?3:V)` | 85 | 2 | `*(PRESSURE, VOLUME) = *(CONSTANT, BASE, HEIGHT)` |
+| `?0:V = +(?1:P, *(?2:P, ?3:V))` | 55 | 4 | `+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)), *(SLOPE, ^(DV, 2))) = ^(LINEELEMENT, 2)` |
+| `?0:V = *(?1:V, ?2:V)` | 51 | 3 | `*(PARTONE, PARTTWO) = *(AMOUNT, CONSTANT, TEMPERATURE)` |
+| `?0:V = *(?1:V, inv(?2:V))` | 30 | 5 | `CONDITION = *(2, EDGES, inv(INPUTPERTURB))` |
+| `?0:V = +(?1:V, ?2:V)` | 14 | 2 | `2 = +(RELATIVE_VELOCITY, FACES, neg(EDGES))` |
+| `?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))` | 12 | 2 | `AREA = *(+(VALUELEFT, neg(MEANREWARD)), inv(STDREWARD))` |
+| `?0:V = *(?1:P, EXP⟨neg(*(?2:P, ?3:V))⟩)` | 3 | 3 | `PRESENT = *(FUTURE, EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE))))))` |
+| `?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))` | 2 | 2 | `STD = *(+(neg(CENTER), pm(SQRT(DISC))), inv(*(2, COEFF0)))` |
+| `?0:V = MEET⟨?1:P, ?0:V⟩` | 2 | 2 | `SETA = MEET(SETA, JOIN(SETA, PROP2))` |
+| `?0:V = neg(LOG⟨?1:V⟩)` | 2 | 2 | `SURPRISAL = neg(LOG(SIGMOID(*(BETA, +(LOGRATIOCHOSEN, neg(LOGRATIOREJECTED))))))` |
+
+Family is the matcher's own `typed` skeleton, so "the families are
+non-isomorphic" is true by definition and therefore worthless as evidence. The
+number that can fail is the **untyped** one: 11 typed families collapse to 10
+head/arity shapes, because `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)` differ only in a
+slot class. That one collision turns out to explain every ceiling below.
+
+Three holdout files, cut on three different keys, deterministically and without
+a seed — families and disciplines alternate in descending-size order, and the
+vocabulary holdout grows from the rarest target token upward to a declared 20%.
+There is nothing to re-roll:
+
+| holdout | train | held | key | held keys |
+|---|---:|---:|---|---:|
+| family | 243 | 155 | typed skeleton | 5 families |
+| discipline | 222 | 176 | C's discipline | 7 disciplines |
+| vocabulary | 315 | 83 | rarest target tokens | 57 tokens |
+
+The pairwise Jaccard of the three holdout sets is 0.111, 0.139 and 0.257, so
+these are three partitions rather than one wearing three names. They are **not
+fully orthogonal**, and the shortfall is reported rather than asserted away:
+holding out complete families also empties **five of ten** disciplines out of
+training, because at this corpus size some disciplines occur in only one
+skeleton. The discipline holdout is cleaner (7 of 8 families still trained) and
+the vocabulary holdout keeps 6 of 10 families and 11 of 15 disciplines.
+
+### The ceiling table
+
+Every control was run before any training, and the predictions were committed
+before any control existed.
+
+| control | family | discipline | vocabulary |
+|---|---:|---:|---:|
+| **blind** copy C | 0.000 | 0.000 | 0.000 |
+| **blind** copy B | 0.000 | 0.000 | 0.000 |
+| **blind** last-slot number transfer *(v0.6's 1.000 rule)* | **0.000** | **0.011** | **0.048** |
+| **blind** first-slot number transfer | 0.000 | 0.000 | 0.000 |
+| **blind** positional rename | 0.026 | 0.028 | 0.048 |
+| **blind** modal action pattern | 0.000 | 0.000 | 0.000 |
+| **blind** nearest-template transfer | **0.400** | **0.932** | **0.398** |
+| **blind** nearest authored template | 0.000 | 0.000 | 0.000 |
+| **blind ceiling** | **0.400** | **0.932** | **0.398** |
+| shuffled C — symbolic input-only | 0.000 | 0.000 | 0.000 |
+| shuffled C — positional rename | 0.000 | 0.000 | 0.000 |
+| shuffled C — nearest-template | 0.032 | 0.000 | 0.000 |
+| *sighted* symbolic, input only | 0.458 | 0.545 | 0.651 |
+| *sighted* symbolic, input + declared slot classes | **1.000** | **1.000** | **1.000** |
+| *sighted* symbolic oracle | 1.000 | 1.000 | 1.000 |
+
+Copy-C, copy-B and nearest-authored-template **cannot** exceed zero — admission
+forbids it. v0.6 reported them as capability baselines and review corrected it;
+they are kept as vacuity checks and excluded from the ceiling so the correction
+cannot be un-made by accident.
+
+### Predictions, adjudicated
+
+**P-CS1 FIRED.** The v0.6 killer scores 0.000 / 0.011 / 0.048, inside its ≤0.05
+bound on all three holdouts — narrowly on the vocabulary holdout (4 of 83 rows).
+The rule that solved the entire previous lane now solves essentially none of it.
+
+**P-CS2 FIRED, then MISSED, and the miss is the best result on this branch.**
+The symbolic ceiling is 1.000, as predicted. But the *second* clause — that it
+is 1.000 from the input alone — is false: a solver reading only
+`A <sep> B <sep> C` reaches 0.458 / 0.545 / 0.651. Adding exactly two corpus
+declarations, the parameter/variable class of each slot and the identity table,
+takes the same solver to **1.000 on all three holdouts**. `Search` gates its
+arithmetic-identity rule on the class being `P`, so a reader of the token
+stream cannot recover it. The residual this lane leaves to something other than
+the token stream is therefore not "difficulty" — it is a specific, nameable
+piece of declared structure, which is a far sharper claim than the one
+predicted. The v0.4 creation thesis still holds and is stated plainly: with the
+slot classes in hand the task is closed-form, so this lane measures the
+**pointing mechanism**, and no later model number may be sold as reasoning.
+
+**P-CS3 half-fired.** Nearest-template transfer *is* the strongest blind
+control on every holdout, by an order of magnitude over positional rename. Its
+second clause was wrong twice over, and the second way is the interesting one.
+The ratio skeleton `*(?1:V, inv(?2:V))` is not the largest family — it was the
+*only* family in v0.6, and the prediction carried that assumption forward
+unexamined; in this build it is fifth at 30 rows, behind `*(?1:P, ?2:V)` at 142.
+Nor is it the most vulnerable: it scores **0.000** on the vocabulary holdout,
+is not held out at all by the family split, and on the discipline holdout its
+1.000 is shared with six other families. Size and target length were the wrong
+mechanism entirely — the real one is untyped-shape leakage, below, which no
+clause of P-CS3 anticipated.
+
+**P-CS4 MISSED on both clauses.** The family holdout was predicted lowest and
+the vocabulary holdout highest. Observed: vocabulary 0.398 is marginally the
+lowest, family 0.400 next, and the **discipline holdout is by far the highest at
+0.932** — nearly vacuous against a structure-replay baseline. Holding out a
+target discipline barely matters, because the same skeletons recur across
+disciplines and the answer rides on structure.
+
+**P-CS5 MISSED AS WORDED.** The prediction asked for a ≥0.5 *absolute* collapse.
+Shuffling C's leaves takes symbolic input-only from 0.458/0.545/0.651 to 0.000
+and nearest-template from 0.400/0.932/0.398 to 0.032/0.000/0.000 — a 93–100%
+*relative* collapse everywhere, but on the family holdout the absolute drop is
+0.458 and 0.368, below the threshold, purely because the unshuffled score never
+reached 0.5 there. The threshold was badly chosen; the substantive claim — no
+control survives losing C — holds without exception.
+
+**P-CS7 FIRED.** The blind ceiling is below 1.000 on all three holdouts, not
+merely one, so the roadmap's acceptance condition is met with margin.
+
+### What adversarial self-review found
+
+Attacking our own split turned up one defect that changes how the ceilings
+should be read, and it is the reason the `shape_leak` diagnostic exists.
+
+**The family holdout leaks through the untyped shape, and that leak IS the
+ceiling.** Families are typed skeletons; `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)`
+are two families and one head/arity shape. Splitting nearest-template transfer
+on the single bit "is this row's untyped shape still in training":
+
+| holdout | rows w/ shape in train | score there | rows w/ unseen shape | score there |
+|---|---:|---:|---:|---:|
+| family | 51 | **1.000** | 104 | **0.106** |
+| discipline | 162 | **1.000** | 14 | **0.143** |
+| vocabulary | 63 | 0.492 | 20 | 0.100 |
+
+The family holdout's 0.400 is exactly `51/155 × 1.000 + 104/155 × 0.106`. The
+control is not demonstrating a capability; it is walking through a hole in the
+split. The **strict ceiling is the unseen-shape column, ≈0.10–0.14**, and the
+discipline holdout's 0.932 is explained entirely by 162 of its 176 rows keeping
+their shape in training. The disciplined response is to report this rather than
+re-roll the split after seeing the number: an untyped-shape holdout is filed as
+required next evidence, not silently substituted for the committed one.
+
+*Can a control see the answer through metadata?* Not in what it computes, but
+review found the assurance was only a convention: every scorer, blind and
+sighted, was handed one shared context object with the whole `Corpus` in it,
+one attribute access away. Nothing read it — the ceilings are byte-identical
+before and after — but "we checked that none of them do" is not the standard
+this repo applies to its own tools. The context is now built as two separate
+dicts and the blind one physically does not contain the corpus, so a control
+that wanted the answer would have to edit `build_context` to reach it.
+`authored_pairs` stays on the blind side because `nearest_authored_template`
+needs it and is pinned at zero by admission.
+
+That still left blindness as a claim about what eight functions *happen* to
+read, because every control is handed the whole `Quadruple` and a `Quadruple`
+owns `d_tree`. It is now executed instead of asserted: on each holdout, D is
+poisoned on every held row (replaced by another row's D, which also poisons the
+derived target and both leaf-provenance tuples) and each blind control must
+return the identical guess. All eight do, on all three splits. Training rows
+are left intact — replaying a training row's realization is the baseline's
+whole point, and those labels are legitimately its own.
+
+*Does dedup hold across splits?* Yes — dedup is by rendered target and is
+applied before any split is cut, so no target can appear on both sides of any
+holdout; it is pinned by test, as is order-independence. Dedup by target does
+not by itself forbid the converse — two different Ds sharing one
+`A <sep> B <sep> C` — which would make the lane ill-posed and let exact-input
+retrieval masquerade as structure transfer. Measured: **398 distinct targets
+over 398 distinct inputs**, so the task is a function of its input, and that is
+now a test rather than a coincidence.
+
+Two mistakes were caught by the tests rather than by reading. The family
+non-isomorphism witness first keyed on operator heads alone, and `*` is n-ary
+after canonicalization, so `*(?1:P, ?2:V, ?3:V)` and `*(?1:P, ?2:V)` read as one
+shape; keying on head/arity fixed that and immediately exposed the sharper
+P-vs-V collision above. And `head_kind` first guessed that call heads are
+UPPERCASE identifiers — the corpus falsified it with `sum`, `lim` and
+`AGGREGATE_n`, and 19 statements silently failed to round-trip. It is now a
+declared table cited to the six `Parser` lines that build operator nodes, with a
+test that re-derives the partition from every authored template.
+
+### Limits
+
+- The strict ceiling is ≈0.10–0.14, not the headline 0.40; the headline is
+  inflated by untyped-shape leakage and must be quoted with that caveat.
+- The discipline holdout is near-vacuous against structure replay and should
+  not be cited as a difficulty result on its own.
+- The three holdouts are not fully orthogonal; five of ten disciplines leave
+  training when whole families do.
+- D is a *derived structural target*, verified by the specializer, not an
+  asserted truth. `*(PRESSURE, VOLUME) = *(CONSTANT, BASE, HEIGHT)` is a
+  correct specialization of C and not a law of nature; nothing here enters the
+  corpus or the epistemic ladder.
+- Four families carry two or three examples, so their per-family numbers are
+  anecdotes.
+- No model has been run. Every number above is a control.
+
+The three split files land in `experiments/data/`, which is gitignored by repo
+policy, so they are regenerated rather than stored; the ceiling table itself is
+committed at `experiments/results/corpus_analogy_v07_ceilings.json`. That is
+only safe because the split rule takes no seed and no threshold to search over,
+and because "regenerates exactly" is checked rather than trusted: a test writes
+all three files twice, from two independent builds, through the same writer the
+CLI uses, and compares them byte for byte — plus the checkout's own copies when
+they exist. That test previously *skipped* when the files had not been built
+yet, which is precisely the fresh-clone case where a gitignored dataset needs
+the guarantee most; it can no longer skip.
+
+Reproduce with:
+
+```console
+python experiments/corpus_analogy_split.py
+python -m unittest tests.test_corpus_analogy_split
+```

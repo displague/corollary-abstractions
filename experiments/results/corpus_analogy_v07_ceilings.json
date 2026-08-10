@@ -1,0 +1,565 @@
+{
+  "task": "corpus_analogy_v07",
+  "rows_before_dedup": 914,
+  "distinct_targets": 398,
+  "dedup_compression": 2.2964824120603016,
+  "families": 11,
+  "untyped_shapes": 10,
+  "source_disciplines": [
+    "algebraic_topology",
+    "calculus",
+    "chemistry",
+    "economics",
+    "geometry",
+    "graph_theory",
+    "information_theory",
+    "logic",
+    "machine_learning",
+    "numerical_analysis",
+    "physics",
+    "set_theory",
+    "statistics"
+  ],
+  "target_disciplines": [
+    "algebraic_topology",
+    "calculus",
+    "chemistry",
+    "differential_geometry",
+    "economics",
+    "geometric_modeling",
+    "geometry",
+    "graph_theory",
+    "information_theory",
+    "logic",
+    "machine_learning",
+    "numerical_analysis",
+    "physics",
+    "set_theory",
+    "statistics"
+  ],
+  "rows_with_compound_expansion": 376,
+  "admission_ledger": {
+    "ADMITTED": 914,
+    "ambiguous_rename_inverse": 2,
+    "expansion_leaf_collides_with_alignment": 4,
+    "head_identity_collapse_not_pointable": 4,
+    "no_cross_discipline_twin": 149,
+    "target_is_an_authored_statement": 52,
+    "two_constructions_disagree": 20
+  },
+  "family_inventory": [
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "examples": 142,
+      "disciplines": [
+        "geometry",
+        "physics"
+      ],
+      "via": [
+        "absorption",
+        "absorption+identity",
+        "compound"
+      ],
+      "op_multiset": {
+        "*/2": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "CIRCUMFERENCE = *(CONSTANT, RADIUS)",
+        "B": "*(AMOUNT, CONSTANT, TEMPERATURE) = *(PRESSURE, VOLUME)",
+        "C": "FORCE = *(INERTIA, RESPONSE)",
+        "D": "*(INERTIA, RESPONSE) = *(AMOUNT, CONSTANT, TEMPERATURE)"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "examples": 85,
+      "disciplines": [
+        "chemistry",
+        "geometry"
+      ],
+      "via": [
+        "absorption",
+        "absorption+identity",
+        "compound",
+        "identity",
+        "identity+compound"
+      ],
+      "op_multiset": {
+        "*/3": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "ABSORBANCE = *(ABSORPTIVITY, PATHLENGTH, CONCENTRATION)",
+        "B": "*(AMOUNT, CONSTANT, TEMPERATURE) = *(PRESSURE, VOLUME)",
+        "C": "AREA = *(CONSTANT, BASE, HEIGHT)",
+        "D": "*(PRESSURE, VOLUME) = *(CONSTANT, BASE, HEIGHT)"
+      }
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "examples": 55,
+      "disciplines": [
+        "calculus",
+        "economics",
+        "geometric_modeling",
+        "statistics"
+      ],
+      "via": [
+        "absorption",
+        "absorption+compound",
+        "absorption+identity",
+        "compound"
+      ],
+      "op_multiset": {
+        "*/2": 1,
+        "+/2": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "CONSUMPTION = +(AUTONOMOUS, *(PROPENSITY, DISPOSABLE_INCOME))",
+        "B": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)), *(COEFFG, ^(DV, 2))) = ^(LINEELEMENT, 2)",
+        "C": "LINEARIZED = +(BASEVALUE, *(SLOPE, DISPLACEMENT))",
+        "D": "+(*(2, COEFFF, DU, DV), *(COEFFE, ^(DU, 2)), *(SLOPE, ^(DV, 2))) = ^(LINEELEMENT, 2)"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "examples": 51,
+      "disciplines": [
+        "differential_geometry",
+        "geometry",
+        "graph_theory"
+      ],
+      "via": [
+        "absorption",
+        "compound"
+      ],
+      "op_multiset": {
+        "*/2": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "AREA = *(DIM1, DIM2)",
+        "B": "*(AMOUNT, CONSTANT, TEMPERATURE) = *(PRESSURE, VOLUME)",
+        "C": "EDGES = *(PARTONE, PARTTWO)",
+        "D": "*(PARTONE, PARTTWO) = *(AMOUNT, CONSTANT, TEMPERATURE)"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "examples": 30,
+      "disciplines": [
+        "calculus",
+        "chemistry",
+        "economics",
+        "machine_learning",
+        "numerical_analysis"
+      ],
+      "via": [
+        "absorption",
+        "absorption+compound",
+        "compound"
+      ],
+      "op_multiset": {
+        "*/2": 1,
+        "=/2": 1,
+        "inv/1": 1
+      },
+      "example": {
+        "A": "CONCENTRATION = *(AMOUNT, inv(VOLUME))",
+        "B": "AVGDEGREE = *(2, EDGES, inv(VERTICES))",
+        "C": "CONDITION = *(OUTPUTPERTURB, inv(INPUTPERTURB))",
+        "D": "CONDITION = *(2, EDGES, inv(INPUTPERTURB))"
+      }
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "examples": 14,
+      "disciplines": [
+        "algebraic_topology",
+        "physics"
+      ],
+      "via": [
+        "absorption",
+        "absorption+compound",
+        "compound"
+      ],
+      "op_multiset": {
+        "+/2": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "CHAINRANK = +(CYCLERANK, IMAGERANK)",
+        "B": "2 = +(VERTICES, FACES, neg(EDGES))",
+        "C": "OBJECT_VELOCITY = +(RELATIVE_VELOCITY, FRAME_VELOCITY)",
+        "D": "2 = +(RELATIVE_VELOCITY, FACES, neg(EDGES))"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "examples": 12,
+      "disciplines": [
+        "geometry",
+        "numerical_analysis"
+      ],
+      "via": [
+        "absorption+identity",
+        "identity"
+      ],
+      "op_multiset": {
+        "*/3": 1,
+        "+/2": 1,
+        "=/2": 1
+      },
+      "example": {
+        "A": "AREA = *(CONSTANT, HEIGHT, +(BASE1, BASE2))",
+        "B": "ADVANTAGE = *(+(REWARD, neg(MEANREWARD)), inv(STDREWARD))",
+        "C": "AREA = *(CONSTANT, STEPWIDTH, +(VALUELEFT, VALUERIGHT))",
+        "D": "AREA = *(+(VALUELEFT, neg(MEANREWARD)), inv(STDREWARD))"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "examples": 3,
+      "disciplines": [
+        "chemistry",
+        "economics",
+        "machine_learning"
+      ],
+      "via": [
+        "absorption+identity"
+      ],
+      "op_multiset": {
+        "*/2": 2,
+        "=/2": 1,
+        "EXP/1": 1,
+        "neg/1": 1
+      },
+      "example": {
+        "A": "AMOUNT = *(INITIAL, EXP(neg(*(RATECONST, TIME))))",
+        "B": "RATECONST = *(PREFACTOR, EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE))))))",
+        "C": "PRESENT = *(FUTURE, EXP(neg(*(RATE, HORIZON))))",
+        "D": "PRESENT = *(FUTURE, EXP(neg(*(BARRIER, inv(*(GASCONST, TEMPERATURE))))))"
+      }
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "examples": 2,
+      "disciplines": [
+        "machine_learning",
+        "statistics"
+      ],
+      "via": [
+        "compound"
+      ],
+      "op_multiset": {
+        "*/2": 1,
+        "+/2": 1,
+        "=/2": 1,
+        "inv/1": 1,
+        "neg/1": 1
+      },
+      "example": {
+        "A": "ADVANTAGE = *(+(REWARD, neg(MEANREWARD)), inv(STDREWARD))",
+        "B": "VAR = *(+(neg(COEFF1), pm(SQRT(DISC))), inv(*(2, COEFF0)))",
+        "C": "STD = *(+(RAW, neg(CENTER)), inv(SCALE))",
+        "D": "STD = *(+(neg(CENTER), pm(SQRT(DISC))), inv(*(2, COEFF0)))"
+      }
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?1:P, ?0:V\u27e9",
+      "examples": 2,
+      "disciplines": [
+        "logic",
+        "set_theory"
+      ],
+      "via": [
+        "compound"
+      ],
+      "op_multiset": {
+        "=/2": 1,
+        "MEET/2": 1
+      },
+      "example": {
+        "A": "PROP1 = MEET(TRUTH, PROP1)",
+        "B": "PROP1 = MEET(PROP1, JOIN(PROP1, PROP2))",
+        "C": "SETA = MEET(UNIVERSE, SETA)",
+        "D": "SETA = MEET(SETA, JOIN(SETA, PROP2))"
+      }
+    },
+    {
+      "skeleton": "?0:V = neg(LOG\u27e8?1:V\u27e9)",
+      "examples": 2,
+      "disciplines": [
+        "chemistry",
+        "information_theory"
+      ],
+      "via": [
+        "compound"
+      ],
+      "op_multiset": {
+        "=/2": 1,
+        "LOG/1": 1,
+        "neg/1": 1
+      },
+      "example": {
+        "A": "PH = neg(LOG(ACTIVITY))",
+        "B": "LOSS = neg(LOG(SIGMOID(*(BETA, +(LOGRATIOCHOSEN, neg(LOGRATIOREJECTED))))))",
+        "C": "SURPRISAL = neg(LOG(WEIGHT))",
+        "D": "SURPRISAL = neg(LOG(SIGMOID(*(BETA, +(LOGRATIOCHOSEN, neg(LOGRATIOREJECTED))))))"
+      }
+    }
+  ],
+  "leakage_surfaces": {
+    "family": {
+      "train": 243,
+      "holdout": 155,
+      "held_keys": [
+        "?0:V = *(?1:P, ?2:V, ?3:V)",
+        "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+        "?0:V = *(?1:V, ?2:V)",
+        "?0:V = +(?1:V, ?2:V)",
+        "?0:V = MEET\u27e8?1:P, ?0:V\u27e9"
+      ],
+      "discipline_values_in_holdout_also_in_train": [
+        5,
+        10
+      ],
+      "holdout_target_tokens_unseen_in_train_targets": 28,
+      "jaccard_with": {
+        "discipline": 0.11073825503355705,
+        "vocabulary": 0.13875598086124402
+      }
+    },
+    "discipline": {
+      "train": 222,
+      "holdout": 176,
+      "held_keys": [
+        "algebraic_topology",
+        "differential_geometry",
+        "economics",
+        "geometric_modeling",
+        "logic",
+        "numerical_analysis",
+        "physics"
+      ],
+      "family_values_in_holdout_also_in_train": [
+        7,
+        8
+      ],
+      "holdout_target_tokens_unseen_in_train_targets": 40,
+      "jaccard_with": {
+        "family": 0.11073825503355705,
+        "vocabulary": 0.25728155339805825
+      }
+    },
+    "vocabulary": {
+      "train": 315,
+      "holdout": 83,
+      "held_keys": [
+        "ABSORPTIVITY",
+        "ADVANTAGE",
+        "AUTONOMOUS",
+        "BASEVALUE",
+        "BETA",
+        "CENTRIFUGAL_ACCELERATION",
+        "CHAINRANK",
+        "COND",
+        "CORIOLIS_ACCELERATION",
+        "CYCLERANK",
+        "DEGREE",
+        "DISPLACEMENT",
+        "DISPOSABLE_INCOME",
+        "FACES",
+        "FIRST",
+        "FLOW",
+        "FUTURE",
+        "GOVERNMENT",
+        "IN",
+        "INPUT",
+        "INTERCEPT",
+        "INVESTMENT",
+        "INVPARTITION",
+        "LOGRATIOCHOSEN",
+        "LOGRATIOREJECTED",
+        "LOWRANKA",
+        "LOWRANKB",
+        "NET_EXPORTS",
+        "NOISE_i",
+        "OBJECT_VELOCITY",
+        "OUTPUTPERTURB",
+        "PARTTWO",
+        "PCT_QUANTITY",
+        "PH",
+        "POINT",
+        "POLICYNEW",
+        "PRED_i",
+        "PREFACTOR",
+        "PREMIUM",
+        "PRESENT",
+        "PRESSURE",
+        "PRINCIPAL2",
+        "PROBABILITY",
+        "PROP1",
+        "PROP2",
+        "QUANTITY",
+        "RELATIVE_VELOCITY",
+        "RISKFREE",
+        "RV",
+        "SECOND",
+        "SETA",
+        "SETB",
+        "SHIFT",
+        "STD",
+        "SURPRISAL",
+        "TRANSLATION",
+        "WIDTH"
+      ],
+      "family_values_in_holdout_also_in_train": [
+        6,
+        10
+      ],
+      "discipline_values_in_holdout_also_in_train": [
+        11,
+        15
+      ],
+      "jaccard_with": {
+        "family": 0.13875598086124402,
+        "discipline": 0.25728155339805825
+      }
+    }
+  },
+  "ceilings": {
+    "family": {
+      "train_n": 243,
+      "holdout_n": 155,
+      "blind": {
+        "copy_c": 0.0,
+        "copy_b": 0.0,
+        "last_slot_number_transfer": 0.0,
+        "first_slot_number_transfer": 0.0,
+        "positional_rename": 0.025806451612903226,
+        "modal_action_pattern": 0.0,
+        "nearest_template_transfer": 0.4,
+        "nearest_authored_template": 0.0
+      },
+      "sighted": {
+        "symbolic_input_only": 0.45806451612903226,
+        "symbolic_typed_input": 1.0,
+        "symbolic_oracle": 1.0
+      },
+      "shuffled_c_leaves": {
+        "symbolic_input_only": 0.0,
+        "positional_rename": 0.0,
+        "nearest_template_transfer": 0.03225806451612903
+      },
+      "blind_ceiling": 0.4,
+      "blind_ceiling_control": "nearest_template_transfer",
+      "per_family_nearest_template": {
+        "?0:V = *(?1:P, ?2:V, ?3:V)": 0.10588235294117647,
+        "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)": 0.0,
+        "?0:V = *(?1:V, ?2:V)": 1.0,
+        "?0:V = +(?1:V, ?2:V)": 0.14285714285714285,
+        "?0:V = MEET\u27e8?1:P, ?0:V\u27e9": 0.0
+      },
+      "shape_leak": {
+        "holdout_rows_whose_shape_is_in_train": 51,
+        "holdout_rows_with_an_unseen_shape": 104,
+        "nearest_template_on_leaky_shapes": 1.0,
+        "nearest_template_on_unseen_shapes": 0.10576923076923077
+      }
+    },
+    "discipline": {
+      "train_n": 222,
+      "holdout_n": 176,
+      "blind": {
+        "copy_c": 0.0,
+        "copy_b": 0.0,
+        "last_slot_number_transfer": 0.011363636363636364,
+        "first_slot_number_transfer": 0.0,
+        "positional_rename": 0.028409090909090908,
+        "modal_action_pattern": 0.0,
+        "nearest_template_transfer": 0.9318181818181818,
+        "nearest_authored_template": 0.0
+      },
+      "sighted": {
+        "symbolic_input_only": 0.5454545454545454,
+        "symbolic_typed_input": 1.0,
+        "symbolic_oracle": 1.0
+      },
+      "shuffled_c_leaves": {
+        "symbolic_input_only": 0.0,
+        "positional_rename": 0.0,
+        "nearest_template_transfer": 0.0
+      },
+      "blind_ceiling": 0.9318181818181818,
+      "blind_ceiling_control": "nearest_template_transfer",
+      "per_family_nearest_template": {
+        "?0:V = *(?1:P, ?2:V)": 1.0,
+        "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))": 1.0,
+        "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)": 1.0,
+        "?0:V = *(?1:V, ?2:V)": 1.0,
+        "?0:V = *(?1:V, inv(?2:V))": 1.0,
+        "?0:V = +(?1:P, *(?2:P, ?3:V))": 1.0,
+        "?0:V = +(?1:V, ?2:V)": 0.14285714285714285,
+        "?0:V = MEET\u27e8?1:P, ?0:V\u27e9": 1.0
+      },
+      "shape_leak": {
+        "holdout_rows_whose_shape_is_in_train": 162,
+        "holdout_rows_with_an_unseen_shape": 14,
+        "nearest_template_on_leaky_shapes": 1.0,
+        "nearest_template_on_unseen_shapes": 0.14285714285714285
+      }
+    },
+    "vocabulary": {
+      "train_n": 315,
+      "holdout_n": 83,
+      "blind": {
+        "copy_c": 0.0,
+        "copy_b": 0.0,
+        "last_slot_number_transfer": 0.04819277108433735,
+        "first_slot_number_transfer": 0.0,
+        "positional_rename": 0.04819277108433735,
+        "modal_action_pattern": 0.0,
+        "nearest_template_transfer": 0.39759036144578314,
+        "nearest_authored_template": 0.0
+      },
+      "sighted": {
+        "symbolic_input_only": 0.6506024096385542,
+        "symbolic_typed_input": 1.0,
+        "symbolic_oracle": 1.0
+      },
+      "shuffled_c_leaves": {
+        "symbolic_input_only": 0.0,
+        "positional_rename": 0.0,
+        "nearest_template_transfer": 0.0
+      },
+      "blind_ceiling": 0.39759036144578314,
+      "blind_ceiling_control": "nearest_template_transfer",
+      "per_family_nearest_template": {
+        "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))": 0.0,
+        "?0:V = *(?1:P, ?2:V)": 0.8064516129032258,
+        "?0:V = *(?1:P, ?2:V, ?3:V)": 0.0,
+        "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)": 1.0,
+        "?0:V = *(?1:V, ?2:V)": 0.5,
+        "?0:V = *(?1:V, inv(?2:V))": 0.0,
+        "?0:V = +(?1:P, *(?2:P, ?3:V))": 0.0,
+        "?0:V = +(?1:V, ?2:V)": 0.14285714285714285,
+        "?0:V = MEET\u27e8?1:P, ?0:V\u27e9": 0.0,
+        "?0:V = neg(LOG\u27e8?1:V\u27e9)": 0.0
+      },
+      "shape_leak": {
+        "holdout_rows_whose_shape_is_in_train": 63,
+        "holdout_rows_with_an_unseen_shape": 20,
+        "nearest_template_on_leaky_shapes": 0.49206349206349204,
+        "nearest_template_on_unseen_shapes": 0.1
+      }
+    }
+  },
+  "split_files": [
+    "corpus_analogy_v07_family.jsonl",
+    "corpus_analogy_v07_discipline.jsonl",
+    "corpus_analogy_v07_vocabulary.jsonl"
+  ]
+}

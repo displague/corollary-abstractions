@@ -448,17 +448,48 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
 
 ## Controller / harness
 
-- **Corpus analogy has depth one and family breadth one.** The first grounded
-  evaluation admits 40 rows but only five distinct novel targets, all from the
-  typed ratio family. A blind “put B's new number in C's last slot” rule scores
-  1.000, so the current lane is a construction demo, not a learning challenge:
-  strict slot-renaming plus numeric-substitution constraints correctly refuse
-  ambiguous compound bindings. Expand the corpus/evaluator until family,
-  discipline, and literal-vocabulary holdouts are all non-empty; introduce
-  explicit source leaves for compound expansions; then train on grounded rows.
-  The v0.5 synthetic checkpoint scores 0.000 on the current RHS residual, but
-  the blind win means that failure is not evidence of a hard task. Its
-  synthetic 1.000 must never be cited as corpus transfer.
+- **SHIPPED (split + ceilings) — corpus analogy is a real split; the model arm
+  and an untyped-shape holdout remain open.** Branch
+  `feature/corpus-analogy-v07`, `experiments/corpus_analogy_split.py`. The v0.6
+  defect (40 rows, five targets, one ratio family, a blind last-slot rule at
+  1.000) is closed: 914 rows dedup to **398 distinct targets** over **11 typed
+  families / 10 untyped shapes**, 13 source and 15 target disciplines, 376 of
+  398 carrying a compound-expansion leaf. Compound expansions became
+  representable once B was recognized as part of the INPUT — its leaves are
+  pointable where they stand — and the admission gate is literal: every token
+  of D must occur in `A <sep> B <sep> C`. That gate also refuses head-identity
+  collapses (the element is nowhere in the input) and settles that B's
+  identity-free form is the target rather than the re-substituted `*(1, …)`.
+  Three seedless holdout files; blind ceilings **0.400 / 0.932 / 0.398**, the
+  v0.6 killer down to **0.000 / 0.011 / 0.048**. The v0.5 synthetic
+  checkpoint's 1.000 still must never be cited as corpus transfer.
+  Open:
+  - **The headline ceiling is inflated by our own split.** Families are TYPED
+    skeletons, so `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)` are two families and one
+    head/arity shape. Nearest-template replay scores 1.000 exactly where a
+    held-out row's untyped shape is still in training and ~0.10 where it is
+    not; the family holdout's 0.400 is exactly
+    `51/155 × 1.000 + 104/155 × 0.106`. The strict ceiling is **≈0.10–0.14**.
+    Needed: an **untyped-shape holdout**. Deliberately NOT substituted after
+    the fact — re-rolling a split against a measured ceiling launders the
+    result — so it is queued, not quietly swapped in.
+  - **The discipline holdout is near-vacuous** at 0.932, because 162 of its 176
+    rows keep their untyped shape in training. Do not cite it alone as a
+    difficulty result.
+  - **The three axes are not orthogonal.** Holding out whole families empties
+    five of ten disciplines out of training; at this corpus size some
+    disciplines occur in only one skeleton. Pinned as a regression number
+    rather than asserted away.
+  - **The residual is metadata, and that bounds what a model can be credited
+    with.** A solver reading only the token stream reaches 0.458/0.545/0.651;
+    adding each slot's parameter/variable class and the identity table takes it
+    to 1.000 on all three holdouts, because `Search` gates its arithmetic-
+    identity rule on the class being `P`. With those declarations the task is
+    closed-form, so the lane measures the pointing mechanism only.
+  - **No model has been trained.** Every committed number is a control, and the
+    GPU arm must be reported against the strict ceiling, not the headline.
+  - Four families carry two or three examples; their per-family numbers are
+    anecdotes, and more cross-discipline twins would fix that.
 
 - **PARTIAL — conversation state is maintained and revisable in-process;
   durable authenticated resume remains open.** Owner-isolated sessions now
