@@ -59,6 +59,17 @@ bindings), **near-miss** (informative failure, kept deliberately).
   proven as its sole hardware/driver cause. *P-DC5 retracted; P-DC6/7 fired*
   (2026-08-09)
 
+- **Raw source-byte provenance is newline-fragile across Windows checkouts.**
+  The completed depth runs correctly pinned the exact runtime bytes, but a
+  later rebase changed mixed LF/CRLF working-tree bytes into semantically
+  identical uniform CRLF. The analyzer still requires an exact raw-digest
+  match first; a reviewed `depth_source_manifest.json` may bridge only those
+  recorded runtime hashes to the canonical-LF hashes at clean run commit
+  `25db073`, and forged or missing bridges refuse. Future launchers should
+  record Git blob ids or canonical text hashes alongside raw hashes before a
+  run starts. *post-run provenance finding; fail-closed bridge with regression
+  controls* (2026-08-09)
+
 - **Held-out tactic classification does not guarantee a search gain.** Three
   27,688-parameter byte-GRU rankers all score 0.8125 on four theorem-held-out
   groups (frequency 0.4375; shuffled-label controls 0.25–0.375) and solve live
@@ -74,7 +85,8 @@ bindings), **near-miss** (informative failure, kept deliberately).
   Breadth-first search retains that accepted transition as branch evidence and
   reaches the proof through another branch. This is the first controller trace
   in which backtracking is load-bearing rather than simulated by rejecting a
-  no-op. *P-LS2 fired after a registered palette correction; live verifier
+  no-op. *P-LS2's first registered run missed; corrective P-LS6 fired and
+  satisfied P-LS2's substantive accepted-dead-branch criterion; live verifier
   result* (2026-08-09)
 
 - **Rendered proof-state names are not necessarily callable proof-state

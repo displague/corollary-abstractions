@@ -29,7 +29,7 @@ and Alice can supersede silver with copper without changing world truth. It
 also constructs the first corpus-grounded analogy lane—then shows that a blind
 last-slot number rule solves it perfectly.
 
-**Demonstrate:** 
+**Demonstrate:**
 
 ```console
 python prover/live_search.py
@@ -64,8 +64,11 @@ outside the weights.
 - **Visual gate adjudication:** the parse-first V1 protocol remains registered,
   but the model experiment is explicitly deferred because its renderer, source
   graph, invalid-pair generator, and exact verifier do not yet exist.
-- **Depth-consumer ablation:**
-  [PENDING FIVE-ARM / THREE-SEED VERDICT — replace before release.]
+- **Depth-consumer ablation:** address-only remains best at
+  `0.196 ± 0.064` conditional depth-OOD. Query reaches `0.179 ± 0.025`,
+  memory `0.082 ± 0.027`, both recurrent consumers `0.039 ± 0.011`, and the
+  two-parameter-matched MLP `0.142 ± 0.014`. More recurrence at the consumers
+  damages the copy interface rather than repairing depth.
 
 ### Shipped as corrections and negative results
 
@@ -175,8 +178,28 @@ selects on 5,000 validation rows, tests on 5,000 held-out-combination rows, and
 reports conditional depth-OOD exact on 2,450 retained depth-4/5 rows from 3,000
 generated. The release does not hide the 550 capacity exclusions.
 
-[PENDING FINAL MEANS, PAIRED EFFECTS, P-DC1–P-DC7 VERDICTS, AND DEMONSTRATE
-COMMAND AFTER THE COMPLETE MATRIX.]
+| arm | parameters | ID exact mean | conditional depth-OOD s0 / s1 / s2 | OOD mean ± SD |
+|---|---:|---:|---|---:|
+| recurrent address only | 1,481,987 | 0.9999 | 0.284 / 0.171 / 0.134 | **0.196 ± 0.064** |
+| recurrent query | 1,581,059 | 0.9998 | 0.186 / 0.204 / 0.146 | 0.179 ± 0.025 |
+| recurrent memory | 1,581,059 | 0.9999 | 0.073 / 0.053 / 0.119 | 0.082 ± 0.027 |
+| recurrent query + memory | 1,680,131 | 0.9999 | 0.030 / 0.054 / 0.033 | **0.039 ± 0.011** |
+| one-shot level-aware MLP | 1,680,133 | 1.0000 | 0.131 / 0.134 / 0.162 | 0.142 ± 0.014 |
+
+P-DC1, P-DC2, and P-DC3 **missed**: both recurrence loses to address on all
+three paired seeds, neither single consumer materially improves, and the
+matched MLP beats both recurrence on every seed. P-DC4's complete-matrix gate
+is satisfied. P-DC5 remains publicly retracted because its allocated-tensor
+measurand could not observe the crash state; its MiB/GiB wording stays
+corrected on the record. P-DC6 and P-DC7 fired: all 15 rows completed, maximum
+whole-device footprint was 6,387,466,240 bytes, and final evaluation added at
+most 2,097,152 bytes over the train/validation high-water mark.
+
+Teacher-forced diagnostics locate the damage. Address-only averages 0.910 on
+C-leaf copy and 1.000 on EOS; memory recurrence falls to 0.705 and 0.913, while
+both consumers fall to 0.677 on C-leaf. **Demonstrate:** download
+`depth-address-recurrent-s0.pt` and run the fresh-example command in the asset
+section below.
 
 ### Vision waits for ground truth
 
@@ -204,7 +227,11 @@ rg --files | rg -i "\.(svg|tikz|png|jpg)$|scene.?graph|diagram.*render"
   attributable historical bindings.
 - Corpus provenance does not guarantee benchmark difficulty; the first real
   analogy lane is structurally solved by a blind rule.
-- [PENDING depth discovery.]
+- A recurrent address can extrapolate while learned transformations in its
+  consumers destroy the information a pointer needs to copy.
+- Raw source-byte provenance is newline-fragile on Windows; the reviewed depth
+  source manifest binds mixed runtime bytes to canonical Git content, and new
+  runs should record blob ids at launch.
 
 The full evidence and corrections live in
 [DISCOVERIES.md](DISCOVERIES.md).
@@ -239,9 +266,39 @@ where they record a narrower defect or design boundary rather than a milestone.
 - Vision remains a reviewed protocol with no experiment.
 - Affect and oscillation are reviewed future designs, not v0.6 executable
   capabilities beyond the already-shipped generic frame/event machinery.
-- [PENDING depth limit.]
+- Depth OOD is conditional on 2,450/3,000 generated rows; 72 depth-4 and 478
+  depth-5 rows exceed fixed capacity limits, so the harder depth is filtered
+  more heavily.
+- The depth task contains five root-level synthetic transforms, not temporal,
+  perspective, proof, or story examples; no integrated learned model spans
+  those symbolic capabilities yet.
 - Nothing here stands against general LLM benchmarks. The under-64-MB target is
   a system constraint, not an external-comparison result.
+
+## Release validation record
+
+The release candidate was validated on Windows on 2026-08-09 after the final
+depth integration and document rotation:
+
+- all 14 seeds regenerated their committed corpora byte-identically;
+- schema/link validation passed for 221/221 nodes across 22 corpora;
+- the matcher reported 30 shape, 31 typed, 30 family, 32 aliased, and 5 mirror
+  groups, with zero ladder violations, parse problems, or slot-schema gaps;
+- specialization regenerated 655 cheapest-derivation edges; decomposition
+  covered 193/221 statements with mean groundedness 0.770; concept compression
+  remained 11.24× versus characters;
+- all 271 unit tests passed;
+- the oracle controller, maintained conversation, theory-of-mind,
+  frame-local ladder, and corpus-analogy demonstrations completed, including
+  the analogy lane's 1.000 blind control;
+- live PyPantograph search reproduced 9 states / 86 proposals, its projection
+  ablation exhausted at 10 / 80, and the seed-1 downloaded-checkpoint path
+  reproduced the learned 63-proposal solution;
+- the address-only depth checkpoint demo reproduced 1.000 exact on 100 fresh
+  trained-depth rows and 0.280 exact on 100 fresh deep rows.
+
+The six asset files below were rehashed from their source worktrees immediately
+before release; their byte counts and SHA-256 values match the tables.
 
 ## Assets and their stories
 
@@ -268,9 +325,60 @@ gh release download v0.6.0 --pattern tactic-policy-byte-gru-s1.pt --dir experime
 python experiments/train_tactic_policy.py --live --demo-checkpoint experiments/results/tactic-policy-byte-gru-s1.pt
 ```
 
-[PENDING depth winner/representative seeds and parameter-matched control,
-selected only after the three-seed matrix. Every attached checkpoint gets its
-exact result, role, SHA-256, and exercise command.]
+The depth assets tell the negative result rather than selecting only a winner:
+
+| release asset | role | seed ID / OOD exact | bytes | SHA-256 |
+|---|---|---:|---:|---|
+| `depth-address-recurrent-s0.pt` | best surviving address-only mechanism | 1.000 / 0.284 | 5,964,599 | `64920088e60b739ea8ca5921cce1a28b2acade06c4bb0b4110e48024cc749a77` |
+| `depth-both-recurrent-s2.pt` | representative falsified both-consumer arm | 1.000 / 0.033 | 6,759,783 | `2c0fd4e31090aff7cc5159f8b4fb497435ac52622a982b20da3773f98e90f17d` |
+| `depth-level-mlp-s2.pt` | two-parameter-matched non-recurrent consumer control | 1.000 / 0.162 | 6,766,501 | `36128823fc653c8e8ebaca35b745cdcc8d5f722957159656a36e501dfae15f2a` |
+
+**Before → Now → Demonstrate:** before, only address construction iterated over
+path levels, and the consumers were a plausible untested explanation of the
+remaining wall. Now, the complete matrix refutes that explanation: recurrence
+in both consumers is the worst arm, while the matched MLP partly recovers but
+still trails address-only. Exercise the released best surviving checkpoint on
+fresh shallow and deep examples without retraining:
+
+```console
+gh release download v0.6.0 --pattern depth-address-recurrent-s0.pt --dir experiments/results
+python experiments/demo_analogy_checkpoint.py --checkpoint experiments/results/depth-address-recurrent-s0.pt --eval-size 100
+```
+
+The public names above are intentionally different from the training scripts'
+local checkpoint names. This maintainer-side manifest is the executable
+source→release mapping (paths are relative to the main checkout):
+
+| source artifact | staged / release asset |
+|---|---|
+| `.worktrees/learned-tactic-policy/experiments/results/tactic_policy_s0.pt` | `tactic-policy-byte-gru-s0.pt` |
+| `.worktrees/learned-tactic-policy/experiments/results/tactic_policy_s1.pt` | `tactic-policy-byte-gru-s1.pt` |
+| `.worktrees/learned-tactic-policy/experiments/results/tactic_policy_s2.pt` | `tactic-policy-byte-gru-s2.pt` |
+| `.worktrees/depth-consumers/experiments/results/depth_address_s0.pt` | `depth-address-recurrent-s0.pt` |
+| `.worktrees/depth-consumers/experiments/results/depth_both_s2.pt` | `depth-both-recurrent-s2.pt` |
+| `.worktrees/depth-consumers/experiments/results/depth_mlp_s2.pt` | `depth-level-mlp-s2.pt` |
+
+The release operator copies those six files into a temporary staging directory
+under the public names before `gh release upload`; GitHub's `file#label` syntax
+sets only a display label and is not used as a rename mechanism.
+
+```powershell
+$assetStage = Join-Path $env:TEMP 'corollary-v0.6.0-assets'
+New-Item -ItemType Directory -Force -Path $assetStage | Out-Null
+Copy-Item .worktrees\learned-tactic-policy\experiments\results\tactic_policy_s0.pt "$assetStage\tactic-policy-byte-gru-s0.pt"
+Copy-Item .worktrees\learned-tactic-policy\experiments\results\tactic_policy_s1.pt "$assetStage\tactic-policy-byte-gru-s1.pt"
+Copy-Item .worktrees\learned-tactic-policy\experiments\results\tactic_policy_s2.pt "$assetStage\tactic-policy-byte-gru-s2.pt"
+Copy-Item .worktrees\depth-consumers\experiments\results\depth_address_s0.pt "$assetStage\depth-address-recurrent-s0.pt"
+Copy-Item .worktrees\depth-consumers\experiments\results\depth_both_s2.pt "$assetStage\depth-both-recurrent-s2.pt"
+Copy-Item .worktrees\depth-consumers\experiments\results\depth_mlp_s2.pt "$assetStage\depth-level-mlp-s2.pt"
+gh release upload v0.6.0 `
+  "$assetStage\tactic-policy-byte-gru-s0.pt" `
+  "$assetStage\tactic-policy-byte-gru-s1.pt" `
+  "$assetStage\tactic-policy-byte-gru-s2.pt" `
+  "$assetStage\depth-address-recurrent-s0.pt" `
+  "$assetStage\depth-both-recurrent-s2.pt" `
+  "$assetStage\depth-level-mlp-s2.pt"
+```
 
 The four masked-skeleton/recurrent analogy assets already shipped with v0.5.0;
 v0.6 does not duplicate them without a new artifact-specific story.
@@ -282,9 +390,10 @@ An asset without a Before→Now claim and runnable story will not be uploaded.
 
 ```console
 # After completing the Python/torch setup in README.md:
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONIOENCODING = 'utf-8'
 python scripts/check_regeneration.py
 python scripts/validate_nodes.py
-$env:PYTHONIOENCODING = 'utf-8'
 python scripts/match_signatures.py
 python scripts/specialize.py
 python scripts/decompose.py
@@ -304,7 +413,14 @@ $env:Path = "$env:USERPROFILE\.elan\toolchains\leanprover--lean4---v4.29.1\bin;$
 python prover/live_search.py
 python experiments/train_tactic_policy.py --live
 
-# [PENDING depth reproduction command and released-asset demo]
+# Recreate the complete registered depth matrix (one local CUDA GPU; hours):
+python experiments/analogygen.py --out-dir experiments/data
+python experiments/run_depth_consumers.py --data-dir experiments/data --results-dir experiments/results
+python experiments/analyze_depth_consumers.py --results-dir experiments/results
+
+# Or demonstrate the released best surviving checkpoint without retraining:
+gh release download v0.6.0 --pattern depth-address-recurrent-s0.pt --dir experiments/results
+python experiments/demo_analogy_checkpoint.py --checkpoint experiments/results/depth-address-recurrent-s0.pt --eval-size 100
 ```
 
 The block uses PowerShell environment syntax; other shells should translate

@@ -62,8 +62,13 @@ No runtime action may write `data/*/nodes.json` directly.
 
 ## 4. Depth follows the v0.6 consumer verdict
 
-Carry forward the mechanism that survives the five-arm v0.6 ablation, not a
-component name. Required next evidence:
+The five-arm verdict is negative and specific: address-only remains best at
+`0.196 ± 0.064` conditional depth-OOD exact; query reaches `0.179 ± 0.025`,
+memory `0.082 ± 0.027`, both recurrent consumers `0.039 ± 0.011`, and the
+two-parameter-matched MLP `0.142 ± 0.014`, while every arm stays at shallow
+ceiling. Carry forward recurrent address construction, freeze the consumer
+expansion, and investigate the interface rather than a component name.
+Required next evidence:
 
 - remove the conditional-only OOD blind spot: either raise limits/constrain
   generation so all 3,000 generated examples are scored, or report both the
@@ -91,7 +96,7 @@ at ceiling and toward untruncated OOD, longer chains, held-out families, and
 shortcut controls. Dropout is not the proposed repair for a perfect-ID/
 collapsed-depth interface.
 
-Treat v0.6's roughly 4–5 GiB observed footprint as a conservative recovery
+Treat v0.6's roughly 4.0–5.9 GiB observed footprint as a conservative recovery
 protocol, not a permanent utilization target. If a later experiment benefits
 from larger batches, run a separate throughput/safety ladder at 60%, 70%, then
 80% whole-device occupancy, exercising train → atomic checkpoint → greedy OOD
@@ -131,6 +136,9 @@ result reported against it. Synthetic 1.000 remains a mechanism result only.
 - Execute the complete miss chain: exact → neighborhood → derivation → tool →
   ASK for frame-private knowledge → explicit abstention.
 - Store REFUTED and exhausted branches as reusable pruning evidence.
+- Replace string-valued retrieval resolution channels and duck-typed
+  controller commit hooks with typed protocols while preserving the existing
+  five-action API, receipt checks, and verifier-owned authority boundaries.
 
 A successful tool transaction proves what was fetched, not that its content is
 true.

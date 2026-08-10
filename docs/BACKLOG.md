@@ -20,16 +20,15 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   expansion need sense-level ambiguity, project-exact precedence, announced
   ranking/caps, and the existing empirical-only authority boundary. Renderer
   selection and any seed-regenerated reduced extract remain open.
-- **SHIPPED NEGATIVE — consumer recurrence does not move the depth wall.** The
-  five-arm, three-seed matrix leaves recurrent address-only best at
-  `0.196 ± 0.064` conditional OOD. Query recurrence reaches `0.179 ± 0.025`,
-  memory `0.082 ± 0.027`, both `0.039 ± 0.011`, and a two-parameter-matched
-  level-aware MLP `0.142 ± 0.014`; every arm remains at shallow ceiling.
-  Freeze the consumer expansion. Remaining work: score all 3,000 generated OOD
-  rows or count capacity exclusions as failures; separate depth-4/depth-5 and
-  per-step cliffs; add internal/composed transforms and wrapper-transfer
-  shortcut baselines; use at least five seeds for small promoted effects; and
-  test an alternative shared iterative mechanism before naming GRU uniquely.
+- **Make depth evaluation unconditional and harder before another architecture
+  fork.** The completed consumer matrix and its negative result now live in
+  `docs/RELEASE-v0.6.0.md` and `experiments/ANALYSIS.md`. Remaining work is to
+  score all 3,000 generated OOD rows or count capacity exclusions as failures;
+  separate depth-4/depth-5 and per-step cliffs; add internal/composed
+  transforms and wrapper-transfer shortcut baselines; use at least five seeds
+  for small promoted effects; and test an alternative shared iterative
+  mechanism before naming GRU uniquely. Freeze consumer expansion until those
+  evaluation defects are repaired.
 - **PARTIAL — implementation provenance is byte-strong but newline-fragile.**
   The depth run bound raw working-tree SHA-256 values; Windows patching left
   mixed LF/CRLF bytes, and rebase restored equivalent Git content as uniform

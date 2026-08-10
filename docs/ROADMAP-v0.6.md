@@ -1,5 +1,18 @@
 # v0.6 roadmap — learned choice inside a verified world
 
+> **CLOSED by [v0.6.0](RELEASE-v0.6.0.md).** Shipped outcomes and negative
+> results live in the release notes and `experiments/ANALYSIS.md`; unfinished
+> breadth, durable WRITE/conversation, interface-localized depth work, visual
+> ground truth, and richer rendering move to [ROADMAP-v0.7.md](ROADMAP-v0.7.md).
+> Status and prediction text below remain as the historical plan of record.
+> Item map: 1's live search/policy result, 2's maintained conversation, 4's
+> depth ablation, 5's corpus lane, and 8's evidence-backed deferral ship in the
+> release; their unfinished breadth moves to v0.7 items 1, 2, 4, 5, and 8.
+> Item 3 moves to v0.7 item 3; item 6 to item 6; item 7's partial frame work to
+> item 7; item 9 to item 9; item 10 to item 10. Item 11 is the release gate
+> closed by the release notes and their explicit
+> [validation record](RELEASE-v0.6.0.md#release-validation-record).
+
 v0.5 made the harness executable. v0.6 asks whether a tiny learned policy can
 use it: choose a proposal, tool, clarification, or abstention; survive rejected
 branches; and improve without moving exact operations into weights.

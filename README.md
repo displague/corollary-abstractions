@@ -91,18 +91,19 @@ theory-of-mind demos require only the ordinary project environment.
 
 ## The models
 
-Four small architectures, one shared recipe: a **4-layer pre-norm
-Transformer encoder** (d_model=128, 4 heads, feed-forward 512, dropout
-0.1) with task-specific heads. No pretrained weights anywhere; every
-model trains from scratch in minutes on one consumer GPU.
+Five small architectures. Four share a **4-layer pre-norm Transformer
+encoder** (d_model=128, 4 heads, feed-forward 512, dropout 0.1) with
+task-specific heads; `TacticRanker` instead uses one shared byte-level GRU.
+No pretrained weights anywhere; every model trains from scratch on one
+consumer GPU.
 
 | class | file | structure | params | used for |
 |---|---|---|---|---|
 | `TinyTransformer` | `experiments/train.py` | 4-layer encoder + CLS-pool MLP pair-classifier head | ~0.88M | twins / equiv / xlang / qa / syn / realsyn |
 | `SpanPointer` | `experiments/train_span.py` | 4-layer encoder + per-position start/end span head | 0.82–0.91M (by positional variant) | solve-for-X answering; the demo checkpoint |
 | `TreeSeq2Seq` | `experiments/train_gen.py` | 4-layer encoder + 2-layer autoregressive decoder | ~1.45M | the failed naive generator (kept as the negative result) |
-| `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M base; 1.58M depth-consumer arms | generation-by-pointing; analogy completion and address-consumer ablations |
-| `TacticPolicy` | `experiments/train_tactic_policy.py` | byte embedding + one shared GRU + schema head | 27,688 | held-out Lean tactic ranking inside live verified search |
+| `PointerGen` / `AnalogyPointer` | `experiments/train_pgen.py`, `train_analogy.py` | 4-layer encoder + 2-layer decoder with pointer head and grounded copy embeddings | ~1.47M base; 1.48–1.68M depth-consumer arms | generation-by-pointing; analogy completion and address-consumer ablations |
+| `TacticRanker` | `experiments/train_tactic_policy.py` | byte embedding + one shared GRU + schema head | 27,688 | held-out Lean tactic ranking inside live verified search |
 
 Positional encoding is a first-class experimental variable, not a fixed
 choice: absolute learned positions, tree-path addresses (per-level
@@ -111,7 +112,7 @@ shared GRU cell walking each path) are selectable variants — the
 positional ladder results in ANALYSIS.md come from exactly these
 switches. The scaling grid varies encoder width 32–256 at fixed depth.
 
-The fp32 model states are roughly 0.11–6.4 MB. The earlier pointer-model
+The fp32 checkpoint files are roughly 0.11–6.8 MB. The earlier pointer-model
 quantization ladder found fp16 halved its weight footprint without measured
 accuracy loss; that result is not silently generalized to every newer
 architecture. Claim-bearing checkpoints ship as release assets rather than in
@@ -190,6 +191,7 @@ schema checks). Experiments need the local venv:
 uv venv .venv --python 3.12
 uv pip install --python .venv/Scripts/python.exe torch numpy --index-url https://download.pytorch.org/whl/cu130
 uv pip install --python .venv/Scripts/python.exe jsonschema
+.\.venv\Scripts\Activate.ps1
 ```
 
 Live Lean search has one additional native dependency boundary: PyPantograph
@@ -220,13 +222,11 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
-python train_span.py --arm struct --task-prefix solvex2 --positions tree \
+python train_span.py --arm struct --task-prefix solvex2 --positions tree `
     --data-dir data --out results/repro.json   # re-verify the 1.000 result
 
-# after: gh release download v0.6.0 --pattern \
-#   <depth-demo-asset>.pt --dir results
-python demo_analogy_checkpoint.py --checkpoint \
-    results/<depth-demo-asset>.pt  # fresh shallow + deep examples
+# after: gh release download v0.6.0 --pattern depth-address-recurrent-s0.pt --dir results
+python demo_analogy_checkpoint.py --checkpoint results/depth-address-recurrent-s0.pt
 ```
 
 On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts

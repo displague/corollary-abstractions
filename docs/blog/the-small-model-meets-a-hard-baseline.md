@@ -15,7 +15,7 @@ model of language and the world, keeps enough conversational context to follow
 the revisions, and produces polished prose. Our project starts from almost the
 opposite premise. We are asking how much of that process can be made explicit,
 verifiable, and correctable while the learned model remains extraordinarily
-small—roughly 28,000 to 1.6 million parameters in the experiments discussed
+small—roughly 28,000 to 1.7 million parameters in the experiments discussed
 here, with a long-term target
 for the complete system under 64 MB.
 
@@ -170,7 +170,7 @@ protocol in the story domain before the controller is called general.
 
 The system is not one monolithic network. Its learned pieces are small and
 replaceable: an approximately 800,000-parameter span pointer answers questions
-by selecting material already in context; a roughly 1.5–1.6-million-parameter
+by selecting material already in context; a roughly 1.5–1.7-million-parameter
 analogy pointer reconstructs a target entirely by copying input positions; and
 the new 27,688-parameter byte GRU ranks tactic schemas. Exact parsers,
 realizers, verifiers, stores, and frame transitions surround them.
@@ -368,7 +368,29 @@ a logical batch of 192 through 64-example GPU microbatches and evaluates in
 batches of 32 after two near-full-VRAM Windows bugchecks exposed the old final-
 evaluation boundary. Memory safety is reported separately from model quality.
 
-[FINAL FIVE-ARM / THREE-SEED TABLE AND P-DC1–P-DC7 VERDICT PENDING.]
+The completed result is the reverse of the motivating prediction:
+
+| consumer arm | parameters | ID exact mean | depth-OOD s0 / s1 / s2 | OOD mean ± SD |
+|---|---:|---:|---|---:|
+| recurrent address only | 1,481,987 | 0.9999 | 0.284 / 0.171 / 0.134 | **0.196 ± 0.064** |
+| recurrent query | 1,581,059 | 0.9998 | 0.186 / 0.204 / 0.146 | 0.179 ± 0.025 |
+| recurrent memory | 1,581,059 | 0.9999 | 0.073 / 0.053 / 0.119 | 0.082 ± 0.027 |
+| recurrent query + memory | 1,680,131 | 0.9999 | 0.030 / 0.054 / 0.033 | **0.039 ± 0.011** |
+| one-shot level-aware MLP | 1,680,133 | 1.0000 | 0.131 / 0.134 / 0.162 | 0.142 ± 0.014 |
+
+Address-only remains best. Query recurrence is a small mean loss. Memory
+recurrence cuts performance by more than half, and recurrence in both
+consumers is the worst arm. The MLP differs by only two parameters from the
+combined recurrent model and recovers to 0.142, so “more learned processing”
+is not the repair either. All three architectural predictions miss; the
+complete-matrix and corrected GPU-safety gates pass.
+
+The token diagnostics explain what exact accuracy compresses. Address-only
+averages 0.910 accuracy when copying C's variable leaves and 1.000 on the end
+marker. Memory recurrence falls to 0.705 and 0.913; both consumers fall to
+0.677 on C leaves. The model did not need a deeper consumer. It needed the
+consumer to preserve an address representation that already carried useful
+iteration.
 
 The architectural question is more general than whether a GRU is fashionable.
 The earlier fork showed that a shared computation repeatedly applied over a
@@ -376,12 +398,22 @@ tree path extrapolated beyond trained depth, while a lookup table and extra
 curriculum exposure did not. That supports “iteration can generalize,” not
 “GRU is the reasoning organ.”
 
-The new ablation moves shared iteration through the consumers of an address:
+The ablation moved shared iteration through the consumers of an address:
 the pointer query, the encoded memory, both, and a parameter-matched one-shot
-MLP. Whichever mechanism survives must be interpreted alongside seed variance
-and the unchanged trained-depth ceiling. If none materially improves on
-recurrent addressing, the right response is to freeze complexity and inspect
-the remaining interface—not to add recurrent blocks by name.
+MLP. The surviving mechanism is recurrent address construction alone. Seed
+variance and the unchanged trained-depth ceiling remain visible, so the next
+step is to freeze consumer complexity and inspect capacity, decoding, and
+harder transformation interfaces—not to add recurrent blocks by name.
+
+The safety result is equally concrete. The two old attempts bugchecked Windows
+near 15.4 of 15.9 GiB at final evaluation. The replacement kept logical batch
+192 through microbatches of 64, evaluated in batches of 32, capped PyTorch at
+70%, and stopped above 80% whole-device use. All fifteen rows completed; the
+largest whole-device footprint was about 5.95 GiB and final evaluation added
+only 2 MiB. This strongly implicates the near-full-memory boundary, but does
+not prove whether VRAM, the driver, or the hypervisor was the sole cause. A
+later throughput study can test 60%, 70%, and 80% occupancy separately;
+jumping straight to 14 GiB would cross the present safety guard.
 
 This bears directly on the original architectural inspirations. Pointer
 generation has been reduced to its useful half: pointing is the creation
