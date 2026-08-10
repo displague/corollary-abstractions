@@ -1686,8 +1686,12 @@ these are three partitions rather than one wearing three names. They are **not
 fully orthogonal**, and the shortfall is reported rather than asserted away:
 holding out complete families also empties **five of ten** disciplines out of
 training, because at this corpus size some disciplines occur in only one
-skeleton. The discipline holdout is cleaner (7 of 8 families still trained) and
-the vocabulary holdout keeps 6 of 10 families and 11 of 15 disciplines.
+skeleton. The discipline holdout keeps 7 of 8 families in training — which is
+NOT a virtue but the cause of its near-vacuity: with the leaky families
+still trained, nearest-template reaches 0.932 (see the near-vacuous
+verdict below), so this split cannot evidence model capability and no
+model result on it may be quoted as meaningful. The vocabulary holdout
+keeps 6 of 10 families and 11 of 15 disciplines.
 
 ### The ceiling table
 
@@ -1733,7 +1737,12 @@ arithmetic-identity rule on the class being `P`, so a reader of the token
 stream cannot recover it. The residual this lane leaves to something other than
 the token stream is therefore not "difficulty" — it is a specific, nameable
 piece of declared structure, which is a far sharper claim than the one
-predicted. The v0.4 creation thesis still holds and is stated plainly: with the
+predicted. Read the 1.000 with its circularity stated: the typed+oracle
+control re-executes the builder's own construction line
+(`canonicalize(rename(b, translate))`) with the same slot-class translation,
+so it is near-definitional, not an independent solve — it measures that the
+declared classes suffice for the pointing, not that a model would recover
+them. The v0.4 creation thesis still holds and is stated plainly: with the
 slot classes in hand the task is closed-form, so this lane measures the
 **pointing mechanism**, and no later model number may be sold as reasoning.
 
@@ -1765,7 +1774,14 @@ reached 0.5 there. The threshold was badly chosen; the substantive claim — no
 control survives losing C — holds without exception.
 
 **P-CS7 FIRED.** The blind ceiling is below 1.000 on all three holdouts, not
-merely one, so the roadmap's acceptance condition is met with margin.
+merely one. Stated against the full acceptance criterion ("a *non-trivial*
+capability-blind ceiling below 1.000 *and a model result reported against
+it*"): the split-and-ceilings half is met — the family (0.400) and
+vocabulary (0.398) holdouts are non-trivial ceilings below 1.000 (the
+discipline holdout at 0.932 is NOT non-trivial and is disclosed as
+near-vacuous). The model-result half is NOT yet met: no model arm has run;
+this slice delivers the split and the ceilings it must clear, and item 5
+stays open for the model result reported against 0.400/0.398.
 
 ### What adversarial self-review found
 

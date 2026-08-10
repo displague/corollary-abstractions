@@ -150,9 +150,17 @@ Jaccard 0.111 / 0.139 / 0.257). Every D is specializer-accepted from C, absent
 from every authored template, and absent from its own input as a sequence.
 
 Blind ceilings **0.400 / 0.932 / 0.398** (family / discipline / vocabulary),
-all below 1.000, so acceptance is met. **The v0.6 killer is dead: the last-slot
-number rule scores 0.000 / 0.011 / 0.048** (P-CS1 fired). P-CS1 and P-CS7
-fired; P-CS3 half-fired; P-CS4 and P-CS5 missed and are recorded as missed.
+all below 1.000. The acceptance criterion has two halves: a *non-trivial*
+ceiling below 1.000 (MET — family 0.400 and vocabulary 0.398 are
+non-trivial; the discipline 0.932 is disclosed as near-vacuous, not
+counted) *and a model result reported against it* (NOT yet met — no model
+arm has run; this slice delivers the split and the bar, and item 5 stays
+open for the model result against 0.400/0.398). **The v0.6 killer is dead:
+the last-slot number rule scores 0.000 / 0.011 / 0.048** (P-CS1 fired).
+P-CS1 and P-CS7 fired; P-CS3 half-fired; P-CS4 and P-CS5 missed and are
+recorded as missed. (The registered set is P-CS1..5 and P-CS7 — there is no
+P-CS6; the numbering skipped it at registration. Noted so the gap in the
+sequence is not read as a dropped prediction.)
 
 Two results matter more than the headline:
 

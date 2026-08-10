@@ -939,8 +939,12 @@ def ctl_symbolic_typed_input(quad: Quadruple, ctx: dict) -> tuple | None:
     """The same solver, plus the corpus's DECLARED slot classes and identities.
 
     This exists to attribute `symbolic_input_only`'s shortfall rather than
-    merely report it. The two solvers differ in exactly two inputs: the
-    parameter/variable class of each slot, and the identity table. Both are
+    merely report it. The two solvers differ in two DECISIVE inputs: the
+    parameter/variable class of each slot, and the identity table. (There is
+    a third, causally-inert implementation difference — this control renames
+    B while the input-only solver substitutes into C — verified to change no
+    ceiling: untyped scores 0.458/0.545/0.651 under either spelling.) Both
+    decisive inputs are
     corpus declarations, not facts a reader of the token stream could recover,
     and `Search` gates its arithmetic-identity rule on the class being `P`. If
     this control reaches 1.000 while the input-only one does not, the residual

@@ -299,9 +299,18 @@ class VerificationTests(Fixture):
     def test_both_constructions_agree_on_every_admitted_row(self) -> None:
         """subst-into-C and translate-B are checked at build time; re-check it
         here so that relaxing the builder cannot quietly drop the cross-check.
+
+        Pinning the disagreement COUNT is what makes this load-bearing: the
+        prior version asserted only canonicalize-idempotence (a tautology),
+        so stubbing the cross-check to always agree — which shifts the admit
+        count 914->933 / 398->415 — left the whole suite green (review S1).
+        The 20 disagreements are the rows where the two constructions of D
+        diverge and are correctly excluded; if the builder stops cross-
+        checking, this count moves and the test fails.
         """
         for quad in self.quads:
             self.assertEqual(canonicalize(quad.d_tree), quad.d_tree)
+        self.assertEqual(self.ledger["two_constructions_disagree"], 20)
 
     def test_specialization_ledger_is_load_bearing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
