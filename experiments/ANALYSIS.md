@@ -2133,3 +2133,35 @@ Windows. Dead branches are preserved and the cross-task avoidance question now
 has a measured answer: no. The next honest move is not a bigger ranker; it is
 a search that can actually spend a ranking — and a family whose premises must
 be selected rather than discharged in order.
+
+## v0.8 experiments (2026-08-10)
+
+**Corpus-analogy model arm** (`experiments/results/corpus_analogy_model_arm.json`;
+`train_corpus_analogy.py`, 1.49M params, 3 seeds, 120 epochs). Exact-match on each
+holdout's held rows vs the frozen blind ceilings:
+
+| holdout | model (mean ± sd) | blind ceiling | beats? |
+|---|---|---|---|
+| family | 0.168 ± 0.013 | 0.400 | no |
+| discipline | 0.491 ± 0.012 | 0.9318 (near-vacuous) | no |
+| vocabulary | 0.201 ± 0.028 | 0.3976 | no |
+| shape (STRICT) | 0.104 ± 0.012 | 0.1069 | no |
+
+The pointer is fully fit (train exact ≥ 0.9925); on unseen shapes it matches the
+blind replay. The lane measures pointing, not reasoning (two corpus declarations —
+per-slot P/V class + the identity table — make it closed-form), and the model does
+not clear the pointing bar. P-CM1/CM2 MISSED, P-CM3/CM4 FIRED, registered before
+the run; independently re-verified (fresh seeds 0.076/0.114, mean 0.095 < 0.1069).
+
+**Depth interface** (`experiments/results/depth_interface.json`;
+`depth_interface.py`, address arm, 3 seeds). The conditional-only OOD blind spot
+removed: unconditional (correct/generated) reported beside retained (correct/kept),
+with the 550 capacity exclusions (depth-4 72, depth-5 478) scored as failures, not
+dropped. Address retained mean 0.196 vs unconditional 0.160. **P-DI2 (interface
+manipulation, FIRED):** enlarging the copy budget (max_tgt 96→330, max_len 512→700)
+to fully untruncate OOD does not move it — teacher-forced 0.166 untruncated vs 0.143
+control unconditional, inside the pre-registered 0.15 bar, per-seed kept-row deltas
+[-0.043, -0.003, +0.131] (seed noise); the excluded rows stay 0.0 even untruncated
+(max trained target length 88 < the 96 boundary). **P-DI3 MISSED:** the retained
+first-error mass is early (0.751 in deciles 0–2), not the predicted deep end. A
+matched-control interface negative; the budget is not the depth bottleneck.

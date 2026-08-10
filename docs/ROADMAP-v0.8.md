@@ -1,5 +1,14 @@
 # v0.8 roadmap — open requests, and closing the lanes v0.7 left open
 
+**CLOSED — release gate met; v0.8.0 cut. Release notes:
+[RELEASE-v0.8.0.md](RELEASE-v0.8.0.md). Next increment (a deliberate pivot to
+corpus scale and programming): [ROADMAP-v0.9.md](ROADMAP-v0.9.md), argued in
+[DESIGN-corpus-scale-and-programming.md](DESIGN-corpus-scale-and-programming.md).
+Shipped: item 1 (open-prose harness), item 2 (analogy shape holdout + model arm),
+item 4 (PROVEN-WRITE acceptance), item 5 (depth interface). Carried to v0.9:
+items 3, 6, 7, 8 and the existing-multi-corpus WRITE patch, re-scoped as what a
+non-toy corpus needs.**
+
 v0.7 turned single demonstrations into families with capability-blind
 baselines, and in nearly every lane the cheap baseline won or the honest
 ceiling came in far below the headline. v0.8 does two things with that: it
@@ -234,12 +243,25 @@ later domains with separate evidence and governance.
 
 ## Release gate
 
-v0.8 is ready only if it contains:
+**MET — v0.8.0 cut.**
 
 - open-prose authoring of the golden-chicken conversation with a moved-fact
-  control and a serialize/restart, degrading to ASK not a guess;
-- a trained corpus-analogy model reported against the strict ≈0.10–0.14 ceiling;
-- one PROVEN WRITE accepted end-to-end through the full audit and one refused;
-- one interface-level depth result, positive or negative, on untruncated OOD;
-- updated assets whose notes explain winners, losers, and controls;
-- the complete seed/schema/matcher/specializer/decomposer/test suite green.
+  control and a serialize/restart, degrading to ASK not a guess — **MET** (item 1;
+  closure/coverage/ordering gate catches added/negated/misattributed/reordered
+  facts; surface-variety 0.980 vs 0.060);
+- a trained corpus-analogy model reported against the strict ≈0.10–0.14 ceiling
+  — **MET** (item 2; 0.104 ± 0.012 on the 0.1069 shape holdout — an honest
+  negative, beats no blind ceiling);
+- one PROVEN WRITE accepted end-to-end through the full audit and one refused
+  — **MET** (item 4; atomic seed→regenerate→receipt, whole-tree delta, refusal
+  byte-identical);
+- one interface-level depth result, positive or negative, on untruncated OOD
+  — **MET** (item 5; enlarging the copy budget does not move OOD — a matched-control
+  negative; blind spot removed);
+- updated assets whose notes explain winners, losers, and controls — **MET**
+  (RELEASE-v0.8.0.md; both trained lanes' negatives are recorded in committed
+  result JSON, the faithful artifact since the checkpoints are seed-reproducible-only);
+- the complete seed/schema/matcher/specializer/decomposer/test suite green
+  — **MET** (14 seeds byte-identical, 221/221 nodes, matcher 30/31/30/32/5 with 0
+  ladder violations, 655 specialization edges, 193/221 decompose @ 0.770,
+  781 unit tests).

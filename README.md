@@ -6,7 +6,7 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.7.0](docs/RELEASE-v0.7.0.md).
+interface. Latest release: [v0.8.0](docs/RELEASE-v0.8.0.md).
 
 ## Three headline demonstrations
 
@@ -270,7 +270,7 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   formula/diagram twins, SVG structure, and a pixel control. Its oracle layer
   is built (`experiments/visual/`); P-V1–P-V4 stay registered until the
   learned arms run
-- `docs/blog/` — accessible project narratives, including the v0.7 story
+- `docs/blog/` — accessible project narratives, including the v0.8 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
 - `docs/BACKLOG.md` — recorded friction, each item with its evidence

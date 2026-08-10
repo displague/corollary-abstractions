@@ -2408,3 +2408,22 @@ normalized, or read via `git cat-file`) rather than raw working-tree bytes, the
 same move the depth source manifest already made ("binds mixed runtime bytes to
 canonical Git content", DISCOVERIES). Deferred: it is trust-boundary code and
 wants its own adversarial review, not a release-eve change.
+
+## v0.8 process and nit debt
+
+- **Release checkpoints must be staged before their worktree is removed.** The
+  v0.8 analogy-model and depth-interface `.pt` checkpoints were gitignored inside
+  their feature worktrees; removing the worktrees after ff-merge deleted them.
+  Because CUDA is nondeterministic the loss is not fatal (the committed result
+  JSON is the faithful record and the scripts regenerate a same-band checkpoint),
+  and v0.8 shipped the JSON as the asset instead — but the release flow should
+  copy any intended checkpoint asset out of the worktree before `git worktree
+  remove`. Filed as a release-process fix, not a code bug.
+- **`experiments/train_corpus_analogy.py` CLI default is `--epochs 80` but the
+  committed v0.8 run and artifact are at 120.** Fully disclosed in the artifact
+  (`config.epochs: 120`), no integrity impact, but a reader running the default
+  gets a slightly different (still in-band) number than the reported run. Align
+  the default with the reported run for one-command reproducibility.
+- **`experiments/depth_interface.py:65` `MAX_TRAINED_TARGET_LENGTH = 88` is
+  hardcoded.** Correct today (verified max train target = 88), but a data change
+  would silently desync it; compute it from the training data or add a guard test.

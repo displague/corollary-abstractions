@@ -1168,3 +1168,32 @@ bindings), **near-miss** (informative failure, kept deliberately).
   witness can fail, and it is the one that exposed the P-vs-V collision above.
   A test of a definition needs a coarser instrument than the definition.
   *methodology* (2026-08-10)
+
+## v0.8 — open prose, WRITE acceptance, and two honest negatives (2026-08-10)
+
+- **A presence check is not a moved-fact control.** The first open-prose
+  faithfulness gate verified that every accepted anchor word was present plus a
+  narrow foreign-color scan; independent review built four renderers (added false
+  premise, right-color/wrong-owner, negation, dropped beat) that all certified as
+  faithful. The teeth only appear with a *closure* check: the prose must tile
+  completely into approved fact-segments and cover exactly the accepted kinds,
+  and ordering + plant-before-discharge must hold. Then all four adversaries — and
+  temporally-scrambled renders — are caught. *(scripts/prose.py)*
+- **A durable write is safe only when it is atomic, rolls back to byte-identity,
+  and asserts a whole-tree delta of exactly the declared files.** PROVEN-WRITE's
+  first acceptance path passed an adversarial review with no escape, but the
+  robustness gaps it surfaced — non-atomic writes, a rollback flag set too late to
+  clean a torn corpus, a receipt outside the rollback guard, and a data/-only
+  after-check — are the difference between "detection" and containment.
+  *(scripts/write_stage.py)*
+- **On genuinely unseen structural shapes, a trained pointer matches a blind
+  edit-distance replay and no more.** The corpus-analogy model arm scores
+  0.104 ± 0.012 on the strict 0.1069 shape holdout — it clears no blind ceiling on
+  any holdout. The residual this lane can learn on unseen shapes is not there;
+  more parameters on the same distribution will not change that. *(experiments/ANALYSIS.md)*
+- **The depth wall is an early-token failure, not a truncation artifact and not a
+  deep-tail collapse.** Enlarging the copy interface budget does not move
+  untruncated OOD (the 550 previously-excluded rows still score 0.0 — their targets
+  exceed any budget the model trained on), and 0.751 of retained first-decode
+  errors land in deciles 0–2. The interface, not the budget, is the object of
+  study. *(experiments/depth_interface.py)*
