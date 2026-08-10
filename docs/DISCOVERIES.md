@@ -135,6 +135,25 @@ bindings), **near-miss** (informative failure, kept deliberately).
   not a lossless action interface. *P-LS2 initial form missed; P-LS6 fired*
   (2026-08-09)
 
+- **Split by provenance, the self-certificate is one constituent wide — and
+  absorption, not sibling recurrence, is the graph-wide leak.** Attributing
+  every grounded constituent to a channel leaves `data/provability`'s 1.000
+  intact but resolves it into `same_corpus` 0.775 + `pattern_absorption`
+  0.192 against `external` 0.033: five of six nodes take no external credit
+  at all, and the sixth's is a single `IMPLIES⟨?0:V, ?1:V⟩` matching
+  `logic.inference.contraposition`. It is the only corpus in 22 where a
+  near-perfect aggregate survives with almost nothing from outside its own
+  authoring act, though four other corpora are same-corpus-dominant
+  (`morphology`, `narrative`, `temporal_logic`, `differential_topology`).
+  The unpredicted half is larger: **62 of the graph's 75 pattern-absorption
+  constituents absorb a pattern owned outside the absorbing statement's
+  discipline**, so slot-swallows-structure is where cross-discipline-looking
+  credit concentrates everywhere, not only in the modal corpus. Sharpest
+  single case: `temporal.recurrence.until_unfolding`, whose v2 repair from
+  0.000 to 1.000 is 3/3 absorption. The `recursive` channel, meanwhile, is
+  empty across the whole graph. *GC1–GC5 all fired, including the named
+  same-corpus guess; two unpredicted results recorded* (2026-08-09)
+
 - **Löb's axiom and temporal induction are one archetype and refuse to be
   one skeleton.** `provability.modal.loeb_axiom`
   (`IMPLIES⟨BOX⟨IMPLIES⟨BOX⟨?0:V⟩, ?0:V⟩⟩, BOX⟨?0:V⟩⟩`) and

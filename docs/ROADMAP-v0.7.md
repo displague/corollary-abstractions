@@ -308,6 +308,14 @@ fluency is a separate measured axis.
 - Split grounding into external, prior-corpus, same-corpus, recursive, and
   pattern-absorption channels; the provability corpus's 1.000 self-grounding is
   the regression case.
+  **SHIPPED** (`feature/grounding-channels`): `decompose.py` attributes every
+  grounded constituent to one channel and prints a per-corpus table;
+  aggregates unchanged (graph mean 0.770, 440 exact / 75 pattern). Regression
+  case reads out as `same_corpus` 0.775 + `pattern_absorption` 0.192 vs
+  `external` 0.033, and provability is the only corpus flagged
+  `self_certifying`. GC1–GC5 all fired. Open: the channels report but do not
+  gate, and the graph-wide finding that 62 of 75 absorbed patterns are owned
+  outside the absorbing statement's discipline is unaddressed.
 - Add report regeneration/coherence checks parallel to seed coherence.
 - Keep runtime frame ids under `runtime.frames.*`; corpus frames remain node
   references.

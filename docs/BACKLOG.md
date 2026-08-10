@@ -36,10 +36,6 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   hash of run commit `25db073`, with fail-closed forgery controls. New runners
   should record Git blob ids or canonical text hashes at launch in addition to
   raw bytes, eliminating the need for a post-run line-ending bridge.
-- **Split grounding provenance.** The six-node provability corpus self-grounded
-  at 1.000 through same-corpus BOX recurrence and broad pattern absorption.
-  Report external/prior, same-corpus, recursive, and pattern channels
-  separately before using groundedness as an admission signal.
 - **PARTIAL — Visual structure lane: the oracle exists, the arms do not.**
   ROADMAP-v0.7 item 8 steps 1–5 shipped in `experiments/visual/`: a
   deterministic renderer, a source scene graph with role-derived stable slot
@@ -67,6 +63,28 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   renderer/verifier pair built to the same render/parse/invalidate/verify
   protocol. Do not name a family split until at least two non-isomorphic
   families exist — the same defect the v0.6 analogy lane was corrected for.
+- **Split grounding provenance. SHIPPED** (branch `feature/grounding-channels`):
+  `decompose.py` attributes every grounded constituent to one of `external`,
+  `prior_corpus`, `same_corpus`, `recursive`, `pattern_absorption` and prints a
+  per-corpus channel table; the report gains `channels`/`channel_scores` per
+  statement and a `channel_summary` block. The aggregate is untouched (graph
+  mean 0.770, 440 exact / 75 pattern, all 219 entries field-identical), because
+  the split is attribution first. The regression case now reads out as
+  intended: `provability.goedel_loeb.v1` keeps its 1.000 but resolves to
+  `same_corpus` 0.775 + `pattern_absorption` 0.192 against `external` 0.033 —
+  a single constituent (`IMPLIES⟨?0:V, ?1:V⟩` from `logic.inference.
+  contraposition`) is the corpus's entire extra-disciplinary content, and it is
+  the only corpus the new `self_certifying` flag raises. Pinned by
+  `tests/test_decompose_channels.py`.
+  **Still open before groundedness is used as an admission signal:** the
+  channel split reports, it does not gate. Nothing consumes `self_certifying`,
+  and the BACKLOG's proposed remedy — gating the pattern channel's
+  slot-swallows-call credit on the swallowed head being known outside the
+  statement's own corpus — was deliberately NOT implemented here, since it
+  would move aggregate scores and needs its own registered prediction. The
+  measurement that would justify it now exists: 62 of the graph's 75
+  pattern-absorption constituents absorb a pattern owned outside the absorbing
+  statement's discipline.
 - **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
   asked whether emotion classification maps/vectors belong beside math/science
   corpora. The answer is recorded in `docs/DESIGN-affect.md`: source-qualified
@@ -1241,6 +1259,22 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   and extra-corpus grounding separately (provenance is in the inventory
   already), and gate the pattern channel's slot-swallows-call credit on
   the swallowed head being known outside the statement's own corpus.
+  **HALF SHIPPED** (branch `feature/grounding-channels`): the reporting half
+  is delivered. `decompose.py` now attributes every grounded constituent to
+  `external` / `prior_corpus` / `same_corpus` / `recursive` /
+  `pattern_absorption`, and the fails-open corpus reads out as
+  `same_corpus` 0.775 + `pattern_absorption` 0.192 + `external` 0.033 — the
+  1.000 stands, but nothing about it is external any more, and the run flags
+  `provability.goedel_loeb.v1` as the graph's only `self_certifying` corpus
+  (aggregate >= 0.9 with external + prior <= 0.1; two other corpora at
+  aggregate >= 0.9 are correctly not flagged, so the flag is not a restatement
+  of the aggregate). The gating half is untouched on purpose: it changes
+  scores and therefore needs its own registered prediction. Recorded en route:
+  the pattern channel is where cross-discipline-looking credit concentrates
+  graph-wide (62 of 75 absorbed patterns are owned outside the absorbing
+  statement's discipline), and `temporal.recurrence.until_unfolding`'s v2
+  repair from 0.000 to 1.000 is 3/3 pattern absorption — the second fails-open
+  half is bigger than the provability corpus.
 - **`specialize.py` produces zero edges and zero noise on call-only corpora —
   fifth confirmation, from the other side.** 468 specialization edges over the
   merged graph, none touching either of the 17 new nodes in either direction.

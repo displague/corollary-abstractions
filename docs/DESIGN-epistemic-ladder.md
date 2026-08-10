@@ -25,6 +25,18 @@ Groundedness score := fraction of a statement's non-trivial constituents
 that match known forms (`decompose.py`); it grades "disorder" instead of
 gating it.
 
+The score is reported **by provenance channel**, because "matches a known
+form" was measured hiding *whose* form it matched: `external`,
+`prior_corpus` (other corpus, shared discipline), `same_corpus` (siblings
+authored in the same act), `recursive` (self/definitional), and
+`pattern_absorption` (a known form with a slot swallowing this
+constituent's structure). Channel counts partition the same numerator over
+the same denominator, so the aggregate is unchanged and only its
+attribution is new. Any future use of groundedness as an *admission*
+signal must read the channels, not the aggregate: a corpus can reach 1.000
+on `same_corpus` + `pattern_absorption` alone, and one in the corpus does
+(`data/provability`).
+
 ## Where each concept already lives
 
 - **Unknowns**: WH-slots and typed template slots — first-class since the

@@ -35,6 +35,107 @@ docs/BACKLOG.md):
    head recurs in the other side of the relation is marked `recursive`, and
    its self-headed constituents leave the denominator: they are definitional,
    not ungrounded.
+
+Groundedness v3 splits the score by PROVENANCE CHANNEL (ROADMAP-v0.7 item 10).
+The aggregate is unchanged; what changes is that it is no longer reported
+alone, because the aggregate hid *where* the credit came from. The recorded
+counterexample (docs/BACKLOG.md, docs/DISCOVERIES.md): all six
+`data/provability` nodes ground at 1.000 on arrival though BOX occurs nowhere
+else in the graph — intra-corpus BOX recurrence counts unconditionally, and
+the pattern channel grounds Loeb's boxed premise on ex falso's
+`IMPLIES⟨?0:P, ?1:V⟩` by a slot swallowing the boxed subtree. One number
+cannot distinguish that from a statement built out of the rest of the graph.
+
+Every grounded constituent is therefore attributed to exactly one channel:
+
+- `external` — its supporting statements live in another corpus that shares
+  no discipline label with this statement. The only channel that is evidence
+  of grounding in knowledge the statement's authoring act did not bring with
+  it.
+- `prior_corpus` — another corpus, but the two statements share a discipline
+  label (`theory_context.disciplines`; 57 nodes carry more than one, and six
+  labels span corpora, so this is a real channel and not a formality). Same
+  discipline, separately authored.
+- `same_corpus` — the supporting statements are siblings in this statement's
+  own `nodes.json`, i.e. authored in the same act. This is the channel that
+  lets a hermetic corpus self-certify.
+- `recursive` — self/definitional. Holds (a) grounded constituents whose only
+  support is the statement itself, and (b) the entire share of a statement
+  whose constituents were *all* definitional (the v2 self-headed exclusions,
+  which leave the denominator; such a statement scores 1.000 with nothing
+  external about it, and the channel now says so).
+- `pattern_absorption` — the v2 slot-swallows-structure channel. Credit here
+  is quarantined regardless of who owns the pattern: a slot binding a call
+  subtree says the constituent is an *instance* of a known shape, not that
+  its own vocabulary is known. `absorbed_from_channel` on each constituent
+  records the provenance the credit would have claimed under the aggregate,
+  which for Loeb's premise is `external` — exactly the credit the aggregate
+  hid.
+
+Precedence for exact matches is the most independent owner present
+(external > prior_corpus > same_corpus > recursive): attribution is generous
+to the statement, so a near-zero `external` channel is a strong reading. Per
+statement the channel counts partition the grounded numerator over the
+unchanged denominator, so channel shares sum to `groundedness` exactly.
+
+REGISTERED PREDICTIONS (2026-08-09, written before the first channel run;
+adjudication appended below, per AGENTS.md working method 2):
+
+- GC1: `data/provability`'s `external` channel mean lands at or below 0.15
+  (point estimate 0.10), with at least three of its six nodes at exactly
+  0.000 external. Non-zero at all only because bare `IMPLIES⟨?0:V, ?1:V⟩`
+  subterms should match `logic`'s contraposition exactly.
+- GC2: provability's `same_corpus` + `pattern_absorption` means together
+  carry at least 0.80 of its 1.000 aggregate, with `same_corpus` the largest
+  single channel.
+- GC3: at least two non-provability corpora are also same-corpus-dominant
+  (`same_corpus` mean > `external` + `prior_corpus` means). Named guess:
+  `morphology` (a call-only corpus whose CONCAT/STEM/AFFIX vocabulary no
+  other corpus uses); runner-up `narrative`.
+- GC4: aggregates are untouched — every per-statement `groundedness` equals
+  the pre-split value, the graph mean stays 0.770, and the totals stay 440
+  exact / 75 via pattern.
+- GC5: the partition identity holds for all 221 statements: the five channel
+  counts sum to `grounded_exact + grounded_via_pattern`.
+
+ADJUDICATION (2026-08-09, first channel run over all 22 corpora):
+
+- GC1 **FIRED**, mechanism included. provability's `external` mean is 0.033,
+  inside the predicted 0.15 and near the 0.10 point estimate, and five of six
+  nodes are at exactly 0.000. The single external constituent is the one the
+  prediction named: `k_distribution`'s inner `IMPLIES⟨?0:V, ?1:V⟩`, credited
+  to `logic.inference.contraposition`. One constituent out of 17 is the whole
+  extra-disciplinary content of a corpus that grades 1.000.
+- GC2 **FIRED.** `same_corpus` 0.775 + `pattern_absorption` 0.192 = 0.967 of
+  the 1.000 aggregate, `same_corpus` the largest channel, `prior_corpus` and
+  `recursive` both 0.000.
+- GC3 **FIRED, named guess included.** Four non-provability corpora are
+  same-corpus-dominant (predicted at least two): `morphology` 0.498 vs 0.000
+  — the named guess, and the cleanest case as guessed — `narrative` 0.308 vs
+  0.077 (the runner-up guess), `temporal_logic` 0.255 vs 0.159, and
+  `differential_topology` 0.567 vs 0.367, which was not anticipated and is
+  the one corpus besides provability that grades 1.000.
+- GC4 **FIRED.** All 219 emitted entries are field-for-field identical to the
+  pre-split report on `groundedness`, `considered`, `grounded_exact`,
+  `grounded_via_pattern` and every pre-existing constituent key; graph mean
+  0.770; totals 440 exact / 75 via pattern.
+- GC5 **FIRED**, and is now a test
+  (`tests/test_decompose_channels.py`): the five channel counts sum to the
+  grounded numerator for every one of the 219 emitted entries. (The
+  prediction said 221, the node count; two nodes have no non-trivial
+  constituent at all and emit no entry, as before the split.)
+
+Two unpredicted results, recorded because they were not predicted:
+
+- The `recursive` channel is empty across the whole graph (0.000 everywhere).
+  The four self-referential definitions kept non-empty denominators after the
+  v2 exclusion, so nothing lands in it. `temporal.recurrence.until_unfolding`
+  in particular grades 1.000 with all three surviving constituents in
+  `pattern_absorption`: v2 moved it off 0.000 entirely by slot absorption, a
+  fact the aggregate could not show.
+- 62 of the graph's 75 pattern-absorption constituents absorb a pattern owned
+  outside the absorbing statement's discipline. Absorption is where
+  external-looking credit concentrates graph-wide, not a provability quirk.
 """
 
 from __future__ import annotations
@@ -124,33 +225,83 @@ def defined_head(t: tuple) -> tuple | None:
     return None
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--data-dir", type=Path, default=Path("data"))
-    ap.add_argument("--min-family", type=int, default=2,
-                    help="a subterm family counts if it recurs in >= this many statements")
-    ap.add_argument("--max-pattern-attempts", type=int, default=250,
-                    help="cap on known forms tried as patterns per constituent")
-    ap.add_argument("--no-pattern-membership", action="store_true",
-                    help="disable v2 pattern matching (exact skeleton lookup only)")
-    ap.add_argument("--write-report", type=Path, default=None)
-    args = ap.parse_args()
+# The provenance channels, in attribution precedence order: a constituent
+# supported by several statements is credited to the most independent owner
+# it has, so a low `external` share cannot be an artifact of a strict tie-break.
+OWNER_CHANNELS = ("external", "prior_corpus", "same_corpus", "recursive")
+CHANNELS = OWNER_CHANNELS + ("pattern_absorption",)
 
-    nodes, _ = load_nodes(args.data_dir)
+# Thresholds for the `self_certifying` readout: a corpus that grades near the
+# top of the scale while nearly none of the credit comes from outside its own
+# authoring act. Chosen to bracket the recorded regression case (provability,
+# aggregate 1.000 / independent 0.033) without catching the two other corpora
+# at aggregate >= 0.9, whose credit is external; the discrimination is
+# asserted in tests/test_decompose_channels.py rather than assumed.
+SELF_CERTIFYING_AGGREGATE = 0.9
+SELF_CERTIFYING_INDEPENDENT = 0.1
 
-    # Rebuild trees + slot classes (load_nodes keeps only skeleton strings).
+
+def owner_channel(sid: str, owner: str, corpus_of: dict[str, str],
+                  disciplines_of: dict[str, frozenset]) -> str:
+    """Which channel does `owner`'s support of `sid` belong to?
+
+    Corpus identity, not directory name, is the authoring unit: a corpus is
+    seeded in one act, so sibling nodes are "added together" by construction.
+    Discipline membership is read per node (`theory_context.disciplines`), not
+    per corpus, because nodes claim more disciplines than their corpus header
+    does and an umbrella label like `mathematics` is exactly the kind of shared
+    ground that must not be counted as external evidence.
+    """
+    if owner == sid:
+        return "recursive"
+    if corpus_of.get(owner) == corpus_of.get(sid):
+        return "same_corpus"
+    if disciplines_of.get(owner, frozenset()) & disciplines_of.get(sid, frozenset()):
+        return "prior_corpus"
+    return "external"
+
+
+def best_channel(channels) -> str:
+    for ch in OWNER_CHANNELS:
+        if ch in channels:
+            return ch
+    return "recursive"
+
+
+def load_trees(data_dir: Path):
+    """Rebuild trees + slot classes + provenance index.
+
+    `load_nodes` keeps only skeleton strings and the corpus-level discipline,
+    so the corpus files are re-read here for the canonical trees and for the
+    per-node provenance the channel split needs.
+    """
     trees: dict[str, tuple] = {}
     classes: dict[str, dict[str, str]] = {}
-    for corpus_path in sorted(args.data_dir.glob("*/nodes.json")):
+    corpus_of: dict[str, str] = {}
+    disciplines_of: dict[str, frozenset] = {}
+    for corpus_path in sorted(data_dir.glob("*/nodes.json")):
         corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+        corpus_id = corpus.get("corpus_id", corpus_path.parent.name)
+        corpus_discipline = corpus.get("discipline", corpus_path.parent.name)
         for nj in corpus.get("statement_nodes", []):
             sid = nj.get("statement_id")
+            corpus_of[sid] = corpus_id
+            declared = nj.get("theory_context", {}).get("disciplines", [])
+            disciplines_of[sid] = frozenset(declared or [corpus_discipline])
             tmpl = nj.get("structural_signature", {}).get("anonymized_template", "")
             try:
                 trees[sid] = canonicalize(Parser(tokenize(tmpl)).parse())
             except TemplateParseError:
                 continue
             classes[sid] = slot_classes(nj)
+    return trees, classes, corpus_of, disciplines_of
+
+
+def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250,
+            pattern_membership: bool = True) -> dict:
+    """Decompose every statement and attribute its grounding to channels."""
+    nodes, _ = load_nodes(data_dir)
+    trees, classes, corpus_of, disciplines_of = load_trees(data_dir)
 
     # Form inventory 1: expression-side skeletons of whole statements.
     # `form_rep` keeps one concrete (tree, slot_class) witness per skeleton so
@@ -195,7 +346,7 @@ def main() -> int:
         """The v1 grounding test, reused to keep patterns to *known* forms."""
         if set(side_forms.get(skel, ())) - {exclude}:
             return True
-        return len(subterm_hosts.get(skel, set())) >= args.min_family
+        return len(subterm_hosts.get(skel, set())) >= min_family
 
     def pattern_cover(sub: tuple, own_skel: str, sid: str) -> tuple | None:
         """Find a known form that covers `sub` when read as a pattern.
@@ -219,7 +370,7 @@ def main() -> int:
           credited with grounding `?0:P * D⟨?1:V⟩` by letting a factor
           disappear, where the honest citation is the plain product form.
         """
-        budget = args.max_pattern_attempts
+        budget = max_pattern_attempts
         limit = op_count(sub)
         for pop, skel, tree, cls, owners in forms_by_head.get(head_of(sub), ()):
             if budget <= 0:
@@ -236,6 +387,14 @@ def main() -> int:
                 return skel, sorted(owners - {sid})
         return None
 
+    def channel_of(sid: str, owners) -> tuple[str, dict[str, int]]:
+        """Attribute a grounded constituent to one channel, generously."""
+        tally: dict[str, int] = {}
+        for owner in owners:
+            ch = owner_channel(sid, owner, corpus_of, disciplines_of)
+            tally[ch] = tally.get(ch, 0) + 1
+        return best_channel(tally), tally
+
     decompositions = []
     for n in nodes:
         t = trees.get(n.statement_id)
@@ -247,6 +406,7 @@ def main() -> int:
         n_exact = 0
         n_pattern = 0
         n_self = 0
+        channels = dict.fromkeys(CHANNELS, 0)
         self_head = defined_head(t)
         atomic = not any(path for path, _ in subterms(t))
         for path, sub in subterms(t):
@@ -266,26 +426,53 @@ def main() -> int:
             named = sorted(set(side_forms.get(skel, [])) - {n.statement_id})
             hosts = subterm_hosts.get(skel, set())
             n_considered += 1
-            if named or len(hosts) >= args.min_family:
+            if named or len(hosts) >= min_family:
                 n_exact += 1
-                constituents.append({
+                owners = (set(named) | hosts) - {n.statement_id}
+                ch, tally = channel_of(n.statement_id, owners)
+                channels[ch] += 1
+                entry_c = {
                     "path": list(path),
                     "skeleton": skel,
                     "grounded_via": "exact",
+                    "channel": ch,
+                    "owner_channels": {k: tally[k] for k in CHANNELS if k in tally},
                     "instance_of_statements": named[:8],
                     "recurs_in_n_statements": len(hosts),
-                })
+                }
+                if ch == "prior_corpus":
+                    # Name the label that made it prior rather than external, so
+                    # an umbrella discipline cannot launder cross-corpus credit
+                    # invisibly.
+                    shared = set()
+                    for owner in owners:
+                        if owner_channel(n.statement_id, owner, corpus_of,
+                                         disciplines_of) == "prior_corpus":
+                            shared |= (disciplines_of[owner]
+                                       & disciplines_of[n.statement_id])
+                    entry_c["shared_disciplines"] = sorted(shared)
+                constituents.append(entry_c)
                 continue
-            cover = None if args.no_pattern_membership else pattern_cover(
+            cover = None if not pattern_membership else pattern_cover(
                 sub, skel, n.statement_id)
             if cover is None:
                 continue
             n_pattern += 1
             pat_skel, pat_owners = cover
+            channels["pattern_absorption"] += 1
+            # The channel this credit would have claimed if slot absorption
+            # were counted as ordinary grounding — the provenance the aggregate
+            # hid. Reported, never added to an owner channel.
+            absorbed_ch, absorbed_tally = channel_of(n.statement_id, pat_owners)
             constituents.append({
                 "path": list(path),
                 "skeleton": skel,
                 "grounded_via": "pattern",
+                "channel": "pattern_absorption",
+                "absorbed_from_channel": absorbed_ch,
+                "absorbed_owner_channels": {k: absorbed_tally[k]
+                                            for k in CHANNELS
+                                            if k in absorbed_tally},
                 "instance_of_pattern": pat_skel,
                 "pattern_known_from": pat_owners[:8],
                 "pattern_recurs_in_n_statements": len(pat_owners),
@@ -297,13 +484,27 @@ def main() -> int:
         n_grounded = n_exact + n_pattern
         score = round(n_grounded / n_considered, 3) if n_considered else 1.0
         if constituents or n_considered or n_self:
+            # Channel shares partition the score over the unchanged
+            # denominator. A statement with an empty denominator scored 1.0
+            # only because every constituent was definitional (v2's self-headed
+            # exclusion), so the whole share is recursive — the aggregate said
+            # "perfectly grounded" where the channel says "grounded in itself".
+            if n_considered:
+                shares = {ch: channels[ch] / n_considered for ch in CHANNELS}
+            else:
+                shares = dict.fromkeys(CHANNELS, 0.0)
+                shares["recursive"] = 1.0
             entry = {
                 "statement_id": n.statement_id,
+                "corpus_id": corpus_of.get(n.statement_id, "<unknown>"),
+                "discipline": n.discipline,
                 "template": n.template,
                 "groundedness": score,
                 "considered": n_considered,
                 "grounded_exact": n_exact,
                 "grounded_via_pattern": n_pattern,
+                "channels": dict(channels),
+                "channel_scores": {ch: round(shares[ch], 3) for ch in CHANNELS},
                 "constituents": constituents,
             }
             if self_head is not None:
@@ -312,6 +513,67 @@ def main() -> int:
                 entry["self_headed_constituents_excluded"] = n_self
             decompositions.append(entry)
 
+    return {
+        "decompositions": decompositions,
+        "channel_summary": channel_summary(decompositions),
+        "n_nodes": len(nodes),
+    }
+
+
+def channel_shares(entry: dict) -> dict[str, float]:
+    """Unrounded channel shares of one statement's groundedness.
+
+    Sums to `groundedness` exactly (the rounded `channel_scores` in the report
+    need not, which is why the rollup and the partition test use this).
+    """
+    considered = entry["considered"]
+    if not considered:
+        return {ch: (1.0 if ch == "recursive" else 0.0) for ch in CHANNELS}
+    return {ch: entry["channels"][ch] / considered for ch in CHANNELS}
+
+
+def channel_summary(decompositions: list[dict]) -> dict:
+    """Per-corpus and whole-graph channel means.
+
+    `self_certifying` flags the shape ROADMAP-v0.7 item 10 exists to expose:
+    a corpus that grades near-perfect while almost none of the credit comes
+    from outside its own authoring act. It is a reporting flag, not a gate —
+    nothing consumes it yet, and the provability corpus is its regression case.
+    """
+    by_corpus: dict[str, list[dict]] = defaultdict(list)
+    for d in decompositions:
+        by_corpus[d["corpus_id"]].append(d)
+
+    def block(entries: list[dict], discipline: str | None = None) -> dict:
+        n = len(entries)
+        shares = [channel_shares(e) for e in entries]
+        means = {ch: (sum(s[ch] for s in shares) / n if n else 0.0)
+                 for ch in CHANNELS}
+        counts = {ch: sum(e["channels"][ch] for e in entries) for ch in CHANNELS}
+        mean_g = sum(e["groundedness"] for e in entries) / n if n else 0.0
+        independent = means["external"] + means["prior_corpus"]
+        blk = {
+            "statements": n,
+            "mean_groundedness": round(mean_g, 3),
+            "channel_means": {ch: round(means[ch], 3) for ch in CHANNELS},
+            "channel_constituents": counts,
+            "independent_mean": round(independent, 3),
+            "same_corpus_dominant": means["same_corpus"] > independent,
+            "self_certifying": (mean_g >= SELF_CERTIFYING_AGGREGATE
+                                and independent <= SELF_CERTIFYING_INDEPENDENT),
+        }
+        if discipline is not None:
+            blk["discipline"] = discipline
+        return blk
+
+    corpora = {cid: block(entries, entries[0]["discipline"])
+               for cid, entries in sorted(by_corpus.items())}
+    return {"graph": block(decompositions), "corpora": corpora}
+
+
+def report(result: dict, write_report: Path | None = None) -> None:
+    decompositions = result["decompositions"]
+    summary = result["channel_summary"]
     n_with = sum(1 for d in decompositions if d["constituents"])
     n_named = sum(1 for d in decompositions
                   if any(c.get("instance_of_statements")
@@ -319,7 +581,7 @@ def main() -> int:
     scores = [d["groundedness"] for d in decompositions]
     mean_score = sum(scores) / len(scores) if scores else 0.0
     lowest = sorted(decompositions, key=lambda d: d["groundedness"])[:3]
-    print(f"{n_with} of {len(nodes)} statements decompose into known forms; "
+    print(f"{n_with} of {result['n_nodes']} statements decompose into known forms; "
           f"{n_named} contain a constituent that IS another statement's "
           f"expression side.")
     print("Corpus mean groundedness: "
@@ -373,12 +635,72 @@ def main() -> int:
                   f": {known})")
         print()
 
-    if args.write_report:
-        args.write_report.parent.mkdir(parents=True, exist_ok=True)
-        args.write_report.write_text(json.dumps(
-            {"decompositions": decompositions}, indent=2, ensure_ascii=False)
+    # The v3 readout: where the score came from. The aggregate answers "how
+    # much of this statement is made of known forms"; the channels answer
+    # "known to whom" — and a corpus can only certify itself in the
+    # same_corpus, recursive and pattern_absorption columns.
+    print("## Groundedness by channel (mean share of each statement's score)")
+    header = (f"  {'corpus':46s} {'n':>3s} {'aggr':>6s} {'extern':>7s} "
+              f"{'prior':>7s} {'same':>7s} {'recurs':>7s} {'pattern':>7s}")
+    print(header)
+    print("  " + "-" * (len(header) - 2))
+    rows = sorted(summary["corpora"].items(),
+                  key=lambda kv: (kv[1]["independent_mean"], kv[0]))
+    for cid, blk in rows:
+        m = blk["channel_means"]
+        flag = "  <- self-certifying" if blk["self_certifying"] else ""
+        print(f"  {cid:46s} {blk['statements']:3d} "
+              f"{blk['mean_groundedness']:6.3f} {m['external']:7.3f} "
+              f"{m['prior_corpus']:7.3f} {m['same_corpus']:7.3f} "
+              f"{m['recursive']:7.3f} {m['pattern_absorption']:7.3f}{flag}")
+    g = summary["graph"]
+    gm = g["channel_means"]
+    print(f"  {'GRAPH':46s} {g['statements']:3d} {g['mean_groundedness']:6.3f} "
+          f"{gm['external']:7.3f} {gm['prior_corpus']:7.3f} "
+          f"{gm['same_corpus']:7.3f} {gm['recursive']:7.3f} "
+          f"{gm['pattern_absorption']:7.3f}")
+    flagged = [cid for cid, blk in summary["corpora"].items()
+               if blk["self_certifying"]]
+    print(f"  Self-certifying corpora (aggregate >= 0.9 while external + "
+          f"prior_corpus <= 0.1): {', '.join(flagged) if flagged else 'none'}")
+    dominant = [cid for cid, blk in summary["corpora"].items()
+                if blk["same_corpus_dominant"]]
+    print(f"  Same-corpus-dominant corpora (same_corpus mean above external + "
+          f"prior_corpus): {', '.join(dominant) if dominant else 'none'}")
+    absorbed_external = sum(
+        1 for d in decompositions for c in d["constituents"]
+        if c["channel"] == "pattern_absorption"
+        and c["absorbed_from_channel"] == "external")
+    print(f"  Pattern-absorption constituents whose absorbed pattern is owned "
+          f"outside the discipline: {absorbed_external} of "
+          f"{g['channel_constituents']['pattern_absorption']} — credit the "
+          f"aggregate reported as ordinary grounding.")
+    print()
+
+    if write_report:
+        write_report.parent.mkdir(parents=True, exist_ok=True)
+        write_report.write_text(json.dumps(
+            {"decompositions": decompositions,
+             "channel_summary": summary}, indent=2, ensure_ascii=False)
             + "\n", encoding="utf-8")
-        print(f"Report written to {args.write_report}")
+        print(f"Report written to {write_report}")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--data-dir", type=Path, default=Path("data"))
+    ap.add_argument("--min-family", type=int, default=2,
+                    help="a subterm family counts if it recurs in >= this many statements")
+    ap.add_argument("--max-pattern-attempts", type=int, default=250,
+                    help="cap on known forms tried as patterns per constituent")
+    ap.add_argument("--no-pattern-membership", action="store_true",
+                    help="disable v2 pattern matching (exact skeleton lookup only)")
+    ap.add_argument("--write-report", type=Path, default=None)
+    args = ap.parse_args()
+    result = analyze(args.data_dir, min_family=args.min_family,
+                     max_pattern_attempts=args.max_pattern_attempts,
+                     pattern_membership=not args.no_pattern_membership)
+    report(result, args.write_report)
     return 0
 
 
