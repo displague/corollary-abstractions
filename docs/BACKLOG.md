@@ -2387,3 +2387,24 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   declared commutative, and is the head `data/logic` uses for conjunction, so
   the ingested forms would twin the Boolean corpora for free. The second is
   cheaper and strictly better.
+
+## Proof-correspondence input digests hash raw working-tree bytes (newline-fragile)
+
+`check_corpus` records each named input's SHA-256 over the bytes it reads from
+the working tree, and `test_committed_report_is_regenerable_from_digest_named_inputs`
+compares that against the committed `reports/proof_correspondence.json`. Raw
+working-tree bytes are checkout-dependent: on Windows `core.autocrlf` smudges an
+LF blob to CRLF on disk, so an LF-committed input digests differently than the
+committed report expects. This surfaced at the v0.7 release on
+`prover/proof-artifact-manifest.json` (the one hashed input committed as LF
+while its siblings are CRLF) and was closed for the release by pinning that file
+to `eol=lf` in `.gitattributes`, so every checkout materializes it the way the
+report and every non-Windows run already see it.
+
+The pin fixes the concrete break; the general shape is still fragile — a future
+LF-blob input under `data/`, `prover/`, or the artifact set would reintroduce
+it. The durable fix is to digest **canonical Git content** (line-ending
+normalized, or read via `git cat-file`) rather than raw working-tree bytes, the
+same move the depth source manifest already made ("binds mixed runtime bytes to
+canonical Git content", DISCOVERIES). Deferred: it is trust-boundary code and
+wants its own adversarial review, not a release-eve change.
