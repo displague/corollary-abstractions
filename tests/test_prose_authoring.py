@@ -6,6 +6,13 @@ teeth (P-PR2), the pointer beats the exact template on lexical variety with both
 at ceiling fidelity (P-PR3), facts survive a serialize/restart byte-stable
 (P-PR4), an unrenderable fact degrades to ASK not a guess (P-PR5), and nothing
 is invented (P-PR6).
+
+The moved-fact control is a CLOSURE check (``prose.faithfulness``). Independent
+adversarial review found the earlier presence check unsound: it certified four
+fact-moving renderers as faithful. Those four — added premise, right-value/
+wrong-owner, negation, dropped beat — are pinned here as regression cases that
+must all be CAUGHT, alongside a proof that the gate ignores self-attested
+provenance.
 """
 
 from __future__ import annotations
@@ -37,9 +44,20 @@ from prose import (  # noqa: E402
     is_faithful,
     measure,
 )
+from prose import _beats_present  # noqa: E402
 from session_keys import SessionKeyRing  # noqa: E402
 
 SEEDS = tuple(range(50))
+
+# A faithful body assembled only from approved segments, reused to build the
+# review's four fact-moving adversaries by appending/replacing ONE segment.
+_BODY = (
+    "The golden chicken wanted to sing the sunrise awake. "
+    "A fallen feather rested by the nest. "
+    "But the locked coop door stood in the way. "
+    "It used a fallen feather as a key, and sang until the sun rose."
+)
+_FAITHFUL = _BODY + " Now the golden chicken laid copper eggs."
 
 
 def _bound_session(owner: str = "alice", color: str = "copper", ring=None):
@@ -53,14 +71,53 @@ def _accepted(session) -> frozenset[Fact]:
     return accepted_facts(session.story_state, color)
 
 
+def _as_render(text: str, accepted: frozenset[Fact], arm: str) -> Rendered:
+    # provenance is set EQUAL to the accepted set on purpose: an adversary that
+    # lies in provenance must still be caught by the surface-only closure gate.
+    return Rendered(text, accepted, arm, 0)
+
+
+def _adversaries(accepted: frozenset[Fact]) -> dict[str, Rendered]:
+    """The review's four fact-moving renderers, each built to look faithful to a
+    presence check (accepted anchors present, provenance == accepted)."""
+
+    return {
+        "added-premise": _as_render(
+            _FAITHFUL
+            + " The golden chicken was a thief who had poisoned the farmer's well.",
+            accepted,
+            "adversary-added-premise",
+        ),
+        "wrong-owner": _as_render(
+            _BODY
+            + " The neighbour's grey duck, not the golden chicken, laid the copper eggs.",
+            accepted,
+            "adversary-wrong-owner",
+        ),
+        "negation": _as_render(
+            _BODY + " It did not really lay copper eggs at all; that was a lie.",
+            accepted,
+            "adversary-negation",
+        ),
+        # Drops the complication beat entirely (keeps only approved segments);
+        # closure must catch the uncovered obstacle fact.
+        "dropped-beat": _as_render(
+            "The golden chicken wanted to sing the sunrise awake. "
+            "A fallen feather rested by the nest. "
+            "It used a fallen feather as a key, and sang until the sun rose. "
+            "Now the golden chicken laid copper eggs.",
+            accepted,
+            "adversary-dropped-beat",
+        ),
+    }
+
+
 class AcceptedFactsTests(unittest.TestCase):
     def test_facts_are_the_story_beats_plus_the_signed_binding(self) -> None:
         session = _bound_session(color="copper")
         facts = _accepted(session)
-        kinds = {f.kind for f in facts}
-        # Every accepted beat/binding, nothing else.
         self.assertEqual(
-            kinds,
+            {f.kind for f in facts},
             {
                 "agent",
                 "trait",
@@ -72,8 +129,21 @@ class AcceptedFactsTests(unittest.TestCase):
                 "egg_color",
             },
         )
-        color_fact = next(f for f in facts if f.kind == "egg_color")
-        self.assertEqual(color_fact.value, "copper")
+        self.assertEqual(
+            next(f for f in facts if f.kind == "egg_color").value, "copper"
+        )
+
+    def test_anchors_are_derived_from_the_story_not_hardcoded(self) -> None:
+        facts = _accepted(_bound_session(color="copper"))
+        # Anchors come from significant_tokens() over the real story values.
+        self.assertEqual(
+            next(f for f in facts if f.kind == "obstacle").anchors,
+            ("locked", "coop", "door"),
+        )
+        self.assertEqual(
+            next(f for f in facts if f.kind == "outcome").anchors,
+            ("sang", "sun", "rose"),
+        )
 
 
 class SurfaceVariesFactsInvariantTests(unittest.TestCase):
@@ -83,13 +153,9 @@ class SurfaceVariesFactsInvariantTests(unittest.TestCase):
         accepted = _accepted(_bound_session(color="copper"))
         pointer = SurfacePointerRenderer()
         renders = [pointer.render(accepted, s) for s in SEEDS]
-
-        # Facts byte-invariant across every seed.
         for r in renders:
             self.assertEqual(r.provenance, accepted)
-        # Surface genuinely varies: the vast majority of seeds are distinct.
-        distinct = {r.text for r in renders}
-        self.assertGreaterEqual(len(distinct), 40)
+        self.assertGreaterEqual(len({r.text for r in renders}), 40)
 
     def test_render_is_deterministic_for_a_seed(self) -> None:
         accepted = _accepted(_bound_session(color="copper"))
@@ -100,7 +166,7 @@ class SurfaceVariesFactsInvariantTests(unittest.TestCase):
 
 
 class MovedFactControlTests(unittest.TestCase):
-    """P-PR2: faithful renders pass; adversaries that move a fact are caught."""
+    """P-PR2: faithful renders pass; every fact-moving adversary is caught."""
 
     def test_faithful_renders_pass_for_both_arms(self) -> None:
         accepted = _accepted(_bound_session(color="copper"))
@@ -108,23 +174,77 @@ class MovedFactControlTests(unittest.TestCase):
             for s in SEEDS:
                 self.assertTrue(is_faithful(renderer.render(accepted, s), accepted))
 
-    def test_moved_fact_control_catches_the_adversaries(self) -> None:
+    def test_closure_gate_ignores_self_attested_provenance(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        # Honest surface, EMPTY provenance -> still faithful (gate reads surface).
+        faithful_lie = Rendered(_FAITHFUL, frozenset(), "surface-pointer", 0)
+        self.assertTrue(is_faithful(faithful_lie, accepted))
+        # Adversarial surface, provenance == accepted -> still caught.
+        adversary = _as_render(
+            _FAITHFUL + " A dragon then ate the farmer.", accepted, "x"
+        )
+        self.assertFalse(is_faithful(adversary, accepted))
+
+    def test_moved_fact_control_catches_the_renderer_adversaries(self) -> None:
         accepted = _accepted(_bound_session(color="copper"))
 
         moved = MovedColorRenderer("silver").render(accepted, 3)
         reasons = faithfulness(moved, accepted)
-        self.assertTrue(reasons)
         self.assertFalse(is_faithful(moved, accepted))
-        self.assertTrue(any("egg_color" in r or "egg color" in r for r in reasons))
-        # The honest color genuinely left the surface.
+        self.assertTrue(any("silver" in r for r in reasons))
         self.assertNotIn("copper", moved.text.lower())
 
         deus = DeusRenderer().render(accepted, 3)
         deus_reasons = faithfulness(deus, accepted)
-        self.assertTrue(deus_reasons)
         self.assertFalse(is_faithful(deus, accepted))
-        self.assertTrue(any("feather" in r for r in deus_reasons))
-        self.assertNotIn("feather", deus.text.lower())
+        self.assertTrue(any("magic key" in r or "planted" in r for r in deus_reasons))
+
+    def test_review_four_adversaries_are_all_caught(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        # Sanity: the faithful skeleton the adversaries are built from passes.
+        self.assertTrue(is_faithful(_as_render(_FAITHFUL, accepted, "x"), accepted))
+
+        for name, adversary in _adversaries(accepted).items():
+            with self.subTest(adversary=name):
+                reasons = faithfulness(adversary, accepted)
+                self.assertTrue(reasons, f"{name} was NOT caught")
+                self.assertFalse(is_faithful(adversary, accepted))
+
+        # Each one fails closure for the RIGHT reason.
+        adv = _adversaries(accepted)
+        self.assertTrue(
+            any("thief" in r for r in faithfulness(adv["added-premise"], accepted))
+        )
+        self.assertTrue(
+            any("duck" in r for r in faithfulness(adv["wrong-owner"], accepted))
+        )
+        self.assertTrue(
+            any("lie" in r or "did not" in r for r in faithfulness(adv["negation"], accepted))
+        )
+        # Dropped beat: caught by uncovered coverage, not an unapproved segment.
+        self.assertTrue(
+            any("obstacle" in r for r in faithfulness(adv["dropped-beat"], accepted))
+        )
+
+
+class BeatDetectionTests(unittest.TestCase):
+    """The complication beat needs the obstruction relation, not scenery."""
+
+    def test_scenery_obstacle_word_is_not_a_covered_complication(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        scenery = (
+            "The golden chicken wanted to sing the sunrise awake. "
+            "A fallen feather rested by the coop. "
+            "It used a fallen feather as a key, and sang until the sun rose. "
+            "Now the golden chicken laid copper eggs."
+        )
+        beats = _beats_present(scenery, accepted)
+        self.assertFalse(beats["complication"])  # 'coop' present, no obstruction
+
+    def test_real_complication_is_covered(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        beats = _beats_present(_FAITHFUL, accepted)
+        self.assertTrue(beats["complication"])
 
 
 class TwoArmMetricTests(unittest.TestCase):
@@ -138,17 +258,14 @@ class TwoArmMetricTests(unittest.TestCase):
         pm = measure(tuple(pointer.render(accepted, s) for s in SEEDS), accepted)
         tm = measure(tuple(template.render(accepted, s) for s in SEEDS), accepted)
 
-        # Fidelity axes at ceiling for BOTH arms.
         for m in (pm, tm):
             self.assertEqual(m.premise_preservation, 1.0)
             self.assertEqual(m.required_beat_coverage, 1.0)
             self.assertEqual(m.temporal_consistency, 1.0)
             self.assertIsNone(m.human_preference)  # deferred, not faked
 
-        # Lexical variety strictly higher for the pointer, on two measures.
         self.assertGreater(pm.distinct_surface_ratio, tm.distinct_surface_ratio)
         self.assertGreater(pm.mean_pairwise_jaccard, tm.mean_pairwise_jaccard)
-        # And the template arm is genuinely low-variety (bounded by templates).
         self.assertLessEqual(tm.distinct_surface_ratio, 0.1)
         self.assertGreaterEqual(pm.distinct_surface_ratio, 0.9)
 
@@ -171,23 +288,19 @@ class SerializeRestartTests(unittest.TestCase):
             session_file = workdir / "alice.session.json"
             alice.save(session_file)
 
-            # Restart: drop every in-process authority, reload from the ring.
             del alice, ring
             reloaded = SessionKeyRing.open(keyfile)
             alice2, report = ConversationSession.restore(session_file, reloaded)
             self.assertEqual(len(report.refused), 0)
 
             accepted_post = _accepted(alice2)
-            # The fact set the prose preserves is byte-identical across restart.
             self.assertEqual(accepted_post, accepted_pre)
-            # Same seed reproduces the surface; a new seed varies it.
             self.assertEqual(
                 pointer.render(accepted_post, 5).text, rendered_pre.text
             )
             self.assertNotEqual(
                 pointer.render(accepted_post, 9).text, rendered_pre.text
             )
-            # Revisable after restart: a new binding moves the color fact only.
             alice2.say("actually, make them gold")
             accepted_revised = _accepted(alice2)
             self.assertEqual(
@@ -211,10 +324,8 @@ class AskNotGuessTests(unittest.TestCase):
         self.assertIsInstance(result, ProseAsk)
         self.assertEqual(result.slot, "egg_color")
         self.assertTrue(result.prompt)
-        # No fact was fabricated to fill the prose.
         self.assertIsNone(session.verifier.binding_value(session.state, "egg_color"))
 
-        # Answering the very question the author asked lets it render.
         reply = session.verifier.reply_action(session.state, "copper")
         session.run_turn((reply,))
         rendered = author_prose(session, pointer, seed=1)
@@ -227,20 +338,16 @@ class AskNotGuessTests(unittest.TestCase):
         result = author_prose(session, pointer, seed=1, require_kind="chicken_name")
         self.assertIsInstance(result, ProseAsk)
         self.assertEqual(result.slot, "chicken_name")
-        # The story never gained a chicken_name fact.
         self.assertFalse(
-            any(f.kind == "chicken_name" for f in _accepted_no_reopen(session))
+            any(
+                f.kind == "chicken_name"
+                for f in accepted_facts(session.story_state, "copper")
+            )
         )
 
 
-def _accepted_no_reopen(session) -> frozenset[Fact]:
-    # The ASK reopened a pending 'chicken_name' slot; read facts off the story
-    # + the still-intact egg_color binding, which the ASK never touched.
-    return accepted_facts(session.story_state, "copper")
-
-
 class NoneInventedTests(unittest.TestCase):
-    """P-PR6: no render across either arm invents a fact."""
+    """P-PR6: no render across either arm invents a fact (closure clean)."""
 
     def test_no_render_invents_a_fact(self) -> None:
         accepted = _accepted(_bound_session(color="copper"))
@@ -248,7 +355,6 @@ class NoneInventedTests(unittest.TestCase):
             for s in SEEDS:
                 r = renderer.render(accepted, s)
                 self.assertEqual(r.provenance, accepted)
-                # faithfulness() folds the foreign-anchor scan; empty == clean.
                 self.assertEqual(faithfulness(r, accepted), ())
 
 

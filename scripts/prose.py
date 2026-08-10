@@ -11,13 +11,32 @@ distinction the roadmap draws is load-bearing and kept here: the pointer may
 vary word choice across renders but may never change, add, or drop an accepted
 fact.
 
-The **accepted facts** are exactly the story's beats (from the oracle-accepted
-:class:`oracle_controller_demo.StoryState`) and the owner's signed egg-color
-binding (from the durable :mod:`conversation` key ring). Nothing is invented and
-nothing is dropped. A render is a surface string *plus* the structured
-``provenance`` fact set it pointed at; the moved-fact control (below) checks the
-provenance is byte-invariant across seeds while the surface genuinely varies,
-and that an adversary who moves a fact is caught.
+The **accepted facts** are exactly the story's beats (projected from the
+oracle-accepted :class:`oracle_controller_demo.StoryState`) and the owner's
+signed egg-color binding (from the durable :mod:`conversation` key ring).
+Nothing is invented and nothing is dropped.
+
+The **moved-fact control is a CLOSURE check, not a presence check.** The
+constrained-pointer architecture makes closure tractable *by construction*: the
+pointer emits only from per-fact surface banks and the exact-template arm from
+whole fixed templates, so a faithful render must TILE completely into approved
+surface segments — each segment an approved variant of specific accepted
+fact(s) — with every accepted fact covered and NO segment outside the approved
+set. Under that check an added premise, a negated fact, a right-value/wrong-owner
+misattribution, and a dropped beat are all caught: the first three introduce a
+segment that matches no approved variant, the last fails coverage. The check
+does **not** trust ``rendered.provenance`` (a frozenset the renderer supplies —
+self-attested, worthless against a lying renderer); it reads the surface. See
+:func:`faithfulness`. This is the earlier presence-check's replacement after
+independent adversarial review found four renderers it wrongly certified.
+
+Scope, stated honestly: the control is COMPLETE for prose authored from the
+approved surface algebra (both shipped arms and any renderer that composes from
+the same banks/templates). A faithful paraphrase *outside* the banks would be
+rejected as unapproved — that is the price of a sound closure check over a
+constrained pointer, and it is the right price for a gate whose job is to prove
+no accepted fact moved. Widening the approved algebra is adding bank rows, in a
+diff, with tests — never loosening the closure.
 
 Two arms, compared on the metrics the roadmap names SEPARATELY (no single
 fluency scalar):
@@ -26,9 +45,7 @@ fluency scalar):
   fixed rotation of elaborate templates over the same facts. High fidelity, low
   lexical variety.
 * :class:`SurfacePointerRenderer` — the "constrained surface pointer": composes
-  prose from per-slot surface banks selected DETERMINISTICALLY by a seed. Every
-  bank variant embeds the fact's lexical anchor, so surface varies
-  combinatorially while the accepted facts never move.
+  prose from per-slot surface banks selected DETERMINISTICALLY by a seed.
 
 Determinism is mandatory (AGENTS.md bans ``random``/``Date.now``/unseeded
 entropy — they break reproducibility): surface selection is a pure function of
@@ -52,6 +69,14 @@ P-PR2 (the moved-fact control has teeth). A faithful render's fact set equals
     a wrong egg color, or a deus-ex resolution that drops the planted feather —
     is CAUGHT by name (provenance mismatch and/or a missing/foreign anchor).
     Test: ``test_moved_fact_control_catches_the_adversaries``.
+    CORRECTION (post-review, appended per AGENTS.md — original kept above):
+    the original mechanism ("provenance mismatch and/or a missing/foreign
+    anchor") was UNSOUND — a presence check that certified four fact-moving
+    renderers (added premise, wrong owner, negation, dropped beat) as faithful.
+    P-PR2 now stands on the CLOSURE control in :func:`faithfulness`: the render
+    must tile entirely into approved surface segments covering exactly the
+    accepted facts. The six adversaries (the two original + the review's four)
+    are each CAUGHT; the adjudicating test now also asserts the four.
 P-PR3 (richer template vs pointer on lexical variety). Both arms score 1.0 on
     premise preservation, required-beat coverage, and temporal consistency, but
     the pointer's lexical variety (distinct-surface ratio, mean pairwise word
@@ -70,6 +95,11 @@ P-PR6 (none invented). No render, across all seeds and both arms, carries a
     content anchor outside the accepted fact set; each render's provenance
     equals the accepted set exactly.
     Test: ``test_no_render_invents_a_fact``.
+    CORRECTION (post-review, appended): the original was scoped only to egg
+    colors (an in-vocabulary foreign color word) and to self-attested
+    provenance. "None invented" now means the CLOSURE property: no surface
+    segment outside the approved set — added/negated/misattributed content of
+    any kind, not only colors, is caught, and provenance is not trusted.
 """
 
 from __future__ import annotations
@@ -77,29 +107,54 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass
-from pathlib import Path
 
 from harness import Need, pending_need
 from oracle_controller_demo import StoryState
-from request_grammar import SLOT_VALUES
 
 
 # --------------------------------------------------------------------------
-# Accepted facts: extracted from structured provenance, never guessed
+# Accepted facts: projected from the accepted story + the owner's binding
 # --------------------------------------------------------------------------
+
+#: Function words dropped when deriving a fact's lexical anchors from its own
+#: value phrase. Small and closed on purpose — anchors are the content tokens a
+#: faithful surface must preserve, so a short curated stop-list beats a stemmer
+#: (a stemmer is a similarity judgement, banned here for the same reason
+#: ``request_grammar`` bans one).
+_STOPWORDS = frozenset(
+    {
+        "the", "and", "for", "was", "who", "not", "did", "into", "with", "its",
+        "that", "this", "from", "then", "now", "had", "has", "out", "use",
+        "used", "until", "but", "yet", "once", "there", "they", "tell", "came",
+        "day", "ever", "after", "beside", "near", "like", "come", "rest",
+    }
+)
+
+
+def significant_tokens(phrase: str) -> tuple[str, ...]:
+    """Content tokens of ``phrase`` (>=3 chars, not a stop-word), order-preserved.
+
+    Derived from the phrase itself, so a fact's anchors are grounded in the
+    accepted story text rather than a hand-picked constant. Deliberately not a
+    stemmer or lemmatiser.
+    """
+
+    seen: list[str] = []
+    for token in re.findall(r"[a-z']+", phrase.lower()):
+        if len(token) >= 3 and token not in _STOPWORDS and token not in seen:
+            seen.append(token)
+    return tuple(seen)
 
 
 @dataclass(frozen=True)
 class Fact:
-    """One accepted fact and the lexical anchor a faithful surface must carry.
+    """One accepted fact, its value, and the anchors a faithful surface carries.
 
-    ``anchors`` are the content tokens that MUST appear (on word boundaries) in
-    any faithful rendering of this fact. They are the invariant the surface may
-    not move: connectives, framing verbs and clause order are free to vary
-    around them, but the anchors themselves are the accepted content. Facts are
-    frozen and hashable so a render's provenance is a plain ``frozenset[Fact]``
-    that supports exact set comparison — which is what makes "no fact moved" a
-    structural check, not a fuzzy one.
+    ``anchors`` are the content tokens that must appear (on word boundaries) in
+    any faithful rendering of this fact. They are used by the premise-anchor and
+    the temporal/beat *metrics*; the authoritative moved-fact gate is the
+    closure check in :func:`faithfulness`, which does not depend on them. Facts
+    are frozen and hashable so a fact set is a plain ``frozenset[Fact]``.
     """
 
     kind: str
@@ -107,25 +162,24 @@ class Fact:
     anchors: tuple[str, ...]
 
 
-#: Colors the egg-color slot knows about (reused from the Phase-2 grammar's
-#: closed vocabulary). Used only NEGATIVELY here — to notice a *foreign* color
-#: an adversary smuggled in — never to author one. ``gold``/``golden`` are
-#: excluded from the foreign-color scan because they legitimately describe the
-#: chicken's plumage, not its eggs.
-_COLOR_VOCAB = frozenset(SLOT_VALUES["egg_color"])
-_PLUMAGE_COLORS = frozenset({"gold", "golden"})
-
-
 def accepted_facts(story: StoryState, egg_color: str) -> frozenset[Fact]:
     """The accepted fact set: the story's beats plus the signed egg color.
 
-    Every fact is read from structured provenance the runtime already trusts —
-    the frame's declarations (affirmed/denied traits), the oracle's desire and
-    beats, the complication beat's obstacle, the temporal obligation ledger
-    (planted/discharged), the resolution beat's element mentions — and the one
-    user-owned value the caller pulled from the verifier-signed binding. This
-    function invents nothing: it is a projection of accepted state onto the
-    anchors a faithful surface must preserve.
+    Every value is projected from structured state the runtime already trusts —
+    the frame's declarations (affirmed trait), the oracle's agent and desire,
+    the complication beat's obstacle, the temporal obligation ledger
+    (planted/discharged, ONE fact per obligation so two obligations never
+    collapse), the resolution beat's outcome clause — and the one user value the
+    caller supplies. Anchors are derived from those values by
+    :func:`significant_tokens`, so the control's ground truth is the real story.
+
+    ``egg_color`` is a bare ``str`` and this function trusts its CALLER to have
+    read it from the verifier-signed binding (e.g.
+    ``verifier.binding_value(state, "egg_color")``); the signing boundary lives
+    in :mod:`conversation`/:mod:`retrieval`, not here. What is genuinely fixed
+    to *this* story — the golden-chicken agent, the sing-the-sunrise desire, the
+    feather/coop beats — is fixed because the accepted StoryState fixes it, and
+    is read from that state rather than hard-coded.
     """
 
     frame = story.frame_state
@@ -135,7 +189,6 @@ def accepted_facts(story: StoryState, egg_color: str) -> frozenset[Fact]:
     if story.desire is None:
         raise ValueError("accepted story has no bound desire to render")
 
-    # Affirmed trait, from the frame's own declarations.
     affirmed = None
     for _, literal in frame.spec.declarations:
         if literal.predicate == "trait" and literal.polarity:
@@ -144,23 +197,23 @@ def accepted_facts(story: StoryState, egg_color: str) -> frozenset[Fact]:
     if affirmed is None:
         raise ValueError("accepted story declares no affirmed trait")
 
-    # Obstacle, from the complication beat ("But <obstacle> stood in the way.").
     obstacle = _complication_obstacle(story)
+    outcome = _resolution_outcome(story)
 
     facts = {
-        Fact("agent", agent, ("golden", "chicken")),
+        Fact("agent", agent, significant_tokens(agent)),
         Fact("trait", affirmed, (affirmed,)),
-        Fact("desire", story.desire, ("sunrise",)),
-        Fact("obstacle", obstacle, ("coop",)),
-        Fact("outcome", "sang the sun awake", ("sun",)),
+        Fact("desire", story.desire, significant_tokens(story.desire)),
+        Fact("obstacle", obstacle, significant_tokens(obstacle)),
+        Fact("outcome", outcome, significant_tokens(outcome)),
         Fact("egg_color", egg_color, (egg_color,)),
     }
-    # Temporal obligations: what was planted, and what was discharged.
     for obligation in frame.obligations:
-        facts.add(Fact("planted", obligation.element, ("feather",)))
+        element = obligation.element
+        facts.add(Fact("planted", element, significant_tokens(element)))
         if not obligation.outstanding:
             facts.add(
-                Fact("discharged", "fallen feather used as key", ("feather", "key"))
+                Fact("discharged", element, significant_tokens(element))
             )
     return frozenset(facts)
 
@@ -174,14 +227,112 @@ def _complication_obstacle(story: StoryState) -> str:
     return "the locked coop door"
 
 
+def _resolution_outcome(story: StoryState) -> str:
+    """The outcome clause of the resolution beat: from 'sang' to the end.
+
+    The accepted resolution reads '...and sang until the sun rose'; the outcome
+    fact is that fulfilment clause, read off the beat so its value/anchors track
+    the real story rather than a constant.
+    """
+
+    for beat in story.beats:
+        if beat.role == "resolution":
+            match = re.search(r"(sang .*?)(?:\.|$)", beat.text)
+            if match:
+                return match.group(1).strip()
+    return "sang until the sun rose"
+
+
 # --------------------------------------------------------------------------
-# A render: surface plus the structured provenance it pointed at
+# Surface banks (the approved algebra both arms and the control share)
+# --------------------------------------------------------------------------
+
+#: Optional framing sentences. They carry NO fact; the empty lead is allowed.
+LEADS: tuple[str, ...] = (
+    "",
+    "Here is how it went. ",
+    "They say it happened like this. ",
+    "The tale runs this way. ",
+)
+#: Verb that joins the agent to the (fixed, story-derived) desire clause.
+DESIRE_VERB: tuple[str, ...] = ("wanted", "longed", "yearned", "wished", "set out")
+#: Feather-plant sentences — every variant embeds the planted element verbatim.
+FEATHER_SETUP: tuple[str, ...] = (
+    "Nearby, a fallen feather gleamed beside its nest.",
+    "Beside its nest lay a fallen feather.",
+    "Close by, a fallen feather caught the light.",
+    "A fallen feather rested by the nest.",
+)
+#: Complication sentences — obstacle plus an obstruction RELATION, never scenery.
+COMPLICATION: tuple[str, ...] = (
+    "But the locked coop door stood in the way.",
+    "Yet the locked coop door barred the way.",
+    "Trouble came: the locked coop door would not open.",
+    "However, the locked coop door held fast.",
+)
+#: Resolution sentences — the feather-as-key discharge plus the fixed,
+#: story-derived outcome clause 'sang until the sun rose'.
+RESOLUTION: tuple[str, ...] = (
+    "It used a fallen feather as a key, and sang until the sun rose.",
+    "It turned the fallen feather into a key, and sang until the sun rose.",
+    "It took the fallen feather for a key, and sang until the sun rose.",
+    "With the fallen feather as a key, it went out and sang until the sun rose.",
+)
+#: Egg-color coda sentences — bind the color to the chicken, the accepted owner.
+CODA: tuple[str, ...] = (
+    "Now the golden chicken laid {color} eggs.",
+    "From then on, the golden chicken's eggs came out {color}.",
+    "And the golden chicken's eggs? {Color}, every one.",
+    "Ever after the golden chicken laid eggs of {color}.",
+)
+
+#: The exact-template arm: whole fixed templates, five sentences each, in the
+#: canonical role order (setup1, feather, complication, resolution, coda).
+TEMPLATES: tuple[str, ...] = (
+    "The golden chicken wanted to sing the sunrise awake. A fallen feather lay "
+    "beside its nest. But the locked coop door stood in the way. It used the "
+    "fallen feather as a key, and sang until the sun rose. Now the golden "
+    "chicken laid {color} eggs.",
+    "There was once a golden chicken who longed to sing the sunrise awake. "
+    "Beside its nest a fallen feather had settled. Yet the locked coop door "
+    "barred the way. Clever as it was, it turned the fallen feather into a key, "
+    "and sang until the sun rose. From that day the golden chicken laid {color} "
+    "eggs.",
+    "They tell of a golden chicken that wished to sing the sunrise awake. A "
+    "fallen feather glinted near its nest. But the locked coop door held fast. "
+    "So it worked the fallen feather like a key, and sang until the sun rose. "
+    "Ever after the golden chicken laid eggs of {color}.",
+)
+
+#: Role -> the accepted fact kinds a segment in that role expresses. Shared by
+#: the renderers and the closure control so both read one source of truth.
+_ROLE_KINDS: dict[str, frozenset[str]] = {
+    "lead": frozenset(),
+    "setup1": frozenset({"agent", "trait", "desire"}),
+    "feather": frozenset({"planted"}),
+    "complication": frozenset({"obstacle"}),
+    "resolution": frozenset({"discharged", "outcome"}),
+    "coda": frozenset({"egg_color"}),
+}
+#: The template roles in sentence order (five sentences per template).
+_TEMPLATE_ROLES: tuple[str, ...] = (
+    "setup1", "feather", "complication", "resolution", "coda"
+)
+
+
+# --------------------------------------------------------------------------
+# A render: surface plus the (untrusted) provenance it declares
 # --------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
 class Rendered:
-    """One authored surface plus the fact set it declares it pointed at."""
+    """One authored surface plus the fact set the renderer *declares* it used.
+
+    ``provenance`` is self-attested and the moved-fact control does NOT trust
+    it; it is kept for reporting and for the P-PR6 provenance-equality assertion
+    on honest renderers, never as the gate.
+    """
 
     text: str
     provenance: frozenset[Fact]
@@ -203,15 +354,21 @@ class ProseAsk:
 
 
 def _seeded_choice(bank: tuple[str, ...], seed: int, salt: str) -> str:
-    """Deterministically pick one bank entry from ``(seed, salt)``.
-
-    A pure function of its inputs (sha256), so a seed reproduces the same render
-    on any machine. No ``random``, no clock — the repo bans both because they
-    make a render irreproducible.
-    """
+    """Deterministically pick one bank entry from ``(seed, salt)`` (sha256)."""
 
     digest = hashlib.sha256(f"{seed}|{salt}".encode("utf-8")).digest()
     return bank[int.from_bytes(digest[:8], "big") % len(bank)]
+
+
+def _fact_value(facts: frozenset[Fact], kind: str) -> str:
+    for fact in facts:
+        if fact.kind == kind:
+            return fact.value
+    raise KeyError(f"no accepted fact of kind {kind!r} to render")
+
+
+def _setup1(agent: str, verb: str, desire: str) -> str:
+    return f"{agent.capitalize()} {verb} {desire}."
 
 
 # --------------------------------------------------------------------------
@@ -222,35 +379,16 @@ def _seeded_choice(bank: tuple[str, ...], seed: int, salt: str) -> str:
 class ExactTemplateRenderer:
     """The "richer exact templates" comparison arm.
 
-    A small fixed rotation of elaborate templates over the same facts. Each
-    template is exact — no seeded variation beyond the substituted color — so
-    the arm's lexical variety is bounded by the number of templates, which is
-    exactly the property the pointer is meant to beat. Fidelity is total: every
-    accepted anchor is present in every template.
+    A small fixed rotation of elaborate whole templates. Fidelity is total;
+    lexical variety is bounded by the number of templates, which is exactly the
+    property the pointer beats.
     """
 
     arm = "exact-template"
 
-    TEMPLATES: tuple[str, ...] = (
-        "The golden chicken wanted to sing the sunrise awake. A fallen feather "
-        "lay beside its nest. But the locked coop door stood in the way. It "
-        "used the fallen feather as a key, went outside, and sang until the sun "
-        "rose. Now the golden chicken laid {color} eggs.",
-        "There was once a golden chicken who longed to sing the sunrise awake. "
-        "Beside its nest a fallen feather had come to rest. Yet the locked coop "
-        "door barred the way. Clever as it was, it turned the fallen feather "
-        "into a key, stepped out into the dark, and sang until the sun rose. "
-        "From that day the golden chicken laid {color} eggs.",
-        "They tell of a golden chicken that wished to sing the sunrise awake. "
-        "A fallen feather glinted near its nest. But the locked coop door held "
-        "fast. So it worked the fallen feather like a key, slipped outside, and "
-        "sang the sun into the sky. Ever after, the golden chicken's eggs came "
-        "out {color}.",
-    )
-
     def render(self, facts: frozenset[Fact], seed: int) -> Rendered:
         color = _fact_value(facts, "egg_color")
-        template = self.TEMPLATES[seed % len(self.TEMPLATES)]
+        template = TEMPLATES[seed % len(TEMPLATES)]
         return Rendered(template.format(color=color), facts, self.arm, seed)
 
 
@@ -260,132 +398,146 @@ class ExactTemplateRenderer:
 
 
 class SurfacePointerRenderer:
-    """Compose prose from per-slot surface banks, points only into accepted facts.
+    """Compose prose from per-slot surface banks; point only into accepted facts.
 
     Each bank varies connectives, framing verbs, clause shape and sentence lead
-    while embedding the slot's fact anchor verbatim, so the surface varies
-    combinatorially (thousands of assemblies) but every accepted anchor is
-    always present and no unaccepted anchor is ever introduced. Selection is a
-    pure function of the seed, so the variety is reproducible, not stochastic.
+    while embedding the fact's content, so the surface varies combinatorially
+    but every render tiles into approved segments. Selection is a pure function
+    of the seed, so the variety is reproducible, not stochastic.
     """
 
     arm = "surface-pointer"
 
-    LEADS: tuple[str, ...] = (
-        "",
-        "Here is how it went. ",
-        "They say it happened like this. ",
-        "The tale runs this way. ",
-    )
-    DESIRE_VERB: tuple[str, ...] = ("wanted", "longed", "yearned", "wished", "set out")
-    DESIRE_TAIL: tuple[str, ...] = (
-        "to sing the sunrise awake",
-        "to sing the sunrise into waking",
-        "to sing up the sunrise",
-    )
-    FEATHER_SETUP: tuple[str, ...] = (
-        "Nearby, a fallen feather gleamed beside its nest.",
-        "Beside its nest lay a fallen feather.",
-        "Close by, a fallen feather caught the light.",
-        "A fallen feather rested by the nest.",
-    )
-    COMPLICATION: tuple[str, ...] = (
-        "But the locked coop door stood in the way.",
-        "Yet the locked coop door barred the way.",
-        "Trouble came: the locked coop door would not open.",
-        "However, the locked coop door held fast.",
-    )
-    RESOLUTION: tuple[str, ...] = (
-        "It used a fallen feather as a key, slipped outside, and sang until the sun rose.",
-        "Cleverly, it turned the fallen feather into a key, stepped out, and sang the sun awake.",
-        "It took the fallen feather, worked it like a key, and sang until the sun climbed the sky.",
-        "With the fallen feather for a key, it went out and sang the sun into the sky.",
-    )
-    CODA: tuple[str, ...] = (
-        "Now the golden chicken laid {color} eggs.",
-        "From then on, its eggs came out {color}.",
-        "And its eggs? {Color}, every one.",
-        "Ever after it laid eggs of {color}.",
-    )
-
     def render(self, facts: frozenset[Fact], seed: int) -> Rendered:
+        agent = _fact_value(facts, "agent")
+        desire = _fact_value(facts, "desire")
         color = _fact_value(facts, "egg_color")
-        lead = _seeded_choice(self.LEADS, seed, "lead")
-        verb = _seeded_choice(self.DESIRE_VERB, seed, "verb")
-        tail = _seeded_choice(self.DESIRE_TAIL, seed, "tail")
-        setup1 = f"The golden chicken {verb} {tail}."
-        setup2 = _seeded_choice(self.FEATHER_SETUP, seed, "feather")
-        complication = _seeded_choice(self.COMPLICATION, seed, "complication")
-        resolution = _seeded_choice(self.RESOLUTION, seed, "resolution")
-        coda = _seeded_choice(self.CODA, seed, "coda").format(
+        lead = _seeded_choice(LEADS, seed, "lead")
+        verb = _seeded_choice(DESIRE_VERB, seed, "verb")
+        setup1 = _setup1(agent, verb, desire)
+        setup2 = _seeded_choice(FEATHER_SETUP, seed, "feather")
+        complication = _seeded_choice(COMPLICATION, seed, "complication")
+        resolution = _seeded_choice(RESOLUTION, seed, "resolution")
+        coda = _seeded_choice(CODA, seed, "coda").format(
             color=color, Color=color.capitalize()
         )
         text = f"{lead}{setup1} {setup2} {complication} {resolution} {coda}"
         return Rendered(text, facts, self.arm, seed)
 
 
-def _fact_value(facts: frozenset[Fact], kind: str) -> str:
-    for fact in facts:
-        if fact.kind == kind:
-            return fact.value
-    raise KeyError(f"no accepted fact of kind {kind!r} to render")
-
-
 # --------------------------------------------------------------------------
-# Faithfulness / the moved-fact control
+# The closure control: the render must tile into approved segments
 # --------------------------------------------------------------------------
 
 
-def _has_word(text: str, token: str) -> bool:
-    return re.search(rf"\b{re.escape(token)}\b", text.lower()) is not None
+def _sentences(text: str) -> tuple[str, ...]:
+    return tuple(m.strip() for m in re.findall(r"[^.?!]+[.?!]", text) if m.strip())
+
+
+def approved_segments(accepted: frozenset[Fact]) -> dict[str, frozenset[str]]:
+    """Every approved surface segment -> the accepted fact kinds it expresses.
+
+    Built from the SAME banks and templates the renderers emit from, plus the
+    story-derived agent/desire/color, so "approved variant of an accepted fact"
+    is defined once. A segment absent from this map is, by definition, content
+    the constrained pointer was never licensed to author.
+    """
+
+    agent = _fact_value(accepted, "agent")
+    desire = _fact_value(accepted, "desire")
+    color = _fact_value(accepted, "egg_color")
+
+    approved: dict[str, frozenset[str]] = {}
+
+    def add(segment: str, role: str) -> None:
+        key = re.sub(r"\s+", " ", segment).strip()
+        if key:
+            approved[key] = approved.get(key, frozenset()) | _ROLE_KINDS[role]
+
+    for lead in LEADS:
+        if lead.strip():
+            add(lead, "lead")
+    for verb in DESIRE_VERB:
+        add(_setup1(agent, verb, desire), "setup1")
+    for segment in FEATHER_SETUP:
+        add(segment, "feather")
+    for segment in COMPLICATION:
+        add(segment, "complication")
+    for segment in RESOLUTION:
+        add(segment, "resolution")
+    for segment in CODA:
+        add(segment.format(color=color, Color=color.capitalize()), "coda")
+    for template in TEMPLATES:
+        for sentence, role in zip(
+            _sentences(template.format(color=color)), _TEMPLATE_ROLES
+        ):
+            add(sentence, role)
+    return approved
+
+
+def _tile(
+    text: str, approved: dict[str, frozenset[str]]
+) -> tuple[frozenset[str], str | None]:
+    """Consume ``text`` as a sequence of approved segments (longest-first).
+
+    Returns the union of covered fact kinds and the first UNAPPROVED remainder
+    (or ``None`` if the whole text tiled). A segment matches only up to a
+    terminal-punctuation boundary and only when the next character is a space or
+    end, so a segment cannot be spliced into a longer word.
+    """
+
+    norm = re.sub(r"\s+", " ", text).strip()
+    segments = sorted(approved, key=len, reverse=True)
+    pos = 0
+    covered: set[str] = set()
+    while pos < len(norm):
+        if norm[pos] == " ":
+            pos += 1
+            continue
+        match = None
+        for segment in segments:
+            end = pos + len(segment)
+            if norm.startswith(segment, pos) and (
+                end == len(norm) or norm[end] == " "
+            ):
+                match = segment
+                break
+        if match is None:
+            return frozenset(covered), norm[pos:]
+        covered |= approved[match]
+        pos += len(match)
+    return frozenset(covered), None
 
 
 def faithfulness(rendered: Rendered, accepted: frozenset[Fact]) -> tuple[str, ...]:
-    """Named reasons a render is UNfaithful; empty tuple means faithful.
+    """Named reasons a render moves a fact; empty tuple means faithful.
 
-    Three independent teeth, any one of which catches a moved fact:
-
-    1. *Provenance* — ``rendered.provenance`` must equal ``accepted`` exactly.
-       A dropped, added or substituted fact shows up here structurally.
-    2. *Premise preservation* — every accepted anchor must be present in the
-       surface, so a render cannot claim a fact in provenance it did not write.
-    3. *None invented* — no foreign egg-color token may appear; a substituted
-       color (still a real color word, just the wrong one) is caught even when
-       the accepted anchor is also somehow present.
+    The authoritative moved-fact gate. It reads the SURFACE (never the
+    self-attested provenance) and proves closure: the prose must tile entirely
+    into approved segments (:func:`approved_segments`) and those segments must
+    cover exactly the accepted fact kinds. An unapproved segment (added premise,
+    negation, misattribution) and an uncovered fact (dropped beat) are each a
+    named failure.
     """
 
+    approved = approved_segments(accepted)
+    accepted_kinds = {fact.kind for fact in accepted}
+    covered, unapproved = _tile(rendered.text, approved)
+
     reasons: list[str] = []
-    if rendered.provenance != accepted:
-        added = rendered.provenance - accepted
-        dropped = accepted - rendered.provenance
-        if added:
-            reasons.append(
-                "provenance adds unaccepted fact(s): "
-                + ", ".join(sorted(f"{f.kind}={f.value}" for f in added))
-            )
-        if dropped:
-            reasons.append(
-                "provenance drops accepted fact(s): "
-                + ", ".join(sorted(f"{f.kind}={f.value}" for f in dropped))
-            )
-    for fact in accepted:
-        missing = [tok for tok in fact.anchors if not _has_word(rendered.text, tok)]
-        if missing:
-            reasons.append(
-                f"surface drops the {fact.kind} anchor(s) {missing} "
-                f"(fact {fact.value!r} is not visible in the prose)"
-            )
-    accepted_color = _fact_value(accepted, "egg_color").lower()
-    foreign = sorted(
-        color
-        for color in _COLOR_VOCAB - _PLUMAGE_COLORS - {accepted_color}
-        if _has_word(rendered.text, color)
-    )
-    if foreign:
+    if unapproved is not None:
         reasons.append(
-            f"surface invents a foreign egg color {foreign} not in the "
-            f"accepted binding ({accepted_color!r})"
+            "prose asserts content outside the accepted surface algebra: "
+            f"{unapproved!r}"
         )
+    missing = accepted_kinds - covered
+    if missing:
+        reasons.append(
+            "prose does not express accepted fact(s): " + ", ".join(sorted(missing))
+        )
+    # ``covered`` can only hold accepted kinds (approved segments are built from
+    # the accepted set), so an "extra kind" is structurally impossible; the
+    # teeth against invention are the unapproved-segment branch above.
     return tuple(reasons)
 
 
@@ -396,10 +548,10 @@ def is_faithful(rendered: Rendered, accepted: frozenset[Fact]) -> bool:
 class MovedColorRenderer(SurfacePointerRenderer):
     """Adversary: renders a DIFFERENT egg color than the signed binding.
 
-    A positive control for the moved-fact invariant — it must be CAUGHT. It
-    substitutes a real (but wrong) color word into both the surface and its
-    provenance, so the invariant has to reject it on premise preservation and on
-    the foreign-color scan and on provenance, not merely notice a shrug.
+    A positive control — it must be CAUGHT. Its coda binds a real but wrong
+    color, which is not an approved coda for the accepted color, so closure
+    rejects it on the coda segment. Its provenance is left EQUAL to the accepted
+    set on purpose, to prove the gate does not lean on provenance.
     """
 
     arm = "adversary-moved-color"
@@ -409,37 +561,24 @@ class MovedColorRenderer(SurfacePointerRenderer):
 
     def render(self, facts: frozenset[Fact], seed: int) -> Rendered:
         honest = _fact_value(facts, "egg_color")
-        moved = frozenset(
-            Fact("egg_color", self.wrong_color, (self.wrong_color,))
-            if f.kind == "egg_color"
-            else f
-            for f in facts
-        )
-        base = super().render(moved, seed)
-        # Re-point the coda at the wrong color; leave the rest as the pointer
-        # wrote it. The honest color must genuinely disappear from the surface.
+        base = super().render(facts, seed)
         text = base.text.replace(honest, self.wrong_color)
-        return Rendered(text, moved, self.arm, seed)
+        return Rendered(text, facts, self.arm, seed)
 
 
 class DeusRenderer(SurfacePointerRenderer):
     """Adversary: a deus-ex resolution that drops the planted fallen feather.
 
-    The story's key comes ONLY from the planted feather (no-deus law). This
-    renderer resolves with a key that fell from the sky and never mentions the
-    feather — moving the planted/discharged facts. Must be CAUGHT: the feather
-    anchor vanishes and the provenance loses the planted/discharged facts.
+    Must be CAUGHT: the feather setup and resolution segments are rewritten to a
+    sky-borne magic key (the no-deus violation the frame itself forbids), so
+    those segments are unapproved and the planted/discharged facts go uncovered.
+    Provenance is again left equal to accepted.
     """
 
     arm = "adversary-deus"
 
     def render(self, facts: frozenset[Fact], seed: int) -> Rendered:
-        stripped = frozenset(
-            f for f in facts if f.kind not in ("planted", "discharged")
-        )
-        base = super().render(stripped, seed)
-        # Rewrite setup and resolution to erase the feather; a magic key
-        # appears from nowhere (exactly the deus ex machina the frame forbids).
+        base = super().render(facts, seed)
         text = re.sub(
             r"(Nearby, |Beside its nest lay |Close by, )?[Aa] fallen feather[^.]*\.",
             "A sudden magic key appeared from the sky.",
@@ -447,12 +586,12 @@ class DeusRenderer(SurfacePointerRenderer):
             count=1,
         )
         text = re.sub(
-            r"(It|Cleverly, it|With)[^.]*?sang",
-            "It took the magic key, went outside, and sang",
+            r"(It|With)[^.]*?sang until the sun rose\.",
+            "It took the magic key, went outside, and sang until the sun rose.",
             text,
             count=1,
         )
-        return Rendered(text, stripped, self.arm, base.seed)
+        return Rendered(text, facts, self.arm, seed)
 
 
 # --------------------------------------------------------------------------
@@ -464,9 +603,8 @@ class DeusRenderer(SurfacePointerRenderer):
 class ProseMetrics:
     """The roadmap's metrics, reported side by side and never collapsed.
 
-    ``human_preference`` is deliberately ``None``: it is out of scope for an
-    automated slice and is flagged deferred rather than faked with a proxy
-    scalar (the roadmap forbids a single fluency number).
+    ``human_preference`` is deliberately ``None``: out of scope for an automated
+    slice and flagged deferred rather than faked with a proxy scalar.
     """
 
     arm: str
@@ -480,30 +618,58 @@ class ProseMetrics:
     human_preference: None = None
 
 
-_BEAT_ANCHORS: tuple[tuple[str, tuple[str, ...]], ...] = (
-    ("setup", ("chicken", "sunrise")),
-    ("complication", ("coop",)),
-    ("resolution", ("key", "sun")),
-    ("coda", ("egg_color",)),  # coda anchor is the accepted color, resolved below
+#: Obstruction RELATIONS that make a complication a complication (not scenery).
+_OBSTRUCTION_MARKERS: tuple[str, ...] = (
+    "stood in the way",
+    "barred the way",
+    "would not open",
+    "held fast",
 )
 
 
-def _beats_present(text: str, color: str) -> dict[str, bool]:
-    present: dict[str, bool] = {}
-    for beat, anchors in _BEAT_ANCHORS:
-        toks = (color,) if beat == "coda" else anchors
-        present[beat] = all(_has_word(text, tok) for tok in toks)
-    return present
+def _has_word(text: str, token: str) -> bool:
+    return re.search(rf"\b{re.escape(token)}\b", text.lower()) is not None
 
 
-def _temporal_ok(text: str, color: str) -> bool:
-    """Beat order and plant-before-discharge, measured over the surface itself.
+def _anchor_of(accepted: frozenset[Fact], kind: str) -> str:
+    """A stable content token for ``kind`` (longest anchor), for the metrics."""
 
-    Positions of first anchor occurrences must satisfy
-    setup < complication < resolution < coda, and the feather (plant) must
-    precede the key (discharge). This reads the rendered string, so it is a
-    measurement, not an assumption about how the renderer assembled it.
+    for fact in accepted:
+        if fact.kind == kind and fact.anchors:
+            return max(fact.anchors, key=len)
+    raise KeyError(kind)
+
+
+def _beats_present(text: str, accepted: frozenset[Fact]) -> dict[str, bool]:
+    """Required-beat coverage, grounded in accepted anchors.
+
+    The complication beat requires the obstacle anchor AND an obstruction
+    relation — a bare scenery mention of the obstacle word does not count (the
+    drop-complication adversary keeps 'coop' as scenery; it must NOT read as a
+    covered complication).
     """
+
+    low = text.lower()
+    setup = _has_word(text, _anchor_of(accepted, "agent")) and _has_word(
+        text, _anchor_of(accepted, "desire")
+    )
+    complication = _has_word(text, _anchor_of(accepted, "obstacle")) and any(
+        marker in low for marker in _OBSTRUCTION_MARKERS
+    )
+    resolution = _has_word(text, "key") and _has_word(
+        text, _anchor_of(accepted, "outcome")
+    )
+    coda = _has_word(text, _fact_value(accepted, "egg_color"))
+    return {
+        "setup": setup,
+        "complication": complication,
+        "resolution": resolution,
+        "coda": coda,
+    }
+
+
+def _temporal_ok(text: str, accepted: frozenset[Fact]) -> bool:
+    """Beat order and plant-before-discharge, measured over the surface itself."""
 
     low = text.lower()
 
@@ -511,18 +677,22 @@ def _temporal_ok(text: str, color: str) -> bool:
         match = re.search(rf"\b{re.escape(token)}\b", low)
         return match.start() if match else -1
 
-    idx = {
-        "chicken": at("chicken"),
-        "coop": at("coop"),
-        "key": at("key"),
-        "color": at(color.lower()),
-        "feather": at("feather"),
-    }
-    if any(v < 0 for k, v in idx.items() if k != "feather"):
+    setup = at(_anchor_of(accepted, "agent"))
+    complication = at(_anchor_of(accepted, "obstacle"))
+    resolution = at("key")
+    coda = at(_fact_value(accepted, "egg_color"))
+    feather = at(_anchor_of(accepted, "planted"))
+    if min(setup, complication, resolution, coda) < 0:
         return False
-    ordered = idx["chicken"] < idx["coop"] < idx["key"] < idx["color"]
-    plant_before_discharge = idx["feather"] < 0 or idx["feather"] < idx["key"]
+    ordered = setup < complication < resolution < coda
+    plant_before_discharge = feather < 0 or feather < resolution
     return ordered and plant_before_discharge
+
+
+def _normalize_surface(text: str) -> str:
+    """Whitespace/case-collapsed surface, so variety is not gamed by spacing."""
+
+    return re.sub(r"\s+", " ", text.strip().lower())
 
 
 def _jaccard(a: set[str], b: set[str]) -> float:
@@ -539,28 +709,25 @@ def measure(
     if not renders:
         raise ValueError("cannot measure an empty batch of renders")
     arm = renders[0].arm
-    color = _fact_value(accepted, "egg_color")
     n = len(renders)
 
     preserved = sum(is_faithful(r, accepted) for r in renders) / n
-    covered = (
-        sum(all(_beats_present(r.text, color).values()) for r in renders) / n
-    )
-    temporal = sum(_temporal_ok(r.text, color) for r in renders) / n
+    covered = sum(all(_beats_present(r.text, accepted).values()) for r in renders) / n
+    temporal = sum(_temporal_ok(r.text, accepted) for r in renders) / n
 
-    texts = [r.text for r in renders]
-    distinct_ratio = len(set(texts)) / n
-    word_sets = [set(re.findall(r"[a-z']+", t.lower())) for t in texts]
+    surfaces = [_normalize_surface(r.text) for r in renders]
+    distinct_ratio = len(set(surfaces)) / n
+    word_sets = [set(re.findall(r"[a-z']+", s)) for s in surfaces]
     ttr = [
-        len(set(re.findall(r"[a-z']+", t.lower())))
-        / max(1, len(re.findall(r"[a-z']+", t.lower())))
-        for t in texts
+        len(set(re.findall(r"[a-z']+", s))) / max(1, len(re.findall(r"[a-z']+", s)))
+        for s in surfaces
     ]
     mean_ttr = sum(ttr) / n
-    distances: list[float] = []
-    for i in range(n):
-        for j in range(i + 1, n):
-            distances.append(1.0 - _jaccard(word_sets[i], word_sets[j]))
+    distances = [
+        1.0 - _jaccard(word_sets[i], word_sets[j])
+        for i in range(n)
+        for j in range(i + 1, n)
+    ]
     mean_jaccard = sum(distances) / len(distances) if distances else 0.0
 
     return ProseMetrics(
@@ -593,9 +760,8 @@ def author_prose(
     binding does not yet exist — or ``require_kind`` names a fact the accepted
     set does not contain — this does NOT invent a value, pick a default, or call
     a model: it opens (or keeps) a verifier-minted ASK and returns a
-    :class:`ProseAsk` carrying that question, exactly as an unbound slot has
-    always cost one question. Only when every requested fact is accepted does it
-    render.
+    :class:`ProseAsk` carrying that question. Only when every requested fact is
+    accepted does it render.
 
     ``session`` is a :class:`conversation.ConversationSession`; the ASK reuses
     its harness Need channel (``state.awaiting``), not a second authority.
@@ -617,7 +783,7 @@ def author_prose(
 def _ask_for(session, slot: str) -> ProseAsk:
     """Degrade to a WAITING ASK on ``slot`` through the harness Need channel."""
 
-    from retrieval import ask_action  # local import: keep module import graph flat
+    from retrieval import ask_action  # local import: keep the import graph flat
 
     if session.state.awaiting is None or session.state.awaiting.slot != slot:
         if session.state.pending is None or session.state.pending.slot != slot:
