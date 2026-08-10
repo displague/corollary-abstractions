@@ -9,10 +9,17 @@ The delivered first cuts (frame ownership, visibility-derived and nested
 belief, physics frames, WordNet bridging, masked-skeleton pretraining, and the
 provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
 
-- **Unify ASK memory with owned frames.** `retrieval.UserBinding` remains
-  session-long and HMAC-attributed while owned `FrameState` has functional-value
-  supersession. Define one explicit lifetime and persistence contract before
-  longer conversations.
+- **Unify ASK memory with owned frames: SHIPPED** (branch
+  `feature/conversation-durable`, v0.7 item 2). `scripts/lifetimes.py` is the
+  one contract: five states (`goal_local`, `session`, `durable`, `superseded`,
+  `expired`) shared by `retrieval.UserBinding` and, through
+  `belief_frame_lifetime`, by owned `FrameState`. The load-bearing split is
+  **declared** versus **effective**: the declared lifetime is chosen once by
+  the trusted return channel and covered by the binding's MAC, while
+  `superseded`/`expired` are recomputed on every read from the private ledgers
+  and the current goal and cannot be declared at all. A stored lifetime would
+  not have been authority — anyone holding the public tuple could rewrite
+  `superseded` back to `session`.
 - **Deepen physical reference frames.** Add executable Galilean boosts,
   acceleration invariance, and rotating-frame terms without asserting that
   shared scope semantics imply template equivalence.
@@ -310,6 +317,64 @@ wall) must not be redirected into sentiment tags mid-experiment.
   unauthenticatable pointable record is worse than a missing one. Filed
   rather than approximated. (v0.7 item 6.)
 
+- **Process-local observation minting will not survive serialization —
+  CONFIRMED and SCOPED OUT of v0.7 item 2.** The prediction was right and the
+  restart shipped anyway, because the two do not collide yet: a session
+  snapshot carries `RetrievalState`, which holds `PointableMaterial` and
+  `RetrievalReceipt`, and a restored receipt still verifies (its MAC is
+  key-ring derived). What does **not** survive is
+  `LocalObservationAdapter.contains_item`, which certifies "this store minted
+  exactly this record in this process". So a restored session can hold an
+  observation-backed pointable whose `POINT` would now be REFUSED —
+  a *stale refusal*, the same failure direction as the pruning item, and not a
+  wrong binding. Not fixed here because the honest repairs are both larger than
+  this item: a signed transaction receipt from the adapter (which needs the
+  adapter to own a key), or re-fetch-on-load (which needs a retention and
+  liveness policy). Concretely blocked on: the mint ledger has no retention
+  rule, so a long-lived durable session would grow it without bound. Probe: save
+  a session whose context came from the TOOL rung, restore it, and `POINT` at
+  the observation. (v0.7 item 6 / a v0.8 item.)
+
+- **Each ledger export invalidates every earlier snapshot.** `save()` issues a
+  strictly increasing sequence from the private counter and `import_ledgers`
+  refuses anything behind the high-water mark, which is what makes replaying an
+  older *genuinely signed* ledger impossible. The price: "write two backups,
+  restore the older one" is not supported, and neither is a backup taken before
+  a later save. The alternative — marking freshness only when a snapshot is
+  *admitted* — was rejected because it leaves a window in which an attacker who
+  restores a stale snapshot before the legitimate owner simply wins. A real fix
+  would need per-snapshot identity rather than a single per-scope counter.
+  (v0.7 item 2, self-review.)
+
+- **Session forking is not prevented, only rollback is.**
+  `SessionKeyRing.admit_sequence` uses `>=`, so two processes may import the
+  same snapshot at the same sequence and diverge into two conversations that
+  each believe they are the one. `==` would have bricked any session that
+  crashed between export and import. Registered in advance as P-DS7's second
+  named weakness. What it would take: an import that also bumps the counter,
+  plus a crash-recovery path that can distinguish "never imported" from
+  "imported and lost". (v0.7 item 2.)
+
+- **One root secret backs every scope.** HKDF separation means one session's
+  keys tell you nothing about another's, but a reader of the keyfile can mint
+  any binding for any owner in any session. Revocation is the only remedy and it
+  is session-destroying. Deliberately not mitigated with per-owner roots or a
+  hardware-held key: both would be untested ceremony around the same single
+  file. Filed so the limit is quotable rather than discovered. (v0.7 item 2,
+  P-DS7.)
+
+- **The bounded request grammar is bounded by two demo slots.**
+  `request_grammar.SLOT_PHRASES`/`SLOT_VALUES` cover `egg_color` and `tone`
+  only. That is the mechanism working as designed — an unregistered value
+  degrades to ASK rather than being passed through — but it means "growing"
+  the grammar currently means hand-writing a value vocabulary per slot. Needed
+  before a wider world: slot vocabularies derived from the frame's own
+  declarations or from a corpus lexicon, without turning value admission into a
+  similarity judgement. Also open: `ConversationSession.request_private_slot`
+  falls back to a hard-coded golden-chicken literal for any slot it has not
+  seen opened, which is fine for the demo and wrong for a general session.
+  (v0.7 item 2 / item 9.)
+
 - **The external observation adapter authenticates by minting, not by
   value.** An `Observation` carries its fetch timestamp, so a record cannot
   be re-derived by value the way a committed one can; `contains_item`
@@ -323,6 +388,20 @@ wall) must not be redirected into sentiment tags mid-experiment.
   than with source size — bounded and small today, but it wants an
   explicit retention rule before a long-lived session ships. (v0.7
   item 6.)
+
+- **Session pruning assumes a static rung store — PARTIALLY CLOSED by
+  scoping out.** v0.7 item 2 settled the half it was blocked on: pruning
+  evidence is **not serialized**. `retrieval.LedgerSnapshot` carries the
+  consumed-request and supersession ledgers and deliberately omits
+  `_pruning`, so a restart re-pays for a branch instead of inheriting a
+  refusal whose cause it cannot re-check. The reasoning is this item's own:
+  a stale refusal that survives serialization is worse than one that dies
+  with the process, and its loss costs a re-query rather than a wrong answer.
+  **Still open** for the in-process case: a source that goes live mid-session
+  leaves an earlier TOOL branch REFUSED for the rest of that session. The
+  honest fix remains a re-consult policy (pruning evidence carries the source
+  probe generation it was recorded under), not a wider state key. Original
+  evidence below. (v0.7 item 6.)
 
 - **Session pruning assumes a static rung store, and the TOOL rung breaks
   that by design.** `RetrievalVerifier._pruning` is keyed on
@@ -491,21 +570,23 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   - Four families carry two or three examples; their per-family numbers are
     anecdotes, and more cross-discipline twins would fix that.
 
-- **PARTIAL — conversation state is maintained and revisable in-process;
-  durable authenticated resume remains open.** Owner-isolated sessions now
-  reopen a private slot, explicitly supersede an earlier answer, preserve both
-  signed bindings as provenance, and refuse resurrection by public-state
-  surgery. The binding lifetime is `session`. The verifier's HMAC key,
-  consumed-request set, and supersession ledger are deliberately process-local,
-  so serializing the dataclasses is not a supported restart. Design key
-  versioning/rotation or a host-kept durable authority before persistence; do
-  not serialize the ambient secret into user-visible state. Open-English goal
-  parsing and transport/UI integration also remain open—and are now the
-  surface layer of DESIGN-interactive-harness (TTY + optional HTTP), not a
-  separate demo-only concern. Note the split: the **bounded** slot-filling
-  grammar of ROADMAP-v0.7 item 2 is in-cycle harness Phase-2 work, while
-  unrestricted prose authoring (item 9) is the last phase; deferring both to
-  the end would contradict item 2's release gate.
+- **Durable authenticated conversation resume: SHIPPED** (branch
+  `feature/conversation-durable`, v0.7 item 2). Owner-isolated sessions
+  serialize to public JSON, a new process reloads a root key ring from a
+  gitignored keyfile, re-imports signed anti-replay ledgers, and continues
+  revising. Stale, forged, rolled-back, session-swapped, and revoked-key paths
+  are each refused by a *named* reason (`session_keys.RefusalReason`). The
+  ambient secret is never serialized: what crosses is a key id. The bounded
+  slot-filling grammar landed with it (`scripts/request_grammar.py`), in-cycle
+  as DESIGN §3.4 required.
+
+  Still open, and now the actual next steps rather than a placeholder:
+  transport/UI integration (the harness TTY and HTTP skins); unrestricted prose
+  authoring (item 9, still last); learned question rendering; and the
+  deterministic dispatcher across derivable/store/user/terminal channels before
+  a learned chooser is evaluated. Limits shipped knowingly are filed above:
+  root-key compromise, session forking, export invalidating earlier snapshots,
+  and a two-slot grammar vocabulary.
 
 - **PARTIAL — learned tactic classification works; live ranking does not beat
   the strongest blind order.** The 27,688-parameter byte-GRU has a real
@@ -674,12 +755,17 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   learned or embedding ranker belongs after the exact/neighborhood controls and
   must not replace source attribution or epistemic-status preservation.
 
-- **Retrieval receipts are session-local.** POINT now requires a verifier-
-  minted receipt proving which key/mode admitted which item ids. The HMAC key
-  is intentionally process-local and signatures cover a random session id, so
-  persisted frame state cannot yet resume a pending retrieval after restart. A
-  durable session format needs explicit key lifecycle/versioning rather than
-  serializing an ambient secret.
+- **Retrieval receipts are session-local: SHIPPED** (branch
+  `feature/conversation-durable`, v0.7 item 2). Receipts now carry a `key_id`
+  and are signed under a key derived from the durable ring rather than a
+  process-local secret, so persisted state *does* resume a pending retrieval
+  after a restart: `POINT` at a restored receipt is VERIFIED, and the same
+  receipt with a rewritten signature is still REFUSED
+  (`tests/test_session_durability.py::RetrievalReceiptDurabilityTests`). The
+  ambient secret was never serialized; what crosses is a key id, and the root
+  stays in the runtime-owned keyfile. Note the one rung this does not reach:
+  TOOL-rung observations still fail `contains_item` after a restart (its own
+  BACKLOG item above).
 
 - **No model-initiated durable write path.** Durable knowledge is currently
   excellent but human/agent-mediated: edit a seed, regenerate, validate, and
@@ -709,8 +795,13 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   learned question rendering, and the deterministic dispatcher across
   derivable/store/user/terminal channels before a learned chooser is evaluated.
   Consumption is verifier-private but commits only through the controller's
-  run-level commit hook after completion/waiting callbacks succeed; durable
-  restoration must preserve the same atomicity without serializing the secret.
+  run-level commit hook after completion/waiting callbacks succeed. **Durable
+  restoration now preserves that atomicity without serializing the secret**
+  (v0.7 item 2): `commit_run` still owns every write, and what crosses a
+  restart is a *signed snapshot of what it already committed*, never a
+  re-derivation from public state. Import merges and can only ever *add*
+  refusals — there is no path in which restoring removes a consumed request or
+  an existing supersession.
 
 - **PARTIAL — dead branches are traced and pruned; terminal taxonomy remains.**
   The controller records state-before, action, verifier verdict/reason/evidence,

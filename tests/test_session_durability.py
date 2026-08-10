@@ -517,6 +517,65 @@ class KeyIdentityTests(DurableFixture):
         self.assertNotIn("secret", session_text)
 
 
+class RetrievalReceiptDurabilityTests(DurableFixture):
+    """Receipts were the other half of "session-local"; they cross too."""
+
+    def _retrieved(self):
+        from frames import FrameExecutor
+        from retrieval import (
+            RetrievalState,
+            RetrievalVerifier,
+            UnifiedKnowledgeStore,
+            retrieval_action,
+        )
+
+        executor = FrameExecutor()
+        frame = executor.open_frame(
+            FrameSpec(frame="runtime.frames.receipt_probe", retrieval="open")
+        )
+        store = UnifiedKnowledgeStore.load(ROOT / "data", ROOT / "reports")
+        key = "logic.boolean_laws.de_morgan_laws"
+        state = RetrievalState.from_unknown(
+            executor, frame, "answer", key, Literal("request", "needs", key)
+        )
+        verifier = RetrievalVerifier(store, executor, self.ring)
+        return store, verifier.evaluate(state, retrieval_action(key)).next_state
+
+    def test_receipt_authorizes_point_after_a_restart(self) -> None:
+        from frames import FrameExecutor
+        from retrieval import RetrievalVerifier, point_action
+
+        store, state = self._retrieved()
+        self.assertTrue(state.retrieval_receipts)
+        self.assertEqual(state.retrieval_receipts[0].key_id, self.ring.active_key_id)
+        wire = decode(encode(state))
+        self.assertEqual(wire, state)
+
+        restarted = RetrievalVerifier(
+            store, FrameExecutor(), SessionKeyRing.open(self.keyfile)
+        )
+        outcome = restarted.evaluate(wire, point_action(0))
+        self.assertIs(outcome.verdict, Verdict.VERIFIED)
+
+    def test_a_forged_receipt_is_still_refused_after_a_restart(self) -> None:
+        from frames import FrameExecutor
+        from retrieval import RetrievalVerifier, point_action
+
+        store, state = self._retrieved()
+        tampered = replace(
+            state,
+            retrieval_receipts=(
+                replace(state.retrieval_receipts[0], signature="0" * 64),
+            ),
+        )
+        restarted = RetrievalVerifier(
+            store, FrameExecutor(), SessionKeyRing.open(self.keyfile)
+        )
+        outcome = restarted.evaluate(decode(encode(tampered)), point_action(0))
+        self.assertIs(outcome.verdict, Verdict.REFUSED)
+        self.assertIn("no valid RETRIEVE receipt", outcome.reason)
+
+
 class LifetimeProtocolTests(DurableFixture):
     def test_protocol_table_matches_the_enum(self) -> None:
         named = {row[0] for row in LIFETIME_PROTOCOL}

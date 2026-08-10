@@ -30,7 +30,7 @@ Acceptance: at least two proof families and one story family, each with a
 capability-blind baseline and a fixed-budget curve. A learned loss or tie is a
 valid result.
 
-## 2. Conversation survives process boundaries
+## 2. Conversation survives process boundaries — SHIPPED
 
 - Define durable key identity, rotation, and revocation for ASK receipts and
   supersession records without serializing ambient secrets into public state.
@@ -99,6 +99,55 @@ the shipping commit; a miss is recorded here as prominently as a hit.
   processes may import the same snapshot at the same counter value and diverge
   — because refusing that would brick a session that crashed between export
   and import. Both are scoped out explicitly rather than papered over.
+
+### Adjudication (branch `feature/conversation-durable`)
+
+**All seven fired.** `scripts/conversation.py` runs the acceptance transcript;
+`tests/test_session_durability.py` (36 tests) and `tests/test_request_grammar.py`
+(23 tests) hold it.
+
+- **P-DS1 CONFIRMED.** Alice and Bob serialize to public JSON, the verifiers
+  are dropped, a new `SessionKeyRing.open(keyfile)` re-derives per-session
+  keys, both sessions restore and keep revising. The public story stays
+  byte-identical and `frame.asserted` stays empty on both sides.
+- **P-DS2 CONFIRMED, and non-vacuously.** The forgery test writes its binding
+  *into the session file* and reads it back: the restore succeeds, the record
+  is refused `binding-signature-invalid`, and the rest of the conversation is
+  unaffected. The superseded pre-restart binding is refused
+  `binding-superseded` even with the public supersession tuple deleted. No
+  envelope MAC exists to catch either, by design.
+- **P-DS3 CONFIRMED.** A reply action minted before the save is refused after
+  the restart as an already-consumed request.
+- **P-DS4 CONFIRMED.** All 140 pre-existing retrieval/ASK tests pass
+  unmodified, including
+  `test_second_verifier_cannot_accept_first_verifiers_question` — the default
+  verifier keeps a per-instance ephemeral ring. Full suite 432 → 491.
+- **P-DS5 CONFIRMED — the prediction registered as most likely to miss.** A
+  genuinely signed pre-supersession snapshot, replayed into a fresh restore, is
+  refused `ledger-rollback` by the private monotone counter. A companion test
+  checks the *ordering*: the signature is verified before the counter is
+  consulted, so a forged snapshot claiming sequence 10⁹ cannot advance the
+  high-water mark and lock the real owner out.
+- **P-DS6 CONFIRMED.** Eight registered rules fire; six named failure reasons
+  refuse; every failure degrades to a verifier-minted ASK with zero bindings
+  written. A dedicated test asserts the bound directly — no utterance produces
+  a value outside its slot's closed vocabulary.
+- **P-DS7 CONFIRMED as written.** Both named weaknesses are real and shipped
+  unfixed: root-key file compromise is total (mitigated only by revocation and
+  `.gitignore`), and session forking is possible because `admit_sequence` uses
+  `>=` rather than `==`. Filed in BACKLOG.
+
+**Two defects found by attacking the fixes, both regressed.** (1) Durable
+supersession was filed on the verifier instance, so a durable answer replaced
+in one session revived in the next — a wrong-answer bug, now filed in the key
+ring. (2) A session file's header could disagree with the state it carried;
+the per-binding signatures refused it, but *as a forgery*, teaching the wrong
+invariant. Details in `docs/DISCOVERIES.md`.
+
+**Scoped out, deliberately:** pruning evidence is not serialized (a stale
+refusal must not outlive the process that earned it), and each export
+invalidates every earlier snapshot (the price of counter-based rollback
+refusal).
 
 ## 3. PROVEN-gated WRITE and semantic proof correspondence
 
@@ -522,7 +571,8 @@ fluency is a separate measured axis.
 v0.7 is ready only if it contains:
 
 - a multi-theorem live proof-search curve with strong blind baselines;
-- a durable authenticated conversation restart or an explicit negative result;
+- a durable authenticated conversation restart or an explicit negative result
+  — **MET** (item 2, branch `feature/conversation-durable`);
 - one PROVEN-gated staged WRITE rejected or accepted through the full audit;
 - a non-trivial multi-family corpus analogy split;
 - the visual oracle layer and verifier, even if learned visual arms miss;

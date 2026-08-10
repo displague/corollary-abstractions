@@ -263,27 +263,86 @@ One session can interleave story revision, belief queries, retrieval, and proof
 search **because they share the kernel contract**, not because a monolith model
 contains all skills.
 
-**A `Session` is not a value object.** The block above lists what is
-*serializable*; the session's authority is not. `RetrievalVerifier`
-(`scripts/retrieval.py:741-744`) holds, per **instance**:
+**A `Session` is still not a value object — but it is now restorable.**
+(ROADMAP-v0.7 item 2, SHIPPED. The paragraph this replaces said sessions were
+process-local *by construction*; that is no longer true, and the correction is
+recorded here rather than deleted.)
 
-- `_receipt_secret` and `_ask_secret` — process-local HMAC keys minted at
-  construction;
-- `_consumed_ask_requests` and `_superseded_ask_bindings` — the anti-replay and
-  supersession ledgers.
+The old statement rested on two facts about `RetrievalVerifier`, and it was
+right that both were load-bearing and wrong only about which of them was
+essential:
 
-Both the keys **and the ledgers** live on the verifier instance, outside any
-serializable state, and both are load-bearing: the ledgers are what stop a
-replayed or superseded binding from being resurrected by public-tuple surgery
-(`tests/test_conversation_runtime.py::test_public_state_surgery_cannot_resurrect_superseded_answer`).
-So durability is blocked by **more than key management** — a restart that
-carried keys forward but not the ledgers would silently re-admit consumed
-requests. Any `Session` therefore names its verifier instance rather than
-containing it, and the harness must treat “session” as a handle to live
-authority. **ROADMAP-v0.7 item 2 is the scheduled fix** (durable key identity,
-rotation, revocation, and an explicit lifetime protocol for user/belief
-frames); until it lands, sessions are process-local by construction, which is
-also why §4.3 forbids HTTP from pretending restarts are safe.
+- **the HMAC secrets** were minted per instance with `secrets.token_bytes`;
+- **the ledgers** (`_consumed_ask_requests`, `_superseded_ask_bindings`) lived
+  on the instance, and are what stop a replayed or superseded binding from
+  being resurrected by public-tuple surgery
+  (`tests/test_conversation_runtime.py::test_public_state_surgery_cannot_resurrect_superseded_answer`).
+
+The warning that durability was blocked by **more than key management** was
+correct and remains the design's sharpest point: a restart that carried keys
+forward but not the ledgers would silently re-admit every consumed request.
+What changed is that both halves now have a home outside the process, and
+neither home is public state.
+
+**What a session is now.** A handle to authority that is *derivable*, not a
+handle to authority that is *alive*:
+
+- **Keys** come from a `session_keys.SessionKeyRing` — root keys with ids,
+  statuses (`active`/`retired`/`revoked`) and a monotone per-scope counter,
+  kept in a runtime-owned keyfile (`CORO_SESSION_KEYFILE`, default
+  `.runtime/session-keys.json`, gitignored). Per-session and per-owner signing
+  keys are HKDF-SHA256 derived from `(root, key_id, domain|scope)`, so nothing
+  ambient is ever serialized. Every receipt, question and binding names its
+  `key_id`, which is what makes rotation representable and key-id confusion
+  detectable.
+- **Ledgers** travel as a signed `retrieval.LedgerSnapshot` inside the session
+  file, stamped with a sequence number issued from the private counter. An
+  absent snapshot **refuses the restore by name** rather than defaulting to
+  empty ledgers — the failure this section originally warned about is now an
+  error message, not a silence.
+- **Pruning evidence is deliberately not carried.** See the BACKLOG item
+  "session pruning assumes a static rung store": a stale refusal that survives
+  serialization is worse than one that dies with the process, and its loss
+  costs one re-query.
+
+**The session file is unsigned public state, on purpose.** There is no envelope
+MAC. An envelope MAC would have caught a forged binding at the envelope and so
+proved nothing about whether *bindings* authenticate, which is the property
+item 2 claims; it would also have inverted the trust story the rest of this
+document builds. Anyone may edit a session file. What they cannot do is make an
+edited record authoritative, because authority is per-record signatures plus
+the restored private ledgers. Note the asymmetry this leaves, which is inherent
+and recorded rather than fixed: an attacker with write access can *retire* a
+live binding (add an id to the public `superseded_request_ids`) but can never
+*resurrect* a retired one.
+
+**Named refusals** (`session_keys.RefusalReason`) replace boolean failure at
+every boundary: `unknown-key-id`, `revoked-key-id`, `signature-mismatch`,
+`ledger-rollback`, `session-id-mismatch`, `schema-version-mismatch`,
+`binding-signature-invalid`, `binding-superseded`, `binding-goal-expired`,
+`request-already-consumed`, `undeclarable-lifetime`.
+
+**Lifetime protocol** (`scripts/lifetimes.py`) unifies `retrieval.UserFrame`
+bindings and owned belief frames under one vocabulary — `goal_local`,
+`session`, `durable`, `superseded`, `expired` — split into *declared*
+(chosen once by the trusted return channel, signed, immutable) and *effective*
+(recomputed on every read from the ledgers and the current goal, never
+stored). `superseded` and `expired` cannot be declared at all.
+
+**What is still not durable, stated plainly.** Two limits are scoped out rather
+than solved, both registered as P-DS7 before the work started:
+
+1. **Root-key file compromise** is the scheme's weakest point. Every session
+   key descends from one root secret; a reader of the keyfile can mint any
+   binding for any owner in any session, and revocation is the only remedy.
+2. **Session forking is not prevented.** Two processes may import the same
+   snapshot at the same sequence and diverge. The counter enforces
+   monotonicity, not uniqueness, because refusing a repeat import would brick
+   any session that crashed between export and import.
+
+§4.3's rule stands but for a narrower reason: HTTP may now resume a session,
+and must resume it *through* `ConversationSession.restore` — it may not
+reconstruct a verifier and assume authority.
 
 ### 3.4 Dispatcher: symbolic MoE first, learned policy later
 
@@ -434,9 +493,15 @@ Expose the same session as a **drop-in channel** for existing agent harnesses
 first cut. **Goal:** one session engine, two skins (TTY + HTTP), so external
 orchestrators can drive the kernel without forking it.
 
-Durable authenticated multi-session storage remains open (process-local HMAC
-authority today); HTTP must not pretend restarts are safe until that contract
-exists.
+Durable authenticated single-session storage now exists (§3.3, ROADMAP-v0.7
+item 2): a restart reloads a root key ring, re-imports signed ledgers, and
+refuses a stale, forged, rolled-back or revoked binding by name. HTTP may
+therefore resume a session — but only through `ConversationSession.restore`,
+and only after presenting a key ring; reconstructing a verifier and assuming
+authority is still forbidden. Two limits keep HTTP honest: **session forking is
+not prevented** (two clients may restore the same snapshot and diverge), and
+**multi-session storage across owners is untried** — the shipped contract is
+one owner, one session id, restored in one place at a time.
 
 ---
 

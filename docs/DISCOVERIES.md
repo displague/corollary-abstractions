@@ -13,6 +13,90 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Signing the envelope would have made the acceptance test prove nothing.**
+  ROADMAP-v0.7 item 2's gate is "a stale or forged pre-restart binding is
+  refused". The natural implementation puts a MAC over the whole session file,
+  and it passes the gate — for the wrong reason. A forged binding inside a
+  signed envelope is caught *by the envelope*, so the test says nothing about
+  whether **bindings** authenticate, which is the property being claimed. The
+  same move would have inverted the trust story the harness had been building,
+  in which public state is public and untrusted and authority comes from
+  per-record signatures plus verifier-private ledgers. The shipped session file
+  therefore carries no MAC at all: anyone may edit it, the forgery test writes
+  its binding *into the file* and reads it back normally, the restore succeeds,
+  and the record is refused by its own signature. The general lesson is about
+  test design more than cryptography — **a guard placed one layer above the
+  property under test makes the test vacuous while making it pass**, and the
+  only reliable defence is to forbid the guard in the registered prediction
+  before the code exists (P-DS2 did). *Found while designing v0.7 item 2;
+  regression: `tests/test_session_durability.py::PreRestartBindingTests::
+  test_forged_pre_restart_binding_is_refused_by_name`* (2026-08-10)
+
+- **A signature cannot see a replay; only a counter outside the message can.**
+  Every other refusal in the durable-session design falls out of a MAC:
+  tamper with a binding, a ledger, a key id, and the check fails. Rolling the
+  ledger *back* does not. An earlier snapshot is authentic in every respect —
+  correct key, correct session, correct owner, valid signature — and its only
+  defect is being out of date, which is not a property any message can carry
+  about itself. The fix is a monotone per-scope counter kept in the **private
+  keyfile**, precisely because the public snapshot cannot lower what it cannot
+  see. Two ordering details turned out to be load-bearing and are easy to get
+  backwards: the signature must be checked *before* the counter is consulted
+  (otherwise a forged snapshot claiming sequence 10⁹ locks the real owner out —
+  a denial of service handed over free), and the admission test must be `>=`
+  rather than `==` (otherwise a session that crashed between export and import
+  is bricked). The `>=` buys rollback refusal and explicitly does not buy fork
+  refusal; that trade is filed rather than hidden. *Registered in advance as
+  P-DS5, the prediction most likely to miss; regressions:
+  `LedgerAttackTests::test_ledger_rollback_is_refused` and
+  `::test_forged_ledger_cannot_advance_the_counter`* (2026-08-10)
+
+- **A lifetime that is stored is not a lifetime; it is a suggestion.** The
+  first design gave `UserBinding.lifetime` the obvious job of holding the
+  binding's current state, `session` becoming `superseded` when replaced. That
+  is unusable as authority: the field lives in public state, so anyone holding
+  the tuple writes it back. The shipped protocol splits **declared** from
+  **effective** — the declared lifetime is chosen once by the trusted return
+  channel and covered by the MAC, and `superseded`/`expired` are *recomputed on
+  every read* from the private ledgers and the current goal, stored nowhere.
+  A creating authority cannot declare them at all, because an answer that
+  arrives already dead is a stranger state than the protocol wants to
+  represent. The same split resolved what "durable" could mean operationally:
+  a durable binding is signed under an **owner-scoped** key with neither
+  session id nor frame spec in its payload, which is exactly what lets it cross
+  into a new conversation and exactly why it is not frame-isolated. Reach and
+  isolation are the trade, and the protocol table states it rather than leaving
+  it to be discovered. *v0.7 item 2; `scripts/lifetimes.py`* (2026-08-10)
+
+- **Durable state needs a durable place to record its retirement.** Probing
+  this item's own fixes turned up a wrong-answer bug the item had introduced:
+  supersession was filed on the verifier instance, which is correct for a
+  session-scoped answer (it travels in that session's snapshot) and wrong for a
+  durable one, whose whole point is being valid in conversations that instance
+  will never meet. A durable answer replaced in session A came back to life in
+  session B. The general shape is worth keeping: **whenever state is given a
+  longer life than the thing that records its death, the death gets lost**, and
+  the fix is not a wider check but moving the record to something that lives at
+  least as long — here, the key ring, the design's only durable private state.
+  *Found by adversarial self-review of v0.7 item 2, after the acceptance
+  scenario was already green; regression:
+  `LifetimeProtocolTests::test_durable_supersession_is_filed_under_the_owner_scope`*
+  (2026-08-10)
+
+- **A refusal with the wrong stated reason teaches the wrong invariant.** A
+  session file's header carries convenience copies of the session id and owner
+  that the state also holds. Rewriting only the *inner* `user_frame.owner` left
+  the ledger check satisfied and pushed the whole disagreement onto the
+  per-binding signatures — which did refuse it, so nothing was exploitable.
+  But it was refused as a **forgery** when the actual defect was an
+  inconsistent envelope, and a reader who traced that refusal would learn that
+  the binding scheme guards envelope consistency, which it does not. The repair
+  is not a stronger check but a check *in the right place*. Recorded because
+  "the attack failed" is a weaker result than it looks when the reason is an
+  accident of layering. *v0.7 item 2 self-review; regression:
+  `LedgerAttackTests::test_header_may_not_disagree_with_the_state_it_carries`*
+  (2026-08-10)
+
 - **A record can enter at the right rung and still usurp the wrong
   authority.** The whole contract around external retrieval is "a tool
   transaction proves what was fetched, not that its content is true", which
