@@ -213,6 +213,66 @@ wall) must not be redirected into sentiment tags mid-experiment.
   model directly. (Nested-frames review, note 8; the test surgery is the
   evidence.)
 
+## Interactive harness / agent OS
+
+Evidence: directional design 2026-08-09 (integrate demos into one agent-like
+experience; model composition; offline WordNet/wiki) with review rejecting a
+slash-command **demo launcher** in favor of a **microkernel session** that
+routes only along registered proven paths. Full mapping and predictions
+P-IH1–P-IH6: `docs/DESIGN-interactive-harness.md`.
+
+- **Mechanics are live; demos are frozen policies.** `StoryVerifier` already
+  mutates beats/obligations under GEN actions; `ConversationSession` opens and
+  supersedes private slots; ToM derives belief from events. What is canned is
+  `SequencePolicy` + oracle action lists (golden-chicken, scripted Sally–Anne).
+  Do not ship `/golden_chicken` or `/tom` as product destinations—promote
+  adapters to **subsystems** and demote scripts to **selftests**. Miss criterion
+  for Phase 1 UX is P-IH3 (demo zoo).
+
+- **WAITING must drive the input channel automatically.** Controller
+  `StopReason.WAITING` is the tool-call equivalent of ASK. TTY/HTTP surfaces
+  should prompt the user when the kernel pauses, then resume with a signed
+  reply—users must not be taught a dedicated `/ask` command (P-IH2). Batch
+  mode records need-input instead of inventing values.
+
+- **No primary slash menu of limited demos.** The shell is need-driven: open
+  UNKNOWNs, obligations, and user goals select among **registered** subsystem
+  paths; unregistered paths abstain or ASK (P-IH4). Advanced debug overrides
+  (`:trace`, `:status`, force action) are fine; a zoo of contrived prompts is
+  not.
+
+- **Boot capability matrix (kernel-style init).** On startup, probe corpuses,
+  ledgers, narrative/belief/retrieve, optional WordNet/Lean/tools; print
+  OK/OFF/FAIL with counts, digests, sizes—without requiring eager full loads
+  (P-IH5). Named missing WordNet stays loud FAIL for that probe; unnamed stays
+  OFF. Wikipedia/COCA `data_real` is not a default subsystem.
+
+- **Status chrome and collapsed trace.** Map VERIFIED/SOLVED, REFUSED/REFUTED,
+  WAITING (pulse), EXHAUSTED, BUDGET to characters/colors; stream optional CoT
+  while running; **default collapsed** final view with expand-on-demand. Respect
+  `NO_COLOR`.
+
+- **Session object unifying adapters.** One process image: frames, user
+  channels, stores, optional tools, unified action trace, budgets. Today each
+  demo is a separate entrypoint with no shared session—this is the integration
+  gap, not missing story physics.
+
+- **Subsystem plugins for optional neural tools.** Span/analogy/tactic
+  checkpoints register only after probe success; OFF degrades to symbolic
+  paths. Reject neural MoE over incompatible vocabs as the integration strategy;
+  accept long-term “many specialized models as loadable modules” under ActionKind
+  I/O + global loop detection (`seen_states`, rejected fingerprints, budgets
+  already in `Controller`/`SearchController`).
+
+- **Chat Completions–compatible HTTP skin (Phase 4).** Same session engine as
+  TTY; represent WAITING to external harnesses without inventing slot values
+  (P-IH6). Durable multi-session auth remains blocked on process-local HMAC
+  authority (see conversation item below).
+
+- **Need dispatcher before learned global policy.** Closed-form dispatch from
+  epistemic state and registered paths first; learned ranking among legal
+  actions only with frequency/oracle baselines (tactic-policy negative result).
+
 ## Controller / harness
 
 - **Corpus analogy has depth one and family breadth one.** The first grounded
@@ -236,7 +296,9 @@ wall) must not be redirected into sentiment tags mid-experiment.
   so serializing the dataclasses is not a supported restart. Design key
   versioning/rotation or a host-kept durable authority before persistence; do
   not serialize the ambient secret into user-visible state. Open-English goal
-  parsing and transport/UI integration also remain open.
+  parsing and transport/UI integration also remain open—and are now the
+  surface layer of DESIGN-interactive-harness (TTY + optional HTTP), not a
+  separate demo-only concern.
 
 - **PARTIAL — learned tactic classification works; live ranking does not beat
   the strongest blind order.** The 27,688-parameter byte-GRU has a real

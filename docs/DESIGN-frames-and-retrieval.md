@@ -16,7 +16,9 @@
 > upstream capability. ASK's parsed return channel now pauses as WAITING and
 > resumes persistent user-frame state from a channel-signed reply. External
 > tools, learned parsing and item choice, durable sessions, and WRITE remain
-> open. RETRIEVE cannot substitute a
+> open. Interactive multi-subsystem session design (WAITING as the user
+> channel, boot capability matrix, no demo zoo) lives in
+> `docs/DESIGN-interactive-harness.md`. RETRIEVE cannot substitute a
 > different key after session construction. The sections below retain the original
 > design language as the before-state.
 > Proof summaries reach PROVEN only for the same digest-pinned native

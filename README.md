@@ -248,6 +248,9 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
 - `docs/DESIGN-affect.md` — source-qualified emotion maps, attributed
   belief/story claims, and narrative obligations; weights may propose but do
   not certify affect
+- `docs/DESIGN-interactive-harness.md` — microkernel agent OS: live session
+  over registered subsystems, WAITING as ask-channel, boot capability matrix,
+  optional Chat Completions skin; not a demo slash-menu
 - `docs/DESIGN-visual-structure.md` — the parse-first multimodal plan:
   formula/diagram twins, SVG structure, and a pixel control
 - `docs/blog/` — accessible project narratives, including the v0.6 story
