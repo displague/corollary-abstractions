@@ -1,0 +1,480 @@
+{
+  "experiment": "depth-interface-v0.8-item5",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "interface_variable": "copy_budget(max_tgt,max_len)",
+  "control": {
+    "arm_budget": {
+      "max_tgt": 96,
+      "max_len": 512
+    },
+    "arms": {
+      "address": {
+        "retained_ood": [
+          0.28408163265306124,
+          0.17061224489795918,
+          0.13428571428571429
+        ],
+        "unconditional_ood": [
+          0.232,
+          0.13933333333333334,
+          0.10966666666666666
+        ],
+        "retained_mean": 0.1963265306122449,
+        "unconditional_mean": 0.16033333333333333,
+        "generated": 3000,
+        "kept": 2450,
+        "excluded": 550,
+        "by_depth": {
+          "4": {
+            "generated": 1464,
+            "kept": 1392,
+            "excluded": 72,
+            "retained_scored": 1392,
+            "unconditional_scored": 1464
+          },
+          "5": {
+            "generated": 1536,
+            "kept": 1058,
+            "excluded": 478,
+            "retained_scored": 1058,
+            "unconditional_scored": 1536
+          }
+        },
+        "correct_by_seed": [
+          696,
+          418,
+          329
+        ]
+      },
+      "query": {
+        "retained_ood": [
+          0.18571428571428572,
+          0.20448979591836736,
+          0.1457142857142857
+        ],
+        "unconditional_ood": [
+          0.15166666666666667,
+          0.167,
+          0.119
+        ],
+        "retained_mean": 0.17863945578231294,
+        "unconditional_mean": 0.1458888888888889,
+        "generated": 3000,
+        "kept": 2450,
+        "excluded": 550,
+        "by_depth": {
+          "4": {
+            "generated": 1464,
+            "kept": 1392,
+            "excluded": 72,
+            "retained_scored": 1392,
+            "unconditional_scored": 1464
+          },
+          "5": {
+            "generated": 1536,
+            "kept": 1058,
+            "excluded": 478,
+            "retained_scored": 1058,
+            "unconditional_scored": 1536
+          }
+        },
+        "correct_by_seed": [
+          455,
+          501,
+          357
+        ]
+      },
+      "memory": {
+        "retained_ood": [
+          0.07346938775510205,
+          0.053469387755102044,
+          0.11877551020408163
+        ],
+        "unconditional_ood": [
+          0.06,
+          0.043666666666666666,
+          0.097
+        ],
+        "retained_mean": 0.08190476190476191,
+        "unconditional_mean": 0.06688888888888889,
+        "generated": 3000,
+        "kept": 2450,
+        "excluded": 550,
+        "by_depth": {
+          "4": {
+            "generated": 1464,
+            "kept": 1392,
+            "excluded": 72,
+            "retained_scored": 1392,
+            "unconditional_scored": 1464
+          },
+          "5": {
+            "generated": 1536,
+            "kept": 1058,
+            "excluded": 478,
+            "retained_scored": 1058,
+            "unconditional_scored": 1536
+          }
+        },
+        "correct_by_seed": [
+          180,
+          131,
+          291
+        ]
+      },
+      "both": {
+        "retained_ood": [
+          0.030204081632653063,
+          0.054285714285714284,
+          0.0326530612244898
+        ],
+        "unconditional_ood": [
+          0.024666666666666667,
+          0.044333333333333336,
+          0.02666666666666667
+        ],
+        "retained_mean": 0.039047619047619046,
+        "unconditional_mean": 0.03188888888888889,
+        "generated": 3000,
+        "kept": 2450,
+        "excluded": 550,
+        "by_depth": {
+          "4": {
+            "generated": 1464,
+            "kept": 1392,
+            "excluded": 72,
+            "retained_scored": 1392,
+            "unconditional_scored": 1464
+          },
+          "5": {
+            "generated": 1536,
+            "kept": 1058,
+            "excluded": 478,
+            "retained_scored": 1058,
+            "unconditional_scored": 1536
+          }
+        },
+        "correct_by_seed": [
+          74,
+          133,
+          80
+        ]
+      },
+      "mlp": {
+        "retained_ood": [
+          0.1306122448979592,
+          0.13387755102040816,
+          0.1620408163265306
+        ],
+        "unconditional_ood": [
+          0.10666666666666667,
+          0.10933333333333334,
+          0.13233333333333333
+        ],
+        "retained_mean": 0.14217687074829932,
+        "unconditional_mean": 0.11611111111111111,
+        "generated": 3000,
+        "kept": 2450,
+        "excluded": 550,
+        "by_depth": {
+          "4": {
+            "generated": 1464,
+            "kept": 1392,
+            "excluded": 72,
+            "retained_scored": 1392,
+            "unconditional_scored": 1464
+          },
+          "5": {
+            "generated": 1536,
+            "kept": 1058,
+            "excluded": 478,
+            "retained_scored": 1058,
+            "unconditional_scored": 1536
+          }
+        },
+        "correct_by_seed": [
+          320,
+          328,
+          397
+        ]
+      }
+    }
+  },
+  "treatment": {
+    "arm": "address",
+    "eval_mode": "teacher-forced",
+    "max_tgt": 330,
+    "max_len": 700,
+    "untruncated_step_perfect": [
+      0.168,
+      0.122,
+      0.20933333333333334
+    ],
+    "untruncated_step_perfect_mean": 0.16644444444444445,
+    "kept_step_perfect_mean": 0.2038095238095238,
+    "excluded_step_perfect": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "params": [
+      1511939
+    ],
+    "per_seed": [
+      {
+        "seed": 0,
+        "params": 1511939,
+        "max_tgt": 330,
+        "max_len": 700,
+        "untruncated_step_perfect": 0.168,
+        "kept_step_perfect": 0.2057142857142857,
+        "excluded_step_perfect": 0.0,
+        "excluded_n": 550,
+        "generated": 3000,
+        "cuda_memory": {
+          "pre_model_device_footprint_bytes": 1295581184,
+          "train_validation": {
+            "peak_allocated_bytes": 2078894592,
+            "peak_reserved_bytes": 2938109952,
+            "peak_device_footprint_bytes": 4296605696
+          },
+          "final_evaluation": {
+            "peak_allocated_bytes": 615152128,
+            "peak_reserved_bytes": 4768923648,
+            "peak_device_footprint_bytes": 6127419392
+          }
+        }
+      },
+      {
+        "seed": 1,
+        "params": 1511939,
+        "max_tgt": 330,
+        "max_len": 700,
+        "untruncated_step_perfect": 0.122,
+        "kept_step_perfect": 0.1493877551020408,
+        "excluded_step_perfect": 0.0,
+        "excluded_n": 550,
+        "generated": 3000,
+        "cuda_memory": {
+          "pre_model_device_footprint_bytes": 6127419392,
+          "train_validation": {
+            "peak_allocated_bytes": 2078894592,
+            "peak_reserved_bytes": 4777312256,
+            "peak_device_footprint_bytes": 6135808000
+          },
+          "final_evaluation": {
+            "peak_allocated_bytes": 615152128,
+            "peak_reserved_bytes": 4777312256,
+            "peak_device_footprint_bytes": 6135808000
+          }
+        }
+      },
+      {
+        "seed": 2,
+        "params": 1511939,
+        "max_tgt": 330,
+        "max_len": 700,
+        "untruncated_step_perfect": 0.20933333333333334,
+        "kept_step_perfect": 0.2563265306122449,
+        "excluded_step_perfect": 0.0,
+        "excluded_n": 550,
+        "generated": 3000,
+        "cuda_memory": {
+          "pre_model_device_footprint_bytes": 6135808000,
+          "train_validation": {
+            "peak_allocated_bytes": 2078894592,
+            "peak_reserved_bytes": 4777312256,
+            "peak_device_footprint_bytes": 6135808000
+          },
+          "final_evaluation": {
+            "peak_allocated_bytes": 615152128,
+            "peak_reserved_bytes": 4777312256,
+            "peak_device_footprint_bytes": 6135808000
+          }
+        }
+      }
+    ]
+  },
+  "treatment_safety": {
+    "device_total_bytes": 17094475776,
+    "reserved_limit_bytes": 11966133043,
+    "device_footprint_limit_bytes": 13675580620,
+    "all_phases_within_caps": true,
+    "rows": [
+      {
+        "seed": 0,
+        "phase": "train_validation",
+        "peak_reserved_bytes": 2938109952,
+        "peak_device_footprint_bytes": 4296605696,
+        "within_caps": true
+      },
+      {
+        "seed": 0,
+        "phase": "final_evaluation",
+        "peak_reserved_bytes": 4768923648,
+        "peak_device_footprint_bytes": 6127419392,
+        "within_caps": true
+      },
+      {
+        "seed": 1,
+        "phase": "train_validation",
+        "peak_reserved_bytes": 4777312256,
+        "peak_device_footprint_bytes": 6135808000,
+        "within_caps": true
+      },
+      {
+        "seed": 1,
+        "phase": "final_evaluation",
+        "peak_reserved_bytes": 4777312256,
+        "peak_device_footprint_bytes": 6135808000,
+        "within_caps": true
+      },
+      {
+        "seed": 2,
+        "phase": "train_validation",
+        "peak_reserved_bytes": 4777312256,
+        "peak_device_footprint_bytes": 6135808000,
+        "within_caps": true
+      },
+      {
+        "seed": 2,
+        "phase": "final_evaluation",
+        "peak_reserved_bytes": 4777312256,
+        "peak_device_footprint_bytes": 6135808000,
+        "within_caps": true
+      }
+    ]
+  },
+  "retained_localization": {
+    "arm": "address",
+    "first_error_fraction_by_decile_mean": {
+      "0": 0.2792545739199115,
+      "1": 0.3059841458565079,
+      "2": 0.16548354820062924,
+      "3": 0.09279438969781709,
+      "4": 0.04821101295325007,
+      "5": 0.03864554984041425,
+      "6": 0.03138185484746272,
+      "7": 0.024947455221643978,
+      "8": 0.012779729624560815,
+      "9": 0.0005177398378024636
+    },
+    "per_seed": [
+      {
+        "0": 0.26670287887017924,
+        "1": 0.30038022813688214,
+        "2": 0.1596958174904943,
+        "3": 0.08473655621944595,
+        "4": 0.04345464421510049,
+        "5": 0.041281912004345465,
+        "6": 0.037479630635524175,
+        "7": 0.039652362846279196,
+        "8": 0.025529603476371537,
+        "9": 0.0010863661053775121
+      },
+      {
+        "0": 0.26480500722195477,
+        "1": 0.28984111699566684,
+        "2": 0.17428984111699566,
+        "3": 0.1044776119402985,
+        "4": 0.05729417428984112,
+        "5": 0.04477611940298507,
+        "6": 0.0365912373615792,
+        "7": 0.02118440057775638,
+        "8": 0.006740491092922484,
+        "9": 0.0
+      },
+      {
+        "0": 0.3062558356676004,
+        "1": 0.3277310924369748,
+        "2": 0.16246498599439776,
+        "3": 0.08916900093370682,
+        "4": 0.04388422035480859,
+        "5": 0.029878618113912233,
+        "6": 0.020074696545284782,
+        "7": 0.014005602240896359,
+        "8": 0.006069094304388422,
+        "9": 0.00046685340802987864
+      }
+    ]
+  },
+  "adjudication": {
+    "P-DI1": {
+      "prediction": "The conditional-only OOD metric was a blind spot: reported ood_exact is correct/kept, so the 550 capacity-excluded OOD rows never entered the denominator. The unconditional metric equals retained times kept/generated, so every arm's unconditional OOD is strictly below its retained OOD by the same 550/3000 denominator inflation, the arm ordering (address best, both worst) is preserved, and the 550 excluded rows are entirely depth 4 and 5 -- the deepest, out-of-distribution rows whose target copy-length or source-length exceeds the interface budget.",
+      "unconditional_below_retained_all_arms": true,
+      "retained_ordering": [
+        "address",
+        "query",
+        "mlp",
+        "memory",
+        "both"
+      ],
+      "unconditional_ordering": [
+        "address",
+        "query",
+        "mlp",
+        "memory",
+        "both"
+      ],
+      "ordering_preserved": true,
+      "address_best_both_metrics": true,
+      "exclusions_depth_set": [
+        "4",
+        "5"
+      ],
+      "status": "FIRED",
+      "adjudication_kind": "blind_spot_removal"
+    },
+    "P-DI2": {
+      "prediction": "Enlarging the copy interface budget (max_tgt 96->330, max_len 512->700) so the OOD split is fully untruncated does NOT move untruncated OOD upward. Address-only untruncated greedy-exact stays at or below the control's unconditional metric plus the 0.15 materiality bar -- it does not climb back toward the retained metric -- and the previously-excluded rows score below 0.05 in isolation, because their targets extend into copy positions the interface never trained. The cliff is a depth/interface-boundary property, not a budget artifact; this is a NEGATIVE interface result.",
+      "eval_mode": "teacher-forced (step-perfect)",
+      "control_retained_tf_mean": 0.17551020408163265,
+      "control_unconditional_tf_mean": 0.14333333333333334,
+      "treatment_untruncated_tf_mean": 0.16644444444444445,
+      "treatment_kept_subset_tf_mean": 0.2038095238095238,
+      "materiality_bar": 0.15,
+      "budget_does_not_move_ood": true,
+      "excluded_subset_tf_step_perfect": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "excluded_subset_below_ceiling": true,
+      "excluded_subset_ceiling": 0.05,
+      "max_trained_target_length": 88,
+      "status": "FIRED",
+      "adjudication_kind": "interface_manipulation"
+    },
+    "P-DI3": {
+      "prediction": "On untruncated OOD the residual failure mass localizes to the deep end: every one of the 550 capacity exclusions is depth 4 or 5 and fails at the copy-budget boundary (target length beyond 96), and among the retained rows the teacher-forced first error concentrates in the latest decode deciles rather than being spread uniformly.",
+      "exclusions_depth_set": [
+        "4",
+        "5"
+      ],
+      "exclusions_are_depth_4_5": true,
+      "retained_first_error_late_deciles_7to9": 0.03824492468400725,
+      "retained_first_error_early_deciles_0to2": 0.7507222679770487,
+      "first_error_concentrates_late": false,
+      "first_error_peak_decile": "1",
+      "first_error_fraction_by_decile_mean": {
+        "0": 0.2792545739199115,
+        "1": 0.3059841458565079,
+        "2": 0.16548354820062924,
+        "3": 0.09279438969781709,
+        "4": 0.04821101295325007,
+        "5": 0.03864554984041425,
+        "6": 0.03138185484746272,
+        "7": 0.024947455221643978,
+        "8": 0.012779729624560815,
+        "9": 0.0005177398378024636
+      },
+      "status": "MISSED",
+      "adjudication_kind": "cliff_localization",
+      "correction": "MISS: the retained cliff does NOT concentrate in the late deciles. 0.751 of erroneous retained OOD rows take their first teacher-forced error in deciles 0-2 (peak at decile 1) versus 0.038 in deciles 7-9, so on untruncated OOD the failure is bimodal: retained rows derail EARLY -- the model loses the deep structure near the start of the decode -- while the 550 capacity exclusions sit at the opposite extreme, all depth 4/5 and beyond the copy budget. The cliff is still localized (an early structural break plus a hard budget wall), just not where P-DI3 predicted."
+    }
+  }
+}

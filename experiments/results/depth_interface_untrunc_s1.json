@@ -1,0 +1,50 @@
+{
+  "experiment": "depth-interface-untruncated-treatment",
+  "consumer": "address",
+  "seed": 1,
+  "params": 1511939,
+  "level_code": "recurrent",
+  "epochs": 10,
+  "max_tgt": 330,
+  "max_len": 700,
+  "batch_size": 192,
+  "microbatch_size": 64,
+  "eval_batch_size": 32,
+  "memory_fraction": 0.7,
+  "data_sha256": {
+    "train": "22e7d8c61098d3efa8e4dac1da75f85865ba63100268459cada76fe180176451",
+    "val": "979ce98b05c902e795739b964c85181908b397fd898daa3268b5387f562d75bf",
+    "test": "882f506aa742b683f8f92c8f702f55667e434c96691d53180155728c8252b165",
+    "ood": "0b64ddecc996d5484ab8cd6e3c93fca328e32326478507adcd28413d04969ffd"
+  },
+  "device": "cuda",
+  "val_greedy_best": 1.0,
+  "eval_mode": "teacher-forced",
+  "ood_untruncated": {
+    "generated": 3000,
+    "kept": 3000,
+    "step_perfect_rate": 0.122,
+    "examples": 3000
+  },
+  "ood_control_kept_subset": {
+    "n": 2450,
+    "step_perfect_rate": 0.1493877551020408
+  },
+  "ood_control_excluded_subset": {
+    "n": 550,
+    "step_perfect_rate": 0.0
+  },
+  "cuda_memory": {
+    "pre_model_device_footprint_bytes": 6127419392,
+    "train_validation": {
+      "peak_allocated_bytes": 2078894592,
+      "peak_reserved_bytes": 4777312256,
+      "peak_device_footprint_bytes": 6135808000
+    },
+    "final_evaluation": {
+      "peak_allocated_bytes": 615152128,
+      "peak_reserved_bytes": 4777312256,
+      "peak_device_footprint_bytes": 6135808000
+    }
+  }
+}
