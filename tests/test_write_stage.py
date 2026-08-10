@@ -1849,6 +1849,99 @@ class AcceptedWriteApplicationTests(WriteStageTestCase):
         self.assertFalse((self.repo.root / "data" / CORPUS).exists())
         self.assertFalse((self.repo.root / SEED).exists())
 
+    def test_mid_corpus_write_failure_leaves_tree_byte_identical(self) -> None:
+        """F1/F2: a forced failure during the corpus write leaves NO torn file
+        and NO leftover empty `data/<corpus>/` dir; the tree is byte-identical.
+
+        The failure is injected at the atomic rename, so the real
+        temp-file/fsync/os.replace path runs: the half-written temp is cleaned
+        by the writer's own `finally`, and rollback removes the empty directory
+        the `mkdir` left -- the residue a file-only digest would miss.
+        """
+        real_replace = os.replace
+        # Only the REAL corpus rename fails -- not the scratch regeneration the
+        # audit performs (also `nodes.json`, under a temp dir), which would turn
+        # the audit into a refusal and never reach the application.
+        real_corpus = (self.repo.root / "data" / CORPUS / "nodes.json").resolve()
+
+        def failing_replace(src, dst, *args, **kwargs):
+            if Path(dst).resolve() == real_corpus:
+                raise OSError("crash before the atomic corpus rename")
+            return real_replace(src, dst, *args, **kwargs)
+
+        before_tree = working_tree_digest(self.repo.root)
+        before_data = durable_digest(self.repo.root / "data")
+        with patch("write_stage.os.replace", side_effect=failing_replace):
+            with self.assertRaises(OSError):
+                self.accept(self.candidate())
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        self.assertFalse((self.repo.root / "data" / CORPUS).exists())
+        self.assertFalse((self.repo.root / SEED).exists())
+
+    def test_whole_tree_delta_catches_an_undeclared_change(self) -> None:
+        """F4: the accept path asserts its whole-tree delta is EXACTLY the seed
+        and the target corpus. An extra changed path is caught and rolled back.
+
+        The stray is injected into the post-application digest map (not written
+        to disk), so rollback fully restores the two real files and the ORIGINAL
+        undeclared-change error propagates -- proving the assertion fires, not
+        the escalation path.
+        """
+        import write_stage
+
+        real = write_stage.working_tree_file_digests
+        seen: list[int] = []
+
+        def spy(root):
+            mapping = real(root)
+            seen.append(1)
+            if len(seen) >= 2:  # the post-application map
+                return {**mapping, "scripts/evil_injected.py": "0" * 64}
+            return mapping
+
+        from write_stage import AcceptanceError
+
+        before_tree = working_tree_digest(self.repo.root)
+        with patch("write_stage.working_tree_file_digests", side_effect=spy):
+            with self.assertRaises(AcceptanceError) as caught:
+                self.accept(self.candidate())
+        self.assertIn("did not declare", str(caught.exception))
+        self.assertIn("scripts/evil_injected.py", str(caught.exception))
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertFalse((self.repo.root / "data" / CORPUS).exists())
+        self.assertFalse((self.repo.root / SEED).exists())
+
+    def test_receipt_failure_rolls_the_application_back(self) -> None:
+        """F3: receipt-or-nothing. If the acceptance receipt cannot be written,
+        the seed and corpus are rolled back -- never a durable change with no
+        diffable receipt."""
+        import write_stage
+        from write_stage import AcceptanceError
+
+        real_wr = write_stage._write_receipt_atomic
+
+        def failing_wr(staging_dir, expected, name, payload):
+            # Only the ACCEPTANCE receipt fails; the staging receipt must still
+            # succeed so the failure is exercised on the accept path, not the
+            # audit that precedes it.
+            if name.endswith(".accepted.json"):
+                raise OSError("receipt volume unwritable")
+            return real_wr(staging_dir, expected, name, payload)
+
+        before_tree = working_tree_digest(self.repo.root)
+        with patch(
+            "write_stage._write_receipt_atomic", side_effect=failing_wr
+        ):
+            with self.assertRaises((OSError, AcceptanceError)):
+                self.accept(self.candidate())
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertFalse((self.repo.root / "data" / CORPUS).exists())
+        self.assertFalse((self.repo.root / SEED).exists())
+        self.assertFalse(
+            list(self.repo.staging.glob("*.accepted.json"))
+        )
+
     def test_accept_then_refuse_end_to_end(self) -> None:
         """The gate's demonstration: one accepted end-to-end, one refused, both
         with diffable receipts, in one MiniRepo."""

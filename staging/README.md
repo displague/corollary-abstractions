@@ -153,12 +153,18 @@ itself). Acceptance:
    (refused at `seed_ownership`);
 2. writes the audited **seed** as the durable source of truth, then regenerates
    `data/<corpus>/nodes.json` through the one trusted generator — byte-for-byte
-   what running the committed seed produces. Candidate Python is never executed;
-   the candidate never hands over `nodes.json` bytes;
+   what running the committed seed produces. Both writes are atomic (temp file,
+   fsync, `os.replace`), so a crash mid-write never leaves a torn corpus.
+   Candidate Python is never executed; the candidate never hands over
+   `nodes.json` bytes;
 3. re-verifies in the real tree: exactly the declared node is present and nothing
-   else, every other corpus is byte-identical, schema and links validate, and the
+   else, every other corpus is byte-identical, schema and links validate, the
    declared matcher delta matches the delta now measured against the applied
-   data. Any failure rolls the tree back to byte-identical and refuses.
+   data, and the whole-tree delta is exactly the two files it declared it would
+   write (nothing in `scripts/`, `prover/`, `schema/`, another corpus, or the
+   root). Any failure — including an inability to write the receipt — rolls the
+   tree back to byte-identical and refuses: an applied change without a diffable
+   receipt is not allowed.
 
 An acceptance writes a second receipt, `<record_id>.accepted.json`, recording
 the exact transition — seed path, corpus, node id, and corpus/working-tree

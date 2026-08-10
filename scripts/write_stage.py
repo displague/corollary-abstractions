@@ -448,6 +448,28 @@ def working_tree_digest(repo_root: Path) -> str:
     return digest.hexdigest()
 
 
+def working_tree_file_digests(repo_root: Path) -> dict[str, str]:
+    """Per-file digest map over exactly the paths `working_tree_digest` folds.
+
+    Same traversal and the same `_working_tree_path_excluded` exclusions, so a
+    file the aggregate digest counts is a file this map counts -- but keyed by
+    path, so a caller can ask WHICH files changed, not only WHETHER any did. The
+    accept path uses it to assert its whole-tree delta is exactly the two files
+    it declares it will write.
+    """
+
+    repo_root = repo_root.resolve()
+    digests: dict[str, str] = {}
+    for path in sorted(repo_root.rglob("*")):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(repo_root)
+        if _working_tree_path_excluded(relative):
+            continue
+        digests[relative.as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return digests
+
+
 def _working_tree_path_excluded(relative: Path) -> bool:
     """Mirror only the runtime-heavy `.gitignore` lanes relevant to WRITE.
 
@@ -691,6 +713,36 @@ def _corpus_snapshot(data_dir: Path) -> dict[str, bytes]:
     }
 
 
+def _atomic_write_text(path: Path, text: str) -> None:
+    """Write `text` to `path` atomically, with `Path.write_text` byte semantics.
+
+    The stream is opened in text mode with the default (`None`) newline, so a
+    `\\n` is translated to `os.linesep` exactly as `Path.write_text` would --
+    which is why the accepted corpus stays byte-for-byte what running the
+    committed seed produces (proved by test) even though the write is now a
+    temp-file/fsync/`os.replace` rather than a plain overwrite. A crash mid-write
+    leaves the pre-existing bytes (or nothing) intact, never a torn file: the
+    same discipline the receipt writer already uses.
+    """
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8", closefd=True) as stream:
+            descriptor = -1
+            stream.write(text)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+        temporary.unlink(missing_ok=True)
+
+
 def _materialize_corpus(path: Path, payload: dict) -> None:
     """The committed generator: trusted code that writes a corpus from its
     already-audited declarative payload.
@@ -700,13 +752,12 @@ def _materialize_corpus(path: Path, payload: dict) -> None:
     so running the committed seed reproduces exactly these bytes -- but this is
     trusted code parameterized by data the gate parsed, NOT the candidate seed
     being executed. Every write of `data/*/nodes.json` this module performs, in
-    scratch and on the accept path alike, goes through here.
+    scratch and on the accept path alike, goes through here, and every such
+    write is atomic.
     """
 
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
+    _atomic_write_text(
+        path, json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
     )
 
 
@@ -1717,20 +1768,44 @@ def accept_write(
             f"data/{target_rel} already exists; acceptance never overwrites a "
             "corpus"
         )
-    # An untracked proposed seed may pre-exist (the gate allows it); capture its
-    # bytes so rollback restores them exactly rather than leaving our overwrite.
+    # Everything the accept path is about to touch, RECORDED BEFORE it is
+    # touched, so rollback cleans up regardless of how far a write got:
+    #   * an untracked proposed seed may pre-exist (the gate allows it) -- keep
+    #     its bytes so rollback restores them exactly rather than leaving our
+    #     overwrite; if it did not exist, rollback removes what we created;
+    #   * the corpus directory is new for a new corpus, so rollback must remove
+    #     it even if the (atomic) corpus write never completed and left an empty
+    #     dir behind -- which the file-only `working_tree_digest` would miss.
     seed_before = seed_path.read_bytes() if seed_path.is_file() else None
+    corpus_dir = corpus_path.parent
+    corpus_dir_existed = corpus_dir.exists()
+    # The strong guarantee, established by construction at the point bytes land:
+    # a per-file map of the whole tree BEFORE, so AFTER we can assert the only
+    # paths whose bytes changed are exactly the seed and the target corpus.
+    files_before = working_tree_file_digests(repo_root)
+    expected_changes = {
+        seed_path.resolve().relative_to(repo_root).as_posix(),
+        corpus_path.relative_to(repo_root).as_posix(),
+    }
 
-    seed_written = False
-    created_corpus = False
+    def _rollback() -> None:
+        # Idempotent, intention-based: does not depend on how far the try got.
+        corpus_path.unlink(missing_ok=True)
+        if not corpus_dir_existed:
+            with contextlib.suppress(OSError):
+                corpus_dir.rmdir()
+        if seed_before is not None:
+            seed_path.write_bytes(seed_before)
+        else:
+            seed_path.unlink(missing_ok=True)
+        _restore_snapshot(before_snapshot, repo_root / "data")
+
     try:
         # 4. Apply through trusted code only: the seed as the source of truth,
-        #    the corpus via the one committed generator.
-        seed_path.parent.mkdir(parents=True, exist_ok=True)
-        seed_path.write_text(candidate.seed_source, encoding="utf-8")
-        seed_written = True
+        #    the corpus via the one committed generator. Both writes are atomic
+        #    (temp-file, fsync, os.replace) -- no torn file on a mid-write crash.
+        _atomic_write_text(seed_path, candidate.seed_source)
         _materialize_corpus(corpus_path, payload)
-        created_corpus = True
 
         acceptance = _verify_application(
             candidate,
@@ -1740,19 +1815,46 @@ def accept_write(
             target_rel,
             staging_record,
         )
+
+        # F4: the whole-tree delta must be EXACTLY the two declared files. If a
+        # validator, matcher, or anything else touched `scripts/`, `prover/`,
+        # `schema/`, another corpus, or the root, this catches it and the tree
+        # is rolled back. `staging/` is excluded from the map by construction.
+        files_after = working_tree_file_digests(repo_root)
+        changed = {
+            name
+            for name in set(files_before) | set(files_after)
+            if files_before.get(name) != files_after.get(name)
+        }
+        stray = sorted(changed - expected_changes)
+        if stray:
+            raise AcceptanceError(
+                "acceptance changed files it did not declare: "
+                + ", ".join(stray)
+            )
+
+        acceptance.corpus_digest_before = corpus_before
+        acceptance.corpus_digest_after = durable_digest(repo_root / "data")
+        acceptance.working_tree_digest_before = working_before
+        acceptance.working_tree_digest_after = working_tree_digest(repo_root)
+
+        # F3: receipt-or-nothing. The receipt is written INSIDE the guarded
+        # region, so a receipt failure rolls the application back rather than
+        # leaving a durable change with no diffable receipt. `staging/` is
+        # excluded from the delta above, so writing it does not disturb F4.
+        if staging_dir is not None:
+            expected_staging = repo_root / "staging"
+            receipt = staging_dir / f"{acceptance.record_id}.accepted.json"
+            _write_receipt_atomic(
+                staging_dir,
+                expected_staging,
+                receipt.name,
+                acceptance.render().encode("utf-8"),
+            )
     except Exception as exc:  # noqa: BLE001 - roll back, then re-raise
-        # An application that cannot be verified is not an application. Restore
-        # byte-identity before surfacing the failure.
-        if created_corpus:
-            corpus_path.unlink(missing_ok=True)
-            with contextlib.suppress(OSError):
-                corpus_path.parent.rmdir()
-        if seed_written:
-            if seed_before is not None:
-                seed_path.write_bytes(seed_before)
-            else:
-                seed_path.unlink(missing_ok=True)
-        _restore_snapshot(before_snapshot, repo_root / "data")
+        # An application that cannot be verified -- or cannot be receipted -- is
+        # not an application. Restore byte-identity before surfacing the failure.
+        _rollback()
         if working_tree_digest(repo_root) != working_before:
             raise AcceptanceError(
                 "acceptance failed AND rollback could not restore byte-identity; "
@@ -1760,20 +1862,6 @@ def accept_write(
             ) from exc
         raise
 
-    acceptance.corpus_digest_before = corpus_before
-    acceptance.corpus_digest_after = durable_digest(repo_root / "data")
-    acceptance.working_tree_digest_before = working_before
-    acceptance.working_tree_digest_after = working_tree_digest(repo_root)
-
-    if staging_dir is not None:
-        expected_staging = repo_root / "staging"
-        receipt = staging_dir / f"{acceptance.record_id}.accepted.json"
-        _write_receipt_atomic(
-            staging_dir,
-            expected_staging,
-            receipt.name,
-            acceptance.render().encode("utf-8"),
-        )
     return staging_record, acceptance
 
 
