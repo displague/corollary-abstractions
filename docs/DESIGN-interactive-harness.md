@@ -4,7 +4,10 @@ Source conversation: 2026-08-09 (directional plan on integrating demos into one
 agent-like experience; model composition; offline degradation), with review
 corrections that reject a “slash-command demo launcher” in favor of a
 **capability-driven session**: the system decides what is missing and how to
-fulfill it along **registered, proven paths** only.
+fulfill it along **registered paths** only. (“Registered” is deliberately not
+“proven”: PROVEN is reserved for digest-pinned Lean artifacts. A registered
+path is one a probe-initialized subsystem declared and the kernel will let a
+verifier adjudicate; registration is not a verdict.)
 
 Status: design only. No REPL, HTTP API, or subsystem registry is implemented
 here. The domain-neutral controller, frame executor, retrieval ASK/WAITING
@@ -12,7 +15,11 @@ channel, story adapter, live Lean search, and specialist experiment models
 already exist as libraries and scripted demos; this document specifies how they
 become one live experience. Indexed from `docs/BACKLOG.md` (“Interactive
 harness / agent OS”) and related to `docs/DESIGN-frames-and-retrieval.md`,
-`docs/DESIGN-concept-tokens.md`, and ROADMAP-v0.6 conversation / policy items.
+`docs/DESIGN-concept-tokens.md`, and `docs/ROADMAP-v0.7.md` items 2
+(conversation across process boundaries, bounded request grammar), 6
+(retrieval becomes tool use, miss chain, typed protocols), 7 (external trust
+roots), and 9 (rendering and open-language requests). ROADMAP-v0.6 is closed
+and historical; its conversation/policy threads live in the v0.7 items above.
 
 ---
 
@@ -56,7 +63,7 @@ mutated in a live session? Same question for Sally–Anne and other “demos.”
 | User-frame **bindings** | **Yes** | `ConversationSession` can open slots, ASK → WAITING, accept signed replies, supersede values (silver → copper), isolate owners (Alice vs Bob). Public story beats stay shared; private bindings do not enter `frame.asserted`. |
 | Belief / ToM | **Yes (event-driven)** | Visibility-filtered `observe_event` derives false belief. The Sally–Anne script is a fixed event log; the executor is general. |
 | Retrieval | **Yes** | Any key against five committed stores (+ optional WordNet). Demo CLI is one query, not the limit of the store. |
-| Lean search | **Yes (bounded)** | BFS over registered tactic palettes; not a single canned theorem only—though the public demo targets one held-out Init prop. |
+| Lean search | **Partly (backend general, target hardcoded)** | The generality is the Pantograph backend and BFS over registered tactic palettes; the *proposition* is not yet a parameter—`prover/live_search.py:83-84` hardcodes `HELD_OUT_THEOREM` / `HELD_OUT_PROPOSITION` (one held-out `Init` prop). Turning that into a versioned theorem set is ROADMAP-v0.7 item 1, not a harness deliverable. |
 | Neural tools | **Offline specialists** | Separate processes/checkpoints; not session-native tools yet. |
 
 **Design consequence:** the interactive system must expose **mechanics and
@@ -115,19 +122,47 @@ The kernel:
 
 - does not know Lean, narrative, or WordNet;
 - copy-isolates state at extension boundaries;
-- prunes duplicate rejected `(state_key, action.fingerprint)` pairs;
-- in search mode, tracks `seen_states` so accepted cycles are not re-expanded;
-- enforces budgets (`max_steps` / `max_nodes` / `max_proposals`).
+- prunes duplicate rejected `(state_key, action.fingerprint)` pairs **within a
+  single `run()`**;
+- in search mode, tracks `seen_states` so accepted cycles are not re-expanded
+  **within a single `search()`**;
+- enforces budgets (`max_steps` / `max_nodes` / `max_proposals`) **per run**.
 
-**Loop / tree control (already present, must stay load-bearing):**
+Every one of those is run-scoped, which the table and scope correction below
+make explicit; the session-level analogue does not exist yet.
 
-| Mechanism | Where | Role |
-|---|---|---|
-| Rejected-branch set | `Controller` | Same failed action on same state not retried forever |
-| Attempted set | `SearchController` | Duplicate proposals pruned |
-| `seen_states` | `SearchController` | Cycle detection on accepted frontier |
-| Budgets | both | EXHAUSTED vs BUDGET distinct stop reasons |
-| Verifier REFUSED/REFUTED | adapters | Domain illegal moves never mutate accepted state |
+**Loop / tree control (already present, must stay load-bearing) — and its
+scope:**
+
+| Mechanism | Where | Scope today | Role |
+|---|---|---|---|
+| Rejected-branch set | `Controller` | **per `run()`** (`scripts/controller.py:271`: `rejected` is a local, discarded when `run()` returns) | Same failed action on same state not retried forever *within one run* |
+| Attempted set | `SearchController` | **per `search()`** (run-local) | Duplicate proposals pruned *within one search* |
+| `seen_states` | `SearchController` | **per `search()`** (run-local) | Cycle detection on the accepted frontier *of one search* |
+| Budgets | both | **per run/search** | EXHAUSTED vs BUDGET distinct stop reasons |
+| Verifier REFUSED/REFUTED | adapters | per action, but verifier-instance ledgers persist (§3.3) | Domain illegal moves never mutate accepted state |
+
+**Scope correction (design review, 2026-08-09).** An earlier draft of this
+document described these as global or session-wide properties “already in the
+kernel.” That is false. Every one of them is **run-local**. Under the §6.2
+dispatcher each need is a separate `Controller.run()` / `SearchController`
+invocation, so every pruning structure is reconstructed empty at each
+dispatcher hop. Nothing in the kernel today prevents a session from cycling
+among **registered** paths across hops: need A routes to subsystem X, whose
+outcome re-opens need B, which routes back to X with the same state key, and
+the rejected/seen sets that would have caught it were discarded at the
+previous `return`. In-run loop control is real and must stay; **session-level**
+loop control does not exist and is scheduled work, not an existing guarantee.
+
+Consequently, session-scoped pruning is an explicit deliverable:
+
+- **Phase 1** (§9): the `Session` owns a durable-for-the-session record of
+  `(subsystem_id, state_key, action.fingerprint)` outcomes and of visited
+  `(need, state_key)` pairs, threaded into each run rather than rebuilt.
+- **Phase 2** (§9): the need dispatcher consults that record, and a session
+  budget (total hops / total proposals across runs) produces a session-level
+  EXHAUSTED/BUDGET stop with caution chrome — an honest refusal, never a
+  silent spin. See **P-IH7**.
 
 Future work: expose cycle/budget stats in the UI trace; optional iterative
 deepening or best-first once multi-action learned policies exist—without
@@ -143,10 +178,29 @@ Subsystem = {
                      #      prover.lean_live, tool.span_pointer
   probe(),           # boot: available? version? size? error?
   adapter_factory,   # VerifierAdapter | store | tool handle
-  proven_paths,      # closed set of action schemas / goals it can pursue
+  registered_paths,  # closed set of action schemas / goals it can pursue
   degrade_policy,    # what the kernel does if probe fails
 }
 ```
+
+**This registry is the same seam as ROADMAP-v0.7 item 6's “replace
+string-valued retrieval resolution channels and duck-typed controller commit
+hooks with typed protocols.”** A subsystem descriptor is exactly a typed
+protocol over adapter/store/tool handles. Build one seam, not two: the harness
+registry should *be* the item-6 refactor's landing site, and neither should
+ship a second parallel dispatch vocabulary.
+
+**Probe semantics: liveness only.** A passing probe asserts that a component
+imported, loaded, or answered a smoke call — nothing more. **A probe never
+raises any verdict's epistemic rung, and the boot matrix is not evidence of
+verifier soundness.** `[ OK ] narrative.story` means the `StoryVerifier`
+answered; it does not make that verifier's REFUTED judgments more trustworthy,
+and a fully green matrix is not a certificate. This is the external-trust-roots
+rule of ROADMAP-v0.7 item 7: “the system may verify receipts it minted, but it
+may not certify its own verifier soundness.” Self-probes are self-issued
+receipts. UI must therefore never render matrix status in the verdict palette
+of §4.2 (no green `✓` shared with PROVEN/VERIFIED); OK/OFF/FAIL is a liveness
+channel with its own chrome.
 
 Examples:
 
@@ -166,7 +220,7 @@ Examples:
 | `tool.tactic_rank` | optional GRU ckpt | file + load or OFF |
 
 **Registration rule:** a subsystem may only contribute transitions on its
-**proven_paths**. There is no “try every shell command until something works”
+**registered_paths**. There is no “try every shell command until something works”
 behavior (the Windows-vs-Linux LLM failure mode). If a path is unregistered,
 the kernel does not invent it; it routes to another registered path, ASK, or
 honest abstention.
@@ -193,20 +247,63 @@ One session can interleave story revision, belief queries, retrieval, and proof
 search **because they share the kernel contract**, not because a monolith model
 contains all skills.
 
+**A `Session` is not a value object.** The block above lists what is
+*serializable*; the session's authority is not. `RetrievalVerifier`
+(`scripts/retrieval.py:741-744`) holds, per **instance**:
+
+- `_receipt_secret` and `_ask_secret` — process-local HMAC keys minted at
+  construction;
+- `_consumed_ask_requests` and `_superseded_ask_bindings` — the anti-replay and
+  supersession ledgers.
+
+Both the keys **and the ledgers** live on the verifier instance, outside any
+serializable state, and both are load-bearing: the ledgers are what stop a
+replayed or superseded binding from being resurrected by public-tuple surgery
+(`tests/test_conversation_runtime.py::test_public_state_surgery_cannot_resurrect_superseded_answer`).
+So durability is blocked by **more than key management** — a restart that
+carried keys forward but not the ledgers would silently re-admit consumed
+requests. Any `Session` therefore names its verifier instance rather than
+containing it, and the harness must treat “session” as a handle to live
+authority. **ROADMAP-v0.7 item 2 is the scheduled fix** (durable key identity,
+rotation, revocation, and an explicit lifetime protocol for user/belief
+frames); until it lands, sessions are process-local by construction, which is
+also why §4.3 forbids HTTP from pretending restarts are safe.
+
 ### 3.4 Dispatcher: symbolic MoE first, learned policy later
 
 Review accepts that open-language Shape C comes after earlier approaches.
 
-**Phase order (unchanged intent, reframed):**
+> **Phase numbering:** **§9 is normative** (Phases 0–6, HTTP at 4). The list
+> below is a *capability-maturity ordering* of the dispatcher itself and is
+> subordinate to §9; each entry names its §9 phase. Where any other section of
+> this document says “Phase *n*,” it means the §9 number.
 
-1. **Kernel session + boot matrix + WAITING I/O** (no demo menu).
+**Dispatcher maturity (each mapped to its normative §9 phase):**
+
+1. **Kernel session + boot matrix + WAITING I/O** (no demo menu) — §9 **Phase
+   1**.
 2. **Goal / need detector** over symbolic state: open UNKNOWN, undischarged
    obligation, unsolved goal, missing witness, empty retrieval → choose among
-   registered paths (RETRIEVE vs ASK vs GEN vs search).
-3. **Optional tools** as subsystems when probes succeed.
-4. **Learned ranking** among legal registered actions (vacuity baselines
-   mandatory; tactic-policy lesson: frequency can beat a weak learner).
-5. **Open-English parse/render** constrained to point into accepted content.
+   registered paths (RETRIEVE vs ASK vs GEN vs search); plus session-level
+   pruning and session budgets (§3.1) — §9 **Phase 2**.
+3. **Bounded slot-filling grammar** — §9 **Phase 2**, *not* deferred to last.
+   ROADMAP-v0.7 item 2 requires “a bounded but growing natural-request grammar
+   into frame-private slots, including corrections, pronouns, and owner
+   references,” and item 2 is part of the v0.7 **release gate**. This is
+   in-cycle work: a closed, enumerable grammar that fills *already-open* slots
+   on registered paths. It invents no slot, no path, and no fact; an
+   unparseable utterance falls through to ASK, exactly as an unbound slot does
+   today.
+4. **Optional tools** as subsystems when probes succeed — §9 **Phase 3**.
+5. **Learned ranking** among legal registered actions (vacuity baselines
+   mandatory; tactic-policy lesson: frequency can beat a weak learner) — §9
+   **Phase 5**.
+6. **Unrestricted prose authoring and open-English render** constrained to
+   point into accepted content — §9 **Phase 6**, and the last thing to land.
+   This is ROADMAP-v0.7 item 9's surface pointer, a different problem from
+   (3): open *authoring* of new content versus bounded *filling* of declared
+   slots. Conflating them was what made an earlier draft defer all parsing to
+   the final phase, contradicting item 2's release gate.
 
 The “brain” that chooses the next path is initially **closed-form dispatch
 predicates** (epistemic ladder + goal state), which is the project’s load-bearing
@@ -241,7 +338,12 @@ Long-term “thousands of models” only works if:
 - each tool has a tiny, documented I/O schema;
 - the kernel never treats tool logits as VERIFIED;
 - missing tools degrade via `degrade_policy`, not crash;
-- loop detection remains global across tool hops.
+- loop detection **becomes** session-scoped so it holds across tool hops. It is
+  not there yet: today's pruning is run-local (§3.1), so each tool hop starts
+  with an empty rejected/seen set. Registering a tool that can re-open a need
+  it just failed is a live cycling risk until the Phase-2 session record lands
+  (P-IH7). This is a precondition on “thousands of models,” not a description
+  of the current kernel.
 
 ---
 
@@ -292,6 +394,14 @@ when complete.
 Plain terminals without color still get ASCII markers; color is progressive
 enhancement (`NO_COLOR` respected).
 
+**Trace events are structured records, not strings.** The session emits typed
+events (action kind, subsystem id, verdict, evidence ids, budget counters,
+run/hop index); TTY chrome — glyphs, color, pulsing, collapse state — is **one
+renderer** over that stream. This is the seam that makes §4.3 possible at all:
+the HTTP skin serializes the same records instead of scraping a terminal, and
+a batch run writes them as the machine-readable need-input record of §2.2. No
+verdict may exist only as a rendered character.
+
 ### 4.3 Chat Completions–compatible HTTP (second leg)
 
 Expose the same session as a **drop-in channel** for existing agent harnesses
@@ -337,7 +447,8 @@ ready. registered paths: 14  optional off: 3
 
 Rules:
 
-- **OK** means probe passed; subsystem may register proven_paths.
+- **OK** means the probe passed — the subsystem is *live* and may register its
+  registered_paths. It is not a soundness claim (§3.2).
 - **OFF** means absent optional dependency; degrade_policy active.
 - **FAIL** means required subsystem broken → refuse to enter interactive mode
   (or enter read-only diagnose mode).
@@ -382,9 +493,31 @@ for need in priority(open needs):
   if cycle/budget: stop with caution chrome
 ```
 
-This is the anti-“command not found” design: the system never flails across
-unregistered OS shells; it only walks the registered graph, with loop
-detection already in the kernel.
+This need→candidates→rank→verify→miss ladder is **not a new invention**: it is
+ROADMAP-v0.7 item 6's miss chain — *exact → neighborhood → derivation → tool →
+ASK for frame-private knowledge → explicit abstention* — lifted from retrieval
+to every registered subsystem. The dispatcher should implement item 6's chain
+generically rather than reinventing a parallel one, and item 6's “store
+REFUTED and exhausted branches as reusable pruning evidence” is precisely the
+session-scoped record §3.1 requires.
+
+This is the anti-“command not found” design, with one honest boundary. The
+system never flails across unregistered OS shells: it only walks the
+**registered** graph, and an unregistered path is REFUSED rather than
+improvised. That part is true today and is enforced by registration, not by
+loop detection.
+
+What is **not** true today is the second half of the safety argument. Walking
+only the registered graph does not by itself terminate: the kernel's rejected
+sets, `seen_states`, and budgets are **run-local** (§3.1), and each iteration
+of the loop above is a fresh run, so a session can cycle *among registered
+paths* across dispatcher hops with every pruning structure reset. Bounded
+registration prevents inventing paths; it does not prevent revisiting them.
+Termination across hops requires the session-scoped record and session budget
+scheduled in Phases 1–2, whose adjudicating test is **P-IH7**. Until that
+lands, the dispatcher must be run under an explicit hop ceiling and stop with
+caution chrome when it is reached — a stated budget is the interim guarantee,
+not an unproven claim of global loop detection.
 
 ---
 
@@ -424,54 +557,140 @@ Tool admission bar (unchanged):
 1. closed outputs (point/rank) or proposals only;
 2. capability-blind baseline on the same path;
 3. missing checkpoint → OFF, not crash;
-4. loop detection includes tool-produced actions.
+4. tool-produced actions enter the **session-scoped** pruning record (§3.1),
+   not only the run-local one.
 
 ---
 
 ## 9. Phased delivery
 
+**This table is the normative phase numbering for the whole document.** §3.4's
+dispatcher-maturity list is subordinate to it and maps entry-by-entry; any
+“Phase *n*” elsewhere (including §10's predictions) means the number here.
+
 | Phase | Deliverable | User-visible |
 |---|---|---|
 | **0** | This design + BACKLOG | none |
-| **1** | Session object, boot matrix, TTY loop, WAITING channel, unified trace; wire narrative + belief + retrieve as subsystems | agent-like CLI without demo menu; selftests optional |
-| **2** | Need dispatcher over registered paths; collapse/expand trace UX; status chrome | system asks when needed; final answers default compact |
+| **1** | Session object, boot matrix, TTY loop, WAITING channel, unified structured trace, **session-scoped pruning record** (§3.1); wire narrative + belief + retrieve as subsystems | agent-like CLI without demo menu; selftests optional |
+| **2** | Need dispatcher over registered paths implementing the v0.7 item-6 miss chain; **session budget + session-level loop detection** (P-IH7); **bounded slot-filling grammar** (v0.7 item 2); collapse/expand trace UX; status chrome | system asks when needed; cycling need refuses instead of spinning; final answers default compact |
 | **3** | Optional tool plugins (span/analogy/tactic) | matrix shows tools OK/OFF |
 | **4** | Chat Completions–compatible HTTP skin | external harnesses attach |
 | **5** | Learned multi-action ranking | only with baselines |
-| **6** | Open-English parse/render | still kernel-bound |
+| **6** | Unrestricted prose authoring / open-English render (v0.7 item 9) | still kernel-bound |
 
 Phase 1 must not ship a `/demo_*` surface. Developer selftests are fine.
+Phase 2 must not ship a dispatcher that can loop: either P-IH7's test passes or
+the hop ceiling of §6.2 is enforced and surfaced.
 
 ---
 
 ## 10. Registered predictions (before implementation)
 
-**P-IH1 — Offline core session.** With WordNet/Lean/Torch OFF, a single session
-can still open a fiction frame, bind a private slot via WAITING, answer a
-visibility-derived belief query, and retrieve a corpus twin. If any of those
-requires an optional subsystem, the prediction text is wrong and must be
+Every entry below names the **adjudicating test** that decides it. A prediction
+with no test that could fail is not a prediction, and this section separates
+three kinds of claim that an earlier draft blurred: **predictions** (can be
+falsified by the system's behavior), **policy commitments** (we control the
+outcome, so being “surprised” is impossible), and **architectural commitments**
+(design constraints, not empirical bets). Phase numbers are §9's.
+
+These entries were revised before any implementation and before merge, in
+response to the 2026-08-09 design review; the corrections are recorded here
+rather than applied silently, per ROADMAP-v0.7 item 10.
+
+**P-IH1 — Offline core session.** *(prediction)* With WordNet/Lean/Torch OFF, a
+single session can still open a fiction frame, bind a private slot via WAITING,
+answer a visibility-derived belief query, and retrieve a corpus twin. If any of
+those requires an optional subsystem, the prediction text is wrong and must be
 corrected—not the offline claim silently narrowed.
+*Adjudicated by:* a new `tests/test_session_offline.py` that constructs a
+session with the optional probes forced OFF and drives all four legs in one
+session object, asserting no optional subsystem is registered; run under
+`python -m unittest discover -s tests` with `COROLLARY_WORDNET` unset. Miss if
+any leg needs an OFF subsystem or a second session.
 
-**P-IH2 — WAITING is the ask tool-call.** No user-facing command named ASK is
-required for the private-slot path when a TTY channel exists; the shell
-surfaces WAITING automatically. Miss if users must type a dedicated ask
-command to complete the path.
+**P-IH2 — Every pausing subsystem can state its own need.** *(prediction —
+strengthened)* The original text (“no user-facing ASK command is required”) was
+near-vacuous: `ClarificationRequest` already carries a signed `prompt` field
+(`scripts/retrieval.py:763`), so retrieval's WAITING is presentable by
+construction and the claim could not fail. The claim that can fail is the
+**general** one: *every* subsystem that can pause must supply a
+human-presentable need record through the same typed channel, and the shell
+must render it **without any subsystem-specific knowledge** — no
+retrieval-shaped special case. Miss if the TTY loop must branch on subsystem id
+to phrase a question, or if a non-retrieval subsystem (narrative obligation,
+belief gap, prover missing witness) can reach WAITING with no prompt the shell
+can render.
+*Adjudicated by:* extending `tests/test_ask.py` (see
+`test_controller_stops_waiting_after_verified_question`) with a second,
+non-retrieval pausing subsystem, plus a shell-render test asserting the
+renderer is subsystem-agnostic.
 
-**P-IH3 — No demo zoo.** The default help/UX does not list golden-chicken or
-Sally–Anne as destinations; those names appear only in selftests/docs. Miss if
-Phase 1 ships a slash menu of demos as the primary model.
+**P-IH3 — No demo zoo.** *(POLICY COMMITMENT, not a prediction — re-labeled.)*
+We author the help text and the surface, so we cannot be *surprised* by it;
+registering it as a prediction was a category error. As a commitment: the
+default help/UX will not list golden-chicken or Sally–Anne as destinations;
+those names appear only in selftests and docs, and §9 **Phase 1** ships no
+`/demo_*` surface. Breach is a review failure, not a negative result.
+*Enforced by:* a lint/UX test asserting no demo name occurs in the help/command
+table, alongside the existing oracle regressions in `tests/test_controller.py`
+(`test_oracle_executes_three_verified_beats`) which keep the golden-chicken
+sequence alive as a **selftest**.
 
-**P-IH4 — Registered paths only.** Given a goal that no registered subsystem
-claims, the session abstains or ASKs rather than free-generating an answer.
-Miss if fluent unregistered content is emitted as VERIFIED.
+**P-IH4 — Registered paths only.** *(prediction)* Given a goal that no
+registered subsystem claims, the session abstains or ASKs rather than
+free-generating an answer. Miss if fluent unregistered content is emitted as
+VERIFIED.
+*Adjudicated by:* a dispatcher test that submits a goal outside every
+registered path and asserts the terminal stop is REFUSED/abstain with a reason,
+extending the refusal patterns of `tests/test_retrieval.py`
+(`test_point_before_retrieval_is_refused`).
 
-**P-IH5 — Boot matrix honesty.** Startup output marks WordNet OFF when no
-archive is configured; naming a missing archive FAILs that probe rather than
-silently equating to OFF (preserves today’s loud named-path behavior).
+**P-IH5 — Boot matrix honesty.** *(prediction)* Startup output marks WordNet
+OFF when no archive is configured; naming a missing archive FAILs that probe
+rather than silently equating to OFF (preserves today’s loud named-path
+behavior).
+*Adjudicated by:* a capability-matrix test paired with
+`tests/test_wordnet_retrieval.py`, run twice — once with `COROLLARY_WORDNET`
+unset (expect OFF) and once pointing at a nonexistent path (expect FAIL, not
+OFF). Note this probe asserts liveness only (§3.2); a green matrix is not
+evidence of verifier soundness.
 
-**P-IH6 — HTTP skin parity.** When Phase 4 exists, the same session engine
-backs TTY and chat-completions; a WAITING state is representable to the HTTP
-client without inventing slot values.
+**A-IH6 — One session engine, two skins.** *(ARCHITECTURAL COMMITMENT — split
+out of the former P-IH6.)* The TTY and Chat-Completions surfaces are renderers
+over the same session engine and the same structured trace stream (§4.2); a
+second engine forked for HTTP is a design violation, not a surprising
+observation. Enforced at review and by construction (§4.3's “one session
+engine, two skins”).
+
+**P-IH6 — WAITING survives the HTTP boundary.** *(prediction — the falsifiable
+remainder.)* When §9 **Phase 4** exists, a WAITING state is representable to a
+chat-completions client **without inventing slot values**: the client receives
+a need record and resumes with an authenticated reply, and no default,
+placeholder, or model-generated value is ever substituted for the missing slot.
+Miss if the HTTP mapping can only proceed by supplying a value the user did not
+send.
+*Adjudicated by:* an HTTP-skin test mirroring
+`tests/test_ask.py::test_signed_reply_resumes_same_session_and_binds_user_frame`
+across the transport, plus a negative asserting an unsigned or absent reply
+cannot bind (`test_policy_cannot_guess_user_reply_signature`).
+
+**P-IH7 — Session-level loop detection.** *(prediction — newly registered,
+2026-08-09 review.)* The kernel's rejected sets, `seen_states`, and budgets are
+**run-local** (`scripts/controller.py:271`), so a multi-run dispatcher session
+has no cycle protection today. Prediction: once §9 Phase 1's session-scoped
+pruning record and Phase 2's session budget land, a session whose need cycles
+**between two registered paths** terminates in bounded hops with REFUSED or an
+explicit abstention/BUDGET stop, and never loops.
+*Adjudicated by:* a new `tests/test_session_dispatcher.py` case in which two
+registered subsystems each re-open the need the other just failed, with a
+stated session budget (proposed: 8 dispatcher hops). The session must reach a
+terminal stop within that budget, the stop must be REFUSED/abstain/BUDGET with
+the cycle named in the trace, and the trace must show the second visit to a
+`(need, state_key)` pair being pruned rather than re-expanded. **Miss** if the
+session exceeds the hop ceiling, or if it terminates only because a wall-clock
+or step cap fired without identifying the cycle. Adjudication is required
+before any Phase-3 tool plugin registers, since tools multiply the hop graph
+(§3.5, §8).
 
 ---
 
@@ -489,12 +708,25 @@ client without inventing slot values.
 ## 12. Work items (dependency order)
 
 1. Land this design; index in BACKLOG/README.
-2. Implement `Session` + `CapabilityMatrix.probe()` + registry (no UI).
-3. TTY agent loop: WAITING auto-prompt, status markers, collapsed trace.
-4. Register narrative, belief, five-store as first subsystems; demos → selftests.
-5. Need dispatcher (symbolic) with cycle/budget surfacing.
-6. Optional tools + HTTP skin as separate slices.
-7. Only then learned global action ranking and open-English.
+2. Implement `Session` + `CapabilityMatrix.probe()` + registry (no UI), as the
+   typed-protocol seam of ROADMAP-v0.7 item 6 rather than a second one. The
+   `Session` names its verifier instance; it does not serialize the HMAC
+   authority or the anti-replay/supersession ledgers (§3.3).
+3. **Session-scoped pruning record** (Phase 1): thread visited
+   `(need, state_key)` and `(subsystem_id, state_key, fingerprint)` outcomes
+   through every `run()` instead of rebuilding them empty per hop. Closes the
+   false “loop detection already in the kernel” claim at session scope.
+4. Structured trace events + TTY agent loop as one renderer over them: WAITING
+   auto-prompt, status markers, collapsed trace.
+5. Register narrative, belief, five-store as first subsystems; demos →
+   selftests.
+6. Need dispatcher (symbolic) over the item-6 miss chain, with **session
+   budget** and cycle/budget surfacing; adjudicate **P-IH7**.
+7. Bounded slot-filling grammar into already-open frame-private slots (v0.7
+   item 2) — in-cycle, not deferred to the end.
+8. Optional tools + HTTP skin as separate slices.
+9. Only then learned global action ranking and unrestricted prose authoring
+   (v0.7 item 9).
 
 ---
 

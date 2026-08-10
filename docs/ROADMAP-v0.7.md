@@ -41,6 +41,16 @@ valid result.
 - Preserve provenance when a user changes a preference; never promote testimony
   into corpus or frame truth merely because it persists.
 - Exercise derive → retrieve → ask → revise → abstain in one maintained session.
+- **From `docs/DESIGN-interactive-harness.md`:** durability is blocked by more
+  than keys. `RetrievalVerifier` holds its HMAC secrets **and** its
+  anti-replay/supersession ledgers on the instance
+  (`scripts/retrieval.py:741-744`), so the harness `Session` is a handle to
+  live authority, not a serializable value object. A restart that carried keys
+  forward but not the ledgers would silently re-admit consumed requests. The
+  bounded request grammar above is that design's **Phase 2** (in-cycle,
+  filling already-open frame-private slots); unrestricted prose authoring is
+  item 9 and lands last. Until this item ships, the harness HTTP skin must not
+  pretend restarts are safe.
 
 Acceptance: serialize, restart, authenticate, and continue the Alice/Bob
 golden-chicken demo while a stale or forged pre-restart binding is refused.
@@ -139,6 +149,17 @@ result reported against it. Synthetic 1.000 remains a mechanism result only.
 - Replace string-valued retrieval resolution channels and duck-typed
   controller commit hooks with typed protocols while preserving the existing
   five-action API, receipt checks, and verifier-owned authority boundaries.
+- **From `docs/DESIGN-interactive-harness.md`:** the miss chain above is the
+  harness need dispatcher, generalized from retrieval to every registered
+  subsystem — that design cites this item rather than reinventing a parallel
+  ladder. The subsystem registry it specifies is **the same seam** as the
+  typed-protocols refactor above: one seam, one refactor, no second dispatch
+  vocabulary. Note also that “store REFUTED and exhausted branches as reusable
+  pruning evidence” is currently only true **within one run**: `rejected` is a
+  local in `Controller.run()` (`scripts/controller.py:271`) and
+  `SearchController`'s `seen_states`/`attempted` are per-search, so a
+  multi-run dispatcher resets all pruning at every hop. Making that evidence
+  session-scoped is a prerequisite here, adjudicated by P-IH7.
 
 A successful tool transaction proves what was fetched, not that its content is
 true.
@@ -222,6 +243,13 @@ invalidate/verify protocol, not equations or epistemic authority.
 - Publish the first external benchmark only when its input/output contract maps
   honestly onto implemented capabilities; include memory and artifact size,
   latency, and abstention quality alongside accuracy.
+- **From `docs/DESIGN-interactive-harness.md`:** this item owns **unrestricted
+  prose authoring** — the harness's last phase, reached through a live session
+  with a TTY and optional Chat-Completions surface over the same kernel. It
+  does **not** own bounded slot-filling, which is item 2's in-cycle grammar.
+  Keep the two separate: open authoring of new content is a different problem
+  from filling a declared slot, and collapsing them defers item 2 past its own
+  release gate.
 
 The golden-chicken target is coherent, revisable conversation first; LLM-like
 fluency is a separate measured axis.

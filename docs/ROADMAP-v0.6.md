@@ -105,12 +105,6 @@ P-CR1–P-CR3 fire. Durable authenticated restart and open-English request
 parsing remain open; the signing secret and supersession authority are still
 process-local by design.
 
-**Design follow-on (not a v0.6 release gate):** integrate mechanics into one
-live session rather than more canned demos—WAITING auto-surfaces to the user
-channel, subsystems register only after boot probes, and a future TTY/HTTP
-agent skin shares the same kernel. See
-[DESIGN-interactive-harness.md](DESIGN-interactive-harness.md) (P-IH1–P-IH6).
-
 ## 3. PROVEN-gated WRITE
 
 Implement the fifth controller action as staged storage, symmetric with

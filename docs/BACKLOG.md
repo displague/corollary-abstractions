@@ -218,8 +218,9 @@ wall) must not be redirected into sentiment tags mid-experiment.
 Evidence: directional design 2026-08-09 (integrate demos into one agent-like
 experience; model composition; offline WordNet/wiki) with review rejecting a
 slash-command **demo launcher** in favor of a **microkernel session** that
-routes only along registered proven paths. Full mapping and predictions
-P-IH1–P-IH6: `docs/DESIGN-interactive-harness.md`.
+routes only along registered paths (registered ≠ PROVEN; PROVEN stays reserved
+for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
+`docs/DESIGN-interactive-harness.md`.
 
 - **Mechanics are live; demos are frozen policies.** `StoryVerifier` already
   mutates beats/obligations under GEN actions; `ConversationSession` opens and
@@ -261,13 +262,28 @@ P-IH1–P-IH6: `docs/DESIGN-interactive-harness.md`.
   checkpoints register only after probe success; OFF degrades to symbolic
   paths. Reject neural MoE over incompatible vocabs as the integration strategy;
   accept long-term “many specialized models as loadable modules” under ActionKind
-  I/O + global loop detection (`seen_states`, rejected fingerprints, budgets
-  already in `Controller`/`SearchController`).
+  I/O — **conditional on session-scoped loop detection that does not exist
+  yet**.
+
+- **BLOCKER — loop detection is run-local, not global.** `rejected` is a local
+  inside `Controller.run()` (`scripts/controller.py:271`) and
+  `SearchController`'s `seen_states`/`attempted` are likewise per-search: every
+  pruning structure is discarded on return. A need dispatcher issues one run
+  per hop, so a session can cycle among **registered** paths with pruning reset
+  at each hop. Registration bounds *which* paths exist; it does not bound
+  revisiting them. Fix is a session-scoped `(need, state_key)` /
+  `(subsystem_id, state_key, fingerprint)` record threaded through every run
+  (Phase 1) plus a session hop budget (Phase 2), adjudicated by **P-IH7**.
+  Nothing that multiplies the hop graph — tool plugins especially — should land
+  before it.
 
 - **Chat Completions–compatible HTTP skin (Phase 4).** Same session engine as
   TTY; represent WAITING to external harnesses without inventing slot values
-  (P-IH6). Durable multi-session auth remains blocked on process-local HMAC
-  authority (see conversation item below).
+  (P-IH6). Durable multi-session auth remains blocked on the verifier
+  **instance** — HMAC keys *and* the consumed-request / supersession ledgers
+  (`scripts/retrieval.py:741-744`) — so a `Session` is a handle to live
+  authority, not a value object (see conversation item below; ROADMAP-v0.7
+  item 2 is the scheduled fix).
 
 - **Need dispatcher before learned global policy.** Closed-form dispatch from
   epistemic state and registered paths first; learned ranking among legal
@@ -298,7 +314,10 @@ P-IH1–P-IH6: `docs/DESIGN-interactive-harness.md`.
   not serialize the ambient secret into user-visible state. Open-English goal
   parsing and transport/UI integration also remain open—and are now the
   surface layer of DESIGN-interactive-harness (TTY + optional HTTP), not a
-  separate demo-only concern.
+  separate demo-only concern. Note the split: the **bounded** slot-filling
+  grammar of ROADMAP-v0.7 item 2 is in-cycle harness Phase-2 work, while
+  unrestricted prose authoring (item 9) is the last phase; deferring both to
+  the end would contradict item 2's release gate.
 
 - **PARTIAL — learned tactic classification works; live ranking does not beat
   the strongest blind order.** The 27,688-parameter byte-GRU has a real
