@@ -154,8 +154,11 @@ class FamilyTests(Fixture):
 # ---------------------------------------------------------------------------
 
 class HoldoutTests(Fixture):
-    def test_three_splits_exist_and_all_are_two_sided(self) -> None:
+    def test_all_splits_exist_and_all_are_two_sided(self) -> None:
         self.assertEqual(set(self.splits), set(cas.SPLIT_NAMES))
+        # v0.8 item 2 adds the untyped-shape holdout as a fourth split.
+        self.assertEqual(cas.SPLIT_NAMES,
+                         ("family", "discipline", "vocabulary", "shape"))
         for name, assignment in self.splits.items():
             counts = Counter(assignment.values())
             self.assertGreater(counts["train"], 0, msg=name)
@@ -166,16 +169,37 @@ class HoldoutTests(Fixture):
         for name, assignment in self.splits.items():
             self.assertEqual(set(assignment), targets, msg=name)
 
-    def test_the_three_holdouts_are_not_one_partition_renamed(self) -> None:
-        """Three files must be three partitions, not three names for one.
+    def test_the_original_three_holdouts_are_not_one_partition_renamed(self) -> None:
+        """The original three files must be three partitions, not one renamed.
 
         The pairwise Jaccard of the holdout sets is the measurement that makes
-        "separate holdouts" mean something; 0.26 is the worst pair.
+        "separate holdouts" mean something; 0.257 is the worst pair among the
+        original three. The v0.8 shape holdout is a deliberate STRUCTURAL
+        SIBLING of the family holdout, so it is pinned separately below rather
+        than held to this orthogonality bound.
+        """
+        original = ("family", "discipline", "vocabulary")
+        surfaces = cas.leakage_surfaces(self.quads, self.splits)
+        for name in original:
+            for other, jaccard in surfaces[name]["jaccard_with"].items():
+                if other not in original:
+                    continue
+                self.assertLess(jaccard, 0.30, msg=f"{name} vs {other}")
+
+    def test_shape_holdout_is_a_pinned_structural_sibling_of_family(self) -> None:
+        """The shape holdout is NOT a fourth orthogonal axis, and says so.
+
+        Cutting on the untyped shape necessarily agrees with the family holdout
+        wherever a shape is a single family, so its target Jaccard with family
+        is high BY DESIGN (0.437). Against the two non-structural axes it stays
+        below the orthogonality bound. Pinned, not asserted-orthogonal, because
+        pretending it were independent of family would be dishonest.
         """
         surfaces = cas.leakage_surfaces(self.quads, self.splits)
-        for name, entry in surfaces.items():
-            for other, jaccard in entry["jaccard_with"].items():
-                self.assertLess(jaccard, 0.30, msg=f"{name} vs {other}")
+        jac = surfaces["shape"]["jaccard_with"]
+        self.assertAlmostEqual(jac["family"], 0.4371859296482412, places=6)
+        self.assertLess(jac["discipline"], 0.30)
+        self.assertLess(jac["vocabulary"], 0.30)
 
     def test_axis_entanglement_is_pinned_not_assumed(self) -> None:
         """Full orthogonality is NOT achieved, and the shortfall is the pin.
@@ -199,6 +223,27 @@ class HoldoutTests(Fixture):
         self.assertEqual(
             surfaces["vocabulary"]["discipline_values_in_holdout_also_in_train"],
             (11, 15))
+        # The shape holdout removes whole shapes; because every held shape is a
+        # single family here, none of the held families survive in training
+        # (0 of 5), while 6 of 9 disciplines still do -- discipline is not
+        # entangled with shape the way it is with family.
+        self.assertEqual(
+            surfaces["shape"]["family_values_in_holdout_also_in_train"],
+            (0, 5))
+        self.assertEqual(
+            surfaces["shape"]["discipline_values_in_holdout_also_in_train"],
+            (6, 9))
+
+    def test_shape_holdout_actually_removes_whole_untyped_shapes(self) -> None:
+        assignment = self.splits["shape"]
+        held = {cas.untyped_shape(q) for q in self.quads
+                if assignment[q.target] == "holdout"}
+        train = {cas.untyped_shape(q) for q in self.quads
+                 if assignment[q.target] == "train"}
+        self.assertTrue(held)
+        self.assertTrue(train)
+        # The whole point of the cut: a held row's shape is absent from training.
+        self.assertFalse(held & train)
 
     def test_family_holdout_actually_removes_skeletons(self) -> None:
         assignment = self.splits["family"]
@@ -415,6 +460,9 @@ class ControlTests(unittest.TestCase):
             "family": (0.4000, "nearest_template_transfer"),
             "discipline": (0.9318, "nearest_template_transfer"),
             "vocabulary": (0.3976, "nearest_template_transfer"),
+            # v0.8 item 2: the untyped-shape holdout. 0.1069 lands squarely in
+            # the disclosed strict ~0.10-0.14 band -- see P-CS8 adjudication.
+            "shape": (0.1069, "nearest_template_transfer"),
         }
         for name, (value, control) in expected.items():
             self.assertAlmostEqual(self.table[name]["blind_ceiling"], value,
@@ -429,13 +477,22 @@ class ControlTests(unittest.TestCase):
         and the identity table -- and reaching 1.000 with them while falling
         to 0.46-0.65 without them locates the whole gap there.
         """
+        # The residual band the token-stream-only solver sits in differs by
+        # holdout, and the shape holdout sits BELOW the other three: a genuinely
+        # unseen shape is harder from the token stream alone (0.290), yet the
+        # two declared corpus inputs still take it to 1.000. The gap the two
+        # declarations close is therefore WIDER on unseen shapes, not narrower.
+        input_only_band = {
+            "family": (0.40, 0.70), "discipline": (0.40, 0.70),
+            "vocabulary": (0.40, 0.70), "shape": (0.20, 0.40)}
         for name, entry in self.table.items():
             self.assertEqual(entry["sighted"]["symbolic_oracle"], 1.0, msg=name)
             self.assertEqual(entry["sighted"]["symbolic_typed_input"], 1.0,
                              msg=name)
-            self.assertLess(entry["sighted"]["symbolic_input_only"], 0.70,
+            low, high = input_only_band[name]
+            self.assertLess(entry["sighted"]["symbolic_input_only"], high,
                             msg=name)
-            self.assertGreater(entry["sighted"]["symbolic_input_only"], 0.40,
+            self.assertGreater(entry["sighted"]["symbolic_input_only"], low,
                                msg=name)
 
     def test_shuffling_c_collapses_every_control(self) -> None:
@@ -500,21 +557,44 @@ class ControlTests(unittest.TestCase):
         self.assertIs(sighted_ctx["corpus"], self.corpus)
 
     def test_the_blind_ceiling_is_untyped_shape_leakage(self) -> None:
-        """The finding that explains all three ceilings.
+        """The finding that explains the original three ceilings.
 
         Families are TYPED skeletons, so `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)`
         are two families and one shape. Nearest-template replay scores 1.000
         exactly where a holdout row's untyped shape is still in training and
-        ~0.10 where it is not -- so the ceiling is measuring a hole in the
+        ~0.10 where it is not -- so those ceilings are measuring a hole in the
         split, not a capability. The strict ceiling is the unseen-shape column.
         """
-        for name, entry in self.table.items():
-            leak = entry["shape_leak"]
+        for name in ("family", "discipline", "vocabulary"):
+            leak = self.table[name]["shape_leak"]
             self.assertGreater(leak["nearest_template_on_leaky_shapes"],
                                leak["nearest_template_on_unseen_shapes"],
                                msg=name)
             self.assertLessEqual(leak["nearest_template_on_unseen_shapes"],
                                  0.15, msg=name)
+
+    def test_the_shape_holdout_closes_the_leak_by_construction(self) -> None:
+        """v0.8 item 2. The untyped-shape holdout has NO leaky rows.
+
+        Where the other three mix leaky (shape-in-train, ~1.000) and clean
+        (unseen-shape, ~0.10) rows, the shape holdout holds out whole shapes, so
+        every held row is a clean row. Its `shape_leak` therefore reports zero
+        leaky rows, and its blind ceiling EQUALS the unseen-shape score -- the
+        honest strict ceiling, with no leak left to inflate it.
+        """
+        entry = self.table["shape"]
+        leak = entry["shape_leak"]
+        self.assertEqual(leak["holdout_rows_whose_shape_is_in_train"], 0)
+        self.assertGreater(leak["holdout_rows_with_an_unseen_shape"], 0)
+        # No leaky rows to score, so the leaky column is NaN, not a number.
+        self.assertNotEqual(leak["nearest_template_on_leaky_shapes"],
+                            leak["nearest_template_on_leaky_shapes"])
+        self.assertAlmostEqual(entry["blind_ceiling"],
+                               leak["nearest_template_on_unseen_shapes"],
+                               places=9)
+        # The disclosed strict ceiling is ~0.10-0.14; this lands inside it.
+        self.assertGreaterEqual(entry["blind_ceiling"], 0.08)
+        self.assertLessEqual(entry["blind_ceiling"], 0.16)
 
     def test_committed_ceiling_report_is_not_stale(self) -> None:
         path = (ROOT / "experiments" / "results" /

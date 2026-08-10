@@ -50,7 +50,25 @@ inflate the headline: the strict ceiling is ≈0.10–0.14, not 0.400. Close it.
 
 - Add the **untyped-shape holdout** that this split should have been — cut on
   shape, not typed skeleton — without re-rolling any existing split against a
-  measured ceiling.
+  measured ceiling. **DELIVERED (branch `feature/analogy-shape`).** A fourth
+  `SPLIT_NAMES` entry, `shape`, cuts on the twin's head/arity multiset with the
+  same deterministic alternating-by-size rule as the other three (no seed, no
+  threshold). 131 held rows / 267 train. **Blind ceiling 0.1069**
+  (`nearest_template_transfer`), which lands squarely in the disclosed strict
+  ~0.10–0.14 band and confirms it. The existing family/discipline/vocabulary
+  ceilings (0.400 / 0.9318 / 0.3976) are byte-for-byte unchanged — the shape
+  holdout is added, nothing is re-rolled. `shape_leak` reports **zero** holdout
+  rows whose shape survives in training, so this ceiling is the honest
+  unseen-shape regime with no leak left to inflate it, versus the family
+  holdout's `51/155 × 1.000 + 104/155 × 0.106`. P-CS8 registered before the run
+  and **fired on all four sub-claims** (adjudication in
+  `experiments/corpus_analogy_split.py`). Honest caveats pinned in the tests:
+  the shape holdout's target Jaccard with the family holdout is 0.437 (it is
+  family's structural sibling, not a fourth orthogonal axis), and its
+  `symbolic_input_only` is 0.290 — below the other three's 0.40–0.70 — while
+  `symbolic_typed_input` stays 1.000, so the declared-classes residual is wider
+  on unseen shapes, not narrower. **Still open: the model arm** (below) is a
+  separate slice and trains nothing here.
 - Train the first model arm and report it against 0.398/0.400 *and* the strict
   ≈0.10–0.14, with the two corpus declarations that make the task closed-form
   named as the thing the model is or is not internalizing.

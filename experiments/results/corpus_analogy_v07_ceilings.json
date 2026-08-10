@@ -329,7 +329,8 @@
       "holdout_target_tokens_unseen_in_train_targets": 28,
       "jaccard_with": {
         "discipline": 0.11073825503355705,
-        "vocabulary": 0.13875598086124402
+        "vocabulary": 0.13875598086124402,
+        "shape": 0.4371859296482412
       }
     },
     "discipline": {
@@ -351,7 +352,8 @@
       "holdout_target_tokens_unseen_in_train_targets": 40,
       "jaccard_with": {
         "family": 0.11073825503355705,
-        "vocabulary": 0.25728155339805825
+        "vocabulary": 0.25728155339805825,
+        "shape": 0.06597222222222222
       }
     },
     "vocabulary": {
@@ -426,7 +428,33 @@
       ],
       "jaccard_with": {
         "family": 0.13875598086124402,
-        "discipline": 0.25728155339805825
+        "discipline": 0.25728155339805825,
+        "shape": 0.054187192118226604
+      }
+    },
+    "shape": {
+      "train": 267,
+      "holdout": 131,
+      "held_keys": [
+        "(('*/2', 1), ('+/2', 1), ('=/2', 1), ('inv/1', 1), ('neg/1', 1))",
+        "(('*/2', 1), ('=/2', 1), ('inv/1', 1))",
+        "(('*/3', 1), ('+/2', 1), ('=/2', 1))",
+        "(('*/3', 1), ('=/2', 1))",
+        "(('=/2', 1), ('MEET/2', 1))"
+      ],
+      "family_values_in_holdout_also_in_train": [
+        0,
+        5
+      ],
+      "discipline_values_in_holdout_also_in_train": [
+        6,
+        9
+      ],
+      "holdout_target_tokens_unseen_in_train_targets": 13,
+      "jaccard_with": {
+        "family": 0.4371859296482412,
+        "discipline": 0.06597222222222222,
+        "vocabulary": 0.054187192118226604
       }
     }
   },
@@ -555,11 +583,51 @@
         "nearest_template_on_leaky_shapes": 0.49206349206349204,
         "nearest_template_on_unseen_shapes": 0.1
       }
+    },
+    "shape": {
+      "train_n": 267,
+      "holdout_n": 131,
+      "blind": {
+        "copy_c": 0.0,
+        "copy_b": 0.0,
+        "last_slot_number_transfer": 0.03816793893129771,
+        "first_slot_number_transfer": 0.0,
+        "positional_rename": 0.03816793893129771,
+        "modal_action_pattern": 0.0,
+        "nearest_template_transfer": 0.10687022900763359,
+        "nearest_authored_template": 0.0
+      },
+      "sighted": {
+        "symbolic_input_only": 0.2900763358778626,
+        "symbolic_typed_input": 1.0,
+        "symbolic_oracle": 1.0
+      },
+      "shuffled_c_leaves": {
+        "symbolic_input_only": 0.0,
+        "positional_rename": 0.0,
+        "nearest_template_transfer": 0.03816793893129771
+      },
+      "blind_ceiling": 0.10687022900763359,
+      "blind_ceiling_control": "nearest_template_transfer",
+      "per_family_nearest_template": {
+        "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))": 0.0,
+        "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))": 0.0,
+        "?0:V = *(?1:P, ?2:V, ?3:V)": 0.10588235294117647,
+        "?0:V = *(?1:V, inv(?2:V))": 0.16666666666666666,
+        "?0:V = MEET\u27e8?1:P, ?0:V\u27e9": 0.0
+      },
+      "shape_leak": {
+        "holdout_rows_whose_shape_is_in_train": 0,
+        "holdout_rows_with_an_unseen_shape": 131,
+        "nearest_template_on_leaky_shapes": NaN,
+        "nearest_template_on_unseen_shapes": 0.10687022900763359
+      }
     }
   },
   "split_files": [
     "corpus_analogy_v07_family.jsonl",
     "corpus_analogy_v07_discipline.jsonl",
-    "corpus_analogy_v07_vocabulary.jsonl"
+    "corpus_analogy_v07_vocabulary.jsonl",
+    "corpus_analogy_v07_shape.jsonl"
   ]
 }

@@ -93,6 +93,56 @@ P-CS7  Acceptance holds: the blind ceiling is strictly below 1.000 on at least
        corpus cannot support a non-vacuous split and says which structure is
        missing, rather than shopping for a partition that hides it.
 
+REGISTERED PREDICTION FOR THE v0.8 UNTYPED-SHAPE HOLDOUT (P-CS8)
+----------------------------------------------------------------
+Written and committed BEFORE the shape holdout's controls were run, as the
+v0.8 item-2 slice that adds the split the family holdout should have been. The
+family holdout's 0.400 decomposes (see `_shape_leak`) as
+`51/155 x 1.000 + 104/155 x 0.106`: nearest-template replay scores 1.000 on
+exactly the held rows whose UNTYPED shape is still in training, and ~0.106 on
+the rest. Cutting the holdout on the untyped shape removes those leaky rows by
+construction, so:
+
+P-CS8  The untyped-shape holdout's blind ceiling is STRICTLY BELOW the family
+       holdout's 0.400, and lands in or near the disclosed strict band
+       ~0.10-0.14 (widened only to ~[0.08, 0.16] because the ceiling is the max
+       over ALL blind controls, not nearest-template alone). Four sub-claims:
+       (a) blind_ceiling(shape) < 0.400;
+       (b) blind_ceiling(shape) is approximately in [0.08, 0.16];
+       (c) the split removes WHOLE shapes -- its `shape_leak` reports zero
+           holdout rows whose shape is in training (a structural guarantee of
+           the cut, not a measured control), so its ceiling IS the unseen-shape
+           regime rather than a leaky/clean mixture;
+       (d) P-CS1 extends: `last_slot_number_transfer` stays <= 0.05 here too.
+       A miss on (a) or (b) is recorded as MISSED with a correction appended;
+       the split is NOT re-rolled against the result (that is laundering). The
+       shape holdout is cut on shape, full stop, and whatever ceiling results
+       is reported.
+
+ADJUDICATION OF P-CS8 (appended after the single run; the registration above is
+unchanged, and the split was not re-rolled)
+------------------------------------------------------------------------------
+P-CS8 FIRED on all four sub-claims. The shape holdout is 131 held rows over 267
+train; its blind ceiling is 0.1069 (`nearest_template_transfer`).
+  (a) CONFIRMED: 0.1069 < 0.400.
+  (b) CONFIRMED: 0.1069 is inside [0.08, 0.16] and inside the disclosed strict
+      ~0.10-0.14 band -- essentially equal to the family holdout's OWN
+      clean-shape figure 0.106, which is the point: with the leak removed, the
+      whole holdout scores what the family holdout's unseen-shape rows scored.
+  (c) CONFIRMED structurally: `shape_leak` reports 0 holdout rows whose shape is
+      in training and 131 with an unseen shape, so the ceiling IS the
+      unseen-shape regime rather than a leaky/clean mixture.
+  (d) CONFIRMED: `last_slot_number_transfer` = 0.0382 <= 0.05.
+Two honest observations recorded rather than smoothed: the shape holdout's
+holdout set is a structural sibling of the family holdout (target Jaccard 0.437,
+and 0 of its 5 held shapes' families survive in training), which is expected --
+it is the split the family holdout should have been -- and its
+`symbolic_input_only` is 0.290, BELOW the 0.40-0.70 the other three sit in,
+while `symbolic_typed_input` is still 1.000. The declared-classes residual (the
+P-CS2 finding) is therefore WIDER on unseen shapes, not narrower: the token
+stream alone gets less far when the shape is genuinely novel, and the two corpus
+declarations still close the whole gap.
+
 NOT A PREDICTION -- reported because it was already observed
 -----------------------------------------------------------
 The builder was run while the admission rules were still being settled, so the
@@ -137,7 +187,7 @@ DATA_DIR = ROOT / "data"
 SPEC_REPORT = ROOT / "reports" / "specializations.json"
 SPLIT_DIR = ROOT / "experiments" / "data"
 SPLIT_PREFIX = "corpus_analogy_v07"
-SPLIT_NAMES = ("family", "discipline", "vocabulary")
+SPLIT_NAMES = ("family", "discipline", "vocabulary", "shape")
 
 # The literal-vocabulary holdout grows from the rarest target token upward
 # until it reaches this share of examples. Declared before the run; it is the
@@ -675,9 +725,37 @@ def _by_size(counts: Counter) -> list[str]:
     return [k for k, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
+def untyped_shape(quad: Quadruple) -> tuple:
+    """The twin's head/arity multiset -- slot classes DROPPED.
+
+    The coarser quotient `_shape_leak` and the `untyped_shapes` count already
+    use: `*(?1:P, ?2:V)` and `*(?1:V, ?2:V)` are two TYPED families and ONE
+    shape. A and C share a typed skeleton (twins are grouped by it, then the
+    alignment re-checks head/arity), so this is A's shape as much as C's.
+    """
+    return tuple(sorted(_op_multiset(quad.c_tree).items()))
+
+
 def family_split(quads: list[Quadruple]) -> dict[str, str]:
     held = _alternating(_by_size(Counter(q.family for q in quads)))
     return {q.target: ("holdout" if q.family in held else "train") for q in quads}
+
+
+def shape_split(quads: list[Quadruple]) -> dict[str, str]:
+    """Hold out whole UNTYPED shapes -- the split the family holdout should have
+    been (v0.8 item 2, ROADMAP-v0.7 item 5's disclosed defect).
+
+    Family = A's TYPED skeleton, so two families can be one shape, and a
+    nearest-template replay scores ~1.000 on any held row whose shape survives
+    in training -- the leak `_shape_leak` measures and the family holdout's
+    0.400 is inflated by. Cutting on the shape instead makes a held row's shape
+    GENUINELY absent from training, so that leak is closed by construction, not
+    by tuning. Same deterministic, seedless, alternating-by-size rule as the
+    other three; there is nothing here to re-roll.
+    """
+    held = _alternating(_by_size(Counter(untyped_shape(q) for q in quads)))
+    return {q.target: ("holdout" if untyped_shape(q) in held else "train")
+            for q in quads}
 
 
 def discipline_split(quads: list[Quadruple]) -> dict[str, str]:
@@ -714,7 +792,7 @@ def vocabulary_split(quads: list[Quadruple],
 
 
 SPLIT_BUILDERS = {"family": family_split, "discipline": discipline_split,
-                  "vocabulary": vocabulary_split}
+                  "vocabulary": vocabulary_split, "shape": shape_split}
 
 
 def build_splits(quads: list[Quadruple]) -> dict[str, dict[str, str]]:
@@ -730,13 +808,17 @@ def leakage_surfaces(quads: list[Quadruple],
     the three are not three names for one partition.
     """
     axes = {"family": lambda q: q.family,
-            "discipline": lambda q: q.c_discipline}
+            "discipline": lambda q: q.c_discipline,
+            "shape": untyped_shape}
     out: dict[str, dict] = {}
     for name, assignment in splits.items():
         train = [q for q in quads if assignment[q.target] == "train"]
         held = [q for q in quads if assignment[q.target] == "holdout"]
         if name == "vocabulary":
             held_keys = sorted(_vocab(held) - _vocab(train))
+        elif name == "shape":
+            # shape keys are head/arity multisets; render them for the report
+            held_keys = sorted({str(untyped_shape(q)) for q in held})
         else:
             held_keys = sorted({axes[name](q) for q in held})
         entry: dict = {"train": len(train), "holdout": len(held),
