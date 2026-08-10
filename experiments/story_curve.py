@@ -122,7 +122,7 @@ import random
 import sys
 import time
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
@@ -416,19 +416,17 @@ class LearnedStoryRanker:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class RankedStoryPolicy:
     """The same two-layer policy shape the Lean arms use."""
 
     brief: StoryBrief
     ranker: object
-    orders: list[tuple[str, ...]] = field(default_factory=list)
 
     def propose_all(self, state: StoryState, trace) -> Iterable[Action]:
         del trace
         available = story_candidates(self.brief, state)
         order = self.ranker.order(render_story(state))
-        self.orders.append(order)
         return tuple(
             action for schema in order for action in available.get(schema, ())
         )

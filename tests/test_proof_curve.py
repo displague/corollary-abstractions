@@ -217,6 +217,16 @@ class GrammarTests(unittest.TestCase):
             tuple(s for s in tg.ARBITRARY_ORDER if s != "clear"),
         )
 
+    def test_a_binder_named_case_is_not_swallowed_as_a_block_header(self) -> None:
+        """Self-review: the header test used to run before the ``" : "`` test."""
+        goal = tg.parse_state("case : Prop\nh : case\n⊢ case")
+        self.assertEqual([h.name for h in goal.hypotheses], ["case", "h"])
+        self.assertIsNone(goal.case_label)
+
+    def test_unbalanced_parentheses_fail_soft_not_wrong(self) -> None:
+        """A negative depth would silently disable every later split."""
+        self.assertEqual(tg._split_top("a) ∧ b", "∧"), ["a)", "b"])
+
     def test_every_schema_is_reachable_from_action_schema(self) -> None:
         for tactic, schema in (
             ("clear h", "clear"), ("intro", "intro"), ("intro P Q", "intro"),

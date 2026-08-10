@@ -114,7 +114,11 @@ def _split_top(text: str, operator: str) -> list[str]:
         if character in "([{":
             depth += 1
         elif character in ")]}":
-            depth -= 1
+            # max(0, ...): an unbalanced closer must not drive the depth
+            # negative, because a negative depth would silently disable every
+            # remaining top-level split and turn a parse failure into a wrong
+            # answer.  Fail soft, not silently wrong.
+            depth = max(0, depth - 1)
         if depth == 0 and character == operator:
             parts.append("".join(current).strip())
             current = []
@@ -156,12 +160,16 @@ def parse_state(rendered: str) -> Goal | None:
         stripped = line.strip()
         if not stripped:
             continue
-        if stripped.startswith("case ") and index == 0:
-            case_label = stripped[len("case "):]
-            continue
-        if stripped.startswith("case "):
-            break
         names, separator, type_text = stripped.partition(" : ")
+        # A goal-block header, not a hypothesis.  The ``" : "`` test comes
+        # FIRST so that a binder legitimately named ``case`` (``case : Prop``)
+        # is read as a hypothesis rather than swallowed as a block header --
+        # the reverse order silently dropped it.
+        if not separator and stripped.startswith("case "):
+            if index == 0:
+                case_label = stripped[len("case "):]
+                continue
+            break
         if not separator:
             continue
         for name in names.split():

@@ -35,7 +35,7 @@ from __future__ import annotations
 import sys
 import time
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Protocol
 
@@ -132,7 +132,7 @@ class SyntaxRanker:
         return syntax_order(parse_state(rendered))
 
 
-@dataclass
+@dataclass(frozen=True)
 class RankedSchemaPolicy:
     """The one policy protocol both domains use: rank schemas, expand args.
 
@@ -144,7 +144,6 @@ class RankedSchemaPolicy:
     """
 
     ranker: SchemaRanker
-    orders: list[tuple[str, tuple[str, ...]]] = field(default_factory=list)
 
     def propose_all(
         self, state: LiveLeanState, trace
@@ -153,7 +152,6 @@ class RankedSchemaPolicy:
         goal = parse_state(state.goal_text)
         available = candidates(goal)
         order = self.ranker.order(state.goal_text)
-        self.orders.append((goal_shape(goal), order))
         return tuple(
             Action.build(ActionKind.GEN, "lean_tactic", {"tactic": tactic})
             for schema in order
@@ -299,6 +297,15 @@ class BackendPool:
 
     def get(self, backend: Backend) -> PantographBackend:
         if backend.name not in self._backends:
+            if backend.lean_path is not None and not backend.lean_path.is_dir():
+                # Without this, Pantograph fails with a generic "Server failed
+                # to emit ready signal" that reads like a version mismatch.
+                # Name the actual cause.
+                raise RuntimeError(
+                    f"backend {backend.name!r} needs a built Lake project: "
+                    f"{backend.lean_path} does not exist. Run `lake build` in "
+                    f"{backend.project} first (prover/README.md)."
+                )
             self._backends[backend.name] = PantographBackend(
                 backend.project,
                 backend.imports,
@@ -324,11 +331,6 @@ def solved_at(record: RunRecord, nodes: int, proposals: int) -> bool:
 
 def solved_by_time(record: RunRecord, seconds: float) -> bool:
     return record.solved and record.seconds <= seconds
-
-
-def solved_rate(records: Iterable[RunRecord], nodes: int, proposals: int) -> tuple[int, int]:
-    items = list(records)
-    return sum(solved_at(item, nodes, proposals) for item in items), len(items)
 
 
 def verify_budget_monotonicity(

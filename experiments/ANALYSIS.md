@@ -1914,7 +1914,7 @@ by test — so a proposal-count difference is a schema-ordering difference.
 |---|---|
 | `arbitrary` | schema declaration order, leading with `clear` |
 | `frequency` | **v0.6's winner**, rebuilt from the same 44 training rows under the same mapper (pinned row-for-row by test) |
-| `syntax` | closed-form rules over the rendered goal; capability-blind, no weights |
+| `syntax` | closed-form rules over the rendered goal; blind to the capability under test (learning), not blind to state: it has no weights and no training data |
 | `learned_s0/1/2` | the released v0.6 checkpoints, 27,688 parameters, used as shipped |
 
 Retraining was considered and rejected: the new families are expressible in
@@ -1977,7 +1977,7 @@ order, not more theorems of the same shape.
 
 | arm | 0.02 s | 0.05 s | 0.20 s | 1.00 s | 5.00 s |
 |---|---:|---:|---:|---:|---:|
-| arbitrary / frequency / syntax | 17 | 21 | 22 | 24 | 24 |
+| arbitrary / frequency / syntax (identical in this run) | 17 | 21 | 22 | 24 | 24 |
 | learned_s0 | 13 | 17 | 21 | 24 | 24 |
 | learned_s1 | 14 | 19 | 22 | 24 | 24 |
 | learned_s2 | 14 | 18 | 22 | 24 | 24 |
@@ -1986,6 +1986,24 @@ A 27,688-parameter forward pass costs more than the sub-millisecond Lean round
 trip it saves. **Proposal count and wall time disagree about the ranking, and
 only wall time is what a user waits for.** Total search seconds: syntax 0.784,
 frequency 0.821, arbitrary 0.885, learned 1.19-1.53.
+
+Two controls, because a wall-clock claim is the easiest one to fake. **Per
+proposal**: arbitrary 0.659 ms, frequency 0.663 ms, syntax 0.676 ms,
+learned 1.296 / 1.007 / 1.054 ms. The learned penalty is ~2x and does not
+depend on how many proposals an arm made. **Arm order**: arms run in a fixed
+order per theorem (arbitrary first, learned last), so a server that slowed as
+goal states accumulated would fake exactly this result. It did not — the three
+blind arms drift by 2.5% in the *increasing* direction across positions 1-3,
+which is an order of magnitude smaller than the effect and points the same way
+for the wrong reason, so the effect is not an artifact of it.
+
+**Reproducibility caveat, stated rather than hidden.** Re-running the whole
+lane reproduces every deterministic field exactly — solved, nodes, proposals,
+solution path, dead branches, the full budget curve and every mean — but
+**10 of the 30 wall-clock curve cells moved**. The time ladder is a
+measurement of this host on this run, not a reproducible constant, and no
+conclusion here rests on a single time cell: the claim is the ~2x per-proposal
+gap, which is stable.
 
 ## Dead branches preserved, and cross-task avoidance measured
 
