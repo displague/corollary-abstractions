@@ -234,6 +234,74 @@ refusal).
 
 No runtime action may write `data/*/nodes.json` directly.
 
+### Registered predictions (P-PW1 – P-PW8), committed before the adjudicating run
+
+Registered on branch `feature/proven-write` BEFORE `scripts/proof_correspondence.py`
+or `scripts/write_stage.py` existed, so nothing below was written with a result in
+hand. The declared translatable fragment is fixed here too, so "fail closed on the
+rest" cannot be widened after seeing which theorem falls outside it:
+
+> **Declared Lean fragment.** A goal state translates only if every hypothesis
+> line binds names at type `Prop`, and the goal is built from `¬`, `∧`, `∨`, `→`,
+> `True`, `False`, parenthesisation, those bound propositional names, and at most
+> one TOP-LEVEL `↔`. Types, predicates, binders (`∀`, `∃`), arithmetic, nested
+> `↔`, and every other Lean term are UNTRANSLATABLE, never MISMATCH.
+
+- **P-PW1 — the link count is 16, not 9.** The brief says "the 9 real corpus
+  links". Nine corpus *statements* carry `verified_by`; they cite **16**
+  (statement, theorem) links, which is what `tests/test_verified_by.py` already
+  asserts. The adjudication below is over all 16.
+- **P-PW2 — 15 of 16 CORRESPOND, 1 UNTRANSLATABLE, 0 MISMATCH.** The exception is
+  `logic.boolean_laws.de_morgan_laws → BooleanLaws.not_forall_iff_exists_not`,
+  whose goal is `α : Type, F : α → Prop ⊢ (¬∀ (x : α), F x) ↔ ∃ x, ¬F x`: it
+  binds a type and a predicate and quantifies, so it is outside the declared
+  propositional fragment. This is a genuine finding about the corpus's citation
+  reach, not a defect to paper over — the node *does* declare a matching
+  first-order `equivalent_forms` entry, so the citation is honest and merely
+  uncheckable at this rung.
+- **P-PW3 — the capability-blind control flips.** `verified_by_errors` passes a
+  real gravity statement citing `BooleanLaws.modus_ponens`
+  (`tests/test_verified_by.py::test_wrong_statement_valid_theorem_is_capability_blind_control`).
+  Correspondence must call
+  `physics.gravitation.newton_universal_gravitation → BooleanLaws.modus_ponens`
+  **MISMATCH**.
+- **P-PW4 — hardest theorems to translate, named in advance.** Hardest, and
+  predicted to FAIL: `not_forall_iff_exists_not` (P-PW2). Hardest that is
+  predicted to SUCCEED: `non_contradiction` (`⊢ ¬(P ∧ ¬P)`) — a bare asserted
+  proposition rather than an `↔`, so it needs the "an asserted proposition `A` is
+  the equation `A = TOP`" normalisation, and even then it does **not** match its
+  citing node's canonical template `MEET(PROP1, NEG(PROP1)) = FALSITY`; it can
+  only match that node's declared `equivalent_forms` entry `not(P and not P)`.
+  Third hardest: `excluded_middle`, matching only the declared *dual*.
+- **P-PW5 — six links match the declared Boolean DUAL, not the canonical
+  template.** `de_morgan_not_or`, `distrib_or_and`, `absorption_or_and`,
+  `identity_or_false`, `idempotence_or`, `excluded_middle`. Comparing a
+  regenerated skeleton against `anonymized_template` **alone** would therefore
+  report six FALSE MISMATCHes and make the check unusable as a gate. The
+  correspondence target must be the statement's whole *declared form set*
+  (canonical template, its Boolean dual under the declared MEET/JOIN and
+  TRUTH/FALSITY involution, and each translatable `equivalent_forms` entry), with
+  the matched route recorded per link.
+- **P-PW6 — skeleton correspondence cannot decide ownership between structural
+  twins.** Every `logic.boolean_laws.*` statement shares its skeleton
+  character-for-character with a `settheory.boolean_laws.*` statement (the corpus
+  says so itself). Prediction: every translatable boolean-law link reports at
+  least one non-owning corpus statement whose declared form set contains the same
+  skeleton; the two `logic.inference.*` links report none. Exclusive theorem
+  ownership (already enforced by `verified_by_errors`) is what breaks the tie,
+  and the pair of checks together still cannot say *which* twin deserves it.
+- **P-PW7 — the WRITE gate matrix.** PROVEN + CORRESPONDS → a full staged
+  candidate; VERIFIED → a review-request record carrying no candidate content;
+  CONJECTURED and frame-local → REFUSED. A PROVEN claim whose correspondence is
+  MISMATCH **or** UNTRANSLATABLE → REFUSED, failing closed rather than
+  downgrading to review.
+- **P-PW8 — no runtime write reaches `data/`, and matcher deltas are predicted,
+  not discovered.** A candidate naming `data/logic/nodes.json` as its edit target
+  is REFUSED before any filesystem write; `data/` is byte-identical after every
+  refusal; and a candidate whose *declared* matcher delta disagrees with the
+  delta measured in the scratch checkout is REFUSED even though schema, link, and
+  regeneration checks pass.
+
 ## 4. Depth follows the v0.6 consumer verdict
 
 The five-arm verdict is negative and specific: address-only remains best at
