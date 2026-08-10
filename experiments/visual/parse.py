@@ -45,10 +45,11 @@ def parse_svg(svg_text: str) -> SceneGraph:
     """Step 5. Normalized scene graph from rendered SVG text."""
     try:
         root = ET.fromstring(svg_text)
-    except ET.ParseError as exc:  # pragma: no cover - malformed input guard
+    except ET.ParseError as exc:
         raise SceneGraphError(f"unparseable SVG: {exc}") from exc
     if _local(root.tag) != "svg":
-        raise SceneGraphError(f"root element is <{_local(root.tag)}>, not <svg>")
+        raise SceneGraphError(
+            f"root element is <{_local(root.tag)}>, not <svg>")
     if root.get("data-schema") != "visual-scene/1":
         raise SceneGraphError(
             f"unknown scene schema {root.get('data-schema')!r}")

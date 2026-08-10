@@ -31,11 +31,20 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Iterable
 
-from .scene import (A_RIGHT, Claim, SceneGraph, fmt)
+from .scene import (A_RIGHT, Claim, SceneGraph, check_wellformed, fmt)
 
 GATED_CHECKS = ("incidence", "topology", "right_angle", "leg_lengths",
                 "nondegenerate", "right_angle_slot")
 DERIVED_CHECKS = ("pythagorean", "hypotenuse_claim")
+
+# Which gated checks imply each derived check. This is the specific claim
+# behind excluding them from the gate, so it is the specific claim the tests
+# check: "some gate also failed" would be satisfied by an unrelated check and
+# would not show that the derived one is implied.
+DERIVED_IMPLIED_BY = {
+    "pythagorean": ("right_angle", "incidence"),
+    "hypotenuse_claim": ("right_angle", "incidence", "leg_lengths"),
+}
 
 
 @dataclass(frozen=True)
@@ -75,8 +84,11 @@ class Result:
 def _check_incidence(g: SceneGraph, claim: Claim) -> list[Failure]:
     """Every edge endpoint sits exactly on the vertex the edge names.
 
-    Unresolvable references are ``topology``'s business, so they are skipped
-    here rather than double-reported.
+    Unresolvable references cannot reach here -- ``check_wellformed``
+    refuses them at the door -- so the guard below is unreachable rather
+    than a silent skip. That matters for the ablation: a check that quietly
+    declined to evaluate could make a neighbouring check look load-bearing
+    when it was only covering for this one.
     """
     out: list[Failure] = []
     for e in g.edges:
@@ -173,7 +185,7 @@ def _check_nondegenerate(g: SceneGraph, claim: Claim) -> list[Failure]:
         if e.p1 == e.p2:
             out.append(Failure("nondegenerate", (e.id,),
                                f"{e.id} has zero length"))
-    pts = {(v.point.x, v.point.y) for v in g.vertices}
+    pts = {v.point for v in g.vertices}
     if len(pts) != len(g.vertices):
         out.append(Failure("nondegenerate",
                            tuple(v.id for v in g.vertices),
@@ -280,7 +292,16 @@ def verify(g: SceneGraph, claim: Claim, disabled: Iterable[str] = (),
     ``disabled`` is the ablation handle: it is a real capability removal, not
     a scoring flag. ``derived=True`` additionally runs the redundant checks,
     which must never change ``ok`` -- that invariance is P-VO6.
+
+    Well-formedness is re-enforced here rather than trusted from
+    construction time, and it *raises* instead of returning a verdict. A
+    graph whose references do not resolve is not a figure that failed a
+    geometric check; it is not a figure. Enforcing it at the verdict
+    boundary is what makes "no check can be silently muted" a property of
+    the code rather than a claim in a docstring: every check below either
+    evaluates its relation or is never reached.
     """
+    check_wellformed(g)
     off = set(disabled)
     unknown = off - set(GATED_CHECKS) - set(DERIVED_CHECKS)
     if unknown:

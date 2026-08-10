@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-844 54 948 960" width="948" height="960" data-schema="visual-scene/1" data-figure="rt-0000" data-family="right_triangle" data-style="plain">
+  <rect x="-844" y="54" width="948" height="960" fill="#ffffff"/>
+  <g data-group="edges">
+    <line x1="68" y1="990" x2="-820" y2="78" data-sid="E.hypot" data-kind="edge" data-role="hypotenuse" data-from="V.leg_a" data-to="V.leg_b" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
+    <line x1="80" y1="90" x2="68" y2="990" data-sid="E.leg_a" data-kind="edge" data-role="leg_a" data-from="V.right" data-to="V.leg_a" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
+    <line x1="80" y1="90" x2="-820" y2="78" data-sid="E.leg_b" data-kind="edge" data-role="leg_b" data-from="V.right" data-to="V.leg_b" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g data-group="vertices">
+    <circle cx="68" cy="990" r="6" data-sid="V.leg_a" data-kind="vertex" data-role="leg_a_end" fill="#222222"/>
+    <circle cx="-820" cy="78" r="6" data-sid="V.leg_b" data-kind="vertex" data-role="leg_b_end" fill="#222222"/>
+    <circle cx="80" cy="90" r="6" data-sid="V.right" data-kind="vertex" data-role="right_angle" fill="#222222"/>
+  </g>
+  <g data-group="angles">
+    <path d="M 69.5 877.5 L -43 876" data-sid="A.acu_a" data-kind="angle" data-role="angle_at_a" data-vertex="V.leg_a" data-arms="E.leg_a E.hypot" data-measure="acute" fill="none" stroke="#c0392b" stroke-width="2"/>
+    <path d="M -707.5 79.5 L -709 192" data-sid="A.acu_b" data-kind="angle" data-role="angle_at_b" data-vertex="V.leg_b" data-arms="E.leg_b E.hypot" data-measure="acute" fill="none" stroke="#c0392b" stroke-width="2"/>
+    <path d="M 78.5 202.5 L -34 201 L -32.5 88.5" data-sid="A.right" data-kind="angle" data-role="right_angle" data-vertex="V.right" data-arms="E.leg_a E.leg_b" data-measure="right" fill="none" stroke="#c0392b" stroke-width="2"/>
+  </g>
+  <g data-group="labels">
+    <text data-sid="L.hypotenuse" data-kind="label" x="-376" y="534" font-size="12" fill="#222222">c</text>
+    <text data-sid="L.leg_a" data-kind="label" x="74" y="540" font-size="12" fill="#222222">a</text>
+    <text data-sid="L.leg_b" data-kind="label" x="-370" y="84" font-size="12" fill="#222222">b</text>
+  </g>
+</svg>

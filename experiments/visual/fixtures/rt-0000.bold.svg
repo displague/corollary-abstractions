@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-860 38 980 992" width="980" height="992" data-schema="visual-scene/1" data-figure="rt-0000" data-family="right_triangle" data-style="bold">
+  <rect x="-860" y="38" width="980" height="992" fill="#f7f1e3"/>
+  <g data-group="edges">
+    <line data-sid="E.hypot" data-kind="edge" data-role="hypotenuse" data-from="V.leg_a" data-to="V.leg_b" x1="68" y1="990" x2="-820" y2="78" stroke="#0a3d62" stroke-width="7" stroke-linecap="round"/>
+    <line data-sid="E.leg_a" data-kind="edge" data-role="leg_a" data-from="V.right" data-to="V.leg_a" x1="80" y1="90" x2="68" y2="990" stroke="#0a3d62" stroke-width="7" stroke-linecap="round"/>
+    <line data-sid="E.leg_b" data-kind="edge" data-role="leg_b" data-from="V.right" data-to="V.leg_b" x1="80" y1="90" x2="-820" y2="78" stroke="#0a3d62" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <g data-group="vertices">
+    <circle data-sid="V.leg_a" data-kind="vertex" data-role="leg_a_end" cx="68" cy="990" r="11" fill="#0a3d62"/>
+    <circle data-sid="V.leg_b" data-kind="vertex" data-role="leg_b_end" cx="-820" cy="78" r="11" fill="#0a3d62"/>
+    <circle data-sid="V.right" data-kind="vertex" data-role="right_angle" cx="80" cy="90" r="11" fill="#0a3d62"/>
+  </g>
+  <g data-group="angles">
+    <path data-sid="A.acu_a" data-kind="angle" data-role="angle_at_a" data-vertex="V.leg_a" data-arms="E.leg_a E.hypot" data-measure="acute" d="M 70.25 821.25 L -98.5 819" fill="none" stroke="#e58e26" stroke-width="6"/>
+    <path data-sid="A.acu_b" data-kind="angle" data-role="angle_at_b" data-vertex="V.leg_b" data-arms="E.leg_b E.hypot" data-measure="acute" d="M -651.25 80.25 L -653.5 249" fill="none" stroke="#e58e26" stroke-width="6"/>
+    <path data-sid="A.right" data-kind="angle" data-role="right_angle" data-vertex="V.right" data-arms="E.leg_a E.leg_b" data-measure="right" d="M 77.75 258.75 L -91 256.5 L -88.75 87.75" fill="none" stroke="#e58e26" stroke-width="6"/>
+  </g>
+  <g data-group="labels">
+    <text data-sid="L.hypotenuse" data-kind="label" x="-376" y="534" font-size="22" fill="#0a3d62">c</text>
+    <text data-sid="L.leg_a" data-kind="label" x="74" y="540" font-size="22" fill="#0a3d62">a</text>
+    <text data-sid="L.leg_b" data-kind="label" x="-370" y="84" font-size="22" fill="#0a3d62">b</text>
+  </g>
+</svg>

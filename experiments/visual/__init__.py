@@ -17,9 +17,10 @@ Exactness contract
 
 Every coordinate is a ``fractions.Fraction`` and every verdict is decided by
 integer/rational arithmetic. No floating-point value participates in any
-check, any mutation, or any rendered coordinate. Floats appear only in
-informational metadata (the angular deviation in degrees), which is labelled
-as such and is never read back by the verifier.
+check, any mutation, or any rendered coordinate. Floats appear only outside
+the verdict path -- the informational angular deviation in degrees, and the
+P-VO7 surface baselines, which are scoring instruments rather than checks --
+and no float is ever read back by the verifier.
 
 The controlled right-angle break is therefore exact and length-preserving:
 for a leg direction ``u = (p, q)`` the perpendicular leg direction is
@@ -86,7 +87,8 @@ annotation's referents, never its id.
 They are excluded from the gate deliberately, and this prediction is the
 evidence that the exclusion was correct rather than convenient.
 
-**P-VO7 -- the invalid set is not surface-detectable.** Three
+**P-VO7 -- the invalid set is not surface-detectable.** (Adjudicated over
+every render style, not only the default.) Three
 capability-blind surface baselines (structural element count, SVG byte
 length, maximum coordinate magnitude) are fit on the valid corpus and scored
 on that same corpus, so their false-positive rate is zero by construction
@@ -96,6 +98,43 @@ element-count baseline sits at chance (0.500) on all six because every
 mutation preserves the element inventory. This is the vacuity control for
 step 6: a class that a byte counter separates perfectly is too easy to
 inform a parsed-vector-versus-raster comparison and must be hardened first.
+
+Corrections attached after adversarial review
+---------------------------------------------
+
+The predictions above are kept verbatim as registered at commit ``c79eade``.
+Review found three places where the wording claims more than the measurement
+delivers, and this project attaches corrections rather than editing a
+registered prediction into agreement with its result.
+
+**C1 -- P-VO6 is measured on the 240 valids, not on all 1,680 instances.**
+The derived check set is a *superset* of the gated set, so a verdict can
+only move from accept to reject; every invalid is already a reject, and
+"never changes a verdict" is therefore a theorem there rather than an
+observation. The prediction fired as worded, but only the valid half of the
+corpus could ever have falsified it. The report now carries the statistic
+that does have content: how many invalids trip a derived check *on top of*
+the gated failure that already caught them. That number is large, which is
+the actual evidence that the derived checks are real assertions and still
+redundant to the verdict.
+
+**C2 -- P-VO5 is a design invariant, not an empirical finding.** Element ids
+are module constants, no mutation helper accepts an id change, and
+``check_wellformed`` now raises when the id set differs, so
+``distinct_id_sets == 1`` is guaranteed before the parameter sweep begins.
+It is a real regression guard against a future edit and it was reported as a
+result; it is not a discovery about the generator.
+
+**C3 -- P-VO3 shows separability, not completeness.** Six controlled classes
+map bijectively onto six checks, and each check is necessary for its class.
+That says nothing about whether the six cover the space of representable
+invalid figures, and review produced a counterexample the gate accepted: an
+angle annotation referencing a nonexistent vertex round-tripped through the
+SVG and verified ``ok``. It is now refused as malformed at the door rather
+than gated as a seventh check, because no controlled class exercises it and
+a check without a class is the decoration this layer is meant to avoid.
+Reaching a *complete* check set is not claimed and is not required for step
+6; being explicit about which claim is made is.
 """
 
 from __future__ import annotations

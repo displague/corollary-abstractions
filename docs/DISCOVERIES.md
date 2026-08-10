@@ -13,6 +13,43 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A near-miss that preserves length is what makes a geometry check
+  falsifiable.** The obvious way to break a right angle — nudge the leg
+  endpoint sideways — also changes that leg's length, so the length check
+  catches it too and neither check can be shown load-bearing. Replacing the
+  leg direction `v = (-q, p)` with `w = (q, p)` keeps the squared length
+  identical (`p² + q²`) in exact integer arithmetic while rotating by
+  `2·atan(q/p)`, giving a 1.53°–16.26° near-miss that only the right-angle
+  check sees. With one such construction per check, all six visual-oracle
+  checks ablate into a unique escape: disable one, exactly one invalid class
+  of 240 passes and the other five stay fully rejected. The general lesson is
+  that a verifier's checks are only separately testable if the negative set
+  is built to isolate them. *P-VO2/P-VO3 fired; visual oracle* (2026-08-09)
+
+- **A corpus of well-formed inputs cannot audit a verifier's soundness
+  argument.** The visual oracle's six checks ablate cleanly — disable one,
+  exactly one invalid class of 240 escapes — across 1,680 instances. Review
+  still found a figure all six accepted: an angle annotation referencing a
+  nonexistent vertex, which round-tripped through the SVG and verified `ok`.
+  A second construction made a check skip its relation, so ablating a
+  *different* check let the graph pass. Both occur 0 times in the generated
+  corpus, which is exactly why the corpus could not find them. The results
+  were right and the argument behind them was not yet sound; only inputs the
+  generator never produces separate those two states. Both are now refused
+  as malformed at the door rather than added as checks, since no controlled
+  class exercises them and a check without a class is decoration.
+  *adversarial review; visual oracle* (2026-08-09)
+
+- **A capability-blind control can pass by being blind.** The visual lane's
+  "max coordinate" surface baseline ran its number regex over the whole SVG
+  and matched the `2000` in `http://www.w3.org/2000/svg`. It returned the
+  same constant for every figure and scored a clean 0.500 on all six invalid
+  classes — apparently confirming that the negatives are hard, actually
+  measuring nothing. Reading numbers only from numeric attribute values
+  raised its best cell to 0.740. A baseline that scores at chance deserves
+  the same suspicion as one that scores perfectly: both can mean the
+  instrument never saw the data. *self-audit* (2026-08-09)
+
 - **Synthetic recombinant pointing does not transfer to corpus
   specialization.** Forty real A:B::C:D rows span six source and six target
   disciplines but only five distinct targets in one ratio family. Every D is

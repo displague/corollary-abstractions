@@ -251,12 +251,27 @@ flow yet. The remaining bullets of this item are untouched.
 The v0.6 visual experiment was explicitly deferred because no oracle layer
 existed. Land it in this order:
 
-1. deterministic right-triangle renderer;
-2. source scene graph with stable slot-to-element identities;
-3. controlled-invalid pair generator;
-4. exact incidence/length/right-angle verifier with ablation tests;
-5. normalized SVG/tree input;
-6. only then, parameter-matched parsed-vector and raster arms.
+1. deterministic right-triangle renderer — **SHIPPED** (`experiments/visual/`);
+2. source scene graph with stable slot-to-element identities — **SHIPPED**;
+3. controlled-invalid pair generator — **SHIPPED** (six near-miss classes);
+4. exact incidence/length/right-angle verifier with ablation tests —
+   **SHIPPED** (six gated checks, each ablated into a unique escape);
+5. normalized SVG/tree input — **SHIPPED** (exact round trip);
+6. only then, parameter-matched parsed-vector and raster arms — **OPEN**.
+
+Steps 1–5 result: `N = 240` seeded valid figures and 1,440 controlled
+invalids. The verifier accepts 240/240 valids and rejects 1,440/1,440
+invalids, each at exactly the one check registered as its gate; disabling any
+single check lets all 240 of that check's class through while the other five
+classes stay fully rejected; 5,040 render→parse→verify round trips are exact
+and re-render byte-identically; and no capability-blind surface baseline
+exceeds 0.742 balanced accuracy on any class in any style. P-VO1–P-VO7 were
+committed before the adjudicating run and all seven fired, with three
+corrections attached rather than edited in: P-VO6's evidential base is the
+240 valids, P-VO5 is a design invariant, and P-VO3 shows check separability
+rather than a complete check set. Numbers, the two defects adversarial
+review found, and the corrected blind baseline are in
+`experiments/ANALYSIS.md`. No weights exist in this layer.
 
 P-V1–P-V4 in `DESIGN-visual-structure.md` remain registered until step 6.
 Natural images and medical imagery remain later domains with separate evidence

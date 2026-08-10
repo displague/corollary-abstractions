@@ -40,7 +40,8 @@ from .parse import parse_svg  # noqa: E402
 from .render import STYLES, render_svg  # noqa: E402
 from .scene import (ROLE_TO_ANGLE, ROLE_TO_EDGE, ROLE_TO_VERTEX,  # noqa: E402
                     TriangleParams, fmt, normalize, to_dict)
-from .verify import DERIVED_CHECKS, GATED_CHECKS, verify  # noqa: E402
+from .verify import (DERIVED_CHECKS, DERIVED_IMPLIED_BY,  # noqa: E402
+                     GATED_CHECKS, verify)
 
 # Primitive leg directions. q/p controls the exact near-miss angle
 # 2*atan(q/p), which spans 1.53 to 16.26 degrees over this pool; p != q keeps
@@ -124,18 +125,42 @@ def instance_row(inst: Instance, styles=DEFAULT_STYLES) -> dict:
 # Capability-blind surface baselines (P-VO7)
 # --------------------------------------------------------------------------
 
-# Numbers not preceded by '#' or a word character, so hex colours do not
-# masquerade as coordinates and hand the baseline a constant maximum.
-_NUMBER = re.compile(r"(?<![#\w])-?\d+(?:\.\d+)?")
+_ATTR = re.compile(r'([A-Za-z][\w-]*)="([^"]*)"')
+_NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
+# Attributes whose values are numeric. Reading numbers out of these rather
+# than out of the whole document is what keeps the baseline honest: the first
+# implementation of this feature matched the "2000" in the SVG namespace URI,
+# scored a constant on every figure, and was therefore blind by accident
+# rather than by result. A control that cannot see is not a control.
+_NUMERIC_ATTRS = frozenset({"x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r",
+                            "width", "height", "viewBox", "d", "font-size",
+                            "stroke-width"})
+
+SURFACE_FEATURES = ("element_count", "byte_length", "coord_magnitude")
 
 
 def surface_features(svg: str) -> dict[str, float]:
+    coords = [abs(float(n)) for key, val in _ATTR.findall(svg)
+              if key in _NUMERIC_ATTRS for n in _NUMBER.findall(val)]
     return {
         "element_count": float(svg.count('data-sid="')),
         "byte_length": float(len(svg)),
-        "coord_magnitude": float(max((abs(float(m)) for m in
-                                      _NUMBER.findall(svg)), default=0.0)),
+        "coord_magnitude": max(coords, default=0.0),
     }
+
+
+def _best_threshold_balanced_accuracy(neg: list[float],
+                                      pos: list[float]) -> float:
+    """Best balanced accuracy any threshold rule could reach, tuned on the
+    very data it is scored on. Deliberately unfair to the oracle."""
+    best = 0.5
+    cuts = sorted(set(neg) | set(pos))
+    for t in cuts:
+        for sign in (1, -1):
+            tp = sum(1 for v in pos if v * sign > t * sign)
+            tn = sum(1 for v in neg if v * sign <= t * sign)
+            best = max(best, (tp / len(pos) + tn / len(neg)) / 2)
+    return best
 
 
 def blind_baselines(corpus: list[Instance], style: str = "plain") -> dict:
@@ -144,24 +169,30 @@ def blind_baselines(corpus: list[Instance], style: str = "plain") -> dict:
     Fitting and scoring on the same valid set gives every baseline a zero
     false-positive rate by construction. That is deliberate: the control is
     only informative if it is handed the most favourable possible reading.
+    The novelty rule is the optimal zero-false-positive rule for a discrete
+    feature; ``best_threshold_balanced_accuracy`` additionally reports what
+    an oracle-tuned threshold could do with the false-positive constraint
+    lifted, which is strictly stronger than the registered P-VO7 wording.
     """
     feats = {inst.instance_id: surface_features(render_svg(inst.graph, style))
              for inst in corpus}
     valids = [i for i in corpus if i.expected_valid]
     seen = {name: {feats[v.instance_id][name] for v in valids}
-            for name in ("element_count", "byte_length", "coord_magnitude")}
+            for name in SURFACE_FEATURES}
     report: dict[str, dict] = {}
     for name, allowed in seen.items():
-        fpr = sum(1 for v in valids
-                  if feats[v.instance_id][name] not in allowed) / len(valids)
+        neg = [feats[v.instance_id][name] for v in valids]
+        fpr = sum(1 for v in neg if v not in allowed) / len(neg)
         per_class = {}
         for cls in INVALID_CLASSES:
             rows = [i for i in corpus if i.kind == cls]
-            tpr = sum(1 for r in rows
-                      if feats[r.instance_id][name] not in allowed) / len(rows)
-            per_class[cls] = {"detected": round(tpr, 6),
-                              "balanced_accuracy": round((tpr + 1 - fpr) / 2,
-                                                         6)}
+            pos = [feats[r.instance_id][name] for r in rows]
+            tpr = sum(1 for v in pos if v not in allowed) / len(pos)
+            per_class[cls] = {
+                "detected": round(tpr, 6),
+                "balanced_accuracy": round((tpr + 1 - fpr) / 2, 6),
+                "best_threshold_balanced_accuracy":
+                    round(_best_threshold_balanced_accuracy(neg, pos), 6)}
         report[name] = {"false_positive_rate": round(fpr, 6),
                         "distinct_values_among_valids": len(allowed),
                         "per_class": per_class}
@@ -206,7 +237,8 @@ def adjudicate(corpus: list[Instance], styles=DEFAULT_STYLES) -> dict:
                           "exactly_registered_gate": exact}
     report["P-VO2"] = {"per_class": per_class, "diagonal": diagonal,
                        "fired": diagonal and all(
-                           c["rejected"] == c["n"] for c in per_class.values())}
+                           c["rejected"] == c["n"]
+                           for c in per_class.values())}
 
     # P-VO3: ablation ------------------------------------------------------
     ablation: dict[str, dict] = {}
@@ -253,8 +285,10 @@ def adjudicate(corpus: list[Instance], styles=DEFAULT_STYLES) -> dict:
         rt[style] = {"n": len(corpus), "graph_equal": graph_eq,
                      "verdict_equal": verdict_eq,
                      "byte_identical_rerender": byte_eq}
-        rt_fired = rt_fired and graph_eq == verdict_eq == byte_eq == len(corpus)
-    report["P-VO4"] = {"per_style": rt, "round_trips": len(corpus) * len(styles),
+        rt_fired = (rt_fired
+                    and graph_eq == verdict_eq == byte_eq == len(corpus))
+    report["P-VO4"] = {"per_style": rt,
+                       "round_trips": len(corpus) * len(styles),
                        "fired": rt_fired}
 
     # P-VO5: stable identities --------------------------------------------
@@ -285,8 +319,17 @@ def adjudicate(corpus: list[Instance], styles=DEFAULT_STYLES) -> dict:
                                  and matches_registry and not coord_leak)}
 
     # P-VO6: derived checks are verdict-redundant --------------------------
+    # As registered, "never changes a verdict" is a theorem on the invalids:
+    # the derived set is a superset of the gated set, so ok can only go
+    # True->False, and every invalid is already False. The registered number
+    # is kept (predictions are corrected by attachment, not by rewriting),
+    # and the sharper statistics that carry the real content are added
+    # beside it: how often a derived check fires on an invalid the gate
+    # already caught, and whether one ever fires on a valid.
     changed = []
     fires_without_gate = []
+    fired_on_invalid = []
+    without_implier = []
     for inst in corpus:
         base = verify(inst.graph, inst.claim)
         with_derived = verify(inst.graph, inst.claim, derived=True)
@@ -296,23 +339,52 @@ def adjudicate(corpus: list[Instance], styles=DEFAULT_STYLES) -> dict:
                          if f.check in DERIVED_CHECKS]
         if derived_fired and base.ok:
             fires_without_gate.append(inst.instance_id)
+        if derived_fired and not inst.expected_valid:
+            fired_on_invalid.append(inst.instance_id)
+        for name in set(derived_fired):
+            if not set(DERIVED_IMPLIED_BY[name]) & set(base.failed_checks):
+                without_implier.append(f"{inst.instance_id}:{name}")
+    invalids = len(corpus) - len(valids)
     report["P-VO6"] = {"verdict_changes": len(changed),
                        "derived_fired_while_gate_passed":
                            len(fires_without_gate),
-                       "examples": changed[:5] + fires_without_gate[:5],
-                       "fired": not changed and not fires_without_gate}
+                       "derived_fired_on_invalids": len(fired_on_invalid),
+                       "derived_fired_without_its_implier":
+                           len(without_implier),
+                       "invalids": invalids,
+                       "valids_scored": len(valids),
+                       "note": "verdict_changes is provably zero on the "
+                               "invalids (derived is a superset of gated, "
+                               "so ok can only go True->False and every "
+                               "invalid is already False); the measured "
+                               "content is that no derived check fires on "
+                               "any of the valids, while "
+                               f"{len(fired_on_invalid)}/{invalids} invalids "
+                               "do trip one on top of a gated failure",
+                       "examples": (changed[:5] + fires_without_gate[:5]
+                                    + without_implier[:5]),
+                       "fired": (not changed and not fires_without_gate
+                                 and not without_implier)}
 
     # P-VO7: capability-blind surface baselines ----------------------------
-    blind = blind_baselines(corpus)
-    worst = max(c["balanced_accuracy"]
-                for b in blind.values() for c in b["per_class"].values())
+    # Every style, not just the default: a baseline that fails on `plain`
+    # and succeeds on `bold` would still make the negative set too easy.
+    blind = {style: blind_baselines(corpus, style) for style in styles}
+    worst = max(c["balanced_accuracy"] for s in blind.values()
+                for b in s.values() for c in b["per_class"].values())
+    worst_thr = max(c["best_threshold_balanced_accuracy"]
+                    for s in blind.values() for b in s.values()
+                    for c in b["per_class"].values())
     elem_chance = all(
-        abs(c["balanced_accuracy"] - 0.5) < 1e-9
-        for c in blind["element_count"]["per_class"].values())
-    report["P-VO7"] = {"baselines": blind,
+        abs(c["balanced_accuracy"] - 0.5) < 1e-9 for s in blind.values()
+        for c in s["element_count"]["per_class"].values())
+    report["P-VO7"] = {"baselines_by_style": blind,
+                       "baselines": blind[styles[0]],
                        "max_balanced_accuracy": worst,
+                       "max_best_threshold_balanced_accuracy": worst_thr,
                        "element_count_at_chance": elem_chance,
-                       "fired": worst < 1.0 and elem_chance}
+                       "fired": (worst < 1.0 and worst_thr < 1.0
+                                 and elem_chance)}
 
     report["all_fired"] = all(report[k]["fired"] for k in
                               ("P-VO1", "P-VO2", "P-VO3", "P-VO4", "P-VO5",
@@ -340,7 +412,7 @@ def format_report(rep: dict) -> str:
         esc = a["per_class_escape"][a["uniquely_gates"]]
         lines.append(f"    disable {check:<17} -> {a['uniquely_gates']} "
                      f"passes {esc['passed_when_disabled']}/{esc['n']}; "
-                     f"other classes held: {a['other_classes_still_rejected']}; "
+                     f"others held: {a['other_classes_still_rejected']}; "
                      f"valids kept: {a['valids_still_accepted']}")
     p4 = rep["P-VO4"]
     lines.append(f"P-VO4 round trip      "
@@ -351,21 +423,33 @@ def format_report(rep: dict) -> str:
                      f"verdict={s['verdict_equal']}/{s['n']} "
                      f"bytes={s['byte_identical_rerender']}/{s['n']}")
     p5 = rep["P-VO5"]
-    lines.append(f"P-VO5 slot identities {'FIRED' if p5['fired'] else 'MISSED'}"
+    verdict5 = 'FIRED' if p5['fired'] else 'MISSED'
+    lines.append(f"P-VO5 slot identities {verdict5}"
                  f" (id sets={p5['distinct_id_sets']}, role maps="
                  f"{p5['distinct_role_maps']})")
     p6 = rep["P-VO6"]
-    lines.append(f"P-VO6 derived redundant {'FIRED' if p6['fired'] else 'MISSED'}"
-                 f" (verdict changes={p6['verdict_changes']})")
+    verdict6 = 'FIRED' if p6['fired'] else 'MISSED'
+    lines.append(f"P-VO6 derived redundant {verdict6}"
+                 f" (verdict changes={p6['verdict_changes']}; measured on "
+                 f"{p6['valids_scored']} valids -- "
+                 f"{p6['derived_fired_on_invalids']}/{p6['invalids']} "
+                 f"invalids trip a derived check atop a gated failure)")
     p7 = rep["P-VO7"]
-    lines.append(f"P-VO7 blind baselines {'FIRED' if p7['fired'] else 'MISSED'}"
-                 f" (max balanced accuracy={p7['max_balanced_accuracy']:.3f})")
+    verdict7 = 'FIRED' if p7['fired'] else 'MISSED'
+    lines.append(f"P-VO7 blind baselines {verdict7}"
+                 f" (max balanced accuracy={p7['max_balanced_accuracy']:.3f}, "
+                 f"oracle-threshold max="
+                 f"{p7['max_best_threshold_balanced_accuracy']:.3f})")
     for name, b in p7["baselines"].items():
         cells = " ".join(f"{c['balanced_accuracy']:.3f}"
                          for c in b["per_class"].values())
-        lines.append(f"    {name:<16} {cells}")
+        thr = " ".join(f"{c['best_threshold_balanced_accuracy']:.3f}"
+                       for c in b["per_class"].values())
+        lines.append(f"    {name:<16} novelty  {cells}")
+        lines.append(f"    {'':<16} oracle   {thr}")
     lines.append("")
-    lines.append(f"ALL PREDICTIONS {'FIRED' if rep['all_fired'] else 'MISSED'}")
+    overall = "FIRED" if rep["all_fired"] else "MISSED"
+    lines.append(f"ALL PREDICTIONS {overall}")
     return "\n".join(lines)
 
 

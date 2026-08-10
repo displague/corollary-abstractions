@@ -20,7 +20,8 @@ it without inventing anything.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
 from fractions import Fraction
 from math import atan2, degrees
 from typing import Iterable
@@ -125,9 +126,22 @@ def fmt(v: Fraction) -> str:
     return f"{sign}{digits[:-places]}.{digits[-places:]}"
 
 
+_DECIMAL = re.compile(r"^-?\d+(?:\.\d+)?$")
+
+
 def num(text: str) -> Fraction:
-    """Exact inverse of :func:`fmt` for SVG attribute text."""
-    return Fraction(text)
+    """Exact inverse of :func:`fmt` for SVG attribute text.
+
+    Restricted to the grammar ``fmt`` can actually emit. ``Fraction`` alone
+    would accept ``1/3`` and ``1e3``, which parse silently and then explode
+    at render time far from the cause, and it raises bare ``ValueError`` on
+    junk instead of the ``SceneGraphError`` the parser contract promises.
+    """
+    if not _DECIMAL.match(text.strip()):
+        raise SceneGraphError(
+            f"{text!r} is not a coordinate this renderer can emit "
+            "(expected an exact decimal)")
+    return Fraction(text.strip())
 
 
 @dataclass(frozen=True)
@@ -148,6 +162,28 @@ class TriangleParams:
     oy: int
     hand: int  # +1 or -1: which side of u the second leg lies on
     dih: int   # 0..3: exact multiple-of-90-degree rotation of the whole figure
+
+    def validate(self) -> None:
+        """Enforce the contract the ablation depends on.
+
+        Not defensive style: these are the conditions under which each
+        controlled invalid trips exactly one check. With ``p == q`` the
+        near-miss direction ``w = (q, p)`` becomes parallel to ``u``, so the
+        right-angle break also collapses the triangle and fires
+        ``nondegenerate`` alongside ``right_angle``; with ``m`` or ``n`` zero
+        the *valid* figure is already degenerate. Either would quietly turn
+        the one-class-one-check matrix off-diagonal and vacate P-VO3, so an
+        out-of-contract figure must fail loudly instead of scoring.
+        """
+        if not (self.p > self.q >= 1):
+            raise SceneGraphError(
+                f"direction must satisfy p > q >= 1, got ({self.p}, {self.q}):"
+                " the equal-length near-miss would be collinear with leg a")
+        if self.m < 1 or self.n < 1:
+            raise SceneGraphError(
+                f"leg units must be positive, got m={self.m}, n={self.n}")
+        if self.hand not in (1, -1):
+            raise SceneGraphError(f"hand must be +/-1, got {self.hand}")
 
     def signature(self) -> str:
         return (f"p{self.p}q{self.q}m{self.m}n{self.n}"
@@ -174,6 +210,7 @@ def leg_vectors(params: TriangleParams) -> tuple[Vec, Vec, Vec]:
     right-angle check can be ablated without the length check catching the
     escape for it.
     """
+    params.validate()
     p, q = Fraction(params.p), Fraction(params.q)
     u = Vec(p, q)
     v = Vec(-q, p) * params.hand
@@ -271,27 +308,24 @@ class SceneGraph:
             yield e.p1
             yield e.p2
 
+    # ``replace`` rather than ``changes.get(...)``: a typo'd keyword must
+    # raise, not silently produce an unmutated graph that then "passes" a
+    # test written to prove a mutation is caught.
     def with_vertex(self, vid: str, **changes) -> "SceneGraph":
-        vs = tuple(Vertex(v.id, changes.get("role", v.role),
-                          changes.get("point", v.point)) if v.id == vid else v
+        vs = tuple(replace(v, **changes) if v.id == vid else v
                    for v in self.vertices)
         return SceneGraph(self.figure_id, self.family, vs, self.edges,
                           self.angles)
 
     def with_edge(self, eid: str, **changes) -> "SceneGraph":
-        es = tuple(Edge(e.id, changes.get("role", e.role),
-                        changes.get("frm", e.frm), changes.get("to", e.to),
-                        changes.get("p1", e.p1), changes.get("p2", e.p2))
-                   if e.id == eid else e for e in self.edges)
+        es = tuple(replace(e, **changes) if e.id == eid else e
+                   for e in self.edges)
         return SceneGraph(self.figure_id, self.family, self.vertices, es,
                           self.angles)
 
     def with_angle(self, aid: str, **changes) -> "SceneGraph":
-        angs = tuple(Angle(a.id, changes.get("role", a.role),
-                           changes.get("vertex", a.vertex),
-                           changes.get("arms", a.arms),
-                           changes.get("measure", a.measure))
-                     if a.id == aid else a for a in self.angles)
+        angs = tuple(replace(a, **changes) if a.id == aid else a
+                     for a in self.angles)
         return SceneGraph(self.figure_id, self.family, self.vertices,
                           self.edges, angs)
 
@@ -313,18 +347,68 @@ def normalize(g: SceneGraph) -> SceneGraph:
 def check_wellformed(g: SceneGraph) -> None:
     """Refuse graphs that are not readable as scene graphs at all.
 
-    This is not one of the gated checks. No controlled-invalid class is
-    malformed, and a check with no invalid class to catch would inflate the
-    check inventory without being load-bearing.
+    This is not one of the gated checks and must never become one: no
+    controlled-invalid class is malformed, and a check with no invalid class
+    to catch would inflate the inventory without being load-bearing. It is a
+    precondition, and it raises rather than returning a verdict.
+
+    It is also what keeps the ablation honest. The verifier's checks are
+    written to report nothing about a relation they cannot evaluate, so that
+    disabling one check never silently mutes another. Resolving every
+    reference here -- and, for the registered family, requiring the complete
+    slot inventory -- makes each of those skip branches unreachable for a
+    graph that got through the door: every check either evaluates its
+    relation or the graph never reached the verifier at all.
+
+    Reference resolution is a precondition and not a gated check for the
+    same reason as the rest of this function: no controlled-invalid class is
+    built from a dangling reference, and adding a seventh check with no
+    class to catch would inflate the inventory without being load-bearing.
+    It closes a real hole all the same -- before it, an angle pointing at a
+    nonexistent vertex round-tripped through the SVG and verified ``ok``.
     """
     ids = [e.id for e in (*g.vertices, *g.edges, *g.angles)]
     if len(ids) != len(set(ids)):
         raise SceneGraphError(f"duplicate element ids in {g.figure_id}")
     if not g.vertices or not g.edges or not g.angles:
         raise SceneGraphError(f"empty element class in {g.figure_id}")
+    vertex_ids = {v.id for v in g.vertices}
+    edge_ids = {e.id for e in g.edges}
+    for e in g.edges:
+        for ref in (e.frm, e.to):
+            if ref not in vertex_ids:
+                raise SceneGraphError(
+                    f"edge {e.id} references unknown vertex {ref!r}")
     for a in g.angles:
         if len(a.arms) != 2:
             raise SceneGraphError(f"angle {a.id} must name exactly two arms")
+        if a.vertex not in vertex_ids:
+            raise SceneGraphError(
+                f"angle {a.id} references unknown vertex {a.vertex!r}")
+        for arm in a.arms:
+            if arm not in edge_ids:
+                raise SceneGraphError(
+                    f"angle {a.id} references unknown edge {arm!r}")
+        if a.measure not in ("right", "acute"):
+            raise SceneGraphError(
+                f"angle {a.id} has unknown measure {a.measure!r}")
+    if g.family != FAMILY:
+        raise SceneGraphError(
+            f"{g.figure_id}: unknown family {g.family!r}. Silently falling "
+            "back to the generic checks would downgrade validation for a "
+            "typo; a new family must arrive with its own slot registry.")
+    if set(ids) != ELEMENT_IDS:
+        raise SceneGraphError(
+            f"{g.figure_id}: element ids {sorted(set(ids))} are not the "
+            f"registered slot inventory {sorted(ELEMENT_IDS)}")
+    for kind, elements, registry in (("vertex", g.vertices, ROLE_TO_VERTEX),
+                                     ("edge", g.edges, ROLE_TO_EDGE),
+                                     ("angle", g.angles, ROLE_TO_ANGLE)):
+        got = {e.role: e.id for e in elements}
+        if got != registry:
+            raise SceneGraphError(
+                f"{g.figure_id}: {kind} role map {got} does not match the "
+                f"registered map {registry}")
 
 
 def build_scene(params: TriangleParams, figure_id: str) -> SceneGraph:

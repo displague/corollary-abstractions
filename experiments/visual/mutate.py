@@ -25,8 +25,8 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 from .scene import (A_RIGHT, Claim, E_HYP, E_LEG_A, E_LEG_B, Pt, SceneGraph,
-                    TriangleParams, V_LEG_A, V_LEG_B, V_RIGHT, Vec,
-                    build_claim, build_scene, fmt, leg_vectors)
+                    SceneGraphError, TriangleParams, V_LEG_A, V_LEG_B,
+                    V_RIGHT, Vec, build_claim, build_scene, fmt, leg_vectors)
 
 INVALID_CLASSES = (
     "right_angle_epsilon",
@@ -142,7 +142,17 @@ def mutate(params: TriangleParams, figure_id: str, kind: str
         # at the vertices is untouched, so only incidence sees it.
         e = g.edge(E_HYP)
         delta = Vec(Fraction(3), Fraction(-3))
-        g = g.with_edge(E_HYP, p2=e.p2 + delta)
+        detached = e.p2 + delta
+        if detached == e.p1:
+            # Would collapse the hypotenuse to zero length and fire
+            # `nondegenerate` alongside `incidence`, taking the class off the
+            # diagonal. No figure in the current direction pool comes within
+            # 16 units of this, but a future pool entry must fail loudly
+            # rather than quietly weaken the ablation.
+            raise SceneGraphError(
+                f"{figure_id}: disconnection delta collapses the hypotenuse; "
+                "choose a delta smaller than the figure")
+        g = g.with_edge(E_HYP, p2=detached)
         mut = Mutation(kind, (E_HYP, V_LEG_B),
                        "hypotenuse endpoint detached from the vertex it "
                        "still references; vertex geometry untouched",

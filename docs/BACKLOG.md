@@ -40,14 +40,33 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   at 1.000 through same-corpus BOX recurrence and broad pattern absorption.
   Report external/prior, same-corpus, recursive, and pattern channels
   separately before using groundedness as an admission signal.
-- **Visual structure lane.** Run the formula–diagram twins experiment in
-  `docs/DESIGN-visual-structure.md`: source scene-graph oracle, parsed SVG arm,
-  parameter-matched pixel control, and exact geometry verification.
-  v0.6 inventory found no visual assets, renderer, scene-graph schema, or
-  geometry verifier, so the release explicitly deferred the experiment rather
-  than building oracle and learned arms together. First land a deterministic
-  right-triangle data generator plus inconsistent-pair verifier; only then
-  adjudicate P-V1–P-V4.
+- **PARTIAL — Visual structure lane: the oracle exists, the arms do not.**
+  ROADMAP-v0.7 item 8 steps 1–5 shipped in `experiments/visual/`: a
+  deterministic renderer, a source scene graph with role-derived stable slot
+  ids, six controlled-invalid classes, six gated exact checks each ablated
+  into a unique escape, and an exact SVG round trip. P-VO1–P-VO7 were
+  registered before the run and all fired (`experiments/ANALYSIS.md`).
+  Remaining: step 6 — raster rendering, a parameter-matched pixel encoder,
+  tokenization of the normalized tree, the shuffled-structure control
+  (correct pixels, wrong scene graph), and style/family/structural-OOD
+  splits. P-V1–P-V4 stay registered and unadjudicated until that runs.
+- **Harden the degenerate near-miss before step 6 reports a number.** Of the
+  six invalid classes, `degenerate_zero_leg` is the softest against a
+  capability-blind surface baseline: an oracle-tuned SVG byte-length
+  threshold reaches 0.802 balanced accuracy on it (every other class stays
+  under 0.63, and the maximum over the whole matrix is 0.740). Collapsing a
+  leg shrinks the figure's bounding box, which is exactly the kind of
+  shortcut a raster arm could learn instead of geometry. Add a
+  bounding-box-preserving degeneracy (collinear-but-not-shrunken) before the
+  parsed-vector/raster comparison is scored.
+- **The visual lane has one family, so "family OOD" is not yet available.**
+  `DESIGN-visual-structure.md` names circle measurements, affine transforms,
+  graph connectivity, SHM phase portraits and Lissajous figures as follow-on
+  source-structured families. Step 6 can measure style OOD and structural
+  variation within right triangles, but a family holdout needs a second
+  renderer/verifier pair built to the same render/parse/invalidate/verify
+  protocol. Do not name a family split until at least two non-isomorphic
+  families exist — the same defect the v0.6 analogy lane was corrected for.
 - **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
   asked whether emotion classification maps/vectors belong beside math/science
   corpora. The answer is recorded in `docs/DESIGN-affect.md`: source-qualified

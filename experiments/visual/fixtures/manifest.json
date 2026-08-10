@@ -1,0 +1,306 @@
+{
+  "generator": "experiments/visual/genvisual.py",
+  "seed": 11,
+  "figure_id": "rt-0000",
+  "params": {
+    "p": 75,
+    "q": 1,
+    "m": 12,
+    "n": 12,
+    "ox": 80,
+    "oy": 90,
+    "hand": 1,
+    "dih": 1,
+    "signature": "p75q1m12n12o80,90h1d1",
+    "near_miss_degrees": 1.527797
+  },
+  "instances": [
+    {
+      "instance_id": "rt-0000/valid",
+      "kind": "valid",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": null,
+      "verdict": {
+        "ok": true,
+        "failed_checks": [],
+        "failures": []
+      }
+    },
+    {
+      "instance_id": "rt-0000/right_angle_epsilon",
+      "kind": "right_angle_epsilon",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": {
+        "kind": "right_angle_epsilon",
+        "elements": [
+          "V.leg_b",
+          "E.leg_b",
+          "E.hypot"
+        ],
+        "detail": "leg b rotated onto the equal-length near-miss direction w=(q,p); both leg lengths unchanged",
+        "magnitude": "dot=21600",
+        "magnitude_degrees": 1.52779692185999,
+        "claim_adjusted": false,
+        "registered_gate": "right_angle"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "right_angle"
+        ],
+        "failures": [
+          {
+            "check": "right_angle",
+            "elements": [
+              "V.right",
+              "V.leg_a",
+              "V.leg_b"
+            ],
+            "detail": "dot((leg_a),(leg_b)) = 21600, expected 0"
+          }
+        ]
+      }
+    },
+    {
+      "instance_id": "rt-0000/leg_length",
+      "kind": "leg_length",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": {
+        "kind": "leg_length",
+        "elements": [
+          "V.leg_a",
+          "E.leg_a",
+          "E.hypot"
+        ],
+        "detail": "leg a lengthened by one direction unit along its own axis; right angle and all incidences preserved",
+        "magnitude": "leg_a_sq=950794 claimed=810144",
+        "magnitude_degrees": null,
+        "claim_adjusted": false,
+        "registered_gate": "leg_lengths"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "leg_lengths"
+        ],
+        "failures": [
+          {
+            "check": "leg_lengths",
+            "elements": [
+              "V.right",
+              "V.leg_a"
+            ],
+            "detail": "|V.leg_a-V.right|^2 = 950794, claimed 810144"
+          }
+        ]
+      }
+    },
+    {
+      "instance_id": "rt-0000/edge_disconnected",
+      "kind": "edge_disconnected",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": {
+        "kind": "edge_disconnected",
+        "elements": [
+          "E.hypot",
+          "V.leg_b"
+        ],
+        "detail": "hypotenuse endpoint detached from the vertex it still references; vertex geometry untouched",
+        "magnitude": "delta=(3,-3)",
+        "magnitude_degrees": null,
+        "claim_adjusted": false,
+        "registered_gate": "incidence"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "incidence"
+        ],
+        "failures": [
+          {
+            "check": "incidence",
+            "elements": [
+              "E.hypot",
+              "V.leg_b"
+            ],
+            "detail": "E.hypot end (-817,75) is not on V.leg_b (-820,78)"
+          }
+        ]
+      }
+    },
+    {
+      "instance_id": "rt-0000/hypotenuse_retargeted",
+      "kind": "hypotenuse_retargeted",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": {
+        "kind": "hypotenuse_retargeted",
+        "elements": [
+          "E.hypot"
+        ],
+        "detail": "hypotenuse re-attached to V.right/V.leg_a, duplicating leg a; endpoints kept incident",
+        "magnitude": "degree(V.leg_b)=1",
+        "magnitude_degrees": null,
+        "claim_adjusted": false,
+        "registered_gate": "topology"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "topology"
+        ],
+        "failures": [
+          {
+            "check": "topology",
+            "elements": [
+              "E.hypot",
+              "V.right",
+              "V.leg_a"
+            ],
+            "detail": "E.hypot (hypotenuse) joins ['leg_a_end', 'right_angle'], expected ['leg_a_end', 'leg_b_end']"
+          },
+          {
+            "check": "topology",
+            "elements": [
+              "E.leg_a"
+            ],
+            "detail": "E.leg_a duplicates an existing edge between ['V.leg_a', 'V.right']"
+          },
+          {
+            "check": "topology",
+            "elements": [
+              "V.leg_b"
+            ],
+            "detail": "V.leg_b has degree 1, expected 2"
+          },
+          {
+            "check": "topology",
+            "elements": [
+              "V.right"
+            ],
+            "detail": "V.right has degree 3, expected 2"
+          }
+        ]
+      }
+    },
+    {
+      "instance_id": "rt-0000/degenerate_zero_leg",
+      "kind": "degenerate_zero_leg",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "0"
+      },
+      "mutation": {
+        "kind": "degenerate_zero_leg",
+        "elements": [
+          "V.leg_b",
+          "E.leg_b",
+          "E.hypot"
+        ],
+        "detail": "leg b collapsed to zero length and the claim collapsed with it; figure and claim agree, and the figure is still not a triangle",
+        "magnitude": "leg_b_sq=0",
+        "magnitude_degrees": null,
+        "claim_adjusted": true,
+        "registered_gate": "nondegenerate"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "nondegenerate"
+        ],
+        "failures": [
+          {
+            "check": "nondegenerate",
+            "elements": [
+              "E.leg_b"
+            ],
+            "detail": "E.leg_b has zero length"
+          },
+          {
+            "check": "nondegenerate",
+            "elements": [
+              "V.leg_a",
+              "V.leg_b",
+              "V.right"
+            ],
+            "detail": "two vertices occupy the same point"
+          },
+          {
+            "check": "nondegenerate",
+            "elements": [
+              "V.right",
+              "V.leg_a",
+              "V.leg_b"
+            ],
+            "detail": "the three vertices are collinear (cross product 0)"
+          }
+        ]
+      }
+    },
+    {
+      "instance_id": "rt-0000/right_angle_mislabeled",
+      "kind": "right_angle_mislabeled",
+      "split": "train",
+      "claim": {
+        "leg_a_sq": "810144",
+        "leg_b_sq": "810144"
+      },
+      "mutation": {
+        "kind": "right_angle_mislabeled",
+        "elements": [
+          "A.right"
+        ],
+        "detail": "right-angle annotation rebound to V.leg_a with arms (leg a, hypotenuse); no coordinate changed",
+        "magnitude": "vertex=V.leg_a",
+        "magnitude_degrees": null,
+        "claim_adjusted": false,
+        "registered_gate": "right_angle_slot"
+      },
+      "verdict": {
+        "ok": false,
+        "failed_checks": [
+          "right_angle_slot"
+        ],
+        "failures": [
+          {
+            "check": "right_angle_slot",
+            "elements": [
+              "A.right",
+              "V.leg_a"
+            ],
+            "detail": "A.right is bound to V.leg_a, but the right-angle vertex is V.right"
+          },
+          {
+            "check": "right_angle_slot",
+            "elements": [
+              "A.right",
+              "E.leg_a",
+              "E.hypot"
+            ],
+            "detail": "A.right arms ['E.hypot', 'E.leg_a'], expected ['E.leg_a', 'E.leg_b']"
+          }
+        ]
+      }
+    }
+  ]
+}

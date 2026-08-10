@@ -173,6 +173,10 @@ experiments/
   demo_analogy_checkpoint.py  released model on fresh shallow + deep analogies
   demo_answer.py        the end-to-end demo above (self-bootstrapping)
   run_grid.py           scaling-curve grid
+  visual/               the visual ground-truth oracle: deterministic SVG
+                        renderer, stable-slot scene graph, controlled
+                        near-miss generator, exact ablated verifier, parser
+                        (no weights; the learned arms are still deferred)
   ANALYSIS.md           every result, prediction, and retraction
   data_real/            (gitignored) licensed corpus samples, user-supplied
 prover/
@@ -218,6 +222,8 @@ python prover/live_search.py                # live Lean search + projection abla
 python experiments/train_tactic_policy.py --live  # learned vs strong blind order
 python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_repro.json
                                              # grounded rows + trivial blind baseline
+cd experiments && python -m visual.genvisual adjudicate --n 240 --seed 11
+                                             # visual oracle: P-VO1..P-VO7
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
@@ -252,7 +258,9 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   over registered subsystems, WAITING as ask-channel, boot capability matrix,
   optional Chat Completions skin; not a demo slash-menu
 - `docs/DESIGN-visual-structure.md` — the parse-first multimodal plan:
-  formula/diagram twins, SVG structure, and a pixel control
+  formula/diagram twins, SVG structure, and a pixel control. Its oracle layer
+  is built (`experiments/visual/`); P-V1–P-V4 stay registered until the
+  learned arms run
 - `docs/blog/` — accessible project narratives, including the v0.6 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger

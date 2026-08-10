@@ -1346,6 +1346,192 @@ non-neural: render one right-triangle family deterministically, preserve its
 slot-to-element graph, generate one controlled-invalid counterpart, and prove
 the exact geometry checks distinguish them. Model comparison begins only after
 that foundation survives review.
+
+## Visual oracle layer: the deferred foundation, built (v0.7 item 8, steps 1-5)
+
+The v0.6 deferral named five missing artifacts. All five now exist under
+`experiments/visual/`, and none of them contains a weight: this is steps 1-5
+of item 8 only. **P-V1-P-V4 in `docs/DESIGN-visual-structure.md` remain
+REGISTERED and UNADJUDICATED** — they compare model arms, and step 6 has not
+been built.
+
+Seven predictions (P-VO1-P-VO7) were committed in
+`experiments/visual/__init__.py` at `c79eade`, before the run that judges
+them, specifically so they would not repeat the v0.6 analogy retraction in
+which predictions written in an uncommitted tree had to be downgraded to
+retrospective labels.
+
+Protocol: `N = 240` seeded valid right triangles (`--seed 11`), one
+controlled invalid per class across six classes, 1,680 instances, three
+render styles. Regenerate with
+`python -m visual.genvisual adjudicate --n 240 --seed 11` from
+`experiments/`.
+
+### Verdict: seven of seven fired
+
+| prediction | claim | result |
+|---|---|---|
+| P-VO1 | verifier accepts every seeded valid | 240/240 — **fired** |
+| P-VO2 | rejects every controlled invalid, at exactly its registered check | 1,440/1,440, matrix diagonal — **fired** |
+| P-VO3 | every gated check ablates into a specific escape | 6/6 checks — **fired** |
+| P-VO4 | render → parse → verify is exact | 5,040 round trips — **fired** |
+| P-VO5 | slot ids constant under parameter change | 1 id set, 1 role map — **fired** |
+| P-VO6 | the two non-gated checks are verdict-redundant | 0 verdict changes; see correction C1 — **fired, on a narrower base than the wording implies** |
+| P-VO7 | no capability-blind surface baseline solves a class | max balanced accuracy 0.742 across all three styles — **fired** |
+
+### The ablation is what makes the verifier non-vacuous
+
+Six checks are gated. Each invalid class is caught by exactly one of them,
+and disabling that one check lets all 240 of its class through while the
+other five classes stay 100% rejected and all 240 valids stay accepted:
+
+| disabled check | class that escapes | escapes | other classes still rejected | valids still accepted |
+|---|---|---:|---|---:|
+| `incidence` | `edge_disconnected` | 240/240 | yes | 240 |
+| `topology` | `hypotenuse_retargeted` | 240/240 | yes | 240 |
+| `right_angle` | `right_angle_epsilon` | 240/240 | yes | 240 |
+| `leg_lengths` | `leg_length` | 240/240 | yes | 240 |
+| `nondegenerate` | `degenerate_zero_leg` | 240/240 | yes | 240 |
+| `right_angle_slot` | `right_angle_mislabeled` | 240/240 | yes | 240 |
+
+The leave-one-in dual is the same result read from the other side: each check
+enabled *alone* rejects exactly 240 of the 1,440 invalids — its own class,
+one sixth — with zero false rejections, and the six together reject all
+1,440. The checks partition the negative set rather than overlapping on it.
+
+An ablation is only readable if disabling one check cannot silently mute
+another, so the checks report nothing about relations they cannot evaluate
+and the complete registered slot inventory is a *precondition* that raises
+rather than a check that votes. Every such silent branch is therefore
+unreachable for a graph that got through the door: each check either
+evaluates its relation or the graph never reached the verifier. The same
+reasoning enforces the parameter contract — with `p == q` the equal-length
+near-miss would be collinear with leg a and the right-angle break would fire
+`nondegenerate` too, so out-of-contract parameters raise instead of scoring.
+
+That diagonal did not come for free, and two design decisions bought it:
+
+- **The right-angle break preserves both leg lengths exactly.** A
+  perpendicular nudge would have changed the leg's length too, so the length
+  check would have co-detected it and neither check could have been shown
+  load-bearing. Instead the leg direction `v = (-q, p)` is replaced by
+  `w = (q, p)`, which has the identical squared length `p^2 + q^2` and makes
+  an exact angle of `2*atan(q/p)` with it. Over the direction pool that is a
+  1.53°-16.26° near-miss with no floating point anywhere.
+- **The degenerate class moves its own claim.** A zero-length leg whose claim
+  still asserted a positive length is caught by the length check; adjusting
+  the claim with the figure produces a scene that agrees with its own
+  description and still is not a triangle, which is precisely what a
+  nondegeneracy check is for. It is the only class permitted to touch the
+  claim, and the mutation record says so.
+
+Two further checks are implemented and deliberately **not** gated:
+`pythagorean` (`|hyp|^2 == |leg_a|^2 + |leg_b|^2`) and `hypotenuse_claim`.
+Both are implied by the gated set. Gating them would have given two classes a
+second detector and vacated the ablation argument for the checks that earn
+their place. **Six checks, six classes, no decoration.**
+
+P-VO6 fired, but adversarial review showed its wording claims a wider
+evidential base than it has, and the correction is attached to the
+registration rather than folded into it (correction C1). The derived set is
+a *superset* of the gated set, so a verdict can only move accept → reject;
+every invalid is already a reject, and "never changes a verdict" is a
+theorem there, not an observation. Only the 240 valids could ever have
+falsified it. The report now also carries the numbers that do have content:
+the derived checks fire on 480 of the 1,440 invalids — they are live
+assertions, not dead code — and in 0 of those cases does one fire without a
+failure of the specific gated check that implies it (`right_angle` +
+`incidence` for `pythagorean`; those plus `leg_lengths` for
+`hypotenuse_claim`). That, rather than the verdict count, is the evidence
+that the exclusion was correct.
+
+### Round trip and the anti-erasure control
+
+`parse_svg(render_svg(g, style))` equals `normalize(g)` exactly for all 1,680
+instances in all three styles, and the verifier's verdict *and its
+failing-check list* are identical on source and parsed graphs — the parser
+preserves violations, not just valid figures. The stronger control is that
+`render_svg(parse_svg(svg), style)` reproduces `svg` byte for byte in
+5,040/5,040 cases: normalization drops background, colours, fonts, text
+labels, angle-marker path data and attribute order, and if any of that had
+carried a relation the scene graph does not, the re-render could not
+reconstruct the bytes.
+
+### Capability-blind controls, including one on ourselves
+
+P-VO7 fits three surface baselines on the valid corpus and scores them on
+that same corpus, so their false-positive rate is zero by construction and
+the reading is maximally favourable. Every render style is scored, not just
+the default, because byte length is style-dependent: the maxima across all
+three are 0.742 for the novelty rule and 0.848 for an oracle-tuned
+threshold. Balanced accuracy on `plain`, novelty rule (oracle-tuned
+threshold in parentheses):
+
+| baseline | r.a. epsilon | leg length | disconnected | retargeted | degenerate | mislabeled |
+|---|---|---|---|---|---|---|
+| element count | 0.500 (0.500) | 0.500 (0.500) | 0.500 (0.500) | 0.500 (0.500) | 0.500 (0.500) | 0.500 (0.500) |
+| SVG byte length | 0.500 (0.521) | 0.535 (0.621) | 0.508 (0.565) | 0.515 (0.558) | 0.638 (0.802) | 0.523 (0.544) |
+| max coordinate | 0.579 (0.510) | 0.740 (0.533) | 0.627 (0.508) | 0.500 (0.500) | 0.623 (0.610) | 0.500 (0.500) |
+
+Element count is at chance on every class because every mutation preserves
+the element inventory; `hypotenuse_retargeted` and `right_angle_mislabeled`
+are invisible to coordinate magnitude because neither changes one. Nothing
+reaches 1.000, so the negative set is not a byte-counting exercise — but
+`degenerate_zero_leg` at 0.802 under an oracle threshold (0.848 on the
+`sparse` style) is the softest class and is filed in the BACKLOG as the
+first thing to harden before step 6 reports a learned number.
+
+**A control that could not see, corrected.** The first implementation of the
+`coord_magnitude` feature ran its number regex over the whole SVG document
+and matched the `2000` in the `http://www.w3.org/2000/svg` namespace URI. It
+therefore returned the same constant for every instance and scored a clean
+0.500 on all six classes — a baseline that "confirmed" the invalid set was
+hard by being blind. It was repaired to read numbers only from numeric
+attribute values before the reported run, which raised its best cell from
+0.500 to 0.740. The uncorrected version would have made P-VO7 fire for the
+wrong reason; recording it here rather than quietly fixing it is the point.
+
+### What adversarial review found
+
+Mandatory pre-commit review was run by an independent agent with no stake in
+the result, and it found two defects that the 1,680-instance corpus could
+not have surfaced, because the corpus never produces the inputs that trigger
+them:
+
+- **The verifier accepted a broken figure.** No gated check audits the acute
+  angle annotations, and nothing resolved annotation or edge references, so
+  an angle pointing at a nonexistent vertex — with a nonsense `measure`
+  string — passed well-formedness, round-tripped through the SVG, and
+  verified `ok`. Now refused at the door, not gated as a seventh check:
+  no controlled class exercises it, and a check without a class is exactly
+  the decoration this layer is built to avoid.
+- **"No check can be silently muted" was a docstring, not a property.** An
+  edge naming a nonexistent vertex made `incidence` skip its relation; with
+  `topology` ablated the same graph verified `ok`. Reference resolution is
+  now a precondition, and `verify` enforces it at the verdict boundary and
+  raises rather than returning a verdict — a graph whose references do not
+  resolve is not a figure that failed a check, it is not a figure.
+
+Neither changes any published number: both were measured at 0 occurrences
+across all 1,680 instances. That is the point worth keeping. The ablation
+result was correct and the argument supporting it was not yet sound, and a
+corpus that only ever contains well-formed inputs cannot tell you which is
+which. Review also corrected P-VO6's evidential base (C1), relabelled P-VO5
+as a design invariant (C2), scoped P-VO3 to separability rather than
+completeness of the check set (C3), extended P-VO7 to all three styles, and
+caught a false claim in this package's own exactness paragraph.
+
+### What step 6 still needs
+
+The oracle layer supplies a source graph, an SVG, a normalized parse, exact
+verdicts with element-level localization, mutation records, and md5-stable
+per-figure splits. It does **not** supply: raster rendering, a parameter-
+matched pixel encoder, tokenization of the normalized tree, the
+shuffled-structure control pairing correct pixels with a wrong scene graph,
+style/family/structural-OOD split definitions beyond the single
+right-triangle family, or any training loop. Those are step 6, and P-V1-P-V4
+stay registered until it runs.
+
 ## Depth consumers: recurrence belongs at the address boundary (v0.6 item 4)
 
 The earlier fork established a mechanism-level result: one shared GRU cell

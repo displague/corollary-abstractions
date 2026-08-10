@@ -1,0 +1,89 @@
+{
+  "schema": "visual-scene/1",
+  "figure_id": "rt-0000",
+  "family": "right_triangle",
+  "vertices": [
+    {
+      "id": "V.leg_a",
+      "role": "leg_a_end",
+      "x": "68",
+      "y": "990"
+    },
+    {
+      "id": "V.leg_b",
+      "role": "leg_b_end",
+      "x": "-820",
+      "y": "102"
+    },
+    {
+      "id": "V.right",
+      "role": "right_angle",
+      "x": "80",
+      "y": "90"
+    }
+  ],
+  "edges": [
+    {
+      "id": "E.hypot",
+      "role": "hypotenuse",
+      "from": "V.leg_a",
+      "to": "V.leg_b",
+      "x1": "68",
+      "y1": "990",
+      "x2": "-820",
+      "y2": "102"
+    },
+    {
+      "id": "E.leg_a",
+      "role": "leg_a",
+      "from": "V.right",
+      "to": "V.leg_a",
+      "x1": "80",
+      "y1": "90",
+      "x2": "68",
+      "y2": "990"
+    },
+    {
+      "id": "E.leg_b",
+      "role": "leg_b",
+      "from": "V.right",
+      "to": "V.leg_b",
+      "x1": "80",
+      "y1": "90",
+      "x2": "-820",
+      "y2": "102"
+    }
+  ],
+  "angles": [
+    {
+      "id": "A.acu_a",
+      "role": "angle_at_a",
+      "vertex": "V.leg_a",
+      "arms": [
+        "E.leg_a",
+        "E.hypot"
+      ],
+      "measure": "acute"
+    },
+    {
+      "id": "A.acu_b",
+      "role": "angle_at_b",
+      "vertex": "V.leg_b",
+      "arms": [
+        "E.leg_b",
+        "E.hypot"
+      ],
+      "measure": "acute"
+    },
+    {
+      "id": "A.right",
+      "role": "right_angle",
+      "vertex": "V.right",
+      "arms": [
+        "E.leg_a",
+        "E.leg_b"
+      ],
+      "measure": "right"
+    }
+  ]
+}

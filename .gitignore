@@ -41,6 +41,10 @@ htmlcov/
 .worktrees/
 
 # Experiment artifacts: generated datasets, model checkpoints, run logs
+# (experiments/visual/fixtures/ is deliberately NOT ignored: a few KB of
+# diffable text is the only way a silent change to the emitted SVG/JSON byte
+# format shows up in review)
+experiments/visual/out/
 experiments/data/
 experiments/data_smoke/
 experiments/results/**/*.pt
