@@ -1,0 +1,316 @@
+{
+  "task": "corpus_analogy_model_arm",
+  "device": "cuda",
+  "fell_back_to_cpu": false,
+  "cuda_error": null,
+  "memory_fraction": 0.7,
+  "per_process_memory_fraction_house_rule": 0.7,
+  "max_device_footprint_fraction_house_rule": 0.8,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "params": 1494403,
+  "config": {
+    "epochs": 120,
+    "d_model": 128,
+    "batch_size": 64,
+    "lr": 0.0003,
+    "max_len": 96,
+    "max_tgt": 64,
+    "level_code": "table",
+    "consumer": "address"
+  },
+  "frozen_blind_ceilings": {
+    "family": 0.4,
+    "discipline": 0.9318181818181818,
+    "vocabulary": 0.39759036144578314,
+    "shape": 0.10687022900763359
+  },
+  "strict_holdout": "shape",
+  "near_vacuous_holdout": "discipline",
+  "holdouts": {
+    "family": {
+      "model_exact": {
+        "mean": 0.16774193548387095,
+        "sd": 0.012903225806451604,
+        "per_seed": [
+          0.18064516129032257,
+          0.16774193548387098,
+          0.15483870967741936
+        ],
+        "n_seeds": 3
+      },
+      "ceiling": 0.4,
+      "model_mean": 0.16774193548387095,
+      "margin": -0.23225806451612907,
+      "beats_ceiling": false,
+      "is_strict_ceiling": false,
+      "is_near_vacuous": false,
+      "train_exact": {
+        "mean": 0.9986282578875172,
+        "sd": 0.002375927033702153,
+        "per_seed": [
+          1.0,
+          0.9958847736625515,
+          1.0
+        ],
+        "n_seeds": 3
+      }
+    },
+    "discipline": {
+      "model_exact": {
+        "mean": 0.49053030303030304,
+        "sd": 0.01182764772423938,
+        "per_seed": [
+          0.4943181818181818,
+          0.5,
+          0.4772727272727273
+        ],
+        "n_seeds": 3
+      },
+      "ceiling": 0.9318181818181818,
+      "model_mean": 0.49053030303030304,
+      "margin": -0.44128787878787873,
+      "beats_ceiling": false,
+      "is_strict_ceiling": false,
+      "is_near_vacuous": true,
+      "train_exact": {
+        "mean": 0.9969969969969971,
+        "sd": 0.002600676888241531,
+        "per_seed": [
+          0.9954954954954955,
+          0.9954954954954955,
+          1.0
+        ],
+        "n_seeds": 3
+      }
+    },
+    "vocabulary": {
+      "model_exact": {
+        "mean": 0.2008032128514056,
+        "sd": 0.02782410935853619,
+        "per_seed": [
+          0.21686746987951808,
+          0.1686746987951807,
+          0.21686746987951808
+        ],
+        "n_seeds": 3
+      },
+      "ceiling": 0.39759036144578314,
+      "model_mean": 0.2008032128514056,
+      "margin": -0.19678714859437754,
+      "beats_ceiling": false,
+      "is_strict_ceiling": false,
+      "is_near_vacuous": false,
+      "train_exact": {
+        "mean": 0.9989417989417989,
+        "sd": 0.0018328579974273768,
+        "per_seed": [
+          0.9968253968253968,
+          1.0,
+          1.0
+        ],
+        "n_seeds": 3
+      }
+    },
+    "shape": {
+      "model_exact": {
+        "mean": 0.10432569974554706,
+        "sd": 0.011660497951541575,
+        "per_seed": [
+          0.11450381679389313,
+          0.10687022900763359,
+          0.0916030534351145
+        ],
+        "n_seeds": 3
+      },
+      "ceiling": 0.10687022900763359,
+      "model_mean": 0.10432569974554706,
+      "margin": -0.002544529262086523,
+      "beats_ceiling": false,
+      "is_strict_ceiling": true,
+      "is_near_vacuous": false,
+      "train_exact": {
+        "mean": 0.99625468164794,
+        "sd": 0.0037453183520599342,
+        "per_seed": [
+          1.0,
+          0.9962546816479401,
+          0.9925093632958801
+        ],
+        "n_seeds": 3
+      }
+    }
+  },
+  "beats_strict_shape_ceiling": false,
+  "gpu_footprint": {
+    "peak_allocated_bytes": 96734208,
+    "peak_reserved_bytes": 411041792,
+    "peak_device_footprint_bytes": 1769537536,
+    "device_total_bytes": 17094475776,
+    "device_footprint_fraction": 0.10351516824425608,
+    "within_house_cap": true
+  },
+  "seconds": 242.2,
+  "pointing_not_reasoning": "The model receives only the raw token stream and points; it is denied both corpus declarations (per-slot P/V class and the identity table) that carry symbolic_typed_input to 1.000. A score above a blind ceiling is a POINTING result -- the learned A<->C correspondence beating a blind edit-distance replay -- never a reasoning result.",
+  "run_log": [
+    {
+      "seed": 0,
+      "axis": "family",
+      "held_exact": 0.18064516129032257,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 243,
+      "held_n": 155,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 0,
+      "axis": "discipline",
+      "held_exact": 0.4943181818181818,
+      "train_exact": 0.9954954954954955,
+      "params": 1494403,
+      "train_n": 222,
+      "held_n": 176,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 0,
+      "axis": "vocabulary",
+      "held_exact": 0.21686746987951808,
+      "train_exact": 0.9968253968253968,
+      "params": 1494403,
+      "train_n": 315,
+      "held_n": 83,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 0,
+      "axis": "shape",
+      "held_exact": 0.11450381679389313,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 267,
+      "held_n": 131,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 1,
+      "axis": "family",
+      "held_exact": 0.16774193548387098,
+      "train_exact": 0.9958847736625515,
+      "params": 1494403,
+      "train_n": 243,
+      "held_n": 155,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 1,
+      "axis": "discipline",
+      "held_exact": 0.5,
+      "train_exact": 0.9954954954954955,
+      "params": 1494403,
+      "train_n": 222,
+      "held_n": 176,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 1,
+      "axis": "vocabulary",
+      "held_exact": 0.1686746987951807,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 315,
+      "held_n": 83,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 1,
+      "axis": "shape",
+      "held_exact": 0.10687022900763359,
+      "train_exact": 0.9962546816479401,
+      "params": 1494403,
+      "train_n": 267,
+      "held_n": 131,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 2,
+      "axis": "family",
+      "held_exact": 0.15483870967741936,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 243,
+      "held_n": 155,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 2,
+      "axis": "discipline",
+      "held_exact": 0.4772727272727273,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 222,
+      "held_n": 176,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 2,
+      "axis": "vocabulary",
+      "held_exact": 0.21686746987951808,
+      "train_exact": 1.0,
+      "params": 1494403,
+      "train_n": 315,
+      "held_n": 83,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    },
+    {
+      "seed": 2,
+      "axis": "shape",
+      "held_exact": 0.0916030534351145,
+      "train_exact": 0.9925093632958801,
+      "params": 1494403,
+      "train_n": 267,
+      "held_n": 131,
+      "dropped": {
+        "max_len": 0,
+        "max_tgt": 0
+      }
+    }
+  ]
+}
