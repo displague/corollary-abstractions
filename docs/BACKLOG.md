@@ -69,8 +69,8 @@ Evidence motivating this section: Hooke's law is already authored
 the generator of harmonic motion, but no SHM, angular-frequency, period,
 resonance, normal-mode, or multi-axis coupling node exists. Rotating-frame and
 Galilean nodes ship as scope declarations without an executable multiplanar
-dynamics companion. Side-channel analysis of the depth-consumer analogy run
-confirms neural training is synthetic expression trees only—physics expansion
+dynamics companion. The depth-consumer dataset audit confirms neural training
+is synthetic expression trees only—physics expansion
 must enter the symbolic harness first, with twin predictions registered before
 regenerate, not as mid-matrix train dilution.
 
@@ -101,6 +101,23 @@ regenerate, not as mid-matrix train dilution.
   vacuity-resistant tests (a constant “always resonate” baseline must fail).
   File matcher predictions separately; do not batch them into the first SHM
   slice if that would make adjudication unreadable.
+- **Frequency-domain structure is a third, distinct rung.** Author Fourier
+  series/transform, amplitude and phase spectrum, normal-mode eigenfrequency
+  multiset, sampling/Nyquist controls, and power spectral density only after
+  the time-domain oracle exists. A physical frequency spectrum distributes
+  amplitude or power over temporal frequency; a statistical frequency table
+  counts observations over categories or values. Their common word does not
+  make them twins. Exact DFTs, coordinate transforms, and alias checks remain
+  symbolic; a learned residual may later rank noisy peaks or select the
+  relevant spectrum.
+- **Separate three meanings of multiplanar rotation.** Extend the existing
+  SO(3) rigid-transform/quaternion material with non-commuting 3D composition
+  and Euler-angle coordinate caveats; author torsional SHM
+  (`I θ'' = -κ θ`, `ω = √(κ/I)`) as the registered rotational analogue of the
+  mass–spring equation; then treat higher-dimensional double rotation as
+  simultaneous 2-plane blocks with independent angles. None of these is the
+  same as a rotating reference frame's fictitious forces or two independent
+  translational oscillations.
 - **Diagram families after the visual oracle, not before.** Lissajous figures,
   phase portraits (x,v), and spring–mass free-body + x(t) plots are natural
   V1 follow-ons once the right-triangle renderer, source graph, and
@@ -114,7 +131,7 @@ regenerate, not as mid-matrix train dilution.
 
 ## Affect / emotion structure
 
-Evidence: directional conversation on emotion classification
+Evidence: the proposed emotion-classification direction
 (discrete taxonomies, Russell circumplex, PAD, Plutchik) plus the explicit
 blog limit that ToM ships without rich motives/emotion/culture. RFT coverage
 in DESIGN-cognitive-frames maps relational operants, not affect. Analogy
