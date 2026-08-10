@@ -244,14 +244,42 @@ def probe_torch(*, offline: bool) -> CapabilityRecord:
     return CapabilityRecord("tool.torch", Liveness.OFF, "no torch", True)
 
 
+#: The committed ledgers ``UnifiedKnowledgeStore.load`` reads with NO existence
+#: guard (unlike ``specializations.json``, which it treats as optional). They
+#: are a hard dependency of the corpus subsystem, so the boot probe must own
+#: them: a checkout with ``data/`` but no ``reports/`` would otherwise raise a
+#: ``FileNotFoundError`` from inside ``boot`` — bypassing the contract that a
+#: probe returns FAIL and ``boot`` refuses cleanly, never crashes.
+REQUIRED_CORPUS_LEDGERS = ("signature_matches.json", "decompositions.json")
+
+
 def probe_corpus(repo_root: Path) -> CapabilityRecord:
-    """Required. Committed ``data/*`` present and non-empty, else FAIL (§7)."""
+    """Required. Committed ``data/*`` AND the ledgers the store loads
+    unconditionally must be present and non-empty, else FAIL (§7).
+
+    The probe reports FAIL; it never lets ``boot`` crash. Because
+    ``UnifiedKnowledgeStore.load`` reads ``REQUIRED_CORPUS_LEDGERS`` without an
+    existence guard, a data-present/reports-absent checkout has to surface here
+    as a clean ``corpus.nodes`` FAIL rather than an unhandled exception one
+    call later.
+    """
 
     data_dir = repo_root / "data"
     corpora = sorted(data_dir.glob("*/nodes.json")) if data_dir.is_dir() else []
     if not corpora:
         return CapabilityRecord(
             "corpus.nodes", Liveness.FAIL, "no committed data/*/nodes.json", False
+        )
+    reports_dir = repo_root / "reports"
+    missing = [
+        name for name in REQUIRED_CORPUS_LEDGERS if not (reports_dir / name).is_file()
+    ]
+    if missing:
+        return CapabilityRecord(
+            "corpus.nodes",
+            Liveness.FAIL,
+            "missing required ledger(s): " + ", ".join(missing),
+            False,
         )
     return CapabilityRecord(
         "corpus.nodes",
@@ -365,9 +393,15 @@ def render_stop(result: RunResult) -> str:
     """
 
     glyph = STATUS_GLYPH.get(result.stop_reason, "[?]")
-    need = pending_need(result.final_state)
-    if result.stop_reason is StopReason.WAITING and need is not None:
-        return f"{glyph} {render_need(need)}"
+    if result.stop_reason is StopReason.WAITING:
+        # `.awaiting` is consulted ONLY on the WAITING branch: a terminal stop
+        # (SOLVED/EXHAUSTED/BUDGET) may carry a state that never opened a need
+        # channel — a non-retrieval subsystem's plain state (docs §10) — and it
+        # must render from the structured trace without touching an attribute
+        # it was never required to expose.
+        need = pending_need(result.final_state)
+        if need is not None:
+            return f"{glyph} {render_need(need)}"
     verdict = (
         result.trace[-1].verification.verdict.value if result.trace else "none"
     )

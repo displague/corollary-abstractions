@@ -59,6 +59,7 @@ from controller import (  # noqa: E402
     Action,
     ActionKind,
     Controller,
+    RunResult,
     SequencePolicy,
     StopReason,
     Verdict,
@@ -71,6 +72,7 @@ from harness import (  # noqa: E402
     Liveness,
     Need,
     pending_need,
+    probe_corpus,
     probe_wordnet,
     render_need,
     render_stop,
@@ -354,6 +356,53 @@ class PIH5BootMatrixHonesty(unittest.TestCase):
     def test_offline_forces_off_even_when_named(self) -> None:
         record = probe_wordnet(offline=True, env=str(REPO_ROOT / "anything.zip"))
         self.assertIs(record.liveness, Liveness.OFF)
+
+
+@dataclass(frozen=True)
+class _PlainTerminalState:
+    """A terminal-stop state that never opened a WAITING need channel.
+
+    A non-retrieval subsystem (docs §10, e.g. a prover that SOLVED) is under no
+    obligation to expose ``.awaiting``. It must still render.
+    """
+
+
+class ReviewFixRegressions(unittest.TestCase):
+    """Regressions closing the two should-fix findings of the slice's
+    independent adversarial review. Both were latent in the committed slice
+    (every state it constructs happens to satisfy the assumption); the tests
+    exercise the assumption directly so a later slice cannot reintroduce it."""
+
+    def test_render_stop_terminal_state_without_a_need_channel(self) -> None:
+        # Finding 1: render_stop consulted `.awaiting` unconditionally, so a
+        # terminal stop over a state with no need channel crashed. It must now
+        # touch `.awaiting` only on the WAITING branch.
+        plain = _PlainTerminalState()
+        result = RunResult(plain, plain, (), StopReason.SOLVED)
+        line = render_stop(result)  # must not raise AttributeError
+        self.assertIn("solved", line)
+        self.assertIn("[OK]", line)
+
+    def test_probe_corpus_fails_cleanly_when_required_ledger_absent(self) -> None:
+        # Finding 2: boot only probed data/, but the store reads
+        # reports/{signature_matches,decompositions}.json with no guard, so a
+        # data-present/reports-absent checkout raised inside boot instead of a
+        # clean FAIL. probe_corpus now owns that dependency.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "data" / "logic").mkdir(parents=True)
+            (root / "data" / "logic" / "nodes.json").write_text(
+                "[]", encoding="utf-8"
+            )
+            # reports/ deliberately absent.
+            record = probe_corpus(root)
+            self.assertIs(record.liveness, Liveness.FAIL)
+            self.assertFalse(record.optional)
+            self.assertIn("ledger", record.detail)
+
+    def test_probe_corpus_ok_when_data_and_ledgers_present(self) -> None:
+        record = probe_corpus(REPO_ROOT)
+        self.assertIs(record.liveness, Liveness.OK)
 
 
 class _NoStore:
