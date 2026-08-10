@@ -20,10 +20,16 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   expansion need sense-level ambiguity, project-exact precedence, announced
   ranking/caps, and the existing empirical-only authority boundary. Renderer
   selection and any seed-regenerated reduced extract remain open.
-- **Treat masked pretraining as stabilization, not a wall-mover.** The v0.5
-  result narrowed two-seed spread `0.139 → 0.029` but did not support a mean
-  lift. The next experiment belongs in recurrent address consumers with at
-  least three seeds per arm.
+- **SHIPPED NEGATIVE — consumer recurrence does not move the depth wall.** The
+  five-arm, three-seed matrix leaves recurrent address-only best at
+  `0.196 ± 0.064` conditional OOD. Query recurrence reaches `0.179 ± 0.025`,
+  memory `0.082 ± 0.027`, both `0.039 ± 0.011`, and a two-parameter-matched
+  level-aware MLP `0.142 ± 0.014`; every arm remains at shallow ceiling.
+  Freeze the consumer expansion. Remaining work: score all 3,000 generated OOD
+  rows or count capacity exclusions as failures; separate depth-4/depth-5 and
+  per-step cliffs; add internal/composed transforms and wrapper-transfer
+  shortcut baselines; use at least five seeds for small promoted effects; and
+  test an alternative shared iterative mechanism before naming GRU uniquely.
 - **Split grounding provenance.** The six-node provability corpus self-grounded
   at 1.000 through same-corpus BOX recurrence and broad pattern absorption.
   Report external/prior, same-corpus, recursive, and pattern channels

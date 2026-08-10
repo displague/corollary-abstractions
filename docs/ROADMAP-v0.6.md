@@ -133,8 +133,8 @@ count, and seed distribution. “GRU wins” is not the hypothesis; shared itera
 computation is. If another tied mechanism wins, adopt the mechanism and retire
 the named component claim.
 
-**IN PROGRESS — final-matrix predictions registered before any adjudicating
-run.** The two earlier address-only pilots were invalidated before the control
+**SHIPPED — the registered extension failed; address-only remains best.** The
+two earlier address-only pilots were invalidated before the control
 changed; no pilot artifact is resumable into the final matrix.
 
 - **P-DC1:** Extending shared path iteration into both the pointer query and
@@ -213,6 +213,22 @@ shuffle generator, so paired differences share initialization and data order.
 The historical benchmark filters over-length examples; every final row
 must disclose generated/kept/drop counts by depth, and the release must call
 the metric conditional rather than silently treating it as all generated OOD.
+
+Final adjudication: address-only scores **0.196 ± 0.064** conditional depth-OOD
+exact; query-only **0.179 ± 0.025**; memory-only **0.082 ± 0.027**; both
+recurrent consumers **0.039 ± 0.011**; and the two-parameter-matched one-shot
+MLP **0.142 ± 0.014**. Every arm remains at least 0.9998 mean exact on the
+trained-depth held-out-combination test. P-DC1, P-DC2, and P-DC3 all **MISSED**;
+P-DC4 is satisfied; P-DC5 remains retracted with its unit correction; P-DC6
+and P-DC7 **FIRED**. The maximum observed whole-device footprint was
+6,387,466,240 bytes, final evaluation added at most 2,097,152 bytes, and all 15
+rows completed under the corrected safety protocol. The measured lesson is
+not “more recurrence”: shared iteration is useful while constructing a tree
+address, but learned transformations at the query/memory boundary disrupt the
+copy interface—memory recurrence lowers C-leaf and EOS accuracy, and applying
+recurrence to both consumers is the worst arm. Freeze this consumer expansion;
+v0.7 carries interface localization, unconditional OOD accounting, harder
+transformations, and an alternative iterative mechanism.
 
 ## 5. Corpus-grounded analogy
 

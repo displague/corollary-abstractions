@@ -33,6 +33,30 @@ bindings), **near-miss** (informative failure, kept deliberately).
   facts.** Alice's silver eggs and Bob's blue eggs render from owner-isolated
   bindings over an identical accepted golden-chicken state; neither value
   enters `frame.asserted`. *P-CR1/P-CR3 fired; maintained user-frame demo*
+- **An address can generalize while a learned consumer destroys it.** In a
+  five-arm, three-seed paired matrix, recurrent address-only remains best at
+  `0.196 ± 0.064` conditional depth-OOD exact. Recurrent query construction
+  reaches `0.179 ± 0.025`; recurrent memory `0.082 ± 0.027`; putting recurrence
+  in both consumers collapses to `0.039 ± 0.011`; a two-parameter-matched
+  level-aware MLP recovers to `0.142 ± 0.014`. Every arm is still at ceiling
+  in distribution. Teacher-forced diagnostics locate the damage: address-only
+  averages 0.910 on C-leaf copy and 1.000 on EOS, while memory recurrence falls
+  to 0.705 and 0.913; both consumers fall to 0.677 on C-leaf. Shared iteration
+  helped construct the address, but transforming that representation again at
+  its consumers erased information the pointer needed. *P-DC1–3 missed;
+  P-DC4 satisfied; three paired seeds* (2026-08-09)
+
+- **The safe GPU protocol preserved the experiment and rejected the crash
+  state.** Two identical Windows bugchecks occurred at final evaluation with
+  `nvidia-smi` reporting 15,760/16,303 MiB (15.39/15.92 GiB). The first safety
+  prediction was retracted because its post-cache-clear allocated-tensor
+  measurand could not observe that state. Its replacement used logical batch
+  192, microbatch 64, evaluation batch 32, a 70% allocator cap, atomic
+  artifacts, separate reserved/whole-device telemetry, and an 80% absolute
+  device guard. All 15 rows completed; maximum whole-device footprint was
+  6,387,466,240 bytes and evaluation added at most 2,097,152 bytes. This makes
+  near-full GPU occupancy strongly implicated in the repeatable failure, not
+  proven as its sole hardware/driver cause. *P-DC5 retracted; P-DC6/7 fired*
   (2026-08-09)
 
 - **Held-out tactic classification does not guarantee a search gain.** Three

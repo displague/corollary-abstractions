@@ -1346,3 +1346,64 @@ non-neural: render one right-triangle family deterministically, preserve its
 slot-to-element graph, generate one controlled-invalid counterpart, and prove
 the exact geometry checks distinguish them. Model comparison begins only after
 that foundation survives review.
+## Depth consumers: recurrence belongs at the address boundary (v0.6 item 4)
+
+The earlier fork established a mechanism-level result: one shared GRU cell
+walked over tree-path levels extrapolated beyond trained depth, while lookup
+addresses and additional curriculum exposure did not. This matrix tested the
+remaining hypothesis that the pointer query and decoder memory were
+depth-naive consumers of that recurrent address.
+
+The final protocol uses the same generated dataset and paired seeds for all
+arms: 50,000 depth-2/3 training rows, 5,000 validation rows, 5,000 held-out
+transformation/skeleton combinations at trained depth, and 3,000 generated
+depth-4/5 OOD rows. Fixed capacity limits retain 2,450 OOD rows, so the metric
+below is explicitly **conditional depth-OOD exact**: depth 4 retains
+1,392/1,464; depth 5 retains 1,058/1,536. Twelve rows exceed the input limit and
+538 the target limit. No excluded row is silently scored as success.
+
+| consumer arm | parameters | trained-depth exact (s0/s1/s2) | conditional depth-OOD exact (s0/s1/s2) | OOD mean ± population SD |
+|---|---:|---|---|---:|
+| recurrent address only | 1,481,987 | 1.000 / 0.9996 / 1.000 | 0.284 / 0.171 / 0.134 | **0.196 ± 0.064** |
+| recurrent query | 1,581,059 | 0.9998 / 0.9998 / 0.9998 | 0.186 / 0.204 / 0.146 | 0.179 ± 0.025 |
+| recurrent memory | 1,581,059 | 1.000 / 0.9998 / 0.9998 | 0.073 / 0.053 / 0.119 | 0.082 ± 0.027 |
+| recurrent query + memory | 1,680,131 | 1.000 / 0.9998 / 1.000 | 0.030 / 0.054 / 0.033 | **0.039 ± 0.011** |
+| one-shot level-aware MLP | 1,680,133 | 1.000 / 1.000 / 1.000 | 0.131 / 0.134 / 0.162 | 0.142 ± 0.014 |
+
+The registered materiality threshold was 0.15 absolute mean gain plus at least
+two paired-seed gains of 0.15. **P-DC1 missed:** the both-consumer arm loses to
+address on every seed and by 0.157 mean, even though all shallow seeds clear
+the 0.99 floor. **P-DC2 missed:** neither query nor memory has a material mean
+gain or a material paired-seed win, and both is weaker than either single
+consumer. **P-DC3 missed:** the MLP is within two parameters as required, but
+both recurrence beats it on zero seeds and loses by 0.103 mean. P-DC4's
+fail-closed protocol gate is satisfied.
+
+Teacher-forced diagnostics show this is not just whole-sequence compounding.
+Address-only averages 0.813 accuracy on B-structure tokens, 0.910 on C-leaf
+copy, and 1.000 on EOS. Query recurrence moves those to 0.790 / 0.874 / 1.000.
+Memory recurrence preserves B-structure at 0.799 but drops C-leaf to 0.705 and
+EOS to 0.913. Both consumers reach 0.731 / 0.677 / 0.997. The matched MLP sits
+between them at 0.776 / 0.772 / 1.000. The consumer layers are not repairing a
+depth-naive interface; they are perturbing an address representation that the
+pointer already knew how to copy from.
+
+The safety result is separate from the architecture verdict. Two pre-correction
+runs ended in identical Windows bugchecks at the final-evaluation boundary
+with `nvidia-smi` showing 15,760/16,303 MiB (15.39/15.92 GiB). P-DC5 remains
+publicly retracted: clearing the CUDA cache before measuring peak allocated
+tensors made its promised sub-12-GiB figure unable to observe the crash state.
+P-DC6 and P-DC7 replace it with logical batch 192 accumulated through
+64-example microbatches, evaluation batch 32, a 70% allocator cap, reserved and
+whole-device telemetry, atomic outputs, and an absolute 80% device guard. Both
+fired across all 15 rows. Maximum reserved memory was 5,028,970,496 bytes,
+maximum whole-device footprint 6,387,466,240 bytes, and final evaluation added
+at most 2,097,152 bytes over the train/validation device high-water mark.
+
+**Verdict:** preserve recurrence in address construction and freeze the
+consumer expansion. “Iteration generalizes” remains supported at the address
+boundary; “add recurrence wherever depth is consumed” is refuted. Next work
+belongs at the interface and evaluation boundary: score all generated OOD
+rows, localize capacity/decode failures by depth and step, add non-root and
+composed transformations with shortcut controls, and test another shared
+iterative mechanism before making a GRU-specific claim.
