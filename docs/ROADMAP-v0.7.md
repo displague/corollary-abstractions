@@ -234,7 +234,13 @@ and a discharge requires a record ON the resolution beat, so "the evidence is
 really in the resolution" is no longer a substring test. The hidden-ledger
 control sharpens to "identical prose, no bindings → UNKNOWN", and an element id
 that never appears in the rendered story now plants, discharges, and closes —
-something the substring check could not do. P-EB1–P-EB3 fire; the golden-chicken
+something the substring check could not do. P-EB1–P-EB2 fire. P-EB3's second
+clause was REFUTED by independent post-commit review and repaired in the same
+branch: exact surface matching alone let a span name a word fragment, so a
+story containing a "donkey" and a "monkey" planted, discharged and closed a
+`key` obligation with no key in it — an inherited hole the substring check
+shared and the migration had claimed to close. Bound spans now require word
+boundaries, and that run is the control. The golden-chicken
 demo's output is byte-identical. Still open: the element lexicon is the
 adapter's own declaration rather than corpus-grounded event structure, surface
 matching is deliberately exact, and no consumer mutates a nested model in a live

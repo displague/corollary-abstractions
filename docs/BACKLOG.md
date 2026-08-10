@@ -418,10 +418,26 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   never appears in the rendered story plants, discharges, and closes, which
   the substring check could not do. Predictions P-EB1–P-EB3 in
   `tests/test_controller.py`; demo output byte-identical.
+  **REFUTED then fixed, on the record:** as first shipped (dd1cdd2) exact
+  surface matching had no word-boundary rule, so a bound span could name a
+  word FRAGMENT. With the shipped lexicon (`key` is a declared element) a
+  story about a "donkey" and a "monkey" planted, discharged and CLOSED a
+  key obligation while containing no key — independent post-commit review
+  produced that run. The replaced substring check had the identical hole,
+  so this was an inherited defect the migration advertised as fixed and had
+  not. Bound spans now must sit on word boundaries; the reproduction is the
+  control test. P-EB3's second clause is recorded as refuted-then-repaired
+  rather than quietly rewritten.
   Still open: the element lexicon is the adapter's own declaration, not
   corpus-grounded event structure, and it is deliberately EXACT (a declared
   surface form, casing included) rather than a general semantic binder.
-  Nothing yet links a bound element id to a corpus statement.
+  Nothing yet links a bound element id to a corpus statement. Two known
+  limits of a reference binder, filed rather than hidden: it checks
+  REFERENCE, not polarity or modality — prose reading "there was no fallen
+  feather" binds exactly as well as prose asserting one — and nothing stops
+  two declared elements sharing a surface form, in which case the author's
+  chosen id decides. Both need semantic event structure, not more string
+  rules.
 
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and

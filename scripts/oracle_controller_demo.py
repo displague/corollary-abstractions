@@ -143,11 +143,27 @@ def lean_oracle_run(triples_path: Path = DEFAULT_TRIPLES) -> RunResult[LeanRepla
 
 
 class MentionSyntaxError(ValueError):
-    """A binding argument the adapter cannot parse at all (-> REFUSED)."""
+    """A binding the adapter cannot turn into a record at all (-> REFUSED).
+
+    Unparseable syntax AND spans that fall outside the text they annotate:
+    both are structurally impossible records, not story claims the frame
+    weighed and could not ground. An offset past the end of a beat is a
+    malformed argument in the same sense a negative offset is -- the
+    record cannot be constructed, so there is nothing to adjudicate.
+    (Post-commit review of dd1cdd2, finding M3: the class docstring used
+    to say "cannot parse", which the out-of-range case contradicted. The
+    taxonomy is stated correctly here rather than papered over at the
+    call site.)
+    """
 
 
 class MentionBindingError(ValueError):
-    """A parseable binding the rendered text does not support (-> UNKNOWN)."""
+    """A constructible binding the rendered text does not support.
+
+    -> UNKNOWN: the record is well-formed and the frame simply cannot
+    ground the claim it makes (undeclared element, or a span that is not
+    a declared surface form of the element it names).
+    """
 
 
 @dataclass(frozen=True)
@@ -159,6 +175,16 @@ class NarrativeElement:
     to it. Matching is EXACT, deliberately: a declared surface form is an
     authoring decision (including its casing), never a fuzzy match the
     adapter improvises over whatever prose the oracle happened to write.
+
+    Exact is necessary but was not sufficient. A bound span must also sit
+    on WORD BOUNDARIES of the rendered text: without that, the declared
+    surface "key" matched inside "donkey" and "monkey", and a story
+    containing no key at all planted, discharged, and closed a key
+    obligation -- an author could label a word FRAGMENT with any element
+    id whose surface it happened to contain. Independent review found
+    this after the first commit (dd1cdd2, finding H2); the old
+    substring check had the identical hole, so this is the first version
+    where "the element is visible here" is actually true.
     """
 
     element: str
@@ -200,8 +226,52 @@ class ElementMention:
         return text[self.start : self.end]
 
 
+def _is_canonical_offset(part: str) -> bool:
+    """One offset, one spelling: ASCII digits, no signs, no leading zeros.
+
+    `str.isdigit()` alone is not enough in either direction -- it accepts
+    superscripts and non-ASCII numerals that `int()` then rejects, and it
+    accepts '0002' as a second spelling of 2.
+    """
+
+    if not part.isascii() or not part.isdigit():
+        return False
+    return part == "0" or not part.startswith("0")
+
+
+def _is_word_char(character: str) -> bool:
+    return character.isalnum() or character == "_"
+
+
+def _on_word_boundaries(text: str, start: int, end: int) -> bool:
+    """True when [start, end) is not spliced into a surrounding word.
+
+    \\b semantics, computed not guessed: a boundary is required only where
+    the span's own edge is a word character, so a declared surface may
+    still begin or end with punctuation. This is what stops "key" from
+    binding inside "donkey" -- the anti-vacuity property the exact-match
+    rule alone did not deliver (post-commit review of dd1cdd2, H2).
+    """
+
+    if _is_word_char(text[start]) and start > 0 and _is_word_char(text[start - 1]):
+        return False
+    if (
+        _is_word_char(text[end - 1])
+        and end < len(text)
+        and _is_word_char(text[end])
+    ):
+        return False
+    return True
+
+
 def parse_mention_bindings(spec: str) -> tuple[ElementMention, ...]:
-    """Parse `element@start:end` records, `;`-separated. Closed form only."""
+    """Parse `element@start:end` records, `;`-separated. Closed form only.
+
+    Offsets must be plain decimal digits. `int()` alone would accept
+    '+2', ' 2 ', '0002' and '1_0' as spellings of the same offset, and a
+    binding is an audit record: one offset, one spelling (post-commit
+    review of dd1cdd2, finding L1).
+    """
 
     mentions: list[ElementMention] = []
     for item in spec.split(";"):
@@ -218,12 +288,11 @@ def parse_mention_bindings(spec: str) -> tuple[ElementMention, ...]:
             raise MentionSyntaxError(
                 f"binding {item!r} has no start:end span"
             )
-        try:
-            offsets = (int(start), int(end))
-        except ValueError as error:
+        if not all(_is_canonical_offset(part) for part in (start, end)):
             raise MentionSyntaxError(
-                f"binding {item!r} has non-integer offsets"
-            ) from error
+                f"binding {item!r} needs plain decimal offsets"
+            )
+        offsets = (int(start), int(end))
         try:
             mentions.append(ElementMention(element, *offsets))
         except ValueError as error:
@@ -367,10 +436,10 @@ class StoryFrameVerifier:
     ) -> tuple[ElementMention, ...]:
         """Turn a `binds` argument into typed records against `text`.
 
-        Raises MentionSyntaxError for an unparseable or out-of-range
-        argument (the adapter cannot read the action) and
-        MentionBindingError when the rendered text does not support the
-        claimed binding (the story cannot ground it).
+        Raises MentionSyntaxError for a record that cannot be constructed
+        at all -- unparseable, or a span outside `text` -- and
+        MentionBindingError when the record is well formed but the
+        rendered text does not support the claim it makes.
         """
 
         if not spec:
@@ -392,6 +461,12 @@ class StoryFrameVerifier:
                 raise MentionBindingError(
                     f"span {mention.span_of(text)!r} is not a declared "
                     f"surface form of element {mention.element!r}"
+                )
+            if not _on_word_boundaries(text, mention.start, mention.end):
+                raise MentionBindingError(
+                    f"span {mention.span_of(text)!r} is a word FRAGMENT "
+                    f"here, not a mention of {mention.element!r}: the "
+                    "rendered text continues the word on at least one side"
                 )
         return mentions
 
@@ -477,7 +552,9 @@ class StoryFrameVerifier:
                 # Bindings are relative to the mention fragment; they are
                 # rebased onto the amended beat below, once the fragment
                 # has actually been rendered into the visible story.
-                mentions, failure = self._bind_or_fail(mention, args.get("binds"))
+                mentions, failure = self._bind_or_fail(
+                    mention, args.get("binds"), CHEKHOV_GUN
+                )
                 if failure is not None:
                     return failure
                 if not any(
@@ -552,7 +629,9 @@ class StoryFrameVerifier:
             if not desire:
                 return Verification(Verdict.UNKNOWN, "setup has an unbound desire")
             text = f"{state.agent.capitalize()} wanted {desire}."
-            mentions, failure = self._bind_or_fail(text, args.get("binds"))
+            mentions, failure = self._bind_or_fail(
+                text, args.get("binds"), "narrative.structure.setup_introduction"
+            )
             if failure is not None:
                 return failure
             beat = StoryBeat("setup", text, mentions)
@@ -572,7 +651,11 @@ class StoryFrameVerifier:
             if not obstacle:
                 return Verification(Verdict.UNKNOWN, "complication has no obstacle")
             text = f"But {obstacle} stood in the way."
-            mentions, failure = self._bind_or_fail(text, args.get("binds"))
+            mentions, failure = self._bind_or_fail(
+                text,
+                args.get("binds"),
+                "narrative.structure.complication_obstruction",
+            )
             if failure is not None:
                 return failure
             beat = StoryBeat("complication", text, mentions)
@@ -593,7 +676,11 @@ class StoryFrameVerifier:
             outcome = args.get("outcome")
             if not outcome:
                 return Verification(Verdict.UNKNOWN, "resolution has no outcome")
-            mentions, failure = self._bind_or_fail(outcome, args.get("binds"))
+            mentions, failure = self._bind_or_fail(
+                outcome,
+                args.get("binds"),
+                "narrative.structure.resolution_outcome",
+            )
             if failure is not None:
                 return failure
             beat = StoryBeat("resolution", outcome, mentions)
@@ -614,14 +701,24 @@ class StoryFrameVerifier:
         )
 
     def _bind_or_fail(
-        self, text: str, spec: str | None
+        self,
+        text: str,
+        spec: str | None,
+        law: str,
     ) -> tuple[tuple[ElementMention, ...], Verification[StoryState] | None]:
         """Bind mentions, or hand back the verdict the failure deserves.
 
-        An unreadable argument is REFUSED (the adapter cannot parse the
-        action at all); a binding the rendered text does not support is
-        UNKNOWN (the story cannot ground the claim). Bindings exist to keep
-        the Chekhov ledger visible, so the unsupported case cites that law.
+        An unreadable argument is REFUSED (no record can be built at all);
+        a well-formed binding the rendered text does not support is
+        UNKNOWN (the story cannot ground the claim).
+
+        `law` is the statute the UNKNOWN actually rests on, supplied by
+        the call site: Chekhov's gun when the binding serves a temporal
+        obligation, the beat's own structure law when it does not. Citing
+        chekhov_gun for a bad binding on a complication beat named a law
+        the verdict did not rest on -- exactly what frames.py's evidence
+        rule forbids ("never the frame's whole statute book"). Post-commit
+        review of dd1cdd2, finding M4.
         """
 
         try:
@@ -636,7 +733,7 @@ class StoryFrameVerifier:
             return (), Verification(
                 Verdict.UNKNOWN,
                 f"the rendered text does not support this binding: {error}",
-                evidence=(CHEKHOV_GUN,),
+                evidence=(law,),
             )
 
     @staticmethod

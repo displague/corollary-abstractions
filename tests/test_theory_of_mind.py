@@ -11,7 +11,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from controller import Verdict  # noqa: E402
+from controller import Verdict, Verification  # noqa: E402
 from frames import FrameEvent, FrameExecutor, FrameSpec, Literal  # noqa: E402
 
 
@@ -584,6 +584,33 @@ class NestedBeliefTests(unittest.TestCase):
         self.assertEqual(at_root.next_state.obligations[0].element, "her own plan")
         self.assertEqual(at_root.next_state.children, anne.children)
 
+    def test_a_rejecting_transition_cannot_smuggle_a_state_into_the_root(
+        self,
+    ) -> None:
+        """P-NF5's gate must read the VERDICT, not the presence of a
+        state. `transition` is caller-supplied, and the controller's
+        Verification.validate() is not in this loop -- so a REFUTED
+        verdict carrying a state was grafted into the root and handed
+        back (post-commit review of dd1cdd2, H1). Checked, not assumed."""
+        executor, anne = self._anne_modeling_sally()
+        forged = replace(
+            executor.nested(anne, ("sally",)),
+            asserted=(("smuggled", Literal("marble", "located_in", "box")),),
+        )
+        for verdict in (Verdict.REFUTED, Verdict.UNKNOWN, Verdict.REFUSED):
+            result = executor.route(
+                anne,
+                ("sally",),
+                lambda model, verdict=verdict: Verification(
+                    verdict, "rejected but state-carrying", forged
+                ),
+            )
+            self.assertIs(result.verdict, verdict)
+            self.assertIsNot(result.next_state, anne)
+            self.assertEqual(
+                executor.nested(anne, ("sally",)).asserted, ()
+            )
+
     def test_graft_refusals_are_principled(self) -> None:
         """P-NF6: every ill-formed graft raises before producing state."""
         executor, anne = self._anne_modeling_sally()
@@ -604,6 +631,10 @@ class NestedBeliefTests(unittest.TestCase):
             executor.with_nested(anne, ("sally",), ben_model)
         with self.assertRaisesRegex(ValueError, "closed frame"):
             executor.with_nested(replace(anne, closed=True), ("sally",), model)
+        # ...and a CLOSED model may not be grafted in either: delivery to
+        # it would refuse, which nested recursion turns into a loud error.
+        with self.assertRaisesRegex(ValueError, "CLOSED model"):
+            executor.with_nested(anne, ("sally",), replace(model, closed=True))
         # A self-model stays refused through the graft door. At the graft
         # site itself the child-owner key check subsumes it (an anne-owned
         # model cannot be keyed 'sally' in the first place), so the case

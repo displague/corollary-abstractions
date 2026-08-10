@@ -468,6 +468,17 @@ class TypedEventBinderTests(unittest.TestCase):
         which the old case-insensitive substring check could not do; and
         a span binds only if the frame declared that exact surface form,
         so an author cannot label arbitrary words with any id they like.
+        (ADJUDICATED: first clause fired. Second clause was REFUTED as
+        first shipped in dd1cdd2 and is recorded here rather than
+        rewritten: exact surface matching alone let a span name a word
+        FRAGMENT, so with the shipped lexicon -- where `key` is a
+        declared element -- a story about a "donkey" and a "monkey"
+        planted, discharged and CLOSED a key obligation while containing
+        no key. Independent post-commit review produced that run. The old
+        substring check had the identical hole, so this was an inherited
+        defect the migration advertised as fixed and had not fixed. The
+        binder now also requires word boundaries; the control below is
+        that exact reproduction, and only now does the clause hold.)
     """
 
     BELL_ELEMENTS = (
@@ -591,6 +602,101 @@ class TypedEventBinderTests(unittest.TestCase):
         self.assertIs(cased.verdict, Verdict.UNKNOWN)
         self.assertIn("not a declared surface form", cased.reason)
 
+    def test_a_word_fragment_cannot_stand_in_for_the_element(self) -> None:
+        """The refuted half of P-EB3, as its own control. This exact run
+        was ACCEPTED end to end before the boundary check -- a story with
+        a donkey and a monkey planted, discharged and closed a `key`
+        obligation. Every step is checked, not just the first."""
+        verifier = StoryFrameVerifier()
+        shared = {"agent": "the golden chicken", "desire": "to sing"}
+        setup = verifier.evaluate(
+            verifier.initial_state(),
+            Action.build(ActionKind.GEN, "introduce", {**shared, "trait": "golden"}),
+        ).next_state
+        fragment_plant = Action.build(
+            ActionKind.GEN,
+            "plant",
+            {
+                **shared,
+                "event_id": "key_planted",
+                "element": "key",
+                "mention": "A stubborn donkey brayed nearby.",
+                "binds": "key@14:17",
+            },
+        )
+        planted = verifier.evaluate(setup, fragment_plant)
+        self.assertIs(planted.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(planted.next_state)
+        self.assertIn("word FRAGMENT", planted.reason)
+        # ...and the resolution half, so the fix is not plant-only.
+        state = verifier.evaluate(
+            setup,
+            Action.build(
+                ActionKind.GEN,
+                "obstruct",
+                {**shared, "obstacle": "the locked coop door"},
+            ),
+        ).next_state
+        fragment_resolve = Action.build(
+            ActionKind.GEN,
+            "resolve",
+            {
+                **shared,
+                "outcome": "It slipped past a monkey and sang until dawn",
+                "binds": "key@21:24",
+            },
+        )
+        resolved = verifier.evaluate(state, fragment_resolve)
+        self.assertIs(resolved.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(resolved.next_state)
+        self.assertIn("word FRAGMENT", resolved.reason)
+        # The boundary rule is a boundary rule, not a ban on adjacency:
+        # punctuation and string edges still bind.
+        self.assertEqual(
+            len(
+                verifier.bind_mentions(
+                    "It found a key, and rang.", "key@11:14"
+                )
+            ),
+            1,
+        )
+        self.assertEqual(
+            len(verifier.bind_mentions("key", "key@0:3")), 1
+        )
+
+    def test_a_plant_with_prose_but_no_binding_is_unknown(self) -> None:
+        """The plant-side half of P-EB2's ledger-only control: the setup
+        would render the element in prose, but nothing binds it."""
+        verifier = StoryFrameVerifier()
+        actions = story_oracle_actions()
+        setup = verifier.evaluate(verifier.initial_state(), actions[0]).next_state
+        unbound = verifier.evaluate(setup, rebound(actions[1], binds=""))
+        self.assertIs(unbound.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(unbound.next_state)
+        self.assertIn("does not name the planted element", unbound.reason)
+        self.assertEqual(setup.frame_state.obligations, ())
+
+    def test_binding_failures_cite_the_law_they_rest_on(self) -> None:
+        """frames.py's evidence rule: name the law the verdict rests on,
+        never the whole statute book. A bad binding on a complication
+        beat is not a Chekhov matter."""
+        verifier = StoryFrameVerifier()
+        actions = story_oracle_actions()
+        state = verifier.evaluate(verifier.initial_state(), actions[0]).next_state
+        state = verifier.evaluate(state, actions[1]).next_state
+        bad = verifier.evaluate(
+            state, rebound(actions[2], binds="fallen feather@0:3")
+        )
+        self.assertIs(bad.verdict, Verdict.UNKNOWN)
+        self.assertEqual(
+            bad.evidence, ("narrative.structure.complication_obstruction",)
+        )
+        plant_failure = verifier.evaluate(
+            verifier.evaluate(verifier.initial_state(), actions[0]).next_state,
+            rebound(actions[1], binds="silver egg@2:16"),
+        )
+        self.assertEqual(plant_failure.evidence, ("narrative.constraint.chekhov_gun",))
+
     def test_mention_records_fail_closed_on_construction(self) -> None:
         with self.assertRaisesRegex(ValueError, "non-empty"):
             ElementMention("fallen feather", 4, 4)
@@ -607,6 +713,10 @@ class TypedEventBinderTests(unittest.TestCase):
             (ElementMention("a", 0, 1), ElementMention("b", 2, 4)),
         )
         self.assertEqual(parse_mention_bindings(""), ())
+        # One offset, one spelling: a binding is an audit record.
+        for sloppy in ("a@+0:1", "a@ 0 : 1", "a@0000:1", "a@1_0:12", "a@0:²"):
+            with self.assertRaisesRegex(ValueError, "plain decimal offsets"):
+                parse_mention_bindings(sloppy)
 
 
 if __name__ == "__main__":

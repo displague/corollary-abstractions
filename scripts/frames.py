@@ -30,9 +30,12 @@ Adjudication order and semantics (each is a deliberate design decision):
    (no owner to attribute a model to; suspension inheritance undesigned)
    and self-models are refused (an owner's own frame holds its beliefs).
    `nested` navigates read-only; `with_nested` grafts a mutated model back
-   at an explicit owner path and `route` runs any frame transition inside a
-   model and returns the ROOT state, so a rejected branch still cannot
-   mutate accepted state. Grafting is checked, not trusted: it replaces an
+   at an explicit owner path and `route` runs a frame-LOCAL transition
+   (assert/plant/discharge) inside a model and returns the ROOT state, so a
+   rejected branch still cannot mutate accepted state. `observe_event` is
+   deliberately NOT routable: events reach a model through its parent's
+   delivery, and the graft's subset check refuses a model whose history its
+   holder never saw. Grafting is checked, not trusted: it replaces an
    existing model (creation stays with `open_nested` and its refusals),
    keeps the child-owner key equal to the model's declared owner, refuses
    to graft into a closed frame, and re-checks the subset invariant that
@@ -509,15 +512,28 @@ class FrameExecutor:
         owner_path: tuple[str, ...],
         transition: Callable[[FrameState], Verification[FrameState]],
     ) -> Verification[FrameState]:
-        """Run a frame transition inside a model and graft the result back.
+        """Run a frame-local transition inside a model and graft it back.
 
         `transition` receives the model at owner_path and returns the
-        executor's own Verification; on an accepting verdict the returned
+        executor's own Verification; on an ACCEPTING verdict the returned
         next_state is the ROOT frame with the mutated model grafted in, so
-        the caller keeps holding the root and never a detached child. A
-        rejected branch is passed through untouched -- next_state stays
-        None, and the controller's "rejected branches cannot mutate
-        accepted state" invariant is inherited rather than reimplemented.
+        the caller keeps holding the root and never a detached child.
+
+        A rejected branch is passed through untouched. That gate reads the
+        VERDICT, not the presence of a state: `transition` is an arbitrary
+        caller-supplied callable, so a rejecting verdict that carries a
+        state would otherwise be grafted into the root and handed back --
+        the "rejected branches cannot mutate accepted state" invariant
+        enforced by the controller through Verification.validate(), which
+        is not in this loop. Checked here rather than assumed, because a
+        convention held by care is not an invariant (post-commit review of
+        dd1cdd2, finding H1).
+
+        Frame-LOCAL only. `observe_event` is deliberately not routable:
+        events reach a model through its parent's delivery, so routing one
+        directly would give the model a history its holder never saw, and
+        the graft's subset check refuses it. That refusal is the design,
+        not a gap.
 
         An empty path routes to the root itself (the degenerate identity
         route), which keeps callers from special-casing depth zero.
@@ -526,25 +542,35 @@ class FrameExecutor:
         is a verdict everywhere else in this executor (close_frame,
         observe_event, every transition), and a caller routing into a
         closed ancestor deserves the same disposition it would get for
-        routing into the closed frame directly. Structural errors -- an
-        owner path that does not exist -- still raise, because they are
-        caller mistakes rather than frame semantics.
+        routing into the closed frame directly. A path that does not
+        exist still raises, and is checked FIRST at each level, so a
+        nonexistent path is a KeyError even when the root is closed
+        (an unroutable path is a caller mistake either way; reporting it
+        as "closed" would hide the typo). `with_nested` raises for the
+        same closed frame because it is the structural primitive -- route
+        is the verdict-returning door, and the two layers answer in their
+        own currencies.
         """
 
         current = state
         for depth, owner in enumerate(owner_path):
+            child_state = current.child(owner)
+            if child_state is None:
+                raise KeyError(f"no embedded model of {owner!r} at this level")
             if current.closed:
                 return Verification(
                     Verdict.REFUSED,
                     "frame is closed; it accepts no routed transitions",
                     evidence=(current.spec.frame,) + owner_path[:depth],
                 )
-            child_state = current.child(owner)
-            if child_state is None:
-                raise KeyError(f"no embedded model of {owner!r} at this level")
             current = child_state
         result = transition(current)
-        if not owner_path or result.next_state is None:
+        if not owner_path or not result.verdict.accepts:
+            return result
+        if result.next_state is None:
+            # A malformed accepting verdict; hand it back so the
+            # controller's Verification.validate() names the offender
+            # instead of an AttributeError inside the graft.
             return result
         return Verification(
             result.verdict,
@@ -573,6 +599,15 @@ class FrameExecutor:
             raise ValueError(
                 f"owner {holder.spec.owner!r} cannot nest a model of "
                 "itself; its own frame already holds its beliefs"
+            )
+        if child.closed:
+            # Unreachable today (close_frame REFUSES owned frames), but
+            # observe_event's FIRST guard is `closed` -> REFUSED, which
+            # the nested-delivery RuntimeError would then convert into a
+            # loud failure. "Every invariant re-checked" has to mean it.
+            raise ValueError(
+                f"graft would embed a CLOSED model of {child_owner!r}; "
+                "delivery to it would refuse and break nested recursion"
             )
         processed = set(holder.processed_event_ids)
         unknown = [
