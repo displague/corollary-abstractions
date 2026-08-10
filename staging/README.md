@@ -43,3 +43,51 @@ and a receipt diff shows a real change. Key fields:
 `record_id` is the SHA-256 prefix of the candidate's canonical payload, so the
 same candidate always writes the same filename and a re-run overwrites rather
 than accumulates.
+
+## Shape of a proposal
+
+`python scripts/write_stage.py <proposal.json>` reads this. Every path is
+repository-relative with forward slashes, and none of them may be under
+`data/`.
+
+```json
+{
+  "statement_id": "logic.boolean_laws.domination_laws",
+  "corpus": "logic",
+  "seed_script": "scripts/seed_logic.py",
+  "seed_source_path": "scripts/seed_logic_candidate.py",
+  "rung": "PROVEN",
+  "rationale": "why this belongs in the durable corpus",
+  "artifact": "prover/sample_triples.json",
+  "artifact_sha256": "<sha256 of the artifact bytes>",
+  "reference": "BooleanLaws.domination_and_false",
+  "transition_trace": [
+    {"theorem": "...", "tactic": "...", "stateBefore": "...", "stateAfter": "..."}
+  ],
+  "expected_matcher_delta": {
+    "nodes_analyzed": 1,
+    "shape_groups": 0,
+    "typed_groups": 0,
+    "family_groups": 0,
+    "aliased_groups": 0,
+    "mirror_groups": 0,
+    "new_typed_twin_partners": []
+  },
+  "frame_local": false
+}
+```
+
+`seed_source` may be given inline instead of `seed_source_path`; it is the FULL
+text the seed script should have after the edit, because the node judged is the
+one the scratch regeneration EMITS, not one the proposal asserts.
+
+`expected_matcher_delta` is mandatory for a PROVEN candidate and is a
+REGISTERED PREDICTION in the house sense: it is compared against the delta
+measured in the scratch checkout, and a candidate that mispredicts its own
+effect on the twin matcher is refused even though schema, link and
+regeneration checks passed. A candidate that cannot say what it will do to the
+corpus's structural output does not get to change it.
+
+`rung` is what the candidate CLAIMS. `VERIFIED` stages a review request and
+ignores everything below `rationale`; `CONJECTURED` and `frame_local: true` are
+refused outright.
