@@ -66,6 +66,15 @@ from frames import (
     FrameState,
     Literal,
 )
+from lifetimes import Lifetime, declarable
+from session_keys import (
+    KEY_SCHEMA,
+    KeyRingRefusal,
+    RefusalReason,
+    SessionKeyRing,
+    owner_scope,
+    session_scope,
+)
 from proof_artifacts import (
     resolve_contained_artifact,
     select_closing_transitions,
@@ -1229,7 +1238,15 @@ class RetrievalResolution:
 
 @dataclass(frozen=True)
 class RetrievalReceipt:
-    """Verifier-minted evidence that RETRIEVE admitted these item ids."""
+    """Verifier-minted evidence that RETRIEVE admitted these item ids.
+
+    ``key_id`` names the root-key generation this signature descends from, so
+    a ring holding several generations can verify a receipt minted before a
+    rotation. It is covered by the signature: relabelling a receipt with
+    another generation's id changes the payload and invalidates it. An empty
+    ``key_id`` means "the verifier's own current generation" and is what every
+    pre-item-2 caller produces, which keeps the ephemeral path byte-compatible.
+    """
 
     session_id: str
     frame_scope: str
@@ -1237,6 +1254,7 @@ class RetrievalReceipt:
     mode: str
     item_ids: tuple[str, ...]
     signature: str
+    key_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -1250,17 +1268,60 @@ class ClarificationRequest:
     suggested_key: str
     resolution_channel: Channel
     signature: str
+    key_id: str = ""
 
 
 @dataclass(frozen=True)
 class UserBinding:
-    """Channel-authenticated answer in the persistent user-owned frame."""
+    """Channel-authenticated answer in the persistent user-owned frame.
+
+    ``lifetime`` is the **declared** lifetime (``lifetimes.Lifetime``), chosen
+    by the trusted return channel and covered by ``signature``; it is not the
+    binding's current status. The effective lifetime — which may be
+    ``superseded`` or ``expired`` — is computed on every read by
+    :meth:`RetrievalVerifier.binding_status` from the private ledgers and the
+    current goal, and is never stored anywhere a caller could edit it.
+    """
 
     request_id: str
     slot: str
     value: str
     signature: str
-    lifetime: str = "session"
+    lifetime: str = Lifetime.SESSION.value
+    key_id: str = ""
+
+
+@dataclass(frozen=True)
+class LedgerSnapshot:
+    """The verifier's private anti-replay state, signed for transport.
+
+    This is the record that makes a restart honest. Its two tuples are the
+    consumed-request and supersession ledgers that
+    ``docs/DESIGN-interactive-harness.md`` §3.3 named as the *second* blocker
+    on durability (after keys): a process that reloaded keys but re-minted
+    empty ledgers would silently re-admit every consumed request.
+
+    It is signed, unlike the session file that carries it, because it is
+    verifier-*private* state travelling through public space. ``sequence`` is
+    stamped from the private keyring's monotone counter, and that — not the
+    signature — is what refuses a rollback: an earlier snapshot is a genuinely
+    signed message replayed out of order.
+
+    ``PruningEvidence`` is deliberately **absent**. Carrying it would let a
+    stale refusal outlive the process, and BACKLOG ("session pruning assumes a
+    static rung store") already establishes that the TOOL rung can make a
+    pruned branch answerable again. Losing pruning at a restart costs one
+    re-query; carrying it can cost a wrong REFUSED that no longer has a cause.
+    """
+
+    schema: str
+    key_id: str
+    session_id: str
+    owner: str
+    sequence: int
+    consumed: tuple[tuple[str, str], ...]
+    superseded: tuple[tuple[str, str], ...]
+    signature: str
 
 
 @dataclass(frozen=True)
@@ -1406,23 +1467,80 @@ class RetrievalVerifier:
 
     name = "retrieval-harness"
 
-    def __init__(self, store: QueryStore, frame_executor: FrameExecutor):
+    def __init__(
+        self,
+        store: QueryStore,
+        frame_executor: FrameExecutor,
+        keyring: SessionKeyRing | None = None,
+        key_id: str | None = None,
+    ):
         self.store = store
         self.frame_executor = frame_executor
         self.frame_verifier = FrameAssertionVerifier(frame_executor)
-        self._receipt_secret = secrets.token_bytes(32)
-        self._ask_secret = secrets.token_bytes(32)
+        # ROADMAP-v0.7 item 2. The default is an **ephemeral, per-instance**
+        # ring: one random root, no file, dead at exit. That reproduces the
+        # pre-item-2 contract exactly -- two default verifiers cannot read each
+        # other's material, which is the claim
+        # test_second_verifier_cannot_accept_first_verifiers_question makes --
+        # and it is why the default is not a process-global ring. Durability is
+        # opt-in: pass a SessionKeyRing.open(keyfile) and the same authority
+        # comes back in the next process.
+        self.keyring = keyring if keyring is not None else SessionKeyRing.ephemeral()
+        self.key_id = key_id if key_id is not None else self.keyring.active_key_id
         self._consumed_ask_requests: set[tuple[str, str]] = set()
         self._superseded_ask_bindings: set[tuple[str, str]] = set()
         # Session-scoped pruning evidence (item 6 / P-IH7 substrate). Lives on
         # the verifier instance beside the anti-replay ledgers, for the same
         # reason: it is authority-adjacent state that must not be reachable by
-        # public-tuple surgery. Written only by commit_run.
+        # public-tuple surgery. Written only by commit_run. Unlike the two
+        # ledgers above it is NOT exported by :meth:`export_ledgers`; see
+        # :class:`LedgerSnapshot` for why a stale refusal must not outlive the
+        # process that earned it.
         self._pruning: dict[tuple[str, str, tuple[object, ...]], PruningEvidence] = {}
 
-    def _ask_signature(self, domain: str, *parts: object) -> str:
-        payload = repr((domain, *parts)).encode("utf-8")
-        return hmac.new(self._ask_secret, payload, hashlib.sha256).hexdigest()
+    # -- signing -----------------------------------------------------------
+
+    def _signature(
+        self, domain: str, scope: str, key_id: str, *parts: object
+    ) -> str:
+        """One MAC, purpose-bound twice over.
+
+        The key is derived per ``(key_id, scope, domain)``, and ``key_id``,
+        ``scope`` and ``domain`` are *also* written into the signed payload.
+        The belt is the KDF: material signed for one session, owner, or domain
+        produces an unrelated key elsewhere. The braces are the payload: even
+        a caller who derived the wrong key cannot make a relabelled record
+        verify, because the label is inside the message.
+        """
+
+        key = self.keyring.derive(key_id, scope, domain)
+        payload = repr((KEY_SCHEMA, key_id, domain, scope, *parts)).encode("utf-8")
+        return hmac.new(key, payload, hashlib.sha256).hexdigest()
+
+    def _check(
+        self,
+        presented: str | None,
+        domain: str,
+        scope: str,
+        key_id: str,
+        *parts: object,
+    ) -> RefusalReason | None:
+        """``None`` when the signature authenticates, else the named reason.
+
+        A record naming a key id this ring never had, or one that has been
+        revoked, is refused *by name* before any comparison: "we cannot check
+        this" and "we checked this and it is forged" are different facts and a
+        boolean would merge them.
+        """
+
+        stated = key_id or self.key_id
+        try:
+            expected = self._signature(domain, scope, stated, *parts)
+        except KeyRingRefusal as exc:
+            return exc.reason
+        if presented is None or not hmac.compare_digest(presented, expected):
+            return RefusalReason.SIGNATURE_MISMATCH
+        return None
 
     @staticmethod
     def _question_parts(
@@ -1443,58 +1561,214 @@ class RetrievalVerifier:
     def _valid_question(
         self, state: RetrievalState, request: ClarificationRequest
     ) -> bool:
-        expected = self._ask_signature(
-            "question", *self._question_parts(state, request)
+        return (
+            self._check(
+                request.signature,
+                "question",
+                session_scope(state.session_id),
+                request.key_id,
+                *self._question_parts(state, request),
+            )
+            is None
         )
-        return hmac.compare_digest(request.signature, expected)
 
-    def reply_action(self, state: RetrievalState, value: str) -> Action:
-        """Trusted return-channel boundary: sign one actual user response."""
+    def reply_action(
+        self,
+        state: RetrievalState,
+        value: str,
+        lifetime: Lifetime | str = Lifetime.SESSION,
+    ) -> Action:
+        """Trusted return-channel boundary: sign one actual user response.
+
+        ``lifetime`` is declared *here*, at the channel, and signed into the
+        reply. A policy cannot upgrade an answer to ``durable`` after the fact
+        because the lifetime is inside the MAC, and it cannot declare
+        ``superseded``/``expired`` at all because :func:`lifetimes.declarable`
+        refuses the effective-only states.
+
+        The default reply is byte-identical to the pre-item-2 one: the
+        ``lifetime`` argument is omitted from the action's arguments when it is
+        ``session``, so every existing action shape, fingerprint, and
+        strict-argument test is untouched. The signature still covers the
+        resolved lifetime, so an omitted argument is not an unsigned one.
+        """
+
         request = state.awaiting
         if request is None or not self._valid_question(state, request):
             raise ValueError("cannot reply without a verifier-minted question")
         if not value.strip():
             raise ValueError("user reply must be non-empty")
-        signature = self._ask_signature(
-            "reply", *self._question_parts(state, request), value
-        )
-        return Action.build(
-            ActionKind.ASK,
+        declared = declarable(lifetime)
+        # Signed under the *question's* generation, not the ring's current
+        # one. A rotation between the question and its answer must not orphan
+        # an outstanding WAITING branch: the pair belongs together, and the
+        # new binding minted from it is what gets the fresh generation.
+        signature = self._signature(
             "reply",
-            {
-                "request_id": request.request_id,
-                "value": value,
-                "signature": signature,
-            },
+            session_scope(state.session_id),
+            request.key_id or self.key_id,
+            *self._question_parts(state, request),
+            value,
+            declared.value,
         )
+        arguments = {
+            "request_id": request.request_id,
+            "value": value,
+            "signature": signature,
+        }
+        if declared is not Lifetime.SESSION:
+            arguments["lifetime"] = declared.value
+        return Action.build(ActionKind.ASK, "reply", arguments)
 
-    def binding_value(self, state: RetrievalState, slot: str) -> str | None:
-        """Return the latest authentic user binding for this exact session."""
-        for binding in reversed(state.user_frame.bindings):
-            if binding.slot != slot:
-                continue
-            if (state.session_id, binding.request_id) in (
-                self._superseded_ask_bindings
-            ):
-                continue
-            if self._valid_binding(state, binding):
-                return binding.value
-        return None
+    def binding_scope(self, state: RetrievalState, lifetime: Lifetime) -> str:
+        """Which key a binding of this lifetime is signed under.
 
-    def _valid_binding(
-        self, state: RetrievalState, binding: UserBinding
-    ) -> bool:
-        expected = self._ask_signature(
-            "binding",
+        ``durable`` is owner-scoped; everything else is session-scoped. This
+        one line is what makes ``durable`` mean something operationally rather
+        than being a label: an owner-scoped key produces a MAC that a *new*
+        session id can still verify, and a session-scoped one cannot. It is
+        also the honest cost — a durable binding is not frame-isolated, and
+        :mod:`lifetimes` says so in the protocol table.
+        """
+
+        if lifetime.crosses_sessions:
+            return owner_scope(state.user_frame.owner)
+        return session_scope(state.session_id)
+
+    def _binding_parts(
+        self,
+        state: RetrievalState,
+        lifetime: Lifetime,
+        binding: UserBinding,
+    ) -> tuple[object, ...]:
+        if lifetime.crosses_sessions:
+            # No session id and no frame spec: a durable answer must survive
+            # both. The owner is already in the scope, hence in the key.
+            return (
+                state.user_frame.owner,
+                binding.request_id,
+                binding.slot,
+                binding.value,
+                lifetime.value,
+            )
+        return (
             state.session_id,
             repr(state.frame.spec),
             state.user_frame.owner,
             binding.request_id,
             binding.slot,
             binding.value,
-            binding.lifetime,
+            lifetime.value,
         )
-        return hmac.compare_digest(binding.signature, expected)
+
+    def binding_status(
+        self, state: RetrievalState, binding: UserBinding
+    ) -> Lifetime | RefusalReason:
+        """The binding's *effective* lifetime, or the named reason it has none.
+
+        Computed, never stored (see :mod:`lifetimes`). The order of the checks
+        is the safety argument:
+
+        1. an undeclarable lifetime is refused before any key is derived, so a
+           binding claiming ``superseded`` cannot pick its own scope;
+        2. the signature is checked next, under the scope its *declared*
+           lifetime implies -- so relabelling a session binding ``durable`` to
+           smuggle it into another session fails, because the durable payload
+           and key are different objects entirely;
+        3. supersession is consulted from the **private ledger first** and the
+           public tuple second. Either one is sufficient to kill a binding;
+           only the private one cannot be edited away, which is the whole
+           reason it exists;
+        4. goal-local expiry is last, because it is the only check that
+           depends on the current conversation rather than on the record.
+        """
+
+        try:
+            declared = declarable(binding.lifetime)
+        except ValueError:
+            return RefusalReason.UNDECLARABLE_LIFETIME
+        scope = self.binding_scope(state, declared)
+        reason = self._check(
+            binding.signature,
+            "binding",
+            scope,
+            binding.key_id,
+            *self._binding_parts(state, declared, binding),
+        )
+        if reason is not None:
+            return reason
+        if (scope, binding.request_id) in self._superseded_ask_bindings:
+            return RefusalReason.SUPERSEDED_BINDING
+        if self.keyring.is_superseded(scope, binding.request_id):
+            return RefusalReason.SUPERSEDED_BINDING
+        if binding.request_id in state.user_frame.superseded_request_ids:
+            return RefusalReason.SUPERSEDED_BINDING
+        if declared is Lifetime.GOAL_LOCAL and self._goal_reopened(state, binding):
+            return RefusalReason.EXPIRED_BINDING
+        return declared
+
+    @staticmethod
+    def _goal_reopened(state: RetrievalState, binding: UserBinding) -> bool:
+        """Has a newer question been minted for this binding's slot?
+
+        A goal-local answer is scoped to the goal that asked for it, so the
+        test is not "was it replaced by another answer" (that is supersession)
+        but "was the question asked again". An unanswered reopening is enough:
+        that is precisely the difference between the two lifetimes.
+        """
+
+        asked = [
+            question.request_id
+            for question in state.user_frame.questions
+            if question.slot == binding.slot
+        ]
+        return bool(asked) and asked[-1] != binding.request_id
+
+    def binding_value(self, state: RetrievalState, slot: str) -> str | None:
+        """Return the latest authoritative user binding for this slot."""
+
+        for binding in reversed(state.user_frame.bindings):
+            if binding.slot != slot:
+                continue
+            status = self.binding_status(state, binding)
+            if isinstance(status, Lifetime) and status.authoritative:
+                return binding.value
+        return None
+
+    def binding_refusal(
+        self, state: RetrievalState, binding: UserBinding
+    ) -> RefusalReason | None:
+        """The named reason this binding is not authoritative, if it is not."""
+
+        status = self.binding_status(state, binding)
+        return None if isinstance(status, Lifetime) else status
+
+    def _valid_binding(
+        self, state: RetrievalState, binding: UserBinding
+    ) -> bool:
+        """Signature-only authenticity, with no ledger or goal consultation.
+
+        Kept distinct from :meth:`binding_status` on purpose: ``commit_run``
+        and ``_reply`` need to enumerate the bindings a new answer *replaces*,
+        and those are by definition about to become superseded. Asking the
+        full status there would filter out the very records the supersession
+        ledger has to be told about.
+        """
+
+        try:
+            declared = declarable(binding.lifetime)
+        except ValueError:
+            return False
+        return (
+            self._check(
+                binding.signature,
+                "binding",
+                self.binding_scope(state, declared),
+                binding.key_id,
+                *self._binding_parts(state, declared, binding),
+            )
+            is None
+        )
 
     def session_pruning_evidence(
         self, session_id: str
@@ -1576,7 +1850,10 @@ class RetrievalVerifier:
                     )
                     if slot is not None:
                         superseded.update(
-                            (entry.state_before.session_id, binding.request_id)
+                            (
+                                self._recorded_scope(entry.state_before, binding),
+                                binding.request_id,
+                            )
                             for binding in entry.state_before.user_frame.bindings
                             if binding.slot == slot
                             and self._valid_binding(
@@ -1585,6 +1862,145 @@ class RetrievalVerifier:
                         )
         self._consumed_ask_requests.update(consumed)
         self._superseded_ask_bindings.update(superseded)
+        for scope, request_id in superseded:
+            if scope.startswith("owner:"):
+                # Owner-scoped (durable) retirements outlive every session, so
+                # they belong in the ring, not on this instance. See
+                # SessionKeyRing.record_superseded for the bug that proved it.
+                self.keyring.record_superseded(scope, request_id)
+
+    def _recorded_scope(
+        self, state: RetrievalState, binding: UserBinding
+    ) -> str:
+        """The ledger scope a binding is filed under.
+
+        Supersession is keyed by the binding's own signing scope, not by the
+        session it happened to be replaced in. Otherwise a durable answer
+        superseded during session A would come back to life in session B: the
+        record would be filed under ``session:A`` and nothing in B would look
+        there. The scope is derived from the *declared* lifetime, which is
+        signed, so a caller cannot move a record between ledgers by editing it.
+        """
+
+        try:
+            declared = declarable(binding.lifetime)
+        except ValueError:
+            return session_scope(state.session_id)
+        return self.binding_scope(state, declared)
+
+    # -- durable ledgers ---------------------------------------------------
+
+    def export_ledgers(
+        self, session_id: str, owner: str
+    ) -> "LedgerSnapshot":
+        """Sign this session's anti-replay state for transport across a restart.
+
+        Two scopes are collected, not one: the session's own records, and the
+        owner-scoped records that belong to ``durable`` bindings. Exporting
+        only the session scope would carry a restart forward while quietly
+        forgetting that a durable answer had been replaced.
+
+        The sequence number is issued from the private keyring and is bumped
+        *before* the signature is computed, so every export is strictly newer
+        than the last. A snapshot is therefore not merely authentic; it has a
+        place in an order that the public file cannot argue with.
+        """
+
+        scope = session_scope(session_id)
+        mine = owner_scope(owner)
+        consumed = tuple(
+            sorted(
+                entry
+                for entry in self._consumed_ask_requests
+                if entry[0] == session_id
+            )
+        )
+        superseded = tuple(
+            sorted(
+                entry
+                for entry in self._superseded_ask_bindings
+                if entry[0] in (scope, mine)
+            )
+        )
+        sequence = self.keyring.issue_sequence(scope)
+        signature = self._signature(
+            "ledger",
+            scope,
+            self.key_id,
+            session_id,
+            owner,
+            sequence,
+            consumed,
+            superseded,
+        )
+        return LedgerSnapshot(
+            schema=KEY_SCHEMA,
+            key_id=self.key_id,
+            session_id=session_id,
+            owner=owner,
+            sequence=sequence,
+            consumed=consumed,
+            superseded=superseded,
+            signature=signature,
+        )
+
+    def import_ledgers(
+        self, snapshot: "LedgerSnapshot", session_id: str, owner: str
+    ) -> None:
+        """Re-admit a signed ledger, or refuse it by name.
+
+        Raises :class:`session_keys.KeyRingRefusal`. The check order is
+        load-bearing and each step exists because skipping it is an attack:
+
+        * **schema** first, so a future format cannot be read as this one;
+        * **binding to the session and owner** next -- a snapshot is authority
+          for exactly one conversation, and moving it is not a signature
+          question;
+        * **signature** before the counter, so a snapshot that never came from
+          this ring cannot advance the high-water mark and lock out the real
+          one (a denial-of-service that a naive "check freshness first"
+          ordering would hand over free);
+        * **sequence** last, refusing anything behind the high-water mark as
+          ``ledger-rollback``. This is the only check that catches a
+          *genuinely signed* older snapshot, and it works only because the
+          counter lives in the private keyfile.
+
+        Ledgers are merged, never replaced. A restore may only ever add
+        refusals; there is no code path in which importing removes a consumed
+        request or an existing supersession.
+        """
+
+        if snapshot.schema != KEY_SCHEMA:
+            raise KeyRingRefusal(
+                RefusalReason.SCHEMA_MISMATCH,
+                f"snapshot declares {snapshot.schema!r}",
+            )
+        if snapshot.session_id != session_id or snapshot.owner != owner:
+            raise KeyRingRefusal(
+                RefusalReason.SESSION_MISMATCH,
+                f"snapshot is for {snapshot.owner}/{snapshot.session_id}",
+            )
+        scope = session_scope(session_id)
+        reason = self._check(
+            snapshot.signature,
+            "ledger",
+            scope,
+            snapshot.key_id,
+            snapshot.session_id,
+            snapshot.owner,
+            snapshot.sequence,
+            snapshot.consumed,
+            snapshot.superseded,
+        )
+        if reason is not None:
+            raise KeyRingRefusal(reason, f"ledger for {session_id}")
+        self.keyring.admit_sequence(scope, snapshot.sequence)
+        self._consumed_ask_requests.update(
+            (entry[0], entry[1]) for entry in snapshot.consumed
+        )
+        self._superseded_ask_bindings.update(
+            (entry[0], entry[1]) for entry in snapshot.superseded
+        )
 
     def _receipt_signature(
         self,
@@ -1593,11 +2009,18 @@ class RetrievalVerifier:
         key: str,
         mode: str,
         item_ids: tuple[str, ...],
+        key_id: str = "",
     ) -> str:
-        payload = repr(
-            (session_id, frame_scope, exact_key(key), mode, item_ids)
-        ).encode("utf-8")
-        return hmac.new(self._receipt_secret, payload, hashlib.sha256).hexdigest()
+        return self._signature(
+            "receipt",
+            session_scope(session_id),
+            key_id or self.key_id,
+            session_id,
+            frame_scope,
+            exact_key(key),
+            mode,
+            item_ids,
+        )
 
     def _valid_receipt(
         self, receipt: RetrievalReceipt, session_id: str, frame_scope: str
@@ -1607,14 +2030,20 @@ class RetrievalVerifier:
             or receipt.frame_scope != frame_scope
         ):
             return False
-        expected = self._receipt_signature(
-            receipt.session_id,
-            receipt.frame_scope,
-            receipt.key,
-            receipt.mode,
-            receipt.item_ids,
+        return (
+            self._check(
+                receipt.signature,
+                "receipt",
+                session_scope(receipt.session_id),
+                receipt.key_id,
+                receipt.session_id,
+                receipt.frame_scope,
+                exact_key(receipt.key),
+                receipt.mode,
+                receipt.item_ids,
+            )
+            is None
         )
-        return hmac.compare_digest(receipt.signature, expected)
 
     def state_key(self, state: RetrievalState) -> str:
         """Distinguish two states that must not share a pruning verdict.
@@ -1896,7 +2325,9 @@ class RetrievalVerifier:
                 key,
                 result.mode,
                 item_ids,
+                self.key_id,
             ),
+            self.key_id,
         )
         return Verification(
             Verdict.VERIFIED,
@@ -2130,11 +2561,15 @@ class RetrievalVerifier:
             state.pending.suggested_key,
             state.pending.resolution_channel,
             signature="",
+            key_id=self.key_id,
         )
         request = replace(
             unsigned,
-            signature=self._ask_signature(
-                "question", *self._question_parts(state, unsigned)
+            signature=self._signature(
+                "question",
+                session_scope(state.session_id),
+                self.key_id,
+                *self._question_parts(state, unsigned),
             ),
         )
         return Verification(
@@ -2209,11 +2644,21 @@ class RetrievalVerifier:
                 "signed clarification no longer targets a user-resolvable need",
                 evidence=(request.request_id,),
             )
-        expected_keys = ("request_id", "signature", "value")
-        if tuple(key for key, _ in action.arguments) != expected_keys:
+        # Two admitted shapes, both exact. The three-argument form is the
+        # pre-item-2 reply and declares ``session`` by omission; the
+        # four-argument form adds the explicit lifetime. Anything else is
+        # still refused, so this stays a whitelist and not a relaxation --
+        # ``lifetime`` is the only new key any caller may present, and its
+        # value is checked against the signature two steps below.
+        presented_keys = tuple(key for key, _ in action.arguments)
+        if presented_keys not in (
+            ("request_id", "signature", "value"),
+            ("lifetime", "request_id", "signature", "value"),
+        ):
             return Verification(
                 Verdict.REFUSED,
-                "ASK(reply) requires exactly request_id, signature, and value",
+                "ASK(reply) requires exactly request_id, signature, and value "
+                "(optionally lifetime)",
                 evidence=(request.request_id,),
             )
         if action.dependencies:
@@ -2231,29 +2676,46 @@ class RetrievalVerifier:
                 "user reply has a missing/mismatched request id or empty value",
                 evidence=(request.request_id,),
             )
-        expected = self._ask_signature(
-            "reply", *self._question_parts(state, request), value
+        try:
+            declared = declarable(action.argument("lifetime") or Lifetime.SESSION)
+        except ValueError:
+            return Verification(
+                Verdict.REFUSED,
+                "user reply declares an unregistered or effective-only "
+                f"lifetime {action.argument('lifetime')!r}",
+                evidence=(request.request_id, RefusalReason.UNDECLARABLE_LIFETIME),
+            )
+        reason = self._check(
+            signature,
+            "reply",
+            session_scope(state.session_id),
+            request.key_id,
+            *self._question_parts(state, request),
+            value,
+            declared.value,
         )
-        if signature is None or not hmac.compare_digest(signature, expected):
+        if reason is not None:
             return Verification(
                 Verdict.REFUSED,
                 "user reply signature is invalid; policy output is not user "
                 "input",
-                evidence=(request.request_id,),
+                evidence=(request.request_id, reason),
             )
-        binding = UserBinding(
+        unsigned = UserBinding(
             request.request_id,
             request.slot,
             value,
-            self._ask_signature(
+            signature="",
+            lifetime=declared.value,
+            key_id=self.key_id,
+        )
+        binding = replace(
+            unsigned,
+            signature=self._signature(
                 "binding",
-                state.session_id,
-                repr(state.frame.spec),
-                state.user_frame.owner,
-                request.request_id,
-                request.slot,
-                value,
-                "session",
+                self.binding_scope(state, declared),
+                self.key_id,
+                *self._binding_parts(state, declared, unsigned),
             ),
         )
         superseded = tuple(

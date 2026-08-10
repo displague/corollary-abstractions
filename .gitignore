@@ -55,3 +55,11 @@ experiments/*.log
 
 # Real corpus samples (licensed downloads, user-provided; never commit)
 experiments/data_real/
+
+# Runtime-owned private state (ROADMAP-v0.7 item 2). The session root keys and
+# the monotone anti-rollback counters live here. Committing this file would
+# hand every forger the ability to mint any binding for any owner, which is
+# precisely the threat model scripts/session_keys.py names as its weakest
+# point. Session *files* are public and may be committed; this never is.
+.runtime/
+*.session-keys.json
