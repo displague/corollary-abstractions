@@ -11,8 +11,9 @@ The candidate exercised is a real Boolean law the corpus does not yet carry --
 the domination law `P and false = false` -- proved by a real closing Lean
 transition, staged through the full pipeline: path containment, rung, digest
 pin, closure, transition trace, exclusive ownership, scratch regeneration,
-regeneration confinement, semantic correspondence, schema and link validation,
-matcher-delta prediction, durable byte-identity.
+regeneration confinement, semantic correspondence, structural unambiguity,
+schema and link validation, matcher-delta prediction, durable byte-identity.
+The last class runs the same gate through `controller.py`'s ordinary loop.
 """
 
 from __future__ import annotations
@@ -854,6 +855,127 @@ class ValidationAndDeltaTests(WriteStageTestCase):
             ),
             "matcher_delta_prediction",
         )
+
+
+class ControllerAdapterTests(WriteStageTestCase):
+    """`ActionKind.WRITE` finally has an adapter, and it advances a LEDGER."""
+
+    def proposal(self, name: str, **overrides) -> str:
+        candidate = self.candidate(**overrides)
+        payload = {
+            "statement_id": candidate.statement_id,
+            "corpus": candidate.corpus,
+            "seed_script": candidate.seed_script,
+            "seed_source": candidate.seed_source,
+            "rung": candidate.rung,
+            "rationale": candidate.rationale,
+            "artifact": candidate.artifact,
+            "artifact_sha256": candidate.artifact_sha256,
+            "reference": candidate.reference,
+            "transition_trace": list(candidate.transition_trace),
+            "expected_matcher_delta": candidate.expected_matcher_delta,
+            "frame_local": candidate.frame_local,
+        }
+        directory = self.repo.root / "proposals"
+        directory.mkdir(exist_ok=True)
+        (directory / name).write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        return f"proposals/{name}"
+
+    def verifier(self):
+        from write_stage import WriteStagingVerifier
+
+        return WriteStagingVerifier(self.repo.root, self.repo.staging)
+
+    def test_staged_candidate_advances_only_a_receipt_ledger(self) -> None:
+        from controller import Verdict
+        from write_stage import WriteStagingState, write_action
+
+        verification = self.verifier().evaluate(
+            WriteStagingState(), write_action(self.proposal("good.json"))
+        )
+        self.assertEqual(verification.verdict, Verdict.PROVEN)
+        self.assertEqual(len(verification.next_state.receipts), 1)
+        record_id, outcome = verification.next_state.receipts[0]
+        self.assertEqual(outcome, STAGED_CANDIDATE)
+        # The advanced state holds an id and an outcome. Nothing else fits.
+        self.assertEqual(
+            set(verification.next_state.__dataclass_fields__), {"receipts"}
+        )
+        self.assertTrue(
+            (self.repo.staging / f"{record_id}.json").is_file()
+        )
+
+    def test_verified_rung_advances_as_verified(self) -> None:
+        from controller import Verdict
+        from write_stage import WriteStagingState, write_action
+
+        verification = self.verifier().evaluate(
+            WriteStagingState(),
+            write_action(self.proposal("review.json", rung=VERIFIED)),
+        )
+        self.assertEqual(verification.verdict, Verdict.VERIFIED)
+        self.assertEqual(
+            verification.next_state.receipts[0][1], STAGED_REVIEW_REQUEST
+        )
+
+    def test_refused_candidate_cannot_mutate_the_ledger(self) -> None:
+        from controller import Verdict
+        from write_stage import WriteStagingState, write_action
+
+        verification = self.verifier().evaluate(
+            WriteStagingState(),
+            write_action(self.proposal("bad.json", rung=CONJECTURED)),
+        )
+        self.assertEqual(verification.verdict, Verdict.REFUSED)
+        self.assertIsNone(verification.next_state)
+        verification.validate()
+
+    def test_non_write_actions_and_bad_proposals_are_refused(self) -> None:
+        from controller import Action, ActionKind, Verdict
+        from write_stage import WriteStagingState, write_action
+
+        verifier = self.verifier()
+        cases = [
+            Action.build(ActionKind.RETRIEVE, "lookup", {"key": "x"}),
+            Action.build(ActionKind.WRITE, "stage", {}),
+            write_action("../outside.json"),
+            write_action("/etc/proposal.json"),
+            write_action("data/logic/nodes.json"),
+            write_action("proposals/absent.json"),
+        ]
+        for action in cases:
+            with self.subTest(action=action.arguments):
+                verification = verifier.evaluate(WriteStagingState(), action)
+                self.assertEqual(verification.verdict, Verdict.REFUSED)
+                self.assertIsNone(verification.next_state)
+
+    def test_a_controller_run_stages_then_refuses_without_losing_state(
+        self,
+    ) -> None:
+        from controller import Controller, SequencePolicy, StopReason
+        from write_stage import WriteStagingState, write_action
+
+        good = write_action(self.proposal("good.json"))
+        bad = write_action(self.proposal("bad.json", rung=CONJECTURED))
+        result = Controller().run(
+            WriteStagingState(),
+            SequencePolicy([good, bad]),
+            self.verifier(),
+            lambda state: False,
+        )
+        self.assertEqual(result.stop_reason, StopReason.EXHAUSTED)
+        self.assertEqual(result.accepted_steps, 1)
+        self.assertEqual(result.rejected_steps, 1)
+        self.assertEqual(len(result.final_state.receipts), 1)
+        self.assertEqual(
+            durable_digest(self.repo.root / "data"), self.repo_data_digest
+        )
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.repo_data_digest = durable_digest(self.repo.root / "data")
 
 
 def _sha256(path: Path) -> str:

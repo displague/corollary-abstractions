@@ -723,11 +723,12 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   `GEN` has proof/story/frame semantics, and `retrieval.RetrievalVerifier`
   layers executable `RETRIEVE` plus exact `POINT(position)` over the unchanged
   frame verifier. ASK now adds an authenticated pause/return adapter with a
-  runtime user frame; `WRITE` now has a gate (`scripts/write_stage.py`) but
-  deliberately no controller ADAPTER — see the durable-write entry below: a
-  staged proposal is not an accepted state transition, so wiring it as a
-  state-advancing verifier result would be the category error the item exists
-  to prevent. A live
+  runtime user frame; `WRITE` now has both a gate (`scripts/write_stage.py`)
+  and an adapter (`write_stage.WriteStagingVerifier`), completing the five-
+  action surface. The adapter avoids the obvious category error by being exact
+  about what the action IS: `WRITE(proposal)` means "put this proposal on the
+  table", so the state it advances is a receipt ledger and not knowledge. A
+  live
   PyPantograph verifier now plugs into the same controller for one bounded
   theorem search, but project-backed breadth and a shared proof/story learned
   policy remain open.
@@ -858,11 +859,13 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   scratch graph, declared-versus-measured matcher delta, durable byte-identity.
   Nothing accepts: a staged record carries `approval_granted: []` and
   promotion is a human editing the seed and running the ordinary loop.
-  Receipts are deterministic and are written for refusals too. Still open:
-  - **no controller adapter.** `ActionKind.WRITE` remains vocabulary. Staging
-    is not a state transition, so a verifier returning PROVEN + next_state for
-    a WRITE would make a proposal look like an accepted step. The adapter
-    needs a fourth disposition (proposed-and-parked) before it can exist.
+  Receipts are deterministic and are written for refusals too.
+  `ActionKind.WRITE` also has its first adapter: `WriteStagingVerifier` runs
+  inside the ordinary `controller.py` loop, and the state it advances is a
+  RECEIPT LEDGER of `(record_id, outcome)` pairs — no node, no seed source, no
+  corpus content — so accepting a WRITE means a receipt exists, not that
+  anything was learned. STAGED_CANDIDATE maps to PROVEN, STAGED_REVIEW_REQUEST
+  to VERIFIED, everything else to REFUSED with no next state. Still open:
   - **executing a candidate seed is not sandboxed.** Regeneration is real, so
     the candidate's code runs. Containment is by construction (scratch tree
     outside the repository, relative argv, minimal environment carrying no

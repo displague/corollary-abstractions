@@ -101,6 +101,12 @@ if __package__ in {None, ""}:  # pragma: no cover - CLI import shim
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import match_signatures  # noqa: E402
+from controller import (  # noqa: E402
+    Action,
+    ActionKind,
+    Verdict,
+    Verification,
+)
 from proof_artifacts import (  # noqa: E402
     REQUIRED_TRANSITION_FIELDS,
     resolve_contained_artifact,
@@ -319,6 +325,44 @@ def _resolve_seed_target(repo_root: Path, target: str) -> Path:
             "path_containment",
             f"WRITE target must be `scripts/seed_<name>.py`: {target!r}",
         )
+    return resolved
+
+
+def _resolve_contained_input(repo_root: Path, target: str) -> Path:
+    """Resolve an existing repository file a proposal is allowed to name.
+
+    Same containment discipline as `proof_artifacts.resolve_contained_artifact`
+    (forward slashes only, relative only, no escape), plus the rule this module
+    adds everywhere: `data/` is not an input either. A proposal that could read
+    a corpus file could smuggle corpus bytes into a staged record and make them
+    look like the candidate's own.
+    """
+
+    if "\\" in target:
+        raise Refusal(
+            "path_containment",
+            f"proposal paths must use forward slashes: {target!r}",
+        )
+    if Path(target).is_absolute():
+        raise Refusal(
+            "path_containment",
+            f"proposal path must be repository-relative: {target!r}",
+        )
+    resolved = (repo_root.resolve() / target).resolve()
+    try:
+        relative = resolved.relative_to(repo_root.resolve())
+    except ValueError:
+        raise Refusal(
+            "path_containment",
+            f"proposal path escapes the repository: {target!r}",
+        ) from None
+    if relative.as_posix().split("/")[0] == "data":
+        raise Refusal(
+            "path_containment",
+            f"the durable store is not a proposal input: {target!r}",
+        )
+    if not resolved.is_file():
+        raise Refusal("path_containment", f"proposal does not exist: {target!r}")
     return resolved
 
 
@@ -917,6 +961,110 @@ def _gate(
 # --------------------------------------------------------------------------
 # CLI
 # --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# The controller adapter
+#
+# `ActionKind.WRITE` has been vocabulary since v0.5 with nothing behind it,
+# because the obvious adapter is a category error: a verifier that returned
+# PROVEN with a next state for "add this to the corpus" would make a PROPOSAL
+# look like an accepted step, which is the one thing this item exists to
+# prevent.
+#
+# The way out is to be exact about what the action is. `WRITE(proposal)` does
+# not mean "add this knowledge"; it means "put this proposal on the table". So
+# the state the controller advances is a RECEIPT LEDGER -- record ids and
+# outcomes, no corpus content, no node, no seed source -- and accepting a WRITE
+# means a receipt now exists, not that anything was learned. A refused
+# candidate leaves the ledger untouched, exactly like every other refused
+# branch in `controller.py`.
+#
+# The rung mapping follows the same discipline: a staged CANDIDATE is PROVEN
+# (a machine-checked proof carried it through every gate), a staged REVIEW
+# REQUEST is VERIFIED (a corpus-level assertion earned a human's attention, no
+# more), and everything else is REFUSED. What advances is the ledger; the
+# corpus is asserted byte-identical by the same digest the receipt carries.
+# --------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class WriteStagingState:
+    """A ledger of receipts. Deliberately incapable of holding knowledge."""
+
+    receipts: tuple[tuple[str, str], ...] = ()
+
+    def with_receipt(self, record_id: str, outcome: str) -> "WriteStagingState":
+        return WriteStagingState(self.receipts + ((record_id, outcome),))
+
+
+def write_action(proposal: str) -> Action:
+    """`WRITE(proposal)` -- stage the proposal at this repository-relative path."""
+
+    return Action.build(ActionKind.WRITE, "stage", {"proposal": proposal})
+
+
+class WriteStagingVerifier:
+    """Controller adapter for `ActionKind.WRITE`. Stages; never promotes."""
+
+    name = "write-staging"
+
+    def __init__(self, repo_root: Path = REPO_ROOT, staging_dir: Path | None = None):
+        self.repo_root = repo_root.resolve()
+        self.staging_dir = staging_dir
+
+    def state_key(self, state: WriteStagingState) -> str:
+        return repr(state.receipts)
+
+    def evaluate(
+        self, state: WriteStagingState, action: Action
+    ) -> Verification[WriteStagingState]:
+        if action.kind is not ActionKind.WRITE:
+            return Verification(
+                Verdict.REFUSED,
+                f"{self.name} evaluates WRITE only, got {action.kind.value}",
+            )
+        proposal = action.argument("proposal")
+        if not proposal:
+            return Verification(
+                Verdict.REFUSED, "WRITE requires a `proposal` argument"
+            )
+        try:
+            path = _resolve_contained_input(self.repo_root, proposal)
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            candidate = candidate_from_json(payload, self.repo_root)
+        except Refusal as refusal:
+            return Verification(Verdict.REFUSED, str(refusal))
+        except (OSError, UnicodeError, json.JSONDecodeError, KeyError) as exc:
+            return Verification(
+                Verdict.REFUSED, f"proposal is unreadable: {exc}"
+            )
+
+        record = stage_write(candidate, self.repo_root, self.staging_dir)
+        evidence = (
+            f"record_id={record.record_id}",
+            f"outcome={record.outcome}",
+            f"durable_byte_identical="
+            f"{record.durable_digest_before == record.durable_digest_after}",
+        )
+        if record.outcome == REFUSED:
+            detail = record.refusal["check"] if record.refusal else "refused"
+            return Verification(
+                Verdict.REFUSED,
+                f"candidate refused at {detail}",
+                evidence=evidence,
+            )
+        verdict = (
+            Verdict.PROVEN
+            if record.outcome == STAGED_CANDIDATE
+            else Verdict.VERIFIED
+        )
+        return Verification(
+            verdict,
+            f"{record.outcome}: a receipt exists; nothing is promoted",
+            next_state=state.with_receipt(record.record_id, record.outcome),
+            evidence=evidence,
+        )
 
 
 def candidate_from_json(payload: dict, repo_root: Path) -> WriteCandidate:

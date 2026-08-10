@@ -248,6 +248,10 @@ durable byte-identity; VERIFIED stages a content-free review request;
 CONJECTURED and frame-local are REFUSED. Refusals write a deterministic,
 diffable receipt and leave `data/` byte-identical, asserted by digest on every
 path. Nothing accepts — `approval_granted` is always empty.
+`ActionKind.WRITE` gains its first adapter (`WriteStagingVerifier`) and runs in
+the ordinary controller loop; the state it advances is a receipt ledger of
+`(record_id, outcome)` pairs, so an accepted WRITE means a receipt exists, not
+that anything was learned.
 
 The two limits: correspondence certifies STRUCTURE, and 12 of the 15
 translatable links have a committed structural twin that declares the same
