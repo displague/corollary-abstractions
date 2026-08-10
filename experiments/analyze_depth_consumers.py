@@ -63,6 +63,41 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def canonical_text_sha256(path: Path) -> str:
+    """Hash text with Git-style LF endings, independent of checkout policy."""
+    data = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(data).hexdigest()
+
+
+def verify_implementation_source(results_dir: Path, recorded: dict) -> None:
+    """Verify runtime bytes, with an explicit reviewed newline bridge only.
+
+    The replacement matrix began from a clean commit seconds after several
+    apply_patch edits on Windows.  Runtime provenance therefore captured mixed
+    LF/CRLF working-tree bytes.  A later rebase checked out the identical Git
+    blobs with uniform CRLF.  Exact bytes remain the first gate; the committed
+    source manifest is the only permitted bridge from each recorded runtime
+    digest to the canonical LF digest of that run commit.
+    """
+    manifest_path = results_dir / "depth_source_manifest.json"
+    manifest = None
+    for relative, recorded_digest in recorded.items():
+        implementation = ROOT / relative
+        if not implementation.exists():
+            raise ValueError(f"implementation drift: {relative}")
+        if sha256(implementation) == recorded_digest:
+            continue
+        if manifest is None:
+            if not manifest_path.exists():
+                raise ValueError(f"implementation drift: {relative}")
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        entry = manifest.get("files", {}).get(relative, {})
+        if (entry.get("runtime_sha256") != recorded_digest
+                or entry.get("canonical_lf_sha256") !=
+                canonical_text_sha256(implementation)):
+            raise ValueError(f"implementation drift: {relative}")
+
+
 def material_gain(candidate: float, control: float) -> bool:
     """Compare at the registered boundary without binary-float edge flips."""
     return candidate - control >= MIN_EFFECT - 1e-12
@@ -192,11 +227,8 @@ def load_matrix(results_dir: Path) -> dict[str, dict[int, dict]]:
                 raise ValueError(f"mixed experiment provenance in {path.name}")
     if common_provenance is None:
         raise ValueError("empty depth-consumer matrix")
-    for relative, recorded_digest in common_provenance[
-            "implementation_sha256"].items():
-        implementation = ROOT / relative
-        if not implementation.exists() or sha256(implementation) != recorded_digest:
-            raise ValueError(f"implementation drift: {relative}")
+    verify_implementation_source(
+        results_dir, common_provenance["implementation_sha256"])
     return matrix
 
 

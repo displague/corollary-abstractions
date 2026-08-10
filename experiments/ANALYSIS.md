@@ -1400,6 +1400,16 @@ fired across all 15 rows. Maximum reserved memory was 5,028,970,496 bytes,
 maximum whole-device footprint 6,387,466,240 bytes, and final evaluation added
 at most 2,097,152 bytes over the train/validation device high-water mark.
 
+Post-run integration exposed a provenance edge rather than a model result:
+the raw implementation digests bound Windows working-tree bytes with mixed
+LF/CRLF endings created by patching, while rebase checked out the same Git
+content with uniform CRLF. Exact raw bytes remain the first analyzer gate.
+`depth_source_manifest.json` is an explicit reviewed bridge from each recorded
+runtime digest to the canonical LF digest at clean run commit `25db073`; the
+fallback fires only when both sides match, and forged/missing bridge controls
+refuse. Future runs should bind Git blob ids or canonical text hashes at launch
+so checkout policy never needs a post-run bridge.
+
 **Verdict:** preserve recurrence in address construction and freeze the
 consumer expansion. “Iteration generalizes” remains supported at the address
 boundary; “add recurrence wherever depth is consumed” is refuted. Next work

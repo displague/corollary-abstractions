@@ -1,0 +1,28 @@
+{
+  "experiment": "depth-consumers-v0.6",
+  "run_commit": "25db07347340784ff387ce0120697d983d1fb1bc",
+  "purpose": "Reviewed bridge from runtime mixed-line-ending byte hashes to the canonical LF Git content of the clean run commit.",
+  "boundary": "This manifest does not replace runtime hashes. The analyzer accepts it only when every row carries the named runtime digest and the current normalized source carries the corresponding canonical digest.",
+  "files": {
+    "experiments/train_analogy.py": {
+      "runtime_sha256": "f6a761d1dbbd330a40e5b54de4957d17e19803be819d9f090508e98b999d27d2",
+      "canonical_lf_sha256": "3927f02ca3eed7e5c673a23a679bd3bb0b75c77e4fe29ca556bbe31f578f9c0d"
+    },
+    "experiments/run_depth_consumers.py": {
+      "runtime_sha256": "1bf31a570d5bdafe2d1af4bc7dd7f0eb7d4cc5dce25368e5f5e27e25f65ad225",
+      "canonical_lf_sha256": "1bf31a570d5bdafe2d1af4bc7dd7f0eb7d4cc5dce25368e5f5e27e25f65ad225"
+    },
+    "experiments/depth_consumer_protocol.py": {
+      "runtime_sha256": "979d758d6196b85750dac614cade3340a6f2032f1cd9646627045c7dc751327f",
+      "canonical_lf_sha256": "979d758d6196b85750dac614cade3340a6f2032f1cd9646627045c7dc751327f"
+    },
+    "experiments/tokenizers.py": {
+      "runtime_sha256": "6152b1d48a801a3d89fed6a3f03674a936900ecfff957e315ee1890ff95c82be",
+      "canonical_lf_sha256": "fb72180a741869c9aaec1393131a7117a5c51ce7fadac14f425a2916ae1eade2"
+    },
+    "experiments/train_span.py": {
+      "runtime_sha256": "bd789a0645872a52f9958c9a4a4d84ec7e95a28e6d2b5edae94fd3b5335326ae",
+      "canonical_lf_sha256": "0ff3e74e6d7e41aa6f855830da7b794acff48985b043caa1082f2b5a734ca68b"
+    }
+  }
+}

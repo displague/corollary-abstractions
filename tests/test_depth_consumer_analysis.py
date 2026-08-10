@@ -331,6 +331,40 @@ class DepthConsumerAnalysisTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "implementation drift"):
                 adjudicate(root)
 
+    def test_reviewed_newline_bridge_accepts_only_bound_runtime_digest(
+            self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_matrix(root)
+            relative = "experiments/analyze_depth_consumers.py"
+            runtime_digest = "f" * 64
+            canonical_digest = hashlib.sha256(
+                (ROOT / relative).read_bytes().replace(b"\r\n", b"\n")
+            ).hexdigest()
+            for arm in ARMS:
+                for seed in SEEDS:
+                    path = root / f"depth_{arm}_s{seed}.json"
+                    row = json.loads(path.read_text(encoding="utf-8"))
+                    row["run_provenance"]["implementation_sha256"] = {
+                        relative: runtime_digest}
+                    path.write_text(json.dumps(row), encoding="utf-8")
+            (root / "depth_source_manifest.json").write_text(json.dumps({
+                "files": {relative: {
+                    "runtime_sha256": runtime_digest,
+                    "canonical_lf_sha256": canonical_digest,
+                }},
+            }), encoding="utf-8")
+            adjudicate(root)
+
+            manifest = json.loads(
+                (root / "depth_source_manifest.json").read_text(
+                    encoding="utf-8"))
+            manifest["files"][relative]["runtime_sha256"] = "e" * 64
+            (root / "depth_source_manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "implementation drift"):
+                adjudicate(root)
+
     def test_incomplete_matrix_refuses_instead_of_summarizing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

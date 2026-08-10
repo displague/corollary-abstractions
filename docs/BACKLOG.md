@@ -30,6 +30,13 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   per-step cliffs; add internal/composed transforms and wrapper-transfer
   shortcut baselines; use at least five seeds for small promoted effects; and
   test an alternative shared iterative mechanism before naming GRU uniquely.
+- **PARTIAL — implementation provenance is byte-strong but newline-fragile.**
+  The depth run bound raw working-tree SHA-256 values; Windows patching left
+  mixed LF/CRLF bytes, and rebase restored equivalent Git content as uniform
+  CRLF. A reviewed manifest now binds each runtime hash to the canonical LF
+  hash of run commit `25db073`, with fail-closed forgery controls. New runners
+  should record Git blob ids or canonical text hashes at launch in addition to
+  raw bytes, eliminating the need for a post-run line-ending bridge.
 - **Split grounding provenance.** The six-node provability corpus self-grounded
   at 1.000 through same-corpus BOX recurrence and broad pattern absorption.
   Report external/prior, same-corpus, recursive, and pattern channels
