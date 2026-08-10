@@ -43,6 +43,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from write_stage import (  # noqa: E402
+    ACCEPTED,
     CONJECTURED,
     PROVEN,
     REFUSED,
@@ -50,6 +51,7 @@ from write_stage import (  # noqa: E402
     STAGED_REVIEW_REQUEST,
     VERIFIED,
     WriteCandidate,
+    accept_write,
     durable_digest,
     stage_write,
     main as write_stage_main,
@@ -1628,6 +1630,259 @@ class ControllerAdapterTests(WriteStageTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.repo_data_digest = durable_digest(self.repo.root / "data")
+
+
+class AcceptedWriteApplicationTests(WriteStageTestCase):
+    """The v0.8 acceptance path: a candidate that clears every gate is APPLIED.
+
+    Every test applies changes ONLY inside the temp MiniRepo; the class-level
+    `working_tree_digest` guard confirms the real repository is untouched.
+    """
+
+    def accept(self, candidate: WriteCandidate):
+        return accept_write(candidate, self.repo.root, self.repo.staging)
+
+    def test_accept_applies_seed_and_regenerates_corpus(self) -> None:
+        """The headline: seed written, corpus regenerated, receipt left."""
+        staging, acceptance = self.accept(self.candidate())
+        self.assertEqual(staging.outcome, STAGED_CANDIDATE, staging.refusal)
+        self.assertIsNotNone(acceptance)
+        self.assertEqual(acceptance.outcome, ACCEPTED)
+
+        seed_path = self.repo.root / SEED
+        corpus_path = self.repo.root / "data" / CORPUS / "nodes.json"
+        self.assertTrue(seed_path.is_file())
+        self.assertTrue(corpus_path.is_file())
+        corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+        self.assertEqual(
+            [n["statement_id"] for n in corpus["statement_nodes"]], [STATEMENT_ID]
+        )
+        # The transition is diffable and NOT byte-identical -- applying is the
+        # point -- and the acceptance ties back to the staging audit.
+        self.assertNotEqual(
+            acceptance.corpus_digest_before, acceptance.corpus_digest_after
+        )
+        self.assertNotEqual(
+            acceptance.working_tree_digest_before,
+            acceptance.working_tree_digest_after,
+        )
+        self.assertEqual(acceptance.staging_record_id, staging.record_id)
+        self.assertEqual(
+            [v["check"] for v in acceptance.verifications],
+            [
+                "other_corpora_byte_identical",
+                "declared_node_present_and_only_it",
+                "schema_and_link_validation",
+                "matcher_delta_applied",
+            ],
+        )
+
+    def test_committed_seed_reproduces_the_applied_corpus(self) -> None:
+        """P-PA1: the applied corpus is exactly what the COMMITTED SEED
+        regenerates -- deterministic, and reproducible from the receipt's seed.
+
+        Runtime acceptance never runs the seed; this test does, to prove the
+        trusted generator is byte-identical to executing the committed seed."""
+        _staging, acceptance = self.accept(self.candidate())
+        corpus_path = self.repo.root / "data" / CORPUS / "nodes.json"
+        applied = corpus_path.read_bytes()
+        # Re-derive by RUNNING the committed seed (the generator), in the repo.
+        corpus_path.unlink()
+        result = subprocess.run(
+            [sys.executable, str(self.repo.root / SEED)],
+            cwd=str(self.repo.root),
+            capture_output=True,
+            text=True,
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(corpus_path.read_bytes(), applied)
+        # And the receipt pins the seed source that produced it.
+        self.assertEqual(
+            acceptance.seed_source_sha256,
+            hashlib.sha256(seed_source(NODE).encode("utf-8")).hexdigest(),
+        )
+
+    def test_receipt_is_written_and_records_the_transition(self) -> None:
+        _staging, acceptance = self.accept(self.candidate())
+        receipt_path = self.repo.staging / f"{acceptance.record_id}.accepted.json"
+        self.assertTrue(receipt_path.is_file())
+        payload = json.loads(receipt_path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["outcome"], ACCEPTED)
+        self.assertEqual(payload["node_id"], STATEMENT_ID)
+        self.assertEqual(payload["corpus"], CORPUS)
+        self.assertEqual(payload["seed_script"], SEED)
+        self.assertIn("does NOT certify the statement is true", payload["means"])
+        transition = payload["transition"]
+        self.assertNotEqual(
+            transition["corpus_digest_before"], transition["corpus_digest_after"]
+        )
+
+    def test_other_corpora_are_byte_identical_after_acceptance(self) -> None:
+        before = {
+            path.relative_to(self.repo.root / "data").as_posix(): path.read_bytes()
+            for path in sorted((self.repo.root / "data").rglob("nodes.json"))
+        }
+        self.accept(self.candidate())
+        after = {
+            path.relative_to(self.repo.root / "data").as_posix(): path.read_bytes()
+            for path in sorted((self.repo.root / "data").rglob("nodes.json"))
+        }
+        target = f"{CORPUS}/nodes.json"
+        self.assertNotIn(target, before)
+        self.assertIn(target, after)
+        for name, content in before.items():
+            self.assertEqual(after[name], content, f"data/{name} changed")
+
+    def test_matcher_delta_reverified_against_the_applied_data(self) -> None:
+        _staging, acceptance = self.accept(self.candidate())
+        self.assertEqual(acceptance.matcher_delta["declared"], EXPECTED_DELTA)
+        self.assertEqual(acceptance.matcher_delta["delta"]["nodes_analyzed"], 1)
+
+    def test_refused_candidate_applies_nothing_and_stays_byte_identical(
+        self,
+    ) -> None:
+        """P-PA2: a candidate the gate refuses is applied by nothing."""
+        before_tree = working_tree_digest(self.repo.root)
+        before_data = durable_digest(self.repo.root / "data")
+        staging, acceptance = self.accept(self.candidate(rung=CONJECTURED))
+        self.assertIsNone(acceptance)
+        self.assertEqual(staging.outcome, REFUSED)
+        self.assertEqual(staging.refusal["check"], "epistemic_rung")
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        self.assertFalse((self.repo.root / "data" / CORPUS).exists())
+        self.assertFalse((self.repo.root / SEED).exists())
+        # The refusal still leaves its diffable staging receipt.
+        self.assertTrue(
+            (self.repo.staging / f"{staging.record_id}.json").is_file()
+        )
+        self.assertFalse(
+            (self.repo.staging / f"{staging.record_id}.accepted.json").exists()
+        )
+
+    def test_a_targeting_the_durable_store_refusal_applies_nothing(self) -> None:
+        before_tree = working_tree_digest(self.repo.root)
+        staging, acceptance = self.accept(
+            self.candidate(seed_script="data/logic/nodes.json")
+        )
+        self.assertIsNone(acceptance)
+        self.assertEqual(staging.refusal["check"], "path_containment")
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+
+    def test_orphaning_a_co_owned_seed_is_refused_before_application(self) -> None:
+        """P-PA4: replacing `seed_logic.py` (owns logic + set theory) with a
+        single-corpus envelope is refused at the audit; nothing is applied."""
+        node = copy.deepcopy(NODE)
+        node["statement_id"] = "logic.boolean_laws.domination_laws"
+        corpus = json.loads(
+            (self.repo.root / "data" / "logic" / "nodes.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        corpus["statement_nodes"].append(node)
+        source = corpus_seed_source(corpus, "logic")
+        before_tree = working_tree_digest(self.repo.root)
+        logic_before = (self.repo.root / "data" / "logic" / "nodes.json").read_bytes()
+        settheory_before = (
+            self.repo.root / "data" / "set_theory" / "nodes.json"
+        ).read_bytes()
+        staging, acceptance = self.accept(
+            self.candidate(
+                statement_id="logic.boolean_laws.domination_laws",
+                corpus="logic",
+                seed_script="scripts/seed_logic.py",
+                seed_source=source,
+            )
+        )
+        self.assertIsNone(acceptance)
+        self.assertEqual(staging.refusal["check"], "seed_ownership")
+        self.assertIn("orphan another corpus", staging.refusal["detail"])
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        # The co-owned corpus is untouched, not merely the named one.
+        self.assertEqual(
+            (self.repo.root / "data" / "logic" / "nodes.json").read_bytes(),
+            logic_before,
+        )
+        self.assertEqual(
+            (self.repo.root / "data" / "set_theory" / "nodes.json").read_bytes(),
+            settheory_before,
+        )
+
+    def test_acceptance_never_executes_candidate_code(self) -> None:
+        """P-PA3: a candidate whose seed carries extra code beside the literal
+        envelope is refused as non-canonical; the extra code never runs and the
+        tree stays byte-identical, so acceptance applies nothing.
+
+        The extra code, had it run, would have created a sentinel file.
+        """
+        sentinel = self.repo.root / "candidate-ran.txt"
+        escape = (
+            seed_source(NODE)
+            + "\nfrom pathlib import Path as _P\n"
+            f"_P({str(sentinel)!r}).write_text('owned', encoding='utf-8')\n"
+        )
+        before_tree = working_tree_digest(self.repo.root)
+        staging, acceptance = self.accept(self.candidate(seed_source=escape))
+        self.assertIsNone(acceptance)
+        self.assertEqual(staging.refusal["check"], "declarative_seed")
+        self.assertFalse(sentinel.exists())
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertFalse((self.repo.root / SEED).exists())
+
+    def test_failed_post_application_verification_rolls_back(self) -> None:
+        """An application that cannot be verified is not an application: if a
+        post-application check raises, the seed and corpus are removed and the
+        tree is byte-identical again."""
+        from write_stage import AcceptanceError
+
+        before_tree = working_tree_digest(self.repo.root)
+        before_data = durable_digest(self.repo.root / "data")
+        with patch(
+            "write_stage._verify_application",
+            side_effect=AcceptanceError("injected post-application failure"),
+        ):
+            with self.assertRaises(AcceptanceError):
+                self.accept(self.candidate())
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        self.assertFalse((self.repo.root / "data" / CORPUS).exists())
+        self.assertFalse((self.repo.root / SEED).exists())
+
+    def test_accept_then_refuse_end_to_end(self) -> None:
+        """The gate's demonstration: one accepted end-to-end, one refused, both
+        with diffable receipts, in one MiniRepo."""
+        staging_ok, acceptance = self.accept(self.candidate())
+        self.assertEqual(acceptance.outcome, ACCEPTED)
+
+        # A second candidate, refused because it re-cites the theorem the first
+        # candidate now owns -- exclusive ownership, not skeleton identity, is
+        # what breaks the tie -- applied by nothing, its corpus never created.
+        node = copy.deepcopy(NODE)
+        node["statement_id"] = "otherdemo.boolean_laws.bad"
+        tree_after_accept = working_tree_digest(self.repo.root)
+        staging_bad, acceptance_bad = self.accept(
+            self.candidate(
+                statement_id="otherdemo.boolean_laws.bad",
+                corpus="otherdemo",
+                seed_script="scripts/seed_otherdemo.py",
+                seed_source=seed_source(node, "otherdemo"),
+            )
+        )
+        self.assertIsNone(acceptance_bad)
+        self.assertEqual(
+            staging_bad.refusal["check"], "exclusive_theorem_ownership"
+        )
+        self.assertFalse((self.repo.root / "data" / "otherdemo").exists())
+        # The accepted corpus from the first candidate is still present and the
+        # refusal changed nothing.
+        self.assertEqual(working_tree_digest(self.repo.root), tree_after_accept)
+        self.assertTrue(
+            (self.repo.staging / f"{acceptance.record_id}.accepted.json").is_file()
+        )
+        self.assertTrue(
+            (self.repo.staging / f"{staging_bad.record_id}.json").is_file()
+        )
 
 
 def _sha256(path: Path) -> str:

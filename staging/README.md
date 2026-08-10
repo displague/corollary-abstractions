@@ -131,3 +131,44 @@ receipt alone.
 `rung` is what the candidate CLAIMS. `VERIFIED` stages a review request and
 ignores everything below `rationale`; `CONJECTURED` and `frame_local: true` are
 refused outright.
+
+## Acceptance: applying a candidate (v0.8)
+
+Staging never accepts — `approval_granted` is always empty — because a machine
+may not put its own proposal in the corpus. `--apply` is the SEPARATE, explicit
+act that applies a candidate that already cleared every gate:
+
+```
+python scripts/write_stage.py <proposal.json> --apply
+```
+
+It is deliberate and is NOT reachable from the controller loop (the controller
+only advances a receipt ledger; letting it apply would be the machine promoting
+itself). Acceptance:
+
+1. runs the FULL staging audit first and applies **nothing** unless the outcome
+   is `STAGED_CANDIDATE`. A refused candidate returns its ordinary refusal
+   receipt and the working tree is byte-identical — acceptance cannot apply what
+   the gate would refuse, including a seed that would orphan a co-owned corpus
+   (refused at `seed_ownership`);
+2. writes the audited **seed** as the durable source of truth, then regenerates
+   `data/<corpus>/nodes.json` through the one trusted generator — byte-for-byte
+   what running the committed seed produces. Candidate Python is never executed;
+   the candidate never hands over `nodes.json` bytes;
+3. re-verifies in the real tree: exactly the declared node is present and nothing
+   else, every other corpus is byte-identical, schema and links validate, and the
+   declared matcher delta matches the delta now measured against the applied
+   data. Any failure rolls the tree back to byte-identical and refuses.
+
+An acceptance writes a second receipt, `<record_id>.accepted.json`, recording
+the exact transition — seed path, corpus, node id, and corpus/working-tree
+digests before and after — so the change is reproducible: the same seed source,
+materialized by the same generator, yields the recorded after-digest. Unlike a
+staging receipt the working tree is deliberately NOT byte-identical across an
+acceptance; applying the change is the point, and a human still decides whether
+to `git add` the resulting seed and corpus.
+
+**What acceptance is not.** It means a receipt exists AND the audited seed was
+written and its corpus regenerated so the declared delta was applied. It does
+**not** certify the statement is true; correspondence certifies STRUCTURE only,
+and exclusive ownership, not skeleton identity, is what breaks a twin tie.

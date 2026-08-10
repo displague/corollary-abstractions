@@ -149,6 +149,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 STAGED_CANDIDATE = "STAGED_CANDIDATE"
 STAGED_REVIEW_REQUEST = "STAGED_REVIEW_REQUEST"
 REFUSED = "REFUSED"
+ACCEPTED = "ACCEPTED"
 
 PROVEN = "PROVEN"
 VERIFIED = "VERIFIED"
@@ -690,6 +691,34 @@ def _corpus_snapshot(data_dir: Path) -> dict[str, bytes]:
     }
 
 
+def _materialize_corpus(path: Path, payload: dict) -> None:
+    """The committed generator: trusted code that writes a corpus from its
+    already-audited declarative payload.
+
+    Byte-for-byte identical to the canonical seed's own `main()`
+    (`out.write_text(json.dumps(CORPUS, indent=2, ensure_ascii=False) + '\\n')`),
+    so running the committed seed reproduces exactly these bytes -- but this is
+    trusted code parameterized by data the gate parsed, NOT the candidate seed
+    being executed. Every write of `data/*/nodes.json` this module performs, in
+    scratch and on the accept path alike, goes through here.
+    """
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _restore_snapshot(snapshot: dict[str, bytes], data_dir: Path) -> None:
+    """Write a `_corpus_snapshot` back out, e.g. to reconstruct a before-state."""
+
+    for relative, content in snapshot.items():
+        destination = data_dir / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+
+
 def _statement_ids(payload: bytes) -> list[str]:
     corpus = json.loads(payload.decode("utf-8"))
     return [node.get("statement_id", "") for node in corpus.get("statement_nodes", [])]
@@ -726,11 +755,7 @@ def _regenerate(
         raise Refusal(
             "path_containment", f"corpus target escapes scratch data: {candidate.corpus!r}"
         ) from None
-    target_path.parent.mkdir(parents=True, exist_ok=True)
-    target_path.write_text(
-        json.dumps(new_corpus, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+    _materialize_corpus(target_path, new_corpus)
     after = _corpus_snapshot(scratch / "data")
 
     for name in sorted(set(before) | set(after)):
@@ -832,18 +857,26 @@ def _scrub(text: str, *paths: Path, token: str = "<scratch>") -> str:
     return text
 
 
-def _validate(scratch: Path, repo_root: Path) -> str:
-    """Validate scratch data with validator and schema from the trusted tree."""
+def _validate_data(data_dir: Path, repo_root: Path, cwd: Path, scrub: Path) -> str:
+    """Validate a data tree with the validator and schema from the trusted tree.
+
+    `data_dir` is what is checked, `repo_root` supplies the trusted validator and
+    schema, `cwd` is the process working directory (so relative link targets
+    resolve), and `scrub` is the path removed from the receipt so it stays
+    diffable. Used for both the scratch checkout and, on the accept path, the
+    real `data/` after the transition has been applied.
+    """
+
     result = subprocess.run(
         [
             sys.executable,
             str(repo_root / "scripts" / "validate_nodes.py"),
             "--data-dir",
-            str(scratch / "data"),
+            str(data_dir),
             "--schema",
             str(repo_root / "schema" / "equation-node.schema.json"),
         ],
-        cwd=str(scratch),
+        cwd=str(cwd),
         capture_output=True,
         text=True,
         env=_subprocess_env(),
@@ -851,9 +884,14 @@ def _validate(scratch: Path, repo_root: Path) -> str:
     if result.returncode != 0:
         raise Refusal(
             "schema_and_link_validation",
-            _scrub((result.stdout + result.stderr).strip()[-800:], scratch),
+            _scrub((result.stdout + result.stderr).strip()[-800:], scrub),
         )
-    return _scrub(result.stdout.strip().splitlines()[-1], scratch)
+    return _scrub(result.stdout.strip().splitlines()[-1], scrub)
+
+
+def _validate(scratch: Path, repo_root: Path) -> str:
+    """Validate scratch data with validator and schema from the trusted tree."""
+    return _validate_data(scratch / "data", repo_root, scratch, scratch)
 
 
 # --------------------------------------------------------------------------
@@ -1512,6 +1550,315 @@ def _gate(
 
 
 # --------------------------------------------------------------------------
+# The acceptance path
+#
+# Staging never accepts, and it must not: a machine may not put its own proposal
+# in the corpus, and `stage_write` above ends with `approval_granted: []` on
+# purpose. `accept_write` is the SEPARATE, explicit act that applies a candidate
+# that already cleared every gate. It is not reachable from the controller loop
+# (that would let the machine promote itself); it is invoked deliberately, the
+# same shape as a human running the ordinary seed loop, and it carries the same
+# honesty boundary the receipt does: acceptance means "the audited seed was
+# written and its corpus regenerated by trusted code so the declared delta was
+# applied", NOT "the statement is true".
+#
+# The safety argument is by construction, and every clause is load-bearing:
+#
+#   * it runs the FULL `stage_write` audit first and applies NOTHING unless the
+#     outcome is `STAGED_CANDIDATE`. A refused candidate is returned with its
+#     diffable receipt and the working tree is byte-identical -- the accept path
+#     cannot apply anything the gate would refuse, including a seed that would
+#     orphan a co-owned corpus (refused at `seed_ownership`);
+#   * it re-derives the corpus from the SAME `candidate.seed_source` the gate
+#     audited, parsed as data by `_declarative_corpus` -- candidate Python is
+#     never executed, here or anywhere;
+#   * every byte of `data/*/nodes.json` it writes goes through
+#     `_materialize_corpus`, the one trusted generator, byte-identical to what
+#     running the committed seed would produce. The candidate never hands over
+#     corpus bytes;
+#   * after applying, it re-verifies IN THE REAL TREE: exactly the declared node
+#     is present and nothing else, every OTHER corpus is byte-identical, schema
+#     and links validate, and the declared matcher delta matches the one now
+#     measured against the applied data. Any failure rolls the tree back to
+#     byte-identical and refuses -- an application that cannot be verified is not
+#     an application.
+# --------------------------------------------------------------------------
+
+
+@dataclass
+class AcceptanceRecord:
+    """The diffable receipt for an APPLIED write. Records the exact transition.
+
+    Unlike a staging receipt, the working tree is NOT byte-identical across an
+    acceptance -- applying the seed and regenerating the corpus is the whole
+    point. The receipt therefore records the before/after digests so the applied
+    transition is visible and reproducible: the same seed source, materialized
+    by the same generator, yields the recorded after-digest.
+    """
+
+    record_id: str
+    statement_id: str
+    corpus: str
+    seed_script: str
+    outcome: str = ACCEPTED
+    staging_record_id: str = ""
+    seed_source_sha256: str = ""
+    node_id: str = ""
+    verifications: list[dict] = field(default_factory=list)
+    matcher_delta: dict | None = None
+    corpus_digest_before: str = ""
+    corpus_digest_after: str = ""
+    working_tree_digest_before: str = ""
+    working_tree_digest_after: str = ""
+    # Acceptance grants exactly one thing: the seed was written and the corpus
+    # regenerated by trusted code. It never grants that the statement is true.
+    applied: tuple[str, ...] = ()
+
+    def verified(self, check: str, detail: str) -> None:
+        self.verifications.append(
+            {"check": check, "status": "PASS", "detail": detail}
+        )
+
+    def as_dict(self) -> dict:
+        return {
+            "record_id": self.record_id,
+            "outcome": self.outcome,
+            "staging_record_id": self.staging_record_id,
+            "statement_id": self.statement_id,
+            "corpus": self.corpus,
+            "seed_script": self.seed_script,
+            "seed_source_sha256": self.seed_source_sha256,
+            "node_id": self.node_id,
+            "verifications": self.verifications,
+            "matcher_delta": self.matcher_delta,
+            "transition": {
+                "corpus_digest_before": self.corpus_digest_before,
+                "corpus_digest_after": self.corpus_digest_after,
+                "working_tree_digest_before": self.working_tree_digest_before,
+                "working_tree_digest_after": self.working_tree_digest_after,
+            },
+            "applied": list(self.applied),
+            "means": (
+                "a receipt exists AND the audited seed was written and its "
+                "corpus regenerated by trusted code so the declared delta was "
+                "applied; this does NOT certify the statement is true, and "
+                "correspondence certifies STRUCTURE only"
+            ),
+        }
+
+    def render(self) -> str:
+        return json.dumps(
+            self.as_dict(), indent=2, sort_keys=True, ensure_ascii=False
+        ) + "\n"
+
+
+class AcceptanceError(Exception):
+    """A post-application verification failed. Carries the reason; the tree is
+    rolled back to byte-identical before this is raised."""
+
+
+def accept_write(
+    candidate: WriteCandidate,
+    repo_root: Path = REPO_ROOT,
+    staging_dir: Path | None = None,
+) -> tuple[StagingRecord, AcceptanceRecord | None]:
+    """Audit a candidate and, only if it stages, APPLY it. Never applies a
+    candidate the gate would refuse.
+
+    Returns `(staging_record, acceptance_record)`. On refusal (or a VERIFIED
+    review request) the acceptance record is `None` and the working tree is
+    byte-identical, exactly as for `stage_write`. On acceptance the seed is
+    written, the corpus is regenerated by trusted code, and the acceptance
+    receipt is written beside the staging receipt in `staging/`.
+    """
+
+    repo_root = repo_root.resolve()
+
+    # 1. Full audit first. Applies nothing that the gate would not stage; a
+    #    refused candidate leaves the tree byte-identical and returns here.
+    staging_record = stage_write(candidate, repo_root, staging_dir)
+    if staging_record.outcome != STAGED_CANDIDATE:
+        return staging_record, None
+
+    working_before = staging_record.working_tree_digest_after
+    before_snapshot = _corpus_snapshot(repo_root / "data")
+    corpus_before = durable_digest(repo_root / "data")
+
+    # 2. Re-derive the corpus from the audited seed source. Trusted parse; the
+    #    candidate seed is never executed.
+    payload = _declarative_corpus(candidate.seed_source, candidate.corpus)
+
+    seed_path = _resolve_seed_target(repo_root, candidate.seed_script)
+    # Re-derive the corpus target under the same containment discipline the
+    # scratch regeneration uses, rather than trust `candidate.corpus` across a
+    # function boundary: the gate's `_CORPUS_NAME` check already ran, but this
+    # is where bytes land in the REAL tree, so a traversal must be impossible
+    # here on its own terms, not by inheritance.
+    if not _CORPUS_NAME.fullmatch(candidate.corpus):
+        raise AcceptanceError(
+            f"corpus must be a lowercase directory identifier: {candidate.corpus!r}"
+        )
+    data_dir = (repo_root / "data").resolve()
+    corpus_path = (data_dir / candidate.corpus / "nodes.json").resolve()
+    try:
+        corpus_path.relative_to(data_dir)
+    except ValueError:
+        raise AcceptanceError(
+            f"corpus target escapes data/: {candidate.corpus!r}"
+        ) from None
+    target_rel = f"{candidate.corpus}/nodes.json"
+
+    # 3. Belt-and-braces: the gate's `seed_ownership` already established a new
+    #    seed / new corpus, but acceptance is where bytes land, so re-establish
+    #    it here rather than trust a value carried across a function boundary. A
+    #    corpus that already exists is never overwritten by acceptance.
+    if corpus_path.exists():
+        raise AcceptanceError(
+            f"data/{target_rel} already exists; acceptance never overwrites a "
+            "corpus"
+        )
+    # An untracked proposed seed may pre-exist (the gate allows it); capture its
+    # bytes so rollback restores them exactly rather than leaving our overwrite.
+    seed_before = seed_path.read_bytes() if seed_path.is_file() else None
+
+    seed_written = False
+    created_corpus = False
+    try:
+        # 4. Apply through trusted code only: the seed as the source of truth,
+        #    the corpus via the one committed generator.
+        seed_path.parent.mkdir(parents=True, exist_ok=True)
+        seed_path.write_text(candidate.seed_source, encoding="utf-8")
+        seed_written = True
+        _materialize_corpus(corpus_path, payload)
+        created_corpus = True
+
+        acceptance = _verify_application(
+            candidate,
+            repo_root,
+            payload,
+            before_snapshot,
+            target_rel,
+            staging_record,
+        )
+    except Exception as exc:  # noqa: BLE001 - roll back, then re-raise
+        # An application that cannot be verified is not an application. Restore
+        # byte-identity before surfacing the failure.
+        if created_corpus:
+            corpus_path.unlink(missing_ok=True)
+            with contextlib.suppress(OSError):
+                corpus_path.parent.rmdir()
+        if seed_written:
+            if seed_before is not None:
+                seed_path.write_bytes(seed_before)
+            else:
+                seed_path.unlink(missing_ok=True)
+        _restore_snapshot(before_snapshot, repo_root / "data")
+        if working_tree_digest(repo_root) != working_before:
+            raise AcceptanceError(
+                "acceptance failed AND rollback could not restore byte-identity; "
+                f"manual review required: {type(exc).__name__}: {exc}"
+            ) from exc
+        raise
+
+    acceptance.corpus_digest_before = corpus_before
+    acceptance.corpus_digest_after = durable_digest(repo_root / "data")
+    acceptance.working_tree_digest_before = working_before
+    acceptance.working_tree_digest_after = working_tree_digest(repo_root)
+
+    if staging_dir is not None:
+        expected_staging = repo_root / "staging"
+        receipt = staging_dir / f"{acceptance.record_id}.accepted.json"
+        _write_receipt_atomic(
+            staging_dir,
+            expected_staging,
+            receipt.name,
+            acceptance.render().encode("utf-8"),
+        )
+    return staging_record, acceptance
+
+
+def _verify_application(
+    candidate: WriteCandidate,
+    repo_root: Path,
+    payload: dict,
+    before_snapshot: dict[str, bytes],
+    target_rel: str,
+    staging_record: StagingRecord,
+) -> AcceptanceRecord:
+    """Re-check the applied tree. Raises `AcceptanceError` on any discrepancy."""
+
+    acceptance = AcceptanceRecord(
+        record_id=candidate.record_id,
+        statement_id=candidate.statement_id,
+        corpus=candidate.corpus,
+        seed_script=candidate.seed_script,
+        staging_record_id=staging_record.record_id,
+        seed_source_sha256=candidate.payload()["seed_source_sha256"],
+        node_id=candidate.statement_id,
+        applied=(
+            f"wrote {candidate.seed_script}",
+            f"regenerated data/{target_rel} via the committed generator",
+        ),
+    )
+
+    after_snapshot = _corpus_snapshot(repo_root / "data")
+
+    # Every OTHER corpus byte-identical: acceptance extends its own corpus only.
+    for name in sorted(set(before_snapshot) | set(after_snapshot)):
+        if name == target_rel:
+            continue
+        if before_snapshot.get(name) != after_snapshot.get(name):
+            raise AcceptanceError(
+                f"applying the candidate changed data/{name}, which it does not "
+                "declare"
+            )
+    acceptance.verified(
+        "other_corpora_byte_identical",
+        "every corpus other than the target is byte-identical to before the "
+        "transition",
+    )
+
+    if target_rel not in after_snapshot:
+        raise AcceptanceError(f"data/{target_rel} was not written")
+    applied_corpus = json.loads(after_snapshot[target_rel].decode("utf-8"))
+    if applied_corpus != payload:
+        raise AcceptanceError(
+            f"data/{target_rel} does not equal the audited declarative payload"
+        )
+    ids = [
+        node.get("statement_id", "")
+        for node in applied_corpus.get("statement_nodes", [])
+    ]
+    if ids != [candidate.statement_id]:
+        raise AcceptanceError(
+            f"the applied corpus contains {ids or 'nothing'}, but the candidate "
+            f"declares exactly {candidate.statement_id}"
+        )
+    acceptance.verified(
+        "declared_node_present_and_only_it",
+        f"the regenerated corpus contains exactly {candidate.statement_id}",
+    )
+
+    detail = _validate_data(
+        repo_root / "data", repo_root, repo_root, repo_root
+    )
+    acceptance.verified("schema_and_link_validation", detail)
+
+    with tempfile.TemporaryDirectory(prefix="write-accept-") as temporary:
+        before_data = Path(temporary) / "data"
+        _restore_snapshot(before_snapshot, before_data)
+        measured = _measure_matcher_delta(
+            before_data, repo_root / "data", candidate.statement_id
+        )
+    measured["declared"] = candidate.expected_matcher_delta
+    acceptance.matcher_delta = measured
+    acceptance.verified(
+        "matcher_delta_applied", _compare_declared_delta(candidate, measured)
+    )
+    return acceptance
+
+
+# --------------------------------------------------------------------------
 # CLI
 # --------------------------------------------------------------------------
 
@@ -1687,11 +2034,32 @@ def main() -> int:
     parser.add_argument("proposal", type=Path, help="JSON WRITE proposal")
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument("--staging-dir", type=Path)
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help=(
+            "APPLY a candidate that clears every gate: write its seed and "
+            "regenerate its corpus. Refusal stays byte-identical. Deliberate "
+            "and separate from staging; never reachable from the controller."
+        ),
+    )
     args = parser.parse_args()
     staging_dir = args.staging_dir or args.repo_root / "staging"
 
     payload = json.loads(read_regular_file_once(args.proposal).decode("utf-8"))
     candidate = candidate_from_json(payload, args.repo_root)
+    if args.apply:
+        record, acceptance = accept_write(candidate, args.repo_root, staging_dir)
+        if acceptance is None:
+            print(record.render())
+            print(f"Refused; nothing applied. Receipt: "
+                  f"{staging_dir / (record.record_id + '.json')}")
+            return 1
+        print(acceptance.render())
+        print(f"Applied. Seed: {args.repo_root / candidate.seed_script}")
+        print(f"Corpus: {args.repo_root / 'data' / candidate.corpus / 'nodes.json'}")
+        print(f"Receipt: {staging_dir / (acceptance.record_id + '.accepted.json')}")
+        return 0
     record = stage_write(candidate, args.repo_root, staging_dir)
     print(record.render())
     print(f"Receipt: {staging_dir / (record.record_id + '.json')}")
