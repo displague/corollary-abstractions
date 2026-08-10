@@ -271,6 +271,16 @@ def initial_goal_state(transitions: tuple[dict, ...]) -> str:
     instead would let an attacker who can reorder rows nominate a different
     proposition as the thing proved, so the rule is deliberately independent of
     row order; ambiguity fails closed.
+
+    Order-independent is NOT tamper-proof, and the difference matters. Adding a
+    row whose `stateAfter` is the real opening goal demotes it from root and
+    promotes a decoy in its place. That cannot be detected structurally --
+    unlabelled non-root states occur legitimately (`intro h` on
+    `BooleanLaws.modus_ponens` produces one) -- so the defence is the artifact
+    DIGEST PIN, not this function: `scripts/write_stage.py` refuses a candidate
+    whose artifact bytes do not match the pin, and `scripts/retrieval.py` marks
+    an unpinned artifact untrusted. Row insertion is byte-level tampering and
+    is caught there.
     """
 
     produced = {row["stateAfter"] for row in transitions}

@@ -409,6 +409,11 @@ class GateMatrixTests(WriteStageTestCase):
         record = self.stage(self.candidate(seed_source=seed_source(node)))
         self.assertRefusedBy(record, "semantic_correspondence")
         self.assertIn("MISMATCH", record.refusal["detail"])
+        # "A diffable receipt explaining why" is worth little if the MISMATCH
+        # receipt omits the skeletons that mismatched.
+        self.assertEqual(record.correspondence["verdict"], "MISMATCH")
+        self.assertTrue(record.correspondence["theorem_skeleton"])
+        self.assertTrue(record.correspondence["considered_forms"])
 
     def test_proven_with_an_untranslatable_theorem_fails_closed(self) -> None:
         """UNTRANSLATABLE is reported by the lint but REFUSED by the gate."""
@@ -439,6 +444,19 @@ class MaliciousPathTests(WriteStageTestCase):
         self.assertRefusedBy(record, "path_containment")
         self.assertIn("durable store is never a WRITE target",
                       record.refusal["detail"])
+
+    def test_receipts_may_not_be_written_into_the_durable_store(self) -> None:
+        """Self-review: every candidate-controlled path was contained; the
+        caller-supplied receipt directory was not."""
+        before = durable_digest(self.repo.root / "data")
+        for target in (
+            self.repo.root / "data",
+            self.repo.root / "data" / "logic",
+            self.repo.root / "data" / "new" / "receipts",
+        ):
+            with self.subTest(target=target.name), self.assertRaises(ValueError):
+                stage_write(self.candidate(), self.repo.root, target)
+        self.assertEqual(durable_digest(self.repo.root / "data"), before)
 
     def test_refusal_leaves_the_durable_store_byte_identical(self) -> None:
         before = durable_digest(self.repo.root / "data")
@@ -847,6 +865,21 @@ class ValidationAndDeltaTests(WriteStageTestCase):
         self.assertRefusedBy(record, "structural_unambiguity")
         self.assertIn("logic.boolean_laws.idempotence", record.refusal["detail"])
         self.assertIn("settheory.boolean_laws.idempotence", record.refusal["detail"])
+
+    def test_delta_declared_with_the_wrong_type_is_refused(self) -> None:
+        """Python's `True == 1`, and a JSON proposal is where `true` arrives."""
+        for bad in (
+            dict(EXPECTED_DELTA, nodes_analyzed=True),
+            dict(EXPECTED_DELTA, shape_groups="0"),
+            dict(EXPECTED_DELTA, typed_groups=0.0),
+            dict(EXPECTED_DELTA, new_typed_twin_partners="none"),
+            dict(EXPECTED_DELTA, new_typed_twin_partners=[1]),
+        ):
+            with self.subTest(bad=sorted(bad.items(), key=repr)):
+                self.assertRefusedBy(
+                    self.stage(self.candidate(expected_matcher_delta=bad)),
+                    "matcher_delta_prediction",
+                )
 
     def test_partial_delta_declaration_is_refused(self) -> None:
         self.assertRefusedBy(

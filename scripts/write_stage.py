@@ -619,6 +619,26 @@ def _compare_declared_delta(candidate: WriteCandidate, measured: dict) -> str:
             "matcher_delta_prediction",
             f"declared delta omits: {', '.join(missing)}",
         )
+    # Types are checked before values because Python's `True == 1` would let a
+    # declaration of `true` satisfy a measured delta of 1, and a JSON proposal
+    # is exactly where that spelling arrives. `bool` is excluded explicitly:
+    # `isinstance(True, int)` is also true.
+    for key in sorted(_MATCHER_DELTA_KEYS - {"new_typed_twin_partners"}):
+        value = declared[key]
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise Refusal(
+                "matcher_delta_prediction",
+                f"declared delta `{key}` must be an integer, got "
+                f"{type(value).__name__}",
+            )
+    partners = declared["new_typed_twin_partners"]
+    if not isinstance(partners, (list, tuple)) or not all(
+        isinstance(item, str) for item in partners
+    ):
+        raise Refusal(
+            "matcher_delta_prediction",
+            "declared `new_typed_twin_partners` must be a list of statement ids",
+        )
     actual = {key: measured["delta"][key] for key in _MATCHER_DELTA_KEYS}
     normalized = {
         key: (
@@ -744,7 +764,12 @@ def _check_unowned(candidate: WriteCandidate, repo_root: Path) -> str:
     return f"{candidate.reference} is cited by no committed statement"
 
 
-def _check_correspondence(node: dict, candidate: WriteCandidate, repo_root: Path) -> dict:
+def _check_correspondence(
+    node: dict,
+    candidate: WriteCandidate,
+    repo_root: Path,
+    record: "StagingRecord",
+) -> dict:
     links = [
         link for link in node.get("verified_by", []) or [] if isinstance(link, dict)
     ]
@@ -769,6 +794,9 @@ def _check_correspondence(node: dict, candidate: WriteCandidate, repo_root: Path
         if other.get("statement_id")
     }
     result = check_link(node, link, repo_root, corpus_forms)
+    # Recorded BEFORE any refusal: "a diffable receipt explaining why" is worth
+    # little if the MISMATCH receipt omits the skeletons that mismatched.
+    record.correspondence = result.as_dict()
     if result.verdict != CORRESPONDS:
         raise Refusal(
             "semantic_correspondence",
@@ -807,6 +835,18 @@ def stage_write(
 
     repo_root = repo_root.resolve()
     data_dir = repo_root / "data"
+    if staging_dir is not None:
+        # Self-review: every candidate-controlled path is contained, but the
+        # CALLER-supplied receipt directory was not, and a receipt written into
+        # `data/` would be this module writing to the durable store by its own
+        # hand. A misconfigured caller is a programmer error, not a candidate
+        # to be judged, so it raises rather than producing a REFUSED record.
+        resolved_staging = staging_dir.resolve()
+        if resolved_staging == data_dir or data_dir in resolved_staging.parents:
+            raise ValueError(
+                f"staging directory may not live under the durable store: "
+                f"{staging_dir}"
+            )
     record = StagingRecord(
         record_id=candidate.record_id,
         statement_id=candidate.statement_id,
@@ -919,7 +959,7 @@ def _gate(
         node, detail = _regenerate(candidate, repo_root, scratch)
         record.passed("scratch_regeneration", detail)
         record.passed("regeneration_confinement", detail)
-        record.correspondence = _check_correspondence(node, candidate, repo_root)
+        _check_correspondence(node, candidate, repo_root, record)
         record.passed(
             "semantic_correspondence",
             f"CORRESPONDS via the candidate's "
