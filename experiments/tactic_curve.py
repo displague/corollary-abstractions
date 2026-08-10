@@ -202,6 +202,7 @@ from curve_search import (  # noqa: E402
     run_theorem,
     solved_at,
     solved_by_time,
+    state_leakage,
     training_schema_counts,
     verify_budget_monotonicity,
 )
@@ -425,6 +426,11 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=0,
                         help="pilot mode: only the first N theorems")
     parser.add_argument("--no-learned", action="store_true")
+    parser.add_argument(
+        "--leakage-out", type=Path,
+        default=ROOT / "experiments" / "results" / "proof_curve_leakage.json",
+        help="separate file: state-level overlap with the training extraction",
+    )
     args = parser.parse_args()
 
     theorems = theorem_set.load(args.theorems)
@@ -500,9 +506,29 @@ def main() -> None:
                               PROPOSAL_BUDGETS[MIDDLE]),
                 )
             )
+        # State-level holdout control.  Written to its OWN file so that adding
+        # it can never perturb an already-published curve.
+        leakage = state_leakage(
+            pool, theorems, SyntaxRanker(),
+            theorem_set.training_states(),
+            args.max_nodes, args.max_proposals,
+        )
     finally:
         pool.close()
     elapsed = time.perf_counter() - started
+    if args.leakage_out is not None:
+        args.leakage_out.parent.mkdir(parents=True, exist_ok=True)
+        args.leakage_out.write_text(
+            json.dumps(leakage, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            f"state-leakage control: "
+            f"{leakage['states_in_training_extraction']} of "
+            f"{leakage['distinct_states_across_set']} distinct live states "
+            f"appear among {leakage['training_states_compared']} extracted "
+            f"training states -> {args.leakage_out}"
+        )
 
     families = sorted({item.family for item in selected})
     arms = [ranker.name for ranker in rankers]

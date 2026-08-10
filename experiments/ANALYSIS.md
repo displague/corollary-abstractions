@@ -1897,10 +1897,25 @@ every transition; a refused tactic supplied no next state.
 
 ## Setup
 
-**Held-out is checked, not labelled.** No theorem id appears in
-`prover/sample_triples.json` and no proposition appears as any extracted
-state (`tests/test_proof_curve.py`), so the v0.6 checkpoints cannot have seen
-them. Every theorem carries a *witness* inside the eight registered schemas;
+**Held-out is checked, not labelled — at two levels.** No theorem id appears in
+`prover/sample_triples.json` and no proposition appears as any extracted state
+(`tests/test_proof_curve.py`). That is holdout by theorem identity and by
+statement, which is *not* the same as state-level novelty: two different
+theorems can pass through the same rendered proof state, and the v0.6
+checkpoint was trained on rendered `stateBefore` strings. So the second level
+is measured live rather than assumed —
+`experiments/results/proof_curve_leakage.json`: **0 of the 149 distinct proof
+states search actually visits across the whole set appear among the 137
+extracted training states.** The checkpoints had seen neither these theorems
+nor any state they pass through.
+
+The control ships in its own file on purpose: adding it after publication must
+not perturb `proof_curve.json`, and the set file itself could not be amended to
+describe it, because a published curve names `theorems_v1.json`'s sha256 and the
+versioning rule forbids editing v1. The rule bit its own author on the first
+occasion it could, which is the point of writing it down before it was needed.
+
+Every theorem carries a *witness* inside the eight registered schemas;
 the witness is never shown to a search arm and exists only so that an unsolved
 run reads as a ranking failure rather than an impossible target.
 

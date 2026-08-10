@@ -297,13 +297,18 @@ class BackendPool:
 
     def get(self, backend: Backend) -> PantographBackend:
         if backend.name not in self._backends:
-            if backend.lean_path is not None and not backend.lean_path.is_dir():
+            if backend.lean_path is not None and not any(
+                backend.lean_path.glob("*.olean")
+            ):
                 # Without this, Pantograph fails with a generic "Server failed
-                # to emit ready signal" that reads like a version mismatch.
-                # Name the actual cause.
+                # to emit ready signal" whose own text blames a Lean version
+                # mismatch.  Checking for compiled oleans (not merely for the
+                # directory) also catches a half-finished or cleaned build,
+                # which is the case that would otherwise start a server that
+                # cannot resolve the imports.
                 raise RuntimeError(
-                    f"backend {backend.name!r} needs a built Lake project: "
-                    f"{backend.lean_path} does not exist. Run `lake build` in "
+                    f"backend {backend.name!r} needs a built Lake project: no "
+                    f"*.olean under {backend.lean_path}. Run `lake build` in "
                     f"{backend.project} first (prover/README.md)."
                 )
             self._backends[backend.name] = PantographBackend(
@@ -331,6 +336,55 @@ def solved_at(record: RunRecord, nodes: int, proposals: int) -> bool:
 
 def solved_by_time(record: RunRecord, seconds: float) -> bool:
     return record.solved and record.seconds <= seconds
+
+
+def state_leakage(
+    pool: "BackendPool",
+    theorem_set: TheoremSet,
+    ranker: SchemaRanker,
+    training_states: frozenset[str],
+    max_nodes: int,
+    max_proposals: int,
+) -> dict[str, object]:
+    """How much of what search actually SEES was in the training extraction?
+
+    The theorem set's holdout is by theorem identity and by statement, both
+    checked.  That is not the same as state-level novelty: two different
+    theorems can pass through the same rendered proof state, and the v0.6
+    checkpoint was trained on rendered ``stateBefore`` strings.  Claiming "the
+    checkpoint cannot have seen these" without measuring the intermediate
+    states would be exactly the kind of unfalsifiable assertion AGENTS.md rule
+    5 says to flag.  So it is measured, live, and reported as a number.
+    """
+    seen: set[str] = set()
+    per_theorem: list[dict[str, object]] = []
+    for theorem in theorem_set.theorems:
+        verifier = pool.verifier(theorem_set.backend_of(theorem))
+        policy = RankedSchemaPolicy(ranker)
+        initial = verifier.start(theorem.id, theorem.proposition)
+        result = SearchController[LiveLeanState](max_nodes, max_proposals).run(
+            initial, policy, verifier,
+            lambda state: state.goal_text == SOLVED_GOAL_TEXT,
+        )
+        states = {entry.state_before.goal_text for entry in result.trace}
+        states.add(initial.goal_text)
+        overlap = states & training_states
+        seen |= states
+        per_theorem.append(
+            {
+                "theorem": theorem.id,
+                "distinct_states": len(states),
+                "states_in_training_extraction": len(overlap),
+                "examples": sorted(overlap)[:3],
+            }
+        )
+    return {
+        "arm": ranker.name,
+        "distinct_states_across_set": len(seen),
+        "states_in_training_extraction": len(seen & training_states),
+        "training_states_compared": len(training_states),
+        "per_theorem": per_theorem,
+    }
 
 
 def verify_budget_monotonicity(

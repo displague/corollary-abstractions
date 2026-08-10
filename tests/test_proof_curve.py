@@ -94,6 +94,27 @@ class TheoremSetTests(unittest.TestCase):
                 self.assertFalse(backend.needs_project, theorem.id)
 
 
+    def test_state_level_leakage_control_stays_at_zero(self) -> None:
+        """Theorem-identity holdout is not state-level holdout; measure both.
+
+        The live control writes ``proof_curve_leakage.json``.  This regression
+        exists so that a future theorem set cannot quietly introduce a proof
+        state the v0.6 checkpoint was trained on -- which is the one way a
+        "held out" label could still be false after every other check passes.
+        """
+        report = ROOT / "experiments" / "results" / "proof_curve_leakage.json"
+        if not report.exists():
+            self.skipTest("run experiments/tactic_curve.py to produce it")
+        payload = json.loads(report.read_text(encoding="utf-8"))
+        self.assertGreater(payload["distinct_states_across_set"], 0)
+        self.assertGreater(payload["training_states_compared"], 0)
+        self.assertEqual(payload["states_in_training_extraction"], 0)
+        for row in payload["per_theorem"]:
+            self.assertEqual(
+                row["states_in_training_extraction"], 0, row["theorem"]
+            )
+
+
 class FrequencyBaselineTests(unittest.TestCase):
     def test_extraction_schema_matches_the_v06_mapper_row_for_row(self) -> None:
         """The frequency arm is only v0.6's winner if the mapping is v0.6's."""

@@ -1,0 +1,152 @@
+{
+  "arm": "syntax",
+  "distinct_states_across_set": 149,
+  "states_in_training_extraction": 0,
+  "training_states_compared": 137,
+  "per_theorem": [
+    {
+      "theorem": "curve.conjunction.and_commute",
+      "distinct_states": 8,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.conjunction.and_left",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.conjunction.and_nested_middle",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.conjunction.and_reassociate",
+      "distinct_states": 8,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.conjunction.and_duplicate",
+      "distinct_states": 23,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.conjunction.and_with_true",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.identity",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.constant",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.pair_from_arrows",
+      "distinct_states": 1,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.triple_middle",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.mixed_premises",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.chain_to_triple",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.implication_chain.chain_swap_pair",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.disjunction.or_intro_left",
+      "distinct_states": 4,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.disjunction.or_intro_right",
+      "distinct_states": 5,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.disjunction.or_from_and",
+      "distinct_states": 4,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.disjunction.or_both_sides",
+      "distinct_states": 29,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.disjunction.or_choose_from_and",
+      "distinct_states": 28,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.both_commute",
+      "distinct_states": 8,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.both_left",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.holds_to_either",
+      "distinct_states": 4,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.both_diagonal",
+      "distinct_states": 2,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.either_from_both",
+      "distinct_states": 4,
+      "states_in_training_extraction": 0,
+      "examples": []
+    },
+    {
+      "theorem": "curve.project_import.both_nested",
+      "distinct_states": 8,
+      "states_in_training_extraction": 0,
+      "examples": []
+    }
+  ]
+}
