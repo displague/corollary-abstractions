@@ -55,6 +55,7 @@ from __future__ import annotations
 import json
 import sys
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 
@@ -257,7 +258,8 @@ class PIH7SessionLoopDetection(unittest.TestCase):
         # no run (run_miss_chain was never called for it).
         self.assertIsNone(cycle_event.run)
         self.assertIn("loop detection", cycle_event.detail)
-        self.assertIn("pruned", cycle_event.detail)
+        self.assertIn("visited-dead record", cycle_event.detail)
+        self.assertIn("without re-expansion", cycle_event.detail)
 
         # It fired at hop 2 (index 2): hop0 alpha DEAD, hop1 beta DEAD, hop2 the
         # revisit of alpha's pair. This is the "second visit" P-IH7 names.
@@ -287,7 +289,12 @@ class PIH7SessionLoopDetection(unittest.TestCase):
         alpha_dead, beta_dead, cycle = result.events
         self.assertGreater(alpha_dead.pruning_count, 0)
         self.assertGreater(beta_dead.pruning_count, alpha_dead.pruning_count)
-        # The refusal cites the accumulated cross-hop evidence, not an empty set.
+        # This asserts only that pruning genuinely ACCUMULATES across hops (it
+        # does — the count is monotone and non-empty at the cycle hop). It is
+        # NOT what names the cycle: a review of this slice confirmed the CYCLE
+        # decision is driven by the visited-dead record, and the pruning count
+        # is carried for evidence/cost, not as the refusal's trigger
+        # (see test_cycle_is_named_without_pruning).
         self.assertEqual(cycle.pruning_count, beta_dead.pruning_count)
         self.assertGreater(cycle.pruning_count, 0)
         evidence = self.verifier.session_pruning_evidence(self.session.session_id)
@@ -425,6 +432,110 @@ class PIH7SessionLoopDetection(unittest.TestCase):
             [e.outcome for e in result.events],
             [DispatchOutcome.DEAD, DispatchOutcome.MATERIALIZED],
         )
+
+
+class DispatcherReviewFixRegressions(unittest.TestCase):
+    """Regressions closing the findings of this slice's independent adversarial
+    review. Each exercises the gap directly so a later slice cannot silently
+    reintroduce it."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.store = UnifiedKnowledgeStore.load(
+            REPO_ROOT / "data", REPO_ROOT / "reports"
+        )
+
+    def setUp(self) -> None:
+        self.session = CoreSession.boot(REPO_ROOT, offline=True)
+        self.session.verifier.store = self.store
+
+    def _cycle_registry(self) -> dict[str, RegisteredPath]:
+        executor = self.session.executor
+        return {
+            "subsystem.alpha": RegisteredPath(
+                "subsystem.alpha",
+                registered=True,
+                build_state=lambda sid: _open_need(
+                    executor, DEAD_KEY_A, frame_name="runtime.frames.rfx_alpha"
+                ),
+                reopens="subsystem.beta",
+            ),
+            "subsystem.beta": RegisteredPath(
+                "subsystem.beta",
+                registered=True,
+                build_state=lambda sid: _open_need(
+                    executor, DEAD_KEY_B, frame_name="runtime.frames.rfx_beta"
+                ),
+                reopens="subsystem.alpha",
+            ),
+        }
+
+    def test_cycle_is_named_without_pruning(self) -> None:
+        # Finding 3 / probe 1(d): the cross-subsystem cycle is named by the
+        # dispatcher's visited-dead record, NOT by the pruning count. Neuter
+        # pruning accumulation entirely; the cycle must still be named, with
+        # pruning_count 0 at every hop.
+        self.session.verifier.commit_run = lambda trace: None
+        dispatcher = NeedDispatcher.for_session(self.session, self._cycle_registry())
+        result = dispatcher.dispatch(self.session.session_id, "subsystem.alpha")
+        self.assertIs(result.stop_reason, StopReason.EXHAUSTED)
+        self.assertIsNotNone(result.cycle)
+        self.assertEqual(
+            [e.outcome for e in result.events],
+            [DispatchOutcome.DEAD, DispatchOutcome.DEAD, DispatchOutcome.CYCLE],
+        )
+        self.assertEqual([e.pruning_count for e in result.events], [0, 0, 0])
+
+    def test_matrix_off_subsystem_cannot_be_walked_via_a_lying_flag(self) -> None:
+        # Finding 1: for_session reconciles `registered` against the boot matrix,
+        # so a registry claiming registered=True for a matrix-OFF subsystem is
+        # abstained as UNREGISTERED, never materialized. P-IH4 by construction,
+        # not the caller's good faith. The build_state points at a LIVE key, so
+        # a failed gate would visibly SOLVE.
+        self.assertIs(self.session.matrix.get("retrieve.wordnet").registered, False)
+        executor = self.session.executor
+        registry = {
+            "retrieve.wordnet": RegisteredPath(
+                "retrieve.wordnet",
+                registered=True,  # a lie the matrix must override
+                build_state=lambda sid: _open_need(
+                    executor, _live_corpus_key(), frame_name="runtime.frames.rfx_lie"
+                ),
+                reopens=None,
+            )
+        }
+        dispatcher = NeedDispatcher.for_session(self.session, registry)
+        result = dispatcher.dispatch(self.session.session_id, "retrieve.wordnet")
+        self.assertIs(result.stop_reason, StopReason.EXHAUSTED)
+        self.assertFalse(result.materialized)
+        self.assertEqual(result.events[0].outcome, DispatchOutcome.UNREGISTERED)
+
+    def test_pendingless_registered_path_abstains_not_crashes(self) -> None:
+        # Finding 2: a registered path whose build_state yields a state with no
+        # pending need abstains (EXHAUSTED) rather than raising ValueError out of
+        # dispatch(). The build_state materializes a live-key need, then strips
+        # its pending — the exact shape need_identity used to crash on.
+        executor = self.session.executor
+
+        def _pendingless(sid: str) -> RetrievalState:
+            state = _open_need(
+                executor, DEAD_KEY_A, frame_name="runtime.frames.rfx_np"
+            )
+            return replace(state, pending=None)
+
+        registry = {
+            "subsystem.np": RegisteredPath(
+                "subsystem.np",
+                registered=True,
+                build_state=_pendingless,
+                reopens=None,
+            )
+        }
+        dispatcher = NeedDispatcher.for_session(self.session, registry)
+        result = dispatcher.dispatch(self.session.session_id, "subsystem.np")
+        self.assertIs(result.stop_reason, StopReason.EXHAUSTED)
+        self.assertEqual(result.events[0].outcome, DispatchOutcome.DEAD)
+        self.assertIn("no routable need", result.events[0].detail)
 
 
 if __name__ == "__main__":

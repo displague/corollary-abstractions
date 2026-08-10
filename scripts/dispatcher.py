@@ -25,17 +25,23 @@ re-decided:
 * **Termination is not free (§3.1/§6.2, P-IH7).** The kernel's rejected sets,
   ``seen_states`` and budgets are run-local, so each ``run_miss_chain`` hop
   starts them empty. Two subsystems that re-open each other's need would cycle
-  across hops forever. Two mechanisms stop it, and BOTH matter:
+  across hops forever. Two mechanisms are in play, with a clear division of
+  labour (an adversarial review of this slice pinned it down, correcting an
+  earlier framing that called both load-bearing for the same job):
 
     1. the verifier's session-scoped ``_pruning`` (``retrieval.PruningEvidence``)
        spans hops because this dispatcher reuses **one** verifier for every
        ``run_miss_chain`` call — a re-walk of one subsystem's own dead need
-       costs zero store queries and is the committed evidence a refusal cites;
-    2. the dispatcher's own ``(need, state_key)`` visited-dead record catches
-       the *cross-subsystem* A -> B -> A cycle, whose two legs have different
-       verifier state keys and so are invisible to (1) alone. This is exactly
-       the third of §627's "three things still owed" — the two-subsystem case
-       the landed retrieval substrate could not see by itself.
+       costs zero store queries. This makes the walking CHEAP (and bounds the
+       cost of the ``loop_detection=False`` interim path); it does not, by
+       itself, NAME a cross-subsystem cycle.
+    2. the dispatcher's own ``(need, state_key)`` visited-dead record is what
+       actually catches and names the *cross-subsystem* A -> B -> A cycle,
+       whose two legs have different verifier state keys and so are invisible to
+       (1) alone. The refusal is cited from THIS record, not from the pruning
+       count. This is exactly the third of §627's "three things still owed" —
+       the two-subsystem case the landed retrieval substrate could not see by
+       itself.
 
   The ``(need, state_key)`` key is frame-spec-qualified on both halves
   (``repr(state.frame.spec)`` inside the need identity, and again inside
@@ -200,11 +206,28 @@ class NeedDispatcher:
         Reuses the session's own verifier — a second verifier would be a second
         authority and a second pruning store, which is exactly what this slice
         must not create.
+
+        Reconciles each path's ``registered`` flag against the boot matrix, so a
+        hand-built registry cannot claim a matrix-OFF/FAIL subsystem is
+        registered and get it walked. This makes P-IH4 hold **by construction**
+        for every subsystem the matrix knows about, not merely by the caller's
+        good faith (a review of this slice found the raw flag was gated by
+        convention alone). A subsystem absent from the matrix — a synthetic or
+        not-yet-booted path — keeps its declared flag; the matrix is the
+        authority only over what it actually probed.
         """
 
+        reconciled: dict[str, RegisteredPath] = {}
+        for key, path in registry.items():
+            try:
+                matrix_registered = session.matrix.get(path.subsystem_id).registered
+            except KeyError:
+                reconciled[key] = path
+                continue
+            reconciled[key] = replace(path, registered=matrix_registered)
         return cls(
             session.verifier,
-            registry,
+            reconciled,
             hop_budget=hop_budget,
             loop_detection=loop_detection,
         )
@@ -255,6 +278,34 @@ class NeedDispatcher:
                 )
 
             state = replace(path.build_state(session_id), session_id=session_id)
+            if state.pending is None:
+                # A registered path that produced no routable need (no pending
+                # UNKNOWN) is an honest dead end, not a crash. ``need_identity``
+                # would raise here; abstain like any other leaf abstention
+                # instead, so one misbehaving or already-resolved path cannot
+                # take the whole dispatch down mid-session.
+                detail = (
+                    f"{path.subsystem_id!r} produced no routable need (no "
+                    "pending UNKNOWN); abstaining rather than crashing"
+                )
+                events.append(
+                    DispatchEvent(
+                        hop,
+                        path.subsystem_id,
+                        None,
+                        "",
+                        DispatchOutcome.DEAD,
+                        detail,
+                        len(self.verifier.session_pruning_evidence(session_id)),
+                    )
+                )
+                if path.reopens is None:
+                    return DispatchResult(
+                        StopReason.EXHAUSTED, tuple(events), None, detail, None
+                    )
+                route = path.reopens
+                continue
+
             need_key = need_identity(state)
             state_key = self.verifier.state_key(state)
             pair = (need_key, state_key)
@@ -265,9 +316,12 @@ class NeedDispatcher:
                 detail = (
                     f"need {need_key!r} was already resolved dead at hop "
                     f"{prior.hop} by {prior.subsystem_id!r}; the dispatch cycle "
-                    f"{prior.subsystem_id!r} -> {path.subsystem_id!r} is pruned "
-                    f"from {len(pruning)} committed pruning record(s) rather "
-                    "than re-expanded (P-IH7: session-level loop detection)"
+                    f"{prior.subsystem_id!r} -> {path.subsystem_id!r} is caught "
+                    "by the dispatcher's visited-dead record and refused "
+                    f"without re-expansion. ({len(pruning)} session pruning "
+                    "record(s) made the prior walks cheap, but the cycle is "
+                    "named by the visited-dead record, not by them.) "
+                    "(P-IH7: session-level loop detection)"
                 )
                 events.append(
                     DispatchEvent(
