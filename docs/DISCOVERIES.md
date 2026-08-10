@@ -13,6 +13,44 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A record can enter at the right rung and still usurp the wrong
+  authority.** The whole contract around external retrieval is "a tool
+  transaction proves what was fetched, not that its content is true", which
+  reads as a *status* constraint — keep the record at `empirical`, and the
+  ladder is safe. It is not sufficient. An observation file whose
+  `observation_id` was set to a committed statement id bound that statement's
+  UNKNOWN slot the moment a caller invoked the tool rung directly. The record
+  never claimed to be `derived`; every status assertion in the suite passed.
+  What it took was the *right to answer that key*, which the exact rung
+  already owned. The miss chain would never have reached the tool rung for
+  that key — but a verifier that depends on the policy walking the ladder in
+  order has delegated its authority to the policy. The repair puts the
+  outranking test where POINT is adjudicated, not where the chain is walked:
+  an external record binds only if nothing committed and nothing derivable
+  matches the key at all. The general lesson is that an epistemic ladder
+  needs two independent guards — one on what a record may *claim*, one on
+  what it may *answer* — and that a "rank" ordering only constrains the
+  second if it is enforced at the binding boundary. *Found by adversarial
+  self-review of v0.7 item 6, after all six deliverables' own tests were
+  green; regression:
+  `tests/test_retrieval_tools.py::ObservationAdapterTests::
+  test_outside_record_cannot_answer_a_slot_a_committed_record_owns`*
+  (2026-08-09)
+
+- **Ranking a result set is safe exactly when ties keep the old order.**
+  Adding a relevance score to neighborhood retrieval looked like a
+  behaviour change waiting to happen: 339 committed tests bind by *position*,
+  and several assert that POINT at position 0 verifies. It changed nothing.
+  The reason is structural rather than lucky: the committed sources
+  (corpus, lexicon, twin ledger, decomposition, proof) all alias the same
+  statement id and title, so for any key they score **identically**, and a
+  sort keyed on `(-score, source_order, item_id)` degenerates to the
+  pre-existing order within every tie group. Ranking only reorders material
+  that genuinely differs in overlap. Registered as P-RT3 before running, and
+  it fired with zero test edits — which is the useful form of the result,
+  because "ranking is a refinement of the old order" is a property a future
+  scorer must preserve, not a coincidence to rediscover. (2026-08-09)
+
 - **A near-miss that preserves length is what makes a geometry check
   falsifiable.** The obvious way to break a right angle — nudge the leg
   endpoint sideways — also changes that leg's length, so the length check

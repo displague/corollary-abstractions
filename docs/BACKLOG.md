@@ -257,10 +257,31 @@ wall) must not be redirected into sentiment tags mid-experiment.
   an invariant note recording the deliberate cross-domain reuse.
   `resolution_channel` on RetrievalNeed is a validated string where the
   house pattern is Enum (Verdict, StopReason) — no laundering path exists,
-  consistency only. `commit_run` is duck-typed via getattr rather than an
+  consistency only. **SHIPPED** (branch `feature/retrieval-tools`, v0.7
+  item 6): `retrieval.Channel(str, Enum)` with `STORE`/`USER`.
+  `RetrievalState.from_unknown` still accepts the legacy strings and still
+  raises the same "must be 'store' or 'user'" message, so no caller
+  changed. Side effect worth naming: the Enum's `repr` is part of the ASK
+  HMAC scope, so a signed question whose channel is downgraded to a raw
+  string no longer validates — a strengthening, and safe only because the
+  secrets are process-local and no signature is persisted (v0.7 item 2
+  must re-check this when keys become durable).
+  `commit_run` is duck-typed via getattr rather than an
   optional VerifierAdapter protocol method, and an exception inside it
   would lose a fully-callbacked RunResult — theoretical, but the protocol
-  should own the name.
+  should own the name. **SHIPPED** (same branch): `controller.RunCommitter`
+  is a `runtime_checkable` optional protocol and `Controller.run` uses
+  `isinstance` instead of `getattr`. The exception half is adjudicated
+  rather than silently fixed: the protocol now *states* that a committer
+  must not raise, and the controller deliberately does **not** swallow, on
+  the grounds that returning a RunResult which claims a commit that failed
+  is worse than losing the result. Covered by
+  `tests/test_retrieval_tools.py::TypedProtocolTests::
+  test_a_failing_commit_is_not_swallowed`.
+  Still open from this seam: `SearchController` never calls `commit_run` at
+  all, so a branching search commits no verifier-private effects. Harmless
+  today (no verifier with ledgers is driven by it) and deliberately left
+  alone rather than given semantics nothing has asked for.
 
 ## Retrieval stores
 
@@ -271,6 +292,37 @@ wall) must not be redirected into sentiment tags mid-experiment.
   never ground verdicts or enter verified_by), and no doc overclaims it —
   filed so that if lexical records ever gain more authority, digest
   pinning must arrive first. (Post-merge review of 745a46b, informational.)
+  **Still open after v0.7 item 6, deliberately.** Relation traversal added
+  `wordnet_relation` records that walk hypernym/antonym/entailment edges,
+  which is *more* lexical surface, so the question was re-examined rather
+  than inherited. It stays open because item 6 gave those records strictly
+  less authority than the senses they came from: every relation record is
+  `empirical` and **none of them can ever bind a slot**
+  (`UnifiedKnowledgeStore.binding_match_mode` returns `None` for the source
+  unconditionally). Digests were **not** pinned, and no doc claims they
+  were. The trigger stands: pin before any lexical record becomes bindable.
+
+- **Relation traversal is one hop only.** `relation_records` walks a single
+  edge, because a one-hop edge can be re-derived from the archive by
+  `contains_item` without keeping process state (`target in
+  origin.relations[relation]`). Multi-hop paths would need either a stored
+  path witness or a search inside the containment check, and an
+  unauthenticatable pointable record is worse than a missing one. Filed
+  rather than approximated. (v0.7 item 6.)
+
+- **The external observation adapter authenticates by minting, not by
+  value.** An `Observation` carries its fetch timestamp, so a record cannot
+  be re-derived by value the way a committed one can; `contains_item`
+  therefore certifies "this store minted exactly this record in this
+  process". That is the honest authority of a tool transaction, but it is
+  process-local: it will not survive the serialization v0.7 item 2 is
+  building. When sessions become durable, external records need either a
+  signed transaction receipt or re-fetch-on-load. The mint ledger also
+  keeps every transaction (two fetches of one observation are two real
+  events with two timestamps), so it grows with tool retrievals rather
+  than with source size — bounded and small today, but it wants an
+  explicit retention rule before a long-lived session ships. (v0.7
+  item 6.)
 
 ## Nested frames
 

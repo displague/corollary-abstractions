@@ -17,7 +17,7 @@ from collections import deque
 from copy import deepcopy
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Generic, Iterable, Protocol, TypeVar
+from typing import Generic, Iterable, Protocol, TypeVar, runtime_checkable
 
 
 StateT = TypeVar("StateT")
@@ -129,6 +129,35 @@ class VerifierAdapter(Protocol[StateT]):
     def state_key(self, state: StateT) -> str: ...
 
     def evaluate(self, state: StateT, action: Action) -> Verification[StateT]: ...
+
+
+@runtime_checkable
+class RunCommitter(Protocol[StateT]):
+    """Optional verifier capability: commit verifier-private effects once.
+
+    ROADMAP-v0.7 item 6 / BACKLOG "commit_run duck-typed": the controller used
+    to reach for this hook with ``getattr(verifier, "commit_run", None)``, so
+    the *name* had no owner and a typo in an adapter was a silent no-op. The
+    protocol owns the name now. It stays **optional** — a verifier with no
+    private ledgers implements nothing and the controller is unchanged — which
+    is why it is a separate ``runtime_checkable`` protocol rather than a
+    method added to :class:`VerifierAdapter`.
+
+    Contract:
+
+    * called at most once per :meth:`Controller.run`, with the returned run's
+      own (already copy-isolated) trace;
+    * called only when a :class:`RunResult` is actually being returned, so a
+      speculative ``evaluate`` outside a run commits nothing;
+    * **must not raise.** The same backlog note observed that an exception
+      here loses a fully-callbacked ``RunResult``. That is still true and is
+      deliberate: an implementation whose authority commit failed must not
+      have its failure swallowed while the caller receives a run that claims
+      the commit happened. Losing the result is the honest outcome; the fix
+      belongs in the committer, which is why the protocol states the duty.
+    """
+
+    def commit_run(self, trace: tuple["TraceEntry[StateT]", ...]) -> None: ...
 
 
 class BranchPolicy(Protocol[StateT]):
@@ -279,9 +308,8 @@ class Controller(Generic[StateT]):
                 trace,
                 stop_reason,
             )
-            commit_run = getattr(verifier, "commit_run", None)
-            if callable(commit_run):
-                commit_run(deepcopy(trace))
+            if isinstance(verifier, RunCommitter):
+                verifier.commit_run(deepcopy(trace))
             return result
 
         if is_complete(deepcopy(state)):

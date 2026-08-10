@@ -164,6 +164,49 @@ result reported against it. Synthetic 1.000 remains a mechanism result only.
 A successful tool transaction proves what was fetched, not that its content is
 true.
 
+**Status: SHIPPED** (branch `feature/retrieval-tools`). All six bullets land in
+`scripts/retrieval.py` plus two new modules, with the predictions registered in
+`tests/test_retrieval_tools.py` before the implementation ran.
+
+- **Ranked neighborhood.** `text_keys.overlap_score` is the closed form:
+  `mean(query_coverage, alias_coverage, exact_token_share)` over the
+  best-scoring alias, in `[0, 1]`, `1.0` iff the token sets are equal. Ties
+  fall back to the pre-existing `(source, item_id)` order, so ranking refines
+  the old order rather than replacing it — no existing binding outcome moved.
+  A neighborhood transaction announces the score definition, the admitted
+  score range, the cap, and — when the cap bites — the drop count *and* the
+  score the cut fell at.
+- **Relation traversal.** `UnifiedKnowledgeStore.relation_records` walks one
+  hop of the registered set `{antonym, entailment, hypernym}` **per sense**:
+  the record id names its origin synset, so two senses of one lemma that reach
+  the same target stay two records. Every record is `empirical`, and **no
+  relation record is ever bindable** — a hypernym is WordNet's claim about a
+  sense, not an answer to the key. Multi-hop traversal is deferred, not
+  approximated (BACKLOG).
+- **External adapter.** `scripts/observation_adapter.py` reads a declared
+  local directory of JSON observations, offline, with no network calls. Each
+  observation retains source id, declared `recorded_at`, fetch timestamp, the
+  exact query, its rung, and a per-file SHA-256. Rungs above `empirical` are
+  refused at load with the file named.
+- **Miss chain.** `MISS_CHAIN` + `miss_chain_actions` + `run_miss_chain` make
+  the ladder executable: one RETRIEVE per rung, each separately verdicted in
+  the controller trace, then ASK, then an EXHAUSTED stop with empty context as
+  the explicit abstention. "Derivation" here means *retrieval over the
+  committed specialization and decomposition edges* — a relation this repo
+  already computed, not a deduction performed at query time.
+- **Session pruning.** REFUTED and exhausted (UNKNOWN/ABSTAIN) branches from a
+  *returned* run are recorded on the verifier under
+  `(session_id, state_key, action fingerprint)`. A second dispatcher hop over
+  the same need costs zero store queries. This is the retrieval-side substrate
+  for P-IH7 only; the session budget and cycle report remain Phase-1/2
+  dispatcher work.
+- **Typed protocols.** `Channel` Enum replaces the validated
+  `resolution_channel` string (legacy `"store"`/`"user"` callers unchanged);
+  `controller.RunCommitter` is a `runtime_checkable` optional protocol that
+  owns the `commit_run` name, and `RungStore`/`ObservationSource` are the
+  registry-shaped handles §3.2 asks for. All 339 pre-existing tests — receipt,
+  forgery, replay, supersession included — pass **unmodified**.
+
 ## 7. Frames generalize without leaking semantics
 
 - Add routed nested-frame mutation and graft-back with explicit owner paths.

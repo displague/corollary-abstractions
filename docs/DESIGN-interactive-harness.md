@@ -190,6 +190,22 @@ protocol over adapter/store/tool handles. Build one seam, not two: the harness
 registry should *be* the item-6 refactor's landing site, and neither should
 ship a second parallel dispatch vocabulary.
 
+**The item-6 half of that seam is now in the tree** (branch
+`feature/retrieval-tools`), in the shape this table expects rather than a
+retrieval-private one:
+
+| Registry field | What item 6 shipped |
+|---|---|
+| `probe()` | `observation_adapter.SourceProbe` — `available` / `detail` / `record_count`, liveness only, and the dataclass deliberately carries no status field so it cannot be read as a rung |
+| `adapter_factory` | `observation_adapter.ObservationSource` and `retrieval.RungStore`, both `runtime_checkable` protocols; `UnifiedKnowledgeStore` and `LocalObservationAdapter` satisfy them structurally |
+| `registered_paths` | `retrieval.MISS_CHAIN` (the rung set) and `retrieval.WALKABLE_RELATIONS` (the lexical edge set) |
+| `degrade_policy` | a store that implements no rung is REFUSED with the missing capability named (`"registers no 'derivation' rung; the miss chain may not improvise one"`), never routed around |
+
+The last row is the registration rule made executable: an unregistered rung
+name and an unregistered relation name are both refusals, not improvisations.
+When Phase 1 builds the kernel registry it should wrap these protocols, not
+restate them.
+
 **Probe semantics: liveness only.** A passing probe asserts that a component
 imported, loaded, or answered a smoke call — nothing more. **A probe never
 raises any verdict's epistemic rung, and the boot matrix is not evidence of
@@ -501,6 +517,19 @@ generically rather than reinventing a parallel one, and item 6's “store
 REFUTED and exhausted branches as reusable pruning evidence” is precisely the
 session-scoped record §3.1 requires.
 
+That chain is now **executable** rather than aspirational: `retrieval.
+MISS_CHAIN` is the ordered rung set, `miss_chain_actions(key, slot)` renders it
+as one proposable action per rung plus the terminal ASK, and each rung's
+attempt lands in the controller trace with its own verdict. Two shapes there
+are worth generalizing rather than re-deciding. First, **abstention is not an
+action**: a chain that answers nothing stops EXHAUSTED with empty context and
+a trace carrying one UNKNOWN per rung, so there is no ABSTAIN transition for a
+policy to forge. Second, **ASK is proposed unconditionally** and its refusal
+is informative — a public need gets “assigned to the durable store, not the
+interlocutor”, a frame-private one gets the question — so reading the verdicts
+top to bottom tells you which authority owned the answer, not merely that the
+need went unmet.
+
 This is the anti-“command not found” design, with one honest boundary. The
 system never flails across unregistered OS shells: it only walks the
 **registered** graph, and an unregistered path is REFUSED rather than
@@ -518,6 +547,30 @@ scheduled in Phases 1–2, whose adjudicating test is **P-IH7**. Until that
 lands, the dispatcher must be run under an explicit hop ceiling and stop with
 caution chrome when it is reached — a stated budget is the interim guarantee,
 not an unproven claim of global loop detection.
+
+**Retrieval-side substrate: LANDED** (ROADMAP-v0.7 item 6, branch
+`feature/retrieval-tools`). `RetrievalVerifier` now keeps
+`retrieval.PruningEvidence` keyed by `(session_id, verifier state_key, action
+fingerprint)`, written **only** from `commit_run` — the same commit gate the
+anti-replay ledgers use, so a speculative `evaluate` cannot poison a session
+with a dead end it merely considered. A second walk of item 6's miss chain
+over the same unanswered need refuses all four rungs from stored evidence and
+issues zero store queries
+(`tests/test_retrieval_tools.py::SessionPruningTests::
+test_a_second_dispatcher_hop_costs_no_store_queries`).
+
+This is the *record*, not P-IH7. Three things are still owed before P-IH7 can
+be adjudicated, and none of them is claimed here: the **session budget**
+(§3.1), the dispatcher's `(need, state_key)` **cycle identification** in the
+trace, and the two-subsystem cycle case itself — the landed evidence is keyed
+on one verifier's state, so two subsystems re-opening each other's need still
+need the dispatcher-level record to see the loop. What is now true is that the
+substrate exists and is commit-gated, so Phase 1 builds on it rather than
+inventing a parallel one. Note the asymmetry the implementation forced: only
+REFUTED and exhausted (UNKNOWN/ABSTAIN) branches are recorded. REFUSED is
+deliberately **not** — it is an authority or well-formedness answer whose
+re-check costs one predicate, and caching authority answers is how a stale
+refusal becomes a policy.
 
 ---
 

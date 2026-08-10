@@ -157,6 +157,11 @@ scripts/
   compose_assert.py     global ladder + live frame-local executor statuses
   controller.py         shared v0.5 state/action/verifier loop
   retrieval.py          UNKNOWN -> five-store (+ optional WordNet) RETRIEVE
+                        and the executable miss chain (exact -> neighborhood
+                        -> derivation -> tool -> ASK -> abstention)
+  text_keys.py          closed-form key canon, token matching, overlap score
+  observation_adapter.py  offline external source: a declared folder of JSON
+                        observations, capped at the empirical rung
   wordnet_store.py      external OEWN JSON -> empirical lexical graph
   wordnet_eval.py       P-CF6 held-out synonym-bridge control
   conversation.py       ASK -> WAITING -> signed user reply -> resumed binding
@@ -215,6 +220,10 @@ python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
 python scripts/retrieval.py                 # exact five-store lookup then POINT
 python scripts/retrieval.py quickening --wordnet C:\path\to\english-wordnet-2025-json.zip
+python scripts/retrieval.py --chain "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))"
+                                            # walks the miss chain: exact and
+                                            # neighborhood miss, derivation answers
+python scripts/retrieval.py --chain --observations path\to\notes note.tide_gauge_2026
 python scripts/wordnet_eval.py C:\path\to\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
