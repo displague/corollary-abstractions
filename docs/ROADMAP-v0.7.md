@@ -103,7 +103,7 @@ the shipping commit; a miss is recorded here as prominently as a hit.
 ### Adjudication (branch `feature/conversation-durable`)
 
 **All seven fired.** `scripts/conversation.py` runs the acceptance transcript;
-`tests/test_session_durability.py` (36 tests) and `tests/test_request_grammar.py`
+`tests/test_session_durability.py` (38 tests) and `tests/test_request_grammar.py`
 (23 tests) hold it.
 
 - **P-DS1 CONFIRMED.** Alice and Bob serialize to public JSON, the verifiers
@@ -121,7 +121,7 @@ the shipping commit; a miss is recorded here as prominently as a hit.
 - **P-DS4 CONFIRMED.** All 140 pre-existing retrieval/ASK tests pass
   unmodified, including
   `test_second_verifier_cannot_accept_first_verifiers_question` — the default
-  verifier keeps a per-instance ephemeral ring. Full suite 432 → 491.
+  verifier keeps a per-instance ephemeral ring. Full suite 432 → 493.
 - **P-DS5 CONFIRMED — the prediction registered as most likely to miss.** A
   genuinely signed pre-supersession snapshot, replayed into a fresh restore, is
   refused `ledger-rollback` by the private monotone counter. A companion test

@@ -408,7 +408,16 @@ class SessionKeyRing:
             raise KeyRingRefusal(RefusalReason.UNKNOWN_KEY_ID, key_id)
         if not key.status.verifies:
             raise KeyRingRefusal(RefusalReason.REVOKED_KEY_ID, key_id)
-        info = f"{KEY_SCHEMA}|{domain}|{scope}".encode("utf-8")
+        # Length-prefix each component so the HKDF info is injective even if
+        # a component ever contains the '|' separator. Not reachable today
+        # (domain is a fixed literal set, scope a closed session:/owner:
+        # vocabulary), but hardened before the scope vocabulary can open up
+        # (review nit: derive("b|c","a") == derive("c","a|b") under the bare
+        # join). Signed payloads already separate the labels structurally.
+        info = b"|".join(
+            f"{len(part)}:{part}".encode("utf-8")
+            for part in (KEY_SCHEMA, domain, scope)
+        )
         return hkdf_sha256(key.secret, key_id.encode("utf-8"), info)
 
     def signing_key_id(self) -> str:
