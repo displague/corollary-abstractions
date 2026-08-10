@@ -142,10 +142,119 @@ def lean_oracle_run(triples_path: Path = DEFAULT_TRIPLES) -> RunResult[LeanRepla
     )
 
 
+class MentionSyntaxError(ValueError):
+    """A binding argument the adapter cannot parse at all (-> REFUSED)."""
+
+
+class MentionBindingError(ValueError):
+    """A parseable binding the rendered text does not support (-> UNKNOWN)."""
+
+
+@dataclass(frozen=True)
+class NarrativeElement:
+    """A story element id and the exact rendered forms that name it.
+
+    Element identity is an ID, not prose. `surfaces` is the frame's
+    declared lexicalization of that id -- the only spans a beat may bind
+    to it. Matching is EXACT, deliberately: a declared surface form is an
+    authoring decision (including its casing), never a fuzzy match the
+    adapter improvises over whatever prose the oracle happened to write.
+    """
+
+    element: str
+    surfaces: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if not self.element.strip():
+            raise ValueError("a narrative element needs a non-empty id")
+        if not self.surfaces:
+            raise ValueError(
+                f"element {self.element!r} declares no surface form; an "
+                "element with no lexicalization can never be named visibly"
+            )
+        if any(not surface.strip() for surface in self.surfaces):
+            raise ValueError("surface forms must be non-empty")
+
+
+@dataclass(frozen=True)
+class ElementMention:
+    """A typed binding: this span of a beat's text names this element id."""
+
+    element: str
+    start: int
+    end: int
+
+    def __post_init__(self) -> None:
+        if not self.element.strip():
+            raise ValueError("a mention must name an element")
+        if self.start < 0 or self.end <= self.start:
+            raise ValueError(
+                f"mention span [{self.start}, {self.end}) must be non-empty "
+                "and start at a non-negative offset"
+            )
+
+    def shifted(self, offset: int) -> "ElementMention":
+        return replace(self, start=self.start + offset, end=self.end + offset)
+
+    def span_of(self, text: str) -> str:
+        return text[self.start : self.end]
+
+
+def parse_mention_bindings(spec: str) -> tuple[ElementMention, ...]:
+    """Parse `element@start:end` records, `;`-separated. Closed form only."""
+
+    mentions: list[ElementMention] = []
+    for item in spec.split(";"):
+        item = item.strip()
+        if not item:
+            continue
+        element, at, span = item.rpartition("@")
+        if not at or not element:
+            raise MentionSyntaxError(
+                f"binding {item!r} is not element@start:end"
+            )
+        start, colon, end = span.partition(":")
+        if not colon:
+            raise MentionSyntaxError(
+                f"binding {item!r} has no start:end span"
+            )
+        try:
+            offsets = (int(start), int(end))
+        except ValueError as error:
+            raise MentionSyntaxError(
+                f"binding {item!r} has non-integer offsets"
+            ) from error
+        try:
+            mentions.append(ElementMention(element, *offsets))
+        except ValueError as error:
+            raise MentionSyntaxError(str(error)) from error
+    return tuple(mentions)
+
+
 @dataclass(frozen=True)
 class StoryBeat:
+    """One rendered beat plus the typed element mentions inside its text.
+
+    Mentions are produced when the beat is created and are anchored to
+    offsets in THIS beat's rendered text -- so "the element is visible in
+    this beat" is a structural property of the record, not a later search
+    over prose.
+    """
+
     role: str
     text: str
+    mentions: tuple[ElementMention, ...] = ()
+
+    def __post_init__(self) -> None:
+        for mention in self.mentions:
+            if mention.end > len(self.text):
+                raise ValueError(
+                    f"mention span [{mention.start}, {mention.end}) falls "
+                    f"outside the {self.role!r} beat it annotates"
+                )
+
+    def names(self, element: str) -> bool:
+        return any(mention.element == element for mention in self.mentions)
 
 
 @dataclass(frozen=True)
@@ -185,6 +294,15 @@ def golden_chicken_frame_spec() -> FrameSpec:
     )
 
 
+# The story's declared elements. `key` is registered but never planted: it
+# is the subject of the no-deus probe, so the refutation there rests on the
+# ledger (nothing planted it) rather than on an unknown element id.
+GOLDEN_CHICKEN_ELEMENTS = (
+    NarrativeElement("fallen feather", ("fallen feather",)),
+    NarrativeElement("key", ("key",)),
+)
+
+
 class StoryFrameVerifier:
     """Three-beat story grammar over the runtime frame executor.
 
@@ -192,6 +310,36 @@ class StoryFrameVerifier:
     (narrative.structure.*); trait consistency and planted/discharged temporal
     obligations are delegated to the frame executor. One executor, two
     costumes.
+
+    Element references are BOUND, not grepped (v0.7 item 7). A beat-creating
+    transition may carry `binds`: `element@start:end` records naming spans of
+    the text it is about to render. The adapter validates each record against
+    the frame's declared elements -- the span must be an exact declared
+    surface form of the element id it claims -- and stores it on the beat.
+    plant and discharge then consult those typed records instead of running
+    case-insensitive substring searches over oracle-authored prose (the
+    BACKLOG's "Temporal event grounding remains demo-specific").
+
+    The anti-vacuity controls the substring checks enforced are kept, and two
+    of them get stronger:
+      * A plant must still ALTER A VISIBLE BEAT -- the mention is appended to
+        the rendered setup beat, and its records are rebased onto the amended
+        text, so a ledger-only plant is impossible (the hidden-ledger
+        regression the v0.5 review warned about).
+      * A discharge must still be EVIDENCED BY THE RESOLUTION BEAT -- it now
+        requires a mention record for that element on the resolution beat
+        itself. "The evidence is really in the resolution text" stops being a
+        substring check and becomes structural: a record's span is validated
+        against the beat that carries it and cannot outlive it.
+      * An unrelated mention still fails -- naming some OTHER element does not
+        discharge this one, now by element identity rather than by spelling.
+      * Element ids are decoupled from prose: an id never has to appear in the
+        rendered text, and a span binds only if the frame declared that exact
+        surface form for that id.
+
+    The lexicon is the ADAPTER's, not the FrameSpec's: rendered surface forms
+    are narrative-presentation semantics, and item 7's whole point is that
+    they must not leak into the generic frame layer.
     """
 
     name = "narrative-three-beat-frame"
@@ -200,9 +348,52 @@ class StoryFrameVerifier:
         self,
         executor: FrameExecutor | None = None,
         spec: FrameSpec | None = None,
+        elements: tuple[NarrativeElement, ...] | None = None,
     ):
         self.executor = executor or FrameExecutor()
         self.spec = spec or golden_chicken_frame_spec()
+        self.elements = (
+            GOLDEN_CHICKEN_ELEMENTS if elements is None else elements
+        )
+
+    def surfaces(self, element: str) -> tuple[str, ...] | None:
+        for declared in self.elements:
+            if declared.element == element:
+                return declared.surfaces
+        return None
+
+    def bind_mentions(
+        self, text: str, spec: str | None
+    ) -> tuple[ElementMention, ...]:
+        """Turn a `binds` argument into typed records against `text`.
+
+        Raises MentionSyntaxError for an unparseable or out-of-range
+        argument (the adapter cannot read the action) and
+        MentionBindingError when the rendered text does not support the
+        claimed binding (the story cannot ground it).
+        """
+
+        if not spec:
+            return ()
+        mentions = parse_mention_bindings(spec)
+        for mention in mentions:
+            if mention.end > len(text):
+                raise MentionSyntaxError(
+                    f"span [{mention.start}, {mention.end}) falls outside "
+                    f"the {len(text)}-character text it binds"
+                )
+            surfaces = self.surfaces(mention.element)
+            if surfaces is None:
+                raise MentionBindingError(
+                    f"the frame declares no narrative element "
+                    f"{mention.element!r}; a binding may not invent one"
+                )
+            if mention.span_of(text) not in surfaces:
+                raise MentionBindingError(
+                    f"span {mention.span_of(text)!r} is not a declared "
+                    f"surface form of element {mention.element!r}"
+                )
+        return mentions
 
     def initial_state(self) -> StoryState:
         return StoryState(frame_state=self.executor.open_frame(self.spec))
@@ -270,6 +461,7 @@ class StoryFrameVerifier:
                     f"{action.name} has missing or empty arguments: {missing}",
                     evidence=(self.name,),
                 )
+            mentions: tuple[ElementMention, ...] = ()
             if action.name == "plant":
                 mention = args.get("mention")
                 if tuple(beat.role for beat in state.beats) != ("setup",):
@@ -282,34 +474,38 @@ class StoryFrameVerifier:
                         "plant has no rendered mention in the story",
                         evidence=("narrative.constraint.chekhov_gun",),
                     )
-                if args["element"].casefold() not in mention.casefold():
+                # Bindings are relative to the mention fragment; they are
+                # rebased onto the amended beat below, once the fragment
+                # has actually been rendered into the visible story.
+                mentions, failure = self._bind_or_fail(mention, args.get("binds"))
+                if failure is not None:
+                    return failure
+                if not any(
+                    record.element == args["element"] for record in mentions
+                ):
                     return Verification(
                         Verdict.UNKNOWN,
                         "plant mention does not name the planted element",
                         evidence=("narrative.constraint.chekhov_gun",),
                     )
             else:
-                evidence_text = args.get("evidence_text")
                 if not state.beats or state.beats[-1].role != "resolution":
                     return self._order_refutation(
                         "a discharge must be evidenced by the resolution beat"
                     )
-                if not evidence_text:
+                resolution = state.beats[-1]
+                if not resolution.mentions:
                     return Verification(
                         Verdict.UNKNOWN,
-                        "discharge has no text evidence in the resolution",
+                        "the resolution beat binds no narrative element, so "
+                        "no discharge is evidenced in the story",
                         evidence=("narrative.constraint.chekhov_gun",),
                     )
-                if args["element"].casefold() not in evidence_text.casefold():
+                if not resolution.names(args["element"]):
                     return Verification(
                         Verdict.UNKNOWN,
-                        "discharge evidence does not name the planted element",
-                        evidence=("narrative.constraint.chekhov_gun",),
-                    )
-                if evidence_text.casefold() not in state.beats[-1].text.casefold():
-                    return Verification(
-                        Verdict.UNKNOWN,
-                        "claimed discharge is absent from the resolution text",
+                        "the resolution beat does not name the discharged "
+                        "element",
                         evidence=("narrative.constraint.chekhov_gun",),
                     )
             already_planted = action.name == "plant" and any(
@@ -328,8 +524,16 @@ class StoryFrameVerifier:
                 )
             next_state = replace(state, frame_state=result.next_state)
             if action.name == "plant" and not already_planted:
+                # The plant alters a VISIBLE beat, and its records travel
+                # with the text: rebasing by the appended offset keeps every
+                # span pointing at the same words it was validated against.
+                previous = state.beats[-1]
+                offset = len(previous.text) + 1
                 amended = replace(
-                    state.beats[-1], text=f"{state.beats[-1].text} {mention}"
+                    previous,
+                    text=f"{previous.text} {mention}",
+                    mentions=previous.mentions
+                    + tuple(record.shifted(offset) for record in mentions),
                 )
                 next_state = replace(
                     next_state, beats=state.beats[:-1] + (amended,)
@@ -347,9 +551,11 @@ class StoryFrameVerifier:
             desire = args.get("desire")
             if not desire:
                 return Verification(Verdict.UNKNOWN, "setup has an unbound desire")
-            beat = StoryBeat(
-                "setup", f"{state.agent.capitalize()} wanted {desire}."
-            )
+            text = f"{state.agent.capitalize()} wanted {desire}."
+            mentions, failure = self._bind_or_fail(text, args.get("binds"))
+            if failure is not None:
+                return failure
+            beat = StoryBeat("setup", text, mentions)
             return Verification(
                 Verdict.VERIFIED,
                 "setup binds agent and desire inside the frame",
@@ -365,9 +571,11 @@ class StoryFrameVerifier:
             obstacle = args.get("obstacle")
             if not obstacle:
                 return Verification(Verdict.UNKNOWN, "complication has no obstacle")
-            beat = StoryBeat(
-                "complication", f"But {obstacle} stood in the way."
-            )
+            text = f"But {obstacle} stood in the way."
+            mentions, failure = self._bind_or_fail(text, args.get("binds"))
+            if failure is not None:
+                return failure
+            beat = StoryBeat("complication", text, mentions)
             return Verification(
                 Verdict.VERIFIED,
                 "complication obstructs the setup's bound desire",
@@ -385,7 +593,10 @@ class StoryFrameVerifier:
             outcome = args.get("outcome")
             if not outcome:
                 return Verification(Verdict.UNKNOWN, "resolution has no outcome")
-            beat = StoryBeat("resolution", outcome)
+            mentions, failure = self._bind_or_fail(outcome, args.get("binds"))
+            if failure is not None:
+                return failure
+            beat = StoryBeat("resolution", outcome, mentions)
             return Verification(
                 Verdict.VERIFIED,
                 "resolution closes the setup's bound desire",
@@ -401,6 +612,32 @@ class StoryFrameVerifier:
             f"unknown story transition {action.name!r}",
             evidence=(self.name,),
         )
+
+    def _bind_or_fail(
+        self, text: str, spec: str | None
+    ) -> tuple[tuple[ElementMention, ...], Verification[StoryState] | None]:
+        """Bind mentions, or hand back the verdict the failure deserves.
+
+        An unreadable argument is REFUSED (the adapter cannot parse the
+        action at all); a binding the rendered text does not support is
+        UNKNOWN (the story cannot ground the claim). Bindings exist to keep
+        the Chekhov ledger visible, so the unsupported case cites that law.
+        """
+
+        try:
+            return self.bind_mentions(text, spec), None
+        except MentionSyntaxError as error:
+            return (), Verification(
+                Verdict.REFUSED,
+                f"element binding is unreadable: {error}",
+                evidence=(self.name,),
+            )
+        except MentionBindingError as error:
+            return (), Verification(
+                Verdict.UNKNOWN,
+                f"the rendered text does not support this binding: {error}",
+                evidence=(CHEKHOV_GUN,),
+            )
 
     @staticmethod
     def _order_refutation(reason: str) -> Verification[StoryState]:
@@ -442,6 +679,9 @@ def story_oracle_actions() -> tuple[Action, ...]:
                 "event_id": "fallen_feather_planted",
                 "element": "fallen feather",
                 "mention": "A fallen feather gleamed beside its nest.",
+                # Offsets into the mention fragment above; the adapter
+                # rebases them when the fragment joins the setup beat.
+                "binds": "fallen feather@2:16",
             },
         ),
         Action.build(
@@ -458,6 +698,10 @@ def story_oracle_actions() -> tuple[Action, ...]:
                     "It used a fallen feather as a key, stepped outside, "
                     "and sang until the sun rose"
                 ),
+                # The resolution names two declared elements. Only the
+                # feather was ever planted; 'key' is bound so the no-deus
+                # probe stays a LEDGER refutation rather than an unknown id.
+                "binds": "fallen feather@10:24;key@30:33",
             },
         ),
         Action.build(
@@ -467,7 +711,6 @@ def story_oracle_actions() -> tuple[Action, ...]:
                 **shared,
                 "event_id": "fallen_feather_used_as_key",
                 "element": "fallen feather",
-                "evidence_text": "fallen feather as a key",
             },
         ),
     )

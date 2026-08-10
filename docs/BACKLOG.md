@@ -203,15 +203,25 @@ wall) must not be redirected into sentiment tags mid-experiment.
 
 ## Nested frames
 
-- **No graft-back API for nested-model mutation.** `nested()` navigates
-  read-only, and `assert_literal`/`plant`/`discharge` on a navigated
-  child return a detached state with no path back into the parent; deep
-  tests resort to `replace(parent, children=...)` surgery. Events are
-  the only real-flow channel that updates models in place. Add a
-  `with_nested(parent, owner_path, new_child)` grafting helper (or
-  routed variants of the mutators) before any consumer needs to mutate a
-  model directly. (Nested-frames review, note 8; the test surgery is the
-  evidence.)
+- **No graft-back API for nested-model mutation: SHIPPED** (branch
+  `feature/frames-v07`, v0.7 item 7). `FrameExecutor.with_nested(parent,
+  owner_path, new_child)` grafts a model back immutably and
+  `route(state, owner_path, transition)` runs any executor transition
+  inside a model and returns the ROOT, so an accepted mutation lands in
+  place and a rejected branch still yields no next_state. Grafting is a
+  REPLACEMENT, not an insertion: creation stays with `open_nested` and
+  its refusals, and the graft re-checks the child-owner key, the closed
+  ancestor rule, and the event-history subset invariant across the whole
+  grafted subtree. The `replace(parent, children=...)` surgery is gone
+  from the grandchild test; the poisoned-child test keeps it, now labelled
+  a deliberate API bypass and paired with an assertion that `with_nested`
+  refuses that same graft — which is the point, since surgery is the only
+  remaining way to reach the loud RuntimeError that control exists for.
+  (Nested-frames review, note 8; predictions P-NF4–P-NF6 in
+  `tests/test_theory_of_mind.py`.)
+  Still open: no consumer mutates a model directly yet — the affect slice
+  should still prefer event flow (see the affect note above), and a
+  `route`-driven controller adapter for nested belief is unbuilt.
 
 ## Interactive harness / agent OS
 
@@ -390,13 +400,28 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   theorem search, but project-backed breadth and a shared proof/story learned
   policy remain open.
 
-- **Temporal event grounding remains demo-specific.** Chekhov close-time
-  obligations and governance-gated no-deus heralding both execute. The
-  golden-chicken adapter's visible plant/discharge evidence is still an exact
-  case-insensitive substring over oracle-authored prose rather than a general
-  semantic event binder. Replace it with corpus-grounded event structure while
-  retaining the hidden-ledger, unrelated-mention, order, and idempotence
-  controls.
+- **Temporal event grounding: substrings replaced by a typed binder,
+  corpus grounding still open (PARTIAL).** Chekhov close-time obligations
+  and governance-gated no-deus heralding both execute. The
+  case-insensitive substring searches over oracle-authored prose are gone
+  (branch `feature/frames-v07`, v0.7 item 7): a beat-creating transition
+  carries `binds` records (`element@start:end`), the adapter validates each
+  span against the frame's declared surface forms for that element id, and
+  plant/discharge consult those typed records by element IDENTITY. All four
+  controls survive and two strengthen — a plant still amends the visible
+  setup beat (records are rebased onto the amended text), a discharge now
+  requires a record ON the resolution beat (so "the evidence is really in
+  the resolution" is structural, not a substring test), an unrelated
+  mention fails by identity rather than spelling, and duplicate plants stay
+  idempotent. The hidden-ledger control is now the sharper "identical prose,
+  no bindings → UNKNOWN". Ids are decoupled from prose: an element id that
+  never appears in the rendered story plants, discharges, and closes, which
+  the substring check could not do. Predictions P-EB1–P-EB3 in
+  `tests/test_controller.py`; demo output byte-identical.
+  Still open: the element lexicon is the adapter's own declaration, not
+  corpus-grounded event structure, and it is deliberately EXACT (a declared
+  surface form, casing included) rather than a general semantic binder.
+  Nothing yet links a bound element id to a corpus statement.
 
 - **Past-mirror payoff exposed two specialization false positives.** The
   intended new edges are `response_pattern -> cartoon_gravity` and

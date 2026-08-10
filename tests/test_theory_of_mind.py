@@ -256,6 +256,27 @@ class NestedBeliefTests(unittest.TestCase):
         the parent but not the modeled agent updates the parent and
         leaves the model untouched -- the parent knowingly diverges from
         its model of the other agent.
+
+    Graft-back predictions (v0.7 item 7, registered before the API was
+    exercised; BACKLOG "No graft-back API for nested-model mutation"):
+
+    P-NF4. `with_nested` is a pure structural replacement: grafting the
+        state `nested()` just returned back at the same path is the
+        identity on the parent, and grafting a MUTATED model changes
+        exactly that model's tier -- the holder's own truths, obligations
+        and event history are untouched, so isolation (P-NF2) survives
+        direct mutation exactly as it survives event flow.
+    P-NF5. `route` carries the executor's own verdict outward and hands
+        back the ROOT, never a detached child: an accepted mutation is
+        visible through `nested(root, path)` at any depth, and a rejected
+        one returns next_state None, so the root cannot move on a
+        rejected branch (the controller invariant, inherited).
+    P-NF6. Every ill-formed graft refuses BEFORE producing a state --
+        unknown path, absent target, owner-key mismatch, closed ancestor,
+        and a poisoned event history all raise. Consequence: the loud
+        RuntimeError inside nested delivery becomes reachable only by
+        deliberate dataclass surgery, so its control test must document
+        itself as bypassing the API rather than using it.
     """
 
     def _anne_modeling_sally(self):
@@ -358,7 +379,7 @@ class NestedBeliefTests(unittest.TestCase):
             model_of_sally,
             FrameSpec(frame="runtime.frames.sally_models_ben", owner="ben"),
         )
-        anne = replace(anne, children=(("sally", nested_model),))
+        anne = executor.with_nested(anne, ("sally",), nested_model)
         partial = FrameEvent(
             "partial", (BASKET,), ("anne", "sally"), ("located_in",)
         )
@@ -426,16 +447,216 @@ class NestedBeliefTests(unittest.TestCase):
 
     def test_broken_subset_invariant_fails_loudly(self) -> None:
         """Review should-fix 6: a child refusal inside recursion must
-        surface, not silently fork parent and model histories."""
+        surface, not silently fork parent and model histories.
+
+        DELIBERATE API BYPASS. The poisoned state is built with raw
+        `replace` because `with_nested` now REFUSES exactly this graft
+        (asserted below): a model whose event history is not a subset of
+        its holder's. The surgery is the point -- it is the only way left
+        to reach the RuntimeError, which is the control this test exists
+        for. Real flows and the graft API can no longer construct it.
+        """
         executor, anne = self._anne_modeling_sally()
         poisoned_child = replace(
             executor.nested(anne, ("sally",)),
             processed_event_ids=("z",),
         )
+        with self.assertRaisesRegex(ValueError, "subset invariant"):
+            executor.with_nested(anne, ("sally",), poisoned_child)
         anne = replace(anne, children=(("sally", poisoned_child),))
         event = FrameEvent("z", (BASKET,), ("anne", "sally"), ("located_in",))
         with self.assertRaisesRegex(RuntimeError, "subset invariant"):
             executor.observe_event(anne, event)
+
+    def test_graft_back_replaces_exactly_one_model_tier(self) -> None:
+        """P-NF4: regrafting is the identity; a mutated graft moves only
+        the model's own tier, never its holder's."""
+        executor, anne = self._anne_modeling_sally()
+        anne = executor.observe_event(anne, PLACE).next_state
+        model = executor.nested(anne, ("sally",))
+        self.assertEqual(executor.with_nested(anne, ("sally",), model), anne)
+
+        planted = executor.plant(model, "letter_seen", "the letter")
+        grafted = executor.with_nested(anne, ("sally",), planted.next_state)
+        self.assertEqual(
+            executor.nested(grafted, ("sally",)).obligations,
+            planted.next_state.obligations,
+        )
+        # The holder's own tier is untouched: isolation survives direct
+        # mutation exactly as it survives event flow.
+        self.assertEqual(grafted.obligations, ())
+        self.assertEqual(grafted.asserted, anne.asserted)
+        self.assertEqual(grafted.observed_events, anne.observed_events)
+        # And the input parent is unchanged -- frozen dataclasses, no
+        # in-place edit of the spine.
+        self.assertEqual(executor.nested(anne, ("sally",)).obligations, ())
+
+    def test_grafting_reaches_a_grandchild_through_its_owner_path(self) -> None:
+        executor, anne = self._anne_modeling_sally()
+        anne = executor.with_nested(
+            anne,
+            ("sally",),
+            executor.open_nested(
+                executor.nested(anne, ("sally",)),
+                FrameSpec(
+                    frame="runtime.frames.sally_models_ben", owner="ben"
+                ),
+            ),
+        )
+        ben = executor.nested(anne, ("sally", "ben"))
+        declared = executor.with_nested(
+            anne,
+            ("sally", "ben"),
+            replace(
+                ben,
+                asserted=(("d", Literal("door", "located_in", "hall")),),
+            ),
+        )
+        self.assertIs(
+            executor.check(
+                executor.nested(declared, ("sally", "ben")),
+                Literal("door", "located_in", "hall"),
+            ).verdict,
+            Verdict.VERIFIED,
+        )
+        for path in ((), ("sally",)):
+            self.assertIs(
+                executor.check(
+                    executor.nested(declared, path),
+                    Literal("door", "located_in", "hall"),
+                ).verdict,
+                Verdict.UNKNOWN,
+            )
+
+    def test_routed_mutation_returns_the_root_and_rejections_do_not(self) -> None:
+        """P-NF5: route hands back the ROOT on accept and nothing on a
+        rejected branch."""
+        executor, anne = self._anne_modeling_sally()
+        planted = executor.route(
+            anne,
+            ("sally",),
+            lambda model: executor.plant(model, "letter_seen", "the letter"),
+        )
+        self.assertIs(planted.verdict, Verdict.VERIFIED)
+        root = planted.next_state
+        self.assertEqual(root.spec.frame, anne.spec.frame)
+        self.assertEqual(
+            executor.nested(root, ("sally",)).obligations[0].element,
+            "the letter",
+        )
+        self.assertEqual(root.obligations, ())
+
+        discharged = executor.route(
+            root,
+            ("sally",),
+            lambda model: executor.discharge(model, "letter_read", "the letter"),
+        )
+        self.assertIs(discharged.verdict, Verdict.VERIFIED)
+        self.assertFalse(
+            executor.nested(discharged.next_state, ("sally",))
+            .obligations[0]
+            .outstanding
+        )
+
+        unheralded = executor.route(
+            root,
+            ("sally",),
+            lambda model: executor.discharge(model, "gift", "a sudden gift"),
+        )
+        self.assertIs(unheralded.verdict, Verdict.UNKNOWN)
+        self.assertIsNone(unheralded.next_state)
+        # A closed ancestor REFUSES like any other closed frame: 'closed'
+        # is a verdict in this executor, never an exception.
+        shut = executor.route(
+            replace(anne, closed=True),
+            ("sally",),
+            lambda model: executor.plant(model, "letter_seen", "the letter"),
+        )
+        self.assertIs(shut.verdict, Verdict.REFUSED)
+        self.assertIsNone(shut.next_state)
+        self.assertIn("closed", shut.reason)
+        with self.assertRaisesRegex(KeyError, "no embedded model"):
+            executor.route(anne, ("ben",), lambda model: model)
+        # The degenerate empty route is the root itself.
+        at_root = executor.route(
+            anne, (), lambda state: executor.plant(state, "own", "her own plan")
+        )
+        self.assertEqual(at_root.next_state.obligations[0].element, "her own plan")
+        self.assertEqual(at_root.next_state.children, anne.children)
+
+    def test_graft_refusals_are_principled(self) -> None:
+        """P-NF6: every ill-formed graft raises before producing state."""
+        executor, anne = self._anne_modeling_sally()
+        model = executor.nested(anne, ("sally",))
+        with self.assertRaisesRegex(ValueError, "non-empty owner path"):
+            executor.with_nested(anne, (), model)
+        with self.assertRaisesRegex(KeyError, "ben"):
+            executor.with_nested(anne, ("ben",), model)
+        with self.assertRaisesRegex(KeyError, "no embedded model"):
+            executor.with_nested(anne, ("ben", "sally"), model)
+        # Grafting replaces; creation keeps open_nested's refusals.
+        ben_model = executor.open_frame(
+            FrameSpec(frame="runtime.frames.anne_models_ben", owner="ben")
+        )
+        with self.assertRaisesRegex(KeyError, "open_nested creates one"):
+            executor.with_nested(anne, ("sally", "ben"), ben_model)
+        with self.assertRaisesRegex(ValueError, "child-owner key"):
+            executor.with_nested(anne, ("sally",), ben_model)
+        with self.assertRaisesRegex(ValueError, "closed frame"):
+            executor.with_nested(replace(anne, closed=True), ("sally",), model)
+        # A self-model stays refused through the graft door. At the graft
+        # site itself the child-owner key check subsumes it (an anne-owned
+        # model cannot be keyed 'sally' in the first place), so the case
+        # that needs its own guard is a self-model buried INSIDE a grafted
+        # subtree, where no key check would catch it.
+        with self.assertRaisesRegex(ValueError, "declares owner"):
+            executor.with_nested(anne, ("sally",), ben_model)
+        self_model = replace(
+            model,
+            children=(
+                (
+                    "sally",
+                    executor.open_frame(
+                        FrameSpec(
+                            frame="runtime.frames.sally_models_sally",
+                            owner="sally",
+                        )
+                    ),
+                ),
+            ),
+        )
+        with self.assertRaisesRegex(ValueError, "itself"):
+            executor.with_nested(anne, ("sally",), self_model)
+
+    def test_graft_rejects_a_model_carrying_a_forged_history(self) -> None:
+        """The subset invariant is checked over the whole grafted subtree,
+        not just its root: a poisoned grandchild refuses too."""
+        executor, anne = self._anne_modeling_sally()
+        anne = executor.observe_event(anne, PLACE).next_state
+        model = executor.nested(anne, ("sally",))
+        forged = replace(
+            PLACE, witnessed_by=("sally", "anne", "world"), effects=(BOX,)
+        )
+        with self.assertRaisesRegex(ValueError, "subset invariant"):
+            executor.with_nested(
+                anne, ("sally",), replace(model, observed_events=(forged,))
+            )
+        with_ben = executor.open_nested(
+            model, FrameSpec(frame="runtime.frames.sally_models_ben", owner="ben")
+        )
+        poisoned = replace(
+            with_ben,
+            children=(
+                (
+                    "ben",
+                    replace(
+                        with_ben.child("ben"), processed_event_ids=("ghost",)
+                    ),
+                ),
+            ),
+        )
+        with self.assertRaisesRegex(ValueError, "subset invariant"):
+            executor.with_nested(anne, ("sally",), poisoned)
 
     def test_nesting_refusals_are_principled(self) -> None:
         executor = FrameExecutor()

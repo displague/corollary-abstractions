@@ -212,6 +212,34 @@ effect leaves affect UNKNOWN. Frequency-domain and higher-dimensional rotation
 rungs may remain explicitly partial, but may not be conflated with the first
 cut.
 
+**DELIVERED (these two bullets only) — graft-back and the typed binder.**
+`FrameExecutor.with_nested(parent, owner_path, new_child)` grafts a mutated
+model back immutably and `route(state, owner_path, transition)` runs any
+executor transition inside a model and hands back the ROOT, so a rejected
+branch still produces no next state. Grafting REPLACES rather than inserts —
+creation keeps `open_nested`'s refusals — and re-checks the child-owner key,
+the closed-ancestor rule, and the event-history subset invariant across the
+whole grafted subtree. The `replace(parent, children=...)` surgery is gone
+from the grandchild test; the poisoned-child control keeps it as a documented
+API bypass, because refusing that graft is exactly what makes surgery the only
+route to the loud RuntimeError it tests. P-NF4–P-NF6 fire.
+
+The story adapter's case-insensitive substring searches are gone. Beat-creating
+transitions carry `binds` records (`element@start:end`); the adapter validates
+each span against the frame's declared surface forms for that element id and
+stores typed mentions on the beat, and plant/discharge consult those records by
+element identity. Every anti-vacuity control survives, two structurally: a plant
+still amends the VISIBLE setup beat (records are rebased onto the amended text),
+and a discharge requires a record ON the resolution beat, so "the evidence is
+really in the resolution" is no longer a substring test. The hidden-ledger
+control sharpens to "identical prose, no bindings → UNKNOWN", and an element id
+that never appears in the rendered story now plants, discharges, and closes —
+something the substring check could not do. P-EB1–P-EB3 fire; the golden-chicken
+demo's output is byte-identical. Still open: the element lexicon is the
+adapter's own declaration rather than corpus-grounded event structure, surface
+matching is deliberately exact, and no consumer mutates a nested model in a live
+flow yet. The remaining bullets of this item are untouched.
+
 ## 8. Build visual ground truth before visual weights
 
 The v0.6 visual experiment was explicitly deferred because no oracle layer

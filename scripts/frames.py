@@ -29,6 +29,16 @@ Adjudication order and semantics (each is a deliberate design decision):
    knowingly diverges from its model of the other. Fiction does not nest
    (no owner to attribute a model to; suspension inheritance undesigned)
    and self-models are refused (an owner's own frame holds its beliefs).
+   `nested` navigates read-only; `with_nested` grafts a mutated model back
+   at an explicit owner path and `route` runs any frame transition inside a
+   model and returns the ROOT state, so a rejected branch still cannot
+   mutate accepted state. Grafting is checked, not trusted: it replaces an
+   existing model (creation stays with `open_nested` and its refusals),
+   keeps the child-owner key equal to the model's declared owner, refuses
+   to graft into a closed frame, and re-checks the subset invariant that
+   `observe_event`'s loud RuntimeError assumes -- a model's event history
+   is a subset of its parent's, so the only way to break it remains
+   deliberate dataclass surgery.
 0. The boundary rule: a frame OPENS only if its declarations contradict no
    unsuspended world truth. "Invention is unlimited at the boundary" means
    unlimited once the contradicted truths are explicitly suspended -- a
@@ -98,7 +108,7 @@ law, the matcher established the twin, and those are the whole connection.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Mapping
+from typing import Callable, Mapping
 
 from controller import Action, ActionKind, Verification, Verdict
 
@@ -413,6 +423,183 @@ class FrameExecutor:
                 )
             current = child_state
         return current
+
+    def with_nested(
+        self,
+        parent: FrameState,
+        owner_path: tuple[str, ...],
+        new_child: FrameState,
+    ) -> FrameState:
+        """Replace the model at owner_path, immutably, invariants intact.
+
+        The read-only counterpart of `nested`: mutators applied to a
+        navigated model return a DETACHED state with no path home, so
+        without this every deep consumer reached for
+        `replace(parent, children=...)` surgery -- which silently accepts
+        any tree at all (nested-frames review, note 8).
+
+        This is a REPLACEMENT, not an insertion: creation stays with
+        `open_nested`, which owns the refusals that make a model
+        well-formed (owned parent, owned child, no self-model, no
+        duplicate key). A graft therefore refuses a path that does not
+        already exist, rather than quietly inventing a model at the tip
+        and skipping those gates.
+
+        Every structural invariant `observe_event` relies on is re-checked
+        against the grafted subtree, not assumed:
+        the child-owner key equals the model's declared owner (the key is
+        how delivery matches an owner against witnessed_by -- a mismatched
+        key would route events by one name and adjudicate them under
+        another); no frame on the path is closed (the same reason
+        `open_nested` refuses a closed parent); and the model's event
+        history stays a SUBSET of its holder's. That last one is the
+        premise of the loud RuntimeError inside nested delivery: with it
+        checked here, breaking it requires deliberate dataclass surgery
+        rather than an ordinary graft, which is exactly what the control
+        test now documents itself as doing.
+        """
+
+        if not owner_path:
+            raise ValueError(
+                "with_nested needs a non-empty owner path: an empty path "
+                "names the root frame, and replacing a frame with itself "
+                "is not a graft"
+            )
+        if parent.closed:
+            raise ValueError("cannot graft into a closed frame")
+        holder = parent
+        for owner in owner_path[:-1]:
+            child_state = holder.child(owner)
+            if child_state is None:
+                raise KeyError(f"no embedded model of {owner!r} at this level")
+            if child_state.closed:
+                raise ValueError("cannot graft into a closed frame")
+            holder = child_state
+        target = owner_path[-1]
+        if holder.child(target) is None:
+            raise KeyError(
+                f"no embedded model of {target!r} at this level; grafting "
+                "replaces an existing model and open_nested creates one"
+            )
+        self._check_model(holder, target, new_child)
+        grafted = replace(
+            holder,
+            children=tuple(
+                (owner, new_child if owner == target else state)
+                for owner, state in holder.children
+            ),
+        )
+        # Rebuild the spine outwards: every ancestor is a frozen dataclass,
+        # so the graft is a fresh chain of parents, never an in-place edit.
+        for depth in range(len(owner_path) - 1, 0, -1):
+            ancestor = self.nested(parent, owner_path[:depth - 1])
+            owner = owner_path[depth - 1]
+            grafted = replace(
+                ancestor,
+                children=tuple(
+                    (key, grafted if key == owner else state)
+                    for key, state in ancestor.children
+                ),
+            )
+        return grafted
+
+    def route(
+        self,
+        state: FrameState,
+        owner_path: tuple[str, ...],
+        transition: Callable[[FrameState], Verification[FrameState]],
+    ) -> Verification[FrameState]:
+        """Run a frame transition inside a model and graft the result back.
+
+        `transition` receives the model at owner_path and returns the
+        executor's own Verification; on an accepting verdict the returned
+        next_state is the ROOT frame with the mutated model grafted in, so
+        the caller keeps holding the root and never a detached child. A
+        rejected branch is passed through untouched -- next_state stays
+        None, and the controller's "rejected branches cannot mutate
+        accepted state" invariant is inherited rather than reimplemented.
+
+        An empty path routes to the root itself (the degenerate identity
+        route), which keeps callers from special-casing depth zero.
+
+        A closed frame on the path REFUSES rather than raising: "closed"
+        is a verdict everywhere else in this executor (close_frame,
+        observe_event, every transition), and a caller routing into a
+        closed ancestor deserves the same disposition it would get for
+        routing into the closed frame directly. Structural errors -- an
+        owner path that does not exist -- still raise, because they are
+        caller mistakes rather than frame semantics.
+        """
+
+        current = state
+        for depth, owner in enumerate(owner_path):
+            if current.closed:
+                return Verification(
+                    Verdict.REFUSED,
+                    "frame is closed; it accepts no routed transitions",
+                    evidence=(current.spec.frame,) + owner_path[:depth],
+                )
+            child_state = current.child(owner)
+            if child_state is None:
+                raise KeyError(f"no embedded model of {owner!r} at this level")
+            current = child_state
+        result = transition(current)
+        if not owner_path or result.next_state is None:
+            return result
+        return Verification(
+            result.verdict,
+            result.reason,
+            self.with_nested(state, owner_path, result.next_state),
+            result.evidence,
+        )
+
+    def _check_model(
+        self, holder: FrameState, child_owner: str, child: FrameState
+    ) -> None:
+        """Assert one holder/model pair is well-formed, then recurse."""
+
+        if holder.spec.owner is None:
+            raise ValueError(
+                "nested frames require an OWNED parent: nested fiction's "
+                "suspension-inheritance rules are undesigned (leak controls "
+                "exist for belief nesting only)"
+            )
+        if child.spec.owner != child_owner:
+            raise ValueError(
+                f"graft would break the child-owner key: model keyed "
+                f"{child_owner!r} declares owner {child.spec.owner!r}"
+            )
+        if child.spec.owner == holder.spec.owner:
+            raise ValueError(
+                f"owner {holder.spec.owner!r} cannot nest a model of "
+                "itself; its own frame already holds its beliefs"
+            )
+        processed = set(holder.processed_event_ids)
+        unknown = [
+            event_id
+            for event_id in child.processed_event_ids
+            if event_id not in processed
+        ]
+        if unknown:
+            raise ValueError(
+                f"graft would break the subset invariant: model "
+                f"{child_owner!r} processed events {unknown!r} its holder "
+                "never saw; events reach a model only through its parent"
+            )
+        witnessed = {event.event_id: event for event in holder.observed_events}
+        for event in child.observed_events:
+            if witnessed.get(event.event_id) != event:
+                raise ValueError(
+                    f"graft would break the subset invariant: model "
+                    f"{child_owner!r} observed {event.event_id!r} with "
+                    "visibility or effects its holder did not observe"
+                )
+        seen: set[str] = set()
+        for owner, grandchild in child.children:
+            if owner in seen:
+                raise ValueError(f"model keys must be unique; {owner!r} repeats")
+            seen.add(owner)
+            self._check_model(child, owner, grandchild)
 
     def observe_event(
         self, state: FrameState, event: FrameEvent

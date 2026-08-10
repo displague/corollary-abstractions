@@ -155,11 +155,10 @@ class NoDeusTests(unittest.TestCase):
         action = Action.build(
             ActionKind.GEN,
             "discharge",
-            {
-                "event_id": "sudden_key_used",
-                "element": "key",
-                "evidence_text": "used a fallen feather as a key",
-            },
+            # The resolution beat BINDS 'key' (a declared element that was
+            # never planted), so the binder passes it through and the
+            # refutation comes from the ledger, not from missing evidence.
+            {"event_id": "sudden_key_used", "element": "key"},
         )
         result = StoryFrameVerifier().evaluate(run.final_state, action)
         self.assertIs(result.verdict, Verdict.REFUTED)
