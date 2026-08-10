@@ -20,11 +20,23 @@ This module is the SEMANTIC rung. For one `verified_by` link it:
    constant slots);
 3. skeletonizes it with `match_signatures`' own tokenizer, parser,
    canonicalizer and `skeleton` -- the same front end the twin matcher runs over
-   `anonymized_template`, not a private re-implementation;
+   `anonymized_template`, not a private re-implementation -- with ONE declared
+   refinement, applied identically to both sides: the lattice poles TOP and BOT
+   do not share a slot class (see `LATTICE_POLES`);
 4. compares it against the citing statement's DECLARED FORM SET and reports
    CORRESPONDS / MISMATCH / UNTRANSLATABLE.
 
-Three design decisions are load-bearing and are argued rather than assumed.
+**What a CORRESPONDS verdict is not.** It is a statement about SHAPE. It says
+the theorem's opening goal, translated and skeletonized, is one of the forms the
+citing statement declares. It does NOT say the statement is true, it does not
+say the theorem proves this statement rather than a structural twin, and it is
+not semantic ownership. "Byte integrity alone is not semantic ownership" is a
+FLOOR this rung clears, not a ceiling it reaches. Nothing here -- and nothing in
+a `scripts/write_stage.py` receipt -- may be read as certifying the truth of the
+statement; truth lives in the Lean theorem, and correspondence only says which
+proposition the theorem is about.
+
+Four design decisions are load-bearing and are argued rather than assumed.
 
 **The declared fragment (fail closed on the rest).** A goal translates only if
 every hypothesis line binds names at type `Prop` and the goal is built from `not`,
@@ -61,6 +73,18 @@ That visibility is the price of the widening, and it exposes a real corpus
 finding: `logic.boolean_laws.double_negation` files the one-directional
 `P implies not(not P)` under `equivalent_forms`, so this check would accept a
 theorem proving only that half. See docs/DISCOVERIES.md.
+
+**A lattice constant is an object, not a placeholder.** The twin matcher folds
+every parameter-like slot into one class `P`, which is right for asking "same
+shape?" and catastrophic for asking "does this theorem prove this?": under it,
+`MEET(PROP1, TRUTH) = TRUTH` and `MEET(PROP1, FALSITY) = FALSITY` are the same
+skeleton, and a proof of `P ∧ False ↔ False` certified the FALSE claim
+`P and true = true` through every gate. Correspondence therefore splits the two
+lattice POLES (TOP, BOT) into distinct classes -- on the Lean side and the
+corpus side alike, and only inside this module. Spellings of ONE pole (TRUTH
+and UNIVERSE) are still not distinguished, deliberately: that is the corpus's
+own cross-discipline claim, and `ambiguous_with` is where this module admits it
+cannot choose between them. See `LATTICE_POLES`.
 
 **An asserted proposition is an equation.** A theorem `A` with no top-level `iff`
 is, in the Lindenbaum-Tarski algebra the corpus already works in, the equation
@@ -101,6 +125,7 @@ from match_signatures import (  # noqa: E402
     skeleton,
     slot_classes,
     template_call_heads,
+    template_slots,
     tokenize,
 )
 from proof_artifacts import (  # noqa: E402
@@ -347,6 +372,11 @@ _TEMPLATE_CONST = {"TRUE": "TRUTH", "FALSE": "FALSITY"}
 # Slot categories the emitted template implies. `constant` is what the corpora
 # declare for TRUTH / FALSITY / UNIVERSE / EMPTYSET, and PARAMETER_LIKE maps it
 # to the typed skeleton's `P`; propositional names are variables (`V`).
+#
+# This is the COARSE category only, and it is deliberately the same coarse
+# category the corpus side derives from `slot_schema` -- see
+# `equation_classes`. The identity of a lattice constant is restored later, at
+# skeleton time, by `correspondence_classes`, uniformly on both sides.
 EMITTED_SLOT_CLASSES = {"TRUTH": "P", "FALSITY": "P"}
 
 
@@ -423,9 +453,85 @@ def equation_classes(tree: tuple, classes: dict[str, str]) -> dict[str, str]:
     return {"TRUTH": "P", **classes}
 
 
+# --------------------------------------------------------------------------
+# Constant identity: a lattice bound is an OBJECT, not a placeholder
+# --------------------------------------------------------------------------
+
+# `match_signatures.slot_classes` folds every `parameter` and `constant` slot
+# into ONE coarse class `P`, and the typed skeleton renders a slot as
+# `?<index>:<class>`. That is right for the twin MATCHER, whose question is "do
+# these two statements have the same shape?": `CONSTANT * RADIUS` and
+# `MASS * RADIUS` should group, and the matcher is not asserting either is true.
+#
+# It is wrong for a PROOF gate, whose question is "does this theorem prove this
+# statement?", because a lattice bound is not a placeholder -- TRUTH denotes TOP
+# and nothing else. Under the coarse class alone, `MEET(PROP1, TRUTH) = TRUTH`
+# and `MEET(PROP1, FALSITY) = FALSITY` both skeletonize to
+# `?0:P = MEET⟨?0:P, ?1:V⟩`, so a Lean proof of `P ∧ False ↔ False` -- a TRUE
+# theorem -- certified the canonical claim `P and true = true` -- a FALSE one --
+# as CORRESPONDS, and carried it through all fourteen gates of
+# `scripts/write_stage.py` into a STAGED_CANDIDATE. Found by adversarial review
+# of this branch; it is the headline defect of the item.
+#
+# The refinement is LOCAL TO CORRESPONDENCE. `match_signatures` is untouched, so
+# the matcher's own typed skeletons -- and the matcher-delta prediction the
+# WRITE gate measures against them -- are exactly what they were.
+#
+# Constants are separated by what they DENOTE, not by how they are spelled, and
+# that choice is load-bearing in both directions:
+#
+# * separating the POLES is the fix: TOP and BOT are different objects, so
+#   TRUTH and FALSITY (and UNIVERSE and EMPTYSET) can never unify again;
+# * NOT separating spellings of one pole is equally deliberate. The corpus's
+#   whole cross-discipline thesis is that TRUTH over propositions and UNIVERSE
+#   over subsets are one object read twice, and this module's `ambiguous_with`
+#   reporting exists to say out loud that structure cannot choose between those
+#   two readings. Keying constants by spelling would make
+#   `logic.boolean_laws.identity_laws` and `settheory.boolean_laws.identity_laws`
+#   structurally distinct and silently delete that admission -- a check claiming
+#   more discriminating power than it has, which is the failure mode this whole
+#   module is written against.
+#
+# A parameter-like slot the table does not name keeps the coarse `P` and so
+# matches no Lean-emitted constant at all: `narrative.frame.frame_consistency`
+# writes BOT as `INCONSISTENCY`, and fail-closed is the right answer for an
+# undeclared spelling (the declared-dual code refuses it on the same grounds).
+LATTICE_POLES = {
+    "TRUTH": "TOP",
+    "UNIVERSE": "TOP",
+    "FALSITY": "BOT",
+    "EMPTYSET": "BOT",
+}
+
+
+def correspondence_classes(
+    tree: tuple, classes: dict[str, str]
+) -> dict[str, str]:
+    """Refine slot classes so the two lattice poles can never unify.
+
+    Applied to BOTH sides of every comparison -- Lean-emitted templates and
+    corpus-declared ones -- so it can only ever split a match, never create one.
+    """
+
+    refined = dict(classes)
+    for name in template_slots(tree):
+        if classes.get(name, "V") != "P":
+            continue
+        pole = LATTICE_POLES.get(name)
+        if pole is not None:
+            refined[name] = f"P.{pole}"
+    return refined
+
+
+def correspondence_skeleton(tree: tuple, classes: dict[str, str]) -> str:
+    """`match_signatures.skeleton` with lattice-constant identity restored."""
+
+    return skeleton(tree, correspondence_classes(tree, classes))
+
+
 def template_skeleton(text: str, classes: dict[str, str]) -> str:
     raw = parse_template(text)
-    return skeleton(as_equation(raw), equation_classes(raw, classes))
+    return correspondence_skeleton(as_equation(raw), equation_classes(raw, classes))
 
 
 # --------------------------------------------------------------------------
@@ -561,10 +667,14 @@ def declared_forms(node: dict) -> FormSet:
         else:
             tree = as_equation(raw)
             classes = equation_classes(raw, classes)
-            add("canonical", canonical, skeleton(tree, classes))
+            add("canonical", canonical, correspondence_skeleton(tree, classes))
             dual = boolean_dual(tree, classes)
             if dual is not None:
-                add("dual_of_canonical", canonical, skeleton(dual, dual_classes(classes)))
+                add(
+                    "dual_of_canonical",
+                    canonical,
+                    correspondence_skeleton(dual, dual_classes(classes)),
+                )
     else:
         refused.append("canonical: statement declares no anonymized_template")
 

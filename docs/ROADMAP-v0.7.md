@@ -355,6 +355,52 @@ unambiguity for new durable claims, completeness of declared transition rows (a
 contentless row matched any artifact row), and containment on the CLI's
 `seed_source_path` read.
 
+### Re-adjudication after independent adversarial review
+
+An independent review of the delivered branch returned DO NOT MERGE with two
+blocking findings. Nothing above is edited; the corrections are attached here,
+in the house style, because a prediction that was scored against a weaker
+measurement than it claimed is a prediction that has to be scored again.
+
+**The headline.** A proof of a TRUE theorem staged a FALSE canonical claim
+through all fourteen gates. `match_signatures` folds every parameter-like slot
+into one class `P`, and correspondence inherited that, so `TRUTH` and `FALSITY`
+were the same symbol to the comparison: `MEET(PROP1, TRUTH) = TRUTH` (false) and
+`MEET(PROP1, FALSITY) = FALSITY` (true) both skeletonize to
+`?0:P = MEET⟨?0:P, ?1:V⟩`. A Lean proof of `P ∧ ⊥ ↔ ⊥` therefore adjudicated
+CORRESPONDS via the *canonical* route against the claim `P and true = true`, and
+`scripts/write_stage.py` staged it. The gate was not bypassed; the EVIDENCE the
+gate consumed was one notch weaker than the gate's own enforcement, and that
+turned out to be the shape of nearly every finding in the review.
+
+| prediction | re-adjudication |
+|---|---|
+| P-PW2 | **still FIRED, and now for the right reason.** 15/1/0 is unchanged under constant identity — every committed link kept its verdict AND its route. That is a real result rather than a coincidence: the fix splits `TRUTH` from `FALSITY` while leaving `TRUTH` and `UNIVERSE` unified, so the corpus's honest citations are untouched and only the false-claim shape is split off. |
+| P-PW6 | **still FIRED, and it constrained the fix.** Keying constants by SPELLING would also have closed the hole, and would have silently deleted 12 of the 12 `ambiguous_with` reports (the set-theory twins spell TOP as `UNIVERSE`). The check would have looked stronger and been less honest. The fix separates the two POLES and not the two spellings, and `test_one_pole_spelled_two_ways_still_unifies` pins that as a decision. |
+| P-PW7 | **FIRED as a matrix; the matrix was reading a weaker input than it advertised.** Every row still holds. But "PROVEN + CORRESPONDS → STAGED_CANDIDATE" is only as strong as CORRESPONDS, and CORRESPONDS was admitting a false claim. Registering a gate matrix does not register the quality of the signals it switches on — a lesson for the next matrix. |
+| P-PW8 | **FIRED as WORDED, and the wording was too narrow to be the guarantee anyone wanted.** "No runtime write reaches `data/`" was measured with a `data/`-only digest, while the scratch checkout copies four trees. A candidate that landed a file in `scripts/`, `prover/`, `schema/` or the repository root satisfied P-PW8 exactly and still owned the next run — it could overwrite `scripts/write_stage.py` itself, or poison the `prover/` artifacts every `artifact_sha256` pin resolves against — and the receipt said `byte_identical: true`. The integrity digest now covers the whole working tree, the receipt field is named `working_tree_integrity` for what it measures, and `WorkingTreeIntegrityTests` stages real escapes into `scripts/`, `prover/`, `schema/` and the root. The prediction fired; the prediction was the wrong prediction. |
+
+Ten lesser findings were applied with it. The ones that change a claim rather
+than a line: the containment prose said the seed subprocess "is given no
+repository path in argv or environment", which was true and was being read as
+"the seed cannot find the repository" — `sys.executable` is the project's own
+virtualenv interpreter, so it can; the matcher-delta prediction gated seven of
+nine counters, leaving `ladder_violations`, `parse_problems` and
+`slot_schema_gaps` measured but unregistered; `stage_write` caught only its own
+`Refusal`, so a seed emitting malformed JSON escaped with no receipt and, through
+the controller adapter, aborted the whole run instead of the step; and the
+suite's own isolation control was a bare `assert` (deleted under `python -O`)
+that digested `data/` alone — the one guard that most needed to see a `scripts/`
+escape was blind to it in exactly the same way the gate was.
+
+**Honesty boundary, restated because the fix could be misread as strengthening
+it.** Skeleton correspondence is not semantic ownership. It says the theorem's
+opening goal, translated and skeletonized, is one of the forms the citing
+statement DECLARES. It does not say the statement is true, and it does not say
+this statement rather than its structural twin is what the theorem proves. "Byte
+integrity alone is not semantic ownership" is the floor this rung clears, not the
+ceiling it reaches, and no receipt text may be read as certifying truth.
+
 ## 4. Depth follows the v0.6 consumer verdict
 
 The five-arm verdict is negative and specific: address-only remains best at

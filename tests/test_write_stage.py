@@ -3,9 +3,16 @@
 Every test here runs against a MINI-REPOSITORY: a temporary copy of `scripts/`,
 `data/`, `prover/` and `schema/`. That is not convenience, it is the control --
 if a bug let the stager write to `data/`, a test using the real repository would
-corrupt the durable store to discover it. The real repository's `data/` digest is
-also asserted unchanged around the whole class, so the isolation itself is
-checked rather than assumed.
+corrupt the durable store to discover it. The real repository's digest is also
+asserted unchanged around every class, so the isolation itself is checked rather
+than assumed.
+
+That control was itself two notches weaker than it advertised, and both are
+fixed here. It digested `data/` alone while the fixture copies four trees, so an
+escape into `scripts/` or `prover/` was invisible to the very guard whose job is
+to see it; and it was a bare `assert`, which `python -O` deletes, so the guard
+could be compiled out of existence. It now digests every copied tree and raises
+unconditionally.
 
 The candidate exercised is a real Boolean law the corpus does not yet carry --
 the domination law `P and false = false` -- proved by a real closing Lean
@@ -41,6 +48,7 @@ from write_stage import (  # noqa: E402
     WriteCandidate,
     durable_digest,
     stage_write,
+    working_tree_digest,
 )
 
 
@@ -235,13 +243,21 @@ class WriteStageTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.real_digest = durable_digest(REPO_ROOT / "data")
+        # All four copied trees plus the repository's root files, not `data/`
+        # alone: a stager bug that landed a file in `scripts/` or `prover/`
+        # would have slipped past a corpus-only digest, which is precisely the
+        # blind spot this suite exists to have covered.
+        cls.real_digest = working_tree_digest(REPO_ROOT)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        assert durable_digest(REPO_ROOT / "data") == cls.real_digest, (
-            "a WRITE-staging test changed the repository's durable store"
-        )
+        # `raise`, not `assert`: `python -O` strips assert statements, and a
+        # safety control that a compile flag can delete is not a control.
+        if working_tree_digest(REPO_ROOT) != cls.real_digest:
+            raise AssertionError(
+                "a WRITE-staging test changed the repository working tree "
+                "(root files, data/, prover/, schema/ or scripts/)"
+            )
 
     def setUp(self) -> None:
         self.repo = MiniRepo()
@@ -272,7 +288,9 @@ class WriteStageTestCase(unittest.TestCase):
 
 
 # Declared BEFORE the pipeline measures it; a candidate that cannot say what it
-# will do to the twin matcher does not get staged (P-PW8).
+# will do to the twin matcher does not get staged (P-PW8). Every counter the
+# matcher summary emits is here: the first delivery gated seven of nine, so a
+# candidate could add a `slot_schema_gaps` and never have predicted it.
 EXPECTED_DELTA = {
     "nodes_analyzed": 1,
     "shape_groups": 0,
@@ -280,6 +298,9 @@ EXPECTED_DELTA = {
     "family_groups": 0,
     "aliased_groups": 0,
     "mirror_groups": 0,
+    "ladder_violations": 0,
+    "parse_problems": 0,
+    "slot_schema_gaps": 0,
     "new_typed_twin_partners": [],
 }
 
@@ -309,7 +330,7 @@ class AcceptedCandidateTests(WriteStageTestCase):
                 "structural_unambiguity",
                 "schema_and_link_validation",
                 "matcher_delta_prediction",
-                "durable_store_byte_identity",
+                "working_tree_byte_identity",
             ],
         )
         self.assertTrue(all(c["status"] == "PASS" for c in record.checks))
@@ -352,7 +373,11 @@ class AcceptedCandidateTests(WriteStageTestCase):
         self.assertEqual(path.read_bytes(), original)
         payload = json.loads(original.decode("utf-8"))
         self.assertEqual(payload["outcome"], STAGED_CANDIDATE)
-        self.assertTrue(payload["durable_store"]["byte_identical"])
+        self.assertTrue(payload["working_tree_integrity"]["byte_identical"])
+        self.assertEqual(
+            payload["working_tree_integrity"]["covers"],
+            ["<repository root files>", "data", "prover", "schema", "scripts"],
+        )
         self.assertEqual(payload["approval_granted"], [])
 
     def test_nothing_is_promoted_into_the_mini_repo_corpus(self) -> None:
@@ -408,12 +433,21 @@ class GateMatrixTests(WriteStageTestCase):
         ]
         record = self.stage(self.candidate(seed_source=seed_source(node)))
         self.assertRefusedBy(record, "semantic_correspondence")
-        self.assertIn("MISMATCH", record.refusal["detail"])
-        # "A diffable receipt explaining why" is worth little if the MISMATCH
-        # receipt omits the skeletons that mismatched.
+        # Asserted against the STRUCTURED record, not against prose: the
+        # refusal detail is a human sentence and a substring of it is a weak
+        # pin on a strong claim. "A diffable receipt explaining why" is also
+        # worth little if the MISMATCH receipt omits the skeletons.
         self.assertEqual(record.correspondence["verdict"], "MISMATCH")
+        self.assertIsNone(record.correspondence["matched_route"])
         self.assertTrue(record.correspondence["theorem_skeleton"])
         self.assertTrue(record.correspondence["considered_forms"])
+        self.assertNotIn(
+            record.correspondence["theorem_skeleton"],
+            [
+                form.split(": ", 1)[1]
+                for form in record.correspondence["considered_forms"]
+            ],
+        )
 
     def test_proven_with_an_untranslatable_theorem_fails_closed(self) -> None:
         """UNTRANSLATABLE is reported by the lint but REFUSED by the gate."""
@@ -431,7 +465,8 @@ class GateMatrixTests(WriteStageTestCase):
             )
         )
         self.assertRefusedBy(record, "semantic_correspondence")
-        self.assertIn("UNTRANSLATABLE", record.refusal["detail"])
+        self.assertEqual(record.correspondence["verdict"], "UNTRANSLATABLE")
+        self.assertIsNone(record.correspondence["matched_route"])
 
 
 class MaliciousPathTests(WriteStageTestCase):
@@ -454,18 +489,32 @@ class MaliciousPathTests(WriteStageTestCase):
             self.repo.root / "data" / "logic",
             self.repo.root / "data" / "new" / "receipts",
         ):
-            with self.subTest(target=target.name), self.assertRaises(ValueError):
+            # Not a bare `assertRaises(ValueError)`: `Refusal` is not a
+            # ValueError but `proof_correspondence.Untranslatable` IS, and a
+            # test that accepts any ValueError would go green on a leak from
+            # deep inside the pipeline while claiming to pin this guard. The
+            # message is asserted for the same reason.
+            with self.subTest(target=target.name), self.assertRaises(
+                ValueError
+            ) as caught:
                 stage_write(self.candidate(), self.repo.root, target)
+            self.assertIs(type(caught.exception), ValueError)
+            self.assertIn(
+                "staging directory may not live under the durable store",
+                str(caught.exception),
+            )
         self.assertEqual(durable_digest(self.repo.root / "data"), before)
 
-    def test_refusal_leaves_the_durable_store_byte_identical(self) -> None:
-        before = durable_digest(self.repo.root / "data")
+    def test_refusal_leaves_the_working_tree_byte_identical(self) -> None:
+        before_data = durable_digest(self.repo.root / "data")
+        before_tree = working_tree_digest(self.repo.root)
         record = self.stage(
             self.candidate(seed_script="data/logic/nodes.json")
         )
-        self.assertEqual(durable_digest(self.repo.root / "data"), before)
-        self.assertEqual(record.durable_digest_before, before)
-        self.assertEqual(record.durable_digest_after, before)
+        self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        self.assertEqual(working_tree_digest(self.repo.root), before_tree)
+        self.assertEqual(record.working_tree_digest_before, before_tree)
+        self.assertEqual(record.working_tree_digest_after, before_tree)
 
     def test_refusal_still_writes_a_diffable_receipt(self) -> None:
         record = self.stage(
@@ -475,7 +524,7 @@ class MaliciousPathTests(WriteStageTestCase):
         payload = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(payload["outcome"], REFUSED)
         self.assertEqual(payload["refusal"]["check"], "path_containment")
-        self.assertTrue(payload["durable_store"]["byte_identical"])
+        self.assertTrue(payload["working_tree_integrity"]["byte_identical"])
         self.assertIsNone(payload["staged"])
 
     def test_escaping_and_absolute_targets_are_refused(self) -> None:
@@ -493,26 +542,55 @@ class MaliciousPathTests(WriteStageTestCase):
                     "path_containment",
                 )
 
-    def test_proposal_file_cannot_read_bytes_from_outside_the_repository(
+    def proposal_payload(self, source_path: str) -> dict:
+        return {
+            "statement_id": STATEMENT_ID,
+            "corpus": CORPUS,
+            "seed_script": SEED,
+            "seed_source_path": source_path,
+            "rung": PROVEN,
+        }
+
+    def test_proposal_seed_source_path_must_be_a_contained_seed_script(
         self,
     ) -> None:
         """Self-review: a proposal is untrusted input, and `seed_source_path`
-        was an uncontained read that could pull arbitrary bytes into a record."""
+        was an uncontained read that could pull arbitrary bytes into a record.
+
+        Renamed from `..._cannot_read_bytes_from_outside_the_repository`,
+        which the third case falsified: `scripts/retrieval.py` is INSIDE the
+        repository and is refused for not being a `seed_*.py` script. The rule
+        is containment AND naming, and the name now says so.
+        """
         from write_stage import Refusal, candidate_from_json
 
-        for path in ("../../secret.py", "/etc/passwd", "scripts/retrieval.py"):
-            with self.subTest(path=path), self.assertRaises(Refusal) as caught:
-                candidate_from_json(
-                    {
-                        "statement_id": STATEMENT_ID,
-                        "corpus": CORPUS,
-                        "seed_script": SEED,
-                        "seed_source_path": path,
-                        "rung": PROVEN,
-                    },
-                    self.repo.root,
-                )
+        for path, why in (
+            ("../../secret.py", "escapes the repository"),
+            ("/etc/passwd", "is absolute"),
+            ("scripts/retrieval.py", "is contained but is not a seed script"),
+            ("data/logic/nodes.json", "is the durable store"),
+            ("scripts/seed_absent.py", "does not exist"),
+        ):
+            with self.subTest(path=path, why=why), self.assertRaises(
+                Refusal
+            ) as caught:
+                candidate_from_json(self.proposal_payload(path), self.repo.root)
             self.assertEqual(caught.exception.check, "path_containment")
+
+    def test_a_contained_seed_script_is_actually_read(self) -> None:
+        """The accepting branch. Five refusals and no acceptance would pass
+        just as well against a `seed_source_path` that refused everything --
+        including the shape the README documents."""
+        from write_stage import candidate_from_json
+
+        (self.repo.root / SEED).write_text(
+            seed_source(NODE), encoding="utf-8"
+        )
+        candidate = candidate_from_json(
+            self.proposal_payload(SEED), self.repo.root
+        )
+        self.assertEqual(candidate.seed_source, seed_source(NODE))
+        self.assertEqual(candidate.seed_script, SEED)
 
     def test_seed_naming_a_path_outside_the_scratch_is_screened(self) -> None:
         source = seed_source(NODE).replace(
@@ -521,6 +599,92 @@ class MaliciousPathTests(WriteStageTestCase):
         self.assertRefusedBy(
             self.stage(self.candidate(seed_source=source)), "seed_source_screen"
         )
+
+
+class WorkingTreeIntegrityTests(WriteStageTestCase):
+    """The integrity digest covered `data/` while the fixture copies FOUR trees.
+
+    A candidate seed that reached `scripts/`, `prover/`, `schema/` or the
+    repository root therefore landed its file AND collected a receipt saying
+    `byte_identical: true` -- it could have rewritten `scripts/write_stage.py`
+    to own the next run, or poisoned the `prover/` artifacts that every
+    `artifact_sha256` pin in the corpus resolves against.
+
+    The seeds below defeat `_screen_seed_source` on purpose, by assembling the
+    path at runtime instead of writing a literal. That is the point: the screen
+    is documented as catching non-adversarial mistakes, so the digest is the
+    only thing standing behind the boundary and it must be shown standing.
+    """
+
+    def escaping_seed(self, relative: str, payload: str) -> str:
+        """A seed that writes `relative` inside the REAL mini-repo root.
+
+        The root is passed as character codes so no absolute-path literal and
+        no `..` literal appears in the source -- exactly the shape the module
+        docstring warns a determined candidate can take.
+        """
+        codes = [ord(c) for c in str(self.repo.root)]
+        return (
+            seed_source(NODE)
+            + "\nfrom pathlib import Path as _P\n"
+            f"_root = _P(''.join(chr(c) for c in {codes!r}))\n"
+            f"_target = _root / {'/'.join(repr(p) for p in relative.split('/'))}\n"
+            "_target.parent.mkdir(parents=True, exist_ok=True)\n"
+            f"_target.write_text({payload!r}, encoding='utf-8')\n"
+        )
+
+    def assertEscapeCaught(self, relative: str) -> None:
+        before_tree = working_tree_digest(self.repo.root)
+        before_data = durable_digest(self.repo.root / "data")
+        record = self.stage(
+            self.candidate(seed_source=self.escaping_seed(relative, "# owned\n"))
+        )
+        self.assertRefusedBy(record, "working_tree_byte_identity")
+        self.assertIsNone(record.staged)
+        self.assertNotEqual(
+            record.working_tree_digest_before,
+            record.working_tree_digest_after,
+        )
+        # The escape really happened -- the digest is catching a real write,
+        # not refusing a hypothetical one.
+        self.assertTrue((self.repo.root / relative).is_file())
+        self.assertNotEqual(working_tree_digest(self.repo.root), before_tree)
+        # ... and it is invisible to the `data/`-only digest the gate used to
+        # enforce, which is why that digest was the wrong cover.
+        self.assertEqual(durable_digest(self.repo.root / "data"), before_data)
+        payload = json.loads(
+            (self.repo.staging / f"{record.record_id}.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertFalse(payload["working_tree_integrity"]["byte_identical"])
+
+    def test_a_seed_that_escapes_into_scripts_is_caught_by_the_digest(self) -> None:
+        """The worst case: overwrite the gate itself for the next run."""
+        self.assertEscapeCaught("scripts/write_stage.py")
+
+    def test_a_seed_that_escapes_into_prover_is_caught_by_the_digest(self) -> None:
+        """Poison the artifacts every `artifact_sha256` pin resolves against."""
+        self.assertEscapeCaught("prover/sample_triples.json")
+
+    def test_a_seed_that_escapes_into_the_repository_root_is_caught(self) -> None:
+        self.assertEscapeCaught("AGENTS.md")
+
+    def test_a_seed_that_escapes_into_schema_is_caught(self) -> None:
+        self.assertEscapeCaught("schema/equation-node.schema.json")
+
+    def test_the_digest_ignores_this_gates_own_receipts(self) -> None:
+        """`staging/` is excluded, and it has to be: the gate writes there.
+
+        Without the exclusion the second run of a candidate would see a
+        different before-digest and every re-run would look like tampering.
+        """
+        first = self.stage(self.candidate())
+        second = self.stage(self.candidate())
+        self.assertEqual(
+            first.working_tree_digest_before, second.working_tree_digest_before
+        )
+        self.assertEqual(second.outcome, STAGED_CANDIDATE, second.refusal)
 
 
 class RegenerationConfinementTests(WriteStageTestCase):
@@ -574,14 +738,18 @@ class RegenerationConfinementTests(WriteStageTestCase):
         self.assertIn("seed exploded", record.refusal["detail"])
         self.assertNotIn("write-stage-", record.refusal["detail"])
 
-    def test_the_seed_never_learns_where_the_repository_is(self) -> None:
-        """Containment by construction, not by screen.
+    def test_seed_runs_with_its_cwd_inside_the_scratch_tree(self) -> None:
+        """What the containment actually is: cwd, argv and environment.
 
-        The seed runs with cwd inside a throwaway scratch tree, a relative
-        argv, and an environment carrying no repository path -- so it cannot
-        name the durable store even if it wants to. Proved by making the seed
-        report its own working directory: the refusal shows the scrubbed
-        scratch marker and never the repository root.
+        Renamed from `test_the_seed_never_learns_where_the_repository_is`,
+        which asserted more than it checked. The seed is HANDED no repository
+        path -- proved below by making it report its own working directory --
+        but it is started as `sys.executable`, which is the project's own
+        `.venv` interpreter, so a seed that walks up from `sys.executable` finds
+        the project root. Containment here is over cwd/argv/environment only;
+        the integrity digest is what stands behind the residual threat, and
+        `test_a_seed_that_escapes_into_scripts_is_caught_by_the_digest` is
+        where that is exercised.
         """
         record = self.stage(
             self.candidate(
@@ -594,6 +762,29 @@ class RegenerationConfinementTests(WriteStageTestCase):
         self.assertRefusedBy(record, "scratch_regeneration")
         self.assertIn("cwd=<scratch>", record.refusal["detail"])
         self.assertNotIn(str(self.repo.root), record.refusal["detail"])
+
+    def test_the_seed_is_handed_one_absolute_path_the_interpreters(self) -> None:
+        """The honest half, asserted rather than admitted only in prose.
+
+        `cwd` is scratch and `argv[0]` is relative, but the process is started
+        as `sys.executable` and Python hands that to the child. It is the one
+        absolute path outside the scratch tree the seed always has, and a
+        walk up from it reaches whatever project the interpreter belongs to.
+        """
+        record = self.stage(
+            self.candidate(
+                seed_source=(
+                    "import sys\n"
+                    "from pathlib import Path\n"
+                    "raise SystemExit('exe=' + Path(sys.executable).as_posix())\n"
+                )
+            )
+        )
+        self.assertRefusedBy(record, "scratch_regeneration")
+        detail = record.refusal["detail"]
+        self.assertIn("exe=", detail)
+        # Not scrubbed to `<scratch>`, because it is not in the scratch tree.
+        self.assertNotIn("exe=<scratch>", detail)
 
     def test_extending_an_existing_corpus_is_confined_too(self) -> None:
         """The other regeneration shape: add one node to a committed corpus."""
@@ -648,6 +839,58 @@ class RegenerationConfinementTests(WriteStageTestCase):
         )
         self.assertRefusedBy(record, "regeneration_confinement")
         self.assertIn("removes existing statements", record.refusal["detail"])
+
+    def test_seed_writing_malformed_json_is_refused_with_a_receipt(self) -> None:
+        """`stage_write` caught only its own `Refusal`, so a seed emitting a
+        truncated corpus raised `JSONDecodeError` out of `_regenerate` -- past
+        the after-digest, past the receipt, and (through the adapter) out of
+        `Controller().run`. A candidate is judged or it is not; it may not
+        vanish."""
+        source = (
+            "from pathlib import Path\n"
+            f"out = Path('data') / {CORPUS!r} / 'nodes.json'\n"
+            "out.parent.mkdir(parents=True, exist_ok=True)\n"
+            "out.write_text('{\"statement_nodes\": [', encoding='utf-8')\n"
+        )
+        record = self.stage(self.candidate(seed_source=source))
+        self.assertRefusedBy(record, "regeneration_confinement")
+        self.assertIn("not a corpus document", record.refusal["detail"])
+        self.assertTrue(
+            (self.repo.staging / f"{record.record_id}.json").is_file()
+        )
+        self.assertTrue(
+            record.working_tree_digest_before == record.working_tree_digest_after
+        )
+
+    def test_an_unforeseen_crash_is_a_refusal_with_a_receipt(self) -> None:
+        """The blanket guard behind the named ones.
+
+        A corpus whose `statement_nodes` holds strings instead of objects is
+        valid JSON, has the key the confinement check reads, and then raises
+        `AttributeError` on `node.get` -- a shape no gate anticipated, which is
+        the whole category the blanket guard exists for. It must still produce a
+        judged, digested, scrubbed receipt rather than an exception.
+        """
+        source = (
+            "import json\nfrom pathlib import Path\n"
+            f"out = Path('data') / {CORPUS!r} / 'nodes.json'\n"
+            "out.parent.mkdir(parents=True, exist_ok=True)\n"
+            "out.write_text(json.dumps({'statement_nodes': ['not a node']}),"
+            " encoding='utf-8')\n"
+        )
+        record = self.stage(self.candidate(seed_source=source))
+        self.assertRefusedBy(record, "staging_crashed")
+        self.assertIn("AttributeError", record.refusal["detail"])
+        # Receipts stay diffable even when the gate is surprised.
+        self.assertNotIn("write-stage-", record.refusal["detail"])
+        self.assertNotIn(str(self.repo.root), record.refusal["detail"])
+        payload = json.loads(
+            (self.repo.staging / f"{record.record_id}.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(payload["working_tree_integrity"]["byte_identical"])
+        self.assertIsNone(payload["staged"])
 
     def test_declared_node_cannot_differ_from_the_regenerated_one(self) -> None:
         """The judged node is the one the SEED emits, not one the candidate
@@ -739,7 +982,13 @@ class ProofGateTests(WriteStageTestCase):
             )
         )
         self.assertRefusedBy(record, "semantic_correspondence")
-        self.assertIn("MISMATCH", record.refusal["detail"])
+        self.assertEqual(record.correspondence["verdict"], "MISMATCH")
+        self.assertIsNone(record.correspondence["matched_route"])
+        # The decoy's proposition is what the candidate wanted judged; the
+        # CITED theorem's is what was judged.
+        self.assertEqual(
+            record.correspondence["reference"], THEOREM
+        )
 
     def test_already_owned_theorem_is_refused(self) -> None:
         """A candidate may not re-cite a theorem an existing statement owns."""
@@ -768,7 +1017,14 @@ class ProofGateTests(WriteStageTestCase):
         self.assertRefusedBy(record, "exclusive_theorem_ownership")
 
     def test_candidate_node_citing_another_theorem_is_refused(self) -> None:
-        """Attack: prove theorem A, ship a node that cites theorem B."""
+        """Attack: prove theorem A, ship a node that cites theorem B.
+
+        Refused at `candidate_link_shape`, not `semantic_correspondence`: no
+        correspondence has been computed at this point, and naming the check
+        after one put a `semantic_correspondence` refusal in the receipt beside
+        a null `correspondence` field -- a receipt that reads as "the skeletons
+        were compared and disagreed" when nothing was compared at all.
+        """
         node = copy.deepcopy(NODE)
         node["verified_by"] = [
             {
@@ -778,8 +1034,33 @@ class ProofGateTests(WriteStageTestCase):
             }
         ]
         record = self.stage(self.candidate(seed_source=seed_source(node)))
-        self.assertRefusedBy(record, "semantic_correspondence")
-        self.assertIn("different theorem", record.refusal["detail"])
+        self.assertRefusedBy(record, "candidate_link_shape")
+        self.assertIsNone(record.correspondence)
+
+    def test_candidate_node_with_no_verified_by_link_is_refused(self) -> None:
+        node = copy.deepcopy(NODE)
+        node["verified_by"] = []
+        record = self.stage(self.candidate(seed_source=seed_source(node)))
+        self.assertRefusedBy(record, "candidate_link_shape")
+        self.assertIsNone(record.correspondence)
+
+    def test_two_candidates_differing_only_in_rationale_get_two_receipts(
+        self,
+    ) -> None:
+        """`record_id` names the receipt FILE, and `rationale` was not in the
+        payload it digests -- so two candidates with the same proof and
+        different justifications silently overwrote one another's receipt. The
+        rationale is the one field a reviewer reads and no gate checks, which
+        makes exactly that pair the one a reviewer must see both of."""
+        first = self.stage(self.candidate(rationale="because it is a lattice law"))
+        second = self.stage(self.candidate(rationale="because I say so"))
+        self.assertNotEqual(first.record_id, second.record_id)
+        self.assertTrue((self.repo.staging / f"{first.record_id}.json").is_file())
+        self.assertTrue((self.repo.staging / f"{second.record_id}.json").is_file())
+        self.assertEqual(
+            first.staged["rationale"], "because it is a lattice law"
+        )
+        self.assertEqual(second.staged["rationale"], "because I say so")
 
 
 class ValidationAndDeltaTests(WriteStageTestCase):
@@ -813,8 +1094,10 @@ class ValidationAndDeltaTests(WriteStageTestCase):
         wrong = dict(EXPECTED_DELTA, nodes_analyzed=0)
         record = self.stage(self.candidate(expected_matcher_delta=wrong))
         self.assertRefusedBy(record, "matcher_delta_prediction")
-        self.assertIn("nodes_analyzed", record.refusal["detail"])
-        self.assertIn("declared 0", record.refusal["detail"])
+        # Structured, not prose: the disagreement is visible in the receipt as
+        # declared-versus-measured, which is the thing a reviewer audits.
+        self.assertEqual(record.matcher_delta["declared"]["nodes_analyzed"], 0)
+        self.assertEqual(record.matcher_delta["delta"]["nodes_analyzed"], 1)
         passed = [c["check"] for c in record.checks if c["status"] == "PASS"]
         self.assertIn("schema_and_link_validation", passed)
         self.assertIn("semantic_correspondence", passed)
@@ -863,8 +1146,17 @@ class ValidationAndDeltaTests(WriteStageTestCase):
             )
         )
         self.assertRefusedBy(record, "structural_unambiguity")
-        self.assertIn("logic.boolean_laws.idempotence", record.refusal["detail"])
-        self.assertIn("settheory.boolean_laws.idempotence", record.refusal["detail"])
+        # The claimants come from the structured field, not from a sentence:
+        # `ambiguous_with` is what a reviewer reads and what the gate acts on.
+        self.assertEqual(
+            record.correspondence["ambiguous_with"],
+            [
+                "logic.boolean_laws.idempotence",
+                "settheory.boolean_laws.idempotence",
+            ],
+        )
+        self.assertEqual(record.correspondence["verdict"], "CORRESPONDS")
+        self.assertEqual(record.correspondence["matched_route"], "canonical")
 
     def test_delta_declared_with_the_wrong_type_is_refused(self) -> None:
         """Python's `True == 1`, and a JSON proposal is where `true` arrives."""
@@ -872,6 +1164,9 @@ class ValidationAndDeltaTests(WriteStageTestCase):
             dict(EXPECTED_DELTA, nodes_analyzed=True),
             dict(EXPECTED_DELTA, shape_groups="0"),
             dict(EXPECTED_DELTA, typed_groups=0.0),
+            # A tuple is not a list. JSON cannot produce one, so accepting it
+            # widened only what an in-process caller could pass.
+            dict(EXPECTED_DELTA, new_typed_twin_partners=()),
             dict(EXPECTED_DELTA, new_typed_twin_partners="none"),
             dict(EXPECTED_DELTA, new_typed_twin_partners=[1]),
         ):
@@ -888,6 +1183,69 @@ class ValidationAndDeltaTests(WriteStageTestCase):
             ),
             "matcher_delta_prediction",
         )
+
+    def test_every_matcher_summary_key_is_gated(self) -> None:
+        """Seven of the nine counters were gated, so `ladder_violations`,
+        `parse_problems` and `slot_schema_gaps` were measured, recorded and
+        never predicted. This pins the gate list to the summary itself, so a
+        counter added to `_matcher_summary` cannot slip out of the prediction.
+        """
+        from write_stage import _MATCHER_DELTA_KEYS, _matcher_summary
+
+        summary, _typed = _matcher_summary(self.repo.root / "data")
+        self.assertEqual(
+            set(_MATCHER_DELTA_KEYS),
+            set(summary) | {"new_typed_twin_partners"},
+        )
+        self.assertEqual(set(EXPECTED_DELTA), set(_MATCHER_DELTA_KEYS))
+
+    def test_an_undeclared_slot_schema_gap_is_refused(self) -> None:
+        """The concrete escape the seven-of-nine gate allowed: a candidate
+        whose node uses a template slot its `slot_schema` does not declare
+        raises `slot_schema_gaps` by one and, before this fix, staged with
+        that delta undeclared."""
+        node = copy.deepcopy(NODE)
+        # PROP1 rather than FALSITY: an undeclared slot defaults to
+        # variable-like, which is what PROP1 already was, so nothing else about
+        # the candidate moves -- correspondence, validation and every other
+        # counter are unchanged and `slot_schema_gaps` is the only delta.
+        node["structural_signature"]["slot_schema"] = [
+            slot
+            for slot in node["structural_signature"]["slot_schema"]
+            if slot["slot_id"] != "PROP1"
+        ]
+        record = self.stage(self.candidate(seed_source=seed_source(node)))
+        self.assertRefusedBy(record, "matcher_delta_prediction")
+        self.assertIn("slot_schema_gaps", record.refusal["detail"])
+        self.assertEqual(record.matcher_delta["delta"]["slot_schema_gaps"], 1)
+
+    def test_the_receipt_carries_the_declared_delta_beside_the_measured_one(
+        self,
+    ) -> None:
+        """`staging/README.md` said this field carried the prediction; it did
+        not. The prediction survived only as free text in a PASS detail, so a
+        receipt could not be audited for predicted-versus-measured without
+        going back to the proposal file."""
+        record = self.stage(self.candidate())
+        self.assertEqual(record.matcher_delta["declared"], EXPECTED_DELTA)
+        payload = json.loads(
+            (self.repo.staging / f"{record.record_id}.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        declared = payload["matcher_delta"]["declared"]
+        measured = payload["matcher_delta"]["delta"]
+        self.assertEqual(
+            {key: declared[key] for key in sorted(declared)},
+            {key: measured[key] for key in sorted(declared)},
+        )
+
+    def test_the_declared_delta_is_recorded_even_when_it_is_wrong(self) -> None:
+        wrong = dict(EXPECTED_DELTA, nodes_analyzed=0)
+        record = self.stage(self.candidate(expected_matcher_delta=wrong))
+        self.assertRefusedBy(record, "matcher_delta_prediction")
+        self.assertEqual(record.matcher_delta["declared"], wrong)
+        self.assertEqual(record.matcher_delta["delta"]["nodes_analyzed"], 1)
 
 
 class ControllerAdapterTests(WriteStageTestCase):
@@ -981,6 +1339,55 @@ class ControllerAdapterTests(WriteStageTestCase):
         for action in cases:
             with self.subTest(action=action.arguments):
                 verification = verifier.evaluate(WriteStagingState(), action)
+                self.assertEqual(verification.verdict, Verdict.REFUSED)
+                self.assertIsNone(verification.next_state)
+
+    def test_a_crashing_candidate_refuses_the_step_not_the_run(self) -> None:
+        """`stage_write` sat OUTSIDE this adapter's `try`, so anything it
+        raised propagated out of `Controller().run`: a WRITE that crashed was
+        not a rejected step, it was an aborted loop and a lost ledger."""
+        from controller import Controller, SequencePolicy, StopReason, Verdict
+        from write_stage import WriteStagingState, write_action
+
+        broken = (
+            "from pathlib import Path\n"
+            f"out = Path('data') / {CORPUS!r} / 'nodes.json'\n"
+            "out.parent.mkdir(parents=True, exist_ok=True)\n"
+            "out.write_text('{not json at all', encoding='utf-8')\n"
+        )
+        action = write_action(
+            self.proposal("broken.json", seed_source=broken)
+        )
+        verification = self.verifier().evaluate(WriteStagingState(), action)
+        self.assertEqual(verification.verdict, Verdict.REFUSED)
+        self.assertIsNone(verification.next_state)
+        result = Controller().run(
+            WriteStagingState(),
+            SequencePolicy([action]),
+            self.verifier(),
+            lambda state: False,
+        )
+        self.assertEqual(result.stop_reason, StopReason.EXHAUSTED)
+        self.assertEqual(result.rejected_steps, 1)
+        self.assertEqual(result.final_state.receipts, ())
+
+    def test_an_unreadable_proposal_file_refuses_rather_than_raises(self) -> None:
+        directory = self.repo.root / "proposals"
+        directory.mkdir(exist_ok=True)
+        from controller import Verdict
+        from write_stage import WriteStagingState, write_action
+
+        cases = {
+            "not_json.json": "{ this is not json",
+            "an_array.json": "[1, 2, 3]",
+            "missing_keys.json": '{"statement_id": "x"}',
+        }
+        for name, text in cases.items():
+            (directory / name).write_text(text, encoding="utf-8")
+            with self.subTest(name=name):
+                verification = self.verifier().evaluate(
+                    WriteStagingState(), write_action(f"proposals/{name}")
+                )
                 self.assertEqual(verification.verdict, Verdict.REFUSED)
                 self.assertIsNone(verification.next_state)
 

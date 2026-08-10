@@ -160,11 +160,12 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
             raw = parse_template(
                 node["structural_signature"]["anonymized_template"]
             )
-            from match_signatures import skeleton  # local: naive baseline only
+            from proof_correspondence import as_equation, correspondence_skeleton
 
-            from proof_correspondence import as_equation
-
-            canonical_only = skeleton(
+            # The naive baseline differs from the delivered check in ONE way --
+            # it compares against the canonical template alone. It uses the same
+            # skeletonizer, so this measures the widening and nothing else.
+            canonical_only = correspondence_skeleton(
                 as_equation(raw), equation_classes(raw, slot_classes(node))
             )
             if canonical_only != target:
@@ -209,7 +210,12 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
             r for r in self.report.results if r.verdict == UNTRANSLATABLE
         )
         self.assertEqual(result.reference, "BooleanLaws.not_forall_iff_exists_not")
-        self.assertIn("Prop", result.reason)
+        # Not `assertIn("Prop", ...)`: EVERY binder refusal says "does not bind
+        # names at type `Prop`", so that assertion held for any first-order
+        # theorem and pinned nothing. The distinguishing token is the binder
+        # that was actually refused.
+        self.assertIn("α : Type", result.reason)
+        self.assertIsNone(result.matched_route)
 
     def test_cli_exit_code_is_zero_when_nothing_mismatches(self) -> None:
         import subprocess
@@ -437,9 +443,150 @@ class DeclaredDualTests(unittest.TestCase):
         classes = equation_classes(raw, slot_classes(node))
         once = boolean_dual(as_equation(raw), classes)
         twice = boolean_dual(once, dual_classes(classes))
+        # Non-triviality FIRST: `dual(dual(x)) == x` is satisfied by the
+        # identity, so without this line the test would keep passing if
+        # `boolean_dual` stopped dualizing anything at all.
+        self.assertNotEqual(once, as_equation(raw))
         self.assertEqual(
             skeleton(twice, classes), skeleton(as_equation(raw), classes)
         )
+
+
+class ConstantIdentityTests(unittest.TestCase):
+    """The headline defect: every lattice constant collapsed into one class.
+
+    `match_signatures` classes both `TRUTH` and `FALSITY` as `P`, so
+    `MEET(PROP1, TRUTH) = TRUTH` and `MEET(PROP1, FALSITY) = FALSITY`
+    skeletonized identically. A Lean proof of `P ∧ ⊥ ↔ ⊥` -- a TRUE theorem --
+    therefore CORRESPONDED to the canonical claim `P and true = true` -- a FALSE
+    one -- and `scripts/write_stage.py` staged it through all fourteen gates.
+    """
+
+    THEOREM = "BooleanLaws.domination_and_false"
+    GOAL = "P : Prop\n⊢ P ∧ False ↔ False"
+
+    def node(self, template: str, constant: str) -> dict:
+        return {
+            "statement_id": f"logic.boolean_laws.claims_{constant.lower()}",
+            "structural_signature": {
+                "anonymized_template": template,
+                "slot_schema": [
+                    {
+                        "slot_id": "PROP1",
+                        "syntactic_category": "variable",
+                        "semantic_role": "propositional_operand",
+                    },
+                    {
+                        "slot_id": constant,
+                        "syntactic_category": "constant",
+                        "semantic_role": "lattice_bound",
+                    },
+                ],
+            },
+            "formal_statement": {"equivalent_forms": []},
+            "symbol_lexicon": {"symbols": []},
+        }
+
+    def adjudicate(self, node: dict):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "proof.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "theorem": self.THEOREM,
+                            "tactic": "simp",
+                            "stateBefore": self.GOAL,
+                            "stateAfter": "no goals",
+                        }
+                    ],
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            return check_link(node, link(self.THEOREM, "proof.json"), root)
+
+    def test_a_proof_of_p_and_bot_does_not_certify_p_and_top_equals_top(
+        self,
+    ) -> None:
+        """The false claim, adjudicated. Was CORRESPONDS via `canonical`."""
+        result = self.adjudicate(
+            self.node("MEET(PROP1, TRUTH) = TRUTH", "TRUTH")
+        )
+        self.assertEqual(result.verdict, MISMATCH)
+        self.assertIsNone(result.matched_route)
+        # The two skeletons must be VISIBLY different in the record, or the
+        # refusal is unauditable.
+        self.assertIn("P.BOT", result.theorem_skeleton)
+        self.assertTrue(
+            all("P.TOP" in form for form in result.considered if "MEET" in form),
+            result.considered,
+        )
+
+    def test_the_true_pairing_still_corresponds(self) -> None:
+        """The control: the fix must split the false claim, not every claim."""
+        result = self.adjudicate(
+            self.node("MEET(PROP1, FALSITY) = FALSITY", "FALSITY")
+        )
+        self.assertEqual(result.verdict, CORRESPONDS)
+        self.assertEqual(result.matched_route, "canonical")
+
+    def test_the_declared_dual_of_the_false_claim_does_not_rescue_it(self) -> None:
+        """`JOIN(PROP1, FALSITY) = FALSITY` is the dual offered, and the
+        theorem is a MEET, so no route carries it."""
+        result = self.adjudicate(
+            self.node("MEET(PROP1, TRUTH) = TRUTH", "TRUTH")
+        )
+        self.assertEqual(
+            [form.split(":")[0] for form in result.considered],
+            ["canonical", "dual_of_canonical"],
+        )
+        self.assertEqual(result.verdict, MISMATCH)
+
+    def test_top_and_bot_never_share_a_class(self) -> None:
+        from proof_correspondence import LATTICE_POLES
+
+        self.assertEqual(
+            {name for name, pole in LATTICE_POLES.items() if pole == "TOP"},
+            {"TRUTH", "UNIVERSE"},
+        )
+        self.assertEqual(
+            {name for name, pole in LATTICE_POLES.items() if pole == "BOT"},
+            {"FALSITY", "EMPTYSET"},
+        )
+
+    def test_the_pole_table_and_the_duality_table_agree(self) -> None:
+        """Two declarations about the same four constants; they must not drift.
+
+        A dual that did not swap the pole would put a TOP-classed slot where a
+        BOT-classed one belongs and reintroduce the collapse one route over.
+        """
+        from proof_correspondence import DUAL_SLOTS, LATTICE_POLES
+
+        self.assertEqual(set(DUAL_SLOTS), set(LATTICE_POLES))
+        for name, dual in DUAL_SLOTS.items():
+            self.assertNotEqual(
+                LATTICE_POLES[name], LATTICE_POLES[dual], name
+            )
+
+    def test_one_pole_spelled_two_ways_still_unifies(self) -> None:
+        """Deliberate NON-fix: `TRUTH` and `UNIVERSE` are one object read twice.
+
+        Splitting them would silently delete `ambiguous_with` -- this module's
+        own admission that structure cannot choose between a logic statement and
+        its set-theory twin -- and so claim more discriminating power than the
+        check has. Pinned as a decision, not left to inference.
+        """
+        report = check_corpus(REPO_ROOT / "data", REPO_ROOT)
+        identity = next(
+            r for r in report.results
+            if r.reference == "BooleanLaws.identity_and_true"
+        )
+        self.assertEqual(identity.verdict, CORRESPONDS)
+        self.assertEqual(
+            identity.ambiguous_with, ("settheory.boolean_laws.identity_laws",)
+        )
+        self.assertIn("P.TOP", identity.theorem_skeleton)
 
 
 class DeclaredFormSetTests(unittest.TestCase):

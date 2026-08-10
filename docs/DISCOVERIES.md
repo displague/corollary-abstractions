@@ -261,6 +261,29 @@ bindings), **near-miss** (informative failure, kept deliberately).
   because "ranking is a refinement of the old order" is a property a future
   scorer must preserve, not a coincidence to rediscover. (2026-08-09)
 
+- **A representation borrowed from a matcher smuggled its assumptions into a
+  proof gate, and a true theorem certified a false claim.** The twin matcher
+  folds every parameter-like slot into one class `P`, which is exactly right
+  for its question — "do these two statements have the same shape?" — and
+  asserts nothing about truth. The correspondence check reused that front end
+  on purpose, so that a proof link would be judged by the same grammar the
+  corpus is grouped by rather than by a private re-implementation. The reuse
+  was the right call and it carried one wrong assumption across the boundary:
+  a lattice constant is not a placeholder. Under one shared class,
+  `MEET(PROP1, TRUTH) = TRUTH` and `MEET(PROP1, FALSITY) = FALSITY` are the
+  same skeleton, so a machine-checked Lean proof of `P ∧ ⊥ ↔ ⊥` — a TRUE
+  theorem — adjudicated CORRESPONDS against the canonical claim
+  `P and true = true` — a FALSE one — via the *canonical* route, and the WRITE
+  gate staged it with all fourteen checks PASS. Nothing was bypassed; the
+  evidence a gate consumed was weaker than the gate itself, which is the
+  failure mode that survives review precisely because every check is green.
+  The fix had to be narrower than the obvious one: keying constants by
+  SPELLING would also close the hole and would silently delete every
+  `ambiguous_with` report (the set-theory twins spell TOP as `UNIVERSE`),
+  making the check look stronger while being less honest. Poles are
+  separated; spellings of one pole are not. *near-miss; PROVEN-gated WRITE
+  review* (2026-08-10)
+
 - **The corpus's flagship cross-discipline twin is also the thing that stops
   a proof link from naming an owner.** `logic.boolean_laws.de_morgan_laws`
   and `settheory.boolean_laws.de_morgan_laws` share a skeleton character for

@@ -17,9 +17,14 @@ prohibition, and it is enforced three ways rather than promised once:
    candidate's seed executed at that copy's root, so the byte-identity rule the
    project already enforces (`scripts/check_regeneration.py`) is exercised
    against the candidate instead of against the durable tree;
-3. the durable tree is digested before and after every staging attempt --
+3. the WHOLE WORKING TREE is digested before and after every staging attempt --
    accepted, refused, or crashed -- and the two digests are written into the
    receipt. A refusal that changed a byte would be visible in its own receipt.
+   The cover is the working tree and not `data/` alone because the seed's
+   escape hatches are not corpus-shaped: a candidate that landed a file in
+   `scripts/`, `prover/` or the repository root could own the next run, or
+   poison the artifacts every digest pin resolves against, and a `data/`-only
+   digest called such an attempt byte-identical. See `working_tree_digest`.
 
 The gate matrix, which is the whole point of the module:
 
@@ -47,7 +52,16 @@ Acceptance pipeline for a PROVEN candidate, in order, every step able to refuse:
   adds exactly the declared statement -> semantic correspondence -> STRUCTURAL
   UNAMBIGUITY -> schema and link validation of the merged scratch graph ->
   matcher delta measured and compared against the candidate's DECLARED delta ->
-  durable byte-identity.
+  working-tree byte-identity.
+
+**What a staged candidate is NOT evidence of.** `semantic_correspondence` passing
+means the theorem's opening goal skeletonizes to a form the citing statement
+DECLARES. It does not mean the statement is TRUE, and it does not mean this
+statement rather than a structural twin is what the theorem proves -- which is
+why the unambiguity gate exists and why nothing here accepts. Skeleton-level
+correspondence is a floor above byte integrity, not semantic ownership. A
+receipt is evidence that a proposal survived fourteen checks; a reviewer is what
+turns that into knowledge.
 
 The structural-unambiguity gate is strictly stronger than what the committed
 corpus is held to, and deliberately so. `scripts/proof_correspondence.py`
@@ -68,12 +82,21 @@ in the corpus.
 **Declared limit: executing a candidate seed is not sandboxed.** Regeneration is
 real -- the candidate's seed source is run -- and running code cannot be
 contained by a static screen. The scratch copy lives outside the repository, the
-subprocess is given no repository path in argv or environment, and two cheap
-escapes a NON-adversarial mistake would produce (absolute path literals, `..`
-literals) are screened out; but a determined candidate could still reach the
-durable tree, which is why the before/after digest exists and why the receipt
-records both. Read a candidate's seed source before staging it. Filed in
-docs/BACKLOG.md.
+subprocess is given a relative argv, a working directory inside the scratch tree
+and an environment carrying no repository path, and two cheap escapes a
+NON-adversarial mistake would produce (absolute path literals, `..` literals)
+are screened out.
+
+Do NOT read that as "the seed cannot find the repository". It can, and the leak
+is structural: the interpreter is started as `sys.executable`, which on this
+project is `<project root>/.venv/Scripts/python.exe`, so a seed that walks up
+from its own interpreter path reaches the project root and can enumerate the
+real tree from there. Closing it would mean a different interpreter, not a
+different argument list. Containment here is over CWD, ARGV and ENVIRONMENT
+only; the residual threat is real and the defence against it is after the fact:
+the whole working tree is digested before and after every attempt and both
+digests go in the receipt. Read a candidate's seed source before staging it.
+Filed in docs/BACKLOG.md.
 
 Staging area (`staging/`): the DIRECTORY and its README are committed, the
 RECORDS are not (`staging/.gitignore`). A staging record is runtime output, and
@@ -136,7 +159,20 @@ RUNGS = (PROVEN, VERIFIED, CONJECTURED)
 # `verified_by` resolves against, and the schema the validator reads.
 SCRATCH_TREES = ("scripts", "data", "prover", "schema")
 
+# What the integrity digest covers, and what it deliberately does not. Argued in
+# `working_tree_digest`; the trees are the scratch trees because those are
+# exactly the ones a candidate seed is handed a copy of.
+INTEGRITY_TREES = SCRATCH_TREES
+INTEGRITY_EXCLUDED = frozenset({".git", "__pycache__", "staging"})
+
 _SEED_NAME = re.compile(r"^seed_[a-z0-9_]+\.py$")
+# EVERY counter `_matcher_summary` emits, plus the twin-partner list. Seven of
+# the nine counters were gated at first, which left `ladder_violations`,
+# `parse_problems` and `slot_schema_gaps` outside the registered prediction: a
+# candidate could introduce a slot-schema gap and stage without ever having
+# declared it. `test_every_matcher_summary_key_is_gated` pins the two lists
+# together so a future counter cannot be added to the summary and silently
+# escape the prediction.
 _MATCHER_DELTA_KEYS = frozenset(
     {
         "nodes_analyzed",
@@ -145,6 +181,9 @@ _MATCHER_DELTA_KEYS = frozenset(
         "family_groups",
         "aliased_groups",
         "mirror_groups",
+        "ladder_violations",
+        "parse_problems",
+        "slot_schema_gaps",
         "new_typed_twin_partners",
     }
 )
@@ -189,7 +228,15 @@ class WriteCandidate:
     frame_local: bool = False
 
     def payload(self) -> dict:
-        """Canonical, order-stable view used for the record id."""
+        """Canonical, order-stable view used for the record id.
+
+        `rationale` is digested in rather than omitted: the record id names the
+        receipt FILE, so two candidates it cannot tell apart overwrite each
+        other. Rationale is the one field a reviewer reads and no gate checks,
+        which makes "same proof, different justification" exactly the pair a
+        reviewer must be able to see both of. Digested rather than inlined so
+        the id stays a function of a fixed-size payload.
+        """
 
         return {
             "statement_id": self.statement_id,
@@ -197,6 +244,9 @@ class WriteCandidate:
             "seed_script": self.seed_script,
             "seed_source_sha256": hashlib.sha256(
                 self.seed_source.encode("utf-8")
+            ).hexdigest(),
+            "rationale_sha256": hashlib.sha256(
+                self.rationale.encode("utf-8")
             ).hexdigest(),
             "rung": self.rung,
             "artifact": self.artifact,
@@ -231,13 +281,23 @@ class StagingRecord:
     correspondence: dict | None = None
     matcher_delta: dict | None = None
     staged: dict | None = None
-    durable_digest_before: str = ""
-    durable_digest_after: str = ""
+    # The integrity digest covers the whole working tree, not `data/` alone --
+    # the field is named for what it measures so a receipt cannot be read as a
+    # narrower promise than it makes (or a wider one).
+    working_tree_digest_before: str = ""
+    working_tree_digest_after: str = ""
     approval_required: tuple[str, ...] = ()
     approval_granted: tuple[str, ...] = ()
 
     def passed(self, check: str, detail: str) -> None:
         self.checks.append({"check": check, "status": "PASS", "detail": detail})
+
+    def refused(self, check: str, detail: str) -> None:
+        self.outcome = REFUSED
+        self.refusal = {"check": check, "detail": detail}
+        self.checks.append(
+            {"check": check, "status": "REFUSED", "detail": detail}
+        )
 
     def as_dict(self) -> dict:
         return {
@@ -250,11 +310,17 @@ class StagingRecord:
             "correspondence": self.correspondence,
             "matcher_delta": self.matcher_delta,
             "staged": self.staged,
-            "durable_store": {
-                "digest_before": self.durable_digest_before,
-                "digest_after": self.durable_digest_after,
+            "working_tree_integrity": {
+                "covers": [
+                    "<repository root files>",
+                    *sorted(INTEGRITY_TREES),
+                ],
+                "excludes": sorted(INTEGRITY_EXCLUDED),
+                "digest_before": self.working_tree_digest_before,
+                "digest_after": self.working_tree_digest_after,
                 "byte_identical": (
-                    self.durable_digest_before == self.durable_digest_after
+                    self.working_tree_digest_before
+                    == self.working_tree_digest_after
                 ),
             },
             "approval_required": list(self.approval_required),
@@ -274,16 +340,85 @@ class StagingRecord:
 # --------------------------------------------------------------------------
 
 
-def durable_digest(data_dir: Path) -> str:
-    """One digest over every committed corpus file, path-sensitive."""
+def _digest_tree(
+    digest: "hashlib._Hash",
+    root: Path,
+    base: Path,
+    excluded: frozenset[str] = frozenset(),
+) -> None:
+    """Fold every file under `root` into `digest`, keyed by path from `base`.
 
-    digest = hashlib.sha256()
-    for path in sorted(data_dir.rglob("*")):
+    `excluded` is matched against path COMPONENTS relative to `base`, and is
+    passed explicitly rather than read from the module constant so that the
+    narrow corpus digest cannot inherit the wide digest's exemptions: a corpus
+    directory that happened to be named `staging` must still be digested.
+    """
+
+    for path in sorted(root.rglob("*")):
         if not path.is_file():
             continue
-        digest.update(path.relative_to(data_dir).as_posix().encode("utf-8"))
+        relative = path.relative_to(base)
+        if any(part in excluded for part in relative.parts):
+            continue
+        digest.update(relative.as_posix().encode("utf-8"))
         digest.update(b"\0")
         digest.update(hashlib.sha256(path.read_bytes()).digest())
+
+
+def durable_digest(data_dir: Path) -> str:
+    """One digest over every committed corpus file, path-sensitive.
+
+    Kept as the narrow `data/`-only reading, because "did the DURABLE STORE
+    change?" is a question a reviewer asks on its own -- and because it is the
+    control that shows the wide digest earning its keep (a `scripts/` escape
+    moves one and not the other). It is NOT what the gate enforces; see
+    `working_tree_digest`.
+    """
+
+    digest = hashlib.sha256()
+    _digest_tree(digest, data_dir, data_dir)
+    return digest.hexdigest()
+
+
+def working_tree_digest(repo_root: Path) -> str:
+    """One digest over everything a candidate seed could reach and corrupt.
+
+    The integrity digest used to cover `data/` alone, while the scratch checkout
+    copies FOUR trees (`SCRATCH_TREES`) and the seed's escape hatches are not
+    corpus-shaped. A candidate that landed a file in `scripts/`, `prover/`,
+    `schema/` or the repository root therefore wrote it AND collected a receipt
+    reading `byte_identical: true` -- it could have overwritten this very module
+    for the next run, or poisoned the `prover/` artifacts that every digest pin
+    in the corpus resolves against, and the gate would have called the attempt
+    clean. Found by adversarial review of this branch.
+
+    The cover is the four scratch trees plus the repository's own root-level
+    files, which is exactly "everything the pipeline copies, reads or trusts".
+    Three exclusions, each because including it would make the digest report
+    noise instead of tampering:
+
+    * `.git` -- git's own bookkeeping churns for reasons that are not a
+      candidate's doing;
+    * `__pycache__` -- a byproduct of importing this repository's own modules
+      (the scratch checkout ignores it for the same reason);
+    * `staging` -- this gate's OWN output. Receipts are written here by design,
+      so digesting them would make every second run of the same candidate look
+      like tampering. A seed that wrote into `staging/` would go unnoticed by
+      this digest; that is a declared, bounded gap -- the directory is
+      gitignored runtime output that no other tool reads.
+    """
+
+    repo_root = repo_root.resolve()
+    digest = hashlib.sha256()
+    for path in sorted(repo_root.iterdir()):
+        if path.is_file():
+            digest.update(path.name.encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(hashlib.sha256(path.read_bytes()).digest())
+    for tree in INTEGRITY_TREES:
+        source = repo_root / tree
+        if source.is_dir():
+            _digest_tree(digest, source, repo_root, INTEGRITY_EXCLUDED)
     return digest.hexdigest()
 
 
@@ -393,11 +528,17 @@ def _screen_seed_source(source: str) -> None:
 
 
 def _subprocess_env() -> dict[str, str]:
-    """A minimal environment: no repository path reaches the child process.
+    """A minimal environment: no repository path is PASSED to the child.
 
     `SystemRoot`/`COMSPEC`/`PATHEXT` are Windows requirements for starting a
     Python interpreter at all, and the temp variables keep the child's own
     scratch needs off the repository; nothing else is inherited.
+
+    This narrows what the child is HANDED, not what it can find. `sys.executable`
+    is the project's own virtualenv interpreter, so the project root is one
+    `Path(sys.executable).parents[2]` away no matter how clean this environment
+    is. See the module docstring: containment is cwd/argv/env, and the integrity
+    digest is what actually stands behind it.
     """
 
     import os
@@ -453,7 +594,8 @@ def _regenerate(
     # `scripts/seed_*.py` in this repository emits `Path("data") / discipline /
     # "nodes.json"` relative to the working directory. The argv path is
     # relative for the same reason the environment is minimal -- the subprocess
-    # is handed no route back to the repository.
+    # is HANDED no route back to the repository. It can still derive one from
+    # `sys.executable`; see the module docstring.
     result = subprocess.run(
         [sys.executable, str(Path(candidate.seed_script))],
         cwd=str(scratch),
@@ -488,8 +630,21 @@ def _regenerate(
         )
 
     old_ids = _statement_ids(before[target]) if target in before else []
-    new_corpus = json.loads(after[target].decode("utf-8"))
-    new_ids = [node.get("statement_id", "") for node in new_corpus.get("statement_nodes", [])]
+    # A seed is arbitrary code and its output is untrusted: `json.loads` on a
+    # truncated write raised straight out of the gate, past the after-digest and
+    # past the receipt. Refuse it like any other bad regeneration.
+    try:
+        new_corpus = json.loads(after[target].decode("utf-8"))
+        new_ids = [
+            node.get("statement_id", "")
+            for node in new_corpus["statement_nodes"]
+        ]
+    except (UnicodeDecodeError, json.JSONDecodeError, TypeError, KeyError) as exc:
+        raise Refusal(
+            "regeneration_confinement",
+            f"candidate seed wrote a `data/{target}` that is not a corpus "
+            f"document: {type(exc).__name__}: {str(exc)[:200]}",
+        ) from None
     added = [sid for sid in new_ids if sid not in set(old_ids)]
     removed = [sid for sid in old_ids if sid not in set(new_ids)]
     if removed:
@@ -520,12 +675,21 @@ def _regenerate(
     return node, detail
 
 
-def _scrub(text: str, scratch: Path) -> str:
-    """Keep receipts diffable: a temp path differs on every run."""
+def _scrub(text: str, *paths: Path, token: str = "<scratch>") -> str:
+    """Keep receipts diffable: a temp path differs on every run.
 
-    return text.replace(str(scratch), "<scratch>").replace(
-        str(scratch).replace("\\", "/"), "<scratch>"
-    )
+    `token` is a parameter because the two things worth hiding are not the same
+    thing: a scratch path is noise, a repository path is a location, and a
+    receipt that labelled the second `<scratch>` would be wrong rather than
+    merely terse.
+    """
+
+    for path in paths:
+        native = str(path)
+        text = text.replace(native, token).replace(
+            native.replace("\\", "/"), token
+        )
+    return text
 
 
 def _validate(scratch: Path) -> str:
@@ -631,8 +795,11 @@ def _compare_declared_delta(candidate: WriteCandidate, measured: dict) -> str:
                 f"declared delta `{key}` must be an integer, got "
                 f"{type(value).__name__}",
             )
+    # A list, not "a list or a tuple": a declaration arrives as JSON, where a
+    # tuple cannot occur, so accepting one only widened what an in-process
+    # caller could pass without widening what a proposal file could say.
     partners = declared["new_typed_twin_partners"]
-    if not isinstance(partners, (list, tuple)) or not all(
+    if not isinstance(partners, list) or not all(
         isinstance(item, str) for item in partners
     ):
         raise Refusal(
@@ -773,9 +940,14 @@ def _check_correspondence(
     links = [
         link for link in node.get("verified_by", []) or [] if isinstance(link, dict)
     ]
+    # These two refusals are about the SHAPE of the regenerated node's citation,
+    # not about what a theorem proves: no correspondence has been computed yet,
+    # so calling them `semantic_correspondence` put a check name in the receipt
+    # beside a null `correspondence` field and invited the reader to think a
+    # comparison had been made and failed. They get their own name.
     if len(links) != 1:
         raise Refusal(
-            "semantic_correspondence",
+            "candidate_link_shape",
             f"a staged candidate must carry exactly one verified_by link, "
             f"found {len(links)}",
         )
@@ -784,7 +956,7 @@ def _check_correspondence(
         "reference"
     ) != candidate.reference:
         raise Refusal(
-            "semantic_correspondence",
+            "candidate_link_shape",
             "the regenerated node cites a different theorem than the candidate "
             f"declares: {link.get('artifact')}:{link.get('reference')}",
         )
@@ -852,39 +1024,52 @@ def stage_write(
         statement_id=candidate.statement_id,
         outcome=REFUSED,
         rung=candidate.rung,
-        durable_digest_before=durable_digest(data_dir),
+        working_tree_digest_before=working_tree_digest(repo_root),
     )
     try:
         _gate(candidate, repo_root, record)
     except Refusal as refusal:
-        record.outcome = REFUSED
-        record.refusal = {"check": refusal.check, "detail": refusal.detail}
-        record.checks.append(
-            {"check": refusal.check, "status": "REFUSED", "detail": refusal.detail}
+        record.refused(refusal.check, refusal.detail)
+    except Exception as exc:  # noqa: BLE001 - see below
+        # A gate that only catches its OWN refusal is a gate that stops being a
+        # gate the moment a candidate finds an unforeseen crash: `stage_write`
+        # would raise, no after-digest would be taken, no receipt would be
+        # written, and (through the controller adapter) the exception would
+        # escape `Controller().run` entirely. A candidate seed emitting
+        # malformed JSON did exactly that. Every unexpected failure is therefore
+        # a REFUSAL WITH A RECEIPT: the attempt is judged rather than lost, and
+        # the digest below still runs.
+        record.refused(
+            "staging_crashed",
+            _scrub(
+                _scrub(
+                    f"{type(exc).__name__}: {str(exc).strip()[:400]}",
+                    Path(tempfile.gettempdir()),
+                ),
+                repo_root,
+                token="<repo>",
+            ),
         )
-    record.durable_digest_after = durable_digest(data_dir)
-    if record.durable_digest_after != record.durable_digest_before:
-        # Belt and braces: nothing above writes to data/, so this can only fire
-        # if a candidate seed escaped the scratch checkout. It is a refusal even
-        # for an otherwise perfect candidate, and the receipt says why.
-        record.outcome = REFUSED
+    record.working_tree_digest_after = working_tree_digest(repo_root)
+    if record.working_tree_digest_after != record.working_tree_digest_before:
+        # Belt and braces: nothing above writes into the repository, so this can
+        # only fire if a candidate seed escaped the scratch checkout. It is a
+        # refusal even for an otherwise perfect candidate, and the receipt says
+        # why. The cover is the whole working tree, not `data/`: a seed that
+        # rewrote `scripts/write_stage.py` or a `prover/` artifact would own the
+        # NEXT run, and a `data/`-only digest called that attempt clean.
         record.staged = None
-        record.refusal = {
-            "check": "durable_store_byte_identity",
-            "detail": "the durable store changed during staging; the candidate "
-            "seed escaped the scratch checkout",
-        }
-        record.checks.append(
-            {
-                "check": "durable_store_byte_identity",
-                "status": "REFUSED",
-                "detail": record.refusal["detail"],
-            }
+        record.refused(
+            "working_tree_byte_identity",
+            "the repository changed during staging; the candidate seed escaped "
+            "the scratch checkout",
         )
     else:
         record.passed(
-            "durable_store_byte_identity",
-            "data/ is byte-identical before and after this attempt",
+            "working_tree_byte_identity",
+            "the repository working tree (root files, "
+            + ", ".join(f"{tree}/" for tree in sorted(INTEGRITY_TREES))
+            + ") is byte-identical before and after this attempt",
         )
     if staging_dir is not None:
         staging_dir.mkdir(parents=True, exist_ok=True)
@@ -973,6 +1158,11 @@ def _gate(
         measured = _measure_matcher_delta(
             repo_root / "data", scratch / "data", candidate.statement_id
         )
+        # The candidate's PREDICTION belongs beside the measurement. It survived
+        # only as free text in the pass detail, so a receipt could not be
+        # audited for predicted-versus-measured without re-reading the proposal
+        # file -- and staging/README.md already claimed this field carried it.
+        measured["declared"] = candidate.expected_matcher_delta
         record.matcher_delta = measured
         record.passed(
             "matcher_delta_prediction", _compare_declared_delta(candidate, measured)
@@ -1069,23 +1259,35 @@ class WriteStagingVerifier:
             return Verification(
                 Verdict.REFUSED, "WRITE requires a `proposal` argument"
             )
+        # `stage_write` is INSIDE the try. It was outside, so any exception it
+        # raised propagated out of `Controller().run` and took the whole loop
+        # with it -- a WRITE that crashed was not a refused step, it was an
+        # aborted run. `stage_write` now refuses-with-a-receipt instead of
+        # raising, and this is the second line of that defence.
         try:
             path = _resolve_contained_input(self.repo_root, proposal)
             payload = json.loads(path.read_text(encoding="utf-8"))
             candidate = candidate_from_json(payload, self.repo_root)
+            record = stage_write(candidate, self.repo_root, self.staging_dir)
         except Refusal as refusal:
             return Verification(Verdict.REFUSED, str(refusal))
-        except (OSError, UnicodeError, json.JSONDecodeError, KeyError) as exc:
+        except (
+            OSError,
+            UnicodeError,
+            json.JSONDecodeError,
+            KeyError,
+            TypeError,
+            ValueError,
+        ) as exc:
             return Verification(
                 Verdict.REFUSED, f"proposal is unreadable: {exc}"
             )
 
-        record = stage_write(candidate, self.repo_root, self.staging_dir)
         evidence = (
             f"record_id={record.record_id}",
             f"outcome={record.outcome}",
-            f"durable_byte_identical="
-            f"{record.durable_digest_before == record.durable_digest_after}",
+            f"working_tree_byte_identical="
+            f"{record.working_tree_digest_before == record.working_tree_digest_after}",
         )
         if record.outcome == REFUSED:
             detail = record.refusal["check"] if record.refusal else "refused"
@@ -1110,14 +1312,30 @@ class WriteStagingVerifier:
 def candidate_from_json(payload: dict, repo_root: Path) -> WriteCandidate:
     """Build a candidate from a proposal file; seed source read from disk."""
 
+    if not isinstance(payload, dict):
+        # A proposal file is untrusted bytes: valid JSON is not a proposal.
+        # Without this an array-shaped file raised AttributeError straight out
+        # of the adapter, which is the shape of bug this whole round fixed.
+        raise Refusal(
+            "proposal_shape",
+            f"a WRITE proposal must be a JSON object, got {type(payload).__name__}",
+        )
+
     source_path = payload.get("seed_source_path")
     source = payload.get("seed_source", "")
     if source_path:
         # Self-review: a proposal file is untrusted input, and an uncontained
         # read here would let it pull arbitrary bytes into a staged record.
-        source = _resolve_seed_target(repo_root, source_path).read_text(
-            encoding="utf-8"
-        )
+        resolved = _resolve_seed_target(repo_root, source_path)
+        if not resolved.is_file():
+            # Refusal, not FileNotFoundError: every other bad path in a
+            # proposal is a judged refusal with a receipt, and a typo should
+            # not be the one that raises out of the CLI.
+            raise Refusal(
+                "path_containment",
+                f"proposal seed source does not exist: {source_path!r}",
+            )
+        source = resolved.read_text(encoding="utf-8")
     return WriteCandidate(
         statement_id=payload["statement_id"],
         corpus=payload["corpus"],

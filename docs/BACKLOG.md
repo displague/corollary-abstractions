@@ -678,12 +678,30 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   compares it to the citing statement's declared form set. Over the 16
   committed links: 15 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH.
   "Digest-pinned proof trust" may now be read as structural correspondence —
-  and no further. Three limits are load-bearing and open:
+  and no further. A CORRESPONDS verdict says the theorem's opening goal
+  SKELETONIZES to a form the citing statement declares. It does not say the
+  statement is true and it is not semantic ownership: "byte integrity alone is
+  not semantic ownership" is the floor this rung clears, not the ceiling it
+  reaches. Four limits are load-bearing and open:
   - **structure is not ownership.** 12 of the 15 translatable links have at
     least one other committed statement declaring the same skeleton (the
     set-theory twins). Only the exclusive-ownership rule keeps one claimant;
     correspondence would accept the twin. Reported per link as
     `ambiguous_with`; see docs/DISCOVERIES.md.
+  - **a slot class is not an object identity, and the first version of this
+    check forgot it.** `match_signatures` folds every parameter-like slot into
+    one class `P`, which is right for asking "same shape?" and unsound for
+    asking "does this theorem prove this?": `MEET(PROP1, TRUTH) = TRUTH` and
+    `MEET(PROP1, FALSITY) = FALSITY` skeletonized identically, so a Lean proof
+    of `P ∧ ⊥ ↔ ⊥` certified the FALSE claim `P and true = true` through all
+    fourteen WRITE gates. Correspondence now splits the lattice POLES (TOP,
+    BOT) into distinct classes on both sides. Spellings of one pole (`TRUTH`
+    and `UNIVERSE`) are deliberately still unified — that is the corpus's own
+    cross-discipline claim, and separating them would delete the
+    `ambiguous_with` admission rather than earn a stronger check. Constants
+    the pole table does not name (`INCONSISTENCY`) match no Lean constant at
+    all, which is fail-closed. Open: the pole table is a declaration, and any
+    new lattice-bound spelling must be added to it or silently fails closed.
   - **the fragment is propositional.** `not_forall_iff_exists_not` is
     UNTRANSLATABLE (it binds a type and a predicate and quantifies). Extending
     to first order needs binder-aware templates the corpus grammar does not
@@ -866,15 +884,27 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   corpus content — so accepting a WRITE means a receipt exists, not that
   anything was learned. STAGED_CANDIDATE maps to PROVEN, STAGED_REVIEW_REQUEST
   to VERIFIED, everything else to REFUSED with no next state. Still open:
-  - **executing a candidate seed is not sandboxed.** Regeneration is real, so
-    the candidate's code runs. Containment is by construction (scratch tree
-    outside the repository, relative argv, minimal environment carrying no
-    repository path — a test proves the seed sees only `<scratch>`) plus a
-    screen for absolute and parent-directory path literals, plus a before/after
-    digest of the durable tree. A candidate that searched the filesystem could
-    still find `data/`; the digest would refuse it after the fact, not before.
-    A real answer is an OS-level sandbox or a seed DSL that is data rather
-    than code.
+  - **executing a candidate seed is not sandboxed, and the interpreter path
+    leaks the project root.** Regeneration is real, so the candidate's code
+    runs. Containment covers CWD, ARGV and ENVIRONMENT only: the scratch tree
+    is outside the repository, argv is relative, and the environment carries no
+    repository path (a test proves the seed's `cwd` is only `<scratch>`), plus
+    a screen for absolute and parent-directory path literals. It does **not**
+    cover `sys.executable`, which is this project's own
+    `.venv/Scripts/python.exe` — a seed that walks up from its own interpreter
+    reaches the project root and can enumerate the real tree, and no argument
+    list can close that. The delivered claim that "the subprocess is given no
+    repository path in argv or environment" was true and was being read as
+    "the seed cannot find the repository", which is false; both the module
+    docstring and the test name now say what is actually checked. What stands
+    behind the residual threat is after the fact: the WHOLE WORKING TREE (root
+    files plus `scripts/`, `data/`, `prover/`, `schema/`) is digested before
+    and after every attempt and both digests go in the receipt. That cover is
+    itself a fix — the digest used to be `data/`-only, so a seed that wrote
+    into `scripts/` or `prover/` landed the file and still collected
+    `byte_identical: true`. `staging/` is excluded by design (the gate writes
+    its own receipts there), which is a declared, bounded gap. A real answer
+    is an OS-level sandbox or a seed DSL that is data rather than code.
   - **structural unambiguity is stricter than the corpus.** A candidate whose
     skeleton some committed statement already declares is refused, because
     correspondence cannot say which of them the theorem proves. That is right

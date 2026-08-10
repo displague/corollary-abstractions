@@ -35,14 +35,27 @@ and a receipt diff shows a real change. Key fields:
 | `outcome` | `STAGED_CANDIDATE`, `STAGED_REVIEW_REQUEST`, or `REFUSED` |
 | `checks` | every gate in pipeline order with `PASS`/`REFUSED` and its reason |
 | `refusal` | the single gate that said no, for a refused candidate |
-| `correspondence` | which declared form of the statement the theorem matched |
-| `matcher_delta` | measured before/after twin counts, and the candidate's own declared prediction |
-| `durable_store` | `data/` digest before and after; `byte_identical` must be true |
+| `correspondence` | which declared form of the statement the theorem matched, and every form considered |
+| `matcher_delta` | `before`/`after` counts, the measured `delta`, and the candidate's own `declared` prediction beside it |
+| `working_tree_integrity` | digest of the whole working tree before and after, with what it `covers` and `excludes`; `byte_identical` must be true |
 | `approval_granted` | always empty — this tool never accepts |
 
-`record_id` is the SHA-256 prefix of the candidate's canonical payload, so the
-same candidate always writes the same filename and a re-run overwrites rather
-than accumulates.
+`record_id` is the SHA-256 prefix of the candidate's canonical payload —
+including a digest of the `rationale`, so two candidates with the same proof and
+different justifications get two receipts instead of overwriting one. The same
+candidate always writes the same filename and a re-run overwrites rather than
+accumulates.
+
+### What a `STAGED_CANDIDATE` is not
+
+A staged receipt says a proposal survived fourteen checks. It does **not** say
+the statement is true, and it does not say this statement rather than a
+structural twin is what the theorem proves. `semantic_correspondence` compares
+SKELETONS: the theorem's opening goal, translated into the corpus template
+grammar, is one of the forms the statement declares. That is a floor above byte
+integrity, not semantic ownership — which is exactly why `structural_unambiguity`
+exists, why `correspondence.ambiguous_with` is recorded, and why nothing in this
+directory is ever accepted by the tool that wrote it.
 
 ## Shape of a proposal
 
@@ -50,17 +63,26 @@ than accumulates.
 repository-relative with forward slashes, and none of them may be under
 `data/`.
 
+**This is a SHAPE TEMPLATE, not a runnable example.** The values below are
+placeholders: `BooleanLaws.domination_and_false` is not in
+`prover/sample_triples.json` and `scripts/seed_logic_candidate.py` does not
+exist — a candidate names a seed script it proposes the CONTENT of, and
+`seed_source_path` must resolve to an existing `scripts/seed_<name>.py`. For a
+worked end-to-end candidate that really runs, read
+`tests/test_write_stage.py`, whose fixture stages the domination law
+`P and false = false` against a real closing transition.
+
 ```json
 {
-  "statement_id": "logic.boolean_laws.domination_laws",
-  "corpus": "logic",
-  "seed_script": "scripts/seed_logic.py",
-  "seed_source_path": "scripts/seed_logic_candidate.py",
+  "statement_id": "<corpus>.<topic>.<name>",
+  "corpus": "<corpus directory under data/>",
+  "seed_script": "scripts/seed_<corpus>.py",
+  "seed_source_path": "scripts/seed_<corpus>_candidate.py",
   "rung": "PROVEN",
   "rationale": "why this belongs in the durable corpus",
-  "artifact": "prover/sample_triples.json",
+  "artifact": "prover/<artifact>.json",
   "artifact_sha256": "<sha256 of the artifact bytes>",
-  "reference": "BooleanLaws.domination_and_false",
+  "reference": "<Namespace.theorem_name>",
   "transition_trace": [
     {"theorem": "...", "tactic": "...", "stateBefore": "...", "stateAfter": "..."}
   ],
@@ -71,11 +93,18 @@ repository-relative with forward slashes, and none of them may be under
     "family_groups": 0,
     "aliased_groups": 0,
     "mirror_groups": 0,
+    "ladder_violations": 0,
+    "parse_problems": 0,
+    "slot_schema_gaps": 0,
     "new_typed_twin_partners": []
   },
   "frame_local": false
 }
 ```
+
+`expected_matcher_delta` must declare EVERY counter the matcher summary emits —
+all nine, plus `new_typed_twin_partners` — and no others. An omitted key is
+refused: a counter left ungated is a prediction nobody registered.
 
 `seed_source` may be given inline instead of `seed_source_path`; it is the FULL
 text the seed script should have after the edit, because the node judged is the
@@ -86,7 +115,10 @@ REGISTERED PREDICTION in the house sense: it is compared against the delta
 measured in the scratch checkout, and a candidate that mispredicts its own
 effect on the twin matcher is refused even though schema, link and
 regeneration checks passed. A candidate that cannot say what it will do to the
-corpus's structural output does not get to change it.
+corpus's structural output does not get to change it. The declaration is copied
+into the receipt beside the measurement (`matcher_delta.declared` next to
+`matcher_delta.delta`), so predicted-versus-measured is auditable from the
+receipt alone.
 
 `rung` is what the candidate CLAIMS. `VERIFIED` stages a review request and
 ignores everything below `rationale`; `CONJECTURED` and `frame_local: true` are
