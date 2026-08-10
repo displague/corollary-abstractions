@@ -1,0 +1,330 @@
+{
+  "links": 16,
+  "corresponds": 15,
+  "mismatch": 0,
+  "untranslatable": 1,
+  "results": [
+    {
+      "statement_id": "logic.boolean_laws.de_morgan_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.de_morgan_not_and",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "NEG(MEET(PROP1, PROP2)) = JOIN(NEG(PROP1), NEG(PROP2))",
+      "theorem_skeleton": "JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.de_morgan_laws"
+      ],
+      "considered_forms": [
+        "canonical: JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+        "dual_of_canonical: MEET⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨JOIN⟨?0:V, ?1:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[quantifier]: unsupported character '.' in 'not(forall x. F(x)) = exists x. not F(x)'",
+        "equivalent_forms[nand_basis]: trailing token 'nand'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.de_morgan_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.de_morgan_not_or",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "NEG(JOIN(PROP1, PROP2)) = MEET(NEG(PROP1), NEG(PROP2))",
+      "theorem_skeleton": "MEET⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨JOIN⟨?0:V, ?1:V⟩⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.de_morgan_laws"
+      ],
+      "considered_forms": [
+        "canonical: JOIN⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨MEET⟨?0:V, ?1:V⟩⟩",
+        "dual_of_canonical: MEET⟨NEG⟨?0:V⟩, NEG⟨?1:V⟩⟩ = NEG⟨JOIN⟨?0:V, ?1:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[quantifier]: unsupported character '.' in 'not(forall x. F(x)) = exists x. not F(x)'",
+        "equivalent_forms[nand_basis]: trailing token 'nand'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.de_morgan_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.not_forall_iff_exists_not",
+      "verdict": "UNTRANSLATABLE",
+      "reason": "theorem is outside the fragment: hypothesis 'α : Type' does not bind names at type `Prop`",
+      "theorem_template": null,
+      "theorem_skeleton": null,
+      "matched_route": null,
+      "ambiguous_with": [],
+      "considered_forms": [],
+      "refused_forms": []
+    },
+    {
+      "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.distrib_and_or",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "MEET(PROP1, JOIN(PROP2, PROP3)) = JOIN(MEET(PROP1, PROP2), MEET(PROP1, PROP3))",
+      "theorem_skeleton": "JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩ = MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.distributivity_meet_over_join"
+      ],
+      "considered_forms": [
+        "canonical: JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩ = MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+        "dual_of_canonical: JOIN⟨?0:V, MEET⟨?1:V, ?2:V⟩⟩ = MEET⟨JOIN⟨?0:V, ?1:V⟩, JOIN⟨?0:V, ?2:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[normal_form]: 'any' is not a declared propositional name"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.distributivity_meet_over_join",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.distrib_or_and",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "JOIN(PROP1, MEET(PROP2, PROP3)) = MEET(JOIN(PROP1, PROP2), JOIN(PROP1, PROP3))",
+      "theorem_skeleton": "JOIN⟨?0:V, MEET⟨?1:V, ?2:V⟩⟩ = MEET⟨JOIN⟨?0:V, ?1:V⟩, JOIN⟨?0:V, ?2:V⟩⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.distributivity_meet_over_join"
+      ],
+      "considered_forms": [
+        "canonical: JOIN⟨MEET⟨?0:V, ?1:V⟩, MEET⟨?0:V, ?2:V⟩⟩ = MEET⟨?0:V, JOIN⟨?1:V, ?2:V⟩⟩",
+        "dual_of_canonical: JOIN⟨?0:V, MEET⟨?1:V, ?2:V⟩⟩ = MEET⟨JOIN⟨?0:V, ?1:V⟩, JOIN⟨?0:V, ?2:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[normal_form]: 'any' is not a declared propositional name"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.double_negation",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.double_negation",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "NEG(NEG(PROP1)) = PROP1",
+      "theorem_skeleton": "?0:V = NEG⟨NEG⟨?0:V⟩⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.double_negation"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = NEG⟨NEG⟨?0:V⟩⟩",
+        "equivalent_forms[introduction_only]: ?0:P = IMPLIES⟨?1:V, NEG⟨NEG⟨?1:V⟩⟩⟩",
+        "equivalent_forms[elimination_only]: ?0:P = IMPLIES⟨NEG⟨NEG⟨?1:V⟩⟩, ?1:V⟩"
+      ],
+      "refused_forms": []
+    },
+    {
+      "statement_id": "logic.boolean_laws.absorption",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.absorption_and_or",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "MEET(PROP1, JOIN(PROP1, PROP2)) = PROP1",
+      "theorem_skeleton": "?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.absorption"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?0:V, MEET⟨?0:V, ?1:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[order_form]: trailing token 'entails'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.absorption",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.absorption_or_and",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "JOIN(PROP1, MEET(PROP1, PROP2)) = PROP1",
+      "theorem_skeleton": "?0:V = JOIN⟨?0:V, MEET⟨?0:V, ?1:V⟩⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.absorption"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?0:V, JOIN⟨?0:V, ?1:V⟩⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?0:V, MEET⟨?0:V, ?1:V⟩⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[order_form]: trailing token 'entails'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.identity_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.identity_and_true",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "MEET(PROP1, TRUTH) = PROP1",
+      "theorem_skeleton": "?0:V = MEET⟨?1:P, ?0:V⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.identity_laws"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?1:P, ?0:V⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?1:P, ?0:V⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[annihilators]: unsupported character ',' in 'P and false = false, P or true = true'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.identity_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.identity_or_false",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "JOIN(PROP1, FALSITY) = PROP1",
+      "theorem_skeleton": "?0:V = JOIN⟨?1:P, ?0:V⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.identity_laws"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?1:P, ?0:V⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?1:P, ?0:V⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[annihilators]: unsupported character ',' in 'P and false = false, P or true = true'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.complement_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.non_contradiction",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's equivalent_forms[non_contradiction] form",
+      "theorem_template": "NEG(MEET(PROP1, NEG(PROP1))) = TRUTH",
+      "theorem_skeleton": "?0:P = NEG⟨MEET⟨?1:V, NEG⟨?1:V⟩⟩⟩",
+      "matched_route": "equivalent_forms[non_contradiction]",
+      "ambiguous_with": [],
+      "considered_forms": [
+        "canonical: ?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
+        "dual_of_canonical: ?0:P = JOIN⟨?1:V, NEG⟨?1:V⟩⟩",
+        "equivalent_forms[non_contradiction]: ?0:P = NEG⟨MEET⟨?1:V, NEG⟨?1:V⟩⟩⟩"
+      ],
+      "refused_forms": []
+    },
+    {
+      "statement_id": "logic.boolean_laws.complement_laws",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.excluded_middle",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "JOIN(PROP1, NEG(PROP1)) = TRUTH",
+      "theorem_skeleton": "?0:P = JOIN⟨?1:V, NEG⟨?1:V⟩⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.complement_laws"
+      ],
+      "considered_forms": [
+        "canonical: ?0:P = MEET⟨?1:V, NEG⟨?1:V⟩⟩",
+        "dual_of_canonical: ?0:P = JOIN⟨?1:V, NEG⟨?1:V⟩⟩",
+        "equivalent_forms[non_contradiction]: ?0:P = NEG⟨MEET⟨?1:V, NEG⟨?1:V⟩⟩⟩"
+      ],
+      "refused_forms": []
+    },
+    {
+      "statement_id": "logic.boolean_laws.idempotence",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.idempotence_and",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "MEET(PROP1, PROP1) = PROP1",
+      "theorem_skeleton": "?0:V = MEET⟨?0:V, ?0:V⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.idempotence"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?0:V, ?0:V⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?0:V, ?0:V⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[contraction]: unsupported character ',' in 'from P, P infer P'"
+      ]
+    },
+    {
+      "statement_id": "logic.boolean_laws.idempotence",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.idempotence_or",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's dual_of_canonical form",
+      "theorem_template": "JOIN(PROP1, PROP1) = PROP1",
+      "theorem_skeleton": "?0:V = JOIN⟨?0:V, ?0:V⟩",
+      "matched_route": "dual_of_canonical",
+      "ambiguous_with": [
+        "settheory.boolean_laws.idempotence"
+      ],
+      "considered_forms": [
+        "canonical: ?0:V = MEET⟨?0:V, ?0:V⟩",
+        "dual_of_canonical: ?0:V = JOIN⟨?0:V, ?0:V⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[contraction]: unsupported character ',' in 'from P, P infer P'"
+      ]
+    },
+    {
+      "statement_id": "logic.inference.modus_ponens",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.modus_ponens",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "IMPLIES(MEET(IMPLIES(PROP1, PROP2), PROP1), PROP2) = TRUTH",
+      "theorem_skeleton": "?0:P = IMPLIES⟨MEET⟨?1:V, IMPLIES⟨?1:V, ?2:V⟩⟩, ?2:V⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [],
+      "considered_forms": [
+        "canonical: ?0:P = IMPLIES⟨MEET⟨?1:V, IMPLIES⟨?1:V, ?2:V⟩⟩, ?2:V⟩"
+      ],
+      "refused_forms": [
+        "equivalent_forms[rule]: unsupported character ';' in 'P implies Q ; P |- Q'",
+        "equivalent_forms[sequent]: unsupported character '|' in 'Gamma |- P implies Q, Gamma |- P => Gamma |- Q'",
+        "equivalent_forms[lattice_order]: unsupported character ',' in 'if LEQ(top, implies(P,Q)) and LEQ(top, P) then LEQ(top, Q)'"
+      ]
+    },
+    {
+      "statement_id": "logic.inference.contraposition",
+      "system": "lean4",
+      "artifact": "prover/sample_triples.json",
+      "reference": "BooleanLaws.contraposition",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "IMPLIES(PROP1, PROP2) = IMPLIES(NEG(PROP2), NEG(PROP1))",
+      "theorem_skeleton": "IMPLIES⟨?0:V, ?1:V⟩ = IMPLIES⟨NEG⟨?1:V⟩, NEG⟨?0:V⟩⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [],
+      "considered_forms": [
+        "canonical: IMPLIES⟨?0:V, ?1:V⟩ = IMPLIES⟨NEG⟨?1:V⟩, NEG⟨?0:V⟩⟩",
+        "equivalent_forms[disjunctive]: IMPLIES⟨?0:V, ?1:V⟩ = JOIN⟨?1:V, NEG⟨?0:V⟩⟩",
+        "equivalent_forms[half]: ?0:P = IMPLIES⟨IMPLIES⟨?1:V, ?2:V⟩, IMPLIES⟨NEG⟨?2:V⟩, NEG⟨?1:V⟩⟩⟩"
+      ],
+      "refused_forms": []
+    }
+  ]
+}

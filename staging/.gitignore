@@ -1,0 +1,4 @@
+# Staging records are runtime output, not durable knowledge. See README.md:
+# committing them by default is how policy output becomes trusted knowledge.
+# Attaching one to a review is a deliberate `git add -f`.
+*.json
