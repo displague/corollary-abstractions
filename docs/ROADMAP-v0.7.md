@@ -55,6 +55,51 @@ valid result.
 Acceptance: serialize, restart, authenticate, and continue the Alice/Bob
 golden-chicken demo while a stale or forged pre-restart binding is refused.
 
+### Registered predictions (P-DS, before implementation)
+
+Filed on branch `feature/conversation-durable` before a line of the durable
+key ring, the ledger snapshot, or the request grammar existed. Adjudicated in
+the shipping commit; a miss is recorded here as prominently as a hit.
+
+- **P-DS1.** The acceptance scenario passes: two owner-isolated sessions
+  serialize to public files, the process ends, a fresh process reloads the root
+  key from a runtime-owned keyfile, re-derives per-session signing keys,
+  re-admits the surviving bindings, and both owners keep revising — with the
+  public story still byte-identical and still unasserted.
+- **P-DS2.** Every pre-restart binding that was superseded before the snapshot
+  is REFUSED after restart with the named reason `binding-superseded`, and a
+  binding whose signature was invented is REFUSED as
+  `binding-signature-invalid`. Neither refusal may depend on an envelope-level
+  MAC over the public session file: the session file is deliberately
+  **unsigned public state**, so the refusal has to come from the per-binding
+  signature and the restored private ledger or the test is vacuous.
+- **P-DS3.** Replaying a pre-restart ASK reply action after restart is REFUSED
+  as an already-consumed request, because the consumed-request ledger is
+  restored, not re-minted.
+- **P-DS4.** Every pre-existing receipt, forgery, replay, and supersession test
+  passes **unmodified** — in particular
+  `test_second_verifier_cannot_accept_first_verifiers_question`, which requires
+  that the default (no keyfile) verifier keeps a per-instance ephemeral root
+  key rather than a process-global one.
+- **P-DS5.** Rolling the serialized ledger back to a pre-supersession snapshot
+  is REFUSED as `ledger-rollback`, because the private keyfile keeps a monotone
+  per-session issue counter that the public snapshot cannot lower. This is the
+  prediction most likely to miss: a signature alone cannot detect the replay of
+  an *earlier, genuinely signed* snapshot, so if the counter is not consulted
+  on the restore path the rollback silently succeeds.
+- **P-DS6.** The bounded grammar parses every registered form (fill,
+  correction, pronoun, owner reference, durable and goal-local declarations,
+  abstention) and **degrades to ASK, never to a guess**, on an unregistered
+  slot phrase, an unregistered value, or an unresolvable pronoun.
+- **P-DS7 (named weakness).** The scheme's weakest point is expected to be
+  **root-key file compromise**, not cryptanalysis: derivation is HKDF-SHA256
+  from one root secret, so anyone who can read the keyfile can mint any
+  binding for any owner in any session, and revocation is the only remedy.
+  Second-weakest: nothing in this item prevents **session forking** — two
+  processes may import the same snapshot at the same counter value and diverge
+  — because refusing that would brick a session that crashed between export
+  and import. Both are scoped out explicitly rather than papered over.
+
 ## 3. PROVEN-gated WRITE and semantic proof correspondence
 
 - Regenerate a formal skeleton for every `verified_by` theorem and check that it
