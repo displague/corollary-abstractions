@@ -6,7 +6,7 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.6.0](docs/RELEASE-v0.6.0.md).
+interface. Latest release: [v0.7.0](docs/RELEASE-v0.7.0.md).
 
 ## Three headline demonstrations
 

@@ -841,14 +841,32 @@ fluency is a separate measured axis.
 
 ## Release gate
 
+**CLOSED — all eight met; v0.7.0 cut on 2026-08-10. Release notes:
+[RELEASE-v0.7.0.md](RELEASE-v0.7.0.md). Carried work:
+[ROADMAP-v0.8.md](ROADMAP-v0.8.md).**
+
 v0.7 is ready only if it contains:
 
-- a multi-theorem live proof-search curve with strong blind baselines;
+- a multi-theorem live proof-search curve with strong blind baselines
+  — **MET** (item 1; 24 theorems / 4 families / 144 live runs; learned loses
+  to the syntax-aware blind order, a loss item 1 pre-authorized);
 - a durable authenticated conversation restart or an explicit negative result
   — **MET** (item 2, branch `feature/conversation-durable`);
-- one PROVEN-gated staged WRITE rejected or accepted through the full audit;
-- a non-trivial multi-family corpus analogy split;
-- the visual oracle layer and verifier, even if learned visual arms miss;
-- one shared policy protocol demonstrated in both proof and story domains;
-- updated assets whose notes explain winners, losers, and controls;
-- the complete seed/schema/matcher/specializer/decomposer/test suite green.
+- one PROVEN-gated staged WRITE rejected or accepted through the full audit
+  — **MET** (item 3; 15/1/0 correspondence, fourteen-gate staging, nothing
+  accepted, `data/` byte-identical on every refusal);
+- a non-trivial multi-family corpus analogy split
+  — **MET** (item 5; 398 targets / 11 typed families; blind killer dead at
+  0.000/0.011/0.048; strict ceiling ≈0.10–0.14 disclosed, model arm open);
+- the visual oracle layer and verifier, even if learned visual arms miss
+  — **MET** (item 8 steps 1–5; 240 valids / 1,440 invalids, verifier exact,
+  no weights);
+- one shared policy protocol demonstrated in both proof and story domains
+  — **MET** (item 1 story family; same `SearchController`, disjoint vocabulary);
+- updated assets whose notes explain winners, losers, and controls
+  — **MET** (RELEASE-v0.7.0.md; v0.7 ships no new weights — the curve reuses
+  v0.6's tactic checkpoints by SHA-256 — and the notes say so);
+- the complete seed/schema/matcher/specializer/decomposer/test suite green
+  — **MET** (14 seeds byte-identical, 221/221 nodes, matcher 30/31/30/32/5 with
+  0 ladder violations, 655 specialization edges, 193/221 decompose @ 0.770,
+  695 unit tests).
