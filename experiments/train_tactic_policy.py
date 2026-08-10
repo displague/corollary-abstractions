@@ -166,13 +166,22 @@ def encode(states: list[str], max_bytes: int = 512) -> tuple[torch.Tensor, torch
 
 
 class TacticRanker(nn.Module):
-    def __init__(self, embed_dim: int = 32, hidden_dim: int = 64):
+    """Byte-GRU schema ranker.
+
+    ``classes`` exists so a second DOMAIN can reuse this architecture with its
+    own weights and its own vocabulary size (ROADMAP-v0.7 item 1 permits
+    domain weights and forbids a second controller).  It defaults to the v0.6
+    tactic vocabulary, so every released checkpoint loads unchanged.
+    """
+
+    def __init__(self, embed_dim: int = 32, hidden_dim: int = 64,
+                 classes: int = len(SCHEMAS)):
         super().__init__()
         self.embed = nn.Embedding(257, embed_dim, padding_idx=0)
         self.encoder = nn.GRU(embed_dim, hidden_dim, batch_first=True)
         self.head = nn.Sequential(
             nn.LayerNorm(hidden_dim),
-            nn.Linear(hidden_dim, len(SCHEMAS)),
+            nn.Linear(hidden_dim, classes),
         )
 
     def forward(self, data: torch.Tensor, lengths: torch.Tensor) -> torch.Tensor:

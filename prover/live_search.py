@@ -222,11 +222,25 @@ class StaticTacticPolicy(BranchPolicy[LiveLeanState]):
 
 
 class PantographBackend:
-    """Lazy optional PyPantograph adapter; importing the repo needs no wheel."""
+    """Lazy optional PyPantograph adapter; importing the repo needs no wheel.
+
+    ``lean_path`` (v0.7 item 1) is the native-Windows project door.
+    PyPantograph 0.3.15 derives ``LEAN_PATH`` itself by shelling out to POSIX
+    ``printenv`` (``pantograph/utils.py:get_lean_path_async``), which is why
+    FEASIBILITY.md landmine 12 recorded project loading as blocked here.
+    Supplying the path explicitly means that call is never made: ``Server``
+    only computes a path when ``project_path and not lean_path``.  Nothing is
+    patched and no fork is required.
+    """
 
     name = "PyPantograph/Lean4"
 
-    def __init__(self, project_path: Path | None, imports: tuple[str, ...]):
+    def __init__(
+        self,
+        project_path: Path | None,
+        imports: tuple[str, ...],
+        lean_path: str | None = None,
+    ):
         try:
             from pantograph.message import TacticFailure
             from pantograph.server import Server
@@ -239,6 +253,7 @@ class PantographBackend:
         self.server = Server(
             imports=list(imports),
             project_path=str(project_path) if project_path is not None else None,
+            lean_path=lean_path,
         )
 
     def start(self, proposition: str) -> object:

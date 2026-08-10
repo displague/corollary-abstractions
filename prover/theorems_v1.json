@@ -1,0 +1,245 @@
+{
+  "set_id": "prover.curve",
+  "version": 1,
+  "created": "2026-08-10",
+  "versioning": "Additions and removals create theorems_v2.json; this file is never edited once a curve has been published against it. A published curve names the set file and its sha256, so a later set cannot silently redefine an earlier solved-rate. Correcting an authoring error is also a new version, with the correction recorded in the new file's `supersedes` note -- the same rule the corpus seeds follow.",
+  "held_out_definition": "Absent from prover/sample_triples.json, the 155-row extraction the v0.6 tactic checkpoint was trained on: no theorem id below appears there, and no proposition below appears as any extracted stateBefore. tests/test_proof_curve.py asserts both, so 'held out' is checked rather than asserted.",
+  "solvability": "Every theorem carries a `witness`: a tactic sequence, built only from the eight registered schemas, that closes it under live Lean. The witness is an AUTHORING ARTIFACT and is never shown to a search arm. Its purpose is to make the curve interpretable: an unsolved run is a ranking/search failure at that budget, never an impossible target.",
+  "backends": {
+    "init": {
+      "imports": ["Init"],
+      "project": null,
+      "note": "Lean's prelude only; no Lake project is loaded."
+    },
+    "proofcurve": {
+      "imports": ["Init", "ProofCurve"],
+      "project": "prover/lean/proofcurve",
+      "lean_path": ".lake/build/lib/lean",
+      "note": "Requires `lake build` in prover/lean/proofcurve first. PyPantograph 0.3.15's own LEAN_PATH discovery shells out to POSIX `printenv` and fails on Windows; passing lean_path explicitly bypasses that call entirely (prover/FEASIBILITY.md landmine 12). An Init-only server cannot even STATE these propositions -- `Unknown identifier ProofCurve.Both` -- which is what makes them a project-import family rather than decoration."
+    }
+  },
+  "families": {
+    "conjunction": "Introduce, split a conjunctive goal, and reach premises through structure projections. Solutions lean on `constructor` + `projection`.",
+    "implication_chain": "Curried arrow premises: bind several hypotheses accessibly, then close by `assumption`. Solutions use no projection at all -- the shape that makes this a different family rather than a longer version of the first.",
+    "disjunction": "Choose a disjunct before discharging it. Solutions need `left`/`right`, which no other family requires.",
+    "project_import": "Same underlying logic, stated through project-owned abbreviations. Lean's pretty printer does NOT unfold `ProofCurve.Both P Q`, so the conclusion is syntactically OPAQUE: a syntax-aware blind order sees an atom where a conjunction stands. This family is the deliberate stress on the v0.6 winner."
+  },
+  "theorems": [
+    {
+      "id": "curve.conjunction.and_commute",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "carried forward from v0.6 prover/live_search.py HELD_OUT_PROPOSITION; the single theorem the whole v0.6 live result rested on",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), Q /\\ P",
+      "witness": ["intro P Q h", "constructor", "exact h.right", "exact h.left"]
+    },
+    {
+      "id": "curve.conjunction.and_left",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), P",
+      "witness": ["intro P Q h", "exact h.left"]
+    },
+    {
+      "id": "curve.conjunction.and_nested_middle",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q R : Prop) (h : P /\\ (Q /\\ R)), Q",
+      "witness": ["intro P Q R h", "exact h.right.left"]
+    },
+    {
+      "id": "curve.conjunction.and_reassociate",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q R : Prop) (h : (P /\\ Q) /\\ R), P /\\ R",
+      "witness": ["intro P Q R h", "constructor", "exact h.left.left", "exact h.right"]
+    },
+    {
+      "id": "curve.conjunction.and_duplicate",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), P /\\ (Q /\\ P)",
+      "witness": ["intro P Q h", "constructor", "exact h.left", "constructor", "exact h.right", "exact h.left"]
+    },
+    {
+      "id": "curve.conjunction.and_with_true",
+      "family": "conjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the only Init theorem whose witness needs `trivial`",
+      "proposition": "forall (P : Prop), P -> (True /\\ P)",
+      "witness": ["intro P h1", "constructor", "trivial", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.identity",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P : Prop), P -> P",
+      "witness": ["intro P h1", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.constant",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop), P -> Q -> P",
+      "witness": ["intro P Q h1 h2", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.pair_from_arrows",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop), P -> Q -> (P /\\ Q)",
+      "witness": ["intro P Q h1 h2", "constructor", "assumption", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.triple_middle",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q R : Prop), P -> Q -> R -> Q",
+      "witness": ["intro P Q R h1 h2 h3", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.mixed_premises",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the family's only theorem whose witness reaches a projection, so the split is not perfectly clean by construction",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), Q -> P",
+      "witness": ["intro P Q h h1", "exact h.left"]
+    },
+    {
+      "id": "curve.implication_chain.chain_to_triple",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1 after a plumbing pilot showed every arm solving the short chains at the LOWEST budget rung: a family whose every arm scores 1.000 at every rung measures nothing",
+      "proposition": "forall (P Q R : Prop), P -> Q -> R -> (P /\\ (Q /\\ R))",
+      "witness": ["intro P Q R h1 h2 h3", "constructor", "assumption", "constructor", "assumption", "assumption"]
+    },
+    {
+      "id": "curve.implication_chain.chain_swap_pair",
+      "family": "implication_chain",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the deepest witness in the set (eight tactics)",
+      "proposition": "forall (P Q : Prop), P -> Q -> ((Q /\\ P) /\\ (P /\\ Q))",
+      "witness": ["intro P Q h1 h2", "constructor", "constructor", "assumption", "assumption", "constructor", "assumption", "assumption"]
+    },
+    {
+      "id": "curve.disjunction.or_intro_left",
+      "family": "disjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop), P -> (P \\/ Q)",
+      "witness": ["intro P Q h1", "left", "assumption"]
+    },
+    {
+      "id": "curve.disjunction.or_intro_right",
+      "family": "disjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the mirror of or_intro_left, so a `left`-first blind rule cannot be right on both",
+      "proposition": "forall (P Q : Prop), Q -> (P \\/ Q)",
+      "witness": ["intro P Q h1", "right", "assumption"]
+    },
+    {
+      "id": "curve.disjunction.or_from_and",
+      "family": "disjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), (P \\/ Q)",
+      "witness": ["intro P Q h", "left", "exact h.left"]
+    },
+    {
+      "id": "curve.disjunction.or_both_sides",
+      "family": "disjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the deepest Init witness, and the only one needing `left` on one branch and `right` on the other",
+      "proposition": "forall (P Q : Prop), P -> ((P \\/ Q) /\\ (Q \\/ P))",
+      "witness": ["intro P Q h1", "constructor", "left", "assumption", "right", "assumption"]
+    },
+    {
+      "id": "curve.disjunction.or_choose_from_and",
+      "family": "disjunction",
+      "backend": "init",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; needs `left` on one subgoal and `right` on the other while both discharge through the SAME projection",
+      "proposition": "forall (P Q : Prop) (h : P /\\ Q), ((P \\/ Q) /\\ (Q \\/ P))",
+      "witness": ["intro P Q h", "constructor", "left", "exact h.left", "right", "exact h.left"]
+    },
+    {
+      "id": "curve.project_import.both_commute",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; the opaque restatement of curve.conjunction.and_commute",
+      "proposition": "forall (P Q : Prop) (h : ProofCurve.Both P Q), ProofCurve.Both Q P",
+      "witness": ["intro P Q h", "constructor", "exact h.right", "exact h.left"]
+    },
+    {
+      "id": "curve.project_import.both_left",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : ProofCurve.Both P Q), P",
+      "witness": ["intro P Q h", "exact h.left"]
+    },
+    {
+      "id": "curve.project_import.holds_to_either",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : ProofCurve.Holds P), ProofCurve.Either P Q",
+      "witness": ["intro P Q h", "left", "assumption"]
+    },
+    {
+      "id": "curve.project_import.both_diagonal",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop), P -> ProofCurve.Both P P",
+      "witness": ["intro P Q h1", "constructor", "assumption", "assumption"]
+    },
+    {
+      "id": "curve.project_import.either_from_both",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1",
+      "proposition": "forall (P Q : Prop) (h : ProofCurve.Both P Q), ProofCurve.Either Q P",
+      "witness": ["intro P Q h", "left", "exact h.right"]
+    },
+    {
+      "id": "curve.project_import.both_nested",
+      "family": "project_import",
+      "backend": "proofcurve",
+      "held_out": true,
+      "source": "authored for v0.7 item 1; a project abbreviation nested inside itself, so the opaque conclusion is opaque twice over",
+      "proposition": "forall (P Q : Prop) (h : ProofCurve.Both P Q), ProofCurve.Both Q (ProofCurve.Both P Q)",
+      "witness": ["intro P Q h", "constructor", "exact h.right", "assumption"]
+    }
+  ]
+}
