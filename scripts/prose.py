@@ -77,6 +77,13 @@ P-PR2 (the moved-fact control has teeth). A faithful render's fact set equals
     must tile entirely into approved surface segments covering exactly the
     accepted facts. The six adversaries (the two original + the review's four)
     are each CAUGHT; the adjudicating test now also asserts the four.
+    CORRECTION 2 (post re-review, appended): the gate now also enforces ORDER —
+    beat/temporal order consistent with the accepted StoryState and
+    plant-before-discharge for every obligation — because order is part of the
+    accepted story (the obligation ledger encodes plant->discharge). Three
+    ordering adversaries (discharge-before-plant, full-reverse,
+    resolution-before-complication) that closure+coverage alone certified are now
+    CAUGHT with named reasons and pinned as regression tests.
 P-PR3 (richer template vs pointer on lexical variety). Both arms score 1.0 on
     premise preservation, required-beat coverage, and temporal consistency, but
     the pointer's lexical variety (distinct-surface ratio, mean pairwise word
@@ -477,19 +484,22 @@ def approved_segments(accepted: frozenset[Fact]) -> dict[str, frozenset[str]]:
 
 def _tile(
     text: str, approved: dict[str, frozenset[str]]
-) -> tuple[frozenset[str], str | None]:
+) -> tuple[frozenset[str], str | None, tuple[frozenset[str], ...]]:
     """Consume ``text`` as a sequence of approved segments (longest-first).
 
-    Returns the union of covered fact kinds and the first UNAPPROVED remainder
-    (or ``None`` if the whole text tiled). A segment matches only up to a
-    terminal-punctuation boundary and only when the next character is a space or
-    end, so a segment cannot be spliced into a longer word.
+    Returns the union of covered fact kinds, the first UNAPPROVED remainder (or
+    ``None`` if the whole text tiled), and the ORDERED sequence of covered-kind
+    sets for the segments actually matched — the substrate the ordering gate
+    reads. A segment matches only up to a terminal-punctuation boundary and only
+    when the next character is a space or end, so a segment cannot be spliced
+    into a longer word.
     """
 
     norm = re.sub(r"\s+", " ", text).strip()
     segments = sorted(approved, key=len, reverse=True)
     pos = 0
     covered: set[str] = set()
+    sequence: list[frozenset[str]] = []
     while pos < len(norm):
         if norm[pos] == " ":
             pos += 1
@@ -503,26 +513,62 @@ def _tile(
                 match = segment
                 break
         if match is None:
-            return frozenset(covered), norm[pos:]
+            return frozenset(covered), norm[pos:], tuple(sequence)
         covered |= approved[match]
+        sequence.append(approved[match])
         pos += len(match)
-    return frozenset(covered), None
+    return frozenset(covered), None, tuple(sequence)
+
+
+def _ordering_reasons(
+    text: str, sequence: tuple[frozenset[str], ...], accepted: frozenset[Fact]
+) -> list[str]:
+    """Order is part of the accepted story; a scramble moves a fact.
+
+    Two named teeth, applied only once the prose is otherwise closed and
+    complete: (a) beat/temporal order consistent with the accepted StoryState
+    (reuses :func:`_temporal_ok`, the same measurement the temporal metric
+    uses), and (b) plant-before-discharge for every obligation — a discharge
+    segment may not precede the plant that licenses it, which is exactly what the
+    frame's obligation ledger encodes.
+    """
+
+    reasons: list[str] = []
+    if not _temporal_ok(text, accepted):
+        reasons.append("prose orders beats inconsistently with the accepted story")
+
+    planted_positions = [i for i, kinds in enumerate(sequence) if "planted" in kinds]
+    first_plant = min(planted_positions) if planted_positions else None
+    discharged_elements = sorted(
+        fact.value for fact in accepted if fact.kind == "discharged"
+    )
+    element = discharged_elements[0] if discharged_elements else "the planted element"
+    for i, kinds in enumerate(sequence):
+        if "discharged" in kinds and (first_plant is None or i < first_plant):
+            reasons.append(f"prose discharges {element!r} before it is planted")
+            break
+    return reasons
 
 
 def faithfulness(rendered: Rendered, accepted: frozenset[Fact]) -> tuple[str, ...]:
     """Named reasons a render moves a fact; empty tuple means faithful.
 
     The authoritative moved-fact gate. It reads the SURFACE (never the
-    self-attested provenance) and proves closure: the prose must tile entirely
-    into approved segments (:func:`approved_segments`) and those segments must
-    cover exactly the accepted fact kinds. An unapproved segment (added premise,
-    negation, misattribution) and an uncovered fact (dropped beat) are each a
-    named failure.
+    self-attested provenance) and proves three things: (1) *closure* — the prose
+    tiles entirely into approved segments (:func:`approved_segments`); (2)
+    *coverage* — those segments cover exactly the accepted fact kinds; and (3)
+    *order* — the beats run in the accepted StoryState's order and no obligation
+    is discharged before it is planted (:func:`_ordering_reasons`). An unapproved
+    segment (added premise, negation, misattribution), an uncovered fact (dropped
+    beat), a scrambled beat order, and a discharge-before-plant are each a named
+    failure. Order is folded in because it is part of the accepted story: the
+    frame's obligation ledger encodes plant->discharge, so a reversed narrative
+    moves a fact just as surely as a substituted word does.
     """
 
     approved = approved_segments(accepted)
     accepted_kinds = {fact.kind for fact in accepted}
-    covered, unapproved = _tile(rendered.text, approved)
+    covered, unapproved, sequence = _tile(rendered.text, approved)
 
     reasons: list[str] = []
     if unapproved is not None:
@@ -538,6 +584,13 @@ def faithfulness(rendered: Rendered, accepted: frozenset[Fact]) -> tuple[str, ..
     # ``covered`` can only hold accepted kinds (approved segments are built from
     # the accepted set), so an "extra kind" is structurally impossible; the
     # teeth against invention are the unapproved-segment branch above.
+    #
+    # Ordering is checked only once the prose is otherwise closed and complete:
+    # a partial tiling (unapproved remainder) or a missing beat is already a
+    # failure, and running the order gate on a truncated segment sequence would
+    # add a misleading second reason to an already-caught render.
+    if unapproved is None and not missing:
+        reasons.extend(_ordering_reasons(rendered.text, sequence, accepted))
     return tuple(reasons)
 
 

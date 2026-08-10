@@ -49,15 +49,17 @@ from session_keys import SessionKeyRing  # noqa: E402
 
 SEEDS = tuple(range(50))
 
-# A faithful body assembled only from approved segments, reused to build the
-# review's four fact-moving adversaries by appending/replacing ONE segment.
-_BODY = (
-    "The golden chicken wanted to sing the sunrise awake. "
-    "A fallen feather rested by the nest. "
-    "But the locked coop door stood in the way. "
-    "It used a fallen feather as a key, and sang until the sun rose."
-)
-_FAITHFUL = _BODY + " Now the golden chicken laid copper eggs."
+# Individual approved segments, reused to build the review's fact-moving and
+# ordering adversaries by appending/replacing/reordering exactly one thing.
+_SETUP1 = "The golden chicken wanted to sing the sunrise awake."
+_FEATHER = "A fallen feather rested by the nest."
+_COMPLICATION = "But the locked coop door stood in the way."
+_RESOLUTION = "It used a fallen feather as a key, and sang until the sun rose."
+_CODA = "Now the golden chicken laid copper eggs."
+
+# A faithful body (setup..resolution) and a full faithful render.
+_BODY = " ".join((_SETUP1, _FEATHER, _COMPLICATION, _RESOLUTION))
+_FAITHFUL = _BODY + " " + _CODA
 
 
 def _bound_session(owner: str = "alice", color: str = "copper", ring=None):
@@ -225,6 +227,46 @@ class MovedFactControlTests(unittest.TestCase):
         self.assertTrue(
             any("obstacle" in r for r in faithfulness(adv["dropped-beat"], accepted))
         )
+
+
+class OrderingGateTests(unittest.TestCase):
+    """The gate folds ORDER in: a scramble moves a fact even with no new atom.
+
+    Each adversary below tiles fully into approved segments and covers every
+    accepted fact kind (closure + coverage PASS); only ordering catches them.
+    """
+
+    def test_discharge_before_plant_is_caught(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        # Resolution (feather used as a key) precedes the feather's planting.
+        text = " ".join((_SETUP1, _COMPLICATION, _RESOLUTION, _FEATHER, _CODA))
+        reasons = faithfulness(_as_render(text, accepted, "adversary-dbp"), accepted)
+        self.assertFalse(is_faithful(_as_render(text, accepted, "x"), accepted))
+        self.assertTrue(
+            any("before it is planted" in r for r in reasons), reasons
+        )
+
+    def test_full_reverse_is_caught(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        text = " ".join((_CODA, _RESOLUTION, _COMPLICATION, _FEATHER, _SETUP1))
+        reasons = faithfulness(_as_render(text, accepted, "adversary-rev"), accepted)
+        self.assertFalse(is_faithful(_as_render(text, accepted, "x"), accepted))
+        self.assertTrue(
+            any("orders beats inconsistently" in r for r in reasons), reasons
+        )
+
+    def test_resolution_before_complication_is_caught(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        text = " ".join((_SETUP1, _FEATHER, _RESOLUTION, _COMPLICATION, _CODA))
+        reasons = faithfulness(_as_render(text, accepted, "adversary-rbc"), accepted)
+        self.assertFalse(is_faithful(_as_render(text, accepted, "x"), accepted))
+        self.assertTrue(
+            any("orders beats inconsistently" in r for r in reasons), reasons
+        )
+
+    def test_faithful_order_passes(self) -> None:
+        accepted = _accepted(_bound_session(color="copper"))
+        self.assertTrue(is_faithful(_as_render(_FAITHFUL, accepted, "x"), accepted))
 
 
 class BeatDetectionTests(unittest.TestCase):
