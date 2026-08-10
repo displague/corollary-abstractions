@@ -261,6 +261,42 @@ bindings), **near-miss** (informative failure, kept deliberately).
   because "ranking is a refinement of the old order" is a property a future
   scorer must preserve, not a coincidence to rediscover. (2026-08-09)
 
+- **The corpus's flagship cross-discipline twin is also the thing that stops
+  a proof link from naming an owner.** `logic.boolean_laws.de_morgan_laws`
+  and `settheory.boolean_laws.de_morgan_laws` share a skeleton character for
+  character, and the logic node's own `statistical_significance` celebrates
+  that: "both nodes state one theorem of one Boolean algebra, read once over
+  propositions and once over subsets". Regenerating a formal skeleton from a
+  Lean theorem and matching it against the citing statement therefore
+  certifies STRUCTURE and cannot certify OWNERSHIP: for 12 of the 15
+  translatable committed links, at least one other committed statement
+  declares the very same skeleton, so a link that moved to the set-theory
+  twin would still be CORRESPONDS. The property that makes this corpus
+  valuable as an analogy graph is the property that makes structural
+  correspondence insufficient as a proof gate. What actually keeps one
+  claimant is the older, cheaper rule — `verified_by` theorems are
+  exclusively owned — so the two checks are load-bearing together and
+  neither is sufficient alone. `scripts/proof_correspondence.py` reports the
+  claimants as `ambiguous_with`; the WRITE gate refuses to create new
+  instances of the hole. *P-PW6 fired; PROVEN-gated WRITE* (2026-08-09)
+
+- **`equivalent_forms` is a stronger claim than the corpus uses it for, and
+  a proof gate reading it inherits the weakness.** A correspondence check
+  cannot compare a Lean theorem only to `anonymized_template`: seven of the
+  fifteen translatable committed links would be reported MISMATCH, six
+  because they cite the DUAL law and one because it cites the bare
+  `not(P and not P)` form. Every one of those forms is declared by the citing
+  node, so the citations are honest and the naive gate is simply wrong. But
+  admitting declared forms admits everything a node files there, and
+  `logic.boolean_laws.double_negation` files the ONE-DIRECTIONAL
+  `P implies not(not P)` as an "equivalent form" — so a theorem proving only
+  that half would be accepted as proving the biconditional. The corpus has
+  been using `equivalent_forms` as "related readings a human should see",
+  and the first consumer that treats it as "forms this statement asserts"
+  turns an editorial convenience into a soundness surface. Recorded rather
+  than fixed: narrowing the field is a corpus-wide authoring decision, not a
+  change one gate may make. *near-miss; PROVEN-gated WRITE* (2026-08-09)
+
 - **A near-miss that preserves length is what makes a geometry check
   falsifiable.** The obvious way to break a right angle — nudge the leg
   endpoint sideways — also changes that leg's length, so the length check

@@ -44,9 +44,20 @@ Acceptance pipeline for a PROVEN candidate, in order, every step able to refuse:
   path containment -> rung -> artifact digest pin -> theorem closes to no goals
   -> declared transition trace is really in the artifact -> theorem is unowned
   -> scratch regeneration -> regeneration is CONFINED to the declared corpus and
-  adds exactly the declared statement -> semantic correspondence -> schema and
-  link validation of the merged scratch graph -> matcher delta measured and
-  compared against the candidate's DECLARED delta -> durable byte-identity.
+  adds exactly the declared statement -> semantic correspondence -> STRUCTURAL
+  UNAMBIGUITY -> schema and link validation of the merged scratch graph ->
+  matcher delta measured and compared against the candidate's DECLARED delta ->
+  durable byte-identity.
+
+The structural-unambiguity gate is strictly stronger than what the committed
+corpus is held to, and deliberately so. `scripts/proof_correspondence.py`
+documents that skeleton correspondence cannot distinguish a statement from its
+cross-discipline structural twin, and reports `ambiguous_with` rather than
+failing -- the sixteen committed links are human-authored and each already owns
+its theorem exclusively. A WRITE, by contrast, would MANUFACTURE a new instance
+of that hole, so a candidate whose regenerated skeleton is also declared by some
+committed statement is refused instead of staged with a caveat nobody is obliged
+to read.
 
 Nothing in that list accepts. A `STAGED_CANDIDATE` carries
 `approval_required: ["human_or_prover_review"]` and `approval_granted: []`;
@@ -91,6 +102,7 @@ if __package__ in {None, ""}:  # pragma: no cover - CLI import shim
 
 import match_signatures  # noqa: E402
 from proof_artifacts import (  # noqa: E402
+    REQUIRED_TRANSITION_FIELDS,
     resolve_contained_artifact,
     select_closing_transitions,
 )
@@ -637,6 +649,21 @@ def _check_proof(candidate: WriteCandidate, repo_root: Path) -> list[tuple[str, 
             "transition_trace",
             "a PROVEN candidate must carry the transition trace it claims",
         )
+    # Self-review: `_is_subsequence` matches a declared row when every key it
+    # states agrees, so a row stating NOTHING would match anything and an empty
+    # trace of empty rows would sail through. Completeness is required.
+    for row in candidate.transition_trace:
+        missing = [
+            field
+            for field in REQUIRED_TRANSITION_FIELDS
+            if not isinstance(row.get(field), str) or not row[field].strip()
+        ]
+        if missing:
+            raise Refusal(
+                "transition_trace",
+                "declared transitions must be complete; missing "
+                + ", ".join(missing),
+            )
     if not _is_subsequence(candidate.transition_trace, transitions):
         raise Refusal(
             "transition_trace",
@@ -702,6 +729,22 @@ def _check_correspondence(node: dict, candidate: WriteCandidate, repo_root: Path
         raise Refusal(
             "semantic_correspondence",
             f"{result.verdict}: {result.reason}",
+        )
+    if result.ambiguous_with:
+        # Self-review, the forgery attack: correspondence is STRUCTURAL, and the
+        # corpus's cross-discipline twins share structure exactly. For the
+        # sixteen committed links this is a documented limit -- they are
+        # human-authored and each already owns its theorem exclusively -- but a
+        # WRITE must not MANUFACTURE new instances of it. A candidate whose
+        # regenerated skeleton is also declared by an existing statement cannot
+        # be certified to be the statement the theorem proves, so it is refused
+        # rather than staged with a caveat nobody is obliged to read.
+        raise Refusal(
+            "structural_unambiguity",
+            "the theorem's skeleton is also declared by "
+            + ", ".join(result.ambiguous_with)
+            + "; structural correspondence cannot say which statement it "
+            "proves, so a new durable claim on it is refused",
         )
     return result.as_dict()
 
@@ -838,6 +881,10 @@ def _gate(
             f"CORRESPONDS via the candidate's "
             f"{record.correspondence['matched_route']} form",
         )
+        record.passed(
+            "structural_unambiguity",
+            "no committed statement declares the theorem's skeleton",
+        )
         record.passed("schema_and_link_validation", _validate(scratch))
         measured = _measure_matcher_delta(
             repo_root / "data", scratch / "data", candidate.statement_id
@@ -878,7 +925,11 @@ def candidate_from_json(payload: dict, repo_root: Path) -> WriteCandidate:
     source_path = payload.get("seed_source_path")
     source = payload.get("seed_source", "")
     if source_path:
-        source = (repo_root / source_path).read_text(encoding="utf-8")
+        # Self-review: a proposal file is untrusted input, and an uncontained
+        # read here would let it pull arbitrary bytes into a staged record.
+        source = _resolve_seed_target(repo_root, source_path).read_text(
+            encoding="utf-8"
+        )
     return WriteCandidate(
         statement_id=payload["statement_id"],
         corpus=payload["corpus"],

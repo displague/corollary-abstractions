@@ -662,27 +662,54 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   per story, so its order is the alphabetical order and the arm is
   byte-identical to `arbitrary`.
 
-- **PARTIAL — `verified_by` semantic correspondence remains unchecked node
-  metadata; provenance integrity is now validated.** The
-  retrieval slice's digest pins Lean artifact BYTES, and its loader checks
-  the cited reference exists in the artifact and closes to `no goals` —
-  but nothing checks that the theorem PROVES the statement citing it. Any
-  committed node could cite `BooleanLaws.modus_ponens` and mint a "proven"
-  retrieval record for an unrelated statement (post-merge review of
-  5756007, finding F3; mitigated today only by the committed-data trust
-  model). The cheap first rung is SHIPPED: `validate_nodes.py` now requires
-  repository-contained artifacts whose every row is a complete
-  state–tactic–state transition and whose selected theorem reaches `no goals`;
-  resolves explicit or
-  unambiguous reference-free theorem identities; and gives every theorem
-  reference exactly one statement owner. Its capability-blind control pairs a
-  valid Boolean theorem with an unrelated gravity statement and correctly
-  demonstrates that this lint cannot detect the semantic lie. The remaining
-  fix is prover phase 2 regenerating the statement's formal template from the
-  Lean theorem and matching skeletons, which turns `verified_by` from
-  provenance prose into a checked edge. Until that lands,
-  "digest-pinned proof trust" must not be read as semantic correspondence
-  (retrieval.py's trust-model docstring now says so).
+- **SHIPPED (both rungs) — `verified_by` is a checked edge; what it checks is
+  structure, and structure cannot name an owner.** Rung one (provenance)
+  remains as before: `validate_nodes.py` requires repository-contained
+  artifacts whose every row is a complete state–tactic–state transition and
+  whose selected theorem reaches `no goals`, resolves explicit or unambiguous
+  reference-free theorem identities, and gives every theorem reference exactly
+  one statement owner. Its capability-blind control — a valid Boolean theorem
+  paired with an unrelated gravity statement — still PASSES there, deliberately.
+  Rung two (semantics) is now `scripts/proof_correspondence.py` (branch
+  `feature/proven-write`, v0.7 item 3), and that control now FAILS: the module
+  reads a theorem's opening goal out of the artifact, translates the declared
+  propositional fragment into the corpus template grammar, skeletonizes it with
+  `match_signatures`' own tokenizer/parser/canonicalizer/`skeleton`, and
+  compares it to the citing statement's declared form set. Over the 16
+  committed links: 15 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH.
+  "Digest-pinned proof trust" may now be read as structural correspondence —
+  and no further. Three limits are load-bearing and open:
+  - **structure is not ownership.** 12 of the 15 translatable links have at
+    least one other committed statement declaring the same skeleton (the
+    set-theory twins). Only the exclusive-ownership rule keeps one claimant;
+    correspondence would accept the twin. Reported per link as
+    `ambiguous_with`; see docs/DISCOVERIES.md.
+  - **the fragment is propositional.** `not_forall_iff_exists_not` is
+    UNTRANSLATABLE (it binds a type and a predicate and quantifies). Extending
+    to first order needs binder-aware templates the corpus grammar does not
+    have; until then, that link is uncheckable rather than wrong, and the CLI
+    reports it without failing.
+  - **`equivalent_forms` is admitted as declared content.** Necessary — seven
+    links would otherwise be false MISMATCHes — but it inherits whatever the
+    corpus files there, including one-directional halves. See the
+    DISCOVERIES entry; narrowing the field is a corpus-wide authoring
+    decision.
+
+- **NEW — `equivalent_forms` has two incompatible readings and now has a
+  consumer that needs the strong one.** Nodes file dual laws (fine), notation
+  variants (fine), and one-directional halves under one array:
+  `logic.boolean_laws.double_negation` lists `P implies not(not P)`;
+  `logic.inference.modus_ponens` lists the rule and sequent presentations;
+  `logic.boolean_laws.absorption` lists the order form `P entails (P or Q)`.
+  The proof-correspondence gate reads the array as "forms this statement
+  asserts", so a theorem proving only a listed half would be accepted as
+  proving the whole. Today nothing exploits it (all 16 committed links match
+  a canonical, dual, or full-equivalence form), and the untranslatable
+  entries fall out of the fragment anyway. Fix options, in preference order:
+  add a `strength` field (`equivalent` / `weaker` / `presentational`) to
+  `formalVariant` and admit only `equivalent`; or move halves to a separate
+  `partial_forms` array. Either is a schema change across 221 nodes and needs
+  its own slice.
 
 - **PARTIAL — the common protocol is executable; WRITE remains.**
   `scripts/controller.py` now carries typed state + one of
@@ -696,7 +723,11 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   `GEN` has proof/story/frame semantics, and `retrieval.RetrievalVerifier`
   layers executable `RETRIEVE` plus exact `POINT(position)` over the unchanged
   frame verifier. ASK now adds an authenticated pause/return adapter with a
-  runtime user frame; `WRITE` remains vocabulary without an adapter. A live
+  runtime user frame; `WRITE` now has a gate (`scripts/write_stage.py`) but
+  deliberately no controller ADAPTER — see the durable-write entry below: a
+  staged proposal is not an accepted state transition, so wiring it as a
+  state-advancing verifier result would be the category error the item exists
+  to prevent. A live
   PyPantograph verifier now plugs into the same controller for one bounded
   theorem search, but project-backed breadth and a shared proof/story learned
   policy remain open.
@@ -809,17 +840,48 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   TOOL-rung observations still fail `contains_item` after a restart (its own
   BACKLOG item above).
 
-- **No model-initiated durable write path.** Durable knowledge is currently
-  excellent but human/agent-mediated: edit a seed, regenerate, validate, and
-  recompute every symbolic consequence. Add `WRITE(candidate)` as the
-  PROVEN-gated dual of UNKNOWN-triggered `RETRIEVE`. The action must stage a
-  seed-level authoring candidate carrying `verified_by` and provenance; it must
-  never edit generated `data/*/nodes.json`, and it does not bypass review,
-  byte-identical regeneration, schema/link validation, or matcher checks.
-  VERIFIED-but-unproved material remains a human-curated corpus assertion;
-  CONJECTURED material stays in a proposal queue; frame declarations remain
-  session-local unless separately proved. This preserves correction-by-edit
-  without turning policy output into trusted knowledge.
+- **SHIPPED (staging; acceptance stays human) — model-initiated durable
+  writes have a PROVEN gate.** `scripts/write_stage.py` (branch
+  `feature/proven-write`, v0.7 item 3) is the PROVEN-gated dual of
+  UNKNOWN-triggered `RETRIEVE`. A candidate names a SEED, never a corpus
+  file, and carries seed source, proof artifact, pinned digest, theorem
+  identity and transition trace. The gate matrix: PROVEN + CORRESPONDS stages
+  a full candidate; VERIFIED stages a review-request record carrying no
+  candidate content and executing no seed; CONJECTURED and frame-local are
+  REFUSED; PROVEN with a MISMATCH **or** UNTRANSLATABLE correspondence is
+  REFUSED, failing closed where the lint fails open. Acceptance pipeline, each
+  step able to refuse: path containment, rung, artifact digest pin, theorem
+  closure, transition-trace membership, exclusive theorem ownership, scratch
+  regeneration outside the repository, regeneration confinement (every other
+  corpus byte-identical; exactly the declared statement added), semantic
+  correspondence, structural unambiguity, schema/link validation of the merged
+  scratch graph, declared-versus-measured matcher delta, durable byte-identity.
+  Nothing accepts: a staged record carries `approval_granted: []` and
+  promotion is a human editing the seed and running the ordinary loop.
+  Receipts are deterministic and are written for refusals too. Still open:
+  - **no controller adapter.** `ActionKind.WRITE` remains vocabulary. Staging
+    is not a state transition, so a verifier returning PROVEN + next_state for
+    a WRITE would make a proposal look like an accepted step. The adapter
+    needs a fourth disposition (proposed-and-parked) before it can exist.
+  - **executing a candidate seed is not sandboxed.** Regeneration is real, so
+    the candidate's code runs. Containment is by construction (scratch tree
+    outside the repository, relative argv, minimal environment carrying no
+    repository path — a test proves the seed sees only `<scratch>`) plus a
+    screen for absolute and parent-directory path literals, plus a before/after
+    digest of the durable tree. A candidate that searched the filesystem could
+    still find `data/`; the digest would refuse it after the fact, not before.
+    A real answer is an OS-level sandbox or a seed DSL that is data rather
+    than code.
+  - **structural unambiguity is stricter than the corpus.** A candidate whose
+    skeleton some committed statement already declares is refused, because
+    correspondence cannot say which of them the theorem proves. That is right
+    for new content and would reject a genuine second reading of a shared law;
+    a disambiguating signal (discipline-typed slots, canonical objects) would
+    let such candidates through honestly.
+  - **no acceptance path at all.** Reviewing a staged receipt and applying it
+    is unautomated by design for now; a `--apply` that ran the ordinary loop
+    under a human's signature is the obvious next rung and needs its own
+    authority argument.
 
 - **PARTIAL — ASK is executable; open dialogue and durable sessions remain.** An unresolved slot
   can be answerable but absent from every durable store because its source of

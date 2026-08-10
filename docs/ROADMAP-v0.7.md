@@ -234,6 +234,28 @@ refusal).
 
 No runtime action may write `data/*/nodes.json` directly.
 
+**DELIVERED — all four bullets, with two limits that are structural rather than
+unfinished.** `scripts/proof_correspondence.py` regenerates a formal skeleton
+from every `verified_by` theorem's opening goal and matches it against the
+citing statement: **15 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH** over the 16
+committed links, and the capability-blind control the provenance lint passes (a
+gravity statement citing `BooleanLaws.modus_ponens`) is MISMATCH here.
+`scripts/write_stage.py` stages a PROVEN candidate through path containment,
+digest pin, closure, transition trace, exclusive ownership, scratch
+regeneration, regeneration confinement, correspondence, structural
+unambiguity, schema/link validation, declared-versus-measured matcher delta and
+durable byte-identity; VERIFIED stages a content-free review request;
+CONJECTURED and frame-local are REFUSED. Refusals write a deterministic,
+diffable receipt and leave `data/` byte-identical, asserted by digest on every
+path. Nothing accepts — `approval_granted` is always empty.
+
+The two limits: correspondence certifies STRUCTURE, and 12 of the 15
+translatable links have a committed structural twin that declares the same
+skeleton, so exclusive ownership is what keeps one claimant (`ambiguous_with`
+reports the rest; the WRITE gate refuses to create new instances). And
+executing a candidate seed is contained by construction and screened, but not
+sandboxed. Both are filed in `docs/BACKLOG.md` with the fixes they need.
+
 ### Registered predictions (P-PW1 – P-PW8), committed before the adjudicating run
 
 Registered on branch `feature/proven-write` BEFORE `scripts/proof_correspondence.py`
@@ -301,6 +323,33 @@ rest" cannot be widened after seeing which theorem falls outside it:
   refusal; and a candidate whose *declared* matcher delta disagrees with the
   delta measured in the scratch checkout is REFUSED even though schema, link, and
   regeneration checks pass.
+
+### Adjudication (corrections attached, never applied to the text above)
+
+| prediction | verdict | result |
+|---|---|---|
+| P-PW1 | **FIRED** | 16 links from 9 citing statements; the brief's "9" counted statements |
+| P-PW2 | **FIRED** | 15 CORRESPONDS / 1 UNTRANSLATABLE / 0 MISMATCH; the exception is `not_forall_iff_exists_not`, refused on its `α : Type` binder |
+| P-PW3 | **FIRED** | the gravity control is MISMATCH here and still PASSES the provenance lint (both asserted, in different files) |
+| P-PW4 | **FIRED** | `non_contradiction` needed the asserted-proposition normalisation AND matched only `equivalent_forms[non_contradiction]`, exactly as named in advance; `excluded_middle` matched only the dual |
+| P-PW5 | **FIRED, with a correction** | the six named dual citations are exactly the six `dual_of_canonical` routes. The prediction's *consequence* was understated: the naive canonical-only reading produces **seven** false MISMATCHes, not six — P-PW4 had already named the seventh (`non_contradiction`) without P-PW5 counting it. Recorded in `test_p_pw5_canonical_template_alone_would_reject_seven`. |
+| P-PW6 | **FIRED, with a correction** | the two `logic.inference.*` links have no structural claimant, as predicted. The boolean-law prediction was "every translatable one is ambiguous"; the measurement is **12 of 13**. `non_contradiction` is unambiguous *because* it is carried by a declared variant the set-theory twin does not file — the declared-form-set widening, argued for on other grounds, turns out to be the only thing that disambiguates anything. |
+| P-PW7 | **FIRED** | gate matrix as registered, including PROVEN + UNTRANSLATABLE → REFUSED |
+| P-PW8 | **FIRED** | `data/logic/nodes.json` as an edit target is refused at the first gate with no filesystem write; `data/` digest is identical before and after every refusal; an undeclared, partial, or wrong matcher delta refuses a candidate that passed every earlier stage |
+
+Two defects the delivery found in itself, both fixed in branch and both
+regression-tested: the synthesized TRUTH slot was classed variable-like on the
+corpus side and constant-like on the Lean side, so `modus_ponens` matched its
+own node through a weaker declared form (visible only because the matched route
+is recorded); and the Boolean dual left an undeclared lattice bound in place,
+producing the false form `JOIN(P, NEG(P)) = INCONSISTENCY` and making
+`narrative.frame.frame_consistency` a spurious claimant of
+`BooleanLaws.excluded_middle`.
+
+Adversarial self-review added three gates that were missing: structural
+unambiguity for new durable claims, completeness of declared transition rows (a
+contentless row matched any artifact row), and containment on the CLI's
+`seed_source_path` read.
 
 ## 4. Depth follows the v0.6 consumer verdict
 
