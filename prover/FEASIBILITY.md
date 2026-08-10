@@ -220,12 +220,41 @@ is_solved: True
 9. **elan via winget installs only the stub**; run `elan-init.exe -y` yourself.
 10. **Lean DLL directory must be on `PATH`** to run any Lean-built `.exe` outside `lake env`.
 11. Set `PYTHONIOENCODING=utf-8` — proof states contain `⊢` and Windows defaults to cp1252.
-12. **Project discovery is not native-Windows-safe in PyPantograph 0.3.15.**
-    Its Lake environment loader invokes POSIX `printenv LEAN_PATH`; base
-    `Init` interaction works, but `Server(project_path=...)` does not discover
-    imports from a Windows Lake project. Resolve `LEAN_PATH` without
-    `printenv`, or pass a validated explicit path, before claiming
-    project-backed live search.
+12. **Project discovery is not native-Windows-safe in PyPantograph 0.3.15 —
+    RESOLVED 2026-08-10, no patch required.**
+    Its Lake environment loader invokes POSIX `printenv LEAN_PATH`
+    (`pantograph/utils.py::get_lean_path_async`), so `Server(project_path=…)`
+    alone cannot discover imports from a Windows Lake project while base
+    `Init` interaction works. The fix is a conditional, not a fork:
+    `server.py` computes a path only when `project_path and not lean_path`, so
+    **supplying `lean_path` explicitly means the `printenv` call never runs**.
+
+    ```powershell
+    cd prover\lean\proofcurve; lake build          # -> .lake\build\lib\lean\*.olean
+    ```
+    ```python
+    Server(imports=["Init", "ProofCurve"],
+           project_path=str(project),
+           lean_path=str(project / ".lake" / "build" / "lib" / "lean"))
+    ```
+
+    Verified live on 2026-08-10 (ROADMAP-v0.7 item 1): 36 searches over six
+    project-import theorems, with an `Init`-only control refusing the same
+    propositions (`Unknown identifier 'ProofCurve.Both'`).
+    `prover/live_search.PantographBackend` takes the optional `lean_path`
+    argument; `prover/theorems_v1.json` declares it per backend.
+
+    Two caveats that are NOT resolved:
+    * the project must be pinned to the toolchain the bundled `repl.exe` was
+      built with (4.29.1 here). The `BooleanLaws` extraction project is on
+      4.32.2 — required for `ExtractData.lean`'s `String.trimAscii` — so the
+      server refuses to emit `ready.` against it. `prover/lean/proofcurve/`
+      side-steps this by pinning 4.29.1; nothing reconciles the two yet.
+    * Lean's pretty printer does **not** unfold project `abbrev`s, so an
+      imported `ProofCurve.Both P Q` stays opaque in the rendered goal. Any
+      syntax-driven policy sees an atom where a conjunction stands. That is a
+      useful stress, but it also means dot-notation projections must be
+      *proposed and refused* rather than predicted.
 
 ---
 

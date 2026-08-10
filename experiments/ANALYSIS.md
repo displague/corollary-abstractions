@@ -1879,3 +1879,217 @@ Reproduce with:
 python experiments/corpus_analogy_split.py
 python -m unittest tests.test_corpus_analogy_split
 ```
+---
+
+# From one live theorem to a proof-search curve (ROADMAP-v0.7 item 1)
+
+`experiments/tactic_curve.py` -> `experiments/results/proof_curve.json`
+`experiments/story_curve.py`  -> `experiments/results/story_curve.json`
+Theorem set `prover/theorems_v1.json`, sha256
+`af6f6cb73a06474f8e63a4c899028cf02149a7e0cc3c67b17eb4aa14f565b043`.
+
+v0.6 rested its live-search claim on **one** `Init` theorem, one ordering
+trace, and a learned proposer that a state-blind frequency order beat 64
+proposals to 65.0. This lane replaces that point with a curve: 24 held-out
+theorems in four families, six ranking arms, five budget rungs, **144 live
+PyPantograph runs and no replayed transition in any arm**. Lean adjudicated
+every transition; a refused tactic supplied no next state.
+
+## Setup
+
+**Held-out is checked, not labelled.** No theorem id appears in
+`prover/sample_triples.json` and no proposition appears as any extracted
+state (`tests/test_proof_curve.py`), so the v0.6 checkpoints cannot have seen
+them. Every theorem carries a *witness* inside the eight registered schemas;
+the witness is never shown to a search arm and exists only so that an unsolved
+run reads as a ranking failure rather than an impossible target.
+
+**Schema choice is separated from tactic-argument generation.** A ranker
+orders the eight schemas; `prover/tactic_grammar.py` turns a schema into
+concrete tactic text by reading the rendered goal. Every arm receives the
+*identical candidate multiset* for a state and can only permute it — asserted
+by test — so a proposal-count difference is a schema-ordering difference.
+
+| arm | what it is |
+|---|---|
+| `arbitrary` | schema declaration order, leading with `clear` |
+| `frequency` | **v0.6's winner**, rebuilt from the same 44 training rows under the same mapper (pinned row-for-row by test) |
+| `syntax` | closed-form rules over the rendered goal; capability-blind, no weights |
+| `learned_s0/1/2` | the released v0.6 checkpoints, 27,688 parameters, used as shipped |
+
+Retraining was considered and rejected: the new families are expressible in
+the checkpoint's own vocabulary, so retraining would have replaced "does the
+v0.6 artifact generalize?" with a different question.
+
+**Project imports are live.** `prover/lean/proofcurve/` is a Lake project;
+`import_control` records that an `Init`-only server refuses
+`curve.project_import.both_commute` with "Unknown identifier
+`ProofCurve.Both`". FEASIBILITY.md landmine 12 (POSIX `printenv` in
+PyPantograph's `LEAN_PATH` discovery) is bypassed rather than patched:
+`Server` only computes a path when `project_path` is given *without*
+`lean_path`.
+
+**One run per (theorem, arm) yields the whole curve.** `SearchController` is
+deterministic BFS and every ranker is a pure function of the rendered state,
+so a smaller-budget run is a strict prefix. 24 fresh live re-runs at the
+middle rung agreed with the derived value in 24/24 cases (P-PC6).
+
+## Solved-rate curve, all 24 theorems
+
+| arm | (4,32) | (8,64) | (16,128) | (32,256) | (64,512) | mean proposals |
+|---|---:|---:|---:|---:|---:|---:|
+| arbitrary | 12 | 17 | 21 | 22 | 24 | 55.96 |
+| frequency | 16 | 20 | 21 | 22 | 24 | 51.58 |
+| **syntax** | 16 | **21** | 21 | 22 | 24 | **48.29** |
+| learned_s0 | 16 | 18 | 21 | 22 | 24 | 49.04 |
+| learned_s1 | 16 | 21 | 21 | 22 | 24 | 49.29 |
+| learned_s2 | 16 | 19 | 21 | 22 | 24 | 48.67 |
+
+Budgets are (expanded states, proposals). Every arm solves every theorem at
+the maximum rung, which is exactly v0.6's registered live budget.
+
+## Per family, at the registered middle rung (8 states / 64 proposals)
+
+| family (n) | arbitrary | frequency | syntax | learned s0/s1/s2 (mean) |
+|---|---:|---:|---:|---|
+| conjunction (6) | 3 | 4 | **5** | 4 / 5 / 5 (4.67) |
+| implication_chain (7) | 7 | 7 | 7 | 7 / 7 / 7 (7.00) |
+| disjunction (5) | 3 | 3 | 3 | 3 / 3 / 3 (3.00) |
+| project_import (6) | 4 | 6 | **6** | 4 / 6 / 4 (4.67) |
+
+Mean proposals-to-solution by family:
+
+| family | arbitrary | frequency | syntax | learned mean |
+|---|---:|---:|---:|---:|
+| conjunction | 61.67 | 54.00 | **52.17** | 53.17 |
+| implication_chain | 12.43 | 12.86 | 9.29 | **9.05** |
+| disjunction | 130.20 | 124.60 | **118.00** | 119.40 |
+| project_import | 39.17 | 33.50 | **31.83** | 32.78 |
+
+`implication_chain` is **vacuous as a budget discriminator**: every arm solves
+all seven members at the lowest rung, including the two deeper members added
+after a construction pilot exposed exactly this. An eight-tactic witness still
+costs 11-15 proposals because the chain is nearly linear. Filed in BACKLOG;
+the repair is premises that must be *selected* rather than discharged in
+order, not more theorems of the same shape.
+
+## Wall-clock curve (all 24), the axis that disagrees
+
+| arm | 0.02 s | 0.05 s | 0.20 s | 1.00 s | 5.00 s |
+|---|---:|---:|---:|---:|---:|
+| arbitrary / frequency / syntax | 17 | 21 | 22 | 24 | 24 |
+| learned_s0 | 13 | 17 | 21 | 24 | 24 |
+| learned_s1 | 14 | 19 | 22 | 24 | 24 |
+| learned_s2 | 14 | 18 | 22 | 24 | 24 |
+
+A 27,688-parameter forward pass costs more than the sub-millisecond Lean round
+trip it saves. **Proposal count and wall time disagree about the ranking, and
+only wall time is what a user waits for.** Total search seconds: syntax 0.784,
+frequency 0.821, arbitrary 0.885, learned 1.19-1.53.
+
+## Dead branches preserved, and cross-task avoidance measured
+
+1,552 accepted dead branches across 144 runs (`clear` 419, `intro` 378,
+`constructor` 353, `right` 165, `left` 153, `projection` 42, `trivial` 22,
+`assumption` 20). Signatures are `(goal shape, schema)`, coarse on purpose so
+that a branch that died on one theorem is recognizable on another.
+
+| arm | dead branches | proposals | own-ledger share | pooled-ledger share |
+|---|---:|---:|---:|---:|
+| arbitrary | 297 | 1343 | 0.5257 | 0.5257 |
+| frequency | 264 | 1238 | 0.5073 | 0.5073 |
+| syntax | 243 | 1159 | 0.4901 | 0.4901 |
+| learned_s0 | 248 | 1177 | 0.4503 | 0.5030 |
+| learned_s1 | 252 | 1183 | 0.4928 | 0.4928 |
+| learned_s2 | 248 | 1168 | 0.4478 | 0.4991 |
+
+The *own* ledger is built leave-one-theorem-out from that arm's own runs; the
+*pooled* ledger is the union over all arms and is the fair yardstick, because
+an arm that accepts fewer dead branches shrinks its own ledger and then looks
+virtuous for not revisiting it. Under the pooled ledger the learned mean is
+0.4983 against syntax's 0.4901. **Learned ranking does not avoid branches that
+died on other tasks.** The ledger is also run-local: nothing carries it
+between runs, so no arm could have used it even in principle (BACKLOG).
+
+## Prediction adjudication
+
+- **P-PC1 FIRED** (blind) — syntax >= learned mean on all four families;
+  21/24 vs 19.33/24 overall, with two ties and no learned win.
+- **P-PC2 PARTIALLY MISSED** — 7 of 16 registered cells exact; the whole
+  `implication_chain` row missed (guessed 5/5/6/5, observed 7/7/7/7) and the
+  whole `project_import` row was underestimated by 1-2.
+- **P-PC3 FIRED ON ITS LETTER, REFUTED IN SUBSTANCE** — syntax's margin over
+  frequency is strictly smaller on `project_import` (1.67) than on
+  `conjunction` (1.83), but 0.16 proposals is not a collapse, and by
+  solved-rate `project_import` was the syntax arm's *best* family (6/6). The
+  opacity mechanism is real and separately tested; it costs the blind arm the
+  interior states, not the entrance, because every project theorem still opens
+  on a visible universal quantifier.
+- **P-PC4 FIRED** (blind) — `clear` is the plurality of dead branches, and
+  arbitrary's known-dead proposal share exceeds syntax's under both ledgers.
+- **P-PC5 SPLIT, prediction under-specified** — missed on the own ledger
+  (0.4636 < 0.4901), fired on the pooled one (0.4983 >= 0.4901). The
+  registered text never named which ledger adjudicates; that defect is
+  recorded, not resolved in hindsight. Substantively: no avoidance.
+- **P-PC6 FIRED** (blind) — 24/24 monotonicity re-runs agreed.
+- **P-PC7 FIRED** — `Init`-only elaboration refused, live.
+
+**Disclosure.** Construction pilots with the learned arms disabled were run
+and discarded while the harness was built; they are why `implication_chain`
+gained two deeper members and why the story briefs gained a plantable decoy.
+Every prediction is marked blind or pilot-informed in
+`experiments/tactic_curve.py`; the blind ones are P-PC1, P-PC4, P-PC5, P-PC6.
+
+## Story family: same protocol, no lever
+
+`experiments/story_curve.py`, 8 authored briefs (4 train / 4 held out by story
+identity), 6 arms, 48 runs, 95.1 s. The **same** `SearchController` (asserted
+by object identity, not by name), the same ranker/argument-generator split,
+`StoryFrameVerifier` as sole authority, a disjoint five-schema vocabulary and
+its own weights — domain weights, not a second controller.
+
+| arm | (4,32) | (8,64) | (16,128) | (32,256) | (64,512) | mean proposals |
+|---|---:|---:|---:|---:|---:|---:|
+| arbitrary / frequency / syntax | 0 | 0 | 0 | 0 | 8 | 373.0 |
+| learned_s0 / learned_s1 | 0 | 0 | 0 | 0 | 8 | 373.0 |
+| learned_s2 | 0 | 0 | 0 | 0 | 8 | 377.0 |
+
+Held-out briefs alone give the same 0/0/0/0/4 shape for every arm.
+
+The curve is a single step, and that is the finding. The largest
+best-to-worst proposal spread on any brief is **1.07%**, against **65.6%** on
+the proof side; every arm expands exactly 32 nodes. `SearchController` expands
+each node's full candidate list and the story grammar fixes the solution at
+depth five, so all 31 nodes above it are expanded whatever the order — ranking
+can only save part of one node. P-SC1 (blind) fired, as did P-SC2 (learned
+ties twice, loses once), P-SC3 (each schema fires exactly 4 times in the 20
+training rows, so the frequency arm is byte-identical to `arbitrary` — a
+baseline that cannot differ is not a control), P-SC4, P-SC5 (496 accepted dead
+branches per arm; shares 0.1823 vs 0.1804) and P-SC6.
+
+**"One shared policy protocol works in both domains" is true and nearly empty
+as stated.** The protocol ports; the thing it buys does not. The story-side
+headroom lives in best-first or depth-limited search, which would be a second
+controller and was deliberately not built.
+
+## GPU footprint
+
+Nothing in the proof lane trains, so no batch ladder applies (ROADMAP-v0.7
+item 4). Proof run: 42,545,152 B allocated / 56,623,104 B reserved peak, 276
+MiB whole-device of 16,303 MiB (1.7%). The story run trains three
+27,688-parameter rankers on 20 rows: 87,601,152 B allocated / 106,954,752 B
+reserved. Both are two orders of magnitude below the 80% guard; the 60/70/80%
+ladder was neither needed nor run, and no safety-cap change is mixed into
+this comparison.
+
+## Verdict
+
+The v0.6 headline survives breadth and gets sharper. Across 24 held-out
+theorems the learned checkpoints **overtook v0.6's own winner** (49.00 vs
+51.58 mean proposals) and still lost to a closed-form syntax-aware order
+(48.29) on proposals, on middle-budget solved rate (19.33 vs 21 of 24), and
+decisively on wall clock. Live project-backed search works natively on
+Windows. Dead branches are preserved and the cross-task avoidance question now
+has a measured answer: no. The next honest move is not a bigger ranker; it is
+a search that can actually spend a ranking — and a family whose premises must
+be selected rather than discharged in order.

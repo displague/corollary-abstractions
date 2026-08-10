@@ -588,37 +588,77 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   root-key compromise, session forking, export invalidating earlier snapshots,
   and a two-slot grammar vocabulary.
 
-- **PARTIAL — learned tactic classification works; live ranking does not beat
-  the strongest blind order.** The 27,688-parameter byte-GRU has a real
-  theorem-level holdout and three-seed controls, scoring 0.8125 against
-  frequency 0.4375 and shuffled 0.25–0.375. Live runs take 71/63/61 proposals
-  versus 86 for the arbitrary palette, but a state-blind global frequency
-  order takes 64; the learned mean is 65.0. P-TP5 records the miss. Only 60 of
-  155 extraction rows map to its eight-schema
-  vocabulary; the live target is one `Init` theorem; concrete binder and
-  projection candidates are supplied symbolically; and no model chooses among
-  POINT/RETRIEVE/ASK/WRITE. Expand the atomic extractor, repair native project
-  imports, report held-out solved rate over many theorems and fixed budget
-  curves, then test the same policy interface on story actions. Do not call
-  top-1 schema accuracy a proof-success rate or compare only to arbitrary
-  palette order.
+- **SHIPPED (breadth), STANDING (verdict) — the one live theorem is now a
+  24-theorem, four-family, five-rung solved-rate curve, and the learned arm
+  still loses to a capability-blind order.** ROADMAP-v0.7 item 1.
+  `prover/theorems_v1.json` + `prover/curve_search.py` +
+  `experiments/tactic_curve.py`: 144 live PyPantograph runs, no replay in any
+  arm, budgets 4/8/16/32/64 states and 32/64/128/256/512 proposals. At the
+  middle rung (8, 64): syntax-aware blind 21/24, frequency (v0.6's winner)
+  20/24, learned 18/21/19 (mean 19.33), arbitrary 17/24. Mean proposals:
+  syntax 48.29 < learned 49.00 < frequency 51.58 < arbitrary 55.96 — the
+  learned checkpoints DID overtake v0.6's winner across 24 theorems and still
+  lose to the closed-form order. The v0.6 native-project blocker is closed:
+  PyPantograph 0.3.15 only shells out to POSIX `printenv` when
+  `project_path` is given WITHOUT `lean_path`, so passing the path explicitly
+  bypasses it (no patch, no fork); `prover/lean/proofcurve/` is a 4.29.1-pinned
+  Lake project matching the Pantograph build, so the 4.32.2 extraction
+  project's toolchain mismatch is side-stepped rather than resolved. Still
+  open, and now with evidence: only 60 of 155 extraction rows map to the
+  eight-schema vocabulary; no model chooses among POINT/RETRIEVE/ASK/WRITE;
+  and reconciling the 4.29.1 Pantograph build with the 4.32.2 `BooleanLaws`
+  extraction project remains undone (see the new item below).
 
-- **PARTIAL — live Lean application, branch search, and the first learned-
-  ranking result ship; breadth and native project imports remain open.**
-  ``SearchController`` now explores
-  verifier-accepted branches under independent node/proposal budgets, and the
-  PyPantograph adapter closes one held-out ``Init`` proposition with an
-  unranked fixed palette. The projection ablation is exhausted, making the
-  tactic capability load-bearing. A separate tactic-policy slice now records a
-  real theorem-heldout classification signal but loses live on mean to the
-  state-blind frequency order; multi-theorem solved-rate curves remain open.
-  On native Windows, PyPantograph 0.3.15's project
-  loader invokes POSIX ``printenv`` while resolving ``lake env``; the bundled
-  ``BooleanLaws`` project therefore fails to populate ``LEAN_PATH`` even
-  though base ``Init`` RPC works. Add a Windows path resolver or pass a
-  validated explicit Lean path, and reconcile the current 4.29.1 Pantograph
-  build with the extraction project's 4.32.2 toolchain before claiming live
-  project-backed search.
+- **`implication_chain` is a vacuous budget family.** All six arms solve all
+  seven members at the LOWEST rung (4 states / 32 proposals), including the
+  two deeper members added specifically to fix this after a construction
+  pilot exposed it; an eight-tactic witness still costs 11–15 proposals. The
+  family separates arms only on mean proposals (syntax 9.29 vs frequency
+  12.86). P-PC2's whole row missed because of it. The repair is structural —
+  premises that must be *selected* rather than discharged in order, so the
+  chain branches — not more theorems of the same shape.
+
+- **The two prover Lake projects sit on different toolchains.** The
+  extraction project (`.worktrees/prover-phase1/boollaws`, untracked) needs
+  Lean 4.32.2 for `ExtractData.lean`'s `String.trimAscii`; the committed
+  PyPantograph `repl.exe` is built at 4.29.1 and refuses to emit `ready.`
+  against a mismatched project. `prover/lean/proofcurve/` avoids the problem
+  by pinning 4.29.1, which means **live search has never run against the
+  project the training triples came from**. Either rebuild `repl` at 4.32.2 or
+  re-extract at 4.29.1 before claiming the trained policy and the live search
+  share a project.
+
+- **Cross-task dead-branch avoidance was measured and is absent.** Accepted
+  dead branches are preserved per run (1,552 across 144 runs; `clear` 419,
+  `intro` 378, `constructor` 353) and scored leave-one-theorem-out. Under the
+  pooled ledger the learned arms re-propose known-dead signatures at 0.4983
+  against the syntax arm's 0.4901 — no avoidance. The ledger is also
+  RUN-LOCAL: nothing carries it between runs, so no arm can actually use it.
+  Making the dead-branch ledger an input to ranking (rather than only an
+  output) is the obvious next experiment and is not built. Reproducibility
+  gap (review disclosure): `RunRecord.as_json()` drops
+  `proposal_signatures`/`accepted_signatures`, so the pooled 0.4983/0.4901
+  shares cannot be recomputed from `proof_curve.json` alone — a reader must
+  re-run to audit them. Serialize per-theorem hit counts or the signatures
+  themselves before this measurement is cited in a release. Related: the
+  state-leakage control (`test_state_level_leakage_control_stays_at_zero`)
+  silently skips if its artifact is absent, so a deleted artifact turns the
+  anti-leakage guard into a no-op — make it fail-closed.
+
+- **Breadth-first search leaves almost no ranking headroom in the story
+  domain.** ROADMAP-v0.7 item 1's story arm (`experiments/story_curve.py`, 48
+  runs over 8 briefs): the largest best-to-worst proposal spread on any brief
+  is 1.07% (373 vs 377), against 65.6% on the proof side. Every arm expands
+  exactly 32 nodes. `SearchController` expands each node's FULL candidate list
+  and the story grammar fixes the solution at depth five, so the 31 nodes
+  above it are expanded whatever the order — ranking can only save part of one
+  node. The story curve is consequently a single step at the last rung. Any
+  real story-side ranking result needs best-first or depth-limited search,
+  which is a controller change and was deliberately not made this cycle
+  (item 1 forbids a second controller). Also: the state-blind FREQUENCY
+  baseline is degenerate here — each of the five schemas fires exactly once
+  per story, so its order is the alphabetical order and the arm is
+  byte-identical to `arbitrary`.
 
 - **PARTIAL — `verified_by` semantic correspondence remains unchecked node
   metadata; provenance integrity is now validated.** The

@@ -68,6 +68,49 @@ Budgets match the proof side exactly (states 4/8/16/32/64, proposals
 across both domains.  A step-shaped story curve is the expected consequence of
 P-SC1 and is reported as such, with mean proposals-to-solution beside it as the
 finer-grained comparator.
+
+ADJUDICATION (appended after the run; the text above is unedited)
+-----------------------------------------------------------------
+48 runs, 8 briefs x 6 arms, 95.1 s, 20 training rows, three seeds.
+
+P-SC1 **FIRED**, and it is the result of this arm.  The largest
+    best-to-worst proposal spread on any brief is **1.07%** (373 vs 377),
+    against a largest proof-side spread of **65.6%** (8 vs 15 on
+    ``curve.implication_chain.triple_middle``).  Same controller, same policy
+    protocol, same two-layer ranker/argument split -- and the ranking lever
+    is two orders of magnitude smaller in the story domain.  The mechanism is
+    structural, not a property of the weights: ``SearchController`` expands
+    every node's full candidate list, and the story grammar fixes the
+    solution at depth five, so all 31 nodes above it are expanded whatever
+    the order.  Every arm expands exactly 32 nodes.
+P-SC2 **FIRED.**  Held-out mean proposals-to-solution: syntax 373.0,
+    learned 373.0 / 373.0 / 377.0.  Two seeds tie, one loses; none wins.
+P-SC3 **FIRED.**  Each of the five schemas occurs exactly 4 times in the 20
+    training rows, so the frequency order is the alphabetical order and the
+    frequency arm is byte-identical to the arbitrary arm on every brief.  A
+    state-blind count is not a control in a grammar where every action fires
+    once per story.
+P-SC4 **FIRED.**  8/8 briefs solved by every arm at (64, 512); 0/8 at every
+    lower rung, for every arm.  The curve is a single step, exactly as
+    P-SC1's mechanism predicts.
+P-SC5 **FIRED.**  Every arm records 496 accepted dead branches -- the decoy
+    plant strands an obligation no outcome discharges -- and the cross-brief
+    dead-signature share is 0.1823 for five arms and 0.1804 for the sixth.
+    No arm is within a factor of two of any other because no arm differs at
+    all.  Dead-branch avoidance has the same non-existent headroom that
+    ranking does.
+P-SC6 **FIRED.**  ``STORY_SCHEMAS`` and ``tactic_grammar.SCHEMAS`` are
+    disjoint, and ``tests/test_proof_curve.py`` asserts the story module's
+    ``SearchController`` IS ``controller.SearchController`` by object
+    identity, not by name.
+
+Honest limit this arm establishes: "one shared policy protocol works in both
+domains" is TRUE and nearly EMPTY as stated.  The protocol ports; the thing it
+buys does not.  Claiming a general controller on this evidence would mean
+claiming a lever that measurably is not there -- and a best-first or
+depth-limited search, which this cycle deliberately did not build because it
+would have been a second controller, is where the story-side headroom would
+have to come from.
 """
 
 from __future__ import annotations

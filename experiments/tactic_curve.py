@@ -99,6 +99,78 @@ wall-time budgets 0.02/0.05/0.20/1.00/5.00 s.
   where local Pantograph round trips actually land -- sub-millisecond per
   tactic on this host.  Wall time is the noisiest axis here and is reported as
   secondary: it measures Lean RPC latency at least as much as ranking.
+
+ADJUDICATION (appended after the run; the text above is unedited)
+-----------------------------------------------------------------
+144 live runs, 24 theorems x 6 arms, 7.9 s, theorem set sha256 af6f6cb7...
+
+P-PC1 **FIRED** on all four families.  Syntax-aware blind solved-rate at
+    (8, 64) vs the learned mean: conjunction 5 vs 4.67, implication_chain
+    7 vs 7.00 (tie), disjunction 3 vs 3.00 (tie), project_import 6 vs 4.67.
+    Overall 21/24 vs 19.33/24.  v0.6's verdict survives a 24-theorem set:
+    a closed-form order still beats the learned proposer, and the two ties
+    are ties, not wins.
+P-PC2 **PARTIALLY MISSED** -- 7 of 16 registered cells exact.  Correct:
+    conjunction's whole row (3/4/5, learned guessed 4 vs 4.67 observed) and
+    disjunction's arbitrary, frequency and learned.  Missed:
+    * the entire ``implication_chain`` row (guessed 5/5/6/5, observed
+      7/7/7/7).  The two deeper members added *after* the pilot did not
+      make the family discriminate: an eight-tactic witness still costs
+      only 11-15 proposals, because the chain is nearly linear and every
+      arm's first guess is right at almost every state.  **The family is
+      vacuous as a budget discriminator at every rung** and separates arms
+      only on mean proposals (syntax 9.29 vs frequency 12.86).  Filed in
+      BACKLOG; the repair is structural branching, not more theorems.
+    * ``disjunction`` syntax (guessed 4, observed 3);
+    * the whole ``project_import`` row, underestimated by 1-2 everywhere.
+P-PC3 **FIRED ON ITS LETTER, REFUTED IN SUBSTANCE.**  The registered
+    quantity -- syntax's mean-proposal margin over frequency -- is indeed
+    strictly smaller on project_import (1.67) than on conjunction (1.83).
+    But 0.16 proposals is not a collapse, and by solved-rate the syntax arm
+    scored 6/6 at the middle budget on project_import, its BEST family.  The
+    mechanism is real and separately tested (``syntax_order`` provably falls
+    back to the arbitrary order on an opaque conclusion), but its consequence
+    is small because the FIRST step of every project theorem is still a
+    visible ``∀`` goal where the syntax rule fires normally.  Opacity costs
+    the blind arm the interior states, not the entrance.
+P-PC4 **FIRED.**  ``clear`` supplies 419 of 1,552 accepted dead branches, the
+    plurality (next: ``intro`` 378, ``constructor`` 353).  The arbitrary arm
+    spends 0.5257 of its proposals on signatures already recorded dead on
+    other theorems against the syntax arm's 0.4901, under both the own-ledger
+    and the pooled ledger.
+P-PC5 **SPLIT, and the prediction was under-specified.**  Under each arm's
+    OWN leave-one-theorem-out ledger the learned arms re-propose known-dead
+    signatures LESS than syntax (mean 0.4636 vs 0.4901) -- missed.  Under the
+    POOLED ledger, the common yardstick this module already argued was the
+    fairer one, they re-propose them MORE (mean 0.4983 vs 0.4901) -- fired.
+    The divergence is exactly the artifact the pooled ledger exists to
+    expose: an arm that accepts fewer dead branches shrinks its own ledger
+    and then looks virtuous for not revisiting it.  Per seed the pooled
+    shares are 0.5030 / 0.4928 / 0.4991, so one seed of three beats syntax.
+    The registered text failed to name which ledger adjudicates; that is a
+    defect in the prediction, recorded rather than resolved in hindsight.
+    The substantive answer to the roadmap's question -- "does learned ranking
+    avoid branches that died on other tasks?" -- is **no, not measurably**.
+P-PC6 **FIRED.**  24 fresh live re-runs at (8, 64), zero disagreements with
+    the values derived by thresholding the maximum-budget runs.  The derived
+    curve is a real curve.
+P-PC7 **FIRED.**  An ``Init``-only server refuses
+    ``curve.project_import.both_commute`` with ``Unknown identifier
+    `ProofCurve.Both``` -- recorded live in ``import_control``.
+
+Two findings nobody registered, both worth more than the predictions:
+
+1. **The learned arms beat v0.6's winner and still lose.**  Mean proposals:
+   syntax 48.29 < learned 49.00 < frequency 51.58 < arbitrary 55.96.  In v0.6
+   the frequency order beat the learned mean 64 to 65.0 on one theorem; over
+   24 theorems the learned checkpoints now beat it by 2.6 proposals.  The
+   ranking result moved; the VERDICT did not, because the syntax-aware order
+   this cycle adds is stronger than either.
+2. **On the wall-clock axis the learned arms lose to every blind arm.**  At
+   0.02 s: blind 17/24, learned 13-14/24.  A 27,688-parameter forward pass
+   costs more than the Lean round trip it saves, because a local Pantograph
+   tactic application here is sub-millisecond.  Proposal count and wall time
+   disagree about the ranking, and only wall time is what a user waits for.
 """
 
 from __future__ import annotations

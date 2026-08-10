@@ -96,6 +96,64 @@ bindings), **near-miss** (informative failure, kept deliberately).
   accident of layering. *v0.7 item 2 self-review; regression:
   `LedgerAttackTests::test_header_may_not_disagree_with_the_state_it_carries`*
   (2026-08-10)
+- **A shared search protocol can port perfectly and carry no lever with it.**
+  ROADMAP-v0.7 item 1 asked for the same policy protocol over story actions
+  "before claiming a general controller". It ports exactly: the identical
+  `SearchController`, the identical ranker/argument-generator split, domain
+  weights over the identical architecture, a disjoint vocabulary, and the
+  frame verifier holding the same sole-authority position Lean holds. Every
+  held-out brief solves. And the best-to-worst spread between six ranking arms
+  on any brief is **1.07%** (373 vs 377 proposals) against **65.6%** on the
+  proof side, with every arm expanding exactly 32 nodes. The cause is not the
+  weights and not the domain's difficulty; it is the interaction of two
+  choices that looked independent. Breadth-first search expands a node's FULL
+  candidate list, and the story grammar admits exactly one legal ordering at
+  depth five — so every node above the solution is expanded whatever order the
+  ranker proposes, and ranking can only save part of one node. On the proof
+  side the same controller leaves real headroom because solutions sit at
+  depth 2-4 with many nodes per level, so a good order reaches a solving node
+  *earlier in its level*. The transferable lesson is that "we ran the same
+  protocol in a second domain" is a claim about plumbing, and the thing worth
+  claiming — that ranking buys something — has to be measured separately in
+  each domain, because the search regime, not the policy, decides whether
+  there is anything for a ranking to buy.
+
+- **The learned ranker overtook the baseline that beat it and lost anyway.**
+  v0.6 publicly retracted its live learned-gain claim when a state-blind
+  frequency order solved its one theorem in 64 proposals against a learned
+  mean of 65.0. Over 24 held-out theorems the same three shipped checkpoints
+  now average 49.00 proposals against that frequency order's 51.58 — the
+  retraction's specific comparison reversed with breadth. The verdict did not
+  move, because the arm added this cycle is neither: a closed-form
+  syntax-aware order reading the rendered goal takes 48.29, solves 21/24 at
+  the middle budget against the learned mean of 19.33, and wins on wall clock
+  by a wider margin still. Two things follow. First, a negative result stated
+  against one baseline is only as durable as that baseline — "learned loses"
+  survived here, but "learned loses to frequency" did not. Second, the
+  cheapest strong control is often the one nobody wrote yet: the syntax arm is
+  forty lines of rules over text the verifier already renders.
+
+- **Wall clock and proposal count disagree about which ranker is better, and
+  only one of them is what anyone waits for.** The learned arms need fewer
+  Lean calls than the arbitrary and frequency orders and finish LATER: at a
+  0.02 s budget the blind arms solve 17/24 and the learned arms 13-14/24,
+  because a 27,688-parameter forward pass costs more than the sub-millisecond
+  local Pantograph round trip it saves. The proposal-count metric silently
+  assumes the verifier is the expensive part. That assumption is a property of
+  the deployment, not of the policy, and every solved-rate-per-node figure in
+  the formal-proving literature inherits it. Reporting both axes is cheap; the
+  lane that only reports nodes cannot see this at all.
+
+- **PyPantograph's Windows project blocker was a call that did not have to
+  happen.** `prover/FEASIBILITY.md` recorded native project loading as broken
+  because PyPantograph 0.3.15 resolves `LEAN_PATH` by shelling out to POSIX
+  `printenv`. Reading `server.py` rather than patching it showed the guard is
+  `if project_path and not lean_path` — supplying the path explicitly means
+  the call never runs. Native, no fork, no patch, and a project-import family
+  whose propositions an `Init`-only server refuses to elaborate at all. Worth
+  keeping as a habit: a dependency's "unsupported on this platform" is often
+  one conditional, and the conditional is usually cheaper to read than the
+  workaround is to build.
 
 - **A record can enter at the right rung and still usurp the wrong
   authority.** The whole contract around external retrieval is "a tool

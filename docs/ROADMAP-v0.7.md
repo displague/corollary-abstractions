@@ -30,6 +30,71 @@ Acceptance: at least two proof families and one story family, each with a
 capability-blind baseline and a fixed-budget curve. A learned loss or tie is a
 valid result.
 
+**Status: SHIPPED** (branch `feature/proof-curve`). Acceptance is met with
+four proof families and one story family; the learned result is a loss, which
+this item declared valid in advance. Numbers, tables and the full adjudication
+are in `experiments/ANALYSIS.md`; predictions P-PC1–P-PC7 and P-SC1–P-SC6 were
+committed with no results attached before the adjudicating runs.
+
+- **One theorem became 24.** `prover/theorems_v1.json` (sha256 `af6f6cb7…`)
+  holds 24 held-out theorems in `conjunction` (6), `implication_chain` (7),
+  `disjunction` (5) and `project_import` (6). "Held out" is checked against
+  `prover/sample_triples.json` by test, not labelled. Versioning rule:
+  additions create v2 and v1 is never edited once a curve names its digest.
+  Every theorem carries a witness inside the eight registered schemas, never
+  shown to a search arm, so an unsolved run is a ranking failure rather than
+  an impossible target.
+- **Curves, not a trace.** 144 live PyPantograph runs, no replay in any arm,
+  budgets 4/8/16/32/64 states x 32/64/128/256/512 proposals plus a wall-clock
+  ladder. At the middle rung: syntax-aware blind 21/24, frequency (v0.6's
+  winner, rebuilt from the same rows under the same mapper) 20/24, learned
+  18/21/19, arbitrary 17/24. All arms reach 24/24 at v0.6's own maximum
+  budget. Deriving the curve by thresholding one deterministic maximum-budget
+  run was validated by 24 fresh live re-runs at the middle rung, 24/24 in
+  agreement.
+- **Schema choice is separated from argument generation.**
+  `prover/tactic_grammar.py` computes concrete tactic text from the rendered
+  goal; a ranker only permutes the eight schemas. Every arm receives the
+  identical candidate multiset (asserted by test), so a proposal-count
+  difference is a schema-ordering difference. Lean remains sole transition
+  authority throughout.
+- **Project imports are live and native.** `prover/lean/proofcurve/` is a
+  4.29.1-pinned Lake project; an `Init`-only server refuses its propositions
+  outright, recorded as a live control. FEASIBILITY landmine 12 is bypassed
+  rather than patched — PyPantograph only shells out to POSIX `printenv` when
+  `project_path` is supplied without `lean_path`.
+- **Dead branches preserved, cross-task avoidance measured and absent.**
+  1,552 accepted dead branches, scored leave-one-theorem-out and against a
+  pooled ledger. Under the pooled yardstick the learned arms re-propose
+  known-dead signatures at 0.4983 versus the syntax arm's 0.4901. The answer
+  to "does learned ranking avoid branches that died across tasks" is no.
+- **Story family: same protocol, no lever.** `experiments/story_curve.py`
+  drives eight briefs (four held out by story identity) through the *same*
+  `SearchController` with domain weights and a disjoint five-schema
+  vocabulary. Every arm solves every brief — and the best-to-worst spread on
+  any brief is 1.07% against 65.6% on the proof side, because breadth-first
+  search expands every node's full candidate list above a depth-five
+  solution. The shared protocol is demonstrated; a general *controller* is
+  explicitly not claimed on this evidence.
+
+Open, with evidence, in `docs/BACKLOG.md`: `implication_chain` is vacuous as a
+budget discriminator (every arm solves all seven at the lowest rung); the
+dead-branch ledger is run-local and cannot feed ranking; the Pantograph 4.29.1
+build and the 4.32.2 extraction project still sit on different toolchains, so
+live search has never run against the project the training triples came from;
+and story-side ranking headroom would need a search change this item forbids.
+
+Reproducibility note (review disclosure): the committed unit suite exercises
+the verifier's REFUSED logic against a fake backend and does **not** start
+Lean, so "469 green" attests refusal logic, not liveness; the 144-run curve
+is reproducible only where PyPantograph + the pinned Lean toolchain are
+installed. The recorded `proof_curve.json` carries live provenance (host,
+torch/GPU footprint, a real Pantograph elaboration-error dict) and no code
+path advances state from a committed transition — liveness rests on that,
+not on the suite. Cross-task dead-branch shares are consistent with the
+prose but not recomputable from published `runs[]` alone (signatures are
+dropped from `as_json`); filed in BACKLOG.
+
 ## 2. Conversation survives process boundaries — SHIPPED
 
 - Define durable key identity, rotation, and revocation for ASK receipts and
