@@ -67,3 +67,6 @@ experiments/data_real/
 # Secrets — never commit
 .env
 .env.*
+
+# External corpus archives — pinned by data_sources/manifest.json, never committed
+data_sources/archives/
