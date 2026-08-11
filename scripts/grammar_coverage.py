@@ -38,6 +38,17 @@ v0.10 item 1 (cont.) adds the RELATIONAL/PREDICATE head family:
   ℕ/ℤ) is preserved; a field-typed binding signals only its OWN segment —
   the field signal is segment-local throughout (review-caught: computed
   statement-wide it shielded ℕ floor-division/monus in sibling segments).
+
+The v0.10 quantifier slice adds the FORALL/EXISTS binder heads (carried by
+data/logic's quantification laws and data/number_theory's parity-witness
+definitions): a quantifier PREFIX on the goal body or a hypothesis — chains,
+¬-wrappers, bounded binders, binder groups, ∃! via its ExistsUnique
+expansion — is extracted before any other check; bound names become value
+slots and binder carriers register for that segment only (untyped binders
+default to ℕ, the untyped-`let` rule; shadowing is refused). Any ∀/∃ that
+survives extraction is in a non-prefix position and keeps the precise
+`quantifier_embedded` label; non-numeric binder domains keep their own labels
+(function, structure, ℂ/zmod, shadowed, malformed).
 """
 
 from __future__ import annotations
@@ -533,8 +544,14 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
         r"(?<![\w.])(?:[Nn]at\.[Pp]rime|[Ee]ven|[Oo]dd|[Pp]rime|[Ii]rrational)"
         r"\s+(?:\([^()]*\)|[\w.\d]+)\s+(?:\(|[\w.\d])")),
     ("set_or_finset", re.compile(r"[Ff]inset|∈|∉|⊆|⊂|\.card\b|ℵ|(?<![A-Za-z])[Ss]et(?![A-Za-z])|Set\.")),
-    ("existential_quantifier", re.compile(r"∃")),
-    ("universal_quantifier", re.compile(r"∀")),
+    # v0.10: a quantifier PREFIX is extracted before the blocker scan ever
+    # runs (FORALL/EXISTS are corpus heads now — data/logic quantification,
+    # data/number_theory witness definitions). Any ∀/∃ that still reaches
+    # this scan is EMBEDDED: inside a connective/iff composition, nested in a
+    # non-prefix position of a body, or inside a let-binding equation. Those
+    # positions would need the flat segment checks restructured into an
+    # atom-tree walk, so they stay a precisely named gap.
+    ("quantifier_embedded", re.compile(r"[∀∃]")),
     # a comma or an anonymous constructor ⟨…⟩ surviving big-operator / quantifier /
     # set screening is a pair / tuple / list constructor (no `(a,b,…)` head).
     ("tuple_or_structure", re.compile(r",|⟨|⟩")),
@@ -703,6 +720,226 @@ def _prop_shaped(goal: str) -> bool:
     return _prop_atom_shaped(goal)
 
 
+# --------------------------------------------------------------------------
+# Quantifier-prefix extraction (v0.10: the FORALL/EXISTS binder heads)
+#
+# A goal or hypothesis of the form `∀ x : T, body` / `∃ x : T, body`
+# (chains, ¬-wrappers, bounded binders, binder groups, ∃!) is a quantified
+# proposition whose heads the corpus now carries: data/logic's quantification
+# topic defines FORALL/EXISTS (instantiation, generalization, the De Morgan
+# duals that license the ¬-wrapper, the ∃!-expansion that licenses the
+# ExistsUnique desugar), and data/number_theory carries the existential
+# parity-witness definitions. The extraction rules, registered in the design
+# checkpoint BEFORE this code existed:
+#
+# * Binding is segment-local: bound names join the value slots for THEIR
+#   segment only, and their carriers register for that segment only — a
+#   `∀ x : ℝ` in the goal must not shield Nat-division in a hypothesis, and a
+#   `∀ n : ℕ` hypothesis must not manufacture gaps in the goal. Shadowing an
+#   outer variable is refused outright (`quantifier_shadowed_binder`): the
+#   per-statement carrier flags cannot express two carriers for one name.
+# * Untyped and relation-bounded binders default to the ℕ carrier — Lean's
+#   own elaboration defaults them absent a field signal, so `∀ x > 0,
+#   x + 1/x ≥ 2` IS a ℕ statement as formalized and `1/x` stays the
+#   Nat.div gap; a segment-local field signal lifts the default, because the
+#   same signal is what pins Lean's unification to ℝ/ℚ. (The untyped-`let`
+#   numeral rule, applied to binders.)
+# * Bounded binders desugar the way Lean elaborates them: the binder
+#   predicate joins the body as one more checked conjunct. Prop-typed
+#   binders `(hx : x > 0)` contribute their type the same way; their names
+#   are proof terms, not value slots.
+# * `∃!` desugars to its ExistsUnique expansion (EXISTS/MEET/FORALL/IMPLIES
+#   and an equation between two bound slots — all carried heads, stated by
+#   logic.quantification.unique_existence_expansion): checking-wise the
+#   uniqueness clause re-checks the same body, so ∃! rides the ∃ path.
+# * Quantification over functions, sets/structures, ℂ/zmod domains, and
+#   other non-numeric types keeps precise labels; a type that is none of
+#   those is treated as a Prop binder conjunct (the classify_binder
+#   fallback), whose head then faces the ordinary symbol check.
+# --------------------------------------------------------------------------
+
+_QUANT_CHARS = "∀∃"
+_REL_BOUND_CHARS = "<>≤≥≠"
+
+
+def _outside_groups(s: str) -> str:
+    """Characters of `s` at bracket depth 0, brackets themselves excluded."""
+    out: list[str] = []
+    depth = 0
+    for c in s:
+        if c in _OPEN:
+            depth += 1
+        elif c in _CLOSE:
+            depth -= 1
+        elif depth == 0:
+            out.append(c)
+    return "".join(out)
+
+
+def _quant_binder_section(
+    sec: str, names: list[str], bounds: list[str], carriers: set[str]
+) -> str | None:
+    """Classify ONE binder section (the text between ∀/∃ and its comma),
+    appending bound value names / bound-predicate conjuncts / carriers.
+    Returns a precise gap label, or None when the section is supported."""
+    sec = sec.strip()
+    if not sec:
+        return "quantifier_malformed"
+    groups = top_level_groups(sec)
+    if groups:
+        if _outside_groups(sec).strip():
+            return "quantifier_malformed"
+        for opener, inner in groups:
+            if opener in "[⟨":
+                # instance binder `[Fact p]` / destructuring pattern `⟨a, b⟩`:
+                # a typeclass assumption or a structure pattern — no head.
+                return "quantifier_structure_binder"
+            gap = _quant_binder_section(inner, names, bounds, carriers)
+            if gap is not None:
+                return gap
+        return None
+    # membership binder `x ∈ S`: treated as a bounded binder whose predicate
+    # text carries the ∈, so the set blocker names the gap precisely (the
+    # same bucket these rows occupied before extraction existed).
+    mi = _depth0_find_any(sec, "∈")
+    if mi >= 0:
+        nm = sec[:mi].split()
+        if nm and all(_IDENT_RE.fullmatch(n) for n in nm):
+            names.extend(nm)
+            bounds.append(sec)
+            carriers.add("unknown")
+            return None
+        return "quantifier_malformed"
+    ci = first_top_level_colon(sec)
+    if ci >= 0:
+        nm = sec[:ci].split()
+        typ = sec[ci + 1 :].strip()
+        if not nm or not all(_IDENT_RE.fullmatch(n) for n in nm) or not typ:
+            return "quantifier_malformed"
+        if typ in _NUMERIC_TYPES:
+            names.extend(nm)
+            carriers.add(
+                "nat" if typ in _NAT_TYPES
+                else "int" if typ in _INTZ_TYPES
+                else "field"
+            )
+            return None
+        dr = domain_reason(typ)
+        if dr is not None:
+            return dr
+        typ_norm = typ.replace("->", "→")
+        if "→" in typ_norm and not (set(typ_norm) & _PROP_CHARS - {"→"}):
+            return "quantifier_function_binder"
+        first = typ.split()[0] if typ.split() else ""
+        if first in {"Prop", "Type", "Sort", "Type*", "Sort*"}:
+            # second-order quantification (over propositions or types): the
+            # binder heads are first-order over numeric domains only.
+            return "quantifier_over_sort"
+        if first in _STRUCTURE_HEADS:
+            return _blocker(typ) or "quantifier_structure_binder"
+        # Prop-typed (proof) binder: the type is a bound conjunct; its names
+        # are proof terms, not value slots. Custom non-Prop types land here
+        # too and their head then fails the symbol check — the same
+        # conservative fallback classify_binder applies at statement level.
+        bounds.append(typ)
+        return None
+    ri = _depth0_find_any(sec, _REL_BOUND_CHARS)
+    if ri >= 0:
+        nm = sec[:ri].split()
+        if nm and all(_IDENT_RE.fullmatch(n) for n in nm):
+            names.extend(nm)
+            bounds.append(sec)
+            carriers.add("unknown")
+            return None
+        return "quantifier_malformed"
+    nm = sec.split()
+    if nm and all(_IDENT_RE.fullmatch(n) for n in nm):
+        names.extend(nm)
+        carriers.add("unknown")
+        return None
+    return "quantifier_malformed"
+
+
+def _strip_neg_wrappers(s: str) -> str:
+    """Strip leading ¬ and whole-span parens WHEN a quantifier follows: the
+    NEG head is carried, and the quantifier De Morgan nodes state exactly the
+    NEG∘FORALL / NEG∘EXISTS compositions. `¬(A ∧ B)` is left alone."""
+    while True:
+        if s.startswith("¬"):
+            t = s[1:].lstrip()
+            u = t
+            if _spans_whole(u):
+                v = u[1:-1].strip()
+                if v[:1] in _QUANT_CHARS or v.startswith("¬"):
+                    u = v
+            if u[:1] in _QUANT_CHARS or u.startswith("¬"):
+                s = t
+                continue
+        if _spans_whole(s):
+            inner = s[1:-1].strip()
+            if inner[:1] in _QUANT_CHARS or inner.startswith("¬"):
+                s = inner
+                continue
+        break
+    return s
+
+
+def extract_quantifier_prefix(seg: str):
+    """Parse a (possibly ¬-wrapped) quantifier-PREFIX proposition.
+
+    Returns None when `seg` is not quantifier-led (the caller uses it
+    unchanged); ("gap", label, [], set()) for a precisely refused shape; or
+    ("ok", check_text, bound_names, carriers) where `check_text` is the
+    desugared proposition every segment check runs on — binder predicates and
+    prop-binder types joined to the body with `→`, in binding order."""
+    s = _strip_neg_wrappers(seg.strip())
+    if s[:1] not in _QUANT_CHARS:
+        return None
+    names: list[str] = []
+    bounds: list[str] = []
+    carriers: set[str] = set()
+    while s[:1] in _QUANT_CHARS:
+        rest = s[1:].lstrip()
+        if rest.startswith("!"):
+            # ∃!: rides the ∃ path via its ExistsUnique expansion — the
+            # uniqueness clause re-checks the same body and adds an equation
+            # between two bound slots, both already carried.
+            rest = rest[1:].lstrip()
+        ci = _depth0_seek(rest, ",")
+        if ci < 0:
+            return ("gap", "quantifier_malformed", [], set())
+        gap = _quant_binder_section(rest[:ci], names, bounds, carriers)
+        if gap is not None:
+            return ("gap", gap, [], set())
+        s = _strip_neg_wrappers(rest[ci + 1 :].strip())
+    if not s:
+        return ("gap", "quantifier_malformed", [], set())
+    check_text = " → ".join([*bounds, s]) if bounds else s
+    return ("ok", check_text, names, carriers)
+
+
+def _quantifier_segment(seg: str, outer_names: set[str]):
+    """Segment-level wrapper: None (not quantifier-led) | ("gap", label) |
+    ("ok", check_text, extra_vars, nat, int, field). Shadowing is refused
+    here because only the caller knows the statement's outer names."""
+    r = extract_quantifier_prefix(seg)
+    if r is None:
+        return None
+    if r[0] == "gap":
+        return ("gap", r[1])
+    _, check_text, bound, carriers = r
+    if len(set(bound)) != len(bound) or (set(bound) & outer_names):
+        return ("gap", "quantifier_shadowed_binder")
+    return (
+        "ok",
+        check_text,
+        set(bound),
+        "nat" in carriers or "unknown" in carriers,
+        "int" in carriers,
+        "field" in carriers,
+    )
+
+
 # Integer predicates over a field carrier are NOT the corpus head: data/
 # number_theory's EVEN/ODD/PRIME are integer parity/primality (over ℝ, mathlib's
 # `Even x` is trivially true for every real -- a different, uncarried reading).
@@ -766,16 +1003,42 @@ def classify(stmt: dict) -> dict:
     lets = stmt.get("goal_lets", [])
     value_vars = set(stmt["value_vars"])
     domain_vars = stmt.get("domain_vars", {})
-    # the let bindings are PART of the goal proposition (a let-goal is the
-    # definitional equations plus the body), so they join every goal-side check.
-    goal_segments = [*lets, goal]
-    goal_idents: set[str] = set()
-    for seg in goal_segments:
-        goal_idents |= set(_IDENT_RE.findall(seg))
 
     has_nat = stmt.get("has_nat_carrier", False)
     has_int = stmt.get("has_int_carrier", False)
     has_field = stmt.get("has_field_carrier", False)
+
+    # v0.10: a quantifier PREFIX on the goal body (or a hypothesis, below) is
+    # extracted before any other check — its bound names become value slots
+    # and its carriers register for THAT segment only. `let` equations are
+    # deliberately not extracted: a quantified let-RHS is a Prop-valued
+    # binding, which stays the quantifier_embedded gap.
+    outer_names = value_vars | set(domain_vars)
+    gq = _quantifier_segment(goal, outer_names)
+    goal_gap: str | None = None
+    goal_check, goal_vars = goal, value_vars
+    g_nat, g_int, g_field = has_nat, has_int, has_field
+    if gq is not None:
+        if gq[0] == "gap":
+            goal_gap = gq[1]
+        else:
+            _, goal_check, extra, q_nat, q_int, q_field = gq
+            goal_vars = value_vars | extra
+            g_nat, g_int, g_field = (
+                has_nat or q_nat, has_int or q_int, has_field or q_field,
+            )
+
+    # the let bindings are PART of the goal proposition (a let-goal is the
+    # definitional equations plus the body), so they join every goal-side
+    # check — under the STATEMENT context, while the (desugared) goal body
+    # checks under its quantifier-extended context.
+    goal_contexts = [
+        *((seg, value_vars, has_nat, has_int, has_field) for seg in lets),
+        (goal_check, goal_vars, g_nat, g_int, g_field),
+    ]
+    goal_idents: set[str] = set()
+    for seg, _v, _n, _i, _f in goal_contexts:
+        goal_idents |= set(_IDENT_RE.findall(seg))
 
     # The field signal is SEGMENT-LOCAL (review-caught over-count): a `: ℚ`
     # ascription, coercion `↑`, `Real.` call, or decimal literal legitimizes
@@ -785,34 +1048,40 @@ def classify(stmt: dict) -> dict:
     # (Goedel-Pset-413727), or a ℚ-typed binding hiding Nat.div AND monus
     # inside an ℕ-typed one (Goedel-Pset-1082706, where `s / n` over ℕ is 0
     # and the stated claim is false — exactly what carrier-honesty refuses).
-    # A binder-DECLARED field var (has_field) stays statement-scoped: the var
-    # itself may appear in any segment.
-    def _seg_field_signal(seg: str) -> bool:
-        return has_field or bool(_FIELD_SIGNAL_RE.search(seg))
+    # A binder-DECLARED field var (statement or quantifier) stays scoped to
+    # every segment its scope reaches: the whole statement for a theorem
+    # binder, its OWN segment for a quantifier binder.
+    def _seg_field_signal(seg: str, seg_field: bool) -> bool:
+        return seg_field or bool(_FIELD_SIGNAL_RE.search(seg))
+
+    def _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field):
+        r = (
+            _blocker(seg)
+            or _carrier_gap(seg, seg_nat, seg_int,
+                            _seg_field_signal(seg, seg_field))
+            or _int_pred_field_gap(seg, seg_field, seg_vars)
+        )
+        if r is None:
+            bad = _unsupported_symbol(seg, seg_vars)
+            if bad is not None:
+                r = f"unsupported_symbol:{bad}"
+        return r
 
     # ---- goal-only ----
-    goal_reason: str | None = None
-    if not _prop_shaped(goal):
+    goal_reason: str | None = goal_gap
+    if goal_reason is None and not _prop_shaped(goal_check):
         # prefer the precise construct label when one exists (a relationless
         # `Nat.Coprime m n` is the coprime gap, a relationless `∑`-term the
         # big-operator gap); `no_relation_in_goal` is only the residue that
         # no blocker can name better.
-        goal_reason = _blocker(goal) or "no_relation_in_goal"
+        goal_reason = _blocker(goal_check) or "no_relation_in_goal"
     if goal_reason is None:
         hit = sorted(domain_vars[v] for v in (set(domain_vars) & goal_idents))
         if hit:
             goal_reason = hit[0]
     if goal_reason is None:
-        for seg in goal_segments:
-            goal_reason = (
-                _blocker(seg)
-                or _carrier_gap(seg, has_nat, has_int, _seg_field_signal(seg))
-                or _int_pred_field_gap(seg, has_field, value_vars)
-            )
-            if goal_reason is None:
-                bad = _unsupported_symbol(seg, value_vars)
-                if bad is not None:
-                    goal_reason = f"unsupported_symbol:{bad}"
+        for seg, seg_vars, seg_nat, seg_int, seg_field in goal_contexts:
+            goal_reason = _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field)
             if goal_reason is not None:
                 break
     goal_ok = goal_reason is None
@@ -824,16 +1093,18 @@ def classify(stmt: dict) -> dict:
             full_reason = "function_unknown_binder"
         else:
             for hyp in stmt["hyps"]:
-                r = (
-                    _blocker(hyp)
-                    or _carrier_gap(hyp, has_nat, has_int, _seg_field_signal(hyp))
-                    or _int_pred_field_gap(hyp, has_field, value_vars)
-                    or (
-                        (lambda b: f"unsupported_symbol:{b}" if b else None)(
-                            _unsupported_symbol(hyp, value_vars)
-                        )
+                hq = _quantifier_segment(hyp, outer_names)
+                if hq is None:
+                    r = _segment_gap(hyp, value_vars, has_nat, has_int, has_field)
+                elif hq[0] == "gap":
+                    r = hq[1]
+                else:
+                    _, h_check, h_extra, h_nat, h_int, h_field = hq
+                    r = _segment_gap(
+                        h_check, value_vars | h_extra,
+                        has_nat or h_nat, has_int or h_int,
+                        has_field or h_field,
                     )
-                )
                 if r is not None:
                     full_reason = f"hyp:{r}"
                     break

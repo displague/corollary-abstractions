@@ -248,7 +248,7 @@ class VerifiedByIntegrityTests(unittest.TestCase):
                 check=False,
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("241 statement nodes", result.stdout)
+        self.assertIn("251 statement nodes", result.stdout)
 
     def test_wrong_statement_valid_theorem_is_capability_blind_control(self) -> None:
         """Cheap lint cannot prove theorem/statement semantic correspondence."""

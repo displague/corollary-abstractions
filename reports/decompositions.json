@@ -5949,10 +5949,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4
+            "external": 6
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -7871,6 +7871,820 @@
           },
           "instance_of_statements": [],
           "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_instantiation",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "IMPLIES(FORALL(VAR1, PRED(VAR1)), PRED(TERM1))",
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 1.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "FORALL⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.existential_generalization",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "IMPLIES(PRED(TERM1), EXISTS(VAR1, PRED(VAR1)))",
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 1.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "EXISTS⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_universal",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "NEG(FORALL(VAR1, PRED(VAR1))) = EXISTS(VAR1, NEG(PRED(VAR1)))",
+      "groundedness": 0.833,
+      "considered": 6,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.667,
+        "recursive": 0.0,
+        "pattern_absorption": 0.167
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "NEG⟨PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨FORALL⟨?0:V, PRED⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 6,
+            "same_corpus": 5
+          },
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "FORALL⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_existential",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "NEG(EXISTS(VAR1, PRED(VAR1))) = FORALL(VAR1, NEG(PRED(VAR1)))",
+      "groundedness": 0.833,
+      "considered": 6,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.667,
+        "recursive": 0.0,
+        "pattern_absorption": 0.167
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "NEG⟨PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "NEG⟨EXISTS⟨?0:V, PRED⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 6,
+            "same_corpus": 5
+          },
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "EXISTS⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_conjunction_distribution",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "FORALL(VAR1, MEET(PRED(VAR1), PREDB(VAR1))) = MEET(FORALL(VAR1, PRED(VAR1)), FORALL(VAR1, PREDB(VAR1)))",
+      "groundedness": 0.778,
+      "considered": 9,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 2,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 5,
+        "recursive": 0,
+        "pattern_absorption": 2
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.556,
+        "recursive": 0.0,
+        "pattern_absorption": 0.222
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "MEET⟨PRED⟨?0:V⟩, PREDB⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            0,
+            1,
+            1
+          ],
+          "skeleton": "PREDB⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "MEET⟨FORALL⟨?0:V, PRED⟨?0:V⟩⟩, FORALL⟨?0:V, PREDB⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "FORALL⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "PREDB⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.existential_disjunction_distribution",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "EXISTS(VAR1, JOIN(PRED(VAR1), PREDB(VAR1))) = JOIN(EXISTS(VAR1, PRED(VAR1)), EXISTS(VAR1, PREDB(VAR1)))",
+      "groundedness": 0.778,
+      "considered": 9,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 2,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 5,
+        "recursive": 0,
+        "pattern_absorption": 2
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.556,
+        "recursive": 0.0,
+        "pattern_absorption": 0.222
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "JOIN⟨PRED⟨?0:V⟩, PREDB⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 6,
+            "same_corpus": 2
+          },
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            0,
+            1,
+            1
+          ],
+          "skeleton": "PREDB⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "JOIN⟨EXISTS⟨?0:V, PRED⟨?0:V⟩⟩, EXISTS⟨?0:V, PREDB⟨?0:V⟩⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 6,
+            "same_corpus": 2
+          },
+          "instance_of_pattern": "JOIN⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_valuation",
+            "geotop.measure.area_inclusion_exclusion",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion",
+            "logic.boolean_laws.absorption",
+            "logic.boolean_laws.distributivity_meet_over_join",
+            "settheory.boolean_laws.absorption",
+            "settheory.boolean_laws.distributivity_meet_over_join",
+            "settheory.cardinality.inclusion_exclusion_two_sets"
+          ],
+          "pattern_recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "EXISTS⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "PREDB⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_implies_existential",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "IMPLIES(FORALL(VAR1, PRED(VAR1)), EXISTS(VAR1, PRED(VAR1)))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 1.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "FORALL⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "EXISTS⟨?0:V, PRED⟨?0:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.unique_existence_expansion",
+      "corpus_id": "logic.boolean_foundations.v1",
+      "discipline": "logic",
+      "template": "EXISTS(VAR1, MEET(PRED(VAR1), FORALL(VAR2, IMPLIES(PRED(VAR2), VAR2 = VAR1))))",
+      "groundedness": 0.8,
+      "considered": 5,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 2
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.4,
+        "recursive": 0.0,
+        "pattern_absorption": 0.4
+      },
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "MEET⟨FORALL⟨?0:V, IMPLIES⟨PRED⟨?0:V⟩, ?0:V = ?1:V⟩⟩, PRED⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "IMPLIES⟨PRED⟨?0:V⟩, ?0:V = ?1:V⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "same_corpus",
+          "absorbed_owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_pattern": "IMPLIES⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.inference.ex_falso_quodlibet"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "PRED⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 7
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -10313,12 +11127,12 @@
           "channel": "external",
           "owner_channels": {
             "external": 3,
-            "same_corpus": 1
+            "same_corpus": 3
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 7
         }
       ]
     },
@@ -10327,25 +11141,38 @@
       "corpus_id": "number_theory.core.v1",
       "discipline": "number_theory",
       "template": "ODD(2*INT1 + 1)",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
       "considered": 2,
-      "grounded_exact": 1,
+      "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
         "external": 1,
         "prior_corpus": 0,
-        "same_corpus": 0,
+        "same_corpus": 1,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
         "external": 0.5,
         "prior_corpus": 0.0,
-        "same_corpus": 0.0,
+        "same_corpus": 0.5,
         "recursive": 0.0,
         "pattern_absorption": 0.0
       },
       "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "+(1, *(2, ?0:V))",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
         {
           "path": [
             0,
@@ -10356,10 +11183,142 @@
           "channel": "external",
           "owner_channels": {
             "external": 3,
-            "same_corpus": 1
+            "same_corpus": 3
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.even_witness_definition",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "EVEN(INT1) = EXISTS(INT2, INT1 = 2 * INT2)",
+      "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 1,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.333,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.333,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 5
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 3,
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_witness_definition",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "ODD(INT1) = EXISTS(INT2, INT1 = 2 * INT2 + 1)",
+      "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.25,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.5,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1,
+            1
+          ],
+          "skeleton": "+(1, *(2, ?0:V))",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 3,
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
           ],
           "recurs_in_n_statements": 5
         }
@@ -10422,10 +11381,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -10435,10 +11396,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 4
+          "instance_of_statements": [
+            "numbertheory.parity.odd_witness_definition"
+          ],
+          "recurs_in_n_statements": 5
         }
       ]
     },
@@ -10474,10 +11437,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -10487,12 +11452,13 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
           "instance_of_statements": [
-            "numbertheory.parity.odd_is_not_even"
+            "numbertheory.parity.odd_is_not_even",
+            "numbertheory.parity.odd_witness_definition"
           ],
-          "recurs_in_n_statements": 4
+          "recurs_in_n_statements": 5
         }
       ]
     },
@@ -10547,10 +11513,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -10561,10 +11529,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -10646,12 +11616,13 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
           "instance_of_statements": [
-            "numbertheory.parity.odd_is_not_even"
+            "numbertheory.parity.odd_is_not_even",
+            "numbertheory.parity.odd_witness_definition"
           ],
-          "recurs_in_n_statements": 4
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -10662,12 +11633,13 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
           "instance_of_statements": [
-            "numbertheory.parity.odd_is_not_even"
+            "numbertheory.parity.odd_is_not_even",
+            "numbertheory.parity.odd_witness_definition"
           ],
-          "recurs_in_n_statements": 4
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -10735,10 +11707,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -10809,12 +11783,13 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
           "instance_of_statements": [
-            "numbertheory.parity.odd_is_not_even"
+            "numbertheory.parity.odd_is_not_even",
+            "numbertheory.parity.odd_witness_definition"
           ],
-          "recurs_in_n_statements": 4
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -10825,12 +11800,13 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 3
+            "same_corpus": 4
           },
           "instance_of_statements": [
-            "numbertheory.parity.odd_is_not_even"
+            "numbertheory.parity.odd_is_not_even",
+            "numbertheory.parity.odd_witness_definition"
           ],
-          "recurs_in_n_statements": 4
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -10931,10 +11907,12 @@
           "grounded_via": "exact",
           "channel": "same_corpus",
           "owner_channels": {
-            "same_corpus": 4
+            "same_corpus": 5
           },
-          "instance_of_statements": [],
-          "recurs_in_n_statements": 5
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 6
         },
         {
           "path": [
@@ -15940,13 +16918,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 3,
+            "external": 5,
             "same_corpus": 1
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -16030,13 +17008,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 3,
+            "external": 5,
             "same_corpus": 1
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 5
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -16236,34 +17214,34 @@
   ],
   "channel_summary": {
     "graph": {
-      "statements": 239,
-      "mean_groundedness": 0.776,
+      "statements": 249,
+      "mean_groundedness": 0.781,
       "channel_means": {
-        "external": 0.512,
+        "external": 0.494,
         "prior_corpus": 0.007,
-        "same_corpus": 0.166,
+        "same_corpus": 0.188,
         "recursive": 0.0,
-        "pattern_absorption": 0.091
+        "pattern_absorption": 0.092
       },
       "channel_constituents": {
-        "external": 367,
+        "external": 369,
         "prior_corpus": 4,
-        "same_corpus": 124,
+        "same_corpus": 158,
         "recursive": 0,
-        "pattern_absorption": 91
+        "pattern_absorption": 99
       },
-      "independent_mean": 0.519,
+      "independent_mean": 0.501,
       "same_corpus_dominant": false,
       "self_certifying": false,
       "channel_means_lower": {
-        "external": 0.233,
-        "prior_corpus": 0.035,
-        "same_corpus": 0.417,
+        "external": 0.223,
+        "prior_corpus": 0.033,
+        "same_corpus": 0.432,
         "recursive": 0.0,
-        "pattern_absorption": 0.091
+        "pattern_absorption": 0.092
       },
-      "external_lower": 0.233,
-      "independent_lower": 0.267,
+      "external_lower": 0.223,
+      "independent_lower": 0.257,
       "same_corpus_dominant_lower": true,
       "self_certifying_lower": false
     },
@@ -16665,35 +17643,35 @@
         "discipline": "information_theory"
       },
       "logic.boolean_foundations.v1": {
-        "statements": 12,
-        "mean_groundedness": 0.875,
+        "statements": 20,
+        "mean_groundedness": 0.876,
         "channel_means": {
-          "external": 0.812,
+          "external": 0.487,
           "prior_corpus": 0.0,
-          "same_corpus": 0.0,
+          "same_corpus": 0.292,
           "recursive": 0.0,
-          "pattern_absorption": 0.062
+          "pattern_absorption": 0.096
         },
         "channel_constituents": {
           "external": 27,
           "prior_corpus": 0,
-          "same_corpus": 0,
+          "same_corpus": 30,
           "recursive": 0,
-          "pattern_absorption": 2
+          "pattern_absorption": 10
         },
-        "independent_mean": 0.812,
+        "independent_mean": 0.487,
         "same_corpus_dominant": false,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.442,
+          "external": 0.265,
           "prior_corpus": 0.0,
-          "same_corpus": 0.371,
+          "same_corpus": 0.515,
           "recursive": 0.0,
-          "pattern_absorption": 0.062
+          "pattern_absorption": 0.096
         },
-        "external_lower": 0.442,
-        "independent_lower": 0.442,
-        "same_corpus_dominant_lower": false,
+        "external_lower": 0.265,
+        "independent_lower": 0.265,
+        "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "logic"
       },
@@ -16797,34 +17775,34 @@
         "discipline": "narrative"
       },
       "number_theory.core.v1": {
-        "statements": 12,
-        "mean_groundedness": 0.775,
+        "statements": 14,
+        "mean_groundedness": 0.801,
         "channel_means": {
-          "external": 0.286,
+          "external": 0.287,
           "prior_corpus": 0.0,
-          "same_corpus": 0.417,
+          "same_corpus": 0.452,
           "recursive": 0.0,
-          "pattern_absorption": 0.072
+          "pattern_absorption": 0.062
         },
         "channel_constituents": {
-          "external": 7,
+          "external": 9,
           "prior_corpus": 0,
-          "same_corpus": 18,
+          "same_corpus": 22,
           "recursive": 0,
           "pattern_absorption": 3
         },
-        "independent_mean": 0.286,
+        "independent_mean": 0.287,
         "same_corpus_dominant": true,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.083,
+          "external": 0.071,
           "prior_corpus": 0.0,
-          "same_corpus": 0.619,
+          "same_corpus": 0.668,
           "recursive": 0.0,
-          "pattern_absorption": 0.072
+          "pattern_absorption": 0.062
         },
-        "external_lower": 0.083,
-        "independent_lower": 0.083,
+        "external_lower": 0.071,
+        "independent_lower": 0.071,
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "number_theory"

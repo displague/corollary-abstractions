@@ -49,8 +49,14 @@ EXPECTED = {
         "logic.boolean_laws.de_morgan_laws", CORRESPONDS, "canonical"),
     "BooleanLaws.de_morgan_not_or": (
         "logic.boolean_laws.de_morgan_laws", CORRESPONDS, "dual_of_canonical"),
+    # Moved from de_morgan_laws when the v0.10 quantifier slice authored the
+    # exact-statement node. Still UNTRANSLATABLE: the correspondence checker's
+    # fragment is propositional-only (`α : Type` binds outside `Prop`), so the
+    # link is honestly reported-not-verified and the WRITE gate must keep
+    # treating it as unproven.
     "BooleanLaws.not_forall_iff_exists_not": (
-        "logic.boolean_laws.de_morgan_laws", UNTRANSLATABLE, None),
+        "logic.quantification.quantifier_negation_universal",
+        UNTRANSLATABLE, None),
     "BooleanLaws.distrib_and_or": (
         "logic.boolean_laws.distributivity_meet_over_join", CORRESPONDS,
         "canonical"),

@@ -876,7 +876,17 @@ def report(result: dict, write_report: Path | None = None) -> None:
     print(f"    exact              {e_best}/{len(exact)} "
           f"({e_best / n_ex:.1%}) / {e_all}/{len(exact)} "
           f"({e_all / n_ex:.1%})")
-    print(f"    A wash by rate; the exact channel dominates by absolute count "
+    # The sentence must describe the data, not repeat the v0.7 adjudication:
+    # the rate reading stopped being a wash at the v0.10 quantifier slice
+    # (self-grounding corpus growth lowered exact's external rate), while the
+    # count baseline still refuses the retracted inference outright.
+    rate_gap = a_best / n_abs - e_best / n_ex
+    rate_note = (
+        "A wash by rate" if abs(rate_gap) < 0.12
+        else f"Absorption leads by rate ({rate_gap:+.1%})" if rate_gap > 0
+        else f"The exact channel leads by rate ({-rate_gap:+.1%})"
+    )
+    print(f"    {rate_note}; the exact channel dominates by absolute count "
           f"({e_best / (a_best or 1):.1f}:1). Absorption is where such credit "
           f"is quarantined, not where it concentrates.")
     print()

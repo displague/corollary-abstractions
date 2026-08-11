@@ -820,6 +820,62 @@
       "family_reuse": 4
     },
     {
+      "statement_id": "logic.quantification.universal_instantiation",
+      "char_tokens": 46,
+      "struct_tokens": 15,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.existential_generalization",
+      "char_tokens": 46,
+      "struct_tokens": 15,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_universal",
+      "char_tokens": 61,
+      "struct_tokens": 23,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_existential",
+      "char_tokens": 61,
+      "struct_tokens": 23,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.universal_conjunction_distribution",
+      "char_tokens": 103,
+      "struct_tokens": 35,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.existential_disjunction_distribution",
+      "char_tokens": 103,
+      "struct_tokens": 35,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.universal_implies_existential",
+      "char_tokens": 59,
+      "struct_tokens": 19,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "logic.quantification.unique_existence_expansion",
+      "char_tokens": 78,
+      "struct_tokens": 25,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "ml.recurrence.elman_rnn_hidden_state",
       "char_tokens": 65,
       "struct_tokens": 19,
@@ -1097,6 +1153,20 @@
       "char_tokens": 15,
       "struct_tokens": 12,
       "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "numbertheory.parity.even_witness_definition",
+      "char_tokens": 42,
+      "struct_tokens": 16,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_witness_definition",
+      "char_tokens": 45,
+      "struct_tokens": 20,
+      "concept_tokens": 3,
       "family_reuse": 1
     },
     {
@@ -1688,9 +1758,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 42.68879668049792,
-  "mean_struct": 14.174273858921161,
-  "mean_concept": 3.7136929460580914,
-  "n_family_skeletons": 186,
+  "mean_char": 43.55378486055777,
+  "mean_struct": 14.50996015936255,
+  "mean_concept": 3.6653386454183265,
+  "n_family_skeletons": 196,
   "skeletons_reused": 30
 }

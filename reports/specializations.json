@@ -12038,6 +12038,23 @@
       "looseness": 8
     },
     {
+      "general": "geotop.predicates.de9im_disjoint",
+      "specific": "logic.quantification.universal_conjunction_distribution",
+      "general_template": "MEET(REGA, REGB) = EMPTYSET",
+      "specific_template": "FORALL(VAR1, MEET(PRED(VAR1), PREDB(VAR1))) = MEET(FORALL(VAR1, PRED(VAR1)), FORALL(VAR1, PREDB(VAR1)))",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EMPTYSET": "FORALL(VAR1, MEET(PRED(VAR1), PREDB(VAR1)))",
+        "REGA": "FORALL(VAR1, PRED(VAR1))",
+        "REGB": "FORALL(VAR1, PREDB(VAR1))"
+      },
+      "looseness": 8
+    },
+    {
       "general": "physics.frames.galilean_velocity_addition",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",

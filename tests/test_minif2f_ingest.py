@@ -182,10 +182,17 @@ class ClassifierHonesty(unittest.TestCase):
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "tuple_or_structure")
 
-    def test_quantifier_beats_comma_label(self) -> None:
-        # The comma blocker must not steal a quantifier's reason label.
+    def test_quantifier_prefix_now_covers_and_embedded_beats_comma(self) -> None:
+        # v0.10 quantifier slice: a prefix chain is extracted (its comma is
+        # binder syntax, not a tuple constructor), so this simple witness goal
+        # now reduces under the EXISTS head...
         r = gc.classify(self._mk("∃ m, m > n", vars=("n",)))
-        self.assertEqual(r["goal_reason"], "existential_quantifier")
+        self.assertTrue(r["goal_ok"], r["goal_reason"])
+        # ...while a NON-prefix quantifier keeps its precise label — and the
+        # original concern stands: the comma/tuple blocker must not steal it.
+        r = gc.classify(self._mk("(∃ m, m > n) ∧ n > 0", vars=("n",)))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "quantifier_embedded")
 
     def test_every_supported_head_char_maps_to_a_corpus_node(self) -> None:
         # The supported set may only contain heads that actually appear in the

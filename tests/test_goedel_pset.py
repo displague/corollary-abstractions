@@ -172,14 +172,28 @@ class LetBindingGoals(unittest.TestCase):
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "integer_division_no_head")
 
-    def test_let_body_keeps_its_own_blocker_label(self) -> None:
+    def test_let_body_with_quantifier_prefix_now_covers(self) -> None:
+        # Pre-quantifier-slice this was the `universal_quantifier` gap; the
+        # let binding still desugars to its definitional equation and the
+        # ∀-prefixed body now reduces under the FORALL head.
         st = gc.parse_lean4_theorem(
             "t",
             "theorem t :\n  let p := 4\n  ∀ k : ℝ, k * p = 4 * k := by sorry",
         )
         r = gc.classify(st)
+        self.assertTrue(r["goal_ok"], r["goal_reason"])
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_quantified_let_rhs_stays_a_gap(self) -> None:
+        # A quantifier inside a let-binding EQUATION is a Prop-valued binding,
+        # not a prefix on the goal proposition: precisely labeled, not covered.
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let P := ∀ k : ℕ, k ≥ 0\n  1 = 1 := by sorry",
+        )
+        r = gc.classify(st)
         self.assertFalse(r["goal_ok"])
-        self.assertEqual(r["goal_reason"], "universal_quantifier")
+        self.assertEqual(r["goal_reason"], "quantifier_embedded")
 
     def test_proof_terminator_not_confused_by_proof_side_let(self) -> None:
         st = gc.parse_lean4_theorem(
