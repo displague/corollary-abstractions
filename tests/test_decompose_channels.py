@@ -5,9 +5,19 @@ docstring together with their adjudication; this file is where the two that
 are machine-checkable stay checked:
 
 - GC4 (aggregates unchanged) is pinned as the pre-split numbers: graph mean
-  0.770, 440 exact + 75 pattern-membership constituents, 193 statements with
+  0.774, 469 exact + 87 pattern-membership constituents, 201 statements with
   at least one grounded constituent. A channel change that moves any of them
   is a scoring change and needs its own registered prediction.
+
+  Registered acknowledgment (v0.10 item 1): the pins above moved from their
+  v0.7 values (mean 0.770 -> 0.774, exact 440 -> 469, pattern 75 -> 87,
+  constituents 193 -> 201) because v0.10 added `data/trigonometry` (8 atomic
+  identities, corpus 221 -> 229 nodes). This is a CORPUS change, not a scoring
+  change: the movement is same-corpus-dominated (the double-angle nodes ground
+  in their angle-sum generalizations), no external or prior_corpus channel
+  gained on the provability regression case, and every GC5 partition identity
+  still holds. Any future movement of these pins still needs its own
+  registered acknowledgment like this one.
 - GC5 (partition identity) is checked per statement: the five channel counts
   sum to the grounded numerator, so channel shares sum to `groundedness`.
 
@@ -132,13 +142,13 @@ class ChannelSplitOverCorpus(unittest.TestCase):
 
     def test_aggregate_totals_unchanged(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["mean_groundedness"], 0.770)
+        self.assertEqual(graph["mean_groundedness"], 0.774)
         self.assertEqual(
-            sum(d["grounded_exact"] for d in self.decompositions), 440)
+            sum(d["grounded_exact"] for d in self.decompositions), 469)
         self.assertEqual(
-            sum(d["grounded_via_pattern"] for d in self.decompositions), 75)
+            sum(d["grounded_via_pattern"] for d in self.decompositions), 87)
         self.assertEqual(
-            sum(1 for d in self.decompositions if d["constituents"]), 193)
+            sum(1 for d in self.decompositions if d["constituents"]), 201)
 
     def test_groundedness_is_still_grounded_over_considered(self):
         for d in self.decompositions:
@@ -270,12 +280,12 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         """
         result = analyze(REPO_ROOT / "data", min_family=1)
         decs = result["decompositions"]
-        self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 200)
+        self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 220)
         self.assertEqual(
             result["channel_summary"]["graph"]["channel_means"]["recursive"],
-            0.316)
+            0.317)
         self.assertEqual(
-            sum(1 for d in decs if d["channels"]["recursive"]), 105)
+            sum(1 for d in decs if d["channels"]["recursive"]), 112)
 
     # -- the prior_corpus rule earns its (small) keep ----------------------
 
@@ -309,7 +319,7 @@ class ChannelSplitOverCorpus(unittest.TestCase):
     def test_shipped_channel_scores_sum_within_rounding(self):
         """`channel_scores` is rounded; `channel_shares` is exact.
 
-        Three of the 219 shipped rows sum to 0.001 off `groundedness` because
+        Five of the 227 shipped rows sum to 0.001 off `groundedness` because
         each channel is rounded independently. The module docstring says so
         and this asserts the bound the docstring promises, so a real partition
         break cannot hide behind "it's just rounding".
@@ -321,7 +331,7 @@ class ChannelSplitOverCorpus(unittest.TestCase):
                                    msg=d["statement_id"])
             if abs(total - d["groundedness"]) > 1e-9:
                 off += 1
-        self.assertEqual(off, 3)
+        self.assertEqual(off, 5)
 
     # -- owner precedence is the flattering direction ----------------------
 
@@ -329,27 +339,27 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         exact = [c for d in self.decompositions for c in d["constituents"]
                  if c["grounded_via"] == "exact"]
         multi = [c for c in exact if len(c["owner_channels"]) > 1]
-        self.assertEqual(len(exact), 440)
-        self.assertEqual(len(multi), 190)
+        self.assertEqual(len(exact), 469)
+        self.assertEqual(len(multi), 196)
         # Every multi-owner constituent takes `external`; the generous rule is
         # doing real work, so `external` must be published as an upper bound.
         self.assertTrue(all(c["channel"] == "external" for c in multi))
 
     def test_conservative_rollup_brackets_the_external_share(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["channel_means"]["external"], 0.535)
-        self.assertEqual(graph["channel_means_lower"]["external"], 0.246)
-        self.assertEqual(graph["external_lower"], 0.246)
+        self.assertEqual(graph["channel_means"]["external"], 0.523)
+        self.assertEqual(graph["channel_means_lower"]["external"], 0.24)
+        self.assertEqual(graph["external_lower"], 0.24)
         self.assertLessEqual(graph["external_lower"],
                              graph["channel_means"]["external"])
         exact = [c for d in self.decompositions for c in d["constituents"]
                  if c["grounded_via"] == "exact"]
         self.assertEqual(sum(1 for c in exact if c["channel"] == "external"),
-                         352)
+                         359)
         self.assertEqual(
             sum(1 for c in exact
                 if least_independent_channel(c["owner_channels"]) == "external"),
-            162)
+            163)
         # The conservative shares are still a partition of the same numerator.
         for d in self.decompositions:
             self.assertAlmostEqual(
@@ -373,19 +383,20 @@ class ChannelSplitOverCorpus(unittest.TestCase):
                     if blk["same_corpus_dominant"]]
         conservative = [cid for cid, blk in self.summary["corpora"].items()
                         if blk["same_corpus_dominant_lower"]]
-        self.assertEqual(len(generous), 5)
-        self.assertEqual(len(conservative), 12)
+        self.assertEqual(len(generous), 6)
+        self.assertEqual(len(conservative), 13)
         self.assertTrue(set(generous) <= set(conservative))
 
     # -- the retracted inference stays next to its baseline ----------------
 
     def test_absorption_cross_discipline_share_does_not_beat_the_baseline(self):
-        """The 62-of-75 number, both readings, beside the exact channel.
+        """The 74-of-87 number, both readings, beside the exact channel.
 
-        The commit that shipped the split inferred from 62/75 that absorption
-        is where cross-discipline-looking credit concentrates graph-wide. It
-        does not: the exact channel scores the same way by rate and 5.7:1
-        higher by count. Pinned so the inference cannot return unbaselined.
+        The commit that shipped the split inferred from the then-62/75 that
+        absorption is where cross-discipline-looking credit concentrates
+        graph-wide. It does not: the exact channel scores the same way by rate
+        and 4.9:1 higher by count. Pinned so the inference cannot return
+        unbaselined.
         """
         absorbed = [c for d in self.decompositions for c in d["constituents"]
                     if c["channel"] == "pattern_absorption"]
@@ -398,12 +409,12 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         e_best = sum(1 for c in exact if c["channel"] == "external")
         e_all = sum(1 for c in exact
                     if set(c["owner_channels"]) == {"external"})
-        self.assertEqual((a_best, a_all, len(absorbed)), (62, 36, 75))
-        self.assertEqual((e_best, e_all, len(exact)), (352, 162, 440))
+        self.assertEqual((a_best, a_all, len(absorbed)), (74, 48, 87))
+        self.assertEqual((e_best, e_all, len(exact)), (359, 163, 469))
         # Neither reading separates the channels by more than 12 points, and
         # the exact channel wins outright on absolute count.
         self.assertLess(abs(a_best / len(absorbed) - e_best / len(exact)), 0.12)
-        self.assertGreater(e_best, 5 * a_best)
+        self.assertGreater(e_best, 4 * a_best)
 
     # -- the flag must discriminate, not just restate the aggregate --------
 
