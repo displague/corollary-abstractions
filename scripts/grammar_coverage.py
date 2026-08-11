@@ -564,7 +564,10 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     # so without this blocker a `let`-bound lambda covered as a value — the
     # exact false-positive class the Goedel-Pset foreign-glyph audit caught
     # (6 offenders at 1.73M scale, all conversion lambdas or custom operators).
-    ("uninterpreted_notation", re.compile(r"⋆|·|=>|(?<![\w.'])fun(?![\w.'])|λ")),
+    # ... plus the star-family custom operators (★ U+2605, ∗ U+2217, ⊛): the
+    # quantifier slice's 1.73M audit caught a covered `2 ★ (2 ★ x)` — same
+    # class as `⋆`, glyphs invisible to the identifier scan.
+    ("uninterpreted_notation", re.compile(r"⋆|★|∗|⊛|·|=>|(?<![\w.'])fun(?![\w.'])|λ")),
     ("modular_type_zmod", re.compile(r"[Zz][Mm]od")),
     ("complex_number", re.compile(r"ℂ|complex|Complex|ℐ|ℑ|ℜ|𝕀")),
     # primality itself became a head (PRIME, data/number_theory); coprimality is
@@ -785,10 +788,19 @@ def _quant_binder_section(
     sec = sec.strip()
     if not sec:
         return "quantifier_malformed"
+    # strict-implicit binder brackets `⦃A B C : ℕ⦄` are not in the global
+    # bracket alphabet; unwrap them and read the inner binder as usual.
+    if sec.startswith("⦃") and sec.endswith("⦄"):
+        return _quant_binder_section(sec[1:-1], names, bounds, carriers)
     groups = top_level_groups(sec)
-    if groups:
-        if _outside_groups(sec).strip():
-            return "quantifier_malformed"
+    # A LIST of binder groups only when nothing but whitespace sits outside
+    # them — `(x : ℝ) (hx : x > 0)`. A section with groups AND residue is an
+    # ordinary binder whose type or predicate merely contains parentheses
+    # (`x ∈ Set.Icc (-3 : ℝ) (-1)`, `q : ℕ → (ℝ × ℝ)`) and falls through to
+    # the analysis below. (The first cut labeled those `quantifier_malformed`
+    # — 10,691 rows at 1.73M scale — which the step-1 remainder inspection
+    # caught before the numbers landed.)
+    if groups and not _outside_groups(sec).strip():
         for opener, inner in groups:
             if opener in "[⟨":
                 # instance binder `[Fact p]` / destructuring pattern `⟨a, b⟩`:
@@ -798,10 +810,10 @@ def _quant_binder_section(
             if gap is not None:
                 return gap
         return None
-    # membership binder `x ∈ S`: treated as a bounded binder whose predicate
-    # text carries the ∈, so the set blocker names the gap precisely (the
-    # same bucket these rows occupied before extraction existed).
-    mi = _depth0_find_any(sec, "∈")
+    # membership/subset binder `x ∈ S` / `B ⊆ A`: treated as a bounded binder
+    # whose predicate text carries the ∈/⊆, so the set blocker names the gap
+    # precisely (the same bucket these rows occupied before extraction).
+    mi = _depth0_find_any(sec, "∈∉⊆⊂")
     if mi >= 0:
         nm = sec[:mi].split()
         if nm and all(_IDENT_RE.fullmatch(n) for n in nm):

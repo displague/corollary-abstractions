@@ -2836,3 +2836,118 @@ reaching them needs the flat segment checks restructured into an atom-tree
 walk, a slice of its own), unsupported binder domains (~23,595), quantified
 `let` bindings (987), shadowed binders (1,839), and every body whose inner
 construct already had no head.
+
+### The delta (adjudication of the registered floors), full-statement
+
+| source | before | after | delta | registered floor |
+|---|---|---|---|---|
+| miniF2F | 151 = 30.9% | **161 = 33.0%** | +10 | +8 ✓ |
+| Lean-workbook | 19,570 = 65.8% | **21,239 = 71.4%** | +1,669 | +1,525 ✓ |
+| Goedel-Pset-v1 (1.73M) | 673,521 = 38.9% | **748,384 = 43.2%** | **+74,863** | +65,207 ✓ |
+
+Goal-only: miniF2F 232 → 235 = 48.2%; Lean-workbook 20,180 → 21,887 = 73.6%;
+Goedel-Pset 829,949 → **895,790 = 51.7%** (+65,841; unique covered goals
+476,504 → **540,849**). Every floor was exceeded for the registered reasons:
+the production classifier desugars EVERY quantified hypothesis (the
+simulation stopped at the first) and reaches the ¬-prefixed chains the
+simulation skipped. Goedel's full-statement gain decomposes as 61,269
+goal-position + 13,594 hyp-position rows, drawn EXCLUSIVELY from the four
+old quantifier buckets — no other reason class changed covered status, which
+the dual pass verifies per row.
+
+**LOST = 0, the house standard, on all three sources** — a per-row dual
+classification pass (main @ d131e16, the numbers of record, vs this slice)
+over all 1,732,594 Goedel rows and both committed extracts shows no
+previously covered statement lost coverage, goal-only or full. The parser
+was untouched and the pass asserts old/new parse agreement row-by-row;
+`unparsed` stays 192 and the duplicate rate 24.1%.
+
+### At 1.73M scale the audits fired three times, and each catch is now a test
+
+1. `covered_foreign_glyph_count = 1`: Goedel-Pset-91093 covered
+   `∃! x : ℚ, (2 ★ (2 ★ x)) = (1 ★ x) ∧ …` — the BLACK STAR operator is
+   invisible to the identifier scan, the same class as `⋆` and the section
+   dot from the relational slice. Classifier fix: the star family (★ ∗ ⊛)
+   joins the `uninterpreted_notation` blocker; cost, exactly 1 covered row.
+2. `covered_carrier_residual_count = 1`: Goedel-Pset-1326754
+   `∃ (last : Rat), last = 1 /. 2` under an ℕ theorem binder — a LEGITIMATE
+   cover (the segment's own binder declares the ℚ carrier; `divInt`
+   coincides with rational division on these operands) that the AUDIT
+   couldn't see, because it read only statement-level carrier flags. Audit
+   fix, not a whitelist: `_carrier_residual` re-parses each segment's
+   quantifier prefix with the shared extractor (the segmentation must be the
+   one the classifier saw) while keeping its own independent carrier regex —
+   and a test proves it still flags a ℕ-quantified division.
+3. The step-1-style remainder inspection (before the numbers landed) caught
+   the first cut of the binder-section parser labeling 10,691 rows
+   `quantifier_malformed` when their binder merely contained parentheses
+   (`∀ x ∈ Set.Icc (-3 : ℝ) (-1), …`, `∃ q : ℕ → (ℝ × ℝ), …`) — the same
+   lesson as the `let` truncation: the biggest "malformed" bucket was the
+   instrument's own parse. Fixed (group-lists require an all-whitespace
+   residue; ⊆/∉-bounded and ⦃⦄ strict-implicit binders handled), the bucket
+   collapses to **46** genuinely malformed rows, and the 32 newly covered
+   ⦃⦄-binder rows forced the audit-normalizer decision (binder brackets
+   normalize; factorial `!` and set-builder braces stay foreign, asserted).
+
+### What the buckets became (Goedel-Pset, goal position)
+
+| label | rows | note |
+|---|---|---|
+| covered (was existential/universal_quantifier) | 65,841 | +35,255 from ∃-bucket, +30,586 from ∀-bucket |
+| `quantifier_embedded` | 62,142 | connective/iff/let/nested position — the successor slice |
+| `quantifier_function_binder` | 21,370 | with `unsupported_symbol:f` bodies (28k), the function-slot backlog |
+| body residues under a supported prefix | ~55k | each keeps its pre-existing precise label (abs 43,446 †, monus 41,019 †, int-div 39,987 †, …) |
+| `quantifier_shadowed_binder` | 2,779 | refused re-quantification of an outer name (`theorem (a b : ℤ) : ∀ a b, …`) |
+| `quantifier_structure_binder` / `set_or_finset` | 1,409 / — | membership and ⊆-bounded binders rejoin the set bucket |
+| `quantifier_over_sort` | 457 | second-order (`∀ p : Prop`) |
+| `quantifier_malformed` | 46 | genuinely unparseable binder sections |
+
+† statement-wide bucket totals after redistribution, not quantifier-only.
+Hypothesis side: `hyp:quantifier_embedded` 1,234, `hyp:quantifier_function_binder`
+411, `hyp:quantifier_shadowed_binder` 506, `hyp:quantifier_malformed` 3.
+Lean-workbook's residue: `quantifier_function_binder` 275, `quantifier_embedded`
+187, shadowed 60; miniF2F's: 5 embedded, 1 function-binder.
+
+### Corpus, matcher, pins — and one guard direction that moved
+
+Corpus 241 → **251** (24 disciplines): 8 quantifier laws in `data/logic`
+(new `quantification` topic), 2 witness definitions in `data/number_theory`.
+Matcher `parse_problems: 0`, `slot_schema_gaps: 0`, `ladder_violations: 0`;
+`check_regeneration` byte-identical; `validate_nodes` green over 251. One
+`verified_by` MOVED, not added: `not_forall_iff_exists_not` (14 steps in the
+committed prover artifact) now sits on the node that states exactly what it
+proves — still honestly UNTRANSLATABLE to the propositional-only
+correspondence checker, so it remains reported-not-verified.
+
+**The twin null, a FOURTH time:** `group_counts` is unchanged
+(`{shape: 30, typed: 31, family: 30, aliased: 32, mirror: 5}`). The binder
+heads wrapping PRED slots twin with nothing — quantifier De Morgan does not
+twin with propositional De Morgan (the binder head is real structure), which
+is the same honest separation SIN/COS and EVEN/ODD produced.
+
+GC4 pins moved with the corpus growth (mean 0.776 → 0.781, exact 495 → 531,
+pattern 91 → 99, constituents 212 → 222) under the THIRD registered
+acknowledgment in `tests/test_decompose_channels.py`. The absorption COUNT
+floor holds unweakened: e_best 369 > 4 × a_best 85, ratio **4.3:1** over the
+4:1 floor. **One guard direction moved and is flagged for maintainer
+review rather than absorbed:** the rate reading is no longer a wash —
+absorption's best-owner external rate 85.9% vs the exact channel's 69.5%, a
+16.4-point gap against the old < 0.12 pin. Cause: this slice's new exact
+constituents ground almost entirely same-corpus (the quantifier laws ground
+in one another), diluting exact's external rate, while its 8 absorbed
+constituents (NEG- and MEET/JOIN-wrapped binder compositions) mostly absorb
+external-owned patterns. The refutation of the retracted "absorption
+concentrates cross-discipline credit" inference now rests on the count
+dominance alone; the new gap is pinned at its measured value so further
+drift is a fresh decision, and the decompose stdout sentence now describes
+the data instead of repeating the v0.7 adjudication.
+
+**Disclosed limits of this slice:** embedded quantifiers (62k Goedel goal
+rows) need the flat segment checks rebuilt as an atom-tree walk; binder
+domains beyond the numeric carriers (functions 21k, products/`Fin n`/custom
+structures, sorts) wait on the function-slot and structure heads; shadowed
+binders are refused (2.8k) because per-statement carrier flags cannot say
+"x is ℝ here and ℕ there"; and the pre-existing statement-scoped-field
+asymmetry is inherited unchanged — a theorem-level `(y : ℝ)` can still
+shield a quantifier-ℕ-binder's monus within the same segment, the disclosed
+`r^(n-1)`-class conservatism trade recorded at the segment-local review fix.

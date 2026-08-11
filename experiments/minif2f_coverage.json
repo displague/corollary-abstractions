@@ -12,7 +12,8 @@
       "arithmetic(+ - * / ^)",
       "SQRT(real.sqrt) LOG(real.log) EXP(real.exp) SIN COS TAN",
       "predicates EVEN ODD PRIME IRRATIONAL (arity 1, bare application)",
-      "prop constants TRUTH FALSITY; let-bindings as definitional ="
+      "prop constants TRUTH FALSITY; let-bindings as definitional =",
+      "quantifier PREFIX chains FORALL(∀) EXISTS(∃) over numeric domains (bounded/untyped binders ℕ-defaulted, ¬-wrappers, ∃! via its ExistsUnique expansion)"
     ],
     "explicit_gaps_no_head_in_corpus": [
       "modulo(%, [MOD n])",
@@ -21,7 +22,8 @@
       "tuple/pair constructor",
       "gcd/lcm",
       "big operators(∑ ∏)",
-      "quantifiers(∀ ∃) in goal",
+      "quantifiers in NON-prefix position (embedded in ∧/∨/→/↔, in a let RHS)",
+      "quantification over functions/sets/structures/sorts",
       "unknown-function slot",
       "coprime(2-ary)",
       "Function.Injective/Surjective, Monotone, …"
@@ -32,52 +34,52 @@
   "totals": {
     "statements": 488,
     "goal_only": {
-      "covered": 232,
-      "pct": 47.5
+      "covered": 235,
+      "pct": 48.2
     },
     "full_statement": {
-      "covered": 151,
-      "pct": 30.9
+      "covered": 161,
+      "pct": 33.0
     }
   },
   "by_split": {
     "test": {
       "total": 244,
-      "goal_only_covered": 131,
-      "full_statement_covered": 89
+      "goal_only_covered": 133,
+      "full_statement_covered": 94
     },
     "valid": {
       "total": 244,
-      "goal_only_covered": 101,
-      "full_statement_covered": 62
+      "goal_only_covered": 102,
+      "full_statement_covered": 67
     }
   },
   "goal_only_untranslatable_reasons": {
     "modulo_no_head": 53,
     "big_operator": 50,
-    "unsupported_symbol:f": 20,
+    "unsupported_symbol:f": 24,
     "complex_number": 18,
     "divides_no_head": 15,
     "set_or_finset": 15,
-    "existential_quantifier": 13,
     "gcd_lcm": 9,
     "rational_component": 8,
     "absolute_value": 7,
+    "nat_monus_no_head": 6,
     "floor_ceil": 5,
-    "universal_quantifier": 5,
+    "quantifier_embedded": 5,
     "unsupported_symbol:σ": 5,
+    "factorial": 4,
     "modular_type_zmod": 4,
-    "factorial": 3,
-    "nat_monus_no_head": 3,
+    "integer_division_no_head": 3,
     "unsupported_symbol:a": 3,
     "unsupported_symbol:s": 3,
     "digit_expansion": 2,
     "fractional_exponent": 2,
-    "integer_division_no_head": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
     "binomial_choose": 1,
+    "quantifier_function_binder": 1,
     "unsupported_symbol:d": 1,
     "unsupported_symbol:p": 1,
     "unsupported_symbol:u": 1,
@@ -86,35 +88,32 @@
   "full_statement_untranslatable_reasons": {
     "modulo_no_head": 53,
     "big_operator": 50,
-    "function_unknown_binder": 23,
-    "unsupported_symbol:f": 20,
+    "function_unknown_binder": 24,
+    "unsupported_symbol:f": 24,
     "complex_number": 18,
     "divides_no_head": 15,
     "set_or_finset": 15,
-    "existential_quantifier": 13,
     "gcd_lcm": 9,
-    "hyp:divides_no_head": 8,
+    "hyp:divides_no_head": 9,
     "rational_component": 8,
     "absolute_value": 7,
     "hyp:absolute_value": 7,
+    "hyp:gcd_lcm": 7,
     "hyp:modulo_no_head": 7,
     "hyp:nat_monus_no_head": 7,
-    "hyp:gcd_lcm": 6,
+    "nat_monus_no_head": 6,
     "floor_ceil": 5,
     "hyp:big_operator": 5,
-    "hyp:existential_quantifier": 5,
-    "hyp:universal_quantifier": 5,
-    "universal_quantifier": 5,
+    "quantifier_embedded": 5,
     "unsupported_symbol:σ": 5,
+    "factorial": 4,
     "modular_type_zmod": 4,
-    "factorial": 3,
-    "nat_monus_no_head": 3,
+    "integer_division_no_head": 3,
     "unsupported_symbol:a": 3,
     "unsupported_symbol:s": 3,
     "digit_expansion": 2,
     "fractional_exponent": 2,
     "hyp:unsupported_symbol:real.logb": 2,
-    "integer_division_no_head": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
@@ -125,6 +124,7 @@
     "hyp:list_or_iteration": 1,
     "hyp:rational_component": 1,
     "hyp:unsupported_symbol:nat.sqrt": 1,
+    "quantifier_function_binder": 1,
     "unsupported_symbol:d": 1,
     "unsupported_symbol:p": 1,
     "unsupported_symbol:u": 1,
@@ -144,6 +144,7 @@
     "algebra_bleqa_apbon2msqrtableqambsqon8b",
     "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
     "algebra_ineq_nto1onlt2m1on",
+    "algebra_others_exirrpowirrrat",
     "algebra_sqineq_at2malt1",
     "algebra_sqineq_unitcircatbpamblt1",
     "amc12_2000_p1",
@@ -184,6 +185,7 @@
     "mathd_algebra_208",
     "mathd_algebra_24",
     "mathd_algebra_263",
+    "mathd_algebra_276",
     "mathd_algebra_293",
     "mathd_algebra_304",
     "mathd_algebra_320",
@@ -216,12 +218,16 @@
     "mathd_numbertheory_207",
     "mathd_numbertheory_227",
     "mathd_numbertheory_234",
+    "mathd_numbertheory_296",
+    "mathd_numbertheory_5",
     "mathd_numbertheory_541",
     "mathd_numbertheory_85",
     "numbertheory_4x3m7y3neq2003",
+    "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
     "numbertheory_x5neqy2p4",
     "aime_1983_p9",
     "aime_1984_p15",
+    "aime_1987_p8",
     "aime_1990_p2",
     "aime_1991_p1",
     "algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4",
@@ -243,10 +249,12 @@
     "amc12a_2016_p2",
     "amc12a_2017_p2",
     "amc12a_2021_p7",
+    "amc12b_2002_p6",
     "amc12b_2003_p17",
     "amc12b_2004_p3",
     "amc12b_2020_p5",
     "imo_1961_p1",
+    "imo_1973_p3",
     "imo_1974_p5",
     "imo_2006_p6",
     "mathd_algebra_101",
@@ -256,6 +264,8 @@
     "mathd_algebra_116",
     "mathd_algebra_119",
     "mathd_algebra_126",
+    "mathd_algebra_13",
+    "mathd_algebra_140",
     "mathd_algebra_181",
     "mathd_algebra_190",
     "mathd_algebra_234",
@@ -511,10 +521,10 @@
     {
       "name": "algebra_others_exirrpowirrrat",
       "split": "test",
-      "goal_ok": false,
-      "goal_reason": "existential_quantifier",
-      "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "algebra_sqineq_at2malt1",
@@ -608,9 +618,9 @@
       "name": "amc12a_2002_p6",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_embedded",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_embedded"
     },
     {
       "name": "amc12a_2003_p23",
@@ -856,9 +866,9 @@
       "name": "amc12b_2020_p6",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "factorial",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "factorial"
     },
     {
       "name": "amc12b_2021_p1",
@@ -960,17 +970,17 @@
       "name": "imo_1968_p5_1",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "unsupported_symbol:f",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "unsupported_symbol:f"
     },
     {
       "name": "imo_1969_p2",
       "split": "test",
-      "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_ok": true,
+      "goal_reason": null,
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "function_unknown_binder"
     },
     {
       "name": "imo_1974_p3",
@@ -984,17 +994,17 @@
       "name": "imo_1977_p6",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "universal_quantifier",
+      "goal_reason": "unsupported_symbol:f",
       "full_ok": false,
-      "full_reason": "universal_quantifier"
+      "full_reason": "unsupported_symbol:f"
     },
     {
       "name": "imo_1981_p6",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "universal_quantifier",
+      "goal_reason": "nat_monus_no_head",
       "full_ok": false,
-      "full_reason": "universal_quantifier"
+      "full_reason": "nat_monus_no_head"
     },
     {
       "name": "imo_1982_p1",
@@ -1024,9 +1034,9 @@
       "name": "imo_1985_p6",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "unsupported_symbol:f",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "unsupported_symbol:f"
     },
     {
       "name": "imo_1992_p1",
@@ -1064,9 +1074,9 @@
       "name": "imo_2019_p1",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_embedded",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_embedded"
     },
     {
       "name": "induction_11div10tonmn1ton",
@@ -1377,8 +1387,8 @@
       "split": "test",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:universal_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "mathd_algebra_288",
@@ -1873,8 +1883,8 @@
       "split": "test",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:existential_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "mathd_numbertheory_299",
@@ -1994,7 +2004,7 @@
       "goal_ok": true,
       "goal_reason": null,
       "full_ok": false,
-      "full_reason": "hyp:universal_quantifier"
+      "full_reason": "hyp:gcd_lcm"
     },
     {
       "name": "mathd_numbertheory_447",
@@ -2041,8 +2051,8 @@
       "split": "test",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:existential_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "mathd_numbertheory_517",
@@ -2209,8 +2219,8 @@
       "split": "test",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:existential_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown",
@@ -2224,9 +2234,9 @@
       "name": "numbertheory_notequiv2i2jasqbsqdiv8",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_embedded",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_embedded"
     },
     {
       "name": "numbertheory_x5neqy2p4",
@@ -2289,8 +2299,8 @@
       "split": "valid",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:existential_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "aime_1988_p3",
@@ -2400,9 +2410,9 @@
       "name": "algebra_amgm_faxinrrp2msqrt2geq2mxm1div2x",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "universal_quantifier",
+      "goal_reason": "integer_division_no_head",
       "full_ok": false,
-      "full_reason": "universal_quantifier"
+      "full_reason": "integer_division_no_head"
     },
     {
       "name": "algebra_amgm_prod1toneq1_sum1tongeqn",
@@ -2576,9 +2586,9 @@
       "name": "amc12a_2003_p24",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_embedded",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_embedded"
     },
     {
       "name": "amc12a_2003_p25",
@@ -2809,8 +2819,8 @@
       "split": "valid",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:universal_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "amc12b_2003_p17",
@@ -2872,9 +2882,9 @@
       "name": "imo_1962_p4",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_embedded",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_embedded"
     },
     {
       "name": "imo_1964_p1_1",
@@ -2929,8 +2939,8 @@
       "split": "valid",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:existential_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "imo_1974_p5",
@@ -2976,25 +2986,25 @@
       "name": "imo_1987_p4",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "unsupported_symbol:f",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "unsupported_symbol:f"
     },
     {
       "name": "imo_1987_p6",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "universal_quantifier",
+      "goal_reason": "nat_monus_no_head",
       "full_ok": false,
-      "full_reason": "universal_quantifier"
+      "full_reason": "nat_monus_no_head"
     },
     {
       "name": "imo_1988_p6",
       "split": "valid",
-      "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_ok": true,
+      "goal_reason": null,
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "hyp:divides_no_head"
     },
     {
       "name": "imo_1990_p3",
@@ -3008,9 +3018,9 @@
       "name": "imo_1993_p5",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "existential_quantifier",
+      "goal_reason": "quantifier_function_binder",
       "full_ok": false,
-      "full_reason": "existential_quantifier"
+      "full_reason": "quantifier_function_binder"
     },
     {
       "name": "imo_2006_p6",
@@ -3169,8 +3179,8 @@
       "split": "valid",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:universal_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "mathd_algebra_131",
@@ -3193,8 +3203,8 @@
       "split": "valid",
       "goal_ok": true,
       "goal_reason": null,
-      "full_ok": false,
-      "full_reason": "hyp:universal_quantifier"
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "mathd_algebra_144",
@@ -4136,9 +4146,9 @@
       "name": "numbertheory_aneqprodakp4_anmsqrtanp1eq2",
       "split": "valid",
       "goal_ok": false,
-      "goal_reason": "universal_quantifier",
+      "goal_reason": "nat_monus_no_head",
       "full_ok": false,
-      "full_reason": "universal_quantifier"
+      "full_reason": "nat_monus_no_head"
     },
     {
       "name": "numbertheory_nckeqnm1ckpnm1ckm1",

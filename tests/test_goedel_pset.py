@@ -378,5 +378,159 @@ class CarrierSignalLocality(unittest.TestCase):
         self.assertFalse(igp._carrier_residual(st2))
 
 
+class QuantifierHeads(unittest.TestCase):
+    """v0.10: the FORALL/EXISTS binder heads. A quantifier PREFIX over a
+    numeric domain is extracted before every other check; everything else
+    keeps a precise label. Carrier honesty is segment-local in BOTH
+    directions, untyped binders take Lean's ℕ default, shadowing is refused,
+    and the two audit rows the 1.73M run surfaced are pinned here."""
+
+    def _mk(self, goal, vars=(), hyps=(), fn=False, **flags):
+        return {
+            "name": "t", "goal": goal, "value_vars": list(vars),
+            "hyps": list(hyps), "fn_unknown": fn, "domain_vars": {}, **flags,
+        }
+
+    # ---- supported prefix shapes ------------------------------------------
+    def test_typed_prefix_chains_cover(self) -> None:
+        for goal in (
+            "∀ x : ℝ, x^2 ≥ 0",
+            "∃ x : ℝ, x^2 = 2 ∧ x > 0",
+            "∀ x y : ℝ, x * y = y * x",
+            "∀ x : ℝ, ∀ y : ℝ, x + y = y + x",
+            "∀ (x : ℝ) (hx : x > 0), x^2 > 0",
+            "∀ ⦃a b : ℕ⦄, a + b = b + a",
+            "∀ x : ℕ, Even (2 * x)",
+        ):
+            r = gc.classify(self._mk(goal))
+            self.assertTrue(r["full_ok"], (goal, r["full_reason"]))
+
+    def test_bounded_binder_desugars_like_lean(self) -> None:
+        # ∀ x > 0, P  ==  ∀ x, x > 0 → P; the bound is a checked conjunct
+        r = gc.classify(self._mk("∀ ε > 0, ∃ δ > 0, δ < ε"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_untyped_binder_defaults_to_nat_carrier(self) -> None:
+        # Lean's elaboration defaults the binder to ℕ absent a field signal:
+        # `1/x` IS Nat.div as formalized, and the claim stays a carrier gap.
+        r = gc.classify(self._mk("∀ x > 0, x + 1/x ≥ 2"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+        # a segment-local field signal lifts the default
+        r = gc.classify(self._mk("∀ x > (0 : ℝ), x / 2 < x"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_negation_wrapped_chain_is_neg_composition(self) -> None:
+        # NEG∘EXISTS is exactly what the quantifier De Morgan nodes state.
+        r = gc.classify(self._mk("¬ (∃ k : ℕ, n = 2 * k)", vars=("n",),
+                                 has_nat_carrier=True))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+        # ... and the honest refusal inside: monus over ℕ stays a gap
+        r = gc.classify(self._mk("¬∃ x y : ℕ, 7^x - 3^y = 4"))
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+
+    def test_exists_unique_rides_the_expansion(self) -> None:
+        # ∃! desugars to its ExistsUnique expansion (carried heads only),
+        # grounded by logic.quantification.unique_existence_expansion.
+        r = gc.classify(self._mk("∃! x : ℝ, 2*x = 6"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_quantified_hypothesis_unblocks_full_statement(self) -> None:
+        r = gc.classify(self._mk("x = 3", vars=("x", "n"),
+                                 hyps=["∃ k : ℕ, n = 2 * k"],
+                                 has_nat_carrier=True))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    # ---- carrier honesty, segment-local in BOTH directions ----------------
+    def test_goal_field_binder_does_not_shield_hyp_nat_division(self) -> None:
+        r = gc.classify(self._mk("a / 2 = 3", vars=("a",),
+                                 hyps=["∃ x : ℝ, x = 1"],
+                                 has_nat_carrier=True))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_hyp_nat_binder_does_not_gap_the_goal(self) -> None:
+        r = gc.classify(self._mk("a = 3", vars=("a",),
+                                 hyps=["∀ n : ℕ, n ≥ 0"]))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_quantifier_nat_binder_gaps_its_own_segment(self) -> None:
+        r = gc.classify(self._mk("∀ n : ℕ, n - 1 ≤ n"))
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+        r = gc.classify(self._mk("∀ n : ℤ, n - 1 ≤ n"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_shadowed_binder_refused_precisely(self) -> None:
+        # per-statement carrier flags cannot express two carriers for one
+        # name, so re-binding an outer variable is refused, not guessed at.
+        r = gc.classify(self._mk("∀ y : ℝ, y ≥ 0", vars=("y",)))
+        self.assertEqual(r["goal_reason"], "quantifier_shadowed_binder")
+
+    # ---- precise labels for what stays out of reach -----------------------
+    def test_unreachable_shapes_keep_precise_labels(self) -> None:
+        for goal, label in (
+            ("(∀ x : ℝ, x = x) ∧ (∃ y : ℝ, y = 2)", "quantifier_embedded"),
+            ("∀ x : ℝ, (∃ y : ℝ, y > x) → x < x + 1", "quantifier_embedded"),
+            ("∀ f : ℝ → ℝ, f 0 = 0", "quantifier_function_binder"),
+            ("∃ q : ℕ → (ℝ × ℝ), q = q", "quantifier_function_binder"),
+            ("∀ S : Finset ℕ, S.card ≥ 0", "set_or_finset"),
+            ("∀ x ∈ Finset.range 5, x < 5", "set_or_finset"),
+            ("∀ x ∈ Set.Icc (-3 : ℝ) (-1), x ≤ 0", "set_or_finset"),
+            ("∃ B ⊆ A, B = B", "set_or_finset"),
+            ("∀ z : ℂ, z = z", "complex_number"),
+            ("∀ p : Prop, p ∨ ¬p", "quantifier_over_sort"),
+            ("∃ p : ℕ × ℕ, p = p", "vector_or_module_op"),
+            ("∃ x : ℝ,", "quantifier_malformed"),
+        ):
+            r = gc.classify(self._mk(goal, vars=("A",)))
+            self.assertEqual(r["goal_reason"], label, goal)
+
+    def test_quantified_let_rhs_is_embedded(self) -> None:
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let P := ∀ k : ℕ, k ≥ 0\n  1 = 1 := by sorry",
+        )
+        self.assertEqual(gc.classify(st)["goal_reason"], "quantifier_embedded")
+
+    # ---- the two audit rows the 1.73M run surfaced ------------------------
+    def test_star_operator_is_uninterpreted_notation(self) -> None:
+        # Goedel-Pset-91093: `2 ★ (2 ★ x)` — the ★ glyph is invisible to the
+        # identifier scan, the same class as `⋆` and the section dot.
+        r = gc.classify(self._mk("∃! x : ℚ, (2 ★ (2 ★ x)) = (1 ★ x) ∧ x = 21/20"))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "uninterpreted_notation")
+
+    def test_carrier_audit_sees_quantifier_field_binder(self) -> None:
+        # Goedel-Pset-1326754: `∃ (last : Rat), last = 1 /. 2` under an ℕ
+        # theorem binder. The segment's own binder declares the field carrier,
+        # so the audit must not flag the cover ...
+        import ingest_goedel_pset as igp
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (n : ℕ) (h : n ≥ 3) :\n"
+            "  ∃ (last : Rat), last = 1 /. 2 := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertTrue(r["full_ok"], r["full_reason"])
+        self.assertFalse(igp._carrier_residual(st))
+        # ... while a ℕ-quantified division would still be one if it were
+        # ever covered (the audit stays able to see the class it guards).
+        st2 = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (n : ℕ) :\n  ∃ k : ℕ, k = n / 2 := by sorry",
+        )
+        self.assertTrue(igp._carrier_residual(st2))
+
+    def test_audit_normalizer_keeps_factorial_and_set_braces_foreign(self) -> None:
+        import ingest_goedel_pset as igp
+        # ∃! and binder braces normalize; a bare factorial `!` and set-builder
+        # braces (with `|`) must still read as foreign glyphs.
+        self.assertFalse(set(igp._audit_normalize("∃! x : ℚ, x = 1")) - igp._ALLOWED)
+        self.assertFalse(set(igp._audit_normalize("∀ ⦃a b : ℕ⦄, a = b")) - igp._ALLOWED)
+        self.assertFalse(set(igp._audit_normalize("∀ {a : ℕ}, a = a")) - igp._ALLOWED)
+        self.assertTrue(set(igp._audit_normalize("n ! = 6")) - igp._ALLOWED)
+        self.assertTrue(
+            set(igp._audit_normalize("∀ x ∈ {y : ℕ | y > 0}, x > 0")) - igp._ALLOWED)
+
+
 if __name__ == "__main__":
     unittest.main()

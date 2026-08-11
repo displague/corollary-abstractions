@@ -218,11 +218,15 @@ def build_coverage(doc: dict) -> dict:
                 "SQRT(real.sqrt) LOG(real.log) EXP(real.exp) SIN COS TAN",
                 "predicates EVEN ODD PRIME IRRATIONAL (arity 1, bare application)",
                 "prop constants TRUTH FALSITY; let-bindings as definitional =",
+                "quantifier PREFIX chains FORALL(∀) EXISTS(∃) over numeric domains "
+                "(bounded/untyped binders ℕ-defaulted, ¬-wrappers, ∃! via its "
+                "ExistsUnique expansion)",
             ],
             "explicit_gaps_no_head_in_corpus": [
                 "modulo(%, [MOD n])", "divides(∣)", "absolute-value/norm(|·|, ∥·∥)",
                 "tuple/pair constructor", "gcd/lcm", "big operators(∑ ∏)",
-                "quantifiers(∀ ∃) in goal", "unknown-function slot",
+                "quantifiers in NON-prefix position (embedded in ∧/∨/→/↔, in a let "
+                "RHS)", "quantification over functions/sets/structures/sorts", "unknown-function slot",
                 "coprime(2-ary)", "Function.Injective/Surjective, Monotone, …",
             ],
             "supported_heads_verified": "each supported head has a corresponding node "

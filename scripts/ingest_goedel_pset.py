@@ -43,9 +43,15 @@ COVERAGE_PATH = REPO_ROOT / "experiments" / "goedel_pset_coverage.json"
 MANIFEST_SOURCE_ID = "hf-goedel-pset-v1"
 
 # Whitelist for the covered-set foreign-glyph audit (matches the committed tests).
+# v0.10 quantifier slice: ∀ ∃ and the binder comma are now grammar glyphs (a
+# covered `∀ x : ℝ, ...` carries all three). `!` is NOT whitelisted — only the
+# two-character token `∃!` is, via the targeted pre-strip in
+# `_has_foreign_glyph` — so a stray factorial `!` in a covered row still trips
+# the audit. Braces (implicit binders `{x : ℝ}`) stay OUTSIDE the whitelist on
+# purpose: if a covered row ever carries them the audit should say so first.
 _ALLOWED = set(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "+-*/^=<>≤≥≠∧∨¬→↔() .:_'↑ℝℕℤℚπ√"
+    "+-*/^=<>≤≥≠∧∨¬→↔() .:_'↑ℝℕℤℚπ√∀∃,"
 )
 _ALLOWED |= {chr(c) for c in range(0x2080, 0x209D)}  # subscripts
 _ALLOWED |= {chr(c) for c in range(0x2070, 0x2080)}  # superscripts
@@ -80,9 +86,25 @@ def _load_manifest_source() -> dict:
     raise KeyError(f"manifest source `{MANIFEST_SOURCE_ID}` not found")
 
 
+# Implicit binder groups directly after a quantifier (`∀ {x y : ℝ},`) are the
+# same quantification as explicit ones; their braces become parens for the
+# glyph audit ONLY in that position, and only when no set-builder `|` is
+# inside — a brace anywhere else in a covered row still trips the audit.
+_IMPLICIT_BINDER_RE = re.compile(r"([∀∃]\s*)\{([^{}|]*)\}")
+
+
+def _audit_normalize(txt: str) -> str:
+    # `∃!` is the unique-existence token (covered via its ExistsUnique
+    # expansion); a bare `!` is factorial and must keep tripping the audit.
+    # Strict-implicit brackets ⦃⦄ are binder brackets and NOTHING else in
+    # Lean, so they normalize to parens unconditionally (32 realized covers).
+    txt = txt.replace("∃!", "∃").replace("⦃", "(").replace("⦄", ")")
+    return _IMPLICIT_BINDER_RE.sub(r"\1(\2)", txt)
+
+
 def _has_foreign_glyph(stmt: dict) -> bool:
     for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
-        if set(txt) - _ALLOWED:
+        if set(_audit_normalize(txt)) - _ALLOWED:
             return True
     return False
 
@@ -94,12 +116,24 @@ def _carrier_residual(stmt: dict) -> bool:
     SEGMENT-LOCAL, like the classifier's own carrier rule: a field signal in one
     segment must not excuse a `/`/`⁻¹` in another. (The earlier concatenated
     form was blind to exactly the cross-segment shielding the adversarial
-    review caught, so it could never flag the class it existed to catch.)"""
+    review caught, so it could never flag the class it existed to catch.)
+
+    Quantifier-aware since the v0.10 slice: a segment's own binder can declare
+    the field carrier (`∃ last : Rat, last = 1 /. 2` under an ℕ theorem
+    binder — the audit's first hit). The prefix is re-parsed with the shared
+    extractor so the audit sees the same segmentation the classifier saw, but
+    the carrier VERDICT below stays the audit's own independent regex logic."""
     if stmt.get("has_field_carrier"):
         return False
     if not (stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")):
         return False
     for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
+        q = gc.extract_quantifier_prefix(txt)
+        if q is not None and q[0] == "ok":
+            _, check_text, _names, carriers = q
+            if "field" in carriers:
+                continue  # the segment's own binder declares the field carrier
+            txt = check_text
         if gc._FIELD_SIGNAL_RE.search(txt):
             continue
         if "/" in txt or "⁻¹" in txt or _FRAC_EXP_RE.search(txt):

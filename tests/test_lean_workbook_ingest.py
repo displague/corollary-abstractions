@@ -195,8 +195,9 @@ class CommittedArtifacts(unittest.TestCase):
         byname = {s["name"]: s for s in self.ext["statements"]}
         allowed = set(
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "+-*/^=<>≤≥≠∧∨¬→↔() .:_'↑ℝℕℤℚπ√"
-        )
+            "+-*/^=<>≤≥≠∧∨¬→↔() .:_'↑ℝℕℤℚπ√∀∃,"
+        )  # v0.10: ∀ ∃ and the binder comma are grammar glyphs; `∃!` is
+        # pre-stripped below so a bare factorial `!` still trips the audit.
         allowed |= {chr(c) for c in range(0x2080, 0x209D)}  # subscripts
         allowed |= {chr(c) for c in range(0x2070, 0x2080)}  # superscripts
         allowed |= set("¹²³⁄")
@@ -205,7 +206,9 @@ class CommittedArtifacts(unittest.TestCase):
         for name in self.cov["covered_full_statement_names"]:
             s = byname[name]
             for txt in [s["goal"]] + s["hyps"]:
-                bad = set(txt) - allowed
+                norm = re.sub(r"([∀∃]\s*)\{([^{}|]*)\}", r"\1(\2)",
+                              txt.replace("∃!", "∃"))
+                bad = set(norm) - allowed
                 if bad:
                     offenders.append((name, "".join(sorted(bad))))
                     break

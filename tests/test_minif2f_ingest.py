@@ -236,6 +236,22 @@ class CorpusHeadProvenance(unittest.TestCase):
         for const in ("TRUTH", "FALSITY"):
             self.assertIn(const, templates, f"claimed constant {const} absent from data/")
 
+    def test_binder_heads_actually_appear(self) -> None:
+        # v0.10: the quantifier slice — FORALL/EXISTS are carried by
+        # data/logic's quantification laws and data/number_theory's witness
+        # definitions. Same rule, verified node-by-node against data/.
+        templates = self._all_templates()
+        for head in ("FORALL(", "EXISTS("):
+            self.assertIn(head, templates, f"claimed head {head} absent from data/")
+        # the ∃!-desugar is grounded by the authored expansion node, and the
+        # witness definitions tie EXISTS to the predicate heads:
+        for tpl in (
+            "EXISTS(VAR1, MEET(PRED(VAR1), FORALL(VAR2, IMPLIES(PRED(VAR2), VAR2 = VAR1))))",
+            "EVEN(INT1) = EXISTS(INT2, INT1 = 2 * INT2)",
+            "ODD(INT1) = EXISTS(INT2, INT1 = 2 * INT2 + 1)",
+        ):
+            self.assertIn(tpl, templates, f"grounding template missing: {tpl}")
+
     def test_no_covered_statement_relies_on_an_unverified_head(self) -> None:
         # % and ∣ are gaps: no covered statement may contain them.
         ext = json.loads(ing.EXTRACT_PATH.read_text(encoding="utf-8"))
@@ -281,15 +297,19 @@ class CommittedArtifacts(unittest.TestCase):
         ext = json.loads(ing.EXTRACT_PATH.read_text(encoding="utf-8"))
         byname = {s["name"]: s for s in ext["statements"]}
         cov = json.loads(ing.COVERAGE_PATH.read_text(encoding="utf-8"))
+        # v0.10 quantifier slice: ∀ ∃ and the binder comma are grammar glyphs;
+        # `∃!` is pre-stripped as a token so a bare factorial `!` still trips.
         allowed = set(
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "+-*/^=<>≤≥≠∧∨¬→↔() .:↑ℝℕℤℚπ⁻¹²³⁰⁴⁵⁶⁷⁸⁹"
+            "+-*/^=<>≤≥≠∧∨¬→↔() .:↑ℝℕℤℚπ⁻¹²³⁰⁴⁵⁶⁷⁸⁹∀∃,"
         ) | {chr(c) for c in range(0x2080, 0x208A)}  # subscripts ₀-₉
         offenders = []
         for name in cov["covered_full_statement_names"]:
             s = byname[name]
             for txt in [s["goal"]] + s["hyps"]:
-                bad = set(txt) - allowed
+                norm = re.sub(r"([∀∃]\s*)\{([^{}|]*)\}", r"\1(\2)",
+                              txt.replace("∃!", "∃"))
+                bad = set(norm) - allowed
                 if bad:
                     offenders.append((name, "".join(sorted(bad))))
         self.assertEqual(offenders, [], f"covered statements with foreign glyphs: {offenders[:5]}")
