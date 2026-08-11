@@ -1,3 +1,18 @@
+> **CLOSED at v0.9.0.** See [RELEASE-v0.9.0.md](RELEASE-v0.9.0.md). Where each
+> item went:
+> - **Item 1 (ingestion) — SHIPPED** as the honest grammar-coverage measurement
+>   its own acceptance clause allows (grammar reach is the bottleneck): three
+>   pinned sources measured — miniF2F 29.7%, Lean-workbook 64.1%, Goedel-Pset-v1
+>   32.8% @ 1.73M. Its *authoring* half carried → [ROADMAP-v0.10.md](ROADMAP-v0.10.md) item 4.
+> - **`verified_by`-grounded ingestion — SHIPPED AS A NEGATIVE:** architecturally
+>   blocked (offline, propositional-only verification; no Lean toolchain). The wall
+>   is now precisely located; the verifier that climbs it is v0.10 item 2.
+> - **Item 2 (programming) → v0.10 item 3.** **Item 3 (harness session) → v0.10
+>   item 5.** **Item 4 (benchmark) → v0.10 item 6.** **Item 5 (carried lanes) →
+>   v0.10 item 7.** **Item 6 (parked rungs)** remain parked. **Item 7 (governance)**
+>   carries forward unchanged.
+> - The grammar-extension backlog the measurement produced is v0.10 item 1.
+
 # v0.9 roadmap — scale and code: break the closed world
 
 v0.8 closed the lanes v0.7 left open and opened the one it deferred: the

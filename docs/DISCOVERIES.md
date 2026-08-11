@@ -13,6 +13,45 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The honest reach of the corpus grammar on uncontrolled formal math is about
+  a third — measured, not asserted (v0.9).** A shared coverage instrument
+  (`scripts/grammar_coverage.py`) reduced three real, digest-pinned Lean sources
+  to head-algebra skeletons: miniF2F 29.7%, Lean-workbook 64.1%, Goedel-Pset-v1
+  32.8% at 1.73M statements (full-statement, the conditional-node fraction). The
+  two competition/olympiad-derived sources land near 30%; the one curated
+  inequality set (64%) is the outlier. The untranslatable remainder is a
+  prioritized, three-source-confirmed grammar-extension backlog: a
+  relational/predicate head (the single largest 1.73M gap, `no_relation_in_goal`
+  at 22%), a quantifier/binder head, a first-class function slot, indexed
+  aggregation, and a carrier-honest number field. See
+  `experiments/ANALYSIS.md` §§ grammar-coverage. Status: **empirical** (a
+  measurement, reproducible byte-for-byte from the committed extracts / pinned
+  parquets).
+
+- **"The corpus carries head X" must be verified node-by-node, and against the
+  actual operation — not the surface symbol (v0.9).** Independent adversarial
+  review found the coverage classifier over-counting three separate ways, each
+  corrected downward: it claimed `%`/`∣` as supported heads the corpus does not
+  have (the only `MOD` in `data/` is morphology's linguistic *modifier*); it read
+  `/` and `-` over ℕ/ℤ as real division/subtraction when they are `Nat.div`/
+  `Int.div` (floor) and monus, so trivial statements like `(1 + 1/n)^n < 3` (over
+  ℕ, just `1 < 3`) counted covered; and it was arity-blind to bare `log`, so a
+  two-argument `log b x` (base-b log) passed with the same token set as
+  `Real.log x`. The reusable rule: a supported head is a claim to check against
+  the corpus and against the operation's real semantics under its carrier, never
+  an assertion from the surface glyph. Status: **reference** (a methodology
+  correction, with regression tests).
+
+- **Offline, propositional-only verification cannot ground an ingested arithmetic
+  `verified_by` (v0.9).** Verification in this repo is a manifest lookup plus a
+  parse of a committed Lean transition-row artifact — no Lean toolchain — and the
+  correspondence rung translates only the propositional fragment (not/and/or/
+  implies over `Prop`). Ingested Lean-workbook / Goedel-Pset goals are arithmetic,
+  hence UNTRANSLATABLE, so an ingested arithmetic theorem cannot earn a
+  `verified_by` today. This is why v0.9 authored no `verified_by`-bridged nodes;
+  building the arithmetic verifier is the precise, located wall v0.10 climbs.
+  Status: **reference** (an architectural boundary, not a defect).
+
 - **A digest supplied by the claimant is a checksum, not a trust root; a
   post-hoc digest is detection, not containment.** The first PROVEN-WRITE
   implementation executed candidate Python in a scratch cwd, screened obvious
