@@ -282,10 +282,12 @@ class PredicateHeads(unittest.TestCase):
 class CarrierSignalLocality(unittest.TestCase):
     """Review-caught over-count (v0.10 item 1 cont. adversarial review): the
     field signal computed over the WHOLE statement let a `: ℚ` ascription in
-    one segment legitimize ℕ floor-division/monus in a sibling segment. 3,644
-    covered Goedel-Pset rows fell to this (1,167 already inside the old
-    baseline via goal↔hyp shielding). The signal is now segment-local; these
-    two tests are distilled from the review's evidence rows."""
+    one segment legitimize ℕ floor-division/monus in a sibling segment. 6,066
+    covered Goedel-Pset rows fell to this under the uniform segment-local fix
+    (1,146 already inside the old baseline via goal↔hyp shielding; the
+    review's own laxer segment notion had estimated 3,644). The signal is now
+    segment-local; these two tests are distilled from the review's evidence
+    rows."""
 
     def test_monus_in_nat_let_not_shielded_by_rat_cast_in_body(self) -> None:
         # Goedel-Pset-413727: the goal body carries `(w : ℚ)`, but the monus
