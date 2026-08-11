@@ -1,1 +1,3 @@
 prover/proof-artifact-manifest.json text eol=lf
+data_sources/derived/minif2f/statements.json text eol=lf
+experiments/minif2f_coverage.json text eol=lf

@@ -195,12 +195,33 @@
       "id": "git-openai-minif2f",
       "group": "ingest-formal",
       "url": "https://github.com/openai/miniF2F",
+      "git_commit": "4e433ff5cadff23f9911a2bb5bbab2d351ce5554",
+      "raw_url_template": "https://raw.githubusercontent.com/openai/miniF2F/4e433ff5cadff23f9911a2bb5bbab2d351ce5554/lean/src/{filename}",
       "filename": null,
       "sha256": null,
       "size_bytes": null,
       "access": "git",
-      "license": "see repo LICENSE (verify; repo recently archived)",
-      "purpose": "Formalized competition problems (Lean/Isabelle/HOL Light/Metamath). Prime first ingestion target for v0.9 item 1 — maps to statement nodes with real verified_by links. Pin the commit SHA when cloned."
+      "license": "Apache License 2.0 (lean/LICENSE, sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30). Permissive: a derived statement extract may be committed with attribution.",
+      "verified": "2026-08-10",
+      "purpose": "Formalized competition problems (Lean 3 / Isabelle / HOL Light / Metamath). Prime first ingestion target for v0.9 item 1. The Lean-3 statement files are the digest-pinned source for scripts/ingest_minif2f.py; the deterministic extract lands in data_sources/derived/minif2f/statements.json (committed) and the grammar-coverage measurement in experiments/minif2f_coverage.json.",
+      "files": [
+        {
+          "filename": "test.lean",
+          "path": "lean/src/test.lean",
+          "sha256": "fe8830147623fffbb7f55f878de363fdb2f9738c269b68ab11b31f6e3d59c5fb",
+          "size_bytes": 51399,
+          "theorem_count": 244,
+          "split": "test"
+        },
+        {
+          "filename": "valid.lean",
+          "path": "lean/src/valid.lean",
+          "sha256": "46a8162d75ca3350eaf7843c2af16eb90c15553c70df34e8d2f636547ca26028",
+          "size_bytes": 47189,
+          "theorem_count": 244,
+          "split": "valid"
+        }
+      ]
     }
   ],
   "reference_papers": [

@@ -1,0 +1,6593 @@
+{
+  "generated_by": "scripts/ingest_minif2f.py extract",
+  "source": {
+    "id": "git-openai-minif2f",
+    "url": "https://github.com/openai/miniF2F",
+    "git_commit": "4e433ff5cadff23f9911a2bb5bbab2d351ce5554",
+    "license": "Apache License 2.0 (lean/LICENSE, sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30). Permissive: a derived statement extract may be committed with attribution.",
+    "attribution": "miniF2F (c) 2021 OpenAI, released under Apache License 2.0. Statement signatures extracted; proofs omitted.",
+    "files": [
+      {
+        "filename": "test.lean",
+        "sha256": "fe8830147623fffbb7f55f878de363fdb2f9738c269b68ab11b31f6e3d59c5fb",
+        "split": "test",
+        "theorem_count": 244
+      },
+      {
+        "filename": "valid.lean",
+        "sha256": "46a8162d75ca3350eaf7843c2af16eb90c15553c70df34e8d2f636547ca26028",
+        "split": "valid",
+        "theorem_count": 244
+      }
+    ]
+  },
+  "statement_count": 488,
+  "statements": [
+    {
+      "name": "aime_1983_p1",
+      "value_vars": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 < x ∧ 1 < y ∧ 1 < z",
+        "0 ≤ w",
+        "real.log w / real.log x = 24",
+        "real.log w / real.log y = 40",
+        "real.log w / real.log (x * y * z) = 12"
+      ],
+      "goal": "real.log w / real.log z = 60",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1983_p2",
+      "value_vars": [
+        "x",
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < p ∧ p < 15",
+        "p ≤ x ∧ x ≤ 15",
+        "f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)"
+      ],
+      "goal": "15 ≤ f x",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1983_p3",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = (x^2 + (18 * x + 30) - 2 * real.sqrt (x^2 + (18 * x + 45)))",
+        "fintype (f⁻¹' {0})"
+      ],
+      "goal": "∏ x in (f⁻¹' {0}).to_finset, x = 20",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1984_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, u (n + 1) = u n + 1",
+        "∑ k in finset.range 98, u k.succ = 137"
+      ],
+      "goal": "∑ k in finset.range 49, u (2 * k.succ) = 93",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1984_p7",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, 1000 ≤ n → f n = n - 3",
+        "∀ n, n < 1000 → f n = f (f (n + 5))"
+      ],
+      "goal": "f 84 = 997",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1987_p5",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "y^2 + 3 * (x^2 * y^2) = 30 * x^2 + 517"
+      ],
+      "goal": "3 * (x^2 * y^2) = 588",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1988_p8",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, 0 < x → f x x = x",
+        "∀ x y, (0 < x ∧ 0 < y) → f x y = f y x",
+        "∀ x y, (0 < x ∧ 0 < y) → (↑x + ↑y) * f x y = y * (f x (x + y))"
+      ],
+      "goal": "f 14 52 = 364",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1989_p8",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a + 4 * b + 9 * c + 16 * d + 25 * e + 36 * f + 49 * g = 1",
+        "4 * a + 9 * b + 16 * c + 25 * d + 36 * e + 49 * f + 64 * g = 12",
+        "9 * a + 16 * b + 25 * c + 36 * d + 49 * e + 64 * f + 81 * g = 123"
+      ],
+      "goal": "16 * a + 25 * b + 36 * c + 49 * d + 64 * e + 81 * f + 100 * g = 334",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1990_p15",
+      "value_vars": [
+        "a",
+        "b",
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a * x + b * y = 3",
+        "a * x^2 + b * y^2 = 7",
+        "a * x^3 + b * y^3 = 16",
+        "a * x^4 + b * y^4 = 42"
+      ],
+      "goal": "a * x^5 + b * y^5 = 20",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1990_p4",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x",
+        "x^2 - 10 * x - 29 ≠ 0",
+        "x^2 - 10 * x - 45 ≠ 0",
+        "x^2 - 10 * x - 69 ≠ 0",
+        "1 / (x^2 - 10 * x - 29) + 1 / (x^2 - 10 * x - 45) - 2 / (x^2 - 10 * x - 69) = 0"
+      ],
+      "goal": "x = 13",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1991_p9",
+      "value_vars": [
+        "x",
+        "m"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 / real.cos x + real.tan x = 22 / 7",
+        "1 / real.sin x + 1 / real.tan x = m"
+      ],
+      "goal": "↑m.denom + m.num = 44",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1994_p3",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "f x + f (x-1) = x^2",
+        "f 19 = 94"
+      ],
+      "goal": "f (94) % 1000 = 561",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "aime_1995_p7",
+      "value_vars": [
+        "k",
+        "m",
+        "n",
+        "t"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < k ∧ 0 < m ∧ 0 < n",
+        "nat.gcd m n = 1",
+        "(1 + real.sin t) * (1 + real.cos t) = 5/4",
+        "(1 - real.sin t) * (1- real.cos t) = m/n - real.sqrt k"
+      ],
+      "goal": "k + m + n = 27",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1997_p9",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a",
+        "1 / a - int.floor (1 / a) = a^2 - int.floor (a^2)",
+        "2 < a^2",
+        "a^2 < 3"
+      ],
+      "goal": "a^12 - 144 * (1 / a) = 233",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aime_1999_p11",
+      "value_vars": [
+        "m"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∑ k in finset.Icc (1 : ℕ) 35, real.sin (5 * k * π / 180) = real.tan (m * π / 180)",
+        "(m.denom:ℝ) / m.num < 90"
+      ],
+      "goal": "↑m.denom + m.num = 177",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7",
+      "value_vars": [],
+      "domain_vars": {
+        "f": "complex_number",
+        "z": "complex_number"
+      },
+      "hyps": [
+        "f + 3*z = 11",
+        "3*(f - 1) - 5*z = -68"
+      ],
+      "goal": "f = -10 ∧ z = 7",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_9onxpypzleqsum2onxpy",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y ∧ 0 < z"
+      ],
+      "goal": "9 / (x + y + z) ≤ 2 / (x + y) + 2 / (y + z) + 2 / (z + x)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_abpbcpcageq3_sumaonsqrtapbgeq3onsqrt2",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "3 ≤ a * b + b * c + c * a"
+      ],
+      "goal": "3 / real.sqrt 2 ≤ a / real.sqrt (a + b) + b / real.sqrt (b + c) + c / real.sqrt (c + a)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_absapbon1pabsapbleqsumabsaon1pabsa",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "abs (a + b) / (1 + abs (a + b)) ≤ abs a / (1 + abs a) + abs b / (1 + abs b)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "abs (x - 1) + abs x + abs (x + 1) = x + 2"
+      ],
+      "goal": "0 ≤ x ∧ x ≤ 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_amgm_sum1toneqn_prod1tonleq1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∑ x in finset.range n, a x = n"
+      ],
+      "goal": "∏ x in finset.range n, a x ≤ 1",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "algebra_amgm_sumasqdivbgeqsuma",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d"
+      ],
+      "goal": "a^2 / b + b^2 / c + c^2 / d + d^2 / a ≥ a + b + c + d",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_apbmpcneq0_aeq0anbeq0anceq0",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < m ∧ 0 < n",
+        "m^3 = 2",
+        "n^3 = 4",
+        "(a:ℝ) + b * m + c * n = 0"
+      ],
+      "goal": "a = 0 ∧ b = 0 ∧ c = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_apbon2pownleqapownpbpowon2",
+      "value_vars": [
+        "a",
+        "b",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "0 < n"
+      ],
+      "goal": "((a + b) / 2)^n ≤ (a^n + b^n) / 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_apbpceq2_abpbcpcaeq1_aleq1on3anbleq1ancleq4on3",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≤ b ∧ b ≤ c",
+        "a + b + c = 2",
+        "a * b + b * c + c * a = 1"
+      ],
+      "goal": "0 ≤ a ∧ a ≤ 1 / 3 ∧ 1 / 3 ≤ b ∧ b ≤ 1 ∧ 1 ≤ c ∧ c ≤ 4 / 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_bleqa_apbon2msqrtableqambsqon8b",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "b ≤ a"
+      ],
+      "goal": "(a + b) / 2 - real.sqrt (a * b) ≤ (a - b)^2 / (8 * b)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
+      "value_vars": [
+        "r"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "r^((1:ℝ) / 3) + 1 / r^((1:ℝ) / 3) = 3"
+      ],
+      "goal": "r^3 + 1 / r^3 = 5778",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_ineq_nto1onlt2m1on",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(n:ℝ)^((1:ℝ) / n) < 2 - 1 / n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_others_exirrpowirrrat",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∃ a b, irrational a ∧ irrational b ∧ ¬ irrational (a^b)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_sqineq_at2malt1",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "a * (2 - a) ≤ 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_sqineq_unitcircatbpabsamblt1",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a^2 + b^2 = 1"
+      ],
+      "goal": "a * b + ∥a - b∥ ≤ 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_sqineq_unitcircatbpamblt1",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a^2 + b^2 = 1"
+      ],
+      "goal": "a * b + (a - b) ≤ 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "algebra_sum1onsqrt2to1onsqrt10000lt198",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in (finset.Icc (2 : ℕ) 10000), (1 / real.sqrt k) < 198",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2000_p1",
+      "value_vars": [
+        "i",
+        "m",
+        "o"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "i ≠ 0 ∧ m ≠ 0 ∧ o ≠ 0",
+        "i*m*o = 2001"
+      ],
+      "goal": "i+m+o ≤ 671",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2000_p12",
+      "value_vars": [
+        "a",
+        "m",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a + m + c = 12"
+      ],
+      "goal": "a*m*c + a*m + m*c + a*c ≤ 112",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2000_p20",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y ∧ 0 < z",
+        "x + 1/y = 4",
+        "y + 1/z = 1",
+        "z + 1/x = 7/3"
+      ],
+      "goal": "x*y*z = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2000_p6",
+      "value_vars": [
+        "p",
+        "q"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime p ∧ nat.prime q",
+        "4 ≤ p ∧ p ≤ 18",
+        "4 ≤ q ∧ q ≤ 18"
+      ],
+      "goal": "↑p * ↑q - (↑p + ↑q) ≠ (194:ℤ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2001_p21",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a * b * c * d = 8!",
+        "a * b + a + b = 524",
+        "b * c + b + c = 146",
+        "c * d + c + d = 104"
+      ],
+      "goal": "↑a - ↑d = (10 : ℤ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12_2001_p5",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "finset.prod (finset.filter (λ x, ¬ even x) (finset.range 10000)) (id : ℕ → ℕ) = (10000!) / ((2^5000) * 5000!)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2002_p13",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "a ≠ b",
+        "abs (a - 1/a) = 1",
+        "abs (b - 1/b) = 1"
+      ],
+      "goal": "a + b = real.sqrt 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2002_p6",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "∃ m, (m > n ∧ ∃ p, m * p ≤ m + p)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2003_p23",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (k : ℕ), k ∈ S ↔ 0 < k ∧ ((k * k) : ℕ) ∣ (∏ i in (finset.Icc 1 9), i!)"
+      ],
+      "goal": "S.card = 672",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2003_p5",
+      "value_vars": [
+        "A",
+        "M",
+        "C"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "A ≤ 9 ∧ M ≤ 9 ∧ C ≤ 9",
+        "nat.of_digits 10 [0,1,C,M,A] + nat.of_digits 10 [2,1,C,M,A] = 123422"
+      ],
+      "goal": "A + M + C = 14",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2008_p25",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, a (n + 1) = real.sqrt 3 * a n - b n",
+        "∀ n, b (n + 1) = real.sqrt 3 * b n + a n",
+        "a 100 = 2",
+        "b 100 = 4"
+      ],
+      "goal": "a 1 + b 1 = 1 / (2^98)",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2009_p6",
+      "value_vars": [
+        "m",
+        "n",
+        "p",
+        "q"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "p = 2 ^ m",
+        "q = 3 ^ n"
+      ],
+      "goal": "p^(2 * n) * (q^m) = 12^(m * n)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2009_p7",
+      "value_vars": [
+        "x",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ m, a (m + 1) - a m = a (m + 2) - a (m + 1)",
+        "a 1 = 2 * x - 3",
+        "a 2 = 5 * x - 11",
+        "a 3 = 3 * x + 1",
+        "a n = 2009"
+      ],
+      "goal": "n = 502",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2013_p4",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(2^2014 + 2^2012) / (2^2014 - 2^2012) = (5:ℝ) / 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2019_p12",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 1 ∧ y ≠ 1",
+        "real.log x / real.log 2 = real.log 16 / real.log y",
+        "x * y = 64"
+      ],
+      "goal": "real.log (x / y) / real.log 2 = 20",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p10",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "real.logb 2 (real.logb 16 n) = real.logb 4 (real.logb 4 n)"
+      ],
+      "goal": "(nat.digits 10 n).sum = 13",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p15",
+      "value_vars": [],
+      "domain_vars": {
+        "a": "complex_number",
+        "b": "complex_number"
+      },
+      "hyps": [
+        "a^3 - 8 = 0",
+        "b^3 - 8 * b^2 - 8 * b + 64 = 0"
+      ],
+      "goal": "complex.abs (a - b) ≤ 2 * real.sqrt 21",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p25",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ ↑⌊x⌋ * (x - ↑⌊x⌋) = ↑a * x ^ 2",
+        "∑ k in S, k = 420"
+      ],
+      "goal": "↑a.denom + a.num = 929",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p4",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 1000 ≤ n ∧ n ≤ 9999 ∧ (∀ (d : ℕ), d ∈ nat.digits 10 n → even d) ∧ 5 ∣ n"
+      ],
+      "goal": "S.card = 100",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p7",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "(a 0)^3 = 1",
+        "(a 1)^3 = 8",
+        "(a 2)^3 = 27",
+        "(a 3)^3 = 64",
+        "(a 4)^3 = 125",
+        "(a 5)^3 = 216",
+        "(a 6)^3 = 343"
+      ],
+      "goal": "↑∑ k in finset.range 7, (6 * (a k)^2) - ↑(2 * ∑ k in finset.range 6, (a k)^2) = (658:ℤ)",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2020_p9",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ 0 ≤ x ∧ x ≤ 2 * real.pi ∧ real.tan (2 * x) = real.cos (x / 2)"
+      ],
+      "goal": "S.card = 5",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p12",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ z, f z = z^6 - 10 * z^5 + a * z^4 + b * z^3 + c * z^2 + d * z + 16",
+        "∀ z, f z = 0 → (z.im = 0 ∧ 0 < z.re ∧ ↑(int.floor z.re) = z.re)"
+      ],
+      "goal": "b = 88",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p14",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (finset.Icc 1 20), (real.logb (5^k) (3^(k^2)))) * (∑ k in (finset.Icc 1 100), (real.logb (9^k) (25^k))) = 21000",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p18",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀x>0, ∀y>0, f (x * y) = f x + f y",
+        "∀p, nat.prime p → f p = p"
+      ],
+      "goal": "f (25 /. 11) < 0",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p19",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ 0 ≤ x ∧ x ≤ real.pi ∧ real.sin (real.pi / 2 * real.cos x) = real.cos (real.pi / 2 * real.sin x)"
+      ],
+      "goal": "S.card = 2",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p22",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^3 + a * x^2 + b * x + c",
+        "f⁻¹' {0} = {real.cos (2 * real.pi / 7), real.cos (4 * real.pi / 7), real.cos (6 * real.pi / 7)}"
+      ],
+      "goal": "a * b * c = 1 / 32",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p25",
+      "value_vars": [
+        "N"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, 0 < n → f n = ((nat.divisors n).card)/(n^((1:ℝ)/3))",
+        "∀ n ≠ N, 0 < n → f n < f N"
+      ],
+      "goal": "(nat.digits 10 N).sum = 9",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p3",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x + y = 17402",
+        "10∣x",
+        "x / 10 = y"
+      ],
+      "goal": "↑x - ↑y = (14238:ℤ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p8",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "d 0 = 0",
+        "d 1 = 0",
+        "d 2 = 1",
+        "∀ n≥3, d n = d (n - 1) + d (n - 3)"
+      ],
+      "goal": "even (d 2021) ∧ odd (d 2022) ∧ even (d 2023)",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12a_2021_p9",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∏ k in finset.range 7, (2^(2^k) + 3^(2^k)) = 3^128 - 2^128",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2002_p19",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "a * (b + c) = 152",
+        "b * (c + a) = 162",
+        "c * (a + b) = 170"
+      ],
+      "goal": "a * b * c = 720",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2002_p2",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x = 4"
+      ],
+      "goal": "(3 * x - 2) * (4 * x + 1) - (3 * x - 2) * (4 * x) + 1 = 11",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2002_p4",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "(1 /. 2 + 1 /. 3 + 1 /. 7 + 1 /. ↑n).denom = 1"
+      ],
+      "goal": "n = 42",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2002_p7",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "b = a + 1",
+        "c = b + 1",
+        "a * b * c = 8 * (a + b + c)"
+      ],
+      "goal": "a^2 + (b^2 + c^2) = 77",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2020_p13",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.sqrt (real.log 6 / real.log 2 + real.log 6 / real.log 3) = real.sqrt (real.log 3 / real.log 2) + real.sqrt (real.log 2 / real.log 3)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2020_p2",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "((100 ^ 2 - 7 ^ 2):ℝ) / (70 ^ 2 - 11 ^ 2) * ((70 - 11) * (70 + 11) / ((100 - 7) * (100 + 7))) = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2020_p21",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 0 < n ∧ (↑n + (1000 : ℝ)) / 70 = int.floor (real.sqrt n)"
+      ],
+      "goal": "S.card = 6",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2020_p22",
+      "value_vars": [
+        "t"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "((2^t - 3 * t) * t) / (4^t) ≤ 1 / 12",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2020_p6",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "9 ≤ n"
+      ],
+      "goal": "∃ (x : ℕ), (x : ℝ)^2 = ((n + 2)! - (n + 1)!) / n!",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℤ), x ∈ S ↔ ↑(abs x) < 3 * real.pi"
+      ],
+      "goal": "S.card = 19",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p13",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ 0 < x ∧ x ≤ 2 * real.pi ∧ 1 - 3 * real.sin x + 5 * real.cos (3 * x) = 0"
+      ],
+      "goal": "S.card = 6",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p18",
+      "value_vars": [],
+      "domain_vars": {
+        "z": "complex_number"
+      },
+      "hyps": [
+        "12 * complex.norm_sq z = 2 * complex.norm_sq (z + 2) + complex.norm_sq (z^2 + 1) + 31"
+      ],
+      "goal": "z + 6 / z = -2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p3",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 + 1 / (1 + 1 / (2 + 2 / (3 + x))) = 144 / 53"
+      ],
+      "goal": "x = 3 / 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p4",
+      "value_vars": [
+        "m",
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < m ∧ 0 < a",
+        "↑m / ↑a = (3:ℝ) / 4"
+      ],
+      "goal": "(84 * ↑m + 70 * ↑a) / (↑m + ↑a) = (76:ℝ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "amc12b_2021_p9",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(real.log 80 / real.log 2) / (real.log 2 / real.log 40) - (real.log 160 / real.log 2) / (real.log 2 / real.log 20) = 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1959_p1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "nat.gcd (21*n + 4) (14*n + 3) = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1960_p2",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 ≤ 1 + 2 * x",
+        "(1 - real.sqrt (1 + 2 * x))^2 ≠ 0",
+        "(4 * x^2) / (1 - real.sqrt (1 + 2*x))^2 < 2*x + 9"
+      ],
+      "goal": "-(1 / 2) ≤ x ∧ x < 45 / 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1962_p2",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 ≤ 3 - x",
+        "0 ≤ x + 1",
+        "1 / 2 < real.sqrt (3 - x) - real.sqrt (x + 1)"
+      ],
+      "goal": "-1 ≤ x ∧ x < 1 - real.sqrt 31 / 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1963_p5",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.cos (π / 7) - real.cos (2 * π / 7) + real.cos (3 * π / 7) = 1 / 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1964_p2",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "c < a + b",
+        "b < a + c",
+        "a < b + c"
+      ],
+      "goal": "a^2 * (b + c - a) + b^2 * (c + a - b) + c^2 * (a + b - c) ≤ 3 * a * b * c",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1965_p2",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a 0 ∧ 0 < a 4 ∧ 0 < a 8",
+        "a 1 < 0 ∧ a 2 < 0",
+        "a 3 < 0 ∧ a 5 < 0",
+        "a 7 < 0 ∧ a 9 < 0",
+        "0 < a 0 + a 1 + a 2",
+        "0 < a 3 + a 4 + a 5",
+        "0 < a 6 + a 7 + a 8",
+        "a 0 * x + a 1 * y + a 2 * z = 0",
+        "a 3 * x + a 4 * y + a 5 * z = 0",
+        "a 6 * x + a 7 * y + a 8 * z = 0"
+      ],
+      "goal": "x = 0 ∧ y = 0 ∧ z = 0",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1968_p5_1",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a",
+        "∀ x, f (x + a) = 1 / 2 + real.sqrt (f x - (f x)^2)"
+      ],
+      "goal": "∃ b > 0, ∀ x, f (x + b) = f x",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1969_p2",
+      "value_vars": [
+        "m",
+        "n",
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < k",
+        "∀ x, y x = ∑ i in finset.range k, ((real.cos (a i + x)) / (2^i))",
+        "y m = 0",
+        "y n = 0"
+      ],
+      "goal": "∃ t : ℤ, m - n = t * π",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1974_p3",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "¬ 5∣∑ k in finset.range n, (nat.choose (2 * n + 1) (2 * k + 1)) * (2^(3 * k))",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1977_p6",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, 0 < f n",
+        "∀ n, 0 < n → f (f n) < f (n + 1)"
+      ],
+      "goal": "∀ n, 0 < n → f n = n",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1981_p6",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ y, f 0 y = y + 1",
+        "∀ x, f (x + 1) 0 = f x 1",
+        "∀ x y, f (x + 1) (y + 1) = f x (f (x + 1) y)"
+      ],
+      "goal": "∀ y, f 4 (y + 1) = 2^(f 4 y + 3) - 3",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1982_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ m n, (0 < m ∧ 0 < n) → f (m + n) - f m - f n = 0 ∨ f (m + n) - f m - f n = 1",
+        "f 2 = 0",
+        "0 < f 3",
+        "f 9999 = 3333"
+      ],
+      "goal": "f 1982 = 660",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1983_p6",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "c < a + b",
+        "b < a + c",
+        "a < b + c"
+      ],
+      "goal": "0 ≤ a^2 * b * (a - b) + b^2 * c * (b - c) + c^2 * a * (c - a)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1984_p6",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "k",
+        "m"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d",
+        "odd a ∧ odd b ∧ odd c ∧ odd d",
+        "a < b ∧ b < c ∧ c < d",
+        "a * d = b * c",
+        "a + d = 2^k",
+        "b + c = 2^m"
+      ],
+      "goal": "a = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1985_p6",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f 1 x = x",
+        "∀ x n, f (n + 1) x = f n x * (f n x + 1 / n)"
+      ],
+      "goal": "∃! a, ∀ n, 0 < n → 0 < f n a ∧ f n a < f (n + 1) a ∧ f (n + 1) a < 1",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_1992_p1",
+      "value_vars": [
+        "p",
+        "q",
+        "r"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 < p ∧ p < q ∧ q < r",
+        "(p - 1) * (q - 1) * (r - 1)∣(p * q * r - 1)"
+      ],
+      "goal": "(p, q, r) = (2, 4, 8) ∨ (p, q, r) = (3, 5, 15)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_1997_p5",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "x^(y^2) = y^x"
+      ],
+      "goal": "(x, y) = (1, 1) ∨ (x, y) = (16, 2) ∨ (x, y) = (27, 3)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_2001_p6",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d",
+        "d < c",
+        "c < b",
+        "b < a",
+        "a * c + b * d = (b + d + a - c) * (b + d - a + c)"
+      ],
+      "goal": "¬ nat.prime (a * b + c * d)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "imo_2007_p6",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∑ x in finset.range 100, ((a (x + 1))^2) = 1"
+      ],
+      "goal": "∑ x in finset.range 99, ((a (x + 1))^2 * a (x + 2)) + (a 100)^2 * a 1 < 12 / 25",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "imo_2019_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∀ a b, f (2 * a) + (2 * f b) = f (f (a + b)) ↔ (∀ z, f z = 0 \\/ ∃ c, ∀ z, f z = 2 * z + c))",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "induction_11div10tonmn1ton",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "11 ∣ (10^n - (-1 : ℤ)^n)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_12dvd4expnp1p20",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "12 ∣ 4^(n+1) + 20",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_1pxpownlt1pnx",
+      "value_vars": [
+        "x",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "-1 < x",
+        "0 < n"
+      ],
+      "goal": "(1 + ↑n*x) ≤ (1 + x)^(n:ℕ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_nfactltnexpnm1ngt3",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 ≤ n"
+      ],
+      "goal": "n! < n^(n - 1)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_pord1p1on2powklt5on2",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "∏ k in finset.Icc 1 n, (1 + (1:ℝ) / 2^k) < 5 / 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_pprime_pdvdapowpma",
+      "value_vars": [
+        "p",
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a",
+        "nat.prime p"
+      ],
+      "goal": "p ∣ (a^p - a)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_prod1p1onk3le3m1onn",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "∏ k in finset.Icc 1 n, (1 + (1:ℝ) / k^3) ≤ (3:ℝ) - 1 / ↑n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "induction_sumkexp3eqsumksq",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in finset.range n, k^3 = (∑ k in finset.range n, k)^2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_107",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x^2 + 8 * x + y^2 - 6 * y = 0"
+      ],
+      "goal": "(x + 4)^2 + (y-3)^2 = 5^2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_113",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "x^2 - 14 * x + 3 ≥ 7^2 - 14 * 7 + 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_114",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a = 8"
+      ],
+      "goal": "(16 * (a^2)^((1:ℝ) / 3))^((1:ℝ) / 3) = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_125",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "5 * x = y",
+        "(↑x - (3:ℤ)) + (y - (3:ℤ)) = 30"
+      ],
+      "goal": "x = 6",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_129",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≠ 0",
+        "8⁻¹ / 4⁻¹ - a⁻¹ = 1"
+      ],
+      "goal": "a = -2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_137",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "↑x + (4:ℝ) / (100:ℝ) * ↑x = 598"
+      ],
+      "goal": "x = 575",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_139",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x≠0, ∀y≠0, s x y = (1/y - 1/x) / (x-y)"
+      ],
+      "goal": "s 3 11 = 1/33",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_141",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(a * b)=180",
+        "2 * (a + b)=54"
+      ],
+      "goal": "(a^2 + b^2) = 369",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_142",
+      "value_vars": [
+        "m",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "m * 7 + b = -1",
+        "m * (-1) + b = 7"
+      ],
+      "goal": "m + b = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_143",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x + 1",
+        "∀ x, g x = x^2 + 3"
+      ],
+      "goal": "f (g 2) = 8",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_148",
+      "value_vars": [
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = c * x^3 - 9 * x + 3",
+        "f 2 = 9"
+      ],
+      "goal": "c = 3",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_153",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n = 1 / 3"
+      ],
+      "goal": "int.floor (10 * n) + int.floor (100 * n) + int.floor (1000 * n) + int.floor (10000 * n) = 3702",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_156",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀t, f t = t^4",
+        "∀t, g t = 5 * t^2 - 6",
+        "f x = g x",
+        "f y = g y",
+        "x^2 < y^2"
+      ],
+      "goal": "y^2 - x^2 = 1",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_158",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "even a",
+        "↑∑ k in finset.range 8, (2 * k + 1) - ↑∑ k in finset.range 5, (a + 2 * k) = (4:ℤ)"
+      ],
+      "goal": "a = 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_160",
+      "value_vars": [
+        "n",
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n + x = 97",
+        "n + 5 * x = 265"
+      ],
+      "goal": "n + 2 * x = 139",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_17",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "real.sqrt (4 + real.sqrt (16 + 16 * a)) + real.sqrt (1 + real.sqrt (1 + a)) = 6"
+      ],
+      "goal": "a = 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_170",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℤ), n ∈ S ↔ abs (n - 2) ≤ 5 + 6 / 10"
+      ],
+      "goal": "S.card = 11",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_171",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀x, f x = 5 * x + 4"
+      ],
+      "goal": "f 1 = 9",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_176",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(x + 1)^2 * x = x^3 + 2 * x^2 + x",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_184",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "(a^2) = 6*b",
+        "(a^2) = 54/b"
+      ],
+      "goal": "a = 3 * nnreal.sqrt 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_188",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "σ.1 2 = σ.2 2"
+      ],
+      "goal": "σ.1 (σ.1 2) = 2",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_196",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ abs (2 - x) = 3"
+      ],
+      "goal": "∑ k in S, k = 4",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_208",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.sqrt 1000000 - 1000000^((1:ℝ)/3) = 900",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_209",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "σ.2 2 = 10",
+        "σ.2 10 = 1",
+        "σ.2 1 = 2"
+      ],
+      "goal": "σ.1 (σ.1 10) = 1",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_215",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ (x + 3)^2 = 121"
+      ],
+      "goal": "∑ k in S, k = -6",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_24",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x / 50 = 40"
+      ],
+      "goal": "x = 2000",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_246",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = a * x^4 - b * x^2 + x + 5",
+        "f (-3) = 2"
+      ],
+      "goal": "f 3 = 8",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_263",
+      "value_vars": [
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 ≤ 19 + 3 * y",
+        "real.sqrt (19 + 3 * y) = 7"
+      ],
+      "goal": "y = 10",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_270",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x ≠ -2, f x = 1 / (x + 2)"
+      ],
+      "goal": "f (f 1) = 3/7",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_275",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "((11:ℝ)^(1 / 4))^(3 * x - 3) = 1 / 5"
+      ],
+      "goal": "((11:ℝ)^(1 / 4))^(6 * x + 2) = 121 / 25",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_276",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x : ℝ, 10 * x^2 - x - 24 = (a * x - 8) * (b * x + 3)"
+      ],
+      "goal": "a + b = 12",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_288",
+      "value_vars": [
+        "x",
+        "y",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x < 0 ∧ y < 0",
+        "abs x = 6",
+        "real.sqrt ((x - 8)^2 + (y - 3)^2) = 15",
+        "real.sqrt (x^2 + y^2) = real.sqrt n"
+      ],
+      "goal": "n = 52",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_289",
+      "value_vars": [
+        "k",
+        "t",
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime m ∧ nat.prime n",
+        "t < k",
+        "(k^2 : ℤ) - m * k + n = 0",
+        "(t^2 : ℤ) - m * t + n = 0"
+      ],
+      "goal": "m^n + n^m + k^t + t^k = 20",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_293",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.sqrt (60 * x) * real.sqrt (12 * x) * real.sqrt (63 * x) = 36 * x * real.sqrt (35 * x)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_296",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "abs (((3491 - 60) * (3491 + 60) - 3491^2):ℤ) = 3600",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_302",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(complex.I / 2)^2 = -(1 / 4)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_304",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "91^2 = 8281",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_313",
+      "value_vars": [],
+      "domain_vars": {
+        "v": "complex_number",
+        "i": "complex_number",
+        "z": "complex_number"
+      },
+      "hyps": [
+        "v = i * z",
+        "v = 1 + complex.I",
+        "z = 2 - complex.I"
+      ],
+      "goal": "i = 1/5 + 3/5 * complex.I",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_314",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n = 11"
+      ],
+      "goal": "(1 / 4)^(n + 1) * 2^(2 * n) = 1 / 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_320",
+      "value_vars": [
+        "x",
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "2 * x^2 = 4 * x + 9",
+        "x = (a + nnreal.sqrt b) / c"
+      ],
+      "goal": "a + b + c = 26",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_329",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * y = x",
+        "2 * x + 5 * y = 11"
+      ],
+      "goal": "x + y = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_33",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0",
+        "2 * x = 5 * y",
+        "7 * y = 10 * z"
+      ],
+      "goal": "z / x = 7 / 25",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_332",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(x + y) / 2 = 7",
+        "real.sqrt (x * y) = real.sqrt 19"
+      ],
+      "goal": "x^2 * y^2 = 158",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_338",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * a + b + c = -3",
+        "a + 3 * b + c = 9",
+        "a + b + 3 * c = 19"
+      ],
+      "goal": "a * b * c = -56",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_342",
+      "value_vars": [
+        "a",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∑ k in (finset.range 5), (a + k * d) = 70",
+        "∑ k in (finset.range 10), (a + k * d) = 210"
+      ],
+      "goal": "a = 42/5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_346",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 2 * x - 3",
+        "∀ x, g x = x + 1"
+      ],
+      "goal": "g (f 5 - 1) = 7",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_354",
+      "value_vars": [
+        "a",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a + 6 * d = 30",
+        "a + 10 * d = 60"
+      ],
+      "goal": "a + 20 * d = 135",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_359",
+      "value_vars": [
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "y + 6 + y = 2 * 12"
+      ],
+      "goal": "y = 9",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_362",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a^2 * b^3 = 32 / 27",
+        "a / b^3 = 27 / 4"
+      ],
+      "goal": "a + b = 8 / 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_388",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * x + 4 * y - 12 * z = 10",
+        "-2 * x - 3 * y + 9 * z = -4"
+      ],
+      "goal": "x = 14",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_392",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "even n",
+        "(↑n - 2)^2 + ↑n^2 + (↑n + 2)^2 = (12296:ℤ)"
+      ],
+      "goal": "((↑n - 2) * ↑n * (↑n + 2)) / 8 = (32736:ℤ)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_398",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "9 * b = 20 * c",
+        "7 * a = 4 * b"
+      ],
+      "goal": "63 * a = 80 * c",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_400",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "5 + 500 / 100 * 10 = 110 / 100 * x"
+      ],
+      "goal": "x = 50",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_412",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x + y = 25",
+        "x - y = 11"
+      ],
+      "goal": "x = 18",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_419",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a = -1",
+        "b = 5"
+      ],
+      "goal": "-a - b^2 + 3 * (a * b) = -39",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_427",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * x + y = 17",
+        "5 * y + z = 14",
+        "3 * x + 5 * z = 41"
+      ],
+      "goal": "x + y + z = 12",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_432",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(x + 3) * (2 * x - 6) = 2 * x^2 - 18",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_44",
+      "value_vars": [
+        "s",
+        "t"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "s = 9 - 2 * t",
+        "t = 3 * s + 1"
+      ],
+      "goal": "s = 1 ∧ t = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_440",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 / 2 / 3 = x / 10"
+      ],
+      "goal": "x = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_441",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0"
+      ],
+      "goal": "12 / (x * x) * (x^4 / (14 * x)) * (35 / (3 * x)) = 10",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_452",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, a (n + 2) - a (n + 1) = a (n + 1) - a n",
+        "a 1 = 2 / 3",
+        "a 9 = 4 / 5"
+      ],
+      "goal": "a 5 = 11 / 15",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_459",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * a = b + c + d",
+        "4 * b = a + c + d",
+        "2 * c = a + b + d",
+        "8 * a + 10 * b + 6 * c = 24"
+      ],
+      "goal": "↑d.denom + d.num = 28",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_478",
+      "value_vars": [
+        "b",
+        "h",
+        "v"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < b ∧ 0 < h ∧ 0 < v",
+        "v = 1 / 3 * (b * h)",
+        "b = 30",
+        "h = 13 / 2"
+      ],
+      "goal": "v = 65",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_484",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.log 27 / real.log 3 = 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_487",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "b = a^2",
+        "a + b = 1",
+        "d = c^2",
+        "c + d = 1"
+      ],
+      "goal": "real.sqrt ((a - c)^2 + (b - d)^2)= real.sqrt 10",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_513",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * a + 2 * b = 5",
+        "a + b = 2"
+      ],
+      "goal": "a = 1 ∧ b = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_598",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "((4:ℝ)^a) = 5",
+        "((5:ℝ)^b) = 6",
+        "((6:ℝ)^c) = 7",
+        "((7:ℝ)^d) = 8"
+      ],
+      "goal": "a * b * c * d = 3 / 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_756",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(2:ℝ)^a = 32",
+        "a^b = 125"
+      ],
+      "goal": "b^a = 243",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_76",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀n, odd n → f n = n^2",
+        "∀ n, even n → f n = n^2 - 4*n -1"
+      ],
+      "goal": "f 4 = -1",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_algebra_80",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ -1",
+        "(x - 9) / (x + 1) = 2"
+      ],
+      "goal": "x = -11",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_100",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "nat.gcd n 40 = 10",
+        "nat.lcm n 40 = 280"
+      ],
+      "goal": "n = 70",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_1124",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n ≤ 9",
+        "18∣374 * 10 + n"
+      ],
+      "goal": "n = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_12",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "finset.card (finset.filter (λ x, 20∣x) (finset.Icc 15 85)) = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_127",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (finset.range 101), 2^k) % 7 = 3",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_135",
+      "value_vars": [
+        "n",
+        "A",
+        "B",
+        "C"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n = 3^17 + 3^10",
+        "11 ∣ (n + 1)",
+        "[A,B,C].pairwise(≠)",
+        "{A,B,C} ⊂ finset.Icc 0 9",
+        "odd A ∧ odd C",
+        "¬ 3 ∣ B",
+        "nat.digits 10 n = [B,A,B,C,C,A,C,B,A]"
+      ],
+      "goal": "100 * A + 10 * B + C = 129",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_150",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "¬ nat.prime (7 + 30 * n)"
+      ],
+      "goal": "6 ≤ n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_175",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(2^2010) % 10 = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_185",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n % 5 = 3"
+      ],
+      "goal": "(2 * n) % 5 = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_207",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "8 * 9^2 + 5 * 9 + 2 = 695",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_212",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(16^17 * 17^18 * 18^19) % 10 = 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_222",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.lcm 120 b = 3720",
+        "nat.gcd 120 b = 8"
+      ],
+      "goal": "b = 248",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_227",
+      "value_vars": [
+        "x",
+        "y",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "↑x / (4:ℝ) + y / 6 = (x + y) / n"
+      ],
+      "goal": "n = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_229",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(5^30) % 7 = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_233",
+      "value_vars": [],
+      "domain_vars": {
+        "b": "modular_type_zmod"
+      },
+      "hyps": [
+        "b = 24⁻¹"
+      ],
+      "goal": "b = 116",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_234",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 ≤ a ∧ a ≤ 9 ∧ b ≤ 9",
+        "(10 * a + b)^3 = 912673"
+      ],
+      "goal": "a + b = 16",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_235",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(29 * 79 + 31 * 81) % 10 = 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_237",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (finset.range 101), k) % 6 = 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_239",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in finset.Icc 1 12, k) % 4 = 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_247",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(3 * n) % 2 = 11"
+      ],
+      "goal": "n % 11 = 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_254",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(239 + 174 + 83) % 10 = 6",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_277",
+      "value_vars": [
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.gcd m n = 6",
+        "nat.lcm m n = 126"
+      ],
+      "goal": "60 ≤ m + n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_293",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n ≤ 9",
+        "11∣20 * 100 + 10 * n + 7"
+      ],
+      "goal": "n = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_296",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 ≤ n",
+        "∃ x, x^3 = n",
+        "∃ t, t^4 = n"
+      ],
+      "goal": "4096 ≤ n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_299",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(1 * 3 * 5 * 7 * 9 * 11 * 13) % 10 = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_3",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ x in finset.range 10, ((x + 1)^2)) % 10 = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_314",
+      "value_vars": [
+        "r",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "r = 1342 % 13",
+        "0 < n",
+        "1342∣n",
+        "n % 13 < r"
+      ],
+      "goal": "6710 ≤ n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_320",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n < 101",
+        "101 ∣ (123456 - n)"
+      ],
+      "goal": "n = 34",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_321",
+      "value_vars": [],
+      "domain_vars": {
+        "n": "modular_type_zmod"
+      },
+      "hyps": [
+        "n = 160⁻¹"
+      ],
+      "goal": "n = 1058",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_328",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(5^999999) % 7 = 6",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_34",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x < 100",
+        "x*9 % 100 = 1"
+      ],
+      "goal": "x = 89",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_341",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≤ 9 ∧ b ≤ 9 ∧ c ≤ 9",
+        "nat.digits 10 ((5^100) % 1000) = [c,b,a]"
+      ],
+      "goal": "a + b + c = 13",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_342",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "54 % 6 = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_343",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∏ k in finset.range 6, (2 * k + 1)) % 10 = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_345",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(2000 + 2001 + 2002 + 2003 + 2004 + 2005 + 2006) % 7 = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_353",
+      "value_vars": [
+        "s"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "s = ∑ k in finset.Icc 2010 4018, k"
+      ],
+      "goal": "s % 2009 = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_427",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a = (∑ k in (nat.divisors 500), k)"
+      ],
+      "goal": "∑ k in finset.filter (λ x, nat.prime x) (nat.divisors a), k = 25",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_430",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 ≤ a ∧ a ≤ 9",
+        "1 ≤ b ∧ b ≤ 9",
+        "1 ≤ c ∧ c ≤ 9",
+        "a ≠ b",
+        "a ≠ c",
+        "b ≠ c",
+        "a + b = c",
+        "10 * a + a - b = 2 * c",
+        "c * b = 10 * a + a + a"
+      ],
+      "goal": "a + b + c = 8",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_435",
+      "value_vars": [
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < k",
+        "∀ n, gcd (6 * n + k) (6 * n + 3) = 1",
+        "∀ n, gcd (6 * n + k) (6 * n + 2) = 1",
+        "∀ n, gcd (6 * n + k) (6 * n + 1) = 1"
+      ],
+      "goal": "5 ≤ k",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_447",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in finset.filter (λ x, 3∣x) (finset.Icc 1 49), (k % 10) = 78",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_451",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 2010 ≤ n ∧ n ≤ 2019 ∧ ∃ m, ((nat.divisors m).card = 4 ∧ ∑ p in (nat.divisors m), p = n)"
+      ],
+      "goal": "∑ k in S, k = 2016",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_457",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "80325∣(n!)"
+      ],
+      "goal": "17 ≤ n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_483",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "a 1 = 1",
+        "a 2 = 1",
+        "∀ n, a (n + 2) = a (n + 1) + a n"
+      ],
+      "goal": "(a 100) % 4 = 3",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_495",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "a % 10 = 2",
+        "b % 10 = 4",
+        "nat.gcd a b = 6"
+      ],
+      "goal": "108 ≤ nat.lcm a b",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_5",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "10 ≤ n",
+        "∃ x, x^2 = n",
+        "∃ t, t^3 = n"
+      ],
+      "goal": "64 ≤ n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_517",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(121 * 122 * 123) % 4 = 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_521",
+      "value_vars": [
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "even m",
+        "even n",
+        "m - n = 2",
+        "m * n = 288"
+      ],
+      "goal": "m = 18",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_541",
+      "value_vars": [
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 < m",
+        "1 < n",
+        "m * n = 2005"
+      ],
+      "goal": "m + n = 406",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_551",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "1529 % 6 = 5",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_552",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 12 * x + 7",
+        "∀ x, g x = 5 * x + 2",
+        "∀ x, h x = nat.gcd (f x) (g x)",
+        "fintype (set.range h)"
+      ],
+      "goal": "∑ k in (set.range h).to_finset, k = 12",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_559",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x % 3 = 2",
+        "y % 5 = 4",
+        "x % 10 = y % 10"
+      ],
+      "goal": "14 ≤ x",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_582",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "3∣n"
+      ],
+      "goal": "((n + 4) + (n + 6) + (n + 8)) % 9 = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_618",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, p x = x^2 - x + 41",
+        "1 < nat.gcd (p n) (p (n+1))"
+      ],
+      "goal": "41 ≤ n",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_66",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "194 % 11 = 7",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_711",
+      "value_vars": [
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < m ∧ 0 < n",
+        "gcd m n = 8",
+        "lcm m n = 112"
+      ],
+      "goal": "72 ≤ m + n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_728",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(29^13 - 5^13) % 7 = 0",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_764",
+      "value_vars": [
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime p",
+        "7 ≤ p"
+      ],
+      "goal": "∑ k in finset.Icc 1 (p-2), ((k:zmod p)⁻¹ * ((k:zmod p) + 1)⁻¹) = 2",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_765",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x < 0",
+        "(24 * x) % 1199 = 15"
+      ],
+      "goal": "x ≤ -449",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_769",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(129^34 + 96^38) % 11 = 9",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_85",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "1 * 3^3 + 2 * 3^2 + 2*3 + 2 = 53",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "mathd_numbertheory_99",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(2 * n) % 47 = 15"
+      ],
+      "goal": "n % 47 = 31",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_2pownm1prime_nprime",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "nat.prime (2^n - 1)"
+      ],
+      "goal": "nat.prime n",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_3pow2pownm1mod2pownp3eq2pownp2",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "(3^(2^n) - 1) % (2^(n + 3)) = 2^(n + 2)",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_4x3m7y3neq2003",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "4 * x^3 - 7 * y^3 ≠ 2003",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_aoddbdiv4asqpbsqmod8eq1",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "odd a",
+        "4 ∣ b"
+      ],
+      "goal": "(a^2 + b^2) % 8 = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "∃ k > 0, 2^k = (a + b^2) * (b + a^2)"
+      ],
+      "goal": "a = 1",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown",
+      "value_vars": [
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 4^x + 6^x + 9^x",
+        "0 < m ∧ 0 < n",
+        "m ≤ n"
+      ],
+      "goal": "f (2^m)∣f (2^n)",
+      "fn_unknown": true,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_notequiv2i2jasqbsqdiv8",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "¬ ((∃ i j, a = 2*i ∧ b=2*j) ↔ (∃ k, a^2 + b^2 = 8*k))",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "numbertheory_x5neqy2p4",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "x^5 ≠ y^2 + 4",
+      "fn_unknown": false,
+      "split": "test"
+    },
+    {
+      "name": "aimeII_2001_p3",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "x 1 = 211",
+        "x 2 = 375",
+        "x 3 = 420",
+        "x 4 = 523",
+        "∀ n ≥ 5, x n = x (n - 1) - x (n - 2) + x (n - 3) - x (n - 4)"
+      ],
+      "goal": "x 531 + x 753 + x 975 = 898",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "aimeII_2020_p6",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "t 1 = 20",
+        "t 2 = 21",
+        "∀ n ≥ 3, t n = (5 * t (n - 1) + 1) / (25 * t (n - 2))"
+      ],
+      "goal": "↑(t 2020).denom + (t 2020).num = 626",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "aimeI_2000_p7",
+      "value_vars": [
+        "x",
+        "y",
+        "z",
+        "m"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y ∧ 0 < z",
+        "x * y * z = 1",
+        "x + 1 / z = 5",
+        "y + 1 / x = 29",
+        "z + 1 / y = m",
+        "0 < m"
+      ],
+      "goal": "↑m.denom + m.num = 5",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1983_p9",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ x < real.pi"
+      ],
+      "goal": "12 ≤ ((9 * (x^2 * (real.sin x)^2)) + 4) / (x * real.sin x)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1984_p15",
+      "value_vars": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(x^2 / (2^2 - 1)) + (y^2 / (2^2 - 3^2)) + (z^2 / (2^2 - 5^2)) + (w^2 / (2^2 - 7^2)) = 1",
+        "(x^2 / (4^2 - 1)) + (y^2 / (4^2 - 3^2)) + (z^2 / (4^2 - 5^2)) + (w^2 / (4^2 - 7^2)) = 1",
+        "(x^2 / (6^2 - 1)) + (y^2 / (6^2 - 3^2)) + (z^2 / (6^2 - 5^2)) + (w^2 / (6^2 - 7^2)) = 1",
+        "(x^2 / (8^2 - 1)) + (y^2 / (8^2 - 3^2)) + (z^2 / (8^2 - 5^2)) + (w^2 / (8^2 - 7^2)) = 1"
+      ],
+      "goal": "x^2 + y^2 + z^2 + w^2 = 36",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1984_p5",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "real.logb 8 a + real.logb 4 (b^2) = 5",
+        "real.logb 8 b + real.logb 4 (a^2) = 7"
+      ],
+      "goal": "a * b = 512",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1987_p8",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "∃! k, (8 : ℝ) / 15 < n / (n + k) ∧ (n : ℝ) / (n + k) < 7 / 13"
+      ],
+      "goal": "n ≤ 112",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1988_p3",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x",
+        "real.logb 2 (real.logb 8 x) = real.logb 8 (real.logb 2 x)"
+      ],
+      "goal": "(real.logb 2 x)^2 = 27",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1988_p4",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, abs (a n) < 1",
+        "∑ k in finset.range n, (abs (a k)) = 19 + abs (∑ k in finset.range n, a k)"
+      ],
+      "goal": "20 ≤ n",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1990_p2",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(52 + 6 * real.sqrt 43)^((3 : ℝ) / 2) - (52 - 6 * real.sqrt 43)^((3 : ℝ) / 2) = 828",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1991_p1",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "x * y + (x + y) = 71",
+        "x^2 * y + x * y^2 = 880"
+      ],
+      "goal": "x^2 + y^2 = 146",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1991_p6",
+      "value_vars": [
+        "r"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∑ k in finset.Icc (19 : ℕ) 91, (int.floor (r + k / 100)) = 546"
+      ],
+      "goal": "int.floor (100 * r) = 743",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1994_p4",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "∑ k in finset.Icc 1 n, int.floor (real.logb 2 k) = 1994"
+      ],
+      "goal": "n = 312",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1996_p5",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "r",
+        "s",
+        "t"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^3 + 3 * x^2 + 4 * x - 11",
+        "∀ x, g x = x^3 + r * x^2 + s * x + t",
+        "f a = 0",
+        "f b = 0",
+        "f c = 0",
+        "g (a + b) = 0",
+        "g (b + c) = 0",
+        "g (c + a) = 0"
+      ],
+      "goal": "t = 23",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "aime_1997_p12",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x = (∑ n in finset.Icc (1 : ℕ) 44, real.cos (n * π / 180)) / (∑ n in finset.Icc (1 : ℕ) 44, real.sin (n * π / 180))"
+      ],
+      "goal": "int.floor (100 * x) = 241",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_2complexrootspoly_xsqp49eqxp7itxpn7i",
+      "value_vars": [],
+      "domain_vars": {
+        "x": "complex_number"
+      },
+      "hyps": [],
+      "goal": "x^2 + 49 = (x + (7 * complex.I)) * (x + (-7 * complex.I))",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_2rootsintpoly_am10tap11eqasqpam110",
+      "value_vars": [],
+      "domain_vars": {
+        "a": "complex_number"
+      },
+      "hyps": [],
+      "goal": "(a - 10) * (a + 11) = a^2 + a - 110",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_2rootspoly_apatapbeq2asqp2ab",
+      "value_vars": [],
+      "domain_vars": {
+        "a": "complex_number",
+        "b": "complex_number"
+      },
+      "hyps": [],
+      "goal": "(a + a) * (a + b) = 2 * a^2 + 2 * (a * b)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_2varlineareq_xpeeq7_2xpeeq3_eeq11_xeqn4",
+      "value_vars": [],
+      "domain_vars": {
+        "x": "complex_number",
+        "e": "complex_number"
+      },
+      "hyps": [
+        "x + e = 7",
+        "2 * x + e = 3"
+      ],
+      "goal": "e = 11 ∧ x = -4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_3rootspoly_amdtamctambeqnasqmbpctapcbtdpasqmbpctapcbta",
+      "value_vars": [],
+      "domain_vars": {
+        "b": "complex_number",
+        "c": "complex_number",
+        "d": "complex_number",
+        "a": "complex_number"
+      },
+      "hyps": [],
+      "goal": "(a - d) * (a - c) * (a - b) = -(((a^2 - (b + c) * a) + c * b) * d) + (a^2 - (b + c) * a + c * b) * a",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_amgm_faxinrrp2msqrt2geq2mxm1div2x",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∀ x > 0, 2 - real.sqrt 2 ≥ 2 - x - 1 / (2 * x)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_amgm_prod1toneq1_sum1tongeqn",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "finset.prod (finset.range(n)) a = 1"
+      ],
+      "goal": "finset.sum (finset.range(n)) a ≥ n",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "y ≤ x",
+        "real.sqrt (x * y) * (x - y) = (x + y)"
+      ],
+      "goal": "x + y ≥ 4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_amgm_sumasqdivbsqgeqsumbdiva",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c"
+      ],
+      "goal": "a^2 / b^2 + b^2 / c^2 + c^2 / a^2 ≥ b / a + c / b + a / c",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_apb4leq8ta4pb4",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b"
+      ],
+      "goal": "(a + b)^4 ≤ 8 * (a^4 + b^4)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_binomnegdiscrineq_10alt28asqp1",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "10 * a ≤ 28 * a^2 + 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_manipexpr_2erprsqpesqeqnrpnesq",
+      "value_vars": [],
+      "domain_vars": {
+        "e": "complex_number",
+        "r": "complex_number"
+      },
+      "hyps": [],
+      "goal": "2 * (e * r) + (e^2 + r^2) = (-r + (-e))^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_manipexpr_apbeq2cceqiacpbceqm2",
+      "value_vars": [],
+      "domain_vars": {
+        "a": "complex_number",
+        "b": "complex_number",
+        "c": "complex_number"
+      },
+      "hyps": [
+        "a + b = 2 * c",
+        "c = complex.I"
+      ],
+      "goal": "a * c + b * c = -2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_sqineq_2at2pclta2c2p41pc",
+      "value_vars": [
+        "a",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "2 * a * (2 + c) ≤ a^2 + c^2 + 4 * (1 + c)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_sqineq_2unitcircatblt1",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a^2 + b^2 = 2"
+      ],
+      "goal": "a * b ≤ 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_sqineq_36azm9asqle36zsq",
+      "value_vars": [
+        "z",
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "36 * (a * z) - 9 * a^2 ≤ 36 * z^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_sqineq_4bap1lt4bsqpap1sq",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "4 * b * (a + 1) ≤ 4 * b^2 + (a + 1)^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "algebra_xmysqpymzsqpzmxsqeqxyz_xpypzp6dvdx3y3z3",
+      "value_vars": [
+        "x",
+        "y",
+        "z"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(x - y)^2 + (y - z)^2 + (z - x)^2 = x * y * z"
+      ],
+      "goal": "(x + y + z + 6) ∣ (x^3 + y^3 + z^3)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12_2000_p11",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≠ 0 ∧ b ≠ 0",
+        "a * b = a - b"
+      ],
+      "goal": "a / b + b / a - a * b = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12_2000_p15",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f (x / 3) = x^2 + x + 1",
+        "fintype (f ⁻¹' {7})"
+      ],
+      "goal": "∑ y in (f⁻¹' {7}).to_finset, y / 3 = - 1 / 9",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12_2000_p5",
+      "value_vars": [
+        "x",
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x < 2",
+        "abs (x - 2) = p"
+      ],
+      "goal": "x - p = 2 - 2 * p",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12_2001_p2",
+      "value_vars": [
+        "a",
+        "b",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 ≤ a ∧ a ≤ 9",
+        "0 ≤ b ∧ b ≤ 9",
+        "n = 10 * a + b",
+        "n = a * b + a + b"
+      ],
+      "goal": "b = 9",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12_2001_p9",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x > 0, ∀ y > 0, f (x * y) = f x / y",
+        "f 500 = 3"
+      ],
+      "goal": "f 600 = 5 / 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2002_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = (2 * x + 3) * (x - 4) + (2 * x + 3) * (x - 6)",
+        "fintype (f ⁻¹' {0})"
+      ],
+      "goal": "∑ y in (f⁻¹' {0}).to_finset, y = 7 / 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2002_p12",
+      "value_vars": [
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^2 - 63 * x + k",
+        "set.subset (f ⁻¹' {0}) {x : ℝ | ∃ n : ℕ, ↑n = x ∧ nat.prime n}"
+      ],
+      "goal": "k = 122",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2002_p21",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "u 0 = 4",
+        "u 1 = 7",
+        "∀ n ≥ 2, u (n + 2) = (u n + u (n + 1)) % 10"
+      ],
+      "goal": "∀ n, ∑ k in finset.range(n), u k > 10000 → 1999 ≤ n",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2003_p1",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, u n = 2 * n + 2",
+        "∀ n, v n = 2 * n + 1"
+      ],
+      "goal": "(∑ k in finset.range(2003), u k) - (∑ k in finset.range(2003), v k) = 2003",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2003_p24",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "is_greatest {y : ℝ | ∃ (a b : ℝ), 1 < b ∧ b ≤ a ∧ y = real.logb a (a/b) + real.logb b (b/a)} 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2003_p25",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < b",
+        "∀ x, f x = real.sqrt (a * x^2 + b * x)",
+        "{x | 0 ≤ f x} = f '' {x | 0 ≤ f x}"
+      ],
+      "goal": "a = 0 ∨ a = -4",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2008_p15",
+      "value_vars": [
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "k = 2008^2 + 2^2008"
+      ],
+      "goal": "(k^2 + 2^k) % 10 = 6",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2008_p2",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x * (1 / 2 + 2 / 3) = 1"
+      ],
+      "goal": "x = 6 / 7",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2008_p4",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∏ k in finset.Icc (1 : ℕ) 501, ((4 : ℝ) * k + 4) / (4 * k) = 502",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2008_p8",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "y^3 = 1",
+        "6 * x^2 = 2 * (6 * y^2)"
+      ],
+      "goal": "x^3 = 2 * real.sqrt 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2009_p15",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "∑ k in finset.Icc 1 n, (↑k * (complex.I^k)) = 48 + 49 * complex.I"
+      ],
+      "goal": "n = 97",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2009_p2",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "1 + (1 / (1 + (1 / (1 + 1)))) = (5 : ℚ) / 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2009_p25",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "a 1 = 1",
+        "a 2 = 1 / real.sqrt 3",
+        "∀ n, 1 ≤ n → a (n + 2) = (a n + a (n + 1)) / (1 - a n * a (n + 1))"
+      ],
+      "goal": "abs (a 2009) = 0",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2009_p5",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x^3 - (x + 1) * (x - 1) * x = 5"
+      ],
+      "goal": "x^3 = 125",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2009_p9",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f (x + 3) = 3 * x^2 + 7 * x + 4",
+        "∀ x, f x = a * x^2 + b * x + c"
+      ],
+      "goal": "a + b + c = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2010_p10",
+      "value_vars": [
+        "p",
+        "q"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, a (n + 2) - a (n + 1) = a (n + 1) - a n",
+        "a 1 = p",
+        "a 2 = 9",
+        "a 3 = 3 * p - q",
+        "a 4 = 3 * p + q"
+      ],
+      "goal": "a 2010 = 8041",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2010_p11",
+      "value_vars": [
+        "x",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < b",
+        "(7 : ℝ)^(x + 7) = 8^x",
+        "x = real.logb b (7^7)"
+      ],
+      "goal": "b = 8/7",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2010_p22",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "49 ≤ ∑ k in finset.Icc 1 119, abs (↑k * x - 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2011_p18",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "abs (x + y) + abs (x - y) = 2"
+      ],
+      "goal": "x^2 - 6 * x + y^2 ≤ 9",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2013_p7",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, s (n + 2) = s (n + 1) + s n",
+        "s 9 = 110",
+        "s 7 = 42"
+      ],
+      "goal": "s 4 = 10",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2013_p8",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0",
+        "y ≠ 0",
+        "x ≠ y",
+        "x + 2 / x = y + 2 / y"
+      ],
+      "goal": "x * y = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2015_p10",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < y",
+        "y < x",
+        "x + y + (x * y) = 80"
+      ],
+      "goal": "x = 26",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2016_p2",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(10:ℝ)^x * 100^(2 * x) = 1000^5"
+      ],
+      "goal": "x = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2016_p3",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, ∀ y ≠ 0, f x y = x - y * int.floor (x / y)"
+      ],
+      "goal": "f (3 / 8) (-(2 / 5)) = -(1 / 40)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2017_p2",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0",
+        "y ≠ 0",
+        "x + y = 4 * (x * y)"
+      ],
+      "goal": "1 / x + 1 / y = 4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2017_p7",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "f 1 = 2",
+        "∀ n, 1 < n ∧ even n → f n = f (n - 1) + 1",
+        "∀ n, 1 < n ∧ odd n → f n = f (n - 2) + 2"
+      ],
+      "goal": "f 2017 = 2018",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2019_p21",
+      "value_vars": [],
+      "domain_vars": {
+        "z": "complex_number"
+      },
+      "hyps": [
+        "z = (1 + complex.I) / real.sqrt 2"
+      ],
+      "goal": "(∑ k in finset.Icc 1 12, (z^(k^2))) * (∑ k in finset.Icc 1 12, (1 / z^(k^2))) = 36",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2019_p9",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "a 1 = 1",
+        "a 2 = 3 / 7",
+        "∀ n, a (n + 2) = (a n * a (n + 1)) / (2 * a n - a (n + 1))"
+      ],
+      "goal": "↑(a 2019).denom + (a 2019).num = 8078",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2020_p13",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n ≠ 1",
+        "1 < a ∧ 1 < b ∧ 1 < c",
+        "(n * ((n * (n^(1 / c)))^(1 / b)))^(1 / a) = (n^25)^(1 / 36)"
+      ],
+      "goal": "b = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2020_p22",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 5 ∣ n ∧ nat.lcm 5! n = 5 * nat.gcd 10! n"
+      ],
+      "goal": "S.card = 1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12a_2021_p7",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "1 ≤ ((x * y) - 1)^2 + (x + y)^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2002_p11",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime a",
+        "nat.prime b",
+        "nat.prime (a + b)",
+        "nat.prime (a - b)"
+      ],
+      "goal": "nat.prime (a + b + (a - b + (a + b)))",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2002_p3",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 0 < n ∧ nat.prime (n^2 + 2 - 3 * n)"
+      ],
+      "goal": "S.card = 1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2002_p6",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≠ 0 ∧ b ≠ 0",
+        "∀ x, x^2 + a * x + b = (x - a) * (x - b)"
+      ],
+      "goal": "a = 1 ∧ b = -2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2003_p17",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y",
+        "real.log (x * y^3) = 1",
+        "real.log (x^2 * y) = 1"
+      ],
+      "goal": "real.log (x * y) = 3 / 5",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2003_p6",
+      "value_vars": [
+        "a",
+        "r"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ k, u k = a * r^k",
+        "u 1 = 2",
+        "u 3 = 6"
+      ],
+      "goal": "u 0 = 2 / real.sqrt 3 ∨ u 0 = - (2 / real.sqrt 3)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2003_p9",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = a * x + b",
+        "f 6 - f 2 = 12"
+      ],
+      "goal": "f 12 - f 2 = 30",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2004_p3",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2^x * 3^y = 1296"
+      ],
+      "goal": "x + y = 8",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2020_p5",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(5 : ℚ)/8 * b = 2/3 * a + 7",
+        "(b : ℚ) - 5/8 * b = (a - 2/3 * a) + 7"
+      ],
+      "goal": "a = 42",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "amc12b_2021_p21",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℝ), x ∈ S ↔ 0 < x ∧ x^((2 : ℝ)^real.sqrt 2) = (real.sqrt 2)^((2 : ℝ)^x)"
+      ],
+      "goal": "↑2 ≤ ∑ k in S, k ∧ ∑ k in S, k < 6",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1961_p1",
+      "value_vars": [
+        "x",
+        "y",
+        "z",
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y ∧ 0 < z",
+        "x ≠ y",
+        "y ≠ z",
+        "z ≠ x",
+        "x + y + z = a",
+        "x^2 + y^2 + z^2 = b^2",
+        "x * y = z^2"
+      ],
+      "goal": "0 < a ∧ b^2 < a^2 ∧ a^2 < 3 * b^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1962_p4",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "S = {x : ℝ | (real.cos x)^2 + (real.cos (2 * x))^2 + (real.cos (3 * x))^2 = 1}"
+      ],
+      "goal": "S = {x : ℝ | ∃ m : ℤ, (x = π / 2 + m * π) ∨ (x = π / 4 + m * π / 2) ∨ (x = π / 6 + m * π) ∨ (x = 5 * π / 6 + m * π)}",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1964_p1_1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "7 ∣ (2^n - 1)"
+      ],
+      "goal": "3 ∣ n",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1964_p1_2",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "¬ 7 ∣ (2^n + 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1965_p1",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 ≤ x",
+        "x ≤ 2 * π",
+        "2 * real.cos x ≤ abs (real.sqrt (1 + real.sin (2 * x)) - real.sqrt (1 - real.sin (2 * x)))",
+        "abs (real.sqrt (1 + real.sin (2 * x)) - real.sqrt (1 - real.sin (2 * x))) ≤ real.sqrt 2"
+      ],
+      "goal": "π / 4 ≤ x ∧ x ≤ 7 * π / 4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1966_p4",
+      "value_vars": [
+        "n",
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ k : ℕ, 0 < k → ∀ m : ℤ, x ≠ m * π / (2^k)",
+        "0 < n"
+      ],
+      "goal": "∑ k in finset.Icc 1 n, (1 / real.sin ((2^k) * x)) = 1 / real.tan x - 1 / real.tan ((2^n) * x)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1966_p5",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "a 1 ≠ a 2",
+        "a 1 ≠ a 3",
+        "a 1 ≠ a 4",
+        "a 2 ≠ a 3",
+        "a 2 ≠ a 4",
+        "a 3 ≠ a 4",
+        "abs (a 1 - a 2) * x 2 + abs (a 1 - a 3) * x 3 + abs (a 1 - a 4) * x 4 = 1",
+        "abs (a 2 - a 1) * x 1 + abs (a 2 - a 3) * x 3 + abs (a 2 - a 4) * x 4 = 1",
+        "abs (a 3 - a 1) * x 1 + abs (a 3 - a 2) * x 2 + abs (a 3 - a 4) * x 4 = 1",
+        "abs (a 4 - a 1) * x 1 + abs (a 4 - a 2) * x 2 + abs (a 4 - a 3) * x 3 = 1"
+      ],
+      "goal": "x 2 = 0 ∧ x 3 = 0 ∧ x 1 = 1 / abs (a 1 - a 4) ∧ x 4 = 1 / abs (a 1 - a 4)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1967_p3",
+      "value_vars": [
+        "k",
+        "m",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < k ∧ 0 < m ∧ 0 < n",
+        "∀ s, c s = s * (s + 1)",
+        "nat.prime (k + m + 1)",
+        "n + 1 < k + m + 1"
+      ],
+      "goal": "(∏ i in finset.Icc 1 n, c i) ∣ (∏ i in finset.Icc 1 n, (c (m + i) - c k))",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1973_p3",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∃ x, x^4 + a * x^3 + b * x^2 + a * x + 1 = 0"
+      ],
+      "goal": "4 / 5 ≤ a^2 + b^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1974_p5",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "s"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "s = a / (a + b + d) + b / (a + b + c) + c / (b + c + d) + d / (a + c + d)"
+      ],
+      "goal": "1 < s ∧ s < 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1977_p5",
+      "value_vars": [
+        "a",
+        "b",
+        "q",
+        "r"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "r < a + b",
+        "a^2 + b^2 = (a + b) * q + r",
+        "q^2 + r = 1977"
+      ],
+      "goal": "(abs ((a:ℤ) - 22) = 15 ∧ abs ((b:ℤ) - 22) = 28) ∨ (abs ((a:ℤ) - 22) = 28 ∧ abs ((b:ℤ) - 22) = 15)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1978_p5",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (m : ℕ), 0 < a m",
+        "∀ (p q : ℕ), p ≠ q → a p ≠ a q",
+        "0 < n"
+      ],
+      "goal": "(∑ k in finset.Icc 1 n, (1 : ℝ)/k) ≤ ∑ k in finset.Icc 1 n, (a k)/k^2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1979_p1",
+      "value_vars": [
+        "p",
+        "q"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < q",
+        "∑ k in finset.Icc (1 : ℕ) 1319, ((-1)^(k + 1) * ((1 : ℝ)/k)) = p/q"
+      ],
+      "goal": "1979 ∣ p",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1984_p2",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "¬ 7 ∣ a",
+        "¬ 7 ∣ b",
+        "¬ 7 ∣ (a + b)",
+        "(7^7) ∣ ((a + b)^7 - a^7 - b^7)"
+      ],
+      "goal": "19 ≤ a + b",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1987_p4",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∃ n, f (f n) ≠ n + 1987",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1987_p6",
+      "value_vars": [
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^2 + x + p",
+        "∀ k : ℕ, k ≤ nat.floor (real.sqrt (p / 3)) → nat.prime (f k)"
+      ],
+      "goal": "∀ i ≤ p - 2, nat.prime (f i)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1988_p6",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "(a * b + 1) ∣ (a^2 + b^2)"
+      ],
+      "goal": "∃ x : ℕ, (x^2 : ℝ) = (a^2 + b^2) / (a * b + 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1990_p3",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 ≤ n",
+        "n^2 ∣ 2^n + 1"
+      ],
+      "goal": "n = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_1993_p5",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∃ f : ℕ → ℕ, f 1 = 2 ∧ ∀ n, f (f n) = f n + n ∧ (∀ n, f n < f (n + 1))",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "imo_2006_p6",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(a * b * (a^2 - b^2)) + (b * c * (b^2 - c^2)) + (c * a * (c^2 - a^2)) ≤ (9 * real.sqrt 2) / 32 * (a^2 + b^2 + c^2)^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_divisibility_3div2tooddnp1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "3 ∣ (2^(2 * n + 1) + 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_divisibility_3divnto3m2n",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "3 ∣ n^3 + 2 * n",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_divisibility_9div10tonm1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "9 ∣ (10^n - 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_ineq_nsqlefactn",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "4 ≤ n"
+      ],
+      "goal": "n^2 ≤ n!",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_seq_mul2pnp1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "u 0 = 0",
+        "∀ n, u (n + 1) = 2 * u n + (n + 1)"
+      ],
+      "goal": "u n = 2^(n + 1) - (n + 2)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "induction_sum2kp1npqsqm1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "↑∑ k in (finset.range n), 2 * k + 3 = ↑(n + 1)^2 - (1:ℤ)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_sum_1oktkp1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in (finset.range n), (1 : ℝ) / ((k + 1) * (k + 2)) = n / (n + 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "induction_sum_odd",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in (finset.range n), 2 * k + 1 = n^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_10",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "abs ((120 : ℝ)/100 * 30 - 130/100 * 20) = 10",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_101",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x^2 - 5 * x - 4 ≤ 10"
+      ],
+      "goal": "x ≥ -2 ∧ x ≤ 7",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_104",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "125 / 8 = x / 12"
+      ],
+      "goal": "x = 375 / 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_109",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "3 * a + 2 * b = 12",
+        "a = 4"
+      ],
+      "goal": "b = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_11",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≠ b",
+        "a ≠ 2 * b",
+        "(4 * a + 3 * b) / (a - 2 * b) = 5"
+      ],
+      "goal": "(a + 11 * b) / (a - b) = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_110",
+      "value_vars": [],
+      "domain_vars": {
+        "q": "complex_number",
+        "e": "complex_number"
+      },
+      "hyps": [
+        "q = 2 - 2 * complex.I",
+        "e = 5 + 5 * complex.I"
+      ],
+      "goal": "q * e = 20",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_116",
+      "value_vars": [
+        "k",
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x = (13 - real.sqrt 131) / 4",
+        "2 * x^2 - 13 * x + k = 0"
+      ],
+      "goal": "k = 19/4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_119",
+      "value_vars": [
+        "d",
+        "e"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 * d = 17 * e - 8",
+        "2 * e = d - 9"
+      ],
+      "goal": "e = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_123",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "a + b = 20",
+        "a = 3 * b"
+      ],
+      "goal": "a - b = 10",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_126",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 * 3 = x - 9",
+        "2 * (-5) = y + 1"
+      ],
+      "goal": "x = 15 ∧ y = -11",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_13",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, (x - 3 ≠ 0 ∧ x - 5 ≠ 0) → 4 * x / (x^2 - 8 * x + 15) = a / (x - 3) + b / (x - 5)"
+      ],
+      "goal": "a = -6 ∧ b = 10",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_131",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 2 * x^2 - 7 * x + 2",
+        "f a = 0",
+        "f b = 0",
+        "a ≠ b"
+      ],
+      "goal": "1 / (a - 1) + 1 / (b - 1) = -1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_132",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x + 2",
+        "∀ x, g x = x^2",
+        "f (g x) = g (f x)"
+      ],
+      "goal": "x = - 1/2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_140",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c",
+        "∀ x, 24 * x^2 - 19 * x - 35 = (((a * x) - 5) * ((2 * (b * x)) + c))"
+      ],
+      "goal": "a * b - 3 * c = -9",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_144",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d",
+        "(c : ℤ) - b = d",
+        "(b : ℤ) - a = d",
+        "a + b + c = 60",
+        "a + b > c"
+      ],
+      "goal": "d < 10",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_149",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x < -5, f x = x^2 + 5",
+        "∀ x ≥ -5, f x = 3 * x -8",
+        "fintype (f⁻¹' {10})"
+      ],
+      "goal": "∑ k in (f⁻¹' {10}).to_finset, k = 6",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_15",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ a b, 0 < a ∧ 0 < b → s a b = a^(b:ℕ) + b^(a:ℕ)"
+      ],
+      "goal": "s 2 6 = 100",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_151",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "int.ceil (real.sqrt 27) - int.floor (real.sqrt 26) = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_159",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 3 * x^4 - 7 * x^3 + 2 * x^2 - b * x + 1",
+        "f 1 = 1"
+      ],
+      "goal": "b = -2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_181",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n ≠ 3",
+        "(n + 5) / (n - 3) = 2"
+      ],
+      "goal": "n = 11",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_182",
+      "value_vars": [],
+      "domain_vars": {
+        "y": "complex_number"
+      },
+      "hyps": [],
+      "goal": "7 * (3 * y + 2) = 21 * y + 14",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_185",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = abs (x + 4)",
+        "∀ x, x ∈ s ↔ f x < 9"
+      ],
+      "goal": "s.card = 17",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_190",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "((3 : ℝ) / 8 + 7 / 8) / (4 / 5) = 25 / 16",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_192",
+      "value_vars": [],
+      "domain_vars": {
+        "q": "complex_number",
+        "e": "complex_number",
+        "d": "complex_number"
+      },
+      "hyps": [
+        "q = 11 - (5 * complex.I)",
+        "e = 11 + (5 * complex.I)",
+        "d = 2 * complex.I"
+      ],
+      "goal": "q * e * d = 292 * complex.I",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_206",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^2 + a * x + b",
+        "2 * a ≠ b",
+        "f (2 * a) = 0",
+        "f b = 0"
+      ],
+      "goal": "a + b = -1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_214",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = a * (x - 2)^2 + 3",
+        "f 4 = 4"
+      ],
+      "goal": "f 6 = 7",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_22",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.logb (5^2) (5^4) = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_224",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ real.sqrt n < 7 / 2 ∧ 2 < real.sqrt n"
+      ],
+      "goal": "S.card = 8",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_234",
+      "value_vars": [
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "27 / 125 * d = 9 / 25"
+      ],
+      "goal": "3 / 5 * d^3 = 25 / 9",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_245",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0"
+      ],
+      "goal": "(4 / x)⁻¹ * ((3 * x^3) / x)^2 * ((1 / (2 * x))⁻¹)^3 = 18 * x^8",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_247",
+      "value_vars": [
+        "t",
+        "s",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "t = 2 * s - s^2",
+        "s = n^2 - 2^n + 1"
+      ],
+      "goal": "t = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_251",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 0",
+        "3 + 1 / x = 7 / x"
+      ],
+      "goal": "x = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_267",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x ≠ 1",
+        "x ≠ -2",
+        "(x + 1) / (x - 1) = (x - 2) / (x + 2)"
+      ],
+      "goal": "x = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_28",
+      "value_vars": [
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 2 * x^2 + 5 * x + c",
+        "∃ x, f x ≤ 0"
+      ],
+      "goal": "c ≤ 25/8",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_282",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, (¬ irrational x) → f x = abs (int.floor x)",
+        "∀ x, (irrational x) → f x = (int.ceil x)^2"
+      ],
+      "goal": "f (8^(1/3)) + f (-real.pi) + f (real.sqrt 50) + f (9/2) = 79",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_31",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, u (n + 1) = nnreal.sqrt (x + u n)",
+        "filter.tendsto u filter.at_top (𝓝 9)"
+      ],
+      "goal": "9 = nnreal.sqrt (x + 9)",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_323",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, σ.1 x = x^3 - 8"
+      ],
+      "goal": "σ.2 (σ.1 (σ.2 19)) = 3",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_327",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 / 5 * abs (9 + 2 * a) < 1"
+      ],
+      "goal": "-7 < a ∧ a < -2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_35",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, p x = 2 - x^2",
+        "∀ x ≠ 0, q x = 6 / x"
+      ],
+      "goal": "p (q 2) = -7",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_37",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x + y = 7",
+        "3 * x + y = 45"
+      ],
+      "goal": "x^2 - y^2 = 217",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_393",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, σ.1 x = 4 * x^3 + 1"
+      ],
+      "goal": "σ.2 33 = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_405",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, x ∈ S ↔ 0 < x ∧ x^2 + 4 * x + 4 < 20"
+      ],
+      "goal": "S.card = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_410",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "y = x^2 - 6 * x + 13"
+      ],
+      "goal": "4 ≤ y",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_421",
+      "value_vars": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "b = a^2 + 4 * a + 6",
+        "b = 1 / 2 * a^2 + a + 6",
+        "d = c^2 + 4 * c + 6",
+        "d = 1 / 2 * c^2 + c + 6",
+        "a ≤ c"
+      ],
+      "goal": "c - a = 6",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_422",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, σ.1 x = 5 * x - 12",
+        "σ.1 (x + 1) = σ.2 x"
+      ],
+      "goal": "x = 47 / 24",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_43",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = a * x + b",
+        "f 7 = 4",
+        "f 6 = 3"
+      ],
+      "goal": "f 3 = 0",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_433",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 3 * real.sqrt (2 * x - 7) - 8"
+      ],
+      "goal": "f 8 = 1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_437",
+      "value_vars": [
+        "x",
+        "y",
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x^3 = -45",
+        "y^3 = -101",
+        "x < n",
+        "↑n < y"
+      ],
+      "goal": "n = -4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_451",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "σ.2 (-15) = 0",
+        "σ.2 0 = 3",
+        "σ.2 3 = 9",
+        "σ.2 9 = 20"
+      ],
+      "goal": "σ.1 (σ.1 9) = 0",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_455",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "2 * (2 * (2 * (2 * x))) = 48"
+      ],
+      "goal": "x = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_462",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "((1 : ℚ)/ 2 + 1 / 3) * (1 / 2 - 1 / 3) = 5 / 36",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_48",
+      "value_vars": [],
+      "domain_vars": {
+        "q": "complex_number",
+        "e": "complex_number"
+      },
+      "hyps": [
+        "q = 9 - 4 * complex.I",
+        "e = -3 - 4 * complex.I"
+      ],
+      "goal": "q - e = 12",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_480",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x < 0, f x = -(x^2) - 1",
+        "∀ x, 0 ≤ x ∧ x < 4 → f x = 2",
+        "∀ x ≥ 4, f x = real.sqrt x"
+      ],
+      "goal": "f π = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_482",
+      "value_vars": [
+        "m",
+        "n",
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime m",
+        "nat.prime n",
+        "∀ x, f x = x^2 - 12 * x + k",
+        "f m = 0",
+        "f n = 0",
+        "m ≠ n"
+      ],
+      "goal": "k = 35",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_493",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^2 - 4 * real.sqrt x + 1"
+      ],
+      "goal": "f (f 4) = 70",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_509",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "real.sqrt ((5 / real.sqrt 80 + real.sqrt 845 / 9 + real.sqrt 45) / real.sqrt 5) = 13 / 6",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_51",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b",
+        "a + b = 35",
+        "a = (2/5) * b"
+      ],
+      "goal": "b - a = 15",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_510",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x + y = 13",
+        "x * y = 24"
+      ],
+      "goal": "real.sqrt (x^2 + y^2) = 11",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_536",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "↑3! * ((2 : ℝ)^3 + real.sqrt 9) / 2 = (33 : ℝ)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_547",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x = 5",
+        "y = 2"
+      ],
+      "goal": "real.sqrt (x^3 - 2^y) = 11",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_55",
+      "value_vars": [
+        "q",
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "q = 2 - 4 + 6 - 8 + 10 - 12 + 14",
+        "p = 3 - 6 + 9 - 12 + 15 - 18 + 21"
+      ],
+      "goal": "q / p = 2 / 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_568",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(a - 1) * (a + 1) * (a + 2) - (a - 2) * (a + 1) = a^3 + a^2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_59",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(4 : ℝ)^b + 2^3 = 12"
+      ],
+      "goal": "b = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_616",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = x^3 + 2 * x + 1",
+        "∀ x, g x = x - 1"
+      ],
+      "goal": "f (g 1) = 1",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_67",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ x, f x = 5 * x + 3",
+        "∀ x, g x = x^2 - 2"
+      ],
+      "goal": "g (f (-1)) = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_69",
+      "value_vars": [
+        "rows",
+        "seats"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "rows * seats = 450",
+        "(rows + 5) * (seats - 3) = 450"
+      ],
+      "goal": "rows = 25",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_73",
+      "value_vars": [],
+      "domain_vars": {
+        "p": "complex_number",
+        "q": "complex_number",
+        "r": "complex_number",
+        "x": "complex_number"
+      },
+      "hyps": [
+        "(x - p) * (x - q) = (r - p) * (r - q)",
+        "x ≠ r"
+      ],
+      "goal": "x = p + q - r",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_77",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "a ≠ 0 ∧ b ≠ 0",
+        "∀ x, f x = x^2 + a * x + b",
+        "f a = 0",
+        "f b = 0"
+      ],
+      "goal": "a = 1 ∧ b = -2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_89",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "b ≠ 0"
+      ],
+      "goal": "(7 * b^3)^2 * (4 * b^2)^(-(3 : ℤ)) = 49/64",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_algebra_96",
+      "value_vars": [
+        "x",
+        "y",
+        "z",
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < y ∧ 0 < z",
+        "real.log x - real.log y = a",
+        "real.log y - real.log z = 15",
+        "real.log z - real.log x = -7"
+      ],
+      "goal": "a = -8",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_101",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(17 * 18) % 4 = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_102",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(2^8) % 5 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_109",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ n, v n = 2 * n - 1"
+      ],
+      "goal": "(∑ k in finset.Icc 1 100, v k) % 7 = 4",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_110",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < a ∧ 0 < b ∧ b ≤ a",
+        "(a + b) % 10 = 2",
+        "(2 * a + b) % 10 = 1"
+      ],
+      "goal": "(a - b) % 10 = 6",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_126",
+      "value_vars": [
+        "x",
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < x ∧ 0 < a",
+        "nat.gcd a 40 = x + 3",
+        "nat.lcm a 40 = x * (x + 3)",
+        "∀ b : ℕ, 0 < b → nat.gcd b 40 = x + 3 ∧ nat.lcm b 40 = x * (x + 3) → a ≤ b"
+      ],
+      "goal": "a = 8",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_13",
+      "value_vars": [
+        "u",
+        "v"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 0 < n ∧ (14 * n) % 100 = 46"
+      ],
+      "goal": "((u + v) : ℚ) / 2 = 64",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_132",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "2004 % 12 = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_136",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "123 * n + 17 = 39500"
+      ],
+      "goal": "n = 321",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_149",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in (finset.filter (λ x, x % 8 = 5 ∧ x % 6 = 3) (finset.range 50)), k = 66",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_155",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "finset.card (finset.filter (λ x, x % 19 = 7) (finset.Icc 100 999)) = 52",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_156",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "nat.gcd (n + 7) (2 * n + 1) ≤ 13",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_169",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "nat.gcd 20! 200000 = 40000",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_188",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "nat.gcd 180 168 = 12",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_198",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(5^2005) % 100 = 25",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_200",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "139 % 11 = 7",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_202",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(19^19 + 99^99) % 10 = 8",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_211",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "finset.card (finset.filter (λ n, 6 ∣ (4 * ↑n - (2 : ℤ))) (finset.range 60)) = 20",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_22",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "b < 10",
+        "nat.sqrt (10 * b + 6) * nat.sqrt (10 * b + 6) = 10 * b + 6"
+      ],
+      "goal": "b = 3 ∨ b = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_221",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (x : ℕ), x ∈ S ↔ 0 < x ∧ x < 1000 ∧ x.divisors.card = 3"
+      ],
+      "goal": "S.card = 11",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_232",
+      "value_vars": [],
+      "domain_vars": {
+        "x": "modular_type_zmod",
+        "y": "modular_type_zmod",
+        "z": "modular_type_zmod"
+      },
+      "hyps": [
+        "x = 3⁻¹",
+        "y = 5⁻¹",
+        "z = (x + y)⁻¹"
+      ],
+      "goal": "z = 29",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_236",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(1999^2000) % 5 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_24",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (finset.Icc 1 9), 11^k) % 100 = 59",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_252",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "7! % 23 = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_257",
+      "value_vars": [
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 ≤ x ∧ x ≤ 100",
+        "77∣(∑ k in (finset.range 101), k - x)"
+      ],
+      "goal": "x = 45",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_269",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(2005^2 + 2005^0 + 2005^0 + 2005^5) % 100 = 52",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_284",
+      "value_vars": [
+        "a",
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "1 ≤ a ∧ a ≤ 9 ∧ b ≤ 9",
+        "10 * a + b = 2 * (a + b)"
+      ],
+      "goal": "10 * a + b = 18",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_30",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(33818^2 + 33819^2 + 33820^2 + 33821^2 + 33822^2) % 17 = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_301",
+      "value_vars": [
+        "j"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < j"
+      ],
+      "goal": "(3 * (7 * ↑j + 3)) % 7 = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_303",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ 2 ≤ n ∧ 171 ≡ 80 [MOD n] ∧ 468 ≡ 13 [MOD n]"
+      ],
+      "goal": "∑ k in S, k = 111",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_32",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∈ S ↔ n ∣ 36"
+      ],
+      "goal": "∑ k in S, k = 91",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_326",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(↑n - 1) * ↑n * (↑n + 1) = (720 : ℤ)"
+      ],
+      "goal": "(n + 1) = 10",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_33",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n < 398",
+        "(n * 7) % 398 = 1"
+      ],
+      "goal": "n = 57",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_335",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n % 7 = 5"
+      ],
+      "goal": "(5 * n) % 7 = 4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_35",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (n : ℕ), n ∣ (nat.sqrt 196)"
+      ],
+      "goal": "∑ k in S, k = 24",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_37",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "nat.lcm 9999 100001 = 90900909",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_370",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n % 7 = 3"
+      ],
+      "goal": "(2 * n + 1) % 7 = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_403",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "∑ k in (nat.proper_divisors 198), k = 270",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_405",
+      "value_vars": [
+        "a",
+        "b",
+        "c"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "t 0 = 0",
+        "t 1 = 1",
+        "∀ n > 1, t n = t (n - 2) + t (n - 1)",
+        "a ≡ 5 [MOD 16]",
+        "b ≡ 10 [MOD 16]",
+        "c ≡ 15 [MOD 16]"
+      ],
+      "goal": "(t a + t b + t c) % 7 = 5",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_412",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "x % 19 = 4",
+        "y % 19 = 7"
+      ],
+      "goal": "((x + 1)^2 * (y + 5)^3) % 19 = 13",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_42",
+      "value_vars": [
+        "u",
+        "v"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "∀ (a : ℕ), a ∈ S ↔ 0 < a ∧ 27 * a % 40 = 17"
+      ],
+      "goal": "u + v = 62",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_43",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "is_greatest {n : ℕ | 15^n ∣ 942! } 233",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_45",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(nat.gcd 6432 132) + 11 = 23",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_458",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n % 8 = 7"
+      ],
+      "goal": "n % 4 = 3",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_461",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n = finset.card (finset.filter (λ x, gcd x 8 = 1) (finset.Icc 1 7))"
+      ],
+      "goal": "(3^n) % 8 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_466",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (finset.range 11), k) % 9 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_48",
+      "value_vars": [
+        "b"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < b",
+        "3 * b^2 + 2 * b + 1 = 57"
+      ],
+      "goal": "b = 4",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_530",
+      "value_vars": [
+        "n",
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n ∧ 0 < k",
+        "(n : ℝ) / k < 6",
+        "(5 : ℝ) < n / k"
+      ],
+      "goal": "22 ≤ (nat.lcm n k) / (nat.gcd n k)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_543",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(∑ k in (nat.divisors (30^4)), 1) - 2 = 123",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_629",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "is_least {t : ℕ | 0 < t ∧ (nat.lcm 12 t)^3 = (12 * t)^2} 18",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_64",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "is_least {x : ℕ | 30 * x ≡ 42 [MOD 47]} 39",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_640",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(91145 + 91146 + 91147 + 91148) % 4 = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_668",
+      "value_vars": [],
+      "domain_vars": {
+        "l": "modular_type_zmod",
+        "r": "modular_type_zmod"
+      },
+      "hyps": [
+        "l = (2 + 3)⁻¹",
+        "r = 2⁻¹ + 3⁻¹"
+      ],
+      "goal": "l - r = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_690",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "is_least {a : ℕ | 0 < a ∧ a ≡ 2 [MOD 3] ∧ a ≡ 4 [MOD 5] ∧ a ≡ 6 [MOD 7] ∧ a ≡ 8 [MOD 9]} 314",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_709",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n",
+        "finset.card (nat.divisors (2 * n)) = 28",
+        "finset.card (nat.divisors (3 * n)) = 30"
+      ],
+      "goal": "finset.card (nat.divisors (6 * n)) = 35",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_739",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "9! % 10 = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_780",
+      "value_vars": [
+        "m",
+        "x"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "10 ≤ m",
+        "m ≤ 99",
+        "(6 * x) % m = 1",
+        "(x - 6^2) % m = 0"
+      ],
+      "goal": "m = 43",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_81",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "71 % 3 = 2",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_84",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "int.floor ((9:ℝ) / 160 * 100) = 5",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_92",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(5 * n) % 17 = 8"
+      ],
+      "goal": "n % 17 = 5",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "mathd_numbertheory_961",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "2003 % 11 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_2dvd4expn",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "n ≠ 0"
+      ],
+      "goal": "2 ∣ 4^n",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_aneqprodakp4_anmsqrtanp1eq2",
+      "value_vars": [],
+      "domain_vars": {},
+      "hyps": [
+        "a 0 = 1",
+        "∀ n, a (n + 1) = (∏ k in finset.range (n + 1), (a k)) + 4"
+      ],
+      "goal": "∀ n ≥ 1, a n - real.sqrt (a (n + 1)) = 2",
+      "fn_unknown": true,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_nckeqnm1ckpnm1ckm1",
+      "value_vars": [
+        "n",
+        "k"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n ∧ 0 < k",
+        "k ≤ n"
+      ],
+      "goal": "nat.choose n k = nat.choose (n - 1) k + nat.choose (n - 1) (k - 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_prmdvsneqnsqmodpeq0",
+      "value_vars": [
+        "n",
+        "p"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "nat.prime p"
+      ],
+      "goal": "↑p ∣ n ↔ (n^2) % p = 0",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_sqmod3in01d",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(a^2) % 3 = 0 ∨ (a^2) % 3 = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_sqmod4in01d",
+      "value_vars": [
+        "a"
+      ],
+      "domain_vars": {},
+      "hyps": [],
+      "goal": "(a^2 % 4) = 0 ∨ (a^2 % 4) = 1",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_sumkmulnckeqnmul2pownm1",
+      "value_vars": [
+        "n"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "0 < n"
+      ],
+      "goal": "∑ k in finset.Icc 1 n, (k * nat.choose n k) = n * 2^(n - 1)",
+      "fn_unknown": false,
+      "split": "valid"
+    },
+    {
+      "name": "numbertheory_xsqpysqintdenomeq",
+      "value_vars": [
+        "x",
+        "y"
+      ],
+      "domain_vars": {},
+      "hyps": [
+        "(x^2 + y^2).denom = 1"
+      ],
+      "goal": "x.denom = y.denom",
+      "fn_unknown": false,
+      "split": "valid"
+    }
+  ]
+}

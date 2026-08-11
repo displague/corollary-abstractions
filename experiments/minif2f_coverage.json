@@ -1,0 +1,4185 @@
+{
+  "generated_by": "scripts/ingest_minif2f.py coverage",
+  "source_extract": {
+    "path": "data_sources/derived/minif2f/statements.json",
+    "git_commit": "4e433ff5cadff23f9911a2bb5bbab2d351ce5554",
+    "statement_count": 488
+  },
+  "grammar": {
+    "supported_heads": [
+      "relations(= ≠ < ≤ > ≥ ↔)",
+      "MEET(∧) JOIN(∨) NEG(¬) IMPLIES(→)",
+      "arithmetic(+ - * / ^)",
+      "SQRT(real.sqrt) LOG(real.log) EXP(real.exp)"
+    ],
+    "explicit_gaps_no_head_in_corpus": [
+      "modulo(%, [MOD n])",
+      "divides(∣)",
+      "absolute-value/norm(|·|, ∥·∥)",
+      "tuple/pair constructor",
+      "gcd/lcm",
+      "big operators(∑ ∏)",
+      "quantifiers(∀ ∃) in goal",
+      "unknown-function slot"
+    ],
+    "supported_heads_verified": "each supported head has a corresponding node in data/*/nodes.json; % and ∣ were removed after review found they have no modulo/divides head in the corpus (the only MOD head is morphology's linguistic modifier).",
+    "covered_definition": "every leaf is a numeral or numeric-typed bound variable; every internal node is a supported head; no blocker construct in goal (goal-only) or in goal and all hypotheses (full-statement)."
+  },
+  "totals": {
+    "statements": 488,
+    "goal_only": {
+      "covered": 237,
+      "pct": 48.6
+    },
+    "full_statement": {
+      "covered": 153,
+      "pct": 31.4
+    }
+  },
+  "by_split": {
+    "test": {
+      "total": 244,
+      "goal_only_covered": 133,
+      "full_statement_covered": 88
+    },
+    "valid": {
+      "total": 244,
+      "goal_only_covered": 104,
+      "full_statement_covered": 65
+    }
+  },
+  "goal_only_untranslatable_reasons": {
+    "modulo_no_head": 53,
+    "big_operator": 50,
+    "unsupported_symbol:f": 21,
+    "complex_number": 18,
+    "divides_no_head": 15,
+    "set_or_finset": 15,
+    "existential_quantifier": 12,
+    "gcd_lcm": 9,
+    "rational_component": 8,
+    "absolute_value": 7,
+    "floor_ceil": 5,
+    "no_relation_in_goal": 5,
+    "universal_quantifier": 5,
+    "modular_type_zmod": 4,
+    "factorial": 3,
+    "unsupported_symbol:a": 3,
+    "unsupported_symbol:s": 3,
+    "digit_expansion": 2,
+    "trig": 2,
+    "tuple_or_structure": 2,
+    "unsupported_symbol:g": 2,
+    "unsupported_symbol:real.logb": 2,
+    "unsupported_symbol:u": 2,
+    "binomial_choose": 1,
+    "unsupported_symbol:p": 1,
+    "unsupported_symbol:x": 1
+  },
+  "full_statement_untranslatable_reasons": {
+    "modulo_no_head": 53,
+    "big_operator": 50,
+    "function_unknown_binder": 28,
+    "unsupported_symbol:f": 21,
+    "complex_number": 18,
+    "divides_no_head": 15,
+    "set_or_finset": 15,
+    "existential_quantifier": 12,
+    "gcd_lcm": 9,
+    "hyp:divides_no_head": 8,
+    "rational_component": 8,
+    "absolute_value": 7,
+    "hyp:absolute_value": 7,
+    "hyp:modulo_no_head": 7,
+    "hyp:gcd_lcm": 6,
+    "floor_ceil": 5,
+    "hyp:existential_quantifier": 5,
+    "hyp:universal_quantifier": 5,
+    "no_relation_in_goal": 5,
+    "universal_quantifier": 5,
+    "hyp:big_operator": 4,
+    "modular_type_zmod": 4,
+    "factorial": 3,
+    "hyp:primality": 3,
+    "hyp:unsupported_symbol:even": 3,
+    "unsupported_symbol:a": 3,
+    "unsupported_symbol:s": 3,
+    "digit_expansion": 2,
+    "hyp:unsupported_symbol:real.logb": 2,
+    "trig": 2,
+    "tuple_or_structure": 2,
+    "unsupported_symbol:g": 2,
+    "unsupported_symbol:real.logb": 2,
+    "unsupported_symbol:u": 2,
+    "binomial_choose": 1,
+    "hyp:factorial": 1,
+    "hyp:floor_ceil": 1,
+    "hyp:rational_component": 1,
+    "hyp:tuple_or_structure": 1,
+    "hyp:unsupported_symbol:nat.sqrt": 1,
+    "hyp:unsupported_symbol:odd": 1,
+    "unsupported_symbol:p": 1,
+    "unsupported_symbol:x": 1
+  },
+  "covered_full_statement_names": [
+    "aime_1983_p1",
+    "aime_1987_p5",
+    "aime_1989_p8",
+    "aime_1990_p15",
+    "aime_1990_p4",
+    "algebra_9onxpypzleqsum2onxpy",
+    "algebra_abpbcpcageq3_sumaonsqrtapbgeq3onsqrt2",
+    "algebra_amgm_sumasqdivbgeqsuma",
+    "algebra_apbmpcneq0_aeq0anbeq0anceq0",
+    "algebra_apbon2pownleqapownpbpowon2",
+    "algebra_apbpceq2_abpbcpcaeq1_aleq1on3anbleq1ancleq4on3",
+    "algebra_bleqa_apbon2msqrtableqambsqon8b",
+    "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
+    "algebra_ineq_nto1onlt2m1on",
+    "algebra_sqineq_at2malt1",
+    "algebra_sqineq_unitcircatbpamblt1",
+    "amc12_2000_p1",
+    "amc12_2000_p12",
+    "amc12_2000_p20",
+    "amc12a_2009_p6",
+    "amc12a_2013_p4",
+    "amc12a_2019_p12",
+    "amc12b_2002_p19",
+    "amc12b_2002_p2",
+    "amc12b_2002_p7",
+    "amc12b_2020_p13",
+    "amc12b_2020_p2",
+    "amc12b_2020_p22",
+    "amc12b_2021_p3",
+    "amc12b_2021_p4",
+    "amc12b_2021_p9",
+    "imo_1960_p2",
+    "imo_1962_p2",
+    "imo_1964_p2",
+    "imo_1983_p6",
+    "induction_1pxpownlt1pnx",
+    "mathd_algebra_107",
+    "mathd_algebra_113",
+    "mathd_algebra_114",
+    "mathd_algebra_125",
+    "mathd_algebra_129",
+    "mathd_algebra_137",
+    "mathd_algebra_141",
+    "mathd_algebra_142",
+    "mathd_algebra_160",
+    "mathd_algebra_17",
+    "mathd_algebra_176",
+    "mathd_algebra_184",
+    "mathd_algebra_208",
+    "mathd_algebra_24",
+    "mathd_algebra_263",
+    "mathd_algebra_275",
+    "mathd_algebra_293",
+    "mathd_algebra_304",
+    "mathd_algebra_314",
+    "mathd_algebra_320",
+    "mathd_algebra_329",
+    "mathd_algebra_33",
+    "mathd_algebra_332",
+    "mathd_algebra_338",
+    "mathd_algebra_354",
+    "mathd_algebra_359",
+    "mathd_algebra_362",
+    "mathd_algebra_388",
+    "mathd_algebra_398",
+    "mathd_algebra_400",
+    "mathd_algebra_412",
+    "mathd_algebra_419",
+    "mathd_algebra_427",
+    "mathd_algebra_432",
+    "mathd_algebra_44",
+    "mathd_algebra_440",
+    "mathd_algebra_441",
+    "mathd_algebra_478",
+    "mathd_algebra_484",
+    "mathd_algebra_487",
+    "mathd_algebra_513",
+    "mathd_algebra_598",
+    "mathd_algebra_756",
+    "mathd_algebra_80",
+    "mathd_numbertheory_207",
+    "mathd_numbertheory_227",
+    "mathd_numbertheory_234",
+    "mathd_numbertheory_430",
+    "mathd_numbertheory_541",
+    "mathd_numbertheory_85",
+    "numbertheory_4x3m7y3neq2003",
+    "numbertheory_x5neqy2p4",
+    "aime_1984_p15",
+    "aime_1990_p2",
+    "aime_1991_p1",
+    "algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4",
+    "algebra_amgm_sumasqdivbsqgeqsumbdiva",
+    "algebra_apb4leq8ta4pb4",
+    "algebra_binomnegdiscrineq_10alt28asqp1",
+    "algebra_sqineq_2at2pclta2c2p41pc",
+    "algebra_sqineq_2unitcircatblt1",
+    "algebra_sqineq_36azm9asqle36zsq",
+    "algebra_sqineq_4bap1lt4bsqpap1sq",
+    "amc12_2000_p11",
+    "amc12_2001_p2",
+    "amc12a_2008_p2",
+    "amc12a_2008_p8",
+    "amc12a_2009_p2",
+    "amc12a_2009_p5",
+    "amc12a_2013_p8",
+    "amc12a_2015_p10",
+    "amc12a_2016_p2",
+    "amc12a_2017_p2",
+    "amc12a_2020_p13",
+    "amc12a_2021_p7",
+    "amc12b_2003_p17",
+    "amc12b_2004_p3",
+    "amc12b_2020_p5",
+    "imo_1961_p1",
+    "imo_1974_p5",
+    "imo_2006_p6",
+    "mathd_algebra_101",
+    "mathd_algebra_104",
+    "mathd_algebra_109",
+    "mathd_algebra_11",
+    "mathd_algebra_116",
+    "mathd_algebra_119",
+    "mathd_algebra_123",
+    "mathd_algebra_126",
+    "mathd_algebra_144",
+    "mathd_algebra_181",
+    "mathd_algebra_190",
+    "mathd_algebra_234",
+    "mathd_algebra_245",
+    "mathd_algebra_247",
+    "mathd_algebra_251",
+    "mathd_algebra_267",
+    "mathd_algebra_37",
+    "mathd_algebra_410",
+    "mathd_algebra_421",
+    "mathd_algebra_437",
+    "mathd_algebra_455",
+    "mathd_algebra_462",
+    "mathd_algebra_509",
+    "mathd_algebra_51",
+    "mathd_algebra_510",
+    "mathd_algebra_547",
+    "mathd_algebra_55",
+    "mathd_algebra_568",
+    "mathd_algebra_59",
+    "mathd_algebra_69",
+    "mathd_algebra_89",
+    "mathd_algebra_96",
+    "mathd_numbertheory_136",
+    "mathd_numbertheory_284",
+    "mathd_numbertheory_326",
+    "mathd_numbertheory_48"
+  ],
+  "per_statement": [
+    {
+      "name": "aime_1983_p1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1983_p2",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "aime_1983_p3",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "aime_1984_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "aime_1984_p7",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "aime_1987_p5",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1988_p8",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "aime_1989_p8",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1990_p15",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1990_p4",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1991_p9",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "aime_1994_p3",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "aime_1995_p7",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "aime_1997_p9",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:floor_ceil"
+    },
+    {
+      "name": "aime_1999_p11",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_9onxpypzleqsum2onxpy",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_abpbcpcageq3_sumaonsqrtapbgeq3onsqrt2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_absapbon1pabsapbleqsumabsaon1pabsa",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "algebra_amgm_sum1toneqn_prod1tonleq1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "algebra_amgm_sumasqdivbgeqsuma",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_apbmpcneq0_aeq0anbeq0anceq0",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_apbon2pownleqapownpbpowon2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_apbpceq2_abpbcpcaeq1_aleq1on3anbleq1ancleq4on3",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_bleqa_apbon2msqrtableqambsqon8b",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_ineq_nto1onlt2m1on",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_others_exirrpowirrrat",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "no_relation_in_goal",
+      "full_ok": false,
+      "full_reason": "no_relation_in_goal"
+    },
+    {
+      "name": "algebra_sqineq_at2malt1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_sqineq_unitcircatbpabsamblt1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "algebra_sqineq_unitcircatbpamblt1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_sum1onsqrt2to1onsqrt10000lt198",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12_2000_p1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12_2000_p12",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12_2000_p20",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12_2000_p6",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:primality"
+    },
+    {
+      "name": "amc12_2001_p21",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:factorial"
+    },
+    {
+      "name": "amc12_2001_p5",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2002_p13",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "amc12a_2002_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "amc12a_2003_p23",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12a_2003_p5",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:tuple_or_structure"
+    },
+    {
+      "name": "amc12a_2008_p25",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:a",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:a"
+    },
+    {
+      "name": "amc12a_2009_p6",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2009_p7",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2013_p4",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2019_p12",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2020_p10",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "digit_expansion",
+      "full_ok": false,
+      "full_reason": "digit_expansion"
+    },
+    {
+      "name": "amc12a_2020_p15",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "amc12a_2020_p25",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "amc12a_2020_p4",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12a_2020_p7",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2020_p9",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12a_2021_p12",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2021_p14",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2021_p18",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "amc12a_2021_p19",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12a_2021_p22",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2021_p25",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "digit_expansion",
+      "full_ok": false,
+      "full_reason": "digit_expansion"
+    },
+    {
+      "name": "amc12a_2021_p3",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "amc12a_2021_p8",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "no_relation_in_goal",
+      "full_ok": false,
+      "full_reason": "no_relation_in_goal"
+    },
+    {
+      "name": "amc12a_2021_p9",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12b_2002_p19",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2002_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2002_p4",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:rational_component"
+    },
+    {
+      "name": "amc12b_2002_p7",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2020_p13",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2020_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2020_p21",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12b_2020_p22",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2020_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "amc12b_2021_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12b_2021_p13",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12b_2021_p18",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "amc12b_2021_p3",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2021_p4",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2021_p9",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1959_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "imo_1960_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1962_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1963_p5",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "trig",
+      "full_ok": false,
+      "full_reason": "trig"
+    },
+    {
+      "name": "imo_1964_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1965_p2",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "imo_1968_p5_1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1969_p2",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1974_p3",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_1977_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "universal_quantifier",
+      "full_ok": false,
+      "full_reason": "universal_quantifier"
+    },
+    {
+      "name": "imo_1981_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "universal_quantifier",
+      "full_ok": false,
+      "full_reason": "universal_quantifier"
+    },
+    {
+      "name": "imo_1982_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "imo_1983_p6",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1984_p6",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:odd"
+    },
+    {
+      "name": "imo_1985_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1992_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "tuple_or_structure",
+      "full_ok": false,
+      "full_reason": "tuple_or_structure"
+    },
+    {
+      "name": "imo_1997_p5",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "tuple_or_structure",
+      "full_ok": false,
+      "full_reason": "tuple_or_structure"
+    },
+    {
+      "name": "imo_2001_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "no_relation_in_goal",
+      "full_ok": false,
+      "full_reason": "no_relation_in_goal"
+    },
+    {
+      "name": "imo_2007_p6",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_2019_p1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "induction_11div10tonmn1ton",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_12dvd4expnp1p20",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_1pxpownlt1pnx",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "induction_nfactltnexpnm1ngt3",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "factorial",
+      "full_ok": false,
+      "full_reason": "factorial"
+    },
+    {
+      "name": "induction_pord1p1on2powklt5on2",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "induction_pprime_pdvdapowpma",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_prod1p1onk3le3m1onn",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "induction_sumkexp3eqsumksq",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_algebra_107",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_113",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_114",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_125",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_129",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_137",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_139",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:s",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:s"
+    },
+    {
+      "name": "mathd_algebra_141",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_142",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_143",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_148",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_153",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "floor_ceil",
+      "full_ok": false,
+      "full_reason": "floor_ceil"
+    },
+    {
+      "name": "mathd_algebra_156",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_158",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:even"
+    },
+    {
+      "name": "mathd_algebra_160",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_17",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_170",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_algebra_171",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_176",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_184",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_188",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_196",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_algebra_208",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_209",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_215",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_algebra_24",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_246",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_263",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_270",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_275",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_276",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:universal_quantifier"
+    },
+    {
+      "name": "mathd_algebra_288",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "mathd_algebra_289",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:primality"
+    },
+    {
+      "name": "mathd_algebra_293",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_296",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "mathd_algebra_302",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_304",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_313",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_314",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_320",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_329",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_33",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_332",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_338",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_342",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:big_operator"
+    },
+    {
+      "name": "mathd_algebra_346",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:g",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:g"
+    },
+    {
+      "name": "mathd_algebra_354",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_359",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_362",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_388",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_392",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:even"
+    },
+    {
+      "name": "mathd_algebra_398",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_400",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_412",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_419",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_427",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_432",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_44",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_440",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_441",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_452",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:a",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:a"
+    },
+    {
+      "name": "mathd_algebra_459",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "mathd_algebra_478",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_484",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_487",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_513",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_598",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_756",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_76",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_80",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_100",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_1124",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_12",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_127",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_135",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_150",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:primality"
+    },
+    {
+      "name": "mathd_numbertheory_175",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_185",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_207",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_212",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_222",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_227",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_229",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_233",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modular_type_zmod",
+      "full_ok": false,
+      "full_reason": "modular_type_zmod"
+    },
+    {
+      "name": "mathd_numbertheory_234",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_235",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_237",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_239",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_247",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_254",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_277",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_293",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_296",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:existential_quantifier"
+    },
+    {
+      "name": "mathd_numbertheory_299",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_3",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_314",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_320",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_321",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modular_type_zmod",
+      "full_ok": false,
+      "full_reason": "modular_type_zmod"
+    },
+    {
+      "name": "mathd_numbertheory_328",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_34",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_341",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_342",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_343",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_345",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_353",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_427",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_430",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_435",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:universal_quantifier"
+    },
+    {
+      "name": "mathd_numbertheory_447",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_451",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_457",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_483",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_495",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_5",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:existential_quantifier"
+    },
+    {
+      "name": "mathd_numbertheory_517",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_521",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:even"
+    },
+    {
+      "name": "mathd_numbertheory_541",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_551",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_552",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_559",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_582",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_618",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_numbertheory_66",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_711",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_728",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_764",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_765",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_769",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_85",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_99",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_2pownm1prime_nprime",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "no_relation_in_goal",
+      "full_ok": false,
+      "full_reason": "no_relation_in_goal"
+    },
+    {
+      "name": "numbertheory_3pow2pownm1mod2pownp3eq2pownp2",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_4x3m7y3neq2003",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "numbertheory_aoddbdiv4asqpbsqmod8eq1",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:existential_quantifier"
+    },
+    {
+      "name": "numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "numbertheory_notequiv2i2jasqbsqdiv8",
+      "split": "test",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "numbertheory_x5neqy2p4",
+      "split": "test",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aimeII_2001_p3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:x",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:x"
+    },
+    {
+      "name": "aimeII_2020_p6",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "aimeI_2000_p7",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "aime_1983_p9",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "trig",
+      "full_ok": false,
+      "full_reason": "trig"
+    },
+    {
+      "name": "aime_1984_p15",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1984_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:real.logb"
+    },
+    {
+      "name": "aime_1987_p8",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:existential_quantifier"
+    },
+    {
+      "name": "aime_1988_p3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:real.logb",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:real.logb"
+    },
+    {
+      "name": "aime_1988_p4",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "aime_1990_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1991_p1",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "aime_1991_p6",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "floor_ceil",
+      "full_ok": false,
+      "full_reason": "floor_ceil"
+    },
+    {
+      "name": "aime_1994_p4",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:big_operator"
+    },
+    {
+      "name": "aime_1996_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "aime_1997_p12",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "floor_ceil",
+      "full_ok": false,
+      "full_reason": "floor_ceil"
+    },
+    {
+      "name": "algebra_2complexrootspoly_xsqp49eqxp7itxpn7i",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_2rootsintpoly_am10tap11eqasqpam110",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_2rootspoly_apatapbeq2asqp2ab",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_2varlineareq_xpeeq7_2xpeeq3_eeq11_xeqn4",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_3rootspoly_amdtamctambeqnasqmbpctapcbtdpasqmbpctapcbta",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_amgm_faxinrrp2msqrt2geq2mxm1div2x",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "universal_quantifier",
+      "full_ok": false,
+      "full_reason": "universal_quantifier"
+    },
+    {
+      "name": "algebra_amgm_prod1toneq1_sum1tongeqn",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_amgm_sumasqdivbsqgeqsumbdiva",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_apb4leq8ta4pb4",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_binomnegdiscrineq_10alt28asqp1",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_manipexpr_2erprsqpesqeqnrpnesq",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_manipexpr_apbeq2cceqiacpbceqm2",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "algebra_sqineq_2at2pclta2c2p41pc",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_sqineq_2unitcircatblt1",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_sqineq_36azm9asqle36zsq",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_sqineq_4bap1lt4bsqpap1sq",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "algebra_xmysqpymzsqpzmxsqeqxyz_xpypzp6dvdx3y3z3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "amc12_2000_p11",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12_2000_p15",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12_2000_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "amc12_2001_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12_2001_p9",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "amc12a_2002_p1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2002_p12",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2002_p21",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2003_p1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2003_p24",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "amc12a_2003_p25",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2008_p15",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "amc12a_2008_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2008_p4",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2008_p8",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2009_p15",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:big_operator"
+    },
+    {
+      "name": "amc12a_2009_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2009_p25",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "amc12a_2009_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2009_p9",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "amc12a_2010_p10",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:a",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:a"
+    },
+    {
+      "name": "amc12a_2010_p11",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:real.logb"
+    },
+    {
+      "name": "amc12a_2010_p22",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "amc12a_2011_p18",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "amc12a_2013_p7",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:s",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:s"
+    },
+    {
+      "name": "amc12a_2013_p8",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2015_p10",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2016_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2016_p3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "amc12a_2017_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2017_p7",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "amc12a_2019_p21",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "amc12a_2019_p9",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    },
+    {
+      "name": "amc12a_2020_p13",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12a_2020_p22",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12a_2021_p7",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2002_p11",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "no_relation_in_goal",
+      "full_ok": false,
+      "full_reason": "no_relation_in_goal"
+    },
+    {
+      "name": "amc12b_2002_p3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "amc12b_2002_p6",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:universal_quantifier"
+    },
+    {
+      "name": "amc12b_2003_p17",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2003_p6",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:u",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:u"
+    },
+    {
+      "name": "amc12b_2003_p9",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "amc12b_2004_p3",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2020_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "amc12b_2021_p21",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_1961_p1",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1962_p4",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1964_p1_1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "imo_1964_p1_2",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "imo_1965_p1",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "imo_1966_p4",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_1966_p5",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "imo_1967_p3",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_1973_p3",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:existential_quantifier"
+    },
+    {
+      "name": "imo_1974_p5",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "imo_1977_p5",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "imo_1978_p5",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "imo_1979_p1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "imo_1984_p2",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "imo_1987_p4",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1987_p6",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "universal_quantifier",
+      "full_ok": false,
+      "full_reason": "universal_quantifier"
+    },
+    {
+      "name": "imo_1988_p6",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_1990_p3",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:divides_no_head"
+    },
+    {
+      "name": "imo_1993_p5",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "existential_quantifier",
+      "full_ok": false,
+      "full_reason": "existential_quantifier"
+    },
+    {
+      "name": "imo_2006_p6",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "induction_divisibility_3div2tooddnp1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_divisibility_3divnto3m2n",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_divisibility_9div10tonm1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "induction_ineq_nsqlefactn",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "factorial",
+      "full_ok": false,
+      "full_reason": "factorial"
+    },
+    {
+      "name": "induction_seq_mul2pnp1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:u",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:u"
+    },
+    {
+      "name": "induction_sum2kp1npqsqm1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "induction_sum_1oktkp1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "induction_sum_odd",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_algebra_10",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "absolute_value",
+      "full_ok": false,
+      "full_reason": "absolute_value"
+    },
+    {
+      "name": "mathd_algebra_101",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_104",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_109",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_11",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_110",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_116",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_119",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_123",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_126",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_13",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:universal_quantifier"
+    },
+    {
+      "name": "mathd_algebra_131",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_132",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_140",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:universal_quantifier"
+    },
+    {
+      "name": "mathd_algebra_144",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_149",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_algebra_15",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:s",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:s"
+    },
+    {
+      "name": "mathd_algebra_151",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "floor_ceil",
+      "full_ok": false,
+      "full_reason": "floor_ceil"
+    },
+    {
+      "name": "mathd_algebra_159",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_181",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_182",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_185",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_algebra_190",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_192",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_206",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_214",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_22",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:real.logb",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:real.logb"
+    },
+    {
+      "name": "mathd_algebra_224",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_algebra_234",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_245",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_247",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_251",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_267",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_28",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_282",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_31",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_323",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_327",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:absolute_value"
+    },
+    {
+      "name": "mathd_algebra_35",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:p",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:p"
+    },
+    {
+      "name": "mathd_algebra_37",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_393",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_405",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_algebra_410",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_421",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_422",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_43",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_433",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_437",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_451",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_455",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_462",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_48",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_480",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_482",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_493",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_509",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_51",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_510",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_536",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "factorial",
+      "full_ok": false,
+      "full_reason": "factorial"
+    },
+    {
+      "name": "mathd_algebra_547",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_55",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_568",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_59",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_616",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:f",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:f"
+    },
+    {
+      "name": "mathd_algebra_67",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "unsupported_symbol:g",
+      "full_ok": false,
+      "full_reason": "unsupported_symbol:g"
+    },
+    {
+      "name": "mathd_algebra_69",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_73",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "complex_number",
+      "full_ok": false,
+      "full_reason": "complex_number"
+    },
+    {
+      "name": "mathd_algebra_77",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_algebra_89",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_algebra_96",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_101",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_102",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_109",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_110",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_126",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_13",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_numbertheory_132",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_136",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_149",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_155",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_156",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_169",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_188",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_198",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_200",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_202",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_211",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_22",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:unsupported_symbol:nat.sqrt"
+    },
+    {
+      "name": "mathd_numbertheory_221",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_numbertheory_232",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modular_type_zmod",
+      "full_ok": false,
+      "full_reason": "modular_type_zmod"
+    },
+    {
+      "name": "mathd_numbertheory_236",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_24",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_252",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_257",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_269",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_284",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_30",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_301",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_303",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_32",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_326",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_33",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_335",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_35",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_37",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_370",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_403",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_405",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_412",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_42",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "function_unknown_binder"
+    },
+    {
+      "name": "mathd_numbertheory_43",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_45",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_458",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_461",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_466",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_48",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
+    },
+    {
+      "name": "mathd_numbertheory_530",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_543",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "mathd_numbertheory_629",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "gcd_lcm",
+      "full_ok": false,
+      "full_reason": "gcd_lcm"
+    },
+    {
+      "name": "mathd_numbertheory_64",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_640",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_668",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modular_type_zmod",
+      "full_ok": false,
+      "full_reason": "modular_type_zmod"
+    },
+    {
+      "name": "mathd_numbertheory_690",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_709",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "set_or_finset",
+      "full_ok": false,
+      "full_reason": "set_or_finset"
+    },
+    {
+      "name": "mathd_numbertheory_739",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_780",
+      "split": "valid",
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": false,
+      "full_reason": "hyp:modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_81",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_84",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "floor_ceil",
+      "full_ok": false,
+      "full_reason": "floor_ceil"
+    },
+    {
+      "name": "mathd_numbertheory_92",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "mathd_numbertheory_961",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_2dvd4expn",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "divides_no_head",
+      "full_ok": false,
+      "full_reason": "divides_no_head"
+    },
+    {
+      "name": "numbertheory_aneqprodakp4_anmsqrtanp1eq2",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "universal_quantifier",
+      "full_ok": false,
+      "full_reason": "universal_quantifier"
+    },
+    {
+      "name": "numbertheory_nckeqnm1ckpnm1ckm1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "binomial_choose",
+      "full_ok": false,
+      "full_reason": "binomial_choose"
+    },
+    {
+      "name": "numbertheory_prmdvsneqnsqmodpeq0",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_sqmod3in01d",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_sqmod4in01d",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "modulo_no_head",
+      "full_ok": false,
+      "full_reason": "modulo_no_head"
+    },
+    {
+      "name": "numbertheory_sumkmulnckeqnmul2pownm1",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "big_operator",
+      "full_ok": false,
+      "full_reason": "big_operator"
+    },
+    {
+      "name": "numbertheory_xsqpysqintdenomeq",
+      "split": "valid",
+      "goal_ok": false,
+      "goal_reason": "rational_component",
+      "full_ok": false,
+      "full_reason": "rational_component"
+    }
+  ]
+}

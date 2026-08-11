@@ -21,6 +21,29 @@ python scripts/fetch_sources.py --verify               # re-check local archives
   accept the form on the dataset page first, and any use must cite the authors.
 - **git** sources (miniF2F) are cloned manually; pin the commit SHA.
 
+## Ingestion (source → committed derived extract → measurement)
+
+The archive is gitignored, so an ingestion transform commits a **derived
+extract** (`data_sources/derived/`, license permitting) and reads *that*, so the
+downstream measurement regenerates in CI without the archive. miniF2F is the
+first worked example:
+
+```console
+# stage 1 (needs the pinned archive; SHA-verified): Lean -> committed extract
+python scripts/ingest_minif2f.py extract
+# stage 2 (CI-regenerable from the committed extract): grammar-coverage measurement
+python scripts/ingest_minif2f.py coverage
+```
+
+- Stage 1 verifies each Lean file against the SHA-256 pinned in `manifest.json`
+  and refuses to extract from unpinned bytes; the extract carries the source's
+  Apache-2.0 attribution.
+- Stage 2 is a pure function of the committed extract and is guarded
+  byte-for-byte by a regeneration test. See the coverage write-up in
+  `experiments/ANALYSIS.md` (§ "miniF2F grammar-coverage").
+- Committed JSON in `derived/` and `experiments/` is pinned `text eol=lf` in
+  `.gitattributes` so the working tree stays LF regardless of `core.autocrlf`.
+
 ## Discipline
 
 - Licensed/sample data is for **local research use** and is never redistributed

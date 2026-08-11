@@ -2165,3 +2165,110 @@ control unconditional, inside the pre-registered 0.15 bar, per-seed kept-row del
 (max trained target length 88 < the 96 boundary). **P-DI3 MISSED:** the retained
 first-error mass is early (0.751 in deciles 0–2), not the predicted deep end. A
 matched-control interface negative; the budget is not the depth bottleneck.
+
+## v0.9 item 1 — miniF2F grammar-coverage: the first ingestion number
+
+The v0.9 pivot's headline is "make the corpus non-toy by ingestion", and the
+design doc (DESIGN-corpus-scale-and-programming.md) is explicit that the honest
+first deliverable is a **coverage number** — what fraction of a real formal
+source expresses in the corpus grammar at all — *before* any node is authored or
+any scale is claimed. This is that measurement for miniF2F, the prime first
+target.
+
+**Instrument.** `scripts/ingest_minif2f.py`, two deterministic stages so the
+number regenerates in CI without redistributing the source:
+
+- `extract`: the pinned Lean-3 statement files (`test.lean`, `valid.lean` at
+  commit `4e433ff5`, SHA-256 verified against `data_sources/manifest.json`,
+  archive gitignored) → committed `data_sources/derived/minif2f/statements.json`
+  (488 statement signatures: name, value binders, hypotheses, goal; proofs
+  dropped; Apache-2.0 `LICENSE` + `NOTICE.md` vendored beside the extract). A
+  count mismatch (≠ 244 per file) hard-fails, so parser drift cannot pass
+  silently.
+- `coverage`: the committed extract → committed
+  `experiments/minif2f_coverage.json`. A pure function of the extract, guarded
+  byte-for-byte by a regeneration test.
+
+**What "covered" means, precisely, and the head-provenance rule.** A head counts
+as *supported* only if a node in `data/*/nodes.json` actually carries it:
+relations (`=  ≠  <  ≤  >  ≥  ↔`), the Boolean heads MEET/JOIN/NEG/IMPLIES,
+arithmetic (`+ - * / ^`), and the three transcendental heads the corpus carries
+(SQRT, LOG, EXP). A statement is COVERED only if it reduces to a skeleton whose
+every **leaf** is a numeral or a numeric-typed bound variable and every
+**internal node** is one of those heads. `nnreal` (ℝ≥0) and `ℕ+` count as numeric
+slots — a positivity domain is a *regularity condition* on the leaf, not a
+construct the grammar lacks. Everything else is UNTRANSLATABLE, tagged by the
+first construct with no head.
+
+Two numbers, both reported:
+
+| coverage | test | valid | total |
+|---|---|---|---|
+| goal-only (drops hypotheses; upper bound) | 133/244 | 104/244 | **237/488 = 48.6%** |
+| full-statement (goal AND all hypotheses reduce) | 88/244 | 65/244 | **153/488 = 31.4%** |
+
+Full-statement is the real ingestion number: a competition problem's hypotheses
+carry its meaning, and dropping them to hit the goal changes the theorem. A node
+authored honestly from miniF2F is the conditional `IMPLIES(MEET(hyps), goal)`,
+and **31.4%** of miniF2F is expressible as such a node with the grammar as it
+stands today.
+
+**This number was corrected down by an independent adversarial review, and that
+correction is the honest core of the result.** A first pass reported 60.7% /
+44.7% by (wrongly) treating modulo `%` and divides `∣` as supported "because they
+already appear in the corpus". They do not: grepping `data/*/nodes.json`, the
+only `MOD` head is morphology's *linguistic modifier* and there is **no divides
+head at all**. Review also caught a mathlib norm `∥a−b∥` slipping past an
+ASCII-only `|` blocker, and two goals that are tuple-equalities `(p,q,r)=(2,4,8)`
+whose pairing constructor is not a head. Reclassifying modulo/divides as the gaps
+they are (−83 statements) and fixing the norm/tuple leaks (−3) moved the number
+from 44.7% to **31.4%**. The lesson is the project's standing one: "the corpus
+carries head X" is a claim to be verified node-by-node, not asserted — the
+verifier now checks each supported head against `data/`.
+
+**The untranslatable remainder is the finding** (full-statement, first-hit
+construct, families merged; 335 of 488):
+
+| construct | count | grammar gap |
+|---|---|---|
+| unknown function / sequence (`f x`, `a n`, arrow binder) | 70 | no first-class function slot |
+| modulo (`%`, `[MOD n]`) | 60 | **no modulo head in the corpus** |
+| big operator (`∑`, `∏`, `finset.sum`) | 54 | no indexed-aggregation head |
+| divides (`∣`) | 23 | **no divides head in the corpus** |
+| complex carrier (`ℂ`) | 18 | ℂ is not a leaf domain |
+| existential goal (`∃`) | 17 | no quantifier head (goal position) |
+| set / finset (`∈`, `.card`) | 15 | no membership/cardinality head |
+| gcd / lcm | 15 | no number-theoretic combinator |
+| absolute value / norm (`abs`, `\|·\|`, `∥·∥`) | 14 | no ABS/NORM head (cheap to add) |
+| universal goal (`∀`) | 10 | no quantifier head |
+| rational component (`.num`, `.denom`) | 9 | no field-accessor head |
+| floor/ceil, `zmod`, factorial, primality, tuple, digits, trig, choose | 30 | assorted missing heads |
+
+Two clusters dominate. **Number theory** (modulo 60 + divides 23 + gcd 15 +
+digits/primality/choose ≈ 6 → ~104) is the single largest, and it is *structural*:
+a slot-and-head grammar over first-order real/nat terms has no residue relation.
+**Higher-order structure** (unknown functions 70 + big operators 54 → 124) is the
+other: function-typed slots and bound-index aggregation are genuine grammar
+extensions, not cosmetic gaps. Cheap wins (ABS/NORM 14, factorial 4) would nudge
+the number a few points without touching either ceiling. Each untranslatable form
+is a *scored finding about the grammar's reach*, exactly as v0.7's correspondence
+rung treats an unprovable link.
+
+**Honesty checks that survived the review.** (1) The false-positive sweep now runs
+over a character whitelist (catching non-ASCII operators and constructors the
+first sweep missed) as well as value-var-applied-as-function; after the fixes it
+finds **zero** false positives in the 153 covered. (2) The `nnreal`/`ℕ+` numeric
+slot decision and the ℂ/`zmod` carrier attribution are argued and tested. (3)
+Both stages are byte-for-byte deterministic; `coverage` is a pure function of the
+committed extract, guarded by a regeneration test; each supported head is now
+asserted against `data/` rather than by memory.
+
+**What this licenses next (not done here).** Authoring the 153 covered statements
+as conditional Mathematical Statement Nodes via the PROVEN-WRITE seed→regenerate
+route, each with a real `verified_by` link back to its miniF2F theorem, then
+re-running the twin/specialization ledgers on the enlarged graph to see whether a
+capability-blind baseline that won on 221 curated nodes still wins. That is the
+release-gate work; this measurement is its honest precondition. 31.4% means a
+miniF2F-backed corpus alone adds ~153 nodes (221 → ~374) while the untranslatable
+69% is a *prioritized* grammar-extension backlog — number-theory residue and a
+function slot first — rather than a vague "grow the corpus".
