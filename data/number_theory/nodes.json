@@ -1,0 +1,1504 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "number_theory.core.v1",
+  "discipline": "number_theory",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "numbertheory.parity.even_double",
+      "title": "Twice Any Integer Is Even",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_of_forms"
+      },
+      "formal_statement": {
+        "canonical_ascii": "even(2*n)",
+        "canonical_latex": "2n \\in 2\\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "witness",
+            "notation_system": "ascii",
+            "expression": "2*n = n + n",
+            "scope_note": "The doubling witness: 2n is the sum of n with itself"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_doubling",
+        "anonymized_template": "EVEN(2 * INT1)",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A bare predicate application: the whole statement is one P-typed head over an arithmetic term, the exact shape of an ingested `Even (2 * k)` goal.",
+          "The canonical form of evenness: every even integer arises this way.",
+          "The instance of even-factor absorption with the even factor fixed at 2."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Doubling any integer lands in the even numbers: 2n is a multiple of two by construction.",
+        "statistical_significance": "The generating exemplar of the EVEN head — evenness asserted of a term rather than of a bare slot, which is what ingested parity goals look like.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "numbertheory.parity.even_product_absorbs"
+        ],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "even",
+        "doubling",
+        "multiple of two"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_successor",
+      "title": "One More Than an Even Number Is Odd",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_of_forms"
+      },
+      "formal_statement": {
+        "canonical_ascii": "odd(2*n + 1)",
+        "canonical_latex": "2n + 1 \\notin 2\\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "canonical_form",
+            "notation_system": "ascii",
+            "expression": "odd(m) iff m = 2*n + 1 for some integer n",
+            "scope_note": "The form is exhaustive: every odd integer is 2n+1"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_offset",
+        "anonymized_template": "ODD(2*INT1 + 1)",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A bare predicate application over a compound term, like its even twin.",
+          "The canonical form of oddness: every odd integer arises this way.",
+          "Offsetting the canonical even form by one crosses the parity classes."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "One past any double is odd: 2n+1 leaves remainder one on division by two.",
+        "statistical_significance": "The ODD head's generating exemplar, dual to the doubling node; together they name the two residue classes that partition the integers.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.parity.even_double",
+          "numbertheory.parity.odd_is_not_even"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "odd",
+        "successor",
+        "residue class"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_is_not_even",
+      "title": "Odd Means Not Even",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_classes"
+      },
+      "formal_statement": {
+        "canonical_ascii": "odd(n) = not even(n)",
+        "canonical_latex": "\\text{odd}(n) \\iff \\neg\\,\\text{even}(n)",
+        "equivalent_forms": [
+          {
+            "form_id": "contrapositive_reading",
+            "notation_system": "ascii",
+            "expression": "even(n) = not odd(n)",
+            "scope_note": "The same definition read from the even side"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "predicate_negation_definition",
+        "anonymized_template": "ODD(INT1) = NEG(EVEN(INT1))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A definitional equality between propositions, the same P-typed use of `=` as logic's Boolean-algebra laws.",
+          "Over the integers the two parity classes are complementary, so negation defines one predicate from the other.",
+          "This is what licenses reading a negated parity goal (`¬ Even n`) as odd."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          },
+          {
+            "notation": "NEG(.)",
+            "name": "propositional negation",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "Propositional negation, the same NEG head as scripts/seed_logic.py; ODD is DEFINED through it over the integers."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "An integer is odd exactly when it is not even: over the integers, oddness is the propositional negation of evenness.",
+        "statistical_significance": "The definitional bridge between the two parity heads; with the dichotomy it makes parity a two-class partition rather than two unrelated predicates.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals",
+          "The complementarity is specific to the integers; in a general monoid neither predicate need be the other's negation"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "odd",
+        "even",
+        "negation",
+        "definition"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.dichotomy",
+      "title": "Every Integer Is Even or Odd",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_classes",
+        "canonical_objects": [
+          "ring of integers",
+          "residue classes modulo two"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "even(n) or odd(n)",
+        "canonical_latex": "n \\in 2\\mathbb{Z} \\cup (2\\mathbb{Z}+1)",
+        "equivalent_forms": [
+          {
+            "form_id": "partition",
+            "notation_system": "ascii",
+            "expression": "exactly one of even(n), odd(n) holds",
+            "scope_note": "With odd-is-not-even the disjunction is exclusive"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "predicate_dichotomy",
+        "anonymized_template": "JOIN(EVEN(INT1), ODD(INT1))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A bare disjunction of predicate applications: a whole statement built from P-typed heads with no relation symbol at all.",
+          "Division by two admits exactly the remainders zero and one; the disjunction is exhaustive.",
+          "Exclusive in content — no integer is both — but the JOIN head is inclusive-or; exclusivity is carried by the odd-is-not-even definition."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "JOIN(.,.)",
+            "name": "disjunction",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Propositional (inclusive) disjunction, the same JOIN head as scripts/seed_logic.py; the parity dichotomy's exclusivity is recorded as an invariant, not a different head."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          },
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Division by two sorts every integer into exactly one of two classes: the evens and the odds.",
+        "statistical_significance": "The exhaustiveness half of the parity partition; the case split that grounds every parity argument by cases.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.parity.odd_is_not_even"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "dichotomy",
+        "case split",
+        "partition"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.even_sum_closed",
+      "title": "Even Numbers Are Closed Under Addition",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if even(n) and even(m) then even(n + m)",
+        "canonical_latex": "2\\mathbb{Z} + 2\\mathbb{Z} \\subseteq 2\\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "witness_sum",
+            "notation_system": "ascii",
+            "expression": "2*a + 2*b = 2*(a + b)",
+            "scope_note": "The witness computation behind the closure"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_closure_addition",
+        "anonymized_template": "IMPLIES(MEET(EVEN(INT1), EVEN(INT2)), EVEN(INT1 + INT2))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Symmetric under exchanging INT1 and INT2.",
+          "Parity respects addition: the evens form a subgroup of the integers.",
+          "A conditional whose antecedent and consequent are all predicate heads — the P-typed analogue of an algebraic closure law."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "A second arbitrary integer, independent of n."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "conjunction",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Propositional conjunction, the same MEET head as scripts/seed_logic.py; here it bundles two predicate facts into a joint antecedent."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Adding two even integers yields an even integer: doubles sum to doubles.",
+        "statistical_significance": "The additive closure of the even class — half of the statement that parity is a homomorphism from addition to addition modulo two.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "even",
+        "closure",
+        "addition",
+        "subgroup"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_sum_even",
+      "title": "The Sum of Two Odd Numbers Is Even",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if odd(n) and odd(m) then even(n + m)",
+        "canonical_latex": "(2\\mathbb{Z}+1) + (2\\mathbb{Z}+1) \\subseteq 2\\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "witness_sum",
+            "notation_system": "ascii",
+            "expression": "(2*a + 1) + (2*b + 1) = 2*(a + b + 1)",
+            "scope_note": "The two offsets of one combine into a fresh double"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_crossing_addition",
+        "anonymized_template": "IMPLIES(MEET(ODD(INT1), ODD(INT2)), EVEN(INT1 + INT2))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Symmetric under exchanging INT1 and INT2.",
+          "Addition CROSSES the parity classes here: the antecedent predicates and the consequent predicate are different heads, unlike the even closure.",
+          "The residue computation 1 + 1 = 0 modulo two, spoken in predicates."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "A second arbitrary integer, independent of n."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "conjunction",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Propositional conjunction, the same MEET head as scripts/seed_logic.py; here it bundles two predicate facts into a joint antecedent."
+          },
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Adding two odd integers yields an even integer: the two unit offsets cancel modulo two.",
+        "statistical_significance": "The class-crossing case of parity addition — with the even closure it completes the addition table of the two residue classes.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "odd",
+        "sum",
+        "residue arithmetic"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.even_product_absorbs",
+      "title": "A Product With an Even Factor Is Even",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if even(n) then even(n * m)",
+        "canonical_latex": "2\\mathbb{Z} \\cdot \\mathbb{Z} \\subseteq 2\\mathbb{Z}",
+        "equivalent_forms": [
+          {
+            "form_id": "witness_product",
+            "notation_system": "ascii",
+            "expression": "(2*a) * m = 2*(a * m)",
+            "scope_note": "The factor of two survives any multiplication"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_absorption_multiplication",
+        "anonymized_template": "IMPLIES(EVEN(INT1), EVEN(INT1 * INT2))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "ONE even factor suffices; the other factor is unconstrained — an absorption law, not a closure law.",
+          "The evens form an ideal of the integer ring, not merely a subgroup.",
+          "Its INT1 = 2 instance, detached against the primality of two's evenness, is the doubling node."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "A second arbitrary integer, independent of n."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Multiplying an even integer by anything keeps it even: the factor of two is never lost.",
+        "statistical_significance": "The multiplicative absorption of the even class — the ideal property that makes even-times-anything a one-hypothesis statement where the odd product law needs two.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "numbertheory.parity.even_double"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "even",
+        "product",
+        "absorption",
+        "ideal"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_product_closed",
+      "title": "Odd Numbers Are Closed Under Multiplication",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if odd(n) and odd(m) then odd(n * m)",
+        "canonical_latex": "(2\\mathbb{Z}+1) \\cdot (2\\mathbb{Z}+1) \\subseteq 2\\mathbb{Z}+1",
+        "equivalent_forms": [
+          {
+            "form_id": "witness_product",
+            "notation_system": "ascii",
+            "expression": "(2*a + 1)*(2*b + 1) = 2*(2*a*b + a + b) + 1",
+            "scope_note": "The expansion exhibits the odd canonical form"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_closure_multiplication",
+        "anonymized_template": "IMPLIES(MEET(ODD(INT1), ODD(INT2)), ODD(INT1 * INT2))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Symmetric under exchanging INT1 and INT2.",
+          "Both factors must be odd: a single even factor is absorbed instead.",
+          "The residue computation 1 * 1 = 1 modulo two, spoken in predicates."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "m",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "A second arbitrary integer, independent of n."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "conjunction",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Propositional conjunction, the same MEET head as scripts/seed_logic.py; here it bundles two predicate facts into a joint antecedent."
+          },
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Multiplying two odd integers yields an odd integer: no factor of two can appear in the product that was absent from the factors.",
+        "statistical_significance": "The multiplicative closure of the odd class — with even absorption it completes the multiplication table of the two residue classes.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "odd",
+        "product",
+        "closure"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.primality.two_is_prime",
+      "title": "Two Is Prime",
+      "statement_class": "proposition",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "primality",
+        "topic": "small_primes",
+        "canonical_objects": [
+          "the set of prime numbers"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "prime(2)",
+        "canonical_latex": "2 \\in \\mathbb{P}",
+        "equivalent_forms": [
+          {
+            "form_id": "factor_check",
+            "notation_system": "ascii",
+            "expression": "2 > 1 and the only positive factorizations of 2 are 1*2 and 2*1",
+            "scope_note": "The finite verification that grounds the claim"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "atomic_predicate_instance",
+        "anonymized_template": "PRIME(TWO)",
+        "slot_schema": [
+          {
+            "slot_id": "TWO",
+            "syntactic_category": "constant",
+            "semantic_role": "the_integer_two"
+          }
+        ],
+        "invariants": [
+          "A predicate head applied to a single constant: the smallest possible P-typed statement, and the exact shape of an ingested `Nat.Prime 17` goal.",
+          "TWO is a constant slot in the settheory UNIVERSE / logic TRUTH sense: a distinguished element, not a bindable variable.",
+          "The smallest prime, and the base case of every induction over primes.",
+          "The witness that primality and evenness are compatible at exactly one point."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "2",
+            "syntactic_category": "constant",
+            "semantic_role": "the_integer_two",
+            "mathematical_order": 0,
+            "description": "The integer two: the smallest prime, the modulus of parity, and the radicand of the first irrationality proof."
+          }
+        ],
+        "operators": [],
+        "functionals": [
+          {
+            "notation": "PRIME(.)",
+            "name": "primality predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "PRIME(n) holds when the integer n exceeds one and admits no factorization into two smaller positive integers. The corpus's reading of Lean's `Nat.Prime n` (and bare `Prime n` under `open Nat`). Divisibility itself remains an uncarried gap; these nodes state primality facts expressible without a divides head."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The integer two is prime: it exceeds one and admits no factorization into smaller positive integers.",
+        "statistical_significance": "The atomic exemplar of the PRIME head — a closed statement with no slots, whose whole content is one predicate over one constant.",
+        "regularity_conditions": [
+          "None: a closed arithmetic fact"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.primality.only_even_prime"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "prime",
+        "two",
+        "smallest prime"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.primality.only_even_prime",
+      "title": "Two Is the Only Even Prime",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "primality",
+        "topic": "small_primes"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if prime(n) and even(n) then n = 2",
+        "canonical_latex": "n \\in \\mathbb{P} \\cap 2\\mathbb{Z} \\implies n = 2",
+        "equivalent_forms": [
+          {
+            "form_id": "contrapositive",
+            "notation_system": "ascii",
+            "expression": "if even(n) and n != 2 then not prime(n)",
+            "scope_note": "Every other even number has the proper factor 2"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "predicate_uniqueness",
+        "anonymized_template": "IMPLIES(MEET(PRIME(INT1), EVEN(INT1)), INT1 = 2)",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A conditional from two predicate heads to an ordinary equation: the P-typed and relational fragments of the grammar in one statement.",
+          "Any even number beyond two factors through its evenness, so primality pins the intersection to a single point.",
+          "The reason parity arguments split 'p = 2' from 'p odd' in prime proofs."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "MEET(.,.)",
+            "name": "conjunction",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Propositional conjunction, the same MEET head as scripts/seed_logic.py; here it bundles two predicate facts into a joint antecedent."
+          },
+          {
+            "notation": "PRIME(.)",
+            "name": "primality predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "PRIME(n) holds when the integer n exceeds one and admits no factorization into two smaller positive integers. The corpus's reading of Lean's `Nat.Prime n` (and bare `Prime n` under `open Nat`). Divisibility itself remains an uncarried gap; these nodes state primality facts expressible without a divides head."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A prime that is even can only be two: evenness exhibits a proper factor in any larger candidate.",
+        "statistical_significance": "The uniqueness that makes two the exceptional prime; jointly with even absorption it is why every prime beyond two is odd.",
+        "regularity_conditions": [
+          "None: a closed arithmetic fact about the integers"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.primality.two_is_prime",
+          "numbertheory.parity.even_product_absorbs"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "prime",
+        "even",
+        "uniqueness",
+        "two"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.irrationality.sqrt_prime_irrational",
+      "title": "Square Roots of Primes Are Irrational",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "irrationality",
+        "topic": "algebraic_irrationals"
+      },
+      "formal_statement": {
+        "canonical_ascii": "if prime(p) then irrational(sqrt(p))",
+        "canonical_latex": "p \\in \\mathbb{P} \\implies \\sqrt{p} \\notin \\mathbb{Q}",
+        "equivalent_forms": [
+          {
+            "form_id": "no_rational_square",
+            "notation_system": "ascii",
+            "expression": "if prime(p) then p != (a/b)^2 for all integers a, b",
+            "scope_note": "No rational squares to a prime; Euclid's descent"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "irrationality_of_radicals",
+        "anonymized_template": "IMPLIES(PRIME(INT1), IRRATIONAL(SQRT(INT1)))",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "A predicate-to-predicate conditional whose consequent wraps an arithmetic head (SQRT) inside a P-typed head (IRRATIONAL).",
+          "A prime appears to an odd power in p and to even powers in any square of a rational — the exponent parity mismatch IS the proof.",
+          "Fails for composite radicands with square factors: sqrt(4) = 2."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "p",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An integer in the role of a prime candidate."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication / meta-level inference",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "Material implication where the statement is an object-level conditional, and the meta-level 'if ... then' where it is a theorem schema. Same head and same documented double reading as scripts/seed_logic.py and seed_provability.py."
+          },
+          {
+            "notation": "PRIME(.)",
+            "name": "primality predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "PRIME(n) holds when the integer n exceeds one and admits no factorization into two smaller positive integers. The corpus's reading of Lean's `Nat.Prime n` (and bare `Prime n` under `open Nat`). Divisibility itself remains an uncarried gap; these nodes state primality facts expressible without a divides head."
+          },
+          {
+            "notation": "IRRATIONAL(.)",
+            "name": "irrationality predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "IRRATIONAL(x) holds when the real number x is not a ratio of integers. The corpus's reading of Lean's `Irrational x`; its canonical carriers here are square roots of primes."
+          },
+          {
+            "notation": "SQRT(.)",
+            "name": "square root",
+            "input_arity": 1,
+            "codomain": "nonnegative reals",
+            "description": "The principal square root, the same SQRT head the algebra and calculus corpora carry; here it is the map that sends a prime to the canonical irrational."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The square root of any prime lies outside the rationals: a rational square carries every prime factor an even number of times, and a prime carries itself once.",
+        "statistical_significance": "The general irrationality theorem for prime radicals, whose p = 2 instance is the classical first irrationality proof.",
+        "regularity_conditions": [
+          "Principal (positive) square root",
+          "Primality of the radicand is essential: perfect squares give integers"
+        ],
+        "failure_modes": [
+          "Square-free composite radicands are also irrational, but by a longer argument this statement does not carry."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "numbertheory.irrationality.sqrt_two_irrational"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "irrational",
+        "square root",
+        "prime",
+        "descent"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.irrationality.sqrt_two_irrational",
+      "title": "The Square Root of Two Is Irrational",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "irrationality",
+        "topic": "algebraic_irrationals",
+        "canonical_objects": [
+          "diagonal of the unit square"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "irrational(sqrt(2))",
+        "canonical_latex": "\\sqrt{2} \\notin \\mathbb{Q}",
+        "equivalent_forms": [
+          {
+            "form_id": "no_fraction",
+            "notation_system": "ascii",
+            "expression": "sqrt(2) != a/b for all integers a, b with b != 0",
+            "scope_note": "The spelled-out membership denial"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "irrationality_of_radicals_instance",
+        "anonymized_template": "IRRATIONAL(SQRT(TWO))",
+        "slot_schema": [
+          {
+            "slot_id": "TWO",
+            "syntactic_category": "constant",
+            "semantic_role": "the_integer_two"
+          }
+        ],
+        "invariants": [
+          "A closed statement: one P-typed head over one arithmetic head over one constant, the exact shape of an ingested `Irrational (Real.sqrt 2)` goal.",
+          "The classical descent: an equality 2*b^2 = a^2 forces both sides' parities apart — the proof runs on this corpus's own parity nodes.",
+          "The hypotenuse of the unit square: geometry's first incommensurable."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "2",
+            "syntactic_category": "constant",
+            "semantic_role": "the_integer_two",
+            "mathematical_order": 0,
+            "description": "The integer two: the smallest prime, the modulus of parity, and the radicand of the first irrationality proof."
+          }
+        ],
+        "operators": [],
+        "functionals": [
+          {
+            "notation": "IRRATIONAL(.)",
+            "name": "irrationality predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "IRRATIONAL(x) holds when the real number x is not a ratio of integers. The corpus's reading of Lean's `Irrational x`; its canonical carriers here are square roots of primes."
+          },
+          {
+            "notation": "SQRT(.)",
+            "name": "square root",
+            "input_arity": 1,
+            "codomain": "nonnegative reals",
+            "description": "The principal square root, the same SQRT head the algebra and calculus corpora carry; here it is the map that sends a prime to the canonical irrational."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "No ratio of integers squares to two: the diagonal of the unit square is incommensurable with its side.",
+        "statistical_significance": "The founding irrationality result (Pythagorean school), and the p = 2 instance of the prime-radical theorem; its classical proof is a parity argument, tying this discipline's two subfields together.",
+        "regularity_conditions": [
+          "Principal (positive) square root"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "numbertheory.irrationality.sqrt_prime_irrational"
+        ],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.parity.even_product_absorbs",
+          "numbertheory.parity.odd_product_closed"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "irrational",
+        "square root of two",
+        "incommensurable",
+        "descent"
+      ]
+    }
+  ]
+}

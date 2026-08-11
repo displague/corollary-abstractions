@@ -83,9 +83,12 @@ def parse_theorem_block(block: str) -> dict | None:
     sig = gc.split_signature(block[m.end() :], ":=")
     if sig is None:
         return None
-    binders_text, goal = sig
+    binders_text, goal, lets = sig
     b = gc.parse_binders(binders_text)
-    return {
+    goal_lets = gc.apply_goal_lets(b, lets)
+    if goal_lets is None:
+        return None
+    out = {
         "name": name,
         "value_vars": b["value_vars"],
         "domain_vars": b["domain_vars"],
@@ -96,6 +99,9 @@ def parse_theorem_block(block: str) -> dict | None:
         "has_int_carrier": b["has_int_carrier"],
         "has_field_carrier": b["has_field_carrier"],
     }
+    if goal_lets:  # absent, not empty, so let-free extracts stay byte-identical
+        out["goal_lets"] = goal_lets
+    return out
 
 
 def extract_file(text: str, split: str) -> list[dict]:
@@ -210,11 +216,14 @@ def build_coverage(doc: dict) -> dict:
                 "MEET(∧) JOIN(∨) NEG(¬) IMPLIES(→)",
                 "arithmetic(+ - * / ^)",
                 "SQRT(real.sqrt) LOG(real.log) EXP(real.exp) SIN COS TAN",
+                "predicates EVEN ODD PRIME IRRATIONAL (arity 1, bare application)",
+                "prop constants TRUTH FALSITY; let-bindings as definitional =",
             ],
             "explicit_gaps_no_head_in_corpus": [
                 "modulo(%, [MOD n])", "divides(∣)", "absolute-value/norm(|·|, ∥·∥)",
                 "tuple/pair constructor", "gcd/lcm", "big operators(∑ ∏)",
                 "quantifiers(∀ ∃) in goal", "unknown-function slot",
+                "coprime(2-ary)", "Function.Injective/Surjective, Monotone, …",
             ],
             "supported_heads_verified": "each supported head has a corresponding node "
             "in data/*/nodes.json; % and ∣ were removed after review found they have "

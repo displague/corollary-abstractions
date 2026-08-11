@@ -64,8 +64,12 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _goal_key(goal: str) -> bytes:
-    return hashlib.blake2b(goal.encode("utf-8"), digest_size=16).digest()
+def _goal_key(stmt: dict) -> bytes:
+    # a let-goal's identity is its bindings PLUS its body: keying on the body
+    # alone would collapse distinct let-statements (the old truncated parse did
+    # exactly that, deflating unique_goals).
+    full = "\n".join([*stmt.get("goal_lets", []), stmt["goal"]])
+    return hashlib.blake2b(full.encode("utf-8"), digest_size=16).digest()
 
 
 def _load_manifest_source() -> dict:
@@ -77,7 +81,7 @@ def _load_manifest_source() -> dict:
 
 
 def _has_foreign_glyph(stmt: dict) -> bool:
-    for txt in [stmt["goal"], *stmt["hyps"]]:
+    for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
         if set(txt) - _ALLOWED:
             return True
     return False
@@ -90,7 +94,7 @@ def _carrier_residual(stmt: dict) -> bool:
         return False
     if not (stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")):
         return False
-    txt = stmt["goal"] + " " + " ".join(stmt["hyps"])
+    txt = " ".join([stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]])
     if gc._FIELD_SIGNAL_RE.search(txt):
         return False
     return "/" in txt or "⁻¹" in txt or bool(_FRAC_EXP_RE.search(txt))
@@ -144,14 +148,14 @@ def run() -> int:
                     continue
                 parsed += 1
                 r = gc.classify(st)
-                all_goal_keys.add(_goal_key(st["goal"]))
+                all_goal_keys.add(_goal_key(st))
                 if r["goal_ok"]:
                     goal_ok += 1
                 else:
                     goal_reasons[r["goal_reason"]] += 1
                 if r["full_ok"]:
                     full_ok += 1
-                    covered_goal_keys.add(_goal_key(st["goal"]))
+                    covered_goal_keys.add(_goal_key(st))
                     if len(covered_sample) < 300:
                         covered_sample.append(pid)
                     if _has_foreign_glyph(st):

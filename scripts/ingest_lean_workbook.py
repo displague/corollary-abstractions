@@ -76,11 +76,14 @@ def parse_full_proof(problem_id: str, full_proof: str) -> dict | None:
     sig = gc.split_signature(text[m.end() :], ":=")
     if sig is None:
         return None
-    binders_text, goal = sig
+    binders_text, goal, lets = sig
     if not goal:
         return None
     b = gc.parse_binders(binders_text)
-    return {
+    goal_lets = gc.apply_goal_lets(b, lets)
+    if goal_lets is None:
+        return None
+    out = {
         "name": problem_id,
         "value_vars": b["value_vars"],
         "domain_vars": b["domain_vars"],
@@ -91,6 +94,9 @@ def parse_full_proof(problem_id: str, full_proof: str) -> dict | None:
         "has_int_carrier": b["has_int_carrier"],
         "has_field_carrier": b["has_field_carrier"],
     }
+    if goal_lets:  # absent, not empty, so let-free extracts stay byte-identical
+        out["goal_lets"] = goal_lets
+    return out
 
 
 def _read_parquet_rows(path: Path) -> list[dict]:
@@ -185,8 +191,11 @@ def _dup_stats(statements: list[dict], covered_names: set[str]) -> dict:
     deliberately deferred; this is the honest lower bound on redundancy.)"""
     from collections import Counter
 
-    goal_counts: Counter = Counter(s["goal"] for s in statements)
-    covered_goals = [s["goal"] for s in statements if s["name"] in covered_names]
+    def _full_goal(s: dict) -> str:
+        return "\n".join([*s.get("goal_lets", []), s["goal"]])
+
+    goal_counts: Counter = Counter(_full_goal(s) for s in statements)
+    covered_goals = [_full_goal(s) for s in statements if s["name"] in covered_names]
     covered_counts: Counter = Counter(covered_goals)
     total = len(statements)
     unique = len(goal_counts)
@@ -243,11 +252,14 @@ def build_coverage(doc: dict) -> dict:
                 "MEET(∧) JOIN(∨) NEG(¬) IMPLIES(→)",
                 "arithmetic(+ - * / ^)",
                 "SQRT LOG EXP SIN COS TAN",
+                "predicates EVEN ODD PRIME IRRATIONAL (arity 1, bare application)",
+                "prop constants TRUTH FALSITY; let-bindings as definitional =",
             ],
             "explicit_gaps_no_head_in_corpus": [
                 "modulo(%, [MOD n])", "divides(∣)", "absolute-value/norm(|·|, ∥·∥)",
                 "tuple/pair constructor", "gcd/lcm", "big operators(∑ ∏)",
                 "quantifiers(∀ ∃) in goal", "unknown-function slot",
+                "coprime(2-ary)", "Function.Injective/Surjective, Monotone, …",
             ],
         },
         "totals": {

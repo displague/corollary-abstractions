@@ -5,19 +5,19 @@
       "corpus_id": "algebra.foundations.v1",
       "discipline": "algebra",
       "template": "VAR = (-COEFF1 ± SQRT(DISC)) / (2*COEFF0)",
-      "groundedness": 0.143,
+      "groundedness": 0.286,
       "considered": 7,
-      "grounded_exact": 1,
+      "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
-        "external": 1,
+        "external": 2,
         "prior_corpus": 0,
         "same_corpus": 0,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.143,
+        "external": 0.286,
         "prior_corpus": 0.0,
         "same_corpus": 0.0,
         "recursive": 0.0,
@@ -39,6 +39,22 @@
           },
           "instance_of_statements": [],
           "recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "skeleton": "SQRT⟨?0:P⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
         }
       ]
     },
@@ -461,13 +477,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8
+            "external": 10
           },
           "instance_of_statements": [
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -610,14 +626,14 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8
+            "external": 10
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -1013,7 +1029,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
@@ -1022,7 +1038,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         },
         {
           "path": [
@@ -2110,7 +2126,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -2120,7 +2136,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -2187,7 +2203,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -2197,7 +2213,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -2289,7 +2305,7 @@
           "channel": "pattern_absorption",
           "absorbed_from_channel": "external",
           "absorbed_owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_pattern": "+(?0:V, ?1:V)",
           "pattern_known_from": [
@@ -2299,10 +2315,10 @@
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
             "numanalysis.integration.trapezoidal_rule",
-            "physics.frames.galilean_velocity_addition",
-            "trigonometry.identities.cosine_angle_sum"
+            "numbertheory.parity.even_sum_closed",
+            "numbertheory.parity.odd_sum_even"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -2790,7 +2806,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_statements": [
             "economics.monetary.equation_of_exchange",
@@ -2798,7 +2814,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -3775,7 +3791,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
@@ -3783,7 +3799,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         },
         {
           "path": [
@@ -3793,7 +3809,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
@@ -3801,7 +3817,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -4025,13 +4041,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8
+            "external": 10
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -4705,7 +4721,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "prior_corpus": 1
           },
           "instance_of_statements": [
@@ -4714,7 +4730,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -4751,7 +4767,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 8,
             "prior_corpus": 1,
             "same_corpus": 1
           },
@@ -4760,7 +4776,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -5256,25 +5272,44 @@
       "corpus_id": "geometry.foundations.v1",
       "discipline": "geometry",
       "template": "DISTANCE = SQRT(SUM(DELTA^2))",
-      "groundedness": 0.333,
+      "groundedness": 0.667,
       "considered": 3,
       "grounded_exact": 1,
-      "grounded_via_pattern": 0,
+      "grounded_via_pattern": 1,
       "channels": {
         "external": 1,
         "prior_corpus": 0,
         "same_corpus": 0,
         "recursive": 0,
-        "pattern_absorption": 0
+        "pattern_absorption": 1
       },
       "channel_scores": {
         "external": 0.333,
         "prior_corpus": 0.0,
         "same_corpus": 0.0,
         "recursive": 0.0,
-        "pattern_absorption": 0.0
+        "pattern_absorption": 0.333
       },
       "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "SQRT⟨SUM⟨^(?0:V, 2)⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1,
+            "prior_corpus": 1
+          },
+          "instance_of_pattern": "SQRT⟨?0:P⟩",
+          "pattern_known_from": [
+            "algebra.polynomial_equations.quadratic_formula",
+            "numbertheory.irrationality.sqrt_two_irrational"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
         {
           "path": [
             1,
@@ -5350,7 +5385,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 8,
             "prior_corpus": 1,
             "same_corpus": 1
           },
@@ -5359,7 +5394,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -5914,10 +5949,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 2
+            "external": 4
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         }
       ]
     },
@@ -6069,7 +6104,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "prior_corpus": 1
           },
           "instance_of_statements": [
@@ -6078,7 +6113,7 @@
             "geometry.area_formulas.rectangle_area_formula",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -8140,7 +8175,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -8150,7 +8185,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         },
         {
           "path": [
@@ -8658,7 +8693,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8,
+            "external": 10,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -8668,7 +8703,7 @@
             "graphtheory.enumeration.complete_bipartite_edge_count",
             "physics.thermodynamics.ideal_gas_law"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         },
         {
           "path": [
@@ -9209,7 +9244,7 @@
           "channel": "pattern_absorption",
           "absorbed_from_channel": "external",
           "absorbed_owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_pattern": "+(?0:V, ?1:V)",
           "pattern_known_from": [
@@ -9219,10 +9254,10 @@
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
             "numanalysis.integration.trapezoidal_rule",
-            "physics.frames.galilean_velocity_addition",
-            "trigonometry.identities.cosine_angle_sum"
+            "numbertheory.parity.even_sum_closed",
+            "numbertheory.parity.odd_sum_even"
           ],
-          "pattern_recurs_in_n_statements": 9
+          "pattern_recurs_in_n_statements": 11
         }
       ]
     },
@@ -10246,6 +10281,756 @@
       ]
     },
     {
+      "statement_id": "numbertheory.parity.even_double",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "EVEN(2 * INT1)",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 0,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 1.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 3,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 5
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_successor",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "ODD(2*INT1 + 1)",
+      "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 0,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.5,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 3,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 5
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_is_not_even",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "ODD(INT1) = NEG(EVEN(INT1))",
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.667,
+        "recursive": 0.0,
+        "pattern_absorption": 0.333
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "NEG⟨EVEN⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 11
+          },
+          "instance_of_pattern": "NEG⟨?0:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.complement_laws",
+            "logic.boolean_laws.de_morgan_laws",
+            "logic.boolean_laws.double_negation",
+            "logic.inference.contraposition",
+            "logic.inference.reductio_ad_absurdum",
+            "narrative.frame.frame_consistency",
+            "settheory.boolean_laws.complement_laws",
+            "settheory.boolean_laws.de_morgan_laws"
+          ],
+          "pattern_recurs_in_n_statements": 11
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 4
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.dichotomy",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "JOIN(EVEN(INT1), ODD(INT1))",
+      "groundedness": 1.0,
+      "considered": 2,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 1.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
+          ],
+          "recurs_in_n_statements": 4
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.even_sum_closed",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(MEET(EVEN(INT1), EVEN(INT2)), EVEN(INT1 + INT2))",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.2,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.6,
+        "recursive": 0.0,
+        "pattern_absorption": 0.2
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨EVEN⟨?0:V⟩, EVEN⟨?1:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 2
+          },
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "EVEN⟨+(?0:V, ?1:V)⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 9,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "recurs_in_n_statements": 11
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_sum_even",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(MEET(ODD(INT1), ODD(INT2)), EVEN(INT1 + INT2))",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.2,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.8,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨ODD⟨?0:V⟩, ODD⟨?1:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "EVEN⟨+(?0:V, ?1:V)⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 9,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "recurs_in_n_statements": 11
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.even_product_absorbs",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(EVEN(INT1), EVEN(INT1 * INT2))",
+      "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 1,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.333,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.333,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 10,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "physics.thermodynamics.ideal_gas_law"
+          ],
+          "recurs_in_n_statements": 12
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_product_closed",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(MEET(ODD(INT1), ODD(INT2)), ODD(INT1 * INT2))",
+      "groundedness": 0.8,
+      "considered": 5,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.2,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.6,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨ODD⟨?0:V⟩, ODD⟨?1:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "ODD⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 3
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.odd_is_not_even"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 10,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "economics.monetary.equation_of_exchange",
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count",
+            "physics.thermodynamics.ideal_gas_law"
+          ],
+          "recurs_in_n_statements": 12
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.primality.two_is_prime",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "PRIME(TWO)",
+      "groundedness": 0.0,
+      "considered": 1,
+      "grounded_exact": 0,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 0,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": []
+    },
+    {
+      "statement_id": "numbertheory.primality.only_even_prime",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(MEET(PRIME(INT1), EVEN(INT1)), INT1 = 2)",
+      "groundedness": 1.0,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.667,
+        "recursive": 0.0,
+        "pattern_absorption": 0.333
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "MEET⟨EVEN⟨?0:V⟩, PRIME⟨?0:V⟩⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 2
+          },
+          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
+          "pattern_known_from": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 4
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 5
+        },
+        {
+          "path": [
+            0,
+            1
+          ],
+          "skeleton": "PRIME⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.irrationality.sqrt_prime_irrational",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IMPLIES(PRIME(INT1), IRRATIONAL(SQRT(INT1)))",
+      "groundedness": 0.333,
+      "considered": 3,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 1,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.333,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "PRIME⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.irrationality.sqrt_two_irrational",
+      "corpus_id": "number_theory.core.v1",
+      "discipline": "number_theory",
+      "template": "IRRATIONAL(SQRT(TWO))",
+      "groundedness": 1.0,
+      "considered": 1,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 0,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 1.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "SQRT⟨?0:P⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        }
+      ]
+    },
+    {
       "statement_id": "numanalysis.rootfinding.newton_iteration",
       "corpus_id": "numerical_analysis.computation_and_error.v1",
       "discipline": "numerical_analysis",
@@ -10448,7 +11233,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 8,
             "prior_corpus": 2
           },
           "instance_of_statements": [
@@ -10456,7 +11241,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -11134,7 +11919,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 9
+            "external": 11
           },
           "instance_of_statements": [
             "diffgeo.surfaces.gaussian_curvature_principal_product",
@@ -11142,7 +11927,7 @@
             "geometry.area_formulas.rectangle_area_formula",
             "graphtheory.enumeration.complete_bipartite_edge_count"
           ],
-          "recurs_in_n_statements": 10
+          "recurs_in_n_statements": 12
         }
       ]
     },
@@ -11430,13 +12215,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 8
+            "external": 10
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         }
       ]
     },
@@ -14775,7 +15560,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7,
+            "external": 9,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -14783,7 +15568,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -14952,7 +15737,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7,
+            "external": 9,
             "same_corpus": 1
           },
           "instance_of_statements": [
@@ -14960,7 +15745,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 9
+          "recurs_in_n_statements": 11
         },
         {
           "path": [
@@ -15155,13 +15940,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 1,
+            "external": 3,
             "same_corpus": 1
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -15245,13 +16030,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 1,
+            "external": 3,
             "same_corpus": 1
           },
           "instance_of_statements": [
             "graphtheory.degree.handshake_lemma"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 5
         },
         {
           "path": [
@@ -15451,67 +16236,67 @@
   ],
   "channel_summary": {
     "graph": {
-      "statements": 227,
-      "mean_groundedness": 0.774,
+      "statements": 239,
+      "mean_groundedness": 0.776,
       "channel_means": {
-        "external": 0.523,
-        "prior_corpus": 0.008,
-        "same_corpus": 0.152,
+        "external": 0.512,
+        "prior_corpus": 0.007,
+        "same_corpus": 0.166,
         "recursive": 0.0,
         "pattern_absorption": 0.091
       },
       "channel_constituents": {
-        "external": 359,
+        "external": 367,
         "prior_corpus": 4,
-        "same_corpus": 106,
+        "same_corpus": 124,
         "recursive": 0,
-        "pattern_absorption": 87
+        "pattern_absorption": 91
       },
-      "independent_mean": 0.531,
+      "independent_mean": 0.519,
       "same_corpus_dominant": false,
       "self_certifying": false,
       "channel_means_lower": {
-        "external": 0.24,
-        "prior_corpus": 0.037,
-        "same_corpus": 0.407,
+        "external": 0.233,
+        "prior_corpus": 0.035,
+        "same_corpus": 0.417,
         "recursive": 0.0,
         "pattern_absorption": 0.091
       },
-      "external_lower": 0.24,
-      "independent_lower": 0.276,
+      "external_lower": 0.233,
+      "independent_lower": 0.267,
       "same_corpus_dominant_lower": true,
       "self_certifying_lower": false
     },
     "corpora": {
       "algebra.foundations.v1": {
         "statements": 1,
-        "mean_groundedness": 0.143,
+        "mean_groundedness": 0.286,
         "channel_means": {
-          "external": 0.143,
+          "external": 0.286,
           "prior_corpus": 0.0,
           "same_corpus": 0.0,
           "recursive": 0.0,
           "pattern_absorption": 0.0
         },
         "channel_constituents": {
-          "external": 1,
+          "external": 2,
           "prior_corpus": 0,
           "same_corpus": 0,
           "recursive": 0,
           "pattern_absorption": 0
         },
-        "independent_mean": 0.143,
+        "independent_mean": 0.286,
         "same_corpus_dominant": false,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.0,
+          "external": 0.143,
           "prior_corpus": 0.143,
           "same_corpus": 0.0,
           "recursive": 0.0,
           "pattern_absorption": 0.0
         },
-        "external_lower": 0.0,
-        "independent_lower": 0.143,
+        "external_lower": 0.143,
+        "independent_lower": 0.286,
         "same_corpus_dominant_lower": false,
         "self_certifying_lower": false,
         "discipline": "algebra"
@@ -15749,20 +16534,20 @@
       },
       "geometry.foundations.v1": {
         "statements": 15,
-        "mean_groundedness": 0.8,
+        "mean_groundedness": 0.822,
         "channel_means": {
           "external": 0.567,
           "prior_corpus": 0.033,
           "same_corpus": 0.2,
           "recursive": 0.0,
-          "pattern_absorption": 0.0
+          "pattern_absorption": 0.022
         },
         "channel_constituents": {
           "external": 16,
           "prior_corpus": 1,
           "same_corpus": 5,
           "recursive": 0,
-          "pattern_absorption": 0
+          "pattern_absorption": 1
         },
         "independent_mean": 0.6,
         "same_corpus_dominant": false,
@@ -15772,7 +16557,7 @@
           "prior_corpus": 0.167,
           "same_corpus": 0.528,
           "recursive": 0.0,
-          "pattern_absorption": 0.0
+          "pattern_absorption": 0.022
         },
         "external_lower": 0.106,
         "independent_lower": 0.272,
@@ -16010,6 +16795,39 @@
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "narrative"
+      },
+      "number_theory.core.v1": {
+        "statements": 12,
+        "mean_groundedness": 0.775,
+        "channel_means": {
+          "external": 0.286,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.417,
+          "recursive": 0.0,
+          "pattern_absorption": 0.072
+        },
+        "channel_constituents": {
+          "external": 7,
+          "prior_corpus": 0,
+          "same_corpus": 18,
+          "recursive": 0,
+          "pattern_absorption": 3
+        },
+        "independent_mean": 0.286,
+        "same_corpus_dominant": true,
+        "self_certifying": false,
+        "channel_means_lower": {
+          "external": 0.083,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.619,
+          "recursive": 0.0,
+          "pattern_absorption": 0.072
+        },
+        "external_lower": 0.083,
+        "independent_lower": 0.083,
+        "same_corpus_dominant_lower": true,
+        "self_certifying_lower": false,
+        "discipline": "number_theory"
       },
       "numerical_analysis.computation_and_error.v1": {
         "statements": 8,

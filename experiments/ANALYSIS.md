@@ -2547,3 +2547,118 @@ Pythagorean theorem `a^2 + b^2 = c^2`, because the SIN/COS heads wrapping its sl
 make a structurally different skeleton than bare legs — the matcher is right to
 keep them apart. Adding a head extends *reach*, not necessarily the twin graph;
 reporting the null is the point.
+
+## v0.10 item 1 (cont.) — the relational/predicate head, and what the biggest bucket actually was
+
+The remainder ranking said the next head is relational/predicate:
+`no_relation_in_goal` was the single largest gap — 258,495 of 1.73M Goedel-Pset
+statements (22.2% of the untranslatable set), plus 239 on Lean-workbook and 5 on
+miniF2F. The house methodology is to measure before choosing, so the first step
+was a predicate-head frequency ranking *inside* the bucket. The measurement
+overturned the expectation.
+
+**What actually populated the bucket (Goedel-Pset, 258,495 statements):**
+
+| head / shape | count | share | note |
+|---|---|---|---|
+| `let`-prefixed goals | 226,631 | 87.7% | **a parser artifact, not a predicate** |
+| bare prop-variable / unknown-application goals (`a`, `x`, `p`, …) | ~6,000 | 2.3% | unknowable: the goal is an opaque Prop |
+| `False` | 4,119 | 1.6% | contradiction goals; `True` adds 430 |
+| `Even` / `Odd` | 1,324 | 0.5% | + `IsEven`/`IsOdd` model-invented variants (141) |
+| `Nat.Prime` (bare + negated) | 669 | 0.3% | `¬ Nat.Prime n` is the "not prime" shape |
+| `Irrational` | 218 | 0.1% | almost all over `Real.sqrt` |
+| `Filter.Tendsto`, `IsGreatest`, `StrictMonoOn`, geometry customs (`parallel`, `perp…`), `Function.Injective`, … | long tail | ~7% | function-slot or set-typed: not reachable without those heads |
+| `Nat.Coprime` | 49 | 0.02% | 2-ary; would-cover simulation: 11 goal-only / 3 full |
+
+(Lean-workbook's 239 ranked: `Nat.Coprime` 21, `Even` 15, `Function.Injective`
+12, `False` 9, `¬Nat.Prime` 8, `Odd` 7 …; miniF2F's 5: `nat.prime` 2+1 negated,
+`even` 1, one `∃`.)
+
+**The dominant finding: 87.7% of the bucket was our own parser lying.** A
+Goedel-Pset goal of the form `let x : ℝ := 4 … ; body` was being truncated at
+the *binding's* `:=` — the scanner took the first depth-0 `:=` as the proof
+terminator — so the classifier saw the two-token stub `let x`, which has no
+relation, and filed a quarter-million statements under `no_relation_in_goal`.
+The fix is not a new head at all: a `let` binding is a definitional equality,
+and `=`-definition nodes are what the corpus already expresses definitions with
+(`TAN(x) = SIN(x)/COS(x)`, `CONSISTENCY = NEG(BOX(FALSITY))`). The parser now
+claims each `let`'s `:=` for its binding, splits the bindings into
+`goal_lets` equations (`x = (4 : ℝ)`), and classifies them as goal conjuncts:
+every binding RHS must reduce under the same blocker/carrier/symbol checks as
+the goal, the body is classified on its own shape, and carrier-honesty is
+preserved (a typed binding contributes its declared carrier; an untyped bare
+numeral elaborates at ℕ, so `let n := 10; n / 4 = 2` is still the
+`integer_division_no_head` gap, not real division).
+
+**The predicate heads, chosen by the ranking:** parity (`EVEN`/`ODD`),
+primality (`PRIME`), and irrationality (`IRRATIONAL`) — plus the prop constants
+`TRUTH`/`FALSITY` that `data/logic` already carried (a bare `False` goal is the
+contradiction node `IMPLIES(MEET(hyps), FALSITY)`). The corpus rule is
+load-bearing as before: heads are authored FIRST. `scripts/seed_number_theory.py`
+→ `data/number_theory/nodes.json`, 12 canonical statements: the parity algebra
+(doubling, `2n+1`, odd = ¬even, the even/odd dichotomy, the two closure laws and
+the two crossing laws of sums and products), two is prime and is the *only* even
+prime, and the irrationality of `√p` for prime p with its classical instance
+`√2` (a real `special_case_of`/`generalizes` pair, alongside
+`even_double` ⊂ `even_product_absorbs`). Corpus **229 → 241 nodes, 23 → 24
+disciplines**; matcher `parse_problems: 0`, `slot_schema_gaps: 0`;
+`check_regeneration` holds.
+
+The classifier accepts exactly what the corpus carries: a goal that is a bare
+arity-1 application of a supported predicate (both dialects: `nat.prime`/`even`
+and `Nat.Prime`/`Even`), a prop constant, or a top-level `¬`/`∧`/`∨`/`→`
+composition of such atoms (MEET/JOIN/NEG/IMPLIES are corpus heads). The inner
+term still passes every existing check — `Even (Finset.card S)` stays
+`set_or_finset` — and three honesty guards came out of review lessons:
+**arity** (`Even x y` is `predicate_extra_arg`, the 2-arg `log` lesson),
+**carrier** (`Even x` over a declared ℝ var is `integer_predicate_field_carrier`:
+over a field mathlib's `Even` is trivially true — not the integer-parity head),
+and **naming the remainder precisely** (2-ary `Nat.Coprime` keeps its own
+`coprime_no_head` label; relationless `∑`-goals now land in `big_operator`
+instead of the undifferentiated no-relation bucket).
+
+**The coverage delta (full-statement, all three sources):**
+
+| source | before | after | delta |
+|---|---|---|---|
+| miniF2F | 147 = 30.1% | 151 = 30.9% | +4 |
+| Lean-workbook | 19,532 = 65.7% | 19,574 = 65.8% | +42 |
+| Goedel-Pset-v1 (1.73M) | 606,937 = 35.0% | **679,586 = 39.2%** | **+72,649** |
+
+The `no_relation_in_goal` bucket itself: 258,495 → **9,540** on Goedel-Pset
+(5 → 0 on miniF2F, 239 → 50 on Lean-workbook). It did not all become coverage —
+most of it redistributed to its *true* labels (`∃`-goals, tuples, set-typed
+lets), which is the honest outcome: the instrument now names the remainder
+correctly instead of lumping it. The audited LOST count is **0** on every
+source: a full old-vs-new dual-classification pass over all 1.73M rows shows
+every one of the 606,937 previously covered statements still covered.
+
+**Scale surfaced a false-positive class again, and the audit caught it again.**
+The first full run reported `covered_foreign_glyph_count = 6` — all six were
+`let`-bound *lambdas* (`let f : ℝ → ℝ := (· * 60)`) or custom notation
+(`a ⋆ b`): Lean's section dot `·` and the `⋆` glyph are invisible to the
+identifier scan, so the bound name looked like a plain value. Two fixes, both
+now regression-tested: a function-typed `let` sets the unknown-function flag
+(its name is not a value slot), and a new `uninterpreted_notation` blocker
+(`·`, `⋆`, `fun`/`λ`/`=>`) rejects anonymous functions wherever they appear
+(28,936 statements now carry that precise label). Audit after:
+`foreign_glyphs = 0, carrier_residual = 0`.
+
+**Two honest disclosures.** (1) `unparsed` rose 168 → 192: 24 statements whose
+multi-line lambda-`let` bindings the layout-approximating splitter refuses to
+guess at; all 24 were previously *mis*parsed into the no-relation stub, none was
+ever covered. (2) The duplicate rate FELL 34.6% → 24.1% (unique goals 1.13M →
+1.32M): the old truncation had collapsed every `let x …` goal into the same
+stub, so the previous dedup overcounted redundancy; unique covered goals rise
+414,428 at 35.0% → **482,254** at 39.2%.
+
+**The twin null, a third time.** The 12 number-theory nodes form no new
+cross-discipline twins — `group_counts` is unchanged
+(`{shape: 30, typed: 31, family: 30, aliased: 32, mirror: 5}`). The predicate
+heads wrapping the slots (`EVEN(n+m)` vs bare `a+b`) keep the skeletons apart
+from the arithmetic corpora, exactly as SIN/COS did. Within the discipline the
+grounding is real: the groundedness ledger's exact channel grew 469 → 495 and
+the absorption guard holds without further weakening (exact-over-absorption
+eases 4.9:1 → 4.7:1 by count, still clearly above the 4:1 floor; rate gap
+0.116 < the 0.12 pin) — recorded as the second registered acknowledgment in
+`tests/test_decompose_channels.py`.

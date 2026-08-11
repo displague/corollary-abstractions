@@ -145,9 +145,19 @@ class ClassifierHonesty(unittest.TestCase):
         self.assertFalse(r["full_ok"], "hypothesis has a blocker")
         self.assertEqual(r["full_reason"], "hyp:absolute_value")
 
-    def test_no_relation_goal_rejected(self) -> None:
+    def test_bare_predicate_goal_now_covered(self) -> None:
+        # v0.10 item 1 (cont.): PRIME is a corpus head (data/number_theory), so
+        # the bare application `nat.prime p` is proposition-shaped and covered.
+        # (This test asserted rejection while primality had no head.)
         r = gc.classify(self._mk("nat.prime p", vars=("p",)))
+        self.assertTrue(r["goal_ok"])
+        self.assertTrue(r["full_ok"])
+
+    def test_bare_prop_variable_still_no_relation(self) -> None:
+        # a goal that is a lone proposition variable has no shape to reduce
+        r = gc.classify(self._mk("p", vars=("p",)))
         self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "no_relation_in_goal")
 
     def test_modulo_and_divides_are_gaps_not_supported(self) -> None:
         # Regression: an adversarial review found % and ∣ have no head in the
@@ -207,6 +217,17 @@ class CorpusHeadProvenance(unittest.TestCase):
         # legitimate only once a corpus node carries it.
         for head in ("LOG(", "EXP(", "SQRT(", "SIN(", "COS(", "TAN("):
             self.assertIn(head, templates, f"claimed head {head} absent from data/")
+
+    def test_predicate_heads_actually_appear(self) -> None:
+        # v0.10 item 1 (cont.): the relational/predicate heads were added with
+        # data/number_theory — same rule, verified node-by-node against data/.
+        templates = self._all_templates()
+        for head in ("EVEN(", "ODD(", "PRIME(", "IRRATIONAL("):
+            self.assertIn(head, templates, f"claimed head {head} absent from data/")
+        # the prop constants the classifier accepts as bare goals are carried by
+        # data/logic (identity laws, non-contradiction, ex falso)
+        for const in ("TRUTH", "FALSITY"):
+            self.assertIn(const, templates, f"claimed constant {const} absent from data/")
 
     def test_no_covered_statement_relies_on_an_unverified_head(self) -> None:
         # % and ∣ are gaps: no covered statement may contain them.

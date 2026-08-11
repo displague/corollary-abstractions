@@ -131,5 +131,140 @@ class NoHeadGlyphs(unittest.TestCase):
         )
 
 
+class LetBindingGoals(unittest.TestCase):
+    """v0.10 item 1 (cont.): `let x := e` goal bindings are definitional
+    equalities, not a truncation point. 87% of the old no_relation_in_goal
+    bucket (226,631 of 258,495 statements) was the parser stopping at the
+    binding's `:=` and classifying the two-token stub `let x`."""
+
+    def test_let_goal_parses_past_the_binding(self) -> None:
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let x : ℝ := 4\n  let y : ℝ := 3\n"
+            "  x + y = 7 := by sorry",
+        )
+        self.assertEqual(st["goal"], "x + y = 7")
+        self.assertEqual(st["goal_lets"], ["x = (4 : ℝ)", "y = (3 : ℝ)"])
+        self.assertTrue(st["has_field_carrier"])
+        self.assertTrue(gc.classify(st)["full_ok"])
+
+    def test_let_with_tuple_rhs_is_blocked_not_covered(self) -> None:
+        # the binding is part of the goal: an uncarried constructor in the RHS
+        # blocks the whole statement with the constructor's own label
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let v : ℝ × ℝ := (1, 2)\n  v.1 = 1 := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "tuple_or_structure")
+
+    def test_untyped_numeral_let_keeps_the_nat_carrier(self) -> None:
+        # `let n := 10` elaborates at ℕ, so `/` over it is still Nat.div: the
+        # carrier gap must survive the desugaring (carrier-honesty at let scope)
+        st = gc.parse_lean4_theorem(
+            "t", "theorem t :\n  let n := 10\n  n / 4 = 2 := by sorry"
+        )
+        self.assertTrue(st["has_nat_carrier"])
+        r = gc.classify(st)
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_let_body_keeps_its_own_blocker_label(self) -> None:
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let p := 4\n  ∀ k : ℝ, k * p = 4 * k := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "universal_quantifier")
+
+    def test_proof_terminator_not_confused_by_proof_side_let(self) -> None:
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (x : ℝ) (h : x = 1) : x + 1 = 2 := by\n"
+            "  let y := 3\n  linarith",
+        )
+        self.assertEqual(st["goal"], "x + 1 = 2")
+        self.assertNotIn("goal_lets", st)
+
+
+class PredicateHeads(unittest.TestCase):
+    """v0.10 item 1 (cont.): the relational/predicate heads, chosen by measured
+    frequency inside the no_relation_in_goal bucket. A supported predicate over
+    an unsupported inner term is NOT covered; arity is enforced; predicates the
+    corpus does not carry keep precise gap labels."""
+
+    def _mk(self, goal, vars=(), hyps=(), fn=False, **flags):
+        return {
+            "name": "t", "goal": goal, "value_vars": list(vars),
+            "hyps": list(hyps), "fn_unknown": fn, "domain_vars": {}, **flags,
+        }
+
+    def test_bare_parity_and_primality_goals_covered(self) -> None:
+        for goal in ("Even (n ^ 2 + n)", "Odd (2*n + 1)", "Nat.Prime 17"):
+            r = gc.classify(self._mk(goal, vars=("n",), has_nat_carrier=True))
+            self.assertTrue(r["full_ok"], goal)
+
+    def test_negated_predicate_goal_covered(self) -> None:
+        # NEG is a corpus head (logic); data/number_theory defines ODD through it
+        r = gc.classify(self._mk("¬ Nat.Prime 100"))
+        self.assertTrue(r["full_ok"])
+
+    def test_irrational_over_supported_inner_covered(self) -> None:
+        r = gc.classify(self._mk("Irrational (Real.sqrt 3)"))
+        self.assertTrue(r["full_ok"])
+
+    def test_predicate_composition_covered(self) -> None:
+        # MEET/JOIN/IMPLIES are corpus heads, so compositions of predicate atoms
+        # are proposition-shaped
+        r = gc.classify(self._mk("Even n → Odd (n + 1)", vars=("n",), has_nat_carrier=True))
+        self.assertTrue(r["full_ok"])
+
+    def test_false_goal_is_the_contradiction_node(self) -> None:
+        # FALSITY is carried by data/logic; the hypotheses must still reduce
+        r = gc.classify(self._mk("False", vars=("n",), hyps=("n = 1", "n = 2"),
+                                 has_nat_carrier=True))
+        self.assertTrue(r["full_ok"])
+        r2 = gc.classify(self._mk("False", vars=("n",), hyps=("abs n = 1",),
+                                  has_nat_carrier=True))
+        self.assertFalse(r2["full_ok"])
+
+    def test_predicate_over_unsupported_inner_not_covered(self) -> None:
+        r = gc.classify(self._mk("Even (Finset.card S)"))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "set_or_finset")
+
+    def test_predicate_arity_enforced(self) -> None:
+        r = gc.classify(self._mk("Even n m", vars=("n", "m"), has_nat_carrier=True))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "predicate_extra_arg")
+
+    def test_unapplied_predicate_is_not_a_proposition(self) -> None:
+        r = gc.classify(self._mk("Even"))
+        self.assertFalse(r["goal_ok"])
+
+    def test_coprime_keeps_a_precise_gap_label(self) -> None:
+        # coprimality (2-ary) has no corpus head; it must not vanish into
+        # no_relation_in_goal now that primality is supported
+        r = gc.classify(self._mk("Nat.Coprime 4 9"))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "coprime_no_head")
+
+    def test_uncarried_predicates_stay_gaps(self) -> None:
+        r = gc.classify(self._mk("Function.Injective f", fn=True))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "no_relation_in_goal")
+        r2 = gc.classify(self._mk("IsEven 4"))
+        self.assertFalse(r2["goal_ok"])
+
+    def test_integer_predicate_over_field_carrier_blocked(self) -> None:
+        # over ℝ mathlib's `Even x` is trivially true for every real — that is
+        # not the integer parity head the corpus carries
+        r = gc.classify(self._mk("Even x", vars=("x",), has_field_carrier=True))
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "integer_predicate_field_carrier")
+
+
 if __name__ == "__main__":
     unittest.main()
