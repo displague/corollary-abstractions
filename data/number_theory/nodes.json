@@ -220,6 +220,283 @@
       ]
     },
     {
+      "statement_id": "numbertheory.parity.even_witness_definition",
+      "title": "Evenness Is Having a Doubling Witness",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_classes"
+      },
+      "formal_statement": {
+        "canonical_ascii": "even(n) = exists k. n = 2*k",
+        "canonical_latex": "n \\in 2\\mathbb{Z} \\iff \\exists k\\,(n = 2k)",
+        "equivalent_forms": [
+          {
+            "form_id": "mathlib_form",
+            "notation_system": "ascii",
+            "expression": "Even n iff exists r, n = r + r",
+            "scope_note": "mathlib's Even; 2k and k + k are the same witness under the doubling identity"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "Even n ↔ ∃ k, n = 2 * k"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_witness_even",
+        "anonymized_template": "EVEN(INT1) = EXISTS(INT2, INT1 = 2 * INT2)",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "The definitional bridge between a predicate head and the existential binder: EVEN applied to a slot equals EXISTS over the witness equation, the same P-typed use of `=` as odd_is_not_even.",
+          "The witness slot INT2 occurs only under the binder — the recurrence pattern IS the binding, exactly as in data/logic's quantifier laws.",
+          "The exact shape of an ingested `∃ k, n = 2 * k` goal: exhibiting the witness is the whole proof (existential generalization).",
+          "The reverse direction instantiated at any n is the doubling node EVEN(2 * INT1), which displays the witness instead of binding it."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "The bound witness integer: it occurs only under the existential binder, and exhibiting it is what proves the parity claim."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The parity predicate: EVEN(n) holds exactly when the integer n is a multiple of two. A Prop-valued head over an integer slot, like logic's connectives over propositions — the corpus's reading of Lean's `Even n`. Integer parity only: over a field every element is trivially a double, so the head does not extend there."
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existential binder, the same EXISTS head as data/logic's quantifier laws (first argument the bound witness slot, second the body; binding carried by slot recurrence). Here it binds the integer witness that DEFINES a parity predicate — the corpus's reading of an ingested `∃ k, n = 2 * k`."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "An integer is even exactly when some integer doubles to it: evenness is the existence of a halving witness.",
+        "statistical_significance": "The corpus's definition of EVEN through the EXISTS head — the node that ties the parity predicates of this discipline to the binder heads of data/logic, so an existential parity witness is honestly expressible rather than a quantifier gap.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.parity.even_double"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "even",
+        "witness",
+        "existential",
+        "definition"
+      ]
+    },
+    {
+      "statement_id": "numbertheory.parity.odd_witness_definition",
+      "title": "Oddness Is Having an Offset Doubling Witness",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "parity",
+        "topic": "parity_classes"
+      },
+      "formal_statement": {
+        "canonical_ascii": "odd(n) = exists k. n = 2*k + 1",
+        "canonical_latex": "n \\in 2\\mathbb{Z}+1 \\iff \\exists k\\,(n = 2k + 1)",
+        "equivalent_forms": [
+          {
+            "form_id": "mathlib_form",
+            "notation_system": "ascii",
+            "expression": "Odd n iff exists m, n = 2 * m + 1",
+            "scope_note": "mathlib's Odd, verbatim"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "Odd n ↔ ∃ k, n = 2 * k + 1"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "parity_witness_odd",
+        "anonymized_template": "ODD(INT1) = EXISTS(INT2, INT1 = 2 * INT2 + 1)",
+        "slot_schema": [
+          {
+            "slot_id": "INT1",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          },
+          {
+            "slot_id": "INT2",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "The odd twin of the even witness definition: same binder, same recurrence pattern, the witness equation offset by one.",
+          "With even_witness_definition and odd_is_not_even it closes the loop: the negation definition and the two witness definitions are consistent because no integer is both 2k and 2k+1.",
+          "The exact shape of an ingested `∃ k, n = 2 * k + 1` goal."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "An arbitrary integer."
+          },
+          {
+            "symbol": "k",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "The bound witness integer: it occurs only under the existential binder, and exhibiting it is what proves the parity claim."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "ODD(.)",
+            "name": "oddness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The complementary parity predicate: ODD(n) holds exactly when n is not a multiple of two, equivalently when n has the form 2k+1. The corpus's reading of Lean's `Odd n`."
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existential binder, the same EXISTS head as data/logic's quantifier laws (first argument the bound witness slot, second the body; binding carried by slot recurrence). Here it binds the integer witness that DEFINES a parity predicate — the corpus's reading of an ingested `∃ k, n = 2 * k`."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "An integer is odd exactly when it is one more than some double: oddness is the existence of an offset halving witness.",
+        "statistical_significance": "The ODD head's definition through the EXISTS binder, dual to the even witness definition; together they make the canonical forms of the two residue classes quantifier-explicit.",
+        "regularity_conditions": [
+          "Integer argument: parity is a property of the ring of integers, not of the rationals or reals"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "numbertheory.parity.odd_successor"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "hardywright2008",
+          "bibliographic_entry": "Hardy, G. H., Wright, E. M. (2008). An Introduction to the Theory of Numbers (6th ed.). Oxford: Oxford University Press."
+        },
+        {
+          "citation_key": "burton2010",
+          "bibliographic_entry": "Burton, D. M. (2010). Elementary Number Theory (7th ed.). New York: McGraw-Hill."
+        }
+      ],
+      "keywords": [
+        "parity",
+        "odd",
+        "witness",
+        "existential",
+        "definition"
+      ]
+    },
+    {
       "statement_id": "numbertheory.parity.odd_is_not_even",
       "title": "Odd Means Not Even",
       "statement_class": "definition",

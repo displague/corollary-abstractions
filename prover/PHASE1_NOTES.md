@@ -148,7 +148,7 @@ Per theorem (name → steps), and the `data/logic/nodes.json` node each mirrors:
 |---|---|---|
 | `de_morgan_not_or` | 16 | `logic.boolean_laws.de_morgan_laws` (dual, constructive) |
 | `de_morgan_not_and` | 16 | `logic.boolean_laws.de_morgan_laws` (principal, classical) |
-| `not_forall_iff_exists_not` | 14 | `logic.boolean_laws.de_morgan_laws` (quantifier form) |
+| `not_forall_iff_exists_not` | 14 | `logic.quantification.quantifier_negation_universal` (moved from de_morgan_laws when the v0.10 quantifier slice authored the exact-statement node) |
 | `double_negation` | 11 | `logic.boolean_laws.double_negation` |
 | `absorption_and_or` | 9 | `logic.boolean_laws.absorption` |
 | `absorption_or_and` | 10 | `logic.boolean_laws.absorption` (dual) |

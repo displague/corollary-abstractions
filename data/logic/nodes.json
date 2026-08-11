@@ -206,11 +206,6 @@
           "system": "lean4",
           "artifact": "prover/sample_triples.json",
           "reference": "BooleanLaws.de_morgan_not_or"
-        },
-        {
-          "system": "lean4",
-          "artifact": "prover/sample_triples.json",
-          "reference": "BooleanLaws.not_forall_iff_exists_not"
         }
       ]
     },
@@ -522,7 +517,8 @@
           "logic.boolean_laws.identity_laws"
         ],
         "entails": [
-          "logic.inference.contraposition"
+          "logic.inference.contraposition",
+          "logic.quantification.quantifier_negation_universal"
         ],
         "equivalent_to": [
           "settheory.boolean_laws.double_negation"
@@ -2237,6 +2233,1472 @@
         "cut rule",
         "Lindenbaum-Tarski algebra",
         "partial order"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_instantiation",
+      "title": "Universal Instantiation (∀-Elimination)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(forall x. F(x)) implies F(t)",
+        "canonical_latex": "(\\forall x\\, F(x)) \\to F(t)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(∀ x, F x) → F t"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "forall x. F(x) |- F(t)",
+            "scope_note": "Natural-deduction ∀-elimination; premise above the line"
+          },
+          {
+            "form_id": "dictum",
+            "notation_system": "ascii",
+            "expression": "what is affirmed of all is affirmed of any",
+            "scope_note": "The scholastic dictum de omni, the rule's pre-formal ancestor"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binder_elimination_rule",
+        "anonymized_template": "IMPLIES(FORALL(VAR1, PRED(VAR1)), PRED(TERM1))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          },
+          {
+            "slot_id": "TERM1",
+            "syntactic_category": "variable",
+            "semantic_role": "instantiating_term"
+          }
+        ],
+        "invariants": [
+          "The FORALL head's generating exemplar: the bound slot VAR1 occurs only inside the binder's body, and the recurrence pattern IS the binding — the skeleton's first-occurrence numbering makes the statement alpha-invariant with no dedicated machinery.",
+          "An elimination rule with an IMPLIES root, structurally beside modus ponens rather than the equational laws: it licenses a move from the general to the particular and is not reversible.",
+          "The predicate letter PRED is applied to two DIFFERENT arguments (the bound variable, then the free term), which is what distinguishes instantiation from the vacuous IMPLIES(P, P).",
+          "With existential_generalization it composes into universal_implies_existential — the inhabited-domain bridge between the two binders."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "instantiating_term",
+            "mathematical_order": 0,
+            "description": "An arbitrary term of the domain, free for x in F (no variable of t may be captured by a binder of F)."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "What holds of everything holds of any particular thing you can name: a universal claim may be applied to any term of the domain.",
+        "statistical_significance": "The rule that makes a universal statement USABLE rather than merely true — every application of a general theorem to a concrete case passes through it. For this corpus it is the load-bearing exemplar: the coverage classifier accepts an ingested `∀ x : ℝ, x^2 ≥ 0` only because this node carries the FORALL head it reduces to.",
+        "regularity_conditions": [
+          "t is free for x in F: no variable of t is captured by a binder inside F",
+          "Valid classically and intuitionistically"
+        ],
+        "failure_modes": [
+          "Variable capture: instantiating ∀x ∃y (x ≠ y) with t := y yields the falsehood ∃y (y ≠ y); the freeness side condition is not decorative.",
+          "Free logic rejects the rule for non-denoting terms: from 'all unicorns are horned' one may not instantiate to a unicorn.",
+          "Sorted/typed domains: t must belong to the sort x ranges over, which is exactly the carrier-honesty the coverage classifier enforces on ingested binders."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.quantification.universal_implies_existential"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "universal instantiation",
+        "forall elimination",
+        "specialization",
+        "dictum de omni",
+        "binder"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.existential_generalization",
+      "title": "Existential Generalization (∃-Introduction)",
+      "statement_class": "axiom",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "F(t) implies (exists x. F(x))",
+        "canonical_latex": "F(t) \\to (\\exists x\\, F(x))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "F t → (∃ x, F x)"
+          },
+          {
+            "form_id": "rule",
+            "notation_system": "ascii",
+            "expression": "F(t) |- exists x. F(x)",
+            "scope_note": "Natural-deduction ∃-introduction; the witness is discharged into the binder"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binder_introduction_rule",
+        "anonymized_template": "IMPLIES(PRED(TERM1), EXISTS(VAR1, PRED(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          },
+          {
+            "slot_id": "TERM1",
+            "syntactic_category": "variable",
+            "semantic_role": "instantiating_term"
+          },
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          }
+        ],
+        "invariants": [
+          "The EXISTS head's generating exemplar, and universal instantiation's mirror: the same two predicate applications in the opposite order around the IMPLIES root.",
+          "An introduction rule: the witness t is forgotten, not produced — the conclusion is strictly weaker than the premise, which is why the root is IMPLIES and not an equality.",
+          "The bound slot VAR1 again occurs only inside the binder's body; EXISTS binds by recurrence exactly as FORALL does."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          },
+          {
+            "symbol": "t",
+            "syntactic_category": "variable",
+            "semantic_role": "instantiating_term",
+            "mathematical_order": 0,
+            "description": "An arbitrary term of the domain, free for x in F (no variable of t may be captured by a binder of F)."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A named example establishes existence: if the property holds of some particular term, then something has the property.",
+        "statistical_significance": "The rule every witness argument ends with, and the shape of every ingested `∃ x, x = e` goal read backwards: exhibiting e IS the proof. data/number_theory's parity witness definitions (evenness as the existence of a doubling witness) instantiate this head over the integers.",
+        "regularity_conditions": [
+          "t is free for x in F",
+          "t denotes an element of the domain (existential import of terms)"
+        ],
+        "failure_modes": [
+          "Free logic again: from F(Pegasus) one may not conclude ∃x F(x) unless Pegasus denotes.",
+          "Constructively the rule is valid but its converse reading is the error: knowing ∃x F(x) does not recover WHICH t worked."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.quantification.universal_implies_existential"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "gentzen1935",
+          "bibliographic_entry": "Gentzen, G. (1935). Untersuchungen ueber das logische Schliessen I. Mathematische Zeitschrift, 39(1), 176-210."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "existential generalization",
+        "exists introduction",
+        "witness",
+        "binder"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_universal",
+      "title": "Negation of a Universal (Quantifier De Morgan, ∀-Form)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "not (forall x. F(x)) = (exists x. not F(x))",
+        "canonical_latex": "\\lnot(\\forall x\\, F(x)) \\equiv \\exists x\\, \\lnot F(x)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "¬(∀ x, F x) ↔ (∃ x, ¬F x)"
+          },
+          {
+            "form_id": "counterexample",
+            "notation_system": "ascii",
+            "expression": "a universal fails iff it has a counterexample",
+            "scope_note": "The reading every refutation-by-counterexample argument uses"
+          },
+          {
+            "form_id": "infinitary",
+            "notation_system": "ascii",
+            "expression": "not (F(a1) and F(a2) and ...) = (not F(a1)) or (not F(a2)) or ...",
+            "scope_note": "Over a fixed domain: propositional De Morgan applied to the big meet"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "universal_negation_duality",
+        "anonymized_template": "NEG(FORALL(VAR1, PRED(VAR1))) = EXISTS(VAR1, NEG(PRED(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          }
+        ],
+        "invariants": [
+          "The quantifier De Morgan law: NEG passes through the binder and flips it, exactly as it flips MEET to JOIN in the propositional law — the infinitary reading (FORALL as the big MEET of the body's instances) makes the analogy an identity.",
+          "Equational, hence reversible; but only the ¬∃¬-to-¬∀ direction survives intuitionistically — the equation as stated is classical.",
+          "This is the law that licenses reading a ¬-prefixed quantifier chain as NEG-composition of the binder heads: a `¬∃ x, P` goal is NEG(EXISTS(x, P)), and this node with its dual says the composition is well-defined either way.",
+          "One predicate letter, one bound variable: the smallest statement in which both binder heads appear."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "A universal claim fails exactly when some instance fails: denying 'all' asserts a counterexample.",
+        "statistical_significance": "The refutation rule of quantified mathematics — every disproof-by-counterexample is this equation read left to right. Its Lean form (not_forall_iff_exists_not) is machine-checked in the committed prover artifact, and the verified_by bridge moved HERE from the propositional De Morgan node the moment a node existed that states exactly what the theorem proves.",
+        "regularity_conditions": [
+          "Classical semantics: the left-to-right direction requires excluded middle (Markov-style reasoning is not intuitionistically available)"
+        ],
+        "failure_modes": [
+          "Intuitionistically only ∃x ¬F(x) → ¬∀x F(x) holds; the converse is equivalent to a choice-of-counterexample principle and fails in Heyting semantics.",
+          "Over an empty domain both sides are decided (¬∀ is false, ∃¬ is false), so the law holds — but vacuously, which beginners routinely misread."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.boolean_laws.double_negation",
+          "logic.quantification.quantifier_negation_existential"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "quantifier negation",
+        "De Morgan",
+        "counterexample",
+        "duality",
+        "classical logic"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/sample_triples.json",
+          "reference": "BooleanLaws.not_forall_iff_exists_not"
+        }
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.quantifier_negation_existential",
+      "title": "Negation of an Existential (Quantifier De Morgan, ∃-Form)",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "not (exists x. F(x)) = (forall x. not F(x))",
+        "canonical_latex": "\\lnot(\\exists x\\, F(x)) \\equiv \\forall x\\, \\lnot F(x)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "¬(∃ x, F x) ↔ (∀ x, ¬F x)"
+          },
+          {
+            "form_id": "no_solutions",
+            "notation_system": "ascii",
+            "expression": "an equation has no solution iff every candidate fails it",
+            "scope_note": "The reading every non-existence proof in number theory uses"
+          },
+          {
+            "form_id": "infinitary",
+            "notation_system": "ascii",
+            "expression": "not (F(a1) or F(a2) or ...) = (not F(a1)) and (not F(a2)) and ...",
+            "scope_note": "Over a fixed domain: propositional De Morgan applied to the big join"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "existential_negation_duality",
+        "anonymized_template": "NEG(EXISTS(VAR1, PRED(VAR1))) = FORALL(VAR1, NEG(PRED(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          }
+        ],
+        "invariants": [
+          "The dual De Morgan law, and the intuitionistically innocent one: both directions hold in Heyting semantics, unlike its ∀-form sibling, which needs classical logic — the asymmetry between the two nodes is real logical content, not authoring drift.",
+          "NEG flips EXISTS to FORALL: the infinitary reading of propositional De Morgan over the big join.",
+          "With double negation it ENTAILS the ∀-form law, which is the recorded lineage edge: ¬∀F = ¬∀¬¬F = ¬¬∃¬F = ∃¬F, classically.",
+          "The shape of every ingested no-solutions statement: `¬∃ x y : ℕ, 7^x - 3^y = 4` is NEG over this node's left-hand head."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "not",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "NEG(.)",
+            "name": "lattice complement",
+            "input_arity": 1,
+            "description": "Boolean complement. Realized as negation in data/logic and as relative complement in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Nothing has the property exactly when everything lacks it: denying existence is a universal claim.",
+        "statistical_significance": "The logical form of every impossibility theorem — 'there is no rational square root of two' IS a universally quantified negation, and this node is the bridge between the two shapes. Constructively the cleanest of the four quantifier-negation directions: refuting an existential never needs excluded middle.",
+        "regularity_conditions": [
+          "None beyond first-order semantics: valid classically and intuitionistically, both directions"
+        ],
+        "failure_modes": [
+          "The three-way confusion with ¬∀ shapes: ¬∃¬F (equivalent to ∀F classically but strictly weaker intuitionistically) is routinely conflated with ¬∃F.",
+          "Substructural logics without weakening or with existential import distinctions restrict the equivalence."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [
+          "logic.quantification.quantifier_negation_universal"
+        ],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "heyting1930",
+          "bibliographic_entry": "Heyting, A. (1930). Die formalen Regeln der intuitionistischen Logik. Sitzungsberichte der Preussischen Akademie der Wissenschaften, Physikalisch-mathematische Klasse, 42-56."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "quantifier negation",
+        "De Morgan",
+        "non-existence",
+        "impossibility",
+        "duality"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_conjunction_distribution",
+      "title": "Universal Quantifier Distributes over Conjunction",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(forall x. F(x) and G(x)) = (forall x. F(x)) and (forall x. G(x))",
+        "canonical_latex": "\\forall x\\,(F(x) \\land G(x)) \\equiv (\\forall x\\, F(x)) \\land (\\forall x\\, G(x))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(∀ x, F x ∧ G x) ↔ (∀ x, F x) ∧ (∀ x, G x)"
+          },
+          {
+            "form_id": "big_meet",
+            "notation_system": "ascii",
+            "expression": "meet_x (F(x) and G(x)) = (meet_x F(x)) and (meet_x G(x))",
+            "scope_note": "The infinitary-lattice reading: regrouping a big meet of meets"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binder_meet_distribution",
+        "anonymized_template": "FORALL(VAR1, MEET(PRED(VAR1), PREDB(VAR1))) = MEET(FORALL(VAR1, PRED(VAR1)), FORALL(VAR1, PREDB(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          },
+          {
+            "slot_id": "PREDB",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          }
+        ],
+        "invariants": [
+          "FORALL distributes over MEET in both directions — the equational face of 'the universal quantifier is an infinitary meet': a big meet of pairwise meets regroups freely.",
+          "Two schematic predicates over ONE bound variable; the bound slot recurs in four positions, the densest recurrence pattern in the corpus's logic nodes.",
+          "The dual distribution (FORALL over JOIN) is deliberately ABSENT: only one direction of it is valid, so authoring it as an equation would state a falsehood — the gap is the honest shape of the law, recorded in the failure modes instead.",
+          "Valid intuitionistically in both directions, unlike the quantifier De Morgan pair."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "G",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary unary predicate, independent of F."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Everything satisfies both properties exactly when everything satisfies each: a joint universal claim splits into separate ones.",
+        "statistical_significance": "The regrouping law behind proving conjunctive goals componentwise — `∀ x, P x ∧ Q x` and the pair of separate universals are one statement, which is also why the coverage classifier may check a quantified body's conjuncts under one binder context.",
+        "regularity_conditions": [
+          "None beyond first-order semantics: valid classically and intuitionistically"
+        ],
+        "failure_modes": [
+          "The JOIN analogue fails: (∀x Fx) ∨ (∀x Gx) implies ∀x (Fx ∨ Gx) but not conversely — every integer is even or odd, yet neither 'all are even' nor 'all are odd' holds. Distributing ∀ over ∨ is the classic quantifier error.",
+          "Over distinct bound variables the regrouping is a different (valid) law; conflating the two hides a change of scope."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "distribution",
+        "universal quantifier",
+        "conjunction",
+        "infinitary meet",
+        "scope"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.existential_disjunction_distribution",
+      "title": "Existential Quantifier Distributes over Disjunction",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(exists x. F(x) or G(x)) = (exists x. F(x)) or (exists x. G(x))",
+        "canonical_latex": "\\exists x\\,(F(x) \\lor G(x)) \\equiv (\\exists x\\, F(x)) \\lor (\\exists x\\, G(x))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(∃ x, F x ∨ G x) ↔ (∃ x, F x) ∨ (∃ x, G x)"
+          },
+          {
+            "form_id": "big_join",
+            "notation_system": "ascii",
+            "expression": "join_x (F(x) or G(x)) = (join_x F(x)) or (join_x G(x))",
+            "scope_note": "The infinitary-lattice reading: regrouping a big join of joins"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binder_join_distribution",
+        "anonymized_template": "EXISTS(VAR1, JOIN(PRED(VAR1), PREDB(VAR1))) = JOIN(EXISTS(VAR1, PRED(VAR1)), EXISTS(VAR1, PREDB(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          },
+          {
+            "slot_id": "PREDB",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          }
+        ],
+        "invariants": [
+          "EXISTS distributes over JOIN in both directions — the dual regrouping law, with the big join in place of the big meet.",
+          "Mirror-symmetric to universal_conjunction_distribution under the NEG duality of the quantifier De Morgan pair: negate both sides and both laws exchange, which is how one is classically derived from the other.",
+          "The MEET analogue is deliberately ABSENT for the dual reason: ∃x (Fx ∧ Gx) implies (∃x Fx) ∧ (∃x Gx) but not conversely — the two witnesses need not coincide.",
+          "Valid intuitionistically in both directions."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "G",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "A second arbitrary unary predicate, independent of F."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "logical equivalence (interderivability)",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "or",
+            "name": "disjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "JOIN(.,.)",
+            "name": "lattice join",
+            "input_arity": 2,
+            "description": "Least upper bound in the Boolean lattice. Realized as disjunction in data/logic and as union in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Something satisfies one property or the other exactly when something satisfies the first or something satisfies the second.",
+        "statistical_significance": "The case-split law for existence proofs: a witness for a disjunctive property is a witness for one of its disjuncts, and conversely either separate witness serves. With its ∀/∧ mirror it completes the pair of valid distribution equations — the two invalid mixtures are recorded as failure modes on both nodes, which is the corpus's way of stating a non-law without authoring a false node.",
+        "regularity_conditions": [
+          "None beyond first-order semantics: valid classically and intuitionistically"
+        ],
+        "failure_modes": [
+          "The MEET analogue fails: some integer is even and some is odd, but none is both — (∃x Fx) ∧ (∃x Gx) does not produce a single witness for ∃x (Fx ∧ Gx).",
+          "In free logics the empty domain trivializes both sides to false; the equivalence survives but carries no content."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        },
+        {
+          "citation_key": "davey2002",
+          "bibliographic_entry": "Davey, B. A., Priestley, H. A. (2002). Introduction to Lattices and Order (2nd ed.). Cambridge: Cambridge University Press."
+        }
+      ],
+      "keywords": [
+        "distribution",
+        "existential quantifier",
+        "disjunction",
+        "infinitary join",
+        "witness"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.universal_implies_existential",
+      "title": "A Universal Entails an Existential (Inhabited Domain)",
+      "statement_class": "theorem",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "(forall x. F(x)) implies (exists x. F(x))",
+        "canonical_latex": "(\\forall x\\, F(x)) \\to (\\exists x\\, F(x))",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(∀ x, F x) → (∃ x, F x)"
+          },
+          {
+            "form_id": "square_of_opposition",
+            "notation_system": "ascii",
+            "expression": "the A proposition entails the I proposition",
+            "scope_note": "Subalternation on the traditional square of opposition, valid only with existential import"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "domain_inhabitation_entailment",
+        "anonymized_template": "IMPLIES(FORALL(VAR1, PRED(VAR1)), EXISTS(VAR1, PRED(VAR1)))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          }
+        ],
+        "invariants": [
+          "The only node in the corpus whose truth depends on the DOMAIN rather than on the connectives: over an empty domain the universal is vacuously true and the existential false, so the inhabitation condition is the entire content.",
+          "Composes the two rule nodes it is entailed by: instantiate the universal at any inhabitant, then generalize the instance existentially.",
+          "Same body under both binders — the recurrence pattern distinguishes it from instantiation and generalization, whose second predicate application takes a free term."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "If everything has the property and there is anything at all, then something has the property.",
+        "statistical_significance": "The hinge between the two binder heads, and the corpus's record of the inhabitation subtlety that modern logic extracted from the medieval square of opposition: subalternation is not free — it is purchased by the assumption that the domain is nonempty, which mathlib encodes as the `Nonempty` instance this statement's Lean form requires.",
+        "regularity_conditions": [
+          "The domain of quantification is inhabited (nonempty) — the load-bearing hypothesis"
+        ],
+        "failure_modes": [
+          "Empty domain: ∀x F(x) holds vacuously while ∃x F(x) fails — the inclusive-logic counterexample that dismantled the traditional square of opposition.",
+          "Sortal slippage: inhabitation must hold for the SORT x ranges over, not for some ambient superset."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [
+          "logic.quantification.existential_generalization",
+          "logic.quantification.universal_instantiation"
+        ],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "aristotle_priora",
+          "bibliographic_entry": "Aristotle (c. 350 BCE). Prior Analytics. Translated by A. J. Jenkinson, in The Complete Works of Aristotle (J. Barnes, ed., 1984). Princeton: Princeton University Press."
+        },
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        }
+      ],
+      "keywords": [
+        "subalternation",
+        "existential import",
+        "inhabited domain",
+        "square of opposition"
+      ]
+    },
+    {
+      "statement_id": "logic.quantification.unique_existence_expansion",
+      "title": "Unique Existence, Expanded",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "logic"
+        ],
+        "subfield": "predicate_logic",
+        "topic": "quantifier_laws",
+        "canonical_objects": [
+          "proposition",
+          "truth value",
+          "Lindenbaum-Tarski algebra",
+          "Boolean lattice"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "exists! x. F(x) = exists x. (F(x) and forall y. (F(y) implies y = x))",
+        "canonical_latex": "\\exists! x\\, F(x) \\;\\equiv\\; \\exists x\\,\\bigl(F(x) \\land \\forall y\\,(F(y) \\to y = x)\\bigr)",
+        "equivalent_forms": [
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "(∃! x, F x) ↔ (∃ x, F x ∧ ∀ y, F y → y = x)"
+          },
+          {
+            "form_id": "split",
+            "notation_system": "ascii",
+            "expression": "(exists x. F(x)) and (forall y z. F(y) and F(z) implies y = z)",
+            "scope_note": "The equivalent existence-plus-at-most-one split, with uniqueness stated symmetrically"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unique_existence_definiens",
+        "anonymized_template": "EXISTS(VAR1, MEET(PRED(VAR1), FORALL(VAR2, IMPLIES(PRED(VAR2), VAR2 = VAR1))))",
+        "slot_schema": [
+          {
+            "slot_id": "VAR1",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          },
+          {
+            "slot_id": "PRED",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand"
+          },
+          {
+            "slot_id": "VAR2",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable"
+          }
+        ],
+        "invariants": [
+          "The definiendum ∃! deliberately has NO head of its own: the corpus expresses unique existence only through this expansion, so the template is the bare definiens, stated the way ex falso states its bare schema.",
+          "Nested binders of both kinds with the inner body an EQUATION between the two bound slots — the recurrence pattern (x free in the uniqueness clause, y bound inside it) is the whole content of 'at most one'.",
+          "Existence and uniqueness are the MEET's two conjuncts, and each is strictly weaker than the whole: dropping either conjunct is the standard misreading.",
+          "Lean's `ExistsUnique` unfolds to exactly this shape, which is what licenses the coverage classifier's ∃!-desugar: an ingested `∃! x, P x` is expressible if and only if this expansion is."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "F",
+            "syntactic_category": "variable",
+            "semantic_role": "predicate_operand",
+            "mathematical_order": 0,
+            "description": "An arbitrary unary predicate over the domain of discourse — a schematic letter like modus ponens' P, not a first-class function value."
+          },
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "The bound individual variable, ranging over the domain of discourse; it has no free occurrence in the whole statement."
+          },
+          {
+            "symbol": "y",
+            "syntactic_category": "variable",
+            "semantic_role": "bound_individual_variable",
+            "mathematical_order": 0,
+            "description": "A second bound individual variable, for the inner binder."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "exists!",
+            "name": "unique existence (defined binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "and",
+            "name": "conjunction",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "implies",
+            "name": "material implication",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "=",
+            "name": "equality of algebra elements",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "forall",
+            "name": "universal quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          },
+          {
+            "symbol": "exists",
+            "name": "existential quantifier (binder)",
+            "arity": 2,
+            "operator_family": "logical"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MEET(.,.)",
+            "name": "lattice meet",
+            "input_arity": 2,
+            "description": "Greatest lower bound in the Boolean lattice. Realized as conjunction in data/logic and as intersection in data/set_theory.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "IMPLIES(.,.)",
+            "name": "implication",
+            "input_arity": 2,
+            "description": "Material implication where the statement is an object-language formula, and the meta-level 'if ... then' where the statement is a rule.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "FORALL(.,.)",
+            "name": "universal quantification",
+            "input_arity": 2,
+            "description": "The universal binder: FORALL(x, B) holds when the body B holds of every element of the domain of discourse substituted for the bound variable x. First argument the bound variable's slot, second the body; binding is carried by slot recurrence. Semantically the infinitary MEET of the body's instances, which is why it distributes over MEET and dualizes to EXISTS under NEG. The head does NOT carry the binder's domain — the slot_schema does, as for every other slot.",
+            "codomain": "propositions modulo logical equivalence"
+          },
+          {
+            "notation": "EXISTS(.,.)",
+            "name": "existential quantification",
+            "input_arity": 2,
+            "description": "The existential binder: EXISTS(x, B) holds when some element of the domain of discourse satisfies the body B. Same argument convention as FORALL. Semantically the infinitary JOIN of the body's instances, which is why it distributes over JOIN and dualizes to FORALL under NEG. Unique existence has no head of its own; it is expressed only through the unique_existence_expansion definiens.",
+            "codomain": "propositions modulo logical equivalence"
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Exactly one thing has the property: something has it, and anything that has it is that very thing.",
+        "statistical_significance": "The definition that turns 'the' into a well-formed operator — every definite description and every well-definedness proof of a function value rests on this expansion (Russell's theory of descriptions is its use). For the coverage instrument it is load-bearing: 7,099 Goedel-Pset goals are ∃!-statements, and each is classified by expanding to this definiens of carried heads rather than by inventing an EXISTSUNIQUE head the corpus does not state laws for.",
+        "regularity_conditions": [
+          "Equality is available in the object language (first-order logic with equality)"
+        ],
+        "failure_modes": [
+          "Dropping the uniqueness clause silently weakens 'the solution' to 'a solution'; dropping existence turns a definite description into a vacuous one.",
+          "Uniqueness up to WHICH equivalence matters: unique up to equality, isomorphism, or permutation are different claims, and only the first is this definition."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": [
+          "logic.boolean_laws.complement_laws",
+          "logic.boolean_laws.identity_laws"
+        ]
+      },
+      "provenance": [
+        {
+          "citation_key": "frege1879",
+          "bibliographic_entry": "Frege, G. (1879). Begriffsschrift, eine der arithmetischen nachgebildete Formelsprache des reinen Denkens. Halle: Louis Nebert."
+        },
+        {
+          "citation_key": "whitehead1910",
+          "bibliographic_entry": "Whitehead, A. N., Russell, B. (1910). Principia Mathematica, Volume I. Cambridge: Cambridge University Press."
+        },
+        {
+          "citation_key": "enderton2001",
+          "bibliographic_entry": "Enderton, H. B. (2001). A Mathematical Introduction to Logic (2nd ed.). San Diego: Academic Press."
+        },
+        {
+          "citation_key": "mendelson2015",
+          "bibliographic_entry": "Mendelson, E. (2015). Introduction to Mathematical Logic (6th ed.). Boca Raton: CRC Press."
+        },
+        {
+          "citation_key": "mathlib2020",
+          "bibliographic_entry": "The mathlib Community (2020). The Lean Mathematical Library. Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381.",
+          "url": "https://doi.org/10.1145/3372885.3373824"
+        }
+      ],
+      "keywords": [
+        "unique existence",
+        "definite description",
+        "uniqueness",
+        "well-definedness",
+        "ExistsUnique"
       ]
     }
   ]

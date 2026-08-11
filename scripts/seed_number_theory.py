@@ -20,6 +20,12 @@ is exactly the shape the classifier now accepts from ingested Lean statements
 
 Small, canonical exemplars, not invented scale: they establish the heads so
 ingested predicate statements have something to reduce onto.
+
+The v0.10 quantifier slice adds the two existential witness DEFINITIONS
+(even(n) = ∃k, n = 2k and odd(n) = ∃k, n = 2k+1): they tie this discipline's
+predicate heads to the EXISTS binder head that data/logic's quantifier laws
+define, so an ingested parity witness (`∃ k, n = 2 * k`) is honestly
+expressible rather than a quantifier gap.
 """
 
 from __future__ import annotations
@@ -95,9 +101,19 @@ SQRT_FN = {"notation": "SQRT(.)", "name": "square root", "input_arity": 1,
            "description": "The principal square root, the same SQRT head the "
            "algebra and calculus corpora carry; here it is the map that sends a "
            "prime to the canonical irrational."}
+EXISTS_FN = {"notation": "EXISTS(.,.)", "name": "existential quantification",
+             "input_arity": 2, "codomain": "propositions",
+             "description": "The existential binder, the same EXISTS head as "
+             "data/logic's quantifier laws (first argument the bound witness "
+             "slot, second the body; binding carried by slot recurrence). Here "
+             "it binds the integer witness that DEFINES a parity predicate — "
+             "the corpus's reading of an ingested `∃ k, n = 2 * k`."}
 
 INT_N = sym("n", "variable", "integer", "An arbitrary integer.")
 INT_M = sym("m", "variable", "integer", "A second arbitrary integer, independent of n.")
+INT_K = sym("k", "variable", "integer",
+            "The bound witness integer: it occurs only under the existential "
+            "binder, and exhibiting it is what proves the parity claim.")
 INT_P = sym("p", "variable", "integer", "An integer in the role of a prime candidate.")
 CONST_TWO = sym("2", "constant", "the_integer_two",
                 "The integer two: the smallest prime, the modulus of parity, and "
@@ -208,6 +224,75 @@ NODES = [
              composed_with=["numbertheory.parity.even_double",
                             "numbertheory.parity.odd_is_not_even"]),
          keywords=["parity", "odd", "successor", "residue class"]),
+
+    node("numbertheory.parity.even_witness_definition",
+         "Evenness Is Having a Doubling Witness",
+         "definition", "formal", "parity", "parity_classes",
+         "even(n) = exists k. n = 2*k",
+         "n \\in 2\\mathbb{Z} \\iff \\exists k\\,(n = 2k)",
+         [{"form_id": "mathlib_form", "notation_system": "ascii",
+           "expression": "Even n iff exists r, n = r + r",
+           "scope_note": "mathlib's Even; 2k and k + k are the same witness "
+                         "under the doubling identity"},
+          {"form_id": "unicode", "notation_system": "ascii",
+           "expression": "Even n ↔ ∃ k, n = 2 * k"}],
+         "parity_witness_even", "EVEN(INT1) = EXISTS(INT2, INT1 = 2 * INT2)",
+         [slot("INT1", "variable", "integer"),
+          slot("INT2", "variable", "integer")],
+         ["The definitional bridge between a predicate head and the "
+          "existential binder: EVEN applied to a slot equals EXISTS over the "
+          "witness equation, the same P-typed use of `=` as odd_is_not_even.",
+          "The witness slot INT2 occurs only under the binder — the recurrence "
+          "pattern IS the binding, exactly as in data/logic's quantifier laws.",
+          "The exact shape of an ingested `∃ k, n = 2 * k` goal: exhibiting "
+          "the witness is the whole proof (existential generalization).",
+          "The reverse direction instantiated at any n is the doubling node "
+          "EVEN(2 * INT1), which displays the witness instead of binding it."],
+         [INT_N, INT_K], [EQ, MUL],
+         "An integer is even exactly when some integer doubles to it: "
+         "evenness is the existence of a halving witness.",
+         "The corpus's definition of EVEN through the EXISTS head — the node "
+         "that ties the parity predicates of this discipline to the binder "
+         "heads of data/logic, so an existential parity witness is honestly "
+         "expressible rather than a quantifier gap.",
+         [INTEGER_ONLY],
+         [HARDY_WRIGHT, BURTON],
+         functionals=[EVEN_FN, EXISTS_FN],
+         inferential_links=links(
+             composed_with=["numbertheory.parity.even_double"]),
+         keywords=["parity", "even", "witness", "existential", "definition"]),
+
+    node("numbertheory.parity.odd_witness_definition",
+         "Oddness Is Having an Offset Doubling Witness",
+         "definition", "formal", "parity", "parity_classes",
+         "odd(n) = exists k. n = 2*k + 1",
+         "n \\in 2\\mathbb{Z}+1 \\iff \\exists k\\,(n = 2k + 1)",
+         [{"form_id": "mathlib_form", "notation_system": "ascii",
+           "expression": "Odd n iff exists m, n = 2 * m + 1",
+           "scope_note": "mathlib's Odd, verbatim"},
+          {"form_id": "unicode", "notation_system": "ascii",
+           "expression": "Odd n ↔ ∃ k, n = 2 * k + 1"}],
+         "parity_witness_odd", "ODD(INT1) = EXISTS(INT2, INT1 = 2 * INT2 + 1)",
+         [slot("INT1", "variable", "integer"),
+          slot("INT2", "variable", "integer")],
+         ["The odd twin of the even witness definition: same binder, same "
+          "recurrence pattern, the witness equation offset by one.",
+          "With even_witness_definition and odd_is_not_even it closes the "
+          "loop: the negation definition and the two witness definitions are "
+          "consistent because no integer is both 2k and 2k+1.",
+          "The exact shape of an ingested `∃ k, n = 2 * k + 1` goal."],
+         [INT_N, INT_K], [EQ, ADD, MUL],
+         "An integer is odd exactly when it is one more than some double: "
+         "oddness is the existence of an offset halving witness.",
+         "The ODD head's definition through the EXISTS binder, dual to the "
+         "even witness definition; together they make the canonical forms of "
+         "the two residue classes quantifier-explicit.",
+         [INTEGER_ONLY],
+         [HARDY_WRIGHT, BURTON],
+         functionals=[ODD_FN, EXISTS_FN],
+         inferential_links=links(
+             composed_with=["numbertheory.parity.odd_successor"]),
+         keywords=["parity", "odd", "witness", "existential", "definition"]),
 
     node("numbertheory.parity.odd_is_not_even",
          "Odd Means Not Even",
