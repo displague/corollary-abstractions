@@ -242,7 +242,7 @@ def build_coverage(doc: dict) -> dict:
                 "relations(= ≠ < ≤ > ≥ ↔)",
                 "MEET(∧) JOIN(∨) NEG(¬) IMPLIES(→)",
                 "arithmetic(+ - * / ^)",
-                "SQRT LOG EXP",
+                "SQRT LOG EXP SIN COS TAN",
             ],
             "explicit_gaps_no_head_in_corpus": [
                 "modulo(%, [MOD n])", "divides(∣)", "absolute-value/norm(|·|, ∥·∥)",

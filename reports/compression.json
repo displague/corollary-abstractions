@@ -1546,11 +1546,67 @@
       "struct_tokens": 22,
       "concept_tokens": 3,
       "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.identities.pythagorean",
+      "char_tokens": 31,
+      "struct_tokens": 21,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.definitions.tangent",
+      "char_tokens": 36,
+      "struct_tokens": 19,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.identities.sine_angle_sum",
+      "char_tokens": 72,
+      "struct_tokens": 34,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.identities.cosine_angle_sum",
+      "char_tokens": 72,
+      "struct_tokens": 37,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_sine",
+      "char_tokens": 38,
+      "struct_tokens": 21,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_cosine",
+      "char_tokens": 42,
+      "struct_tokens": 31,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.symmetry.sine_odd",
+      "char_tokens": 25,
+      "struct_tokens": 15,
+      "concept_tokens": 2,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "trigonometry.symmetry.cosine_even",
+      "char_tokens": 24,
+      "struct_tokens": 12,
+      "concept_tokens": 2,
+      "family_reuse": 1
     }
   ],
-  "mean_char": 43.171945701357465,
-  "mean_struct": 13.846153846153847,
-  "mean_concept": 3.841628959276018,
-  "n_family_skeletons": 166,
+  "mean_char": 43.148471615720524,
+  "mean_struct": 14.192139737991265,
+  "mean_concept": 3.7860262008733625,
+  "n_family_skeletons": 174,
   "skeletons_reused": 30
 }

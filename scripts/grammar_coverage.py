@@ -269,6 +269,11 @@ _SUPPORTED_FUNCS = {
     "real.exp": "EXP", "Real.exp": "EXP",
     "nnreal.sqrt": "SQRT", "NNReal.sqrt": "SQRT",
     "sqrt": "SQRT", "log": "LOG", "exp": "EXP",
+    # v0.10 item 1: SIN/COS/TAN are now corpus heads (data/trigonometry). Forward
+    # trig only; inverse and reciprocal trig remain gaps (see the trig blocker).
+    "real.sin": "SIN", "Real.sin": "SIN", "sin": "SIN",
+    "real.cos": "COS", "Real.cos": "COS", "cos": "COS",
+    "real.tan": "TAN", "Real.tan": "TAN", "tan": "TAN",
 }
 _ALLOWED_CONSTS = {"π", "real.pi", "Real.pi", "pi", "ℯ"}
 
@@ -286,6 +291,9 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     # morphology's linguistic modifier; there is no divides head): GAPS.
     ("modulo_no_head", re.compile(r"%|\[ZMOD|\[MOD|\b[Mm]odeq\b|\b[Nn]at\.mod\b|\b[Ii]nt\.mod\b")),
     ("divides_no_head", re.compile(r"∣|\bdvd\b|\b[Nn]at\.dvd\b")),
+    # a `[...]` surviving the modulo blocker (which owns `[MOD`/`[ZMOD`) is a list
+    # literal or a function-iteration `f^[n]` (n-fold composition) -- no head.
+    ("list_or_iteration", re.compile(r"\[")),
     # a fractional exponent `^(1/3)` is not a head: the corpus carries integer POW
     # and an explicit SQRT head, not general rational powers -- and over ℕ the
     # exponent `1/3` is Nat.div = 0 (the classic `x^(1/3)` = x^0 trap) regardless.
@@ -316,8 +324,9 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     ("absolute_value", re.compile(r"\babs\b|\bnorm\b|lvert|lVert|\||∥|‖|⟪|⟫")),
     ("min_max", re.compile(r"\b[Mm]in\b|\b[Mm]ax\b|⊓|⊔|⨅|⨆")),
     ("metavar_or_string", re.compile(r'"|\?')),
-    # trig has no head; under `open Real` the functions appear bare (sin, cos …).
-    ("trig", re.compile(r"[Rr]eal\.(?:cos|sin|tan|arcsin|arccos|arctan)|\b(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan)\b")),
+    # forward sin/cos/tan are now supported heads (data/trigonometry); the trig
+    # GAP is now only inverse, reciprocal, and hyperbolic trig, which have no head.
+    ("trig", re.compile(r"[Rr]eal\.(?:arcsin|arccos|arctan|sinh|cosh|tanh)|\b(?:cot|sec|csc|arcsin|arccos|arctan|sinh|cosh|tanh)\b")),
     ("polynomial", re.compile(r"[Pp]olynomial")),
     ("matrix", re.compile(r"[Mm]atrix")),
     ("derivative", re.compile(r"deriv|∂")),

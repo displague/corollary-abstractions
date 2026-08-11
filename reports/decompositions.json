@@ -154,11 +154,11 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4,
+            "external": 6,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -421,11 +421,11 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4,
+            "external": 6,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -461,13 +461,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6
+            "external": 8
           },
           "instance_of_statements": [
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -610,14 +610,14 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6
+            "external": 8
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         },
         {
           "path": [
@@ -2289,7 +2289,7 @@
           "channel": "pattern_absorption",
           "absorbed_from_channel": "external",
           "absorbed_owner_channels": {
-            "external": 7
+            "external": 9
           },
           "instance_of_pattern": "+(?0:V, ?1:V)",
           "pattern_known_from": [
@@ -2299,9 +2299,10 @@
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
             "numanalysis.integration.trapezoidal_rule",
-            "physics.frames.galilean_velocity_addition"
+            "physics.frames.galilean_velocity_addition",
+            "trigonometry.identities.cosine_angle_sum"
           ],
-          "pattern_recurs_in_n_statements": 7
+          "pattern_recurs_in_n_statements": 9
         },
         {
           "path": [
@@ -4024,13 +4025,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6
+            "external": 8
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -4565,10 +4566,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 5
+            "external": 7
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -4750,7 +4751,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4,
+            "external": 6,
             "prior_corpus": 1,
             "same_corpus": 1
           },
@@ -4759,7 +4760,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -5349,7 +5350,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4,
+            "external": 6,
             "prior_corpus": 1,
             "same_corpus": 1
           },
@@ -5358,7 +5359,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -5410,10 +5411,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 5
+            "external": 7
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -5869,19 +5870,19 @@
       "corpus_id": "graph_theory.counting_and_structure.v1",
       "discipline": "graph_theory",
       "template": "sum_i DEGREE_i = 2*EDGES",
-      "groundedness": 0.5,
+      "groundedness": 1.0,
       "considered": 2,
-      "grounded_exact": 1,
+      "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
-        "external": 1,
+        "external": 2,
         "prior_corpus": 0,
         "same_corpus": 0,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.5,
+        "external": 1.0,
         "prior_corpus": 0.0,
         "same_corpus": 0.0,
         "recursive": 0.0,
@@ -5904,6 +5905,19 @@
             "probstat.probability.probability_normalization"
           ],
           "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
         }
       ]
     },
@@ -6697,10 +6711,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 5
+            "external": 7
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -8801,10 +8815,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 5
+            "external": 7
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 8
         }
       ]
     },
@@ -9195,7 +9209,7 @@
           "channel": "pattern_absorption",
           "absorbed_from_channel": "external",
           "absorbed_owner_channels": {
-            "external": 7
+            "external": 9
           },
           "instance_of_pattern": "+(?0:V, ?1:V)",
           "pattern_known_from": [
@@ -9205,9 +9219,10 @@
             "geometry.area_formulas.trapezoid_area_formula",
             "geometry.perimeter_formulas.rectangle_perimeter_formula",
             "numanalysis.integration.trapezoidal_rule",
-            "physics.frames.galilean_velocity_addition"
+            "physics.frames.galilean_velocity_addition",
+            "trigonometry.identities.cosine_angle_sum"
           ],
-          "pattern_recurs_in_n_statements": 7
+          "pattern_recurs_in_n_statements": 9
         }
       ]
     },
@@ -10433,7 +10448,7 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 4,
+            "external": 6,
             "prior_corpus": 2
           },
           "instance_of_statements": [
@@ -10441,7 +10456,7 @@
             "economics.macroeconomics.fisher_equation",
             "physics.frames.galilean_velocity_addition"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -11415,13 +11430,13 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6
+            "external": 8
           },
           "instance_of_statements": [
             "algtop.homology.chain_rank_nullity",
             "economics.macroeconomics.fisher_equation"
           ],
-          "recurs_in_n_statements": 7
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -14527,38 +14542,943 @@
           "recurs_in_n_statements": 7
         }
       ]
+    },
+    {
+      "statement_id": "trigonometry.identities.pythagorean",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "SIN(ANGLE)^2 + COS(ANGLE)^2 = 1",
+      "groundedness": 1.0,
+      "considered": 5,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.8,
+        "recursive": 0.0,
+        "pattern_absorption": 0.2
+      },
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(^(COS⟨?0:V⟩, 2), ^(SIN⟨?0:V⟩, 2))",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 2
+          },
+          "instance_of_pattern": "+(^(?0:V, 2), ^(?1:V, 2))",
+          "pattern_known_from": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "geometry.right_triangles.pythagorean_theorem"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "^(COS⟨?0:V⟩, 2)",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "^(SIN⟨?0:V⟩, 2)",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.definitions.tangent",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "groundedness": 0.8,
+      "considered": 5,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 2,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 2
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.4,
+        "recursive": 0.0,
+        "pattern_absorption": 0.4
+      },
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(SIN⟨?0:V⟩, inv(COS⟨?0:V⟩))",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1
+          },
+          "instance_of_pattern": "*(?0:P, inv(?1:P))",
+          "pattern_known_from": [
+            "chemistry.kinetics.half_life_first_order"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "inv(COS⟨?0:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 4
+          },
+          "instance_of_pattern": "inv(?0:P)",
+          "pattern_known_from": [
+            "chemistry.kinetics.half_life_first_order",
+            "geometry.circle_formulas.circle_area_from",
+            "ml.preference.grpo_group_relative_advantage",
+            "probstat.transform.z_standardization"
+          ],
+          "pattern_recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.sine_angle_sum",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "groundedness": 0.889,
+      "considered": 9,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 3,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 3
+      },
+      "channel_scores": {
+        "external": 0.111,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.444,
+        "recursive": 0.0,
+        "pattern_absorption": 0.333
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 7,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "recurs_in_n_statements": 9
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(COS⟨?0:V⟩, SIN⟨?1:V⟩), *(COS⟨?1:V⟩, SIN⟨?0:V⟩))",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 2
+          },
+          "instance_of_pattern": "+(*(?0:P, ?1:V), *(?2:P, ?3:V))",
+          "pattern_known_from": [
+            "calculus.differentiation.linearity_of_derivative",
+            "ml.recurrence.linear_ssm_state_update"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(COS⟨?0:V⟩, SIN⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 36
+          },
+          "instance_of_pattern": "*(?0:P, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
+          ],
+          "pattern_recurs_in_n_statements": 36
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "*(COS⟨?0:V⟩, SIN⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 36
+          },
+          "instance_of_pattern": "*(?0:P, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
+          ],
+          "pattern_recurs_in_n_statements": 36
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1,
+            1
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.cosine_angle_sum",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "groundedness": 0.9,
+      "considered": 10,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 4,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 4
+      },
+      "channel_scores": {
+        "external": 0.1,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.4,
+        "recursive": 0.0,
+        "pattern_absorption": 0.4
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "+(?0:V, ?1:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 7,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "algtop.homology.chain_rank_nullity",
+            "economics.macroeconomics.fisher_equation",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "recurs_in_n_statements": 9
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "+(*(COS⟨?0:V⟩, COS⟨?1:V⟩), neg(*(SIN⟨?0:V⟩, SIN⟨?1:V⟩)))",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1
+          },
+          "instance_of_pattern": "+(?0:P, neg(*(?1:P, ?2:V)))",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_surface"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "*(COS⟨?0:V⟩, COS⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 36
+          },
+          "instance_of_pattern": "*(?0:P, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
+          ],
+          "pattern_recurs_in_n_statements": 36
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            0,
+            1
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "neg(*(SIN⟨?0:V⟩, SIN⟨?1:V⟩))",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 7
+          },
+          "instance_of_pattern": "neg(*(?0:P, ?1:V))",
+          "pattern_known_from": [
+            "algtop.invariants.euler_characteristic_surface",
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "economics.finance.present_value_continuous",
+            "ml.objective.kl_regularized_rl_objective",
+            "ml.optimization.gradient_descent_step",
+            "ml.policy.boltzmann_softmax_policy",
+            "physics.mechanics.hookes_law"
+          ],
+          "pattern_recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "*(SIN⟨?0:V⟩, SIN⟨?1:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 36
+          },
+          "instance_of_pattern": "*(?0:P, ?1:V)",
+          "pattern_known_from": [
+            "algtop.homology.betti_alternating_sum",
+            "algtop.invariants.euler_characteristic_surface",
+            "calculus.approximation.tangent_line_linearization",
+            "calculus.differentiation.exponential_derivative",
+            "calculus.differentiation.linearity_of_derivative",
+            "calculus.growth.exponential_growth_law",
+            "chemistry.kinetics.arrhenius_equation",
+            "chemistry.kinetics.first_order_integrated_rate_law"
+          ],
+          "pattern_recurs_in_n_statements": 36
+        },
+        {
+          "path": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_sine",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "groundedness": 0.8,
+      "considered": 5,
+      "grounded_exact": 3,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.2,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.4,
+        "recursive": 0.0,
+        "pattern_absorption": 0.2
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "*(2, COS⟨?0:V⟩, SIN⟨?0:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 1
+          },
+          "instance_of_pattern": "*(?0:P, ?1:P, ?2:V)",
+          "pattern_known_from": [
+            "physics.thermodynamics.ideal_gas_law"
+          ],
+          "pattern_recurs_in_n_statements": 1
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            2
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_cosine",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "COS(2*ANGLE) = COS(ANGLE)^2 - SIN(ANGLE)^2",
+      "groundedness": 0.625,
+      "considered": 8,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 4,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.125,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.5,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "*(2, ?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "graphtheory.degree.handshake_lemma"
+          ],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "^(COS⟨?0:V⟩, 2)",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0,
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [
+            "trigonometry.symmetry.cosine_even"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            1,
+            0
+          ],
+          "skeleton": "^(SIN⟨?0:V⟩, 2)",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.symmetry.sine_odd",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "SIN(-ANGLE) = -SIN(ANGLE)",
+      "groundedness": 0.75,
+      "considered": 4,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 1,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.25,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.25,
+        "recursive": 0.0,
+        "pattern_absorption": 0.25
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        },
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "neg(SIN⟨?0:V⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 6
+          },
+          "instance_of_pattern": "neg(?0:P)",
+          "pattern_known_from": [
+            "algebra.polynomial_equations.quadratic_formula",
+            "geomodel.bezier.de_casteljau_step",
+            "ml.preference.grpo_group_relative_advantage",
+            "numanalysis.interpolation.linear_interpolation",
+            "probstat.probability.two_component_mixture",
+            "probstat.transform.z_standardization"
+          ],
+          "pattern_recurs_in_n_statements": 6
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "SIN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        }
+      ]
+    },
+    {
+      "statement_id": "trigonometry.symmetry.cosine_even",
+      "corpus_id": "trigonometry.core.v1",
+      "discipline": "trigonometry",
+      "template": "COS(-ANGLE) = COS(ANGLE)",
+      "groundedness": 0.667,
+      "considered": 3,
+      "grounded_exact": 2,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 1,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.333,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.333,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            0
+          ],
+          "skeleton": "COS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 6
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 8
+        }
+      ]
     }
   ],
   "channel_summary": {
     "graph": {
-      "statements": 219,
-      "mean_groundedness": 0.77,
+      "statements": 227,
+      "mean_groundedness": 0.774,
       "channel_means": {
-        "external": 0.535,
+        "external": 0.523,
         "prior_corpus": 0.008,
-        "same_corpus": 0.142,
+        "same_corpus": 0.152,
         "recursive": 0.0,
-        "pattern_absorption": 0.086
+        "pattern_absorption": 0.091
       },
       "channel_constituents": {
-        "external": 352,
+        "external": 359,
         "prior_corpus": 4,
-        "same_corpus": 84,
+        "same_corpus": 106,
         "recursive": 0,
-        "pattern_absorption": 75
+        "pattern_absorption": 87
       },
-      "independent_mean": 0.543,
+      "independent_mean": 0.531,
       "same_corpus_dominant": false,
       "self_certifying": false,
       "channel_means_lower": {
-        "external": 0.246,
-        "prior_corpus": 0.038,
-        "same_corpus": 0.4,
+        "external": 0.24,
+        "prior_corpus": 0.037,
+        "same_corpus": 0.407,
         "recursive": 0.0,
-        "pattern_absorption": 0.086
+        "pattern_absorption": 0.091
       },
-      "external_lower": 0.246,
-      "independent_lower": 0.284,
+      "external_lower": 0.24,
+      "independent_lower": 0.276,
       "same_corpus_dominant_lower": true,
       "self_certifying_lower": false
     },
@@ -14895,33 +15815,33 @@
       },
       "graph_theory.counting_and_structure.v1": {
         "statements": 8,
-        "mean_groundedness": 0.469,
+        "mean_groundedness": 0.531,
         "channel_means": {
-          "external": 0.344,
+          "external": 0.406,
           "prior_corpus": 0.031,
           "same_corpus": 0.094,
           "recursive": 0.0,
           "pattern_absorption": 0.0
         },
         "channel_constituents": {
-          "external": 5,
+          "external": 6,
           "prior_corpus": 1,
           "same_corpus": 2,
           "recursive": 0,
           "pattern_absorption": 0
         },
-        "independent_mean": 0.375,
+        "independent_mean": 0.438,
         "same_corpus_dominant": false,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.062,
+          "external": 0.125,
           "prior_corpus": 0.219,
           "same_corpus": 0.188,
           "recursive": 0.0,
           "pattern_absorption": 0.0
         },
-        "external_lower": 0.062,
-        "independent_lower": 0.281,
+        "external_lower": 0.125,
+        "independent_lower": 0.344,
         "same_corpus_dominant_lower": false,
         "self_certifying_lower": false,
         "discipline": "graph_theory"
@@ -15288,6 +16208,39 @@
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "temporal_logic"
+      },
+      "trigonometry.core.v1": {
+        "statements": 8,
+        "mean_groundedness": 0.804,
+        "channel_means": {
+          "external": 0.14,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.441,
+          "recursive": 0.0,
+          "pattern_absorption": 0.223
+        },
+        "channel_constituents": {
+          "external": 6,
+          "prior_corpus": 0,
+          "same_corpus": 22,
+          "recursive": 0,
+          "pattern_absorption": 12
+        },
+        "independent_mean": 0.14,
+        "same_corpus_dominant": true,
+        "self_certifying": false,
+        "channel_means_lower": {
+          "external": 0.0,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.581,
+          "recursive": 0.0,
+          "pattern_absorption": 0.223
+        },
+        "external_lower": 0.0,
+        "independent_lower": 0.0,
+        "same_corpus_dominant_lower": true,
+        "self_certifying_lower": false,
+        "discipline": "trigonometry"
       }
     }
   }

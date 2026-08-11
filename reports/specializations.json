@@ -6948,6 +6948,23 @@
       "looseness": 3
     },
     {
+      "general": "calculus.differentiation.average_rate_of_change",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "INTERVAL": "COS(ANGLE)",
+        "QUANTITY": "SIN(ANGLE)",
+        "RATE": "TAN(ANGLE)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "chemistry.kinetics.half_life_first_order",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "HALFLIFE = CONSTANT / RATECONST",
@@ -6965,6 +6982,23 @@
       "looseness": 3
     },
     {
+      "general": "chemistry.kinetics.half_life_first_order",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "HALFLIFE = CONSTANT / RATECONST",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CONSTANT": "SIN(ANGLE)",
+        "HALFLIFE": "TAN(ANGLE)",
+        "RATECONST": "COS(ANGLE)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "chemistry.solutions.molarity_definition",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "CONCENTRATION = AMOUNT / VOLUME",
@@ -6978,6 +7012,23 @@
         "AMOUNT": "*(VERTICES, +(VERTICES, neg(1)))",
         "CONCENTRATION": "EDGES",
         "VOLUME": "2"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "chemistry.solutions.molarity_definition",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "CONCENTRATION = AMOUNT / VOLUME",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "AMOUNT": "SIN(ANGLE)",
+        "CONCENTRATION": "TAN(ANGLE)",
+        "VOLUME": "COS(ANGLE)"
       },
       "looseness": 3
     },
@@ -7083,6 +7134,23 @@
         "ELASTICITY": "EDGES",
         "PCT_PRICE": "2",
         "PCT_QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "economics.microeconomics.price_elasticity_of_demand",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "ELASTICITY = PCT_QUANTITY / PCT_PRICE",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "ELASTICITY": "TAN(ANGLE)",
+        "PCT_PRICE": "COS(ANGLE)",
+        "PCT_QUANTITY": "SIN(ANGLE)"
       },
       "looseness": 3
     },
@@ -7317,6 +7385,23 @@
       "looseness": 3
     },
     {
+      "general": "ml.policy.policy_probability_ratio",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "RATIO = POLICYNEW / POLICYOLD",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "POLICYNEW": "SIN(ANGLE)",
+        "POLICYOLD": "COS(ANGLE)",
+        "RATIO": "TAN(ANGLE)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "numanalysis.error.relative_condition_number",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
@@ -7330,6 +7415,23 @@
         "CONDITION": "EDGES",
         "INPUTPERTURB": "2",
         "OUTPUTPERTURB": "*(VERTICES, +(VERTICES, neg(1)))"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "numanalysis.error.relative_condition_number",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "CONDITION = OUTPUTPERTURB / INPUTPERTURB",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CONDITION": "TAN(ANGLE)",
+        "INPUTPERTURB": "COS(ANGLE)",
+        "OUTPUTPERTURB": "SIN(ANGLE)"
       },
       "looseness": 3
     },
@@ -7419,6 +7521,23 @@
       "looseness": 3
     },
     {
+      "general": "physics.kinematics.average_speed",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "INTERVAL": "COS(ANGLE)",
+        "QUANTITY": "SIN(ANGLE)",
+        "RATE": "TAN(ANGLE)"
+      },
+      "looseness": 3
+    },
+    {
       "general": "physics.materials.mass_density",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "RATE = QUANTITY / INTERVAL",
@@ -7432,6 +7551,23 @@
         "INTERVAL": "2",
         "QUANTITY": "*(VERTICES, +(VERTICES, neg(1)))",
         "RATE": "EDGES"
+      },
+      "looseness": 3
+    },
+    {
+      "general": "physics.materials.mass_density",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "RATE = QUANTITY / INTERVAL",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 6,
+      "structure_cost": 6,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "INTERVAL": "COS(ANGLE)",
+        "QUANTITY": "SIN(ANGLE)",
+        "RATE": "TAN(ANGLE)"
       },
       "looseness": 3
     },
@@ -8433,6 +8569,23 @@
       "looseness": 4
     },
     {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "trigonometry.identities.pythagorean",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "SIN(ANGLE)^2 + COS(ANGLE)^2 = 1",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CHAINRANK": "1",
+        "CYCLERANK": "^(COS(ANGLE), 2)",
+        "IMAGERANK": "^(SIN(ANGLE), 2)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
@@ -8446,6 +8599,23 @@
         "GAUSSCURVATURE": "DEGREE(COMPOSE(OUTER, INNER))",
         "PRINCIPAL1": "DEGREE(OUTER)",
         "PRINCIPAL2": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "GAUSSCURVATURE": "TAN(ANGLE)",
+        "PRINCIPAL1": "SIN(ANGLE)",
+        "PRINCIPAL2": "inv(COS(ANGLE))"
       },
       "looseness": 4
     },
@@ -8467,6 +8637,23 @@
       "looseness": 4
     },
     {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "AREA": "TAN(ANGLE)",
+        "DIM1": "SIN(ANGLE)",
+        "DIM2": "inv(COS(ANGLE))"
+      },
+      "looseness": 4
+    },
+    {
       "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
@@ -8480,6 +8667,23 @@
         "CIRCUMFERENCE": "DEGREE(COMPOSE(OUTER, INNER))",
         "CONSTANT": "DEGREE(OUTER)",
         "RADIUS": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CIRCUMFERENCE": "TAN(ANGLE)",
+        "CONSTANT": "SIN(ANGLE)",
+        "RADIUS": "inv(COS(ANGLE))"
       },
       "looseness": 4
     },
@@ -8552,6 +8756,23 @@
       "looseness": 4
     },
     {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EDGES": "TAN(ANGLE)",
+        "PARTONE": "SIN(ANGLE)",
+        "PARTTWO": "inv(COS(ANGLE))"
+      },
+      "looseness": 4
+    },
+    {
       "general": "ml.recurrence.linear_ssm_state_update",
       "specific": "calculus.differentiation.product_rule",
       "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
@@ -8588,6 +8809,23 @@
       "looseness": 4
     },
     {
+      "general": "physics.circuits.ohms_law",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FLOW": "SIN(ANGLE)",
+        "POTENTIAL": "TAN(ANGLE)",
+        "RESISTANCE": "inv(COS(ANGLE))"
+      },
+      "looseness": 4
+    },
+    {
       "general": "physics.frames.galilean_velocity_addition",
       "specific": "morphology.quantity.morpheme_count_additivity",
       "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
@@ -8605,6 +8843,23 @@
       "looseness": 4
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "trigonometry.identities.pythagorean",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "SIN(ANGLE)^2 + COS(ANGLE)^2 = 1",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "^(SIN(ANGLE), 2)",
+        "OBJECT_VELOCITY": "1",
+        "RELATIVE_VELOCITY": "^(COS(ANGLE), 2)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "physics.mechanics.newton_second_law",
       "specific": "difftop.degree.degree_multiplicativity",
       "general_template": "FORCE = INERTIA * RESPONSE",
@@ -8618,6 +8873,23 @@
         "FORCE": "DEGREE(COMPOSE(OUTER, INNER))",
         "INERTIA": "DEGREE(OUTER)",
         "RESPONSE": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "compound",
+      "cost": 7,
+      "structure_cost": 7,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FORCE": "TAN(ANGLE)",
+        "INERTIA": "SIN(ANGLE)",
+        "RESPONSE": "inv(COS(ANGLE))"
       },
       "looseness": 4
     },
@@ -9174,6 +9446,24 @@
       "looseness": 4
     },
     {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "compound",
+      "cost": 8,
+      "structure_cost": 8,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "ABSORBANCE": "SIN(*(2, ANGLE))",
+        "ABSORPTIVITY": "2",
+        "CONCENTRATION": "SIN(ANGLE)",
+        "PATHLENGTH": "COS(ANGLE)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "graphtheory.enumeration.complete_graph_edge_count",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
@@ -9188,6 +9478,24 @@
         "BASE": "VERTICES",
         "CONSTANT": "1",
         "HEIGHT": "*(+(VERTICES, neg(1)), inv(2))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "compound",
+      "cost": 8,
+      "structure_cost": 8,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "AREA": "SIN(*(2, ANGLE))",
+        "BASE": "COS(ANGLE)",
+        "CONSTANT": "2",
+        "HEIGHT": "SIN(ANGLE)"
       },
       "looseness": 4
     },
@@ -9273,6 +9581,24 @@
         "CIRCUMFERENCE": "STD",
         "CONSTANT": "1",
         "RADIUS": "*(+(RAW, neg(CENTER)), inv(SCALE))"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.volume_formulas.rectangular_prism_volume",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "VOLUME = DIM1 * DIM2 * DIM3",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "compound",
+      "cost": 8,
+      "structure_cost": 8,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "DIM1": "2",
+        "DIM2": "COS(ANGLE)",
+        "DIM3": "SIN(ANGLE)",
+        "VOLUME": "SIN(*(2, ANGLE))"
       },
       "looseness": 4
     },
@@ -9971,6 +10297,24 @@
       "looseness": 4
     },
     {
+      "general": "chemistry.spectroscopy.beer_lambert_law",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "ABSORBANCE = ABSORPTIVITY * PATHLENGTH * CONCENTRATION",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "identity+compound",
+      "cost": 9,
+      "structure_cost": 7,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "ABSORBANCE": "TAN(ANGLE)",
+        "ABSORPTIVITY": "1",
+        "CONCENTRATION": "inv(COS(ANGLE))",
+        "PATHLENGTH": "SIN(ANGLE)"
+      },
+      "looseness": 4
+    },
+    {
       "general": "economics.finance.capm_expected_return",
       "specific": "geomodel.bezier.de_casteljau_step",
       "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
@@ -10112,6 +10456,24 @@
         "BASE": "DEGREE(OUTER)",
         "CONSTANT": "1",
         "HEIGHT": "DEGREE(INNER)"
+      },
+      "looseness": 4
+    },
+    {
+      "general": "geometry.area_formulas.triangle_area_formula",
+      "specific": "trigonometry.definitions.tangent",
+      "general_template": "AREA = CONSTANT * BASE * HEIGHT",
+      "specific_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+      "via": "identity+compound",
+      "cost": 9,
+      "structure_cost": 7,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "AREA": "TAN(ANGLE)",
+        "BASE": "SIN(ANGLE)",
+        "CONSTANT": "1",
+        "HEIGHT": "inv(COS(ANGLE))"
       },
       "looseness": 4
     },
@@ -10314,6 +10676,40 @@
       "looseness": 5
     },
     {
+      "general": "diffgeo.surfaces.gaussian_curvature_principal_product",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "GAUSSCURVATURE = PRINCIPAL1 * PRINCIPAL2",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "GAUSSCURVATURE": "SIN(*(2, ANGLE))",
+        "PRINCIPAL1": "2",
+        "PRINCIPAL2": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "geometry.area_formulas.rectangle_area_formula",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "AREA = DIM1 * DIM2",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "AREA": "SIN(*(2, ANGLE))",
+        "DIM1": "2",
+        "DIM2": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "geometry.area_formulas.triangle_area_formula",
       "specific": "calculus.differentiation.exponential_derivative",
       "general_template": "AREA = CONSTANT * BASE * HEIGHT",
@@ -10350,6 +10746,74 @@
       "looseness": 5
     },
     {
+      "general": "geometry.circle_formulas.circle_circumference_formula",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "CIRCUMFERENCE": "SIN(*(2, ANGLE))",
+        "CONSTANT": "2",
+        "RADIUS": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "EDGES = PARTONE*PARTTWO",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "EDGES": "SIN(*(2, ANGLE))",
+        "PARTONE": "2",
+        "PARTTWO": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.circuits.ohms_law",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "POTENTIAL = FLOW * RESISTANCE",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FLOW": "2",
+        "POTENTIAL": "SIN(*(2, ANGLE))",
+        "RESISTANCE": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
+      "general": "physics.mechanics.newton_second_law",
+      "specific": "trigonometry.identities.double_angle_sine",
+      "general_template": "FORCE = INERTIA * RESPONSE",
+      "specific_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+      "via": "absorption+compound",
+      "cost": 9,
+      "structure_cost": 8,
+      "algebra_cost": 1,
+      "head_collapses": 0,
+      "bindings": {
+        "FORCE": "SIN(*(2, ANGLE))",
+        "INERTIA": "2",
+        "RESPONSE": "*(COS(ANGLE), SIN(ANGLE))"
+      },
+      "looseness": 5
+    },
+    {
       "general": "probstat.regression.slr_stochastic_specification",
       "specific": "diffgeo.surfaces.first_fundamental_form",
       "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
@@ -10367,6 +10831,23 @@
         "SLOPE": "COEFFG"
       },
       "looseness": 5
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "trigonometry.identities.double_angle_cosine",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "COS(2*ANGLE) = COS(ANGLE)^2 - SIN(ANGLE)^2",
+      "via": "compound",
+      "cost": 9,
+      "structure_cost": 9,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "BETTI": "COS(*(2, ANGLE))",
+        "BOUNDARYRANK": "^(SIN(ANGLE), 2)",
+        "CYCLERANK": "^(COS(ANGLE), 2)"
+      },
+      "looseness": 6
     },
     {
       "general": "algtop.homology.chain_rank_nullity",
@@ -10922,6 +11403,23 @@
       "looseness": 6
     },
     {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "trigonometry.identities.double_angle_cosine",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "COS(2*ANGLE) = COS(ANGLE)^2 - SIN(ANGLE)^2",
+      "via": "compound",
+      "cost": 10,
+      "structure_cost": 10,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CHAINRANK": "COS(*(2, ANGLE))",
+        "CYCLERANK": "^(COS(ANGLE), 2)",
+        "IMAGERANK": "neg(^(SIN(ANGLE), 2))"
+      },
+      "looseness": 7
+    },
+    {
       "general": "calculus.approximation.tangent_line_linearization",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
@@ -11012,6 +11510,23 @@
       "looseness": 7
     },
     {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "trigonometry.identities.double_angle_cosine",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "COS(2*ANGLE) = COS(ANGLE)^2 - SIN(ANGLE)^2",
+      "via": "compound",
+      "cost": 10,
+      "structure_cost": 10,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "neg(^(SIN(ANGLE), 2))",
+        "OBJECT_VELOCITY": "COS(*(2, ANGLE))",
+        "RELATIVE_VELOCITY": "^(COS(ANGLE), 2)"
+      },
+      "looseness": 7
+    },
+    {
       "general": "probstat.transform.affine_location_scale",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "OUT = SCALE*IN + SHIFT",
@@ -11028,6 +11543,25 @@
         "SHIFT": "*(SCALAR1, D(FUNC1))"
       },
       "looseness": 7
+    },
+    {
+      "general": "ml.recurrence.linear_ssm_state_update",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "STATENEXT = TRANSITION*STATE + INPUTGAIN*DRIVE",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "DRIVE": "SIN(ANGLE2)",
+        "INPUTGAIN": "COS(ANGLE1)",
+        "STATE": "SIN(ANGLE1)",
+        "STATENEXT": "SIN(+(ANGLE1, ANGLE2))",
+        "TRANSITION": "COS(ANGLE2)"
+      },
+      "looseness": 6
     },
     {
       "general": "algtop.homology.betti_number_rank",
@@ -11115,6 +11649,114 @@
       "looseness": 7
     },
     {
+      "general": "algtop.invariants.euler_characteristic_surface",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "EULERCHAR = CONSTANT - CONSTANT2*GENUS",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CONSTANT": "*(COS(ANGLE1), COS(ANGLE2))",
+        "CONSTANT2": "SIN(ANGLE1)",
+        "EULERCHAR": "COS(+(ANGLE1, ANGLE2))",
+        "GENUS": "SIN(ANGLE2)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "BASEVALUE": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "DISPLACEMENT": "SIN(ANGLE2)",
+        "LINEARIZED": "SIN(+(ANGLE1, ANGLE2))",
+        "SLOPE": "COS(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "chemistry.thermodynamics.gibbs_free_energy",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "FREE_ENERGY = ENTHALPY - TEMPERATURE * ENTROPY",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "ENTHALPY": "*(COS(ANGLE1), COS(ANGLE2))",
+        "ENTROPY": "SIN(ANGLE2)",
+        "FREE_ENERGY": "COS(+(ANGLE1, ANGLE2))",
+        "TEMPERATURE": "SIN(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "chemistry.thermodynamics.helmholtz_free_energy",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "FREE_ENERGY = INTERNAL_ENERGY - TEMPERATURE * ENTROPY",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "ENTROPY": "SIN(ANGLE2)",
+        "FREE_ENERGY": "COS(+(ANGLE1, ANGLE2))",
+        "INTERNAL_ENERGY": "*(COS(ANGLE1), COS(ANGLE2))",
+        "TEMPERATURE": "SIN(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EXPECTED": "SIN(+(ANGLE1, ANGLE2))",
+        "PREMIUM": "SIN(ANGLE2)",
+        "RISKFREE": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "SENSITIVITY": "COS(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "AUTONOMOUS": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "CONSUMPTION": "SIN(+(ANGLE1, ANGLE2))",
+        "DISPOSABLE_INCOME": "SIN(ANGLE2)",
+        "PROPENSITY": "COS(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
       "general": "geometry.circle_formulas.circle_circumference_formula",
       "specific": "algebra.polynomial_equations.quadratic_formula",
       "general_template": "CIRCUMFERENCE = CONSTANT * RADIUS",
@@ -11128,6 +11770,78 @@
         "CIRCUMFERENCE": "VAR",
         "CONSTANT": "1",
         "RADIUS": "*(+(neg(COEFF1), pm(SQRT(DISC))), inv(*(2, COEFF0)))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "POINT": "SIN(ANGLE2)",
+        "POINTNEW": "SIN(+(ANGLE1, ANGLE2))",
+        "ROTATION": "COS(ANGLE1)",
+        "TRANSLATION": "*(COS(ANGLE2), SIN(ANGLE1))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "ml.objective.kl_regularized_rl_objective",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "OBJECTIVE = EXPECTEDREWARD - KLWEIGHT*DIVERGENCE",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "DIVERGENCE": "SIN(ANGLE2)",
+        "EXPECTEDREWARD": "*(COS(ANGLE1), COS(ANGLE2))",
+        "KLWEIGHT": "SIN(ANGLE1)",
+        "OBJECTIVE": "COS(+(ANGLE1, ANGLE2))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "ml.optimization.gradient_descent_step",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "PARAMNEXT = PARAM - LEARNRATE*GRADIENT",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "GRADIENT": "SIN(ANGLE2)",
+        "LEARNRATE": "SIN(ANGLE1)",
+        "PARAM": "*(COS(ANGLE1), COS(ANGLE2))",
+        "PARAMNEXT": "COS(+(ANGLE1, ANGLE2))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "SLOPE": "SIN(ANGLE2)",
+        "STEPSIZE": "COS(ANGLE1)",
+        "Y": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "YNEXT": "SIN(+(ANGLE1, ANGLE2))"
       },
       "looseness": 7
     },
@@ -11255,6 +11969,41 @@
       "looseness": 7
     },
     {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "IN": "SIN(ANGLE2)",
+        "OUT": "SIN(+(ANGLE1, ANGLE2))",
+        "SCALE": "COS(ANGLE1)",
+        "SHIFT": "*(COS(ANGLE2), SIN(ANGLE1))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "algtop.homology.betti_number_rank",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "BETTI = CYCLERANK - BOUNDARYRANK",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "BETTI": "COS(+(ANGLE1, ANGLE2))",
+        "BOUNDARYRANK": "*(SIN(ANGLE1), SIN(ANGLE2))",
+        "CYCLERANK": "*(COS(ANGLE1), COS(ANGLE2))"
+      },
+      "looseness": 8
+    },
+    {
       "general": "algtop.homology.chain_rank_nullity",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
@@ -11272,6 +12021,23 @@
       "looseness": 8
     },
     {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CHAINRANK": "SIN(+(ANGLE1, ANGLE2))",
+        "CYCLERANK": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "IMAGERANK": "*(COS(ANGLE1), SIN(ANGLE2))"
+      },
+      "looseness": 8
+    },
+    {
       "general": "physics.frames.galilean_velocity_addition",
       "specific": "calculus.differentiation.linearity_of_derivative",
       "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
@@ -11285,6 +12051,23 @@
         "FRAME_VELOCITY": "*(SCALAR2, D(FUNC2))",
         "OBJECT_VELOCITY": "D(+(*(SCALAR1, FUNC1), *(SCALAR2, FUNC2)))",
         "RELATIVE_VELOCITY": "*(SCALAR1, D(FUNC1))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 11,
+      "structure_cost": 11,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "*(COS(ANGLE1), SIN(ANGLE2))",
+        "OBJECT_VELOCITY": "SIN(+(ANGLE1, ANGLE2))",
+        "RELATIVE_VELOCITY": "*(COS(ANGLE2), SIN(ANGLE1))"
       },
       "looseness": 8
     },
@@ -11451,6 +12234,96 @@
       "looseness": 8
     },
     {
+      "general": "calculus.approximation.tangent_line_linearization",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "LINEARIZED = BASEVALUE + SLOPE * DISPLACEMENT",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "BASEVALUE": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "DISPLACEMENT": "COS(ANGLE2)",
+        "LINEARIZED": "COS(+(ANGLE1, ANGLE2))",
+        "SLOPE": "COS(ANGLE1)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "economics.finance.capm_expected_return",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "EXPECTED = RISKFREE + SENSITIVITY * PREMIUM",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "EXPECTED": "COS(+(ANGLE1, ANGLE2))",
+        "PREMIUM": "COS(ANGLE2)",
+        "RISKFREE": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "SENSITIVITY": "COS(ANGLE1)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "economics.macroeconomics.keynesian_consumption_function",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "CONSUMPTION = AUTONOMOUS + PROPENSITY * DISPOSABLE_INCOME",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "AUTONOMOUS": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "CONSUMPTION": "COS(+(ANGLE1, ANGLE2))",
+        "DISPOSABLE_INCOME": "COS(ANGLE2)",
+        "PROPENSITY": "COS(ANGLE1)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "geomodel.transforms.homogeneous_rigid_transform",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "POINTNEW = ROTATION*POINT + TRANSLATION",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "POINT": "COS(ANGLE2)",
+        "POINTNEW": "COS(+(ANGLE1, ANGLE2))",
+        "ROTATION": "COS(ANGLE1)",
+        "TRANSLATION": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "numanalysis.ode.euler_method_step",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "YNEXT = Y + STEPSIZE*SLOPE",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "SLOPE": "COS(ANGLE2)",
+        "STEPSIZE": "COS(ANGLE1)",
+        "Y": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "YNEXT": "COS(+(ANGLE1, ANGLE2))"
+      },
+      "looseness": 8
+    },
+    {
       "general": "physics.frames.galilean_velocity_addition",
       "specific": "algtop.invariants.euler_characteristic_valuation",
       "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
@@ -11515,6 +12388,134 @@
         "FRAME_VELOCITY": "+(CARD(SETB), neg(CARD(MEET(SETA, SETB))))",
         "OBJECT_VELOCITY": "CARD(JOIN(SETA, SETB))",
         "RELATIVE_VELOCITY": "CARD(SETA)"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "probstat.transform.affine_location_scale",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "OUT = SCALE*IN + SHIFT",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "IN": "COS(ANGLE2)",
+        "OUT": "COS(+(ANGLE1, ANGLE2))",
+        "SCALE": "COS(ANGLE1)",
+        "SHIFT": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "algtop.homology.chain_rank_nullity",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "CHAINRANK = CYCLERANK + IMAGERANK",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "CHAINRANK": "COS(+(ANGLE1, ANGLE2))",
+        "CYCLERANK": "*(COS(ANGLE1), COS(ANGLE2))",
+        "IMAGERANK": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))"
+      },
+      "looseness": 9
+    },
+    {
+      "general": "physics.frames.galilean_velocity_addition",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "OBJECT_VELOCITY = RELATIVE_VELOCITY + FRAME_VELOCITY",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "compound",
+      "cost": 12,
+      "structure_cost": 12,
+      "algebra_cost": 0,
+      "head_collapses": 0,
+      "bindings": {
+        "FRAME_VELOCITY": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "OBJECT_VELOCITY": "COS(+(ANGLE1, ANGLE2))",
+        "RELATIVE_VELOCITY": "*(COS(ANGLE1), COS(ANGLE2))"
+      },
+      "looseness": 9
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "identity+compound",
+      "cost": 13,
+      "structure_cost": 11,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "LOWRANKA": "SIN(ANGLE2)",
+        "LOWRANKB": "COS(ANGLE1)",
+        "SCALING": "1",
+        "WEIGHT": "SIN(+(ANGLE1, ANGLE2))",
+        "WEIGHTFROZEN": "*(COS(ANGLE2), SIN(ANGLE1))"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "trigonometry.identities.sine_angle_sum",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+      "via": "identity+compound",
+      "cost": 13,
+      "structure_cost": 11,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "*(COS(ANGLE2), SIN(ANGLE1))",
+        "PRED_i": "SIN(ANGLE2)",
+        "RV_i": "SIN(+(ANGLE1, ANGLE2))",
+        "SLOPE": "COS(ANGLE1)"
+      },
+      "looseness": 7
+    },
+    {
+      "general": "ml.adaptation.lora_low_rank_update",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "WEIGHT = WEIGHTFROZEN + SCALING*LOWRANKB*LOWRANKA",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "identity+compound",
+      "cost": 14,
+      "structure_cost": 12,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "LOWRANKA": "COS(ANGLE2)",
+        "LOWRANKB": "COS(ANGLE1)",
+        "SCALING": "1",
+        "WEIGHT": "COS(+(ANGLE1, ANGLE2))",
+        "WEIGHTFROZEN": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))"
+      },
+      "looseness": 8
+    },
+    {
+      "general": "probstat.regression.slr_stochastic_specification",
+      "specific": "trigonometry.identities.cosine_angle_sum",
+      "general_template": "RV_i = INTERCEPT + SLOPE*PRED_i + NOISE_i",
+      "specific_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+      "via": "identity+compound",
+      "cost": 14,
+      "structure_cost": 12,
+      "algebra_cost": 2,
+      "head_collapses": 0,
+      "bindings": {
+        "INTERCEPT": "0",
+        "NOISE_i": "neg(*(SIN(ANGLE1), SIN(ANGLE2)))",
+        "PRED_i": "COS(ANGLE2)",
+        "RV_i": "COS(+(ANGLE1, ANGLE2))",
+        "SLOPE": "COS(ANGLE1)"
       },
       "looseness": 8
     }

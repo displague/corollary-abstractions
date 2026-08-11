@@ -10,7 +10,7 @@
       "relations(= ≠ < ≤ > ≥ ↔)",
       "MEET(∧) JOIN(∨) NEG(¬) IMPLIES(→)",
       "arithmetic(+ - * / ^)",
-      "SQRT(real.sqrt) LOG(real.log) EXP(real.exp)"
+      "SQRT(real.sqrt) LOG(real.log) EXP(real.exp) SIN COS TAN"
     ],
     "explicit_gaps_no_head_in_corpus": [
       "modulo(%, [MOD n])",
@@ -28,24 +28,24 @@
   "totals": {
     "statements": 488,
     "goal_only": {
-      "covered": 228,
-      "pct": 46.7
+      "covered": 230,
+      "pct": 47.1
     },
     "full_statement": {
-      "covered": 145,
-      "pct": 29.7
+      "covered": 147,
+      "pct": 30.1
     }
   },
   "by_split": {
     "test": {
       "total": 244,
-      "goal_only_covered": 128,
-      "full_statement_covered": 84
+      "goal_only_covered": 129,
+      "full_statement_covered": 85
     },
     "valid": {
       "total": 244,
-      "goal_only_covered": 100,
-      "full_statement_covered": 61
+      "goal_only_covered": 101,
+      "full_statement_covered": 62
     }
   },
   "goal_only_untranslatable_reasons": {
@@ -71,7 +71,6 @@
     "fractional_exponent": 2,
     "integer_division_no_head": 2,
     "nat_monus_no_head": 2,
-    "trig": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
@@ -115,7 +114,6 @@
     "hyp:unsupported_symbol:real.logb": 2,
     "integer_division_no_head": 2,
     "nat_monus_no_head": 2,
-    "trig": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
@@ -123,8 +121,8 @@
     "hyp:factorial": 1,
     "hyp:floor_ceil": 1,
     "hyp:fractional_exponent": 1,
+    "hyp:list_or_iteration": 1,
     "hyp:rational_component": 1,
-    "hyp:tuple_or_structure": 1,
     "hyp:unsupported_symbol:nat.sqrt": 1,
     "hyp:unsupported_symbol:odd": 1,
     "unsupported_symbol:p": 1,
@@ -164,6 +162,7 @@
     "amc12b_2021_p9",
     "imo_1960_p2",
     "imo_1962_p2",
+    "imo_1963_p5",
     "imo_1964_p2",
     "imo_1983_p6",
     "induction_1pxpownlt1pnx",
@@ -216,6 +215,7 @@
     "mathd_numbertheory_85",
     "numbertheory_4x3m7y3neq2003",
     "numbertheory_x5neqy2p4",
+    "aime_1983_p9",
     "aime_1984_p15",
     "aime_1990_p2",
     "aime_1991_p1",
@@ -621,7 +621,7 @@
       "goal_ok": true,
       "goal_reason": null,
       "full_ok": false,
-      "full_reason": "hyp:tuple_or_structure"
+      "full_reason": "hyp:list_or_iteration"
     },
     {
       "name": "amc12a_2008_p25",
@@ -930,10 +930,10 @@
     {
       "name": "imo_1963_p5",
       "split": "test",
-      "goal_ok": false,
-      "goal_reason": "trig",
-      "full_ok": false,
-      "full_reason": "trig"
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "imo_1964_p2",
@@ -2258,10 +2258,10 @@
     {
       "name": "aime_1983_p9",
       "split": "valid",
-      "goal_ok": false,
-      "goal_reason": "trig",
-      "full_ok": false,
-      "full_reason": "trig"
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "aime_1984_p15",

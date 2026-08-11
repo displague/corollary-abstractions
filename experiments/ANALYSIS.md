@@ -2493,3 +2493,57 @@ proofs none is `verified_by`-grounded, so Lean-workbook (real proofs, ~11k uniqu
 covered) remains the authoring source; Pset is the scale-and-diversity stress test
 that says the grammar needs a **relational/predicate head and a quantifier head**
 before ingestion at this scale stops discarding two-thirds of the material.
+
+## v0.10 item 1 — the first grammar head, justified by its coverage delta: trigonometry (SIN/COS/TAN)
+
+v0.9 measured the grammar's reach at ~a third and produced a prioritized list of
+the heads it was missing. v0.10 item 1 is to grow the head-algebra to reach them,
+each head justified not by taste but by **the coverage number it moves on the
+three committed sources**. This is the first, and it establishes the loop.
+
+The head chosen is trigonometry — bounded (three function heads like the existing
+SQRT/LOG/EXP), and blocking a real slice of every source (`sin`/`cos`/`tan`). The
+project's own rule is load-bearing here: **a head is legitimate only once a corpus
+node carries it.** So the head is not added to the classifier by fiat; it is
+authored into the corpus first.
+
+**What was authored.** `scripts/seed_trigonometry.py` → `data/trigonometry/nodes.json`,
+8 canonical identities that define the SIN/COS/TAN heads: the Pythagorean identity
+`SIN(x)^2 + COS(x)^2 = 1`, the sine/cosine angle-sum laws and their double-angle
+special cases (a real `special_case_of`/`generalizes` reciprocal pair), the
+tangent definition `TAN = SIN/COS`, and the odd/even symmetries. The corpus grows
+**221 → 229 nodes, 22 → 23 disciplines**. The matcher parses every new template
+with **zero parse problems and zero slot gaps** (`reports/signature_matches.json`);
+`check_regeneration` holds byte-for-byte.
+
+**The coverage delta (the head's justification), full-statement, all three sources:**
+
+| source | before (v0.9) | after | delta |
+|---|---|---|---|
+| miniF2F | 145 = 29.7% | 147 = 30.1% | +2 |
+| Lean-workbook | 19,077 = 64.1% | 19,535 = 65.7% | +458 |
+| Goedel-Pset-v1 (1.73M) | 567,429 = 32.8% | **607,047 = 35.0%** | **+39,618** |
+
+Goedel-Pset's +2.2 points (unique covered 386,375 → 414,428) is the real evidence:
+one head, authored from eight identities, unlocks ~40k statements that were
+untranslatable the day before. The classifier change is the honest minimum —
+forward `sin`/`cos`/`tan` move from the trig *blocker* into the supported-head
+set, while inverse and reciprocal trig (`arcsin`, `cot`, `sec`, …) stay gaps,
+because the corpus has no head for them.
+
+**Scale surfaced one false positive, and the self-audit caught it.** Making trig
+supported exposed a single covered statement carrying `sin^[n]` — the *n*-fold
+*iterate* of sine (function composition), which is not the sine head at all. The
+`[n]` iteration bracket had no blocker; a `[...]`-notation blocker (list literals
+and function iteration, after the `[MOD` modulo blocker that owns its bracket) now
+rejects it, and `covered_foreign_glyph_count` returned to 0. This is the v0.9
+lesson holding: `sin` supported does not mean every `sin`-bearing string is
+covered, and the committed audit is what makes that testable.
+
+**An honest null.** The eight trig nodes formed **no cross-discipline twins**
+(`reports/signature_matches.json` shows no `trigonometry` entry in any twin group).
+The Pythagorean identity `SIN(x)^2 + COS(x)^2 = 1` does *not* twin with geometry's
+Pythagorean theorem `a^2 + b^2 = c^2`, because the SIN/COS heads wrapping its slots
+make a structurally different skeleton than bare legs — the matcher is right to
+keep them apart. Adding a head extends *reach*, not necessarily the twin graph;
+reporting the null is the point.

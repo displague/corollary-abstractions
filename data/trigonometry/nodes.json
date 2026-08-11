@@ -1,0 +1,974 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "trigonometry.core.v1",
+  "discipline": "trigonometry",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "trigonometry.identities.pythagorean",
+      "title": "Pythagorean Identity",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "fundamental_identities"
+      },
+      "formal_statement": {
+        "canonical_ascii": "sin(x)^2 + cos(x)^2 = 1",
+        "canonical_latex": "\\sin^2 x + \\cos^2 x = 1",
+        "equivalent_forms": [
+          {
+            "form_id": "tangent_secant",
+            "notation_system": "ascii",
+            "expression": "1 + tan(x)^2 = sec(x)^2",
+            "scope_note": "Divide through by cos(x)^2 where cos(x) is nonzero"
+          },
+          {
+            "form_id": "unicode",
+            "notation_system": "ascii",
+            "expression": "sin²θ + cos²θ = 1"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "unit_circle_constraint",
+        "anonymized_template": "SIN(ANGLE)^2 + COS(ANGLE)^2 = 1",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Holds for every real angle without exception.",
+          "Even in the angle: the identity is unchanged under ANGLE -> -ANGLE.",
+          "The single constraint that a point (COS, SIN) lies on the unit circle."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The squared sine and squared cosine of any angle sum to one: the coordinates of a unit-circle point satisfy the circle's equation.",
+        "statistical_significance": "The foundational circular identity; a squared-sum equal to a constant, distinguished from the Pythagorean theorem it descends from by the SIN and COS heads wrapping its slots rather than free legs.",
+        "regularity_conditions": [
+          "Angle measured in radians (or any consistent measure)",
+          "Real-valued angle"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "Pythagorean identity",
+        "unit circle",
+        "sine",
+        "cosine"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.definitions.tangent",
+      "title": "Definition of Tangent",
+      "statement_class": "definition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "ratios"
+      },
+      "formal_statement": {
+        "canonical_ascii": "tan(x) = sin(x)/cos(x)",
+        "canonical_latex": "\\tan x = \\dfrac{\\sin x}{\\cos x}",
+        "equivalent_forms": [
+          {
+            "form_id": "cotangent",
+            "notation_system": "ascii",
+            "expression": "cot(x) = cos(x)/sin(x)",
+            "scope_note": "Reciprocal ratio where sin(x) is nonzero"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ratio_definition",
+        "anonymized_template": "TAN(ANGLE) = SIN(ANGLE) / COS(ANGLE)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Undefined where COS(ANGLE) = 0.",
+          "Odd in the angle: TAN(-ANGLE) = -TAN(ANGLE).",
+          "A ratio of the two coordinate functions."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "/",
+            "name": "division",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          },
+          {
+            "notation": "TAN(.)",
+            "name": "tangent",
+            "input_arity": 1,
+            "codomain": "reals (extended)",
+            "description": "Tangent of an angle; the ratio SIN/COS where COS is nonzero."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish.",
+        "statistical_significance": "A ratio definition in the shape of speed = distance / time and density = mass / volume, with the numerator and denominator both trigonometric heads.",
+        "regularity_conditions": [
+          "Cosine of the angle is nonzero"
+        ],
+        "failure_modes": [
+          "Undefined at odd multiples of pi/2 where the cosine is zero."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "tangent",
+        "ratio",
+        "sine",
+        "cosine"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.sine_angle_sum",
+      "title": "Sine of an Angle Sum",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "angle_addition"
+      },
+      "formal_statement": {
+        "canonical_ascii": "sin(a + b) = sin(a)*cos(b) + cos(a)*sin(b)",
+        "canonical_latex": "\\sin(a+b) = \\sin a\\cos b + \\cos a\\sin b",
+        "equivalent_forms": [
+          {
+            "form_id": "difference",
+            "notation_system": "ascii",
+            "expression": "sin(a - b) = sin(a)*cos(b) - cos(a)*sin(b)",
+            "scope_note": "Replace b by -b using the odd/even symmetries"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "angle_addition_sine",
+        "anonymized_template": "SIN(ANGLE1 + ANGLE2) = SIN(ANGLE1)*COS(ANGLE2) + COS(ANGLE1)*SIN(ANGLE2)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE1",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          },
+          {
+            "slot_id": "ANGLE2",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Symmetric under exchanging ANGLE1 and ANGLE2.",
+          "Reduces to the double-angle sine when the two angles are equal.",
+          "Bilinear in the sine/cosine coordinates of the two angles."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "A first angle, in radians."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "A second angle, in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The sine of a sum of two angles expands into a bilinear combination of the sines and cosines of the parts.",
+        "statistical_significance": "The generating angle-addition law for sine; its equal-angle restriction is the double-angle identity.",
+        "regularity_conditions": [
+          "Real-valued angles in radians"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "trigonometry.identities.double_angle_sine"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "angle addition",
+        "sine",
+        "sum formula"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.cosine_angle_sum",
+      "title": "Cosine of an Angle Sum",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "angle_addition"
+      },
+      "formal_statement": {
+        "canonical_ascii": "cos(a + b) = cos(a)*cos(b) - sin(a)*sin(b)",
+        "canonical_latex": "\\cos(a+b) = \\cos a\\cos b - \\sin a\\sin b",
+        "equivalent_forms": [
+          {
+            "form_id": "difference",
+            "notation_system": "ascii",
+            "expression": "cos(a - b) = cos(a)*cos(b) + sin(a)*sin(b)",
+            "scope_note": "Replace b by -b using the odd/even symmetries"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "angle_addition_cosine",
+        "anonymized_template": "COS(ANGLE1 + ANGLE2) = COS(ANGLE1)*COS(ANGLE2) - SIN(ANGLE1)*SIN(ANGLE2)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE1",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          },
+          {
+            "slot_id": "ANGLE2",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Symmetric under exchanging ANGLE1 and ANGLE2.",
+          "Reduces to the double-angle cosine when the two angles are equal.",
+          "The real part of the complex product e^{i a} e^{i b}."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "A first angle, in radians."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "A second angle, in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The cosine of a sum of two angles is the product of cosines minus the product of sines.",
+        "statistical_significance": "The generating angle-addition law for cosine; with the sine law it is the trigonometric face of complex multiplication.",
+        "regularity_conditions": [
+          "Real-valued angles in radians"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [
+          "trigonometry.identities.double_angle_cosine"
+        ],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "angle addition",
+        "cosine",
+        "sum formula"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_sine",
+      "title": "Double-Angle Sine",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "multiple_angles"
+      },
+      "formal_statement": {
+        "canonical_ascii": "sin(2*x) = 2*sin(x)*cos(x)",
+        "canonical_latex": "\\sin 2x = 2\\sin x\\cos x",
+        "equivalent_forms": [
+          {
+            "form_id": "product_to_sum",
+            "notation_system": "ascii",
+            "expression": "sin(x)*cos(x) = sin(2*x)/2"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "double_angle_sine",
+        "anonymized_template": "SIN(2*ANGLE) = 2*SIN(ANGLE)*COS(ANGLE)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "The equal-angle case of the sine angle-sum law.",
+          "Vanishes exactly where SIN or COS vanishes."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The sine of twice an angle is twice the product of the angle's sine and cosine.",
+        "statistical_significance": "The double-angle sine, a special case of the sine angle-sum law with the two angles identified.",
+        "regularity_conditions": [
+          "Real-valued angle in radians"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "trigonometry.identities.sine_angle_sum"
+        ],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "double angle",
+        "sine"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.identities.double_angle_cosine",
+      "title": "Double-Angle Cosine",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "multiple_angles"
+      },
+      "formal_statement": {
+        "canonical_ascii": "cos(2*x) = cos(x)^2 - sin(x)^2",
+        "canonical_latex": "\\cos 2x = \\cos^2 x - \\sin^2 x",
+        "equivalent_forms": [
+          {
+            "form_id": "sine_only",
+            "notation_system": "ascii",
+            "expression": "cos(2*x) = 1 - 2*sin(x)^2",
+            "scope_note": "Using the Pythagorean identity"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "double_angle_cosine",
+        "anonymized_template": "COS(2*ANGLE) = COS(ANGLE)^2 - SIN(ANGLE)^2",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "The equal-angle case of the cosine angle-sum law.",
+          "A difference of squares in the coordinate functions."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          },
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The cosine of twice an angle is the difference of the squared cosine and the squared sine.",
+        "statistical_significance": "The double-angle cosine, a special case of the cosine angle-sum law with the two angles identified.",
+        "regularity_conditions": [
+          "Real-valued angle in radians"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [
+          "trigonometry.identities.cosine_angle_sum"
+        ],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "double angle",
+        "cosine",
+        "difference of squares"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.symmetry.sine_odd",
+      "title": "Sine is Odd",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "parity"
+      },
+      "formal_statement": {
+        "canonical_ascii": "sin(-x) = -sin(x)",
+        "canonical_latex": "\\sin(-x) = -\\sin x",
+        "equivalent_forms": [
+          {
+            "form_id": "reflection",
+            "notation_system": "ascii",
+            "expression": "sin(-x) + sin(x) = 0"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "odd_function",
+        "anonymized_template": "SIN(-ANGLE) = -SIN(ANGLE)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Odd symmetry: reflection through the origin negates the value.",
+          "Equivalent to point symmetry of the sine graph about the origin."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "SIN(.)",
+            "name": "sine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Sine of an angle (radians); ordinate on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Sine reverses sign when its angle is negated: it is an odd function.",
+        "statistical_significance": "The odd-function archetype instantiated by sine; shares its shape with any sign-reversing map f(-x) = -f(x).",
+        "regularity_conditions": [
+          "Real-valued angle"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "odd function",
+        "sine",
+        "parity",
+        "symmetry"
+      ]
+    },
+    {
+      "statement_id": "trigonometry.symmetry.cosine_even",
+      "title": "Cosine is Even",
+      "statement_class": "identity",
+      "epistemic_status": "derived",
+      "theory_context": {
+        "disciplines": [
+          "trigonometry"
+        ],
+        "subfield": "circular_functions",
+        "topic": "parity"
+      },
+      "formal_statement": {
+        "canonical_ascii": "cos(-x) = cos(x)",
+        "canonical_latex": "\\cos(-x) = \\cos x",
+        "equivalent_forms": [
+          {
+            "form_id": "reflection",
+            "notation_system": "ascii",
+            "expression": "cos(-x) - cos(x) = 0"
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "even_function",
+        "anonymized_template": "COS(-ANGLE) = COS(ANGLE)",
+        "slot_schema": [
+          {
+            "slot_id": "ANGLE",
+            "syntactic_category": "variable",
+            "semantic_role": "angle"
+          }
+        ],
+        "invariants": [
+          "Even symmetry: reflection through the origin preserves the value.",
+          "Equivalent to mirror symmetry of the cosine graph about the vertical axis."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "x",
+            "syntactic_category": "variable",
+            "semantic_role": "angle",
+            "mathematical_order": 0,
+            "description": "An angle, measured in radians."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "-",
+            "name": "negation",
+            "arity": 1,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "COS(.)",
+            "name": "cosine",
+            "input_arity": 1,
+            "codomain": "[-1, 1]",
+            "description": "Cosine of an angle (radians); abscissa on the unit circle."
+          }
+        ],
+        "index_sets": [],
+        "constants": []
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Cosine is unchanged when its angle is negated: it is an even function.",
+        "statistical_significance": "The even-function archetype instantiated by cosine; shares its shape with any reflection-invariant map f(-x) = f(x).",
+        "regularity_conditions": [
+          "Real-valued angle"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "abramowitz1964",
+          "bibliographic_entry": "Abramowitz, M., Stegun, I. A. (1964). Handbook of Mathematical Functions. Washington: National Bureau of Standards."
+        },
+        {
+          "citation_key": "stewart2015",
+          "bibliographic_entry": "Stewart, J. (2015). Calculus: Early Transcendentals (8th ed.). Boston: Cengage Learning."
+        }
+      ],
+      "keywords": [
+        "even function",
+        "cosine",
+        "parity",
+        "symmetry"
+      ]
+    }
+  ]
+}

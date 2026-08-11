@@ -203,7 +203,9 @@ class CorpusHeadProvenance(unittest.TestCase):
 
     def test_transcendental_heads_actually_appear(self) -> None:
         templates = self._all_templates()
-        for head in ("LOG(", "EXP(", "SQRT("):
+        # SIN/COS/TAN were added in v0.10 (data/trigonometry) — a supported head is
+        # legitimate only once a corpus node carries it.
+        for head in ("LOG(", "EXP(", "SQRT(", "SIN(", "COS(", "TAN("):
             self.assertIn(head, templates, f"claimed head {head} absent from data/")
 
     def test_no_covered_statement_relies_on_an_unverified_head(self) -> None:

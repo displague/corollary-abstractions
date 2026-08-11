@@ -69,9 +69,18 @@ class Lean4Dialect(unittest.TestCase):
         self.assertTrue(gc.classify(self._mk("Real.sqrt a ≥ 0", vars=("a",)))["full_ok"])
         self.assertTrue(gc.classify(self._mk("sqrt a ≥ 0", vars=("a",)))["full_ok"])
 
-    def test_bare_trig_is_blocked(self) -> None:
-        r = gc.classify(self._mk("sin x = 0", vars=("x",)))
-        self.assertEqual(r["goal_reason"], "trig")
+    def test_forward_trig_supported_inverse_trig_still_gap(self) -> None:
+        # v0.10 item 1: SIN/COS/TAN are now corpus heads (data/trigonometry), so
+        # forward trig is covered; inverse/reciprocal trig remain gaps.
+        self.assertTrue(
+            gc.classify(self._mk("sin x ^ 2 + cos x ^ 2 = 1", vars=("x",)))["full_ok"]
+        )
+        self.assertEqual(
+            gc.classify(self._mk("arctan x = 0", vars=("x",)))["goal_reason"], "trig"
+        )
+        self.assertEqual(
+            gc.classify(self._mk("cot x = 1", vars=("x",)))["goal_reason"], "trig"
+        )
 
     def test_zmod_congruence_is_modulo_gap(self) -> None:
         r = gc.classify(self._mk("2 ^ 21 ≡ 1 [ZMOD 7]"))
