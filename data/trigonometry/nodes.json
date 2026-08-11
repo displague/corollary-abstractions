@@ -27,9 +27,10 @@
             "scope_note": "Divide through by cos(x)^2 where cos(x) is nonzero"
           },
           {
-            "form_id": "unicode",
+            "form_id": "sine_from_cosine",
             "notation_system": "ascii",
-            "expression": "sin²θ + cos²θ = 1"
+            "expression": "sin(x)^2 = 1 - cos(x)^2",
+            "scope_note": "Solved for the squared sine"
           }
         ]
       },

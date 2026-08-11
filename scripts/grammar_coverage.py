@@ -326,7 +326,10 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     ("metavar_or_string", re.compile(r'"|\?')),
     # forward sin/cos/tan are now supported heads (data/trigonometry); the trig
     # GAP is now only inverse, reciprocal, and hyperbolic trig, which have no head.
-    ("trig", re.compile(r"[Rr]eal\.(?:arcsin|arccos|arctan|sinh|cosh|tanh)|\b(?:cot|sec|csc|arcsin|arccos|arctan|sinh|cosh|tanh)\b")),
+    # Inverse trig appears BOTH as words (arctan) and as superscript (tan⁻¹) -- the
+    # latter must be caught here, because _IDENT_RE drops the ⁻¹ and `Real.tan⁻¹`
+    # would otherwise read as the forward TAN head.
+    ("trig", re.compile(r"(?:sin|cos|tan|cot|sec|csc)⁻¹|[Rr]eal\.(?:arcsin|arccos|arctan|sinh|cosh|tanh)|\b(?:cot|sec|csc|arcsin|arccos|arctan|sinh|cosh|tanh)\b")),
     ("polynomial", re.compile(r"[Pp]olynomial")),
     ("matrix", re.compile(r"[Mm]atrix")),
     ("derivative", re.compile(r"deriv|∂")),

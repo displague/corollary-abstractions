@@ -22,6 +22,7 @@
     "data/set_theory/nodes.json": "3aabd15a9a07017a03af93a4953ab6078280c49f7d384e9db7def8f187c0b149",
     "data/statistics/nodes.json": "3a8b61c37ff7413ed8e9ec0a7f06c7902e5ce748c1095a6c3feccf31eff2fbd9",
     "data/temporal_logic/nodes.json": "44e454bc517672c99154814aea8ff3c54e397bf4540881418de6352b311e8080",
+    "data/trigonometry/nodes.json": "30665470b41a0f438717ce00080a3732ae5a438c1d519e2e46143ed3b553d9e5",
     "prover/proof-artifact-manifest.json": "37d076e57b91ac0c2dce328c9ab07fb030a5d1d48e7c959c10ae51e3b76760df",
     "prover/sample_triples.json": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7"
   },
