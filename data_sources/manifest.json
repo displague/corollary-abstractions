@@ -242,6 +242,24 @@
           "row_count": 29750
         }
       ]
+    },
+    {
+      "id": "hf-goedel-pset-v1",
+      "group": "ingest-formal",
+      "url": "https://huggingface.co/datasets/Goedel-LM/Goedel-Pset-v1",
+      "hf_repo": "Goedel-LM/Goedel-Pset-v1",
+      "hf_revision": "79fc4fbe87b4c694a941bc63ad92dc38d39d41db",
+      "archive_subdir": "goedel-pset",
+      "access": "hf-dataset",
+      "license": "MIT (LICENSE sha256 d16f34eb33458b59555327a1e3595afea96e86275b33b684a2ae6e13cce5ab68; identical MIT stub to Lean-workbook-proofs). The HF page 'Model Agreement' badge is a display artifact; the repo LICENSE is MIT. Formalized from NuminaMath by Goedel-Prover (arXiv:2502.07640).",
+      "verified": "2026-08-11",
+      "purpose": "1,732,594 formalized Lean 4 statements (proofs are `sorry`, unverified). The v0.9 SCALE test: measures grammar reach + duplicate rate at ~58x Lean-workbook, via scripts/ingest_goedel_pset.py. AGGREGATE-ONLY -- no per-statement extract is committed (it would be ~300 MB); the 4 pinned parquets are the reproducibility anchor and experiments/goedel_pset_coverage.json the committed measurement. Cannot ground verified_by (sorry proofs).",
+      "files": [
+        {"filename": "data/train-00000-of-00004.parquet", "sha256": "d6f58be1d73185feb1715c28f66d2d216f1f299e8174e40f63ad028d46d78b06", "size_bytes": 206936100, "row_count": 433149},
+        {"filename": "data/train-00001-of-00004.parquet", "sha256": "a197e27820ac61e264ea52c02845fcd8f9169972fa267acab25134a94c0684f6", "size_bytes": 206876344, "row_count": 433149},
+        {"filename": "data/train-00002-of-00004.parquet", "sha256": "1b4cd10d5fa24cefc81c61cbb39fef81f3bc50ce7a787c1c395ea4b8ac814ccc", "size_bytes": 206705860, "row_count": 433148},
+        {"filename": "data/train-00003-of-00004.parquet", "sha256": "5f2a105c03ccb580966b7c03f051a4db8133e7b1deffd05495a0628830fb6ac7", "size_bytes": 206944306, "row_count": 433148}
+      ]
     }
   ],
   "reference_papers": [

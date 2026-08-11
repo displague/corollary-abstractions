@@ -222,6 +222,27 @@ def parse_binders(binders_text: str) -> dict:
     }
 
 
+_THEOREM_RE = re.compile(r"(?m)^theorem[ \t]+(\S+)")
+
+
+def parse_lean4_theorem(name: str, text: str) -> dict | None:
+    """Parse a Lean 4 `theorem` (statement part only) from raw source text that
+    may carry an `import`/`open` preamble and comments. Returns the statement
+    dict `classify` consumes, or None if no parseable theorem/goal is found."""
+    t = strip_comments(text)
+    m = _THEOREM_RE.search(t)
+    if not m:
+        return None
+    sig = split_signature(t[m.end() :], ":=")
+    if sig is None:
+        return None
+    binders_text, goal = sig
+    if not goal:
+        return None
+    b = parse_binders(binders_text)
+    return {"name": name, "goal": goal, **b}
+
+
 def split_signature(rest: str, terminator: str = ":=") -> tuple[str, str] | None:
     """Given the text AFTER `theorem NAME`, return (binders_text, goal) by
     trimming at the depth-0 proof terminator and splitting at the goal colon."""
@@ -249,7 +270,7 @@ _SUPPORTED_FUNCS = {
     "nnreal.sqrt": "SQRT", "NNReal.sqrt": "SQRT",
     "sqrt": "SQRT", "log": "LOG", "exp": "EXP",
 }
-_ALLOWED_CONSTS = {"π", "real.pi", "Real.pi", "pi"}
+_ALLOWED_CONSTS = {"π", "real.pi", "Real.pi", "pi", "ℯ"}
 
 # Relations that make a goal a statement node. `∣` (divides) is kept here so a
 # `12 ∣ n` goal counts as HAVING a relation and is then rejected by the
@@ -269,14 +290,21 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     # and an explicit SQRT head, not general rational powers -- and over ℕ the
     # exponent `1/3` is Nat.div = 0 (the classic `x^(1/3)` = x^0 trap) regardless.
     ("fractional_exponent", re.compile(r"\^\s*\([^)]*/")),
-    ("set_or_finset", re.compile(r"[Ff]inset|∈|∉|⊆|⊂|\.card\b|(?<![A-Za-z])[Ss]et(?![A-Za-z])|Set\.")),
+    # bare two-argument `log b x` is a base-b logarithm (Nat.log / Real.logb),
+    # which has no head -- unlike one-argument `log x` (= Real.log, supported) and
+    # consistent with the classifier's existing rejection of `logb`/`Real.logb`.
+    ("two_arg_log_no_head", re.compile(r"(?<![\w.])log\s+(?:\([^()]*\)|[\w.\d]+)\s+(?:\(|[\w.\d])")),
+    ("set_or_finset", re.compile(r"[Ff]inset|∈|∉|⊆|⊂|\.card\b|ℵ|(?<![A-Za-z])[Ss]et(?![A-Za-z])|Set\.")),
     ("existential_quantifier", re.compile(r"∃")),
     ("universal_quantifier", re.compile(r"∀")),
-    # a comma surviving big-operator / quantifier / set screening is a pair /
-    # tuple / list constructor (the `(a,b,…)` head, which the grammar lacks).
-    ("tuple_or_structure", re.compile(r",")),
+    # a comma or an anonymous constructor ⟨…⟩ surviving big-operator / quantifier /
+    # set screening is a pair / tuple / list constructor (no `(a,b,…)` head).
+    ("tuple_or_structure", re.compile(r",|⟨|⟩")),
+    # module/vector/product operators with no head: × (Prod / cross), • (SMul),
+    # ⊗ (tensor), ⊕ (direct sum), ⊘. NOT ∘ (the corpus carries a COMPOSE head).
+    ("vector_or_module_op", re.compile(r"×|•|⊗|⊕|⊘")),
     ("modular_type_zmod", re.compile(r"[Zz][Mm]od")),
-    ("complex_number", re.compile(r"ℂ|complex|Complex")),
+    ("complex_number", re.compile(r"ℂ|complex|Complex|ℐ|ℑ|ℜ|𝕀")),
     ("primality", re.compile(r"\b[Nn]at\.[Pp]rime\b|\b[Pp]rime\b|[Cc]oprime")),
     ("gcd_lcm", re.compile(r"\b[Gg]cd\b|\b[Ll]cm\b|[Nn]at\.gcd|[Nn]at\.lcm")),
     ("binomial_choose", re.compile(r"\b[Nn]at\.choose\b|\b[Cc]hoose\b|\b[Nn]at\.factorial\b")),
@@ -286,7 +314,8 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     ("rational_component", re.compile(r"\.denom\b|\.num\b")),
     # absolute value / norm: ASCII |·|, mathlib norm bars ∥·∥ / ‖·‖, and words.
     ("absolute_value", re.compile(r"\babs\b|\bnorm\b|lvert|lVert|\||∥|‖|⟪|⟫")),
-    ("min_max", re.compile(r"\b[Mm]in\b|\b[Mm]ax\b")),
+    ("min_max", re.compile(r"\b[Mm]in\b|\b[Mm]ax\b|⊓|⊔|⨅|⨆")),
+    ("metavar_or_string", re.compile(r'"|\?')),
     # trig has no head; under `open Real` the functions appear bare (sin, cos …).
     ("trig", re.compile(r"[Rr]eal\.(?:cos|sin|tan|arcsin|arccos|arctan)|\b(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan)\b")),
     ("polynomial", re.compile(r"[Pp]olynomial")),
@@ -298,9 +327,14 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
 # admits Greek letters and subscripts in identifiers (α, β, ω, x₀), so the class
 # must include them -- otherwise a Greek-named ℂ/zmod variable escapes the domain
 # check and its statement is wrongly counted covered.
-# ASCII + Greek/Coptic (U+0370-03FF: α β ω π …) + Greek Extended (U+1F00-1FFF).
-_ID_START = "A-Za-z_Ͱ-Ͽἀ-῿"
-_ID_CONT = _ID_START + "0-9₀-ₜ'"  # + digits, subscripts, prime
+# ASCII + Greek/Coptic (U+0370-03FF: α β ω π …) + Greek Extended (U+1F00-1FFF)
+# + Cyrillic (U+0400-04FF: Goedel-Pset uses Cyrillic var names) + ℓ (U+2113).
+# NB: deliberately NOT the ℝ/ℕ/ℤ/ℚ/ℂ type symbols (letterlike U+2100-214F), which
+# stay non-identifier glyphs handled by the carrier/domain logic.
+_ID_START = "A-Za-z_Ͱ-Ͽἀ-῿Ѐ-ӿℓ"
+# continuation adds digits, subscripts (U+2080-209C), phonetic subscript
+# modifiers (U+1D62-1D6A: ᵢ ᵣ ᵤ …, used in var names like hᵣ), and prime.
+_ID_CONT = _ID_START + "0-9₀-ₜᵢ-ᵪ'"
 _IDENT_RE = re.compile(
     "[" + _ID_START + "][" + _ID_CONT + "]*"
     "(?:\\.[" + _ID_START + "][" + _ID_CONT + "]*)*"

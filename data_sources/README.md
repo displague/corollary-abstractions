@@ -44,6 +44,15 @@ carrying theorems), follows the same shape via `scripts/ingest_lean_workbook.py`
 also reports a duplicate rate). Both share the classifier in
 `scripts/grammar_coverage.py`.
 
+A third source, `Goedel-LM/Goedel-Pset-v1` (Lean 4, MIT, **1.73M** statements,
+`sorry` proofs), is the SCALE test via `scripts/ingest_goedel_pset.py`. Because a
+1.73M-row extract would be ~300 MB, this one is **aggregate-only**: the 4 pinned
+parquets are the reproducibility anchor and only the small
+`experiments/goedel_pset_coverage.json` is committed (with a self-checking
+false-positive audit baked in). It is not stdlib-CI-regenerable; reproduce it
+manually with `python scripts/fetch_sources.py --fetch hf-goedel-pset-v1` then
+`python scripts/ingest_goedel_pset.py`.
+
 - Stage 1 verifies each Lean file against the SHA-256 pinned in `manifest.json`
   and refuses to extract from unpinned bytes; the extract carries the source's
   Apache-2.0 attribution.

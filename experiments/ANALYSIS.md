@@ -2401,3 +2401,95 @@ rung (a passing tactic proof certifies what it checks, not correctness in
 general). Then re-run the twin/specialization/decomposition ledgers on the
 enlarged graph — the first honest test of whether a capability-blind baseline
 that won on 221 curated nodes still wins on ~11k ingested ones.
+
+## v0.9 item 1 (cont.) — Goedel-Pset-v1: the scale test (1.73M statements)
+
+miniF2F sized the instrument; Lean-workbook ran it at 30k; **Goedel-Pset-v1**
+runs it at **1,732,594 Lean 4 statements** — ~58× Lean-workbook, MIT-licensed,
+Numina-derived, formalized by Goedel-Prover. Its proofs are `sorry` (unverified),
+so it measures **grammar reach and redundancy at scale**, not verifiability
+(Lean-workbook remains the source that can ground a `verified_by`).
+
+**Reduced-commit, by necessity.** A 1.73M-row per-statement extract would be a
+~300 MB JSON, so this source breaks the commit-the-extract pattern: a single-pass
+tool (`scripts/ingest_goedel_pset.py`) reads the 4 **pinned parquets**
+(SHA-256 + HF revision) and commits only the small aggregate
+`experiments/goedel_pset_coverage.json`. Reproduction from the pinned parquets is
+a documented manual step (needs pyarrow); it is not stdlib-CI-regenerable. To keep
+that honest, the artifact is **self-checking**: it carries the false-positive
+audit counts, and a committed test asserts both are 0.
+
+**The numbers** (parser handled 1,732,426 / 1,732,594 = 99.99%; 168 unparsed):
+
+| coverage | of rows |
+|---|---|
+| goal-only (upper bound) | 726,377 = **41.9%** |
+| full-statement | 567,429 = **32.8%** |
+
+duplicate rate **34.6%** (1,133,609 unique goals) → **386,375 unique covered
+statements**. `audit: covered_foreign_glyph_count = 0, carrier_residual = 0`.
+
+(Post-review: an independent adversarial pass caught one false-HIGH class the
+self-audits are structurally blind to — the classifier was **arity-blind** to
+bare `log`, so a two-argument `log b x` (a base-b logarithm = `Nat.log` /
+`Real.logb`, no head) was accepted with the same token set as a one-argument
+`Real.log x`. Self-contradictory, since `logb`/`Real.logb` was already rejected
+~3,960 times. An arity-aware blocker for `log <atom> <atom>` fixed it, removing
+~1,045 covered (568,474 → 567,429); one-argument `log x` stays supported. It
+confirms the audit's real limit: `foreign_glyph = 0` means no stray glyph, not
+"the covered set is clean" — an ASCII construct with no head still needs an
+explicit blocker.)
+
+**32.8% is the headline finding: half of Lean-workbook's 64.1%, and right next to
+miniF2F's 29.7%.** This is exactly what the design doc predicted an uncontrolled,
+larger, messier source would do — the 64% on Lean-workbook was the reach on a
+*curated* inequality set, not the reach on formal math in general. Two competition
+/ olympiad-derived sources (miniF2F, Pset) land near 30%; the one hand-selected
+inequality set is the outlier. The instrument now has three points, and they say
+the honest reach of the current grammar on real formal math is **~a third**.
+
+**The remainder shifts shape at scale** (full-statement, first-hit family; of
+1,163,952 untranslatable):
+
+| construct | count | share |
+|---|---|---|
+| no relation in goal | 258,495 | 22.2% |
+| unknown function / var applied | 160,176 | 13.8% |
+| existential goal (`∃`) | 131,115 | 11.3% |
+| universal goal (`∀`) | 89,099 | 7.7% |
+| big operator (`∑ ∏`) | 81,130 | 7.0% |
+| set / finset | 76,277 | 6.6% |
+| trig | 60,689 | 5.2% |
+| modulo / integer-division / monus (ℕ-ℤ) | 111,922 | 9.6% |
+| absolute value / complex / divides / binomial / tuple | ~110,000 | ~9% |
+
+The single largest gap is new: **`no_relation_in_goal` (22%)**. Numina word
+problems formalize into a lot of goals that are not (in)equations at all — bare
+predicates (`Even n`, `Collinear A B C`), definitional or membership claims,
+conjunctions of non-relational facts. The grammar shapes relations over slots;
+a fifth of a large model-formalized set simply is not that shape, and that is a
+finding about the *source*, not a defect in the measure. The carrier residue
+(modulo + integer-division + monus + divides = ~134k) is now correctly
+**excluded** — without carrier-awareness those ~71k `/`-and-`-`-over-ℕ/ℤ
+statements would have been counted covered, which is precisely the over-count the
+Lean-workbook review caught, here at 20× the volume.
+
+**Scale hardened the classifier, and the audit proved it.** The 1.73M run
+surfaced 310 covered statements carrying operator/constructor glyphs absent from
+the smaller sets — `×` (Prod / cross), `•` (SMul), `⊓`/`⊔` (lattice min/max),
+`ℐ`/`𝕀` (imaginary unit), `ℵ₀` (cardinal), `⟨…⟩` (anonymous constructor). None
+has a corpus head; all are now blocked, and the fix flows back through the shared
+classifier to every source (Lean-workbook's covered count was unchanged — those
+glyphs were already rejected there for other reasons — while 14 of its rejects
+got the correct `vector_or_module_op` label). Variable-name glyphs that are
+harmless (`ℓ`, Cyrillic, subscript modifiers `hᵣ`) were made visible instead, so a
+domain-typed one can no longer hide. After the pass, `covered_foreign_glyph_count`
+went 310 → 0; the self-checking audit is what makes that claim testable rather
+than asserted.
+
+**What this says for authoring.** At 32.8% with 34.6% duplicates, Pset alone would
+yield ~387k unique covered nodes — ~1,750× the current 221 — but with `sorry`
+proofs none is `verified_by`-grounded, so Lean-workbook (real proofs, ~11k unique
+covered) remains the authoring source; Pset is the scale-and-diversity stress test
+that says the grammar needs a **relational/predicate head and a quantifier head**
+before ingestion at this scale stops discarding two-thirds of the material.
