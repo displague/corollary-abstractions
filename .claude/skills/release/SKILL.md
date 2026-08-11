@@ -36,6 +36,14 @@ rotates the documents:
    its outcome from ANALYSIS.md / DISCOVERIES.md / commit history:
    *shipped* (with numbers), *partial* (what landed, what didn't), or
    *not started*.
+
+   **Drift audit (part of this triage, every release):** the blogs,
+   release notes, and closed roadmaps are the project's drift reminders.
+   Re-read the *previous* release's notes and roadmap — not just this
+   cycle's — and ask explicitly: have any stated goals been lost through
+   focus attrition or scope shifting rather than by decision? Anything
+   found is named in the triage (carried or deliberately parked with the
+   reason), never silently absent.
 2. **Write `docs/RELEASE-vX.Y.Z.md` from that triage**, using the
    section outline below. The governing rule: every claimed improvement
    is written as **Before → Now → Demonstrate** — what was the case
@@ -70,6 +78,14 @@ rotates the documents:
    Nothing planned is silently dropped — it either ships (release doc),
    carries (next roadmap), or is deliberately parked (BACKLOG, with the
    reason).
+
+   **The forward-looking design item:** every next-roadmap strives to
+   contain at least one strong, forward-looking design — inspired by
+   what the previous releases proved or falsified — that leads into the
+   next release's goals rather than only extending the current ones.
+   It should be a direction the released evidence now makes possible or
+   necessary, written as a design (what it unlocks, what it rests on),
+   not just a task line.
 4. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
    now live in the release doc); keep or migrate the rest; confirm new
    friction from the cycle is filed.
