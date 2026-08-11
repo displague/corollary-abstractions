@@ -2427,3 +2427,17 @@ wants its own adversarial review, not a release-eve change.
 - **`experiments/depth_interface.py:65` `MAX_TRAINED_TARGET_LENGTH = 88` is
   hardcoded.** Correct today (verified max train target = 88), but a data change
   would silently desync it; compute it from the training data or add a guard test.
+
+## Carrier table: ℝ≥0/NNReal subtraction is monus-family (v0.10 quantifier-slice review filing)
+
+- **`ℝ≥0`/`NNReal` sits in the coverage classifier's `_FIELD_TYPES`
+  (pre-existing, v0.9), but mathlib's NNReal subtraction is TRUNCATED —
+  monus-family, not the field `-` head.** So `∀ x : ℝ≥0, x - 1 ≤ x` covers
+  under a head that misreads its subtraction (division and `⁻¹` over NNReal
+  are honest; only `-` is wrong). Realized instances not yet counted at 1.73M
+  scale. The fix belongs to the carrier-honest number-field slice
+  (ROADMAP-v0.10 item 1, last bullet): either move NNReal to a monus-like
+  carrier class for `-` while keeping its field reading for `/`, or give
+  truncated subtraction its own head there. Filed from the quantifier slice's
+  adversarial review rather than patched inline, because splitting one
+  type's carrier class per operator deserves its own measured slice.

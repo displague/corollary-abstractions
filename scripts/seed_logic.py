@@ -2007,8 +2007,10 @@ QUANTIFIER_LAWS = [
             "flips it, exactly as it flips MEET to JOIN in the propositional "
             "law — the infinitary reading (FORALL as the big MEET of the "
             "body's instances) makes the analogy an identity.",
-            "Equational, hence reversible; but only the ¬∃¬-to-¬∀ direction "
-            "survives intuitionistically — the equation as stated is classical.",
+            "Equational, hence reversible; but only the ∃¬-to-¬∀ direction "
+            "survives intuitionistically — the equation as stated is classical. "
+            "(Review-corrected: an earlier wording named ¬∃¬-to-¬∀, a direction "
+            "valid in no logic; the failure_modes entry always had it right.)",
             "This is the law that licenses reading a ¬-prefixed quantifier "
             "chain as NEG-composition of the binder heads: a `¬∃ x, P` goal "
             "is NEG(EXISTS(x, P)), and this node with its dual says the "

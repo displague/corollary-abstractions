@@ -36,12 +36,12 @@
     "parsed": 29750,
     "unparsed": 0,
     "goal_only": {
-      "covered": 21887,
+      "covered": 21885,
       "pct_of_rows": 73.6,
       "pct_of_parsed": 73.6
     },
     "full_statement": {
-      "covered": 21239,
+      "covered": 21237,
       "pct_of_rows": 71.4,
       "pct_of_parsed": 71.4
     }
@@ -52,8 +52,8 @@
     "unique_goals": 18483,
     "duplicate_statements": 11267,
     "duplicate_rate_pct": 37.9,
-    "covered_statements": 21239,
-    "unique_covered_goals": 12659,
+    "covered_statements": 21237,
+    "unique_covered_goals": 12657,
     "note": "structural (alpha-renamed) duplicates are not counted here; they are a twin-matcher measure deferred to the authoring phase.",
     "most_repeated_goals": [
       {
@@ -106,10 +106,10 @@
     "absolute_value": 603,
     "unsupported_symbol:f": 541,
     "complex_number": 309,
-    "nat_monus_no_head": 276,
+    "nat_monus_no_head": 277,
     "quantifier_function_binder": 275,
     "set_or_finset": 257,
-    "integer_division_no_head": 239,
+    "integer_division_no_head": 240,
     "binomial_choose": 204,
     "quantifier_embedded": 187,
     "unsupported_symbol:x": 186,
@@ -230,10 +230,10 @@
     "unsupported_symbol:f": 541,
     "complex_number": 309,
     "hyp:set_or_finset": 279,
-    "nat_monus_no_head": 276,
+    "nat_monus_no_head": 277,
     "quantifier_function_binder": 275,
     "set_or_finset": 257,
-    "integer_division_no_head": 239,
+    "integer_division_no_head": 240,
     "binomial_choose": 204,
     "quantifier_embedded": 187,
     "unsupported_symbol:x": 186,
@@ -10947,7 +10947,6 @@
     "lean_workbook_plus_17061",
     "lean_workbook_plus_17076",
     "lean_workbook_plus_17077",
-    "lean_workbook_plus_17079",
     "lean_workbook_plus_17081",
     "lean_workbook_plus_17090",
     "lean_workbook_plus_17095",
@@ -15862,7 +15861,6 @@
     "lean_workbook_plus_48497",
     "lean_workbook_plus_48498",
     "lean_workbook_plus_48506",
-    "lean_workbook_plus_4852",
     "lean_workbook_plus_48524",
     "lean_workbook_plus_48525",
     "lean_workbook_plus_48528",

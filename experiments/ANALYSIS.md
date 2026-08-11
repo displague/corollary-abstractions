@@ -2842,16 +2842,20 @@ construct already had no head.
 | source | before | after | delta | registered floor |
 |---|---|---|---|---|
 | miniF2F | 151 = 30.9% | **161 = 33.0%** | +10 | +8 ✓ |
-| Lean-workbook | 19,570 = 65.8% | **21,239 = 71.4%** | +1,669 | +1,525 ✓ |
-| Goedel-Pset-v1 (1.73M) | 673,521 = 38.9% | **748,384 = 43.2%** | **+74,863** | +65,207 ✓ |
+| Lean-workbook | 19,570 = 65.8% | **21,237 = 71.4%** | +1,667 | +1,525 ✓ |
+| Goedel-Pset-v1 (1.73M) | 673,521 = 38.9% | **747,889 = 43.2%** | **+74,368** | +65,207 ✓ |
 
-Goal-only: miniF2F 232 → 235 = 48.2%; Lean-workbook 20,180 → 21,887 = 73.6%;
-Goedel-Pset 829,949 → **895,790 = 51.7%** (+65,841; unique covered goals
-476,504 → **540,849**). Every floor was exceeded for the registered reasons:
+(Review-corrected: the slice first landed at Goedel 748,384 / LW 21,239;
+adversarial review then caught the mixed-carrier chain shield — the
+correction subsection below — which removed 495 + 2 over-counted covers.
+These are the numbers of record.)
+
+Goal-only: miniF2F 232 → 235 = 48.2%; Lean-workbook 20,180 → 21,885 = 73.6%;
+Goedel-Pset 829,949 → **895,333 = 51.7%** (+65,384; unique covered goals
+476,504 → **540,405**). Every floor was exceeded for the registered reasons:
 the production classifier desugars EVERY quantified hypothesis (the
 simulation stopped at the first) and reaches the ¬-prefixed chains the
-simulation skipped. Goedel's full-statement gain decomposes as 61,269
-goal-position + 13,594 hyp-position rows, drawn EXCLUSIVELY from the four
+simulation skipped. Goedel's full-statement gain decomposes as 60,844 goal-position + 13,524 hyp-position rows, drawn EXCLUSIVELY from the four
 old quantifier buckets — no other reason class changed covered status, which
 the dual pass verifies per row.
 
@@ -2885,7 +2889,9 @@ was untouched and the pass asserts old/new parse agreement row-by-row;
    lesson as the `let` truncation: the biggest "malformed" bucket was the
    instrument's own parse. Fixed (group-lists require an all-whitespace
    residue; ⊆/∉-bounded and ⦃⦄ strict-implicit binders handled), the bucket
-   collapses to **46** genuinely malformed rows, and the 32 newly covered
+   collapses to **46** — mostly legal-but-mixed binder lists
+   (`∀ (a : ℕ → ℝ) d, …`) the extractor refuses conservatively rather than
+   truly unparseable text — and the 32 newly covered
    ⦃⦄-binder rows forced the audit-normalizer decision (binder brackets
    normalize; factorial `!` and set-builder braces stay foreign, asserted).
 
@@ -2896,11 +2902,11 @@ was untouched and the pass asserts old/new parse agreement row-by-row;
 | covered (was existential/universal_quantifier) | 65,841 | +35,255 from ∃-bucket, +30,586 from ∀-bucket |
 | `quantifier_embedded` | 62,142 | connective/iff/let/nested position — the successor slice |
 | `quantifier_function_binder` | 21,370 | with `unsupported_symbol:f` bodies (28k), the function-slot backlog |
-| body residues under a supported prefix | ~55k | each keeps its pre-existing precise label (abs 43,446 †, monus 41,019 †, int-div 39,987 †, …) |
+| body residues under a supported prefix | ~55k | each keeps its pre-existing precise label (abs 43,472 †, monus 41,239 †, int-div 40,442 †, …) |
 | `quantifier_shadowed_binder` | 2,779 | refused re-quantification of an outer name (`theorem (a b : ℤ) : ∀ a b, …`) |
 | `quantifier_structure_binder` / `set_or_finset` | 1,409 / — | membership and ⊆-bounded binders rejoin the set bucket |
 | `quantifier_over_sort` | 457 | second-order (`∀ p : Prop`) |
-| `quantifier_malformed` | 46 | genuinely unparseable binder sections |
+| `quantifier_malformed` | 46 | conservative parse-limit refusals (mixed group+bare binder lists like `∀ (a : ℕ → ℝ) d, …` — legal Lean the extractor declines to guess at) plus truly malformed text |
 
 † statement-wide bucket totals after redistribution, not quantifier-only.
 Hypothesis side: `hyp:quantifier_embedded` 1,234, `hyp:quantifier_function_binder`
@@ -2951,3 +2957,72 @@ binders are refused (2.8k) because per-statement carrier flags cannot say
 asymmetry is inherited unchanged — a theorem-level `(y : ℝ)` can still
 shield a quantifier-ℕ-binder's monus within the same segment, the disclosed
 `r^(n-1)`-class conservatism trade recorded at the segment-local review fix.
+One further carrier-table item, review-filed for the next carrier slice
+(also in docs/BACKLOG.md): `ℝ≥0`/`NNReal` sits in `_FIELD_TYPES`
+(pre-existing, v0.9), but mathlib's NNReal subtraction is truncated —
+monus-family, not the field `-` head — so `∀ x : ℝ≥0, x - 1 ≤ x` covers
+under a head that misreads its subtraction. Realized instances not yet
+counted; the fix belongs to the carrier-honest number-field slice
+(ROADMAP-v0.10 item 1, last bullet), not to a one-line patch here.
+
+### Review correction — the mixed-carrier chain shield (a caught over-count, fourth cycle)
+
+Independent adversarial review of this slice reproduced the headline numbers
+and caught the class this project's audits exist to catch, one level deeper
+than the slice's own three catches: `_quantifier_segment` returned ONE field
+flag for the whole segment, so a chain mixing carriers —
+`∀ (d : ℚ) (n : ℕ), …` — let the ℚ binder shield a sibling ℕ binder's
+Nat.div/monus in conjuncts that never touch `d`. The review's evidence rows
+make the semantics vivid: `4 / m` with `m : ℕ` (Goedel-Pset-846154) is
+Nat.div and the covered claim is value-breaking; the `(n − 2) · 180` polygon
+rows (216780, 236097) cover a ℕ monus; a VACUOUS `a : ℝ` binder shielded
+statement-ℤ `Int.div` (1684555); and a quantifier-ℝ binder shielded a
+statement-ℕ `1/a` (968965). Credit where due: the finding is the review's.
+
+**The fix, both halves.** (1) Classifier: when a chain's field carrier mixes
+with an integer-or-unknown carrier — its own or the statement's — the field
+flag is demoted for that segment, and the division/monus falls to the
+integer reading's existing precise gap, the same conservative direction as
+the ℕ default for untyped binders. An in-segment textual signal (`↑`, `: ℚ`
+ascription, decimal) still legitimizes, exactly as everywhere else.
+(2) Audit: `_carrier_residual`'s binder excuse now fires only for PURE-field
+chains — before this, its `continue` and the classifier's shield fired on
+the same one-boolean signal, so the audit was structurally blind to the
+class it guards (the same un-blinding the segment-local review forced on the
+concatenated-text audit). Both halves are regression-tested from the
+evidence rows, with controls: the `∀ (n : ℕ)`-only variant already refused
+correctly, pure-field chains keep dividing, `↑n / 2` keeps its coercion, and
+int+field mixes keep `-` (integer subtraction is a real head).
+
+**The correction, counted (per-row dual pass, slice-as-committed → fixed,
+all 1.73M rows plus both extracts):** Goedel loses **495** full-statement
+covers (331 `integer_division_no_head` + 94 `nat_monus_no_head` in goal
+position, 42 + 28 in hypotheses; 457 goal-only), Lean-workbook loses **2**,
+miniF2F **0**; no row gains. That is ~9× the review's 56 CONFIRMED false
+covers, because the uniform rule also refuses the elaboration-ambiguous
+residue a text-level instrument cannot attribute — `n * (a₁ + aₙ) / 2`
+mixes, and only Lean's elaborator knows whether the `/` landed in ℚ via
+coercion; `∀ x > M` with `M : ℝ` binds x at ℝ, but the bound's type is
+inference the classifier does not perform. Stricter than the review asked,
+in the only honest direction — the same trade as the segment-local
+correction (6,066 removed against an estimated 3,644).
+
+**Corrected numbers of record:** Goedel-Pset full **747,889 = 43.2%**
+(goal-only 895,333 = 51.7%, unique covered 540,405; like-for-like delta vs
+the pre-slice record +74,368 full / +65,384 goal-only, LOST still 0 by the
+re-run triple pass), Lean-workbook **21,237 = 71.4%**, miniF2F unchanged at
+**161 = 33.0%**. Audits `foreign_glyphs = 0, carrier_residual = 0` — the
+latter now over a check that can see mixed-chain shielding.
+
+**Two smaller review corrections, same cycle.** (1) A corpus factual error:
+`quantifier_negation_universal`'s invariant named "¬∃¬-to-¬∀" as the
+intuitionistically surviving direction — a direction valid in no logic; the
+valid one is ∃¬ → ¬∀, as the node's own failure_modes always said. Fixed in
+the seed, regenerated (node COUNT unchanged, so GC4/GC5 do not move;
+re-verified, not assumed). (2) The design note's "alpha-invariant for free"
+is a Barendregt-style NAMING CONVENTION, not a theorem: first-occurrence
+placeholder numbering is invariant under whole-statement injective renaming,
+and the corpus templates deliberately reuse the `{x}` slot across sibling
+binders — a future twin authored with distinct inner binder names would NOT
+match until normalized. Recorded here so the convention is a documented
+choice rather than an accidental claim.

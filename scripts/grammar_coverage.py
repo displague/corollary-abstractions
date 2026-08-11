@@ -1025,6 +1025,21 @@ def classify(stmt: dict) -> dict:
     # and its carriers register for THAT segment only. `let` equations are
     # deliberately not extracted: a quantified let-RHS is a Prop-valued
     # binding, which stays the quantifier_embedded gap.
+    # MIXED-CARRIER CHAIN SHIELD (review-caught over-count, this slice's own
+    # regression): the chain-level field flag is ONE boolean for the whole
+    # segment, so `∀ (d : ℚ) (n : ℕ), …` shielded a sibling ℕ binder's
+    # Nat.div/monus in conjuncts that never touch d (realized rows: the
+    # `(n-2)*180` monus family, `4/m` with m : ℕ — value-breaking — and
+    # vacuous field binders over statement-ℕ/ℤ division). When a chain's
+    # field carrier MIXES with an integer-or-unknown carrier (its own or the
+    # statement's), the field flag is demoted and the division/monus cannot
+    # be attributed to the field binder: the integer reading's gap wins —
+    # the same conservative direction as the ℕ default for untyped binders.
+    # An in-segment textual signal (`↑`, `: ℚ` ascription, decimal) still
+    # legitimizes, exactly as everywhere else.
+    def _q_field_unmixed(q_nat: bool, q_int: bool, q_field: bool) -> bool:
+        return q_field and not (q_nat or q_int or has_nat or has_int)
+
     outer_names = value_vars | set(domain_vars)
     gq = _quantifier_segment(goal, outer_names)
     goal_gap: str | None = None
@@ -1037,7 +1052,8 @@ def classify(stmt: dict) -> dict:
             _, goal_check, extra, q_nat, q_int, q_field = gq
             goal_vars = value_vars | extra
             g_nat, g_int, g_field = (
-                has_nat or q_nat, has_int or q_int, has_field or q_field,
+                has_nat or q_nat, has_int or q_int,
+                has_field or _q_field_unmixed(q_nat, q_int, q_field),
             )
 
     # the let bindings are PART of the goal proposition (a let-goal is the
@@ -1115,7 +1131,7 @@ def classify(stmt: dict) -> dict:
                     r = _segment_gap(
                         h_check, value_vars | h_extra,
                         has_nat or h_nat, has_int or h_int,
-                        has_field or h_field,
+                        has_field or _q_field_unmixed(h_nat, h_int, h_field),
                     )
                 if r is not None:
                     full_reason = f"hyp:{r}"

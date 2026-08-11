@@ -119,21 +119,32 @@ def _carrier_residual(stmt: dict) -> bool:
     review caught, so it could never flag the class it existed to catch.)
 
     Quantifier-aware since the v0.10 slice: a segment's own binder can declare
-    the field carrier (`∃ last : Rat, last = 1 /. 2` under an ℕ theorem
-    binder — the audit's first hit). The prefix is re-parsed with the shared
-    extractor so the audit sees the same segmentation the classifier saw, but
-    the carrier VERDICT below stays the audit's own independent regex logic."""
+    the field carrier (`∃ last : Rat, last = 1 /. 2` — the audit's first
+    realized hit). The prefix is re-parsed with the shared extractor so the
+    audit sees the same segmentation the classifier saw, but the carrier
+    VERDICT below stays the audit's own independent regex logic — and the
+    binder field carrier excuses a division ONLY when the chain is pure
+    field: a chain mixing field with nat/int/unknown carriers (its own or
+    the statement's) gets no excuse, which is exactly the mixed-carrier
+    shield class the adversarial review caught the classifier over-counting
+    (`∀ (d : ℚ) (n : ℕ), … 4/m …`). Before this, the audit's `continue` and
+    the classifier's shield fired on the same one-boolean signal, so the
+    audit was structurally blind to the class."""
     if stmt.get("has_field_carrier"):
         return False
-    if not (stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")):
-        return False
+    stmt_int = stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")
     for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
+        seg_int = stmt_int
         q = gc.extract_quantifier_prefix(txt)
         if q is not None and q[0] == "ok":
             _, check_text, _names, carriers = q
-            if "field" in carriers:
-                continue  # the segment's own binder declares the field carrier
+            chain_int = bool(carriers & {"nat", "int", "unknown"})
+            if "field" in carriers and not chain_int and not stmt_int:
+                continue  # pure-field chain: its binder declares the carrier
             txt = check_text
+            seg_int = seg_int or chain_int
+        if not seg_int:
+            continue
         if gc._FIELD_SIGNAL_RE.search(txt):
             continue
         if "/" in txt or "⁻¹" in txt or _FRAC_EXP_RE.search(txt):

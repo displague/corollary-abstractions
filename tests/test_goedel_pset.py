@@ -500,14 +500,13 @@ class QuantifierHeads(unittest.TestCase):
         self.assertEqual(r["goal_reason"], "uninterpreted_notation")
 
     def test_carrier_audit_sees_quantifier_field_binder(self) -> None:
-        # Goedel-Pset-1326754: `∃ (last : Rat), last = 1 /. 2` under an ℕ
-        # theorem binder. The segment's own binder declares the field carrier,
-        # so the audit must not flag the cover ...
+        # Goedel-Pset-1326754-class, distilled to the PURE-field chain: the
+        # segment's own binder declares the field carrier, so the audit must
+        # not flag the cover ...
         import ingest_goedel_pset as igp
         st = gc.parse_lean4_theorem(
             "t",
-            "theorem t (n : ℕ) (h : n ≥ 3) :\n"
-            "  ∃ (last : Rat), last = 1 /. 2 := by sorry",
+            "theorem t : ∃ (last : Rat), last = 1 /. 2 := by sorry",
         )
         r = gc.classify(st)
         self.assertTrue(r["full_ok"], r["full_reason"])
@@ -519,6 +518,64 @@ class QuantifierHeads(unittest.TestCase):
             "theorem t (n : ℕ) :\n  ∃ k : ℕ, k = n / 2 := by sorry",
         )
         self.assertTrue(igp._carrier_residual(st2))
+
+    # ---- the mixed-carrier chain shield (adversarial-review catch) --------
+    def test_mixed_carrier_chain_does_not_shield(self) -> None:
+        """Review-caught over-count: the chain-level field flag is one
+        boolean, so `∀ (d : ℚ) (n : ℕ), …` shielded a sibling ℕ binder's
+        Nat.div/monus in conjuncts that never touch d. Under carrier mixing
+        the field flag is demoted and the integer reading's gap wins —
+        distilled from the review's evidence rows."""
+        # 216780-class: `(n - 2) * 180` is ℕ monus regardless of the ℚ sibling
+        r = gc.classify(self._mk("∀ (d : ℚ) (n : ℕ), (n - 2) * 180 = 360 ∧ d = 1"))
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+        # 846154-class: `4 / m` with m : ℕ is Nat.div — value-breaking cover
+        r = gc.classify(self._mk("∃ (a : ℚ) (m : ℕ), 4 / m = 2 ∧ a = 1"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+        # 1684555-class: a vacuous quantifier-ℝ binder over statement-ℤ division
+        r = gc.classify(self._mk("∀ a : ℝ, k / 2 = 1", vars=("k",),
+                                 has_int_carrier=True))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+        # 968965-class: quantifier-ℝ binder must not shield statement-ℕ 1/n
+        r = gc.classify(self._mk("∀ x : ℝ, 1 / n ≤ x ∨ x < 0", vars=("n",),
+                                 has_nat_carrier=True))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+        # ... and the same rule holds in hypothesis position
+        r = gc.classify(self._mk("a = 1", vars=("a",),
+                                 hyps=["∀ (d : ℚ) (n : ℕ), n / 2 = 1 ∧ d = 2"]))
+        self.assertEqual(r["full_reason"], "hyp:integer_division_no_head")
+
+    def test_mixed_carrier_controls(self) -> None:
+        # pure-field chains keep dividing
+        r = gc.classify(self._mk("∀ (x y : ℝ), x / 2 + y / 2 = 1"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+        # an in-segment textual signal (coercion arrow) still legitimizes,
+        # exactly as everywhere else
+        r = gc.classify(self._mk("∀ (d : ℚ) (n : ℕ), ↑n / 2 = d"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+        # the ∀ (n : ℕ)-only variant refused correctly BEFORE the fix: control
+        r = gc.classify(self._mk("∀ (n : ℕ), n / 2 = 1"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+        # int+field mix with `-` only: subtraction is a real head over ℤ
+        r = gc.classify(self._mk("∀ (d : ℚ) (k : ℤ), k - 1 ≤ k ∧ d = 2"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_carrier_audit_sees_mixed_chain_shield(self) -> None:
+        # The audit's `continue` used to fire on the same one-boolean signal
+        # as the classifier's shield — structurally blind to this class. Now
+        # a mixed chain gets no excuse and the shape reads as a residual.
+        import ingest_goedel_pset as igp
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t : ∀ (d : ℚ) (n : ℕ), n / 2 = 1 ∧ d = 2 := by sorry",
+        )
+        self.assertTrue(igp._carrier_residual(st))
+        # control: the pure-field chain stays excused
+        st2 = gc.parse_lean4_theorem(
+            "t",
+            "theorem t : ∀ (d : ℚ), d / 2 = 1 := by sorry",
+        )
+        self.assertFalse(igp._carrier_residual(st2))
 
     def test_audit_normalizer_keeps_factorial_and_set_braces_foreign(self) -> None:
         import ingest_goedel_pset as igp
