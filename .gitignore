@@ -63,3 +63,7 @@ experiments/data_real/
 # point. Session *files* are public and may be committed; this never is.
 .runtime/
 *.session-keys.json
+
+# Secrets — never commit
+.env
+.env.*
