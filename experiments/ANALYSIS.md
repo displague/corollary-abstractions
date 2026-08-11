@@ -2617,21 +2617,30 @@ and **naming the remainder precisely** (2-ary `Nat.Coprime` keeps its own
 `coprime_no_head` label; relationless `∑`-goals now land in `big_operator`
 instead of the undifferentiated no-relation bucket).
 
-**The coverage delta (full-statement, all three sources):**
+**The coverage delta (full-statement, all three sources), review-corrected:**
 
 | source | before | after | delta |
 |---|---|---|---|
 | miniF2F | 147 = 30.1% | 151 = 30.9% | +4 |
-| Lean-workbook | 19,532 = 65.7% | 19,574 = 65.8% | +42 |
-| Goedel-Pset-v1 (1.73M) | 606,937 = 35.0% | **679,586 = 39.2%** | **+72,649** |
+| Lean-workbook | 19,532 = 65.7% | 19,570 = 65.8% | +38 |
+| Goedel-Pset-v1 (1.73M) | 606,937 = 35.0% † | **673,521 = 38.9%** | **+66,584** |
+
+† The slice's first-landed numbers (Goedel 679,586 = 39.2%, LW 19,574) carried
+a cross-segment carrier-shielding over-count that adversarial review caught;
+the correction is §"Review correction" below. The old baseline itself contained
+1,146 rows of the same defect (goal↔hyp shielding predates this slice), so the
+like-for-like corrected comparison is 605,791 → 673,521 = **+67,730**.
 
 The `no_relation_in_goal` bucket itself: 258,495 → **9,540** on Goedel-Pset
 (5 → 0 on miniF2F, 239 → 50 on Lean-workbook). It did not all become coverage —
 most of it redistributed to its *true* labels (`∃`-goals, tuples, set-typed
 lets), which is the honest outcome: the instrument now names the remainder
-correctly instead of lumping it. The audited LOST count is **0** on every
-source: a full old-vs-new dual-classification pass over all 1.73M rows shows
-every one of the 606,937 previously covered statements still covered.
+correctly instead of lumping it. The audited LOST count for the head extension
+itself is **0** on every source: a full old-vs-new dual-classification pass
+over all 1.73M rows shows the grammar changes dropped no previously covered
+statement. (The review correction below then *deliberately* removes 1,146
+old-baseline rows — but as over-counts being corrected, each with a per-row
+audit trail, not as losses.)
 
 **Scale surfaced a false-positive class again, and the audit caught it again.**
 The first full run reported `covered_foreign_glyph_count = 6` — all six were
@@ -2641,7 +2650,7 @@ identifier scan, so the bound name looked like a plain value. Two fixes, both
 now regression-tested: a function-typed `let` sets the unknown-function flag
 (its name is not a value slot), and a new `uninterpreted_notation` blocker
 (`·`, `⋆`, `fun`/`λ`/`=>`) rejects anonymous functions wherever they appear
-(28,936 statements now carry that precise label). Audit after:
+(28,924 statements now carry that precise label). Audit after:
 `foreign_glyphs = 0, carrier_residual = 0`.
 
 **Two honest disclosures.** (1) `unparsed` rose 168 → 192: 24 statements whose
@@ -2650,7 +2659,10 @@ guess at; all 24 were previously *mis*parsed into the no-relation stub, none was
 ever covered. (2) The duplicate rate FELL 34.6% → 24.1% (unique goals 1.13M →
 1.32M): the old truncation had collapsed every `let x …` goal into the same
 stub, so the previous dedup overcounted redundancy; unique covered goals rise
-414,428 at 35.0% → **482,254** at 39.2%.
+414,330 at 35.0% → **476,504** at 38.9%. (Correction note: this slice's commit
+message and the first version of this paragraph misquoted the baseline as
+414,428 — the committed v0.9 artifact pins `unique_covered_goals` = 414,330.
+The commit message is immutable; this is the correction of record.)
 
 **The twin null, a third time.** The 12 number-theory nodes form no new
 cross-discipline twins — `group_counts` is unchanged
@@ -2662,3 +2674,64 @@ the absorption guard holds without further weakening (exact-over-absorption
 eases 4.9:1 → 4.7:1 by count, still clearly above the 4:1 floor; rate gap
 0.116 < the 0.12 pin) — recorded as the second registered acknowledgment in
 `tests/test_decompose_channels.py`.
+
+### Review correction — the carrier signal must be segment-local (a caught over-count)
+
+Independent adversarial review of this slice reproduced every headline claim
+and then found the one it exists to find: `classify()` computed the field
+signal (`: ℚ`/`: ℝ` ascription, coercion `↑`, `Real.` call, decimal literal)
+over the WHOLE statement and passed it to every segment's carrier check. One
+`: ℚ` in one binding therefore legitimized `/` and `-` over ℕ in *sibling*
+segments — `Nat.div` and monus covered as if they were real division and
+subtraction, precisely the over-count carrier-honesty exists to refuse. The
+review's evidence rows make the semantics vivid: in Goedel-Pset-1082706 the
+shielded `sample_size / total_students` is ℕ-division — it equals **0** in
+Lean, and the covered statement is arithmetically false as formalized.
+
+**The fix.** The signal is now segment-local (goal body, each `let` equation,
+each hypothesis separately), and a field-**typed** `let` no longer sets the
+statement-wide field carrier — its `(rhs : ℚ)` equation string is its own,
+local signal. Integer-typed lets still register statement-wide, because an
+integer carrier only ever *creates* gaps (the safe direction). Binder-declared
+field variables (`(x : ℝ)`) remain statement-scoped — that is the pre-slice,
+v0.9-reviewed semantics for variables that genuinely occur anywhere — which
+leaves one disclosed asymmetry: `r^(n-1)` under an ℝ *binder* stays covered
+while the same exponent monus under a ℚ-typed *let* is now a gap. Conservative
+in exactly one direction. The `_carrier_residual` audit was un-blinded the same
+way: it previously regexed the same concatenated text, so it was structurally
+incapable of flagging this class; it now checks per segment, and the class it
+would flag is regression-tested from both evidence rows.
+
+**The correction, counted per row (triple-classifier pass: pre-slice /
+slice-as-committed / fixed):**
+
+| | count |
+|---|---|
+| rows losing coverage under the fix | **6,066** |
+| — as `integer_division_no_head` (goal / hyp) | 3,300 / 476 |
+| — as `nat_monus_no_head` (goal / hyp) | 1,905 / 382 |
+| — as `integer_predicate_field_carrier` (argument-level hole, see below) | 3 |
+| of the 6,066: already inside the OLD 606,937 baseline (goal↔hyp shielding predates the slice) | 1,146 |
+| of the 6,066: inside this slice's new gain | 4,920 |
+| rows gaining coverage (a ℚ-let no longer globally triggering the integer-predicate guard) | 1 |
+
+Corrected numbers: Goedel-Pset full-statement **673,521 = 38.9%** (goal-only
+829,949 = 47.9%, unique covered 476,504), Lean-workbook **19,570** (its 4
+corrections are `Even ((3+√5)^n + (3−√5)^n)` — over ℝ, mathlib-`Even` is
+trivially true of every real, so the formalization is vacuous and the corpus's
+integer EVEN head must refuse it; all 4 were inside this slice's gain),
+miniF2F unchanged at 151. The review estimated ~3,644 rows from a slightly
+laxer segment notion; the uniform rule (every segment local, typed-let field
+carriers local too) removes 6,066 — stricter than the review asked, in the
+only honest direction, and it is what the evidence row 1082706 actually
+requires. The same review follow-up closed the argument-level hole
+(`Even ↑n`, `Odd (x : ℝ)`: field signal inside the predicate's own argument),
+which realized 3 Goedel + 4 Lean-workbook corrections.
+
+GC4/GC5 do not move (the corpus is unchanged at 241 nodes / 24 disciplines;
+re-verified, not assumed), and the audit fields stay
+`foreign_glyphs = 0, carrier_residual = 0` — now over a residual check that
+can actually see the class it guards against. Corrections are first-class
+here: the numbers above replace the slice's first-landed ones, and the commit
+that landed them stays in history with this section as its correction of
+record.

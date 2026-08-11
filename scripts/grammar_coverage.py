@@ -33,8 +33,11 @@ v0.10 item 1 (cont.) adds the RELATIONAL/PREDICATE head family:
   Goedel-Pset's `no_relation_in_goal` bucket. Bindings are now split into
   `goal_lets` equations (`x = e`, `x = (e : T)`); each must reduce exactly like
   a goal conjunct, and the body is classified on its own shape. An untyped
-  numeral binding contributes a ℕ carrier (Lean's numeral default), a typed one
-  its declared carrier, so carrier-honesty (`/` `-` over ℕ/ℤ) is preserved.
+  numeral binding contributes a ℕ carrier (Lean's numeral default) and an
+  integer-typed one its declared carrier, so carrier-honesty (`/` `-` over
+  ℕ/ℤ) is preserved; a field-typed binding signals only its OWN segment —
+  the field signal is segment-local throughout (review-caught: computed
+  statement-wide it shielded ℕ floor-division/monus in sibling segments).
 """
 
 from __future__ import annotations
@@ -371,10 +374,13 @@ def apply_goal_lets(
     the binding-equation strings (`x = e`, `x = (e : T)`), or None if a binding
     is malformed (empty rhs) and the statement should count as unparsed.
 
-    Each simple-named binding registers a value var; a typed binding contributes
-    its declared carrier, and an untyped bare-numeral binding the ℕ carrier
-    (ℤ if negated) that Lean's numeral elaboration gives it — so `/` and `-`
-    over let-bound integers stay the floor-division/monus gaps (carrier-honesty)."""
+    Each simple-named binding registers a value var; an INTEGER-typed binding
+    contributes its declared carrier, and an untyped bare-numeral binding the ℕ
+    carrier (ℤ if negated) that Lean's numeral elaboration gives it — so `/`
+    and `-` over let-bound integers stay the floor-division/monus gaps.
+    A FIELD-typed binding deliberately does not set the statement-wide field
+    carrier (its ascription is a segment-local signal only; see the comment
+    below — the review-caught shielding over-count)."""
     goal_lets: list[str] = []
     for nm, typ, rhs in lets:
         if not rhs:
@@ -388,14 +394,21 @@ def apply_goal_lets(
             continue
         if _IDENT_RE.fullmatch(nm):
             b["value_vars"].append(nm)
+            # Carrier flags from lets are ASYMMETRIC on purpose. An integer
+            # carrier only ever CREATES gaps (`/` becomes Nat.div, `-` monus),
+            # so ℕ/ℤ-typed and untyped-numeral bindings register statement-
+            # wide — the safe direction. A field-typed binding must NOT set
+            # the statement-wide field carrier: that would let one `: ℚ`
+            # binding shield Nat.div/monus in a SIBLING ℕ binding (the
+            # review's evidence row Goedel-Pset-1082706, where the shielded
+            # `s / n` over ℕ is 0 and the claim is false). Its `(rhs : ℚ)`
+            # equation string already carries the SEGMENT-local signal.
             if typ is not None:
                 ts = typ.strip()
                 if ts in _NAT_TYPES:
                     b["has_nat_carrier"] = True
                 elif ts in _INTZ_TYPES:
                     b["has_int_carrier"] = True
-                elif ts in _FIELD_TYPES:
-                    b["has_field_carrier"] = True
             elif _INT_NUMERAL_RE.fullmatch(rhs):
                 if rhs.lstrip().startswith("-"):
                     b["has_int_carrier"] = True
@@ -412,7 +425,7 @@ def parse_lean4_theorem(name: str, text: str) -> dict | None:
     m = _THEOREM_RE.search(t)
     if not m:
         return None
-    sig = split_signature(t[m.end() :], ":=")
+    sig = split_signature(t[m.end() :])
     if sig is None:
         return None
     binders_text, goal, lets = sig
@@ -429,12 +442,14 @@ def parse_lean4_theorem(name: str, text: str) -> dict | None:
 
 
 def split_signature(
-    rest: str, terminator: str = ":="
+    rest: str,
 ) -> tuple[str, str, list[tuple[str, str | None, str]]] | None:
     """Given the text AFTER `theorem NAME`, return (binders_text, goal, lets) by
-    trimming at the depth-0 proof terminator (let-aware: a `let x := e` binding's
-    `:=` does not terminate the statement) and splitting at the goal colon.
-    `lets` is the list of (name, type-or-None, rhs) goal-prefix bindings."""
+    trimming at the depth-0 `:=` proof terminator (let-aware: a `let x := e`
+    binding's `:=` does not terminate the statement) and splitting at the goal
+    colon. `lets` is the list of (name, type-or-None, rhs) goal-prefix bindings.
+    (The old `terminator` parameter is gone: `_find_statement_end` is
+    necessarily `:=`-specific because the let-claiming rule is.)"""
     end = _find_statement_end(rest)
     if end < 0:
         return None
@@ -696,20 +711,35 @@ def _prop_shaped(goal: str) -> bool:
 _INT_PRED_RE = re.compile(
     r"(?<![\w.])(?:[Ee]ven|[Oo]dd|(?:[Nn]at\.)?[Pp]rime)(?![\w.'])"
 )
+# ... and the argument-level hole: even WITHOUT a field binder, a predicate
+# applied to a coerced/ascribed-real argument (`Even ↑x`, `Odd (y : ℝ)`) is
+# the trivial field reading, not the integer head. (Review follow-up; zero
+# realized false positives at 1.73M today — this keeps it that way.)
+_INT_PRED_ARG_RE = re.compile(
+    r"(?<![\w.])(?:[Ee]ven|[Oo]dd|(?:[Nn]at\.)?[Pp]rime)\s*"
+    r"(↑\S*|\((?:[^()]|\([^()]*\))*\))"
+)
 
 
 def _int_pred_field_gap(text: str, has_field: bool, value_vars: set[str]) -> str | None:
-    if not has_field or not _INT_PRED_RE.search(text):
+    if not _INT_PRED_RE.search(text):
         return None
-    if any(tok in value_vars for tok in _IDENT_RE.findall(text)):
+    if has_field and any(tok in value_vars for tok in _IDENT_RE.findall(text)):
         return "integer_predicate_field_carrier"
+    for m in _INT_PRED_ARG_RE.finditer(text):
+        if _FIELD_SIGNAL_RE.search(m.group(1)):
+            return "integer_predicate_field_carrier"
     return None
 
 
-# A statement whose arithmetic is (even partly) over a field: a field-typed
-# value var, an explicit coercion ↑, a ℝ/ℚ ascription, a Real/Rat namespace call,
-# or a decimal literal. Without any such signal, `/` and `-` over ℕ/ℤ carriers
-# are the floor-division / monus GAPS, not the real operations.
+# An EXPRESSION whose arithmetic is over a field: an explicit coercion ↑, a
+# ℝ/ℚ ascription, a Real/Rat namespace call, or a decimal literal. Applied
+# PER SEGMENT (goal body, each let-binding equation, each hypothesis): a
+# signal legitimizes `/` and `-` only in the segment that carries it —
+# computed over the whole statement it shielded ℕ floor-division/monus in
+# sibling segments (the review-caught over-count). Without a local signal
+# (or a binder-declared field var), `/` and `-` over ℕ/ℤ carriers are the
+# floor-division / monus GAPS, not the real operations.
 _FIELD_SIGNAL_RE = re.compile(
     r"↑|:\s*ℝ|:\s*ℚ|:\s*NNReal|:\s*ℝ≥0|\bReal\.|\bNNReal\b|\bRat\.|[0-9]\.[0-9]"
 )
@@ -746,8 +776,19 @@ def classify(stmt: dict) -> dict:
     has_nat = stmt.get("has_nat_carrier", False)
     has_int = stmt.get("has_int_carrier", False)
     has_field = stmt.get("has_field_carrier", False)
-    all_text = " || ".join(goal_segments + stmt["hyps"])
-    field_signal = has_field or bool(_FIELD_SIGNAL_RE.search(all_text))
+
+    # The field signal is SEGMENT-LOCAL (review-caught over-count): a `: ℚ`
+    # ascription, coercion `↑`, `Real.` call, or decimal literal legitimizes
+    # `/` and `-` only in the expression that carries it. Computed globally it
+    # shielded ℕ floor-division/monus in OTHER segments — e.g. a `(w : ℚ)`
+    # goal body hiding the `a + b - 1` monus inside a sibling ℕ let-binding
+    # (Goedel-Pset-413727), or a ℚ-typed binding hiding Nat.div AND monus
+    # inside an ℕ-typed one (Goedel-Pset-1082706, where `s / n` over ℕ is 0
+    # and the stated claim is false — exactly what carrier-honesty refuses).
+    # A binder-DECLARED field var (has_field) stays statement-scoped: the var
+    # itself may appear in any segment.
+    def _seg_field_signal(seg: str) -> bool:
+        return has_field or bool(_FIELD_SIGNAL_RE.search(seg))
 
     # ---- goal-only ----
     goal_reason: str | None = None
@@ -765,7 +806,7 @@ def classify(stmt: dict) -> dict:
         for seg in goal_segments:
             goal_reason = (
                 _blocker(seg)
-                or _carrier_gap(seg, has_nat, has_int, field_signal)
+                or _carrier_gap(seg, has_nat, has_int, _seg_field_signal(seg))
                 or _int_pred_field_gap(seg, has_field, value_vars)
             )
             if goal_reason is None:
@@ -785,7 +826,7 @@ def classify(stmt: dict) -> dict:
             for hyp in stmt["hyps"]:
                 r = (
                     _blocker(hyp)
-                    or _carrier_gap(hyp, has_nat, has_int, field_signal)
+                    or _carrier_gap(hyp, has_nat, has_int, _seg_field_signal(hyp))
                     or _int_pred_field_gap(hyp, has_field, value_vars)
                     or (
                         (lambda b: f"unsupported_symbol:{b}" if b else None)(

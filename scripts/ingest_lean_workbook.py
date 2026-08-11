@@ -73,7 +73,7 @@ def parse_full_proof(problem_id: str, full_proof: str) -> dict | None:
     m = THEOREM_RE.search(text)
     if not m:
         return None
-    sig = gc.split_signature(text[m.end() :], ":=")
+    sig = gc.split_signature(text[m.end() :])
     if sig is None:
         return None
     binders_text, goal, lets = sig

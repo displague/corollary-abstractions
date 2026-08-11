@@ -80,7 +80,7 @@ def parse_theorem_block(block: str) -> dict | None:
     if not m:
         return None
     name = m.group(1)
-    sig = gc.split_signature(block[m.end() :], ":=")
+    sig = gc.split_signature(block[m.end() :])
     if sig is None:
         return None
     binders_text, goal, lets = sig

@@ -145,7 +145,9 @@ class LetBindingGoals(unittest.TestCase):
         )
         self.assertEqual(st["goal"], "x + y = 7")
         self.assertEqual(st["goal_lets"], ["x = (4 : ℝ)", "y = (3 : ℝ)"])
-        self.assertTrue(st["has_field_carrier"])
+        # a field-typed LET does not set the statement-wide field carrier
+        # (segment-local signal only — the review-caught shielding fix)
+        self.assertFalse(st["has_field_carrier"])
         self.assertTrue(gc.classify(st)["full_ok"])
 
     def test_let_with_tuple_rhs_is_blocked_not_covered(self) -> None:
@@ -264,6 +266,100 @@ class PredicateHeads(unittest.TestCase):
         r = gc.classify(self._mk("Even x", vars=("x",), has_field_carrier=True))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "integer_predicate_field_carrier")
+
+    def test_integer_predicate_over_coerced_or_ascribed_arg_blocked(self) -> None:
+        # the argument-level hole (review follow-up): a coercion/ascription in
+        # the ARGUMENT is the field reading even with no field binder in sight
+        for goal in ("Even ↑n", "Odd (x : ℝ)"):
+            r = gc.classify(self._mk(goal, vars=("n", "x"), has_nat_carrier=True))
+            self.assertFalse(r["goal_ok"], goal)
+            self.assertEqual(r["goal_reason"], "integer_predicate_field_carrier", goal)
+        # the plain integer application stays covered
+        r2 = gc.classify(self._mk("Even (n + 1)", vars=("n",), has_nat_carrier=True))
+        self.assertTrue(r2["full_ok"])
+
+
+class CarrierSignalLocality(unittest.TestCase):
+    """Review-caught over-count (v0.10 item 1 cont. adversarial review): the
+    field signal computed over the WHOLE statement let a `: ℚ` ascription in
+    one segment legitimize ℕ floor-division/monus in a sibling segment. 3,644
+    covered Goedel-Pset rows fell to this (1,167 already inside the old
+    baseline via goal↔hyp shielding). The signal is now segment-local; these
+    two tests are distilled from the review's evidence rows."""
+
+    def test_monus_in_nat_let_not_shielded_by_rat_cast_in_body(self) -> None:
+        # Goedel-Pset-413727: the goal body carries `(w : ℚ)`, but the monus
+        # `a + b - 1` lives inside an ℕ-typed binding with no local signal.
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n"
+            "  let a : ℕ := 5\n"
+            "  let b : ℕ := 3\n"
+            "  let w : ℕ := a * (a + b - 1)\n"
+            "  (w : ℚ) / a = 3/7 := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+
+    def test_nat_div_in_nat_let_not_shielded_by_rat_typed_sibling(self) -> None:
+        # Goedel-Pset-1082706: `s / n` over ℕ is 0 (the stated claim is
+        # arithmetically false in Lean); the ℚ-typed sibling binding must not
+        # shield it.
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (n g s : ℕ) (h1 : n = 125) (h2 : g = 50) (h3 : s = 25) :\n"
+            "  let r : ℚ := s / n\n"
+            "  let b : ℕ := (n - g) * (s / n)\n"
+            "  b = 15 ∧ r = 1/5 := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_local_signal_still_legitimizes_its_own_segment(self) -> None:
+        # the control: division-free ℕ bindings plus a ℚ-cast body divide fine
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n"
+            "  let a : ℕ := 5\n"
+            "  let w : ℕ := a + 2\n"
+            "  (w : ℚ) / a = 7/5 := by sorry",
+        )
+        r = gc.classify(st)
+        self.assertTrue(r["full_ok"], r)
+
+    def test_hyp_signal_does_not_shield_goal_monus(self) -> None:
+        # the pre-existing (pre-slice) exposure: goal↔hyp shielding
+        r = gc.classify({
+            "name": "t", "goal": "a - b = 2", "value_vars": ["a", "b", "x"],
+            "hyps": ["x = (3 : ℚ) / 4"], "fn_unknown": False, "domain_vars": {},
+            "has_nat_carrier": True,
+        })
+        self.assertFalse(r["goal_ok"])
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+
+    def test_carrier_residual_audit_sees_cross_segment_shielding(self) -> None:
+        # The audit itself was blind by construction (it regexed the same
+        # concatenated text), so it could never flag the class it guards.
+        # Per-segment, the 1082706 shape IS a residual if it were ever covered.
+        import ingest_goedel_pset as igp
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (n g s : ℕ) :\n"
+            "  let r : ℚ := s / n\n"
+            "  let b : ℕ := (n - g) * (s / n)\n"
+            "  b = 15 := by sorry",
+        )
+        self.assertTrue(igp._carrier_residual(st))
+        # ... and the ℚ-local division alone is NOT a residual
+        st2 = gc.parse_lean4_theorem(
+            "t",
+            "theorem t (n s : ℕ) :\n"
+            "  let r : ℚ := s / n\n"
+            "  n + s = 150 := by sorry",
+        )
+        self.assertFalse(igp._carrier_residual(st2))
 
 
 if __name__ == "__main__":

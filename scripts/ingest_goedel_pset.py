@@ -89,15 +89,22 @@ def _has_foreign_glyph(stmt: dict) -> bool:
 
 def _carrier_residual(stmt: dict) -> bool:
     """A covered statement that STILL carries an integer-only division/monus/frac
-    exponent — must never happen; this is the classifier self-check."""
+    exponent — must never happen; this is the classifier self-check.
+
+    SEGMENT-LOCAL, like the classifier's own carrier rule: a field signal in one
+    segment must not excuse a `/`/`⁻¹` in another. (The earlier concatenated
+    form was blind to exactly the cross-segment shielding the adversarial
+    review caught, so it could never flag the class it existed to catch.)"""
     if stmt.get("has_field_carrier"):
         return False
     if not (stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")):
         return False
-    txt = " ".join([stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]])
-    if gc._FIELD_SIGNAL_RE.search(txt):
-        return False
-    return "/" in txt or "⁻¹" in txt or bool(_FRAC_EXP_RE.search(txt))
+    for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
+        if gc._FIELD_SIGNAL_RE.search(txt):
+            continue
+        if "/" in txt or "⁻¹" in txt or _FRAC_EXP_RE.search(txt):
+            return True
+    return False
 
 
 def run() -> int:
