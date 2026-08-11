@@ -2735,3 +2735,104 @@ can actually see the class it guards against. Corrections are first-class
 here: the numbers above replace the slice's first-landed ones, and the commit
 that landed them stays in history with this section as its correction of
 record.
+
+## v0.10 item 1 (cont.) — the quantifier/binder head: FORALL and EXISTS
+
+After the relational/predicate slice, the two largest named gaps on
+Goedel-Pset are the quantifier buckets: `existential_quantifier` 131,051 +
+`universal_quantifier` 85,810 in the goal (12.5% of 1.73M), plus
+`hyp:universal_quantifier` 10,063 + `hyp:existential_quantifier` 9,770
+blocking full-statement coverage — 236,694 statements in all. Lean-workbook
+carries 2,925 goal + 27 hyp; miniF2F 18 goal + 10 hyp. The house rule is to
+measure before choosing, so the first step ranked what is actually inside the
+buckets, with a prototype quantifier-prefix parser and a **would-cover
+simulation**: strip the prefix, register the bound variables with their
+declared carriers (untyped binders defaulting to ℕ, the same rule untyped
+`let` numerals already follow), desugar bounded binders
+(`∀ x > 0, P` → `x > 0 → P`, Lean's own elaboration), refuse shadowing, and
+run the EXISTING classifier on the transformed statement.
+
+**The ranked table (Goedel-Pset goal bucket, 216,861 statements):**
+
+| shape | count | share | note |
+|---|---|---|---|
+| prefix chain, supported binder shapes | 143,462 | 66.2% | typed-numeric 109,048 + bounded/untyped 34,414 |
+| — of which the body ALSO reduces (would-cover) | **60,223** | 27.8% | 53,920 with clean hypotheses; 3,093 via the ∃!-desugar |
+| — body residue: unknown-function application | 28,033 | 12.9% | `f x`, sequence apps — the function-slot backlog |
+| — body residue: non-prefix quantifier inside body | 21,779 | 10.0% | `∀ x, (∃ y, …) ∧ …` — stays a precise gap |
+| — body residue: abs / monus / int-div / others | 31,427 | 14.5% | each keeps its precise pre-existing label |
+| embedded quantifier (goal is not a quantifier prefix) | 48,812 | 22.5% | 25,260 inside →∧∨ composition, 12,776 iff-composed, **13,031 ¬-prefixed** (reachable: NEG is a head) |
+| binder over unsupported domain | 23,595 | 10.9% | `f : ℝ → ℝ` 9,677; `ℝ × ℝ`/`Fin n`/custom structures 12,457; `Set`/`Finset`/`Polynomial` 1,461 |
+| `∃!` unique existence | 7,099 | 3.3% | desugars to EXISTS/MEET/FORALL/IMPLIES/`=` — all carried |
+| shadowed binder (bound name collides with an outer var) | 1,839 | 0.8% | refused precisely — per-name carriers are not tracked |
+| quantifier inside a `let` binding | 987 | 0.5% | a Prop-valued binding; stays a gap |
+| chain shapes | E 79,116 / A 77,595 / mixed 10,351 | | nesting is head-nesting, no new machinery |
+
+Hyp buckets (19,833): the same analysis gives **11,287** would-cover (typed
+8,204), directly unblocking full-statement coverage on rows whose goal already
+reduces. Two guesses the measurement killed: the `∃ k, n = 2*k` parity-witness
+shape is only **76 goal + 48 hyp** rows (the EVEN/ODD witness-definition nodes
+are authored because they are the canonical definition of the heads' link to
+EXISTS, not for bucket share), and single-equation `∃`-bodies (16,131) are
+mostly NOT bare witnesses — 6,432 have the bound variable alone on one side.
+
+### Design checkpoint (registered before the corpus was written)
+
+**Representation.** Two new template heads, `FORALL(X, BODY)` and
+`EXISTS(X, BODY)` — ordinary call heads to the matcher (non-commutative,
+nothing declared in `HEAD_ALGEBRA`: binder exchange `∀x∀y = ∀y∀x` is true but
+undeclared, the same honest under-declaration as associativity elsewhere).
+The first argument is the bound variable's slot; binding structure is carried
+by slot RECURRENCE in the skeleton (`FORALL⟨?0, EVEN⟨*(2, ?0)⟩⟩`), which the
+skeleton's first-occurrence numbering makes alpha-invariant for free. Nested
+quantifiers are nested head applications. Schematic predicate slots (`PRED`)
+are applied as call heads, the established `F(ENDPOINT)` pattern from
+calculus. Corpus first, as always: `data/logic` gains a `quantification`
+topic (the classical first-order laws: instantiation, generalization, the two
+quantifier De Morgan duals, the two distribution laws, ∀→∃ on an inhabited
+domain, and the ∃!-expansion that grounds the classifier's desugar);
+`data/number_theory` gains the EVEN/ODD existential-witness definitions,
+tying the new head to the predicate heads of the previous slice.
+
+**What the head claims.** A covered quantified statement reduces to a
+skeleton whose every head the corpus carries — now including quantification
+over a NUMERIC domain (a typed ℕ/ℤ/ℝ/ℚ binder or a defaulted-ℕ untyped one)
+whose body reduces under every existing blocker/carrier/symbol check with the
+bound variable as one more value slot. **What it does not claim:** the
+template head does not carry the binder's domain (the node's `slot_schema`
+does, exactly as for every other slot — carrier-honesty at ingestion does the
+type work); it does not represent quantification over functions, sets,
+tuples, `Fin n`, or custom structures (those keep precise labels — they are
+the function-slot/structure backlog); it does not touch non-prefix
+quantifiers except the ¬-prefixed chain, which is NEG-composition of a
+carried head (the quantifier De Morgan nodes state exactly that composition).
+
+**Carrier honesty, decided in advance.** (1) Quantifier-binder carriers are
+SEGMENT-LOCAL in both directions: a `∀ x : ℝ` in the goal must not shield
+Nat-division in a hypothesis (the review lesson), and a `∀ n : ℕ` in a
+hypothesis must not manufacture gaps in the goal — the bound name cannot
+occur outside its segment because shadowing is refused. (2) Untyped and
+relation-bounded binders default to the ℕ carrier: Lean's own elaboration
+defaults them absent a field signal, so `∀ x > 0, x + 1/x ≥ 2` IS a ℕ
+statement as formalized (`1/x` is Nat.div) and stays
+`integer_division_no_head`; a segment-local field signal lifts the default,
+because the same signal is what pins Lean's unification to ℝ/ℚ. This is the
+untyped-`let` rule applied to binders. (3) The pre-existing, disclosed
+asymmetry stays: a statement-binder field variable is statement-scoped, so it
+can shield a quantifier-ℕ-binder's monus *within the same segment* — the
+`r^(n-1)` asymmetry from the segment-local review fix, inherited unchanged,
+not widened. (4) `∃!` desugars to its Lean/FOL definition
+(`ExistsUnique`: EXISTS + MEET + FORALL + IMPLIES + `=`, all carried heads),
+grounded by the authored expansion node; classification-wise the uniqueness
+clause re-checks the same body and adds one equation between two bound slots.
+
+**Registered expectation (floors, from the simulation):** Goedel-Pset
+full-statement +≈65,207 (53,920 goal-side + 11,287 hyp-side), goal-only
++≈60,223; Lean-workbook full +≈1,525; miniF2F full +≈8. Floors because the
+simulation desugared only the FIRST quantified hypothesis per statement and
+did not simulate ¬-prefixed chains at all. **What stays a gap, precisely
+labeled:** embedded quantifiers in connective/iff position (~35,781 —
+reaching them needs the flat segment checks restructured into an atom-tree
+walk, a slice of its own), unsupported binder domains (~23,595), quantified
+`let` bindings (987), shadowed binders (1,839), and every body whose inner
+construct already had no head.
