@@ -21,6 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import ingest_minif2f as ing  # noqa: E402
+import grammar_coverage as gc  # noqa: E402
 
 MANIFEST = json.loads(
     (REPO_ROOT / "data_sources" / "manifest.json").read_text(encoding="utf-8")
@@ -52,9 +53,9 @@ class ManifestPin(unittest.TestCase):
 class ParserSoundness(unittest.TestCase):
     def test_top_level_scanners(self) -> None:
         s = "(a : ℝ) (h : f (x) = 1) : a = 2 := proof"
-        self.assertEqual(ing._take_until_top_level(s, ":="), s[: s.index(":=")])
-        sig = ing._take_until_top_level(s, ":=")
-        ci = ing._first_top_level_colon(sig)
+        self.assertEqual(gc.take_until_top_level(s, ":="), s[: s.index(":=")])
+        sig = gc.take_until_top_level(s, ":=")
+        ci = gc.first_top_level_colon(sig)
         # the first depth-0 colon is the goal separator, not the ':' inside binders
         self.assertEqual(sig[:ci].strip(), "(a : ℝ) (h : f (x) = 1)")
         self.assertEqual(sig[ci + 1 :].strip(), "a = 2")
@@ -74,25 +75,25 @@ class ParserSoundness(unittest.TestCase):
 
     def test_nnreal_and_pnat_are_numeric_slots(self) -> None:
         for typ in ("nnreal", "ℕ+"):
-            names, hyp, is_fn, dom = ing._classify_binder(f"x y : {typ}")
+            names, hyp, is_fn, dom = gc.classify_binder(f"x y : {typ}")
             self.assertEqual(names, ["x", "y"], typ)
             self.assertIsNone(hyp)
             self.assertFalse(is_fn)
             self.assertEqual(dom, [])
 
     def test_function_and_domain_binders(self) -> None:
-        _, _, is_fn, _ = ing._classify_binder("f : ℝ → ℝ")
+        _, _, is_fn, _ = gc.classify_binder("f : ℝ → ℝ")
         self.assertTrue(is_fn)
-        _, _, is_fn2, _ = ing._classify_binder("g : ℂ → ℂ")
+        _, _, is_fn2, _ = gc.classify_binder("g : ℂ → ℂ")
         self.assertTrue(is_fn2)
-        _, _, _, dom = ing._classify_binder("a : ℂ")
+        _, _, _, dom = gc.classify_binder("a : ℂ")
         self.assertEqual(dom, [("a", "complex_number")])
-        _, _, _, domz = ing._classify_binder("n : zmod 1399")
+        _, _, _, domz = gc.classify_binder("n : zmod 1399")
         self.assertEqual(domz, [("n", "modular_type_zmod")])
 
     def test_prop_binder_is_a_hypothesis_not_a_function(self) -> None:
         # `a → b` here is a Prop implication, not a function type.
-        names, hyp, is_fn, _ = ing._classify_binder("h : a = 0 → b = 0")
+        names, hyp, is_fn, _ = gc.classify_binder("h : a = 0 → b = 0")
         self.assertEqual(names, [])
         self.assertFalse(is_fn)
         self.assertEqual(hyp, "a = 0 → b = 0")
@@ -111,76 +112,76 @@ class ClassifierHonesty(unittest.TestCase):
         }
 
     def test_covered_conditional_identity(self) -> None:
-        r = ing.classify(self._mk("v = 65", vars=("v", "b", "h"),
+        r = gc.classify(self._mk("v = 65", vars=("v", "b", "h"),
                                   hyps=("v = b * h", "0 < b ∧ 0 < h")))
         self.assertTrue(r["goal_ok"])
         self.assertTrue(r["full_ok"])
         self.assertIsNone(r["full_reason"])
 
     def test_covered_with_supported_transcendentals(self) -> None:
-        r = ing.classify(self._mk("real.log w / real.log z = 60",
+        r = gc.classify(self._mk("real.log w / real.log z = 60",
                                   vars=("w", "z"), hyps=("real.log w = 3",)))
         self.assertTrue(r["full_ok"])
 
     def test_big_operator_blocked(self) -> None:
-        r = ing.classify(self._mk("∑ i in finset.range n, i = 1", vars=("n",)))
+        r = gc.classify(self._mk("∑ i in finset.range n, i = 1", vars=("n",)))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "big_operator")
 
     def test_function_unknown_blocks_full_but_maybe_not_goal(self) -> None:
         # goal mentions f (an unknown function) -> unsupported at goal level
-        r = ing.classify(self._mk("f 5 = 11", fn=True))
+        r = gc.classify(self._mk("f 5 = 11", fn=True))
         self.assertFalse(r["goal_ok"])
         self.assertTrue(r["goal_reason"].startswith("unsupported_symbol"))
 
     def test_complex_domain_var_in_goal(self) -> None:
-        r = ing.classify(self._mk("(a - 10) * (a + 11) = a^2 + a - 110",
+        r = gc.classify(self._mk("(a - 10) * (a + 11) = a^2 + a - 110",
                                   domain={"a": "complex_number"}))
         self.assertEqual(r["goal_reason"], "complex_number")
 
     def test_hypothesis_carries_the_blocker(self) -> None:
-        r = ing.classify(self._mk("x = 6", vars=("x", "y"), hyps=("abs x = 6",)))
+        r = gc.classify(self._mk("x = 6", vars=("x", "y"), hyps=("abs x = 6",)))
         self.assertTrue(r["goal_ok"], "goal alone is fine")
         self.assertFalse(r["full_ok"], "hypothesis has a blocker")
         self.assertEqual(r["full_reason"], "hyp:absolute_value")
 
     def test_no_relation_goal_rejected(self) -> None:
-        r = ing.classify(self._mk("nat.prime p", vars=("p",)))
+        r = gc.classify(self._mk("nat.prime p", vars=("p",)))
         self.assertFalse(r["goal_ok"])
 
     def test_modulo_and_divides_are_gaps_not_supported(self) -> None:
         # Regression: an adversarial review found % and ∣ have no head in the
         # corpus (the only MOD node is morphology's linguistic modifier). They
         # must be rejected, not silently counted.
-        r = ing.classify(self._mk("(2^2010) % 10 = 4"))
+        r = gc.classify(self._mk("(2^2010) % 10 = 4"))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "modulo_no_head")
-        r2 = ing.classify(self._mk("12 ∣ 4^(n+1) + 20", vars=("n",)))
+        r2 = gc.classify(self._mk("12 ∣ 4^(n+1) + 20", vars=("n",)))
         self.assertFalse(r2["goal_ok"])
         self.assertEqual(r2["goal_reason"], "divides_no_head")
 
     def test_mathlib_norm_bars_are_blocked(self) -> None:
         # Regression: ∥·∥ (U+2225) escaped an ASCII-only `|` blocker.
-        r = ing.classify(self._mk("a * b + ∥a - b∥ ≤ 1", vars=("a", "b")))
+        r = gc.classify(self._mk("a * b + ∥a - b∥ ≤ 1", vars=("a", "b")))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "absolute_value")
 
     def test_tuple_constructor_equality_blocked(self) -> None:
         # Regression: (p,q,r)=(2,4,8) has a pairing constructor with no head.
-        r = ing.classify(self._mk("(p, q, r) = (2, 4, 8)", vars=("p", "q", "r")))
+        r = gc.classify(self._mk("(p, q, r) = (2, 4, 8)", vars=("p", "q", "r")))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "tuple_or_structure")
 
     def test_quantifier_beats_comma_label(self) -> None:
         # The comma blocker must not steal a quantifier's reason label.
-        r = ing.classify(self._mk("∃ m, m > n", vars=("n",)))
+        r = gc.classify(self._mk("∃ m, m > n", vars=("n",)))
         self.assertEqual(r["goal_reason"], "existential_quantifier")
 
     def test_every_supported_head_char_maps_to_a_corpus_node(self) -> None:
         # The supported set may only contain heads that actually appear in the
         # corpus. % and ∣ must NOT be reachable as covered.
         for glyph in ("%", "∣"):
-            r = ing.classify(self._mk(f"a {glyph} b = 1", vars=("a", "b")))
+            r = gc.classify(self._mk(f"a {glyph} b = 1", vars=("a", "b")))
             self.assertFalse(r["goal_ok"], f"{glyph} must be a gap")
 
 

@@ -17,8 +17,11 @@ python scripts/fetch_sources.py --verify               # re-check local archives
 - **Direct** sources download over HTTPS and are verified against the pinned
   SHA-256; a mismatch is refused and not saved.
 - **HF** datasets fetch through the `hf` CLI, using `HF_TOKEN` from `.env`
-  (gitignored, never printed). Gated sets (e.g. GAIR/MathPile) need a human to
-  accept the form on the dataset page first, and any use must cite the authors.
+  (gitignored, never printed). A fetch is **refused without a pinned
+  `hf_revision`** (a bare `hf download` / `load_dataset` pulls the moving `main`
+  and can't be reproduced); the pinned per-file SHA-256s are re-verified after
+  download. Gated sets (e.g. GAIR/MathPile) need a human to accept the form on
+  the dataset page first, and any use must cite the authors.
 - **git** sources (miniF2F) are cloned manually; pin the commit SHA.
 
 ## Ingestion (source → committed derived extract → measurement)
@@ -34,6 +37,12 @@ python scripts/ingest_minif2f.py extract
 # stage 2 (CI-regenerable from the committed extract): grammar-coverage measurement
 python scripts/ingest_minif2f.py coverage
 ```
+
+A second source, `Goedel-LM/Lean-workbook-proofs` (Lean 4, MIT, 29,750 proof-
+carrying theorems), follows the same shape via `scripts/ingest_lean_workbook.py`
+(extract needs pyarrow to read the pinned parquet; coverage is stdlib-only and
+also reports a duplicate rate). Both share the classifier in
+`scripts/grammar_coverage.py`.
 
 - Stage 1 verifies each Lean file against the SHA-256 pinned in `manifest.json`
   and refuses to extract from unpinned bytes; the extract carries the source's

@@ -2204,13 +2204,24 @@ Two numbers, both reported:
 
 | coverage | test | valid | total |
 |---|---|---|---|
-| goal-only (drops hypotheses; upper bound) | 133/244 | 104/244 | **237/488 = 48.6%** |
-| full-statement (goal AND all hypotheses reduce) | 88/244 | 65/244 | **153/488 = 31.4%** |
+| goal-only (drops hypotheses; upper bound) | 128/244 | 100/244 | **228/488 = 46.7%** |
+| full-statement (goal AND all hypotheses reduce) | 84/244 | 61/244 | **145/488 = 29.7%** |
+
+(These numbers were corrected **twice** by the shared classifier's evolution
+during the Lean-workbook slice, both downward, both honest. First, making the
+identifier regex Unicode-aware caught 5 goals of the form `σ.1 (σ.1 2) = 2` —
+`σ` an unknown `Equiv` permutation invisible to an ASCII-only token pattern.
+Then **carrier-awareness** (see the Lean-workbook review below) removed
+integer-division / fractional-exponent false positives here too: over `ℕ`/`ℤ`,
+`/` is `Nat.div`/`Int.div` (floor) and `x^(1/3)` is `x^0` — operations with no
+corpus head. Net: full-statement `31.4% → 30.1% → 29.7%`, goal-only
+`48.6% → 46.7%`. The instrument is shared, so a fix found on one source
+re-measures the other — which is the point.)
 
 Full-statement is the real ingestion number: a competition problem's hypotheses
 carry its meaning, and dropping them to hit the goal changes the theorem. A node
 authored honestly from miniF2F is the conditional `IMPLIES(MEET(hyps), goal)`,
-and **31.4%** of miniF2F is expressible as such a node with the grammar as it
+and **29.7%** of miniF2F is expressible as such a node with the grammar as it
 stands today.
 
 **This number was corrected down by an independent adversarial review, and that
@@ -2263,12 +2274,130 @@ Both stages are byte-for-byte deterministic; `coverage` is a pure function of th
 committed extract, guarded by a regeneration test; each supported head is now
 asserted against `data/` rather than by memory.
 
-**What this licenses next (not done here).** Authoring the 153 covered statements
+**What this licenses next (not done here).** Authoring the 145 covered statements
 as conditional Mathematical Statement Nodes via the PROVEN-WRITE seed→regenerate
 route, each with a real `verified_by` link back to its miniF2F theorem, then
 re-running the twin/specialization ledgers on the enlarged graph to see whether a
 capability-blind baseline that won on 221 curated nodes still wins. That is the
-release-gate work; this measurement is its honest precondition. 31.4% means a
-miniF2F-backed corpus alone adds ~153 nodes (221 → ~374) while the untranslatable
-69% is a *prioritized* grammar-extension backlog — number-theory residue and a
+release-gate work; this measurement is its honest precondition. 29.7% means a
+miniF2F-backed corpus alone adds ~145 nodes (221 → ~366) while the untranslatable
+70% is a *prioritized* grammar-extension backlog — number-theory residue and a
 function slot first — rather than a vague "grow the corpus".
+
+## v0.9 item 1 (cont.) — Lean-workbook grammar-coverage: the second source, at scale
+
+miniF2F answered *whether* the coverage instrument works; Goedel-LM's
+**Lean-workbook-proofs** answers what it says at scale, and it is the better
+first ingestion target for authoring: **29,750 Lean 4 theorems each carrying a
+real tactic proof** (not `sorry`), **MIT-licensed** (so a derived statement
+extract may be committed), 16 MB. Unlike Goedel-Pset (statements with `sorry`),
+its proofs can eventually ground a `verified_by` link.
+
+**Instrument.** `scripts/ingest_lean_workbook.py`, the same two-stage shape as
+miniF2F, sharing the classifier now factored into `scripts/grammar_coverage.py`.
+The classifier was made **dialect-aware** for Lean 4 (capitalized namespaces
+`Real.sqrt`/`Finset`/`Nat.Prime`, and the bare forms `sqrt`/`sin`/`Prime` that
+appear under `open Real Nat`); every Lean-4 spelling is an *addition*, so miniF2F
+still regenerates (its number moved only because the shared Unicode-identifier
+fix corrected 5 latent false positives there — see the miniF2F note above). The
+source parquet is pinned by **HF commit revision + file SHA-256**;
+`fetch_sources.py` now refuses an unpinned HF fetch and SHA-verifies after
+download. The extract stage needs pyarrow; the coverage stage is stdlib-only and
+regenerates byte-for-byte from the committed extract.
+
+**The numbers** (denominator = all 29,750 rows; the parser handled 100% of them):
+
+| coverage | of rows |
+|---|---|
+| goal-only (upper bound) | 19,674 = **66.1%** |
+| full-statement (goal AND all hypotheses reduce) | 19,077 = **64.1%** |
+
+**64% — more than double miniF2F's 29.7% — and the gap is the finding, not an
+error.** Lean Workbook is dominated by **algebraic inequalities over ℝ** with
+positivity hypotheses (`0 < a ∧ 0 < b`, `a + b + c = 1`), which is precisely the
+grammar's sweet spot; miniF2F carries far more number theory (modulo/divides) and
+existential goals, which the grammar has no head for. Same instrument, two
+sources, two honest and very different numbers — exactly what a coverage measure
+is supposed to expose. (These figures are already *post*-review: an independent
+adversarial pass caught the classifier accepting `/` and `-` over ℕ/ℤ as if they
+were real division/subtraction — they are `Nat.div`/`Int.div` floor division and
+monus, siblings of the modulo it already gaps — which had inflated the headline
+to 68.0%. Carrier-awareness plus a fractional-exponent block corrected it to
+64.1%; see the honesty section below.)
+
+**But 64% of rows is not 64% of nodes: the duplicate rate is 37.9%.** Keyed on
+the exact (whitespace-normalized) goal string, only **18,483 of 29,750** goals
+are unique; the most repeated single goal appears **32 times**
+(`(a+b+c)^5 ≥ 81·abc·(a²+b²+c²)`). Within the covered set, **11,189 unique
+goals** back the 19,077 covered rows.
+
+That 11,189 is a **floor** on the unique node yield, and both error directions
+are worth naming. Keying on the goal string alone (a) *under*-counts nodes where
+two rows share a goal but carry different hypotheses — genuinely distinct
+conditional statements `hyps → goal` — and (b) *over*-counts uniqueness relative
+to the deeper truth, because alpha-renamed / structurally-identical restatements
+(same skeleton, different variable names or constants) still read as distinct
+goal strings. Resolving both needs the structural-twin matcher, which is exactly
+what the authoring phase runs on this data. So the honest statement is: **at
+least ~11,189 unique covered statements** — a floor that is still a ~51× jump
+over the current 221-node corpus, and the first chance to test the
+twin/specialization claims outside a hand-curated world.
+
+**The untranslatable remainder** (full-statement, first-hit family; 10,673 of
+29,750):
+
+| construct | count | note |
+|---|---|---|
+| universal goal (`∀`) | 1,957 | no quantifier head |
+| unknown function / var applied | 1,049 | no first-class function slot |
+| fractional exponent (`x^(1/3)`) | ~1,021 | rational power / `Nat.div` exponent — no head |
+| big operator (`∑ ∏`) | 1,013 | no indexed-aggregation head |
+| existential goal (`∃`) | 971 | no quantifier head |
+| modulo (`%`, `[ZMOD n]`) | 922 | **no modulo head** |
+| divides (`∣`) | 741 | **no divides head** |
+| integer division / monus (`/`, `-` over ℕ/ℤ) | ~450 | **`Nat.div`/`Int.div`/monus — no head** |
+| trig (`sin cos …`, bare under `open Real`) | 603 | no trig head |
+| absolute value / norm | 567 | no ABS/NORM head (cheap) |
+| set / finset | 464 | no membership/cardinality head |
+| complex carrier (`ℂ`) | 268 | ℂ not a leaf domain |
+| floor/ceil, gcd, binomial, factorial, tuple, min/max, zmod, matrix, deriv | ~640 | assorted missing heads |
+
+Quantifiers (∀ + ∃ = 2,928) are the single largest block here — Lean Workbook
+states many claims with an explicit binder the grammar cannot yet head — followed
+by the same function-slot and big-operator structural gaps miniF2F flagged, the
+number-theory residue (modulo + divides + integer-division = ~2,113), and the
+fractional-power gap. The prioritized grammar-extension backlog is now confirmed
+across two independent sources: **a quantifier/binder head, a function-typed slot,
+indexed aggregation, and a carrier-honest number field (integer vs real division,
+rational powers, the modulo/divides residue)** are where the reach has to grow.
+
+**Honesty checks — and the review that moved the number 4 points.** Parser
+fidelity was spot-checked by diffing extracted goals against the raw parquet
+`full_proof` (faithful, no truncation); a character-whitelist sweep over all
+19,077 covered statements finds **zero** foreign operator glyphs (a committed
+test). The audit caught two real over-counts, in sequence. First, Greek-named
+variables (`α β ω`) and mathlib `√`/`[ZMOD]` notation were invisible to an
+ASCII-only classifier — a complex-`ω` statement was wrongly covered — fixed with a
+Unicode-aware identifier class. Then an **independent adversarial review** found
+the load-bearing one: the classifier treated `/` and `-` over `ℕ`/`ℤ` as real
+division/subtraction, when over `ℕ` `a/b` is `Nat.div` (floor), `a-b` is monus,
+and `x^(1/3)` is `x^0 = 1` — so trivial/vacuous statements like
+`(1 + 1/n)^n < 3` (over ℕ, just `1 < 3`) were counted covered. That is the exact
+sibling of the modulo gap already excluded. Carrier-awareness (the extract now
+records each var's ℕ/ℤ/field carrier; a `/`/`-`/`⁻¹` with no field signal over an
+integer carrier is a gap) plus a fractional-exponent block corrected the headline
+**68.0% → 64.1%**, and re-corrected miniF2F **31.4% → 29.7%**. A bounded residual
+remains and is disclosed: a non-elaborating classifier cannot always tell a real
+division inside a field-coerced subexpression from a `Nat.div`, so a few
+mixed-carrier statements may still be over-counted — the true number is a hair
+lower, not higher. This is the standing rule again: a claimed head must be
+verified against the actual operation, not the surface symbol.
+
+**What this licenses next (not done here).** Author the ~11,189 unique covered
+statements as conditional Mathematical Statement Nodes via the PROVEN-WRITE
+seed→regenerate route, each retaining its `problem_id` so the pinned proof can be
+attached as a **candidate `verified_by`** and adjudicated by the correspondence
+rung (a passing tactic proof certifies what it checks, not correctness in
+general). Then re-run the twin/specialization/decomposition ledgers on the
+enlarged graph — the first honest test of whether a capability-blind baseline
+that won on 221 curated nodes still wins on ~11k ingested ones.

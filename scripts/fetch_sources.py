@@ -120,22 +120,54 @@ def _download(url: str, dest: Path, expected_sha: str | None) -> tuple[str, str]
             tmp.unlink()
 
 
-def _fetch_hf(src: dict) -> tuple[str, str]:
+def _hf_local_dir(archive_dir: Path, src: dict) -> Path:
+    """Where an HF source's files land: archives/<archive_subdir or id>/."""
+    return archive_dir / src.get("archive_subdir", src["id"])
+
+
+def _fetch_hf(src: dict, archive_dir: Path) -> tuple[str, str]:
     repo = src.get("hf_repo")
     if not repo:
         return "ERROR", "no hf_repo"
+    # Pinning by commit revision is REQUIRED: `hf download` without --revision
+    # pulls the moving `main`, which cannot be reproduced. (Only HF datasets can
+    # drift; the direct HTTP sources are already SHA-pinned.)
+    revision = src.get("hf_revision")
+    if not revision:
+        return "ERROR", f"{src['id']}: no hf_revision pinned — refusing unpinned HF fetch"
     token = _load_env_token()
     if src.get("access") == "hf-dataset-gated" and not token:
         return "GATED", f"needs HF_TOKEN + accepted form on {src['url']} — fetch manually"
     if shutil.which("hf") is None:
         return "ERROR", "hf CLI not found"
-    cmd = ["hf", "download", f"hf://datasets/{repo}", "--repo-type", "dataset"]
+
+    local_dir = _hf_local_dir(archive_dir, src)
+    files = src.get("files") or []
+    cmd = [
+        "hf", "download", repo, "--repo-type", "dataset",
+        "--revision", revision, "--local-dir", str(local_dir),
+    ]
+    cmd += [f["filename"] for f in files]  # empty list => whole repo
     try:
         subprocess.run(cmd, check=True, cwd=str(REPO_ROOT))
     except subprocess.CalledProcessError as exc:
         hint = " (gated? accept the form on the dataset page)" if src.get("access") == "hf-dataset-gated" else ""
         return "ERROR", f"hf download failed ({exc.returncode}){hint}"
-    return "OK", "hf download complete; pin per-file SHAs before ingest"
+
+    # Verify the pinned per-file SHAs so a fetch is byte-for-byte reproducible.
+    problems: list[str] = []
+    for f in files:
+        p = local_dir / f["filename"]
+        if not p.is_file():
+            problems.append(f"{f['filename']} missing after download")
+            continue
+        expected = f.get("sha256")
+        if expected and _sha256(p) != expected:
+            problems.append(f"{f['filename']} SHA mismatch")
+    if problems:
+        return "MISMATCH", "; ".join(problems)
+    pinned = f", {len(files)} file(s) SHA-verified" if files else "; pin per-file SHAs before ingest"
+    return "OK", f"fetched @ {revision[:12]}{pinned}"
 
 
 def cmd_list(manifest: dict) -> int:
@@ -208,9 +240,9 @@ def cmd_fetch(manifest: dict, ids: list[str]) -> int:
             if status == "MISMATCH":
                 bad += 1
         elif access in ("hf-dataset", "hf-dataset-gated"):
-            status, detail = _fetch_hf(src)
+            status, detail = _fetch_hf(src, archive_dir)
             print(f"  [{status:<9}] {src['id']} {detail}")
-            if status == "ERROR":
+            if status in ("ERROR", "MISMATCH"):
                 bad += 1
         elif access == "git":
             print(f"  [MANUAL   ] {src['id']}: git clone {src['url']} (pin the commit SHA)")
