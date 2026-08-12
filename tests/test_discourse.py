@@ -68,6 +68,43 @@ class DiscourseStoreTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             DiscourseEntity("  ", EntityKind.NEUTER)
 
+    def test_thirty_two_turn_scripts_meet_floors(self) -> None:
+        """P-LS7 suite: N≥30 intro→anaphor; ≥0.95 hit; wipe miss 1.0."""
+        scripts: list[tuple[DiscourseEntity, Anaphor]] = []
+        kinds = (
+            (EntityKind.NEUTER, Anaphor.IT),
+            (EntityKind.NEUTER, Anaphor.THAT),
+            (EntityKind.MASC, Anaphor.HE),
+            (EntityKind.FEM, Anaphor.SHE),
+            (EntityKind.PLURAL, Anaphor.THEY),
+        )
+        while len(scripts) < 30:
+            for i, (kind, anaphor) in enumerate(kinds):
+                if len(scripts) >= 30:
+                    break
+                entity = DiscourseEntity(
+                    f"e{len(scripts)}_{kind.value}",
+                    kind,
+                    surfaces=(f"surface-{len(scripts)}",),
+                )
+                scripts.append((entity, anaphor))
+
+        hits = 0
+        wipe_misses = 0
+        for entity, anaphor in scripts:
+            state = DiscourseState().introduce(entity)
+            got = state.resolve(anaphor)
+            if got is not None and got.entity_id == entity.entity_id:
+                hits += 1
+            wiped = state.wipe().resolve(anaphor)
+            if wiped is None:
+                wipe_misses += 1
+
+        n = len(scripts)
+        self.assertGreaterEqual(n, 30)
+        self.assertGreaterEqual(hits / n, 0.95)
+        self.assertEqual(wipe_misses / n, 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()
