@@ -138,8 +138,12 @@ def check_ledgers(with_goedel: bool) -> None:
          str(REPO / "reports" / "compression.json")],
         [PY, str(REPO / "scripts" / "proof_correspondence.py"), "--write-report",
          str(REPO / "reports" / "proof_correspondence.json")],
-        [PY, str(REPO / "scripts" / "ingest_minif2f.py")],
-        [PY, str(REPO / "scripts" / "ingest_lean_workbook.py")],
+        # the two extract-based ingests take a required stage; `coverage`
+        # regenerates the committed JSON from the committed extract (the
+        # CI-regenerable path — `extract` would need the pinned archives).
+        # (First real --goedel run of this harness caught the missing arg.)
+        [PY, str(REPO / "scripts" / "ingest_minif2f.py"), "coverage"],
+        [PY, str(REPO / "scripts" / "ingest_lean_workbook.py"), "coverage"],
     ]
     if with_goedel:
         steps.append([PY, str(REPO / "scripts" / "ingest_goedel_pset.py")])
