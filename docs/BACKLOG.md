@@ -451,60 +451,42 @@ wall) must not be redirected into sentiment tags mid-experiment.
 
 ## Language as structure (linguistic dual of the prover)
 
-Evidence: synthesis of DESIGN-concept-tokens, DESIGN-linguistic-twins, frames,
-epistemic ladder, corpus-scale spine, and interactive harness (2026-08-11),
-plus external review the same day that the first diagram was sentence-local
-and missing discourse. Challenge accepted: surface English is not
-*definitionally* a bag of string templates; analysis and creation should be
-plan/construct/verify/realize under the same kernel, with **discourse state**
-as a first-class multi-utterance layer. Full guidance and P-LS1–P-LS9:
-`docs/DESIGN-language-as-structure.md`.
+Evidence: DESIGN synthesis + discourse review + architecture review + **v0.10
+loop coordinator review (post-quantifier merge)**. Full guidance P-LS1–P-LS13
+with numeric registration: `docs/DESIGN-language-as-structure.md`. Spine to
+keep: L1–L4, index-relative verification, R-register.
 
-- **Retract “templates are the design law.”** f-strings in the golden-chicken
-  oracle are a *provisional realizer*. The real objects are linguistic terms
-  (entity/event, **explicit** scope/quantification, tense/aspect/modal, speech
-  act, reference, discourse relations, narrative constructors) plus
-  morphosyntactic realization. Policy must not store whole English beats as
-  source of truth once a brief→term path exists (P-LS3).
+- **Quantifier row is no longer “v0.10 priority / coverage gap.”** Formal
+  `FORALL`/`EXISTS` shipped (slot-recurrence binding). Inherit measured
+  caveat: alpha-invariance is Barendregt **naming convention** (whole-
+  statement injective rename only; sibling binders reuse slot names by
+  design). NL must not invent a second binder calculus (§5.1, §5.4).
 
-- **Four pillars before “LLM as residual” claims:** discourse/common ground,
-  reference (anaphora/ellipsis/deixis), scope/binding, pragmatics/speech acts.
-  Each needs negative controls (R9) before shipped status. Partial machinery
-  exists (frames, ToM, obligations, ASK); unified discourse store does not
-  (P-LS7).
+- **P-LS predictions need formal registration discipline.** Fragment id,
+  suite N, metric floors, LOST policy, twin expectation, GC4/GC5 acks—before
+  adjudication. Qualitative pass/miss alone is goalpost drift (R14).
 
-- **Architecture gaps (third review) before more coverage bullets.**
-  (1) **Intensional indices**—falsity ≠ illegality; world-truth is not the
-  sole hard gate; belief/fiction/modal operators select indices (P-LS10,
-  P-LS12; R10). (2) **Legality strata L1–L4**—grammatical, well-typed,
-  index-consistent, normative/felicitous—separable in traces (P-LS11; R11);
-  honorific/register may be hard in some fragments. (3) **Joint candidate
-  set C**, not pure feed-forward. (4) **Lexical denotations** from
-  authored/ingested inventory, not residual packaging. (5) **Preference
-  residual defended-narrow**—finite candidates + shallow features only
-  (P-LS4; R13). (6) **Fragment-named checkers** (R15). (7) **Non-declarative
-  types** (R16). (8) Anti-CYC: measured coverage + refuse (R14).
+- **P-LS5 = coverage-instrument pipeline shape** (pinned source → extract →
+  precise refusal labels → audits 0 → dual-pass LOST=0 or disclosed). Same
+  shape that moved Goedel 32.8%→43.2% and exposed parser artifacts.
 
-- **Legal vs preferred cut is load-bearing and multi-strata.** Task-relative
-  hard filters first; preference only over index-admissible realizations
-  (P-LS4). **Sense is not style**—stays in C / index checks (R8). Open
-  gradience does not silent-soft into VERIFIED (R12).
+- **P-LS1b LOST dual** for realizer/parser growth; pattern
+  `scripts/verify_slice.py`.
 
-- **Round-trip before richness.** Ship parser/realizer identity on the
-  existing langgen interlingua (P-LS1). Content REFUTED must survive synonym
-  packaging (P-LS2). Packed ambiguity filters before prefer (P-LS8).
+- **P-LS4 operational:** every preference feature is a deterministic
+  unit-tested pure function in-repo; untestable “coherence modeling” miss
+  conditions are refused at review.
 
-- **Inference ≠ commit.** Entailment/contradiction paths that do not mutate
-  world state (P-LS9); verification still owns acceptance at a named index.
+- **P-LS13 twin null / GC pins** when NL nodes enter `data/*`.
 
-- **WordNet stays sense candidates, not term algebra or denotation authority.**
-  Deixis still composes from owner/frame/tense (P-LS6), not person-synsets.
+- **Sequencing:** story briefs + round-trip may proceed; **discourse store
+  product wiring only after ROADMAP-v0.10 item 5 harness session** so a
+  second memory system is never born. Standalone pure modules for unit tests
+  are fine.
 
-- **Coverage instrument for any open-English claim** (P-LS5), same honesty as
-  v0.9 formal coverage—fragment first, scale later. Do not let NL hijack
-  v0.10 formal grammar/verifier work; share kernel, separate head growth;
-  discourse store should reuse session/frame machinery (indices already
-  partially ship as frames/ToM).
+- **Retract templates-as-design-law; keep architecture gaps (indices, L1–L4,
+  joint C, lexicon source, residual hardness).** Implementation may live on
+  `feature/language-structure-impl` without blocking design merge.
 
 ## Interactive harness / agent OS
 

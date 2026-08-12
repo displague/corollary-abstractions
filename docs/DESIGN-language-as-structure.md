@@ -25,7 +25,19 @@ than generation. That review is integrated in §5.3–§5.3.2 and §6 (R10–R16
 accepted where it exposes real category errors, **refused where it demands
 open-world NLU this project explicitly does not ship**.
 
-Status: design guidance. Not an implementation slice. Corrects an
+A fourth review (v0.10 loop coordinator, post-quantifier-merge) held the
+L1–L4 / index-relative / R-register spine and required: (1) inherit the
+**shipped** `FORALL`/`EXISTS` representation and alpha-convention caveat;
+(2) **numeric registration** for every P-LS (fragment, suite size, floors);
+(3) P-LS5 = formal **coverage-instrument pipeline** shape; (4) **LOST dual**
+for round-trip growth; (5) **twin-null / GC4–GC5** discipline for NL corpus
+entries; (6) **operational** P-LS4 (unit-tested pure feature functions);
+(7) discourse **after** harness session so no second memory is born. Applied
+in §2, §5.1, §5.4, §7–§8.
+
+Status: design guidance. Implementation may proceed on a **separate** branch
+(`feature/language-structure-impl`) without blocking on this doc’s merge;
+predictions still bind adjudication. Corrects an
 overstatement that appears in conversation and in thin readings of
 “expressive rendering,” without retracting measured floors (parse-first,
 closed-form equality, empirical WordNet boundary). Indexed from
@@ -114,8 +126,8 @@ These are not metaphors. They are the intended type alignment.
 | Inequalities / comparison | Order heads; CMP in linguistic twins | Formal order corpora + CMP design |
 | Perspective / deixis | Owned frames; reference frames; tense | ToM + physics frames ship; deictic cell open as *composition* of them |
 | Momentum / temporal force | Temporal modalities; plant/discharge obligations; precedence | Narrative + temporal_logic ship |
-| Quantification / binders | Grammar heads (v0.10 formal priority); must be **explicit in NL algebra**, not smuggled into STMT | Formal coverage gap; NL scope/binding largely open |
-| Discourse / common ground | Session + frames + obligation ledger (partial) | **No first-class multi-utterance discourse store yet** |
+| Quantification / binders | **Shipped formal:** `FORALL(X, BODY)` / `EXISTS(X, BODY)` as ordinary non-commutative call heads; binding via **slot recurrence** in the skeleton (`FORALL⟨?0, EVEN⟨*(2, ?0)⟩⟩`). See §5.1 scope pillar and ANALYSIS quantifier slice (`f24ddeb` family). | Formal: measured (Goedel full-statement **43.2%** post-quantifier). **Alpha-invariance is a Barendregt-style naming convention**, not free: first-occurrence numbering is invariant under *whole-statement injective* renaming; sibling binders in templates deliberately reuse `{x}` — a twin with distinct inner binder names will **not** match until normalized. NL surface scope/binding still largely open. |
+| Discourse / common ground | Session + frames + obligation ledger (partial) | **No first-class multi-utterance discourse store yet** (and must not fork a second memory—§8) |
 | Reference (he/that/ellipsis) | Entity ids + mention binds (story); visibility (ToM) | Span binds are local; anaphora/ellipsis across turns **open** |
 | Speech acts / pragmatics | ASK vs GEN vs assert; WAITING channel; obligations | Partial; implication/presupposition **open** |
 | Presupposition / accommodation | Frame premises + plant; no general accommodation calculus | **Open** |
@@ -291,7 +303,7 @@ first-class:
 |---|---|---|---|
 | **Discourse state** | Introduced entities, salience, topic/focus, temporal context, speaker/addressee, common ground / commitments | Session ids; user frames; story beats; obligation ledger | No unified cross-utterance discourse object; no salience ranking |
 | **Reference** | Pronouns, definites, deixis, ellipsis, “the former/do so” | Story `ElementMention` binds; ToM visibility; deictic *composition* plan in cognitive-frames | No anaphora resolver; no ellipsis reconstruction; binds are local spans |
-| **Scope / quantification / binding** | Negation scope, ∀/∃, modality, conditionals, bound anaphora | Formal quantifier heads (v0.10); NEG; frame `scope` object | NL algebra must not bury these in STMT/MOD; binding theory largely unauthored |
+| **Scope / quantification / binding** | Negation scope, ∀/∃, modality, conditionals, bound anaphora | **Formal shipped:** `FORALL`/`EXISTS` call heads + slot-recurrence binding (quantifier merge); NEG; frame `scope` object for fiction/physics. Measured caveat: alpha-invariance only under whole-statement injective renaming (Barendregt naming convention); sibling binders share slot names by design — distinct-name twins miss. | **Do not re-promise “explicit scope” in the abstract** — inherit this representation for formal terms and for any NL term that lowers to the same algebra. NL-specific gaps: surface quantifier syntax, bound anaphora across discourse, modality/conditionals as NL constructors. Binding theory for pronouns remains open. |
 | **Pragmatics / speech acts** | Assert vs question vs request vs command vs implication; felicity | `ActionKind` ASK/GEN; WAITING; narrative obligations | Presupposition, scalar implicature, indirect speech acts open |
 
 These are **not** four new neural modules. They are four **symbolic state and
@@ -501,10 +513,14 @@ preference model over index-admissible realizations
    abstain—before building a full sentence term.
 
 3. **Term algebra (symbolic)**  
-   Entity/event/state; **explicit** scope/quantification/binding; tense/
-   aspect/modal; speech-act type; reference markers (as bindings into
-   discourse, not free strings); discourse relations; narrative constructors;
-   comparison/modifiers as already designed.
+   Entity/event/state; quantification/binding via the **existing** formal
+   representation where applicable—`FORALL(X, BODY)` / `EXISTS(X, BODY)` as
+   non-commutative call heads with binding by slot recurrence (not a second
+   binder calculus)—plus the documented alpha-convention limit (sibling
+   templates reuse binder slots; distinct inner names do not twin until
+   normalized); tense/aspect/modal; speech-act type; reference markers (as
+   bindings into discourse, not free strings); discourse relations; narrative
+   constructors; comparison/modifiers as already designed.
 
 4. **Morphosyntactic realization (symbolic)**  
    Language-specific rules: order, agreement, inflection, articles,
@@ -598,10 +614,9 @@ Symbolic trees scale; tiny nets may not. Prefer search over deeper constructors
 to hoping recurrence invents English.
 
 **R6 — Demo debt.**  
-Golden-chicken still freezes prose in the oracle policy. Until briefs are
-terms and sentences are realizations of verified terms, the *practice*
-under-sells the *design*. That debt is engineering priority, not evidence
-against the challenge.
+Golden-chicken prose-as-policy is the debt. Implementation may clear it via
+`narrative.realize.v1` briefs (P-LS3) while this doc is still under review;
+adjudication still requires the registered floors, not vibes.
 
 **R7 — Hybrid edge discipline.**  
 A larger model may propose candidate terms, reference resolutions, or
@@ -653,77 +668,160 @@ drive the check.
 
 ## 7. Registered predictions (before implementation)
 
-**P-LS1 — Dual of parse.**  
-There exists a realizer R and parser P on a non-trivial fragment such that
-for terms t in a test suite, P(R(t)) =_canon t (canonical equality). Miss if
-only hand-written strings pass round-trip.
+Registration discipline matches formal v0.10 slices: each prediction pins a
+**named fragment**, **suite size**, and **numeric floors** where applicable.
+Qualitative pass/miss alone is not enough (R14 / goalpost drift). When a
+fragment grows, mechanical dual-pass / LOST accounting is mandatory from day
+one (`scripts/verify_slice.py` is the pattern: mechanical 80% as one command;
+judgment only for design attack + sampled adjudication).
+
+### Registration template (required fields)
+
+For every P-LS before its adjudicating implementation:
+
+| Field | Meaning |
+|---|---|
+| `fragment_id` | Grammar + lexicon scope (e.g. `langgen.xlang.v1`, `narrative.realize.v1`) |
+| `lexicon_n` / `pattern_n` | Closed inventory sizes |
+| `suite` | Generator + seed + **N ≥ floor** (machine-generated preferred) |
+| `metric floors` | Exact rates or counts registered in advance |
+| `LOST policy` | LOST=0 on dual-pass unless `--allow-losses` with row-by-row disclosure |
+| `twin expectation` | When touching `data/*`: register group_counts / twin null or expected Δ **before** regen (formal null has held four consecutive head slices; NL must do the same) |
+| `GC4/GC5` | Budget for pin movement; append-only registered acknowledgments (harness-checked) |
+
+### Predictions
+
+**P-LS1 — Dual of parse (round-trip).**  
+- **Fragment:** `langgen.xlang.v1` (interlingua STMT/ASK/CMP/EVT + MOD; LEX_A and
+  LEX_B as in `experiments/langgen.py`; both language realizers).  
+- **Suite:** N ≥ **500** machine-generated terms from `gen_tree` at depth ≤ 2,
+  fixed seed registered in the test module; both langs A and B.  
+- **Floor:** exact canonical equality `canonicalize(P(R(t))) == canonicalize(t)`
+  on **≥ 0.98** of the suite per language (allow documented refuse class for
+  free modifier-order surface shuffle if R is non-deterministic—then R must
+  offer a deterministic mode for the suite).  
+- **Miss:** hand-picked suite only; or rate below floor; or LOST > 0 on a
+  later fragment grow without disclosure (P-LS1b).
+
+**P-LS1b — Round-trip LOST dual (mechanical).**  
+When the realizer/parser fragment grows, every term that previously
+round-tripped must still round-trip. Implement as a dual-pass over a pinned
+suite file (or regenerate-at-base vs new), same spirit as
+`verify_slice.py` dual-pass: **LOST=0** or every loss printed and counted.
+Miss if growth silently drops prior round-trips.
 
 **P-LS2 — Content refutation survives fluency.**  
-A realization of a term that contradicts frame premises is REFUTED by the
-same frame executor path as today’s trait checks, independent of wording
-variants in the lexicon. Miss if synonym packaging bypasses REFUTED.
+- **Fragment:** `narrative.realize.v1` + golden-chicken frame (or successor
+  brief).  
+- **Suite:** N ≥ **20** realization variants that only swap licensed
+  synonym/packaging for trait-denying content (silver vs golden) plus N ≥ 5
+  controls that stay frame-legal.  
+- **Floor:** **20/20** denying variants → L3 frame REFUTED (or equivalent
+  separable tag); **0** laundering to VERIFIED via wording.  
+- **Miss:** any denying variant accepted as index-VERIFIED.
 
 **P-LS3 — Oracle story becomes a brief.**  
-Golden-chicken (or successor) can be expressed as a structured brief + search
-or scripted constructors *without* storing full English sentences in the
-policy, except as realizer outputs. Miss if policy still embeds whole beat
-strings as the source of truth.
+- **Fragment:** `narrative.realize.v1` (named plant/outcome patterns only).  
+- **Suite:** golden-chicken oracle path + at least one alternate brief using
+  the same patterns with different slots.  
+- **Floor:** oracle still **5/5** VERIFIED steps; policy/module source of
+  truth has **zero** hand-authored `@start:end` bind literals (binds only via
+  `span_of`/`bind_spec` on realized text).  
+- **Miss:** full beat strings or magic binds remain the policy source.
 
-**P-LS4 — Preference only over index-admissible realizations.**  
-Any learned or statistical ranker is evaluated against a frequency baseline
-on the **same finite candidate set** after L1–L2 and task-L3/L4 filters;
-unlicensed tokens cannot appear; no candidate that changes denotation is
-admitted. Preference features are closed-form/shallow (§5.3.5) or the
-prediction is withdrawn. Miss if the ranker emits OOV prose, alternate
-senses, or requires unrestricted coherence modeling to beat frequency.
+**P-LS4 — Preference only over index-admissible realizations (operational).**  
+- **Fragment:** declared candidate generator + preference feature registry.  
+- **Operational miss (testable):** every preference feature **must** exist as
+  a **deterministic, unit-tested function** in the repo (pure: candidates +
+  discourse snapshot → score/order key). A feature that cannot be written that
+  way is **refused at review time**, not discovered at evaluation.  
+- **Suite:** fixed candidate sets of size K ≥ 3 per item; N ≥ 30 items.  
+- **Floor:** ranker cannot emit outside the candidate set (**0** OOV);
+  frequency baseline reported on the same set; learned/stat ranker does not
+  beat frequency by using any non-registered feature.  
+- **Miss:** OOV emission; or a feature lands without a unit test; or
+  denotation-changing candidates enter the set.
 
-**P-LS5 — Coverage before scale claim.**  
-A public coverage instrument for open English (or a declared fragment such as
-“simple clauses + modifiers + CMP + WH”) reports expressible fraction before
-any claim of prover-like text creation at scale. Miss if marketing outruns
-measurement (v0.9’s lesson applied to NL).
+**P-LS5 — Coverage instrument (pipeline shape, not reinvented).**  
+Adopt the formal coverage pipeline **verbatim**:
+
+```text
+pinned source → deterministic extract → classifier with precise refusal labels
+  → audit fields must be 0 → per-row dual pass on every grammar change
+  (LOST=0 or disclosed row-by-row)
+```
+
+- **Fragment:** declared NL fragment (initially e.g. simple clauses +
+  modifiers + CMP + WH over a pinned synthetic or small extract).  
+- **Suite:** pinned corpus/extract with SHA; refusal taxonomy registered
+  before the run (expect precision to pay the way formal did: Goedel
+  **32.8% → 43.2%** this cycle, with the largest “relation” gain revealed as a
+  **parser artifact** only because labels were precise).  
+- **Floor:** publish expressible fraction + refusal histogram before any
+  scale/prover-like-text claim; audits analogous to
+  `foreign_glyphs`/`carrier_residual` = 0.  
+- **Miss:** marketing a rate without pinned source, refusal labels, or
+  dual-pass discipline.
 
 **P-LS6 — Deixis is composition, not a lexicon.**  
-I/you/here/now in generated or parsed text resolve through owner/frame/tense
-machinery, not through WordNet person-deixis alone. Aligns with cognitive-
-frames deictic cell.
+- **Fragment:** owner/frame/tense machinery + toy dialogue suite N ≥ 10.  
+- **Floor:** **10/10** I/you/here/now resolutions use frame ownership /
+  reference-frame / tense state; WordNet person-synset-only path is not
+  sufficient for pass.  
+- **Miss:** any pass that keys only on lexical person features.
 
 **P-LS7 — Discourse state is load-bearing across turns.**  
-A two-turn dialogue where turn 2 uses a pronoun or definite whose only legal
-antecedent is introduced in turn 1 succeeds iff the discourse store carries
-that entity; wiping the store (ablation) forces ASK/UNKNOWN/REFUSED rather
-than a guessed referent. Miss if turn 2 “works” with empty discourse via
-fluent default.
+- **Fragment:** session-shaped discourse store (after harness session—§8);
+  toy entities N_kinds ≥ 2.  
+- **Suite:** N ≥ 30 two-turn scripts (intro entity → anaphor).  
+- **Floor:** **≥ 0.95** resolve when store intact; **1.0** miss (no invented
+  referent) after wipe ablation on the same scripts.  
+- **Miss:** wipe still “resolves”; or discourse is a second memory parallel to
+  session rather than hosted by it.
 
 **P-LS8 — Packed ambiguity filters before prefer.**  
-On a controlled scope or attachment ambiguity, the system retains multiple
-candidates until a hard constraint (world/frame) eliminates all but a legal
-subset; preference never runs on the raw unfiltered forest. Miss if a single
-parse is forced without recording alternatives when the fragment claims
-ambiguity support.
+- **Fragment:** declared ambiguity suite (scope or attachment), M ≥ 15 items
+  with ≥ 2 candidates each.  
+- **Floor:** preference never invoked on unfiltered forest; after hard
+  filters, remaining set recorded; if >1 remain, system reports multi or
+  ASK—not a silent unique parse.  
+- **Miss:** forced unique parse with no alternative record when fragment
+  claims ambiguity support.
 
 **P-LS9 — Inference is reportable without commit.**  
-There exists a path that answers “does A entail B?” (or contradiction) using
-symbolic machinery without writing B into world state as VERIFIED. Miss if
-the only way to “infer” is to accept a state transition that mutates the
-world. The checker names its fragment.
+- **Fragment:** named entailment fragment (e.g. story or formal mini-suite)
+  N ≥ 15 pairs.  
+- **Floor:** answers entailment/contradiction with **0** world mutations on
+  the pure-query path; fragment id present on every answer.  
+- **Miss:** only path mutates world to “infer.”
 
 **P-LS10 — Index-relative false belief survives language.**  
-A generated or parsed attitude report “Sally believes the marble is in the
-basket” can be frame-local VERIFIED while world holds box, without the
-utterance being treated as grammatically illegal. Miss if world-falsity
-blocks the sentence at L1/L2 or as a single undifferentiated “illegal.”
+- **Fragment:** Sally–Anne + realization of attitude report.  
+- **Suite:** N ≥ 5 surface variants.  
+- **Floor:** **5/5** frame-local VERIFIED / world box without L1/L2 illegal.  
+- **Miss:** world-falsity collapses to undifferentiated illegal.
 
 **P-LS11 — Strata visible in the trace.**  
-At least one demo/trace distinguishes L1 parse failure, L2 type failure,
-L3 index REFUTED, and L4 normative REFUSED as separate stop reasons or
-evidence tags. Miss if all four collapse to one error string.
+- **Fragment:** harness or demo trace schema.  
+- **Suite:** four injected failures (one per L1–L4).  
+- **Floor:** **4/4** distinct tags/reasons.  
+- **Miss:** collapsed single error string.
 
 **P-LS12 — Fiction assert vs world assert.**  
-Inside an open fiction frame, asserting frame premises is index-legal; the
-same string as unguarded world assertion is not automatically world-VERIFIED
-on exit (demotion rules). Miss if fiction content leaks as world VERIFIED
-via the realizer.
+- **Fragment:** golden-chicken (or successor) frame open/close.  
+- **Suite:** N ≥ 5 fiction-premise asserts + exit check.  
+- **Floor:** in-frame index-legal; **0** world-VERIFIED leaks on exit
+  (demotion).  
+- **Miss:** realizer path promotes fiction to world VERIFIED.
+
+**P-LS13 — Twin null (or registered Δ) for NL corpus entries.**  
+When NL nodes enter `data/*` via linguistic-twins / morphology / narrative
+paths: **before** regen, register expected `group_counts` movement or
+**twin null** (unchanged), matching the formal honesty instrument that has
+held four consecutive head slices. Budget GC4/GC5 pin movement and
+append-only registered acknowledgments (mechanically checked by
+`verify_slice.py` acks).  
+- **Miss:** silent twin churn or unacknowledged GC pin drift.
 
 ---
 
@@ -731,28 +829,36 @@ via the realizer.
 
 v0.10 rightly prioritizes **formal** grammar heads and external verifiers.
 Language-as-structure must not hijack that lane. Ordered so each step is
-falsifiable:
+falsifiable and **dependencies are explicit**:
 
 1. **Name the debt:** treat golden-chicken strings as realization debt (this
    doc + BACKLOG).  
-2. **Story briefs as terms:** desire/obstacle/outcome/plant as structured
-   fields only; English only via R(·).  
-3. **Round-trip tests (P-LS1)** on the existing langgen interlingua + both
-   language realizers.  
-4. **Minimal discourse store** for multi-turn entity intro + pronoun
-   resolution (P-LS7)—even a toy two-entity world beats sentence-local only.  
-5. **Expand linguistic constructors** (scope/binding first-class) only with
-   coverage deltas and negative controls (P-LS8, R9).  
-6. **WordNet** remains lexicon/sense-candidate plugin, never term algebra.  
-7. **Preference models last**, over admissible sets only (P-LS4); sense not
-   in the preference tail.  
-8. **Open-English coverage instrument** when the fragment is worth measuring
-   (P-LS5).  
-9. **Entailment-without-commit** path where useful (P-LS9).
+2. **Story briefs as terms (P-LS3):** structured fields + named realizers;
+   binds computed; register fragment `narrative.realize.v1`.  
+3. **Round-trip (P-LS1) + LOST dual (P-LS1b):** langgen fragment; machine
+   suite N ≥ 500; wire into a `verify_slice`-style check as soon as a slice
+   owns the fragment.  
+4. **ROADMAP-v0.10 item 5 — harness session first.** Prove the session shape
+   (boot matrix, need dispatch, shared session memory) **before** promoting
+   discourse to a product path.  
+5. **Minimal discourse store (P-LS7)** — **only after step 4**, hosted **on**
+   the session machinery so a **second memory system is never born**. A
+   standalone pure module for unit tests is fine; wiring into conversation
+   must not fork session state.  
+6. **Scope/binding for NL** reuses formal `FORALL`/`EXISTS` + slot recurrence
+   where terms lower to that algebra; do not invent a parallel binder
+   calculus. Surface/discourse binding gaps close with coverage deltas and
+   negative controls (P-LS8, R9).  
+7. **WordNet** remains lexicon/sense-candidate plugin, never term algebra.  
+8. **Preference models last (P-LS4):** features as unit-tested pure
+   functions only.  
+9. **NL coverage instrument (P-LS5)** when the fragment is worth measuring —
+   same pipeline shape as formal.  
+10. **Entailment-without-commit (P-LS9)** where useful.  
+11. **Twin null / GC acks (P-LS13)** on every NL corpus touch.
 
 Formal ingest and linguistic calculus share the kernel and the epistemic
-ladder; they do not share one rushed grammar. Discourse state should reuse
-session/frame machinery rather than invent a second memory system.
+ladder; they do not share one rushed grammar.
 
 ---
 
