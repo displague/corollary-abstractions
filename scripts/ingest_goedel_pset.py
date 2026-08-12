@@ -86,11 +86,17 @@ def _load_manifest_source() -> dict:
     raise KeyError(f"manifest source `{MANIFEST_SOURCE_ID}` not found")
 
 
-# Implicit binder groups directly after a quantifier (`∀ {x y : ℝ},`) are the
-# same quantification as explicit ones; their braces become parens for the
-# glyph audit ONLY in that position, and only when no set-builder `|` is
-# inside — a brace anywhere else in a covered row still trips the audit.
-_IMPLICIT_BINDER_RE = re.compile(r"([∀∃]\s*)\{([^{}|]*)\}")
+# Implicit binder groups after a quantifier (`∀ {x y : ℝ},`) are the same
+# quantification as explicit ones; their braces become parens for the glyph
+# audit ONLY in binder position, and only when no set-builder `|` is inside —
+# a brace anywhere else in a covered row still trips the audit. The pattern
+# reaches every group of ONE binder section (it may cross earlier groups but
+# never a comma — the section's boundary — nor another brace), applied to a
+# fixpoint: the embedded-quantifier slice's 1.73M audit caught a covered
+# `∀ {α : ℝ} {n : ℕ} (h : …), …` whose SECOND brace group the old
+# directly-after-the-quantifier pattern left foreign (audit=1; the cover was
+# legitimate, the normalizer was the bug — fixed as a class, not a row).
+_IMPLICIT_BINDER_RE = re.compile(r"([∀∃][^{},|]*)\{([^{}|]*)\}")
 
 
 def _audit_normalize(txt: str) -> str:
@@ -99,7 +105,11 @@ def _audit_normalize(txt: str) -> str:
     # Strict-implicit brackets ⦃⦄ are binder brackets and NOTHING else in
     # Lean, so they normalize to parens unconditionally (32 realized covers).
     txt = txt.replace("∃!", "∃").replace("⦃", "(").replace("⦄", ")")
-    return _IMPLICIT_BINDER_RE.sub(r"\1(\2)", txt)
+    while True:
+        new = _IMPLICIT_BINDER_RE.sub(r"\1(\2)", txt)
+        if new == txt:
+            return new
+        txt = new
 
 
 def _has_foreign_glyph(stmt: dict) -> bool:

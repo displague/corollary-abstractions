@@ -34,19 +34,19 @@
   "totals": {
     "statements": 488,
     "goal_only": {
-      "covered": 235,
-      "pct": 48.2
+      "covered": 237,
+      "pct": 48.6
     },
     "full_statement": {
-      "covered": 161,
-      "pct": 33.0
+      "covered": 163,
+      "pct": 33.4
     }
   },
   "by_split": {
     "test": {
       "total": 244,
-      "goal_only_covered": 133,
-      "full_statement_covered": 94
+      "goal_only_covered": 135,
+      "full_statement_covered": 96
     },
     "valid": {
       "total": 244,
@@ -57,7 +57,7 @@
   "goal_only_untranslatable_reasons": {
     "modulo_no_head": 53,
     "big_operator": 50,
-    "unsupported_symbol:f": 24,
+    "unsupported_symbol:f": 25,
     "complex_number": 18,
     "divides_no_head": 15,
     "set_or_finset": 15,
@@ -66,7 +66,6 @@
     "absolute_value": 7,
     "nat_monus_no_head": 6,
     "floor_ceil": 5,
-    "quantifier_embedded": 5,
     "unsupported_symbol:σ": 5,
     "factorial": 4,
     "modular_type_zmod": 4,
@@ -75,6 +74,7 @@
     "unsupported_symbol:s": 3,
     "digit_expansion": 2,
     "fractional_exponent": 2,
+    "quantifier_embedded": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
@@ -88,8 +88,8 @@
   "full_statement_untranslatable_reasons": {
     "modulo_no_head": 53,
     "big_operator": 50,
+    "unsupported_symbol:f": 25,
     "function_unknown_binder": 24,
-    "unsupported_symbol:f": 24,
     "complex_number": 18,
     "divides_no_head": 15,
     "set_or_finset": 15,
@@ -104,7 +104,6 @@
     "nat_monus_no_head": 6,
     "floor_ceil": 5,
     "hyp:big_operator": 5,
-    "quantifier_embedded": 5,
     "unsupported_symbol:σ": 5,
     "factorial": 4,
     "modular_type_zmod": 4,
@@ -114,6 +113,7 @@
     "digit_expansion": 2,
     "fractional_exponent": 2,
     "hyp:unsupported_symbol:real.logb": 2,
+    "quantifier_embedded": 2,
     "tuple_or_structure": 2,
     "unsupported_symbol:g": 2,
     "unsupported_symbol:real.logb": 2,
@@ -151,6 +151,7 @@
     "amc12_2000_p12",
     "amc12_2000_p20",
     "amc12_2000_p6",
+    "amc12a_2002_p6",
     "amc12a_2009_p6",
     "amc12a_2013_p4",
     "amc12a_2019_p12",
@@ -224,6 +225,7 @@
     "mathd_numbertheory_85",
     "numbertheory_4x3m7y3neq2003",
     "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
+    "numbertheory_notequiv2i2jasqbsqdiv8",
     "numbertheory_x5neqy2p4",
     "aime_1983_p9",
     "aime_1984_p15",
@@ -617,10 +619,10 @@
     {
       "name": "amc12a_2002_p6",
       "split": "test",
-      "goal_ok": false,
-      "goal_reason": "quantifier_embedded",
-      "full_ok": false,
-      "full_reason": "quantifier_embedded"
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "amc12a_2003_p23",
@@ -1074,9 +1076,9 @@
       "name": "imo_2019_p1",
       "split": "test",
       "goal_ok": false,
-      "goal_reason": "quantifier_embedded",
+      "goal_reason": "unsupported_symbol:f",
       "full_ok": false,
-      "full_reason": "quantifier_embedded"
+      "full_reason": "unsupported_symbol:f"
     },
     {
       "name": "induction_11div10tonmn1ton",
@@ -2233,10 +2235,10 @@
     {
       "name": "numbertheory_notequiv2i2jasqbsqdiv8",
       "split": "test",
-      "goal_ok": false,
-      "goal_reason": "quantifier_embedded",
-      "full_ok": false,
-      "full_reason": "quantifier_embedded"
+      "goal_ok": true,
+      "goal_reason": null,
+      "full_ok": true,
+      "full_reason": null
     },
     {
       "name": "numbertheory_x5neqy2p4",

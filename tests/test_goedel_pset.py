@@ -592,6 +592,23 @@ class QuantifierHeads(unittest.TestCase):
         self.assertTrue(
             set(igp._audit_normalize("∀ x ∈ {y : ℕ | y > 0}, x > 0")) - igp._ALLOWED)
 
+    def test_audit_normalizer_reaches_every_binder_group(self) -> None:
+        import ingest_goedel_pset as igp
+        # Goedel-Pset-251446 (embedded-quantifier slice audit catch): the
+        # SECOND consecutive implicit-binder group must normalize too...
+        self.assertFalse(
+            set(igp._audit_normalize(
+                "(¬(∀ {α : ℝ} {n : ℕ} (h : 0 < α ∧ 0 < n), ∃ x, x = α * n))"
+                " ∧ (∀ {α : ℝ} {n : ℕ} (h : 0 < α ∧ 0 < n), ∃ x, x = α * n)"
+            )) - igp._ALLOWED)
+        # ...but a brace past the binder section's comma is NOT binder
+        # position and stays foreign, as does a set-builder in the section.
+        self.assertTrue(
+            set(igp._audit_normalize("∀ x : ℕ, x ∈ ({1} : Set ℕ)")) - igp._ALLOWED)
+        self.assertTrue(
+            set(igp._audit_normalize("∀ {x : ℕ} (h : x ∈ {y | y > 0}), x > 0"))
+            - igp._ALLOWED)
+
 
 class GoedelPsetEmbeddedQuantifierWalk(unittest.TestCase):
     """v0.10 embedded quantifiers: the atom-tree walk. A goal-body or
