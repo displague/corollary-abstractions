@@ -124,13 +124,27 @@ def render_adjp(t: tuple, lex: dict[str, str], lang: str) -> list[str]:
     return [intens] + inner if lang == "A" else inner + [intens]
 
 
+def _adjp_sort_key(ap: tuple) -> str:
+    """Stable key for deterministic intersective order (canonical leaf id)."""
+    node = ap
+    while node[0] == "call":
+        node = node[2][0]
+    return node[1]
+
+
 def render_np(t: tuple, lex: dict[str, str], lang: str,
-              rng: random.Random) -> list[str]:
+              rng: random.Random | None,
+              *, deterministic: bool = False) -> list[str]:
     if t[0] == "slot":
         return ["the", lex[t[1]]] if lang == "A" else [lex[t[1]]]
     noun, *adjps = t[2]
     adjps = list(adjps)
-    rng.shuffle(adjps)  # surface order of intersective modifiers is free
+    if deterministic or rng is None:
+        # P-LS1 suite mode: free modifier order is a refuse class when
+        # non-deterministic; deterministic mode sorts by concept id.
+        adjps.sort(key=_adjp_sort_key)
+    else:
+        rng.shuffle(adjps)  # surface order of intersective modifiers is free
     words: list[str] = []
     for ap in adjps:
         words.extend(render_adjp(ap, lex, lang))
@@ -139,15 +153,22 @@ def render_np(t: tuple, lex: dict[str, str], lang: str,
     return [lex[noun[1]]] + words
 
 
-def render(t: tuple, lang: str, rng: random.Random,
-           lex: dict[str, str] | None = None) -> str:
+def render(t: tuple, lang: str, rng: random.Random | None = None,
+           lex: dict[str, str] | None = None, *,
+           deterministic: bool = False) -> str:
+    """Realize interlingua tree ``t`` in language A or B.
+
+    ``deterministic=True`` (or ``rng is None``) fixes intersective modifier
+    order for round-trip suites (fragment ``langgen.xlang.v1`` / P-LS1).
+    """
     if lex is None:
         lex = LEX_A if lang == "A" else LEX_B
+    det = deterministic or rng is None
 
     def np_or_wh(n: tuple) -> list[str]:
         if n == ("slot", "WH"):
             return [lex["WH"]]
-        return render_np(n, lex, lang, rng)
+        return render_np(n, lex, lang, rng, deterministic=det)
 
     head = t[1]
     if head in {"STMT", "ASK"}:
@@ -165,6 +186,241 @@ def render(t: tuple, lang: str, rng: random.Random,
         return " ".join(np_or_wh(np1) + ["is", lex[dim[1]] + "er", "than"]
                         + np_or_wh(np2))
     return " ".join(np_or_wh(np1) + np_or_wh(np2) + [lex[dim[1]], "mas"])
+
+
+# ---------------------------------------------------------------------------
+# Parse (surface → interlingua) — fragment langgen.xlang.v1
+# ---------------------------------------------------------------------------
+
+FRAGMENT_ID = "langgen.xlang.v1"
+
+# Context-sensitive reverse maps (adj/dim share surface forms).
+_NOUN_A = {LEX_A[f"n{i}"]: f"n{i}" for i in range(len(NOUNS))}
+_VERB_A = {LEX_A[f"v{i}"]: f"v{i}" for i in range(len(VERBS))}
+_ADJ_A = {LEX_A[f"a{i}"]: f"a{i}" for i in range(len(ADJS))}
+_DIM_A = {LEX_A[f"d{i}"]: f"d{i}" for i in range(len(DIMS))}
+_INT_A = {LEX_A[f"i{i}"]: f"i{i}" for i in range(len(INTENS))}
+_NOUN_B = {LEX_B[f"n{i}"]: f"n{i}" for i in range(len(NOUNS))}
+_VERB_B = {LEX_B[f"v{i}"]: f"v{i}" for i in range(len(VERBS))}
+_ADJ_B = {LEX_B[f"a{i}"]: f"a{i}" for i in range(len(ADJS))}
+_DIM_B = {LEX_B[f"d{i}"]: f"d{i}" for i in range(len(DIMS))}
+_INT_B = {LEX_B[f"i{i}"]: f"i{i}" for i in range(len(INTENS))}
+
+
+class ParseError(ValueError):
+    """Surface string is outside fragment langgen.xlang.v1."""
+
+
+def _tok(s: str) -> list[str]:
+    return s.split()
+
+
+def _parse_adjp_a(tokens: list[str], i: int) -> tuple[tuple, int]:
+    intens_chain: list[str] = []
+    while i < len(tokens) and tokens[i] in _INT_A:
+        intens_chain.append(_INT_A[tokens[i]])
+        i += 1
+    if i >= len(tokens) or tokens[i] not in _ADJ_A:
+        raise ParseError(f"expected adjective at {i}: {tokens[i:]!r}")
+    node: tuple = ("slot", _ADJ_A[tokens[i]])
+    i += 1
+    for intens in reversed(intens_chain):
+        node = ("call", "MOD", (node, ("slot", intens)))
+    return node, i
+
+
+def _parse_adjp_b(tokens: list[str], i: int) -> tuple[tuple, int]:
+    if i >= len(tokens) or tokens[i] not in _ADJ_B:
+        raise ParseError(f"expected adjective at {i}: {tokens[i:]!r}")
+    node: tuple = ("slot", _ADJ_B[tokens[i]])
+    i += 1
+    while i < len(tokens) and tokens[i] in _INT_B:
+        node = ("call", "MOD", (node, ("slot", _INT_B[tokens[i]])))
+        i += 1
+    return node, i
+
+
+def _parse_np_a(tokens: list[str], i: int) -> tuple[tuple, int]:
+    if i < len(tokens) and tokens[i] == LEX_A["WH"]:
+        return ("slot", "WH"), i + 1
+    if i >= len(tokens) or tokens[i] != "the":
+        raise ParseError(f"expected 'the' at {i}: {tokens[i:]!r}")
+    i += 1
+    adjps: list[tuple] = []
+    while i < len(tokens) and (
+        tokens[i] in _INT_A or tokens[i] in _ADJ_A
+    ) and tokens[i] not in _NOUN_A:
+        ap, i = _parse_adjp_a(tokens, i)
+        adjps.append(ap)
+    if i >= len(tokens) or tokens[i] not in _NOUN_A:
+        raise ParseError(f"expected noun at {i}: {tokens[i:]!r}")
+    noun = ("slot", _NOUN_A[tokens[i]])
+    i += 1
+    if not adjps:
+        return noun, i
+    return ("op", "+", (noun, *adjps)), i
+
+
+def _parse_np_b(tokens: list[str], i: int) -> tuple[tuple, int]:
+    if i < len(tokens) and tokens[i] == LEX_B["WH"]:
+        return ("slot", "WH"), i + 1
+    if i >= len(tokens) or tokens[i] not in _NOUN_B:
+        raise ParseError(f"expected noun at {i}: {tokens[i:]!r}")
+    noun = ("slot", _NOUN_B[tokens[i]])
+    i += 1
+    adjps: list[tuple] = []
+    while i < len(tokens) and tokens[i] in _ADJ_B:
+        ap, i = _parse_adjp_b(tokens, i)
+        adjps.append(ap)
+    if not adjps:
+        return noun, i
+    return ("op", "+", (noun, *adjps)), i
+
+
+def _dim_from_er(word: str) -> str | None:
+    if not word.endswith("er") or len(word) <= 2:
+        return None
+    base = word[:-2]
+    return _DIM_A.get(base)
+
+
+def parse(surface: str, lang: str) -> tuple:
+    """Parse a langgen surface string into an interlingua tree.
+
+    Raises ParseError if the string is outside fragment ``langgen.xlang.v1``.
+    """
+    tokens = _tok(surface.strip())
+    if not tokens:
+        raise ParseError("empty surface")
+    if lang == "A":
+        return _parse_sentence_a(tokens)
+    if lang == "B":
+        return _parse_sentence_b(tokens)
+    raise ParseError(f"unknown language {lang!r}")
+
+
+def _parse_sentence_a(tokens: list[str]) -> tuple:
+    # CMP: NP is DIMer than NP
+    if "is" in tokens and "than" in tokens:
+        is_i = tokens.index("is")
+        than_i = tokens.index("than")
+        if than_i != is_i + 2:
+            raise ParseError("malformed comparative")
+        dim_id = _dim_from_er(tokens[is_i + 1])
+        if dim_id is None:
+            raise ParseError(f"unknown comparative {tokens[is_i + 1]!r}")
+        np1, j = _parse_np_a(tokens, 0)
+        if j != is_i:
+            raise ParseError("junk before comparative")
+        np2, k = _parse_np_a(tokens, than_i + 1)
+        if k != len(tokens):
+            raise ParseError("trailing tokens after comparative")
+        return ("call", "CMP", (("slot", dim_id), np1, np2))
+
+    ask = tokens[-1] == "?"
+    body = tokens[:-1] if ask else tokens
+    # STMT/ASK: NP VERB NP
+    np1, i = _parse_np_a(body, 0)
+    if i >= len(body) or body[i] not in _VERB_A:
+        raise ParseError(f"expected verb at {i}: {body[i:]!r}")
+    verb = ("slot", _VERB_A[body[i]])
+    i += 1
+    np2, i = _parse_np_a(body, i)
+    if i != len(body):
+        raise ParseError("trailing tokens after clause")
+    evt = ("call", "EVT", (verb, np1, np2))
+    return ("call", "ASK" if ask else "STMT", (evt,))
+
+
+def _parse_sentence_b(tokens: list[str]) -> tuple:
+    # CMP: NP NP DIM mas
+    if tokens and tokens[-1] == "mas":
+        if len(tokens) < 4:
+            raise ParseError("short comparative B")
+        dim_word = tokens[-2]
+        if dim_word not in _DIM_B:
+            raise ParseError(f"unknown dim {dim_word!r}")
+        dim_id = _DIM_B[dim_word]
+        body = tokens[:-2]
+        np1, i = _parse_np_b(body, 0)
+        np2, i = _parse_np_b(body, i)
+        if i != len(body):
+            raise ParseError("trailing tokens in comparative B")
+        return ("call", "CMP", (("slot", dim_id), np1, np2))
+
+    ask = tokens[-1] == "ka"
+    body = tokens[:-1] if ask else tokens
+    # STMT/ASK: NP NP VERB
+    np1, i = _parse_np_b(body, 0)
+    np2, i = _parse_np_b(body, i)
+    if i >= len(body) or body[i] not in _VERB_B:
+        raise ParseError(f"expected verb at {i}: {body[i:]!r}")
+    verb = ("slot", _VERB_B[body[i]])
+    i += 1
+    if i != len(body):
+        raise ParseError("trailing tokens after B clause")
+    evt = ("call", "EVT", (verb, np1, np2))
+    return ("call", "ASK" if ask else "STMT", (evt,))
+
+
+def leaf_aware_canon(node: tuple) -> tuple:
+    """Canonicalize, then re-sort commutative ``+`` args by full tree repr.
+
+    ``match_signatures.canonicalize`` orders commutative args by ``shape_key``,
+    which erases slot identity. Distinct intersective adjectives with the same
+    MOD shape therefore do not get a unique order — fine for structural twins,
+    fatal for P(R(t)) identity. Leaf-aware sort restores a unique normal form
+    for the langgen fragment without changing the matcher.
+    """
+    node = canonicalize(node)
+    return _sort_plus_by_repr(node)
+
+
+def _sort_plus_by_repr(node: tuple) -> tuple:
+    kind = node[0]
+    if kind in {"num", "slot"}:
+        return node
+    if kind == "rel":
+        rel, (lhs, rhs) = node[1], node[2]
+        return ("rel", rel, (_sort_plus_by_repr(lhs), _sort_plus_by_repr(rhs)))
+    name = node[1]
+    args = tuple(_sort_plus_by_repr(a) for a in node[2])
+    if kind == "op" and name == "+":
+        args = tuple(sorted(args, key=repr))
+    return (kind, name, args)
+
+
+def roundtrip_ok(t: tuple, lang: str) -> bool:
+    """True when leaf_aware_canon(P(R_det(t))) == leaf_aware_canon(t)."""
+    try:
+        surface = render(t, lang, deterministic=True)
+        recovered = parse(surface, lang)
+        return leaf_aware_canon(recovered) == leaf_aware_canon(t)
+    except ParseError:
+        return False
+
+
+def make_roundtrip_suite(
+    n: int = 500, seed: int = 20260812, depth: int = 2
+) -> list[tuple]:
+    """Machine-generated interlingua terms for P-LS1 (registered seed/size)."""
+    rng = random.Random(seed)
+    out: list[tuple] = []
+    seen: set[str] = set()
+    attempts = 0
+    while len(out) < n and attempts < n * 40:
+        attempts += 1
+        t = gen_tree(rng, depth)
+        key = str(canonicalize(t))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(t)
+    if len(out) < n:
+        raise RuntimeError(
+            f"could only generate {len(out)} unique trees for suite of {n}"
+        )
+    return out
 
 
 # ---------------------------------------------------------------------------

@@ -148,6 +148,7 @@ from frames import (  # noqa: E402
     FrameSpec,
     Literal,
 )
+from narrative_realize import bind_spec  # noqa: E402
 from oracle_controller_demo import (  # noqa: E402
     NarrativeElement,
     StoryFrameVerifier,
@@ -211,11 +212,6 @@ class StoryBrief:
         return StoryFrameVerifier(spec=self.spec(), elements=self.elements())
 
 
-def _span(text: str, needle: str) -> tuple[int, int]:
-    start = text.index(needle)
-    return start, start + len(needle)
-
-
 def story_candidates(
     brief: StoryBrief, state: StoryState
 ) -> dict[str, tuple[Action, ...]]:
@@ -223,9 +219,11 @@ def story_candidates(
 
     Mirrors :func:`tactic_grammar.candidates`: every arm receives this exact
     candidate set, in this exact within-schema order, and may only permute the
-    schema keys.  Offsets are computed from the rendered text, never guessed,
-    and the decoy element is offered alongside the real one so that choosing
-    *which* element to plant is a real branch rather than a formality.
+    schema keys.  Offsets are computed from the rendered text via
+    ``narrative_realize.span_of`` / ``bind_spec`` (same helpers as P-LS3),
+    never hand-authored as magic numbers, and the decoy element is offered
+    alongside the real one so that choosing *which* element to plant is a
+    real branch rather than a formality.
     """
     shared = {"agent": brief.agent}
     introduce: list[Action] = []
@@ -246,7 +244,6 @@ def story_candidates(
     ):
         if surface not in brief.plant_mention:
             continue
-        start, end = _span(brief.plant_mention, surface)
         plant.append(
             Action.build(
                 ActionKind.GEN, "plant",
@@ -256,7 +253,7 @@ def story_candidates(
                     "event_id": f"{element.replace(' ', '_')}_planted",
                     "element": element,
                     "mention": brief.plant_mention,
-                    "binds": f"{element}@{start}:{end}",
+                    "binds": bind_spec(element, brief.plant_mention, surface),
                 },
             )
         )
@@ -277,8 +274,7 @@ def story_candidates(
             (brief.decoy_element, brief.decoy_surface),
         ):
             if surface in outcome:
-                start, end = _span(outcome, surface)
-                binds.append(f"{element}@{start}:{end}")
+                binds.append(bind_spec(element, outcome, surface))
         resolve.append(
             Action.build(
                 ActionKind.GEN, "resolve",

@@ -111,6 +111,116 @@ class OracleStillSolvesTests(unittest.TestCase):
             "fallen feather@3:17",
         )
 
+    def test_alternate_brief_same_patterns_also_solves(self) -> None:
+        """P-LS3: second brief, same pattern inventory, different slots."""
+        from controller import Controller, SequencePolicy
+        from oracle_controller_demo import (
+            NarrativeElement,
+            StoryFrameVerifier,
+        )
+
+        brief = NarrativeBrief(
+            id="copper_bell",
+            agent="the copper bell",
+            desire="to mark the hour",
+            trait="copper",
+            denied_trait="iron",
+            plant_element="loose clapper",
+            plant_surface="loose clapper",
+            plant_pattern="gleamed_beside_nest",
+            decoy_element="rope",
+            decoy_surface="rope",
+            obstacle="the frozen tower door",
+            outcome_pattern="used_as_key_and_sang",
+        )
+        from frames import (
+            CHEKHOV_GUN,
+            FRAME_CONSISTENCY,
+            NO_DEUS,
+            FrameSpec,
+            Literal,
+        )
+
+        spec = FrameSpec(
+            frame="runtime.frames.copper_bell",
+            title="copper bell",
+            declarations=(
+                ("agent", Literal("story", "agent", brief.agent)),
+                ("copper", Literal(brief.agent, "trait", "copper")),
+                (
+                    "no_iron",
+                    Literal(brief.agent, "trait", "iron", polarity=False),
+                ),
+            ),
+            governed_by=(FRAME_CONSISTENCY, CHEKHOV_GUN, NO_DEUS),
+        )
+        elements = (
+            NarrativeElement(brief.plant_element, (brief.plant_surface,)),
+            NarrativeElement(brief.decoy_element, (brief.decoy_surface,)),
+        )
+        verifier = StoryFrameVerifier(spec=spec, elements=elements)
+        run = Controller(max_steps=5).run(
+            verifier.initial_state(),
+            SequencePolicy(brief.oracle_actions()),
+            verifier,
+            lambda state: (
+                tuple(b.role for b in state.beats)
+                == ("setup", "complication", "resolution")
+                and bool(state.frame_state.obligations)
+                and not any(o.outstanding for o in state.frame_state.obligations)
+            ),
+        )
+        self.assertTrue(run.solved)
+        self.assertEqual(run.accepted_steps, 5)
+        self.assertIn("loose clapper", run.final_state.beats[0].text)
+
+
+class TraitDenyFluencyTests(unittest.TestCase):
+    """P-LS2: wording variants cannot launder a denied trait to VERIFIED."""
+
+    def test_twenty_silver_desire_variants_all_refuted(self) -> None:
+        from controller import Action, ActionKind
+        from oracle_controller_demo import StoryFrameVerifier
+
+        initial = story_oracle_run().initial_state
+        verifier = StoryFrameVerifier()
+        desires = [f"to seek path {i}" for i in range(20)]
+        for desire in desires:
+            action = Action.build(
+                ActionKind.GEN,
+                "introduce",
+                {
+                    "agent": "the golden chicken",
+                    "trait": "silver",
+                    "desire": desire,
+                },
+            )
+            result = verifier.evaluate(initial, action)
+            self.assertIs(
+                result.verdict,
+                Verdict.REFUTED,
+                f"desire={desire!r} laundered to {result.verdict}",
+            )
+
+    def test_five_golden_desire_controls_verified(self) -> None:
+        from controller import Action, ActionKind
+        from oracle_controller_demo import StoryFrameVerifier
+
+        initial = story_oracle_run().initial_state
+        verifier = StoryFrameVerifier()
+        for i in range(5):
+            action = Action.build(
+                ActionKind.GEN,
+                "introduce",
+                {
+                    "agent": "the golden chicken",
+                    "trait": "golden",
+                    "desire": f"to keep watch {i}",
+                },
+            )
+            result = verifier.evaluate(initial, action)
+            self.assertIs(result.verdict, Verdict.VERIFIED)
+
 
 if __name__ == "__main__":
     unittest.main()
