@@ -188,9 +188,14 @@ class ClassifierHonesty(unittest.TestCase):
         # now reduces under the EXISTS head...
         r = gc.classify(self._mk("∃ m, m > n", vars=("n",)))
         self.assertTrue(r["goal_ok"], r["goal_reason"])
-        # ...while a NON-prefix quantifier keeps its precise label — and the
-        # original concern stands: the comma/tuple blocker must not steal it.
+        # ...a connective-position quantifier now reduces via the v0.10
+        # atom-tree walk (EXISTS under MEET, binder comma consumed per leaf)...
         r = gc.classify(self._mk("(∃ m, m > n) ∧ n > 0", vars=("n",)))
+        self.assertTrue(r["goal_ok"], r["goal_reason"])
+        # ...while a TERM-position quantifier keeps its precise label — and
+        # the original concern stands: the comma/tuple blocker must not steal
+        # it (the binder comma is inside the refused leaf).
+        r = gc.classify(self._mk("(∃ m, m = 1) = False", vars=("n",)))
         self.assertFalse(r["goal_ok"])
         self.assertEqual(r["goal_reason"], "quantifier_embedded")
 

@@ -467,9 +467,13 @@ class QuantifierHeads(unittest.TestCase):
 
     # ---- precise labels for what stays out of reach -----------------------
     def test_unreachable_shapes_keep_precise_labels(self) -> None:
+        # (the two connective-position rows that sat here before the
+        # embedded-quantifier slice now cover via the atom-tree walk and are
+        # asserted positive in GoedelPsetEmbeddedQuantifierWalk; TERM-position
+        # quantifiers are what genuinely stays out)
         for goal, label in (
-            ("(∀ x : ℝ, x = x) ∧ (∃ y : ℝ, y = 2)", "quantifier_embedded"),
-            ("∀ x : ℝ, (∃ y : ℝ, y > x) → x < x + 1", "quantifier_embedded"),
+            ("(∃ x : ℝ, x = 1) = False", "quantifier_embedded"),
+            ("IsLeast {n : ℕ | ∀ w : ℝ, w ≥ 0} 4", "quantifier_embedded"),
             ("∀ f : ℝ → ℝ, f 0 = 0", "quantifier_function_binder"),
             ("∃ q : ℕ → (ℝ × ℝ), q = q", "quantifier_function_binder"),
             ("∀ S : Finset ℕ, S.card ≥ 0", "set_or_finset"),
@@ -587,6 +591,120 @@ class QuantifierHeads(unittest.TestCase):
         self.assertTrue(set(igp._audit_normalize("n ! = 6")) - igp._ALLOWED)
         self.assertTrue(
             set(igp._audit_normalize("∀ x ∈ {y : ℕ | y > 0}, x > 0")) - igp._ALLOWED)
+
+
+class GoedelPsetEmbeddedQuantifierWalk(unittest.TestCase):
+    """v0.10 embedded quantifiers: the atom-tree walk. A goal-body or
+    hypothesis segment whose flat verdict would be `quantifier_embedded` is
+    re-judged as a connective tree; every leaf faces the existing machinery.
+    Scope hygiene per the registered design: binders per subformula, shadow
+    refusal on scope overlap, sibling scopes alpha-independent, carriers
+    leaf-local, term/let positions and past-cap nests refused precisely."""
+
+    def _mk(self, goal, vars=(), hyps=(), fn=False, **flags):
+        return {
+            "name": "t", "goal": goal, "value_vars": list(vars),
+            "hyps": list(hyps), "fn_unknown": fn, "domain_vars": {}, **flags,
+        }
+
+    # ---- shapes the walk reaches ------------------------------------------
+    def test_embedded_shapes_cover(self) -> None:
+        for goal in (
+            # the two rows test_unreachable_shapes asserted embedded pre-slice:
+            "(∀ x : ℝ, x = x) ∧ (∃ y : ℝ, y = 2)",
+            "∀ x : ℝ, (∃ y : ℝ, y > x) → x < x + 1",
+            # iff-of-existence (the top Goedel ↔ shape)
+            "(∃ x : ℝ, x^2 + 2 * x + 1 = 0) ↔ 1 ≤ 1",
+            # claim ∧ witness (the top Goedel ∧ shape)
+            "1 + 1 = 2 ∧ ∃ y : ℝ, y^2 = 4",
+            # disjunction of existentials, SIBLING scopes reusing a name —
+            # alpha-independent, each occurrence inside exactly one binder
+            "(∃ k : ℤ, 6 = 2 * k) ∨ (∃ k : ℤ, 6 = 2 * k + 1)",
+            # NEG over IFF over two existentials (miniF2F
+            # numbertheory_notequiv2i2jasqbsqdiv8's shape)
+            "¬((∃ i : ℤ, 4 = 2 * i) ↔ (∃ k : ℤ, 16 = 8 * k))",
+            # ∃! in connective position rides its expansion
+            "(∃! x : ℝ, x = 1) ∨ 1 = 2",
+            # quantifier under quantifier under connective
+            "∃ m : ℕ, (m > 3 ∧ ∃ p : ℕ, m * p ≤ m + p)",
+            # ¬-wrapped universal against its existential dual (De Morgan)
+            "¬(∀ x : ℝ, x^2 + 1 > 0) ↔ ∃ x : ℝ, x^2 + 1 ≤ 0",
+        ):
+            r = gc.classify(self._mk(goal))
+            self.assertTrue(r["full_ok"], (goal, r["full_reason"]))
+
+    def test_embedded_hypothesis_unblocks_full_statement(self) -> None:
+        r = gc.classify(self._mk(
+            "c = 4", vars=("c",), has_field_carrier=True,
+            hyps=("c > 0", "∃ x : ℝ, x = c ∧ ∀ y : ℝ, y^2 ≥ 0"),
+        ))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    # ---- scope hygiene: shadowing refused on OVERLAP only ------------------
+    def test_enclosing_binder_shadow_refused(self) -> None:
+        r = gc.classify(self._mk("∀ x : ℝ, (∃ x : ℝ, x = 1) ∧ x > 0"))
+        self.assertEqual(r["goal_reason"], "quantifier_shadowed_binder")
+
+    def test_statement_binder_shadow_refused(self) -> None:
+        r = gc.classify(self._mk(
+            "(∃ n : ℕ, n = 1) ∧ n = 2", vars=("n",), has_nat_carrier=True))
+        self.assertEqual(r["goal_reason"], "quantifier_shadowed_binder")
+
+    # ---- carrier honesty, leaf-local ---------------------------------------
+    def test_field_binder_leaf_does_not_shield_sibling_nat_division(self) -> None:
+        # the mixed-carrier chain shield, one level down: a ℚ-quantified leaf
+        # must not legitimize Nat.div in its SIBLING conjunct
+        r = gc.classify(self._mk(
+            "(∀ d : ℚ, d = d) ∧ n / 3 = 4", vars=("n",), has_nat_carrier=True))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_field_binder_leaf_does_not_shield_sibling_monus(self) -> None:
+        r = gc.classify(self._mk(
+            "(∀ x : ℝ, x^2 ≥ 0) ∧ n - 2 = 1", vars=("n",), has_nat_carrier=True))
+        self.assertEqual(r["goal_reason"], "nat_monus_no_head")
+
+    def test_untyped_embedded_binder_keeps_nat_default(self) -> None:
+        # untyped ∃ in connective position defaults to ℕ exactly like a
+        # prefix binder: its body's `/` stays Nat.div
+        r = gc.classify(self._mk("(∃ x, x / 2 = 3) ∧ 1 = 1"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_pure_field_embedded_leaf_still_divides(self) -> None:
+        r = gc.classify(self._mk("(∃ x : ℝ, x / 2 = 3) ∧ 1 = 1"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    # ---- precise refusals through the tree ---------------------------------
+    def test_inner_leaf_defects_get_their_own_labels(self) -> None:
+        for goal, label in (
+            ("(∀ f : ℝ → ℝ, f 0 = 0) ∧ 1 = 1", "quantifier_function_binder"),
+            ("(∀ p : Prop, p ∨ ¬p) ∧ 1 = 1", "quantifier_over_sort"),
+            ("(∃ x : ℕ, f x = 1) ∧ 1 = 1", "unsupported_symbol:f"),
+            ("(∃ x : ℝ, |x| = 1) ∧ 1 = 1", "absolute_value"),
+        ):
+            r = gc.classify(self._mk(goal))
+            self.assertEqual(r["goal_reason"], label, goal)
+
+    def test_term_position_quantifier_stays_embedded(self) -> None:
+        for goal in (
+            "(∃ x : ℝ, x = 1) = False",       # Prop-valued equality operand
+            "IsLeast {n : ℕ | ∀ w : ℝ, w ≥ 0} 4",  # set-builder body
+        ):
+            r = gc.classify(self._mk(goal))
+            self.assertEqual(r["goal_reason"], "quantifier_embedded", goal)
+
+    def test_depth_cap_refuses_conservatively(self) -> None:
+        goal = "(" * 45 + "∃ x : ℕ, x = 1" + ")" * 45 + " ∧ 1 = 1"
+        r = gc.classify(self._mk(goal))
+        self.assertEqual(r["goal_reason"], "quantifier_embedded")
+
+    def test_quantified_let_rhs_still_refused(self) -> None:
+        # the walk is gated to goal bodies and hypotheses; a quantified
+        # let-RHS is a Prop-valued binding and keeps the embedded label
+        st = gc.parse_lean4_theorem(
+            "t",
+            "theorem t :\n  let P := (∀ k : ℕ, k ≥ 0) ∧ 1 = 1\n  2 = 2 := by sorry",
+        )
+        self.assertEqual(gc.classify(st)["goal_reason"], "quantifier_embedded")
 
 
 if __name__ == "__main__":

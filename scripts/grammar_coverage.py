@@ -49,6 +49,16 @@ default to ℕ, the untyped-`let` rule; shadowing is refused). Any ∀/∃ that
 survives extraction is in a non-prefix position and keeps the precise
 `quantifier_embedded` label; non-numeric binder domains keep their own labels
 (function, structure, ℂ/zmod, shadowed, malformed).
+
+The v0.10 embedded-quantifier slice adds the atom-tree walk: where the flat
+verdict on a goal body or hypothesis would be `quantifier_embedded`, the
+segment is re-judged as a depth-0 connective tree (∧/∨/→/↔/¬ — all carried
+heads) whose leaves are relations or quantified subformulas, each leaf
+checked by the existing machinery (prefix extraction per subformula, binder
+names and carriers per subformula, leaf-local field signals, every blocker).
+Term-position quantifiers (set-builders, Prop-valued equality operands,
+function arguments), quantified `let` equations, scope-overlapping shadowing,
+and past-cap nesting keep precise refusals.
 """
 
 from __future__ import annotations
@@ -548,9 +558,11 @@ _BLOCKERS: list[tuple[str, re.Pattern]] = [
     # runs (FORALL/EXISTS are corpus heads now — data/logic quantification,
     # data/number_theory witness definitions). Any ∀/∃ that still reaches
     # this scan is EMBEDDED: inside a connective/iff composition, nested in a
-    # non-prefix position of a body, or inside a let-binding equation. Those
-    # positions would need the flat segment checks restructured into an
-    # atom-tree walk, so they stay a precisely named gap.
+    # non-prefix position of a body, or inside a let-binding equation. Since
+    # the v0.10 embedded-quantifier slice, a goal-body or hypothesis segment
+    # with this verdict is re-judged by the atom-tree walk (`_tree_walk`);
+    # the label survives only for what the walk itself refuses (term
+    # position, quantified lets, past-cap nesting).
     ("quantifier_embedded", re.compile(r"[∀∃]")),
     # a comma or an anonymous constructor ⟨…⟩ surviving big-operator / quantifier /
     # set screening is a pair / tuple / list constructor (no `(a,b,…)` head).
@@ -952,6 +964,140 @@ def _quantifier_segment(seg: str, outer_names: set[str]):
     )
 
 
+# --------------------------------------------------------------------------
+# Atom-tree walk (v0.10 embedded quantifiers)
+#
+# Where the flat path's verdict on a GOAL-BODY or HYPOTHESIS segment would be
+# `quantifier_embedded` — and ONLY there — the segment is re-judged as a
+# connective tree whose leaves are either relations or quantified
+# subformulas. The gate guarantees the dual pass loses nothing: a segment the
+# flat path already judged some other way is never re-judged, and `let`
+# equations keep the embedded refusal (a quantified let-RHS is a Prop-valued
+# binding). Design registered in ANALYSIS "embedded quantifiers: the
+# atom-tree walk" BEFORE this code existed; the rules:
+#
+# * Split at depth-0 ∧/∨/→/↔ — every one a carried head (MEET/JOIN/IMPLIES
+#   and the ↔ relation) — STOPPING at the first depth-0 ∀/∃: a Lean binder's
+#   scope swallows everything to its right, so the remainder is one leaf.
+# * ¬-wrappers and whole-span parens strip per part: NEG is a carried head
+#   over any checked subtree (the quantifier De Morgan nodes state the
+#   quantified compositions; the propositional laws the rest).
+# * A quantifier-led leaf runs the EXISTING prefix extractor — binder rules
+#   unchanged (ℕ-default, bounded-binder desugar, ∃! expansion, precise
+#   function/structure/sort/malformed refusals) — then the walk recurses into
+#   the desugared body. A quantifier-free leaf must be prop-shaped and pass
+#   every existing blocker/carrier/symbol check.
+# * Binder names are tracked PER SUBFORMULA. Shadowing is refused on scope
+#   OVERLAP (a leaf binder colliding with a statement binder, domain var, or
+#   ENCLOSING quantifier binder on its path): slot-recurrence binding cannot
+#   express two carriers for one name in one scope chain. Disjoint SIBLING
+#   scopes reusing a name — `(∃ k, n = 2*k) ∨ (∃ k, n = 2*k+1)` — are
+#   alpha-independent and accepted: every occurrence sits inside exactly one
+#   binder's subtree, so skeleton recurrence stays unambiguous.
+# * Carrier honesty is LEAF-LOCAL, strictly finer than segment-local: a
+#   field signal legitimizes `/`/`-` in its own conjunct's subtree only, and
+#   the mixed-carrier chain shield applies per quantified leaf against the
+#   flags inherited on its path. The one disclosed asymmetry is inherited
+#   unchanged: a statement-binder field variable is statement-scoped and
+#   reaches every leaf, exactly as it reaches every segment.
+# * A ∀/∃ that is not leaf-leading after the split — term position: inside a
+#   set-builder (`IsLeast {n | ∀ …}`), a Prop-valued equality operand
+#   (`(∃ …) = False`), a function argument — keeps `quantifier_embedded`, as
+#   does anything past the depth cap (adversarially deep nests refuse
+#   conservatively).
+# --------------------------------------------------------------------------
+
+_CONN_CHARS = "→∧∨↔"
+_TREE_DEPTH_CAP = 40
+
+
+def _split_tree_parts(s: str) -> tuple[list[str], list[str]]:
+    """Split at depth-0 connectives, stopping at the first depth-0 quantifier
+    char (whose Lean scope swallows everything rightward into one leaf)."""
+    parts: list[str] = []
+    conns: list[str] = []
+    depth = 0
+    start = 0
+    for i, c in enumerate(s):
+        if c in _OPEN:
+            depth += 1
+        elif c in _CLOSE:
+            depth -= 1
+        elif depth == 0:
+            if c in _CONN_CHARS:
+                parts.append(s[start:i])
+                conns.append(c)
+                start = i + 1
+            elif c in _QUANT_CHARS:
+                break
+    parts.append(s[start:])
+    return parts, conns
+
+
+def _tree_leaf_gap(a: str, leaf_vars: set[str], nat: bool, int_: bool,
+                   field: bool) -> str | None:
+    """Every flat check, applied to ONE quantifier-free leaf: prop shape
+    first (an atom must be a relation, a prop constant, or a supported bare
+    predicate application), then blockers, the leaf-local carrier rule, the
+    integer-predicate rule, and the symbol scan under the leaf's own vars."""
+    if not _prop_atom_shaped(a):
+        return _blocker(a) or "no_relation_in_goal"
+    r = (
+        _blocker(a)
+        or _carrier_gap(a, nat, int_, field or bool(_FIELD_SIGNAL_RE.search(a)))
+        or _int_pred_field_gap(a, field, leaf_vars)
+    )
+    if r is None:
+        bad = _unsupported_symbol(a, leaf_vars)
+        if bad is not None:
+            r = f"unsupported_symbol:{bad}"
+    return r
+
+
+def _tree_walk(seg: str, leaf_vars: set[str], nat: bool, int_: bool,
+               field: bool, path_names: set[str], depth: int = 0) -> str | None:
+    """Judge one subformula of the atom tree. None means every leaf reduced;
+    otherwise the first leaf's precise gap label."""
+    if depth > _TREE_DEPTH_CAP:
+        return "quantifier_embedded"
+    parts, _conns = _split_tree_parts(seg)
+    if len(parts) > 1:
+        for p in parts:
+            if not p.strip():
+                return "quantifier_embedded"  # dangling connective operand
+            r = _tree_walk(p, leaf_vars, nat, int_, field, path_names, depth + 1)
+            if r is not None:
+                return r
+        return None
+    a = seg.strip()
+    if not a:
+        return "quantifier_embedded"
+    if a.startswith("¬"):
+        return _tree_walk(a[1:], leaf_vars, nat, int_, field, path_names, depth + 1)
+    if _spans_whole(a):
+        return _tree_walk(a[1:-1], leaf_vars, nat, int_, field, path_names, depth + 1)
+    if a[0] in _QUANT_CHARS:
+        r = extract_quantifier_prefix(a)
+        if r is None or r[0] == "gap":
+            return r[1] if r is not None else "quantifier_embedded"
+        _, check_text, bound, carriers = r
+        if len(set(bound)) != len(bound) or (set(bound) & path_names):
+            return "quantifier_shadowed_binder"
+        q_nat = "nat" in carriers or "unknown" in carriers
+        q_int = "int" in carriers
+        # mixed-carrier chain shield, per quantified leaf: the chain's field
+        # carrier is demoted when it mixes with an integer-or-unknown carrier
+        # (its own or anything inherited on the path) — same direction as the
+        # statement-level shield, applied to the leaf's inherited flags.
+        l_field = field or ("field" in carriers and not (q_nat or q_int or nat or int_))
+        return _tree_walk(check_text, leaf_vars | set(bound), nat or q_nat,
+                          int_ or q_int, l_field, path_names | set(bound),
+                          depth + 1)
+    if "∀" in a or "∃" in a:
+        return "quantifier_embedded"  # TERM position: genuinely out
+    return _tree_leaf_gap(a, leaf_vars, nat, int_, field)
+
+
 # Integer predicates over a field carrier are NOT the corpus head: data/
 # number_theory's EVEN/ODD/PRIME are integer parity/primality (over ℝ, mathlib's
 # `Even x` is trivially true for every real -- a different, uncarried reading).
@@ -1060,12 +1206,14 @@ def classify(stmt: dict) -> dict:
     # definitional equations plus the body), so they join every goal-side
     # check — under the STATEMENT context, while the (desugared) goal body
     # checks under its quantifier-extended context.
+    # the final True/False flag marks the segment as goal-body/hypothesis
+    # (atom-tree walk eligible) vs let-equation (embedded stays refused).
     goal_contexts = [
-        *((seg, value_vars, has_nat, has_int, has_field) for seg in lets),
-        (goal_check, goal_vars, g_nat, g_int, g_field),
+        *((seg, value_vars, has_nat, has_int, has_field, False) for seg in lets),
+        (goal_check, goal_vars, g_nat, g_int, g_field, True),
     ]
     goal_idents: set[str] = set()
-    for seg, _v, _n, _i, _f in goal_contexts:
+    for seg, _v, _n, _i, _f, _t in goal_contexts:
         goal_idents |= set(_IDENT_RE.findall(seg))
 
     # The field signal is SEGMENT-LOCAL (review-caught over-count): a `: ℚ`
@@ -1082,7 +1230,8 @@ def classify(stmt: dict) -> dict:
     def _seg_field_signal(seg: str, seg_field: bool) -> bool:
         return seg_field or bool(_FIELD_SIGNAL_RE.search(seg))
 
-    def _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field):
+    def _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field,
+                     tree_names=None):
         r = (
             _blocker(seg)
             or _carrier_gap(seg, seg_nat, seg_int,
@@ -1093,6 +1242,12 @@ def classify(stmt: dict) -> dict:
             bad = _unsupported_symbol(seg, seg_vars)
             if bad is not None:
                 r = f"unsupported_symbol:{bad}"
+        # v0.10 embedded quantifiers: exactly where the flat verdict would be
+        # `quantifier_embedded` AND the segment is a goal body or hypothesis
+        # (tree_names is not None), the atom-tree walk gets the final word.
+        if r == "quantifier_embedded" and tree_names is not None:
+            r = _tree_walk(seg, seg_vars, seg_nat, seg_int, seg_field,
+                           tree_names)
         return r
 
     # ---- goal-only ----
@@ -1103,13 +1258,21 @@ def classify(stmt: dict) -> dict:
         # big-operator gap); `no_relation_in_goal` is only the residue that
         # no blocker can name better.
         goal_reason = _blocker(goal_check) or "no_relation_in_goal"
+        if goal_reason == "quantifier_embedded":
+            # a not-yet-prop-shaped goal whose blocker verdict is the embedded
+            # label (e.g. `(∀ x : ℕ, Even x) ∧ Odd 3`, relationless): the walk
+            # judges it — its per-leaf prop-shape check subsumes this gate.
+            goal_reason = _tree_walk(goal_check, goal_vars, g_nat, g_int,
+                                     g_field, outer_names | goal_vars)
     if goal_reason is None:
         hit = sorted(domain_vars[v] for v in (set(domain_vars) & goal_idents))
         if hit:
             goal_reason = hit[0]
     if goal_reason is None:
-        for seg, seg_vars, seg_nat, seg_int, seg_field in goal_contexts:
-            goal_reason = _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field)
+        for seg, seg_vars, seg_nat, seg_int, seg_field, is_body in goal_contexts:
+            goal_reason = _segment_gap(
+                seg, seg_vars, seg_nat, seg_int, seg_field,
+                (outer_names | seg_vars) if is_body else None)
             if goal_reason is not None:
                 break
     goal_ok = goal_reason is None
@@ -1123,7 +1286,8 @@ def classify(stmt: dict) -> dict:
             for hyp in stmt["hyps"]:
                 hq = _quantifier_segment(hyp, outer_names)
                 if hq is None:
-                    r = _segment_gap(hyp, value_vars, has_nat, has_int, has_field)
+                    r = _segment_gap(hyp, value_vars, has_nat, has_int,
+                                     has_field, outer_names)
                 elif hq[0] == "gap":
                     r = hq[1]
                 else:
@@ -1132,6 +1296,7 @@ def classify(stmt: dict) -> dict:
                         h_check, value_vars | h_extra,
                         has_nat or h_nat, has_int or h_int,
                         has_field or _q_field_unmixed(h_nat, h_int, h_field),
+                        outer_names | h_extra,
                     )
                 if r is not None:
                     full_reason = f"hyp:{r}"
