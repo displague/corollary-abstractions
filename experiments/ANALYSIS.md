@@ -3071,3 +3071,117 @@ Unmapped: **66** — plurals the no-stemming rule refuses to guess ("embers",
 vocabulary barely at all (4%) — a concept→multilingual-forms bridge now
 exists, but the corpus names ~60 of these everyday concepts. Nothing is
 wired into any runtime path in this slice; the number is the deliverable.
+## v0.10 item 1 (cont.) — embedded quantifiers: the atom-tree walk
+
+*(2026-08-12, the successor slice the quantifier head named. Measured before
+designed; designed before coded — this section is the registered checkpoint.)*
+
+### Step 1 — what the 62,142-row bucket actually is
+
+`quantifier_embedded` is a whole-segment blocker verdict: any ∀/∃ the prefix
+extractor did not consume, anywhere in a checked text. Measured composition
+(per-row dual pass of a prototype walk against main `82ca355`, all 1,732,402
+parsed Goedel rows; positions and shapes from the effective checked text,
+i.e. after any supported prefix was already extracted):
+
+| position of the surviving ∀/∃ | rows | share |
+|---|---|---|
+| top of the goal body, under a connective | 36,584 | 58.9% |
+| inside the BODY of a supported prefix chain | 24,801 | 39.9% |
+| inside a `let` equation only | 757 | 1.2% |
+
+Top shapes (connective signature at the split point × quantifier mix):
+`∧`+forall 5,214+4,538, `→`+exists 3,034+1,702, `↔`+exists 2,658,
+`∧`+exists 2,551+2,087, `∧`+forall-depth-2 2,309, `↔`+mixed 2,193,
+`∧`+mixed 2,190, `↔`+forall 1,879, `→∧`+exists 1,688, `→`+forall 1,642 — the
+iff-of-existence, claim-∧-witness, and hypothesis-∀ shapes the roadmap
+predicted, plus long ∧-chains carrying one quantified conjunct.
+
+**What the walk reaches, honestly:** 24,767 of 62,142 goal rows (39.9%)
+would cover — every leaf reduces under the EXISTING machinery with no new
+head. The other 60% fails a leaf check for reasons the flat blocker was
+hiding behind the quantifier glyph, and redistributes to its own precise
+labels: `unsupported_symbol:*` 12,989 (mostly `f`,`a`,`x` — the function-slot
+backlog measured through one more veil), `no_relation_in_goal` 4,217,
+residual `quantifier_embedded` 4,170 (term position: set-builders
+`IsLeast {n | ∀ …}`, Prop-valued equalities `(∃ …) = False`, plus the 757
+quantified lets — genuinely out), `absolute_value` 3,164, `nat_monus` 2,823,
+`vector_or_module_op` 2,150, `quantifier_shadowed_binder` 1,923,
+`integer_division` 1,498, `quantifier_function_binder` 1,262, and a long
+precise tail. Hypothesis side: of 1,233 `hyp:quantifier_embedded`, 833
+would cover. The bucket stays the top FEASIBLE pick: `set_or_finset`
+(87,483) and `big_operator` (74,437) are larger but need heads the corpus
+does not carry; this slice needs zero new heads.
+
+### Design checkpoint (registered before the classifier changed)
+
+**The walk.** Where the flat path's verdict on a GOAL-BODY or HYPOTHESIS
+segment would be `quantifier_embedded` — and only there — the segment is
+re-judged by an atom-tree walk: split the text at depth-0 ∧/∨/→/↔ (stopping
+at the first depth-0 ∀/∃, whose Lean scope swallows everything rightward),
+strip ¬-wrappers and whole-span parens per part, and recurse. Leaves are
+either (a) quantifier-led: the EXISTING prefix extractor runs on the leaf,
+its binder rules unchanged (ℕ-default for untyped/relation-bounded binders,
+bounded-binder desugar, ∃! via the ExistsUnique expansion, precise refusals
+for function/structure/sort/malformed binders), and the walk recurses into
+the desugared body; or (b) quantifier-free: the leaf must be prop-shaped and
+pass every existing blocker/carrier/symbol check. Nothing else changes:
+`let` equations keep the `quantifier_embedded` refusal (a quantified let-RHS
+is a Prop-valued binding), and a segment the flat path already judged some
+other way is not re-judged — so the dual pass can lose nothing and gain only
+from the two targeted buckets.
+
+**Scope hygiene, decided in advance.** (1) Binder names are tracked PER
+SUBFORMULA: a leaf's bound names extend the value slots and carriers for its
+own subtree only. (2) Shadowing is refused on scope OVERLAP: a leaf binder
+that collides with a statement binder, a domain var, or an ENCLOSING
+quantifier's binder anywhere on its path is `quantifier_shadowed_binder`
+(slot-recurrence binding cannot express two carriers for one name in one
+scope chain). Disjoint SIBLING scopes reusing a name — `(∃ k, n = 2*k) ∨
+(∃ k, n = 2*k+1)` — are alpha-independent and accepted: each occurrence of
+the name sits inside exactly one binder's subtree, so skeleton recurrence
+stays unambiguous. (3) Carrier honesty is leaf-local, which is strictly
+finer than segment-local: a field signal in one conjunct legitimizes `/`/`-`
+in that conjunct's subtree only — the mixed-carrier chain shield applies
+per quantified leaf against the flags inherited on its path (a ℚ binder in
+one branch cannot shield a sibling branch's Nat.div). The one disclosed
+asymmetry is inherited unchanged, not widened: a statement-binder field
+variable is statement-scoped and reaches every leaf, exactly as it reaches
+every segment today. (4) A ∀/∃ that is not leaf-leading after the split —
+term position (set-builder bodies, Prop-valued equality operands, function
+arguments) — keeps the `quantifier_embedded` label; a recursion-depth cap
+(40) refuses adversarially deep nests conservatively.
+
+**Head carriage, verified node-by-node (no corpus change).** The walk
+composes only heads the corpus already carries. FORALL/EXISTS under
+connectives are exhibited by the 8 quantification laws + 2 witness
+definitions: FORALL under IMPLIES (`universal_instantiation`,
+`universal_implies_existential`), under NEG (`quantifier_negation_universal`),
+under MEET (`universal_conjunction_distribution`, RHS), under `=`/IFF (both
+De Morgan nodes, both distribution nodes); EXISTS under IMPLIES
+(`existential_generalization`, subalternation), under NEG
+(`quantifier_negation_existential`), under JOIN
+(`existential_disjunction_distribution`, RHS), under `=`/IFF (De Morgan,
+distribution, both witness definitions); nested quantifier-under-quantifier
+and IMPLIES-under-FORALL-under-MEET-under-EXISTS
+(`unique_existence_expansion`). Two pairs are not pairwise exhibited —
+EXISTS directly under MEET, FORALL directly under JOIN — and the claim made
+for them is exactly the head-wise standard in force since the miniF2F
+write-up ("every internal node is a head the corpus carries"), the same
+standard under which MEET/JOIN compositions of relation atoms have been
+accepted since the relational slice. No new HEAD is required anywhere in the
+walk, so the corpus does not change and the GC pins must not move — the
+acknowledgment ledger stays at three entries.
+
+**Registered expectation.** The simulation is an exact mirror of the
+production hook (same extractor, same leaf checks), so these are point
+expectations and floors at once: Goedel-Pset full **+24,874** (24,041
+goal-position + 833 hyp-position) → 772,763 = 44.6%, goal-only **+24,767** →
+920,100 = 53.1%; Lean-workbook full **+31** → 21,268 = 71.5%, goal-only +35;
+miniF2F full **+2** → 163 = 33.4%, goal-only +2. LOST = 0 per row over all
+1.73M + both extracts; every gain from `quantifier_embedded` /
+`hyp:quantifier_embedded` only. Refused rows may only move to equal-or-finer
+labels (the 12,989-row unmasking of `unsupported_symbol:*` is the largest
+single redistributive effect, and is a finding in itself: the function-slot
+demand is ~18% bigger than the named `quantifier_function_binder` bucket
+shows).
