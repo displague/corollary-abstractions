@@ -1,0 +1,39 @@
+{
+ "backend": "lean4",
+ "checks": [
+  "elaborates: pinned toolchain lean binary invoked directly by path (no elan proxy, no network), exit 0 required, warnings fail",
+  "axiom audit: `#print axioms` footprint of the claimed reference must be contained in ['Classical.choice', 'Quot.sound', 'propext'] (a `sorry` surfaces here as sorryAx even though the compiler exits 0)",
+  "surface containment: the claimed statement appears verbatim in the pinned source as the claimed reference's declaration"
+ ],
+ "claim": {
+  "reference": "lean_workbook_10411",
+  "statement_id": "numbertheory.ingested.lean_workbook_10411",
+  "surface": "(2014^2015) % 121 = 34"
+ },
+ "environment": {
+  "lean_version": "Lean (version 4.32.2, x86_64-w64-windows-gnu, commit f3b06c705e6c85f5314019d5d3baab0fec5b580c, Release)",
+  "platform": "win32",
+  "toolchain": "leanprover/lean4:v4.32.2"
+ },
+ "evidence": {
+  "axioms": [
+   "sorryAx"
+  ],
+  "exit_code": 1,
+  "output_sha256": "79e877976aa31aa6878a7595f3ce68127fddf759f1a2840b3ca144bf948b17cd",
+  "output_tail": [
+   "prover/lean/ingested/Lw10411Probe.lean:25:59: warning: exponent 2015 exceeds the threshold 256, exponentiation operation was not evaluated, use `set_option exponentiation.threshold <num>` to set a new threshold",
+   "prover/lean/ingested/Lw10411Probe.lean:25:59: error: maximum recursion depth has been reached",
+   "use `set_option maxRecDepth <num>` to increase limit",
+   "use `set_option diagnostics true` to get diagnostic information",
+   "'lean_workbook_10411' depends on axioms: [sorryAx]"
+  ],
+  "reason": "lean exited 1; lean warned: prover/lean/ingested/Lw10411Probe.lean:25:59: warning: exponent 2015 exceeds the threshold 256, exponentiation operation was not evaluated, use `set_option exponentiation.threshold <num>` to set a new threshold; axiom audit failed: ['sorryAx'] outside the allowed set"
+ },
+ "inputs": {
+  "prover/lean/ingested/Lw10411Probe.lean": "8f8cabe5baaa36b515eebeb1d2fd5f579682cdb0f5aa5560951d3c466d2650ea",
+  "prover/lean/ingested/lean-toolchain": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273"
+ },
+ "schema_version": 1,
+ "verdict": "fail"
+}

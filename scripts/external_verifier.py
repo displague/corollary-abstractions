@@ -127,6 +127,31 @@ def _digest(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _relativize(text: str, repo_root: Path, names: list[str]) -> str:
+    """Fold absolute tool paths back to the names the verdict already pins.
+
+    Lean prints the ABSOLUTE source path in every diagnostic, so a verdict
+    that recorded a failing run verbatim would carry one machine's checkout
+    path into a committed ledger: not byte-reproducible anywhere else, and
+    its `output_sha256` would differ per checkout even when the outcome is
+    identical. Only the pinned inputs' own paths are folded — nothing else
+    in the tool's output is rewritten, so a diagnostic that genuinely names
+    another file stays visible as itself.
+    """
+
+    for name in names:
+        absolute = repo_root / name
+        forms = {
+            str(absolute),
+            str(absolute).replace("\\", "/"),
+            str(absolute.resolve()),
+            str(absolute.resolve()).replace("\\", "/"),
+        }
+        for form in sorted(forms, key=len, reverse=True):
+            text = text.replace(form, name)
+    return text
+
+
 def _pin_inputs(repo_root: Path, names: list[str]) -> dict[str, str]:
     """sha256 every input by repository-relative name; ValueError refuses."""
     pins: dict[str, str] = {}
@@ -259,7 +284,7 @@ def check_lean4(
         ).stdout.strip()
 
     output = (completed.stdout or "") + (completed.stderr or "")
-    output = output.replace("\r\n", "\n")
+    output = _relativize(output.replace("\r\n", "\n"), repo_root, list(inputs))
     environment = {
         "toolchain": toolchain,
         "lean_version": version,
@@ -405,15 +430,35 @@ def check_python_tests(
                 errors="replace",
             )
             stage_results["mypy"] = mypy_run.returncode
+
+            def portable(text: str) -> str:
+                """No machine paths in a committed ledger (see _relativize).
+
+                The sandbox scratch directory is fresh per run, so it is
+                folded to a fixed token as well — otherwise a recorded
+                failure would differ byte-wise on every single execution.
+                """
+                return _relativize(
+                    text.replace(scratch, "<sandbox>"),
+                    repo_root,
+                    [candidate, tests],
+                )
+
             if mypy_run.returncode != 0:
                 failures.append(
                     "mypy --strict failed: "
-                    + (mypy_run.stdout or mypy_run.stderr).strip()[:400]
+                    + portable(mypy_run.stdout or mypy_run.stderr).strip()[:400]
                 )
             test_run = subprocess.run(
                 [
                     sys.executable,
                     "-I",
+                    # -B: the interpreter must not write bytecode caches. The
+                    # runner's hook now refuses those writes anyway (they land
+                    # outside the sandbox, in the repository), so leaving them
+                    # enabled would make a legitimate check fail on its first
+                    # cold run and pass afterwards.
+                    "-B",
                     str(sandbox_runner),
                     scratch,
                     str(candidate_path),
@@ -425,12 +470,25 @@ def check_python_tests(
                 errors="replace",
             )
             stage_results["tests"] = test_run.returncode
-            test_output = (
-                (test_run.stdout or "") + (test_run.stderr or "")
-            ).replace("\r\n", "\n")
+            test_output = portable(
+                ((test_run.stdout or "") + (test_run.stderr or "")).replace(
+                    "\r\n", "\n"
+                )
+            )
             evidence["tests_output_sha256"] = _digest(
                 test_output.encode("utf-8")
             )
+            refusals = sorted(
+                {
+                    line.strip()
+                    for line in test_output.splitlines()
+                    if "sandbox refused" in line
+                }
+            )
+            if refusals:
+                # The refusal is named in the verdict, not buried in a
+                # truncated traceback (design Sec. 7, P5).
+                evidence["sandbox_refusals"] = refusals
             if test_run.returncode != 0:
                 failures.append(
                     "sandboxed tests failed: " + test_output.strip()[:400]

@@ -265,6 +265,81 @@ T3 = `lean_workbook_10202`, plus the mutations named below.
 Adjudication of P1–P9 lands in this file's §8 after implementation, exact to
 the row.
 
-## 8. Adjudication — after implementation (placeholder)
+## 8. Adjudication — after implementation
 
-To be filled by the implementation commits; predictions above are frozen.
+§7 above is frozen as registered. Every prediction landed as written; two
+things the design did NOT say are disclosed at the end, in the house style
+(the registered text is never edited to match the outcome).
+
+| # | outcome | where it is checked |
+|---|---|---|
+| P1 | **CONFIRMED** — `verdict: pass`, `evidence.axioms == ["propext"]`, three `checks` and no more | `prover/verifier-verdicts/lean_workbook_1041.lean4.json`; `test_external_verifier.VerdictObjectHonesty` |
+| P2 | **CONFIRMED** — T3 unbridged, `formal`, reason written into the node | `test_the_mathlib_node_stays_unbridged_and_says_why` |
+| P3 | **CONFIRMED** — `14 ∣ 2^30 + 3^60` elaborates to a `decide` failure, verdict `fail` | `LeanNegativeControls.test_false_statement_fails` |
+| P4 | **CONFIRMED** — `sorry` on the TRUE statement exits 0 with a warning and is caught by the axiom audit naming `sorryAx` | `test_sorry_fails_on_the_axiom_audit` |
+| P5 | **CONFIRMED** — pinned check passes; `% 14` mutation fails; `socket.getaddrinfo` and an out-of-sandbox write are refused with the audit event named in `evidence.sandbox_refusals` | `PythonNegativeControls` (4 tests) |
+| P6 | **CONFIRMED exactly** — the ingested link is CORRESPONDS via `canonical`, `ambiguous_with` empty, the prior 16 links keep byte-identical verdict+route, and the `DIVIDES(7, …)` decoy is MISMATCH | `GroundArithmeticFragmentTests` (11 tests) |
+| P7 | **CONFIRMED** — all four fail-closed paths, one test each | `AttachRule` (5 tests) |
+| P8a | **CONFIRMED, and now committed as a record** — see the disclosure below | `prover/verifier-verdicts/lean_workbook_10411.lean4.json`; `CommittedNegativeRecord` |
+| P9 | **CONFIRMED** — `group_counts {30, 31, 30, 32, 5}` unchanged, a FIFTH consecutive twin null; GC4 moved and the FOURTH acknowledgment was appended | `test_matcher_mirror`; `test_decompose_channels` docstring |
+
+**The GC4 movement, exactly.** Mean groundedness 0.781 → 0.774, external
+channel mean 0.494 → 0.490, external lower 0.223 → 0.221, and at
+`min_family=1` recursive 244 → 250 over 126 → 128 statements. NOT ONE
+constituent moved on any channel (exact stays 531, pattern 99,
+statements-with-constituents 222); both ingested nodes are fully ground and
+own nothing, so they contribute groundedness 0.0 and every per-statement
+mean shifts by exactly the two added zeros. Pure denominator dilution — the
+adjudication is in the acknowledgment appended to
+`tests/test_decompose_channels.py`, which is where it has to survive.
+
+**Disclosure 1 — the committed FAIL verdict carried machine paths.** §2 said
+verdicts must be byte-reproducible and named the two hazards it had thought
+of (timestamps, key order). It missed a third: Lean prints the ABSOLUTE
+source path in every diagnostic, so the first `lean_workbook_10411` verdict
+written embedded this checkout's home directory in `evidence.reason` and
+`evidence.output_tail`, and its `output_sha256` would have differed on every
+clone even where the outcome was identical. Fixed in
+`external_verifier._relativize`: the pinned inputs' own absolute paths are
+folded back to the repository-relative names the verdict already pins (and
+the python sandbox's scratch directory to a fixed token) before anything is
+digested or recorded — nothing else in the tool's output is rewritten, so a
+diagnostic naming some other file stays visible as itself. Both PASS
+verdicts regenerate byte-identically across the change, which is the
+evidence that the fold touched only failing output.
+`LedgerBytesArePortable` is the regression.
+
+**Disclosure 2 — "recorded FAIL" had nowhere to live.** P8(a) promised T2
+would be *recorded* as a FAIL, and the implementation as first landed
+recorded it only in this note's prose. A ledger that contains nothing but
+passes is not a ledger, so the negative is now a first-class committed
+entry: `prover/lean/ingested/Lw10411Probe.lean` (the statement restated
+verbatim from the same pinned extract, with no `set_option` escape hatch)
+and its FAIL verdict, which sits in the ledger, re-hashes green, and is
+referenced by no manifest artifact — so it can back nothing. That is the
+`{pass, fail, refused}` vocabulary of §2 doing the job it was declared for.
+
+**Disclosure 3 — the sandbox's write rule had a hole, and it fired.** §1
+called the audit hook a discipline boundary and named ctypes and hostile C
+extensions as its known evasions. The hole that actually mattered was
+neither: the `open` audit event carries `(path, mode, flags)` and the MODE
+IS `None` for every low-level open — `os.open`, `_io.FileIO`, and CPython's
+own bytecode-cache writer — while the hook read only the mode. This was not
+hypothetical. A `python-tests` run with a cold cache **wrote `__pycache__`
+into the repository** and still reported PASS, under a `checks` line that
+claims writes outside the sandbox are refused. The rule now reads the flags
+as well, and the runner is invoked with `-B` so no legitimate check needs
+that write; the committed verdict's evidence digest is byte-identical across
+the fix, and the cold-cache run is now the same run as the warm one. Two
+regressions pin it. The discipline-boundary caveat still stands as written —
+it was just not the reason this one leaked.
+
+**Disclosure 4 — the ingested link touched three existing pins.** §6
+predicted the corpus-count pins (README, `test_matcher_mirror`,
+`test_verified_by`) and the link count. It did not anticipate that three
+tests iterating the correspondence `EXPECTED` table assume ONE artifact file
+and that every CORRESPONDS link has a structural twin: the ingested link
+lives in its own traced artifact and has no twin at all. Fixed by giving the
+table an explicit `ARTIFACT_OF` map and stating the no-twin case as its own
+assertion rather than an exemption — both are P6's own predictions turned
+into checks, but the need for them was discovered, not foreseen.

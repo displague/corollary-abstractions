@@ -2480,3 +2480,19 @@ wants its own adversarial review, not a release-eve change.
   truncated subtraction its own head there. Filed from the quantifier slice's
   adversarial review rather than patched inline, because splitting one
   type's carrier class per operator deserves its own measured slice.
+
+## Verdict-backed ingestion should be a RULE, not a precedent (v0.10 item 2 review filing)
+
+- **Nothing forces a future ingested node to carry a verdict.**
+  `external_verifier.verdict_ledger_errors` checks every verdict that EXISTS
+  and every manifest `verdicts` entry that is DECLARED, but a new artifact
+  whose manifest entry simply omits `verdicts` is cited exactly like the 16
+  pre-verifier propositional links — so the next ingest could quietly skip
+  the authority the slice was built to establish. The invariant worth adding:
+  a `verified_by` link whose statement is INGESTED (or, more generally, whose
+  manifest entry declares a `source` .lean file) must resolve to at least one
+  PASS `lean4` verdict over that source claiming that statement. Not patched
+  inline because it is a validator WIDENING, not a fix — the registered
+  design (docs/DESIGN-external-verifier.md §3) deliberately froze the link
+  vocabulary this slice, so the new rung belongs to the ingestion slice that
+  needs it (roadmap item 3 or the next ingest), with its own prediction.

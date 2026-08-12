@@ -3308,3 +3308,95 @@ guard is the classifier's contact rule plus its regression tests. Making
 the audit see nesting would mean reimplementing the walk inside it and
 forfeiting its independence; left as a known limit, flagged for the next
 review.
+
+## v0.10 item 2 — the external verifier: what a passing check actually certifies (2026-08-12)
+
+Design registered before implementation in `docs/DESIGN-external-verifier.md`
+(predictions P1–P9 frozen in §7, adjudicated exact-to-the-row in §8). This
+section is the numbers-of-record summary; the argument lives in that note.
+
+**What shipped.** `scripts/external_verifier.py` is a transition authority
+with two live backends behind one interface: `lean4` invokes the pinned
+toolchain's binary DIRECTLY by path (an absent toolchain is a REFUSAL, never
+a download) and requires exit 0, no warnings, and an axiom footprint inside
+`{propext, Classical.choice, Quot.sound}`; `python-tests` runs
+`py_compile` → `mypy --strict` → `unittest` under a CPython audit hook that
+refuses sockets, subprocesses and out-of-sandbox writes — a **discipline**
+boundary, not a security boundary, and the verdict's `checks` list says so
+rather than claiming a jail. Verdicts are committed ledger objects (LF,
+sorted keys, no timestamps, never a bare boolean) over
+`{pass, fail, refused}`, and `recheck` re-runs one from its own pins.
+
+**The honesty boundary, which is the point of the item:** a passing check
+certifies what it checks, not correctness in general. A `lean4` PASS says
+*this pinned source elaborates cleanly under this pinned toolchain and the
+named theorem's axiom footprint is inside the allowed set* — not that the
+theorem formalizes the prose statement citing it (that stays the
+correspondence rung's separate, shape-only claim), and not anything about
+bytes it did not pin.
+
+**The first ingested `verified_by`, end to end.** `lean_workbook_1041`
+(`13 ∣ 2^30 + 3^60`, from the pinned Lean-workbook extract) is ground
+divisibility, decidable in **core Lean** — so the chain is buildable with
+the toolchain actually installed: pinned source → PASS verdict (axioms
+exactly `[propext]`) → transitions traced by `prover/ExtractData.win.lean`
+(not hand-written) → digest pin in the manifest → the node's link →
+`verified_by_errors` provenance re-check → correspondence CORRESPONDS. Links
+16 → 17; corpus 251 → 253; validator green over 24 corpora.
+
+**Where the bridge stops, recorded where it applies.** `lean_workbook_10202`
+(`2^21 ≡ 1 [ZMOD 7]`) needs Mathlib, which is outside the hermetic budget
+(multi-GB fetch, network at verification time); it enters `formal` with NO
+link and writes that reason into its own `semantic_interpretation`.
+`lean_workbook_10411` (`(2014^2015) % 121 = 34`) is TRUE, ground, and still
+not provable by the shipped options — `decide` exceeds
+`exponentiation.threshold` and closes the declaration with `sorryAx` — so it
+is committed as a **FAIL verdict** over its own probe source, referenced by
+no artifact and therefore backing nothing. The verifier was NOT taught to
+raise the option until the check passed; a verifier that tunes its own
+options is not an authority.
+
+**The correspondence rung's second fragment.** Zero-hypothesis goals over
+numerals and `+ * ^ % ∣ = ( )` only. `-` (monus), `/` (floor division),
+order relations and every identifier are refused, not guessed — the v0.9
+`Nat.div` carrier lesson applied to a new surface. Ground templates have no
+slots, so CORRESPONDS is exact structural identity and a wrong literal is a
+MISMATCH: the `DIVIDES(7, 2^30 + 3^60)` decoy citing the 13 theorem is
+adjudicated MISMATCH, and so is a wrong exponent, while the prior 16 links
+keep byte-identical verdict AND route.
+
+**Ledger movement (P9).** `group_counts {shape 30, typed 31, family 30,
+aliased 32, mirror 5}` — unchanged, the **fifth** consecutive twin null.
+GC4 moved by DENOMINATOR DILUTION only: mean groundedness 0.781 → 0.774,
+external 0.494 → 0.490, external lower 0.223 → 0.221, min-family-1 recursive
+244 → 250 over 126 → 128 statements, with **not one constituent moving on
+any channel** (531 exact / 99 pattern / 222 statements-with-constituents all
+identical). Both new nodes are fully ground, own nothing anywhere in the
+corpus, and contribute groundedness 0.0. The fourth registered
+acknowledgment records exactly that, appended without touching the prior
+three. Grammar-coverage numbers are untouched this slice by construction:
+`scripts/grammar_coverage.py` and the three ingest scripts are byte-identical
+to the base commit, so Goedel 44.6% / Lean-workbook 71.5% / miniF2F 33.4%
+stand as measured in the previous slice.
+
+**Disclosure.** The first FAIL verdict written embedded this checkout's
+absolute path in `evidence.reason` and `evidence.output_tail` (Lean prints
+absolute paths in diagnostics), which would have made a committed ledger
+reproducible on exactly one machine. The design's byte-reproducibility
+clause had named timestamps and key order and missed this. Fixed by folding
+pinned inputs' own paths back to their repository-relative names before
+anything is digested; both PASS verdicts regenerate byte-identically across
+the fix, which is the evidence the fold touched only failing output.
+
+**Second disclosure — the sandbox's write rule had a hole, and it fired.**
+The design named ctypes and hostile C extensions as the audit hook's known
+evasions. The hole that mattered was neither: the `open` audit event carries
+`(path, mode, flags)` and the mode is `None` for every low-level open —
+`os.open`, `_io.FileIO`, and CPython's own bytecode-cache writer — while the
+hook read only the mode. A `python-tests` run with a cold cache **wrote
+`__pycache__` into the repository** and still reported PASS, under a `checks`
+line claiming out-of-sandbox writes are refused. The rule reads the flags
+now, and the runner is invoked with `-B`; the committed verdict's evidence
+digest is byte-identical across the fix, and the cold-cache run is now the
+same run as the warm one. The discipline-boundary caveat stands as written —
+it just was not the reason this one leaked.
