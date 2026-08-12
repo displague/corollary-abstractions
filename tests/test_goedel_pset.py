@@ -608,6 +608,12 @@ class QuantifierHeads(unittest.TestCase):
         self.assertTrue(
             set(igp._audit_normalize("∀ {x : ℕ} (h : x ∈ {y | y > 0}), x > 0"))
             - igp._ALLOWED)
+        # reviewer's control: the widened pattern must not cross a membership
+        # glyph into set-literal braces (their inner comma would even pass
+        # the inner class — the ∈ exclusion is what stops it).
+        self.assertTrue(
+            set(igp._audit_normalize("∀ x ∈ ({1, 2} : Set ℕ), x > 0"))
+            - igp._ALLOWED)
 
 
 class GoedelPsetEmbeddedQuantifierWalk(unittest.TestCase):
@@ -713,6 +719,61 @@ class GoedelPsetEmbeddedQuantifierWalk(unittest.TestCase):
         goal = "(" * 45 + "∃ x : ℕ, x = 1" + ")" * 45 + " ∧ 1 = 1"
         r = gc.classify(self._mk(goal))
         self.assertEqual(r["goal_reason"], "quantifier_embedded")
+
+    # ---- the nested-shield review fix (fifth cycle): atom contact ----------
+    def test_nested_and_single_chain_agree(self) -> None:
+        # The review's probe pair: an inherited field flag must not survive
+        # into a descendant ℕ leaf — the nested spelling and the single
+        # mixed chain must give the SAME verdict.
+        nested = gc.classify(self._mk("∀ x : ℝ, x = x ∧ ∀ n : ℕ, n / 2 * 2 = n"))
+        single = gc.classify(self._mk("∀ (x : ℝ) (n : ℕ), x = x ∧ n / 2 * 2 = n"))
+        self.assertEqual(nested["goal_reason"], "integer_division_no_head")
+        self.assertEqual(nested["goal_reason"], single["goal_reason"])
+
+    def test_field_prefix_does_not_shield_nested_nat_division(self) -> None:
+        # Goedel-Pset-704685's shape: `∃ l : ℝ, … ∧ ∀ a > 0, a + 4/a ≥ 4` —
+        # the inner a is ℕ by the untyped-binder rule and l never touches
+        # its atom, so 4/a is Nat.div and the row must refuse.
+        r = gc.classify(self._mk("∃ l : ℝ, l = 4 ∧ ∀ a > 0, a + 4 / a ≥ 4"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_unused_field_binder_does_not_shield(self) -> None:
+        # Goedel-Pset-1586260's shape: a vacuous `m : ℝ` binder must not
+        # shield a ℕ-defaulted ∃-leaf's division anywhere in its body.
+        r = gc.classify(self._mk("∃ m : ℝ, m = m ∧ ∃ x, 4 / x = 2"))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_field_contact_in_the_atom_still_covers(self) -> None:
+        # Positive control (the reviewer's adjudicated-honest class): the
+        # field var SHARES the atom, so Lean elaborates the division in ℝ.
+        r = gc.classify(self._mk("∃ l : ℝ, 1 = 1 ∧ ∀ a : ℕ, l ≥ 4 / a"))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_unused_statement_field_binder_does_not_shield(self) -> None:
+        # Goedel-Pset-1586260 verbatim shape: the unused STATEMENT binder
+        # `(m : ℝ)` must not shield the ℕ-defaulted ∃-leaves' `4 / x`. The
+        # statement is pure-field, so its value vars shield by NAME — and m
+        # touches no atom.
+        r = gc.classify(self._mk(
+            "(∃ x y, (y = 4 / x ∧ x = 2 ∧ y = 2)) ∧ (∃ x y, (y = 4 / x ∧ x = 2 ∧ y = 0))",
+            vars=("m",), hyps=("m ≠ 0",), has_field_carrier=True))
+        self.assertEqual(r["goal_reason"], "integer_division_no_head")
+
+    def test_statement_field_contact_still_covers(self) -> None:
+        # ...while the same pure-field statement DOES shield an atom its
+        # field var actually touches (x : ℝ forces the ℝ reading of q / 3).
+        r = gc.classify(self._mk(
+            "x > 0 ∧ ∃ q : ℤ, x = q / 3", vars=("x",), has_field_carrier=True))
+        self.assertTrue(r["full_ok"], r["full_reason"])
+
+    def test_mixed_statement_keeps_the_disclosed_blanket(self) -> None:
+        # A MIXED statement (ℝ and ℤ binders) has no per-name types in the
+        # extracts; the walk keeps the flat path's disclosed blanket
+        # (Goedel-Pset-359's adjudicated-honest shape).
+        r = gc.classify(self._mk(
+            "a = a ↔ ∃ f g : ℤ, x = f / g", vars=("x", "a"),
+            has_field_carrier=True, has_int_carrier=True))
+        self.assertTrue(r["full_ok"], r["full_reason"])
 
     def test_quantified_let_rhs_still_refused(self) -> None:
         # the walk is gated to goal bodies and hypotheses; a quantified

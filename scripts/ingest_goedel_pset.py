@@ -96,7 +96,12 @@ def _load_manifest_source() -> dict:
 # `∀ {α : ℝ} {n : ℕ} (h : …), …` whose SECOND brace group the old
 # directly-after-the-quantifier pattern left foreign (audit=1; the cover was
 # legitimate, the normalizer was the bug — fixed as a class, not a row).
-_IMPLICIT_BINDER_RE = re.compile(r"([∀∃][^{},|]*)\{([^{}|]*)\}")
+# Membership glyphs are excluded from the crossing (review follow-up): a
+# binder section that reads `x ∈ (…` is a bounded-membership binder, and the
+# widened pattern must not cross it into set-literal braces
+# (`∀ x ∈ ({1, 2} : Set ℕ)` — unreachable as a cover today, kept foreign so
+# the audit would say so first if that ever changes).
+_IMPLICIT_BINDER_RE = re.compile(r"([∀∃][^{},|∈∉⊆⊂]*)\{([^{}|]*)\}")
 
 
 def _audit_normalize(txt: str) -> str:
@@ -145,9 +150,16 @@ def _carrier_residual(stmt: dict) -> bool:
     stmt_int = stmt.get("has_nat_carrier") or stmt.get("has_int_carrier")
     for txt in [stmt["goal"], *stmt.get("goal_lets", []), *stmt["hyps"]]:
         seg_int = stmt_int
+        # NB (embedded-quantifier review, disclosed): this audit reads
+        # statement + OUTERMOST-chain carriers; a NESTED chain's carriers
+        # inside check_text are invisible to it, so the guard for the
+        # nested-shield class is the classifier's atom-contact rule plus its
+        # regression tests, not this ledger field. Making the audit see
+        # nesting would mean reimplementing the walk here and forfeiting the
+        # audit's independence.
         q = gc.extract_quantifier_prefix(txt)
         if q is not None and q[0] == "ok":
-            _, check_text, _names, carriers = q
+            _, check_text, _names, carriers, _fnames = q
             chain_int = bool(carriers & {"nat", "int", "unknown"})
             if "field" in carriers and not chain_int and not stmt_int:
                 continue  # pure-field chain: its binder declares the carrier

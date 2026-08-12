@@ -3234,3 +3234,77 @@ set-builder `|` still excluded) and runs to a fixpoint; negative controls
 pin that a brace past the binder comma and a set-builder inside the section
 stay foreign. Audits end 0/0 legitimately. Suite 892 → 905 (+12 walk tests
 including the negative-control matrix, +1 normalizer regression).
+
+### Review correction — nesting defeated the mixed-carrier shield; the fix is atom contact (fifth cycle)
+
+Independent adversarial review reproduced every mechanical check and then
+found the class this slice's own design note failed to carry one level
+down: `_tree_walk` demoted only a chain's OWN field carrier — an INHERITED
+field flag was never revoked when a descendant leaf declared ℕ/ℤ/unknown
+binders. The probe pair makes it exact: `∀ x : ℝ, x = x ∧ ∀ n : ℕ,
+n/2*2 = n` covered while its single-chain spelling `∀ (x : ℝ) (n : ℕ), …`
+refused — the registered statement-level rule, violated one nesting level
+down. Realized rows: Goedel-Pset-704685 (a prefix `∃ l : ℝ` shielding
+`4/a` under an inner untyped-ℕ `∀ a > 0`) and 1586260 (an unused statement
+binder `(m : ℝ)` shielding `4/x` under ℕ-defaulted `∃ x y` conjuncts).
+Credit where due: the finding, the probe pair, and the 1,259-row flip list
+are the review's.
+
+**The fix chosen: atom contact, not the blanket revoke.** The reviewer's
+hand-adjudication showed most blanket-flips are honest Lean-coercion covers
+— the field variable SHARES the atom (`x = f / g` with `x : ℝ` forces the
+ℝ reading), which is attribution evidence a text-level instrument can act
+on. So field carriers with decidable names now shield walk leaves BY NAME,
+on atom contact only: (1) an unmixed quantifier chain's field-typed binder
+names join the walk's contact set (gated by the `_q_field_unmixed`
+predicate against inherited flags, so identical text gets identical
+verdicts in prefix and embedded position); (2) a PURE-field statement's
+value vars shield by name too — exact, not approximate, because
+`value_vars` only ever holds numerically-typed names, so `has_field` with
+no nat/int carrier means every one of them is field-typed; (3) a MIXED
+statement keeps the blanket boolean — per-name types of statement binders
+are not in the committed extracts, contact is undecidable there, and the
+blanket is precisely the flat path's disclosed `r^(n-1)` asymmetry at its
+pre-existing width. A leaf with no contact, no textual signal, and no
+blanket is demoted to the integer reading's precise gap.
+
+**The correction, counted (exact dual pass, pre-fix classifier vs fixed,
+all 1.73M rows + both extracts):** Goedel removes **375** full covers (212
+`nat_monus`, 131 `integer_division`, 19+13 hyp-side; 44 quantifier-origin,
+319 pure-field-statement, 12 of them same-class rows the review's probe
+variant missed) and **regains 7** the old blanket had FALSELY REFUSED —
+`Odd p` / `Nat.Prime p` over genuine ℕ binders inside pure-field
+statements, where the blanket leaked into the integer-predicate check and
+misattributed the field carrier to `p` (`integer_predicate_field_carrier`);
+contact fixes both directions, and `Even x` over an actual field var stays
+refused because the var is its own contact. Net Goedel **−368** full /
+−371 goal-only; Lean-workbook −1 (lean_workbook_15817, the known
+honest-cover cost of atom granularity: `x` is pinned to ℝ by the atom that
+touches `A`, but the bound conjunct `x − 2 ≠ 0` alone shows no evidence —
+refused in the conservative direction, disclosed per precedent); miniF2F 0.
+Of the review's 1,259 blanket-flips, 896 keep covering (contact or mixed
+blanket, including 160 of the 204 quantifier-origin coercions the sample
+adjudicated honest), 363 are removed.
+
+**Numbers of record, corrected:** Goedel-Pset full **772,395 = 44.6%**
+(goal-only **919,729 = 53.1%**, unique covered 563,296; like-for-like vs
+base +24,506 full / +24,396 goal-only, LOST=0 by the re-run per-row pass),
+Lean-workbook **21,267 = 71.5%** (goal-only 21,919, +30/+34 vs base),
+miniF2F unchanged **163 = 33.4%**. Audits 0/0. Suite 905 → 912 (+4
+nested-shield regressions incl. the probe pair and both realized-row
+shapes with positive controls, +3 statement-origin contact/blanket pins).
+
+**Two disclosures attached to the registered design, per house style.**
+(1) The design checkpoint's carrier sentence — "the one disclosed asymmetry
+is inherited unchanged, not widened" — was INACCURATE as written: the walk
+as first landed also blanket-inherited QUANTIFIER-origin field flags into
+nested leaves (204 realized rows had no statement field binder at all),
+which is a widening this correction removes. The registered text stands
+uncorrected above, as registered; this paragraph is the correction. (2) The
+carrier-residual audit reads statement + outermost-chain carriers only; a
+nested chain's carriers inside a desugared body are invisible to it, so the
+ledger audit is structurally blind to this class in both directions — the
+guard is the classifier's contact rule plus its regression tests. Making
+the audit see nesting would mean reimplementing the walk inside it and
+forfeiting its independence; left as a known limit, flagged for the next
+review.

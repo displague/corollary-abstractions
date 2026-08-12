@@ -792,10 +792,14 @@ def _outside_groups(s: str) -> str:
 
 
 def _quant_binder_section(
-    sec: str, names: list[str], bounds: list[str], carriers: set[str]
+    sec: str, names: list[str], bounds: list[str], carriers: set[str],
+    fnames: list[str],
 ) -> str | None:
     """Classify ONE binder section (the text between ∀/∃ and its comma),
-    appending bound value names / bound-predicate conjuncts / carriers.
+    appending bound value names / bound-predicate conjuncts / carriers —
+    and, for FIELD-typed sections, the bound names to `fnames`: the
+    atom-contact shield (review fix, embedded-quantifier slice) needs to
+    know WHICH names carry the field type, not just that one exists.
     Returns a precise gap label, or None when the section is supported."""
     sec = sec.strip()
     if not sec:
@@ -803,7 +807,7 @@ def _quant_binder_section(
     # strict-implicit binder brackets `⦃A B C : ℕ⦄` are not in the global
     # bracket alphabet; unwrap them and read the inner binder as usual.
     if sec.startswith("⦃") and sec.endswith("⦄"):
-        return _quant_binder_section(sec[1:-1], names, bounds, carriers)
+        return _quant_binder_section(sec[1:-1], names, bounds, carriers, fnames)
     groups = top_level_groups(sec)
     # A LIST of binder groups only when nothing but whitespace sits outside
     # them — `(x : ℝ) (hx : x > 0)`. A section with groups AND residue is an
@@ -818,7 +822,7 @@ def _quant_binder_section(
                 # instance binder `[Fact p]` / destructuring pattern `⟨a, b⟩`:
                 # a typeclass assumption or a structure pattern — no head.
                 return "quantifier_structure_binder"
-            gap = _quant_binder_section(inner, names, bounds, carriers)
+            gap = _quant_binder_section(inner, names, bounds, carriers, fnames)
             if gap is not None:
                 return gap
         return None
@@ -842,11 +846,13 @@ def _quant_binder_section(
             return "quantifier_malformed"
         if typ in _NUMERIC_TYPES:
             names.extend(nm)
-            carriers.add(
-                "nat" if typ in _NAT_TYPES
-                else "int" if typ in _INTZ_TYPES
-                else "field"
-            )
+            if typ in _NAT_TYPES:
+                carriers.add("nat")
+            elif typ in _INTZ_TYPES:
+                carriers.add("int")
+            else:
+                carriers.add("field")
+                fnames.extend(nm)
             return None
         dr = domain_reason(typ)
         if dr is not None:
@@ -912,16 +918,19 @@ def extract_quantifier_prefix(seg: str):
     """Parse a (possibly ¬-wrapped) quantifier-PREFIX proposition.
 
     Returns None when `seg` is not quantifier-led (the caller uses it
-    unchanged); ("gap", label, [], set()) for a precisely refused shape; or
-    ("ok", check_text, bound_names, carriers) where `check_text` is the
-    desugared proposition every segment check runs on — binder predicates and
-    prop-binder types joined to the body with `→`, in binding order."""
+    unchanged); ("gap", label, [], set(), []) for a precisely refused shape;
+    or ("ok", check_text, bound_names, carriers, field_names) where
+    `check_text` is the desugared proposition every segment check runs on —
+    binder predicates and prop-binder types joined to the body with `→`, in
+    binding order — and `field_names` are the chain's FIELD-typed bound
+    names (the atom-contact shield's evidence set; review fix)."""
     s = _strip_neg_wrappers(seg.strip())
     if s[:1] not in _QUANT_CHARS:
         return None
     names: list[str] = []
     bounds: list[str] = []
     carriers: set[str] = set()
+    fnames: list[str] = []
     while s[:1] in _QUANT_CHARS:
         rest = s[1:].lstrip()
         if rest.startswith("!"):
@@ -931,27 +940,28 @@ def extract_quantifier_prefix(seg: str):
             rest = rest[1:].lstrip()
         ci = _depth0_seek(rest, ",")
         if ci < 0:
-            return ("gap", "quantifier_malformed", [], set())
-        gap = _quant_binder_section(rest[:ci], names, bounds, carriers)
+            return ("gap", "quantifier_malformed", [], set(), [])
+        gap = _quant_binder_section(rest[:ci], names, bounds, carriers, fnames)
         if gap is not None:
-            return ("gap", gap, [], set())
+            return ("gap", gap, [], set(), [])
         s = _strip_neg_wrappers(rest[ci + 1 :].strip())
     if not s:
-        return ("gap", "quantifier_malformed", [], set())
+        return ("gap", "quantifier_malformed", [], set(), [])
     check_text = " → ".join([*bounds, s]) if bounds else s
-    return ("ok", check_text, names, carriers)
+    return ("ok", check_text, names, carriers, fnames)
 
 
 def _quantifier_segment(seg: str, outer_names: set[str]):
     """Segment-level wrapper: None (not quantifier-led) | ("gap", label) |
-    ("ok", check_text, extra_vars, nat, int, field). Shadowing is refused
-    here because only the caller knows the statement's outer names."""
+    ("ok", check_text, extra_vars, nat, int, field, field_names). Shadowing
+    is refused here because only the caller knows the statement's outer
+    names."""
     r = extract_quantifier_prefix(seg)
     if r is None:
         return None
     if r[0] == "gap":
         return ("gap", r[1])
-    _, check_text, bound, carriers = r
+    _, check_text, bound, carriers, fnames = r
     if len(set(bound)) != len(bound) or (set(bound) & outer_names):
         return ("gap", "quantifier_shadowed_binder")
     return (
@@ -961,6 +971,7 @@ def _quantifier_segment(seg: str, outer_names: set[str]):
         "nat" in carriers or "unknown" in carriers,
         "int" in carriers,
         "field" in carriers,
+        fnames,
     )
 
 
@@ -995,11 +1006,26 @@ def _quantifier_segment(seg: str, outer_names: set[str]):
 #   alpha-independent and accepted: every occurrence sits inside exactly one
 #   binder's subtree, so skeleton recurrence stays unambiguous.
 # * Carrier honesty is LEAF-LOCAL, strictly finer than segment-local: a
-#   field signal legitimizes `/`/`-` in its own conjunct's subtree only, and
-#   the mixed-carrier chain shield applies per quantified leaf against the
-#   flags inherited on its path. The one disclosed asymmetry is inherited
-#   unchanged: a statement-binder field variable is statement-scoped and
-#   reaches every leaf, exactly as it reaches every segment.
+#   field signal legitimizes `/`/`-` in its own conjunct's subtree only.
+#   Quantifier-origin field carriers shield BY NAME, on atom contact
+#   (adversarial-review fix, fifth cycle): a chain's field-typed binder
+#   names join the walk's contact set — only when the chain is unmixed
+#   against its own and its inherited ℕ/ℤ flags, the _q_field_unmixed
+#   predicate one level down, so identical text gets identical verdicts in
+#   prefix and embedded position — and a leaf is shielded only if one of
+#   those names OCCURS in the leaf's atom text (the coercion evidence: with
+#   `l : ℝ` in the atom, Lean elaborates the atom's `/` in ℝ) or the leaf
+#   carries its own textual signal. An inherited flag with no contact is
+#   demoted: the review's probe `∀ x : ℝ, x = x ∧ ∀ n : ℕ, n/2*2 = n` must
+#   refuse exactly like its single-chain spelling. Statement binders join
+#   the contact set BY NAME when the statement is pure-field (has_field and
+#   no nat/int carrier — exact, not approximate: value_vars only ever holds
+#   numerically-typed names, so a pure-field statement's value vars are all
+#   field-typed; the review's realized `(m : ℝ) … (∃ x y, y = 4/x ∧ …)` row
+#   refuses because m touches no atom). A MIXED statement keeps the blanket
+#   (per-name types are not in the committed extracts — contact is
+#   undecidable there), which is exactly the flat path's disclosed
+#   `r^(n-1)` asymmetry, inherited at its pre-existing width.
 # * A ∀/∃ that is not leaf-leading after the split — term position: inside a
 #   set-builder (`IsLeast {n | ∀ …}`), a Prop-valued equality operand
 #   (`(∃ …) = False`), a function argument — keeps `quantifier_embedded`, as
@@ -1039,7 +1065,10 @@ def _tree_leaf_gap(a: str, leaf_vars: set[str], nat: bool, int_: bool,
     """Every flat check, applied to ONE quantifier-free leaf: prop shape
     first (an atom must be a relation, a prop constant, or a supported bare
     predicate application), then blockers, the leaf-local carrier rule, the
-    integer-predicate rule, and the symbol scan under the leaf's own vars."""
+    integer-predicate rule, and the symbol scan under the leaf's own vars.
+    `field` arrives already contact-resolved (statement blanket OR a
+    quantifier field name occurring in this atom); the textual signal is
+    checked here, on the leaf's own text only."""
     if not _prop_atom_shaped(a):
         return _blocker(a) or "no_relation_in_goal"
     r = (
@@ -1055,9 +1084,19 @@ def _tree_leaf_gap(a: str, leaf_vars: set[str], nat: bool, int_: bool,
 
 
 def _tree_walk(seg: str, leaf_vars: set[str], nat: bool, int_: bool,
-               field: bool, path_names: set[str], depth: int = 0) -> str | None:
+               stmt_field: bool, field_names: frozenset[str],
+               path_names: set[str], depth: int = 0) -> str | None:
     """Judge one subformula of the atom tree. None means every leaf reduced;
-    otherwise the first leaf's precise gap label."""
+    otherwise the first leaf's precise gap label.
+
+    `stmt_field` is the MIXED-statement blanket (a statement carrying both
+    field and nat/int binders shields as it always has in the flat path —
+    per-name types are undecidable from the extracts); `field_names` are the
+    field-typed names with decidable scope: a pure-field statement's value
+    vars plus the field binders of unmixed quantifier chains on the path.
+    Names shield a leaf only on atom CONTACT (review fix: an inherited flag
+    was never revoked one nesting level down, so `∀ x : ℝ, x = x ∧
+    ∀ n : ℕ, n/2*2 = n` covered while its single-chain spelling refused)."""
     if depth > _TREE_DEPTH_CAP:
         return "quantifier_embedded"
     parts, _conns = _split_tree_parts(seg)
@@ -1065,7 +1104,8 @@ def _tree_walk(seg: str, leaf_vars: set[str], nat: bool, int_: bool,
         for p in parts:
             if not p.strip():
                 return "quantifier_embedded"  # dangling connective operand
-            r = _tree_walk(p, leaf_vars, nat, int_, field, path_names, depth + 1)
+            r = _tree_walk(p, leaf_vars, nat, int_, stmt_field, field_names,
+                           path_names, depth + 1)
             if r is not None:
                 return r
         return None
@@ -1073,29 +1113,37 @@ def _tree_walk(seg: str, leaf_vars: set[str], nat: bool, int_: bool,
     if not a:
         return "quantifier_embedded"
     if a.startswith("¬"):
-        return _tree_walk(a[1:], leaf_vars, nat, int_, field, path_names, depth + 1)
+        return _tree_walk(a[1:], leaf_vars, nat, int_, stmt_field,
+                          field_names, path_names, depth + 1)
     if _spans_whole(a):
-        return _tree_walk(a[1:-1], leaf_vars, nat, int_, field, path_names, depth + 1)
+        return _tree_walk(a[1:-1], leaf_vars, nat, int_, stmt_field,
+                          field_names, path_names, depth + 1)
     if a[0] in _QUANT_CHARS:
         r = extract_quantifier_prefix(a)
         if r is None or r[0] == "gap":
             return r[1] if r is not None else "quantifier_embedded"
-        _, check_text, bound, carriers = r
+        _, check_text, bound, carriers, fnames = r
         if len(set(bound)) != len(bound) or (set(bound) & path_names):
             return "quantifier_shadowed_binder"
         q_nat = "nat" in carriers or "unknown" in carriers
         q_int = "int" in carriers
-        # mixed-carrier chain shield, per quantified leaf: the chain's field
-        # carrier is demoted when it mixes with an integer-or-unknown carrier
-        # (its own or anything inherited on the path) — same direction as the
-        # statement-level shield, applied to the leaf's inherited flags.
-        l_field = field or ("field" in carriers and not (q_nat or q_int or nat or int_))
+        # a chain's field names join the contact set only when the chain is
+        # unmixed against its own AND its inherited ℕ/ℤ flags — the
+        # _q_field_unmixed predicate one level down, so `∃ l : ℝ, l = 4/n`
+        # under a ℕ statement refuses embedded exactly as it does as a
+        # prefix. Contact does the rest per leaf.
+        if fnames and not (q_nat or q_int or nat or int_):
+            new_fnames = field_names | frozenset(fnames)
+        else:
+            new_fnames = field_names
         return _tree_walk(check_text, leaf_vars | set(bound), nat or q_nat,
-                          int_ or q_int, l_field, path_names | set(bound),
-                          depth + 1)
+                          int_ or q_int, stmt_field, new_fnames,
+                          path_names | set(bound), depth + 1)
     if "∀" in a or "∃" in a:
         return "quantifier_embedded"  # TERM position: genuinely out
-    return _tree_leaf_gap(a, leaf_vars, nat, int_, field)
+    contact = bool(field_names) and bool(
+        field_names & set(_IDENT_RE.findall(a)))
+    return _tree_leaf_gap(a, leaf_vars, nat, int_, stmt_field or contact)
 
 
 # Integer predicates over a field carrier are NOT the corpus head: data/
@@ -1187,20 +1235,40 @@ def classify(stmt: dict) -> dict:
         return q_field and not (q_nat or q_int or has_nat or has_int)
 
     outer_names = value_vars | set(domain_vars)
+
+    # Statement-binder field carriers, resolved for the atom-tree walk
+    # (review fix, fifth cycle): a PURE-field statement's value vars are all
+    # field-typed (exact — value_vars only ever holds numerically-typed
+    # names), so they shield walk leaves by NAME on atom contact; a MIXED
+    # statement keeps the blanket boolean, the flat path's disclosed
+    # asymmetry at its pre-existing width (per-name types of a mixed
+    # statement are not in the committed extracts).
+    stmt_blanket = has_field and (has_nat or has_int)
+    stmt_fnames: frozenset[str] = (
+        frozenset(value_vars)
+        if has_field and not has_nat and not has_int
+        else frozenset()
+    )
+
     gq = _quantifier_segment(goal, outer_names)
     goal_gap: str | None = None
     goal_check, goal_vars = goal, value_vars
     g_nat, g_int, g_field = has_nat, has_int, has_field
+    goal_fnames: frozenset[str] = frozenset()
     if gq is not None:
         if gq[0] == "gap":
             goal_gap = gq[1]
         else:
-            _, goal_check, extra, q_nat, q_int, q_field = gq
+            _, goal_check, extra, q_nat, q_int, q_field, q_fn = gq
             goal_vars = value_vars | extra
             g_nat, g_int, g_field = (
                 has_nat or q_nat, has_int or q_int,
                 has_field or _q_field_unmixed(q_nat, q_int, q_field),
             )
+            # the prefix chain's field NAMES seed the walk's contact set,
+            # under the same unmixed gate as the segment-level flag
+            if _q_field_unmixed(q_nat, q_int, q_field):
+                goal_fnames = frozenset(q_fn)
 
     # the let bindings are PART of the goal proposition (a let-goal is the
     # definitional equations plus the body), so they join every goal-side
@@ -1231,7 +1299,7 @@ def classify(stmt: dict) -> dict:
         return seg_field or bool(_FIELD_SIGNAL_RE.search(seg))
 
     def _segment_gap(seg, seg_vars, seg_nat, seg_int, seg_field,
-                     tree_names=None):
+                     tree_ctx=None):
         r = (
             _blocker(seg)
             or _carrier_gap(seg, seg_nat, seg_int,
@@ -1244,10 +1312,14 @@ def classify(stmt: dict) -> dict:
                 r = f"unsupported_symbol:{bad}"
         # v0.10 embedded quantifiers: exactly where the flat verdict would be
         # `quantifier_embedded` AND the segment is a goal body or hypothesis
-        # (tree_names is not None), the atom-tree walk gets the final word.
-        if r == "quantifier_embedded" and tree_names is not None:
-            r = _tree_walk(seg, seg_vars, seg_nat, seg_int, seg_field,
-                           tree_names)
+        # (tree_ctx is not None), the atom-tree walk gets the final word.
+        # tree_ctx = (path names for shadow refusal, quantifier-origin field
+        # names for the atom-contact shield); the statement field carrier
+        # goes in separately — the walk must not blanket-inherit a
+        # quantifier-origin flag (the review's nesting finding).
+        if r == "quantifier_embedded" and tree_ctx is not None:
+            r = _tree_walk(seg, seg_vars, seg_nat, seg_int, stmt_blanket,
+                           stmt_fnames | tree_ctx[1], tree_ctx[0])
         return r
 
     # ---- goal-only ----
@@ -1263,7 +1335,8 @@ def classify(stmt: dict) -> dict:
             # label (e.g. `(∀ x : ℕ, Even x) ∧ Odd 3`, relationless): the walk
             # judges it — its per-leaf prop-shape check subsumes this gate.
             goal_reason = _tree_walk(goal_check, goal_vars, g_nat, g_int,
-                                     g_field, outer_names | goal_vars)
+                                     stmt_blanket, stmt_fnames | goal_fnames,
+                                     outer_names | goal_vars)
     if goal_reason is None:
         hit = sorted(domain_vars[v] for v in (set(domain_vars) & goal_idents))
         if hit:
@@ -1272,7 +1345,7 @@ def classify(stmt: dict) -> dict:
         for seg, seg_vars, seg_nat, seg_int, seg_field, is_body in goal_contexts:
             goal_reason = _segment_gap(
                 seg, seg_vars, seg_nat, seg_int, seg_field,
-                (outer_names | seg_vars) if is_body else None)
+                (outer_names | seg_vars, goal_fnames) if is_body else None)
             if goal_reason is not None:
                 break
     goal_ok = goal_reason is None
@@ -1287,16 +1360,21 @@ def classify(stmt: dict) -> dict:
                 hq = _quantifier_segment(hyp, outer_names)
                 if hq is None:
                     r = _segment_gap(hyp, value_vars, has_nat, has_int,
-                                     has_field, outer_names)
+                                     has_field, (outer_names, frozenset()))
                 elif hq[0] == "gap":
                     r = hq[1]
                 else:
-                    _, h_check, h_extra, h_nat, h_int, h_field = hq
+                    _, h_check, h_extra, h_nat, h_int, h_field, h_fn = hq
+                    h_fnames = (
+                        frozenset(h_fn)
+                        if _q_field_unmixed(h_nat, h_int, h_field)
+                        else frozenset()
+                    )
                     r = _segment_gap(
                         h_check, value_vars | h_extra,
                         has_nat or h_nat, has_int or h_int,
                         has_field or _q_field_unmixed(h_nat, h_int, h_field),
-                        outer_names | h_extra,
+                        (outer_names | h_extra, h_fnames),
                     )
                 if r is not None:
                     full_reason = f"hyp:{r}"
