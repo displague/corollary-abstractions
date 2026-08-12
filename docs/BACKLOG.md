@@ -452,31 +452,46 @@ wall) must not be redirected into sentiment tags mid-experiment.
 ## Language as structure (linguistic dual of the prover)
 
 Evidence: synthesis of DESIGN-concept-tokens, DESIGN-linguistic-twins, frames,
-epistemic ladder, corpus-scale spine, and interactive harness (2026-08-11).
-Challenge accepted: surface English is not *definitionally* a bag of string
-templates; analysis and creation should be parse/construct/verify/linearize
-under the same kernel. Full guidance and P-LS1–P-LS6:
+epistemic ladder, corpus-scale spine, and interactive harness (2026-08-11),
+plus external review the same day that the first diagram was sentence-local
+and missing discourse. Challenge accepted: surface English is not
+*definitionally* a bag of string templates; analysis and creation should be
+plan/construct/verify/realize under the same kernel, with **discourse state**
+as a first-class multi-utterance layer. Full guidance and P-LS1–P-LS9:
 `docs/DESIGN-language-as-structure.md`.
 
 - **Retract “templates are the design law.”** f-strings in the golden-chicken
-  oracle are a *provisional linearizer*. The real objects are linguistic terms
-  (STMT/EVT/CMP/MOD/… + narrative constructors) plus a linearization grammar.
-  Policy must not store whole English beats as source of truth once a brief→
-  term path exists (P-LS3).
+  oracle are a *provisional realizer*. The real objects are linguistic terms
+  (entity/event, **explicit** scope/quantification, tense/aspect/modal, speech
+  act, reference, discourse relations, narrative constructors) plus
+  morphosyntactic realization. Policy must not store whole English beats as
+  source of truth once a brief→term path exists (P-LS3).
 
-- **Round-trip before richness.** Ship parser/linearizer identity on the
-  existing langgen interlingua (P-LS1) before claiming prover-like text
-  creation. Content REFUTED must survive synonym packaging (P-LS2).
+- **Four pillars before “LLM as residual” claims:** discourse/common ground,
+  reference (anaphora/ellipsis/deixis), scope/binding, pragmatics/speech acts.
+  Each needs negative controls (R9) before shipped status. Partial machinery
+  exists (frames, ToM, obligations, ASK); unified discourse store does not
+  (P-LS7).
 
-- **WordNet stays lexicon, not term algebra.** Empirical forms/senses only;
-  deixis still composes from owner/frame/tense (P-LS6), not person-synsets.
+- **Legal vs preferred cut is load-bearing.** Hard filters first; preference
+  model only over semantically admissible realizations (P-LS4). **Sense is
+  not style**—disambiguation or packed multi-sense must sit in the legal
+  pipeline before or inside verification, not in the preference tail (R8).
+
+- **Round-trip before richness.** Ship parser/realizer identity on the
+  existing langgen interlingua (P-LS1). Content REFUTED must survive synonym
+  packaging (P-LS2). Packed ambiguity filters before prefer (P-LS8).
+
+- **Inference ≠ commit.** Entailment/contradiction paths that do not mutate
+  world state (P-LS9); verification still owns acceptance.
+
+- **WordNet stays lexicon/sense candidates, not term algebra.** Deixis still
+  composes from owner/frame/tense (P-LS6), not person-synsets.
 
 - **Coverage instrument for any open-English claim** (P-LS5), same honesty as
   v0.9 formal coverage—fragment first, scale later. Do not let NL hijack
-  v0.10 formal grammar/verifier work; share kernel, separate head growth.
-
-- **Residual only among licensed linearizations/lexicon picks** (P-LS4), with
-  frequency baselines. No neural owner of structure or equality.
+  v0.10 formal grammar/verifier work; share kernel, separate head growth;
+  discourse store should reuse session/frame machinery.
 
 ## Interactive harness / agent OS
 
