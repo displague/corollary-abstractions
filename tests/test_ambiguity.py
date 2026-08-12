@@ -123,6 +123,35 @@ class PackedAmbiguityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             resolve_forest(item, prefer_when_multi=True, prefer=prefer_oov)
 
+    def test_prefer_keeps_multi_survivors_and_only_sees_filtered(self) -> None:
+        low = ForestCandidate("l", "attach_low", "k2")
+        high = ForestCandidate("h", "attach_high", "k1")
+        mid = ForestCandidate("m", "attach_mid", "k3")
+        item = AmbiguityItem(
+            item_id="prefer_filtered",
+            surface="s",
+            candidates=(high, low, mid),
+            constraints=(
+                HardConstraint("no_low", lambda c: c.candidate_id != "l"),
+            ),
+        )
+        seen: list[str] = []
+
+        def prefer(survivors):
+            seen.extend(c.candidate_id for c in survivors)
+            return survivors[0]
+
+        result = resolve_forest(item, prefer_when_multi=True, prefer=prefer)
+        self.assertEqual(result.outcome, AmbiguityOutcome.MULTI)
+        self.assertEqual(
+            {c.candidate_id for c in result.survivors}, {"h", "m"}
+        )
+        self.assertNotIn("l", seen)
+        self.assertTrue(result.preferred_invoked)
+        self.assertIsNotNone(result.preferred)
+        assert result.preferred is not None
+        self.assertIn(result.preferred.candidate_id, {"h", "m"})
+
     def test_item_requires_two_candidates(self) -> None:
         with self.assertRaises(ValueError):
             AmbiguityItem(

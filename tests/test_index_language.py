@@ -34,7 +34,6 @@ class FalseBeliefLanguageTests(unittest.TestCase):
         for content_surface in variants:
             world = MultiIndexWorld()
             surface = attitude_report_surface("Sally", content_surface)
-            self.assertIn("believes", surface)
             belief_st, world_st = world.utter_attitude(surface, content)
             self.assertEqual(
                 belief_st,
@@ -46,9 +45,31 @@ class FalseBeliefLanguageTests(unittest.TestCase):
                 IndexStatus.REFUTED,
                 f"surface={surface!r} world={world_st}",
             )
-            # Not L1/L2 illegal undifferentiated — statuses are index-tagged
             self.assertNotEqual(belief_st, world_st)
             self.assertEqual(FRAGMENT_ID, "index.language.v1")
+
+    def test_surface_is_load_bearing_mismatch_refused(self) -> None:
+        world = MultiIndexWorld()
+        # Claims basket content_fact but surface packages a different phrase
+        # that is not registered / mismatched → REFUSED (not auto-VERIFIED).
+        belief_st, world_st = world.utter_attitude(
+            "Sally believes nonsense content",
+            "marble_location=basket",
+        )
+        self.assertEqual(belief_st, IndexStatus.REFUSED)
+        self.assertEqual(world_st, IndexStatus.REFUSED)
+
+    def test_surface_wrong_content_package_refused(self) -> None:
+        world = MultiIndexWorld()
+        surface = attitude_report_surface(
+            "Sally", "the marble is in the basket"
+        )
+        # Mismatched structured fact vs surface package
+        belief_st, world_st = world.utter_attitude(
+            surface, "marble_location=box"
+        )
+        self.assertEqual(belief_st, IndexStatus.REFUSED)
+        self.assertEqual(world_st, IndexStatus.REFUSED)
 
 
 class FictionAssertTests(unittest.TestCase):

@@ -176,46 +176,59 @@ class OracleStillSolvesTests(unittest.TestCase):
 
 
 class TraitDenyFluencyTests(unittest.TestCase):
-    """P-LS2: wording variants cannot launder a denied trait to VERIFIED."""
+    """P-LS2: trait packaging variants cannot launder silver to VERIFIED."""
 
-    def test_twenty_silver_desire_variants_all_refuted(self) -> None:
+    def test_twenty_silver_packages_all_refuted(self) -> None:
         from controller import Action, ActionKind
+        from narrative_realize import SILVER_TRAIT_PACKAGES, package_trait_denotation
         from oracle_controller_demo import StoryFrameVerifier
 
+        self.assertGreaterEqual(len(SILVER_TRAIT_PACKAGES), 20)
         initial = story_oracle_run().initial_state
         verifier = StoryFrameVerifier()
-        desires = [f"to seek path {i}" for i in range(20)]
-        for desire in desires:
+        for surface in SILVER_TRAIT_PACKAGES:
+            trait = package_trait_denotation(surface)
+            self.assertEqual(trait, "silver", surface)
             action = Action.build(
                 ActionKind.GEN,
                 "introduce",
                 {
                     "agent": "the golden chicken",
-                    "trait": "silver",
-                    "desire": desire,
+                    "trait": trait,
+                    "desire": "to sing the sunrise awake",
                 },
             )
             result = verifier.evaluate(initial, action)
             self.assertIs(
                 result.verdict,
                 Verdict.REFUTED,
-                f"desire={desire!r} laundered to {result.verdict}",
+                f"package={surface!r} laundered to {result.verdict}",
             )
 
-    def test_five_golden_desire_controls_verified(self) -> None:
+    def test_five_golden_package_controls_verified(self) -> None:
         from controller import Action, ActionKind
+        from narrative_realize import package_trait_denotation
         from oracle_controller_demo import StoryFrameVerifier
 
+        packages = (
+            "golden",
+            "appears golden",
+            "gold-colored",
+            "golden",
+            "appears golden",
+        )
         initial = story_oracle_run().initial_state
         verifier = StoryFrameVerifier()
-        for i in range(5):
+        for surface in packages:
+            trait = package_trait_denotation(surface)
+            self.assertEqual(trait, "golden", surface)
             action = Action.build(
                 ActionKind.GEN,
                 "introduce",
                 {
                     "agent": "the golden chicken",
-                    "trait": "golden",
-                    "desire": f"to keep watch {i}",
+                    "trait": trait,
+                    "desire": "to keep watch",
                 },
             )
             result = verifier.evaluate(initial, action)

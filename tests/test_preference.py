@@ -106,6 +106,15 @@ class PreferenceRegistryTests(unittest.TestCase):
             self.assertEqual(len(ordered), 3)
             self.assertEqual(set(ordered), {c.candidate_id for c in cands})
 
+    def test_mixed_denotation_keys_refused(self) -> None:
+        cands = (
+            RealizationCandidate("a", "hi", "greet"),
+            RealizationCandidate("b", "bye", "farewell"),
+        )
+        with self.assertRaises(ValueError) as ctx:
+            rank_candidates(cands, (FeatureLength(),))
+        self.assertIn("denotation_key", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

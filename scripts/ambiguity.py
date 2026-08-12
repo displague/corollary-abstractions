@@ -16,7 +16,7 @@ Suite registration: M ≥ 15 controlled items with ≥ 2 candidates each.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Callable, Sequence
 
@@ -74,6 +74,7 @@ class AmbiguityResult:
     survivors: tuple[ForestCandidate, ...]
     eliminated: tuple[tuple[ForestCandidate, str], ...]  # cand, constraint name
     preferred_invoked: bool
+    preferred: ForestCandidate | None = None
     fragment_id: str = FRAGMENT_ID
 
 
@@ -106,9 +107,9 @@ def resolve_forest(
     """Filter then decide UNIQUE / MULTI / ASK / UNKNOWN.
 
     Preference is only legal when ``prefer_when_multi`` is True *and* a
-    ``prefer`` function is supplied *and* survivors > 1. Even then, the
-    result records that preference ran; default for the fragment is
-    MULTI without preference (silent unique is forbidden).
+    ``prefer`` function is supplied *and* survivors > 1. Preference never
+    collapses the survivor record: outcome stays MULTI with ``preferred``
+    set (silent unique that drops alternatives is forbidden).
     """
     survivors, eliminated = hard_filter(item.candidates, item.constraints)
     if len(survivors) == 0:
@@ -117,22 +118,27 @@ def resolve_forest(
         )
     if len(survivors) == 1:
         return AmbiguityResult(
-            AmbiguityOutcome.UNIQUE, survivors, eliminated, preferred_invoked=False
+            AmbiguityOutcome.UNIQUE,
+            survivors,
+            eliminated,
+            preferred_invoked=False,
+            preferred=survivors[0],
         )
-    # >1 survivors
+    # >1 survivors — always MULTI; optional preferred ranking among them
+    preferred: ForestCandidate | None = None
+    preferred_invoked = False
     if prefer_when_multi and prefer is not None:
         chosen = prefer(survivors)
         if chosen not in survivors:
             raise ValueError("prefer() emitted OOV candidate")
-        return AmbiguityResult(
-            AmbiguityOutcome.UNIQUE,
-            (chosen,),
-            eliminated,
-            preferred_invoked=True,
-        )
-    # Default: multi or ask — never silent unique without recording alts
+        preferred = chosen
+        preferred_invoked = True
     return AmbiguityResult(
-        AmbiguityOutcome.MULTI, survivors, eliminated, preferred_invoked=False
+        AmbiguityOutcome.MULTI,
+        survivors,
+        eliminated,
+        preferred_invoked=preferred_invoked,
+        preferred=preferred,
     )
 
 

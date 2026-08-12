@@ -94,15 +94,19 @@ class MultiIndexWorld:
     ) -> tuple[IndexStatus, IndexStatus]:
         """Report attitude: legal at belief even if world disagrees.
 
-        Returns (belief_status, world_status_of_same_content).
+        ``surface`` is load-bearing: it must be a well-formed attitude report
+        whose content packaging matches ``content_fact`` (P-LS10 — no cosmetic
+        surfaces). Returns (belief_status, world_status_of_same_content).
         """
-        # Belief may already hold content; asserting report is VERIFIED at belief
-        belief_status = (
-            IndexStatus.VERIFIED
-            if content_fact in self.belief.facts
-            else IndexStatus.UNKNOWN
-        )
-        # Re-check / affirm at belief index
+        parsed = parse_attitude_surface(surface)
+        if parsed is None:
+            return IndexStatus.REFUSED, IndexStatus.REFUSED
+        agent, packaged = parsed
+        if agent.casefold() != "sally":
+            return IndexStatus.REFUSED, IndexStatus.REFUSED
+        if packaged != content_fact:
+            # Surface packaging does not denote the claimed content
+            return IndexStatus.REFUSED, IndexStatus.REFUSED
         new_belief, belief_status = self.belief.assert_fact(content_fact)
         self.belief = new_belief
         # World evaluation of the same content (unguarded)
@@ -112,7 +116,6 @@ class MultiIndexWorld:
             f.startswith("marble_location=") and f != content_fact
             for f in self.world.facts
         ):
-            # Distinct location facts conflict for this fragment
             world_status = IndexStatus.REFUTED
         else:
             world_status = IndexStatus.UNKNOWN
@@ -144,8 +147,37 @@ class MultiIndexWorld:
         return fact in self.world.facts
 
 
-def attitude_report_surface(agent: str, content: str) -> str:
-    return f"{agent} believes {content}"
+# Closed packaging table: surface content phrase → fact key (P-LS10 variants).
+_ATTITUDE_CONTENT_PACKAGES: dict[str, str] = {
+    "the marble is in the basket": "marble_location=basket",
+    "marble is in the basket": "marble_location=basket",
+    "it is in the basket": "marble_location=basket",
+    "the marble remains in the basket": "marble_location=basket",
+    "basket holds the marble": "marble_location=basket",
+}
+
+
+def attitude_report_surface(agent: str, content_phrase: str) -> str:
+    if content_phrase not in _ATTITUDE_CONTENT_PACKAGES:
+        raise ValueError(
+            f"unregistered attitude content packaging {content_phrase!r}"
+        )
+    return f"{agent} believes {content_phrase}"
+
+
+def parse_attitude_surface(surface: str) -> tuple[str, str] | None:
+    """Parse ``{Agent} believes {content_phrase}`` → (agent, fact_key)."""
+    marker = " believes "
+    text = " ".join(surface.split())
+    low = text.casefold()
+    idx = low.find(marker)
+    if idx < 0:
+        return None
+    agent = text[:idx].strip()
+    phrase = text[idx + len(marker) :].strip()
+    if not agent or phrase not in _ATTITUDE_CONTENT_PACKAGES:
+        return None
+    return agent, _ATTITUDE_CONTENT_PACKAGES[phrase]
 
 
 def fiction_premise_surface(premise: str) -> str:

@@ -203,3 +203,43 @@ GOLDEN_CHICKEN_BRIEF = NarrativeBrief(
     obstacle="the locked coop door",
     outcome_pattern="used_as_key_and_sang",
 )
+
+
+# P-LS2: licensed surface packagings that denote the denied trait "silver"
+# (structured trait field still carries the denotation; packaging is the
+# English that claims that trait — not desire-string variation).
+SILVER_TRAIT_PACKAGES: tuple[str, ...] = tuple(
+    f"appears {w}"
+    for w in (
+        "silver",
+        "silvery",
+        "argent",
+        "chrome-like",
+        "pewter-toned",
+        "quicksilver",
+        "moon-metal",
+        "white-metal",
+        "tin-bright",
+        "mercury-sheen",
+        "frost-metal",
+        "coin-colored",
+        "steel-pale",
+        "ash-metal",
+        "mirror-pale",
+        "cloud-metal",
+        "ghost-metal",
+        "pale-metal",
+        "luster-silver",
+        "sheen-silver",
+    )
+)
+
+
+def package_trait_denotation(surface: str) -> str | None:
+    """Map a trait packaging surface to a trait id, or None if unregistered."""
+    text = " ".join(surface.split()).casefold()
+    if text in {p.casefold() for p in SILVER_TRAIT_PACKAGES} or text == "silver":
+        return "silver"
+    if text in {"golden", "appears golden", "gold-colored"}:
+        return "golden"
+    return None

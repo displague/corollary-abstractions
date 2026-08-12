@@ -156,11 +156,14 @@ def rank_candidates(
     """
     if not candidates:
         return ()
+    denotations = {c.denotation_key for c in candidates}
+    if len(denotations) != 1:
+        raise ValueError(
+            "rank_candidates requires a single denotation_key across the set; "
+            f"got {sorted(denotations)}"
+        )
     ids = [c.candidate_id for c in candidates]
     id_set = set(ids)
-    # Denotation guard: all candidates in one rank call must share denotation
-    # or be explicitly multi-denotation (caller responsibility). We only
-    # refuse empty denotation (dataclass) and OOV emission.
     totals = {cid: 0.0 for cid in ids}
     for feat in features:
         if feat.name not in REGISTERED_FEATURES:
