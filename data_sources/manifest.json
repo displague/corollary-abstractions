@@ -166,6 +166,20 @@
       "purpose": "COCA sample: database."
     },
     {
+      "id": "git-lexibank-wold",
+      "group": "lang-lexicon",
+      "url": "https://github.com/lexibank/wold/archive/refs/tags/v4.2.zip",
+      "release_tag": "v4.2",
+      "filename": "wold-4.2.zip",
+      "sha256": "d0349d227c58bd86dbdc11d773553f4d9013bd657a948799230de2650422d704",
+      "size_bytes": 16073789,
+      "access": "direct",
+      "license": "CC BY 4.0 -- verified inside the pinned archive: LICENSE is the full Creative Commons Attribution 4.0 International text, and metadata.json declares \"license\": \"CC-BY-4.0\". Redistribution of a derived extract is permitted with attribution; the citation below is REQUIRED and vendored into data_sources/derived/wold/NOTICE.md.",
+      "attribution": "Haspelmath, Martin & Tadmor, Uri (eds.) 2009. World Loanword Database. Leipzig: Max Planck Institute for Evolutionary Anthropology. https://wold.clld.org (CLDF dataset lexibank/wold v4.2); CLDF: Forkel et al. 2018, Cross-Linguistic Data Formats, Scientific Data 5:180205.",
+      "verified": "2026-08-12",
+      "purpose": "Empirical multilingual lexicon (concept -> forms) for the language-as-structure lane: the 1,460 core LWT meanings (Haspelmath-2009-1460 concept list) with word forms for a declared 6-vocabulary subset, extracted deterministically by scripts/ingest_wold.py into data_sources/derived/wold/lexicon.json. EMPIRICAL TIER ONLY (house rule): never grounds a frame verdict and never appears in verified_by. What the lexicon connects to today is measured, not asserted: experiments/wold_reach.json."
+    },
+    {
       "id": "hf-proofcheck-prooflang",
       "group": "ingest-formal",
       "url": "https://huggingface.co/datasets/proofcheck/prooflang",
