@@ -3185,3 +3185,52 @@ labels (the 12,989-row unmasking of `unsupported_symbol:*` is the largest
 single redistributive effect, and is a finding in itself: the function-slot
 demand is ~18% bigger than the named `quantifier_function_binder` bucket
 shows).
+
+### The delta (adjudication of the registered expectations), full-statement
+
+| source | before | after | Δ | registered | verdict |
+|---|---|---|---|---|---|
+| miniF2F | 161 = 33.0% | **163 = 33.4%** | +2 | +2 | exact |
+| Lean-workbook | 21,237 = 71.4% | **21,268 = 71.5%** | +31 | +31 | exact |
+| Goedel-Pset-v1 | 747,889 = 43.2% | **772,763 = 44.6%** | +24,874 | +24,874 | exact |
+
+Goal-only: Goedel 895,333 → **920,100 = 53.1%** (+24,767; unique covered
+540,405 → 563,636), Lean-workbook 21,920 = 73.7% (+35), miniF2F 237 = 48.6%
+(+2). Every registered value hit to the row — the simulation was an exact
+mirror of the production hook, and the dual pass (verify_slice per-row over
+all 1.73M + both extracts) proves LOST = 0 with every gain drawn from
+`quantifier_embedded` / `hyp:quantifier_embedded` only. Unparsed stays 192;
+the parser is untouched. Corpus unchanged (251 nodes / 24 disciplines,
+exactly as the design checkpoint required), so the GC pins did not move,
+README/nodes counts stand, and the acknowledgment ledger stays at three
+entries.
+
+### What the buckets became (Goedel-Pset, goal position)
+
+`quantifier_embedded` collapses 62,142 → **4,170** (term-position residue:
+set-builder bodies under `IsLeast/IsGreatest`, Prop-valued equality
+operands, quantified lets 757, past-cap nests) and `hyp:quantifier_embedded`
+1,233 → 50. The masked defects surface under their own names:
+`unsupported_symbol:f` 49,030 → 55,045, `absolute_value` 43,472 → 46,636,
+`nat_monus` 41,239 → 44,062, `integer_division` 40,442 → 41,940,
+`no_relation_in_goal` 10,971 → 15,188, `vector_or_module_op` 10,783 →
+12,933, `quantifier_function_binder` 21,370 → 22,632,
+`quantifier_shadowed_binder` 2,779 → 4,702. The top of the gap table is now
+`set_or_finset` 87,483 / `big_operator` 74,437 / `unsupported_symbol:f`
+55,045 — the first two need heads the corpus does not carry (membership,
+big operators), the third is the function-slot design the roadmap already
+names. Lean-workbook's embedded residue: 2; miniF2F's: 2.
+
+### The audit fired once at 1.73M, and the catch is a class fix
+
+`foreign_glyphs=1`: Goedel-Pset-251446, a LEGITIMATE cover
+(`(¬(∀ {α : ℝ} {n : ℕ} (h : …), ∃ x, …)) ∧ (∀ …)` — NEG∘FORALL against its
+un-negated twin, every head carried) whose SECOND consecutive
+implicit-binder brace group the audit normalizer left foreign — the old
+pattern normalized only a brace group DIRECTLY after the quantifier glyph.
+The normalizer now reaches every group of one binder section (crossing
+earlier groups, never a comma — the section boundary — nor another brace;
+set-builder `|` still excluded) and runs to a fixpoint; negative controls
+pin that a brace past the binder comma and a set-builder inside the section
+stay foreign. Audits end 0/0 legitimately. Suite 892 → 905 (+12 walk tests
+including the negative-control matrix, +1 normalizer regression).
