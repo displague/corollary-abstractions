@@ -33,6 +33,7 @@ from frames import (
     FrameState,
     Literal,
 )
+from narrative_realize import GOLDEN_CHICKEN_BRIEF
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -366,9 +367,16 @@ def golden_chicken_frame_spec() -> FrameSpec:
 # The story's declared elements. `key` is registered but never planted: it
 # is the subject of the no-deus probe, so the refutation there rests on the
 # ledger (nothing planted it) rather than on an unknown element id.
+# Surfaces stay aligned with GOLDEN_CHICKEN_BRIEF (single source of slots).
 GOLDEN_CHICKEN_ELEMENTS = (
-    NarrativeElement("fallen feather", ("fallen feather",)),
-    NarrativeElement("key", ("key",)),
+    NarrativeElement(
+        GOLDEN_CHICKEN_BRIEF.plant_element,
+        (GOLDEN_CHICKEN_BRIEF.plant_surface,),
+    ),
+    NarrativeElement(
+        GOLDEN_CHICKEN_BRIEF.decoy_element,
+        (GOLDEN_CHICKEN_BRIEF.decoy_surface,),
+    ),
 )
 
 
@@ -757,60 +765,18 @@ class StoryFrameVerifier:
         )
 
 
-STORY_DESIRE = "to sing the sunrise awake"
+# Desire slot for the canonical brief (also on GOLDEN_CHICKEN_BRIEF.desire).
+STORY_DESIRE = GOLDEN_CHICKEN_BRIEF.desire
 
 
 def story_oracle_actions() -> tuple[Action, ...]:
-    shared = {"agent": "the golden chicken", "desire": STORY_DESIRE}
-    return (
-        Action.build(
-            ActionKind.GEN,
-            "introduce",
-            {**shared, "trait": "golden"},
-        ),
-        Action.build(
-            ActionKind.GEN,
-            "plant",
-            {
-                **shared,
-                "event_id": "fallen_feather_planted",
-                "element": "fallen feather",
-                "mention": "A fallen feather gleamed beside its nest.",
-                # Offsets into the mention fragment above; the adapter
-                # rebases them when the fragment joins the setup beat.
-                "binds": "fallen feather@2:16",
-            },
-        ),
-        Action.build(
-            ActionKind.GEN,
-            "obstruct",
-            {**shared, "obstacle": "the locked coop door"},
-        ),
-        Action.build(
-            ActionKind.GEN,
-            "resolve",
-            {
-                **shared,
-                "outcome": (
-                    "It used a fallen feather as a key, stepped outside, "
-                    "and sang until the sun rose"
-                ),
-                # The resolution names two declared elements. Only the
-                # feather was ever planted; 'key' is bound so the no-deus
-                # probe stays a LEDGER refutation rather than an unknown id.
-                "binds": "fallen feather@10:24;key@30:33",
-            },
-        ),
-        Action.build(
-            ActionKind.GEN,
-            "discharge",
-            {
-                **shared,
-                "event_id": "fallen_feather_used_as_key",
-                "element": "fallen feather",
-            },
-        ),
-    )
+    """Oracle sequence from structured brief + named realizers (P-LS3).
+
+    Plant/outcome English and bind offsets are produced by
+    ``scripts/narrative_realize.py``; they are not hand-authored prose with
+    magic ``@start:end`` literals in this policy.
+    """
+    return GOLDEN_CHICKEN_BRIEF.oracle_actions()
 
 
 def story_oracle_run() -> RunResult[StoryState]:
