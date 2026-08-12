@@ -10,8 +10,20 @@ A subsequent external review (same day) argued the first diagram under-specified
 **discourse**: context/common ground, reference, scope/binding, pragmatics,
 presupposition, information structure, morphosyntax, packed ambiguity, and
 inference distinct from verification. That review is integrated in §5–§5.4;
-the four conspicuously missing pillars for “algebra rich enough that an LLM
-is residual, not engine” are **discourse state, reference, scope, pragmatics**.
+the four conspicuously missing **coverage** pillars for “algebra rich enough
+that an LLM is residual, not engine” are **discourse state, reference, scope,
+pragmatics**.
+
+A third review (context-blind; classical NLU/semantics lens) argued the doc
+still inherits **pipeline assumptions** and misses **architecture** gaps:
+intensional indices (fiction/belief vs world-truth), multi-strata legality,
+gradience, joint inference vs feed-forward parse, load-bearing lexical
+semantics, acquisition/CYC coverage failure mode, verifier tractability,
+non-declarative semantic types, prosody, incrementality/dialogue update
+semantics, and an undefended claim that the preference residual is “easier”
+than generation. That review is integrated in §5.3–§5.3.2 and §6 (R10–R16);
+accepted where it exposes real category errors, **refused where it demands
+open-world NLU this project explicitly does not ship**.
 
 Status: design guidance. Not an implementation slice. Corrects an
 overstatement that appears in conversation and in thin readings of
@@ -252,22 +264,21 @@ the *inner* loop. The *outer* loop that makes multi-utterance language work:
 surface ── morphosyntax / realization ── surface
                      │
                      ▼
-           inference / constraint layer
+        candidate set C (jointly constrained; may re-enter parse)
+                     │
+           inference / constraint layer  (fragment-named)
               ↙          ↓          ↘
-           world       frame      normative
-         verifier    verifier    verifier
-         (truth)   (scope/ToM)  (obligations,
-                                 speech-act felicity)
+         index@world  index@frame  index@normative
+         (corpus)     (belief/     (obligations,
+                       fiction/     speech-act type
+                       modal)       checks—not “true”)
                      │
                      ▼
-             legal realizations
-             (semantically admissible set)
+        L1–L4 filtered realizations (task-relative hardness)
                      │
                      ▼
-        preference model over that set only
-        register · rhythm · focus packaging ·
-        discourse coherence · style
-        (NOT denotational sense choice — see §5.3)
+        preference over finite candidates only
+        (shallow closed-form features—§5.3.5)
 ```
 
 ### 5.1 The four pillars (review-accepted gaps)
@@ -300,49 +311,183 @@ among legally consistent candidates).
 | Inference / entailment | Distinct from “is this accepted in the frame”: A⊢B, contradiction, equivalence, causal/temporal consequence via specialize/twins/compose + temporal laws | Hard symbolic where closed form exists; residual only for ranking *which* entailment to surface |
 | Communicative goal / planner | **Upstream** of term construction: what move to make (answer, revise, plant, ask, abstain)—controller need-dispatch + narrative policy | Hard: illegal moves; soft: which legal move when several progress the goal |
 
-### 5.3 Legal vs preferred (stronger distinction)
+### 5.3 Legality strata, intensional indices, and preference (architecture cut)
 
-Keep two cut-points, never one mushy score:
+#### 5.3.0 The category error to fix first
+
+A context-blind review correctly noted: **falsity is not illegality.** A hard
+“world consistency” filter that blocks every false sentence would also block
+lies, fiction, counterfactuals, hypotheticals, and attitude reports
+(“John believes the earth is flat”). That would be a **category error** relative
+to this repository—which already ships **frame-local VERIFIED** that can be
+**world-REFUTED** (Sally’s basket; golden-chicken fiction; rotating-frame
+suspensions).
+
+So “world verifier as *the* hard gate on utterances” is **rejected**.
+Verification is always **relativized to an index**:
+
+| Index | Role | Example |
+|---|---|---|
+| **World / corpus tier** | Shared public commitments | Marble is in box |
+| **Owned belief frame** | Agent’s information state | Sally: basket |
+| **Fiction / hypothesis frame** | Premises under suspension | Golden chicken exists |
+| **Modal / temporal index** | Accessibility / time | Eventually discharge plant |
+| **Normative ledger** | Obligations, speech-act commitments | Chekhov outstanding |
+
+Attitude and fiction operators belong **in the algebra** (or as constructors
+that open/select an index), not as “illegal because false of the world.”
+
+Asserting a world-false claim **as world-true** may still be REFUTED.
+Reporting it **under BELIEVE(agent, ·)** or inside a fiction frame may be
+VERIFIED relative to that index. The epistemic ladder already encodes this
+discipline; the language architecture must **expose indices**, not collapse
+them into one gate.
+
+#### 5.3.1 Four notions of “legal” (do not conflate)
+
+The second review noted the doc quietly mixed four notions. Split them:
+
+| Stratum | Meaning | Default hardness | Notes |
+|---|---|---|---|
+| **L1 Grammatical** | Morphosyntactically well-formed in the active language | Hard (fragment) | Ill-formed → GIBBERISH / no parse |
+| **L2 Semantically well-typed** | Well-typed term: arity, selectional types, speech-act type, scope binding | Hard (fragment) | Ill-typed → REFUSED as structure |
+| **L3 Index-consistent** | Consistent with a **named** index (world, frame, time, modal base) | Hard *relative to index* | False-at-world can be true-at-belief |
+| **L4 Normative / felicitous** | Obligations, speech-act conditions, social constraints | Hard *when declared* | Language-relative: see honorifics |
+
+**Preferred** applies only after the strata the *current task* marks as hard
+have been applied. Not every task uses L3-world; narrative generation uses
+L3-fiction. Proof talk uses L3-corpus. User preference revision uses
+L3-user-frame.
+
+**Social deixis / honorifics (review accepted):** in Japanese/Korean-style
+fragments, register can be **L1/L4 hard** given discourse social indices
+(speaker/addressee status), not soft “style.” The hard/soft split is
+**language- and fragment-relative**, not universal English prejudice.
+English casual/formal variation may stay soft until a fragment declares
+otherwise.
+
+#### 5.3.2 Gradience (what we refuse to smuggle)
+
+Vagueness (“tall”), coercion (“began the book”), loose talk, hyperbole,
+metaphor, acceptability gradience: these **break a crisp admissible set** if
+forced into classical truth-conditions for open English.
+
+**Project stance (antagonistic and intentional):**
+
+- The shipped product is a **growing closed fragment** with **declared**
+  predicates whose evaluation is closed-form or index-relative.
+- Open vague predicates are either **excluded from the fragment** (coverage
+  miss), **typed as graded residual proposals** that never alone become
+  VERIFIED, or **anchored** to explicit thresholds/comparatives in the algebra
+  (`height(x) > θ` with θ bound).
+- Metaphor/loose talk are **not** first-class generation targets. If admitted,
+  they enter as **explicit operators** (METAPHOR, LOOSE) with denotations that
+  do not launder into world VERIFIED.
+- Acceptability gradience may inform **preference scores** among L1–L2 legal
+  candidates; it does not replace L1–L2.
+
+This is not a claim that natural language is crisp. It is a claim that **this
+kernel only certifies what it can check**.
+
+#### 5.3.3 Joint inference vs feed-forward pipeline
+
+Review: attachment and sense need world/pragmatic information *during* parse;
+a pure feed-forward forest-then-filter may be too weak; joint/abductive
+inference is the real story.
+
+**Accepted as factorization, not as “one neural joint model owns all layers.”**
 
 ```text
-1. LEGAL (hard, symbolic)
-   - well-typed term under the algebra
-   - morphosyntactically realizable under the language
-   - discourse-coherent (reference resolves; presuppositions satisfied or
-     explicitly accommodated)
-   - world/frame/normative verifiers accept (or status is honestly UNKNOWN)
-   - speech-act felicity (e.g. cannot assert what frame REFUTES)
+Processing order in the diagram is a *dependency factorization* for
+engineering and tests—not a claim that humans or an optimal interpreter
+must run left-to-right without revision.
 
-2. PREFERRED (soft, only over the legal set)
-   - register, rhythm, focus packaging, discourse coherence *among* legal
-     variants, style
-   - frequency / tiny ranker / non-neural weights OK
-   - baselines mandatory
+Mechanism (project-shaped):
+  - Maintain a candidate set C of (term, discourse-delta, index) triples
+  - Constraints from L1–L4 eliminate or score candidates as soon as they fire
+  - Parsers may emit packed forests; world/frame/discourse constraints may
+    *re-enter* parse choice (re-rank or prune C) without becoming free prose
+  - Residual proposers may suggest candidates into C; they never mark VERIFIED
+  - Irreducible C → ASK / UNKNOWN / multi-answer report—not forced unique parse
 ```
 
-**Sense is not style.** Choosing the wrong lexical sense changes denotation
-and therefore truth-conditions. Placement rules:
+That is joint **constraint solving over a finite candidate set**, not CYC-scale
+abduction over open text, and not “the LLM is the joint model.”
+
+#### 5.3.4 Lexical semantics is load-bearing (and must have a source)
+
+Review: open-class meanings, selectional restrictions, idioms, constructions
+carry most of the weight; the algebra’s easy skeleton is not enough.
+
+**Where denotations come from in this project (ordered):**
+
+| Source | Authority |
+|---|---|
+| Statement nodes / concept ids in `data/*` | VERIFIED inventory of predicates and identities |
+| Typed slots + heads (selectional structure) | Hard L2 constraints |
+| Composite concept tokens / idioms as **named constructs** with decompositions | Extrinsic composites, not free composition |
+| Formal ingest (Lean-class) when correspondence holds | Extends inventory under coverage discipline |
+| WordNet | Empirical sense candidates and glosses only |
+| Open web unsupervised lexicon induction | **Not** an admission path to VERIFIED |
+
+No romance: if the predicate is not in the inventory, the system cannot
+honestly “know” it. Coverage growth is authoring + measured ingest (v0.9/v0.10
+discipline), not hope.
+
+#### 5.3.5 Preference residual: defended, narrowed
+
+Review: ranking by “discourse coherence, focus, rhythm” re-imports full
+competence; the residual becomes the engine through the back door.
+
+**Load-bearing claim (now explicit):**
+
+> A preference model is strictly easier than open generation **only if** its
+> input is a **finite candidate set** already closed under L1–L2 (and task-
+> relevant L3–L4), and its features are **closed-form or shallow**
+> (length, template id frequency, focus-feature match to discourse topic
+> tag, honorific-feature match, registered style id)—not free-form
+> “understand coherence like an LLM.”
+
+If a feature cannot be computed without unrestricted language understanding,
+it **does not belong in preference**; either promote it to a symbolic
+constraint or drop it. The residual ranks **labels of candidates**, it does
+not invent candidates from ℝ^d prose space.
+
+Baselines: uniform, frequency of realization pattern, length—always reported.
+
+#### 5.3.6 Sense placement (unchanged core, sharpened)
+
+**Sense is not style.** Wrong sense → wrong denotation → wrong index check.
 
 | Stage | Sense handling |
 |---|---|
-| Parse / construct | Prefer **underspecified** concept or explicit sense id; WordNet multi-sense stays multi-candidate |
-| Before or inside verification | Sense must be fixed enough that the proposition is checkable, **or** verification runs on a *set* of candidates and returns UNKNOWN if they disagree on verdict |
-| Preference model | May rank among senses **only when all remaining candidates are already legal and denotationally equivalent for the current check** (true synonymy under project lexicon), not to “pick bank vs riverbank” after the fact |
+| Parse / construct | Underspecified concept or explicit sense id; multi-sense stays multi-candidate in C |
+| Index check | Sense fixed enough to evaluate at the index, **or** check the set and return UNKNOWN if verdicts disagree |
+| Preference | Only among candidates already index-legal **and** denotationally equivalent for the check at hand |
 
-So the label is not:
-
-```text
-optional residual: lexicon rank, sense, style among legal forms
-```
-
-but:
+Label:
 
 ```text
-preference model over semantically admissible realizations
+preference model over index-admissible realizations
+(candidates already L1–L2 legal and task-L3/L4 legal)
 ```
 
-with **sense disambiguation living in the legal pipeline** (or remaining
-packed until resolved), not in the preference tail.
+### 5.3.7 Architecture gaps vs coverage gaps
+
+| Kind | Examples | Response |
+|---|---|---|
+| **Coverage gaps** (second review) | Discourse store, anaphora, scope constructors, speech-act inventory | Grow algebra + state; pillars §5.1 |
+| **Architecture gaps** (third review) | Intensional indices, legality strata, joint candidates, lexicon source, tractable fragments, non-declarative types, residual hardness proof | Fix definitions (this section); do not paper with more STMT bullets |
+
+### 5.3.8 Further architecture items (third review)
+
+| Item | Stance |
+|---|---|
+| **Non-declarative types** | Questions denote answer-sets / open terms; imperatives denote properties of future states or commanded updates—not truth-values. “Verify” means type-correct + felicitous + successful update/goal progress, not “true.” Algebra must type speech acts. |
+| **Verifier tractability** | Entailment undecidable in general. Every shipped checker names a **fragment** (as formal coverage already does). No “world model of everything.” Frame problem: only registered fluents/events update. |
+| **Acquisition / neologisms / CYC death** | Algebra extends by **seed authoring, measured coverage, PROVEN-WRITE path**—not self-expanding open NLU. Neologisms enter as UNKNOWN or empirical until authored. This is a deliberate anti-CYC control: refuse to pretend universal coverage. |
+| **Prosody** | Primary carrier of focus/interrogativity in speech; punctuation is lossy. Treat as **optional modality** (like vision): symbolic prosody features when present; otherwise information-structure features underspecified. Not a v0.10 blocker. |
+| **Incrementality / dialogue dynamics** | Left-to-right repair, split utterances, clarification, QUD, grounding acts. Discourse *state* needs **update semantics** (what each accepted move adds), not only a bag of entities. WAITING/ASK is a thin slice of clarification. Full incremental dialogue is later; design must not assume batch-only utterance pairs forever. |
 
 ### 5.4 Layers (order is load-bearing)
 
@@ -366,25 +511,29 @@ packed until resolved), not in the preference tail.
    contractions. Replaces ad hoc f-strings. langgen A/B is the prototype.
    “Linearize” in older prose means this whole layer.
 
-5. **Inference / constraint layer (symbolic)**  
+5. **Inference / constraint layer (symbolic, fragment-bounded)**  
    Entailment, contradiction, temporal/causal consequence, twin/specialize
-   edges—**not** the same button as “accept this transition into state,”
-   though both use closed forms. Verification *commits*; inference *explains
-   and projects*.
+   edges—**not** the same button as “accept this transition into state.”
+   Inference *explains and projects*; verification *commits* at an index.
+   Every checker names its decidable/search-bounded fragment (§5.3.8).
 
-6. **World / frame / normative verifiers (symbolic)**  
-   Content truth, local scope, obligations/speech-act felicity—as now, but
-   fed by discourse-resolved terms.
+6. **Index-relative verifiers (symbolic)**  
+   World/corpus, belief, fiction/hypothesis, modal/temporal, normative—**not**
+   one world-truth gate. Fed by discourse-resolved, typed terms (including
+   non-declarative types for questions/commands).
 
-7. **Lexicon (extrinsic, partly empirical)**  
-   Concept/sense → forms. Project lexicon first; WordNet optional. Multi-sense
-   remains multi-candidate until legally resolved (§5.3).
+7. **Lexicon (extrinsic, load-bearing inventory)**  
+   Concept/sense → forms **and** denotations anchored to authored/ingested
+   nodes. Project lexicon first; WordNet sense *candidates* only. Idioms as
+   composite constructs. Multi-sense stays in C until index checks resolve.
 
-8. **Preference model (optional, tiny, soft)**  
-   Only over the admissible realization set. Never invents denotation.
+8. **Preference model (optional, tiny, soft, defended-narrow)**  
+   Finite candidates + shallow features only (§5.3.5). Never invents denotation
+   or coherence-from-prose.
 
 9. **Kernel session**  
-   WAITING, registered paths, boot matrix, refuse unregistered inventiveness.
+   WAITING, registered paths, boot matrix, discourse update semantics (even
+   if initially thin), refuse unregistered inventiveness.
 
 ### 5.5 What grows when language “gets rich”
 
@@ -459,16 +608,46 @@ A larger model may propose candidate terms, reference resolutions, or
 realizations. If it ever owns equality, twin identity, frame consistency, or
 discourse commitment, the project has become a wrapper.
 
-**R8 — Preference must not launder sense.**  
+**R8 — Preference must not launder sense or reference.**  
 If a ranker can change denotation (wrong WordNet sense, wrong pronoun
-antecedent) and still display as VERIFIED, the legal/preferred cut has
-failed. Sense and reference live in the hard pipeline (§5.3).
+antecedent) and still display as VERIFIED, the strata cut has failed. Sense
+and reference live in candidate set C and index checks (§5.3).
 
 **R9 — Pillars without tests are prose.**  
 Discourse/reference/scope/pragmatics as design labels without negative
-controls (ambiguous pronoun with two legal genders, failed presupposition,
-scope ambiguity that flips REFUTED) are decoration. Each pillar needs at
-least one REFUSED/REFUTED/UNKNOWN control before it is “shipped.”
+controls are decoration. Each pillar needs at least one
+REFUSED/REFUTED/UNKNOWN control before it is “shipped.”
+
+**R10 — Falsity ≠ illegality.**  
+A system that hard-fails every world-false string has regressed on frames/ToM.
+Attitude and fiction operators must select indices; only *unguarded*
+world-assertion of false content is world-REFUTED.
+
+**R11 — One mushy “legal” score is a design bug.**  
+L1–L4 must be separable in traces (grammatical vs typed vs index vs
+normative), so debugging does not blame “the verifier” for honorific or
+parse failures.
+
+**R12 — Open gradience is not a silent soft gate.**  
+Vague/metaphorical open English must not become VERIFIED by preference
+score. Exclude, grade as proposal, or anchor—never launder.
+
+**R13 — Residual hardness must remain true.**  
+If preference features require unrestricted coherence understanding, the
+architecture has failed open; shrink features or promote constraints
+(§5.3.5).
+
+**R14 — CYC death by coverage.**  
+If algebra growth is unmeasured open authoring without coverage instruments
+and refuse-paths, the project repeats classical NLU failure. v0.9 discipline
+applies to NL fragments.
+
+**R15 — Undecidable “world verifier.”**  
+Any entailment/world check without a named fragment is an overclaim.
+
+**R16 — Non-declaratives are not bools.**  
+Verifying a question as true/false is a type error; speech-act types must
+drive the check.
 
 ---
 
@@ -490,12 +669,13 @@ or scripted constructors *without* storing full English sentences in the
 policy, except as realizer outputs. Miss if policy still embeds whole beat
 strings as the source of truth.
 
-**P-LS4 — Preference only over admissible realizations.**  
+**P-LS4 — Preference only over index-admissible realizations.**  
 Any learned or statistical ranker is evaluated against a frequency baseline
-on the **same legal candidate set**; unlicensed tokens cannot appear; no
-candidate that changes denotation relative to the verified term is admitted
-to the set. Miss if the ranker can emit OOV prose or alternate senses that
-still display as VERIFIED.
+on the **same finite candidate set** after L1–L2 and task-L3/L4 filters;
+unlicensed tokens cannot appear; no candidate that changes denotation is
+admitted. Preference features are closed-form/shallow (§5.3.5) or the
+prediction is withdrawn. Miss if the ranker emits OOV prose, alternate
+senses, or requires unrestricted coherence modeling to beat frequency.
 
 **P-LS5 — Coverage before scale claim.**  
 A public coverage instrument for open English (or a declared fragment such as
@@ -526,7 +706,24 @@ ambiguity support.
 There exists a path that answers “does A entail B?” (or contradiction) using
 symbolic machinery without writing B into world state as VERIFIED. Miss if
 the only way to “infer” is to accept a state transition that mutates the
-world.
+world. The checker names its fragment.
+
+**P-LS10 — Index-relative false belief survives language.**  
+A generated or parsed attitude report “Sally believes the marble is in the
+basket” can be frame-local VERIFIED while world holds box, without the
+utterance being treated as grammatically illegal. Miss if world-falsity
+blocks the sentence at L1/L2 or as a single undifferentiated “illegal.”
+
+**P-LS11 — Strata visible in the trace.**  
+At least one demo/trace distinguishes L1 parse failure, L2 type failure,
+L3 index REFUTED, and L4 normative REFUSED as separate stop reasons or
+evidence tags. Miss if all four collapse to one error string.
+
+**P-LS12 — Fiction assert vs world assert.**  
+Inside an open fiction frame, asserting frame premises is index-legal; the
+same string as unguarded world assertion is not automatically world-VERIFIED
+on exit (demotion rules). Miss if fiction content leaks as world VERIFIED
+via the realizer.
 
 ---
 
@@ -568,25 +765,34 @@ session/frame machinery rather than invent a second memory system.
 | Surface English *requires* string templates | **Retracted as design law**; demoted to provisional realizer |
 | Language is formulaic structure dual to equations | **Accepted as target**; already sketched in linguistic-twins |
 | Analysis and creation under one prover-like loop | **Accepted**; creation = plan+construct+verify+realize+discourse-update |
-| Sentence-local dual is enough | **Rejected**; discourse/reference/scope/pragmatics are first-class pillars |
-| Sense belongs in style residual | **Rejected**; sense is denotational → legal pipeline |
-| Legal vs preferred | **Hard cut**; preference only on admissible set |
-| Rich text from corpora as primary path | **Rejected** if corpora mean wiki/WordNet as structure; **accepted** if “corpora” means growing term algebra + discourse + lexicon + world nodes |
-| Statistical non-neural weights | **OK** for preference over legal realizations |
+| Sentence-local dual is enough | **Rejected**; discourse pillars are coverage gaps |
+| World-truth as sole hard gate | **Rejected**; intensional indices (architecture) |
+| One notion of “legal” | **Rejected**; L1–L4 strata, task-relative |
+| Sense belongs in style residual | **Rejected**; denotation → candidate set / index check |
+| Preference may use full coherence LLM | **Rejected**; residual hardness claim narrowed (§5.3.5) |
+| Feed-forward only | **Softened**; factorization + joint candidate set C |
+| Open gradience as soft VERIFIED | **Rejected**; fragment/anchor/propose only |
+| Lexicon is residual packaging | **Softened**; denotations load-bearing, authored/ingested |
+| Universal NLU / CYC acquisition | **Rejected**; measured coverage + refuse |
+| Rich text from wiki/WordNet as structure | **Rejected** |
+| Statistical non-neural weights | **OK** for preference over finite candidates |
 | Neural structure-owner on open text | **Rejected** |
 
 ---
 
 ## 10. One-sentence north star
 
-**Text is a morphosyntactic interface to a typed world under a discourse—not a
-place where the world or the common ground is invented—and the same kernel
-that proves a conjunction can, in the limit, plan a speech act, construct a
-scoped term, resolve reference, refuse a contradiction or failed
-presupposition, realize only legal forms, rank preferences among them, and
-ask when a slot is frame-private.**
+**Text is a morphosyntactic interface to typed, index-relative structure under
+a discourse—not a place where world truth, common ground, or denotation is
+invented by fluency—and the same kernel that proves a conjunction can, in
+the fragment it actually implements, plan a speech act, construct a scoped
+term at a named index, resolve reference, refuse type errors and failed
+presuppositions, report entailments without silent commit, realize only
+stratum-legal forms, rank a finite candidate set with shallow features, and
+ask when the information state does not determine a unique move.**
 
-That is the completion of the puzzle: not more templates, not WordNet-as-
-author, not a second controller for “language,” but the linguistic dual of
-everything this repository already measures when it is honest—with discourse
-as the multi-turn home of the same discipline.
+That is the completion of the puzzle under antagonistic realism: coverage
+pillars (discourse, reference, scope, pragmatics) plus architecture pillars
+(intensional indices, legality strata, joint candidates, tractable fragments,
+defended residual)—without surrendering the project to open-world NLU or a
+back-door LLM engine.

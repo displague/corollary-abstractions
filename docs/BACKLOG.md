@@ -473,25 +473,38 @@ as a first-class multi-utterance layer. Full guidance and P-LS1–P-LS9:
   exists (frames, ToM, obligations, ASK); unified discourse store does not
   (P-LS7).
 
-- **Legal vs preferred cut is load-bearing.** Hard filters first; preference
-  model only over semantically admissible realizations (P-LS4). **Sense is
-  not style**—disambiguation or packed multi-sense must sit in the legal
-  pipeline before or inside verification, not in the preference tail (R8).
+- **Architecture gaps (third review) before more coverage bullets.**
+  (1) **Intensional indices**—falsity ≠ illegality; world-truth is not the
+  sole hard gate; belief/fiction/modal operators select indices (P-LS10,
+  P-LS12; R10). (2) **Legality strata L1–L4**—grammatical, well-typed,
+  index-consistent, normative/felicitous—separable in traces (P-LS11; R11);
+  honorific/register may be hard in some fragments. (3) **Joint candidate
+  set C**, not pure feed-forward. (4) **Lexical denotations** from
+  authored/ingested inventory, not residual packaging. (5) **Preference
+  residual defended-narrow**—finite candidates + shallow features only
+  (P-LS4; R13). (6) **Fragment-named checkers** (R15). (7) **Non-declarative
+  types** (R16). (8) Anti-CYC: measured coverage + refuse (R14).
+
+- **Legal vs preferred cut is load-bearing and multi-strata.** Task-relative
+  hard filters first; preference only over index-admissible realizations
+  (P-LS4). **Sense is not style**—stays in C / index checks (R8). Open
+  gradience does not silent-soft into VERIFIED (R12).
 
 - **Round-trip before richness.** Ship parser/realizer identity on the
   existing langgen interlingua (P-LS1). Content REFUTED must survive synonym
   packaging (P-LS2). Packed ambiguity filters before prefer (P-LS8).
 
 - **Inference ≠ commit.** Entailment/contradiction paths that do not mutate
-  world state (P-LS9); verification still owns acceptance.
+  world state (P-LS9); verification still owns acceptance at a named index.
 
-- **WordNet stays lexicon/sense candidates, not term algebra.** Deixis still
-  composes from owner/frame/tense (P-LS6), not person-synsets.
+- **WordNet stays sense candidates, not term algebra or denotation authority.**
+  Deixis still composes from owner/frame/tense (P-LS6), not person-synsets.
 
 - **Coverage instrument for any open-English claim** (P-LS5), same honesty as
   v0.9 formal coverage—fragment first, scale later. Do not let NL hijack
   v0.10 formal grammar/verifier work; share kernel, separate head growth;
-  discourse store should reuse session/frame machinery.
+  discourse store should reuse session/frame machinery (indices already
+  partially ship as frames/ToM).
 
 ## Interactive harness / agent OS
 
