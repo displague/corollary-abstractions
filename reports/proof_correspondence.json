@@ -16,7 +16,7 @@
     "data/machine_learning/nodes.json": "14481d52a1bbec1bdac68099d342453791f5946ed02b92dd70a8a7eda298b392",
     "data/morphology/nodes.json": "f94adb5febf9ee2e0c377ec8c926539c086db5b98a191f7781bc917e96f52587",
     "data/narrative/nodes.json": "ef28496077e4c338f6b8236819c89d5e049b74e781f40fed320034f115e36b90",
-    "data/number_theory/nodes.json": "a73e7478cfe6a2a409359ff86a35d5da4c80b276980ae9451672dc2158fe0db0",
+    "data/number_theory/nodes.json": "0f162e1048e49498a12133ccf2fb66ce17be9949299e29dccbcebd5e965b3230",
     "data/numerical_analysis/nodes.json": "2ac5f9168b613c7f7751b10587bb2dba6aba8f9dc8a4a5a7b9040b0bfe938dc7",
     "data/physics/nodes.json": "66c1d9a95322cfb3e35c92b536fc5fabec59ac42dd310860a4dfa42da840f50d",
     "data/provability/nodes.json": "b69f022ecfff64cd9c7f248c898358484a96a1a02852e9d35117a89924240d27",
@@ -24,11 +24,12 @@
     "data/statistics/nodes.json": "3a8b61c37ff7413ed8e9ec0a7f06c7902e5ce748c1095a6c3feccf31eff2fbd9",
     "data/temporal_logic/nodes.json": "44e454bc517672c99154814aea8ff3c54e397bf4540881418de6352b311e8080",
     "data/trigonometry/nodes.json": "30665470b41a0f438717ce00080a3732ae5a438c1d519e2e46143ed3b553d9e5",
-    "prover/proof-artifact-manifest.json": "37d076e57b91ac0c2dce328c9ab07fb030a5d1d48e7c959c10ae51e3b76760df",
+    "prover/ingested_triples.json": "db5a05a31700ae70a2f27e4108d65cb9d7b1c465ee2577f5f61df8bd43ffcc7e",
+    "prover/proof-artifact-manifest.json": "8fe62f00f7ec8bd3dd8e914248f7de247712ec533aec65e24d277a6743d7f03e",
     "prover/sample_triples.json": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7"
   },
-  "links": 16,
-  "corresponds": 15,
+  "links": 17,
+  "corresponds": 16,
   "mismatch": 0,
   "untranslatable": 1,
   "results": [
@@ -352,6 +353,22 @@
       "matched_route": null,
       "ambiguous_with": [],
       "considered_forms": [],
+      "refused_forms": []
+    },
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_1041",
+      "system": "lean4",
+      "artifact": "prover/ingested_triples.json",
+      "reference": "lean_workbook_1041",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "DIVIDES(13, ((2 ^ 30) + (3 ^ 60)))",
+      "theorem_skeleton": "?0:P.TOP = DIVIDES⟨13, +(^(2, 30), ^(3, 60))⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [],
+      "considered_forms": [
+        "canonical: ?0:P.TOP = DIVIDES⟨13, +(^(2, 30), ^(3, 60))⟩"
+      ],
       "refused_forms": []
     }
   ]

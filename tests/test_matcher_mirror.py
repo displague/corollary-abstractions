@@ -67,11 +67,12 @@ class MirrorReportTests(unittest.TestCase):
         cls.report = build_report(nodes, problems)
 
     def test_registered_group_counts_include_physics_frames_slice(self) -> None:
-        # 251 = 241 + the v0.10 quantifier slice (8 logic quantifier laws
-        # + 2 number-theory witness definitions). group_counts below are
-        # UNCHANGED: the binder heads wrapping PRED slots twin with nothing
-        # — the fourth consecutive twin null, reported, not hidden.
-        self.assertEqual(self.report["nodes_analyzed"], 251)
+        # 253 = 251 + the v0.10 external-verifier slice (2 ingested
+        # Lean-workbook ground-arithmetic nodes; docs/DESIGN-external-
+        # verifier.md). group_counts below are UNCHANGED: fully ground
+        # DIVIDES/MOD equations twin with nothing — the fifth consecutive
+        # twin null, reported, not hidden.
+        self.assertEqual(self.report["nodes_analyzed"], 253)
         self.assertEqual(
             self.report["group_counts"],
             {

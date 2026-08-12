@@ -5,7 +5,7 @@ docstring together with their adjudication; this file is where the two that
 are machine-checkable stay checked:
 
 - GC4 (aggregates unchanged) is pinned as the pre-split numbers: graph mean
-  0.781, 531 exact + 99 pattern-membership constituents, 222 statements with
+  0.774, 531 exact + 99 pattern-membership constituents, 222 statements with
   at least one grounded constituent. A channel change that moves any of them
   is a scoring change and needs its own registered prediction.
 
@@ -61,7 +61,25 @@ are machine-checkable stay checked:
   rests on the COUNT dominance alone; the new rate gap is pinned at its
   measured value below so any further drift is a fresh decision, and the
   movement is flagged for maintainer review in the slice's ANALYSIS section.
-- GC5 (partition identity) is checked per statement: the five channel counts
+
+  Registered acknowledgment (v0.10 item 2, external verifier — the FOURTH):
+  the pins moved again (mean 0.774, external mean 0.490, external lower
+  0.221, recursive-at-min-family-1 244 -> 250 over 126 -> 128 statements)
+  because the slice added the two INGESTED Lean-workbook ground-arithmetic
+  nodes (corpus 251 -> 253; docs/DESIGN-external-verifier.md). This is the
+  purest CORPUS change of the four: NOT ONE constituent moved on any
+  channel — exact stays 531, pattern stays 99, statements-with-constituents
+  stays 222, prior_corpus keeps exactly its four pinned constituents, and
+  group_counts is unchanged a FIFTH time. The mean and the channel means
+  moved by DENOMINATOR DILUTION alone: both ingested nodes are fully ground
+  (three considered subterms each, zero grounded — numerals and ground
+  DIVIDES/MOD applications have no owners anywhere in the corpus), so they
+  contribute groundedness 0.0 and shift every per-statement average down
+  by exactly the two added zeros. The min-family-1 recursive movement is
+  the same two nodes' 2 x 3 subterms falling into the empty-tally fallback,
+  as that pin's own docstring predicts for owner-less families. No guard
+  direction moved: the absorption count floor and the 0.164 rate-gap pin
+  read identically before and after (the new nodes absorb nothing).
   sum to the grounded numerator, so channel shares sum to `groundedness`.
 
 The provability corpus is the regression case the item names. Its 1.000 must
@@ -185,7 +203,7 @@ class ChannelSplitOverCorpus(unittest.TestCase):
 
     def test_aggregate_totals_unchanged(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["mean_groundedness"], 0.781)
+        self.assertEqual(graph["mean_groundedness"], 0.774)
         self.assertEqual(
             sum(d["grounded_exact"] for d in self.decompositions), 531)
         self.assertEqual(
@@ -323,12 +341,12 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         """
         result = analyze(REPO_ROOT / "data", min_family=1)
         decs = result["decompositions"]
-        self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 244)
+        self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 250)
         self.assertEqual(
             result["channel_summary"]["graph"]["channel_means"]["recursive"],
-            0.312)
+            0.317)
         self.assertEqual(
-            sum(1 for d in decs if d["channels"]["recursive"]), 126)
+            sum(1 for d in decs if d["channels"]["recursive"]), 128)
 
     # -- the prior_corpus rule earns its (small) keep ----------------------
 
@@ -390,9 +408,9 @@ class ChannelSplitOverCorpus(unittest.TestCase):
 
     def test_conservative_rollup_brackets_the_external_share(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["channel_means"]["external"], 0.494)
-        self.assertEqual(graph["channel_means_lower"]["external"], 0.223)
-        self.assertEqual(graph["external_lower"], 0.223)
+        self.assertEqual(graph["channel_means"]["external"], 0.49)
+        self.assertEqual(graph["channel_means_lower"]["external"], 0.221)
+        self.assertEqual(graph["external_lower"], 0.221)
         self.assertLessEqual(graph["external_lower"],
                              graph["channel_means"]["external"])
         exact = [c for d in self.decompositions for c in d["constituents"]

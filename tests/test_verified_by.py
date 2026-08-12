@@ -50,8 +50,11 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             )
         self.assertEqual(verified_by_errors(nodes, REPO_ROOT), [])
         links = [link for n in nodes for link in n.get("verified_by", [])]
-        self.assertEqual(len(links), 16)
-        self.assertEqual(len({link["reference"] for link in links}), 16)
+        # 17 = the 16 propositional BooleanLaws links + the first INGESTED
+        # arithmetic link (numbertheory.ingested.lean_workbook_1041 ->
+        # prover/ingested_triples.json; v0.10 item 2).
+        self.assertEqual(len(links), 17)
+        self.assertEqual(len({link["reference"] for link in links}), 17)
 
     def test_missing_artifact_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -248,7 +251,7 @@ class VerifiedByIntegrityTests(unittest.TestCase):
                 check=False,
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("251 statement nodes", result.stdout)
+        self.assertIn("253 statement nodes", result.stdout)
 
     def test_wrong_statement_valid_theorem_is_capability_blind_control(self) -> None:
         """Cheap lint cannot prove theorem/statement semantic correspondence."""

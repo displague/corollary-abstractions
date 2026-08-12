@@ -15,8 +15,9 @@ names the exact heads it is missing. See
 
 ## Three headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 251
-hand-authored statement nodes across 24 disciplines, structure alone:
+**1. The matcher discovers that sciences repeat one another.** From 253
+statement nodes across 24 disciplines (251 hand-authored + 2 ingested from
+Lean-workbook, one carrying a machine-checked bridge), structure alone:
 
 ```
 $ python scripts/match_signatures.py
@@ -153,7 +154,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (24 disciplines, 251 nodes)
+data/<discipline>/      statement corpora (24 disciplines, 253 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -219,7 +220,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 251 nodes / 24 corpora green
+python scripts/validate_nodes.py            # 253 nodes / 24 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats

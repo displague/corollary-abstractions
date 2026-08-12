@@ -6,3 +6,7 @@ experiments/lean_workbook_coverage.json text eol=lf
 experiments/goedel_pset_coverage.json text eol=lf
 data_sources/derived/wold/lexicon.json text eol=lf
 experiments/wold_reach.json text eol=lf
+prover/ingested_triples.json text eol=lf
+prover/verifier-verdicts/*.json text eol=lf
+prover/lean/ingested/** text eol=lf
+prover/pychecks/*.py text eol=lf

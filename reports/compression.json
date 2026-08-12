@@ -1240,6 +1240,20 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "numbertheory.ingested.lean_workbook_1041",
+      "char_tokens": 28,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_10202",
+      "char_tokens": 26,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "numanalysis.rootfinding.newton_iteration",
       "char_tokens": 25,
       "struct_tokens": 17,
@@ -1758,9 +1772,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 43.55378486055777,
-  "mean_struct": 14.50996015936255,
-  "mean_concept": 3.6653386454183265,
-  "n_family_skeletons": 196,
+  "mean_char": 43.42292490118577,
+  "mean_struct": 14.521739130434783,
+  "mean_concept": 3.644268774703557,
+  "n_family_skeletons": 198,
   "skeletons_reused": 30
 }

@@ -38,6 +38,13 @@ from match_signatures import slot_classes  # noqa: E402
 
 
 ARTIFACT = "prover/sample_triples.json"
+INGESTED_ARTIFACT = "prover/ingested_triples.json"
+
+# Which committed artifact carries each reference. The propositional sample is
+# the default; the v0.10 item 2 ingested link lives in its own traced artifact
+# (docs/DESIGN-external-verifier.md Sec. 3), so anything iterating EXPECTED has
+# to ask here rather than assume one file.
+ARTIFACT_OF = {"lean_workbook_1041": INGESTED_ARTIFACT}
 
 # Every committed link, with the route the delivered check reports. Pinned as a
 # TABLE rather than a count so that a change of route -- a link silently falling
@@ -86,6 +93,11 @@ EXPECTED = {
         "logic.inference.modus_ponens", CORRESPONDS, "canonical"),
     "BooleanLaws.contraposition": (
         "logic.inference.contraposition", CORRESPONDS, "canonical"),
+    # v0.10 item 2: the first INGESTED link, adjudicated by the
+    # ground-arithmetic fragment (docs/DESIGN-external-verifier.md Sec. 5).
+    # It lives in prover/ingested_triples.json, not ARTIFACT above.
+    "lean_workbook_1041": (
+        "numbertheory.ingested.lean_workbook_1041", CORRESPONDS, "canonical"),
 }
 
 
@@ -121,9 +133,12 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
         self.assertEqual([r.reference for r in self.report.mismatches], [])
 
     def test_p_pw2_counts(self) -> None:
-        """15 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH over 16 links."""
-        self.assertEqual(len(self.report.results), 16)
-        self.assertEqual(self.report.count(CORRESPONDS), 15)
+        """16 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH over 17 links.
+
+        17 = 16 propositional + the ingested arithmetic link (v0.10 item 2).
+        """
+        self.assertEqual(len(self.report.results), 17)
+        self.assertEqual(self.report.count(CORRESPONDS), 16)
         self.assertEqual(self.report.count(UNTRANSLATABLE), 1)
         self.assertEqual(self.report.count(MISMATCH), 0)
 
@@ -206,7 +221,7 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
                 continue
             node = nodes[statement_id]
             _resolved, _text, target = theorem_skeleton(
-                REPO_ROOT / ARTIFACT, reference
+                REPO_ROOT / ARTIFACT_OF.get(reference, ARTIFACT), reference
             )
             raw = parse_template(
                 node["structural_signature"]["anonymized_template"]
@@ -246,6 +261,13 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
             statement_id = EXPECTED[reference][0]
             if statement_id.startswith("logic.inference."):
                 self.assertEqual(partners, (), reference)
+            elif statement_id.startswith("numbertheory.ingested."):
+                # v0.10 item 2, P6: the ground-arithmetic skeleton has no
+                # slots to fold and no other node declares this exact ground
+                # equation, so the ownership ambiguity that dogs the boolean
+                # laws does not arise here at all. Empty is the prediction,
+                # not an exemption.
+                self.assertEqual(partners, (), reference)
             elif EXPECTED[reference][2].startswith("equivalent_forms["):
                 # The declared-variant route is what breaks the tie here: the
                 # set-theory twin does not declare `not(A and not A)`.
@@ -284,7 +306,7 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
                 env={"PYTHONIOENCODING": "utf-8", **_min_env()},
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("15 CORRESPONDS", result.stdout)
+        self.assertIn("16 CORRESPONDS", result.stdout)
 
 
 def _min_env() -> dict:
@@ -670,6 +692,130 @@ class DeclaredFormSetTests(unittest.TestCase):
             result = check_link(node, link("T", "proof.json"), root)
         self.assertEqual(result.verdict, UNTRANSLATABLE)
         self.assertIn("no translatable form", result.reason)
+
+
+class GroundArithmeticFragmentTests(unittest.TestCase):
+    """v0.10 item 2, P6: the second declared fragment, both ways.
+
+    The fragment's whole value is that it can say MISMATCH where the
+    propositional one could only shrug. That cuts both ways, so this class
+    pins the accusation AND the refusals: a wrong literal is an accusation
+    (ground templates have no slots, so there is no near-miss to hide in),
+    while monus, floor division, order and identifiers are refusals, because
+    a corpus reading that does not coincide with Lean's must never be
+    guessed (docs/DESIGN-external-verifier.md Sec. 5, the v0.9 `Nat.div`
+    lesson).
+    """
+
+    INGESTED = "numbertheory.ingested.lean_workbook_1041"
+
+    def adjudicate(self, goal_state: str, node_id: str | None = None):
+        """Adjudicate the ingested node against a constructed goal state."""
+        node = corpus_nodes()[node_id or self.INGESTED]
+        return self.adjudicate_node(node, goal_state)
+
+    def adjudicate_node(self, node: dict, goal_state: str):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "proof.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "theorem": "T",
+                            "tactic": "decide",
+                            "stateBefore": goal_state,
+                            "stateAfter": "no goals",
+                        }
+                    ],
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            return check_link(node, link("T", "proof.json"), root)
+
+    def decoy(self, divisor: str) -> dict:
+        """The ingested node restated about `divisor` instead of 13.
+
+        Mutated consistently — canonical template, ascii/latex surfaces and
+        every declared equivalent form — so the decoy cannot be caught by an
+        internal inconsistency instead of by the theorem comparison. `13`
+        occurs only as the divisor in this node's surfaces (the other
+        numerals are 2, 30, 3, 60), so the substitution is exact.
+        """
+        node = json.loads(json.dumps(corpus_nodes()[self.INGESTED]))
+        signature = node["structural_signature"]
+        signature["anonymized_template"] = signature[
+            "anonymized_template"
+        ].replace("13", divisor)
+        formal = node["formal_statement"]
+        for key in ("canonical_ascii", "canonical_latex"):
+            formal[key] = formal[key].replace("13", divisor)
+        for form in formal.get("equivalent_forms", []):
+            form["expression"] = form["expression"].replace("13", divisor)
+        return node
+
+    # -- the control, so the accusations below cannot pass for free --------
+
+    def test_the_committed_goal_state_corresponds(self) -> None:
+        result = self.adjudicate("⊢ 13 ∣ 2 ^ 30 + 3 ^ 60")
+        self.assertEqual(result.verdict, CORRESPONDS)
+        self.assertEqual(result.matched_route, "canonical")
+        self.assertEqual(result.ambiguous_with, ())
+
+    # -- P6's named decoy, and the same falsehood from the other side ------
+
+    def test_decoy_node_claiming_seven_divides_is_a_mismatch(self) -> None:
+        """P6's decoy: `DIVIDES(7, 2^30 + 3^60)` citing the 13 theorem."""
+        decoy = self.decoy("7")
+        self.assertIn(
+            "DIVIDES(7,", decoy["structural_signature"]["anonymized_template"]
+        )
+        result = self.adjudicate_node(decoy, "⊢ 13 ∣ 2 ^ 30 + 3 ^ 60")
+        self.assertEqual(result.verdict, MISMATCH)
+        self.assertIsNone(result.matched_route)
+
+    def test_a_wrong_literal_in_the_theorem_is_a_mismatch(self) -> None:
+        """The mirror image: the true node, a theorem about 7."""
+        result = self.adjudicate("⊢ 7 ∣ 2 ^ 30 + 3 ^ 60")
+        self.assertEqual(result.verdict, MISMATCH)
+
+    def test_a_wrong_exponent_is_a_mismatch(self) -> None:
+        """Structure alone would accept this; the literals are compared."""
+        result = self.adjudicate("⊢ 13 ∣ 2 ^ 31 + 3 ^ 60")
+        self.assertEqual(result.verdict, MISMATCH)
+
+    # -- carrier-honest refusals: never MISMATCH, always UNTRANSLATABLE ----
+
+    def test_monus_is_refused_not_guessed(self) -> None:
+        """`-` on ℕ is monus; the corpus reading does not coincide."""
+        result = self.adjudicate("⊢ 13 ∣ 2 ^ 30 - 3")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
+
+    def test_floor_division_is_refused_not_guessed(self) -> None:
+        result = self.adjudicate("⊢ 13 ∣ 26 / 2")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
+
+    def test_order_relations_are_outside_the_fragment(self) -> None:
+        result = self.adjudicate("⊢ 2 ^ 30 < 3 ^ 60")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
+
+    def test_any_identifier_leaves_the_ground_fragment(self) -> None:
+        result = self.adjudicate("⊢ 13 ∣ n")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
+
+    def test_a_hypothesis_line_makes_the_fragments_disjoint(self) -> None:
+        """Ground refuses any hypothesis; propositional needs a Prop binder.
+
+        A state with a non-Prop binder therefore falls through BOTH, which is
+        the disjointness claim of design Sec. 5 stated as a test: no state
+        can be read by one fragment because the other declined it.
+        """
+        result = self.adjudicate("n : ℕ\n⊢ 13 ∣ 2 ^ 30 + 3 ^ 60")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
+
+    def test_a_bare_term_is_not_a_proposition(self) -> None:
+        result = self.adjudicate("⊢ 2 ^ 30 + 3 ^ 60")
+        self.assertEqual(result.verdict, UNTRANSLATABLE)
 
 
 if __name__ == "__main__":
