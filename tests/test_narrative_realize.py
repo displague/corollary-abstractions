@@ -176,28 +176,28 @@ class OracleStillSolvesTests(unittest.TestCase):
 
 
 class TraitDenyFluencyTests(unittest.TestCase):
-    """P-LS2: trait packaging variants cannot launder silver to VERIFIED."""
+    """P-LS2: trait packaging is load-bearing; silver packages REFUTED."""
 
     def test_twenty_silver_packages_all_refuted(self) -> None:
-        from controller import Action, ActionKind
-        from narrative_realize import SILVER_TRAIT_PACKAGES, package_trait_denotation
+        from narrative_realize import (
+            SILVER_TRAIT_PACKAGES,
+            introduce_from_trait_package,
+        )
         from oracle_controller_demo import StoryFrameVerifier
 
         self.assertGreaterEqual(len(SILVER_TRAIT_PACKAGES), 20)
         initial = story_oracle_run().initial_state
         verifier = StoryFrameVerifier()
         for surface in SILVER_TRAIT_PACKAGES:
-            trait = package_trait_denotation(surface)
-            self.assertEqual(trait, "silver", surface)
-            action = Action.build(
-                ActionKind.GEN,
-                "introduce",
-                {
-                    "agent": "the golden chicken",
-                    "trait": trait,
-                    "desire": "to sing the sunrise awake",
-                },
+            action = introduce_from_trait_package(
+                "the golden chicken",
+                surface,
+                "to sing the sunrise awake",
             )
+            self.assertIsNotNone(action, surface)
+            assert action is not None
+            # Packaging must have produced structured silver (load-bearing).
+            self.assertEqual(dict(action.arguments)["trait"], "silver")
             result = verifier.evaluate(initial, action)
             self.assertIs(
                 result.verdict,
@@ -206,33 +206,35 @@ class TraitDenyFluencyTests(unittest.TestCase):
             )
 
     def test_five_golden_package_controls_verified(self) -> None:
-        from controller import Action, ActionKind
-        from narrative_realize import package_trait_denotation
+        from narrative_realize import (
+            GOLDEN_TRAIT_PACKAGES,
+            introduce_from_trait_package,
+        )
         from oracle_controller_demo import StoryFrameVerifier
 
-        packages = (
-            "golden",
-            "appears golden",
-            "gold-colored",
-            "golden",
-            "appears golden",
-        )
+        packages = GOLDEN_TRAIT_PACKAGES[:5]
+        self.assertGreaterEqual(len(packages), 5)
         initial = story_oracle_run().initial_state
         verifier = StoryFrameVerifier()
         for surface in packages:
-            trait = package_trait_denotation(surface)
-            self.assertEqual(trait, "golden", surface)
-            action = Action.build(
-                ActionKind.GEN,
-                "introduce",
-                {
-                    "agent": "the golden chicken",
-                    "trait": trait,
-                    "desire": "to keep watch",
-                },
+            action = introduce_from_trait_package(
+                "the golden chicken", surface, "to keep watch"
             )
+            self.assertIsNotNone(action, surface)
+            assert action is not None
+            self.assertEqual(dict(action.arguments)["trait"], "golden")
             result = verifier.evaluate(initial, action)
             self.assertIs(result.verdict, Verdict.VERIFIED)
+
+    def test_unregistered_package_never_reaches_verifier(self) -> None:
+        from narrative_realize import introduce_from_trait_package
+
+        action = introduce_from_trait_package(
+            "the golden chicken",
+            "appears purple-polka-dot",  # not in package map
+            "to sing",
+        )
+        self.assertIsNone(action)
 
 
 if __name__ == "__main__":

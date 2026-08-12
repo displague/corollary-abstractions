@@ -205,41 +205,67 @@ GOLDEN_CHICKEN_BRIEF = NarrativeBrief(
 )
 
 
-# P-LS2: licensed surface packagings that denote the denied trait "silver"
-# (structured trait field still carries the denotation; packaging is the
-# English that claims that trait — not desire-string variation).
+# P-LS2: licensed surface packagings → trait denotation (closed lexicon).
+# Packaging is load-bearing: introduce_from_trait_package refuses unregistered
+# surfaces before the frame verifier runs.
+_TRAIT_PACKAGE_MAP: dict[str, str] = {
+    "silver": "silver",
+    "appears silver": "silver",
+    "silvery": "silver",
+    "argent": "silver",
+    "chrome-like": "silver",
+    "pewter-toned": "silver",
+    "quicksilver": "silver",
+    "moon-metal": "silver",
+    "white-metal": "silver",
+    "tin-bright": "silver",
+    "mercury-sheen": "silver",
+    "frost-metal": "silver",
+    "coin-colored": "silver",
+    "steel-pale": "silver",
+    "ash-metal": "silver",
+    "mirror-pale": "silver",
+    "cloud-metal": "silver",
+    "ghost-metal": "silver",
+    "pale-metal": "silver",
+    "luster-silver": "silver",
+    "sheen-silver": "silver",
+    "golden": "golden",
+    "appears golden": "golden",
+    "gold-colored": "golden",
+    "gilt": "golden",
+    "auric": "golden",
+}
+
 SILVER_TRAIT_PACKAGES: tuple[str, ...] = tuple(
-    f"appears {w}"
-    for w in (
-        "silver",
-        "silvery",
-        "argent",
-        "chrome-like",
-        "pewter-toned",
-        "quicksilver",
-        "moon-metal",
-        "white-metal",
-        "tin-bright",
-        "mercury-sheen",
-        "frost-metal",
-        "coin-colored",
-        "steel-pale",
-        "ash-metal",
-        "mirror-pale",
-        "cloud-metal",
-        "ghost-metal",
-        "pale-metal",
-        "luster-silver",
-        "sheen-silver",
-    )
+    sorted(k for k, v in _TRAIT_PACKAGE_MAP.items() if v == "silver")
+)
+GOLDEN_TRAIT_PACKAGES: tuple[str, ...] = tuple(
+    sorted(k for k, v in _TRAIT_PACKAGE_MAP.items() if v == "golden")
 )
 
 
 def package_trait_denotation(surface: str) -> str | None:
     """Map a trait packaging surface to a trait id, or None if unregistered."""
     text = " ".join(surface.split()).casefold()
-    if text in {p.casefold() for p in SILVER_TRAIT_PACKAGES} or text == "silver":
-        return "silver"
-    if text in {"golden", "appears golden", "gold-colored"}:
-        return "golden"
-    return None
+    return _TRAIT_PACKAGE_MAP.get(text)
+
+
+def introduce_from_trait_package(
+    agent: str,
+    trait_package: str,
+    desire: str,
+) -> Action | None:
+    """Build introduce GEN from packaging; None if packaging unregistered.
+
+    Callers must treat None as REFUSED (packaging gate) — the frame verifier
+    is never asked to adjudicate an unregistered surface.
+    """
+    trait = package_trait_denotation(trait_package)
+    if trait is None:
+        return None
+    return Action.build(
+        ActionKind.GEN,
+        "introduce",
+        {"agent": agent, "trait": trait, "desire": desire},
+    )
