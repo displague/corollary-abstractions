@@ -1,0 +1,30 @@
+{
+ "backend": "python-tests",
+ "checks": [
+  "compile: both pinned modules byte-compile",
+  "types: mypy --strict over both pinned modules (offline)",
+  "tests: pinned unittest module executed in a subprocess whose first act installs a CPython audit hook refusing sockets, subprocesses, and writes outside the sandbox directory (a discipline boundary, not a security boundary)"
+ ],
+ "claim": {
+  "statement_id": "numbertheory.ingested.lean_workbook_1041",
+  "surface": "13 | 2^30 + 3^60"
+ },
+ "environment": {
+  "mypy": "2.3.0",
+  "platform": "win32",
+  "python": "3.13.12"
+ },
+ "evidence": {
+  "stages": {
+   "mypy": 0,
+   "tests": 0
+  },
+  "tests_output_sha256": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4"
+ },
+ "inputs": {
+  "prover/pychecks/lean_workbook_1041_check.py": "8a8a62cdfa865e6f137475d6eb4cac85c3c3a3111807cd2080a2681472a9f1dd",
+  "prover/pychecks/test_lean_workbook_1041.py": "c7550f5720e0e936b3d698b6d78931ec9f960b279b52da20be09bf279e95c7d7"
+ },
+ "schema_version": 1,
+ "verdict": "pass"
+}

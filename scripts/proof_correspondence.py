@@ -38,12 +38,29 @@ proposition the theorem is about.
 
 Four design decisions are load-bearing and are argued rather than assumed.
 
-**The declared fragment (fail closed on the rest).** A goal translates only if
-every hypothesis line binds names at type `Prop` and the goal is built from `not`,
-`and`, `or`, `implies`, `True`, `False`, parentheses, those bound propositional
-names, and at most one TOP-LEVEL `iff`. Types, predicates, `forall`, `exists`,
-arithmetic, nested `iff` and every other Lean term are UNTRANSLATABLE -- never
-MISMATCH. Refusing to translate is not evidence of a wrong citation, and
+**The declared fragments (fail closed on the rest).** TWO disjoint fragments
+translate; everything else is UNTRANSLATABLE -- never MISMATCH.
+
+* PROPOSITIONAL: every hypothesis line binds names at type `Prop` and the goal
+  is built from `not`, `and`, `or`, `implies`, `True`, `False`, parentheses,
+  those bound propositional names, and at most one TOP-LEVEL `iff`.
+* GROUND ARITHMETIC (v0.10 item 2, docs/DESIGN-external-verifier.md Sec. 5): a
+  goal state with ZERO hypothesis lines whose goal is built only from numerals
+  and `+ * ^ % | = ( )` -- `|` becomes the corpus head DIVIDES, `%` becomes
+  MOD (already `ordered_compose` in the head algebra), and a bare proposition
+  is normalised to `<expr> = TRUTH` by the same `as_equation` rule as the
+  propositional side. Deliberate refusals, carrier-honesty (the v0.9 `Nat.div`
+  lesson): `-` (Nat subtraction is monus), `/` (Nat division is floor
+  division), order relations, and any identifier. Every operator admitted is
+  one whose corpus reading and Lean reading coincide on ground natural-number
+  terms. Ground templates have no slots, so CORRESPONDS here is exact
+  structural identity of the ground equation, and a wrong literal is a
+  MISMATCH, not a near-miss.
+
+The two fragments cannot collide: one requires `Prop` binders, the other
+refuses any hypothesis line and any letter. Types, predicates, `forall`,
+`exists`, variable arithmetic, nested `iff` and every other Lean term remain
+UNTRANSLATABLE. Refusing to translate is not evidence of a wrong citation, and
 collapsing the two would let this check manufacture false accusations exactly
 where it is weakest. The corpus contains one such link today
 (`BooleanLaws.not_forall_iff_exists_not`, a first-order theorem); its citing node
@@ -367,6 +384,158 @@ def read_goal(state: str) -> tuple[str, frozenset[str]]:
 
 
 # --------------------------------------------------------------------------
+# Ground arithmetic: the second declared fragment (v0.10 item 2)
+# --------------------------------------------------------------------------
+
+# The whole surface, or nothing: any character outside this set (letters
+# above all -- variables, function names, type ascriptions) refuses the
+# fragment. `∣` is Lean's divisibility; ASCII `|` is accepted for corpus-side
+# spellings run through the same translator in tests.
+_ARITH_SURFACE_RE = re.compile(r"^[\d\s+*^%∣|=()]+$")
+_ARITH_TOKEN_RE = re.compile(r"\s*(\d+|[+*^%∣|=()])")
+
+
+class _GroundArithmeticParser:
+    """Precedence-climbing parser for ground natural-number arithmetic.
+
+    Grammar (Lean's own precedences, so goals re-read the way Lean printed
+    them): statement := sum (('=' | '∣') sum)? ; sum := prod ('+' prod)* ;
+    prod := power (('*' | '%') power)* ; power := atom ('^' power)? ;
+    atom := numeral | '(' sum ')'. Exactly zero or one relational operator,
+    at the top level only; `-` and `/` are absent by design (monus / floor
+    division do not share a corpus reading), as is every identifier.
+    """
+
+    def __init__(self, text: str):
+        self.tokens: list[str] = []
+        pos = 0
+        while pos < len(text):
+            if text[pos].isspace():
+                pos += 1
+                continue
+            match = _ARITH_TOKEN_RE.match(text, pos)
+            if not match:
+                raise Untranslatable(
+                    f"unsupported arithmetic character {text[pos]!r}"
+                )
+            self.tokens.append(match.group(1))
+            pos = match.end()
+        self.i = 0
+
+    def peek(self) -> str | None:
+        return self.tokens[self.i] if self.i < len(self.tokens) else None
+
+    def next(self) -> str:
+        token = self.peek()
+        if token is None:
+            raise Untranslatable("arithmetic goal ends early")
+        self.i += 1
+        return token
+
+    def parse_statement(self) -> str:
+        """Template text for one ground proposition."""
+        left = self.sum()
+        token = self.peek()
+        if token is None:
+            raise Untranslatable(
+                "a bare numeral term is not a proposition; a relation "
+                "(`=` or divisibility) is required"
+            )
+        self.next()
+        right = self.sum()
+        if self.peek() is not None:
+            raise Untranslatable(
+                f"trailing token {self.peek()!r} after the top-level relation"
+            )
+        if token == "=":
+            return f"{left} = {right}"
+        if token in {"∣", "|"}:
+            return f"DIVIDES({left}, {right})"
+        raise Untranslatable(f"unsupported top-level relation {token!r}")
+
+    def sum(self) -> str:
+        left = self.product()
+        while self.peek() == "+":
+            self.next()
+            left = f"({left} + {self.product()})"
+        return left
+
+    def product(self) -> str:
+        left = self.power()
+        while self.peek() in {"*", "%"}:
+            operator = self.next()
+            right = self.power()
+            left = (
+                f"MOD({left}, {right})"
+                if operator == "%"
+                else f"({left} * {right})"
+            )
+        return left
+
+    def power(self) -> str:
+        base = self.atom()
+        if self.peek() == "^":
+            self.next()
+            return f"({base} ^ {self.power()})"
+        return base
+
+    def atom(self) -> str:
+        token = self.next()
+        if token == "(":
+            inner = self.sum()
+            if self.next() != ")":
+                raise Untranslatable("expected `)` in arithmetic goal")
+            return inner
+        if token.isdigit():
+            return token
+        raise Untranslatable(
+            f"token {token!r} cannot start an arithmetic term"
+        )
+
+
+def read_ground_arithmetic_goal(state: str) -> str | None:
+    """The goal text iff the state is in the ground-arithmetic fragment.
+
+    None routes the state to the propositional fragment instead. The two are
+    disjoint by construction: this one requires ZERO hypothesis lines (the
+    propositional reader requires at least one `Prop` binder) and refuses any
+    letter, so no state can translate under both.
+    """
+
+    lines = [
+        line.strip()
+        for line in state.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+        if line.strip()
+    ]
+    goals = [line for line in lines if line.startswith(_GOAL_MARKER)]
+    if len(goals) != 1 or len(lines) != 1:
+        return None
+    goal = goals[0][len(_GOAL_MARKER):].strip()
+    if not _ARITH_SURFACE_RE.match(goal) or not any(
+        c.isdigit() for c in goal
+    ):
+        return None
+    return goal
+
+
+def translate_ground_arithmetic(goal: str) -> tuple[str, dict[str, str]]:
+    """Corpus template text for a ground-arithmetic goal; no slots emitted."""
+
+    return _GroundArithmeticParser(goal).parse_statement(), {}
+
+
+def translate_goal_state(state: str) -> tuple[str, dict[str, str]]:
+    """Route one opening goal state to its declared fragment, fail closed."""
+
+    arithmetic = read_ground_arithmetic_goal(state)
+    if arithmetic is not None:
+        return translate_ground_arithmetic(arithmetic)
+    goal, names = read_goal(state)
+    tree = parse_fragment(goal, names)
+    return emit_template(tree)
+
+
+# --------------------------------------------------------------------------
 # Fragment -> corpus template grammar
 # --------------------------------------------------------------------------
 
@@ -687,8 +856,17 @@ def declared_forms(node: dict) -> FormSet:
         form_id = entry.get("form_id", "<unnamed>")
         expression = entry.get("expression", "")
         try:
-            tree = parse_fragment(expression, ascii_names)
-            text, emitted = emit_template(tree)
+            if _ARITH_SURFACE_RE.match(expression) and any(
+                c.isdigit() for c in expression
+            ):
+                # The ground-arithmetic fragment, same router rule as the
+                # Lean side: an all-numeral surface can never be a
+                # propositional form (those need declared letter names), so
+                # the two dialects stay disjoint on the corpus side too.
+                text, emitted = translate_ground_arithmetic(expression)
+            else:
+                tree = parse_fragment(expression, ascii_names)
+                text, emitted = emit_template(tree)
             add(f"equivalent_forms[{form_id}]", expression,
                 template_skeleton(text, emitted))
         except Untranslatable as exc:
@@ -759,9 +937,7 @@ def theorem_skeleton(
     """
 
     transitions, resolved = select_closing_transitions(artifact_path, reference)
-    goal, names = read_goal(initial_goal_state(transitions))
-    tree = parse_fragment(goal, names)
-    text, classes = emit_template(tree)
+    text, classes = translate_goal_state(initial_goal_state(transitions))
     return resolved, text, template_skeleton(text, classes)
 
 
@@ -772,9 +948,7 @@ def theorem_skeleton_bytes(
     transitions, resolved = select_closing_transitions_bytes(
         artifact_bytes, reference, label
     )
-    goal, names = read_goal(initial_goal_state(transitions))
-    tree = parse_fragment(goal, names)
-    text, classes = emit_template(tree)
+    text, classes = translate_goal_state(initial_goal_state(transitions))
     return resolved, text, template_skeleton(text, classes)
 
 

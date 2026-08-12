@@ -1,0 +1,5 @@
+name = "ingested"
+defaultTargets = ["Ingested"]
+
+[[lean_lib]]
+name = "Ingested"

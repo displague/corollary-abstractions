@@ -5,6 +5,15 @@
     "prover/sample_triples.json": {
       "sha256": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7",
       "authority": "native Lean extraction described in prover/PHASE1_NOTES.md"
+    },
+    "prover/ingested_triples.json": {
+      "sha256": "db5a05a31700ae70a2f27e4108d65cb9d7b1c465ee2577f5f61df8bd43ffcc7e",
+      "authority": "native Lean extraction (prover/ExtractData.win.lean over prover/lean/ingested, toolchain leanprover/lean4:v4.32.2, core Lean, no Mathlib); design and honesty boundary in docs/DESIGN-external-verifier.md",
+      "source": "prover/lean/ingested/Ingested.lean",
+      "verdicts": [
+        "prover/verifier-verdicts/lean_workbook_1041.lean4.json",
+        "prover/verifier-verdicts/lean_workbook_1041.python-tests.json"
+      ]
     }
   }
 }

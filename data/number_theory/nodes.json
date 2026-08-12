@@ -1776,6 +1776,249 @@
         "incommensurable",
         "descent"
       ]
+    },
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_1041",
+      "title": "Thirteen Divides 2^30 + 3^60 (Ingested)",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "divisibility",
+        "topic": "ingested_ground_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "13 | 2^30 + 3^60",
+        "canonical_latex": "13 \\mid 2^{30} + 3^{60}",
+        "equivalent_forms": [
+          {
+            "form_id": "ascii_ground",
+            "notation_system": "ascii",
+            "expression": "13 | 2^30 + 3^60",
+            "scope_note": "The same ground surface the pinned Lean source states as `13 ∣ 2^30 + 3^60`; translated by the correspondence rung's ground-arithmetic fragment, not the propositional one."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ingested_ground_divisibility",
+        "anonymized_template": "DIVIDES(13, 2 ^ 30 + 3 ^ 60)",
+        "slot_schema": [
+          {
+            "slot_id": "GROUND_DIVISOR_13",
+            "syntactic_category": "constant",
+            "semantic_role": "documentation of the ground divisor 13 — the template itself is fully ground and carries no matcher slots"
+          }
+        ],
+        "invariants": [
+          "Fully ground: no slots, no variables — a single decidable arithmetic fact, the exact shape of the ingested Lean goal `⊢ 13 ∣ 2 ^ 30 + 3 ^ 60`.",
+          "DIVIDES is Prop-valued over ground natural-number terms, the corpus reading of Lean's `∣` on ℕ; the ground-arithmetic correspondence fragment translates the goal with no slot folding, so CORRESPONDS here is exact structural identity of the ground equation.",
+          "The proof route is kernel-checked `decide` in core Lean 4 — no Mathlib, no axioms beyond propext — which is exactly why this statement, and not a Mathlib-dependent one, carries the first ingested bridge."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "13",
+            "syntactic_category": "constant",
+            "semantic_role": "divisor",
+            "mathematical_order": 0,
+            "description": "The fixed divisor: a ground object, not a placeholder."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "+",
+            "name": "addition",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "DIVIDES(., .)",
+            "name": "divisibility predicate",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "DIVIDES(d, n) holds exactly when d divides n in the natural numbers — the corpus's reading of Lean's `d ∣ n` on ℕ. Prop-valued over ground arithmetic terms, first argument the divisor."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "13",
+            "value": 13,
+            "description": "the divisor"
+          },
+          {
+            "symbol": "2^30 + 3^60",
+            "value": null,
+            "description": "the dividend, kept symbolic: 1073741824 + 42391158275216203514294433201 (its exact value is the python-tests verdict's business, not this record's)"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "13 divides 2^30 + 3^60: the ground divisibility fact stated by Lean-workbook problem lean_workbook_1041, restated verbatim from the pinned extract.",
+        "statistical_significance": "The first ingested statement to carry a real `verified_by` end-to-end (ROADMAP-v0.10 item 2, option (a)): pinned source prover/lean/ingested/Ingested.lean -> external-verifier lean4 verdict (exit 0, no warnings, axioms exactly [propext]) -> traced transition rows prover/ingested_triples.json -> digest pin in prover/proof-artifact-manifest.json -> this node's link, plus an independent python-tests verdict over the same claim in exact integer arithmetic. Every verdict certifies exactly what it checked, not correctness in general (docs/DESIGN-external-verifier.md).",
+        "regularity_conditions": [
+          "Natural-number carrier: `∣` and `^` are read on ℕ, where they agree with the corpus heads; no subtraction or division appears, so no monus/floor-division carrier hazard arises"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "leanworkbook_goedel2025",
+          "bibliographic_entry": "Lean Workbook problems, proofs by Goedel-Prover (Lin et al., 2025, arXiv:2502.07640). Ingested from the pinned derived extract data_sources/derived/lean_workbook/statements.json (HF Goedel-LM/Lean-workbook-proofs, revision b731852af8d8ab11498fda27bce9020738c01c59, MIT License; attribution in data_sources/derived/lean_workbook/NOTICE.md).",
+          "url": "https://huggingface.co/datasets/Goedel-LM/Lean-workbook-proofs"
+        }
+      ],
+      "keywords": [
+        "ingested",
+        "lean workbook",
+        "divisibility",
+        "decidable",
+        "external verifier",
+        "verified_by"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/ingested_triples.json",
+          "reference": "lean_workbook_1041"
+        }
+      ]
+    },
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_10202",
+      "title": "2^21 Is Congruent to 1 Modulo 7 (Ingested, Formal Without Bridge)",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "modular_arithmetic",
+        "topic": "ingested_ground_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "2^21 % 7 = 1 % 7",
+        "canonical_latex": "2^{21} \\equiv 1 \\pmod{7}",
+        "equivalent_forms": [
+          {
+            "form_id": "ascii_residues",
+            "notation_system": "ascii",
+            "expression": "2^21 % 7 = 1 % 7",
+            "scope_note": "Int.ModEq unfolded to its defining residue equation; the source Lean surface is `2^21 ≡ 1 [ZMOD 7]`."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ingested_ground_congruence",
+        "anonymized_template": "MOD(2 ^ 21, 7) = MOD(1, 7)",
+        "slot_schema": [
+          {
+            "slot_id": "GROUND_MODULUS_7",
+            "syntactic_category": "constant",
+            "semantic_role": "documentation of the ground modulus 7 — the template itself is fully ground and carries no matcher slots"
+          }
+        ],
+        "invariants": [
+          "Fully ground congruence, stated as the residue equation that defines Int.ModEq; both sides are MOD applications over numerals.",
+          "NO BRIDGE: this node deliberately carries no verified_by link — see statistical_significance for the recorded decision.",
+          "The MOD head is the matcher's declared ordered_compose; nothing about this node extends the head algebra."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "7",
+            "syntactic_category": "constant",
+            "semantic_role": "modulus",
+            "mathematical_order": 0,
+            "description": "The fixed modulus: a ground object, not a placeholder."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MOD(., .)",
+            "name": "residue (mod)",
+            "input_arity": 2,
+            "codomain": "natural numbers",
+            "description": "MOD(a, n) is the remainder of a on division by n — the corpus's reading of Lean's `a % n` on ℕ. Already declared ordered_compose in the matcher's head algebra."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "7",
+            "value": 7,
+            "description": "the modulus"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "2^21 leaves remainder 1 on division by 7 (equivalently 7 divides 2^21 - 1): the congruence stated by Lean-workbook problem lean_workbook_10202, restated as its defining residue equation.",
+        "statistical_significance": "NODE-LEVEL RECORD, decision (b) of ROADMAP-v0.10 item 2 (docs/DESIGN-external-verifier.md Sec. 4): this statement is `formal` WITHOUT a `verified_by` bridge. Its Lean-workbook proof needs Mathlib (`ZMOD` is Mathlib's Int.ModEq notation; core Lean cannot parse the statement — verified by direct probe), and Mathlib is outside the repo's hermetic verification budget, so no bridge is claimed. `epistemic_status: formal` here records formal PROVENANCE (a Lean statement with an upstream machine-checked proof this repo cannot re-check); this corpus does NOT certify the congruence. Any future ingested node without a bridge must carry this same record.",
+        "regularity_conditions": [
+          "Residue reading: the ZMOD congruence is recorded via its defining residue equation over ℕ, where % agrees with the corpus MOD head"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "leanworkbook_goedel2025",
+          "bibliographic_entry": "Lean Workbook problems, proofs by Goedel-Prover (Lin et al., 2025, arXiv:2502.07640). Ingested from the pinned derived extract data_sources/derived/lean_workbook/statements.json (HF Goedel-LM/Lean-workbook-proofs, revision b731852af8d8ab11498fda27bce9020738c01c59, MIT License; attribution in data_sources/derived/lean_workbook/NOTICE.md).",
+          "url": "https://huggingface.co/datasets/Goedel-LM/Lean-workbook-proofs"
+        }
+      ],
+      "keywords": [
+        "ingested",
+        "lean workbook",
+        "congruence",
+        "modular arithmetic",
+        "formal without bridge"
+      ]
     }
   ]
 }

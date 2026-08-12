@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 from proof_artifacts import (
@@ -481,6 +482,16 @@ def main() -> int:
     errors.extend(
         verified_by_errors(all_nodes, REPO_ROOT)
     )
+    # External-verifier ledger integrity (v0.10 item 2): every committed
+    # verdict re-hashes its pinned inputs, every manifest pin matches its
+    # committed bytes, and a PASS verdict attaches only to the statement it
+    # names. Fail closed; certifies ledger integrity, not correctness.
+    try:
+        from external_verifier import verdict_ledger_errors
+    except ImportError:  # pragma: no cover - CLI import shim
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from external_verifier import verdict_ledger_errors
+    errors.extend(verdict_ledger_errors(REPO_ROOT, all_nodes))
 
     if errors:
         print("Validation failed:")

@@ -1,0 +1,8 @@
+[
+ {
+  "theorem": "lean_workbook_1041",
+  "tactic": "decide",
+  "stateBefore": "⊢ 13 ∣ 2 ^ 30 + 3 ^ 60",
+  "stateAfter": "no goals"
+ }
+]
