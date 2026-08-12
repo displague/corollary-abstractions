@@ -141,3 +141,6 @@ is to keep the ontology and matcher (useful regardless) and drop the model.
   first pass and the source of twin/pseudonym structure
 - `prover/` — the verifier-coupled task where a small model can genuinely
   punch above its weight class; first consumer of concept tokens
+- `docs/DESIGN-language-as-structure.md` — NL analysis/creation as term
+  algebra + linearization (the dual of prove/pretty-print); retracts string
+  templates as design law while keeping parse-first and extrinsic lexicon

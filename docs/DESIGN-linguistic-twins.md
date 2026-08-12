@@ -1,7 +1,9 @@
 # Design: Linguistic Twins — grammar as the next discipline corpus
 
 Status: design + first experiment (experiments/langgen.py). Extends
-DESIGN-concept-tokens.md into natural-language syntax.
+DESIGN-concept-tokens.md into natural-language syntax. Creation dual
+(construct → verify → linearize), demo-debt, and P-LS* predictions:
+`docs/DESIGN-language-as-structure.md`.
 
 ## The claim
 

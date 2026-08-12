@@ -106,8 +106,12 @@ access to them is an auditable action stream.
    reasoning chains: each proposal becomes the next step's premise. The
    prover's propose-verify-repeat loop is the backbone; a plot event is
    a tactic applied to story state, checked against the frame.
-4. **Expressive rendering** — richer symbolic realizer, or a small
-   learned surface model that only points into the extrinsic lexicon.
+4. **Expressive rendering** — not “more f-strings,” but linearization of
+   verified linguistic/narrative terms (see
+   `docs/DESIGN-language-as-structure.md`): construct under laws, then
+   pretty-print; optional residual only ranks licensed forms. A small
+   pointer into the extrinsic lexicon remains the graded joint, never the
+   owner of structure.
 
 Story generation and abstract reasoning are one problem here; the
 chicken is the friendlier costume.

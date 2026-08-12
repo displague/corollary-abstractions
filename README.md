@@ -259,6 +259,9 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
 - `docs/DESIGN-linguistic-twins.md` — grammar as another discipline corpus:
   modifiers as recursive operators, questions as equations, languages as
   twins of one interlingua
+- `docs/DESIGN-language-as-structure.md` — text analysis/creation as the dual
+  of prove→pretty-print; terms + linearize, not string templates as law;
+  WordNet as lexicon only
 - `docs/DESIGN-epistemic-ladder.md` — seven epistemic rungs, each with a
   closed form; status is symbolic, never learned
 - `docs/DESIGN-frames-and-retrieval.md` — fiction as scoped premises;

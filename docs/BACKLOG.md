@@ -449,6 +449,35 @@ wall) must not be redirected into sentiment tags mid-experiment.
   should still prefer event flow (see the affect note above), and a
   `route`-driven controller adapter for nested belief is unbuilt.
 
+## Language as structure (linguistic dual of the prover)
+
+Evidence: synthesis of DESIGN-concept-tokens, DESIGN-linguistic-twins, frames,
+epistemic ladder, corpus-scale spine, and interactive harness (2026-08-11).
+Challenge accepted: surface English is not *definitionally* a bag of string
+templates; analysis and creation should be parse/construct/verify/linearize
+under the same kernel. Full guidance and P-LS1–P-LS6:
+`docs/DESIGN-language-as-structure.md`.
+
+- **Retract “templates are the design law.”** f-strings in the golden-chicken
+  oracle are a *provisional linearizer*. The real objects are linguistic terms
+  (STMT/EVT/CMP/MOD/… + narrative constructors) plus a linearization grammar.
+  Policy must not store whole English beats as source of truth once a brief→
+  term path exists (P-LS3).
+
+- **Round-trip before richness.** Ship parser/linearizer identity on the
+  existing langgen interlingua (P-LS1) before claiming prover-like text
+  creation. Content REFUTED must survive synonym packaging (P-LS2).
+
+- **WordNet stays lexicon, not term algebra.** Empirical forms/senses only;
+  deixis still composes from owner/frame/tense (P-LS6), not person-synsets.
+
+- **Coverage instrument for any open-English claim** (P-LS5), same honesty as
+  v0.9 formal coverage—fragment first, scale later. Do not let NL hijack
+  v0.10 formal grammar/verifier work; share kernel, separate head growth.
+
+- **Residual only among licensed linearizations/lexicon picks** (P-LS4), with
+  frequency baselines. No neural owner of structure or equality.
+
 ## Interactive harness / agent OS
 
 Evidence: directional design 2026-08-09 (integrate demos into one agent-like
