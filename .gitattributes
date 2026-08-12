@@ -4,3 +4,5 @@ experiments/minif2f_coverage.json text eol=lf
 data_sources/derived/lean_workbook/statements.json text eol=lf
 experiments/lean_workbook_coverage.json text eol=lf
 experiments/goedel_pset_coverage.json text eol=lf
+data_sources/derived/wold/lexicon.json text eol=lf
+experiments/wold_reach.json text eol=lf
