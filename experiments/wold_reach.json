@@ -1,0 +1,10281 @@
+{
+  "generated_by": "scripts/ingest_wold.py reach",
+  "question": "Of the 1,460 core LWT meanings, how many connect to vocabulary the repo already has today? Measured, not asserted; nothing consumes this at runtime yet.",
+  "source_lexicon": {
+    "path": "data_sources/derived/wold/lexicon.json",
+    "release_tag": "v4.2",
+    "meaning_count": 1460
+  },
+  "match_rule": "a meaning maps to a target iff any of its English candidates (English WOLD forms + normalized LWT name, lowercased, wordnet_store.lemma_key-normalized) is in the target vocabulary; exact match only, no stemming.",
+  "targets": {
+    "langgen_vocab": {
+      "vocab_size": 41,
+      "mapped": 27,
+      "pct": 1.8
+    },
+    "corpus_node_tokens": {
+      "vocab_size": 817,
+      "mapped": 58,
+      "pct": 4.0
+    },
+    "wordnet_lemmas": {
+      "vocab_size": 127311,
+      "mapped": 1394,
+      "pct": 95.5
+    }
+  },
+  "totals": {
+    "meanings": 1460,
+    "mapped_any": {
+      "count": 1394,
+      "pct": 95.5
+    },
+    "unmapped": {
+      "count": 66,
+      "pct": 4.5
+    }
+  },
+  "unmapped_meaning_ids": [
+    "1-841",
+    "2-444",
+    "2-445",
+    "2-454",
+    "2-455",
+    "2-511",
+    "2-512",
+    "2-521",
+    "2-522",
+    "2-92",
+    "2-93",
+    "2-94",
+    "2-941",
+    "2-942",
+    "2-95",
+    "2-96",
+    "4-271",
+    "4-301",
+    "4-49",
+    "5-65",
+    "6-461",
+    "7-16",
+    "8-35",
+    "8-74",
+    "8-96",
+    "9-78",
+    "10-612",
+    "10-613",
+    "10-614",
+    "10-615",
+    "12-02",
+    "12-041",
+    "14-332",
+    "14-481",
+    "14-491",
+    "17-51",
+    "17-52",
+    "17-53",
+    "17-61",
+    "17-62",
+    "17-63",
+    "17-64",
+    "17-65",
+    "17-66",
+    "17-67",
+    "17-68",
+    "17-69",
+    "20-21",
+    "20-55",
+    "23-565",
+    "24-03",
+    "24-07",
+    "24-08",
+    "22-51",
+    "9-92",
+    "8-28",
+    "5-983",
+    "9-9",
+    "2-4561",
+    "2-4562",
+    "2-541",
+    "2-622",
+    "2-6411",
+    "2-6412",
+    "2-932",
+    "24-04"
+  ],
+  "per_meaning": [
+    {
+      "id": "1-1",
+      "gloss": "WORLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-21",
+      "gloss": "LAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-212",
+      "gloss": "EARTH (SOIL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-213",
+      "gloss": "DUST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-214",
+      "gloss": "MUD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-215",
+      "gloss": "SAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-22",
+      "gloss": "MOUNTAIN OR HILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-222",
+      "gloss": "PRECIPICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-23",
+      "gloss": "PLAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-24",
+      "gloss": "VALLEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-25",
+      "gloss": "ISLAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-26",
+      "gloss": "MAINLAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-27",
+      "gloss": "SHORE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-28",
+      "gloss": "CAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-31",
+      "gloss": "WATER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-32",
+      "gloss": "SEA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-322",
+      "gloss": "CALM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-323",
+      "gloss": "ROUGH (OF SEA)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-324",
+      "gloss": "FOAM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-329",
+      "gloss": "OCEAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-33",
+      "gloss": "LAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-34",
+      "gloss": "BAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-341",
+      "gloss": "LAGOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-342",
+      "gloss": "REEF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-343",
+      "gloss": "CAPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-35",
+      "gloss": "WAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-352",
+      "gloss": "TIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-353",
+      "gloss": "LOW TIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-354",
+      "gloss": "HIGH TIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-36",
+      "gloss": "FLOWING BODY OF WATER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-362",
+      "gloss": "WHIRLPOOL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-37",
+      "gloss": "SPRING OR WELL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-38",
+      "gloss": "SWAMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-39",
+      "gloss": "WATERFALL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-41",
+      "gloss": "FOREST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-43",
+      "gloss": "WOOD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-44",
+      "gloss": "STONE OR ROCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-45",
+      "gloss": "EARTHQUAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-51",
+      "gloss": "SKY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-52",
+      "gloss": "SUN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-53",
+      "gloss": "MOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-54",
+      "gloss": "STAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-55",
+      "gloss": "LIGHTNING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-56",
+      "gloss": "THUNDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-57",
+      "gloss": "BOLT (OF LIGHTNING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-58",
+      "gloss": "STORM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-59",
+      "gloss": "RAINBOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-61",
+      "gloss": "LIGHT (RADIATION)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-62",
+      "gloss": "DARKNESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-63",
+      "gloss": "SHADE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-64",
+      "gloss": "DEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-71",
+      "gloss": "AIR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-72",
+      "gloss": "WIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-73",
+      "gloss": "CLOUD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-74",
+      "gloss": "FOG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-75",
+      "gloss": "RAIN (PRECIPITATION)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-76",
+      "gloss": "SNOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-77",
+      "gloss": "ICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-78",
+      "gloss": "WEATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-81",
+      "gloss": "FIRE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-82",
+      "gloss": "FLAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-83",
+      "gloss": "SMOKE (EXHAUST)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-84",
+      "gloss": "ASH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-841",
+      "gloss": "EMBERS",
+      "mapped": []
+    },
+    {
+      "id": "1-851",
+      "gloss": "BURN (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-852",
+      "gloss": "BURNING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-86",
+      "gloss": "LIGHT (IGNITE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-861",
+      "gloss": "EXTINGUISH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-87",
+      "gloss": "MATCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-88",
+      "gloss": "FIREWOOD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-89",
+      "gloss": "CHARCOAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-1",
+      "gloss": "PERSON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-21",
+      "gloss": "MAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-22",
+      "gloss": "WOMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-23",
+      "gloss": "MALE (OF PERSON)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-24",
+      "gloss": "FEMALE (OF PERSON)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-25",
+      "gloss": "BOY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-251",
+      "gloss": "YOUNG MAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-26",
+      "gloss": "GIRL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-261",
+      "gloss": "YOUNG WOMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-27",
+      "gloss": "CHILD (YOUNG HUMAN)",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-28",
+      "gloss": "BABY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-31",
+      "gloss": "HUSBAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-32",
+      "gloss": "WIFE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-33",
+      "gloss": "MARRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-34",
+      "gloss": "WEDDING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-341",
+      "gloss": "DIVORCE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-35",
+      "gloss": "FATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-36",
+      "gloss": "MOTHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-37",
+      "gloss": "PARENTS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-38",
+      "gloss": "MARRIED MAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-39",
+      "gloss": "MARRIED WOMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-41",
+      "gloss": "SON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-42",
+      "gloss": "DAUGHTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-662",
+      "gloss": "DOLPHIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-43",
+      "gloss": "CHILD (DESCENDANT)",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-44",
+      "gloss": "BROTHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-444",
+      "gloss": "OLDER BROTHER",
+      "mapped": []
+    },
+    {
+      "id": "2-445",
+      "gloss": "YOUNGER BROTHER",
+      "mapped": []
+    },
+    {
+      "id": "2-45",
+      "gloss": "SISTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-454",
+      "gloss": "OLDER SISTER",
+      "mapped": []
+    },
+    {
+      "id": "2-455",
+      "gloss": "YOUNGER SISTER",
+      "mapped": []
+    },
+    {
+      "id": "2-456",
+      "gloss": "SIBLING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-458",
+      "gloss": "TWINS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-46",
+      "gloss": "GRANDFATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-461",
+      "gloss": "OLD MAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-47",
+      "gloss": "GRANDMOTHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-471",
+      "gloss": "OLD WOMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-48",
+      "gloss": "GRANDSON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-49",
+      "gloss": "GRANDDAUGHTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-51",
+      "gloss": "UNCLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-511",
+      "gloss": "MATERNAL UNCLE (MOTHER'S BROTHER)",
+      "mapped": []
+    },
+    {
+      "id": "2-512",
+      "gloss": "PATERNAL UNCLE (FATHER'S BROTHER)",
+      "mapped": []
+    },
+    {
+      "id": "2-52",
+      "gloss": "AUNT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-521",
+      "gloss": "MATERNAL AUNT (MOTHER'S SISTER)",
+      "mapped": []
+    },
+    {
+      "id": "2-522",
+      "gloss": "PATERNAL AUNT (FATHER'S SISTER)",
+      "mapped": []
+    },
+    {
+      "id": "2-53",
+      "gloss": "NEPHEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-54",
+      "gloss": "NIECE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-55",
+      "gloss": "COUSIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-56",
+      "gloss": "ANCESTORS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-57",
+      "gloss": "DESCENDANTS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-61",
+      "gloss": "FATHER-IN-LAW (OF MAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-611",
+      "gloss": "FATHER-IN-LAW (OF WOMAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-62",
+      "gloss": "MOTHER-IN-LAW (OF MAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-621",
+      "gloss": "MOTHER-IN-LAW (OF WOMAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-63",
+      "gloss": "SON-IN-LAW (OF MAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-631",
+      "gloss": "SON-IN-LAW (OF WOMAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-64",
+      "gloss": "DAUGHTER-IN-LAW (OF MAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-641",
+      "gloss": "DAUGHTER-IN-LAW (OF WOMAN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-71",
+      "gloss": "STEPFATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-72",
+      "gloss": "STEPMOTHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-73",
+      "gloss": "STEPSON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-74",
+      "gloss": "STEPDAUGHTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-75",
+      "gloss": "ORPHAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-76",
+      "gloss": "WIDOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-77",
+      "gloss": "WIDOWER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-81",
+      "gloss": "RELATIVES",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-82",
+      "gloss": "FAMILY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-91",
+      "gloss": "I",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-92",
+      "gloss": "THOU",
+      "mapped": []
+    },
+    {
+      "id": "2-93",
+      "gloss": "HE OR SHE OR IT",
+      "mapped": []
+    },
+    {
+      "id": "2-94",
+      "gloss": "WE",
+      "mapped": []
+    },
+    {
+      "id": "2-941",
+      "gloss": "WE (INCLUSIVE)",
+      "mapped": []
+    },
+    {
+      "id": "2-942",
+      "gloss": "WE (EXCLUSIVE)",
+      "mapped": []
+    },
+    {
+      "id": "2-95",
+      "gloss": "YOU",
+      "mapped": []
+    },
+    {
+      "id": "2-96",
+      "gloss": "THEY",
+      "mapped": []
+    },
+    {
+      "id": "3-11",
+      "gloss": "ANIMAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-12",
+      "gloss": "MALE (OF ANIMAL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-13",
+      "gloss": "FEMALE (OF ANIMAL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-15",
+      "gloss": "LIVESTOCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-16",
+      "gloss": "PASTURE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-18",
+      "gloss": "HERDSMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-19",
+      "gloss": "STABLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-2",
+      "gloss": "CATTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-21",
+      "gloss": "BULL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-22",
+      "gloss": "OX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-23",
+      "gloss": "COW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-24",
+      "gloss": "CALF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-25",
+      "gloss": "SHEEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-26",
+      "gloss": "RAM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-28",
+      "gloss": "EWE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-29",
+      "gloss": "LAMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-32",
+      "gloss": "BOAR (MALE PIG)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-34",
+      "gloss": "SOW (FEMALE PIG)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-35",
+      "gloss": "PIG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-36",
+      "gloss": "GOAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-37",
+      "gloss": "MALE GOAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-38",
+      "gloss": "YOUNG GOAT (KID)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-41",
+      "gloss": "HORSE",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-42",
+      "gloss": "STALLION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-44",
+      "gloss": "MARE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-45",
+      "gloss": "FOAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-46",
+      "gloss": "DONKEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-47",
+      "gloss": "MULE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-5",
+      "gloss": "FOWL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-52",
+      "gloss": "ROOSTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-54",
+      "gloss": "HEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-55",
+      "gloss": "CHICKEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-56",
+      "gloss": "GOOSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-57",
+      "gloss": "DUCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-58",
+      "gloss": "NEST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-581",
+      "gloss": "BIRD",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-582",
+      "gloss": "SEAGULL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-583",
+      "gloss": "HERON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-584",
+      "gloss": "EAGLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-585",
+      "gloss": "HAWK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-586",
+      "gloss": "VULTURE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-591",
+      "gloss": "BAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-592",
+      "gloss": "PARROT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-593",
+      "gloss": "CROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-594",
+      "gloss": "DOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-596",
+      "gloss": "OWL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-61",
+      "gloss": "DOG",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-614",
+      "gloss": "RABBIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-62",
+      "gloss": "CAT",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-622",
+      "gloss": "OPOSSUM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-63",
+      "gloss": "MUROID (MOUSE OR RAT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-65",
+      "gloss": "FISH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-652",
+      "gloss": "FIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-653",
+      "gloss": "SCALE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-654",
+      "gloss": "GILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-655",
+      "gloss": "SHELL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-661",
+      "gloss": "SHARK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-663",
+      "gloss": "WHALE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-664",
+      "gloss": "STINGRAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-665",
+      "gloss": "FRESHWATER EEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-71",
+      "gloss": "WOLF",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-72",
+      "gloss": "LION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-73",
+      "gloss": "BEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-74",
+      "gloss": "FOX",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-75",
+      "gloss": "DEER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-76",
+      "gloss": "MONKEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-77",
+      "gloss": "ELEPHANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-78",
+      "gloss": "CAMEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-81",
+      "gloss": "INSECT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-811",
+      "gloss": "HEAD LOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-812",
+      "gloss": "NIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-813",
+      "gloss": "FLEA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-814",
+      "gloss": "CENTIPEDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-815",
+      "gloss": "SCORPION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-816",
+      "gloss": "COCKROACH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-817",
+      "gloss": "ANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-818",
+      "gloss": "SPIDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-819",
+      "gloss": "SPIDER WEB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-82",
+      "gloss": "BEE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-821",
+      "gloss": "BEESWAX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-822",
+      "gloss": "BEEHIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-823",
+      "gloss": "WASP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-83",
+      "gloss": "FLY (INSECT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-831",
+      "gloss": "SANDFLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-832",
+      "gloss": "MOSQUITO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-84",
+      "gloss": "WORM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-85",
+      "gloss": "SNAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-91",
+      "gloss": "FIREFLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-92",
+      "gloss": "BUTTERFLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-93",
+      "gloss": "GRASSHOPPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-94",
+      "gloss": "SNAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-95",
+      "gloss": "FROG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-96",
+      "gloss": "LIZARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-97",
+      "gloss": "CROCODILE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-98",
+      "gloss": "TURTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-11",
+      "gloss": "BODY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-12",
+      "gloss": "SKIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-13",
+      "gloss": "FLESH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-14",
+      "gloss": "HAIR (HEAD)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-142",
+      "gloss": "BEARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-144",
+      "gloss": "HAIR (BODY)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-145",
+      "gloss": "PUBIC HAIR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-146",
+      "gloss": "DANDRUFF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-15",
+      "gloss": "BLOOD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-151",
+      "gloss": "BLOOD VESSEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-16",
+      "gloss": "BONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-162",
+      "gloss": "RIB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-17",
+      "gloss": "HORN (ANATOMY)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-18",
+      "gloss": "TAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-19",
+      "gloss": "BACK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-191",
+      "gloss": "SPINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-2",
+      "gloss": "HEAD",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-201",
+      "gloss": "TEMPLES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-202",
+      "gloss": "SKULL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-203",
+      "gloss": "BRAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-204",
+      "gloss": "FACE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-205",
+      "gloss": "FOREHEAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-207",
+      "gloss": "JAW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-208",
+      "gloss": "CHEEK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-209",
+      "gloss": "CHIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-21",
+      "gloss": "EYE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-212",
+      "gloss": "EYEBROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-213",
+      "gloss": "EYELID",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-214",
+      "gloss": "EYELASH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-215",
+      "gloss": "BLINK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-22",
+      "gloss": "EAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-221",
+      "gloss": "EARLOBE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-222",
+      "gloss": "EARWAX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-23",
+      "gloss": "NOSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-231",
+      "gloss": "NOSTRIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-232",
+      "gloss": "NASAL MUCUS (SNOT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-24",
+      "gloss": "MOUTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-241",
+      "gloss": "BEAK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-25",
+      "gloss": "LIP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-26",
+      "gloss": "TONGUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-27",
+      "gloss": "TOOTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-271",
+      "gloss": "GUMS",
+      "mapped": []
+    },
+    {
+      "id": "4-272",
+      "gloss": "MOLAR TOOTH",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-28",
+      "gloss": "NECK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-281",
+      "gloss": "NAPE (OF NECK)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-29",
+      "gloss": "THROAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-3",
+      "gloss": "SHOULDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-301",
+      "gloss": "SHOULDERBLADE",
+      "mapped": []
+    },
+    {
+      "id": "4-302",
+      "gloss": "COLLARBONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-31",
+      "gloss": "ARM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-312",
+      "gloss": "ARMPIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-32",
+      "gloss": "ELBOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-321",
+      "gloss": "WRIST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-33",
+      "gloss": "HAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-331",
+      "gloss": "PALM OF HAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-34",
+      "gloss": "FINGER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-342",
+      "gloss": "THUMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-344",
+      "gloss": "FINGERNAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-345",
+      "gloss": "CLAW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-35",
+      "gloss": "LEG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-351",
+      "gloss": "UPPER LEG (THIGH)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-352",
+      "gloss": "CALF OF LEG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-36",
+      "gloss": "KNEE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-37",
+      "gloss": "FOOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-371",
+      "gloss": "ANKLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-372",
+      "gloss": "HEEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-374",
+      "gloss": "FOOTPRINT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-38",
+      "gloss": "TOE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-392",
+      "gloss": "WING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-393",
+      "gloss": "FEATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-4",
+      "gloss": "CHEST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-41",
+      "gloss": "BREAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-412",
+      "gloss": "NIPPLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-42",
+      "gloss": "UDDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-43",
+      "gloss": "NAVEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-44",
+      "gloss": "HEART",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-441",
+      "gloss": "LUNG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-45",
+      "gloss": "LIVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-451",
+      "gloss": "KIDNEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-452",
+      "gloss": "SPLEEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-46",
+      "gloss": "STOMACH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-461",
+      "gloss": "INTESTINES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-462",
+      "gloss": "WAIST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-463",
+      "gloss": "HIP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-464",
+      "gloss": "BUTTOCKS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-47",
+      "gloss": "WOMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-49",
+      "gloss": "TESTICLES",
+      "mapped": []
+    },
+    {
+      "id": "4-492",
+      "gloss": "PENIS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-51",
+      "gloss": "BREATHE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-52",
+      "gloss": "YAWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-521",
+      "gloss": "HICCOUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-53",
+      "gloss": "COUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-54",
+      "gloss": "SNEEZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-55",
+      "gloss": "SWEAT (PERSPIRE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-56",
+      "gloss": "SPIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-57",
+      "gloss": "VOMIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-58",
+      "gloss": "BITE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-59",
+      "gloss": "LICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-591",
+      "gloss": "DRIBBLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-61",
+      "gloss": "SLEEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-612",
+      "gloss": "SNORE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-62",
+      "gloss": "DREAM (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-63",
+      "gloss": "WAKE UP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-64",
+      "gloss": "FART",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-65",
+      "gloss": "PISS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-66",
+      "gloss": "SHIT (DEFECATE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-67",
+      "gloss": "COPULATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-68",
+      "gloss": "SHIVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-69",
+      "gloss": "BATHE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-71",
+      "gloss": "BEGET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-72",
+      "gloss": "BE BORN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-73",
+      "gloss": "PREGNANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-732",
+      "gloss": "CONCEIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-74",
+      "gloss": "BE ALIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-75",
+      "gloss": "DIE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-751",
+      "gloss": "DROWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-76",
+      "gloss": "KILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-77",
+      "gloss": "CORPSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-78",
+      "gloss": "BURY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-79",
+      "gloss": "GRAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-81",
+      "gloss": "STRONG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-82",
+      "gloss": "WEAK",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-83",
+      "gloss": "HEALTHY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-84",
+      "gloss": "SICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-841",
+      "gloss": "FEVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-842",
+      "gloss": "GOITER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-843",
+      "gloss": "COMMON COLD (DISEASE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-85",
+      "gloss": "WOUND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-852",
+      "gloss": "BRUISE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-853",
+      "gloss": "SWELLING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-854",
+      "gloss": "ITCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-855",
+      "gloss": "BLISTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-856",
+      "gloss": "BOIL (OF SKIN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-857",
+      "gloss": "PUS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-858",
+      "gloss": "SCAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-86",
+      "gloss": "CURE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-87",
+      "gloss": "PHYSICIAN",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-88",
+      "gloss": "MEDICINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-89",
+      "gloss": "POISON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-91",
+      "gloss": "TIRED",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-912",
+      "gloss": "REST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-92",
+      "gloss": "LAZY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-93",
+      "gloss": "BALD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-94",
+      "gloss": "LAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-95",
+      "gloss": "DEAF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-96",
+      "gloss": "MUTE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-97",
+      "gloss": "BLIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-98",
+      "gloss": "DRUNK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-99",
+      "gloss": "NAKED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-11",
+      "gloss": "EAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-12",
+      "gloss": "FOOD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-121",
+      "gloss": "COOKED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-122",
+      "gloss": "RAW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-123",
+      "gloss": "RIPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-124",
+      "gloss": "UNRIPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-125",
+      "gloss": "ROTTEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-13",
+      "gloss": "DRINK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-14",
+      "gloss": "BE HUNGRY",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-141",
+      "gloss": "FAMINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-15",
+      "gloss": "BE THIRSTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-16",
+      "gloss": "SUCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-18",
+      "gloss": "CHEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-181",
+      "gloss": "SWALLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-19",
+      "gloss": "CHOKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-21",
+      "gloss": "COOK (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-22",
+      "gloss": "BOIL (OF LIQUID)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-23",
+      "gloss": "ROAST OR FRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-24",
+      "gloss": "BAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-25",
+      "gloss": "OVEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-26",
+      "gloss": "POT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-27",
+      "gloss": "KETTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-28",
+      "gloss": "PAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-31",
+      "gloss": "DISH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-32",
+      "gloss": "PLATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-33",
+      "gloss": "BOWL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-34",
+      "gloss": "JUG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-35",
+      "gloss": "CUP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-36",
+      "gloss": "SAUCER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-37",
+      "gloss": "SPOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-38",
+      "gloss": "KNIFE (FOR EATING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-39",
+      "gloss": "FORK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-391",
+      "gloss": "TONGS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-41",
+      "gloss": "MEAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-42",
+      "gloss": "BREAKFAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-43",
+      "gloss": "LUNCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-44",
+      "gloss": "DINNER (SUPPER)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-45",
+      "gloss": "DINNER (SUPPER)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-46",
+      "gloss": "PEEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-47",
+      "gloss": "SIEVE OR STRAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-48",
+      "gloss": "SCRAPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-49",
+      "gloss": "MIX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-51",
+      "gloss": "BREAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-53",
+      "gloss": "DOUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-54",
+      "gloss": "KNEAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-55",
+      "gloss": "FLOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-56",
+      "gloss": "GRIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-57",
+      "gloss": "MILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-58",
+      "gloss": "MORTAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-59",
+      "gloss": "PESTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-61",
+      "gloss": "MEAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-63",
+      "gloss": "SAUSAGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-64",
+      "gloss": "SOUP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-65",
+      "gloss": "VEGETABLES",
+      "mapped": []
+    },
+    {
+      "id": "5-66",
+      "gloss": "BEAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-7",
+      "gloss": "POTATO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-71",
+      "gloss": "FRUIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-712",
+      "gloss": "BUNCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-75",
+      "gloss": "FIG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-76",
+      "gloss": "GRAPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-77",
+      "gloss": "NUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-78",
+      "gloss": "OLIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-79",
+      "gloss": "OIL (ORGANIC SUBSTANCE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-791",
+      "gloss": "FAT (ORGANIC SUBSTANCE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-81",
+      "gloss": "SALT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-82",
+      "gloss": "PEPPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-821",
+      "gloss": "CHILI PEPPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-84",
+      "gloss": "HONEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-85",
+      "gloss": "SUGAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-86",
+      "gloss": "MILK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-87",
+      "gloss": "DRAW MILK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-88",
+      "gloss": "CHEESE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-89",
+      "gloss": "BUTTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-9",
+      "gloss": "BEVERAGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-91",
+      "gloss": "MEAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-92",
+      "gloss": "WINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-93",
+      "gloss": "BEER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-94",
+      "gloss": "ALCOHOL (FERMENTED DRINK)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-97",
+      "gloss": "EGG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-971",
+      "gloss": "YOLK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-11",
+      "gloss": "PUT ON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-12",
+      "gloss": "CLOTHES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-13",
+      "gloss": "TAILOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-21",
+      "gloss": "CLOTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-22",
+      "gloss": "WOOL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-23",
+      "gloss": "LINEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-24",
+      "gloss": "COTTON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-25",
+      "gloss": "SILK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-27",
+      "gloss": "FELT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-28",
+      "gloss": "FUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-29",
+      "gloss": "LEATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-31",
+      "gloss": "SPIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-32",
+      "gloss": "SPINDLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-33",
+      "gloss": "WEAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-34",
+      "gloss": "LOOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-35",
+      "gloss": "SEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-36",
+      "gloss": "NEEDLE (FOR SEWING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-37",
+      "gloss": "AWL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-38",
+      "gloss": "THREAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-39",
+      "gloss": "DYE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-41",
+      "gloss": "CLOAK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-411",
+      "gloss": "PONCHO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-37",
+      "gloss": "LADDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-42",
+      "gloss": "DRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-43",
+      "gloss": "COAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-44",
+      "gloss": "SHIRT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-45",
+      "gloss": "COLLAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-46",
+      "gloss": "SKIRT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-461",
+      "gloss": "GRASS-SKIRT",
+      "mapped": []
+    },
+    {
+      "id": "6-48",
+      "gloss": "TROUSERS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-49",
+      "gloss": "STOCKING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-51",
+      "gloss": "SHOE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-52",
+      "gloss": "BOOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-54",
+      "gloss": "SHOEMAKER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-55",
+      "gloss": "HEADGEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-57",
+      "gloss": "BELT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-58",
+      "gloss": "GLOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-59",
+      "gloss": "VEIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-61",
+      "gloss": "POCKET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-62",
+      "gloss": "BUTTON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-63",
+      "gloss": "PIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-71",
+      "gloss": "ORNAMENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-72",
+      "gloss": "JEWEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-73",
+      "gloss": "RING",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-74",
+      "gloss": "BRACELET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-75",
+      "gloss": "NECKLACE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-76",
+      "gloss": "BEAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-77",
+      "gloss": "EARRING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-78",
+      "gloss": "HEADBAND OR HEADDRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-79",
+      "gloss": "TATTOO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-81",
+      "gloss": "RAG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-82",
+      "gloss": "TOWEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-91",
+      "gloss": "COMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-92",
+      "gloss": "BRUSH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-921",
+      "gloss": "BRAID",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-93",
+      "gloss": "RAZOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-94",
+      "gloss": "OINTMENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-95",
+      "gloss": "SOAP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-96",
+      "gloss": "MIRROR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-11",
+      "gloss": "DWELL (LIVE, RESIDE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-12",
+      "gloss": "HOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-13",
+      "gloss": "HUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-131",
+      "gloss": "GARDEN-HOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-14",
+      "gloss": "TENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-15",
+      "gloss": "YARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-16",
+      "gloss": "MEN'S HOUSE",
+      "mapped": []
+    },
+    {
+      "id": "7-17",
+      "gloss": "COOKHOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-18",
+      "gloss": "MEETING HOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-21",
+      "gloss": "ROOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-22",
+      "gloss": "DOOR",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-221",
+      "gloss": "DOORPOST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-23",
+      "gloss": "LOCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-231",
+      "gloss": "LATCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-24",
+      "gloss": "KEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-25",
+      "gloss": "WINDOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-26",
+      "gloss": "FLOOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-27",
+      "gloss": "WALL (OF HOUSE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-31",
+      "gloss": "FIREPLACE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-32",
+      "gloss": "STOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-33",
+      "gloss": "CHIMNEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-42",
+      "gloss": "BED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-421",
+      "gloss": "PILLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-422",
+      "gloss": "BLANKET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-43",
+      "gloss": "CHAIR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-44",
+      "gloss": "TABLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-45",
+      "gloss": "TORCH OR LAMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-46",
+      "gloss": "CANDLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-47",
+      "gloss": "SHELF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-48",
+      "gloss": "TROUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-51",
+      "gloss": "ROOF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-52",
+      "gloss": "THATCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-53",
+      "gloss": "RIDGEPOLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-54",
+      "gloss": "RAFTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-55",
+      "gloss": "BEAM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-56",
+      "gloss": "POST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-57",
+      "gloss": "BOARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-58",
+      "gloss": "ARCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-61",
+      "gloss": "MASON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-62",
+      "gloss": "BRICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-63",
+      "gloss": "MORTAR BINDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-64",
+      "gloss": "ADOBE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-11",
+      "gloss": "FARMER",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-12",
+      "gloss": "FIELD",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-13",
+      "gloss": "GARDEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-15",
+      "gloss": "CULTIVATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-16",
+      "gloss": "FENCE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-17",
+      "gloss": "DITCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-21",
+      "gloss": "PLOUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-212",
+      "gloss": "FURROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-22",
+      "gloss": "DIG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-23",
+      "gloss": "SPADE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-24",
+      "gloss": "SHOVEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-25",
+      "gloss": "HOE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-26",
+      "gloss": "PITCHFORK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-27",
+      "gloss": "RAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-31",
+      "gloss": "SOW SEEDS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-311",
+      "gloss": "SEED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-32",
+      "gloss": "MOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-33",
+      "gloss": "SICKLE OR SCYTHE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-34",
+      "gloss": "THRESH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-35",
+      "gloss": "THRESHING-FLOOR",
+      "mapped": []
+    },
+    {
+      "id": "8-41",
+      "gloss": "HARVEST OR HARVEST SEASON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-42",
+      "gloss": "GRAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-43",
+      "gloss": "WHEAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-44",
+      "gloss": "BARLEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-45",
+      "gloss": "RYE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-46",
+      "gloss": "OAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-47",
+      "gloss": "MAIZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-48",
+      "gloss": "RICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-51",
+      "gloss": "GRASS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-52",
+      "gloss": "HAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-53",
+      "gloss": "PLANT (VEGETATION)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-531",
+      "gloss": "PLANT (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-54",
+      "gloss": "ROOT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-55",
+      "gloss": "BRANCH OR TWIG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-56",
+      "gloss": "LEAF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-57",
+      "gloss": "FLOWER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-6",
+      "gloss": "TREE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-61",
+      "gloss": "OAK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-62",
+      "gloss": "BEECH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-63",
+      "gloss": "BIRCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-64",
+      "gloss": "PINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-65",
+      "gloss": "FIR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-66",
+      "gloss": "ACORN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-67",
+      "gloss": "VINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-68",
+      "gloss": "TOBACCO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-69",
+      "gloss": "SMOKE (INHALE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-691",
+      "gloss": "PIPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-72",
+      "gloss": "TREE STUMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-73",
+      "gloss": "TREE TRUNK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-74",
+      "gloss": "FORKED BRANCH",
+      "mapped": []
+    },
+    {
+      "id": "8-75",
+      "gloss": "BARK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-76",
+      "gloss": "SAP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-81",
+      "gloss": "PALM TREE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-82",
+      "gloss": "COCONUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-83",
+      "gloss": "CITRUS FRUIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-84",
+      "gloss": "BANANA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-85",
+      "gloss": "BANYAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-91",
+      "gloss": "SWEET POTATO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-912",
+      "gloss": "YAM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-92",
+      "gloss": "CASSAVA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-93",
+      "gloss": "GOURD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-931",
+      "gloss": "PUMPKIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-94",
+      "gloss": "BAMBOO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-941",
+      "gloss": "SUGAR CANE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-96",
+      "gloss": "FISH POISON",
+      "mapped": []
+    },
+    {
+      "id": "8-97",
+      "gloss": "NETTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-98",
+      "gloss": "MUSHROOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-11",
+      "gloss": "DO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-12",
+      "gloss": "WORK (LABOUR)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-14",
+      "gloss": "BEND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-15",
+      "gloss": "FOLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-16",
+      "gloss": "TIE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-161",
+      "gloss": "UNTIE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-18",
+      "gloss": "CHAIN",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-19",
+      "gloss": "ROPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-192",
+      "gloss": "KNOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-21",
+      "gloss": "STRIKE OR BEAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-211",
+      "gloss": "POUND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-22",
+      "gloss": "CUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-221",
+      "gloss": "CUT DOWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-222",
+      "gloss": "CHOP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-223",
+      "gloss": "STAB TO DEATH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-23",
+      "gloss": "KNIFE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-24",
+      "gloss": "SHEARS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-25",
+      "gloss": "AXE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-251",
+      "gloss": "ADZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-26",
+      "gloss": "BREAK (DESTROY OR GET DESTROYED)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-261",
+      "gloss": "BROKEN (NOT WORKING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-27",
+      "gloss": "SPLIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-28",
+      "gloss": "TEAR (SHRED)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-83",
+      "gloss": "STATUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-29",
+      "gloss": "PULL OFF (SKIN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-31",
+      "gloss": "RUB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-32",
+      "gloss": "STRETCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-33",
+      "gloss": "PULL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-34",
+      "gloss": "SPREAD OUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-341",
+      "gloss": "HANG UP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-342",
+      "gloss": "PRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-343",
+      "gloss": "SQUEEZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-35",
+      "gloss": "POUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-36",
+      "gloss": "WASH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-37",
+      "gloss": "SWEEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-38",
+      "gloss": "BROOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-422",
+      "gloss": "TOOL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-43",
+      "gloss": "CARPENTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-44",
+      "gloss": "BUILD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-46",
+      "gloss": "BORE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-461",
+      "gloss": "HOLLOW OUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-48",
+      "gloss": "SAW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-49",
+      "gloss": "HAMMER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-5",
+      "gloss": "NAIL (TOOL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-56",
+      "gloss": "GLUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-6",
+      "gloss": "BLACKSMITH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-61",
+      "gloss": "FORGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-62",
+      "gloss": "ANVIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-63",
+      "gloss": "CAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-64",
+      "gloss": "GOLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-65",
+      "gloss": "SILVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-66",
+      "gloss": "COPPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-67",
+      "gloss": "IRON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-68",
+      "gloss": "LEAD (CHEMICAL ELEMENT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-69",
+      "gloss": "TIN OR TINPLATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-71",
+      "gloss": "POTTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-72",
+      "gloss": "MOLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-73",
+      "gloss": "CLAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-74",
+      "gloss": "GLASS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-75",
+      "gloss": "BRAID (VERB) OR WEAVE (BASKET)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-76",
+      "gloss": "BASKET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-77",
+      "gloss": "MAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-771",
+      "gloss": "RUG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-78",
+      "gloss": "NETBAG",
+      "mapped": []
+    },
+    {
+      "id": "9-79",
+      "gloss": "FAN (OBJECT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-791",
+      "gloss": "FAN (ACTION)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-81",
+      "gloss": "CARVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-82",
+      "gloss": "SCULPTOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-84",
+      "gloss": "CHISEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-88",
+      "gloss": "PAINT (PIGMENTS)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-89",
+      "gloss": "PAINTING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-11",
+      "gloss": "MOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-12",
+      "gloss": "",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-13",
+      "gloss": "TURN AROUND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-14",
+      "gloss": "WRAP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-15",
+      "gloss": "ROLL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-16",
+      "gloss": "DROP (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-17",
+      "gloss": "TWIST (AROUND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-21",
+      "gloss": "RISE (MOVE UPWARDS)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-22",
+      "gloss": "LIFT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-23",
+      "gloss": "FALL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-24",
+      "gloss": "DRIP (EMIT LIQUID)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-25",
+      "gloss": "THROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-252",
+      "gloss": "CATCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-26",
+      "gloss": "SHAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-32",
+      "gloss": "FLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-33",
+      "gloss": "SINK (DESCEND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-34",
+      "gloss": "FLOAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-35",
+      "gloss": "SWIM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-351",
+      "gloss": "DIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-352",
+      "gloss": "SPLASH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-36",
+      "gloss": "SAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-37",
+      "gloss": "FLY (MOVE THROUGH AIR)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-38",
+      "gloss": "BLOW (OF WIND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-41",
+      "gloss": "CRAWL OR CREEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-412",
+      "gloss": "KNEEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-413",
+      "gloss": "CROUCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-42",
+      "gloss": "SLIP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-43",
+      "gloss": "JUMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-431",
+      "gloss": "KICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-44",
+      "gloss": "DANCE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-45",
+      "gloss": "WALK",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-451",
+      "gloss": "LIMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-46",
+      "gloss": "RUN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-47",
+      "gloss": "GO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-471",
+      "gloss": "GO UP (ASCEND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-472",
+      "gloss": "CLIMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-473",
+      "gloss": "GO DOWN (DESCEND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-474",
+      "gloss": "GO OUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-48",
+      "gloss": "COME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-481",
+      "gloss": "COME BACK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-49",
+      "gloss": "LEAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-491",
+      "gloss": "DISAPPEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-51",
+      "gloss": "FLEE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-52",
+      "gloss": "FOLLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-53",
+      "gloss": "PURSUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-55",
+      "gloss": "ARRIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-56",
+      "gloss": "APPROACH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-57",
+      "gloss": "ENTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-61",
+      "gloss": "CARRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-612",
+      "gloss": "CARRY IN HAND",
+      "mapped": []
+    },
+    {
+      "id": "10-613",
+      "gloss": "CARRY ON SHOULDER",
+      "mapped": []
+    },
+    {
+      "id": "10-614",
+      "gloss": "CARRY ON HEAD",
+      "mapped": []
+    },
+    {
+      "id": "10-615",
+      "gloss": "CARRY UNDER ARM",
+      "mapped": []
+    },
+    {
+      "id": "10-62",
+      "gloss": "BRING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-63",
+      "gloss": "SEND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-64",
+      "gloss": "LEAD (GUIDE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-65",
+      "gloss": "DRIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-66",
+      "gloss": "RIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-67",
+      "gloss": "PUSH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-71",
+      "gloss": "ROAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-72",
+      "gloss": "PATH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-74",
+      "gloss": "BRIDGE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-75",
+      "gloss": "CART",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-76",
+      "gloss": "WHEEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-77",
+      "gloss": "AXLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-78",
+      "gloss": "YOKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-81",
+      "gloss": "SHIP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-83",
+      "gloss": "BOAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-831",
+      "gloss": "CANOE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-832",
+      "gloss": "OUTRIGGER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-84",
+      "gloss": "RAFT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-85",
+      "gloss": "OAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-851",
+      "gloss": "PADDLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-852",
+      "gloss": "ROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-86",
+      "gloss": "RUDDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-87",
+      "gloss": "MAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-88",
+      "gloss": "SAILCLOTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-89",
+      "gloss": "ANCHOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-91",
+      "gloss": "PORT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-92",
+      "gloss": "LAND (DESCEND)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-11",
+      "gloss": "HAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-12",
+      "gloss": "OWN",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-13",
+      "gloss": "TAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-14",
+      "gloss": "SEIZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-15",
+      "gloss": "HOLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-16",
+      "gloss": "GET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-17",
+      "gloss": "KEEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-18",
+      "gloss": "THING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-21",
+      "gloss": "GIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-22",
+      "gloss": "GIVE BACK",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-24",
+      "gloss": "PRESERVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-25",
+      "gloss": "RESCUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-27",
+      "gloss": "DESTROY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-28",
+      "gloss": "INJURE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-31",
+      "gloss": "LOOK FOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-32",
+      "gloss": "FIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-33",
+      "gloss": "MISPLACE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-34",
+      "gloss": "LET GO OR SET FREE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-43",
+      "gloss": "MONEY",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-44",
+      "gloss": "COIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-51",
+      "gloss": "RICH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-52",
+      "gloss": "POOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-53",
+      "gloss": "BEGGAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-54",
+      "gloss": "STINGY",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-61",
+      "gloss": "LEND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-62",
+      "gloss": "BORROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-63",
+      "gloss": "OWE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-64",
+      "gloss": "DEBT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-65",
+      "gloss": "PAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-66",
+      "gloss": "BILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-69",
+      "gloss": "TAX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-77",
+      "gloss": "HIRE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-78",
+      "gloss": "WAGES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-79",
+      "gloss": "EARN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-81",
+      "gloss": "BUY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-82",
+      "gloss": "SELL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-83",
+      "gloss": "TRADE OR BARTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-84",
+      "gloss": "MERCHANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-85",
+      "gloss": "MARKET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-86",
+      "gloss": "STORE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-87",
+      "gloss": "PRICE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-88",
+      "gloss": "EXPENSIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-89",
+      "gloss": "CHEAP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-91",
+      "gloss": "SHARE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-92",
+      "gloss": "WEIGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-01",
+      "gloss": "AFTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-011",
+      "gloss": "BEHIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-02",
+      "gloss": "BESIDE",
+      "mapped": []
+    },
+    {
+      "id": "12-03",
+      "gloss": "DOWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-04",
+      "gloss": "BEFORE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-041",
+      "gloss": "IN FRONT OF",
+      "mapped": []
+    },
+    {
+      "id": "12-05",
+      "gloss": "INSIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-06",
+      "gloss": "OUTSIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-07",
+      "gloss": "BELOW OR UNDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-08",
+      "gloss": "UP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-11",
+      "gloss": "PLACE (POSITION)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-12",
+      "gloss": "PUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-13",
+      "gloss": "SIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-14",
+      "gloss": "LIE DOWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-15",
+      "gloss": "STAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-16",
+      "gloss": "REMAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-17",
+      "gloss": "REMAINS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-21",
+      "gloss": "GATHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-212",
+      "gloss": "PICK UP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-213",
+      "gloss": "PILE UP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-22",
+      "gloss": "JOIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-23",
+      "gloss": "SEPARATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-232",
+      "gloss": "DIVIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-24",
+      "gloss": "OPEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-25",
+      "gloss": "SHUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-26",
+      "gloss": "COVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-27",
+      "gloss": "HIDE (CONCEAL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-31",
+      "gloss": "HIGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-32",
+      "gloss": "LOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-33",
+      "gloss": "TOP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-34",
+      "gloss": "BOTTOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-35",
+      "gloss": "END (OF SPACE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-352",
+      "gloss": "POINTED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-353",
+      "gloss": "EDGE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-36",
+      "gloss": "SIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-37",
+      "gloss": "MIDDLE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-41",
+      "gloss": "RIGHT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-42",
+      "gloss": "LEFT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-43",
+      "gloss": "NEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-44",
+      "gloss": "FAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-45",
+      "gloss": "EAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-46",
+      "gloss": "WEST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-47",
+      "gloss": "NORTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-48",
+      "gloss": "SOUTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-53",
+      "gloss": "GROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-54",
+      "gloss": "MEASURE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-541",
+      "gloss": "FATHOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-55",
+      "gloss": "BIG",
+      "mapped": [
+        "langgen_vocab",
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-56",
+      "gloss": "SMALL",
+      "mapped": [
+        "langgen_vocab",
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-57",
+      "gloss": "LONG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-58",
+      "gloss": "TALL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-59",
+      "gloss": "SHORT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-61",
+      "gloss": "WIDE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-62",
+      "gloss": "NARROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-63",
+      "gloss": "THICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-65",
+      "gloss": "THIN (OF SHAPE OF OBJECT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-67",
+      "gloss": "DEEP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-68",
+      "gloss": "SHALLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-71",
+      "gloss": "FLAT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-73",
+      "gloss": "STRAIGHT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-74",
+      "gloss": "CROOKED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-75",
+      "gloss": "HOOK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-76",
+      "gloss": "CORNER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-77",
+      "gloss": "CROSS",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-78",
+      "gloss": "SQUARE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-81",
+      "gloss": "ROUND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-82",
+      "gloss": "CIRCLE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-83",
+      "gloss": "BALL",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-84",
+      "gloss": "LINE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-85",
+      "gloss": "HOLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-92",
+      "gloss": "SIMILAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-93",
+      "gloss": "CHANGE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13",
+      "gloss": "ZERO",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-01",
+      "gloss": "ONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-02",
+      "gloss": "TWO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-03",
+      "gloss": "THREE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-04",
+      "gloss": "FOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-05",
+      "gloss": "FIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-06",
+      "gloss": "SIX",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-07",
+      "gloss": "SEVEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-08",
+      "gloss": "EIGHT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-09",
+      "gloss": "NINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-1",
+      "gloss": "TEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-101",
+      "gloss": "ELEVEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-102",
+      "gloss": "TWELVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-103",
+      "gloss": "FIFTEEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-104",
+      "gloss": "TWENTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-105",
+      "gloss": "HUNDRED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-106",
+      "gloss": "THOUSAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-107",
+      "gloss": "COUNT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-14",
+      "gloss": "ALL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-15",
+      "gloss": "MANY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-16",
+      "gloss": "MORE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-17",
+      "gloss": "FEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-18",
+      "gloss": "ENOUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-181",
+      "gloss": "SOME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-19",
+      "gloss": "CROWD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-21",
+      "gloss": "FULL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-22",
+      "gloss": "EMPTY",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-23",
+      "gloss": "PART",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-24",
+      "gloss": "HALF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-33",
+      "gloss": "ONLY",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-34",
+      "gloss": "FIRST",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-35",
+      "gloss": "LAST (FINAL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-36",
+      "gloss": "SECOND",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-37",
+      "gloss": "PAIR",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-38",
+      "gloss": "TWICE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-42",
+      "gloss": "THIRD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-44",
+      "gloss": "THREE TIMES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-11",
+      "gloss": "TIME",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-12",
+      "gloss": "AGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-13",
+      "gloss": "NEW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-14",
+      "gloss": "YOUNG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-15",
+      "gloss": "OLD",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-16",
+      "gloss": "EARLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-17",
+      "gloss": "LATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-18",
+      "gloss": "NOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-19",
+      "gloss": "IMMEDIATELY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-21",
+      "gloss": "FAST",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-22",
+      "gloss": "SLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-23",
+      "gloss": "HURRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-24",
+      "gloss": "BE LATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-25",
+      "gloss": "BEGIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-252",
+      "gloss": "LAST (ENDURE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-26",
+      "gloss": "END (OF TIME)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-27",
+      "gloss": "FINISH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-28",
+      "gloss": "CEASE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-29",
+      "gloss": "READY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-31",
+      "gloss": "ALWAYS",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-32",
+      "gloss": "OFTEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-33",
+      "gloss": "SOMETIMES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-331",
+      "gloss": "SOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-332",
+      "gloss": "FOR A LONG TIME",
+      "mapped": []
+    },
+    {
+      "id": "14-34",
+      "gloss": "NEVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-35",
+      "gloss": "AGAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-41",
+      "gloss": "DAY (24 HOURS)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-42",
+      "gloss": "NIGHT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-43",
+      "gloss": "DAWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-44",
+      "gloss": "MORNING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-45",
+      "gloss": "MIDDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-451",
+      "gloss": "AFTERNOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-46",
+      "gloss": "EVENING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-47",
+      "gloss": "TODAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-48",
+      "gloss": "TOMORROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-481",
+      "gloss": "DAY AFTER TOMORROW",
+      "mapped": []
+    },
+    {
+      "id": "14-49",
+      "gloss": "YESTERDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-491",
+      "gloss": "DAY BEFORE YESTERDAY",
+      "mapped": []
+    },
+    {
+      "id": "14-51",
+      "gloss": "HOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-53",
+      "gloss": "CLOCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-61",
+      "gloss": "WEEK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-62",
+      "gloss": "SUNDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-63",
+      "gloss": "MONDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-64",
+      "gloss": "TUESDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-65",
+      "gloss": "WEDNESDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-66",
+      "gloss": "THURSDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-67",
+      "gloss": "FRIDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-68",
+      "gloss": "SATURDAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-71",
+      "gloss": "MONTH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-73",
+      "gloss": "YEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-74",
+      "gloss": "WINTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-75",
+      "gloss": "SPRINGTIME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-76",
+      "gloss": "SUMMER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-77",
+      "gloss": "AUTUMN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-78",
+      "gloss": "SEASON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-21",
+      "gloss": "SMELL (STINK)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-89",
+      "gloss": "WRINKLED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-212",
+      "gloss": "SNIFF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-22",
+      "gloss": "SMELL (PERCEIVE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-25",
+      "gloss": "FRAGRANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-26",
+      "gloss": "STINKING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-31",
+      "gloss": "TASTE (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-35",
+      "gloss": "SWEET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-36",
+      "gloss": "SALTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-37",
+      "gloss": "BITTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-38",
+      "gloss": "SOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-39",
+      "gloss": "BRACKISH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-41",
+      "gloss": "HEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-42",
+      "gloss": "LISTEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-44",
+      "gloss": "SOUND OR NOISE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-45",
+      "gloss": "LOUD",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-46",
+      "gloss": "QUIET",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-51",
+      "gloss": "SEE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-52",
+      "gloss": "LOOK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-55",
+      "gloss": "SHOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-56",
+      "gloss": "SHINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-57",
+      "gloss": "BRIGHT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-61",
+      "gloss": "COLOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-62",
+      "gloss": "LIGHT (COLOR)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-63",
+      "gloss": "DARK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-64",
+      "gloss": "WHITE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-65",
+      "gloss": "BLACK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-66",
+      "gloss": "RED",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-67",
+      "gloss": "BLUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-68",
+      "gloss": "GREEN",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-69",
+      "gloss": "YELLOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-71",
+      "gloss": "TOUCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-712",
+      "gloss": "PINCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-72",
+      "gloss": "FEEL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-74",
+      "gloss": "HARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-75",
+      "gloss": "SOFT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-76",
+      "gloss": "ROUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-77",
+      "gloss": "SMOOTH",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-78",
+      "gloss": "SHARP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-79",
+      "gloss": "BLUNT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-81",
+      "gloss": "HEAVY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-82",
+      "gloss": "LIGHT (WEIGHT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-83",
+      "gloss": "WET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-84",
+      "gloss": "DRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-85",
+      "gloss": "HOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-851",
+      "gloss": "WARM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-86",
+      "gloss": "COLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-87",
+      "gloss": "CLEAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "15-88",
+      "gloss": "DIRTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-11",
+      "gloss": "SOUL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-15",
+      "gloss": "SURPRISED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-18",
+      "gloss": "GOOD LUCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-19",
+      "gloss": "BAD LUCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-23",
+      "gloss": "HAPPY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-25",
+      "gloss": "LAUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-251",
+      "gloss": "SMILE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-26",
+      "gloss": "PLAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-27",
+      "gloss": "LOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-29",
+      "gloss": "KISS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-3",
+      "gloss": "EMBRACE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-31",
+      "gloss": "PAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-32",
+      "gloss": "GRIEF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-33",
+      "gloss": "ANXIETY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-34",
+      "gloss": "REGRET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-35",
+      "gloss": "PITY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-37",
+      "gloss": "CRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-38",
+      "gloss": "TEAR (OF EYE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-39",
+      "gloss": "GROAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-41",
+      "gloss": "HATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-42",
+      "gloss": "ANGER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-44",
+      "gloss": "ENVY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-45",
+      "gloss": "SHAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-48",
+      "gloss": "PROUD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-51",
+      "gloss": "DARE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-52",
+      "gloss": "BRAVE",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-53",
+      "gloss": "FEAR (FRIGHT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-54",
+      "gloss": "DANGER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-62",
+      "gloss": "WANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-622",
+      "gloss": "CHOOSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-63",
+      "gloss": "HOPE (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-65",
+      "gloss": "FAITHFUL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-66",
+      "gloss": "TRUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-67",
+      "gloss": "LIE (MISLEAD)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-68",
+      "gloss": "DECEIT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-69",
+      "gloss": "FORGIVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-71",
+      "gloss": "GOOD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-72",
+      "gloss": "BAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-73",
+      "gloss": "CORRECT (RIGHT)",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-74",
+      "gloss": "WRONG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-76",
+      "gloss": "FAULT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-77",
+      "gloss": "MISTAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-78",
+      "gloss": "BLAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-79",
+      "gloss": "PRAISE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-81",
+      "gloss": "BEAUTIFUL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-82",
+      "gloss": "UGLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-83",
+      "gloss": "GREEDY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "16-84",
+      "gloss": "CLEVER",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-11",
+      "gloss": "MIND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-13",
+      "gloss": "THINK (REFLECT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-14",
+      "gloss": "THINK (BELIEVE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-15",
+      "gloss": "BELIEVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-16",
+      "gloss": "UNDERSTAND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-17",
+      "gloss": "KNOW (SOMETHING)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-171",
+      "gloss": "GUESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-172",
+      "gloss": "IMITATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-18",
+      "gloss": "SEEM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-19",
+      "gloss": "IDEA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-21",
+      "gloss": "WISE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-22",
+      "gloss": "STUPID",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-23",
+      "gloss": "MAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-24",
+      "gloss": "LEARN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-242",
+      "gloss": "STUDY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-25",
+      "gloss": "TEACH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-26",
+      "gloss": "PUPIL (STUDENT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-27",
+      "gloss": "TEACHER",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-28",
+      "gloss": "SCHOOL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-31",
+      "gloss": "REMEMBER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-32",
+      "gloss": "FORGET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-34",
+      "gloss": "CLEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-35",
+      "gloss": "OBSCURE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-36",
+      "gloss": "SECRET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-37",
+      "gloss": "CERTAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-38",
+      "gloss": "EXPLAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-41",
+      "gloss": "INTENTION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-42",
+      "gloss": "CAUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-43",
+      "gloss": "DOUBT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-44",
+      "gloss": "SUSPECT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-441",
+      "gloss": "BETRAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-45",
+      "gloss": "NEED (NOUN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-46",
+      "gloss": "EASY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-47",
+      "gloss": "DIFFICULT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-48",
+      "gloss": "TRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-49",
+      "gloss": "MANNER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-51",
+      "gloss": "AND",
+      "mapped": []
+    },
+    {
+      "id": "17-52",
+      "gloss": "BECAUSE",
+      "mapped": []
+    },
+    {
+      "id": "17-53",
+      "gloss": "IF",
+      "mapped": []
+    },
+    {
+      "id": "17-54",
+      "gloss": "OR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-55",
+      "gloss": "YES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-56",
+      "gloss": "NO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "17-61",
+      "gloss": "HOW",
+      "mapped": []
+    },
+    {
+      "id": "17-62",
+      "gloss": "HOW MANY PIECES",
+      "mapped": []
+    },
+    {
+      "id": "17-63",
+      "gloss": "HOW MUCH",
+      "mapped": []
+    },
+    {
+      "id": "17-64",
+      "gloss": "WHAT",
+      "mapped": []
+    },
+    {
+      "id": "17-65",
+      "gloss": "WHEN",
+      "mapped": []
+    },
+    {
+      "id": "17-66",
+      "gloss": "WHERE",
+      "mapped": []
+    },
+    {
+      "id": "17-67",
+      "gloss": "WHICH",
+      "mapped": []
+    },
+    {
+      "id": "17-68",
+      "gloss": "WHO",
+      "mapped": []
+    },
+    {
+      "id": "17-69",
+      "gloss": "WHY",
+      "mapped": []
+    },
+    {
+      "id": "18-11",
+      "gloss": "VOICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-12",
+      "gloss": "SING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-13",
+      "gloss": "SHOUT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-15",
+      "gloss": "WHISPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-16",
+      "gloss": "MUMBLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-17",
+      "gloss": "WHISTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-18",
+      "gloss": "SHRIEK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-19",
+      "gloss": "HOWL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-21",
+      "gloss": "SPEAK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-211",
+      "gloss": "STUTTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-22",
+      "gloss": "SAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-221",
+      "gloss": "TELL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-222",
+      "gloss": "SPEECH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-23",
+      "gloss": "BE SILENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-24",
+      "gloss": "LANGUAGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-26",
+      "gloss": "WORD",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-28",
+      "gloss": "NAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-31",
+      "gloss": "ASK (INQUIRE)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-32",
+      "gloss": "ANSWER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-33",
+      "gloss": "ADMIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-34",
+      "gloss": "DENY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-35",
+      "gloss": "ASK (REQUEST)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-36",
+      "gloss": "PROMISE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-37",
+      "gloss": "REFUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-38",
+      "gloss": "FORBID",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-39",
+      "gloss": "SCOLD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-41",
+      "gloss": "CALL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-42",
+      "gloss": "CALL BY NAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-43",
+      "gloss": "ANNOUNCE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-44",
+      "gloss": "THREATEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-45",
+      "gloss": "BOAST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-51",
+      "gloss": "WRITE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-52",
+      "gloss": "READ",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-56",
+      "gloss": "PAPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-57",
+      "gloss": "PEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-61",
+      "gloss": "BOOK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-67",
+      "gloss": "POET",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-71",
+      "gloss": "FLUTE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-72",
+      "gloss": "DRUM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-73",
+      "gloss": "BRASS INSTRUMENT (HORN OR TRUMPET)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "18-74",
+      "gloss": "RATTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-11",
+      "gloss": "COUNTRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-12",
+      "gloss": "NATIVE COUNTRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-15",
+      "gloss": "TOWN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-16",
+      "gloss": "VILLAGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-17",
+      "gloss": "BOUNDARY",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-21",
+      "gloss": "PEOPLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-23",
+      "gloss": "CLAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-24",
+      "gloss": "CHIEFTAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-25",
+      "gloss": "WALKING STICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-31",
+      "gloss": "RULE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-32",
+      "gloss": "KING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-33",
+      "gloss": "QUEEN",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-36",
+      "gloss": "NOBLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-37",
+      "gloss": "CITIZEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-41",
+      "gloss": "MASTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-42",
+      "gloss": "SLAVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-43",
+      "gloss": "SERVANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-44",
+      "gloss": "FREEMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-45",
+      "gloss": "COMMAND",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-46",
+      "gloss": "OBEY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-47",
+      "gloss": "PERMIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-51",
+      "gloss": "FRIEND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-52",
+      "gloss": "ENEMY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-54",
+      "gloss": "NEIGHBOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-55",
+      "gloss": "STRANGER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-56",
+      "gloss": "GUEST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-57",
+      "gloss": "HOST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-58",
+      "gloss": "HELP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-59",
+      "gloss": "PREVENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-61",
+      "gloss": "CUSTOM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-62",
+      "gloss": "QUARREL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-63",
+      "gloss": "PLOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-65",
+      "gloss": "MEET",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-72",
+      "gloss": "PROSTITUTE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-11",
+      "gloss": "FIGHT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-13",
+      "gloss": "BATTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-14",
+      "gloss": "PEACE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-15",
+      "gloss": "ARMY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-17",
+      "gloss": "SOLDIER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-21",
+      "gloss": "WEAPONS",
+      "mapped": []
+    },
+    {
+      "id": "20-22",
+      "gloss": "CLUB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-222",
+      "gloss": "BATTLE-AXE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-23",
+      "gloss": "SLING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-24",
+      "gloss": "BOW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-25",
+      "gloss": "ARROW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-26",
+      "gloss": "SPEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-27",
+      "gloss": "SWORD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-28",
+      "gloss": "GUN",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-31",
+      "gloss": "ARMOUR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-33",
+      "gloss": "HELMET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-34",
+      "gloss": "SHIELD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-35",
+      "gloss": "FORTRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-36",
+      "gloss": "TOWER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-41",
+      "gloss": "VICTORY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-42",
+      "gloss": "DEFEAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-43",
+      "gloss": "ATTACK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-44",
+      "gloss": "DEFEND",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-45",
+      "gloss": "RETREAT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-46",
+      "gloss": "SURRENDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-47",
+      "gloss": "PRISONER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-471",
+      "gloss": "GUARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-48",
+      "gloss": "BOOTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-49",
+      "gloss": "AMBUSH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-51",
+      "gloss": "FISHERMAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-52",
+      "gloss": "FISHHOOK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-53",
+      "gloss": "FISHING LINE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-54",
+      "gloss": "FISHNET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-55",
+      "gloss": "FISH TRAP",
+      "mapped": []
+    },
+    {
+      "id": "20-56",
+      "gloss": "BAIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-61",
+      "gloss": "HUNT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-62",
+      "gloss": "SHOOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-63",
+      "gloss": "MISS (A TARGET)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-64",
+      "gloss": "TRAP (PITFALL)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "20-65",
+      "gloss": "TRAP (CATCH)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-11",
+      "gloss": "LAW",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-15",
+      "gloss": "COURT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-013",
+      "gloss": "AT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-16",
+      "gloss": "ADJUDICATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-17",
+      "gloss": "JUDGMENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-18",
+      "gloss": "JUDGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-21",
+      "gloss": "PLAINTIFF",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-22",
+      "gloss": "DEFENDANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-23",
+      "gloss": "WITNESS",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-24",
+      "gloss": "SWEAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-25",
+      "gloss": "OATH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-31",
+      "gloss": "ACCUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-32",
+      "gloss": "CONDEMN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-33",
+      "gloss": "CONVICT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-34",
+      "gloss": "ACQUIT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-35",
+      "gloss": "GUILTY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-36",
+      "gloss": "INNOCENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-37",
+      "gloss": "PUNISHMENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-38",
+      "gloss": "FINE (PENALTY)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-39",
+      "gloss": "PRISON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-42",
+      "gloss": "MURDER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-43",
+      "gloss": "ADULTERY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-44",
+      "gloss": "RAPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-46",
+      "gloss": "ARSON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-47",
+      "gloss": "PERJURY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-51",
+      "gloss": "STEAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "21-52",
+      "gloss": "THIEF",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-11",
+      "gloss": "RELIGION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-12",
+      "gloss": "DEITY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-13",
+      "gloss": "TEMPLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-14",
+      "gloss": "ALTAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-15",
+      "gloss": "SACRIFICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-16",
+      "gloss": "WORSHIP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-17",
+      "gloss": "PRAY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-18",
+      "gloss": "PRIEST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-19",
+      "gloss": "HOLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-22",
+      "gloss": "PREACH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-23",
+      "gloss": "BLESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-24",
+      "gloss": "CURSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-26",
+      "gloss": "ABSTAIN FROM FOOD",
+      "mapped": [
+        "langgen_vocab",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-31",
+      "gloss": "HEAVEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-32",
+      "gloss": "HELL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-35",
+      "gloss": "DEMON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-37",
+      "gloss": "IDOL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-42",
+      "gloss": "MAGIC",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-43",
+      "gloss": "MAGICIAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-44",
+      "gloss": "ELF OR FAIRY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-45",
+      "gloss": "GHOST",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-47",
+      "gloss": "OMEN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-1",
+      "gloss": "RADIO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-11",
+      "gloss": "TELEVISION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-12",
+      "gloss": "TELEPHONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-135",
+      "gloss": "MOTORCYCLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-14",
+      "gloss": "CAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-15",
+      "gloss": "BUS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-16",
+      "gloss": "AIRPLANE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-17",
+      "gloss": "ELECTRICITY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-175",
+      "gloss": "BATTERY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-2",
+      "gloss": "HOSPITAL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-21",
+      "gloss": "NURSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-22",
+      "gloss": "PILL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-23",
+      "gloss": "INJECTION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-5",
+      "gloss": "FAUCET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-51",
+      "gloss": "SINK (BASIN)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-52",
+      "gloss": "TOILET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-53",
+      "gloss": "MATTRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-3",
+      "gloss": "GOVERNMENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-31",
+      "gloss": "PRESIDENT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-32",
+      "gloss": "MINISTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-33",
+      "gloss": "POLICE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-34",
+      "gloss": "DRIVER'S LICENSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-37",
+      "gloss": "CRIME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-38",
+      "gloss": "ELECTION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-4",
+      "gloss": "MAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-41",
+      "gloss": "POSTAGE STAMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-42",
+      "gloss": "LETTER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-44",
+      "gloss": "BANK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-54",
+      "gloss": "CAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-55",
+      "gloss": "SCREW",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-555",
+      "gloss": "SCREWDRIVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-56",
+      "gloss": "BOTTLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-565",
+      "gloss": "CANDY",
+      "mapped": []
+    },
+    {
+      "id": "23-24",
+      "gloss": "SPECTACLES",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-57",
+      "gloss": "PLASTIC",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-575",
+      "gloss": "BOMB",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-58",
+      "gloss": "WORKSHOP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-59",
+      "gloss": "CIGARETTE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-61",
+      "gloss": "CALENDAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-62",
+      "gloss": "MOVIE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-63",
+      "gloss": "MUSIC",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-64",
+      "gloss": "SONG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-6",
+      "gloss": "NEWSPAPER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-385",
+      "gloss": "ADDRESS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-39",
+      "gloss": "NUMBER",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-155",
+      "gloss": "TRAIN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-36",
+      "gloss": "BIRTH CERTIFICATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-18",
+      "gloss": "BRAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-195",
+      "gloss": "PETROLEUM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-185",
+      "gloss": "MOTOR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-19",
+      "gloss": "MACHINE",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-13",
+      "gloss": "BICYCLE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-395",
+      "gloss": "STREET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-445",
+      "gloss": "LIBERATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "19-565",
+      "gloss": "INVITE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-35",
+      "gloss": "LICENSE PLATE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-43",
+      "gloss": "POSTCARD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-01",
+      "gloss": "BE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-02",
+      "gloss": "BECOME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-03",
+      "gloss": "WITHOUT",
+      "mapped": []
+    },
+    {
+      "id": "24-05",
+      "gloss": "THROUGH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-13",
+      "gloss": "SAME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-06",
+      "gloss": "NOT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-07",
+      "gloss": "THIS",
+      "mapped": []
+    },
+    {
+      "id": "24-08",
+      "gloss": "THAT",
+      "mapped": []
+    },
+    {
+      "id": "24-09",
+      "gloss": "HERE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-1",
+      "gloss": "THERE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-11",
+      "gloss": "OTHER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-493",
+      "gloss": "VAGINA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-9",
+      "gloss": "TEA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "23-91",
+      "gloss": "COFFEE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-12",
+      "gloss": "NEXT",
+      "mapped": [
+        "corpus_node_tokens",
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-862",
+      "gloss": "COYOTE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-863",
+      "gloss": "HARE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-865",
+      "gloss": "QUAIL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-866",
+      "gloss": "RACCOON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-869",
+      "gloss": "SQUIRREL",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-871",
+      "gloss": "REINDEER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-872",
+      "gloss": "ELK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-873",
+      "gloss": "BEAVER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-79",
+      "gloss": "SLED",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-29",
+      "gloss": "LASSO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-991",
+      "gloss": "LARCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-993",
+      "gloss": "NEEDLE TREE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-771",
+      "gloss": "ARCTIC LIGHTS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-465",
+      "gloss": "TENDON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-67",
+      "gloss": "TAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "6-98",
+      "gloss": "SNOWSHOE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-5",
+      "gloss": "CIRCUMCISION",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-51",
+      "gloss": "INITIATION CEREMONY",
+      "mapped": []
+    },
+    {
+      "id": "8-996",
+      "gloss": "CONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-8112",
+      "gloss": "BODY LOUSE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-494",
+      "gloss": "VULVA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-99",
+      "gloss": "TAPIR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-93",
+      "gloss": "WHETSTONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-92",
+      "gloss": "TUMPLINE",
+      "mapped": []
+    },
+    {
+      "id": "7-65",
+      "gloss": "CAMP",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-28",
+      "gloss": "DIGGING STICK",
+      "mapped": []
+    },
+    {
+      "id": "3-597",
+      "gloss": "CORMORANT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-833",
+      "gloss": "CRUSTACEANS (PRAWNS OR SHRIMP)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-834",
+      "gloss": "TERMITE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-835",
+      "gloss": "TICK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-87",
+      "gloss": "BOOMERANG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-88",
+      "gloss": "KANGAROO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-89",
+      "gloss": "ANTEATER",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-598",
+      "gloss": "TOUCAN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-9",
+      "gloss": "JAGUAR",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "5-983",
+      "gloss": "MANIOC BREAD",
+      "mapped": []
+    },
+    {
+      "id": "7-66",
+      "gloss": "HAMMOCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-911",
+      "gloss": "MILLET",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-913",
+      "gloss": "CHAMELEON",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-9",
+      "gloss": "DRAW (WATER)",
+      "mapped": []
+    },
+    {
+      "id": "9-91",
+      "gloss": "PEG",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "10-58",
+      "gloss": "RETURN HOME",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "3-917",
+      "gloss": "BUFFALO",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-411",
+      "gloss": "SAVANNA",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-831",
+      "gloss": "STEAM",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-4561",
+      "gloss": "OLDER SIBLING",
+      "mapped": []
+    },
+    {
+      "id": "2-4562",
+      "gloss": "YOUNGER SIBLING",
+      "mapped": []
+    },
+    {
+      "id": "2-4711",
+      "gloss": "GRANDPARENTS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-5",
+      "gloss": "GRANDCHILD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-541",
+      "gloss": "SIBLING'S CHILD",
+      "mapped": []
+    },
+    {
+      "id": "2-622",
+      "gloss": "PARENTS-IN-LAW",
+      "mapped": []
+    },
+    {
+      "id": "2-6411",
+      "gloss": "CHILD-IN-LAW",
+      "mapped": []
+    },
+    {
+      "id": "2-6412",
+      "gloss": "SIBLING-IN-LAW",
+      "mapped": []
+    },
+    {
+      "id": "2-931",
+      "gloss": "HE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "2-932",
+      "gloss": "SHE",
+      "mapped": []
+    },
+    {
+      "id": "2-933",
+      "gloss": "IT",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-741",
+      "gloss": "LIFE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-771",
+      "gloss": "CARCASS",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-844",
+      "gloss": "DISEASE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "7-232",
+      "gloss": "PADLOCK",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "8-121",
+      "gloss": "PADDY FIELD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "11-29",
+      "gloss": "DAMAGE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "12-081",
+      "gloss": "ABOVE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-231",
+      "gloss": "PIECE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "13-331",
+      "gloss": "ALONE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-251",
+      "gloss": "BEGINNING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "14-411",
+      "gloss": "DAY (NOT NIGHT)",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-131",
+      "gloss": "CHURCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "22-132",
+      "gloss": "MOSQUE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-14",
+      "gloss": "NOTHING",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-7501",
+      "gloss": "DEAD",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-8541",
+      "gloss": "SCRATCH",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-111",
+      "gloss": "MAKE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "4-431",
+      "gloss": "BELLY",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "9-311",
+      "gloss": "WIPE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "1-775",
+      "gloss": "FREEZE",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    },
+    {
+      "id": "24-04",
+      "gloss": "WITH",
+      "mapped": []
+    },
+    {
+      "id": "12-012",
+      "gloss": "IN",
+      "mapped": [
+        "wordnet_lemmas"
+      ]
+    }
+  ]
+}

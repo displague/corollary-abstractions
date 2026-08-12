@@ -3028,3 +3028,46 @@ and the corpus templates deliberately reuse the `{x}` slot across sibling
 binders — a future twin authored with distinct inner binder names would NOT
 match until normalized. Recorded here so the convention is a documented
 choice rather than an accidental claim.
+
+## Language lane — WOLD lexicon: the first empirical multilingual source, and its measured reach (2026-08-12)
+
+**What was pinned.** lexibank/wold `v4.2` (2026-07-17), the CLDF dataset of
+the World Loanword Database — release zip SHA-256-pinned in
+`data_sources/manifest.json` (`git-lexibank-wold`), license verified INSIDE
+the archive (LICENSE = full CC Attribution 4.0 International text;
+`metadata.json` declares `CC-BY-4.0`), required citations carried verbatim in
+the manifest entry and `data_sources/derived/wold/NOTICE.md`. House rule
+applies unchanged: a lexical source enters at **empirical** — it never
+grounds a frame verdict and never appears in `verified_by`.
+
+**The extract.** `scripts/ingest_wold.py extract` → committed
+`data_sources/derived/wold/lexicon.json` (~0.8 MB): the 1,460 core LWT
+meanings (Haspelmath-2009-1460) with word forms for a DECLARED six-vocabulary
+subset — English, Dutch, Romanian, Japanese, Vietnamese, MandarinChinese
+(11,155 forms). Why these six: English is the repo's realization language;
+Dutch is the only vocabulary attesting all 1,460; Romanian is the
+highest-coverage Romance vocabulary (Spanish — the natural pick next to
+`corpusdata-span` — is only a DONOR language in WOLD, not one of the 41
+recipient vocabularies; disclosed, not silently substituted); the last three
+are the highest-coverage non-Indo-European vocabularies across three
+families. Byte-identical regeneration from the SHA-verified zip, same
+discipline as the miniF2F/Lean-workbook extracts.
+
+**The reach number (measure before claiming).** Of the 1,460 meanings, how
+many connect to vocabulary the repo has TODAY (`experiments/wold_reach.json`;
+exact match after `lemma_key` normalization, no stemming)?
+
+| target | vocab size | mapped | pct |
+|---|---|---|---|
+| langgen toy lexicon (`experiments/langgen.py`) | 41 | 27 | 1.8% |
+| data/*/nodes.json metadata tokens | 817 | 58 | 4.0% |
+| Open English WordNet lemmas (pinned OEWN 2025) | 127,311 | 1,394 | 95.5% |
+| **mapped to any** | | **1,394** | **95.5%** |
+
+Unmapped: **66** — plurals the no-stemming rule refuses to guess ("embers",
+"gums"), pronouns and kin descriptions WordNet has no lemma for ("he/she/it",
+"the mother's brother"). The honest reading: WOLD connects to the repo's
+*lexical* layer (WordNet) almost completely, and to the repo's *own* concept
+vocabulary barely at all (4%) — a concept→multilingual-forms bridge now
+exists, but the corpus names ~60 of these everyday concepts. Nothing is
+wired into any runtime path in this slice; the number is the deliverable.
