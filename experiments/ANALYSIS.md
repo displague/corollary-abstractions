@@ -2998,8 +2998,10 @@ int+field mixes keep `-` (integer subtraction is a real head).
 all 1.73M rows plus both extracts):** Goedel loses **495** full-statement
 covers (331 `integer_division_no_head` + 94 `nat_monus_no_head` in goal
 position, 42 + 28 in hypotheses; 457 goal-only), Lean-workbook loses **2**,
-miniF2F **0**; no row gains. That is ~9× the review's 56 CONFIRMED false
-covers, because the uniform rule also refuses the elaboration-ambiguous
+miniF2F **0**; no row gains. That is ~9× the review's 56 FLAGGED rows (~35
+confirmed on hand-adjudication; the spot-verify later adjudicated ~10 of the
+56 as legitimate covers), because the uniform rule also refuses the
+elaboration-ambiguous
 residue a text-level instrument cannot attribute — `n * (a₁ + aₙ) / 2`
 mixes, and only Lean's elaborator knows whether the `/` landed in ℚ via
 coercion; `∀ x > M` with `M : ℝ` binds x at ℝ, but the bound's type is
