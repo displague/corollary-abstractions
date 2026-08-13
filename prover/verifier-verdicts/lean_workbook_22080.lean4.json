@@ -1,0 +1,29 @@
+{
+ "backend": "lean4",
+ "checks": [
+  "elaborates: pinned toolchain lean binary invoked directly by path (no elan proxy, no network), exit 0 required, warnings fail",
+  "axiom audit: `#print axioms` footprint of the claimed reference must be contained in ['Classical.choice', 'Quot.sound', 'propext'] (a `sorry` surfaces here as sorryAx even though the compiler exits 0)",
+  "surface containment: the claimed statement appears verbatim in the pinned source as the claimed reference's declaration"
+ ],
+ "claim": {
+  "reference": "lean_workbook_22080",
+  "statement_id": "numbertheory.ingested.lean_workbook_22080",
+  "surface": "(2^30) % 1000 = 824"
+ },
+ "environment": {
+  "lean_version": "Lean (version 4.32.2, x86_64-w64-windows-gnu, commit f3b06c705e6c85f5314019d5d3baab0fec5b580c, Release)",
+  "platform": "win32",
+  "toolchain": "leanprover/lean4:v4.32.2"
+ },
+ "evidence": {
+  "axioms": [],
+  "exit_code": 0,
+  "output_sha256": "47a0ccde7f430a0de155a609b95bcaef48a353fd77fe7041ed98b936159cc74c"
+ },
+ "inputs": {
+  "prover/lean/session/Session22080.lean": "9124a7d0594b50fb924529c552645571784a2bbb531f0f060554629936b08f9e",
+  "prover/lean/session/lean-toolchain": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273"
+ },
+ "schema_version": 1,
+ "verdict": "pass"
+}

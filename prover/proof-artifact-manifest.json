@@ -2,10 +2,6 @@
   "schema_version": 1,
   "trust_model": "local-files trust root; digest authenticates committed extraction bytes, not theorem-to-statement correspondence",
   "artifacts": {
-    "prover/sample_triples.json": {
-      "sha256": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7",
-      "authority": "native Lean extraction described in prover/PHASE1_NOTES.md"
-    },
     "prover/ingested_triples.json": {
       "sha256": "db5a05a31700ae70a2f27e4108d65cb9d7b1c465ee2577f5f61df8bd43ffcc7e",
       "authority": "native Lean extraction (prover/ExtractData.win.lean over prover/lean/ingested, toolchain leanprover/lean4:v4.32.2, core Lean, no Mathlib); design and honesty boundary in docs/DESIGN-external-verifier.md",
@@ -13,14 +9,6 @@
       "verdicts": [
         "prover/verifier-verdicts/lean_workbook_1041.lean4.json",
         "prover/verifier-verdicts/lean_workbook_1041.python-tests.json"
-      ]
-    },
-    "prover/pychecks/gcd_euclid_recursive.py": {
-      "sha256": "ada80950d4de72eedcbdd483ed10c4f543234c66eb608db53cd9b61acbfdf696",
-      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); a PASS certifies those checks, not correctness in general",
-      "source": "prover/pychecks/gcd_euclid_recursive.py",
-      "verdicts": [
-        "prover/verifier-verdicts/programming_euclid_recursive.python-tests.json"
       ]
     },
     "prover/pychecks/gcd_euclid_iterative.py": {
@@ -31,12 +19,32 @@
         "prover/verifier-verdicts/programming_euclid_iterative.python-tests.json"
       ]
     },
+    "prover/pychecks/gcd_euclid_recursive.py": {
+      "sha256": "ada80950d4de72eedcbdd483ed10c4f543234c66eb608db53cd9b61acbfdf696",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/gcd_euclid_recursive.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_euclid_recursive.python-tests.json"
+      ]
+    },
     "prover/pychecks/gcd_stein.py": {
       "sha256": "55dcbde577e8cc0cccf5fabc04d73b736e4b2403af6c6dd2d2d127e6e55edd6c",
       "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); first-party Stein foil; a PASS certifies those checks, not correctness in general",
       "source": "prover/pychecks/gcd_stein.py",
       "verdicts": [
         "prover/verifier-verdicts/programming_stein_binary.python-tests.json"
+      ]
+    },
+    "prover/sample_triples.json": {
+      "sha256": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7",
+      "authority": "native Lean extraction described in prover/PHASE1_NOTES.md"
+    },
+    "prover/session_triples.json": {
+      "sha256": "386dd940c008dbc65e4e9143d7bf4705d16dce7890b1c29455b3729caf757631",
+      "authority": "native Lean extraction (prover/ExtractData.win.lean over prover/lean/session, toolchain leanprover/lean4:v4.32.2, core Lean, no Mathlib), post-processed by scripts/trace_to_triples.py; authored during the v0.10 item 5 session (docs/DESIGN-v010-harness-session.md)",
+      "source": "prover/lean/session/Session22080.lean",
+      "verdicts": [
+        "prover/verifier-verdicts/lean_workbook_22080.lean4.json"
       ]
     }
   }

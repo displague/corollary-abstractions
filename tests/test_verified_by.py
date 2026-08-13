@@ -50,14 +50,18 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             )
         self.assertEqual(verified_by_errors(nodes, REPO_ROOT), [])
         links = [link for n in nodes for link in n.get("verified_by", [])]
-        # 20 = the 17 lean4 links (16 propositional + 1 ingested
-        # arithmetic; v0.10 item 2) + 3 python-tests citations from
-        # data/programming (v0.10 item 3; docs/DESIGN-programming-discipline.md).
-        # proof_correspondence still scores only the 17 lean4 links.
-        self.assertEqual(len(links), 20)
-        self.assertEqual(len({link["reference"] for link in links}), 20)
+        # 21 = the 18 lean4 links (16 propositional + 1 ingested arithmetic
+        # from v0.10 item 2 + 1 authored by the item 5 SESSION through the
+        # WRITE gate) + 3 python-tests citations from data/programming
+        # (v0.10 item 3; docs/DESIGN-programming-discipline.md).
+        # proof_correspondence scores only the 18 lean4 links.
+        self.assertEqual(len(links), 21)
+        self.assertEqual(len({link["reference"] for link in links}), 21)
         self.assertEqual(
             sum(1 for link in links if link["system"] == "python-tests"), 3
+        )
+        self.assertEqual(
+            sum(1 for link in links if link["system"] == "lean4"), 18
         )
 
     def test_missing_artifact_fails_closed(self) -> None:
@@ -260,7 +264,7 @@ class VerifiedByIntegrityTests(unittest.TestCase):
                 check=False,
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("256 statement nodes", result.stdout)
+        self.assertIn("257 statement nodes", result.stdout)
 
     def test_wrong_statement_valid_theorem_is_capability_blind_control(self) -> None:
         """Cheap lint cannot prove theorem/statement semantic correspondence."""

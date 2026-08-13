@@ -1,0 +1,8 @@
+[
+ {
+  "theorem": "lean_workbook_22080",
+  "tactic": "decide",
+  "stateBefore": "⊢ 2 ^ 30 % 1000 = 824",
+  "stateAfter": "no goals"
+ }
+]

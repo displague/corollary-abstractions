@@ -12,6 +12,7 @@
     "data/geospatial_topology/nodes.json": "d5b55dc7ec5aaeaec5b9aa57770c255e9b264cf973865d1878253704f3219ddb",
     "data/graph_theory/nodes.json": "04c91e0ac6728a8ec15c124d47d007588ee7c1cec033fe568f99a6a556490f58",
     "data/information_theory/nodes.json": "3fd8790526ed53496f50d015c2676d03cbab57a742cee5eb60db3f428a9f6fd9",
+    "data/ingested_arithmetic/nodes.json": "6e19d72abcfac49dfb36b03103919cc860f1dc76c3f2d94a102b0892fc9a549d",
     "data/logic/nodes.json": "2d10bbae75eadadec20a1a82bc06bb220c5110405112cd72f2c0491b873d6c0c",
     "data/machine_learning/nodes.json": "14481d52a1bbec1bdac68099d342453791f5946ed02b92dd70a8a7eda298b392",
     "data/morphology/nodes.json": "f94adb5febf9ee2e0c377ec8c926539c086db5b98a191f7781bc917e96f52587",
@@ -26,17 +27,34 @@
     "data/temporal_logic/nodes.json": "44e454bc517672c99154814aea8ff3c54e397bf4540881418de6352b311e8080",
     "data/trigonometry/nodes.json": "30665470b41a0f438717ce00080a3732ae5a438c1d519e2e46143ed3b553d9e5",
     "prover/ingested_triples.json": "db5a05a31700ae70a2f27e4108d65cb9d7b1c465ee2577f5f61df8bd43ffcc7e",
-    "prover/proof-artifact-manifest.json": "bf142903efdb233ddd6a0ec2ada8ae6efc264abb37d680ecc0a7219b3c713a06",
+    "prover/proof-artifact-manifest.json": "99c9a683a3207c687522f89efad37c8d2dbc726c3b62785d14ad89b9eb496c71",
     "prover/pychecks/gcd_euclid_iterative.py": "48338fba664d0802f6adc26f12fbeb684c1ac12a0820a091c90f66626064288a",
     "prover/pychecks/gcd_euclid_recursive.py": "ada80950d4de72eedcbdd483ed10c4f543234c66eb608db53cd9b61acbfdf696",
     "prover/pychecks/gcd_stein.py": "55dcbde577e8cc0cccf5fabc04d73b736e4b2403af6c6dd2d2d127e6e55edd6c",
-    "prover/sample_triples.json": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7"
+    "prover/sample_triples.json": "8dcc31e4d95cf8443194e5eb64872a0db308475b9424ccf2b760b086a52180d7",
+    "prover/session_triples.json": "386dd940c008dbc65e4e9143d7bf4705d16dce7890b1c29455b3729caf757631"
   },
-  "links": 17,
-  "corresponds": 16,
+  "links": 18,
+  "corresponds": 17,
   "mismatch": 0,
   "untranslatable": 1,
   "results": [
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_22080",
+      "system": "lean4",
+      "artifact": "prover/session_triples.json",
+      "reference": "lean_workbook_22080",
+      "verdict": "CORRESPONDS",
+      "reason": "matched the statement's canonical form",
+      "theorem_template": "MOD((2 ^ 30), 1000) = 824",
+      "theorem_skeleton": "824 = MOD⟨^(2, 30), 1000⟩",
+      "matched_route": "canonical",
+      "ambiguous_with": [],
+      "considered_forms": [
+        "canonical: 824 = MOD⟨^(2, 30), 1000⟩"
+      ],
+      "refused_forms": []
+    },
     {
       "statement_id": "logic.boolean_laws.de_morgan_laws",
       "system": "lean4",

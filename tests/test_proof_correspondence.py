@@ -44,7 +44,11 @@ INGESTED_ARTIFACT = "prover/ingested_triples.json"
 # the default; the v0.10 item 2 ingested link lives in its own traced artifact
 # (docs/DESIGN-external-verifier.md Sec. 3), so anything iterating EXPECTED has
 # to ask here rather than assume one file.
-ARTIFACT_OF = {"lean_workbook_1041": INGESTED_ARTIFACT}
+SESSION_ARTIFACT = "prover/session_triples.json"
+ARTIFACT_OF = {
+    "lean_workbook_1041": INGESTED_ARTIFACT,
+    "lean_workbook_22080": SESSION_ARTIFACT,
+}
 
 # Every committed link, with the route the delivered check reports. Pinned as a
 # TABLE rather than a count so that a change of route -- a link silently falling
@@ -98,6 +102,10 @@ EXPECTED = {
     # It lives in prover/ingested_triples.json, not ARTIFACT above.
     "lean_workbook_1041": (
         "numbertheory.ingested.lean_workbook_1041", CORRESPONDS, "canonical"),
+    # v0.10 item 5: authored by the recorded session. Same fragment, the
+    # OTHER declared head — MOD where 1041 was DIVIDES.
+    "lean_workbook_22080": (
+        "numbertheory.ingested.lean_workbook_22080", CORRESPONDS, "canonical"),
 }
 
 
@@ -133,12 +141,13 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
         self.assertEqual([r.reference for r in self.report.mismatches], [])
 
     def test_p_pw2_counts(self) -> None:
-        """16 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH over 17 links.
+        """17 CORRESPONDS, 1 UNTRANSLATABLE, 0 MISMATCH over 18 links.
 
-        17 = 16 propositional + the ingested arithmetic link (v0.10 item 2).
+        18 = 16 propositional + the ingested arithmetic link (v0.10 item 2)
+        + the link the item 5 session authored through the WRITE gate.
         """
-        self.assertEqual(len(self.report.results), 17)
-        self.assertEqual(self.report.count(CORRESPONDS), 16)
+        self.assertEqual(len(self.report.results), 18)
+        self.assertEqual(self.report.count(CORRESPONDS), 17)
         self.assertEqual(self.report.count(UNTRANSLATABLE), 1)
         self.assertEqual(self.report.count(MISMATCH), 0)
 
@@ -306,7 +315,7 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
                 env={"PYTHONIOENCODING": "utf-8", **_min_env()},
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("16 CORRESPONDS", result.stdout)
+        self.assertIn("17 CORRESPONDS", result.stdout)
 
 
 def _min_env() -> dict:

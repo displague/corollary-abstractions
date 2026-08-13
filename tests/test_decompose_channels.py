@@ -5,7 +5,7 @@ docstring together with their adjudication; this file is where the two that
 are machine-checkable stay checked:
 
 - GC4 (aggregates unchanged) is pinned as the pre-split numbers: graph mean
-  0.774, 531 exact + 99 pattern-membership constituents, 222 statements with
+  0.774, 533 exact + 99 pattern-membership constituents, 224 statements with
   at least one grounded constituent. A channel change that moves any of them
   is a scoring change and needs its own registered prediction.
 
@@ -101,6 +101,36 @@ are machine-checkable stay checked:
   0.317 -> 0.313); conservative same_corpus_dominant 15 -> 16. Recursive
   defines_head gains GCD (twice) and STEIN. Prior four acknowledgments
   are not rewritten.
+
+  Registered acknowledgment (v0.10 item 5, the recorded session — the SIXTH):
+  mean 0.779 (unchanged at three places), exact 550 -> 552,
+  statements-with-constituents 226 -> 228, external mean 0.499 -> 0.497,
+  external lower 0.223 -> 0.222, min-family-1 statements 128 -> 129, because
+  the session authored one node through the audited WRITE route (corpus
+  256 -> 257; docs/DESIGN-v010-harness-session.md). It is the first
+  acknowledgment whose added constituents are INGESTED-to-INGESTED: the new
+  node is `MOD(2 ^ 30, 1000) = 824` and it shares the subterm `2 ^ 30` with
+  the first ingested statement, `DIVIDES(13, 2 ^ 30 + 3 ^ 60)`, so each
+  grounds the other through the prior_corpus channel — two new exact
+  constituents, both `^(2, 30)`, `recurs_in_n_statements: 2`, and the first
+  prior_corpus constituents to carry a real shared discipline
+  (`number_theory`) rather than the `mathematics` umbrella the other four
+  carry. Nothing was taught to expect it; the ledger found it the moment a
+  second ingested statement existed. Guard directions unmoved: the
+  absorption count floor and the 0.164 rate-gap pin read identically, since
+  a ground residue equation absorbs nothing — BUT the rate-gap pin moves a
+  third time, 0.156 -> 0.159, for the arithmetic reason that two new exact
+  constituents change that channel's denominator while absorption's is
+  untouched. The count floor, which is the load-bearing guard, holds
+  unweakened (e_best 387 > 4 x a_best). The rate-gap pin has now been
+  re-pinned by three consecutive slices against its original guard
+  direction; it still needs the maintainer sign-off flagged at item 2 and is
+  carried to release triage rather than quietly re-pinned again.
+  `group_counts` does not move
+  either — but the twin-null STREAK language stops here, because item 3
+  already ended it; this slice merely fails to restart it. What is new is
+  that the WRITE gate checked the null ITSELF, as the candidate's DECLARED
+  matcher delta, before applying the write.
 
 The provability corpus is the regression case the item names. Its 1.000 must
 keep resolving into same-corpus + pattern-absorption with a near-zero external
@@ -225,11 +255,11 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         graph = self.summary["graph"]
         self.assertEqual(graph["mean_groundedness"], 0.779)
         self.assertEqual(
-            sum(d["grounded_exact"] for d in self.decompositions), 550)
+            sum(d["grounded_exact"] for d in self.decompositions), 552)
         self.assertEqual(
             sum(d["grounded_via_pattern"] for d in self.decompositions), 100)
         self.assertEqual(
-            sum(1 for d in self.decompositions if d["constituents"]), 226)
+            sum(1 for d in self.decompositions if d["constituents"]), 228)
 
     def test_groundedness_is_still_grounded_over_considered(self):
         for d in self.decompositions:
@@ -364,14 +394,14 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         self.assertEqual(sum(d["channels"]["recursive"] for d in decs), 261)
         self.assertEqual(
             result["channel_summary"]["graph"]["channel_means"]["recursive"],
-            0.313)
+            0.312)
         self.assertEqual(
-            sum(1 for d in decs if d["channels"]["recursive"]), 128)
+            sum(1 for d in decs if d["channels"]["recursive"]), 129)
 
     # -- the prior_corpus rule earns its (small) keep ----------------------
 
     def test_prior_corpus_constituents_are_pinned(self):
-        """Four constituents, all on the umbrella label `mathematics`.
+        """Six constituents: four on `mathematics`, two on `number_theory`.
 
         Small, but the rule is not decorative: without the shared-discipline
         test these four become `external` evidence, and no aggregate moves to
@@ -387,10 +417,17 @@ class ChannelSplitOverCorpus(unittest.TestCase):
              "*(?0:P, ?1:V, +(?2:V, ?3:V))", ("mathematics",)),
             ("graphtheory.enumeration.complete_graph_edge_count",
              "inv(2)", ("mathematics",)),
+            # v0.10 item 5: the two INGESTED ground statements now ground
+            # each other's shared `2 ^ 30`. Nothing was taught this; the
+            # ledger found it because a second ingested statement existed.
             ("numanalysis.integration.trapezoidal_rule",
              "*(?0:P, ?1:V, +(?2:V, ?3:V))", ("mathematics",)),
             ("numanalysis.rootfinding.bisection_interval_halving",
              "inv(2)", ("mathematics",)),
+            ("numbertheory.ingested.lean_workbook_1041",
+             "^(2, 30)", ("number_theory",)),
+            ("numbertheory.ingested.lean_workbook_22080",
+             "^(2, 30)", ("number_theory",)),
         ])
         self.assertGreater(
             self.summary["graph"]["channel_means"]["prior_corpus"], 0.0)
@@ -421,7 +458,7 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         exact = [c for d in self.decompositions for c in d["constituents"]
                  if c["grounded_via"] == "exact"]
         multi = [c for c in exact if len(c["owner_channels"]) > 1]
-        self.assertEqual(len(exact), 550)
+        self.assertEqual(len(exact), 552)
         self.assertEqual(len(multi), 213)
         # Every multi-owner constituent takes `external`; the generous rule is
         # doing real work, so `external` must be published as an upper bound.
@@ -429,9 +466,9 @@ class ChannelSplitOverCorpus(unittest.TestCase):
 
     def test_conservative_rollup_brackets_the_external_share(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["channel_means"]["external"], 0.499)
-        self.assertEqual(graph["channel_means_lower"]["external"], 0.223)
-        self.assertEqual(graph["external_lower"], 0.223)
+        self.assertEqual(graph["channel_means"]["external"], 0.497)
+        self.assertEqual(graph["channel_means_lower"]["external"], 0.222)
+        self.assertEqual(graph["external_lower"], 0.222)
         self.assertLessEqual(graph["external_lower"],
                              graph["channel_means"]["external"])
         exact = [c for d in self.decompositions for c in d["constituents"]
@@ -498,13 +535,13 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         e_all = sum(1 for c in exact
                     if set(c["owner_channels"]) == {"external"})
         self.assertEqual((a_best, a_all, len(absorbed)), (86, 52, 100))
-        self.assertEqual((e_best, e_all, len(exact)), (387, 174, 550))
+        self.assertEqual((e_best, e_all, len(exact)), (387, 174, 552))
         # The count floor is the load-bearing guard and holds unweakened.
         self.assertGreater(e_best, 4 * a_best)
         # The rate gap is pinned at its measured value (it is NOT a wash any
         # more; absorption leads by rate). A tolerance would let drift hide.
         self.assertAlmostEqual(
-            a_best / len(absorbed) - e_best / len(exact), 0.156, delta=0.001)
+            a_best / len(absorbed) - e_best / len(exact), 0.159, delta=0.001)
 
     # -- the flag must discriminate, not just restate the aggregate --------
 

@@ -466,8 +466,15 @@ class CoreSession:
         *,
         offline: bool = False,
         wordnet_env: str | None = None,
+        session_id: str | None = None,
     ) -> "CoreSession":
         """Detect capabilities like kernel init, then build the session.
+
+        ``session_id`` is supplied only by callers that must be able to
+        REPRODUCE a session — the recorded run of ROADMAP-v0.10 item 5 writes
+        a committed transcript, and a random id would make that transcript
+        differ from itself on every run. Default stays the random token: an
+        interactive session's identity is not the caller's to choose.
 
         ``offline=True`` forces every optional subsystem OFF regardless of what
         is installed — the honest way to reproduce a WordNet/Lean/Torch-absent
@@ -516,6 +523,7 @@ class CoreSession:
             executor=executor,
             verifier=verifier,
             story=story,
+            **({"session_id": session_id} if session_id else {}),
         )
         session.events.append(
             SessionEvent(

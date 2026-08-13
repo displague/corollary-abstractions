@@ -736,6 +736,13 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "numbertheory.ingested.lean_workbook_22080",
+      "char_tokens": 23,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "logic.boolean_laws.de_morgan_laws",
       "char_tokens": 54,
       "struct_tokens": 20,
@@ -1793,9 +1800,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 44.55859375,
-  "mean_struct": 14.97265625,
-  "mean_concept": 3.63671875,
-  "n_family_skeletons": 200,
+  "mean_char": 44.474708171206224,
+  "mean_struct": 14.957198443579767,
+  "mean_concept": 3.6264591439688716,
+  "n_family_skeletons": 201,
   "skeletons_reused": 31
 }

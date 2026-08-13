@@ -1,0 +1,5 @@
+name = "session"
+defaultTargets = ["Session22080"]
+
+[[lean_lib]]
+name = "Session22080"

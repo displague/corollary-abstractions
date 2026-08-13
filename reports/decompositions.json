@@ -7122,6 +7122,49 @@
       ]
     },
     {
+      "statement_id": "numbertheory.ingested.lean_workbook_22080",
+      "corpus_id": "ingested_arithmetic.session.v1",
+      "discipline": "ingested_arithmetic",
+      "template": "MOD(2 ^ 30, 1000) = 824",
+      "groundedness": 0.5,
+      "considered": 2,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 0,
+        "prior_corpus": 1,
+        "same_corpus": 0,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.0,
+        "prior_corpus": 0.5,
+        "same_corpus": 0.0,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "^(2, 30)",
+          "grounded_via": "exact",
+          "channel": "prior_corpus",
+          "owner_channels": {
+            "prior_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2,
+          "shared_disciplines": [
+            "number_theory"
+          ]
+        }
+      ]
+    },
+    {
       "statement_id": "logic.boolean_laws.de_morgan_laws",
       "corpus_id": "logic.boolean_foundations.v1",
       "discipline": "logic",
@@ -12048,25 +12091,43 @@
       "corpus_id": "number_theory.core.v1",
       "discipline": "number_theory",
       "template": "DIVIDES(13, 2 ^ 30 + 3 ^ 60)",
-      "groundedness": 0.0,
+      "groundedness": 0.333,
       "considered": 3,
-      "grounded_exact": 0,
+      "grounded_exact": 1,
       "grounded_via_pattern": 0,
       "channels": {
         "external": 0,
-        "prior_corpus": 0,
+        "prior_corpus": 1,
         "same_corpus": 0,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
         "external": 0.0,
-        "prior_corpus": 0.0,
+        "prior_corpus": 0.333,
         "same_corpus": 0.0,
         "recursive": 0.0,
         "pattern_absorption": 0.0
       },
-      "constituents": []
+      "constituents": [
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "^(2, 30)",
+          "grounded_via": "exact",
+          "channel": "prior_corpus",
+          "owner_channels": {
+            "prior_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2,
+          "shared_disciplines": [
+            "number_theory"
+          ]
+        }
+      ]
     },
     {
       "statement_id": "numbertheory.ingested.lean_workbook_10202",
@@ -17697,34 +17758,34 @@
   ],
   "channel_summary": {
     "graph": {
-      "statements": 254,
+      "statements": 255,
       "mean_groundedness": 0.779,
       "channel_means": {
-        "external": 0.499,
-        "prior_corpus": 0.007,
+        "external": 0.497,
+        "prior_corpus": 0.01,
         "same_corpus": 0.181,
         "recursive": 0.0,
         "pattern_absorption": 0.092
       },
       "channel_constituents": {
         "external": 387,
-        "prior_corpus": 4,
+        "prior_corpus": 6,
         "same_corpus": 159,
         "recursive": 0,
         "pattern_absorption": 100
       },
-      "independent_mean": 0.505,
+      "independent_mean": 0.507,
       "same_corpus_dominant": false,
       "self_certifying": false,
       "channel_means_lower": {
-        "external": 0.223,
-        "prior_corpus": 0.033,
-        "same_corpus": 0.431,
+        "external": 0.222,
+        "prior_corpus": 0.036,
+        "same_corpus": 0.43,
         "recursive": 0.0,
         "pattern_absorption": 0.092
       },
-      "external_lower": 0.223,
-      "independent_lower": 0.255,
+      "external_lower": 0.222,
+      "independent_lower": 0.258,
       "same_corpus_dominant_lower": true,
       "self_certifying_lower": false
     },
@@ -18125,6 +18186,39 @@
         "self_certifying_lower": false,
         "discipline": "information_theory"
       },
+      "ingested_arithmetic.session.v1": {
+        "statements": 1,
+        "mean_groundedness": 0.5,
+        "channel_means": {
+          "external": 0.0,
+          "prior_corpus": 0.5,
+          "same_corpus": 0.0,
+          "recursive": 0.0,
+          "pattern_absorption": 0.0
+        },
+        "channel_constituents": {
+          "external": 0,
+          "prior_corpus": 1,
+          "same_corpus": 0,
+          "recursive": 0,
+          "pattern_absorption": 0
+        },
+        "independent_mean": 0.5,
+        "same_corpus_dominant": false,
+        "self_certifying": false,
+        "channel_means_lower": {
+          "external": 0.0,
+          "prior_corpus": 0.5,
+          "same_corpus": 0.0,
+          "recursive": 0.0,
+          "pattern_absorption": 0.0
+        },
+        "external_lower": 0.0,
+        "independent_lower": 0.5,
+        "same_corpus_dominant_lower": false,
+        "self_certifying_lower": false,
+        "discipline": "ingested_arithmetic"
+      },
       "logic.boolean_foundations.v1": {
         "statements": 20,
         "mean_groundedness": 0.876,
@@ -18259,33 +18353,33 @@
       },
       "number_theory.core.v1": {
         "statements": 16,
-        "mean_groundedness": 0.701,
+        "mean_groundedness": 0.722,
         "channel_means": {
           "external": 0.403,
-          "prior_corpus": 0.0,
+          "prior_corpus": 0.021,
           "same_corpus": 0.256,
           "recursive": 0.0,
           "pattern_absorption": 0.042
         },
         "channel_constituents": {
           "external": 17,
-          "prior_corpus": 0,
+          "prior_corpus": 1,
           "same_corpus": 15,
           "recursive": 0,
           "pattern_absorption": 2
         },
-        "independent_mean": 0.403,
+        "independent_mean": 0.424,
         "same_corpus_dominant": false,
         "self_certifying": false,
         "channel_means_lower": {
           "external": 0.075,
-          "prior_corpus": 0.0,
+          "prior_corpus": 0.021,
           "same_corpus": 0.584,
           "recursive": 0.0,
           "pattern_absorption": 0.042
         },
         "external_lower": 0.075,
-        "independent_lower": 0.075,
+        "independent_lower": 0.096,
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "number_theory"

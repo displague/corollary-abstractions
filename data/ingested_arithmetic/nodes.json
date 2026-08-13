@@ -1,0 +1,134 @@
+{
+  "schema": "../../schema/equation-node.schema.json",
+  "corpus_id": "ingested_arithmetic.session.v1",
+  "discipline": "ingested_arithmetic",
+  "version": "1.0.0-alpha",
+  "statement_nodes": [
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_22080",
+      "title": "Two to the Thirtieth Leaves 824 Modulo 1000 (Ingested)",
+      "statement_class": "proposition",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "number_theory"
+        ],
+        "subfield": "modular_arithmetic",
+        "topic": "ingested_ground_arithmetic"
+      },
+      "formal_statement": {
+        "canonical_ascii": "2^30 % 1000 = 824",
+        "canonical_latex": "2^{30} \\bmod 1000 = 824",
+        "equivalent_forms": [
+          {
+            "form_id": "ascii_ground",
+            "notation_system": "ascii",
+            "expression": "2^30 % 1000 = 824",
+            "scope_note": "The same ground surface the pinned Lean source states as `(2^30) % 1000 = 824`; translated by the correspondence rung's ground-arithmetic fragment, not the propositional one."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "ingested_ground_residue",
+        "anonymized_template": "MOD(2 ^ 30, 1000) = 824",
+        "slot_schema": [
+          {
+            "slot_id": "GROUND_MODULUS_1000",
+            "syntactic_category": "constant",
+            "semantic_role": "documentation of the ground modulus 1000 — the template itself is fully ground and carries no matcher slots"
+          }
+        ],
+        "invariants": [
+          "Fully ground: no slots, no variables — a single decidable arithmetic fact, the exact shape of the traced Lean goal `⊢ 2 ^ 30 % 1000 = 824`.",
+          "MOD is the corpus reading of Lean's `%` on ℕ, already declared ordered_compose in the head algebra; the ground-arithmetic fragment translates the goal with no slot folding, so CORRESPONDS here is exact structural identity of the ground equation.",
+          "The last three digits of 2^30 = 1073741824 — the ordinary reason a problem set asks for it, and irrelevant to what the verifier actually certified."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "1000",
+            "syntactic_category": "constant",
+            "semantic_role": "modulus",
+            "mathematical_order": 0,
+            "description": "The fixed modulus: a ground object, not a placeholder."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "MOD(., .)",
+            "name": "residue (mod)",
+            "input_arity": 2,
+            "codomain": "natural numbers",
+            "description": "MOD(a, n) is the remainder of a on division by n — the corpus's reading of Lean's `a % n` on ℕ. Already declared ordered_compose in the matcher's head algebra."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1000",
+            "value": 1000,
+            "description": "the modulus"
+          },
+          {
+            "symbol": "824",
+            "value": 824,
+            "description": "the residue"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "2^30 leaves remainder 824 on division by 1000: the ground residue fact stated by Lean-workbook problem lean_workbook_22080, restated verbatim from the pinned extract.",
+        "statistical_significance": "Authored BY the recorded v0.10 item 5 session through the audited route (docs/DESIGN-v010-harness-session.md): a dispatched need the corpus could not meet -> external-verifier lean4 verdict over the pinned source prover/lean/session/Session22080.lean (exit 0, no warnings, axiom footprint EMPTY — `%` on ℕ decides without propext, where the first bridge's `∣` needed it) -> transition rows traced by prover/ExtractData.win.lean and post-processed by scripts/trace_to_triples.py -> digest pin in prover/proof-artifact-manifest.json -> this link, applied by write_stage.accept_write. The verdict certifies exactly what it checked, not correctness in general.",
+        "regularity_conditions": [
+          "Natural-number carrier: `%` and `^` are read on ℕ, where they agree with the corpus heads; no subtraction or division appears, so no monus/floor-division carrier hazard arises"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "leanworkbook_goedel2025",
+          "bibliographic_entry": "Lean Workbook problems, proofs by Goedel-Prover (Lin et al., 2025, arXiv:2502.07640). Ingested from the pinned derived extract data_sources/derived/lean_workbook/statements.json (HF Goedel-LM/Lean-workbook-proofs, revision b731852af8d8ab11498fda27bce9020738c01c59, MIT License; attribution in data_sources/derived/lean_workbook/NOTICE.md).",
+          "url": "https://huggingface.co/datasets/Goedel-LM/Lean-workbook-proofs"
+        }
+      ],
+      "keywords": [
+        "ingested",
+        "lean workbook",
+        "modular arithmetic",
+        "decidable",
+        "external verifier",
+        "verified_by",
+        "authored in session"
+      ],
+      "verified_by": [
+        {
+          "system": "lean4",
+          "artifact": "prover/session_triples.json",
+          "reference": "lean_workbook_22080"
+        }
+      ]
+    }
+  ]
+}

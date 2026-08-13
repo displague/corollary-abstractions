@@ -181,8 +181,18 @@ def _refusal(backend: str, claim: dict, reason: str) -> Verdict:
 def toolchain_binary(toolchain: str) -> Path | None:
     """The installed toolchain's lean binary, or None. NEVER downloads."""
     mangled = toolchain.strip().replace("/", "--").replace(":", "---")
+    try:
+        home = Path.home()
+    except RuntimeError:
+        # A stripped environment (no HOME/USERPROFILE) is the same situation
+        # as an absent toolchain and must be reported the same way: this is
+        # the function whose whole contract is "or None, and NEVER a
+        # download". Raising here turned a REFUSAL into a crash in any
+        # caller that runs the verifier from a minimal subprocess env, which
+        # is exactly how the repo's own tests invoke CLIs.
+        return None
     binary = (
-        Path.home()
+        home
         / ".elan"
         / "toolchains"
         / mangled

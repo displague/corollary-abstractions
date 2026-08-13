@@ -75,7 +75,15 @@ class MirrorReportTests(unittest.TestCase):
         # first time after those five nulls: the Euclid pair is one new
         # group of size 2 (P4/P9, registered before the matcher ran). Stein
         # is a singleton. Prior acknowledgments are not rewritten.
-        self.assertEqual(self.report["nodes_analyzed"], 256)
+        # Item 5 acknowledgment: 257 = 256 + the node the recorded session
+        # authored through the audited WRITE route
+        # (docs/DESIGN-v010-harness-session.md). group_counts are unchanged
+        # AGAIN — a ground residue equation twins with nothing — but the
+        # streak language stops here: item 3 ended the consecutive-null run,
+        # and this slice merely fails to restart it. What IS new: the WRITE
+        # gate checked this null itself, as the candidate's DECLARED matcher
+        # delta, before applying the write.
+        self.assertEqual(self.report["nodes_analyzed"], 257)
         self.assertEqual(
             self.report["group_counts"],
             {

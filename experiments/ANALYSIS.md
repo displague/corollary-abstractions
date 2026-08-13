@@ -3457,3 +3457,71 @@ appended to `tests/test_decompose_channels.py`.
 **Specialization (P10).** `specialize.py` ran unchanged and exited 0. The
 Euclid pair are twins, not a general/specific nest; no programming
 specialization edge is claimed.
+## v0.10 item 5 — one real session, recorded: the ingested layer starts grounding itself (2026-08-12)
+
+Design and frozen predictions in `docs/DESIGN-v010-harness-session.md`;
+§7 adjudicates P1–P7 exact to the row. The record itself is
+`experiments/harness_session.json`, emitted from the components' own
+structured objects (`SessionEvent`, `DispatchEvent`, verdict JSON,
+`StagingRecord`, `AcceptanceRecord`) rather than re-typed prose, and
+re-verifiable with `python scripts/session_run.py --check`.
+
+**What ran.** One booted session, four recorded legs, no new surface.
+(A) A need the corpus could not meet — `numbertheory.ingested.lean_workbook_22080`,
+dispatched, every registered path abstained. The external verifier re-checked
+its committed verdict over the pinned source `prover/lean/session/Session22080.lean`;
+the transitions were traced by `prover/ExtractData.win.lean` and post-processed
+by the new `scripts/trace_to_triples.py`; the WRITE gate ran **sixteen checks**
+and applied the candidate, adding the node by regenerating the corpus from the
+seed it accepted. (A′) The same need, dispatched again by the NEXT session:
+**SOLVED, materialized** — the running session's store is a boot-time snapshot,
+so the write it applied is not visible to itself, which is recorded rather than
+hidden. (B) The same-shaped statement one exponent too large,
+`(2^2006) % 7 = 4`: the verifier FAILED it on the axiom audit (`sorryAx`, the
+default `exponentiation.threshold`), and the gate refused the candidate too, at
+`theorem_closure`. Two independent refusals, working tree byte-identical.
+(C) "why did the chicken cross the road?", routed to a path the boot matrix did
+not register: `exhausted`, nothing minted, the abstention worded by the
+dispatcher itself (P-IH4).
+
+**The number that matters, and the prediction it broke.** Corpus 253 → 254,
+`verified_by` links 17 → 18, `group_counts {30, 31, 30, 32, 5}` unchanged — a
+SIXTH consecutive twin null, and the first one the WRITE gate checked ITSELF,
+because it refuses a PROVEN candidate that has not declared its matcher delta
+in advance ("an undeclared delta is an unregistered prediction"). But GC4 did
+**not** move by denominator dilution the way the four previous corpus-growth
+acknowledgments did: exact constituents 531 → **533**, statements with at
+least one grounded constituent 222 → **224**, mean groundedness 0.774 →
+**0.775 (up)**, external channel mean 0.490 → 0.488.
+
+The reason is the result: the session's node is `MOD(2 ^ 30, 1000) = 824`, and
+it shares the subterm `2 ^ 30` with the first ingested statement,
+`DIVIDES(13, 2 ^ 30 + 3 ^ 60)`. Each grounds the other through the
+`prior_corpus` channel — two new exact constituents, both `^(2, 30)`,
+`recurs_in_n_statements: 2`, on the shared discipline `number_theory` rather
+than the `mathematics` umbrella the corpus's other four prior_corpus
+constituents carry. **The ingested layer began grounding itself.** Nothing was
+taught to look for this; the decomposition ledger found it the moment a second
+ingested statement existed. It is a two-constituent result on a 254-node
+corpus and proves nothing about scale — but it is the first evidence that
+ingestion compounds rather than merely accumulating, which is the whole bet of
+ROADMAP-v0.10 item 4.
+
+**What the gate taught the session, recorded because it constrains the next
+one.** The declarative WRITE lane stages NEW seed / NEW corpus pairs only:
+appending to an existing corpus "needs a trusted patch format"
+(`seed_ownership`), the carried-open multi-corpus WRITE patch of ROADMAP-v0.10
+§7. So the design's plan to append to `data/number_theory` was refused, and the
+node landed in a new corpus `data/ingested_arithmetic/` — corpora 24 → 25. Until
+that patch format lands, **no session can add a statement to an existing
+corpus**, which is a real constraint on item 4's authoring-at-scale plan and is
+better learned here than there.
+
+**Disclosure.** P1 predicted the new verdict's axiom footprint would be
+`[propext]`, by analogy with the first bridge. It is `[]`: `%` on ℕ decides
+without propext where `∣` needed it. The prediction was wrong in a direction
+that makes the claim stronger, which is exactly why it had to name the set
+rather than the direction. P5 asked for a byte-identical re-run of the
+transcript; a session that mutates the corpus cannot deliver that by
+construction, so `--check` re-verifies the record instead. Both stand
+uncorrected in §6 and adjudicated in §7.
