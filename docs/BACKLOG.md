@@ -2541,3 +2541,25 @@ wants its own adversarial review, not a release-eve change.
   rule. The emitter is a separate design; this is not a silent expansion
   of the first wave. `docs/DESIGN-item4-authoring.md` §1 registered the
   cut before the seed ran.
+
+## Parked at v0.10.0 release triage (no named dependant in ROADMAP-v0.11)
+
+ROADMAP-v0.11 adopts the rule v0.10's drift audit produced: a carried lane
+must name the headline item that depends on it, or be parked here in writing.
+These two carried lanes have no dependant in v0.11 and are parked rather than
+carried a third time under the word "open".
+
+- **Proof-search curve depth.** Carried since v0.9 item 5. The proof curve
+  (`prover/curve_search.py`) works and its 24-theorem result stands; deepening
+  it serves no v0.11 headline item. Unpark when a cycle has a claim that needs
+  deeper search — the likely trigger is a verifier-backed synthesis lane, not
+  the corpus work.
+- **The groundedness gate.** Carried since v0.9 item 5. v0.10 changed what it
+  would be gating: with 251 ground identities in the corpus, groundedness now
+  moves with corpus composition (the same effect that retired the absorption
+  rate-gap pin), so a gate written against today's numbers would encode a
+  regime rather than a standard. Unpark after v0.11 item 1 says whether
+  self-grounding is a real signal or a composition artifact.
+
+Both were honestly sequenced behind corpus work each time they were carried;
+naming that is the point of the rule, not blaming the deferral.

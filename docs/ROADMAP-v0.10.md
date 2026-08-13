@@ -1,3 +1,19 @@
+> **CLOSED at v0.10.0.** This file stays as the historical plan of record.
+> Where each item went:
+> item 1 (grammar heads) — **shipped**, see [RELEASE-v0.10.0.md](RELEASE-v0.10.0.md);
+> item 2 (external verifier) — **shipped**;
+> item 3 (programming discipline) — **shipped**;
+> item 4 (author the covered subset) — **partial**: 251 of 12,681 authored,
+> remainder carried to [ROADMAP-v0.11.md](ROADMAP-v0.11.md) item 1's
+> prerequisite (skeleton emitter);
+> item 5 (harness session) — **shipped**;
+> item 6 (external benchmark) — **not started**, carried to ROADMAP-v0.11
+> item 4 with a named dependant or a parking notice required;
+> item 7 (carried lanes) — the multi-corpus WRITE patch **shipped** as item
+> 4's trusted append format; proof-search depth and the groundedness gate
+> are **parked** in BACKLOG; the parked rungs remain parked.
+> Triage and drift audit: [TRIAGE-v0.10.md](TRIAGE-v0.10.md).
+
 # v0.10 roadmap — extend the grammar, build the verifier, then author
 
 v0.9 measured the grammar's reach on real formal math and found it is about a

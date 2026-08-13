@@ -1267,3 +1267,59 @@ bindings), **near-miss** (informative failure, kept deliberately).
   exceed any budget the model trained on), and 0.751 of retained first-decode
   errors land in deciles 0–2. The interface, not the budget, is the object of
   study. *(experiments/depth_interface.py)*
+
+## v0.10 — the verifier, the inert middle, and a baseline that scaled badly (2026-08-13)
+
+*Process note, recorded because the drift audit caught it: **v0.9 shipped
+without adding a section here.** Its findings live in `RELEASE-v0.9.0.md` and
+`experiments/ANALYSIS.md` only. That gap is left as-is rather than
+reconstructed from memory; this section covers v0.10.*
+
+- **A capability-blind baseline can win on count and lose on precision, and
+  scale separates the two.** At 221 curated nodes the operator bag simply
+  beat the matcher on pair count. At 508 nodes with 251 ingested, the bag
+  forms 7,622 pairs to the matcher's 96 — and its precision *falls* from
+  2.03% to 1.26% (0.54% on ingested-only pairs) while the matcher's stays at
+  1.0. More data made the blind baseline louder and worse, not better.
+  *(experiments/ANALYSIS.md, item 4)*
+- **Fully ground statements are inert in every ledger role.** They are not
+  specialize generals (no slots to bind), not specialize specifics, and not
+  decompose patterns. Their only structural participation is the subterms
+  they share. A corpus of ground identities therefore grows coverage and
+  same-corpus grounding while adding nothing to the generalization lattice.
+  *(scripts/specialize.py, scripts/decompose.py; v0.10 item 4 design)*
+- **`specialize.py` is quadratic in slot-free templates.** 68 first-wave
+  templates with 8–30 operators ran 87 minutes without writing a report on
+  the 508-node graph, because a slot-free tree enumerates commutative subsets
+  against every other node and can only produce noise. Skipping slot-less
+  candidate generals restores it to 0.41s with the 713 pre-ingest edges
+  identical. *(docs/BACKLOG.md, v0.10 item 4)*
+- **Ingested statements ground each other, and it showed up twice
+  unprompted.** A second ingested statement was enough for the ledger to
+  record it and the first grounding a shared `2 ^ 30`; 251 more produced 614
+  `same_corpus` constituents inside the new corpus and a third owner for the
+  same subterm. Both times the registered prediction expected denominator
+  dilution instead. Not yet measured against a null.
+  *(docs/DESIGN-self-grounding-ingestion.md)*
+- **`%` on ℕ decides without `propext`; `∣` needs it.** A prediction that
+  carried one statement's axiom footprint over to a different operator was
+  wrong in the direction that makes the certificate stronger (empty axiom
+  set). Name the set, not the direction.
+  *(prover/verifier-verdicts/lean_workbook_22080.lean4.json)*
+- **An audit hook that reads only `open`'s mode is not a write boundary.**
+  The mode is `None` for every low-level open — `os.open`, `_io.FileIO`, and
+  CPython's own bytecode writer — so a sandboxed check wrote `__pycache__`
+  into the repository while reporting PASS. Read the flags too.
+  *(scripts/_verifier_sandbox.py)*
+- **A build directory inside a scratch tree is a performance bug with a
+  correctness face.** `lake` materialises a 3 GB, 14,748-file toolchain copy
+  under `prover/`, which the WRITE gate then copies per test and hashes twice
+  per class: 13 tests went from 26s to 1394s, and a lean run touching it
+  mid-class tripped the working-tree guard with a change no candidate had
+  made. *(scripts/write_stage.py, SCRATCH_IGNORED)*
+- **A guard that moves whenever the corpus succeeds is measuring the corpus.**
+  The absorption rate-gap pin moved four times (0.164, 0.156, 0.159, 0.490);
+  the last jump was self-grounding ingestion dropping the exact channel's
+  external *rate* while its *count* grew. Retired in favour of the count
+  floor, which strengthened to 5.31:1.
+  *(tests/test_decompose_channels.py)*
