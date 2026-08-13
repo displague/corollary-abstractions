@@ -10,3 +10,5 @@ prover/ingested_triples.json text eol=lf
 prover/verifier-verdicts/*.json text eol=lf
 prover/lean/ingested/** text eol=lf
 prover/pychecks/*.py text eol=lf
+data/programming/nodes.json text eol=lf
+data_sources/derived/algorithms/** text eol=lf
