@@ -564,12 +564,34 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         # The count floor is the load-bearing guard and holds unweakened
         # (strengthened 4.5:1 -> 5.3:1).
         self.assertGreater(e_best, 4 * a_best)
-        # RATE-GAP FOURTH RE-PIN, FLAGGED. 0.159 -> 0.490 because ingesting
-        # 251 same-corpus-grounding identities lowered exact's external
-        # rate; absorption stayed 86/100. Not a silent re-pin: queued for
-        # the maintainer sign-off already on the release-triage brief.
-        self.assertAlmostEqual(
-            a_best / len(absorbed) - e_best / len(exact), 0.490, delta=0.001)
+        # THE RATE-GAP PIN IS RETIRED HERE, at v0.10 release triage, by
+        # maintainer decision. It is not deleted quietly, so the reasoning
+        # stays where the assertion used to be.
+        #
+        # The pin read "absorption's best-owner external RATE leads the
+        # exact channel's by less than 0.12". It moved in four consecutive
+        # slices — 0.164, 0.156, 0.159, 0.490 — and the last jump made the
+        # cause unmistakable: it is a RATIO whose denominator the corpus
+        # controls. Ingesting 251 ground identities that ground each other
+        # added 614 same_corpus constituents to the exact channel, dropping
+        # exact's external rate from ~70% to ~37% while absorption stayed at
+        # 86/100. Absorption did not become more external; the exact channel
+        # became more internally grounded — which is the compounding result
+        # the ingestion program wanted. A guard that moves every time the
+        # corpus succeeds is measuring corpus composition, not the behaviour
+        # it was written to guard.
+        #
+        # What the pin was FOR survives intact: the retracted inference
+        # ("absorption concentrates cross-discipline credit") is refuted by
+        # the COUNT floor asserted immediately above, which has never
+        # weakened in any slice and strengthened to 5.31:1 here (457 > 4 x
+        # 86). That is the load-bearing guard, and it is composition-robust
+        # in the direction that matters: more exact credit makes it stronger,
+        # not weaker.
+        #
+        # If a future slice wants a rate-shaped guard back, it owes a
+        # composition-robust statistic and its own registered prediction —
+        # not this one re-pinned a fifth time.
 
     # -- the flag must discriminate, not just restate the aggregate --------
 
