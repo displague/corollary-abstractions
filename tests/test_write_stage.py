@@ -2042,7 +2042,7 @@ TRANSITIONS_B = [
     {
         "theorem": THEOREM_B,
         "tactic": "decide",
-        "stateBefore": "\u22a2 1 + 1 = 2",
+        "stateBefore": "\u22a2 424242 + 1 = 424243",
         "stateAfter": "no goals",
     }
 ]
@@ -2053,20 +2053,20 @@ def _join_node() -> dict:
     node["statement_id"] = STATEMENT_ID_B
     node["title"] = "One Plus One Is Two (Write-stage append fixture)"
     node["formal_statement"] = {
-        "canonical_ascii": "1 + 1 = 2",
-        "canonical_latex": "1 + 1 = 2",
+        "canonical_ascii": "424242 + 1 = 424243",
+        "canonical_latex": "424242 + 1 = 424243",
         "equivalent_forms": [
             {
                 "form_id": "ascii_ground",
                 "notation_system": "ascii",
-                "expression": "1 + 1 = 2",
+                "expression": "424242 + 1 = 424243",
                 "scope_note": "Ground arithmetic; cannot dualize onto a lattice law.",
             }
         ],
     }
     node["structural_signature"] = {
         "archetype_id": "ground_one_plus_one",
-        "anonymized_template": "1 + 1 = 2",
+        "anonymized_template": "424242 + 1 = 424243",
         "slot_schema": [
             {
                 "slot_id": "GROUND_ONE",

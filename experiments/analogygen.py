@@ -51,7 +51,14 @@ def serialize(t: tuple) -> list[str]:
     position."""
     kind = t[0]
     if kind == "num":
-        return [f"#{t[1]:g}"]
+        value = float(t[1])
+        text = f"{value:g}"
+        # :g is 6 significant digits; ingested numerals (10112369,
+        # 4.44e+75) do not survive it. Fall back to repr only then, so
+        # the curated graph's token spelling stays `#2` not `#2.0`.
+        if float(text) != value:
+            text = repr(value)
+        return [f"#{text}"]
     if kind == "slot":
         return [t[1]]
     out = [f"{t[1]}("]

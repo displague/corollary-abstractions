@@ -1690,6 +1690,13 @@ def _gate(
         return
 
     record.passed("epistemic_rung", "PROVEN may stage a full candidate")
+    # Corpus name before envelope parse: a malicious corpus string would
+    # otherwise fail corpus_id syntax and hide the containment refusal.
+    if not re.fullmatch(r"[a-z0-9_]+", candidate.corpus):
+        raise Refusal(
+            "path_containment",
+            f"corpus must be a single data/ directory name: {candidate.corpus!r}",
+        )
     lane, parsed = _candidate_lane(candidate)
     corpus_target = repo_root / "data" / candidate.corpus / "nodes.json"
     proposed_untracked_seed = (
