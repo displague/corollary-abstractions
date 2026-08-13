@@ -113,10 +113,20 @@ rotates the documents:
    slice's measured value, and whether the load-bearing guard alongside
    it ever weakened). Re-pinning a third time inside a release is how a
    guard becomes a ratchet.
-4. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
+4. **Write the release's blog post in `docs/blog/`** — every release has
+   had one since v0.5, and the skill did not say so until v0.10 shipped
+   without one. It is not a summary of the release notes: the notes are
+   the record, the post is the ARGUMENT — what the cycle believed going
+   in, what actually happened, and what the project now owes. Title it
+   for the finding, not the version (`how-much-of-it-fits.md`,
+   `when-the-honest-baseline-wins.md`). Lead with the result that
+   complicates the story rather than the one that flatters it; if the
+   cycle produced a negative, that is the post. Link it from the release
+   notes' links row.
+5. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
    now live in the release doc); keep or migrate the rest; confirm new
    friction from the cycle is filed.
-5. The old roadmap file stays in place as the historical plan-of-record —
+6. The old roadmap file stays in place as the historical plan-of-record —
    do not delete it; the release doc references it. **Mark it closed**:
    prepend a banner stating the version it closed at and where each item
    went (shipped -> release doc; carried -> next roadmap, by number), so

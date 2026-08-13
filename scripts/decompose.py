@@ -581,6 +581,15 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
                     "grounded_via": "exact",
                     "channel": ch,
                     "owner_channels": {k: tally[k] for k in CHANNELS if k in tally},
+                    # WHICH statements own this subterm, not just what KIND of
+                    # owner they are (v0.11 item 1, route 1). `owner_channels`
+                    # answers "same corpus or not"; questions like "is the
+                    # owner itself an ingested node?" need identity, and until
+                    # now `analyze` computed these sets and threw them away.
+                    # Sorted and complete: truncating here would make a
+                    # self-grounding rate uncomputable for exactly the
+                    # heavily-shared subterms that matter most.
+                    "owners": sorted(owners),
                     "instance_of_statements": named[:8],
                     "recurs_in_n_statements": len(hosts),
                 }
@@ -617,6 +626,10 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
                 "skeleton": skel,
                 "grounded_via": "pattern",
                 "channel": "pattern_absorption",
+                # The absorbing pattern's owners, by identity. Same reason as
+                # the exact branch; kept separate because this credit is
+                # reported, never added to an owner channel.
+                "absorbed_owners": sorted(pat_owners),
                 "absorbed_from_channel": absorbed_ch,
                 "absorbed_owner_channels": {k: absorbed_tally[k]
                                             for k in CHANNELS

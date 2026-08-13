@@ -10,7 +10,8 @@ Previous: [RELEASE-v0.9.0.md](RELEASE-v0.9.0.md) ·
 Closed plan: [ROADMAP-v0.10.md](ROADMAP-v0.10.md) ·
 Next: [ROADMAP-v0.11.md](ROADMAP-v0.11.md) ·
 Triage & drift audit: [TRIAGE-v0.10.md](TRIAGE-v0.10.md) ·
-Findings: [DISCOVERIES.md](DISCOVERIES.md)
+Findings: [DISCOVERIES.md](DISCOVERIES.md) ·
+Blog: [the bag still wins](blog/the-bag-still-wins.md)
 
 ---
 
