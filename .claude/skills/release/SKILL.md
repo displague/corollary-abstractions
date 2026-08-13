@@ -44,6 +44,19 @@ rotates the documents:
    focus attrition or scope shifting rather than by decision? Anything
    found is named in the triage (carried or deliberately parked with the
    reason), never silently absent.
+
+   **Every carried lane names its dependant, or is parked.** A "carried"
+   item is not yet a plan — it is a deferral, and deferrals compound
+   quietly. So for each item carried into the next roadmap, write down
+   which of that roadmap's HEADLINE items depends on it. If one does, the
+   lane is not a lane: it is a **prerequisite**, and it is ordered BEFORE
+   its dependant rather than listed under carried-open work. If none
+   does, park it in BACKLOG with the reason. An item carried a second
+   time with no named dependant is the shape this rule exists to catch.
+   (v0.10 earned it: the multi-corpus WRITE patch rode two cycles as the
+   least prominent entry in a carried-lanes list, then turned out to
+   block the cycle's headline authoring item — discovered by running the
+   gate, not by reading the roadmap. See docs/TRIAGE-v0.10.md §2.)
 2. **Write `docs/RELEASE-vX.Y.Z.md` from that triage**, using the
    section outline below. The governing rule: every claimed improvement
    is written as **Before → Now → Demonstrate** — what was the case
@@ -85,7 +98,21 @@ rotates the documents:
    next release's goals rather than only extending the current ones.
    It should be a direction the released evidence now makes possible or
    necessary, written as a design (what it unlocks, what it rests on),
-   not just a task line.
+   not just a task line. The strongest source is usually something the
+   cycle produced BY ACCIDENT and nobody designed for — an unpredicted
+   measurement, a prediction that missed in an interesting direction, a
+   behaviour a review surfaced. Prefer one of those over an extrapolation
+   of the current plan, and say what would falsify it.
+
+   **Guard pins that moved get a decision, not a re-pin.** If a pinned
+   guard has been re-measured and re-pinned against its own direction in
+   more than one slice, triage is where that stops: either retire the pin
+   with a written rationale, or register the drift as a scoring change
+   owing its own prediction and experiment. Bring it to the maintainer as
+   a QUESTION with the history in a table (pin as written, then each
+   slice's measured value, and whether the load-bearing guard alongside
+   it ever weakened). Re-pinning a third time inside a release is how a
+   guard becomes a ratchet.
 4. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
    now live in the release doc); keep or migrate the rest; confirm new
    friction from the cycle is filed.
