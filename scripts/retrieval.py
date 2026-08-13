@@ -396,6 +396,14 @@ class UnifiedKnowledgeStore:
                 proof_details: list[str] = []
                 proof_artifacts_trusted: list[bool] = []
                 for entry in verified_by:
+                    if entry["system"] == "python-tests":
+                        # Item 3: a python-tests citation is a test-backed
+                        # check, not a Lean proof. Skip it here so the
+                        # store can load the graph; do not mint a proof
+                        # record and do not call select_closing_transitions
+                        # on a .py file. PROVEN stays lean4-only
+                        # (docs/DESIGN-programming-discipline.md §2).
+                        continue
                     if entry["system"] != "lean4":
                         raise ValueError(
                             "retrieval can authenticate only verified_by system "
@@ -435,22 +443,26 @@ class UnifiedKnowledgeStore:
                         else " — untrusted extraction"
                     )
                     proof_details.append(detail)
-                items.append(
-                    RetrievalItem(
-                        item_id=f"proof:{statement_id}",
-                        source="proof",
-                        title=f"{title} proof artifacts",
-                        text="; ".join(proof_details),
-                        epistemic_status=(
-                            "proven"
-                            if all(proof_artifacts_trusted)
-                            else "conjectured"
-                        ),
-                        source_ids=(statement_id, *artifacts),
-                        aliases=(statement_id, title, *references, *artifacts),
-                        trusted=all(proof_artifacts_trusted),
+                # Only mint a proof record from lean4 entries. An empty
+                # trusted list (`all([]) == True`) would otherwise mark a
+                # python-tests-only node proven from nothing.
+                if proof_details:
+                    items.append(
+                        RetrievalItem(
+                            item_id=f"proof:{statement_id}",
+                            source="proof",
+                            title=f"{title} proof artifacts",
+                            text="; ".join(proof_details),
+                            epistemic_status=(
+                                "proven"
+                                if all(proof_artifacts_trusted)
+                                else "conjectured"
+                            ),
+                            source_ids=(statement_id, *artifacts),
+                            aliases=(statement_id, title, *references, *artifacts),
+                            trusted=all(proof_artifacts_trusted),
+                        )
                     )
-                )
 
         # Weakest-member inheritance for derivative records (review
         # finding F1: a hardcoded "verified" let an empirical statement be

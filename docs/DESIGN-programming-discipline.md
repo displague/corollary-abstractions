@@ -499,3 +499,13 @@ fail-closed gate. The path now requires the artifact to be a key in
 `prover/proof-artifact-manifest.json`, so the inherited ledger rung
 can demand a PASS that claims this statement. Found in the capped
 adversarial review, not by a test we had written in advance.
+
+**Disclosure 4 — retrieval refused to load the graph.** Item 2 froze
+`retrieval.py` at `system == lean4` and raised on anything else, so
+the first `UnifiedKnowledgeStore.load` over a 256-node corpus crashed
+and took twenty tests with it (retrieval, dispatcher, session,
+WordNet). The honest fix is not to authenticate python-tests as
+proofs: skip those citations, and do not mint a `proof:` item when
+the only links were python-tests (`all([])` is True and would have
+laundered an empty check into `proven`). The statement records stay
+`formal`. Found by the full suite after rebase onto 9553db9.

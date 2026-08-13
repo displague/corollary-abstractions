@@ -197,6 +197,33 @@ class TwinsAndBaseline(unittest.TestCase):
         self.assertEqual(matcher[0], {ids[0], ids[1]})
 
 
+class RetrievalDoesNotTreatTestsAsProofs(unittest.TestCase):
+    """python-tests citations must not crash the store or mint proven."""
+
+    def test_store_loads_and_programming_nodes_are_not_proven(self) -> None:
+        from retrieval import UnifiedKnowledgeStore
+
+        store = UnifiedKnowledgeStore.load(
+            REPO_ROOT / "data", REPO_ROOT / "reports"
+        )
+        proof_ids = {
+            item.item_id
+            for item in store.items
+            if item.item_id.startswith("proof:programming.")
+        }
+        self.assertEqual(proof_ids, set())
+        programming = [
+            item
+            for item in store.items
+            if any(
+                sid.startswith("programming.")
+                for sid in item.source_ids
+            )
+        ]
+        self.assertTrue(programming)
+        self.assertFalse(any(item.epistemic_status == "proven" for item in programming))
+
+
 class VerdictBackedRule(unittest.TestCase):
     """P7: the seed refuses a verified_by without a PASS."""
 
