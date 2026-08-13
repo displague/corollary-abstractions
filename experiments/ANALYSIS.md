@@ -3525,3 +3525,20 @@ rather than the direction. P5 asked for a byte-identical re-run of the
 transcript; a session that mutates the corpus cannot deliver that by
 construction, so `--check` re-verifies the record instead. Both stand
 uncorrected in §6 and adjudicated in §7.
+
+**Post-rebase note (item 3 landed first).** The section above measured item 5
+against `9553db9`. The programming-discipline slice merged first, so the
+numbers as merged are: corpus 256 → **257** across 26 corpora, `verified_by`
+21 links (18 lean4 + 3 python-tests), exact constituents 550 → **552**,
+statements-with-constituents 226 → **228**, mean groundedness 0.779
+(unchanged at three places), external 0.499 → **0.497**. Two corrections
+follow from that ordering and are recorded rather than smoothed. (1) The
+"sixth consecutive twin null" above is **wrong as merged**: item 3's Euclid
+pair formed a new twin group and ended the streak first. `group_counts` is
+genuinely unmoved by this node, but the streak claim belonged to the older
+base. (2) The absorption rate-gap pin moved a third time, 0.156 → **0.159**,
+because two new exact constituents change that channel's denominator; the
+count floor holds unweakened (387 > 4 × a_best). That pin has now been
+re-pinned against its original guard direction by three consecutive slices
+and goes to release triage for sign-off. The self-grounding finding is
+unaffected: both ingested statements still ground each other's `^(2, 30)`.

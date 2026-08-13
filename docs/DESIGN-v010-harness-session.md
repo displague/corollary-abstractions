@@ -189,3 +189,45 @@ untrusted proposer and is treated as one.
 environment raised `RuntimeError` instead of returning `None`. The whole
 contract of that function is "or None, and NEVER a download"; a crash is not
 a refusal. It now refuses.
+
+## 8. Post-rebase re-measurement (item 3 landed first)
+
+Everything in §7 was measured against `9553db9`, the base this slice was
+developed on. ROADMAP-v0.10 item 3 (the programming discipline) merged to
+`main` first, so the numbers this slice actually lands on differ. Both are
+kept: §7 is what the predictions were adjudicated against, and this is what
+the merge produces.
+
+| | measured vs `9553db9` (§7) | as merged onto `615fea7` |
+|---|---|---|
+| corpus | 253 → 254 | 256 → **257** (26 corpora) |
+| `verified_by` links | 17 → 18 | 20 → **21** (18 lean4 + 3 python-tests) |
+| exact constituents | 531 → 533 | 550 → **552** |
+| statements with constituents | 222 → 224 | 226 → **228** |
+| mean groundedness | 0.774 → 0.775 | 0.779 → 0.779 (unchanged at 3 places) |
+| external mean / lower | 0.490 → 0.488 / 0.221 | 0.499 → **0.497** / 0.223 → **0.222** |
+| absorption rate gap | 0.164 (unmoved) | 0.156 → **0.159** |
+
+**One claim in §7 does not survive the rebase and is corrected here rather
+than edited above: the "SIXTH consecutive twin null".** Item 3's Euclid pair
+formed a new twin group, which ended the null streak before this slice
+landed. `group_counts` is genuinely unchanged by *this* node — a ground
+residue equation twins with nothing — but the streak language was true only
+against the older base. What survives unqualified is the part that was never
+about the streak: the WRITE gate checked the null ITSELF, as the candidate's
+declared matcher delta, before applying the write.
+
+**And one guard moved that §7 said had not.** The absorption rate-gap pin
+goes 0.156 → 0.159, because two new exact constituents change that channel's
+denominator while absorption's is untouched. The count floor — the
+load-bearing guard — holds unweakened (`e_best` 387 > 4 × `a_best`). This pin
+has now been re-pinned against its original guard direction by three
+consecutive slices (0.12 → 0.164 → 0.156 → 0.159); it is carried to release
+triage for the maintainer sign-off first flagged in item 2, not re-pinned
+quietly again.
+
+**What did NOT change across the rebase:** the self-grounding finding. Both
+ingested statements still ground each other's `^(2, 30)` through the
+prior_corpus channel, still with `recurs_in_n_statements: 2`, still the only
+two prior_corpus constituents carrying a real shared discipline rather than
+the `mathematics` umbrella.
