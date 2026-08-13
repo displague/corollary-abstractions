@@ -488,3 +488,14 @@ at groundedness 1.0 (same_corpus 3 + external 1 each); Stein is 0.455
 261 over 128 statements. Conservative same_corpus_dominant 15 → 16.
 `defines_head` gains GCD (twice) and STEIN. The fifth acknowledgment
 in `tests/test_decompose_channels.py` is where this has to survive.
+
+**Disclosure 3 — a contained `.py` is not a verdict.** The first
+`verified_by_errors` python-tests path accepted any repository-contained
+candidate module. A hand-edited node citing
+`prover/pychecks/gcd_euclid_drop_abs.py` (the committed FAIL, not in
+the manifest) would have passed the provenance rung. The seed-side
+rule (P7) would not have emitted it, but the validator is the
+fail-closed gate. The path now requires the artifact to be a key in
+`prover/proof-artifact-manifest.json`, so the inherited ledger rung
+can demand a PASS that claims this statement. Found in the capped
+adversarial review, not by a test we had written in advance.

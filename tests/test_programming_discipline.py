@@ -53,6 +53,23 @@ class Vocabulary(unittest.TestCase):
         errors = verified_by_errors([node], REPO_ROOT)
         self.assertTrue(any("JSON artifact" in e for e in errors), errors)
 
+    def test_unmanifested_py_file_cannot_ground_a_link(self) -> None:
+        """Review finding: a contained .py is not a verdict."""
+        node = {
+            "statement_id": "programming.example.unmanifested",
+            "verified_by": [{
+                "system": "python-tests",
+                "artifact": "prover/pychecks/gcd_euclid_drop_abs.py",
+                "reference": "greatest_common_divisor",
+            }],
+        }
+        errors = verified_by_errors([node], REPO_ROOT)
+        self.assertTrue(
+            any("not a key in" in e and "proof-artifact-manifest" in e
+                for e in errors),
+            errors,
+        )
+
     def test_lean4_against_py_candidate_is_refused(self) -> None:
         node = {
             "statement_id": "programming.example.lean_on_py",

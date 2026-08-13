@@ -420,6 +420,28 @@ def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
                         "must name the checked function"
                     )
                     continue
+                # Review finding: existence of a .py file is not a verdict.
+                # A python-tests link must name a manifest-keyed artifact so
+                # verdict_ledger_errors can require a PASS claiming this
+                # statement. An unmanifested candidate would otherwise
+                # launder an unchecked file into verified_by.
+                manifest_path = repo_root / "prover" / "proof-artifact-manifest.json"
+                try:
+                    manifest = json.loads(
+                        manifest_path.read_text(encoding="utf-8")
+                    )
+                    entries = manifest.get("artifacts") or {}
+                except (OSError, ValueError):
+                    entries = {}
+                if artifact not in entries:
+                    errors.append(
+                        f"{node_id}: verified_by[{link_index}] is "
+                        "`python-tests` but `{artifact}` is not a key in "
+                        "prover/proof-artifact-manifest.json; a test-backed "
+                        "citation requires a digest-pinned artifact with a "
+                        "PASS verdict"
+                    )
+                    continue
                 owners.setdefault((system, reference), set()).add(node_id)
                 continue
             reference = resolve_reference(artifact, reference, node_id)
