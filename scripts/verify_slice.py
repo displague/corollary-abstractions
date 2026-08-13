@@ -364,8 +364,27 @@ def check_guards() -> None:
 def check_suite() -> None:
     code, out = run_cmd([PY, "-m", "unittest", "discover", "-s", "tests",
                          "-p", "test_*.py"], timeout=3600)
-    tail = out.strip().splitlines()[-3:] if out.strip() else []
-    record("suite", code == 0, " / ".join(tail))
+    lines = out.strip().splitlines() if out.strip() else []
+    tail = lines[-3:]
+    # NAME the failures. Keeping only the tail printed "FAILED (errors=1)"
+    # and threw away which test — a reviewer then re-ran the whole 5-minute
+    # suite just to learn the name, which is exactly the cost this harness
+    # exists to remove. unittest writes one `FAIL: <test>` / `ERROR: <test>`
+    # header per failure; those headers are the answer.
+    named = [
+        line.strip() for line in lines
+        if line.startswith(("FAIL: ", "ERROR: "))
+    ]
+    if named:
+        print("  failing tests:")
+        for line in named[:25]:
+            print(f"    {line}")
+        if len(named) > 25:
+            print(f"    ... and {len(named) - 25} more")
+    detail = " / ".join(tail)
+    if named:
+        detail += " | " + "; ".join(named[:5])
+    record("suite", code == 0, detail)
 
 
 def main(argv: list[str] | None = None) -> int:
