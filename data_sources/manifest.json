@@ -238,6 +238,35 @@
       ]
     },
     {
+      "id": "git-thealgorithms-python",
+      "group": "ingest-code",
+      "url": "https://github.com/TheAlgorithms/Python",
+      "git_commit": "f5988cc09713315817df6a7e327e258013a94440",
+      "raw_url_template": "https://raw.githubusercontent.com/TheAlgorithms/Python/f5988cc09713315817df6a7e327e258013a94440/{path}",
+      "filename": null,
+      "sha256": null,
+      "size_bytes": null,
+      "access": "git",
+      "license": "MIT (LICENSE.md sha256 4395a1dc4bda1d6054c45b4d1230c709c7398e6d66f1d0aff4b22d95973bea56, verified 2026-08-12: the file is the MIT License text, copyright 2016-2022 TheAlgorithms and contributors). Permissive: a derived extract of named functions may be committed with attribution.",
+      "attribution": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+      "verified": "2026-08-12",
+      "purpose": "Pinned source for ROADMAP-v0.10 item 3 (programming as a first-class discipline). One file only — maths/greatest_common_divisor.py — because a smaller cleanly-licensed source that reaches the acceptance bar beats a whole-repo pin of a moving master. Extracted by scripts/ingest_algorithms.py into data_sources/derived/algorithms/extract.json. CodeNet was declined (submission terms); thuva4/Algorithms was declined as the primary source (TypeScript).",
+      "files": [
+        {
+          "filename": "greatest_common_divisor.py",
+          "path": "maths/greatest_common_divisor.py",
+          "sha256": "04a4b5d9f5fcc2e5ff0e2e49ba8f015098df97cfa76796a5b638392fbb15f81e",
+          "size_bytes": 2091
+        },
+        {
+          "filename": "LICENSE.md",
+          "path": "LICENSE.md",
+          "sha256": "4395a1dc4bda1d6054c45b4d1230c709c7398e6d66f1d0aff4b22d95973bea56",
+          "size_bytes": 1095
+        }
+      ]
+    },
+    {
       "id": "hf-goedel-lean-workbook-proofs",
       "group": "ingest-formal",
       "url": "https://huggingface.co/datasets/Goedel-LM/Lean-workbook-proofs",
