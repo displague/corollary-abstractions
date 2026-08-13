@@ -2501,3 +2501,43 @@ wants its own adversarial review, not a release-eve change.
   design (docs/DESIGN-external-verifier.md §3) deliberately froze the link
   vocabulary this slice, so the new rung belongs to the ingestion slice that
   needs it (roadmap item 3 or the next ingest), with its own prediction.
+
+## TOKEN_RE is missing the standalone `<` `>` already in RELATIONS (v0.10 item 4)
+
+- **51 of 302 unique-covered ground-arithmetic Lean-workbook goals fail
+  to tokenize, because `TOKEN_RE` matches `<=` `>=` but not standalone
+  `<` `>`.** `RELATIONS` already contains both glyphs; the coverage
+  instrument marks the goals `full_ok`; `tokenize` raises
+  `unexpected character`. This is the exact "covered without a skeleton
+  emitter" wall, reduced to a one-character-class hole. Item 4's first
+  wave filtered them out rather than widen the matcher (collision
+  boundary is write_stage / new seed / new corpus, not
+  `match_signatures.py`). The fix is `TOKEN_RE`'s character class, with
+  a prediction that existing `<=` `>=` still win (they are earlier
+  alternatives) and that committed parse_problems stays empty. Two
+  further fails are `√(expr)` rather than `√digits`, which the seed's
+  `SQRT_BARE` does not wrap.
+
+## specialize.py is already minutes-scale at 508 nodes (v0.10 item 4)
+
+- **`find_specializations` is exhaustive pairwise search.** 257 nodes
+  were comfortable; 508 (this wave) ran past 15 minutes of one core
+  with a constant 230 MB RSS before finishing. The next ingest step
+  toward the 12k unique-covered set is not authorable until this is
+  bounded — a head-indexed candidate filter, a skip for fully-ground
+  patterns that cannot bind, or a declared pair cap. `decompose.py`
+  has the same shape (per-constituent pattern attempts against a
+  growing form inventory). Filed from the first-wave ledger regen,
+  not patched inline: a scoring-adjacent index change needs its own
+  prediction.
+
+## Remainder of the 12,681 unique-covered set needs a skeleton emitter
+
+- **Item 4's first wave is 251 parse-clean ground identities, not the
+  ~11,189 the roadmap named.** Most unique-covered goals still carry
+  binders, `Real.sin`, or inequalities the coverage instrument accepts
+  without emitting a matcher template. Authoring them without an emitter
+  would invent Lean-flavoured templates or drop the zero-parse-problems
+  rule. The emitter is a separate design; this is not a silent expansion
+  of the first wave. `docs/DESIGN-item4-authoring.md` §1 registered the
+  cut before the seed ran.

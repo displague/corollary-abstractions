@@ -78,10 +78,20 @@ With items 1–2 in hand, author the covered statements (starting from the
 Nodes via the PROVEN-WRITE seed→regenerate route, and re-run the
 twin/specialization/decomposition ledgers on the materially larger graph.
 
+**PARTIAL** on `feature/v010-item4` — first wave 251 parse-clean unique-covered
+ground identities (257 → 508 / 27 corpora), formal-without-bridge. Operator-bag
+baseline still wins on pair count (7,622 vs 96) and loses harder on precision
+(2.03% → 1.26%; 0.54% ingested-only). Ingested layer grounds itself: 614
+same_corpus constituents inside the new corpus; `2^30` now has a third owner.
+Trusted append format (Slice A) shipped. Remainder of the 12,681 waits on a
+skeleton emitter. Design + adjudication: `docs/DESIGN-item4-authoring.md`,
+`docs/DESIGN-write-append.md`.
+
 Acceptance: a real ingested source authored to a materially larger node count,
 provenance intact, reproducible byte-for-byte, and the ledgers recomputed and
 reported — especially whether any capability-blind baseline that won on 221
-curated nodes still wins on thousands of ingested ones.
+curated nodes still wins on thousands of ingested ones. **MET on hundreds,
+not thousands.**
 
 ## 5. Drive the open harness on a real session (carried from v0.9 item 3)
 

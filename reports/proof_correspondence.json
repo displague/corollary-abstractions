@@ -13,6 +13,7 @@
     "data/graph_theory/nodes.json": "04c91e0ac6728a8ec15c124d47d007588ee7c1cec033fe568f99a6a556490f58",
     "data/information_theory/nodes.json": "3fd8790526ed53496f50d015c2676d03cbab57a742cee5eb60db3f428a9f6fd9",
     "data/ingested_arithmetic/nodes.json": "7c5d100322585e123451d8d3aef83984f7c8a037889bf2648e911bebb7a621c6",
+    "data/lean_workbook/nodes.json": "2b3a24e7ca28e6cdf01abac229f9cc0b9df8048087f0595d3879e89c216d3179",
     "data/logic/nodes.json": "2d10bbae75eadadec20a1a82bc06bb220c5110405112cd72f2c0491b873d6c0c",
     "data/machine_learning/nodes.json": "14481d52a1bbec1bdac68099d342453791f5946ed02b92dd70a8a7eda298b392",
     "data/morphology/nodes.json": "f94adb5febf9ee2e0c377ec8c926539c086db5b98a191f7781bc917e96f52587",

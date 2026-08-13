@@ -83,14 +83,19 @@ class MirrorReportTests(unittest.TestCase):
         # and this slice merely fails to restart it. What IS new: the WRITE
         # gate checked this null itself, as the candidate's DECLARED matcher
         # delta, before applying the write.
-        self.assertEqual(self.report["nodes_analyzed"], 257)
+        # Item 4 acknowledgment: 508 = 257 + 251 parse-clean unique-covered
+        # ground identities (docs/DESIGN-item4-authoring.md). group_counts
+        # MOVE {31,32,31,33,5} -> {35,36,35,37,5}. Eight new typed pairs,
+        # all ingested-to-ingested parenthesization/commutativity twins;
+        # zero ingested-to-curated. Prior acknowledgments are not rewritten.
+        self.assertEqual(self.report["nodes_analyzed"], 508)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 31,
-                "typed": 32,
-                "family": 31,
-                "aliased": 33,
+                "shape": 35,
+                "typed": 36,
+                "family": 35,
+                "aliased": 37,
                 "mirror": 5,
             },
         )

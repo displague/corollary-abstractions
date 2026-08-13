@@ -13,6 +13,27 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The ingested layer grounds itself at hundreds of nodes (v0.10 item 4).**
+  614 of 681 exact constituents inside `lean_workbook.ground.v1` are
+  `same_corpus`. A third statement now shares `^(2, 30)` with the two
+  earlier ingested nodes (`leanworkbook.ground.lean_workbook_28978`),
+  through `prior_corpus` / `number_theory`. Item 5's two-constituent
+  anecdote was not a one-off: ingestion compounds. Status: **empirical**.
+
+- **Operator-bag precision collapses when the corpus grows by ground
+  identities (v0.10 item 4).** On the 257-node prior graph a capability-blind
+  operator-bag (`same set of {+,-,*,/,^,=}`) forms 4,345 pairs against the
+  matcher's 88 typed pairs (precision 2.03%). After ingesting 251 unique-
+  covered Lean-workbook ground identities: bag 7,622 vs matcher 96
+  (precision 1.26%); ingested-only, 1,489 vs 8 (precision 0.54%). Matcher
+  precision against the bag stays 1.0 — same typed skeleton implies same
+  glyphs. The eight new typed pairs are ingested-to-ingested parenthesization
+  / commutativity twins of the same identity; none twin with a curated
+  slotted law. The baseline that "won" on pair count on 221/257 still wins
+  on pair count and loses harder on precision. Regenerable:
+  `scripts/measure_operator_bag.py` → `experiments/item4_operator_bag.json`.
+  Status: **empirical** (registered as P3 before the seed ran).
+
 - **Recursive and iterative Euclid are one remainder recurrence; Stein is
   not, even though it is also named gcd (v0.10 item 3).**
   `programming.euclid.recursive` and `programming.euclid.iterative` (both

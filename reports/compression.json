@@ -743,6 +743,1763 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "leanworkbook.ground.lean_workbook_10628",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_1071",
+      "char_tokens": 19,
+      "struct_tokens": 12,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_10778",
+      "char_tokens": 22,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_10893",
+      "char_tokens": 27,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_11128",
+      "char_tokens": 93,
+      "struct_tokens": 92,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_11319",
+      "char_tokens": 11,
+      "struct_tokens": 6,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_11349",
+      "char_tokens": 37,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_12045",
+      "char_tokens": 29,
+      "struct_tokens": 28,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_13563",
+      "char_tokens": 9,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_14402",
+      "char_tokens": 21,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_15033",
+      "char_tokens": 41,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_15066",
+      "char_tokens": 21,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_15939",
+      "char_tokens": 33,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_16156",
+      "char_tokens": 24,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_16971",
+      "char_tokens": 29,
+      "struct_tokens": 31,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_17613",
+      "char_tokens": 16,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_18638",
+      "char_tokens": 39,
+      "struct_tokens": 32,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_1905",
+      "char_tokens": 50,
+      "struct_tokens": 38,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_19927",
+      "char_tokens": 11,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_19970",
+      "char_tokens": 16,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_20021",
+      "char_tokens": 8,
+      "struct_tokens": 3,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_20143",
+      "char_tokens": 47,
+      "struct_tokens": 37,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_2023",
+      "char_tokens": 15,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_20367",
+      "char_tokens": 33,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_21025",
+      "char_tokens": 30,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_2141",
+      "char_tokens": 9,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_22126",
+      "char_tokens": 17,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_22869",
+      "char_tokens": 53,
+      "struct_tokens": 47,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_23473",
+      "char_tokens": 50,
+      "struct_tokens": 38,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_24072",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_24837",
+      "char_tokens": 34,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_25121",
+      "char_tokens": 28,
+      "struct_tokens": 26,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_25288",
+      "char_tokens": 11,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_26123",
+      "char_tokens": 31,
+      "struct_tokens": 31,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_26827",
+      "char_tokens": 38,
+      "struct_tokens": 43,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_26961",
+      "char_tokens": 20,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_27370",
+      "char_tokens": 97,
+      "struct_tokens": 100,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_27439",
+      "char_tokens": 10,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_27680",
+      "char_tokens": 55,
+      "struct_tokens": 44,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_28495",
+      "char_tokens": 32,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_28765",
+      "char_tokens": 20,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_28814",
+      "char_tokens": 57,
+      "struct_tokens": 65,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_28974",
+      "char_tokens": 19,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_28978",
+      "char_tokens": 85,
+      "struct_tokens": 65,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_29291",
+      "char_tokens": 23,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_29579",
+      "char_tokens": 38,
+      "struct_tokens": 31,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_29650",
+      "char_tokens": 17,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_3006",
+      "char_tokens": 33,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_31043",
+      "char_tokens": 29,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_31453",
+      "char_tokens": 19,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_31482",
+      "char_tokens": 34,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_32",
+      "char_tokens": 18,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_32483",
+      "char_tokens": 31,
+      "struct_tokens": 29,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_32791",
+      "char_tokens": 33,
+      "struct_tokens": 26,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_33786",
+      "char_tokens": 20,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_33990",
+      "char_tokens": 50,
+      "struct_tokens": 53,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_34443",
+      "char_tokens": 13,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_34702",
+      "char_tokens": 29,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_35661",
+      "char_tokens": 70,
+      "struct_tokens": 27,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_35941",
+      "char_tokens": 5,
+      "struct_tokens": 3,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_36507",
+      "char_tokens": 38,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_36754",
+      "char_tokens": 17,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_36859",
+      "char_tokens": 34,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_37116",
+      "char_tokens": 28,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_37421",
+      "char_tokens": 237,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_37503",
+      "char_tokens": 103,
+      "struct_tokens": 82,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_37649",
+      "char_tokens": 12,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_38970",
+      "char_tokens": 27,
+      "struct_tokens": 9,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_39422",
+      "char_tokens": 22,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_39797",
+      "char_tokens": 49,
+      "struct_tokens": 34,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_40207",
+      "char_tokens": 81,
+      "struct_tokens": 57,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_40671",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_41113",
+      "char_tokens": 41,
+      "struct_tokens": 35,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_41511",
+      "char_tokens": 11,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_41627",
+      "char_tokens": 12,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_41768",
+      "char_tokens": 88,
+      "struct_tokens": 32,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_42243",
+      "char_tokens": 22,
+      "struct_tokens": 16,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_42840",
+      "char_tokens": 46,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_42924",
+      "char_tokens": 26,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_43771",
+      "char_tokens": 21,
+      "struct_tokens": 16,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_44097",
+      "char_tokens": 59,
+      "struct_tokens": 69,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_44235",
+      "char_tokens": 27,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_44314",
+      "char_tokens": 19,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_4574",
+      "char_tokens": 20,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_46101",
+      "char_tokens": 116,
+      "struct_tokens": 90,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_46239",
+      "char_tokens": 42,
+      "struct_tokens": 47,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_46312",
+      "char_tokens": 123,
+      "struct_tokens": 120,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_46419",
+      "char_tokens": 11,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_47283",
+      "char_tokens": 65,
+      "struct_tokens": 70,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_47286",
+      "char_tokens": 21,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_48080",
+      "char_tokens": 11,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_4924",
+      "char_tokens": 9,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_50453",
+      "char_tokens": 52,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_50988",
+      "char_tokens": 48,
+      "struct_tokens": 38,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_52570",
+      "char_tokens": 17,
+      "struct_tokens": 24,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_53067",
+      "char_tokens": 42,
+      "struct_tokens": 44,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_53209",
+      "char_tokens": 20,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_53456",
+      "char_tokens": 31,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_5392",
+      "char_tokens": 9,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_54972",
+      "char_tokens": 9,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_55010",
+      "char_tokens": 31,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_55753",
+      "char_tokens": 54,
+      "struct_tokens": 30,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_56002",
+      "char_tokens": 68,
+      "struct_tokens": 50,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_56244",
+      "char_tokens": 19,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_56393",
+      "char_tokens": 41,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_5642",
+      "char_tokens": 91,
+      "struct_tokens": 44,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_6089",
+      "char_tokens": 63,
+      "struct_tokens": 64,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_617",
+      "char_tokens": 15,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_6435",
+      "char_tokens": 41,
+      "struct_tokens": 26,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_6591",
+      "char_tokens": 12,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_7082",
+      "char_tokens": 24,
+      "struct_tokens": 9,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_7084",
+      "char_tokens": 13,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_7918",
+      "char_tokens": 30,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_8862",
+      "char_tokens": 25,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_9267",
+      "char_tokens": 14,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_942",
+      "char_tokens": 21,
+      "struct_tokens": 24,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_9640",
+      "char_tokens": 25,
+      "struct_tokens": 8,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_98",
+      "char_tokens": 13,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_10069",
+      "char_tokens": 52,
+      "struct_tokens": 40,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_1007",
+      "char_tokens": 34,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_11897",
+      "char_tokens": 12,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_11941",
+      "char_tokens": 16,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_12227",
+      "char_tokens": 109,
+      "struct_tokens": 85,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_13855",
+      "char_tokens": 31,
+      "struct_tokens": 32,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_14482",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_15925",
+      "char_tokens": 11,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_16115",
+      "char_tokens": 153,
+      "struct_tokens": 132,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_16263",
+      "char_tokens": 159,
+      "struct_tokens": 170,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_1634",
+      "char_tokens": 18,
+      "struct_tokens": 8,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_16510",
+      "char_tokens": 25,
+      "struct_tokens": 26,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_17384",
+      "char_tokens": 10,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_1834",
+      "char_tokens": 52,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_19271",
+      "char_tokens": 29,
+      "struct_tokens": 28,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_20673",
+      "char_tokens": 22,
+      "struct_tokens": 14,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_21011",
+      "char_tokens": 89,
+      "struct_tokens": 80,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_22627",
+      "char_tokens": 26,
+      "struct_tokens": 20,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_22779",
+      "char_tokens": 29,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_23956",
+      "char_tokens": 24,
+      "struct_tokens": 24,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_24239",
+      "char_tokens": 10,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_24559",
+      "char_tokens": 26,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_25299",
+      "char_tokens": 19,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_26178",
+      "char_tokens": 36,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_26988",
+      "char_tokens": 24,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_27064",
+      "char_tokens": 17,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_27116",
+      "char_tokens": 41,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_27142",
+      "char_tokens": 96,
+      "struct_tokens": 73,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_27625",
+      "char_tokens": 50,
+      "struct_tokens": 48,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_27774",
+      "char_tokens": 35,
+      "struct_tokens": 34,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_28570",
+      "char_tokens": 37,
+      "struct_tokens": 37,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_29222",
+      "char_tokens": 34,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_30234",
+      "char_tokens": 14,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_31417",
+      "char_tokens": 16,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_31919",
+      "char_tokens": 37,
+      "struct_tokens": 52,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_32072",
+      "char_tokens": 12,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_32904",
+      "char_tokens": 37,
+      "struct_tokens": 27,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_3345",
+      "char_tokens": 13,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_34873",
+      "char_tokens": 19,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_35269",
+      "char_tokens": 25,
+      "struct_tokens": 20,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_35270",
+      "char_tokens": 66,
+      "struct_tokens": 50,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_35586",
+      "char_tokens": 36,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_35620",
+      "char_tokens": 36,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_35630",
+      "char_tokens": 21,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_37099",
+      "char_tokens": 23,
+      "struct_tokens": 31,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_3727",
+      "char_tokens": 18,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_38580",
+      "char_tokens": 25,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_39228",
+      "char_tokens": 35,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_39393",
+      "char_tokens": 17,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_39589",
+      "char_tokens": 50,
+      "struct_tokens": 35,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_4042",
+      "char_tokens": 77,
+      "struct_tokens": 90,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_41144",
+      "char_tokens": 9,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_41641",
+      "char_tokens": 25,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_41741",
+      "char_tokens": 9,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_42261",
+      "char_tokens": 20,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_42432",
+      "char_tokens": 31,
+      "struct_tokens": 29,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_42783",
+      "char_tokens": 47,
+      "struct_tokens": 55,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_42947",
+      "char_tokens": 81,
+      "struct_tokens": 96,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_43720",
+      "char_tokens": 26,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_44283",
+      "char_tokens": 28,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_44496",
+      "char_tokens": 119,
+      "struct_tokens": 53,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_45783",
+      "char_tokens": 46,
+      "struct_tokens": 32,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_46161",
+      "char_tokens": 29,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_46623",
+      "char_tokens": 59,
+      "struct_tokens": 40,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_46866",
+      "char_tokens": 64,
+      "struct_tokens": 51,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_47393",
+      "char_tokens": 36,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_47452",
+      "char_tokens": 45,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_47595",
+      "char_tokens": 68,
+      "struct_tokens": 55,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_48269",
+      "char_tokens": 57,
+      "struct_tokens": 60,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_48903",
+      "char_tokens": 45,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_48904",
+      "char_tokens": 24,
+      "struct_tokens": 12,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_48978",
+      "char_tokens": 17,
+      "struct_tokens": 10,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_49699",
+      "char_tokens": 51,
+      "struct_tokens": 47,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_49701",
+      "char_tokens": 57,
+      "struct_tokens": 54,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_50230",
+      "char_tokens": 34,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_50286",
+      "char_tokens": 19,
+      "struct_tokens": 12,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_50716",
+      "char_tokens": 35,
+      "struct_tokens": 29,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_50820",
+      "char_tokens": 30,
+      "struct_tokens": 44,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_51469",
+      "char_tokens": 36,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_51495",
+      "char_tokens": 33,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_51755",
+      "char_tokens": 23,
+      "struct_tokens": 21,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_51789",
+      "char_tokens": 39,
+      "struct_tokens": 30,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_52393",
+      "char_tokens": 68,
+      "struct_tokens": 54,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_53087",
+      "char_tokens": 39,
+      "struct_tokens": 37,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_53233",
+      "char_tokens": 14,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_53494",
+      "char_tokens": 18,
+      "struct_tokens": 12,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_54607",
+      "char_tokens": 18,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_55286",
+      "char_tokens": 26,
+      "struct_tokens": 9,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_5572",
+      "char_tokens": 29,
+      "struct_tokens": 24,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_55985",
+      "char_tokens": 29,
+      "struct_tokens": 31,
+      "concept_tokens": 1,
+      "family_reuse": 3
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_57986",
+      "char_tokens": 25,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_58381",
+      "char_tokens": 52,
+      "struct_tokens": 29,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_58489",
+      "char_tokens": 45,
+      "struct_tokens": 53,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_58667",
+      "char_tokens": 53,
+      "struct_tokens": 29,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_5927",
+      "char_tokens": 18,
+      "struct_tokens": 22,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_59650",
+      "char_tokens": 23,
+      "struct_tokens": 19,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_60324",
+      "char_tokens": 13,
+      "struct_tokens": 18,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_60748",
+      "char_tokens": 76,
+      "struct_tokens": 69,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_61498",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_61945",
+      "char_tokens": 53,
+      "struct_tokens": 38,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_62241",
+      "char_tokens": 36,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_63430",
+      "char_tokens": 46,
+      "struct_tokens": 44,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_63875",
+      "char_tokens": 52,
+      "struct_tokens": 20,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_63887",
+      "char_tokens": 10,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_64103",
+      "char_tokens": 19,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_64453",
+      "char_tokens": 29,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_64937",
+      "char_tokens": 43,
+      "struct_tokens": 15,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_65017",
+      "char_tokens": 14,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_65603",
+      "char_tokens": 65,
+      "struct_tokens": 53,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_66704",
+      "char_tokens": 31,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_67161",
+      "char_tokens": 40,
+      "struct_tokens": 24,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_68304",
+      "char_tokens": 153,
+      "struct_tokens": 13,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_71134",
+      "char_tokens": 21,
+      "struct_tokens": 12,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_71596",
+      "char_tokens": 54,
+      "struct_tokens": 34,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_71947",
+      "char_tokens": 9,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_72785",
+      "char_tokens": 33,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_73438",
+      "char_tokens": 34,
+      "struct_tokens": 25,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_74351",
+      "char_tokens": 34,
+      "struct_tokens": 36,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_76820",
+      "char_tokens": 25,
+      "struct_tokens": 28,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_76998",
+      "char_tokens": 77,
+      "struct_tokens": 100,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_77954",
+      "char_tokens": 33,
+      "struct_tokens": 9,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_78019",
+      "char_tokens": 16,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_78367",
+      "char_tokens": 21,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_78557",
+      "char_tokens": 16,
+      "struct_tokens": 17,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_78661",
+      "char_tokens": 39,
+      "struct_tokens": 27,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_78722",
+      "char_tokens": 19,
+      "struct_tokens": 28,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_79354",
+      "char_tokens": 77,
+      "struct_tokens": 41,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_7998",
+      "char_tokens": 14,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_80094",
+      "char_tokens": 12,
+      "struct_tokens": 11,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_80697",
+      "char_tokens": 29,
+      "struct_tokens": 28,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_9325",
+      "char_tokens": 33,
+      "struct_tokens": 23,
+      "concept_tokens": 1,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_9762",
+      "char_tokens": 12,
+      "struct_tokens": 7,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
+      "statement_id": "leanworkbook.ground.lean_workbook_plus_9978",
+      "char_tokens": 49,
+      "struct_tokens": 37,
+      "concept_tokens": 1,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "logic.boolean_laws.de_morgan_laws",
       "char_tokens": 54,
       "struct_tokens": 20,
@@ -1800,9 +3557,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 44.474708171206224,
-  "mean_struct": 14.957198443579767,
-  "mean_concept": 3.6264591439688716,
-  "n_family_skeletons": 201,
-  "skeletons_reused": 31
+  "mean_char": 40.431102362204726,
+  "mean_struct": 21.486220472440944,
+  "mean_concept": 2.328740157480315,
+  "n_family_skeletons": 446,
+  "skeletons_reused": 35
 }

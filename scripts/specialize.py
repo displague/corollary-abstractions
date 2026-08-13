@@ -103,7 +103,7 @@ from pathlib import Path
 from match_signatures import (
     COMMUTATIVE, COMMUTATIVE_CALL_HEADS, ParsedNode, Parser,
     TemplateParseError, canonicalize, identity_terms, load_nodes, slot_classes,
-    tokenize,
+    template_slots, tokenize,
 )
 
 # ---------------------------------------------------------------------------
@@ -536,11 +536,19 @@ def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
         # guard excluded all 16 inference-rule nodes (probed, BACKLOG).
         if gtree[0] not in {"rel", "call", "op"} or op_count(gtree) < MIN_PATTERN_OPS:
             continue
+        # Fully-ground trees have nothing to bind. Using them as patterns
+        # is algebra-swallowing noise and is already minutes-scale at
+        # 508 nodes (docs/DESIGN-item4-authoring.md P6).
+        if not template_slots(gtree):
+            continue
         for spec in nodes:
             if spec.statement_id == gen.statement_id:
                 continue
             if gen.shape == spec.shape:
                 continue  # exact twins already reported
+            # Fully-ground specifics do not participate either (P7).
+            if not template_slots(trees[spec.statement_id]):
+                continue
             search = Search(classes[gen.statement_id], op_count(gtree),
                             rankers[spec.statement_id])
             best = search.run(gtree, trees[spec.statement_id])

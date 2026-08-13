@@ -77,7 +77,7 @@ run; no ledger was regenerated.
 | P1 | **PARTIAL** | Seed emits **251**, not 302. `check_regeneration` is byte-identical (20 seeds). Zero matcher parse problems / slot gaps. The miss is the 51 unique-covered ground goals `TOKEN_RE` cannot tokenize: standalone `<` `>` are in `RELATIONS` but not in the character class (plus two `√(expr)` forms the seed's `SQRT_BARE` does not wrap). Filed in `docs/BACKLOG.md`. |
 | P2 | **CONFIRMED** | `group_counts` moved `{31,32,31,33,5}` → `{35,36,35,37,5}` on 508 nodes / 27 corpora. Eight new typed pairs, all ingested-to-ingested (parenthesization / commutativity of the same ground identity). Zero ingested-to-curated typed pairs. |
 | P3 | **CONFIRMED** | Operator-bag forms **7,622** pairs; matcher forms **96**. Matcher precision against the bag is **1.0**. Bag precision against the matcher is **0.0126** (was **0.0203** on the 257-node prior graph; **0.0054** on the 251 ingested nodes alone). The capability-blind baseline still "wins" on pair count and loses harder on precision. `experiments/item4_operator_bag.json`, `scripts/measure_operator_bag.py`. |
-| P4 | *pending* | Waiting on `decompose.py` over 508 nodes. The absorption rate-gap pin will be flagged, not silently re-pinned, if it moves. |
+| P4 | **CONFIRMED, with a flagged rate-gap move** | Exact 552 → **1235**, statements-with-constituents 228 → **406**, pattern stays **100**. Mean 0.779 → **0.577** because the new layer's own mean is 0.368, not 0 — constituents were added (614 same_corpus inside `lean_workbook.ground.v1`), not just zeros. Rate-gap 0.159 → **0.490** (exact external rate 70% → 37% while absorption stayed 86/100). Count floor strengthened 4.5:1 → **5.3:1**. The rate-gap is flagged for the queued maintainer sign-off; it is not a silent fourth re-pin. |
 | P5 | **CONFIRMED** | No node in this wave carries `verified_by`. Correspondence table stays **17 / 1 / 0** over 18 lean4 links (the registered "16 / 1 / 0" was the pre-item-5 count; this wave did not move the table item 5 left). |
 
 **Disclosure 1 — 302 was a coverage count, not a parse count.** §1 said "every template is one the matcher already parses." That was wrong: the coverage instrument marks `<` `>` goals `full_ok` because `RELATIONS` contains them; `tokenize` still raises. The 251-after-filter is the honest first wave, not a silent narrowing after the fact — the seed's `template_parses` gate is the same parser the matcher uses.
@@ -104,8 +104,8 @@ Registered before the skip lands:
   2-hour ledger timeout. New edges of the form *slotted general →
   ground specific* may appear and are reported.
 
-This is a scoring-adjacent filter, not a silent timeout. The 87-minute
-probe is the evidence; the skip is the decision.
+Adjudicated with P7: **CONFIRMED**. 713 edges identical to the pre-ingest
+report; 0.41s.
 
 Probed further: P6 alone (skip as general, keep as specific) still ran
 past 25 minutes. Slotted laws matching *into* 30-operator ground sums
@@ -130,3 +130,13 @@ of the 713 committed edges touch any of them.
   still count. Predicted: every GC4 aggregate that does not depend on
   the new nodes is identical to the 257-node report; the run finishes
   in minutes.
+
+P7 **CONFIRMED** with P6 (713 edges identical, 0.41s). P8 **CONFIRMED**
+as scoring-identical on the pattern channel (100 before and after) and
+as a finish-in-minutes claim; a call-free-subterm skip on the other
+side of `pattern_cover` was the same argument and is included. The
+"GC4 aggregates that do not depend on the new nodes stay identical"
+half is **PARTIAL**: pattern 100 and a_best 86 held, but two umbrella
+`inv(2)` prior_corpus constituents left that channel because the new
+owners do not share `mathematics`. Reported in the seventh
+acknowledgment, not smoothed.

@@ -233,7 +233,7 @@ from pathlib import Path
 
 from match_signatures import (
     Parser, TemplateParseError, canonicalize, load_nodes, skeleton,
-    slot_classes, tokenize,
+    slot_classes, template_slots, tokenize,
 )
 from specialize import MatchState, match, op_count
 
@@ -249,6 +249,19 @@ def subterms(t: tuple, path: tuple = ()):
         yield path, t
         for i, a in enumerate(t[2]):
             yield from subterms(a, path + (i,))
+
+
+def _tree_has_call(t: tuple) -> bool:
+    """True iff a named-head call occurs in `t`.
+
+    `pattern_cover` only accepts a match that binds some slot to a call,
+    so walking the pattern index for a call-free subterm cannot succeed.
+    """
+    if t[0] == "call":
+        return True
+    if t[0] in {"slot", "num"}:
+        return False
+    return any(_tree_has_call(a) for a in t[2])
 
 
 def tree_size(t: tuple) -> int:
@@ -463,6 +476,10 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
     # constituent only ever tries the forms that could possibly match it.
     forms_by_head: dict[tuple, list[tuple]] = defaultdict(list)
     for skel, (tree, cls) in form_rep.items():
+        # Slot-free trees cannot satisfy pattern_cover's call-bind guard
+        # (docs/DESIGN-item4-authoring.md P8). Exact lookup still sees them.
+        if not template_slots(tree):
+            continue
         owners = set(side_forms.get(skel, ())) | subterm_hosts.get(skel, set())
         forms_by_head[head_of(tree)].append(
             (op_count(tree), skel, tree, cls, owners))
@@ -580,8 +597,12 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
                     entry_c["shared_disciplines"] = sorted(shared)
                 constituents.append(entry_c)
                 continue
-            cover = None if not pattern_membership else pattern_cover(
-                sub, skel, n.statement_id)
+            # pattern_cover requires some bind to be a named-head call.
+            # A call-free subterm cannot satisfy that, so skip the
+            # 250-attempt walk (P8, the specific-side half).
+            cover = None
+            if pattern_membership and _tree_has_call(sub):
+                cover = pattern_cover(sub, skel, n.statement_id)
             if cover is None:
                 continue
             n_pattern += 1

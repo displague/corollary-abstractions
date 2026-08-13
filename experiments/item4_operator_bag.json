@@ -1,0 +1,68 @@
+{
+  "schema": "item4_operator_bag.v1",
+  "glyphs": [
+    "+",
+    "-",
+    "*",
+    "/",
+    "^",
+    "="
+  ],
+  "parse_problems": 0,
+  "all": {
+    "nodes": 508,
+    "matcher": {
+      "pairs": 96,
+      "precision": 1.0,
+      "recall": 0.012595119391235896
+    },
+    "operator_bag": {
+      "pairs": 7622,
+      "precision": 0.012595119391235896,
+      "recall": 1.0
+    },
+    "intersection": 96,
+    "only_matcher": 0,
+    "only_bag": 7526
+  },
+  "prior": {
+    "nodes": 257,
+    "matcher": {
+      "pairs": 88,
+      "precision": 1.0,
+      "recall": 0.020253164556962026
+    },
+    "operator_bag": {
+      "pairs": 4345,
+      "precision": 0.020253164556962026,
+      "recall": 1.0
+    },
+    "intersection": 88,
+    "only_matcher": 0,
+    "only_bag": 4257
+  },
+  "ingested": {
+    "nodes": 251,
+    "matcher": {
+      "pairs": 8,
+      "precision": 1.0,
+      "recall": 0.005372733378106112
+    },
+    "operator_bag": {
+      "pairs": 1489,
+      "precision": 0.005372733378106112,
+      "recall": 1.0
+    },
+    "intersection": 8,
+    "only_matcher": 0,
+    "only_bag": 1481
+  },
+  "group_counts": {
+    "shape": 35,
+    "typed": 36,
+    "family": 35,
+    "aliased": 37,
+    "mirror": 5
+  },
+  "nodes_analyzed": 508
+}

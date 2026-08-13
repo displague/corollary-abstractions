@@ -145,6 +145,8 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
 
         18 = 16 propositional + the ingested arithmetic link (v0.10 item 2)
         + the link the item 5 session authored through the WRITE gate.
+        Item 4 acknowledgment: the 251-node first wave carries no
+        verified_by (formal-without-bridge). The table does not move.
         """
         self.assertEqual(len(self.report.results), 18)
         self.assertEqual(self.report.count(CORRESPONDS), 17)

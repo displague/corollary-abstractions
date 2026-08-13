@@ -3542,3 +3542,56 @@ count floor holds unweakened (387 > 4 × a_best). That pin has now been
 re-pinned against its original guard direction by three consecutive slices
 and goes to release triage for sign-off. The self-grounding finding is
 unaffected: both ingested statements still ground each other's `^(2, 30)`.
+
+---
+
+## v0.10 item 4 — first wave of covered ingest, and the baseline on hundreds
+
+Registered in `docs/DESIGN-item4-authoring.md` (and Slice A's
+`docs/DESIGN-write-append.md`) before the generator ran.
+
+**What landed.** 251 parse-clean unique-covered Lean-workbook ground
+identities as `data/lean_workbook/nodes.json` (257 → **508** nodes, 26 →
+**27** corpora). Formal without `verified_by` (item 2 decision (b),
+recorded on every node). The coverage instrument marked 302 such goals;
+51 fail to tokenize because `TOKEN_RE` has `<=` `>=` but not standalone
+`<` `>` even though both glyphs are already in `RELATIONS`. The seed
+filters through the same parser the matcher uses. Slice A (trusted
+`append_nodes` JSON, never executed) is the session-scale path; this
+wave used a generator seed.
+
+**The roadmap question.** Does a capability-blind baseline that won on
+221 curated nodes still win on ingested ones? The operator-bag (same
+set of `{+,-,*,/,^,=}`) still wins on pair count and loses harder on
+precision:
+
+| graph | bag pairs | matcher pairs | bag precision |
+|---|---:|---:|---:|
+| 257 prior | 4,345 | 88 | 2.03% |
+| 251 ingested only | 1,489 | 8 | 0.54% |
+| 508 combined | 7,622 | 96 | 1.26% |
+
+Matcher precision against the bag stays **1.0**. The eight new typed
+pairs are ingested-to-ingested parenthesization / commutativity twins;
+none twin with a curated slotted law. Regenerable:
+`scripts/measure_operator_bag.py`.
+
+**Compounding, not accumulation.** Exact constituents 552 → **1235**;
+614 of the new ones are `same_corpus` inside the new corpus. A third
+statement now shares `^(2, 30)` with the two earlier ingested nodes.
+Mean groundedness 0.779 → **0.577** because the new layer's own mean is
+0.368, not because the old nodes were diluted by zeros. Pattern
+membership stays 100.
+
+**Rate-gap, flagged.** 0.159 → **0.490**. The exact channel's external
+rate fell 70% → 37% while absorption stayed 86/100. The count floor
+*strengthened* (4.5:1 → 5.3:1). This is the fourth re-pin against the
+original guard direction and is queued for maintainer sign-off, not
+absorbed as a new normal.
+
+**Honest limit.** This is hundreds, not the 12,681 unique-covered set.
+The rest wait on a skeleton emitter. `specialize.py` and `decompose.py`
+needed scoring-adjacent skips (fully-ground trees are not specialize
+endpoints; slot-free trees cannot be decompose patterns) to finish
+inside the ledger timeout; the 713 pre-ingest specialization edges are
+byte-identical.
