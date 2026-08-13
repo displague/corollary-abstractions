@@ -1,0 +1,130 @@
+# v0.10 release triage — gate status, drift audit, and the decisions that need a maintainer
+
+Written before the release notes so the arguable calls are visible as calls,
+not buried in prose. Two of them are the maintainer's, not mine.
+
+## 1. Release gate: 6 of 7
+
+`ROADMAP-v0.10.md` §"Release gate" lists seven conditions.
+
+| # | gate condition | status |
+|---|---|---|
+| 1 | ≥1 new grammar head, each with its coverage delta on all three sources, zero parse problems | **MET** — four heads (trig, relational/predicate, quantifier/binder, embedded-quantifier walk); Goedel-Pset 32.8% → 44.6%, Lean-workbook 64.1% → 71.5%, miniF2F 29.7% → 33.4% |
+| 2 | one ingested statement `verified_by`-grounded end to end, **or** a documented `formal`-without-bridge decision | **MET, both halves** — `lean_workbook_1041` bridged through a real Lean verdict; `lean_workbook_10202` recorded `formal`-without-bridge at node level because Mathlib is outside the hermetic budget |
+| 3 | one verified-code node end to end + one structural-twin-over-code result vs a blind baseline | **MET** (item 3) — 3 code nodes, 3 PASS verdicts; matcher forms 1 pair at precision 1.0 where the token baseline forms 3 at 1/3 |
+| 4 | **a real ingested source authored to a materially larger corpus**, ledgers recomputed | **NOT MET** — item 4, in flight, and blocked on a patch format (§2) |
+| 5 | one real end-to-end harness session that produces or revises a node | **MET** (item 5) — four legs recorded, node applied through the audited route |
+| 6 | updated assets whose notes explain winners, losers, and controls | **MET** — `experiments/ANALYSIS.md` carries every slice's numbers, negatives, and disclosures |
+| 7 | the complete suite green | **MET** — 1073 tests, ~300s |
+
+The release decision is therefore the same one v0.9 faced: **ship 6/7 and
+carry item 4, or hold the release until item 4 lands.** Unlike v0.9, item 4
+is not merely unstarted — it is *actively blocked on a named prerequisite*
+that another agent is building right now, which argues for holding rather
+than re-scoping. That is the maintainer's call; §4 states it as a question.
+
+## 2. Drift audit vs v0.9's stated goals (the release skill's requirement)
+
+v0.9 carried six things forward. What happened to each:
+
+| carried from v0.9 | landed in v0.10? |
+|---|---|
+| Item 1's **authoring half** (ingested nodes into the graph) | **NO — carried a second time** (v0.10 item 4) |
+| Item 2, programming as a first-class discipline | **YES** (v0.10 item 3) |
+| Item 3, drive the open harness on a real session | **YES** (v0.10 item 5) |
+| Item 4, an external benchmark | **NO — carried a second time**, not started |
+| Item 5's lanes: proof-search depth, **multi-corpus WRITE patch**, groundedness gate | **NO — carried a second time** |
+| Item 6, physics/affect/oscillation/visual rungs | still parked, deliberately |
+
+**The finding this audit exists to produce.** The multi-corpus WRITE patch
+was carried through two cycles as a minor lane in a list of "carried-open
+lanes" — the least prominent item on the page. In v0.10 it became the thing
+**blocking the headline authoring item**. Item 5 discovered this by running
+the real gate rather than reasoning about it: the WRITE lane stages new
+seed/new corpus pairs only, so adding one statement to an existing corpus is
+impossible, and item 4's thousands of statements would need thousands of
+one-node corpora. A deferral compounded into a blocker, and nothing in two
+roadmaps noticed, because the lane was never re-read against the items that
+depended on it. **Concrete process change for ROADMAP-v0.11: every carried
+lane must name which of the cycle's headline items depends on it, or be
+explicitly parked.** A lane with no named dependant is parked; a lane that
+blocks a headline item is not a lane, it is a prerequisite and gets ordered
+before its dependant.
+
+**The second attrition signal, stated plainly:** the external benchmark
+(v0.9 item 4 → v0.10 item 6) has now been carried twice without being
+started. Its roadmap entry honestly says it depends on items 1–4, so this is
+sequencing rather than neglect — but two cycles of silent carry is exactly
+the pattern above. v0.11 must either schedule it with a date-shaped
+commitment or park it in writing.
+
+**What did NOT drift, worth saying because attrition audits only ever list
+failures:** every headline item that was *started* in v0.10 finished, each
+with a registered design committed before implementation and adjudicated
+after; the independent-review-before-merge discipline held for six
+consecutive slices and caught a real defect every time; and no slice merged
+without the full suite green.
+
+## 3. Maintainer decision #1 — the absorption rate-gap pin
+
+Standing since the quantifier slice and now **re-pinned by three consecutive
+slices against its original guard direction**:
+
+| slice | rate gap | count floor (`e_best` > 4 × `a_best`) |
+|---|---|---|
+| pin as written | < 0.12 | — |
+| quantifier/binder (v0.10 item 1) | 0.164 | holds, 4.3:1 |
+| programming (item 3) | 0.156 | holds |
+| recorded session (item 5) | **0.159** | holds, 387 > 4 × 86 |
+
+The count floor — the load-bearing guard — has never been weakened. What
+moved is the *rate* reading: absorption's best-owner external rate leads the
+exact channel's by ~16 points where the pin promised under 12. Each slice
+re-pinned it at its measured value with an argument, which is defensible
+once and starts to look like ratcheting at three. The retracted inference
+("absorption concentrates cross-discipline credit") currently rests on count
+dominance alone.
+
+**Question for the maintainer:** accept the rate reading as structural and
+retire the < 0.12 pin with a written rationale, or treat the drift as a
+scoring change that owes its own registered prediction and experiment? Not
+a decision I should make silently by re-pinning a fourth time.
+
+## 4. Maintainer decision #2 — release scope
+
+**Question:** hold v0.10 until item 4 lands (it is in flight, and its
+blocker is being built now), or ship 6/7 with item 4 carried to v0.11?
+
+My recommendation: **hold**, briefly. v0.9 re-scoped and shipped, and item 1's
+authoring half is the thing that got carried; carrying it a *third* time
+would make "author the corpus at scale" the goal this project keeps
+announcing and never doing. The blocker is understood, specified, and being
+built — which is exactly the situation where waiting is cheap and shipping
+is expensive.
+
+## 5. Forward-looking design for ROADMAP-v0.11 (release-skill requirement)
+
+The skill requires ≥1 strong forward-looking design item, inspired by what
+the previous releases actually produced. The candidate is **self-grounding
+ingestion, measured**, and it comes from a two-constituent observation in
+item 5 that nobody designed for: the moment a second ingested statement
+existed, it and the first grounded each other's shared `2 ^ 30` subterm
+through the `prior_corpus` channel — the first prior_corpus constituents in
+the corpus to carry a real shared discipline rather than the `mathematics`
+umbrella.
+
+That is the compounding hypothesis in miniature, and v0.11 can make it a
+measurement rather than an anecdote: as ingested nodes go from 3 to
+thousands (item 4), does the share of subterms grounded *inside* the
+ingested layer rise superlinearly with corpus size, or does it flatten
+because ingested statements are mutually alien? Both answers are
+publishable, and the negative is the more interesting one: a flat curve
+would say ingestion buys coverage but not structure, which would change what
+the corpus is for. The instrument mostly exists — the decomposition channels
+already distinguish same-corpus, prior-corpus and external ownership — so
+the design work is the sampling and the null model (what grounding rate
+would random ground statements over the same operator inventory produce?),
+not new machinery. It also gives item 6's external benchmark its most
+defensible shape: a claim about structure recovery that the architecture
+wins *because* of its design, measured on a corpus large enough to be
+uncomfortable.
