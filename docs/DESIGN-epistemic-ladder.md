@@ -13,7 +13,7 @@ worth proposing*.
 
 | rung | closed form that decides it |
 |---|---|
-| PROVEN | a machine-checked proof exists (`verified_by` → Lean artifact) |
+| PROVEN | a machine-checked proof exists (`verified_by` with `system: lean4` → Lean artifact). A `verified_by` citation whose `system` is `python-tests` is a test-backed check, not this rung — see `docs/DESIGN-programming-discipline.md` §2. |
 | VERIFIED | the statement is a corpus node / recorded identity |
 | CONJECTURED | registered with its adjudication procedure, awaiting verdict |
 | UNKNOWN | a well-formed statement with a hole (WH-slot); a question |

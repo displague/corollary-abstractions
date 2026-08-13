@@ -1,0 +1,31 @@
+{
+ "backend": "python-tests",
+ "checks": [
+  "compile: both pinned modules byte-compile",
+  "types: mypy --strict over both pinned modules (offline)",
+  "tests: pinned unittest module executed in a subprocess whose first act installs a CPython audit hook refusing sockets, subprocesses, and writes outside the sandbox directory (a discipline boundary, not a security boundary)"
+ ],
+ "claim": {
+  "statement_id": "programming.euclid.drop_abs",
+  "surface": "gcd without abs (declared mutation)"
+ },
+ "environment": {
+  "mypy": "2.3.0",
+  "platform": "win32",
+  "python": "3.13.12"
+ },
+ "evidence": {
+  "reason": "sandboxed tests failed: .F\n======================================================================\nFAIL: test_negatives (test_gcd_euclid_drop_abs.EuclidDropAbs.test_negatives)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"prover/pychecks/test_gcd_euclid_drop_abs.py\", line 18, in test_negatives\n    self.assertEqual(greatest_common_divisor(-3, 9), 3)\n    ~~",
+  "stages": {
+   "mypy": 0,
+   "tests": 1
+  },
+  "tests_output_sha256": "1f419126ea858cf06544e37281002fc4b63e56ef9aedd2df541b1046411e0054"
+ },
+ "inputs": {
+  "prover/pychecks/gcd_euclid_drop_abs.py": "b86a2df88b41eb4a54746199246cd15e3e3f7ac28bd8532262c726189915732c",
+  "prover/pychecks/test_gcd_euclid_drop_abs.py": "34e7f4a9a9d10cc34b9aa7ed38062f2d7cb38fd4ddff5da91abbec95bd8db655"
+ },
+ "schema_version": 1,
+ "verdict": "fail"
+}

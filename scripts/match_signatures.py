@@ -235,6 +235,16 @@ HEAD_ALGEBRA: dict[str, dict] = {
         # symmetric. Declared for completeness; the node is a singleton, so
         # nothing in the current graph turns on it.
     },
+    # ---- programming (ROADMAP-v0.10 item 3) ----
+    "GCD": {
+        "kind": "call", "commutative": True, "associative": True,
+        "provenance": "CONVENTION",
+        # gcd is symmetric on the integers. Declared so the two Euclidean
+        # orientations (first-arg-zero vs second-arg-zero) can share a
+        # skeleton after slot renaming; this slice does not author a
+        # separate commutativity theorem just to flip the provenance bit
+        # (docs/DESIGN-programming-discipline.md §4).
+    },
 }
 
 # Operator heads the canonicalizer flattens AND sorts. `specialize.py` imports

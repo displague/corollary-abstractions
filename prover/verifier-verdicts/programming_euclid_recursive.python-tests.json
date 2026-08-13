@@ -1,0 +1,30 @@
+{
+ "backend": "python-tests",
+ "checks": [
+  "compile: both pinned modules byte-compile",
+  "types: mypy --strict over both pinned modules (offline)",
+  "tests: pinned unittest module executed in a subprocess whose first act installs a CPython audit hook refusing sockets, subprocesses, and writes outside the sandbox directory (a discipline boundary, not a security boundary)"
+ ],
+ "claim": {
+  "statement_id": "programming.euclid.recursive",
+  "surface": "gcd(a, b) = |b| if a = 0 else gcd(b % a, a)"
+ },
+ "environment": {
+  "mypy": "2.3.0",
+  "platform": "win32",
+  "python": "3.13.12"
+ },
+ "evidence": {
+  "stages": {
+   "mypy": 0,
+   "tests": 0
+  },
+  "tests_output_sha256": "888a0c0ed615e57d32cf72be501b0c355f33b8613c81dfdaa99db33d7959487e"
+ },
+ "inputs": {
+  "prover/pychecks/gcd_euclid_recursive.py": "ada80950d4de72eedcbdd483ed10c4f543234c66eb608db53cd9b61acbfdf696",
+  "prover/pychecks/test_gcd_euclid_recursive.py": "06bce257a646114217c28d01ae12ab9f2cfc6b83465fe47235602b94973b2c2f"
+ },
+ "schema_version": 1,
+ "verdict": "pass"
+}

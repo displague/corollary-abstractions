@@ -375,11 +375,11 @@ def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
                     "non-empty string"
                 )
                 continue
-            if system != "lean4":
+            if system not in {"lean4", "python-tests"}:
                 errors.append(
                     f"{node_id}: verified_by[{link_index}].system `{system}` "
-                    "is unsupported; native transition parsing supports only "
-                    "`lean4`"
+                    "is unsupported; supported systems are `lean4` and "
+                    "`python-tests`"
                 )
                 continue
             if not isinstance(artifact, str) or not artifact.strip():
@@ -396,6 +396,31 @@ def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
                     f"{node_id}: verified_by reference must be a non-empty "
                     "theorem identity"
                 )
+                continue
+            if system == "python-tests":
+                # A python-tests citation is a digest-pinned candidate, not
+                # a Lean transition-row artifact. Cross-system attach is
+                # refused: a .json triples file is lean4's shape.
+                if Path(artifact).suffix.casefold() == ".json":
+                    errors.append(
+                        f"{node_id}: verified_by[{link_index}] is "
+                        "`python-tests` but cites a JSON artifact "
+                        f"`{artifact}`; python-tests citations name the "
+                        "pinned candidate module, not a Lean triples file"
+                    )
+                    continue
+                try:
+                    resolve_contained_artifact(repo_root, artifact)
+                except ValueError as exc:
+                    errors.append(f"{node_id}: {exc}")
+                    continue
+                if not isinstance(reference, str) or not reference.strip():
+                    errors.append(
+                        f"{node_id}: verified_by[{link_index}].reference "
+                        "must name the checked function"
+                    )
+                    continue
+                owners.setdefault((system, reference), set()).add(node_id)
                 continue
             reference = resolve_reference(artifact, reference, node_id)
             if reference is None:

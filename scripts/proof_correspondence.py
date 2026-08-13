@@ -1130,6 +1130,11 @@ def check_corpus(data_dir: Path, repo_root: Path) -> CorrespondenceReport:
         for link in node.get("verified_by", []) or []:
             if not isinstance(link, dict):
                 continue
+            # python-tests citations are test-backed checks, not Lean
+            # goals; scoring them UNTRANSLATABLE would pollute the
+            # correspondence table. Skipped, not adjudicated.
+            if link.get("system") == "python-tests":
+                continue
             report.results.append(
                 check_link(
                     node,

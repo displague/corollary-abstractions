@@ -14,6 +14,30 @@
         "prover/verifier-verdicts/lean_workbook_1041.lean4.json",
         "prover/verifier-verdicts/lean_workbook_1041.python-tests.json"
       ]
+    },
+    "prover/pychecks/gcd_euclid_recursive.py": {
+      "sha256": "ada80950d4de72eedcbdd483ed10c4f543234c66eb608db53cd9b61acbfdf696",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/gcd_euclid_recursive.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_euclid_recursive.python-tests.json"
+      ]
+    },
+    "prover/pychecks/gcd_euclid_iterative.py": {
+      "sha256": "48338fba664d0802f6adc26f12fbeb684c1ac12a0820a091c90f66626064288a",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/gcd_euclid_iterative.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_euclid_iterative.python-tests.json"
+      ]
+    },
+    "prover/pychecks/gcd_stein.py": {
+      "sha256": "55dcbde577e8cc0cccf5fabc04d73b736e4b2403af6c6dd2d2d127e6e55edd6c",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); first-party Stein foil; a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/gcd_stein.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_stein_binary.python-tests.json"
+      ]
     }
   }
 }
