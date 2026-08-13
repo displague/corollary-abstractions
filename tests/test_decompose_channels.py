@@ -80,6 +80,7 @@ are machine-checkable stay checked:
   as that pin's own docstring predicts for owner-less families. No guard
   direction moved: the absorption count floor and the 0.164 rate-gap pin
   read identically before and after (the new nodes absorb nothing).
+  sum to the grounded numerator, so channel shares sum to `groundedness`.
 
   Registered acknowledgment (v0.10 item 3, programming discipline — the
   FIFTH): the pins moved again (mean 0.774 -> 0.779, exact 531 -> 550,
@@ -100,7 +101,6 @@ are machine-checkable stay checked:
   0.317 -> 0.313); conservative same_corpus_dominant 15 -> 16. Recursive
   defines_head gains GCD (twice) and STEIN. Prior four acknowledgments
   are not rewritten.
-  sum to the grounded numerator, so channel shares sum to `groundedness`.
 
 The provability corpus is the regression case the item names. Its 1.000 must
 keep resolving into same-corpus + pattern-absorption with a near-zero external

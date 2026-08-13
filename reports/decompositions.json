@@ -170,11 +170,11 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 7,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -423,10 +423,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 2
+            "external": 3
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -437,11 +437,11 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 7,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -4565,12 +4565,12 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 2
+            "external": 3
           },
           "instance_of_statements": [
             "algtop.homology.betti_number_rank"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -4582,10 +4582,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7
+            "external": 8
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -5446,10 +5446,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7
+            "external": 8
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -6746,10 +6746,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7
+            "external": 8
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -9644,12 +9644,12 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 2
+            "external": 3
           },
           "instance_of_statements": [
             "algtop.homology.betti_number_rank"
           ],
-          "recurs_in_n_statements": 3
+          "recurs_in_n_statements": 4
         },
         {
           "path": [
@@ -9664,10 +9664,10 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 7
+            "external": 8
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     },
@@ -10351,25 +10351,58 @@
       "corpus_id": "morphology.concatenative.v1",
       "discipline": "morphology",
       "template": "PHRASE = MOD(MOD(BASE, INTENSIFIER1), INTENSIFIER2)",
-      "groundedness": 0.0,
+      "groundedness": 1.0,
       "considered": 2,
-      "grounded_exact": 0,
-      "grounded_via_pattern": 0,
+      "grounded_exact": 1,
+      "grounded_via_pattern": 1,
       "channels": {
-        "external": 0,
+        "external": 1,
         "prior_corpus": 0,
         "same_corpus": 0,
         "recursive": 0,
-        "pattern_absorption": 0
+        "pattern_absorption": 1
       },
       "channel_scores": {
-        "external": 0.0,
+        "external": 0.5,
         "prior_corpus": 0.0,
         "same_corpus": 0.0,
         "recursive": 0.0,
-        "pattern_absorption": 0.0
+        "pattern_absorption": 0.5
       },
-      "constituents": []
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "MOD⟨MOD⟨?0:V, ?1:V⟩, ?2:V⟩",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 2
+          },
+          "instance_of_pattern": "MOD⟨?0:V, ?1:V⟩",
+          "pattern_known_from": [
+            "programming.euclid.iterative",
+            "programming.euclid.recursive"
+          ],
+          "pattern_recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "MOD⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ]
     },
     {
       "statement_id": "narrative.structure.story_sequence",
@@ -11202,16 +11235,16 @@
       "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
-        "external": 1,
+        "external": 2,
         "prior_corpus": 0,
-        "same_corpus": 1,
+        "same_corpus": 0,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.333,
+        "external": 0.667,
         "prior_corpus": 0.0,
-        "same_corpus": 0.333,
+        "same_corpus": 0.0,
         "recursive": 0.0,
         "pattern_absorption": 0.0
       },
@@ -11222,12 +11255,13 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11334,16 +11368,16 @@
       "grounded_exact": 2,
       "grounded_via_pattern": 1,
       "channels": {
-        "external": 0,
+        "external": 1,
         "prior_corpus": 0,
-        "same_corpus": 2,
+        "same_corpus": 1,
         "recursive": 0,
         "pattern_absorption": 1
       },
       "channel_scores": {
-        "external": 0.0,
+        "external": 0.333,
         "prior_corpus": 0.0,
-        "same_corpus": 0.667,
+        "same_corpus": 0.333,
         "recursive": 0.0,
         "pattern_absorption": 0.333
       },
@@ -11379,14 +11413,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11415,16 +11450,16 @@
       "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
-        "external": 0,
+        "external": 1,
         "prior_corpus": 0,
-        "same_corpus": 2,
+        "same_corpus": 1,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.0,
+        "external": 0.5,
         "prior_corpus": 0.0,
-        "same_corpus": 1.0,
+        "same_corpus": 0.5,
         "recursive": 0.0,
         "pattern_absorption": 0.0
       },
@@ -11435,14 +11470,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11469,21 +11505,21 @@
       "template": "IMPLIES(MEET(EVEN(INT1), EVEN(INT2)), EVEN(INT1 + INT2))",
       "groundedness": 1.0,
       "considered": 5,
-      "grounded_exact": 4,
-      "grounded_via_pattern": 1,
+      "grounded_exact": 5,
+      "grounded_via_pattern": 0,
       "channels": {
-        "external": 1,
+        "external": 4,
         "prior_corpus": 0,
-        "same_corpus": 3,
+        "same_corpus": 1,
         "recursive": 0,
-        "pattern_absorption": 1
+        "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.2,
+        "external": 0.8,
         "prior_corpus": 0.0,
-        "same_corpus": 0.6,
+        "same_corpus": 0.2,
         "recursive": 0.0,
-        "pattern_absorption": 0.2
+        "pattern_absorption": 0.0
       },
       "constituents": [
         {
@@ -11491,18 +11527,13 @@
             0
           ],
           "skeleton": "MEET⟨EVEN⟨?0:V⟩, EVEN⟨?1:V⟩⟩",
-          "grounded_via": "pattern",
-          "channel": "pattern_absorption",
-          "absorbed_from_channel": "external",
-          "absorbed_owner_channels": {
-            "external": 2
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1
           },
-          "instance_of_pattern": "MEET⟨?0:P, ?1:V⟩",
-          "pattern_known_from": [
-            "logic.boolean_laws.identity_laws",
-            "settheory.boolean_laws.identity_laws"
-          ],
-          "pattern_recurs_in_n_statements": 2
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
         },
         {
           "path": [
@@ -11511,14 +11542,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11527,14 +11559,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11685,16 +11718,16 @@
       "grounded_exact": 2,
       "grounded_via_pattern": 0,
       "channels": {
-        "external": 1,
+        "external": 2,
         "prior_corpus": 0,
-        "same_corpus": 1,
+        "same_corpus": 0,
         "recursive": 0,
         "pattern_absorption": 0
       },
       "channel_scores": {
-        "external": 0.333,
+        "external": 0.667,
         "prior_corpus": 0.0,
-        "same_corpus": 0.333,
+        "same_corpus": 0.0,
         "recursive": 0.0,
         "pattern_absorption": 0.0
       },
@@ -11705,14 +11738,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -11866,16 +11900,16 @@
       "grounded_exact": 2,
       "grounded_via_pattern": 1,
       "channels": {
-        "external": 0,
+        "external": 1,
         "prior_corpus": 0,
-        "same_corpus": 2,
+        "same_corpus": 1,
         "recursive": 0,
         "pattern_absorption": 1
       },
       "channel_scores": {
-        "external": 0.0,
+        "external": 0.333,
         "prior_corpus": 0.0,
-        "same_corpus": 0.667,
+        "same_corpus": 0.333,
         "recursive": 0.0,
         "pattern_absorption": 0.333
       },
@@ -11905,14 +11939,15 @@
           ],
           "skeleton": "EVEN⟨?0:V⟩",
           "grounded_via": "exact",
-          "channel": "same_corpus",
+          "channel": "external",
           "owner_channels": {
+            "external": 1,
             "same_corpus": 5
           },
           "instance_of_statements": [
             "numbertheory.parity.even_witness_definition"
           ],
-          "recurs_in_n_statements": 6
+          "recurs_in_n_statements": 7
         },
         {
           "path": [
@@ -13277,6 +13312,404 @@
         "pattern_absorption": 0.0
       },
       "constituents": []
+    },
+    {
+      "statement_id": "programming.euclid.recursive",
+      "corpus_id": "programming.core.v1",
+      "discipline": "programming",
+      "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.25,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.75,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "ITE⟨EQ⟨?0:V, 0⟩, ABS⟨?1:V⟩, GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "programming.euclid.iterative"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "EQ⟨?0:V, 0⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "ABS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            2,
+            1
+          ],
+          "skeleton": "MOD⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ],
+      "recursive": true,
+      "defines_head": "GCD",
+      "self_headed_constituents_excluded": 2
+    },
+    {
+      "statement_id": "programming.euclid.iterative",
+      "corpus_id": "programming.core.v1",
+      "discipline": "programming",
+      "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))",
+      "groundedness": 1.0,
+      "considered": 4,
+      "grounded_exact": 4,
+      "grounded_via_pattern": 0,
+      "channels": {
+        "external": 1,
+        "prior_corpus": 0,
+        "same_corpus": 3,
+        "recursive": 0,
+        "pattern_absorption": 0
+      },
+      "channel_scores": {
+        "external": 0.25,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.75,
+        "recursive": 0.0,
+        "pattern_absorption": 0.0
+      },
+      "constituents": [
+        {
+          "path": [
+            1
+          ],
+          "skeleton": "ITE⟨EQ⟨?0:V, 0⟩, ABS⟨?1:V⟩, GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [
+            "programming.euclid.recursive"
+          ],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            0
+          ],
+          "skeleton": "EQ⟨?0:V, 0⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            1,
+            1
+          ],
+          "skeleton": "ABS⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            1,
+            2,
+            1
+          ],
+          "skeleton": "MOD⟨?0:V, ?1:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1,
+            "same_corpus": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        }
+      ],
+      "recursive": true,
+      "defines_head": "GCD",
+      "self_headed_constituents_excluded": 2
+    },
+    {
+      "statement_id": "programming.stein.binary",
+      "corpus_id": "programming.core.v1",
+      "discipline": "programming",
+      "template": "STEIN(INTA, INTB) = ITE(EQ(INTA, 0), INTB, ITE(EQ(INTB, 0), INTA, ITE(MEET(EVEN(INTA), EVEN(INTB)), 2 * STEIN(HALVE(INTA), HALVE(INTB)), ITE(EVEN(INTA), STEIN(HALVE(INTA), INTB), ITE(EVEN(INTB), STEIN(INTA, HALVE(INTB)), STEIN(HALVE(ABS(INTA - INTB)), MINOF(INTA, INTB)))))))",
+      "groundedness": 0.455,
+      "considered": 22,
+      "grounded_exact": 9,
+      "grounded_via_pattern": 1,
+      "channels": {
+        "external": 7,
+        "prior_corpus": 0,
+        "same_corpus": 2,
+        "recursive": 0,
+        "pattern_absorption": 1
+      },
+      "channel_scores": {
+        "external": 0.318,
+        "prior_corpus": 0.0,
+        "same_corpus": 0.091,
+        "recursive": 0.0,
+        "pattern_absorption": 0.045
+      },
+      "constituents": [
+        {
+          "path": [
+            0,
+            0
+          ],
+          "skeleton": "EQ⟨?0:V, 0⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            2,
+            0
+          ],
+          "skeleton": "EQ⟨?0:V, 0⟩",
+          "grounded_via": "exact",
+          "channel": "same_corpus",
+          "owner_channels": {
+            "same_corpus": 2
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 3
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            0
+          ],
+          "skeleton": "MEET⟨EVEN⟨?0:V⟩, EVEN⟨?1:V⟩⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 1
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 2
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            0,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            0,
+            1
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            1
+          ],
+          "skeleton": "*(2, STEIN⟨HALVE⟨?0:V⟩, HALVE⟨?1:V⟩⟩)",
+          "grounded_via": "pattern",
+          "channel": "pattern_absorption",
+          "absorbed_from_channel": "external",
+          "absorbed_owner_channels": {
+            "external": 7
+          },
+          "instance_of_pattern": "*(2, ?0:V)",
+          "pattern_known_from": [
+            "graphtheory.degree.handshake_lemma",
+            "numbertheory.parity.even_double",
+            "numbertheory.parity.even_witness_definition",
+            "numbertheory.parity.odd_successor",
+            "numbertheory.parity.odd_witness_definition",
+            "trigonometry.identities.double_angle_cosine",
+            "trigonometry.identities.double_angle_sine"
+          ],
+          "pattern_recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            2,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          "skeleton": "EVEN⟨?0:V⟩",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 6
+          },
+          "instance_of_statements": [
+            "numbertheory.parity.even_witness_definition"
+          ],
+          "recurs_in_n_statements": 7
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          "skeleton": "+(?0:V, neg(?1:V))",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 3
+          },
+          "instance_of_statements": [
+            "algtop.homology.betti_number_rank"
+          ],
+          "recurs_in_n_statements": 4
+        },
+        {
+          "path": [
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1
+          ],
+          "skeleton": "neg(?0:V)",
+          "grounded_via": "exact",
+          "channel": "external",
+          "owner_channels": {
+            "external": 8
+          },
+          "instance_of_statements": [],
+          "recurs_in_n_statements": 9
+        }
+      ],
+      "recursive": true,
+      "defines_head": "STEIN",
+      "self_headed_constituents_excluded": 5
     },
     {
       "statement_id": "provability.modal.k_distribution",
@@ -17163,11 +17596,11 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 7,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         },
         {
           "path": [
@@ -17253,45 +17686,45 @@
           "grounded_via": "exact",
           "channel": "external",
           "owner_channels": {
-            "external": 6,
+            "external": 7,
             "same_corpus": 1
           },
           "instance_of_statements": [],
-          "recurs_in_n_statements": 8
+          "recurs_in_n_statements": 9
         }
       ]
     }
   ],
   "channel_summary": {
     "graph": {
-      "statements": 251,
-      "mean_groundedness": 0.774,
+      "statements": 254,
+      "mean_groundedness": 0.779,
       "channel_means": {
-        "external": 0.49,
+        "external": 0.499,
         "prior_corpus": 0.007,
-        "same_corpus": 0.186,
+        "same_corpus": 0.181,
         "recursive": 0.0,
         "pattern_absorption": 0.092
       },
       "channel_constituents": {
-        "external": 369,
+        "external": 387,
         "prior_corpus": 4,
-        "same_corpus": 158,
+        "same_corpus": 159,
         "recursive": 0,
-        "pattern_absorption": 99
+        "pattern_absorption": 100
       },
-      "independent_mean": 0.497,
+      "independent_mean": 0.505,
       "same_corpus_dominant": false,
       "self_certifying": false,
       "channel_means_lower": {
-        "external": 0.221,
+        "external": 0.223,
         "prior_corpus": 0.033,
-        "same_corpus": 0.428,
+        "same_corpus": 0.431,
         "recursive": 0.0,
         "pattern_absorption": 0.092
       },
-      "external_lower": 0.221,
-      "independent_lower": 0.254,
+      "external_lower": 0.223,
+      "independent_lower": 0.255,
       "same_corpus_dominant_lower": true,
       "self_certifying_lower": false
     },
@@ -17760,33 +18193,33 @@
       },
       "morphology.concatenative.v1": {
         "statements": 11,
-        "mean_groundedness": 0.558,
+        "mean_groundedness": 0.648,
         "channel_means": {
-          "external": 0.0,
+          "external": 0.045,
           "prior_corpus": 0.0,
           "same_corpus": 0.498,
           "recursive": 0.0,
-          "pattern_absorption": 0.059
+          "pattern_absorption": 0.105
         },
         "channel_constituents": {
-          "external": 0,
+          "external": 1,
           "prior_corpus": 0,
           "same_corpus": 15,
           "recursive": 0,
-          "pattern_absorption": 3
+          "pattern_absorption": 4
         },
-        "independent_mean": 0.0,
+        "independent_mean": 0.045,
         "same_corpus_dominant": true,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.0,
+          "external": 0.045,
           "prior_corpus": 0.0,
           "same_corpus": 0.498,
           "recursive": 0.0,
-          "pattern_absorption": 0.059
+          "pattern_absorption": 0.105
         },
-        "external_lower": 0.0,
-        "independent_lower": 0.0,
+        "external_lower": 0.045,
+        "independent_lower": 0.045,
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "morphology"
@@ -17828,31 +18261,31 @@
         "statements": 16,
         "mean_groundedness": 0.701,
         "channel_means": {
-          "external": 0.251,
+          "external": 0.403,
           "prior_corpus": 0.0,
-          "same_corpus": 0.396,
+          "same_corpus": 0.256,
           "recursive": 0.0,
-          "pattern_absorption": 0.054
+          "pattern_absorption": 0.042
         },
         "channel_constituents": {
-          "external": 9,
+          "external": 17,
           "prior_corpus": 0,
-          "same_corpus": 22,
+          "same_corpus": 15,
           "recursive": 0,
-          "pattern_absorption": 3
+          "pattern_absorption": 2
         },
-        "independent_mean": 0.251,
-        "same_corpus_dominant": true,
+        "independent_mean": 0.403,
+        "same_corpus_dominant": false,
         "self_certifying": false,
         "channel_means_lower": {
-          "external": 0.062,
+          "external": 0.075,
           "prior_corpus": 0.0,
           "same_corpus": 0.584,
           "recursive": 0.0,
-          "pattern_absorption": 0.054
+          "pattern_absorption": 0.042
         },
-        "external_lower": 0.062,
-        "independent_lower": 0.062,
+        "external_lower": 0.075,
+        "independent_lower": 0.075,
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "number_theory"
@@ -17955,6 +18388,39 @@
         "same_corpus_dominant_lower": true,
         "self_certifying_lower": false,
         "discipline": "statistics"
+      },
+      "programming.core.v1": {
+        "statements": 3,
+        "mean_groundedness": 0.818,
+        "channel_means": {
+          "external": 0.273,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.53,
+          "recursive": 0.0,
+          "pattern_absorption": 0.015
+        },
+        "channel_constituents": {
+          "external": 9,
+          "prior_corpus": 0,
+          "same_corpus": 8,
+          "recursive": 0,
+          "pattern_absorption": 1
+        },
+        "independent_mean": 0.273,
+        "same_corpus_dominant": true,
+        "self_certifying": false,
+        "channel_means_lower": {
+          "external": 0.106,
+          "prior_corpus": 0.0,
+          "same_corpus": 0.697,
+          "recursive": 0.0,
+          "pattern_absorption": 0.015
+        },
+        "external_lower": 0.106,
+        "independent_lower": 0.106,
+        "same_corpus_dominant_lower": true,
+        "self_certifying_lower": false,
+        "discipline": "programming"
       },
       "provability.goedel_loeb.v1": {
         "statements": 6,

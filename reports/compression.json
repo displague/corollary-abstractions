@@ -1415,6 +1415,27 @@
       "family_reuse": 1
     },
     {
+      "statement_id": "programming.euclid.recursive",
+      "char_tokens": 73,
+      "struct_tokens": 27,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "programming.euclid.iterative",
+      "char_tokens": 73,
+      "struct_tokens": 27,
+      "concept_tokens": 3,
+      "family_reuse": 2
+    },
+    {
+      "statement_id": "programming.stein.binary",
+      "char_tokens": 275,
+      "struct_tokens": 105,
+      "concept_tokens": 3,
+      "family_reuse": 1
+    },
+    {
       "statement_id": "provability.modal.k_distribution",
       "char_tokens": 68,
       "struct_tokens": 22,
@@ -1772,9 +1793,9 @@
       "family_reuse": 1
     }
   ],
-  "mean_char": 43.42292490118577,
-  "mean_struct": 14.521739130434783,
-  "mean_concept": 3.644268774703557,
-  "n_family_skeletons": 198,
-  "skeletons_reused": 30
+  "mean_char": 44.55859375,
+  "mean_struct": 14.97265625,
+  "mean_concept": 3.63671875,
+  "n_family_skeletons": 200,
+  "skeletons_reused": 31
 }
