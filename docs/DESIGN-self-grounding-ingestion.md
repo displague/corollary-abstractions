@@ -154,3 +154,33 @@ route 2 for speed, the release must say which one the number is.
 Recommended: route 1, because the owner id is the thing every later
 ownership question also wants, and because a proxy reported as the real
 measurement is how a project talks itself into believing a curve.
+
+## 7. A cost constraint the measurement inherits (from item 4, before it merged)
+
+Item 4 hit a wall this design has to plan around: on the 508-node graph,
+`specialize.py` ran **87 minutes without writing a report**. The cause is
+this design's own subject matter — 68 first-wave templates carry 8–30
+operators, and a **fully ground tree has no slots to bind**, so used as a
+candidate general it enumerates commutative subsets against every other node
+and produces only algebra-swallowing noise. Their fix is to skip candidate
+generals whose parsed tree has no slots.
+
+Three consequences here, recorded before the slice starts:
+
+1. **The ISG curve must not be computed by re-running the specializer.** It
+   is a decomposition-side question (who owns a subterm), not a
+   generalization-side one (what specializes into what). Route 1 of §6 —
+   emitting owner ids from `decompose.py` — is now clearly the right route,
+   and this is a second, independent argument for it.
+2. **Subsampling has a cost profile, not just a statistical one.** The
+   curve's points at 8 / 32 / 128 / 512 ingested nodes are cheap on the
+   decomposition side but would be quadratic-ish on the specialization side;
+   the committed curve script must state which passes it runs and must not
+   silently invoke a ledger that takes an hour per point.
+3. **"Fully ground statements are not generals" is a fact about the corpus,
+   not a bug.** It also predicts something for the null model in §4: if
+   ground statements cannot generalize, then whatever self-grounding they
+   show is subterm sharing rather than abstraction, which is exactly the
+   distinction §6 draws between routes 1 and 2 — and makes S4 (does the
+   effect survive removing the most common subterm?) the load-bearing
+   prediction rather than a robustness footnote.
