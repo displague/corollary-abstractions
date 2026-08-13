@@ -184,3 +184,46 @@ Three consequences here, recorded before the slice starts:
    distinction §6 draws between routes 1 and 2 — and makes S4 (does the
    effect survive removing the most common subterm?) the load-bearing
    prediction rather than a robustness footnote.
+
+## 8. Route decision (v0.11, before implementation)
+
+§6 left a choice open. It is now made, in writing, as ROADMAP-v0.11 item 1
+requires.
+
+**ROUTE 1: emit owner ids from `decompose.py`.** Route 2's shared-skeleton
+proxy is rejected as the headline measurement.
+
+Three reasons, in order of weight:
+
+1. **The two routes answer different questions and the proxy answers the
+   easier one.** Sharing is symmetric — "these two statements both contain
+   `2 ^ 30`" — while grounding is directed and precedence-sensitive: the
+   ledger picks a *most independent owner* per constituent, which is why the
+   same subterm can be `same_corpus` in one node and `prior_corpus` in
+   another. A proxy that ignores that would report a higher number and
+   attribute it to a mechanism it did not measure.
+2. **v0.10 made owner identity a recurring need, not a one-off.** Item 4's
+   headline required knowing WHICH nodes the baseline paired; item 5's
+   finding required knowing WHICH node owned `^(2, 30)`; this measurement
+   requires knowing whether an owner is ingested. Three questions in one
+   cycle that the ledger could not answer without re-deriving `analyze`'s
+   discarded owner sets.
+3. **Cost forces it anyway** (§7): the curve must not re-run the specializer,
+   so it has to be a decomposition-side query — and the decomposition side is
+   exactly where the owner ids already exist and are thrown away.
+
+**What route 1 costs, stated up front.** An additive `owners` field per
+constituent rewrites every row of `reports/decompositions.json` — a large
+diff touching no scoring. It must land on a quiet `main` (no other slice
+regenerating ledgers), and it needs its own registered prediction: **P-R1 —
+adding owner ids changes no channel, no count, and no aggregate; the only
+diff is the new field.** If any GC4 number moves, the emitter is computing
+something other than what `channel_of` already computed, and that is a bug
+rather than an acknowledgment.
+
+**Where the proxy still earns its keep.** Route 2 becomes a *control*, not
+the measurement: computing both and reporting the gap (proxy − ISG) shows how
+much of the apparent self-grounding is mere co-occurrence. If the two are
+close, the ledger's owner precedence is doing little work on ground
+statements; if the proxy is much higher, that difference is itself the
+finding. The release reports both, labelled.
