@@ -119,3 +119,14 @@ of the 713 committed edges touch any of them.
   participates in the twin ledger, not this one. The 713 pre-ingest
   edges stay (none had a ground endpoint). The run finishes in
   minutes, not hours.
+
+- **P8** (disclosed, performance, scoring-identical): `decompose.py`'s
+  `forms_by_head` index skips slot-free trees. `pattern_cover` already
+  refuses any pattern that does not bind a named-head call, so a
+  slot-free tree can never be accepted as a pattern; leaving it in the
+  index only burns the 250-attempt budget on 30-operator ground sums.
+  Exact skeleton lookup (`side_forms` / `subterm_hosts`) is unchanged,
+  so the `2^30` prior_corpus pair and any new exact shared subterms
+  still count. Predicted: every GC4 aggregate that does not depend on
+  the new nodes is identical to the 257-node report; the run finishes
+  in minutes.
