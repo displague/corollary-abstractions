@@ -15,4 +15,3 @@ data_sources/derived/algorithms/** text eol=lf
 prover/session_triples.json text eol=lf
 prover/lean/session/** text eol=lf
 experiments/harness_session.json text eol=lf
-data/ingested_arithmetic/nodes.json text eol=lf
