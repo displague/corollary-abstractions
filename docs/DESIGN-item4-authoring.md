@@ -106,3 +106,16 @@ Registered before the skip lands:
 
 This is a scoring-adjacent filter, not a silent timeout. The 87-minute
 probe is the evidence; the skip is the decision.
+
+Probed further: P6 alone (skip as general, keep as specific) still ran
+past 25 minutes. Slotted laws matching *into* 30-operator ground sums
+is the remaining explosion. A second measurement on the committed
+pre-ingest report: 254 fully-ground nodes exist in the 508-node graph
+(251 first-wave + the three earlier ingested arithmetic nodes); **zero**
+of the 713 committed edges touch any of them.
+
+- **P7** (disclosed): skip a fully-ground statement as a specific as
+  well. Specialization is a slot-binding relation; a ground identity
+  participates in the twin ledger, not this one. The 713 pre-ingest
+  edges stay (none had a ground endpoint). The run finishes in
+  minutes, not hours.
