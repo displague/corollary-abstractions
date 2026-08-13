@@ -54,6 +54,12 @@ certifies what it checks, not correctness in general.
 
 ## 3. Programming as a first-class discipline (carried from v0.9 item 2)
 
+**SHIPPED** on `feature/v010-programming` — 3 verified-code nodes
+(253 → 256 / 25 disciplines), `python-tests` may ground `verified_by`
+(PROVEN stays lean4), Euclid pair typed-twins against a token-`gcd`
+baseline (precision 1.0 vs 1/3), drop-abs FAIL recorded and cited by
+nothing. Design + adjudication: `docs/DESIGN-programming-discipline.md`.
+
 The architecture runs the same operations over code with the verifier of item 2
 swapped in. AST → canonical form → structural address → pointer residual →
 external verifier. A verified code snippet becomes nodes; structural-twin
@@ -62,7 +68,7 @@ machinery.
 
 Acceptance: one verified-code node type end-to-end, one structural-twin-over-code
 result against a capability-blind baseline, one synthesis-or-debug transaction
-adjudicated by the external verifier.
+adjudicated by the external verifier. **MET.**
 
 ## 4. Author the covered subset, then recompute the ledgers on the enlarged graph
    (carried from v0.9 item 1's authoring half)

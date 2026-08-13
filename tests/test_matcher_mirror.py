@@ -67,19 +67,22 @@ class MirrorReportTests(unittest.TestCase):
         cls.report = build_report(nodes, problems)
 
     def test_registered_group_counts_include_physics_frames_slice(self) -> None:
-        # 253 = 251 + the v0.10 external-verifier slice (2 ingested
-        # Lean-workbook ground-arithmetic nodes; docs/DESIGN-external-
-        # verifier.md). group_counts below are UNCHANGED: fully ground
-        # DIVIDES/MOD equations twin with nothing — the fifth consecutive
-        # twin null, reported, not hidden.
-        self.assertEqual(self.report["nodes_analyzed"], 253)
+        # Item 2 pin (kept as registered prose): 253 = 251 + 2 ingested
+        # Lean-workbook ground-arithmetic nodes; group_counts were UNCHANGED
+        # (fifth consecutive twin null).
+        # Item 3 acknowledgment: 256 = 253 + 3 verified-code nodes
+        # (docs/DESIGN-programming-discipline.md). group_counts MOVE for the
+        # first time after those five nulls: the Euclid pair is one new
+        # group of size 2 (P4/P9, registered before the matcher ran). Stein
+        # is a singleton. Prior acknowledgments are not rewritten.
+        self.assertEqual(self.report["nodes_analyzed"], 256)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 30,
-                "typed": 31,
-                "family": 30,
-                "aliased": 32,
+                "shape": 31,
+                "typed": 32,
+                "family": 31,
+                "aliased": 33,
                 "mirror": 5,
             },
         )

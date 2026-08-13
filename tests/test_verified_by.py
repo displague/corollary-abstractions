@@ -50,11 +50,15 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             )
         self.assertEqual(verified_by_errors(nodes, REPO_ROOT), [])
         links = [link for n in nodes for link in n.get("verified_by", [])]
-        # 17 = the 16 propositional BooleanLaws links + the first INGESTED
-        # arithmetic link (numbertheory.ingested.lean_workbook_1041 ->
-        # prover/ingested_triples.json; v0.10 item 2).
-        self.assertEqual(len(links), 17)
-        self.assertEqual(len({link["reference"] for link in links}), 17)
+        # 20 = the 17 lean4 links (16 propositional + 1 ingested
+        # arithmetic; v0.10 item 2) + 3 python-tests citations from
+        # data/programming (v0.10 item 3; docs/DESIGN-programming-discipline.md).
+        # proof_correspondence still scores only the 17 lean4 links.
+        self.assertEqual(len(links), 20)
+        self.assertEqual(len({link["reference"] for link in links}), 20)
+        self.assertEqual(
+            sum(1 for link in links if link["system"] == "python-tests"), 3
+        )
 
     def test_missing_artifact_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -239,7 +243,12 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             ],
         }
         errors = verified_by_errors([malformed], REPO_ROOT)
-        self.assertTrue(any("supports only `lean4`" in e for e in errors), errors)
+        # v0.10 item 3 opened `python-tests` as a second system; LEAN4
+        # (wrong case) is still unsupported. The old "supports only lean4"
+        # wording is gone; the refusal is the pin.
+        self.assertTrue(
+            any("unsupported" in e and "LEAN4" in e for e in errors), errors
+        )
 
     def test_default_cli_paths_work_from_foreign_cwd(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -251,7 +260,7 @@ class VerifiedByIntegrityTests(unittest.TestCase):
                 check=False,
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("253 statement nodes", result.stdout)
+        self.assertIn("256 statement nodes", result.stdout)
 
     def test_wrong_statement_valid_theorem_is_capability_blind_control(self) -> None:
         """Cheap lint cannot prove theorem/statement semantic correspondence."""

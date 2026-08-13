@@ -13,6 +13,16 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Recursive and iterative Euclid are one remainder recurrence; Stein is
+  not, even though it is also named gcd (v0.10 item 3).**
+  `programming.euclid.recursive` and `programming.euclid.iterative` (both
+  from TheAlgorithms/Python, MIT) typed-twin on
+  `GCD⟨?0:V, ?1:V⟩ = ITE⟨EQ⟨?0:V, 0⟩, ABS⟨?1:V⟩, GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩⟩`.
+  First-party Stein is a singleton. A capability-blind token-`gcd` baseline
+  forms all 3 pairs (precision 1/3); the matcher forms 1 (precision 1.0).
+  Control-flow (recursion vs while) is evaluation strategy, not structure.
+  Status: **exact** (typed twin, registered as P4/P5 before the matcher ran).
+
 - **The honest reach of the corpus grammar on uncontrolled formal math is about
   a third — measured, not asserted (v0.9).** A shared coverage instrument
   (`scripts/grammar_coverage.py`) reduced three real, digest-pinned Lean sources

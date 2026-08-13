@@ -445,5 +445,46 @@ edited to match the outcome.
 
 ## 9. Adjudication — after implementation
 
-§8 above is frozen as registered. This section is filled after the
-seed, the verdicts, and the matcher have run.
+§8 above is frozen as registered. Every prediction landed as written.
+One disclosure at the end.
+
+| # | outcome | where it is checked |
+|---|---|---|
+| P1 | **CONFIRMED** — three `python-tests` links accepted; cross-system attach refused both ways; nodes stay `formal`; PROVEN closed form still requires lean4 | `test_programming_discipline.Vocabulary`; `DESIGN-epistemic-ladder.md` |
+| P2 | **CONFIRMED** — MIT as found in LICENSE.md, commit `f5988cc` pinned, citation verbatim in NOTICE + extract; CodeNet and thuva4 absent from the manifest | `test_algorithms_ingest.ManifestPin` |
+| P3 | **CONFIRMED** — three PASS verdicts recheck; validator green over 256 / 25 | `test_programming_discipline.EndToEnd`; `validate_nodes.py` |
+| P4 | **CONFIRMED exactly** — typed skeleton `GCD⟨?0:V, ?1:V⟩ = ITE⟨EQ⟨?0:V, 0⟩, ABS⟨?1:V⟩, GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩⟩` groups T_rec + T_it; T_st in no group; parse_problems [] and slot_schema_gaps [] | `test_programming_discipline.TwinsAndBaseline`; matcher stdout |
+| P5 | **CONFIRMED** — token-`gcd` baseline forms 3 pairs; matcher forms 1; precision 1.0 vs 1/3; both recall the Euclid pair | `test_token_gcd_baseline_loses_on_precision` |
+| P6 | **CONFIRMED** — drop-abs is `verdict: fail` on the negatives; cited by no manifest entry and no node; `recheck` reproduces fail | `test_drop_abs_is_a_committed_fail_cited_by_nothing` |
+| P7 | **CONFIRMED** — `require_python_tests_pass` raises on a missing statement_id and on the drop-abs FAIL; BACKLOG item marked PARTIAL | `VerdictBackedRule`; `docs/BACKLOG.md` |
+| P8 | **CONFIRMED** — correspondence stays 16 / 1 / 0 over 17 lean4 links; python-tests citations are skipped | `test_proof_correspondence` (count unmoved) |
+| P9 | **CONFIRMED exactly** — 253 → 256, 24 → 25; group_counts 30/31/30/32/5 → 31/32/31/33/5; GC4 moved and the FIFTH acknowledgment was appended | `test_matcher_mirror`; `test_decompose_channels` |
+| P10 | **CONFIRMED** — specialize.py and decompose.py ran unchanged, exit 0; no code-shaped pass added; no programming specialization edge claimed (the Euclid pair are twins) | this note; `scripts/specialize.py` stdout |
+
+**Disclosure 1 — GCD commutativity reordered the recursive call.** §4
+wrote the authored template as `GCD(MOD(INTB, INTA), INTA)` (TheAlgorithms
+recursive orientation). The matcher, having been told GCD is commutative,
+emits the typed skeleton `GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩`. That is the
+declaration doing the job it was declared for, not a template rewrite.
+The two Euclid nodes still share one skeleton; Stein still does not.
+The authored template in the seed is unchanged.
+
+**Disclosure 2 — P5's "statement_id" wording was sloppy.** The
+registered baseline said "token `gcd` in both `statement_id`s". The
+ids are `programming.euclid.*` / `programming.stein.binary`; the gcd
+token lives in `keywords` (and the function names). A literal reading
+of the registered wording forms 0 pairs and is a vacuous baseline.
+The check that was meant — and that is what a name-blind control
+actually has — is the keyword. Precision 1.0 vs 1/3 stands on that
+reading. The registered sentence is not edited.
+
+**The GC4 movement, exactly.** Mean groundedness 0.774 → 0.779, exact
+531 → 550, pattern 99 → 100, statements-with-constituents 222 → 226,
+external 0.490 → 0.499, external lower 0.221 → 0.223. Not item 2's
+denominator dilution: the Euclid pair are self-headed GCD recurrences
+at groundedness 1.0 (same_corpus 3 + external 1 each); Stein is 0.455
+(9 exact + 1 pattern over 22 considered). Absorption count floor holds
+(387 > 4 × 86). Rate gap 0.164 → 0.156. min-family-1 recursive 250 →
+261 over 128 statements. Conservative same_corpus_dominant 15 → 16.
+`defines_head` gains GCD (twice) and STEIN. The fifth acknowledgment
+in `tests/test_decompose_channels.py` is where this has to survive.

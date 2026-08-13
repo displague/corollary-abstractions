@@ -1,10 +1,10 @@
 {
-  "nodes_analyzed": 253,
+  "nodes_analyzed": 256,
   "group_counts": {
-    "shape": 30,
-    "typed": 31,
-    "family": 30,
-    "aliased": 32,
+    "shape": 31,
+    "typed": 32,
+    "family": 31,
+    "aliased": 33,
     "mirror": 5
   },
   "ladder_violations": [],
@@ -906,6 +906,27 @@
           "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
           "discipline": "set_theory",
           "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
+        }
+      ]
+    },
+    {
+      "skeleton": "GCD⟨?0:V, ?1:V⟩ = ITE⟨EQ⟨?0:V, 0⟩, ABS⟨?1:V⟩, GCD⟨?0:V, MOD⟨?1:V, ?0:V⟩⟩⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "euclid_remainder_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.euclid.recursive",
+          "discipline": "programming",
+          "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))"
+        },
+        {
+          "statement_id": "programming.euclid.iterative",
+          "discipline": "programming",
+          "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))"
         }
       ]
     },
@@ -2022,6 +2043,27 @@
           "statement_id": "settheory.cardinality.inclusion_exclusion_two_sets",
           "discipline": "set_theory",
           "template": "CARD(JOIN(SETA, SETB)) = CARD(SETA) + CARD(SETB) - CARD(MEET(SETA, SETB))"
+        }
+      ]
+    },
+    {
+      "skeleton": "GCD⟨?0, ?1⟩ = ITE⟨EQ⟨?0, 0⟩, ABS⟨?1⟩, GCD⟨?0, MOD⟨?1, ?0⟩⟩⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "euclid_remainder_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.euclid.recursive",
+          "discipline": "programming",
+          "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))"
+        },
+        {
+          "statement_id": "programming.euclid.iterative",
+          "discipline": "programming",
+          "template": "GCD(INTA, INTB) = ITE(EQ(INTA, 0), ABS(INTB), GCD(MOD(INTB, INTA), INTA))"
         }
       ]
     },

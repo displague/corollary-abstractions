@@ -2483,7 +2483,12 @@ wants its own adversarial review, not a release-eve change.
 
 ## Verdict-backed ingestion should be a RULE, not a precedent (v0.10 item 2 review filing)
 
-- **Nothing forces a future ingested node to carry a verdict.**
+- **PARTIAL — the rule is real for programming nodes, not yet for Lean ingest.**
+  v0.10 item 3 (`docs/DESIGN-programming-discipline.md` §6, P7):
+  `scripts/seed_programming.py` will not emit a `verified_by` link unless a
+  committed `python-tests` PASS names that `statement_id`. The drop-abs FAIL
+  does not satisfy the rule. The Lean-ingest half is still open.
+- **Nothing forces a future *Lean-ingested* node to carry a verdict.**
   `external_verifier.verdict_ledger_errors` checks every verdict that EXISTS
   and every manifest `verdicts` entry that is DECLARED, but a new artifact
   whose manifest entry simply omits `verdicts` is cited exactly like the 16
