@@ -165,7 +165,18 @@ SCRATCH_TREES = ("scripts", "data", "prover", "schema")
 # `working_tree_digest`; the trees are the scratch trees because those are
 # exactly the ones a candidate seed is handed a copy of.
 INTEGRITY_TREES = SCRATCH_TREES
-INTEGRITY_EXCLUDED = frozenset({".git", "__pycache__", "staging"})
+
+# Build byproducts of this repository's OWN sources, excluded from the
+# scratch copy and from the integrity digest alike. `.lake` is Lean's build
+# directory: running `lake` once inside `prover/lean/<project>` materialises
+# a ~3 GB, ~15k-file copy of the toolchain INSIDE a scratch tree, at which
+# point every WRITE test copies it per test and every class-level digest
+# hashes it twice (measured: 13 tests went from 26s to 1394s, and a lean run
+# touching it mid-class tripped the working-tree guard). Nothing here is a
+# seed target or an input to a staging decision, and the external verifier
+# never reads it — it invokes the pinned toolchain's binary by path.
+SCRATCH_IGNORED = ("__pycache__", ".lake")
+INTEGRITY_EXCLUDED = frozenset({".git", "staging", *SCRATCH_IGNORED})
 INTEGRITY_EXCLUDED_RUNTIME = (
     ".runtime",
     ".venv",
@@ -174,6 +185,17 @@ INTEGRITY_EXCLUDED_RUNTIME = (
     "experiments/data_real",
     "experiments/data_smoke",
     "experiments/visual/out",
+    # Fetched, SHA-pinned external archives (gitignored, ~1 GB once the
+    # Lean corpora are present). Same lane as experiments/data: a large
+    # generated/downloaded input, never a WRITE target, and already
+    # authenticated where it is used -- every ingest script verifies its
+    # archive against the manifest's sha256 before reading a byte, so this
+    # digest re-hashing a gigabyte adds no integrity the manifest does not
+    # already provide. It DOES cost minutes per call: with archives fetched,
+    # the WRITE suite's per-class tree digest was hashing ~0.8 GB twice a
+    # class. `data_sources/manifest.json` and the committed
+    # `data_sources/derived/` extracts stay covered.
+    "data_sources/archives",
 )
 PROOF_MANIFEST = "prover/proof-artifact-manifest.json"
 
@@ -701,7 +723,7 @@ def _scratch_checkout(repo_root: Path, destination: Path) -> None:
             shutil.copytree(
                 source,
                 destination / tree,
-                ignore=shutil.ignore_patterns("__pycache__"),
+                ignore=shutil.ignore_patterns(*SCRATCH_IGNORED),
             )
 
 

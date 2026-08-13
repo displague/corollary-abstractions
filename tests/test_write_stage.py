@@ -47,6 +47,8 @@ from write_stage import (  # noqa: E402
     CONJECTURED,
     PROVEN,
     REFUSED,
+    INTEGRITY_EXCLUDED,
+    SCRATCH_IGNORED,
     STAGED_CANDIDATE,
     STAGED_REVIEW_REQUEST,
     VERIFIED,
@@ -57,6 +59,7 @@ from write_stage import (  # noqa: E402
     main as write_stage_main,
     working_tree_digest,
     _held_staging_directory,
+    _scratch_checkout,
     _write_all,
 )
 
@@ -230,7 +233,10 @@ class MiniRepo:
             shutil.copytree(
                 REPO_ROOT / tree,
                 self.root / tree,
-                ignore=shutil.ignore_patterns("__pycache__"),
+                # Same ignores as the real scratch checkout, and for the
+                # same reason: a `lake` build tree under prover/ is ~3 GB,
+                # and this copy runs once PER TEST.
+                ignore=shutil.ignore_patterns(*SCRATCH_IGNORED),
             )
         (self.root / ARTIFACT).write_text(
             json.dumps(TRANSITIONS, ensure_ascii=False, indent=2) + "\n",
@@ -784,6 +790,53 @@ class MaliciousPathTests(WriteStageTestCase):
         self.assertRefusedBy(
             self.stage(self.candidate(seed_source=source)), "declarative_seed"
         )
+
+
+class BuildByproductExclusionTests(WriteStageTestCase):
+    """A Lean build tree under `prover/` must cost this gate nothing.
+
+    Found by running the suite in a worktree where the v0.10 ingested Lean
+    project had been built: `lake` had materialised
+    `prover/lean/ingested/.lake` — 3.0 GB across 14,748 files — INSIDE a
+    scratch tree. The scratch checkout copies that tree once per test and
+    the class guard digests it twice per class, so this class alone went
+    from 26s to 1394s, and a lean run touching it mid-class tripped the
+    working-tree guard with a change no candidate had made. Both the copy
+    and the digest now skip it, the way they always skipped `__pycache__`.
+    """
+
+    def test_lake_and_pycache_are_ignored_by_copy_and_digest(self) -> None:
+        self.assertEqual(SCRATCH_IGNORED, ("__pycache__", ".lake"))
+        for name in SCRATCH_IGNORED:
+            self.assertIn(name, INTEGRITY_EXCLUDED, name)
+
+    def test_a_build_tree_moves_neither_the_digest_nor_the_copy(self) -> None:
+        project = self.repo.root / "prover" / "lean" / "probe"
+        project.mkdir(parents=True)
+        (project / "Probe.lean").write_text("theorem t : True := trivial\n",
+                                            encoding="utf-8")
+        before = working_tree_digest(self.repo.root)
+        build = project / ".lake" / "packages" / "lean4" / "lib"
+        build.mkdir(parents=True)
+        (build / "huge.olean").write_bytes(b"\0" * 4096)
+        self.assertEqual(working_tree_digest(self.repo.root), before)
+        with tempfile.TemporaryDirectory() as temporary:
+            destination = Path(temporary) / "scratch"
+            _scratch_checkout(self.repo.root, destination)
+            self.assertTrue((destination / "prover" / "lean" / "probe"
+                             / "Probe.lean").is_file())
+            self.assertFalse((destination / "prover" / "lean" / "probe"
+                              / ".lake").exists())
+
+    def test_the_source_beside_the_build_tree_is_still_covered(self) -> None:
+        """The exclusion is the byproduct, never the sources next to it."""
+        project = self.repo.root / "prover" / "lean" / "probe"
+        project.mkdir(parents=True)
+        source = project / "Probe.lean"
+        source.write_text("theorem t : True := trivial\n", encoding="utf-8")
+        before = working_tree_digest(self.repo.root)
+        source.write_text("theorem t : True := by trivial\n", encoding="utf-8")
+        self.assertNotEqual(working_tree_digest(self.repo.root), before)
 
 
 class WorkingTreeIntegrityTests(WriteStageTestCase):
