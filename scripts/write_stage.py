@@ -130,6 +130,13 @@ from controller import (  # noqa: E402
     Verdict,
     Verification,
 )
+from seed_appends import (  # noqa: E402
+    APPEND_KIND,
+    APPENDS_DIRNAME,
+    AppendError,
+    append_dir,
+    apply_appends,
+)
 from proof_artifacts import (  # noqa: E402
     REQUIRED_TRANSITION_FIELDS,
     read_regular_file_once,
@@ -698,6 +705,99 @@ def _declarative_corpus(source: str, corpus: str) -> dict:
     return payload
 
 
+def _parse_append_document(
+    source: str, corpus: str, seed_script: str
+) -> dict:
+    """Parse an append_nodes document. Data only; never executed."""
+
+    try:
+        doc = json.loads(source)
+    except json.JSONDecodeError as exc:
+        raise Refusal(
+            "declarative_seed", f"append document is not valid JSON: {exc}"
+        ) from None
+    if not isinstance(doc, dict):
+        raise Refusal("declarative_seed", "append document must be a JSON object")
+    if doc.get("kind") != APPEND_KIND:
+        raise Refusal(
+            "declarative_seed",
+            f"append document kind must be {APPEND_KIND!r}",
+        )
+    if doc.get("schema_version") != 1:
+        raise Refusal("declarative_seed", "append schema_version must be 1")
+    extra = sorted(
+        set(doc) - {"kind", "schema_version", "seed_script", "corpus",
+                    "statement_nodes"}
+    )
+    if extra:
+        raise Refusal(
+            "declarative_seed",
+            f"append document has unexpected keys: {', '.join(extra)}",
+        )
+    if doc.get("corpus") != corpus:
+        raise Refusal(
+            "declarative_seed",
+            f"append corpus {doc.get('corpus')!r} does not match "
+            f"candidate corpus {corpus!r}",
+        )
+    if doc.get("seed_script") != seed_script:
+        raise Refusal(
+            "declarative_seed",
+            f"append seed_script {doc.get('seed_script')!r} does not match "
+            f"candidate seed_script {seed_script!r}",
+        )
+    nodes = doc.get("statement_nodes")
+    if not isinstance(nodes, list) or not nodes:
+        raise Refusal(
+            "declarative_seed",
+            "append statement_nodes must be a non-empty list",
+        )
+    ids: list[str] = []
+    for node in nodes:
+        if not isinstance(node, dict) or not isinstance(
+            node.get("statement_id"), str
+        ) or not node["statement_id"].strip():
+            raise Refusal(
+                "declarative_seed",
+                "every appended node must be an object with a statement_id",
+            )
+        ids.append(node["statement_id"])
+    if len(ids) != len(set(ids)):
+        raise Refusal("declarative_seed", "append document has duplicate ids")
+    return doc
+
+
+def _candidate_lane(
+    candidate: WriteCandidate,
+) -> tuple[str, dict]:
+    """Classify seed_source as new_corpus or append. Refuses anything else."""
+
+    stripped = candidate.seed_source.lstrip()
+    if stripped.startswith("{"):
+        return "append", _parse_append_document(
+            candidate.seed_source, candidate.corpus, candidate.seed_script
+        )
+    return "new_corpus", _declarative_corpus(
+        candidate.seed_source, candidate.corpus
+    )
+
+
+def _seed_owns_corpus(seed_path: Path, corpus: str) -> bool:
+    """The same ownership heuristic check_regeneration uses."""
+
+    text = seed_path.read_text(encoding="utf-8", errors="replace")
+    return (
+        f'"{corpus}"' in text
+        or f"'{corpus}'" in text
+        or f"/{corpus}/" in text
+        or f'"data/{corpus}' in text
+    )
+
+
+def _append_filename(statement_id: str) -> str:
+    return f"{statement_id}.json"
+
+
 # --------------------------------------------------------------------------
 # Scratch regeneration
 # --------------------------------------------------------------------------
@@ -814,11 +914,7 @@ def _regenerate(
             f"corpus must be a lowercase directory identifier: {candidate.corpus!r}",
         )
     _scratch_checkout(repo_root, scratch)
-    new_corpus = _declarative_corpus(candidate.seed_source, candidate.corpus)
-    seed_path = scratch / candidate.seed_script
-    seed_path.parent.mkdir(parents=True, exist_ok=True)
-    seed_path.write_text(candidate.seed_source, encoding="utf-8")
-
+    lane, parsed = _candidate_lane(candidate)
     before = _corpus_snapshot(repo_root / "data")
     target = f"{candidate.corpus}/nodes.json"
     target_path = (scratch / "data" / target).resolve()
@@ -828,11 +924,52 @@ def _regenerate(
         raise Refusal(
             "path_containment", f"corpus target escapes scratch data: {candidate.corpus!r}"
         ) from None
-    _materialize_corpus(target_path, new_corpus)
+
+    append_rel = None
+    if lane == "append":
+        append_rel = (
+            f"{candidate.corpus}/{APPENDS_DIRNAME}/"
+            f"{_append_filename(candidate.statement_id)}"
+        )
+        append_path = scratch / "data" / append_rel
+        append_path.parent.mkdir(parents=True, exist_ok=True)
+        append_path.write_bytes(
+            (json.dumps(parsed, ensure_ascii=False, indent=2) + "\n").encode(
+                "utf-8"
+            )
+        )
+        # The committed nodes.json is already seed+prior-appends
+        # (check_regeneration). Merge only the NEW nodes as data; do not
+        # re-exec the existing seed.
+        existing = json.loads(target_path.read_text(encoding="utf-8"))
+        existing_ids = {
+            node.get("statement_id")
+            for node in existing.get("statement_nodes", [])
+        }
+        for node in parsed["statement_nodes"]:
+            sid = node["statement_id"]
+            if sid in existing_ids:
+                raise Refusal(
+                    "append_collision",
+                    f"{sid} is already in data/{target}",
+                )
+            existing["statement_nodes"].append(node)
+            existing_ids.add(sid)
+        new_corpus = existing
+        _materialize_corpus(target_path, new_corpus)
+    else:
+        new_corpus = parsed
+        seed_path = scratch / candidate.seed_script
+        seed_path.parent.mkdir(parents=True, exist_ok=True)
+        seed_path.write_text(candidate.seed_source, encoding="utf-8")
+        _materialize_corpus(target_path, new_corpus)
     after = _corpus_snapshot(scratch / "data")
 
+    allowed = {target}
+    if append_rel is not None:
+        allowed.add(append_rel)
     for name in sorted(set(before) | set(after)):
-        if name == target:
+        if name in allowed:
             continue
         if before.get(name) != after.get(name):
             raise Refusal(
@@ -869,11 +1006,23 @@ def _regenerate(
             "regeneration_confinement",
             f"candidate seed removes existing statements: {', '.join(removed)}",
         )
-    if added != [candidate.statement_id]:
+    declared_ids = (
+        [node["statement_id"] for node in parsed["statement_nodes"]]
+        if lane == "append"
+        else [candidate.statement_id]
+    )
+    if set(added) != set(declared_ids) or (
+        lane != "append" and added != [candidate.statement_id]
+    ):
         raise Refusal(
             "regeneration_confinement",
             f"candidate seed adds {added or 'nothing'}, but the candidate "
-            f"declares `{candidate.statement_id}`",
+            f"declares {declared_ids}",
+        )
+    if lane == "append" and candidate.statement_id not in declared_ids:
+        raise Refusal(
+            "regeneration_confinement",
+            "candidate.statement_id is not among the appended ids",
         )
     if len(new_ids) != len(set(new_ids)):
         raise Refusal(
@@ -894,10 +1043,11 @@ def _regenerate(
                 "regeneration_confinement",
                 "candidate changes or reorders existing target-corpus statements",
             )
-        if len(new_nodes) != len(old_nodes) + 1:
+        if len(new_nodes) != len(old_nodes) + len(declared_ids):
             raise Refusal(
                 "regeneration_confinement",
-                "candidate must append exactly one target-corpus statement",
+                f"candidate must append exactly {len(declared_ids)} "
+                "target-corpus statement(s)",
             )
 
     node = next(
@@ -1540,24 +1690,83 @@ def _gate(
         return
 
     record.passed("epistemic_rung", "PROVEN may stage a full candidate")
+    lane, parsed = _candidate_lane(candidate)
     corpus_target = repo_root / "data" / candidate.corpus / "nodes.json"
     proposed_untracked_seed = (
         seed_target.exists()
         and candidate.seed_source_path == candidate.seed_script
         and not _git_tracked(repo_root, candidate.seed_script)
     )
-    if (seed_target.exists() and not proposed_untracked_seed) or corpus_target.exists():
-        raise Refusal(
+    if lane == "append":
+        if not seed_target.is_file():
+            raise Refusal(
+                "seed_ownership",
+                "an append names a committed seed that already owns the "
+                "corpus; that seed is missing",
+            )
+        if (repo_root / ".git").exists() and not _git_tracked(
+            repo_root, candidate.seed_script
+        ):
+            raise Refusal(
+                "seed_ownership",
+                "an append names a committed seed that already owns the "
+                "corpus; that seed is untracked",
+            )
+        if not corpus_target.is_file():
+            raise Refusal(
+                "seed_ownership",
+                "an append requires an existing corpus; a new corpus uses "
+                "the literal-envelope lane",
+            )
+        if not _seed_owns_corpus(seed_target, candidate.corpus):
+            raise Refusal(
+                "seed_ownership",
+                f"`{candidate.seed_script}` does not own corpus "
+                f"`{candidate.corpus}`",
+            )
+        existing_ids = {
+            node.get("statement_id")
+            for node in json.loads(
+                corpus_target.read_text(encoding="utf-8")
+            ).get("statement_nodes", [])
+        }
+        incoming = [
+            node["statement_id"] for node in parsed["statement_nodes"]
+        ]
+        collision = [sid for sid in incoming if sid in existing_ids]
+        if collision:
+            raise Refusal(
+                "append_collision",
+                "an append that would replace an existing node is a "
+                "different operation: " + ", ".join(collision),
+            )
+        if candidate.statement_id not in incoming:
+            raise Refusal(
+                "declarative_seed",
+                "candidate.statement_id must be one of the appended ids",
+            )
+        record.passed(
             "seed_ownership",
-            "the declarative WRITE lane stages new seed/new corpus pairs only; "
-            "replacing an existing seed could orphan another corpus it owns, "
-            "and appending to an existing corpus needs a trusted patch format",
+            "append to a corpus this committed seed already owns; the seed "
+            "file is not rewritten",
         )
-    record.passed(
-        "seed_ownership",
-        "both the proposed seed and corpus are new; no existing seed outputs "
-        "can be orphaned",
-    )
+        record.passed(
+            "append_collision",
+            "no appended id is already in the corpus",
+        )
+    else:
+        if (seed_target.exists() and not proposed_untracked_seed) or corpus_target.exists():
+            raise Refusal(
+                "seed_ownership",
+                "the declarative WRITE lane stages new seed/new corpus pairs only; "
+                "replacing an existing seed could orphan another corpus it owns, "
+                "and appending to an existing corpus needs a trusted patch format",
+            )
+        record.passed(
+            "seed_ownership",
+            "both the proposed seed and corpus are new; no existing seed outputs "
+            "can be orphaned",
+        )
     proof_checks, artifact_bytes = _check_proof(candidate, repo_root)
     for check, detail in proof_checks:
         record.passed(check, detail)
@@ -1757,9 +1966,9 @@ def accept_write(
     before_snapshot = _corpus_snapshot(repo_root / "data")
     corpus_before = durable_digest(repo_root / "data")
 
-    # 2. Re-derive the corpus from the audited seed source. Trusted parse; the
-    #    candidate seed is never executed.
-    payload = _declarative_corpus(candidate.seed_source, candidate.corpus)
+    # 2. Re-derive the corpus from the audited source. Trusted parse; the
+    #    candidate is never executed.
+    lane, parsed = _candidate_lane(candidate)
 
     seed_path = _resolve_seed_target(repo_root, candidate.seed_script)
     # Re-derive the corpus target under the same containment discipline the
@@ -1781,11 +1990,10 @@ def accept_write(
         ) from None
     target_rel = f"{candidate.corpus}/nodes.json"
 
-    # 3. Belt-and-braces: the gate's `seed_ownership` already established a new
-    #    seed / new corpus, but acceptance is where bytes land, so re-establish
-    #    it here rather than trust a value carried across a function boundary. A
-    #    corpus that already exists is never overwritten by acceptance.
-    if corpus_path.exists():
+    # 3. Belt-and-braces. new_corpus never overwrites an existing corpus.
+    #    append never overwrites an existing seed; it may rewrite the
+    #    corpus file it is extending, via the trusted merger.
+    if lane != "append" and corpus_path.exists():
         raise AcceptanceError(
             f"data/{target_rel} already exists; acceptance never overwrites a "
             "corpus"
@@ -1805,13 +2013,28 @@ def accept_write(
     # a per-file map of the whole tree BEFORE, so AFTER we can assert the only
     # paths whose bytes changed are exactly the seed and the target corpus.
     files_before = working_tree_file_digests(repo_root)
-    expected_changes = {
-        seed_path.resolve().relative_to(repo_root).as_posix(),
-        corpus_path.relative_to(repo_root).as_posix(),
-    }
+    if lane == "append":
+        append_path = (
+            append_dir(corpus_dir) / _append_filename(candidate.statement_id)
+        )
+        expected_changes = {
+            append_path.resolve().relative_to(repo_root).as_posix(),
+            corpus_path.relative_to(repo_root).as_posix(),
+        }
+    else:
+        append_path = None
+        expected_changes = {
+            seed_path.resolve().relative_to(repo_root).as_posix(),
+            corpus_path.relative_to(repo_root).as_posix(),
+        }
 
     def _rollback() -> None:
         # Idempotent, intention-based: does not depend on how far the try got.
+        if lane == "append":
+            if append_path is not None:
+                append_path.unlink(missing_ok=True)
+            _restore_snapshot(before_snapshot, repo_root / "data")
+            return
         corpus_path.unlink(missing_ok=True)
         if not corpus_dir_existed:
             with contextlib.suppress(OSError):
@@ -1823,19 +2046,45 @@ def accept_write(
         _restore_snapshot(before_snapshot, repo_root / "data")
 
     try:
-        # 4. Apply through trusted code only: the seed as the source of truth,
-        #    the corpus via the one committed generator. Both writes are atomic
-        #    (temp-file, fsync, os.replace) -- no torn file on a mid-write crash.
-        _atomic_write_text(seed_path, candidate.seed_source)
-        _materialize_corpus(corpus_path, payload)
+        # 4. Apply through trusted code only. Candidate Python is never
+        #    executed. new_corpus writes a seed + materializes the envelope;
+        #    append writes the JSON patch and merges it onto the existing
+        #    corpus.
+        if lane == "append":
+            append_path.parent.mkdir(parents=True, exist_ok=True)
+            _atomic_write_text(
+                append_path,
+                json.dumps(parsed, ensure_ascii=False, indent=2) + "\n",
+            )
+            composed = json.loads(corpus_path.read_text(encoding="utf-8"))
+            for node in parsed["statement_nodes"]:
+                composed["statement_nodes"].append(node)
+            _materialize_corpus(corpus_path, composed)
+            verify_payload = composed
+        else:
+            _atomic_write_text(seed_path, candidate.seed_source)
+            _materialize_corpus(corpus_path, parsed)
+            verify_payload = parsed
 
         acceptance = _verify_application(
             candidate,
             repo_root,
-            payload,
+            verify_payload,
             before_snapshot,
             target_rel,
             staging_record,
+            lane=lane,
+            append_rel=(
+                f"{candidate.corpus}/{APPENDS_DIRNAME}/"
+                f"{_append_filename(candidate.statement_id)}"
+                if lane == "append"
+                else None
+            ),
+            declared_ids=(
+                [n["statement_id"] for n in parsed["statement_nodes"]]
+                if lane == "append"
+                else [candidate.statement_id]
+            ),
         )
 
         # F4: the whole-tree delta must be EXACTLY the two declared files. If a
@@ -1894,9 +2143,23 @@ def _verify_application(
     before_snapshot: dict[str, bytes],
     target_rel: str,
     staging_record: StagingRecord,
+    lane: str = "new_corpus",
+    append_rel: str | None = None,
+    declared_ids: list[str] | None = None,
 ) -> AcceptanceRecord:
     """Re-check the applied tree. Raises `AcceptanceError` on any discrepancy."""
 
+    declared_ids = declared_ids or [candidate.statement_id]
+    if lane == "append":
+        applied = (
+            f"wrote data/{append_rel}",
+            f"merged append into data/{target_rel} via the trusted merger",
+        )
+    else:
+        applied = (
+            f"wrote {candidate.seed_script}",
+            f"regenerated data/{target_rel} via the committed generator",
+        )
     acceptance = AcceptanceRecord(
         record_id=candidate.record_id,
         statement_id=candidate.statement_id,
@@ -1905,17 +2168,17 @@ def _verify_application(
         staging_record_id=staging_record.record_id,
         seed_source_sha256=candidate.payload()["seed_source_sha256"],
         node_id=candidate.statement_id,
-        applied=(
-            f"wrote {candidate.seed_script}",
-            f"regenerated data/{target_rel} via the committed generator",
-        ),
+        applied=applied,
     )
 
     after_snapshot = _corpus_snapshot(repo_root / "data")
 
     # Every OTHER corpus byte-identical: acceptance extends its own corpus only.
+    allowed = {target_rel}
+    if append_rel:
+        allowed.add(append_rel)
     for name in sorted(set(before_snapshot) | set(after_snapshot)):
-        if name == target_rel:
+        if name in allowed:
             continue
         if before_snapshot.get(name) != after_snapshot.get(name):
             raise AcceptanceError(
@@ -1939,15 +2202,32 @@ def _verify_application(
         node.get("statement_id", "")
         for node in applied_corpus.get("statement_nodes", [])
     ]
-    if ids != [candidate.statement_id]:
-        raise AcceptanceError(
-            f"the applied corpus contains {ids or 'nothing'}, but the candidate "
-            f"declares exactly {candidate.statement_id}"
+    if lane == "append":
+        before_ids = _statement_ids(before_snapshot[target_rel])
+        added = [sid for sid in ids if sid not in set(before_ids)]
+        if set(added) != set(declared_ids):
+            raise AcceptanceError(
+                f"the applied corpus added {added or 'nothing'}, but the "
+                f"candidate declares {declared_ids}"
+            )
+        if ids[:len(before_ids)] != before_ids:
+            raise AcceptanceError(
+                "append changed or reordered existing target-corpus statements"
+            )
+        acceptance.verified(
+            "declared_node_present_and_only_it",
+            f"the regenerated corpus appended exactly {declared_ids}",
         )
-    acceptance.verified(
-        "declared_node_present_and_only_it",
-        f"the regenerated corpus contains exactly {candidate.statement_id}",
-    )
+    else:
+        if ids != [candidate.statement_id]:
+            raise AcceptanceError(
+                f"the applied corpus contains {ids or 'nothing'}, but the "
+                f"candidate declares exactly {candidate.statement_id}"
+            )
+        acceptance.verified(
+            "declared_node_present_and_only_it",
+            f"the regenerated corpus contains exactly {candidate.statement_id}",
+        )
 
     detail = _validate_data(
         repo_root / "data", repo_root, repo_root, repo_root

@@ -204,5 +204,27 @@ Disclosures append; the registered text is not edited.
 
 ## 8. Adjudication — after implementation
 
-§7 above is frozen as registered. This section is filled after the
-gate, the merger, and the tests have run.
+§7 above is frozen as registered.
+
+| # | outcome | where it is checked |
+|---|---|---|
+| P1 | **CONFIRMED** — literal envelope against `seed_logic.py` still refused at `seed_ownership` with the orphan detail | `test_literal_envelope_against_existing_seed_still_refused`; `RegenerationConfinementTests` |
+| P2 | **CONFIRMED** — one-node append to the just-created `writestage_demo` corpus stages and accepts; seed bytes unchanged; append file written; both ids present | `test_append_one_node_accepts_without_rewriting_the_seed` |
+| P3 | **CONFIRMED** — colliding id refused at `append_collision`; tree digest unchanged | `test_colliding_id_is_refused_and_tree_is_identical` |
+| P4 | **CONFIRMED** — a `sys.executable` walk is still `declarative_seed` | `test_python_is_not_an_append` |
+| P5 | **CONFIRMED** — two-id append with `nodes_analyzed: 1` is refused | `test_two_node_append_is_confined_to_those_ids` |
+| P6 | **CONFIRMED** — undeclared delta refused on the append lane, same detail | `test_undeclared_delta_is_still_refused_on_the_append_lane` |
+| P7 | **CONFIRMED** — existing replacement-ownership tests still pass | `RegenerationConfinementTests` (13 tests) |
+
+**Disclosure 1 — the first append fixture dualized onto the node it
+was appending to.** A JOIN-domination law is the lattice dual of the
+MEET-domination fixture the new-corpus lane uses; `structural_unambiguity`
+correctly refused it. The append fixture is a ground `1 + 1 = 2`, which
+cannot dualize. The registered tests stand; the fixture was wrong, not
+the gate.
+
+**Disclosure 2 — MiniRepos have no `.git`.** The append lane's
+"committed seed" check cannot call `git ls-files` in the test fixture.
+Existence of the seed file is required always; the tracked check runs
+only when `repo_root/.git` exists. The real tree still refuses an
+untracked seed.

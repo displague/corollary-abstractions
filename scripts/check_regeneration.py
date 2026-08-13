@@ -47,6 +47,16 @@ def main() -> int:
         if r.returncode != 0:
             failures.append((seed.name, r.stderr.strip()[-400:]))
             print(f"  SEED FAILED: {seed.name}")
+    # Trusted appends are data, not seed Python. Apply them after every
+    # seed so a WRITE that landed data/<corpus>/appends/ still regenerates
+    # (docs/DESIGN-write-append.md).
+    try:
+        sys.path.insert(0, str(REPO / "scripts"))
+        from seed_appends import AppendError, apply_appends  # noqa: E402
+        apply_appends(REPO / "data")
+    except AppendError as exc:
+        failures.append(("seed_appends", str(exc)[:400]))
+        print(f"  APPEND FAILED: {exc}")
     diff = sh("git", "diff", "--stat", "--", "data").stdout.strip()
     drift = bool(diff)
     if drift:

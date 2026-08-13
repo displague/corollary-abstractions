@@ -2031,6 +2031,226 @@ class AcceptedWriteApplicationTests(WriteStageTestCase):
         )
 
 
+# --------------------------------------------------------------------------
+# Trusted append format (docs/DESIGN-write-append.md)
+# --------------------------------------------------------------------------
+
+STATEMENT_ID_B = "writestagedemo.arithmetic.one_plus_one"
+THEOREM_B = "Nat.one_add_one"
+ARTIFACT_B = "prover/candidate_proof_b.json"
+TRANSITIONS_B = [
+    {
+        "theorem": THEOREM_B,
+        "tactic": "decide",
+        "stateBefore": "\u22a2 1 + 1 = 2",
+        "stateAfter": "no goals",
+    }
+]
+
+
+def _join_node() -> dict:
+    node = copy.deepcopy(NODE)
+    node["statement_id"] = STATEMENT_ID_B
+    node["title"] = "One Plus One Is Two (Write-stage append fixture)"
+    node["formal_statement"] = {
+        "canonical_ascii": "1 + 1 = 2",
+        "canonical_latex": "1 + 1 = 2",
+        "equivalent_forms": [
+            {
+                "form_id": "ascii_ground",
+                "notation_system": "ascii",
+                "expression": "1 + 1 = 2",
+                "scope_note": "Ground arithmetic; cannot dualize onto a lattice law.",
+            }
+        ],
+    }
+    node["structural_signature"] = {
+        "archetype_id": "ground_one_plus_one",
+        "anonymized_template": "1 + 1 = 2",
+        "slot_schema": [
+            {
+                "slot_id": "GROUND_ONE",
+                "syntactic_category": "constant",
+                "semantic_role": "the_integer_one",
+            }
+        ],
+        "invariants": ["Fully ground: no matcher slots."],
+    }
+    node["verified_by"] = [
+        {"system": "lean4", "artifact": ARTIFACT_B, "reference": THEOREM_B}
+    ]
+    return node
+
+
+def append_source(
+    nodes: list[dict],
+    corpus: str,
+    seed_script: str,
+) -> str:
+    return json.dumps(
+        {
+            "kind": "append_nodes",
+            "schema_version": 1,
+            "seed_script": seed_script,
+            "corpus": corpus,
+            "statement_nodes": nodes,
+        },
+        ensure_ascii=False,
+        indent=2,
+    )
+
+
+class TrustedAppendTests(WriteStageTestCase):
+    """Slice A: append to an existing seed/corpus without rewriting the seed."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        (self.repo.root / ARTIFACT_B).write_text(
+            json.dumps(TRANSITIONS_B, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        self.repo.trust_artifact(ARTIFACT_B)
+
+    def _accept_new_corpus(self):
+        return accept_write(
+            self.candidate(), self.repo.root, self.repo.staging
+        )
+
+    def _append_candidate(self, nodes=None, **overrides):
+        nodes = nodes if nodes is not None else [_join_node()]
+        primary = nodes[0]["statement_id"]
+        delta = dict(EXPECTED_DELTA)
+        delta["nodes_analyzed"] = len(nodes)
+        base = dict(
+            statement_id=primary,
+            corpus=CORPUS,
+            seed_script=SEED,
+            seed_source=append_source(nodes, CORPUS, SEED),
+            artifact=ARTIFACT_B,
+            artifact_sha256=hashlib.sha256(
+                (self.repo.root / ARTIFACT_B).read_bytes()
+            ).hexdigest(),
+            reference=THEOREM_B,
+            transition_trace=tuple(TRANSITIONS_B),
+            expected_matcher_delta=delta,
+        )
+        base.update(overrides)
+        return self.candidate(**base)
+
+    def test_literal_envelope_against_existing_seed_still_refused(self) -> None:
+        record = self.stage(
+            self.candidate(
+                corpus="logic",
+                seed_script="scripts/seed_logic.py",
+                seed_source=seed_source(NODE, "logic"),
+            )
+        )
+        self.assertRefusedBy(record, "seed_ownership")
+        self.assertIn("orphan another corpus", record.refusal["detail"])
+
+    def test_python_is_not_an_append(self) -> None:
+        self._accept_new_corpus()
+        record = self.stage(
+            self.candidate(
+                seed_source=(
+                    "import sys\nfrom pathlib import Path\n"
+                    "raise SystemExit('exe=' + Path(sys.executable).as_posix())\n"
+                )
+            )
+        )
+        self.assertRefusedBy(record, "declarative_seed")
+
+    def test_append_one_node_accepts_without_rewriting_the_seed(self) -> None:
+        staging0, acceptance0 = self._accept_new_corpus()
+        self.assertEqual(staging0.outcome, STAGED_CANDIDATE, staging0.refusal)
+        seed_before = (self.repo.root / SEED).read_bytes()
+        tree_before = working_tree_digest(self.repo.root)
+
+        staging, acceptance = accept_write(
+            self._append_candidate(), self.repo.root, self.repo.staging
+        )
+        self.assertEqual(staging.outcome, STAGED_CANDIDATE, staging.refusal)
+        self.assertIsNotNone(acceptance)
+        self.assertEqual(acceptance.outcome, ACCEPTED)
+        self.assertEqual((self.repo.root / SEED).read_bytes(), seed_before)
+
+        corpus = json.loads(
+            (self.repo.root / "data" / CORPUS / "nodes.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        ids = [n["statement_id"] for n in corpus["statement_nodes"]]
+        self.assertEqual(ids, [STATEMENT_ID, STATEMENT_ID_B])
+        append_path = (
+            self.repo.root / "data" / CORPUS / "appends" / f"{STATEMENT_ID_B}.json"
+        )
+        self.assertTrue(append_path.is_file())
+        self.assertNotEqual(working_tree_digest(self.repo.root), tree_before)
+
+    def test_colliding_id_is_refused_and_tree_is_identical(self) -> None:
+        self._accept_new_corpus()
+        digest = working_tree_digest(self.repo.root)
+        colliding = copy.deepcopy(NODE)
+        record = self.stage(self._append_candidate(nodes=[colliding]))
+        self.assertRefusedBy(record, "append_collision")
+        self.assertEqual(working_tree_digest(self.repo.root), digest)
+
+    def test_undeclared_delta_is_still_refused_on_the_append_lane(self) -> None:
+        self._accept_new_corpus()
+        record = self.stage(
+            self._append_candidate(expected_matcher_delta=None)
+        )
+        self.assertRefusedBy(record, "matcher_delta_prediction")
+        self.assertIn("unregistered prediction", record.refusal["detail"])
+
+    def test_two_node_append_is_confined_to_those_ids(self) -> None:
+        self._accept_new_corpus()
+        second = _join_node()
+        third = copy.deepcopy(_join_node())
+        third["statement_id"] = "writestagedemo.boolean_laws.extra"
+        third["structural_signature"] = copy.deepcopy(
+            second["structural_signature"]
+        )
+        third["structural_signature"]["anonymized_template"] = (
+            "JOIN(PROP1, FALSITY) = PROP1"
+        )
+        third.pop("verified_by", None)
+        # Two ids emitted, one node declared in the matcher delta:
+        # the declared batch and the emitted batch must agree.
+        record = self.stage(
+            self._append_candidate(
+                nodes=[second, third],
+                expected_matcher_delta=EXPECTED_DELTA,  # nodes_analyzed: 1
+            )
+        )
+        self.assertEqual(record.outcome, REFUSED, record.refusal)
+        self.assertIn(
+            record.refusal["check"],
+            {"matcher_delta_prediction", "regeneration_confinement"},
+        )
+
+    def test_seed_plus_append_reproduces_the_applied_corpus(self) -> None:
+        self._accept_new_corpus()
+        _staging, _acceptance = accept_write(
+            self._append_candidate(), self.repo.root, self.repo.staging
+        )
+        corpus_path = self.repo.root / "data" / CORPUS / "nodes.json"
+        applied = corpus_path.read_bytes()
+        corpus_path.unlink()
+        result = subprocess.run(
+            [sys.executable, str(self.repo.root / SEED)],
+            cwd=str(self.repo.root),
+            capture_output=True,
+            text=True,
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        from seed_appends import apply_appends
+
+        apply_appends(self.repo.root / "data")
+        self.assertEqual(corpus_path.read_bytes(), applied)
+
+
 def _sha256(path: Path) -> str:
     import hashlib
 
