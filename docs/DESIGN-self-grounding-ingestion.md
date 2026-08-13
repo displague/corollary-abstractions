@@ -114,3 +114,43 @@ still unstarted) its most defensible shape: a structure-recovery claim the
 architecture wins *because* of its design, measured on a corpus large enough
 to be uncomfortable, against a null that a keyword baseline cannot beat by
 construction.
+
+## 6. Correction, before any measurement ran
+
+§3 said ISG "is a query over `reports/decompositions.json`, not new
+machinery". **That is wrong, and finding it now is why the design was
+written before the slice.**
+
+The committed ledger records, per constituent, its `channel`, an
+`owner_channels` TALLY, `recurs_in_n_statements`, and `instance_of_statements`
+— but **not the owner statement ids**. `same_corpus` / `prior_corpus` /
+`external` answer *what kind of relationship* an owner has to the node, never
+*which node* it was. "Grounded by another INGESTED node" is a question about
+owner identity, and it cannot be asked of the committed artifacts. (The owner
+sets do exist, inside `decompose.analyze`'s `channel_of`; they are discarded
+before the report is written.)
+
+Two honest routes, and the choice belongs to the v0.11 slice:
+
+1. **Emit owner ids per constituent** — a small additive field in
+   `decompose.py`, which makes ISG a real query and helps every future
+   ownership question. Cost: it changes `reports/decompositions.json` for
+   every node, so it must not be attempted while another slice is
+   regenerating ledgers; it lands on a quiet main, with its own
+   acknowledgment if any pin moves.
+2. **Measure a weaker, well-defined proxy that IS computable today**: the
+   fraction of an ingested node's grounded constituents whose *skeleton* also
+   occurs as a subterm of at least one other ingested node. That is exactly
+   the shape of the item-5 observation (`^(2, 30)` with
+   `recurs_in_n_statements: 2`), and it is a fact about shared structure
+   rather than about attributed ownership.
+
+They are not the same measurement and must not be reported as if they were:
+route 2 counts subterms two ingested statements HAVE IN COMMON, route 1
+counts subterms one ingested statement GROUNDS IN another. Route 2 will read
+higher, because sharing is symmetric and grounding is not. If the slice ships
+route 2 for speed, the release must say which one the number is.
+
+Recommended: route 1, because the owner id is the thing every later
+ownership question also wants, and because a proxy reported as the real
+measurement is how a project talks itself into believing a curve.
