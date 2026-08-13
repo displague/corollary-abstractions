@@ -15,7 +15,7 @@ not buried in prose. Two of them are the maintainer's, not mine.
 | 4 | **a real ingested source authored to a materially larger corpus**, ledgers recomputed | **MET on hundreds, not thousands** — item 4 merged (`5653b22`): the trusted `append_nodes` JSON format shipped (its own prerequisite, see §2), then a first wave of 251 parse-clean ground identities, 257 → 508 nodes / 26 → 27 corpora, formal-without-bridge, ledgers recomputed and byte-identical on regen. The remaining 12,681 unique-covered statements wait on a skeleton emitter (BACKLOG) |
 | 5 | one real end-to-end harness session that produces or revises a node | **MET** (item 5) — four legs recorded, node applied through the audited route |
 | 6 | updated assets whose notes explain winners, losers, and controls | **MET** — `experiments/ANALYSIS.md` carries every slice's numbers, negatives, and disclosures |
-| 7 | the complete suite green | **MET** — 1073 tests, ~300s |
+| 7 | the complete suite green | **MET** — 1084 tests, 4 skipped, on the merged tip |
 
 **RESOLVED at triage: the gate is met and v0.10.0 is cut now** (maintainer
 decision, §4). What the notes may honestly claim is bounded by what landed:
@@ -83,8 +83,8 @@ without the full suite green.
 
 ## 3. Maintainer decision #1 — the absorption rate-gap pin
 
-Standing since the quantifier slice and now **re-pinned by three consecutive
-slices against its original guard direction**:
+Standing since the quantifier slice and re-pinned by **four** consecutive
+slices against its original guard direction:
 
 | slice | rate gap | count floor (`e_best` > 4 × `a_best`) |
 |---|---|---|
@@ -92,6 +92,7 @@ slices against its original guard direction**:
 | quantifier/binder (v0.10 item 1) | 0.164 | holds, 4.3:1 |
 | programming (item 3) | 0.156 | holds |
 | recorded session (item 5) | **0.159** | holds, 387 > 4 × 86 |
+| item 4 first wave | **0.490** | holds and STRENGTHENS, 457 > 4 × 86 = 5.31:1 |
 
 The count floor — the load-bearing guard — has never been weakened. What
 moved is the *rate* reading: absorption's best-owner external rate leads the
@@ -100,8 +101,6 @@ re-pinned it at its measured value with an argument, which is defensible
 once and starts to look like ratcheting at three. The retracted inference
 ("absorption concentrates cross-discipline credit") currently rests on count
 dominance alone.
-
-| item 4 first wave | **0.490** | holds and STRENGTHENS, 457 > 4 × 86 = 5.31:1 |
 
 **DECIDED at triage: the < 0.12 rate pin is RETIRED, with the rationale
 recorded where the assertion used to be** (`tests/test_decompose_channels.py`).
