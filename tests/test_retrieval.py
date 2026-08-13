@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import hashlib
 import json
 import shutil
 import tempfile
@@ -101,7 +102,13 @@ class RetrievalTests(unittest.TestCase):
         self.assertIs(pointed.verdict, Verdict.VERIFIED)
 
     def test_short_nonexact_key_cannot_prefix_match_a_long_alias(self) -> None:
-        key = "7"
+        # The probe used to be "7". v0.10 item 2 ingested a node about
+        # `2^21 = 1 mod 7`, whose symbol lexicon declares the ground constant
+        # 7 — so "7" now has an EXACT alias and stopped being a probe for
+        # loose PREFIX matching. The guard is unchanged; only the key that
+        # is genuinely absent from the corpus moved. The companion test
+        # below pins that the new match is exact, not a prefix.
+        key = "7q"
         state = RetrievalState.from_unknown(
             self.executor,
             self.frame,
@@ -115,6 +122,27 @@ class RetrievalTests(unittest.TestCase):
         self.assertIs(result.verdict, Verdict.UNKNOWN)
         self.assertIsNone(result.next_state)
         self.assertIn("ABSTAIN", result.evidence)
+
+    def test_the_bare_numeral_seven_matches_exactly_not_by_prefix(
+        self,
+    ) -> None:
+        """Why the probe above had to move (v0.10 item 2).
+
+        A ground ingested node put the constant 7 in a symbol lexicon, so
+        the corpus now answers the key "7" — but by EXACT alias, which is
+        the mode the store is allowed to answer in. Nothing about the
+        prefix guard changed, and this pins the distinction rather than
+        leaving the moved probe unexplained.
+        """
+        result = self.store.query("7")
+        self.assertEqual(result.mode, "exact")
+        self.assertTrue(
+            all(
+                item.item_id.endswith("lean_workbook_10202")
+                for item in result.items
+            ),
+            [item.item_id for item in result.items],
+        )
 
     def test_unique_decomposition_only_key_can_bind_its_corpus_owner(self) -> None:
         key = "D⟨COMPOSE⟨?0:V, ?1:V⟩⟩"
@@ -416,6 +444,56 @@ class RetrievalTests(unittest.TestCase):
             self.assertFalse(proof.trusted)
             self.assertIn("1 extracted transitions", proof.text)
             self.assertIn("untrusted extraction", proof.text)
+
+    def test_the_manifest_pin_still_equals_the_original_hardcoded_digest(
+        self,
+    ) -> None:
+        """The second pin survives as a check, not as runtime logic.
+
+        Trust used to be one constant in `oracle_controller_demo`, correct
+        while the repo had exactly one proof artifact; v0.10 item 2 added a
+        second, so the loader now reads the manifest's pin. That is a wider
+        trust root, and this is the guard that the widening did not quietly
+        move the ORIGINAL artifact's answer: the manifest's pin for
+        `prover/sample_triples.json` must still be, byte for byte, the
+        digest that used to be hardcoded.
+        """
+        from oracle_controller_demo import TRUSTED_TRIPLES_SHA256
+
+        manifest = json.loads(
+            (REPO_ROOT / "prover" / "proof-artifact-manifest.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(
+            manifest["artifacts"]["prover/sample_triples.json"]["sha256"],
+            TRUSTED_TRIPLES_SHA256,
+        )
+
+    def test_an_unpinned_artifact_is_untrusted_even_if_it_parses(
+        self,
+    ) -> None:
+        """Absence from the manifest is untrust, not a free pass."""
+        from retrieval import _artifact_is_pinned
+
+        self.assertFalse(
+            _artifact_is_pinned(REPO_ROOT, "prover/not-in-manifest.json", "x")
+        )
+        self.assertFalse(
+            _artifact_is_pinned(
+                REPO_ROOT, "prover/ingested_triples.json", "0" * 64
+            )
+        )
+        self.assertTrue(
+            _artifact_is_pinned(
+                REPO_ROOT,
+                "prover/ingested_triples.json",
+                hashlib.sha256(
+                    (REPO_ROOT / "prover" / "ingested_triples.json")
+                    .read_bytes()
+                ).hexdigest(),
+            )
+        )
 
     def test_out_of_root_artifact_cannot_mint_a_proof_record(self) -> None:
         """Review F1 reproduction: containment is now the loader's too.

@@ -14,8 +14,8 @@
       "pct": 1.8
     },
     "corpus_node_tokens": {
-      "vocab_size": 817,
-      "mapped": 58,
+      "vocab_size": 826,
+      "mapped": 59,
       "pct": 4.0
     },
     "wordnet_lemmas": {
@@ -27,11 +27,11 @@
   "totals": {
     "meanings": 1460,
     "mapped_any": {
-      "count": 1394,
+      "count": 1395,
       "pct": 95.5
     },
     "unmapped": {
-      "count": 66,
+      "count": 65,
       "pct": 4.5
     }
   },
@@ -86,7 +86,6 @@
     "20-21",
     "20-55",
     "23-565",
-    "24-03",
     "24-07",
     "24-08",
     "22-51",
@@ -9674,7 +9673,9 @@
     {
       "id": "24-03",
       "gloss": "WITHOUT",
-      "mapped": []
+      "mapped": [
+        "corpus_node_tokens"
+      ]
     },
     {
       "id": "24-05",

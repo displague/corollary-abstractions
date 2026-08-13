@@ -3400,3 +3400,17 @@ now, and the runner is invoked with `-B`; the committed verdict's evidence
 digest is byte-identical across the fix, and the cold-cache run is now the
 same run as the warm one. The discipline-boundary caveat stands as written —
 it just was not the reason this one leaked.
+
+**Third disclosure — the WOLD reach number moved, and moved on PROSE.** The
+corpus-token target of the WOLD reach table above (dated 2026-08-12, earlier
+the same day) recounts `data/*/nodes.json` metadata tokens, so the two
+ingested nodes moved it: vocab 817 → **826**, mapped 58 → **59**, mapped-any
+1,394 → **1,395**, unmapped 66 → **65**. The newly mapped meaning is `24-03`
+= **WITHOUT** — which entered the token vocabulary from the phrase "formal
+WITHOUT a bridge" in `lean_workbook_10202`'s own `semantic_interpretation`,
+not from any mathematical content. Worth stating plainly: that target
+measures the corpus's PROSE vocabulary as much as its concept vocabulary, so
+it will drift with authoring style, and a reading of it as "concepts the
+corpus names" is generous by exactly that much. The table above stands as
+first measured; `experiments/wold_reach.json` carries the recount, and its
+regeneration test is what caught the drift.

@@ -79,7 +79,6 @@ from proof_artifacts import (
     resolve_contained_artifact,
     select_closing_transitions,
 )
-from oracle_controller_demo import TRUSTED_TRIPLES_SHA256
 from wordnet_store import WordNetIndex, WordNetSynset, lemma_key
 
 
@@ -156,6 +155,33 @@ MISS_CHAIN: tuple[Rung, ...] = (
     Rung.DERIVATION,
     Rung.TOOL,
 )
+
+
+def _artifact_is_pinned(
+    repo_root: Path, artifact: str, digest: str
+) -> bool:
+    """Does this artifact's digest match the manifest's pin for it?
+
+    Trust used to be ONE hardcoded constant — the sha256 of
+    `prover/sample_triples.json` — which was exactly right while the repo
+    had exactly one proof artifact. v0.10 item 2 added a second (the traced
+    `prover/ingested_triples.json`, itself backed by committed external
+    verifier verdicts), and a hardcoded single digest answers `untrusted`
+    for every artifact that is not the first one. The pin registry is
+    `prover/proof-artifact-manifest.json`, which the validator's ledger rung
+    already re-checks; this reads the same pin rather than keeping a second,
+    silently narrower list. An artifact absent from the manifest, a manifest
+    that will not parse, or a digest that does not match stays UNTRUSTED —
+    the record is then `conjectured`, never dropped.
+    """
+
+    manifest_path = repo_root / "prover" / "proof-artifact-manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        entry = manifest["artifacts"][artifact]
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+    return isinstance(entry, dict) and entry.get("sha256") == digest
 
 
 def item_match_mode(item: "RetrievalItem", key: str) -> str | None:
@@ -386,7 +412,9 @@ class UnifiedKnowledgeStore:
                     artifact_digest = hashlib.sha256(
                         artifact_path.read_bytes()
                     ).hexdigest()
-                    trusted_artifact = artifact_digest == TRUSTED_TRIPLES_SHA256
+                    trusted_artifact = _artifact_is_pinned(
+                        repo_root, entry["artifact"], artifact_digest
+                    )
                     proof_artifacts_trusted.append(trusted_artifact)
                     detail = entry["system"]
                     if reference:
