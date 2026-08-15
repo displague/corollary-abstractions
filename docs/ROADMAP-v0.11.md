@@ -1,5 +1,10 @@
 # v0.11 roadmap — measure what ingestion actually bought
 
+The cycle's forward-looking design (for v0.12, written before the
+blog) is [DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md).
+Triage: [TRIAGE-v0.11.md](TRIAGE-v0.11.md). This file is not yet
+closed — the tag has not been cut.
+
 v0.10 authored ingested statements at hundreds and learned two things that
 set this cycle's agenda: a capability-blind baseline still wins on pair
 count while losing on precision, and ingested statements ground each other
