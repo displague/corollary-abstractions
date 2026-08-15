@@ -2504,43 +2504,43 @@ wants its own adversarial review, not a release-eve change.
 
 ## TOKEN_RE is missing the standalone `<` `>` already in RELATIONS (v0.10 item 4)
 
-- **51 of 302 unique-covered ground-arithmetic Lean-workbook goals fail
-  to tokenize, because `TOKEN_RE` matches `<=` `>=` but not standalone
-  `<` `>`.** `RELATIONS` already contains both glyphs; the coverage
-  instrument marks the goals `full_ok`; `tokenize` raises
-  `unexpected character`. This is the exact "covered without a skeleton
-  emitter" wall, reduced to a one-character-class hole. Item 4's first
-  wave filtered them out rather than widen the matcher (collision
-  boundary is write_stage / new seed / new corpus, not
-  `match_signatures.py`). The fix is `TOKEN_RE`'s character class, with
-  a prediction that existing `<=` `>=` still win (they are earlier
-  alternatives) and that committed parse_problems stays empty. Two
-  further fails are `√(expr)` rather than `√digits`, which the seed's
-  `SQRT_BARE` does not wrap.
+- **SHIPPED** with the v0.11 skeleton emitter (`docs/DESIGN-skeleton-emitter.md`
+  P-E1). `TOKEN_RE` now matches `<` `>` after `<=` `>=`. All 51 first-wave
+  misses became authorable (302 ground). Two `√(expr)` cases ride the
+  emitter's `SQRT` rewrite, not a second token-class hole. parse_problems
+  stays 0.
 
 ## specialize.py is already minutes-scale at 508 nodes (v0.10 item 4)
 
-- **`find_specializations` is exhaustive pairwise search.** 257 nodes
-  were comfortable; 508 (this wave) ran past 15 minutes of one core
-  with a constant 230 MB RSS before finishing. The next ingest step
-  toward the 12k unique-covered set is not authorable until this is
-  bounded — a head-indexed candidate filter, a skip for fully-ground
-  patterns that cannot bind, or a declared pair cap. `decompose.py`
-  has the same shape (per-constituent pattern attempts against a
-  growing form inventory). Filed from the first-wave ledger regen,
-  not patched inline: a scoring-adjacent index change needs its own
-  prediction.
+- **PARTIAL — bounded for ingested scale, not solved as a general index.**
+  v0.11 P-E4 skips any specialize pair whose general or specific is in
+  an ingested discipline. The 713 curated edges are unchanged; the run
+  finishes in minutes at 12,771 nodes. The exhaustive pairwise search
+  is still the algorithm on the curated graph. A head-indexed filter
+  remains the follow-on if curated scale grows. `decompose.py` got the
+  sibling skip (ingested-only forms are not patterns; ingested
+  statements skip `pattern_cover`, P-E5b).
 
 ## Remainder of the 12,681 unique-covered set needs a skeleton emitter
 
-- **Item 4's first wave is 251 parse-clean ground identities, not the
-  ~11,189 the roadmap named.** Most unique-covered goals still carry
-  binders, `Real.sin`, or inequalities the coverage instrument accepts
-  without emitting a matcher template. Authoring them without an emitter
-  would invent Lean-flavoured templates or drop the zero-parse-problems
-  rule. The emitter is a separate design; this is not a silent expansion
-  of the first wave. `docs/DESIGN-item4-authoring.md` §1 registered the
-  cut before the seed ran.
+- **SHIPPED** (`docs/DESIGN-skeleton-emitter.md`). 12,514 authored
+  (302 ground + 12,212 emitted); **123 excluded**, bucketed in
+  `experiments/lean_workbook_emit.json`. Dominant exclusions: matcher
+  `parse_fail` 54, chained inequalities 16, superscript inverse `⁻¹`,
+  primes in names, set-builder braces. The matcher was not widened.
+- **The test suite independently reloads the 12k-node graph.**
+  `analyze` (~4 min), `load_nodes` (~90 s), and `measure` (~90 s) each
+  run from several tests. A full `min_family=1` analyze was 20+ minutes
+  and is skipped above 1,000 statements. A shared fixture or a curated-
+  only analyze path would bring the suite back under ten minutes.
+- **`reports/decompositions.json` is not regenerated at 12k scale.**
+  Live `analyze` is 181,867 exact constituents with full owner lists —
+  a hundred-megabyte artifact. The committed report stays the pre-scale
+  file. The self-grounding curve did not need that artifact: it is a
+  live `analyze_loaded` query with in-memory overlays
+  (`experiments/self_grounding_curve.json`). A summary-only decompose
+  report remains the follow-on if a committed ledger at this scale
+  becomes load-bearing.
 
 ## Parked at v0.10.0 release triage (no named dependant in ROADMAP-v0.11)
 
@@ -2554,12 +2554,14 @@ carried a third time under the word "open".
   it serves no v0.11 headline item. Unpark when a cycle has a claim that needs
   deeper search — the likely trigger is a verifier-backed synthesis lane, not
   the corpus work.
-- **The groundedness gate.** Carried since v0.9 item 5. v0.10 changed what it
-  would be gating: with 251 ground identities in the corpus, groundedness now
-  moves with corpus composition (the same effect that retired the absorption
-  rate-gap pin), so a gate written against today's numbers would encode a
-  regime rather than a standard. Unpark after v0.11 item 1 says whether
-  self-grounding is a real signal or a composition artifact.
+- **The groundedness gate.** Carried since v0.9 item 5. v0.11 item 1
+  answered the parking condition: self-grounding is a real signal
+  (S1–S4 fired; the route-2 proxy is *not* the signal — it reads 1.0
+  of grounded constituents while route-1 ISG of those is 0.543). A
+  gate is now justifiable as a design, not a regime snapshot. Unparked
+  for the next cycle that wants an admission signal; not designed here.
+  Any gate must still beat the conservative/`external_lower` bracket
+  and must not treat the proxy as ownership.
 
 Both were honestly sequenced behind corpus work each time they were carried;
 naming that is the point of the rule, not blaming the deferral.

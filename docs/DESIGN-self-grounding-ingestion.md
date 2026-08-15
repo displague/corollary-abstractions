@@ -227,3 +227,45 @@ much of the apparent self-grounding is mere co-occurrence. If the two are
 close, the ledger's owner precedence is doing little work on ground
 statements; if the proxy is much higher, that difference is itself the
 finding. The release reports both, labelled.
+
+## 9. Adjudication (appended after the run; §1–§8 unedited)
+
+Committed generator: `scripts/measure_self_grounding.py` →
+`experiments/self_grounding_curve.json`. Selection seed 20260814.
+Null seeds 0/1/2. Decomposition only; specialize not run. Pattern
+membership off (equivalent for this metric: ingested statements already
+skip `pattern_cover`).
+
+| N | ISG_real | ISG_null mean | gap | XSG_real |
+|---:|---:|---:|---:|---:|
+| 8 | 0.018 | 0.059 | −0.041 | 0.423 |
+| 32 | 0.098 | 0.122 | −0.024 | 0.400 |
+| 128 | 0.229 | 0.183 | +0.046 | 0.428 |
+| 512 | 0.308 | 0.266 | +0.042 | 0.413 |
+| 12,515 | 0.473 | 0.410 | +0.063 | 0.397 |
+
+- **S1 FIRED.** At N=12,515, ISG_real 0.473 > ISG_null 0.410 by 0.063,
+  against a null spread of 0.0014. Raw: 98,499 / 208,404 considered
+  subterms have an ingested most-independent owner.
+- **S2 FIRED.** Last gap > first gap; Spearman(N, gap) = 0.90. The
+  sequence is not a staircase: 128 → 512 dips 0.046 → 0.042, then
+  12,515 rises to 0.063. Compounding is the trend, including a sign
+  change — real is *below* the null at N=8 and 32 (shared squares and
+  numerals, the small-N noise the design warned about) and above it
+  from N=128.
+- **S3 FIRED.** ISG rose 0.455 from N=8 to N=12,515; XSG fell 0.026
+  (0.423 → 0.397). The ingested layer gained owners without dropping
+  the curated connection.
+- **S4 FIRED**, and it is stronger than S1. Dropping `^(?0:V, 2)`
+  (6,870 host statements, 26,321 occurrences) raises ISG_real to 0.541
+  and the gap to 0.127. The popular term was XSG-heavy — squares the
+  curated algebra already owns — so removing it unmasks more
+  self-grounding, rather than carrying the curve.
+
+**Route-2 control.** At N=12,515 the proxy (any ingested co-host) is
+0.99997 of grounded constituents; ISG_of_grounded is 0.543. The
+0.457 gap is the finding §8 said to label: sharing is nearly
+universal on this layer, grounding is not. Reporting the proxy as ISG
+would have been a 1.0 dressed as compounding.
+
+Mixed winning-channel owners: 2 constituents. Not a rounding story.

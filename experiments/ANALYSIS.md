@@ -3595,3 +3595,128 @@ needed scoring-adjacent skips (fully-ground trees are not specialize
 endpoints; slot-free trees cannot be decompose patterns) to finish
 inside the ledger timeout; the 713 pre-ingest specialization edges are
 byte-identical.
+
+---
+
+## v0.11 prerequisite — skeleton emitter for the unique-covered remainder
+
+Registered in `docs/DESIGN-skeleton-emitter.md` before the emitter
+authored any new node. Bucket census of the 12,681 was measured
+read-only before the emitter existed.
+
+**What landed.** A Lean-surface → matcher-template emitter
+(`scripts/emit_skeleton.py`). `TOKEN_RE` accepts standalone `<` `>`
+(`<=` `>=` still win). Seed emits **12,514** ingested nodes (302
+ground + 12,212 emitted) into `data/lean_workbook/nodes.json`. **123**
+excluded, bucketed in `experiments/lean_workbook_emit.json`. Corpus
+508 → **12,771**. Formal without `verified_by`.
+
+**Matcher.** parse_problems **0**, slot_schema_gaps **0**.
+`group_counts` `{35,36,35,37,5}` → `{1027,972,971,973,5}`. Shared
+inequality skeletons twin (P-E3).
+
+**Ledgers, bounded.** specialize skips ingested endpoints: **713**
+edges unchanged (P-E4). decompose skips ingested-only patterns and
+skips `pattern_cover` on ingested statements (P-E5b, disclosed after
+an 8-minute no-output run). Exact **181,867**, pattern **88** (was
+100: exact now owns former pattern-only skeletons), mean **0.862**,
+statements-with-constituents **12,612**. Graph same_corpus 0.466 /
+external 0.391; `lean_workbook.ground.v1` is same-corpus-dominant
+(0.473 > 0.387). That is the curve's substrate, not S1–S4.
+
+**Honest limit.** `reports/decompositions.json` is not rewritten at
+this scale (181k constituents × owner lists). Live `analyze` is the
+pin source.
+
+---
+
+## v0.11 item 1 — self-grounding curve against its null
+
+Registered in `docs/DESIGN-self-grounding-ingestion.md` before the
+12k corpus existed. Route 1 (owner ids), decided in writing before
+this run. Generator: `scripts/measure_self_grounding.py`. Specialize
+was not invoked. Pattern membership off; equivalent here because
+ingested statements already skip `pattern_cover`.
+
+**The question.** As ingested nodes go from 8 to 12,515, does the
+share of considered subterms whose most-independent owner is another
+ingested node rise faster than a distribution-matched synthetic null?
+
+**S1–S4 all FIRED.**
+
+| N | ISG_real | ISG_null | gap | XSG_real | considered (real) |
+|---:|---:|---:|---:|---:|---:|
+| 8 | 0.018 | 0.059 | −0.041 | 0.423 | 111 |
+| 32 | 0.098 | 0.122 | −0.024 | 0.400 | 492 |
+| 128 | 0.229 | 0.183 | +0.046 | 0.428 | 1,939 |
+| 512 | 0.308 | 0.266 | +0.042 | 0.413 | 8,546 |
+| 12,515 | 0.473 | 0.410 | +0.063 | 0.397 | 208,404 |
+
+Null spread at N=12,515 is 0.14 points (three seeds). The 6.3-point
+gap is ~45× that spread.
+
+Reading:
+
+- **Small N is the design's own warning.** At 8 and 32 the real layer
+  sits *below* the null. Two shared squares (`^(?0:V, 2)` is the most
+  common real subterm at every N) and a handful of numerals do not
+  beat random trees drawn from the same operator/numeral inventory.
+  A curve stopped at hundreds could have been reported as "flat."
+- **The sign flips by N=128 and the last gap is the largest.**
+  Spearman(N, gap) = 0.90. 128 → 512 dips 0.046 → 0.042 (not a
+  staircase); 12,515 is 0.063. Compounding is the trend.
+- **XSG barely moves.** 0.423 → 0.397. The ingested layer did not
+  buy self-grounding by shedding the curated one. S3's load-bearing
+  half.
+- **S4 is stronger than S1, which is the opposite of the feared
+  failure.** Dropping `^(?0:V, 2)` (6,870 hosts, 26,321 occurrences)
+  *raises* ISG_real to 0.541 and the gap to 0.127. The popular term
+  is XSG-heavy — squares curated algebra already owns — so it was
+  diluting the rate, not carrying it.
+- **The proxy is almost 1.0 and is not the measurement.** At full N,
+  181,270 / 181,276 grounded constituents have some ingested
+  co-host (proxy 0.99997); only 98,499 have an ingested
+  most-independent owner (ISG_of_grounded 0.543). Route 2 would have
+  published "everything compounds." Mixed winning-channel owners: 2.
+
+**Null honesty.** Synthetic trees, sampled from the observed head /
+arity / numeral / slot / relation / size / discipline inventory, are
+systematically shallower than the real Lean statements (68k vs 208k
+considered at the same N). Smaller trees share `inv` / `neg` more
+readily, which *raises* ISG_null. The real curve beat a null that
+was easy to share and still won on owner-attributed grounding.
+
+**What this is not.** Self-grounding is a structural fact about the
+graph. It is not correctness, usefulness, or proof. The 12k nodes
+remain formal-without-bridge.
+
+---
+
+## v0.11 item 2 — one figure of merit for the bag
+
+Registered in `docs/DESIGN-fair-fight.md` before this re-run. The
+figure of merit is bag precision against typed twins. The bag was
+not retuned (glyphs still `{+,-,*,/,^,=}`).
+
+**FF1–FF5 all FIRED.**
+
+| slice | nodes | bag pairs | matcher pairs | bag precision | k |
+|---|---:|---:|---:|---:|---:|
+| 257 prior (v0.10) | 257 | 4,345 | 88 | 2.03% | 0 |
+| 508 combined (v0.10) | 508 | 7,622 | 96 | 1.26% | 0 |
+| 256 curated (now) | 256 | 4,341 | 88 | 2.03% | 0 |
+| 12,515 ingested | 12,515 | 9,010,102 | 1,879 | 0.0209% | 0 |
+| 12,771 full | 12,771 | 9,041,744 | 1,991 | **0.0220%** | 1 |
+
+Matcher precision 1,990/1,991 = 0.9995. The one miss is
+`leanworkbook.skel.lean_workbook_49137` vs
+`trigonometry.identities.double_angle_cosine` (emitter `+ -(...)`
+vs curated infix `-`). Size-matched draw (seed 20260814): 1 twin
+in 1,991 bag pairs.
+
+The skeptic sentence, as registered: the bag still wins on count
+and still loses on the only figure of merit that does not restate
+its definition, and the matcher misses only the print-convention
+pair. F1 against either gold is `2p/(1+p)` of bag precision — a
+transform, not a second measurement. Regenerable:
+`scripts/measure_operator_bag.py`.

@@ -51,6 +51,18 @@ load-bearing rather than a footnote.
 **Prerequisite, ordered before it:** the **skeleton emitter** for the
 remaining 12,681 unique-covered statements (carried from v0.10 item 4).
 Named dependant: this item — the curve needs thousands, not hundreds.
+**SHIPPED** on `feature/v011-skeleton-emitter`: 12,514 authored
+(302 ground + 12,212 emitted), 123 excluded with census
+(`experiments/lean_workbook_emit.json`, `docs/DESIGN-skeleton-emitter.md`).
+Corpus 508 → 12,771.
+
+**SHIPPED** (this item): route 1, S1–S4 all **FIRED**. At N=12,515
+ISG_real 0.473 vs ISG_null 0.410 (spread 0.0014). The gap changes
+sign: real is below the null at N=8/32 and above it from N=128.
+S4 is stronger than S1 (gap 0.127 after dropping `^(?0:V, 2)`).
+Route-2 proxy at full N is 1.000 of grounded vs ISG_of_grounded
+0.543 — sharing is not grounding. Regenerable:
+`scripts/measure_self_grounding.py`.
 
 ## 2. Make the baseline comparison a fair fight (headline)
 
@@ -69,6 +81,12 @@ claim victory.
 **Acceptance:** one registered metric, one table, and a sentence a skeptic
 can hold the project to.
 
+**SHIPPED.** Design registered in [DESIGN-fair-fight.md](DESIGN-fair-fight.md)
+before the 12,771-node re-run. Figure of merit: bag precision against
+typed twins = **0.0220%** (1,990 / 9,041,744). Matcher 1,991 pairs at
+precision 0.9995; the one miss is the named print-convention pair.
+FF1–FF5 all **FIRED**. Regenerable: `scripts/measure_operator_bag.py`.
+
 ## 3. Programming discipline, second wave (carried from v0.10 item 3)
 
 Item 3 shipped three verified-code nodes and a twin result against a blind
@@ -77,6 +95,10 @@ whether the `python-tests` verdict vocabulary decision (a citation of a
 committed check, never PROVEN) survives contact with more code.
 **Named dependant:** item 2's fair-fight comparison, which is stronger with
 code twins in the sample.
+**Still open.** Items 1 and 2 shipped on this branch; this wave did
+not start. The vocabulary decision (a citation, never PROVEN) is
+untested at volume. Next slice, not a silent park — item 2's figure
+of merit does not need code twins to be well-defined.
 
 ## 4. The external benchmark (carried a THIRD time — schedule or park)
 
@@ -91,16 +113,25 @@ construction. If item 1 returns a flat curve, **this item is parked in
 BACKLOG in writing**, because the architecture would then have no
 structure-recovery claim worth benchmarking.
 
+**SCHEDULED, not parked.** Item 1 beat its null (S1–S4 fired). The
+curve *is* the structure-recovery claim: at thousands of ingested
+nodes, owner-attributed self-grounding outruns a distribution-matched
+synthetic null, and a keyword / operator-bag baseline cannot produce
+that gap by construction (item 2: bag precision 0.0220% on the same
+graph). The next cycle runs this claim as an external benchmark —
+same ISG question, a held-out source, a keyword baseline that is
+forbidden from seeing owner ids. Not started this slice.
+
 ## 5. Carried lanes, each with its dependant named
 
 | lane | named dependant | disposition |
 |---|---|---|
-| Skeleton emitter for the 12,681 remainder | item 1 | **prerequisite**, ordered first |
+| Skeleton emitter for the 12,681 remainder | item 1 | **SHIPPED** (12,514 authored, 123 excluded) |
 | Verdict-backed ingestion as a RULE (a manifest entry declaring a source must carry a PASS) | item 3 | carried |
-| `TOKEN_RE` missing standalone `<` `>` | item 1 (51 statements it excluded) | carried |
-| `specialize.py` cost at scale | item 1 (the curve re-runs ledgers) | carried |
+| `TOKEN_RE` missing standalone `<` `>` | item 1 (51 statements it excluded) | **SHIPPED** with the emitter (P-E1) |
+| `specialize.py` cost at scale | item 1 (the curve re-runs ledgers) | **PARTIAL** — ingested endpoints skipped; 713 curated edges unchanged |
 | Proof-search depth | *none* | **parked** in BACKLOG |
-| Groundedness gate | *none* | **parked** in BACKLOG |
+| Groundedness gate | *none* | **unparked** in BACKLOG — item 1 said the signal is real; not designed this slice |
 | Physics / affect / oscillation / visual rungs | *none* | remain parked |
 
 ## 6. Governance

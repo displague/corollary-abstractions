@@ -13,6 +13,45 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Ingestion compounds, and the proxy would have lied about it (v0.11
+  item 1).** At 12,515 ingested nodes, 47.3% of considered subterms have
+  another ingested node as their most-independent owner, against a
+  distribution-matched synthetic null of 41.0% (spread 0.14 points).
+  The gap changes sign with scale: real is *below* the null at N=8 and
+  32 and above it from N=128. Dropping the single most common subterm
+  (`^(?0:V, 2)`, 6,870 hosts) *widens* the gap to 12.7 points — the
+  popular term was curated-owned, not the carrier. The rejected
+  shared-skeleton proxy reads 1.000 of grounded constituents at the
+  same N; route-1 ISG of those same constituents is 0.543. Sharing is
+  nearly universal; grounding is not. S1–S4 all fired. Regenerable:
+  `scripts/measure_self_grounding.py`. Status: **empirical**.
+
+- **The bag's figure of merit at thousands is 0.022% (v0.11 item 2).**
+  On 12,771 nodes the operator-bag forms 9,041,744 pairs at 0.0220%
+  precision against typed twins; the matcher forms 1,991 at 99.95%.
+  The one miss is the already-named double-angle print convention.
+  A size-matched draw from the bag recovers 1 twin in 1,991. Count
+  still belongs to the bag; the only number that does not restate the
+  bag's definition belongs to the matcher. FF1–FF5 all fired.
+  Regenerable: `scripts/measure_operator_bag.py`. Status: **empirical**.
+
+- **The first ingested-to-curated typed twin is the double-angle cosine
+  (v0.11 emitter).** `leanworkbook.skel.lean_workbook_49137`
+  (`COS(2*theta) = COS(theta)^2 + -(SIN(theta)^2)`) typed-twins
+  `trigonometry.identities.double_angle_cosine`. The operator-bag
+  misses the pair because the emitter prints subtraction as `+ -(...)`
+  (a `+` glyph) and the curated node writes infix `-`. Matcher
+  precision against the bag is therefore 1 − 1/N, not 1.0 — the first
+  break of item 4's P3 at thousands. Status: **exact**.
+
+- **The skeleton emitter authored thousands; that is substrate for the
+  curve, not the curve (v0.11 prerequisite).** 12,514 unique-covered
+  Lean-workbook statements now have matcher templates (302 ground +
+  12,212 emitted); 123 remain excluded, bucketed
+  (`experiments/lean_workbook_emit.json`). Corpus 508 → 12,771. The
+  measurement that uses this layer is the self-grounding curve above.
+  Status: **empirical** (substrate).
+
 - **The ingested layer grounds itself at hundreds of nodes (v0.10 item 4).**
   614 of 681 exact constituents inside `lean_workbook.ground.v1` are
   `same_corpus`. A third statement now shares `^(2, 30)` with the two

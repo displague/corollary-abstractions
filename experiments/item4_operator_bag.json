@@ -1,5 +1,5 @@
 {
-  "schema": "item4_operator_bag.v1",
+  "schema": "item4_operator_bag.v2",
   "glyphs": [
     "+",
     "-",
@@ -8,61 +8,140 @@
     "^",
     "="
   ],
+  "figure_of_merit": "operator_bag.precision against typed twins",
+  "design": "docs/DESIGN-fair-fight.md",
   "parse_problems": 0,
   "all": {
-    "nodes": 508,
+    "nodes": 12771,
     "matcher": {
-      "pairs": 96,
-      "precision": 1.0,
-      "recall": 0.012595119391235896
+      "pairs": 1991,
+      "precision": 0.9994977398292315,
+      "recall": 0.00022009028346743726
     },
     "operator_bag": {
-      "pairs": 7622,
-      "precision": 0.012595119391235896,
-      "recall": 1.0
+      "pairs": 9041744,
+      "precision": 0.00022009028346743726,
+      "recall": 0.9994977398292315
     },
-    "intersection": 96,
-    "only_matcher": 0,
-    "only_bag": 7526
+    "intersection": 1990,
+    "only_matcher": 1,
+    "only_matcher_pairs": [
+      [
+        "leanworkbook.skel.lean_workbook_49137",
+        "trigonometry.identities.double_angle_cosine"
+      ]
+    ],
+    "only_bag": 9039754,
+    "figure_of_merit": 0.00022009028346743726,
+    "size_matched_draw": {
+      "drawn": 1991,
+      "twins": 1,
+      "precision": 0.0005022601707684581,
+      "exhaustive": false,
+      "seed": 20260814
+    },
+    "draw_se": 0.0003324428582633814,
+    "draw_within_3se": true
   },
   "prior": {
-    "nodes": 257,
+    "nodes": 256,
     "matcher": {
       "pairs": 88,
       "precision": 1.0,
-      "recall": 0.020253164556962026
+      "recall": 0.0202718267680258
     },
     "operator_bag": {
-      "pairs": 4345,
-      "precision": 0.020253164556962026,
+      "pairs": 4341,
+      "precision": 0.0202718267680258,
       "recall": 1.0
     },
     "intersection": 88,
     "only_matcher": 0,
-    "only_bag": 4257
+    "only_matcher_pairs": [],
+    "only_bag": 4253,
+    "figure_of_merit": 0.0202718267680258,
+    "size_matched_draw": {
+      "drawn": 88,
+      "twins": 2,
+      "precision": 0.022727272727272728,
+      "exhaustive": false,
+      "seed": 20260814
+    },
+    "draw_se": 0.01502304283407544,
+    "draw_within_3se": true
   },
   "ingested": {
-    "nodes": 251,
+    "nodes": 12515,
     "matcher": {
-      "pairs": 8,
+      "pairs": 1879,
       "precision": 1.0,
-      "recall": 0.005372733378106112
+      "recall": 0.00020854369906134248
     },
     "operator_bag": {
-      "pairs": 1489,
-      "precision": 0.005372733378106112,
+      "pairs": 9010102,
+      "precision": 0.00020854369906134248,
       "recall": 1.0
     },
-    "intersection": 8,
+    "intersection": 1879,
     "only_matcher": 0,
-    "only_bag": 1481
+    "only_matcher_pairs": [],
+    "only_bag": 9008223,
+    "figure_of_merit": 0.00020854369906134248,
+    "size_matched_draw": {
+      "drawn": 1879,
+      "twins": 1,
+      "precision": 0.0005321979776476849,
+      "exhaustive": false,
+      "seed": 20260814
+    },
+    "draw_se": 0.0003331116769929892,
+    "draw_within_3se": true
   },
   "group_counts": {
-    "shape": 35,
-    "typed": 36,
-    "family": 35,
-    "aliased": 37,
+    "shape": 1027,
+    "typed": 972,
+    "family": 971,
+    "aliased": 973,
     "mirror": 5
   },
-  "nodes_analyzed": 508
+  "nodes_analyzed": 12771,
+  "adjudication": {
+    "FF1": {
+      "fired": true,
+      "bag_precision": 0.00022009028346743726,
+      "prior_combined": 0.0126
+    },
+    "FF2": {
+      "fired": true,
+      "k": 1,
+      "matcher_pairs": 1991,
+      "named_pairs": [
+        [
+          "leanworkbook.skel.lean_workbook_49137",
+          "trigonometry.identities.double_angle_cosine"
+        ]
+      ]
+    },
+    "FF3": {
+      "fired": true,
+      "bag_recall_vs_matcher": 0.9994977398292315,
+      "matcher_precision_vs_bag": 0.9994977398292315
+    },
+    "FF4": {
+      "fired": true,
+      "draw": {
+        "drawn": 1991,
+        "twins": 1,
+        "precision": 0.0005022601707684581,
+        "exhaustive": false,
+        "seed": 20260814
+      },
+      "se": 0.0003324428582633814
+    },
+    "FF5": {
+      "fired": true,
+      "ingested": 0.00020854369906134248,
+      "curated": 0.0202718267680258
+    }
+  }
 }
