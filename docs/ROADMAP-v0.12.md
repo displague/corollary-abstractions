@@ -10,6 +10,16 @@ The design is committed and its predictions are frozen:
 during v0.11 triage *before* the v0.11 blog, so the next question
 could not be chosen to flatter the post.
 
+Two later steering notes, also written before the v0.11 tag, name
+what H1–H6 are permission for and do not replace them:
+[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md) (the
+leftover is a budgeted edit; P-BR2 parks a family-holdout ranker
+without a second PASS-not-twin cell) and
+[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md)
+(the first emergent programming measurement is WRITE recovery;
+P-Z1–P-Z4 wait on an unsaturated non-programming fit). Neither
+note is a v0.12 headline. Neither is a ranker run.
+
 **House rule (kept):** every carried lane names the headline item
 that depends on it, or is parked in BACKLOG with a reason.
 

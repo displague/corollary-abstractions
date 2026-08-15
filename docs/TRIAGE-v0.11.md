@@ -2,9 +2,12 @@
 
 Written before the release notes so the arguable calls are visible as
 calls. The forward-looking design for v0.12 is committed first:
-[DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md). The blog
-is not written yet; the design is the thing it is not allowed to
-choose after.
+[DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md). Two
+steering notes sit beside it and do not replace it:
+[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md) and
+[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md).
+The blog is not written yet; the designs are the thing it is not
+allowed to choose after.
 
 ## 1. Release gate
 
