@@ -91,3 +91,10 @@ look like chance. A seeded Goedel-Pset sample is the scale test.
 If the shape dies, Lean-workbook compounded and the architecture
 did not. That is the more interesting answer, and it is the one
 we are obliged to prefer if the holdout gives it to us.
+
+This post is the argument, not the inventory. After it was
+drafted, a second programming wave put tests at volume without
+calling them proofs, and a drift audit found the live prompt
+v0.8 said was shipped still exits after a liveness list. Those
+are in the [release notes](../RELEASE-v0.11.0.md). They are not
+this finding.

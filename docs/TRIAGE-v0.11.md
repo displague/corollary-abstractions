@@ -2,12 +2,13 @@
 
 Written before the release notes so the arguable calls are visible as
 calls. The forward-looking design for v0.12 is committed first:
-[DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md). Two
-steering notes sit beside it and do not replace it:
-[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md) and
-[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md).
-The blog is not written yet; the designs are the thing it is not
-allowed to choose after.
+[DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md). Steering notes sit beside it and do not replace it:
+[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md),
+[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md),
+[DESIGN-live-session.md](DESIGN-live-session.md).
+The blog leads with the sign flip
+([the-curve-changed-sign.md](blog/the-curve-changed-sign.md));
+the designs are the thing it is not allowed to choose after.
 
 ## 1. Release gate
 
@@ -59,6 +60,16 @@ it with a written design is not a fourth silent carry — the parking
 condition was evaluated (curve was not flat) and the claim is
 specified. A fourth cycle that does not run H1–H6 owes a park.
 
+**vs v0.8, the lost surface.** v0.8 item 1 asked for a live session
+with a text prompt. The release said the system can now be driven.
+What a person can type today is still nothing: the session program
+prints a liveness list and exits. v0.9 called that an earned
+foundation. v0.11's first draft omitted the prompt from the
+roadmap. That is focus attrition, not a decision. It is named here
+and scheduled as v0.12 item 5, after the curve, with a dependant
+(write-recovery typability). Implementing it inside this tag would
+choose v0.13 from the post.
+
 ## 3. Carried lanes into v0.12
 
 | lane | named dependant in v0.12 | disposition |
@@ -70,6 +81,10 @@ specified. A fourth cycle that does not run H1–H6 owes a park.
 | `specialize.py` general index | *none* | stays PARTIAL / parked |
 | Proof-search depth | *none* | stays parked |
 | Physics / affect / visual | *none* | stay parked |
+| Live TTY / one typed line (v0.8 claimed “driven”) | item 5 of v0.12 (typability for write-recovery) | **resurfaced** — notes said shipped; `harness.py` still exits after the boot list. Not implemented this cycle. Design: DESIGN-live-session.md |
+| Chat-shaped HTTP skin | *none* | stays parked |
+| Open-English authoring of new nodes | *none* | stays parked (last) |
+| Multi-turn dispatch memory | *none this cycle* | parked (P-LS6) |
 
 ## 4. Questions for the notes, not for a maintainer
 

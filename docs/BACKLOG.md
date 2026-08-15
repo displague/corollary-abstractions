@@ -497,6 +497,15 @@ routes only along registered paths (registered ≠ PROVEN; PROVEN stays reserved
 for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
 `docs/DESIGN-interactive-harness.md`.
 
+- **SCHEDULED — one typed line after the boot list (v0.12 item 5).**
+  v0.8's notes said the system can be driven. `python scripts/harness.py`
+  still prints a liveness list and exits. Design and floors:
+  `docs/DESIGN-live-session.md` (P-LS1–P-LS5). Named dependant: a
+  person can type the illegal write that write-recovery later ranks.
+  Not implemented in v0.11. HTTP skin, ranker, open-English new
+  nodes, and a second user line in the same process are **not** this
+  slice (P-LS6 parked).
+
 - **Mechanics are live; demos are frozen policies.** `StoryVerifier` already
   mutates beats/obligations under GEN actions; `ConversationSession` opens and
   supersedes private slots; ToM derives belief from events. What is canned is

@@ -1,3 +1,24 @@
+> **CLOSED at v0.11.0.** This file stays as the historical plan of
+> record. Where each item went:
+> item 1 (self-grounding curve) — **shipped**, see
+> [RELEASE-v0.11.0.md](RELEASE-v0.11.0.md);
+> item 2 (fair-fight figure of merit) — **shipped**;
+> item 3 (programming second wave) — **shipped**;
+> item 4 (external benchmark) — **scheduled, not run**, carried to
+> [ROADMAP-v0.12.md](ROADMAP-v0.12.md) item 1 as held-out recovery;
+> carried lanes — emitter and `<` `>` **shipped**; verdict RULE
+> **partial** (programming half held; Lean half → v0.12 item 4);
+> specialize skip **partial**; proof-search depth **parked**;
+> groundedness gate **unparked** → v0.12 item 2; physics/affect/visual
+> remain parked.
+> Forward-looking designs written this cycle, not implemented:
+> [DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md),
+> [DESIGN-residual-proposer.md](DESIGN-residual-proposer.md),
+> [DESIGN-emergent-programming.md](DESIGN-emergent-programming.md),
+> [DESIGN-live-session.md](DESIGN-live-session.md).
+> Triage: [TRIAGE-v0.11.md](TRIAGE-v0.11.md).
+> Blog: [the curve changed sign](blog/the-curve-changed-sign.md).
+
 # v0.11 roadmap — measure what ingestion actually bought
 
 The cycle's forward-looking design (for v0.12, written before the

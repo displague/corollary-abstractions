@@ -6,12 +6,13 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.9.0](docs/RELEASE-v0.9.0.md) — the honest reach of
-the corpus grammar on real formal math, **measured**: three digest-pinned Lean
-sources (miniF2F 29.7%, Lean-workbook 64.1%, Goedel-Pset-v1 32.8% at 1.73M
-statements), which puts the reach on uncontrolled formal math at about a third and
-names the exact heads it is missing. See
-[RELEASE-v0.9.0.md](docs/RELEASE-v0.9.0.md).
+interface. Latest release: [v0.11.0](docs/RELEASE-v0.11.0.md) — ingested
+self-grounding beats a matched random baseline at thousands, and
+sits *below* that baseline at thirty-two. Figure of merit for the
+name-blind bag against typed twins: 0.0220%. See
+[the curve changed sign](docs/blog/the-curve-changed-sign.md).
+The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
+still stands: about a third on uncontrolled formal math.
 
 ## Three headline demonstrations
 

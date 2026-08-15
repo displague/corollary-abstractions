@@ -9,11 +9,19 @@ fulfill it along **registered paths** only. (“Registered” is deliberately no
 path is one a probe-initialized subsystem declared and the kernel will let a
 verifier adjudicate; registration is not a verdict.)
 
-Status: design only. No REPL, HTTP API, or subsystem registry is implemented
-here. The domain-neutral controller, frame executor, retrieval ASK/WAITING
-channel, story adapter, live Lean search, and specialist experiment models
-already exist as libraries and scripted demos; this document specifies how they
-become one live experience. Indexed from `docs/BACKLOG.md` (“Interactive
+Status: **kernel and dispatcher shipped; the live prompt did not.**
+`scripts/harness.py` prints a boot list and exits.
+`scripts/dispatcher.py` routes registered paths.
+`scripts/session_run.py --check` re-verifies one recorded session.
+There is still no “read a goal, loop until done.” That first typable
+slice is [DESIGN-live-session.md](DESIGN-live-session.md) (v0.12
+item 5). Chat-shaped HTTP, multi-turn memory across two typed
+lines, and open-English authoring of new nodes remain later. The
+domain-neutral controller, frame executor, retrieval ASK channel,
+story adapter, live Lean search, and specialist experiment models
+already exist as libraries. This file is how they become one live
+experience; do not read “shipped” in v0.8's notes as that
+experience. Indexed from `docs/BACKLOG.md` (“Interactive
 harness / agent OS”) and related to `docs/DESIGN-frames-and-retrieval.md`,
 `docs/DESIGN-concept-tokens.md`, and `docs/ROADMAP-v0.7.md` items 2
 (conversation across process boundaries, bounded request grammar), 6

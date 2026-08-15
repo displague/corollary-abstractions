@@ -23,9 +23,20 @@ shipped without its notes file.
 .venv/Scripts/python.exe scripts/validate_nodes.py          # must pass
 .venv/Scripts/python.exe scripts/match_signatures.py --write-report reports/signature_matches.json
 .venv/Scripts/python.exe scripts/specialize.py     --write-report reports/specializations.json
-.venv/Scripts/python.exe scripts/decompose.py      --write-report reports/decompositions.json
 .venv/Scripts/python.exe scripts/measure_compression.py --write-report reports/compression.json
 ```
+
+At ingested scale (~12k nodes), **do not** rewrite
+`reports/decompositions.json` as a release step. Live analysis is
+the pin source (181k+ constituents; the committed file stays the
+pre-scale ledger). TRIAGE-v0.11 §1.6 is the precedent. If a later
+cycle needs a committed decompose report, it owes a summary-only
+format and its own prediction — not a hundred-megabyte clobber.
+
+**Do not tag while the complete-suite gate is PARTIAL.** Graph-
+touching tests green during a slice is not “the suite is green.”
+Re-run on the tip, or the notes must refuse that sentence and the
+tag waits. v0.11's gate 7 is the precedent.
 
 ## 2. The document lifecycle (roadmap -> release notes -> next roadmap)
 
@@ -39,11 +50,27 @@ rotates the documents:
 
    **Drift audit (part of this triage, every release):** the blogs,
    release notes, and closed roadmaps are the project's drift reminders.
-   Re-read the *previous* release's notes and roadmap — not just this
-   cycle's — and ask explicitly: have any stated goals been lost through
-   focus attrition or scope shifting rather than by decision? Anything
-   found is named in the triage (carried or deliberately parked with the
-   reason), never silently absent.
+   Re-read the *previous two* releases' notes and roadmaps — not just
+   this cycle's — and ask explicitly: have any stated goals been lost
+   through focus attrition or scope shifting rather than by decision?
+   Anything found is named in the triage (carried or deliberately
+   parked with the reason), never silently absent.
+
+   **Product surfaces are goals.** A live prompt, a chat-shaped HTTP
+   skin, a conversation a person can type into: if a prior roadmap's
+   acceptance named them, they are in the audit. v0.8 item 1 asked for
+   a live session with a text prompt; RELEASE-v0.8.0 said the system
+   can now be driven; `scripts/harness.py` still prints a liveness
+   list and exits. v0.9 called that an earned foundation. v0.11's
+   first draft omitted the prompt. That is the shape this paragraph
+   exists to catch — the same shape as the multi-corpus WRITE patch,
+   on a surface instead of a corpus lane.
+
+   **"Shipped" means the acceptance a newcomer can try.** If the
+   acceptance was “a person types and sees ask or refuse,” libraries
+   plus a recorded session are not that acceptance. Call them
+   libraries. Leave the surface open or park it. Do not let a later
+   roadmap inherit “driven” as a fact.
 
    **Every carried lane names its dependant, or is parked.** A "carried"
    item is not yet a plan — it is a deferral, and deferrals compound

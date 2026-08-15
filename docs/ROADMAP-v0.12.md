@@ -10,15 +10,21 @@ The design is committed and its predictions are frozen:
 during v0.11 triage *before* the v0.11 blog, so the next question
 could not be chosen to flatter the post.
 
-Two later steering notes, also written before the v0.11 tag, name
-what H1–H6 are permission for and do not replace them:
-[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md) (the
-leftover is a budgeted edit; P-BR2 parks a family-holdout ranker
-without a second PASS-not-twin cell) and
-[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md)
-(the first emergent programming measurement is WRITE recovery;
-P-Z1–P-Z4 wait on an unsaturated non-programming fit). Neither
-note is a v0.12 headline. Neither is a ranker run.
+Steering notes written before the v0.11 tag, none of them a ranker
+run, none of them this cycle's headline:
+
+- [DESIGN-residual-proposer.md](DESIGN-residual-proposer.md) —
+  leftover = which already-authored edit to try next, under a
+  budget. A family-holdout ranker parks unless a cell exists that
+  passes the source's tests and is not the same remainder
+  recurrence (only Stein today).
+- [DESIGN-emergent-programming.md](DESIGN-emergent-programming.md)
+  — first emergent measurement = rank legal recoveries after the
+  write gate refuses; waits on a training leftover that is not
+  write-recovery itself.
+- [DESIGN-live-session.md](DESIGN-live-session.md) — one typed
+  line after the boot list. Reclaims the live prompt v0.8 claimed
+  and did not ship. This is item 5 below.
 
 **House rule (kept):** every carried lane names the headline item
 that depends on it, or is parked in BACKLOG with a reason.
@@ -73,7 +79,51 @@ supplied the sample, it did not run the holdout.
 cites `verified_by` without a PASS is the case the rule exists to
 refuse.
 
-## 5. Carried lanes
+## 5. One typed line after the boot list (live session)
+
+Reclaims what v0.8's notes said was shipped: a person types, the
+system asks or refuses, the status is a machine verdict. Today
+`python scripts/harness.py` prints a liveness list and exits.
+Design and frozen predictions: [DESIGN-live-session.md](DESIGN-live-session.md)
+(P-LS1–P-LS5 live; P-LS6 parked).
+
+**Named dependant:** item 6 — a person can type the illegal write
+that write-recovery later ranks. Ordered **after** item 1 so the
+held-out curve still owns the cycle.
+
+**Acceptance:** after the boot list the process waits; one line
+reaches the existing write gate or the existing dispatcher; a
+proposal that replaces a seed that owns a corpus prints
+`seed_ownership` and leaves the tree byte-identical; a sentence no
+registered path claims is not marked verified; a line that is not
+a recorded-session leg still reaches those programs. No HTTP skin,
+no ranker, no fifth algorithm file, no open-English node
+authoring, no second user line in the same process.
+
+## 6. Write-recovery measurement (carried, gated on a fit)
+
+[DESIGN-emergent-programming.md](DESIGN-emergent-programming.md).
+Rank legal follow-ups after the write gate refuses. P-Z1–P-Z4.
+**Does not start** until a later design names an unsaturated
+training leftover that is not write-recovery, not the parked
+family-holdout ranker, and not a re-fit of the vacant analogy or
+tactic constructions (P-Z4). Item 5 makes the illegal write
+typable. This item does not run inside item 5.
+
+**Named dependant:** none in this cycle's headlines until the fit
+exists. If no fit is named by triage, **park in BACKLOG** rather
+than carry a third time as a floating ranker.
+
+## 7. Budgeted-edit ranker (parked unless a second foil exists)
+
+[DESIGN-residual-proposer.md](DESIGN-residual-proposer.md).
+Family-holdout ranks authored edits under a budget. Parks unless
+a cell exists that passes the source's tests and is not the same
+remainder recurrence. Only Stein is that cell. **Parked.** Do not
+author a second foil this cycle to unpark it. A later trained
+experiment may unpark; it is not emergence.
+
+## 8. Carried lanes
 
 | lane | named dependant | disposition |
 |---|---|---|
@@ -82,11 +132,17 @@ refuse.
 | Programming second wave | item 1 H3 | **SHIPPED** (sample exists; H3 still unrun) |
 | Verdict RULE | item 1 B | carried |
 | Groundedness gate | item 2 | gated on H1 |
+| One typed line (live session) | item 6 typability | **item 5**, after the curve |
+| Write-recovery ranker | *fit required* | gated on P-Z4; park at triage if no fit |
+| Budgeted-edit ranker | *none* | **parked** (one foil cell) |
+| Multi-turn dispatch memory (P-LS6) | *none this cycle* | **parked** |
+| Chat-shaped HTTP skin | *none* | **parked** |
+| Open-English authoring of new nodes | *none* | **parked** (last, as v0.8 said) |
 | `specialize.py` general index | *none* | **parked** |
 | Proof-search depth | *none* | **parked** |
 | Physics / affect / visual | *none* | remain parked |
 
-## 6. Governance
+## 9. Governance
 
 Unchanged from v0.11: capability-blind baselines; negatives
 first-class; designs before runs; guard pins that move get a
@@ -103,6 +159,9 @@ v0.12 is ready only if it contains:
 - either the groundedness gate designed under §8's constraints,
   or a written park because H1 failed;
 - item 3 shipped or parked with the H3 dependant evaluated;
+- item 5 shipped (one typed line, P-LS1–P-LS5 adjudicated) or
+  parked in writing with the typability dependant evaluated;
+- item 6 run only if a fit was named, otherwise parked;
 - every carried lane naming its dependant or parked;
 - updated assets with winners, losers, and controls;
 - the complete suite green.

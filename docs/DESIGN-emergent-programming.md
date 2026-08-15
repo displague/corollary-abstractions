@@ -189,6 +189,10 @@ makes it the first emergent measurement and waits on a fit. v0.11
 freezes that sentence the way the residual-proposer was frozen:
 before the blog, without a run.
 
+A person typing the illegal write is
+[DESIGN-live-session.md](DESIGN-live-session.md) (v0.12 item 5).
+That slice does not run this ranker.
+
 ## 9. How this was produced (disclosure, not a prediction)
 
 Three antagonist cycles, then this close:
