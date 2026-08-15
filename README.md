@@ -15,11 +15,10 @@ names the exact heads it is missing. See
 
 ## Three headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 508
-statement nodes across 27 corpora (251 hand-authored + 254 ingested from
-Lean-workbook's unique-covered ground-arithmetic subset, three of those
-carrying a machine-checked Lean bridge and one of those authored by a
-recorded session through the WRITE gate, + 3 verified-code),
+**1. The matcher discovers that sciences repeat one another.** From 12,771
+statement nodes across 27 corpora (257 curated including 3 verified-code
+and the recorded-session ingest, + 12,514 unique-covered Lean-workbook
+statements with matcher templates — 302 ground + 12,212 emitted),
 structure alone:
 
 ```
@@ -157,7 +156,7 @@ comparison is trusted.
 
 ```
 schema/                 Mathematical Statement Node JSON schema
-data/<discipline>/      statement corpora (27 corpora, 508 nodes)
+data/<discipline>/      statement corpora (27 corpora, 12,771 nodes)
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -223,7 +222,7 @@ data required (the `experiments/data_real/` samples feed only auxiliary
 profiling and are never committed):
 
 ```
-python scripts/validate_nodes.py            # 508 nodes / 27 corpora green
+python scripts/validate_nodes.py            # 12,771 nodes / 27 corpora green
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats

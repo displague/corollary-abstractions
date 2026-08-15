@@ -1,0 +1,41 @@
+{
+  "generated_by": "scripts/decompose.py analyze (live, not reports/decompositions.json)",
+  "design": "docs/DESIGN-skeleton-emitter.md",
+  "nodes": 12771,
+  "ingested_authored": 12514,
+  "ingested_ground": 302,
+  "ingested_emitted": 12212,
+  "ingested_excluded": 123,
+  "decompositions": 12761,
+  "statements_with_constituents": 12612,
+  "mean_groundedness": 0.862,
+  "grounded_exact": 181867,
+  "grounded_via_pattern": 88,
+  "channel_means": {
+    "external": 0.391,
+    "prior_corpus": 0.004,
+    "same_corpus": 0.466,
+    "recursive": 0.0,
+    "pattern_absorption": 0.002
+  },
+  "channel_constituents": {
+    "external": 82576,
+    "prior_corpus": 680,
+    "same_corpus": 98611,
+    "recursive": 0,
+    "pattern_absorption": 88
+  },
+  "external_lower": 0.005,
+  "independent_lower": 0.006,
+  "specialize_edges": 713,
+  "group_counts": {
+    "shape": 1027,
+    "typed": 972,
+    "family": 971,
+    "aliased": 973,
+    "mirror": 5
+  },
+  "parse_problems": 0,
+  "slot_schema_gaps": 0,
+  "note": "reports/decompositions.json is not regenerated at this scale. These aggregates are the pin source for the eighth GC4 acknowledgment."
+}

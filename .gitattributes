@@ -15,3 +15,6 @@ data_sources/derived/algorithms/** text eol=lf
 prover/session_triples.json text eol=lf
 prover/lean/session/** text eol=lf
 experiments/harness_session.json text eol=lf
+data/lean_workbook/nodes.json text eol=lf
+experiments/lean_workbook_emit.json text eol=lf
+experiments/skeleton_emitter_aggregates.json text eol=lf

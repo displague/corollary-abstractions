@@ -229,13 +229,23 @@ from __future__ import annotations
 import argparse
 import json
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 from match_signatures import (
-    Parser, TemplateParseError, canonicalize, load_nodes, skeleton,
+    Parser, TemplateParseError, canonicalize, skeleton,
     slot_classes, template_slots, tokenize,
 )
 from specialize import MatchState, match, op_count
+
+
+@dataclass(frozen=True)
+class LoadedNode:
+    """The three fields `analyze` reads off a statement. Not a ParsedNode."""
+
+    statement_id: str
+    discipline: str
+    template: str
 
 
 def subterms(t: tuple, path: tuple = ()):
@@ -347,6 +357,12 @@ SELF_CERTIFYING_AGGREGATE = 0.9
 SELF_CERTIFYING_INDEPENDENT = 0.1
 
 
+def _ingested_sid(sid: str, corpus_of: dict[str, str]) -> bool:
+    """True when `sid` was authored by an ingested corpus, not a curated seed."""
+    cid = corpus_of.get(sid, "")
+    return cid.startswith("lean_workbook") or cid.startswith("ingested_arithmetic")
+
+
 def owner_channel(sid: str, owner: str, corpus_of: dict[str, str],
                   disciplines_of: dict[str, frozenset]) -> str:
     """Which channel does `owner`'s support of `sid` belong to?
@@ -408,13 +424,16 @@ def least_independent_channel(channels) -> str:
     return "recursive"
 
 
-def load_trees(data_dir: Path):
+def load_trees(data_dir: Path, keep: set[str] | None = None):
     """Rebuild trees + slot classes + provenance index.
 
-    `load_nodes` keeps only skeleton strings and the corpus-level discipline,
-    so the corpus files are re-read here for the canonical trees and for the
-    per-node provenance the channel split needs.
+    One pass over the corpora. `analyze` used to call `load_nodes` as well,
+    which re-reads every file and computes five matcher skeletons analyze
+    never uses; on the 12k ingested graph that second pass was the thing
+    making a decompose-only query minutes-scale. `keep` drops ids before
+    they are parsed, so a curve point at N=8 does not tokenize 12k templates.
     """
+    nodes: list[LoadedNode] = []
     trees: dict[str, tuple] = {}
     classes: dict[str, dict[str, str]] = {}
     corpus_of: dict[str, str] = {}
@@ -425,23 +444,75 @@ def load_trees(data_dir: Path):
         corpus_discipline = corpus.get("discipline", corpus_path.parent.name)
         for nj in corpus.get("statement_nodes", []):
             sid = nj.get("statement_id")
-            corpus_of[sid] = corpus_id
-            declared = nj.get("theory_context", {}).get("disciplines", [])
-            disciplines_of[sid] = frozenset(declared or [corpus_discipline])
+            if keep is not None and sid not in keep:
+                continue
             tmpl = nj.get("structural_signature", {}).get("anonymized_template", "")
             try:
                 trees[sid] = canonicalize(Parser(tokenize(tmpl)).parse())
             except TemplateParseError:
                 continue
+            corpus_of[sid] = corpus_id
+            declared = nj.get("theory_context", {}).get("disciplines", [])
+            disciplines_of[sid] = frozenset(declared or [corpus_discipline])
             classes[sid] = slot_classes(nj)
-    return trees, classes, corpus_of, disciplines_of
+            nodes.append(LoadedNode(sid, corpus_discipline, tmpl))
+    return nodes, trees, classes, corpus_of, disciplines_of
+
+
+def attach_extra(
+    nodes: list[LoadedNode],
+    trees: dict[str, tuple],
+    classes: dict[str, dict[str, str]],
+    corpus_of: dict[str, str],
+    disciplines_of: dict[str, frozenset],
+    extra: list[dict],
+) -> None:
+    """Inject in-memory statements (the self-grounding null). Mutates."""
+    for item in extra:
+        sid = item["statement_id"]
+        tmpl = item["template"]
+        tree = canonicalize(Parser(tokenize(tmpl)).parse())
+        trees[sid] = tree
+        slot_cls = dict(item.get("classes") or {})
+        for slot in template_slots(tree):
+            slot_cls.setdefault(slot, "V")
+        classes[sid] = slot_cls
+        corpus_of[sid] = item["corpus_id"]
+        disciplines_of[sid] = frozenset(
+            item.get("disciplines") or [item["discipline"]])
+        nodes.append(LoadedNode(sid, item["discipline"], tmpl))
 
 
 def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250,
-            pattern_membership: bool = True) -> dict:
+            pattern_membership: bool = True,
+            keep: set[str] | None = None,
+            extra: list[dict] | None = None) -> dict:
     """Decompose every statement and attribute its grounding to channels."""
-    nodes, _ = load_nodes(data_dir)
-    trees, classes, corpus_of, disciplines_of = load_trees(data_dir)
+    nodes, trees, classes, corpus_of, disciplines_of = load_trees(data_dir, keep)
+    if extra:
+        attach_extra(nodes, trees, classes, corpus_of, disciplines_of, extra)
+    return analyze_loaded(
+        nodes, trees, classes, corpus_of, disciplines_of,
+        min_family=min_family,
+        max_pattern_attempts=max_pattern_attempts,
+        pattern_membership=pattern_membership,
+    )
+
+
+def analyze_loaded(
+    nodes: list[LoadedNode],
+    trees: dict[str, tuple],
+    classes: dict[str, dict[str, str]],
+    corpus_of: dict[str, str],
+    disciplines_of: dict[str, frozenset],
+    min_family: int = 2,
+    max_pattern_attempts: int = 250,
+    pattern_membership: bool = True,
+) -> dict:
+    """Decompose a graph that is already in memory. The curve's many points
+    share one `load_trees` of the curated layer; only the ingested overlay
+    changes. This is a decomposition-side query — it must not call specialize.
+    """
 
     # Form inventory 1: expression-side skeletons of whole statements.
     # `form_rep` keeps one concrete (tree, slot_class) witness per skeleton so
@@ -481,6 +552,11 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
         if not template_slots(tree):
             continue
         owners = set(side_forms.get(skel, ())) | subterm_hosts.get(skel, set())
+        # Ingested-only forms are not patterns (P-E5). Exact lookup still
+        # sees them via side_forms / subterm_hosts — that is the ISG
+        # substrate. A form with any curated owner stays a pattern.
+        if owners and all(_ingested_sid(o, corpus_of) for o in owners):
+            continue
         forms_by_head[head_of(tree)].append(
             (op_count(tree), skel, tree, cls, owners))
     for bucket in forms_by_head.values():
@@ -609,8 +685,12 @@ def analyze(data_dir: Path, min_family: int = 2, max_pattern_attempts: int = 250
             # pattern_cover requires some bind to be a named-head call.
             # A call-free subterm cannot satisfy that, so skip the
             # 250-attempt walk (P8, the specific-side half).
+            # Ingested statements skip it too (P-E5b): 12k slotted
+            # inequalities walking curated patterns is the same
+            # explosion, and the ISG curve is exact-owner only.
             cover = None
-            if pattern_membership and _tree_has_call(sub):
+            if (pattern_membership and _tree_has_call(sub)
+                    and not _ingested_sid(n.statement_id, corpus_of)):
                 cover = pattern_cover(sub, skel, n.statement_id)
             if cover is None:
                 continue

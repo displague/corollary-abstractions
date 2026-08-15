@@ -88,14 +88,18 @@ class MirrorReportTests(unittest.TestCase):
         # MOVE {31,32,31,33,5} -> {35,36,35,37,5}. Eight new typed pairs,
         # all ingested-to-ingested parenthesization/commutativity twins;
         # zero ingested-to-curated. Prior acknowledgments are not rewritten.
-        self.assertEqual(self.report["nodes_analyzed"], 508)
+        # v0.11 skeleton emitter: 12771 = 257 + 12514 (302 ground + 12212
+        # emitted; docs/DESIGN-skeleton-emitter.md P-E3). group_counts MOVE
+        # {35,36,35,37,5} -> {1027,972,971,973,5}. Shared inequality
+        # skeletons twin at scale. parse_problems 0, slot_schema_gaps 0.
+        self.assertEqual(self.report["nodes_analyzed"], 12771)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 35,
-                "typed": 36,
-                "family": 35,
-                "aliased": 37,
+                "shape": 1027,
+                "typed": 972,
+                "family": 971,
+                "aliased": 973,
                 "mirror": 5,
             },
         )

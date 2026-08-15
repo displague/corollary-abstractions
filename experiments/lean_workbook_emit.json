@@ -1,0 +1,192 @@
+{
+  "generated_by": "scripts/seed_lean_workbook.py emit census",
+  "design": "docs/DESIGN-skeleton-emitter.md",
+  "unique_covered_considered": 12335,
+  "emitted": 12212,
+  "excluded": 123,
+  "excluded_by_reason": {
+    "parse_fail": 54,
+    "emit:unexpected token '>='": 12,
+    "emit:trailing '('": 8,
+    "emit:trailing 'x'": 4,
+    "emit:trailing '2'": 3,
+    "emit:unexpected token '>'": 3,
+    "emit:untokenizable '⁻¹ + (b^2 + '": 3,
+    "emit:untokenizable '⁻¹ - (x + 1)'": 3,
+    "emit:trailing 'theta'": 2,
+    "emit:untokenizable '⁻¹ + a⁻¹ + a'": 2,
+    "emit:expected ')', got '('": 1,
+    "emit:expected ')', got '2'": 1,
+    "emit:expected ')', got 't'": 1,
+    "emit:trailing '10'": 1,
+    "emit:unexpected token '<'": 1,
+    "emit:unexpected token '<='": 1,
+    "emit:untokenizable \"' + b + c = \"": 1,
+    "emit:untokenizable \"' b' , a'^2 \"": 1,
+    "emit:untokenizable \"' q' x1' x2'\"": 1,
+    "emit:untokenizable \"' y', x = SQ\"": 1,
+    "emit:untokenizable \"'', y = x^((\"": 1,
+    "emit:untokenizable \"') * (x + x'\"": 1,
+    "emit:untokenizable \"') = SQRT(a'\"": 1,
+    "emit:untokenizable '{alpha beta '": 1,
+    "emit:untokenizable '{m p }, m^2 '": 1,
+    "emit:untokenizable '{x y z t }, '": 1,
+    "emit:untokenizable '⁻¹ * (4 * k '": 1,
+    "emit:untokenizable '⁻¹ * b * c +'": 1,
+    "emit:untokenizable '⁻¹ * b⁻¹) / '": 1,
+    "emit:untokenizable '⁻¹ + (2 * b '": 1,
+    "emit:untokenizable '⁻¹ + (x + 1)'": 1,
+    "emit:untokenizable '⁻¹ + a⁻¹ + ('": 1,
+    "emit:untokenizable '⁻¹ + y⁻¹ = 0'": 1,
+    "emit:untokenizable '⁻¹ + y⁻¹ = 4'": 1,
+    "emit:untokenizable '⁻¹ = 0.1'": 1,
+    "emit:untokenizable '⁻¹ ≥ x / (x '": 1,
+    "emit:untokenizable '⁻¹'": 1,
+    "emit:untokenizable '⁻¹) * u * (1'": 1,
+    "emit:untokenizable '⁻¹)⁻¹ = a'": 1
+  },
+  "excluded_samples": {
+    "parse_fail": [
+      "lean_workbook_10385: ∀ θ : ℝ, (cos θ + Real.sqrt 3 * sin θ) / 2 = cos (θ - Real.pi / 3)",
+      "lean_workbook_11516: Real.sin (x / 6) < x / 6",
+      "lean_workbook_13231: True",
+      "lean_workbook_13921: Real.cos (36 * Real.pi / 180) - Real.cos (72 * Real.pi / 180) = Real.sin (54 * Real.pi / 180) - Real.sin (18 * Real.pi / 180)",
+      "lean_workbook_14385: Real.cos (36 * Real.pi / 180) * Real.sin (36 * Real.pi / 180) = Real.sin (72 * Real.pi / 180) / 2"
+    ],
+    "emit:untokenizable '⁻¹ * b⁻¹) / '": [
+      "lean_workbook_10526: (a⁻¹ * b⁻¹) / (a⁻¹ ^ 3 - b⁻¹ ^ 3) = 1 / ((1 / a^3) - (1 / b^3)) * (1 / (a * b))"
+    ],
+    "emit:trailing '10'": [
+      "lean_workbook_10924: -Real.sqrt 10 ≤ 3 * Real.sin x + Real.cos x ∧ 3 * Real.sin x + Real.cos x ≤ Real.sqrt 10"
+    ],
+    "emit:unexpected token '>='": [
+      "lean_workbook_10995: ∀ a ≥ 0, (Real.sqrt a / (a * Real.sqrt a - 3 * a + 3 * Real.sqrt a + 4)) ≤ 1 / 3",
+      "lean_workbook_3917: ∀ k ≥ 0, (k+2)^2+(k+3)^2+(k+5)^2+(k+8)^2=(k+1)^2+(k+4)^2+(k+6)^2+(k+7)^2",
+      "lean_workbook_39616: ∀ n ≥ 2, 5 ^ n + 9 < 6 ^ n",
+      "lean_workbook_42836: ∀ n ≥ 2, (5^n + 9 < 6^n)",
+      "lean_workbook_46065: ∀ a ≥ 0, (Real.sqrt a / (2 * a * Real.sqrt a - a + 3 * Real.sqrt a + 3)) ≤ (1 / 7)"
+    ],
+    "emit:untokenizable '{alpha beta '": [
+      "lean_workbook_12323: ∀ {α β : ℚ}, α < β → α < (α + β) / 2 ∧ (α + β) / 2 < β"
+    ],
+    "emit:untokenizable '⁻¹ = 0.1'": [
+      "lean_workbook_1265: (10 : ℝ)⁻¹ = 0.1"
+    ],
+    "emit:trailing '('": [
+      "lean_workbook_1405: x = Real.sqrt (23 / 3) ∨ x = -Real.sqrt (23 / 3)",
+      "lean_workbook_38577: -Real.sqrt (a ^ 2 + b ^ 2) ≤ a * Real.sin x + b * Real.cos x ∧ a * Real.sin x + b * Real.cos x ≤ Real.sqrt (a ^ 2 + b ^ 2)",
+      "lean_workbook_44356: -Real.log (1/2) + Real.log (Real.sqrt 3 / 2) = Real.log 3 / 2",
+      "lean_workbook_49287: -Real.sqrt (a ^ 2 + b ^ 2) ≤ a * x + b * Real.sqrt (1 - x ^ 2) ∧ a * x + b * Real.sqrt (1 - x ^ 2) ≤ Real.sqrt (a ^ 2 + b ^ 2)",
+      "lean_workbook_49901: Real.log (Real.tan (Real.pi / 4 - a)) = -Real.log (Real.tan (Real.pi / 4 + a))"
+    ],
+    "emit:untokenizable '⁻¹ * (4 * k '": [
+      "lean_workbook_15469: (Real.cos x = Real.pi / 2 + Real.sin x + 2 * Real.pi * k) ↔ (Real.cos (x + Real.pi / 4) = (2 * Real.sqrt 2)⁻¹ * (4 * k + 1) * Real.pi)"
+    ],
+    "emit:untokenizable '⁻¹ + (b^2 + '": [
+      "lean_workbook_17083: (a^2 + 1)⁻¹ + (b^2 + 1)⁻¹ + (c^2 + 1)⁻¹ + (d^2 + 1)⁻¹ ≥ 2",
+      "lean_workbook_plus_78228: (a^2 + 1)⁻¹ + (b^2 + 1)⁻¹ ≥ 2 / (1 + a * b)",
+      "lean_workbook_plus_80626: (a^2 + a + 1)⁻¹ + (b^2 + b + 1)⁻¹ + (c^2 + c + 1)⁻¹ ≥ 1"
+    ],
+    "emit:untokenizable \"') * (x + x'\"": [
+      "lean_workbook_19753: a * (x - x') * (x + x') = b * (y' - y) * (y + y')"
+    ],
+    "emit:unexpected token '>'": [
+      "lean_workbook_23355: ∀ x > 0, x - Real.log (1 + x) > 0",
+      "lean_workbook_23663: a ≥ 0",
+      "lean_workbook_24413: ∀ x > 1/4, Real.sqrt x < 2 * x"
+    ],
+    "emit:untokenizable '⁻¹) * u * (1'": [
+      "lean_workbook_23557: ∃ u v : ℝ, 2 * u - 2 * v - 2 * (Real.sqrt (2 - u^2) - 9 * v⁻¹) * u * (1 / Real.sqrt (2 - u^2)) = 0 ∧ -2 * u + 2 * v + 18 * (Real.sqrt (2 - u^2) - 9 * v⁻¹) * v⁻¹"
+    ],
+    "emit:trailing 'theta'": [
+      "lean_workbook_26239: Real.cos (Real.pi / 2 + θ) = - Real.sin θ",
+      "lean_workbook_plus_69887: sin (-θ) = -sin θ"
+    ],
+    "emit:untokenizable '⁻¹)⁻¹ = a'": [
+      "lean_workbook_26676: (a⁻¹)⁻¹ = a"
+    ],
+    "emit:untokenizable '⁻¹ + a⁻¹ + a'": [
+      "lean_workbook_30425: (b⁻¹ + a⁻¹ + a^2 + b^2 - 2 - a - b) ≥ 0",
+      "lean_workbook_3360: b⁻¹ + a⁻¹ + a^2 + b^2 - 2 - a - b ≥ 0"
+    ],
+    "emit:unexpected token '<='": [
+      "lean_workbook_33282: ∀ a ≤ (4:ℝ) / 3, (3 * a - 4) * (3 * a - 1) ^ 2 / (50 * (1 + a ^ 2)) ≤ 0"
+    ],
+    "emit:trailing '2'": [
+      "lean_workbook_33313: -Real.sqrt 2 ≤ x + y ∧ x + y ≤ Real.sqrt 2",
+      "lean_workbook_36120: -Real.sqrt 2 ≤ u * x - u * y + v * x + v * y ∧ u * x - u * y + v * x + v * y ≤ Real.sqrt 2",
+      "lean_workbook_40209: a ^ 2 + b ^ 2 + c ^ 2 + a * b + b * c + c * a ≥ 1"
+    ],
+    "emit:untokenizable '⁻¹ * b * c +'": [
+      "lean_workbook_34303: (a^2 + 1)⁻¹ * b * c + (b^2 + 1)⁻¹ * c * a + (c^2 + 1)⁻¹ * a * b ≤ 3 / 4"
+    ],
+    "emit:trailing 'x'": [
+      "lean_workbook_34975: ∀ x : ℝ, -cos x ^ 2 + sin x ^ 2 = -cos (2 * x)",
+      "lean_workbook_40712: ∀ x y : ℝ, x + y = 0 → sin y = -sin x",
+      "lean_workbook_47602: ∀ x : ℝ, sin (-x) = - sin x",
+      "lean_workbook_51876: ∀ x : ℝ, sin (-x) = -sin x"
+    ],
+    "emit:untokenizable '⁻¹ + (2 * b '": [
+      "lean_workbook_39738: 3 / 2 ≥ (2 * a * b + a + b + 4)⁻¹ + (2 * b * c + b + c + 4)⁻¹ + (2 * c * a + c + a + 4)⁻¹"
+    ],
+    "emit:unexpected token '<'": [
+      "lean_workbook_41765: ∀ a < 1, 4 * (2 * a ^ 4 + 1) * (a ^ 2 + 2) ≥ a ^ 2 * (2 * a + 1) ^ 7 * (a + 1) ^ 2"
+    ],
+    "emit:untokenizable '⁻¹ + a⁻¹ + ('": [
+      "lean_workbook_44482: (a - 1)⁻¹ + a⁻¹ + (a + 1)⁻¹ > 3 * a⁻¹"
+    ],
+    "emit:untokenizable \"') = SQRT(a'\"": [
+      "lean_workbook_48235: √((2 * s) / a) / √((2 * s) / a') = √(a' / a)"
+    ],
+    "emit:expected ')', got 't'": [
+      "lean_workbook_48513: (Real.exp (-Real.log t * Real.log t) = t^(-Real.log t))"
+    ],
+    "emit:untokenizable \"' + b + c = \"": [
+      "lean_workbook_4921: a' + b + c = 10"
+    ],
+    "emit:untokenizable '{m p }, m^2 '": [
+      "lean_workbook_53264: ∀ {m p : ℕ}, m^2 ≥ p^2 + 1 ∧ p^2 + 1 ≥ 2 * p → m^2 ≥ 2 * p"
+    ],
+    "emit:untokenizable '⁻¹ + y⁻¹ = 4'": [
+      "lean_workbook_53842: x⁻¹ + y⁻¹ = 4"
+    ],
+    "emit:expected ')', got '('": [
+      "lean_workbook_9304: ∀ θ : ℝ, (a * cos θ + b * sin θ ≥ - Real.sqrt (a^2 + b^2) ∧ a * cos θ + b * sin θ ≤ Real.sqrt (a^2 + b^2))"
+    ],
+    "emit:untokenizable '⁻¹ - (x + 1)'": [
+      "lean_workbook_9440: (x + y + 2)⁻¹ - (x + 1)⁻¹ * (y + 1)⁻¹ ≤ 1 / 16",
+      "lean_workbook_plus_71365: (x + y + 3)⁻¹ - (x + 1)⁻¹ * (y + 1)⁻¹ ≤ 2 / 27",
+      "lean_workbook_plus_79225: (x + y + 3)⁻¹ - (x + 1)⁻¹ * (y + 2)⁻¹ ≤ 16⁻¹"
+    ],
+    "emit:untokenizable '{x y z t }, '": [
+      "lean_workbook_9610: ∀ {x y z t : ℝ}, x + y = y + z ∧ y + z = z + t ∧ z + t = t + x ↔ x = z ∧ y = t"
+    ],
+    "emit:untokenizable \"' q' x1' x2'\"": [
+      "lean_workbook_plus_13013: ∃ (p' q' x₁' x₂' : ℤ), p' - q' = 1 ∧ x₁' - x₂' = 1 ∧ x₁'^2 + p' * x₁' + q' = 0 ∧ x₂'^2 + p' * x₂' + q' = 0"
+    ],
+    "emit:untokenizable '⁻¹ + (x + 1)'": [
+      "lean_workbook_plus_15559: (x + y + 2)⁻¹ + (x + 1)⁻¹ * (y + 1)⁻¹ ≤ 3 / 2"
+    ],
+    "emit:untokenizable \"' b' , a'^2 \"": [
+      "lean_workbook_plus_25568: ∃ a' b' : ℤ, a'^2 + 5 * b'^2 = n^4"
+    ],
+    "emit:untokenizable '⁻¹ + y⁻¹ = 0'": [
+      "lean_workbook_plus_33866: x⁻¹ + y⁻¹ = 0.5"
+    ],
+    "emit:untokenizable \"'', y = x^((\"": [
+      "lean_workbook_plus_41111: ∃ y'', y = x^((1:ℝ)/3) ∧ (y'' < 0 ∨ y'' > 0)"
+    ],
+    "emit:untokenizable '⁻¹'": [
+      "lean_workbook_plus_47050: 0 < a⁻¹"
+    ],
+    "emit:untokenizable \"' y', x = SQ\"": [
+      "lean_workbook_plus_53216: ∃ x' y', x = √2/2 * (x' - y') ∧ y = √2/2 * (x' + y')"
+    ],
+    "emit:untokenizable '⁻¹ ≥ x / (x '": [
+      "lean_workbook_plus_5437: (x * y)⁻¹ ≥ x / (x ^ 4 + y ^ 2) + y / (x ^ 2 + y ^ 4)"
+    ],
+    "emit:expected ')', got '2'": [
+      "lean_workbook_plus_75324: ((Real.sqrt 2 / 2)^3 * (-Real.sqrt 2 / 2)^3) / ((1 + (Real.sqrt 2 / 2)^6) * (1 + (-Real.sqrt 2 / 2)^6)) = -8 / 81"
+    ]
+  }
+}

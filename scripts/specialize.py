@@ -120,6 +120,15 @@ COST_HEAD_COLLAPSE = 4    # per call node erased by a declared head identity
 
 MIN_PATTERN_OPS = 2       # non-triviality bar, checked on the pattern AS USED
 
+# Disciplines whose statements are ingested instances, not curated laws.
+# They twin and they decompose by exact lookup; they do not specialize
+# (docs/DESIGN-skeleton-emitter.md P-E4).
+INGESTED_DISCIPLINES = frozenset({"lean_workbook", "ingested_arithmetic"})
+
+
+def _ingested_discipline(discipline: str) -> bool:
+    return discipline in INGESTED_DISCIPLINES
+
 
 @lru_cache(maxsize=None)
 def op_count(t: tuple) -> int:
@@ -541,6 +550,12 @@ def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
         # 508 nodes (docs/DESIGN-item4-authoring.md P6).
         if not template_slots(gtree):
             continue
+        # Ingested statements are not specialize endpoints
+        # (docs/DESIGN-skeleton-emitter.md P-E4). The remainder has slots,
+        # so the ground skip above would let 8k inequalities become
+        # generals; the curve does not need this ledger.
+        if _ingested_discipline(gen.discipline):
+            continue
         for spec in nodes:
             if spec.statement_id == gen.statement_id:
                 continue
@@ -548,6 +563,8 @@ def find_specializations(nodes: list[ParsedNode], trees: dict[str, tuple],
                 continue  # exact twins already reported
             # Fully-ground specifics do not participate either (P7).
             if not template_slots(trees[spec.statement_id]):
+                continue
+            if _ingested_discipline(spec.discipline):
                 continue
             search = Search(classes[gen.statement_id], op_count(gtree),
                             rankers[spec.statement_id])

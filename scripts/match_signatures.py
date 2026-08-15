@@ -280,8 +280,10 @@ def identity_terms(head: str) -> tuple[tuple, ...]:
         return (("num", float(ident)),)
     return tuple(("slot", name) for name in ident)
 
+# `<=` / `>=` must stay earlier alternatives than standalone `<` / `>`
+# (docs/DESIGN-skeleton-emitter.md P-E1; BACKLOG TOKEN_RE hole).
 TOKEN_RE = re.compile(
-    r"\s*(=>_d|<=|>=|[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[=+\-*/^()\[\],|]|±)"
+    r"\s*(=>_d|<=|>=|[<>]|[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[=+\-*/^()\[\],|]|±)"
 )
 
 
