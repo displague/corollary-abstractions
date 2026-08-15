@@ -15,8 +15,8 @@ names the exact heads it is missing. See
 
 ## Three headline demonstrations
 
-**1. The matcher discovers that sciences repeat one another.** From 12,771
-statement nodes across 27 corpora (257 curated including 3 verified-code
+**1. The matcher discovers that sciences repeat one another.** From 12,777
+statement nodes across 27 corpora (263 curated including 9 verified-code
 and the recorded-session ingest, + 12,514 unique-covered Lean-workbook
 statements with matcher templates — 302 ground + 12,212 emitted),
 structure alone:

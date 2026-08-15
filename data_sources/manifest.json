@@ -249,14 +249,32 @@
       "access": "git",
       "license": "MIT (LICENSE.md sha256 4395a1dc4bda1d6054c45b4d1230c709c7398e6d66f1d0aff4b22d95973bea56, verified 2026-08-12: the file is the MIT License text, copyright 2016-2022 TheAlgorithms and contributors). Permissive: a derived extract of named functions may be committed with attribution.",
       "attribution": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
-      "verified": "2026-08-12",
-      "purpose": "Pinned source for ROADMAP-v0.10 item 3 (programming as a first-class discipline). One file only — maths/greatest_common_divisor.py — because a smaller cleanly-licensed source that reaches the acceptance bar beats a whole-repo pin of a moving master. Extracted by scripts/ingest_algorithms.py into data_sources/derived/algorithms/extract.json. CodeNet was declined (submission terms); thuva4/Algorithms was declined as the primary source (TypeScript).",
+      "verified": "2026-08-15",
+      "purpose": "Pinned source for the programming discipline (v0.10 item 3 one-file GCD pin; v0.11 item 3 second wave adds factorial, double_factorial, binary_exponentiation — same commit). Four maths files, not a whole-repo pin of a moving master. Extracted by scripts/ingest_algorithms.py into data_sources/derived/algorithms/extract.json. The two modular exponentiation functions in binary_exponentiation.py are declined this slice (docs/DESIGN-programming-second-wave.md §3). CodeNet was declined (submission terms); thuva4/Algorithms was declined as the primary source (TypeScript).",
       "files": [
         {
           "filename": "greatest_common_divisor.py",
           "path": "maths/greatest_common_divisor.py",
           "sha256": "04a4b5d9f5fcc2e5ff0e2e49ba8f015098df97cfa76796a5b638392fbb15f81e",
           "size_bytes": 2091
+        },
+        {
+          "filename": "factorial.py",
+          "path": "maths/factorial.py",
+          "sha256": "bfb8a6376ea4a157e96320c57670ac052c758e654f4448df2e980c4a53e62ac8",
+          "size_bytes": 1919
+        },
+        {
+          "filename": "double_factorial.py",
+          "path": "maths/double_factorial.py",
+          "sha256": "c48437588d8f3efa6716b13ccab8c06230ea5673a64026130874406e5136dbca",
+          "size_bytes": 2074
+        },
+        {
+          "filename": "binary_exponentiation.py",
+          "path": "maths/binary_exponentiation.py",
+          "sha256": "52554576c9d40931127dfa35eb429ddd6969c3d691ff8646e8e7196baa71617d",
+          "size_bytes": 5175
         },
         {
           "filename": "LICENSE.md",

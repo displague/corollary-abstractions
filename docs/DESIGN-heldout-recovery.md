@@ -214,7 +214,7 @@ Named so they do not ride as lanes:
 
 | item | relation to this design |
 |---|---|
-| Programming second wave (v0.11 item 3, unstarted) | **named dependant: H3.** A code-twin sample makes the keyword baseline's failure (or success) less of a math-only fact. If this design is cut to miniF2F-only, item 3 is parked in BACKLOG — it would have no v0.12 headline depending on it. |
+| Programming second wave (v0.11 item 3) | **SHIPPED; named dependant: H3.** The code-twin sample now exists (factorial foil set, combined keyword precision 0.4). If this design is cut to miniF2F-only, the sample remains; H3 itself would then have no holdout B to run on. |
 | Verdict-backed ingestion as a RULE | named dependant: held-out B. A Goedel-Pset sample that cites `verified_by` without a PASS is the case the rule exists to refuse. |
 | `specialize.py` general index | none. Remains PARTIAL. Unpark when a curated-scale growth needs it. |
 

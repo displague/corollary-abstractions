@@ -497,6 +497,954 @@
           "reference": "gcd_stein"
         }
       ]
+    },
+    {
+      "statement_id": "programming.factorial.recursive",
+      "title": "Factorial, Recursive (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "combinatorial_algorithms",
+        "topic": "factorial",
+        "canonical_objects": [
+          "factorial"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "n! = 1 if n <= 1 else n * (n-1)!",
+        "canonical_latex": "n! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-1)!",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "fact(n) = 1 if n <= 1 else n * fact(n - 1)",
+            "scope_note": "Recursive orientation; the iterative implementation is the same recurrence."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "factorial_product_recurrence",
+        "anonymized_template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))",
+        "slot_schema": [
+          {
+            "slot_id": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Canonical form is the product recurrence, not the control-flow: recursion and a for-loop that realize this recurrence are the same algorithm (docs/DESIGN-programming-second-wave.md §4).",
+          "Base case LEQ(N, 1) is the source's n in {0, 1} under the regularity condition N >= 0.",
+          "Volume tests compare against math.factorial on range(20)."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer argument."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "FACT(.)",
+            "name": "factorial",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "n!. Unary; the recurrence is n * FACT(n-1)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "non-strict order",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existing LEQ head, reused for the n <= 1 base."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "the factorial base-case value and the LEQ threshold"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The factorial recurrence, recursive evaluation, as implemented by TheAlgorithms/Python factorial_recursive (commit f5988cc, MIT).",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer argument; negatives are regularity, not structure"
+        ],
+        "failure_modes": [
+          "Stepping by 2 instead of 1 agrees on {0, 1} and fails at 3 (the committed n-minus-2 FAIL records this)."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.factorial.iterative"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "factorial",
+        "recursive",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/factorial_recursive.py",
+          "reference": "factorial_recursive"
+        }
+      ]
+    },
+    {
+      "statement_id": "programming.factorial.iterative",
+      "title": "Factorial, Iterative (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "combinatorial_algorithms",
+        "topic": "factorial",
+        "canonical_objects": [
+          "factorial"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "n! = 1 if n <= 1 else n * (n-1)!",
+        "canonical_latex": "n! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-1)!",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "fact(n) = 1 if n <= 1 else n * fact(n - 1)",
+            "scope_note": "Recursive orientation; the iterative implementation is the same recurrence."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "factorial_product_recurrence",
+        "anonymized_template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))",
+        "slot_schema": [
+          {
+            "slot_id": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Canonical form is the product recurrence, not the control-flow: recursion and a for-loop that realize this recurrence are the same algorithm (docs/DESIGN-programming-second-wave.md §4).",
+          "Base case LEQ(N, 1) is the source's n in {0, 1} under the regularity condition N >= 0.",
+          "Volume tests compare against math.factorial on range(20)."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer argument."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "FACT(.)",
+            "name": "factorial",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "n!. Unary; the recurrence is n * FACT(n-1)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "non-strict order",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existing LEQ head, reused for the n <= 1 base."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "the factorial base-case value and the LEQ threshold"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The same factorial recurrence, for-loop evaluation, as implemented by TheAlgorithms/Python factorial (commit f5988cc, MIT). Control-flow is evaluation strategy, not structure.",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer argument; negatives are regularity, not structure"
+        ],
+        "failure_modes": [
+          "Stepping by 2 instead of 1 agrees on {0, 1} and fails at 3 (the committed n-minus-2 FAIL records this)."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.factorial.recursive"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "factorial",
+        "iterative",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/factorial_iterative.py",
+          "reference": "factorial"
+        }
+      ]
+    },
+    {
+      "statement_id": "programming.dfactorial.recursive",
+      "title": "Double Factorial, Recursive (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "combinatorial_algorithms",
+        "topic": "double_factorial",
+        "canonical_objects": [
+          "double factorial"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "n!! = 1 if n <= 1 else n * (n-2)!!",
+        "canonical_latex": "n!! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-2)!!",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "dfact(n) = 1 if n <= 1 else n * dfact(n - 2)",
+            "scope_note": "The ingested foil: name contains factorial, recurrence does not share FACT's skeleton."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "double_factorial_recurrence",
+        "anonymized_template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))",
+        "slot_schema": [
+          {
+            "slot_id": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Different recurrence from factorial: the step is N - 2, not N - 1. The matcher must not twin this with the factorial pair (P-W4).",
+          "The token `factorial` is in keywords so the capability-blind baseline pairs it with both factorial nodes.",
+          "Volume tests compare against math.prod(range(i, 0, -2)) on range(20)."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer argument."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "DFACT(.)",
+            "name": "double factorial",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "n!!. Unary; the recurrence is n * DFACT(n-2). Different skeleton from FACT; the token factorial is shared on purpose (docs/DESIGN-programming-second-wave.md §5.2)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "non-strict order",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existing LEQ head, reused for the n <= 1 base."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "the double-factorial base-case value"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "the double-factorial step"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The double-factorial recurrence (step n-2), recursive evaluation, as implemented by TheAlgorithms/Python double_factorial_recursive (commit f5988cc, MIT). Name-similar non-twin of the factorial pair.",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer argument"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.dfactorial.iterative"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "factorial",
+        "double factorial",
+        "recursive",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/dfactorial_recursive.py",
+          "reference": "double_factorial_recursive"
+        }
+      ]
+    },
+    {
+      "statement_id": "programming.dfactorial.iterative",
+      "title": "Double Factorial, Iterative (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "combinatorial_algorithms",
+        "topic": "double_factorial",
+        "canonical_objects": [
+          "double factorial"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "n!! = 1 if n <= 1 else n * (n-2)!!",
+        "canonical_latex": "n!! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-2)!!",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "dfact(n) = 1 if n <= 1 else n * dfact(n - 2)",
+            "scope_note": "The ingested foil: name contains factorial, recurrence does not share FACT's skeleton."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "double_factorial_recurrence",
+        "anonymized_template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))",
+        "slot_schema": [
+          {
+            "slot_id": "N",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Different recurrence from factorial: the step is N - 2, not N - 1. The matcher must not twin this with the factorial pair (P-W4).",
+          "The token `factorial` is in keywords so the capability-blind baseline pairs it with both factorial nodes.",
+          "Volume tests compare against math.prod(range(i, 0, -2)) on range(20)."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "n",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer argument."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "DFACT(.)",
+            "name": "double factorial",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "n!!. Unary; the recurrence is n * DFACT(n-2). Different skeleton from FACT; the token factorial is shared on purpose (docs/DESIGN-programming-second-wave.md §5.2)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "LEQ(.,.)",
+            "name": "non-strict order",
+            "input_arity": 2,
+            "codomain": "propositions",
+            "description": "The existing LEQ head, reused for the n <= 1 base."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "the double-factorial base-case value"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "the double-factorial step"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The same double-factorial recurrence, for-loop evaluation, as implemented by TheAlgorithms/Python double_factorial_iterative (commit f5988cc, MIT).",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer argument"
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.dfactorial.recursive"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "factorial",
+        "double factorial",
+        "iterative",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/dfactorial_iterative.py",
+          "reference": "double_factorial_iterative"
+        }
+      ]
+    },
+    {
+      "statement_id": "programming.binexp.recursive",
+      "title": "Binary Exponentiation, Recursive (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "number_theoretic_algorithms",
+        "topic": "binary_exponentiation",
+        "canonical_objects": [
+          "binary exponentiation"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "bexp(a, e) = 1 if e = 0 else (bexp(a, e/2)^2 if e even else a * bexp(a, e-1))",
+        "canonical_latex": "a^{e}=1\\text{ if }e=0\\text{ else }(a^{e/2})^{2}\\text{ if }e\\text{ even else }a\\cdot a^{e-1}",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "bexp(a, e) = 1 if e == 0 else (bexp(a, e//2)**2 if e%2==0 else a * bexp(a, e-1))",
+            "scope_note": "Even-first authored orientation."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binary_exponentiation_recurrence",
+        "anonymized_template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))",
+        "slot_schema": [
+          {
+            "slot_id": "BASE",
+            "syntactic_category": "variable",
+            "semantic_role": "real"
+          },
+          {
+            "slot_id": "EXPN",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Canonical form is the square-and-multiply recurrence, not the bit-shift accumulator. Recursion and a while-loop that realize this recurrence are the same algorithm.",
+          "Even-first orientation: EVEN and HALVE already exist (Stein). The TheAlgorithms recursive body checks odd first; both nodes are authored onto the even-first template (docs/DESIGN-programming-second-wave.md §4).",
+          "The even branch is rec ^ 2 (one recursive call, then square), matching the source's bind-then-multiply."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "real",
+            "mathematical_order": 0,
+            "description": "Exponentiation base."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer exponent."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BEXP(.,.)",
+            "name": "binary exponentiation",
+            "input_arity": 2,
+            "codomain": "reals",
+            "description": "a^b by squaring. Ordered: exponentiation is not commutative. Authored even-first (EVEN/HALVE already exist)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The number-theory EVEN head, reused: Stein branches on parity."
+          },
+          {
+            "notation": "HALVE(.)",
+            "name": "exact divide-by-two",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "Exact halving of an even integer. Not Nat.div: the argument is even by the EVEN guard that wraps it."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "0",
+            "value": 0,
+            "description": "the exponent base-case test"
+          },
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "a^0"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "the even-branch square"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "Binary exponentiation by squaring, recursive evaluation, as implemented by TheAlgorithms/Python binary_exp_recursive (commit f5988cc, MIT). Authored even-first (EVEN/HALVE already exist); the source checks odd first.",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer exponent; real base. Modular variants in the source file are declined this slice."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.binexp.iterative"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "exponentiation",
+        "power",
+        "recursive",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/binexp_recursive.py",
+          "reference": "binary_exp_recursive"
+        }
+      ]
+    },
+    {
+      "statement_id": "programming.binexp.iterative",
+      "title": "Binary Exponentiation, Iterative (TheAlgorithms)",
+      "statement_class": "identity",
+      "epistemic_status": "formal",
+      "theory_context": {
+        "disciplines": [
+          "programming"
+        ],
+        "subfield": "number_theoretic_algorithms",
+        "topic": "binary_exponentiation",
+        "canonical_objects": [
+          "binary exponentiation"
+        ]
+      },
+      "formal_statement": {
+        "canonical_ascii": "bexp(a, e) = 1 if e = 0 else (bexp(a, e/2)^2 if e even else a * bexp(a, e-1))",
+        "canonical_latex": "a^{e}=1\\text{ if }e=0\\text{ else }(a^{e/2})^{2}\\text{ if }e\\text{ even else }a\\cdot a^{e-1}",
+        "equivalent_forms": [
+          {
+            "form_id": "recurrence",
+            "notation_system": "ascii",
+            "expression": "bexp(a, e) = 1 if e == 0 else (bexp(a, e//2)**2 if e%2==0 else a * bexp(a, e-1))",
+            "scope_note": "Even-first authored orientation."
+          }
+        ]
+      },
+      "structural_signature": {
+        "archetype_id": "binary_exponentiation_recurrence",
+        "anonymized_template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))",
+        "slot_schema": [
+          {
+            "slot_id": "BASE",
+            "syntactic_category": "variable",
+            "semantic_role": "real"
+          },
+          {
+            "slot_id": "EXPN",
+            "syntactic_category": "variable",
+            "semantic_role": "integer"
+          }
+        ],
+        "invariants": [
+          "Canonical form is the square-and-multiply recurrence, not the bit-shift accumulator. Recursion and a while-loop that realize this recurrence are the same algorithm.",
+          "Even-first orientation: EVEN and HALVE already exist (Stein). The TheAlgorithms recursive body checks odd first; both nodes are authored onto the even-first template (docs/DESIGN-programming-second-wave.md §4).",
+          "The even branch is rec ^ 2 (one recursive call, then square), matching the source's bind-then-multiply."
+        ]
+      },
+      "symbol_lexicon": {
+        "symbols": [
+          {
+            "symbol": "a",
+            "syntactic_category": "variable",
+            "semantic_role": "real",
+            "mathematical_order": 0,
+            "description": "Exponentiation base."
+          },
+          {
+            "symbol": "b",
+            "syntactic_category": "variable",
+            "semantic_role": "integer",
+            "mathematical_order": 0,
+            "description": "Non-negative integer exponent."
+          }
+        ],
+        "operators": [
+          {
+            "symbol": "=",
+            "name": "equality",
+            "arity": 2,
+            "operator_family": "relational"
+          },
+          {
+            "symbol": "*",
+            "name": "multiplication",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "-",
+            "name": "subtraction",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          },
+          {
+            "symbol": "^",
+            "name": "exponentiation",
+            "arity": 2,
+            "operator_family": "arithmetic"
+          }
+        ],
+        "functionals": [
+          {
+            "notation": "BEXP(.,.)",
+            "name": "binary exponentiation",
+            "input_arity": 2,
+            "codomain": "reals",
+            "description": "a^b by squaring. Ordered: exponentiation is not commutative. Authored even-first (EVEN/HALVE already exist)."
+          },
+          {
+            "notation": "ITE(.,.,.)",
+            "name": "if-then-else",
+            "input_arity": 3,
+            "codomain": "the then/else carrier",
+            "description": "Ordered ternary: condition, then-branch, else-branch. Not commutative. The control-flow of a recurrence, not a new matcher."
+          },
+          {
+            "notation": "EVEN(.)",
+            "name": "evenness predicate",
+            "input_arity": 1,
+            "codomain": "propositions",
+            "description": "The number-theory EVEN head, reused: Stein branches on parity."
+          },
+          {
+            "notation": "HALVE(.)",
+            "name": "exact divide-by-two",
+            "input_arity": 1,
+            "codomain": "integers",
+            "description": "Exact halving of an even integer. Not Nat.div: the argument is even by the EVEN guard that wraps it."
+          }
+        ],
+        "index_sets": [],
+        "constants": [
+          {
+            "symbol": "0",
+            "value": 0,
+            "description": "the exponent base-case test"
+          },
+          {
+            "symbol": "1",
+            "value": 1,
+            "description": "a^0"
+          },
+          {
+            "symbol": "2",
+            "value": 2,
+            "description": "the even-branch square"
+          }
+        ]
+      },
+      "semantic_interpretation": {
+        "statement_meaning": "The same binary-exponentiation recurrence, bit-shift evaluation, as implemented by TheAlgorithms/Python binary_exp_iterative (commit f5988cc, MIT).",
+        "statistical_significance": "A python-tests PASS certifies that the pinned candidate compiled, passed mypy --strict, and survived the pinned tests under the sandbox. It does not certify the candidate correct (docs/DESIGN-programming-discipline.md §2).",
+        "regularity_conditions": [
+          "Non-negative integer exponent; real base. Modular variants in the source file are declined this slice."
+        ]
+      },
+      "inferential_links": {
+        "entailed_by": [],
+        "entails": [],
+        "equivalent_to": [
+          "programming.binexp.recursive"
+        ],
+        "special_case_of": [],
+        "generalizes": [],
+        "composed_with": []
+      },
+      "provenance": [
+        {
+          "citation_key": "thealgorithms_python_f5988cc",
+          "bibliographic_entry": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
+          "url": "https://github.com/TheAlgorithms/Python"
+        }
+      ],
+      "keywords": [
+        "exponentiation",
+        "power",
+        "iterative",
+        "ingested",
+        "programming"
+      ],
+      "verified_by": [
+        {
+          "system": "python-tests",
+          "artifact": "prover/pychecks/binexp_iterative.py",
+          "reference": "binary_exp_iterative"
+        }
+      ]
     }
   ]
 }

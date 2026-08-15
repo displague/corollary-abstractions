@@ -178,6 +178,26 @@ are machine-checkable stay checked:
   5.3:1 -> 1115:1 (e_best 82576 > 4 x 74). Graph itself is now
   same_corpus_dominant. Prior seven acknowledgments are not rewritten.
 
+  Registered acknowledgment (v0.11 item 3, programming second wave —
+  the NINTH): mean 0.862 -> 0.863, exact 181867 -> 181909, pattern
+  88 -> 89, statements-with-constituents 12612 -> 12618, because the
+  slice added six verified-code nodes (corpus 12771 -> 12777;
+  docs/DESIGN-programming-second-wave.md). A CORPUS change, not a
+  scoring change: the new nodes are self-headed FACT / DFACT / BEXP
+  recurrences at groundedness 1.0 (FACT/DFACT 5 exact each, BEXP 9;
+  same_corpus 3/3/6 + external 2/2/3). External channel mean stayed
+  0.391; external_lower stayed 0.005. e_best 82576 -> 82590 (+14,
+  the new nodes' external constituents). e_all 215 -> 211 (four
+  exclusive-external constituents gained a second owner — reported,
+  not smoothed). Absorption (74, 40, 88) -> (74, 40, 89). Count
+  floor holds (82590 > 4 x 74). same_corpus_dominant generous 7 /
+  conservative 17 unchanged. defines_head gains FACT, DFACT, BEXP.
+  programming.core.v1 now trips `self_certifying_lower` (mean 0.939,
+  conservative independent <= 0.1) but not the generous flag —
+  the first corpus besides provability to do so. Twin pairs ground
+  each other; generous still credits the multi-owner constituents
+  external. Prior eight acknowledgments are not rewritten.
+
 The provability corpus is the regression case the item names. Its 1.000 must
 keep resolving into same-corpus + pattern-absorption with a near-zero external
 channel; if a future change lets that corpus claim external grounding, this
@@ -299,13 +319,13 @@ class ChannelSplitOverCorpus(unittest.TestCase):
 
     def test_aggregate_totals_unchanged(self):
         graph = self.summary["graph"]
-        self.assertEqual(graph["mean_groundedness"], 0.862)
+        self.assertEqual(graph["mean_groundedness"], 0.863)
         self.assertEqual(
-            sum(d["grounded_exact"] for d in self.decompositions), 181867)
+            sum(d["grounded_exact"] for d in self.decompositions), 181909)
         self.assertEqual(
-            sum(d["grounded_via_pattern"] for d in self.decompositions), 88)
+            sum(d["grounded_via_pattern"] for d in self.decompositions), 89)
         self.assertEqual(
-            sum(1 for d in self.decompositions if d["constituents"]), 12612)
+            sum(1 for d in self.decompositions if d["constituents"]), 12618)
 
     def test_groundedness_is_still_grounded_over_considered(self):
         for d in self.decompositions:
@@ -452,7 +472,8 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         }
         self.assertEqual(
             curated_defs,
-            {"EVENTUALLY", "GCD", "ONCE", "SINCE", "STEIN", "UNTIL"})
+            {"BEXP", "DFACT", "EVENTUALLY", "FACT", "GCD", "ONCE",
+             "SINCE", "STEIN", "UNTIL"})
 
     def test_recursive_channel_is_reachable_at_min_family_one(self):
         """The sensitivity that makes the emptiness a design fact, pinned.
@@ -546,7 +567,7 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         exact = [c for d in self.decompositions for c in d["constituents"]
                  if c["grounded_via"] == "exact"]
         multi = [c for c in exact if len(c["owner_channels"]) > 1]
-        self.assertEqual(len(exact), 181867)
+        self.assertEqual(len(exact), 181909)
         self.assertGreater(len(multi), 281)
         # At hundreds, every multi-owner constituent had an external
         # owner. At thousands, same_corpus + prior_corpus (ingested
@@ -568,11 +589,11 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         exact = [c for d in self.decompositions for c in d["constituents"]
                  if c["grounded_via"] == "exact"]
         self.assertEqual(sum(1 for c in exact if c["channel"] == "external"),
-                         82576)
+                         82590)
         self.assertEqual(
             sum(1 for c in exact
                 if least_independent_channel(c["owner_channels"]) == "external"),
-            215)
+            211)
         # The conservative shares are still a partition of the same numerator.
         for d in self.decompositions:
             self.assertAlmostEqual(
@@ -580,7 +601,14 @@ class ChannelSplitOverCorpus(unittest.TestCase):
                 d["groundedness"], delta=0.001, msg=d["statement_id"])
 
     def test_provability_self_certifies_under_both_owner_rules(self):
-        """GC6, registered in the decompose.py docstring before this rollup."""
+        """GC6, registered in the decompose.py docstring before this rollup.
+
+        Ninth acknowledgment: programming.core.v1 now trips
+        `self_certifying_lower` (mean 0.939 after six volume nodes,
+        conservative independent <= 0.1 because twin pairs ground each
+        other) but NOT the generous flag. The generous-only pin in
+        `test_self_certifying_flag_is_not_vacuous` is unchanged.
+        """
         block = self.summary["corpora"][PROVABILITY]
         self.assertTrue(block["self_certifying"])
         self.assertTrue(block["self_certifying_lower"])
@@ -588,7 +616,13 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         self.assertEqual(block["independent_lower"], 0.033)
         both = [cid for cid, blk in self.summary["corpora"].items()
                 if blk["self_certifying"] or blk["self_certifying_lower"]]
-        self.assertEqual(both, [PROVABILITY])
+        self.assertEqual(
+            both,
+            ["programming.core.v1", PROVABILITY],
+        )
+        prog = self.summary["corpora"]["programming.core.v1"]
+        self.assertFalse(prog["self_certifying"])
+        self.assertTrue(prog["self_certifying_lower"])
 
     def test_same_corpus_dominance_is_a_lower_bound(self):
         """GC3 counted four non-provability corpora; generosity hid the rest."""
@@ -628,8 +662,8 @@ class ChannelSplitOverCorpus(unittest.TestCase):
         e_best = sum(1 for c in exact if c["channel"] == "external")
         e_all = sum(1 for c in exact
                     if set(c["owner_channels"]) == {"external"})
-        self.assertEqual((a_best, a_all, len(absorbed)), (74, 40, 88))
-        self.assertEqual((e_best, e_all, len(exact)), (82576, 215, 181867))
+        self.assertEqual((a_best, a_all, len(absorbed)), (74, 40, 89))
+        self.assertEqual((e_best, e_all, len(exact)), (82590, 211, 181909))
         # The count floor is the load-bearing guard and holds unweakened
         # (strengthened 4.5:1 -> 5.3:1).
         self.assertGreater(e_best, 4 * a_best)

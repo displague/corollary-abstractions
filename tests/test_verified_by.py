@@ -50,15 +50,16 @@ class VerifiedByIntegrityTests(unittest.TestCase):
             )
         self.assertEqual(verified_by_errors(nodes, REPO_ROOT), [])
         links = [link for n in nodes for link in n.get("verified_by", [])]
-        # 21 = the 18 lean4 links (16 propositional + 1 ingested arithmetic
+        # 27 = the 18 lean4 links (16 propositional + 1 ingested arithmetic
         # from v0.10 item 2 + 1 authored by the item 5 SESSION through the
-        # WRITE gate) + 3 python-tests citations from data/programming
-        # (v0.10 item 3; docs/DESIGN-programming-discipline.md).
+        # WRITE gate) + 9 python-tests citations from data/programming
+        # (v0.10 item 3 three + v0.11 item 3 six;
+        # docs/DESIGN-programming-second-wave.md).
         # proof_correspondence scores only the 18 lean4 links.
-        self.assertEqual(len(links), 21)
-        self.assertEqual(len({link["reference"] for link in links}), 21)
+        self.assertEqual(len(links), 27)
+        self.assertEqual(len({link["reference"] for link in links}), 27)
         self.assertEqual(
-            sum(1 for link in links if link["system"] == "python-tests"), 3
+            sum(1 for link in links if link["system"] == "python-tests"), 9
         )
         self.assertEqual(
             sum(1 for link in links if link["system"] == "lean4"), 18
@@ -264,7 +265,7 @@ class VerifiedByIntegrityTests(unittest.TestCase):
                 check=False,
             )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("12771 statement nodes", result.stdout)
+        self.assertIn("12777 statement nodes", result.stdout)
 
     def test_wrong_statement_valid_theorem_is_capability_blind_control(self) -> None:
         """Cheap lint cannot prove theorem/statement semantic correspondence."""

@@ -68,14 +68,35 @@ class DerivedAttribution(unittest.TestCase):
         self.assertIn("https://github.com/TheAlgorithms/Python", text)
         self.assertIn("f5988cc09713315817df6a7e327e258013a94440", text)
 
-    def test_extract_carries_the_citation_and_both_functions(self) -> None:
+    def test_extract_carries_the_citation_and_eight_functions(self) -> None:
         doc = json.loads((DERIVED_DIR / "extract.json").read_text(encoding="utf-8"))
         self.assertEqual(doc["attribution"], CITATION)
         self.assertEqual(doc["license"], "MIT")
         self.assertEqual(
             [fn["name"] for fn in doc["functions"]],
-            ["greatest_common_divisor", "gcd_by_iterative"],
+            [
+                "greatest_common_divisor",
+                "gcd_by_iterative",
+                "factorial",
+                "factorial_recursive",
+                "double_factorial_recursive",
+                "double_factorial_iterative",
+                "binary_exp_recursive",
+                "binary_exp_iterative",
+            ],
         )
+        self.assertEqual(
+            doc["source_files"],
+            [
+                "maths/greatest_common_divisor.py",
+                "maths/factorial.py",
+                "maths/double_factorial.py",
+                "maths/binary_exponentiation.py",
+            ],
+        )
+        names = [fn["name"] for fn in doc["functions"]]
+        self.assertNotIn("binary_exp_mod_recursive", names)
+        self.assertNotIn("binary_exp_mod_iterative", names)
 
     def test_vendored_license_is_mit(self) -> None:
         text = (DERIVED_DIR / "LICENSE").read_text(encoding="utf-8")
@@ -85,8 +106,13 @@ class DerivedAttribution(unittest.TestCase):
 
 class Regeneration(unittest.TestCase):
     def test_extract_regenerates_when_archive_present(self) -> None:
-        gcd = ARCHIVE_DIR / "greatest_common_divisor.py"
-        if not gcd.is_file():
+        needed = (
+            "greatest_common_divisor.py",
+            "factorial.py",
+            "double_factorial.py",
+            "binary_exponentiation.py",
+        )
+        if not all((ARCHIVE_DIR / name).is_file() for name in needed):
             self.skipTest("pinned TheAlgorithms files not in archives/")
         fresh = ing.extract()
         committed = json.loads(

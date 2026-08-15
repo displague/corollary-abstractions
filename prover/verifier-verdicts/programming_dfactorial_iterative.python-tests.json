@@ -1,0 +1,30 @@
+{
+ "backend": "python-tests",
+ "checks": [
+  "compile: both pinned modules byte-compile",
+  "types: mypy --strict over both pinned modules (offline)",
+  "tests: pinned unittest module executed in a subprocess whose first act installs a CPython audit hook refusing sockets, subprocesses, and writes outside the sandbox directory (a discipline boundary, not a security boundary)"
+ ],
+ "claim": {
+  "statement_id": "programming.dfactorial.iterative",
+  "surface": "n!! = 1 if n <= 1 else n * (n-2)!!"
+ },
+ "environment": {
+  "mypy": "2.3.0",
+  "platform": "win32",
+  "python": "3.13.12"
+ },
+ "evidence": {
+  "stages": {
+   "mypy": 0,
+   "tests": 0
+  },
+  "tests_output_sha256": "fb184ea57734512b1f088f9181209901b9cd46df3eb7eaa2500ea9e48dde20b5"
+ },
+ "inputs": {
+  "prover/pychecks/dfactorial_iterative.py": "540db2066d05c76b765abb0ecea12973d07b28f4a683c4a8a92ceb3f5b2ad3d0",
+  "prover/pychecks/test_dfactorial_iterative.py": "fc6a8296556430ce62cbb1055471f21563554cc82bf7ecaa85af343d4a5d0146"
+ },
+ "schema_version": 1,
+ "verdict": "pass"
+}

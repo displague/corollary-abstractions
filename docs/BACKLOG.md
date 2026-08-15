@@ -2487,7 +2487,10 @@ wants its own adversarial review, not a release-eve change.
   v0.10 item 3 (`docs/DESIGN-programming-discipline.md` §6, P7):
   `scripts/seed_programming.py` will not emit a `verified_by` link unless a
   committed `python-tests` PASS names that `statement_id`. The drop-abs FAIL
-  does not satisfy the rule. The Lean-ingest half is still open.
+  does not satisfy the rule. v0.11 item 3 re-confirmed the rule at volume
+  (six new PASS nodes; the n-minus-2 FAIL also does not satisfy it;
+  `docs/DESIGN-programming-second-wave.md` P-W7). The Lean-ingest half is
+  still open.
 - **Nothing forces a future *Lean-ingested* node to carry a verdict.**
   `external_verifier.verdict_ledger_errors` checks every verdict that EXISTS
   and every manifest `verdicts` entry that is DECLARED, but a new artifact

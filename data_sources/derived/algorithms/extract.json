@@ -3,7 +3,12 @@
   "git_commit": "f5988cc09713315817df6a7e327e258013a94440",
   "license": "MIT",
   "attribution": "TheAlgorithms and contributors. TheAlgorithms/Python. MIT License. https://github.com/TheAlgorithms/Python (commit f5988cc09713315817df6a7e327e258013a94440).",
-  "source_file": "maths/greatest_common_divisor.py",
+  "source_files": [
+    "maths/greatest_common_divisor.py",
+    "maths/factorial.py",
+    "maths/double_factorial.py",
+    "maths/binary_exponentiation.py"
+  ],
   "functions": [
     {
       "name": "greatest_common_divisor",
@@ -14,6 +19,36 @@
       "name": "gcd_by_iterative",
       "source_file": "maths/greatest_common_divisor.py",
       "text": "def gcd_by_iterative(x: int, y: int) -> int:\n    \"\"\"\n    Below method is more memory efficient because it does not create additional\n    stack frames for recursive functions calls (as done in the above method).\n    >>> gcd_by_iterative(24, 40)\n    8\n    >>> greatest_common_divisor(24, 40) == gcd_by_iterative(24, 40)\n    True\n    >>> gcd_by_iterative(-3, -9)\n    3\n    >>> gcd_by_iterative(3, -9)\n    3\n    >>> gcd_by_iterative(1, -800)\n    1\n    >>> gcd_by_iterative(11, 37)\n    1\n    >>> gcd_by_iterative(0, 0)\n    0\n    \"\"\"\n    while y:  # --> when y=0 then loop will terminate and return x as final GCD.\n        x, y = y, x % y\n    return abs(x)\n"
+    },
+    {
+      "name": "factorial",
+      "source_file": "maths/factorial.py",
+      "text": "def factorial(number: int) -> int:\n    \"\"\"\n    Calculate the factorial of specified number (n!).\n\n    >>> import math\n    >>> all(factorial(i) == math.factorial(i) for i in range(20))\n    True\n    >>> factorial(0.1)\n    Traceback (most recent call last):\n        ...\n    ValueError: factorial() only accepts integral values\n    >>> factorial(-1)\n    Traceback (most recent call last):\n        ...\n    ValueError: factorial() not defined for negative values\n    >>> factorial(1)\n    1\n    >>> factorial(6)\n    720\n    >>> factorial(0)\n    1\n    \"\"\"\n    if number != int(number):\n        raise ValueError(\"factorial() only accepts integral values\")\n    if number < 0:\n        raise ValueError(\"factorial() not defined for negative values\")\n    value = 1\n    for i in range(1, number + 1):\n        value *= i\n    return value\n"
+    },
+    {
+      "name": "factorial_recursive",
+      "source_file": "maths/factorial.py",
+      "text": "def factorial_recursive(n: int) -> int:\n    \"\"\"\n    Calculate the factorial of a positive integer\n    https://en.wikipedia.org/wiki/Factorial\n\n    >>> import math\n    >>> all(factorial_recursive(i) == math.factorial(i) for i in range(20))\n    True\n    >>> factorial_recursive(0.1)\n    Traceback (most recent call last):\n        ...\n    ValueError: factorial_recursive() only accepts integral values\n    >>> factorial_recursive(-1)\n    Traceback (most recent call last):\n        ...\n    ValueError: factorial_recursive() not defined for negative values\n    \"\"\"\n    if not isinstance(n, int):\n        raise ValueError(\"factorial_recursive() only accepts integral values\")\n    if n < 0:\n        raise ValueError(\"factorial_recursive() not defined for negative values\")\n    return 1 if n in {0, 1} else n * factorial_recursive(n - 1)\n"
+    },
+    {
+      "name": "double_factorial_recursive",
+      "source_file": "maths/double_factorial.py",
+      "text": "def double_factorial_recursive(n: int) -> int:\n    \"\"\"\n    Compute double factorial using recursive method.\n    Recursion can be costly for large numbers.\n\n    To learn about the theory behind this algorithm:\n    https://en.wikipedia.org/wiki/Double_factorial\n\n    >>> from math import prod\n    >>> all(double_factorial_recursive(i) == prod(range(i, 0, -2)) for i in range(20))\n    True\n    >>> double_factorial_recursive(0.1)\n    Traceback (most recent call last):\n        ...\n    ValueError: double_factorial_recursive() only accepts integral values\n    >>> double_factorial_recursive(-1)\n    Traceback (most recent call last):\n        ...\n    ValueError: double_factorial_recursive() not defined for negative values\n    \"\"\"\n    if not isinstance(n, int):\n        raise ValueError(\"double_factorial_recursive() only accepts integral values\")\n    if n < 0:\n        raise ValueError(\"double_factorial_recursive() not defined for negative values\")\n    return 1 if n <= 1 else n * double_factorial_recursive(n - 2)\n"
+    },
+    {
+      "name": "double_factorial_iterative",
+      "source_file": "maths/double_factorial.py",
+      "text": "def double_factorial_iterative(num: int) -> int:\n    \"\"\"\n    Compute double factorial using iterative method.\n\n    To learn about the theory behind this algorithm:\n    https://en.wikipedia.org/wiki/Double_factorial\n\n    >>> from math import prod\n    >>> all(double_factorial_iterative(i) == prod(range(i, 0, -2)) for i in range(20))\n    True\n    >>> double_factorial_iterative(0.1)\n    Traceback (most recent call last):\n        ...\n    ValueError: double_factorial_iterative() only accepts integral values\n    >>> double_factorial_iterative(-1)\n    Traceback (most recent call last):\n        ...\n    ValueError: double_factorial_iterative() not defined for negative values\n    \"\"\"\n    if not isinstance(num, int):\n        raise ValueError(\"double_factorial_iterative() only accepts integral values\")\n    if num < 0:\n        raise ValueError(\"double_factorial_iterative() not defined for negative values\")\n    value = 1\n    for i in range(num, 0, -2):\n        value *= i\n    return value\n"
+    },
+    {
+      "name": "binary_exp_recursive",
+      "source_file": "maths/binary_exponentiation.py",
+      "text": "def binary_exp_recursive(base: float, exponent: int) -> float:\n    \"\"\"\n    Computes a^b recursively, where a is the base and b is the exponent\n\n    >>> binary_exp_recursive(3, 5)\n    243\n    >>> binary_exp_recursive(11, 13)\n    34522712143931\n    >>> binary_exp_recursive(-1, 3)\n    -1\n    >>> binary_exp_recursive(0, 5)\n    0\n    >>> binary_exp_recursive(3, 1)\n    3\n    >>> binary_exp_recursive(3, 0)\n    1\n    >>> binary_exp_recursive(1.5, 4)\n    5.0625\n    >>> binary_exp_recursive(3, -1)\n    Traceback (most recent call last):\n        ...\n    ValueError: Exponent must be a non-negative integer\n    \"\"\"\n    if exponent < 0:\n        raise ValueError(\"Exponent must be a non-negative integer\")\n\n    if exponent == 0:\n        return 1\n\n    if exponent % 2 == 1:\n        return binary_exp_recursive(base, exponent - 1) * base\n\n    b = binary_exp_recursive(base, exponent // 2)\n    return b * b\n"
+    },
+    {
+      "name": "binary_exp_iterative",
+      "source_file": "maths/binary_exponentiation.py",
+      "text": "def binary_exp_iterative(base: float, exponent: int) -> float:\n    \"\"\"\n    Computes a^b iteratively, where a is the base and b is the exponent\n\n    >>> binary_exp_iterative(3, 5)\n    243\n    >>> binary_exp_iterative(11, 13)\n    34522712143931\n    >>> binary_exp_iterative(-1, 3)\n    -1\n    >>> binary_exp_iterative(0, 5)\n    0\n    >>> binary_exp_iterative(3, 1)\n    3\n    >>> binary_exp_iterative(3, 0)\n    1\n    >>> binary_exp_iterative(1.5, 4)\n    5.0625\n    >>> binary_exp_iterative(3, -1)\n    Traceback (most recent call last):\n        ...\n    ValueError: Exponent must be a non-negative integer\n    \"\"\"\n    if exponent < 0:\n        raise ValueError(\"Exponent must be a non-negative integer\")\n\n    res: int | float = 1\n    while exponent > 0:\n        if exponent & 1:\n            res *= base\n\n        base *= base\n        exponent >>= 1\n\n    return res\n"
     }
   ]
 }

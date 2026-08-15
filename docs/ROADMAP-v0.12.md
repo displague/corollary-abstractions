@@ -49,15 +49,13 @@ is parked in BACKLOG in writing.
 
 ## 3. Programming discipline, second wave (carried from v0.11 item 3)
 
-Still unstarted. **Named dependant:** item 1's H3 — a code-twin
-sample makes "the keyword baseline cannot steal the gap" less of a
-math-only fact. If item 1 is cut to miniF2F-only, **this item is
-parked in BACKLOG**, because it would then have no headline
-depending on it.
-
-**Acceptance:** a source with real tests at volume; the
-`python-tests` citation-not-PROVEN decision survives or is
-retracted in writing.
+**SHIPPED on the v0.11 branch** (so H3 has its second-modality
+sample). Same TheAlgorithms pin, three more files, six new nodes,
+volume tests, vocabulary decision survives. The code-twin keyword
+baseline is now a measured number (precision 0.4 combined, 1/3 on
+the factorial foil set) rather than a planned control.
+**Named dependant:** item 1's H3 — still load-bearing; this slice
+supplied the sample, it did not run the holdout.
 
 ## 4. Verdict-backed ingestion as a RULE (carried)
 
@@ -71,7 +69,7 @@ refuse.
 |---|---|---|
 | miniF2F emit through the existing emitter | item 1 small-N | **prerequisite**, ordered first |
 | Goedel-Pset seeded sample | item 1 scale | **prerequisite**, ordered with it |
-| Programming second wave | item 1 H3 | carried; park if no holdout B |
+| Programming second wave | item 1 H3 | **SHIPPED** (sample exists; H3 still unrun) |
 | Verdict RULE | item 1 B | carried |
 | Groundedness gate | item 2 | gated on H1 |
 | `specialize.py` general index | *none* | **parked** |

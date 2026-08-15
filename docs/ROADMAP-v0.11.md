@@ -99,11 +99,14 @@ baseline. Extend to a source with real test cases at volume, and answer
 whether the `python-tests` verdict vocabulary decision (a citation of a
 committed check, never PROVEN) survives contact with more code.
 **Named dependant:** item 2's fair-fight comparison, which is stronger with
-code twins in the sample.
-**Still open.** Items 1 and 2 shipped on this branch; this wave did
-not start. The vocabulary decision (a citation, never PROVEN) is
-untested at volume. Next slice, not a silent park — item 2's figure
-of merit does not need code twins to be well-defined.
+code twins in the sample. v0.12 also names this slice as H3's dependant.
+**SHIPPED.** Same source, three more files (factorial, double_factorial,
+binary_exponentiation). Six new PASS nodes, one n-minus-2 FAIL.
+Volume is real: `range(20)` against `math.factorial` / `math.prod`.
+The citation-not-PROVEN decision **survives** (P-W1). Token-`factorial`
+baseline precision 1/3 vs matcher 1.0 on the four-node foil set; combined
+programming-keyword precision 0.4 vs 1.0 (P-W5). Design:
+[DESIGN-programming-second-wave.md](DESIGN-programming-second-wave.md).
 
 ## 4. The external benchmark (carried a THIRD time — schedule or park)
 
@@ -132,7 +135,7 @@ forbidden from seeing owner ids. Not started this slice.
 | lane | named dependant | disposition |
 |---|---|---|
 | Skeleton emitter for the 12,681 remainder | item 1 | **SHIPPED** (12,514 authored, 123 excluded) |
-| Verdict-backed ingestion as a RULE (a manifest entry declaring a source must carry a PASS) | item 3 | carried |
+| Verdict-backed ingestion as a RULE (a manifest entry declaring a source must carry a PASS) | item 3 (programming half) / v0.12 held-out B (Lean half) | **PARTIAL** — programming rule held at volume; Lean-ingest half still open |
 | `TOKEN_RE` missing standalone `<` `>` | item 1 (51 statements it excluded) | **SHIPPED** with the emitter (P-E1) |
 | `specialize.py` cost at scale | item 1 (the curve re-runs ledgers) | **PARTIAL** — ingested endpoints skipped; 713 curated edges unchanged |
 | Proof-search depth | *none* | **parked** in BACKLOG |

@@ -18,10 +18,16 @@ P9. group_counts shape 30→31, typed 31→32, family 30→31, aliased 32→33,
 P10. specialize.py finds no general/specific nest (the Euclid pair are
     twins, not a nest). Zero parse problems, zero slot gaps.
 
-Verdict-backed rule (P7): this seed will not emit a verified_by link
-unless a committed python-tests PASS names that statement_id. There is
-no formal-without-bridge node in this slice; the branch exists so the
-next author cannot skip a verdict silently.
+Verdict-backed rule (P7 / P-W7): this seed will not emit a verified_by
+link unless a committed python-tests PASS names that statement_id.
+
+Second wave (docs/DESIGN-programming-second-wave.md), registered BEFORE
+the matcher re-run:
+P-W4. three new typed groups of size 2 (factorial, dfactorial, binexp);
+      Euclid unchanged; Stein singleton; no FACT/DFACT or BEXP/STEIN cross.
+P-W5. token-`factorial` baseline forms 6 pairs; matcher forms 2.
+P-W9. group_counts {1027,972,971,973,5} -> {1030,975,974,976,5}.
+P-W10. no programming specialization edge (pairs are twins, not nests).
 """
 
 from __future__ import annotations
@@ -46,6 +52,7 @@ def op(symbol, name, arity=2, family="arithmetic"):
 EQ = op("=", "equality", 2, "relational")
 MUL = op("*", "multiplication", 2, "arithmetic")
 SUB = op("-", "subtraction", 2, "arithmetic")
+POW = op("^", "exponentiation", 2, "arithmetic")
 
 GCD_FN = {"notation": "GCD(.,.)", "name": "greatest common divisor",
           "input_arity": 2, "codomain": "integers",
@@ -81,6 +88,25 @@ MINOF_FN = {"notation": "MINOF(.,.)", "name": "binary minimum",
             "input_arity": 2, "codomain": "integers",
             "description": "The existing MINOF head, used in Stein's both-odd "
             "reduction."}
+FACT_FN = {"notation": "FACT(.)", "name": "factorial",
+           "input_arity": 1, "codomain": "integers",
+           "description": "n!. Unary; the recurrence is n * FACT(n-1)."}
+DFACT_FN = {"notation": "DFACT(.)", "name": "double factorial",
+            "input_arity": 1, "codomain": "integers",
+            "description": "n!!. Unary; the recurrence is n * DFACT(n-2). "
+            "Different skeleton from FACT; the token factorial is shared "
+            "on purpose (docs/DESIGN-programming-second-wave.md §5.2)."}
+BEXP_FN = {"notation": "BEXP(.,.)", "name": "binary exponentiation",
+           "input_arity": 2, "codomain": "reals",
+           "description": "a^b by squaring. Ordered: exponentiation is not "
+           "commutative. Authored even-first (EVEN/HALVE already exist)."}
+LEQ_FN = {"notation": "LEQ(.,.)", "name": "non-strict order",
+          "input_arity": 2, "codomain": "propositions",
+          "description": "The existing LEQ head, reused for the n <= 1 base."}
+
+INT_N = sym("n", "variable", "integer", "Non-negative integer argument.")
+BASE_X = sym("a", "variable", "real", "Exponentiation base.")
+EXP_N = sym("b", "variable", "integer", "Non-negative integer exponent.")
 
 INT_A = sym("a", "variable", "integer", "First integer argument.")
 INT_B = sym("b", "variable", "integer", "Second integer argument.")
@@ -309,6 +335,168 @@ def _stein():
     return n
 
 
+FACT_TEMPLATE = "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))"
+FACT_SLOTS = [slot("N", "variable", "integer")]
+FACT_INVARIANTS = [
+    "Canonical form is the product recurrence, not the control-flow: "
+    "recursion and a for-loop that realize this recurrence are the "
+    "same algorithm (docs/DESIGN-programming-second-wave.md §4).",
+    "Base case LEQ(N, 1) is the source's n in {0, 1} under the "
+    "regularity condition N >= 0.",
+    "Volume tests compare against math.factorial on range(20).",
+]
+
+
+def _fact(sid, title, artifact, reference, extra_meaning, keywords, twin):
+    require_python_tests_pass(sid)
+    n = node(
+        sid, title, "identity", "formal",
+        "combinatorial_algorithms", "factorial",
+        "n! = 1 if n <= 1 else n * (n-1)!",
+        "n! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-1)!",
+        [{"form_id": "recurrence", "notation_system": "ascii",
+          "expression": "fact(n) = 1 if n <= 1 else n * fact(n - 1)",
+          "scope_note": "Recursive orientation; the iterative "
+          "implementation is the same recurrence."}],
+        "factorial_product_recurrence",
+        FACT_TEMPLATE,
+        FACT_SLOTS,
+        FACT_INVARIANTS,
+        [INT_N], [EQ, MUL, SUB],
+        extra_meaning,
+        HONESTY,
+        ["Non-negative integer argument; negatives are regularity, "
+         "not structure"],
+        [THEALGORITHMS],
+        functionals=[FACT_FN, ITE_FN, LEQ_FN],
+        constants=[{"symbol": "1", "value": 1,
+                    "description": "the factorial base-case value and the "
+                    "LEQ threshold"}],
+        inferential_links=links(equivalent_to=[twin]),
+        keywords=keywords,
+        canonical_objects=["factorial"],
+        failure_modes=[
+            "Stepping by 2 instead of 1 agrees on {0, 1} and fails at 3 "
+            "(the committed n-minus-2 FAIL records this)."
+        ],
+    )
+    n["verified_by"] = [{
+        "system": "python-tests",
+        "artifact": artifact,
+        "reference": reference,
+    }]
+    return n
+
+
+DFACT_TEMPLATE = "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))"
+DFACT_INVARIANTS = [
+    "Different recurrence from factorial: the step is N - 2, not N - 1. "
+    "The matcher must not twin this with the factorial pair (P-W4).",
+    "The token `factorial` is in keywords so the capability-blind "
+    "baseline pairs it with both factorial nodes.",
+    "Volume tests compare against math.prod(range(i, 0, -2)) on range(20).",
+]
+
+
+def _dfact(sid, title, artifact, reference, extra_meaning, keywords, twin):
+    require_python_tests_pass(sid)
+    n = node(
+        sid, title, "identity", "formal",
+        "combinatorial_algorithms", "double_factorial",
+        "n!! = 1 if n <= 1 else n * (n-2)!!",
+        "n!! = 1 \\text{ if } n \\le 1 \\text{ else } n\\cdot(n-2)!!",
+        [{"form_id": "recurrence", "notation_system": "ascii",
+          "expression": "dfact(n) = 1 if n <= 1 else n * dfact(n - 2)",
+          "scope_note": "The ingested foil: name contains factorial, "
+          "recurrence does not share FACT's skeleton."}],
+        "double_factorial_recurrence",
+        DFACT_TEMPLATE,
+        FACT_SLOTS,
+        DFACT_INVARIANTS,
+        [INT_N], [EQ, MUL, SUB],
+        extra_meaning,
+        HONESTY,
+        ["Non-negative integer argument"],
+        [THEALGORITHMS],
+        functionals=[DFACT_FN, ITE_FN, LEQ_FN],
+        constants=[{"symbol": "1", "value": 1,
+                    "description": "the double-factorial base-case value"},
+                   {"symbol": "2", "value": 2,
+                    "description": "the double-factorial step"}],
+        inferential_links=links(equivalent_to=[twin]),
+        keywords=keywords,
+        canonical_objects=["double factorial"],
+    )
+    n["verified_by"] = [{
+        "system": "python-tests",
+        "artifact": artifact,
+        "reference": reference,
+    }]
+    return n
+
+
+BEXP_TEMPLATE = (
+    "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, "
+    "ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, "
+    "BASE * BEXP(BASE, EXPN - 1)))"
+)
+BEXP_SLOTS = [
+    slot("BASE", "variable", "real"),
+    slot("EXPN", "variable", "integer"),
+]
+BEXP_INVARIANTS = [
+    "Canonical form is the square-and-multiply recurrence, not the "
+    "bit-shift accumulator. Recursion and a while-loop that realize "
+    "this recurrence are the same algorithm.",
+    "Even-first orientation: EVEN and HALVE already exist (Stein). "
+    "The TheAlgorithms recursive body checks odd first; both nodes "
+    "are authored onto the even-first template "
+    "(docs/DESIGN-programming-second-wave.md §4).",
+    "The even branch is rec ^ 2 (one recursive call, then square), "
+    "matching the source's bind-then-multiply.",
+]
+
+
+def _bexp(sid, title, artifact, reference, extra_meaning, keywords, twin):
+    require_python_tests_pass(sid)
+    n = node(
+        sid, title, "identity", "formal",
+        "number_theoretic_algorithms", "binary_exponentiation",
+        "bexp(a, e) = 1 if e = 0 else (bexp(a, e/2)^2 if e even else a * bexp(a, e-1))",
+        "a^{e}=1\\text{ if }e=0\\text{ else }(a^{e/2})^{2}\\text{ if }e\\text{ even else }a\\cdot a^{e-1}",
+        [{"form_id": "recurrence", "notation_system": "ascii",
+          "expression": "bexp(a, e) = 1 if e == 0 else "
+          "(bexp(a, e//2)**2 if e%2==0 else a * bexp(a, e-1))",
+          "scope_note": "Even-first authored orientation."}],
+        "binary_exponentiation_recurrence",
+        BEXP_TEMPLATE,
+        BEXP_SLOTS,
+        BEXP_INVARIANTS,
+        [BASE_X, EXP_N], [EQ, MUL, SUB, POW],
+        extra_meaning,
+        HONESTY,
+        ["Non-negative integer exponent; real base. Modular variants "
+         "in the source file are declined this slice."],
+        [THEALGORITHMS],
+        functionals=[BEXP_FN, ITE_FN, EVEN_FN, HALVE_FN],
+        constants=[{"symbol": "0", "value": 0,
+                    "description": "the exponent base-case test"},
+                   {"symbol": "1", "value": 1,
+                    "description": "a^0"},
+                   {"symbol": "2", "value": 2,
+                    "description": "the even-branch square"}],
+        inferential_links=links(equivalent_to=[twin]),
+        keywords=keywords,
+        canonical_objects=["binary exponentiation"],
+    )
+    n["verified_by"] = [{
+        "system": "python-tests",
+        "artifact": artifact,
+        "reference": reference,
+    }]
+    return n
+
+
 NODES = [
     _euclid(
         "programming.euclid.recursive",
@@ -334,6 +522,74 @@ NODES = [
         ["gcd", "euclid", "iterative", "ingested", "programming"],
     ),
     _stein(),
+    _fact(
+        "programming.factorial.recursive",
+        "Factorial, Recursive (TheAlgorithms)",
+        "prover/pychecks/factorial_recursive.py",
+        "factorial_recursive",
+        "The factorial recurrence, recursive evaluation, as implemented "
+        "by TheAlgorithms/Python factorial_recursive (commit f5988cc, MIT).",
+        ["factorial", "recursive", "ingested", "programming"],
+        twin="programming.factorial.iterative",
+    ),
+    _fact(
+        "programming.factorial.iterative",
+        "Factorial, Iterative (TheAlgorithms)",
+        "prover/pychecks/factorial_iterative.py",
+        "factorial",
+        "The same factorial recurrence, for-loop evaluation, as implemented "
+        "by TheAlgorithms/Python factorial (commit f5988cc, MIT). "
+        "Control-flow is evaluation strategy, not structure.",
+        ["factorial", "iterative", "ingested", "programming"],
+        twin="programming.factorial.recursive",
+    ),
+    _dfact(
+        "programming.dfactorial.recursive",
+        "Double Factorial, Recursive (TheAlgorithms)",
+        "prover/pychecks/dfactorial_recursive.py",
+        "double_factorial_recursive",
+        "The double-factorial recurrence (step n-2), recursive evaluation, "
+        "as implemented by TheAlgorithms/Python double_factorial_recursive "
+        "(commit f5988cc, MIT). Name-similar non-twin of the factorial pair.",
+        ["factorial", "double factorial", "recursive", "ingested",
+         "programming"],
+        twin="programming.dfactorial.iterative",
+    ),
+    _dfact(
+        "programming.dfactorial.iterative",
+        "Double Factorial, Iterative (TheAlgorithms)",
+        "prover/pychecks/dfactorial_iterative.py",
+        "double_factorial_iterative",
+        "The same double-factorial recurrence, for-loop evaluation, as "
+        "implemented by TheAlgorithms/Python double_factorial_iterative "
+        "(commit f5988cc, MIT).",
+        ["factorial", "double factorial", "iterative", "ingested",
+         "programming"],
+        twin="programming.dfactorial.recursive",
+    ),
+    _bexp(
+        "programming.binexp.recursive",
+        "Binary Exponentiation, Recursive (TheAlgorithms)",
+        "prover/pychecks/binexp_recursive.py",
+        "binary_exp_recursive",
+        "Binary exponentiation by squaring, recursive evaluation, as "
+        "implemented by TheAlgorithms/Python binary_exp_recursive "
+        "(commit f5988cc, MIT). Authored even-first (EVEN/HALVE already "
+        "exist); the source checks odd first.",
+        ["exponentiation", "power", "recursive", "ingested", "programming"],
+        twin="programming.binexp.iterative",
+    ),
+    _bexp(
+        "programming.binexp.iterative",
+        "Binary Exponentiation, Iterative (TheAlgorithms)",
+        "prover/pychecks/binexp_iterative.py",
+        "binary_exp_iterative",
+        "The same binary-exponentiation recurrence, bit-shift evaluation, "
+        "as implemented by TheAlgorithms/Python binary_exp_iterative "
+        "(commit f5988cc, MIT).",
+        ["exponentiation", "power", "iterative", "ingested", "programming"],
+        twin="programming.binexp.recursive",
+    ),
 ]
 
 

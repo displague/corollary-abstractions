@@ -94,11 +94,17 @@ class Vocabulary(unittest.TestCase):
 class EndToEnd(unittest.TestCase):
     """P3: each node has a rechecking PASS; P6: drop-abs is a recorded FAIL."""
 
-    def test_three_pass_verdicts_recheck(self) -> None:
+    def test_nine_pass_verdicts_recheck(self) -> None:
         for name in (
             "programming_euclid_recursive.python-tests.json",
             "programming_euclid_iterative.python-tests.json",
             "programming_stein_binary.python-tests.json",
+            "programming_factorial_recursive.python-tests.json",
+            "programming_factorial_iterative.python-tests.json",
+            "programming_dfactorial_recursive.python-tests.json",
+            "programming_dfactorial_iterative.python-tests.json",
+            "programming_binexp_recursive.python-tests.json",
+            "programming_binexp_iterative.python-tests.json",
         ):
             ok, detail = ev.recheck(REPO_ROOT, f"prover/verifier-verdicts/{name}")
             self.assertTrue(ok, detail)
@@ -122,13 +128,30 @@ class EndToEnd(unittest.TestCase):
             "prover/verifier-verdicts/programming_euclid_drop_abs.python-tests.json",
             cited,
         )
+        self.assertNotIn(
+            "prover/verifier-verdicts/programming_factorial_n_minus_2.python-tests.json",
+            cited,
+        )
         for node in _nodes():
-            self.assertNotEqual(
-                node["statement_id"], "programming.euclid.drop_abs"
+            self.assertNotIn(
+                node["statement_id"],
+                {"programming.euclid.drop_abs",
+                 "programming.factorial.n_minus_2"},
             )
         ok, detail = ev.recheck(
             REPO_ROOT,
             "prover/verifier-verdicts/programming_euclid_drop_abs.python-tests.json",
+        )
+        self.assertTrue(ok, detail)
+
+    def test_n_minus_2_is_a_committed_fail_cited_by_nothing(self) -> None:
+        path = VERDICTS / "programming_factorial_n_minus_2.python-tests.json"
+        verdict = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(verdict["verdict"], "fail")
+        self.assertEqual(verdict["backend"], "python-tests")
+        ok, detail = ev.recheck(
+            REPO_ROOT,
+            "prover/verifier-verdicts/programming_factorial_n_minus_2.python-tests.json",
         )
         self.assertTrue(ok, detail)
 
@@ -167,6 +190,27 @@ class TwinsAndBaseline(unittest.TestCase):
         for group in groups:
             self.assertNotIn("programming.stein.binary", group)
 
+    def test_second_wave_pairs_are_typed_twins_and_do_not_cross(self) -> None:
+        """P-W4: three new groups of size 2; no FACT/DFACT or BEXP/STEIN cross."""
+        expected = [
+            {"programming.factorial.recursive", "programming.factorial.iterative"},
+            {"programming.dfactorial.recursive", "programming.dfactorial.iterative"},
+            {"programming.binexp.recursive", "programming.binexp.iterative"},
+        ]
+        groups = [
+            {m["statement_id"] for m in g["members"]}
+            for g in self.report["typed_twin_groups"]
+        ]
+        for pair in expected:
+            self.assertIn(pair, groups)
+        for group in groups:
+            heads = {sid.split(".")[1] for sid in group if sid.startswith("programming.")}
+            if "factorial" in heads:
+                self.assertNotIn("dfactorial", heads)
+            if "binexp" in heads:
+                self.assertNotIn("stein", heads)
+            self.assertNotIn("programming.stein.binary", group)
+
     def test_token_gcd_baseline_loses_on_precision(self) -> None:
         # P5 registered "token gcd in statement_id". The ids are
         # programming.euclid.* / programming.stein.* — the gcd token
@@ -191,10 +235,81 @@ class TwinsAndBaseline(unittest.TestCase):
         matcher = [
             {m["statement_id"] for m in g["members"]}
             for g in self.report["typed_twin_groups"]
-            if any(m["statement_id"].startswith("programming.") for m in g["members"])
+            if {m["statement_id"] for m in g["members"]} <= set(ids)
         ]
         self.assertEqual(len(matcher), 1)
         self.assertEqual(matcher[0], {ids[0], ids[1]})
+
+    def test_token_factorial_baseline_loses_on_precision(self) -> None:
+        """P-W5: keyword factorial forms 6 pairs; matcher forms 2."""
+        by_id = _by_id()
+        ids = [
+            "programming.factorial.recursive",
+            "programming.factorial.iterative",
+            "programming.dfactorial.recursive",
+            "programming.dfactorial.iterative",
+        ]
+        def has_factorial(sid: str) -> bool:
+            return "factorial" in by_id[sid].get("keywords", [])
+        baseline = [
+            (a, b)
+            for i, a in enumerate(ids)
+            for b in ids[i + 1 :]
+            if has_factorial(a) and has_factorial(b)
+        ]
+        self.assertEqual(len(baseline), 6)
+        matcher = [
+            {m["statement_id"] for m in g["members"]}
+            for g in self.report["typed_twin_groups"]
+            if {m["statement_id"] for m in g["members"]} <= set(ids)
+        ]
+        self.assertEqual(len(matcher), 2)
+        self.assertEqual(
+            set(map(frozenset, matcher)),
+            {
+                frozenset(ids[:2]),
+                frozenset(ids[2:]),
+            },
+        )
+
+    def test_combined_programming_keyword_baseline_is_point_four(self) -> None:
+        """P-W5 combined: 10 keyword pairs vs 4 matcher pairs (precision 0.4)."""
+        by_id = _by_id()
+        ids = [n["statement_id"] for n in _nodes()]
+        tokens = ("gcd", "factorial", "exponentiation")
+        def toks(sid: str) -> set[str]:
+            kws = by_id[sid].get("keywords", [])
+            return {t for t in tokens if t in kws}
+        baseline = [
+            (a, b)
+            for i, a in enumerate(ids)
+            for b in ids[i + 1 :]
+            if toks(a) & toks(b)
+        ]
+        self.assertEqual(len(baseline), 10)
+        matcher = [
+            {m["statement_id"] for m in g["members"]}
+            for g in self.report["typed_twin_groups"]
+            if any(m["statement_id"].startswith("programming.") for m in g["members"])
+        ]
+        self.assertEqual(len(matcher), 4)
+
+    def test_volume_loops_are_real(self) -> None:
+        """P-W11: FACT/DFACT tests contain a range(20) library comparison."""
+        needles = {
+            "test_factorial_recursive.py": "range(20)",
+            "test_factorial_iterative.py": "range(20)",
+            "test_dfactorial_recursive.py": "range(20)",
+            "test_dfactorial_iterative.py": "range(20)",
+        }
+        for name, needle in needles.items():
+            text = (REPO_ROOT / "prover" / "pychecks" / name).read_text(
+                encoding="utf-8"
+            )
+            self.assertIn(needle, text)
+            self.assertTrue(
+                "math.factorial" in text or "math.prod" in text, name
+            )
 
 
 class RetrievalDoesNotTreatTestsAsProofs(unittest.TestCase):
@@ -235,6 +350,10 @@ class VerdictBackedRule(unittest.TestCase):
     def test_drop_abs_fail_does_not_satisfy_the_rule(self) -> None:
         with self.assertRaises(SystemExit):
             seed.require_python_tests_pass("programming.euclid.drop_abs")
+
+    def test_n_minus_2_fail_does_not_satisfy_the_rule(self) -> None:
+        with self.assertRaises(SystemExit):
+            seed.require_python_tests_pass("programming.factorial.n_minus_2")
 
 
 if __name__ == "__main__":

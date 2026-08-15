@@ -92,14 +92,19 @@ class MirrorReportTests(unittest.TestCase):
         # emitted; docs/DESIGN-skeleton-emitter.md P-E3). group_counts MOVE
         # {35,36,35,37,5} -> {1027,972,971,973,5}. Shared inequality
         # skeletons twin at scale. parse_problems 0, slot_schema_gaps 0.
-        self.assertEqual(self.report["nodes_analyzed"], 12771)
+        # v0.11 item 3 second wave: 12777 = 12771 + 6 verified-code nodes
+        # (docs/DESIGN-programming-second-wave.md). group_counts MOVE
+        # {1027,972,971,973,5} -> {1030,975,974,976,5} — three new groups
+        # of size 2 (factorial, dfactorial, binexp). P-W4/P-W9 registered
+        # before the matcher ran. Prior acknowledgments are not rewritten.
+        self.assertEqual(self.report["nodes_analyzed"], 12777)
         self.assertEqual(
             self.report["group_counts"],
             {
-                "shape": 1027,
-                "typed": 972,
-                "family": 971,
-                "aliased": 973,
+                "shape": 1030,
+                "typed": 975,
+                "family": 974,
+                "aliased": 976,
                 "mirror": 5,
             },
         )

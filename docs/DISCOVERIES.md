@@ -83,6 +83,31 @@ bindings), **near-miss** (informative failure, kept deliberately).
   Control-flow (recursion vs while) is evaluation strategy, not structure.
   Status: **exact** (typed twin, registered as P4/P5 before the matcher ran).
 
+- **Factorial and double-factorial share a token and not a skeleton;
+  binary exponentiation is a third recurrence pair (v0.11 item 3).**
+  Same source, three more files, tests at volume (`range(20)` vs
+  `math.factorial` / `math.prod`). Typed twins:
+  `{programming.factorial.recursive, programming.factorial.iterative}`
+  on `FACT⟨?0:V⟩ = ITE⟨LEQ⟨?0:V, 1⟩, 1, *(?0:V, FACT⟨-(?0:V, 1)⟩)⟩`;
+  `{programming.dfactorial.*}` on the `N - 2` sibling; `{programming.binexp.*}`
+  on even-first square-and-multiply. A token-`factorial` baseline forms
+  6 pairs (precision 1/3); the matcher forms 2 (precision 1.0). Combined
+  programming-keyword baseline 10 pairs vs 4, precision 0.4. The
+  `python-tests` citation-not-PROVEN decision survives at this volume:
+  nine programming nodes stay `formal`; retrieval still mints no
+  `proof:programming.*`. Status: **exact** (P-W1/P-W4/P-W5, registered
+  before the matcher ran).
+
+- **At volume, the programming corpus is self-certifying under the
+  conservative owner rule and not under the generous one (v0.11 item 3).**
+  Nine nodes, eight at groundedness 1.0: corpus mean 0.939. Twin pairs
+  ground each other, so the conservative (least-independent-owner) reading
+  puts independent credit under 0.1 and trips `self_certifying_lower`.
+  The generous reading still gives multi-owner constituents to external
+  and does not trip the flag. Provability remains the only corpus that
+  self-certifies under *both* rules. Status: **exact** (GC4 ninth
+  acknowledgment; not predicted — a measurement).
+
 - **The honest reach of the corpus grammar on uncontrolled formal math is about
   a third — measured, not asserted (v0.9).** A shared coverage instrument
   (`scripts/grammar_coverage.py`) reduced three real, digest-pinned Lean sources

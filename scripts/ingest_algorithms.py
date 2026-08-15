@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Deterministic extract of the pinned TheAlgorithms/Python GCD file.
+"""Deterministic extract of the pinned TheAlgorithms/Python maths files.
 
-Design: docs/DESIGN-programming-discipline.md (committed before this file).
+Design: docs/DESIGN-programming-discipline.md (first wave, one file) and
+docs/DESIGN-programming-second-wave.md (this wave, four files).
 
-TheAlgorithms/Python is the chosen source for ROADMAP-v0.10 item 3: MIT,
-Python, and small enough that a one-file pin reaches the acceptance bar.
-CodeNet was declined (submission terms); thuva4/Algorithms was declined as
-the primary source (TypeScript; the live verifier backend is python-tests).
+TheAlgorithms/Python is the chosen source: MIT, Python, and small enough
+that a per-file pin reaches the acceptance bar. CodeNet was declined
+(submission terms); thuva4/Algorithms was declined as the primary source
+(TypeScript; the live verifier backend is python-tests).
 
 Two stages, mirroring ingest_minif2f.py / ingest_wold.py:
 
@@ -16,10 +17,13 @@ Two stages, mirroring ingest_minif2f.py / ingest_wold.py:
            -> committed data_sources/derived/algorithms/extract.json
   check    committed extract.json is internally complete (no archive)
 
-The source file still contains a Python-2 ``except A, B`` in ``main()``,
-so the extract NEVER ast-parses the whole file. It slices the two
-function definitions by their ``def`` lines and stops before ``def main``.
-That is a declared transform, not a guess.
+The GCD source file still contains a Python-2 ``except A, B`` in
+``main()``, so the extract NEVER ast-parses a whole file. It slices
+named function definitions by their ``def`` lines. That is a declared
+transform, not a guess.
+
+The two modular exponentiation functions in binary_exponentiation.py
+are declined this slice (design §3) and are not sliced.
 
 Determinism: source order, no timestamps, LF-only bytes via write_bytes.
 """
@@ -46,11 +50,52 @@ CITATION = (
     "(commit f5988cc09713315817df6a7e327e258013a94440)."
 )
 
-# Slice markers: inclusive start, exclusive end. Order is source order.
-FUNCTION_SLICES = (
-    ("greatest_common_divisor", "def greatest_common_divisor", "def gcd_by_iterative"),
-    ("gcd_by_iterative", "def gcd_by_iterative", "def main"),
+# Per-file slice markers: inclusive start, exclusive end. Order is
+# source-file order, then source order inside the file.
+FILE_SLICES: tuple[dict, ...] = (
+    {
+        "filename": "greatest_common_divisor.py",
+        "source_file": "maths/greatest_common_divisor.py",
+        "functions": (
+            ("greatest_common_divisor", "def greatest_common_divisor", "def gcd_by_iterative"),
+            ("gcd_by_iterative", "def gcd_by_iterative", "def main"),
+        ),
+    },
+    {
+        "filename": "factorial.py",
+        "source_file": "maths/factorial.py",
+        "functions": (
+            ("factorial", "def factorial(", "def factorial_recursive"),
+            ("factorial_recursive", "def factorial_recursive", "if __name__"),
+        ),
+    },
+    {
+        "filename": "double_factorial.py",
+        "source_file": "maths/double_factorial.py",
+        "functions": (
+            ("double_factorial_recursive", "def double_factorial_recursive",
+             "def double_factorial_iterative"),
+            ("double_factorial_iterative", "def double_factorial_iterative",
+             "if __name__"),
+        ),
+    },
+    {
+        "filename": "binary_exponentiation.py",
+        "source_file": "maths/binary_exponentiation.py",
+        "functions": (
+            ("binary_exp_recursive", "def binary_exp_recursive",
+             "def binary_exp_iterative"),
+            ("binary_exp_iterative", "def binary_exp_iterative",
+             "def binary_exp_mod_recursive"),
+        ),
+    },
 )
+
+EXPECTED_FUNCTION_NAMES = [
+    name
+    for spec in FILE_SLICES
+    for name, _start, _end in spec["functions"]
+]
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -109,31 +154,34 @@ def _slice_function(source: str, start_marker: str, end_marker: str) -> str:
 def extract() -> dict:
     src = _load_manifest_source()
     files = {entry["filename"]: entry for entry in src["files"]}
-    gcd_meta = files["greatest_common_divisor.py"]
     lic_meta = files["LICENSE.md"]
-    gcd_bytes = _verified_file(gcd_meta["filename"], gcd_meta["sha256"])
     lic_bytes = _verified_file(lic_meta["filename"], lic_meta["sha256"])
     license_text = lic_bytes.decode("utf-8")
     if "MIT License" not in license_text:
         raise SystemExit(
             "LICENSE.md does not contain 'MIT License'; refusing to extract"
         )
-    source = gcd_bytes.decode("utf-8")
     functions = []
-    for name, start, end in FUNCTION_SLICES:
-        functions.append(
-            {
-                "name": name,
-                "source_file": "maths/greatest_common_divisor.py",
-                "text": _slice_function(source, start, end),
-            }
-        )
+    source_files = []
+    for spec in FILE_SLICES:
+        meta = files[spec["filename"]]
+        raw = _verified_file(meta["filename"], meta["sha256"])
+        source = raw.decode("utf-8")
+        source_files.append(spec["source_file"])
+        for name, start, end in spec["functions"]:
+            functions.append(
+                {
+                    "name": name,
+                    "source_file": spec["source_file"],
+                    "text": _slice_function(source, start, end),
+                }
+            )
     return {
         "source_id": MANIFEST_SOURCE_ID,
         "git_commit": src["git_commit"],
         "license": "MIT",
         "attribution": CITATION,
-        "source_file": "maths/greatest_common_divisor.py",
+        "source_files": source_files,
         "functions": functions,
     }
 
@@ -144,8 +192,10 @@ def check_extract(doc: dict) -> None:
     if doc.get("attribution") != CITATION:
         raise SystemExit("extract attribution drifted from the citation of record")
     names = [fn["name"] for fn in doc.get("functions", [])]
-    if names != ["greatest_common_divisor", "gcd_by_iterative"]:
+    if names != EXPECTED_FUNCTION_NAMES:
         raise SystemExit(f"extract functions drifted: {names}")
+    if "binary_exp_mod_recursive" in names or "binary_exp_mod_iterative" in names:
+        raise SystemExit("extract took the declined modular pair")
 
 
 def main(argv: list[str] | None = None) -> int:

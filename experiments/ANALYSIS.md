@@ -3720,3 +3720,44 @@ its definition, and the matcher misses only the print-convention
 pair. F1 against either gold is `2p/(1+p)` of bag precision — a
 transform, not a second measurement. Regenerable:
 `scripts/measure_operator_bag.py`.
+
+---
+
+## v0.11 item 3 — programming second wave, volume, vocabulary survives
+
+Design registered first: `docs/DESIGN-programming-second-wave.md`.
+Adjudication exact to the row in that file's §9.
+
+**The vocabulary decision survives.** Nine programming nodes cite
+`system: "python-tests"`, stay `formal`, and write the honesty
+sentence. Retrieval still mints no `proof:programming.*`.
+Correspondence stays 16 / 1 / 0 over the 18 lean4 links. A
+`range(20)` library comparison is a stronger computational claim
+than eight doctests and is still not a proof.
+
+**Source.** Same TheAlgorithms/Python pin, commit `f5988cc`, MIT.
+Three files added: `maths/factorial.py`, `maths/double_factorial.py`,
+`maths/binary_exponentiation.py`. Extract holds eight functions;
+the two modular exponentiation variants were declined (already have
+an ingested foil family). Stein stays first-party.
+
+**Volume.** Each FACT/DFACT test module loops `range(20)` against
+`math.factorial` / `math.prod`. BEXP adds a `range(16) × 6 bases`
+loop against `**` as a disclosed expansion of the source \(a^b\)
+claim. The n-minus-2 mutation agrees on `{0,1}` and fails at 3;
+the volume loop is what catches it.
+
+**Twins vs the keyword baseline (H3 substrate).** Three new typed
+groups of size 2. Token-`factorial` baseline: 6 pairs, matcher 2,
+precision 1.0 vs 1/3. Token-`exponentiation` on the two-node BEXP
+set ties (1 vs 1). Combined programming-keyword baseline
+(`gcd`/`factorial`/`exponentiation`): 10 pairs vs 4, precision 0.4.
+group_counts {1027, 972, 971, 973, 5} → {1030, 975, 974, 976, 5}.
+
+**Ledgers.** Corpus 12,771 → 12,777. `verified_by` 21 → 27
+(18 lean4 + 9 python-tests). GC4: mean 0.862 → 0.863, exact 181867
+→ 181909, pattern 88 → 89, with-constituents 12612 → 12618.
+`programming.core.v1` now trips `self_certifying_lower` (mean 0.939)
+but not the generous flag — first corpus besides provability to do
+so. Ninth acknowledgment in `tests/test_decompose_channels.py`.
+specialize.py still 713 curated edges; no programming nest claimed.

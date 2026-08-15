@@ -11,6 +11,54 @@
         "prover/verifier-verdicts/lean_workbook_1041.python-tests.json"
       ]
     },
+    "prover/pychecks/binexp_iterative.py": {
+      "sha256": "15c3746a29cddedd4b6b2e8d4e5a31cc77565b73a45a0ebc090eeedd8f00bf98",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/binexp_iterative.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_binexp_iterative.python-tests.json"
+      ]
+    },
+    "prover/pychecks/binexp_recursive.py": {
+      "sha256": "465fc91cd61db65f4cfeb686d8590330817a499aa205dd6e71ce2c4baa82b7dc",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/binexp_recursive.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_binexp_recursive.python-tests.json"
+      ]
+    },
+    "prover/pychecks/dfactorial_iterative.py": {
+      "sha256": "540db2066d05c76b765abb0ecea12973d07b28f4a683c4a8a92ceb3f5b2ad3d0",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/dfactorial_iterative.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_dfactorial_iterative.python-tests.json"
+      ]
+    },
+    "prover/pychecks/dfactorial_recursive.py": {
+      "sha256": "3e88dcfb673692460afb05776f59e5e27728735e5e8a1822e3dd7c1196beb34c",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/dfactorial_recursive.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_dfactorial_recursive.python-tests.json"
+      ]
+    },
+    "prover/pychecks/factorial_iterative.py": {
+      "sha256": "3992cb02b630e2183396e3a9eeb2e7d0c94d9c8fd87e2f54b1e515aad3431d1a",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/factorial_iterative.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_factorial_iterative.python-tests.json"
+      ]
+    },
+    "prover/pychecks/factorial_recursive.py": {
+      "sha256": "62a007032097455d40013c92f8ffdf1fa93780d1d47c560b13b29d4206cdc8d4",
+      "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md, docs/DESIGN-programming-second-wave.md); a PASS certifies those checks, not correctness in general",
+      "source": "prover/pychecks/factorial_recursive.py",
+      "verdicts": [
+        "prover/verifier-verdicts/programming_factorial_recursive.python-tests.json"
+      ]
+    },
     "prover/pychecks/gcd_euclid_iterative.py": {
       "sha256": "48338fba664d0802f6adc26f12fbeb684c1ac12a0820a091c90f66626064288a",
       "authority": "python-tests: compile + mypy --strict + pinned unittest (docs/DESIGN-programming-discipline.md); a PASS certifies those checks, not correctness in general",

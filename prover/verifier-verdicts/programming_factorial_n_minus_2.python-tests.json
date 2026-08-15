@@ -1,0 +1,31 @@
+{
+ "backend": "python-tests",
+ "checks": [
+  "compile: both pinned modules byte-compile",
+  "types: mypy --strict over both pinned modules (offline)",
+  "tests: pinned unittest module executed in a subprocess whose first act installs a CPython audit hook refusing sockets, subprocesses, and writes outside the sandbox directory (a discipline boundary, not a security boundary)"
+ ],
+ "claim": {
+  "statement_id": "programming.factorial.n_minus_2",
+  "surface": "broken n-2 factorial"
+ },
+ "environment": {
+  "mypy": "2.3.0",
+  "platform": "win32",
+  "python": "3.13.12"
+ },
+ "evidence": {
+  "reason": "sandboxed tests failed: F\n======================================================================\nFAIL: test_agrees_with_math_factorial_through_19 (test_factorial_n_minus_2.FactorialNMinus2.test_agrees_with_math_factorial_through_19)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"prover/pychecks/test_factorial_n_minus_2.py\", line 19, in test_agrees_with_ma",
+  "stages": {
+   "mypy": 0,
+   "tests": 1
+  },
+  "tests_output_sha256": "bb6bb44f351fda709ba6e4db90e37165e6d0dc397e442a19383ed8e31e24b7c7"
+ },
+ "inputs": {
+  "prover/pychecks/factorial_n_minus_2.py": "f1c99bf94713fdc4c432432409f773de8131b2476f2683954a2e49cc032d54ba",
+  "prover/pychecks/test_factorial_n_minus_2.py": "e3af7eb864ce7157b158ab9a76b17b4dff9d33d79c4f2ea2e23ddb5f51c0b774"
+ },
+ "schema_version": 1,
+ "verdict": "fail"
+}

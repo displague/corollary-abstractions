@@ -36,7 +36,7 @@ v0.10 carried these into v0.11. What happened:
 | Self-grounding curve + null (v0.11 item 1) | **YES** — S1–S4 fired; shape was the accident |
 | Fair-fight FoM (v0.11 item 2) | **YES** — 0.0220% |
 | Skeleton emitter (prerequisite) | **YES** — 12,514 / 123 |
-| Programming second wave (v0.11 item 3) | **NO — carried** to v0.12 with a named dependant (H3 of the held-out design). Not parked: item 2's FoM did not need code twins, so this slice did not start |
+| Programming second wave (v0.11 item 3) | **YES** — six volume-tested nodes; citation-not-PROVEN survives (P-W1). H3 of the held-out design now has its code-twin sample |
 | External benchmark (carried a third time) | **SCHEDULED**, not run — the design now exists |
 | Verdict-backed ingestion as a RULE | **carried** — named dependant: held-out B |
 | `TOKEN_RE` `<` `>` | **YES** (P-E1) |
@@ -45,9 +45,9 @@ v0.10 carried these into v0.11. What happened:
 | Groundedness gate | **unparked**, not designed — constraints in DESIGN-heldout-recovery.md §8 |
 | Physics / affect / oscillation / visual | stayed parked |
 
-Nothing planned was silently dropped. Item 3 is the one unfinished
-half that a reader could miss: it is named here and in ROADMAP-v0.12
-item 3, not absorbed into "the headlines shipped."
+Nothing planned was silently dropped. Item 3 shipped after the
+headlines; it is named here and in ROADMAP-v0.12 item 3 as H3's
+sample, not absorbed into "the headlines shipped."
 
 **vs v0.9, one more time.** The external benchmark has now been
 carried through v0.9, v0.10, and v0.11 without a run. This cycle
@@ -61,7 +61,7 @@ specified. A fourth cycle that does not run H1–H6 owes a park.
 | lane | named dependant in v0.12 | disposition |
 |---|---|---|
 | Held-out recovery (this cycle's design) | headline | **ordered first** |
-| Programming second wave | H3 (keyword baseline on a second modality) | carried; parked if holdout B is cut |
+| Programming second wave | H3 (keyword baseline on a second modality) | **SHIPPED** — sample exists; H3 still unrun |
 | Verdict-backed ingestion RULE | held-out B | carried |
 | Groundedness gate | headline, after H1 | unparked; not drawn until H1 lands |
 | `specialize.py` general index | *none* | stays PARTIAL / parked |
