@@ -1,0 +1,32 @@
+{
+  "generated_by": "scripts/seed_minif2f.py emit census",
+  "design": "docs/DESIGN-heldout-recovery.md",
+  "role": "held-out A (small-N) — the emitter was not fitted to this source",
+  "statements_in_extract": 488,
+  "duplicate_goals_dropped": 10,
+  "unique_goals": 478,
+  "unique_covered_considered": 160,
+  "emitted": 157,
+  "excluded": 3,
+  "emitted_by_split": {
+    "test": 93,
+    "valid": 64
+  },
+  "excluded_by_reason": {
+    "emit:untokenizable '⁻¹ * ((3 * x'": 1,
+    "emit:untokenizable '⁻¹ / 4⁻¹ - a'": 1,
+    "parse_fail": 1
+  },
+  "excluded_samples": {
+    "emit:untokenizable '⁻¹ / 4⁻¹ - a'": [
+      "mathd_algebra_129: a = -2"
+    ],
+    "parse_fail": [
+      "aime_1983_p9: 12 ≤ ((9 * (x^2 * (real.sin x)^2)) + 4) / (x * real.sin x)"
+    ],
+    "emit:untokenizable '⁻¹ * ((3 * x'": [
+      "mathd_algebra_245: (4 / x)⁻¹ * ((3 * x^3) / x)^2 * ((1 / (2 * x))⁻¹)^3 = 18 * x^8"
+    ]
+  },
+  "emitter_widened": false
+}

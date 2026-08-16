@@ -357,10 +357,25 @@ SELF_CERTIFYING_AGGREGATE = 0.9
 SELF_CERTIFYING_INDEPENDENT = 0.1
 
 
+# Corpora authored in one mechanical act from a pinned external extract.
+# Registration is load-bearing twice over: it keeps a corpus out of the
+# pattern set (P-E5, see `forms_by_head` below) and it decides who counts as
+# an ingested owner. An ingested corpus left unregistered would have its
+# forms promoted to patterns, which changes `pattern_cover` grounding for
+# EVERY node in the graph -- including layers whose curve is already
+# published. Adding a name here is the conservative direction: it can only
+# remove forms from the pattern set, never resurrect one.
+#
+# `minif2f` (v0.12 held-out A) is ingested in exactly this sense. Being
+# "held out" is a fact about a MEASUREMENT's id set -- design §4 makes
+# Lean-workbook curated-relative to the miniF2F curve -- not about this flag.
+INGESTED_CORPUS_PREFIXES = ("lean_workbook", "ingested_arithmetic", "minif2f")
+
+
 def _ingested_sid(sid: str, corpus_of: dict[str, str]) -> bool:
     """True when `sid` was authored by an ingested corpus, not a curated seed."""
     cid = corpus_of.get(sid, "")
-    return cid.startswith("lean_workbook") or cid.startswith("ingested_arithmetic")
+    return cid.startswith(INGESTED_CORPUS_PREFIXES)
 
 
 def owner_channel(sid: str, owner: str, corpus_of: dict[str, str],

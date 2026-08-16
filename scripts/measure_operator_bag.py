@@ -46,7 +46,11 @@ GLYPH_RE = re.compile(r"[+\-*/^=]")
 DEFAULT_OUT = REPO / "experiments" / "item4_operator_bag.json"
 DRAW_SEED = 20260814
 PRIOR_COMBINED_PRECISION = 0.0126
-INGESTED_DISCIPLINES = {"lean_workbook", "ingested_arithmetic"}
+# Keep in step with decompose.INGESTED_CORPUS_PREFIXES: this set is keyed by
+# discipline, that one by corpus id, and a corpus registered in only one of
+# them would be ingested for grounding and curated for the bag, or the
+# reverse. `minif2f` is v0.12 held-out A.
+INGESTED_DISCIPLINES = {"lean_workbook", "ingested_arithmetic", "minif2f"}
 SCHEMA = "item4_operator_bag.v2"
 MISS_LIST_CAP = 100
 

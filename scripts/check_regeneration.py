@@ -8,13 +8,28 @@ hand-edits to JSON would drift silently until the next regeneration
 clobbered them (data/statistics lived in exactly that state). This tool
 makes coherence a checked invariant:
 
-1. refuses to run if data/ has uncommitted changes (so it cannot destroy
-   in-progress work);
+1. refuses to run if a corpus root has uncommitted changes (so it cannot
+   destroy in-progress work);
 2. runs every scripts/seed_*.py from the repo root (seeds are
    deterministic and byte-idempotent by house rule);
-3. reports any resulting git diff under data/ as DRIFT and restores the
-   committed state;
-4. reports any data/<discipline>/ directory owned by NO seed script.
+3. reports any resulting git diff under a corpus root as DRIFT and
+   restores the committed state;
+4. reports any <root>/<discipline>/ directory owned by NO seed script.
+
+Two corpus roots, both checked identically:
+
+- `data/` — the merged analysis graph. Every ledger, every pinned guard,
+  and `validate_nodes.py`'s default run are computed over exactly this.
+- `data_holdout/` — quarantined corpora (v0.12 held-out sources). Committed,
+  versioned, schema-checkable and byte-reproducible like any other corpus,
+  but deliberately invisible to the merged graph: a holdout that joins the
+  graph every pin is computed over is not held out. `decompose.load_trees`
+  takes its root as a parameter, so a measurement merges the overlay in
+  memory instead (see scripts/seed_minif2f.py for the measured reason).
+
+Regeneration coherence is the one guarantee a holdout must NOT lose — it
+is the whole claim that the sample was drawn mechanically rather than
+chosen — so it is checked here rather than left to the measurement.
 
 Run in the release skill's step 1 and after any corpus authoring.
 """
@@ -27,16 +42,26 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 
+# Corpus roots, in report order. `data_holdout/` may legitimately not exist
+# in a clone that has authored no holdout yet; absent roots are skipped, not
+# an error.
+CORPUS_ROOTS = ("data", "data_holdout")
+
 
 def sh(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(args, cwd=REPO, capture_output=True, text=True)
 
 
+def present_roots() -> list[str]:
+    return [r for r in CORPUS_ROOTS if (REPO / r).is_dir()]
+
+
 def main() -> int:
-    dirty = sh("git", "status", "--porcelain", "--", "data").stdout.strip()
+    roots = present_roots()
+    dirty = sh("git", "status", "--porcelain", "--", *roots).stdout.strip()
     if dirty:
-        print("REFUSING: data/ has uncommitted changes; commit or stash "
-              "before checking regeneration:\n" + dirty)
+        print(f"REFUSING: {'/, '.join(roots)}/ has uncommitted changes; "
+              "commit or stash before checking regeneration:\n" + dirty)
         return 2
 
     seeds = sorted((REPO / "scripts").glob("seed_*.py"))
@@ -57,28 +82,32 @@ def main() -> int:
     except AppendError as exc:
         failures.append(("seed_appends", str(exc)[:400]))
         print(f"  APPEND FAILED: {exc}")
-    diff = sh("git", "diff", "--stat", "--", "data").stdout.strip()
+    roots = present_roots()
+    diff = sh("git", "diff", "--stat", "--", *roots).stdout.strip()
     drift = bool(diff)
     if drift:
         print("DRIFT: committed data differs from regenerated data:")
         print(diff)
-        sh("git", "checkout", "--", "data")
+        sh("git", "checkout", "--", *roots)
         print("(committed state restored)")
     else:
         print(f"coherence OK: {len(seeds)} seeds regenerate committed data "
-              f"byte-identically")
+              f"byte-identically across {'/, '.join(roots)}/")
 
-    owned = set()
-    for seed in seeds:
-        text = seed.read_text(encoding="utf-8", errors="replace")
-        for d in (REPO / "data").iterdir():
-            if d.is_dir() and (f'"{d.name}"' in text or f"'{d.name}'" in text
-                               or f"/{d.name}/" in text
-                               or f'"data/{d.name}' in text
-                               or d.name in text):
-                owned.add(d.name)
-    orphans = [d.name for d in sorted((REPO / "data").iterdir())
-               if d.is_dir() and d.name not in owned]
+    orphans: list[str] = []
+    for root in roots:
+        owned = set()
+        for seed in seeds:
+            text = seed.read_text(encoding="utf-8", errors="replace")
+            for d in (REPO / root).iterdir():
+                if d.is_dir() and (f'"{d.name}"' in text or f"'{d.name}'" in text
+                                   or f"/{d.name}/" in text
+                                   or f'"{root}/{d.name}' in text
+                                   or d.name in text):
+                    owned.add(d.name)
+        orphans.extend(f"{root}/{d.name}"
+                       for d in sorted((REPO / root).iterdir())
+                       if d.is_dir() and d.name not in owned)
     if orphans:
         print(f"ORPHAN CORPORA (no owning seed script): {', '.join(orphans)}")
 
