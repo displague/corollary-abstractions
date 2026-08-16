@@ -369,7 +369,9 @@ SELF_CERTIFYING_INDEPENDENT = 0.1
 # `minif2f` (v0.12 held-out A) is ingested in exactly this sense. Being
 # "held out" is a fact about a MEASUREMENT's id set -- design §4 makes
 # Lean-workbook curated-relative to the miniF2F curve -- not about this flag.
-INGESTED_CORPUS_PREFIXES = ("lean_workbook", "ingested_arithmetic", "minif2f")
+INGESTED_CORPUS_PREFIXES = (
+    "lean_workbook", "ingested_arithmetic", "minif2f", "goedel_pset",
+)
 
 
 def _ingested_sid(sid: str, corpus_of: dict[str, str]) -> bool:

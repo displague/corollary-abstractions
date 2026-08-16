@@ -50,7 +50,13 @@ PRIOR_COMBINED_PRECISION = 0.0126
 # discipline, that one by corpus id, and a corpus registered in only one of
 # them would be ingested for grounding and curated for the bag, or the
 # reverse. `minif2f` is v0.12 held-out A.
-INGESTED_DISCIPLINES = {"lean_workbook", "ingested_arithmetic", "minif2f"}
+INGESTED_DISCIPLINES = {
+    "lean_workbook", "ingested_arithmetic", "minif2f", "goedel_pset",
+}
+# NB both holdouts carry corpus-header discipline `minif2f` / `goedel_pset`
+# while their per-node `theory_context.disciplines` read `mathematics`.
+# `n.discipline` is the header, which is what this set matches; `mathematics`
+# is a curated umbrella and must never land here.
 SCHEMA = "item4_operator_bag.v2"
 MISS_LIST_CAP = 100
 
