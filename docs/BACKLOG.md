@@ -2594,5 +2594,23 @@ carried a third time under the word "open".
   Any gate must still beat the conservative/`external_lower` bracket
   and must not treat the proxy as ownership.
 
+  **RE-PARKED in v0.12, because H1 failed.**
+  `DESIGN-heldout-recovery.md` §8 set this condition in advance — "If H1
+  fails, the gate stays undrawn — the parking condition returns" — and it
+  returned. Held-out B (Goedel-Pset) at N=1,896 scores owner-attributed
+  ISG **0.0254 against a null of 0.1513**, a gap of **−0.126** that grows
+  *more* negative with N; held-out A (miniF2F) is below its null at every
+  size. v0.11 unparked this gate on the strength of S1–S4 firing. One
+  cycle later, two sources the emitter was not fitted to say that
+  strength was source-specific, and the matched-N control (C1) shows the
+  difference is source and not scale: at identical N=157 the fitted
+  source scores +0.0496 and the holdout −0.0428.
+
+  A threshold drawn now would be fitted to Lean-workbook's 0.473, which
+  §8 forbids by name. **Unpark only when some source other than
+  Lean-workbook shows a positive owner-attributed gap that survives its
+  own null.** Note this is the *second* park of this item, and the second
+  park is better evidenced than the first unpark was.
+
 Both were honestly sequenced behind corpus work each time they were carried;
 naming that is the point of the rule, not blaming the deferral.

@@ -208,6 +208,101 @@ or it is designing against a regime:
 If H1 fails, the gate stays undrawn — the parking condition
 returns.
 
+## 10. Adjudication — H1–H6 after the run (v0.12)
+
+§5 is frozen as registered and is not edited here. Artifact:
+`experiments/heldout_recovery.json`, from
+`scripts/measure_heldout_recovery.py` (route 1, `pattern_membership=False`,
+null seeds 0/1/2, selection seed 20260816). Both holdouts are quarantined
+corpora; the other holdout is never loaded into a run.
+
+**The curves.**
+
+| holdout | N | real ISG | null mean | gap |
+|---|---:|---:|---:|---:|
+| miniF2F (A) | 8 | 0.00000 | 0.01626 | −0.01626 |
+| | 32 | 0.00000 | 0.00991 | −0.00991 |
+| | 157 | 0.00547 | 0.04823 | −0.04276 |
+| Goedel-Pset (B) | 8 | 0.00000 | 0.00000 | 0.00000 |
+| | 32 | 0.00000 | 0.00936 | −0.00936 |
+| | 128 | 0.00725 | 0.05354 | −0.04629 |
+| | 512 | 0.01442 | 0.10750 | −0.09308 |
+| | 1896 | 0.02537 | 0.15125 | **−0.12588** |
+
+| | outcome |
+|---|---|
+| **H1** (scale, B) | **MISSED** |
+| **H2** (sign flip) | **FIRED** |
+| **H3** (keyword cannot steal it) | **FIRED**, but weakly — see below |
+| **H4** (proxy is not ISG) | **FIRED**, decisively |
+| **H5** (S4-style, B) | **MISSED**, and conditional on H1 |
+| **H6** (XSG) | **FIRED** |
+
+**H1 — MISSED.** At N=1,896 the real rate is 0.02537 against a null mean
+of 0.15125: the holdout sits **far below** its matched null, and the gap
+grows *monotonically more negative* with N (−0.009 → −0.046 → −0.093 →
+−0.126). This is not a curve that failed to flip; it is a curve running the
+other way. Lean-workbook's compounding is a fact about Lean-workbook.
+
+This is §2's third answer, the one the design called the more interesting
+negative: **ingestion still buys coverage. It does not buy a transferable
+structure-recovery claim.**
+
+**H2 — FIRED**, on both holdouts, at both small sizes. But note what it is
+worth now: H2 predicted the small-N deficit was a size effect rather than a
+Lean-workbook effect. It fired, and H1's miss shows the deficit was not a
+*stage* the holdouts would grow out of. H2 firing is therefore consistent
+with the negative, not a consolation for it.
+
+**H3 — FIRED, and the firing is weak.** `bag_gap` = −0.0058 ≤ 0, so the
+predicate is satisfied. The honest reading is that the capability-blind bag
+cannot steal a positive gap because **there is no positive gap to steal**,
+and the bag is itself saturated at this scale: 0.9937 real against 0.9995
+null, both ≈ 1.0. H3 was designed to discriminate in a world where H1
+fired. In this world it is nearly vacuous and is reported as such rather
+than counted as a win.
+
+**H4 — FIRED, decisively, and it is the result that most earns its keep.**
+
+| holdout | proxy | ISG of grounded | difference |
+|---|---:|---:|---:|
+| miniF2F | 0.7080 | 0.0077 | **0.7003** |
+| Goedel-Pset | 0.9240 | 0.0404 | **0.8835** |
+
+Both far above the registered 0.2. Had v0.11 shipped the sharing proxy as
+its headline, these two holdouts would have reported 71% and 92%
+"self-grounding" on sources that recover essentially nothing. The refusal
+to use the proxy is what makes this cycle's negative legible at all.
+
+**H5 — MISSED, and it could not have fired.** H5 asks whether H1 survives
+deleting the most common holdout subterm. H1 did not hold, so there was no
+gap to survive. Dropping `^(?0:V, 2)` moves the gap from −0.12588 to
+−0.12474 — it changes essentially nothing, which does at least say the
+negative is not an artifact of one fashionable square. Recorded as a miss
+because the predicate is written on H1, not re-scored as a pass on a
+technicality.
+
+**H6 — FIRED.** XSG falls by 0.0055 while ISG rises by 0.0254 from N=8 to
+N=1,896. The S3 shape holds: the holdout's parts do not stop having owners
+as the layer grows, they simply keep having *external* ones. XSG stays near
+0.59–0.63 throughout. The parts are grounded; they are grounded by the
+curated and Lean-workbook layers, not by each other.
+
+**One degenerate cell, disclosed.** Goedel-Pset at N=8 has real 0.0 and all
+three nulls 0.0, so its gap is exactly 0.0. That cell is vacuous — two
+zeros, not a measured agreement — and is excluded from any reading of the
+trend. The trend is carried by 32 / 128 / 512 / 1896.
+
+**What this licenses, with C1 attached.** See
+[DESIGN-matched-n-control.md](DESIGN-matched-n-control.md): at identical
+N=157 the fitted source scores +0.0496 and the held-out source −0.0428,
+opposite in sign and separated by 1.9× the combined null spread. So the
+negative is **not** an artifact of holdout size. Source, not scale.
+
+**Consequence for the groundedness gate.** §8's parking condition returns:
+H1 failed, so the gate stays undrawn and is parked in `docs/BACKLOG.md` in
+writing. Nothing is fitted to Lean-workbook's 0.473.
+
 ## 9. What v0.12 owes besides this
 
 Named so they do not ride as lanes:
