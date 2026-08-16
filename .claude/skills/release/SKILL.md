@@ -162,14 +162,15 @@ rotates the documents:
    guard becomes a ratchet.
 4. **Write the release's blog post in `docs/blog/`** — every release has
    had one since v0.5, and the skill did not say so until v0.10 shipped
-   without one. It is not a summary of the release notes: the notes are
-   the record, the post is the ARGUMENT — what the cycle believed going
-   in, what actually happened, and what the project now owes. Title it
-   for the finding, not the version (`how-much-of-it-fits.md`,
-   `when-the-honest-baseline-wins.md`). Lead with the result that
-   complicates the story rather than the one that flatters it; if the
-   cycle produced a negative, that is the post. Link it from the release
-   notes' links row.
+   without one. Format, voice, and the required last-section chain:
+   [references/blog-posts.md](references/blog-posts.md). The notes are
+   the record. The post is the argument a stranger can finish. Title it
+   for the finding, not the version. Lead with the result that
+   complicates the story; if the cycle produced a negative, that is the
+   post. End looking forward to the next release *from the design the
+   findings forced*, written before this post. Link it from the release
+   notes' links row. Model:
+   `docs/blog/the-world-outside-the-weights.md`.
 5. **Prune `docs/BACKLOG.md`**: delete entries whose work shipped (they
    now live in the release doc); keep or migrate the rest; confirm new
    friction from the cycle is filed.
