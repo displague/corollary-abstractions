@@ -740,14 +740,235 @@ class CoreSession:
         return run
 
 
+# --------------------------------------------------------------------------
+# One typed line (v0.12 item 5; docs/DESIGN-live-session.md)
+# --------------------------------------------------------------------------
+#
+# v0.8's notes said the system could be driven. What existed was this boot
+# list and a *recorded* session replayed by `scripts/session_run.py --check`.
+# This section is the reclamation: after the list, read ONE line, route it to
+# a program that already exists, print that program's own verdict, stop.
+#
+# Both routes are existing programs called through their public adapters. The
+# rule that makes this honest is that neither refusal text is written here --
+# the write gate's check name and the dispatcher's stop reason are printed as
+# they come back. A paraphrase invented in this file would be a costume, and
+# is exactly what P-LS3 calls a miss.
+#
+# Imports for the two routes are function-local on purpose: `session_run`
+# imports `CoreSession` from this module, so pulling `write_stage` /
+# `dispatcher` in at module scope risks an import cycle for every caller that
+# only wanted to boot a matrix.
+
+#: The path a free-text line is offered to. It is deliberately NOT registered:
+#: no registered path claims arbitrary English, and inventing one is the
+#: "fluent unregistered content emitted as a fact" that P-LS2 forbids.
+UNREGISTERED_PATH = "tool.freeform_answer"
+
+#: The one command word that reaches an exact answer. A literal head word,
+#: not a phrase the shell interprets: `owns x ^ 2` routes, "who owns x^2?"
+#: does not and is abstained on. That asymmetry is deliberate -- a command
+#: is registered, English is not, and pretending otherwise is the costume.
+OWNS_COMMAND = "owns"
+
+
+def _looks_like_path(line: str) -> bool:
+    """Closed form: is this line an *attempt* at a repository-relative path?
+
+    A syntactic test, not a guess about intent. Prose carries whitespace; a
+    proposal path does not, and either ends in `.json` or carries a
+    separator. A path that does not exist still routes to the write gate on
+    purpose, so the gate's own named refusal is what the person sees instead
+    of a message this file made up.
+    """
+    if not line or any(ch.isspace() for ch in line):
+        return False
+    return line.endswith(".json") or "/" in line or "\\" in line
+
+
+def _existing_file(repo_root: Path, line: str) -> bool:
+    """True when the line names a regular file inside the repository."""
+    try:
+        return (repo_root / line).is_file()
+    except (OSError, ValueError):
+        # Windows rejects `?` and `:` in path components, so a typed question
+        # raises here rather than answering False. A question is not a path.
+        return False
+
+
+def _route_write(repo_root: Path, line: str) -> dict:
+    """Hand the line to the write gate exactly as the controller would."""
+
+    from write_stage import (  # noqa: PLC0415
+        WriteStagingState,
+        WriteStagingVerifier,
+        write_action,
+    )
+
+    verifier = WriteStagingVerifier(repo_root, staging_dir=None)
+    result = verifier.evaluate(WriteStagingState(), write_action(line))
+    return {
+        "route": "write_gate",
+        "status": result.verdict.value,
+        "detail": result.reason,
+        "evidence": list(result.evidence),
+    }
+
+
+def _route_dispatch(session: "CoreSession", line: str) -> dict:
+    """Offer the line to the dispatcher as a need on an unregistered path."""
+
+    from dispatcher import NeedDispatcher, RegisteredPath  # noqa: PLC0415
+    from retrieval import RetrievalState  # noqa: PLC0415
+
+    def build_state(_subsystem_id: str) -> "RetrievalState":
+        frame = session.executor.open_frame(
+            FrameSpec(frame="live_session", retrieval="open")
+        )
+        # The need's key is the typed text itself. Nothing is normalised,
+        # completed, or defaulted -- P-LS5 is a property of not writing the
+        # code that would fill a slot, not of a check that says we did not.
+        return RetrievalState.from_unknown(
+            session.executor, frame, "answer", line,
+            Literal("request", "needs", line),
+        )
+
+    registry = {
+        UNREGISTERED_PATH: RegisteredPath(
+            UNREGISTERED_PATH, registered=False, build_state=build_state,
+        )
+    }
+    dispatcher = NeedDispatcher.for_session(session, registry)
+    result = dispatcher.dispatch(session.session_id, UNREGISTERED_PATH)
+    return {
+        "route": "dispatcher",
+        # `DispatchResult` carries a StopReason and no Verdict at all, so
+        # "verified" is unreachable on this route by construction (P-LS2).
+        "status": result.stop_reason.value,
+        "detail": result.reason,
+        "missing_capability": UNREGISTERED_PATH,
+        "materialized": result.materialized,
+    }
+
+
+def read_one_line(stream=None) -> str | None:
+    """Read exactly one line. `None` means the stream ended without one."""
+
+    import sys  # noqa: PLC0415
+
+    handle = sys.stdin if stream is None else stream
+    raw = handle.readline()
+    if raw == "":
+        return None
+    return raw.strip()
+
+
+def _route_ownership(repo_root: Path, session: "CoreSession", query: str) -> dict:
+    """`owns <expr>` — the exact lookup, and the only route that can solve.
+
+    Gated on the boot matrix, not on hope: the answer is read out of the
+    committed corpus graph, so if `corpus.nodes` did not register, this
+    route refuses instead of answering from somewhere else. That is the
+    same registration rule §3.2 applies to every other subsystem.
+    """
+
+    from ownership import (  # noqa: PLC0415
+        REQUIRES_SUBSYSTEM,
+        QueryError,
+        lookup,
+        render,
+    )
+
+    if REQUIRES_SUBSYSTEM not in session.matrix.registered_ids():
+        return {
+            "route": "ownership",
+            "status": "exhausted",
+            "detail": (
+                f"{REQUIRES_SUBSYSTEM} did not register on this boot; the "
+                "ownership lookup reads the committed corpus graph and has "
+                "nowhere else to read it from"
+            ),
+            "missing_capability": REQUIRES_SUBSYSTEM,
+        }
+    if not query:
+        return {
+            "route": "ownership",
+            "status": "refused",
+            "detail": f"{OWNS_COMMAND!r} needs a template expression after it",
+        }
+    try:
+        answer = lookup(query, repo_root / "data")
+    except QueryError as exc:
+        return {"route": "ownership", "status": "refused", "detail": str(exc)}
+    return {
+        "route": "ownership",
+        # Exact and total: every hosting statement, decided by the matcher's
+        # own canonicaliser. `solved` here is a lookup that returned, not a
+        # judgement that something is true, useful, or proved.
+        "status": "solved" if answer.found else "exhausted",
+        "detail": (
+            f"{len(answer.hosts)} of {answer.searched} statements host "
+            f"{answer.query!r}"
+            if answer.found
+            else f"no statement hosts {answer.query!r}"
+        ),
+        "answer": render(answer),
+    }
+
+
+def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dict:
+    """The whole decision, as data, so a test can assert on it."""
+
+    if line is None or not line:
+        # P-LS5: a pause binds nothing. There is no default line, no
+        # placeholder need, and no slot filled on the person's behalf.
+        return {
+            "line": None,
+            "route": "none",
+            "status": "waiting",
+            "detail": (
+                "no line was typed before the input ended; nothing was "
+                "dispatched, nothing was staged, no slot was bound"
+            ),
+        }
+    head, _, rest = line.partition(" ")
+    if head.lower() == OWNS_COMMAND:
+        return {"line": line, **_route_ownership(repo_root, session, rest.strip())}
+    if _existing_file(repo_root, line) or _looks_like_path(line):
+        return {"line": line, **_route_write(repo_root, line)}
+    return {"line": line, **_route_dispatch(session, line)}
+
+
+def render_verdict(verdict: dict) -> list[str]:
+    """The structured stop, in the order a person reads it."""
+
+    out = ["", "--- one typed line ---"]
+    out.append(f"line    : {verdict['line'] if verdict['line'] else '(none typed)'}")
+    out.append(f"route   : {verdict['route']}")
+    out.append(f"status  : {verdict['status']}")
+    out.append(f"detail  : {verdict['detail']}")
+    for item in verdict.get("evidence", ()):
+        out.append(f"evidence: {item}")
+    if verdict.get("missing_capability"):
+        out.append(f"missing : {verdict['missing_capability']}")
+    for item in verdict.get("answer", ()):
+        out.append(f"  {item}")
+    return out
+
+
 def main() -> int:
-    """Print the offline boot matrix for the repo this file lives in."""
+    """Print the offline boot matrix, then read one line and stop."""
 
     repo_root = Path(__file__).resolve().parent.parent
     session = CoreSession.boot(repo_root, offline=True)
     print(f"corollary kernel (offline) session {session.session_id[:12]}...")
     for line in session.matrix.render():
         print(line)
+
+    typed = read_one_line()
+    verdict = route_line(repo_root, session, typed)
+    for row in render_verdict(verdict):
+        print(row)
     return 0
 
 

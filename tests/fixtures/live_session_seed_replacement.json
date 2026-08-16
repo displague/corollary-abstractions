@@ -1,0 +1,8 @@
+{
+  "statement_id": "numbertheory.live.seed_replacement_probe",
+  "corpus": "number_theory",
+  "seed_script": "scripts/seed_number_theory.py",
+  "seed_source": "import json\nfrom pathlib import Path\n\nCORPUS = json.loads('{\\n  \"schema\": \"../../schema/equation-node.schema.json\",\\n  \"corpus_id\": \"number_theory.replacement.v1\",\\n  \"discipline\": \"number_theory\",\\n  \"version\": \"1.0.0\",\\n  \"statement_nodes\": []\\n}')\n\ndef main() -> None:\n    out = Path('data') / 'number_theory' / 'nodes.json'\n    out.parent.mkdir(parents=True, exist_ok=True)\n    out.write_text(\n        json.dumps(CORPUS, indent=2, ensure_ascii=False) + '\\n',\n        encoding='utf-8',\n    )\n\nmain()\n",
+  "rung": "PROVEN",
+  "rationale": "P-LS3 probe: a typed path that would replace a seed owning a corpus."
+}
