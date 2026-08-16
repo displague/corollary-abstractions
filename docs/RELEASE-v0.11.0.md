@@ -182,6 +182,14 @@ conservative owner rule.
   reload 12k nodes). Graph-touching tests were green during the
   slices; **the complete suite must be re-run on the tip before
   anyone treats “green” as a tag-time fact.**
+  *Addendum, at the tag:* it was re-run —
+  `python -m unittest discover -s tests`, 2026-08-16, **1123 tests,
+  OK (skipped=3), 23,744s** (6h35m, not 30 minutes). It caught one
+  real drift: the committed WOLD reach ledger still said
+  `corpus_node_tokens` 840 against the corpus's 846 after the
+  programming second wave. Regenerated before the tag; only
+  `vocab_size` moved, the reach measurement did not.
+  See [TRIAGE-v0.11.md](TRIAGE-v0.11.md) §1.7.
 - `python scripts/harness.py` still prints a boot list and
   exits. v0.8 said the system can be driven. That was libraries
   plus a recorded session, not a prompt. Named in triage; scheduled

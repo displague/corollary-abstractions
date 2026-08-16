@@ -1914,6 +1914,33 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   Fix: extend `check_regeneration.py` (or add a sibling) to re-run each
   report writer into a temp path and diff, and put it in the release skill's
   step 1 alongside the data check.
+- **The release skill's ledger refresh does not cover every generated
+  artifact, and `experiments/wold_reach.json` proved it.** Step 1 of
+  `.claude/skills/release/SKILL.md` lists five commands; `ingest_wold.py
+  reach` is not among them, so the WOLD reach ledger drifted silently
+  when the programming second wave added six corpus tokens
+  (`corpus_node_tokens` 840 committed vs 846 fresh). Nothing caught it
+  until the full `unittest discover` on the v0.11.0 tag tip — a 6h35m
+  run — because the only guard is a unit test, not a refresh step. This
+  is the same shape as the entry above about `reports/` having no
+  regeneration check, but worse in one way: `run_reach()` deliberately
+  refuses to run without the pinned WordNet archive, so a contributor
+  without the gitignored archive *cannot* refresh it and will not learn
+  that it is stale. Fix: enumerate every committed generated artifact
+  and its writer in one place, have the release step re-run each into a
+  temp path and diff, and make the archive-gated ones fail loudly as
+  "cannot verify" rather than skip quietly.
+- **The suite's cost estimate is an order of magnitude stale, and it is
+  quoted in handoffs.** ROADMAP-v0.11 and the v0.12 handoff both say the
+  full discover is "30+ minutes"; measured on the tag tip it is
+  **23,744s / 6h35m** for 1123 tests. The cost is concentrated, not
+  spread — `test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded`
+  alone runs 6+ minutes at 12,777 nodes, single-threaded with a 5.4 GB
+  working set. Anyone planning a release around the old number will
+  either kill a healthy run thinking it hung, or skip the gate. Wanted:
+  a per-test timing pass to name the graph-scale outliers, and either a
+  faster fixture for them or a documented two-tier gate (fast tier per
+  slice, full tier per tag) with the real wall-clock written down.
 - **The cost weights are the first numbers in the matcher with no corpus
   citation.** `HEAD_ALGEBRA` was built on the house rule that every algebraic
   claim names the node that justifies it; `COST_IDENTITY = 2` and

@@ -22,7 +22,39 @@ the designs are the thing it is not allowed to choose after.
 | 4 | external benchmark scheduled with its claim, or parked | **MET, scheduled** — item 1 beat its null; claim is the sign-flip-then-compounding shape on a held-out source (`DESIGN-heldout-recovery.md`). Not run this cycle |
 | 5 | every carried lane names its dependant or is parked | **MET** — see §3 |
 | 6 | updated assets whose notes explain winners, losers, controls | **MET** — ANALYSIS carries every slice; curve JSON and bag JSON are the regenerable assets. `reports/decompositions.json` is **not** rewritten (181k constituents) — disclosed, live `analyze_loaded` is the pin source |
-| 7 | the complete suite green | **PARTIAL** — graph-touching tests green (156, 1 skipped: full-graph `min_family=1` at 12k). Full discover is 30+ minutes because several tests each reload the 12k graph. Must be re-run on the tip before the tag |
+| 7 | the complete suite green | **MET** — `python -m unittest discover -s tests` on the tip, 2026-08-16: **Ran 1123 tests, OK (skipped=3)**, 23,744s. See §1.7 |
+
+### 1.7 What the tip run cost, and the one thing it caught
+
+`python -m unittest discover -s tests`, 2026-08-16, on the tag tip:
+**Ran 1123 tests, OK (skipped=3), 23,744s** (6h35m). The "30+ minutes"
+estimate in ROADMAP-v0.11 and the v0.12 handoff is wrong by an order of
+magnitude and should not be quoted again. The cost is not spread: a
+handful of graph-scale tests dominate, and
+`test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded`
+alone ran 6+ minutes at 12,777 nodes.
+
+The three skips are environment- or design-gated, not masked failures:
+pinned TheAlgorithms files absent from `archives/`; the deliberate
+full-graph `min_family=1` skip; tracer build directory gitignored.
+
+**The run earned its keep.** A first pass failed one test —
+`test_wold_ingest.CommittedReach.test_repo_local_targets_recount_from_committed_lexicon`,
+`corpus_node_tokens` **846 fresh vs 840 committed**. The six
+programming-wave-2 nodes added six tokens and
+`experiments/wold_reach.json` was never regenerated. That is exactly
+the drift gate 7 exists to stop, and no slice-level run would have
+seen it. Regenerated with the pinned WordNet archive (`run_reach()`
+refuses to compute without it, by design): only `vocab_size` moves,
+840 → 846. `mapped` stays 59 — the new tokens are formal operators
+that map to no WOLD meaning, so the reach *measurement* is unchanged.
+`tests.test_wold_ingest` is now 21/21 including both byte-for-byte
+regeneration tests, which had been skipping for want of the archive.
+
+Friction filed: the release skill's step-1 refresh list does not
+include `ingest_wold.py reach`, which is why this drifted unseen —
+the same shape as the open BACKLOG entry about `reports/` having no
+regeneration check.
 
 **What the notes may honestly claim.** "Ingestion compounds above a
 matched null at thousands" is TRUE, with the sign flip attached, not

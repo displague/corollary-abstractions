@@ -1,10 +1,10 @@
 {
-  "nodes_analyzed": 12771,
+  "nodes_analyzed": 12777,
   "group_counts": {
-    "shape": 1027,
-    "typed": 972,
-    "family": 971,
-    "aliased": 973,
+    "shape": 1030,
+    "typed": 975,
+    "family": 974,
+    "aliased": 976,
     "mirror": 5
   },
   "ladder_violations": [],
@@ -7021,6 +7021,27 @@
       ]
     },
     {
+      "skeleton": "BEXP⟨?0:V, ?1:V⟩ = ITE⟨EQ⟨?1:V, 0⟩, 1, ITE⟨EVEN⟨?1:V⟩, ^(BEXP⟨?0:V, HALVE⟨?1:V⟩⟩, 2), *(?0:V, BEXP⟨?0:V, +(?1:V, neg(1))⟩)⟩⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "binary_exponentiation_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.binexp.recursive",
+          "discipline": "programming",
+          "template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))"
+        },
+        {
+          "statement_id": "programming.binexp.iterative",
+          "discipline": "programming",
+          "template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))"
+        }
+      ]
+    },
+    {
       "skeleton": "CARD⟨JOIN⟨?0:V, ?1:V⟩⟩ = +(CARD⟨?0:V⟩, CARD⟨?1:V⟩, neg(CARD⟨MEET⟨?0:V, ?1:V⟩⟩))",
       "disciplines": [
         "algebraic_topology",
@@ -7215,6 +7236,27 @@
       ]
     },
     {
+      "skeleton": "DFACT⟨?0:V⟩ = ITE⟨LEQ⟨?0:V, 1⟩, 1, *(?0:V, DFACT⟨+(?0:V, neg(2))⟩)⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "double_factorial_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.dfactorial.recursive",
+          "discipline": "programming",
+          "template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))"
+        },
+        {
+          "statement_id": "programming.dfactorial.iterative",
+          "discipline": "programming",
+          "template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))"
+        }
+      ]
+    },
+    {
       "skeleton": "EXISTS⟨?0:V, MEET⟨?1:V < +(1, ?0:V), ?0:V <= ?1:V⟩⟩",
       "disciplines": [
         "lean_workbook"
@@ -7300,6 +7342,27 @@
           "statement_id": "leanworkbook.skel.lean_workbook_25898",
           "discipline": "lean_workbook",
           "template": "EXP(x) >= 1 + x"
+        }
+      ]
+    },
+    {
+      "skeleton": "FACT⟨?0:V⟩ = ITE⟨LEQ⟨?0:V, 1⟩, 1, *(?0:V, FACT⟨+(?0:V, neg(1))⟩)⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "factorial_product_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.factorial.recursive",
+          "discipline": "programming",
+          "template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))"
+        },
+        {
+          "statement_id": "programming.factorial.iterative",
+          "discipline": "programming",
+          "template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))"
         }
       ]
     },
@@ -30014,6 +30077,27 @@
       ]
     },
     {
+      "skeleton": "BEXP⟨?0, ?1⟩ = ITE⟨EQ⟨?1, 0⟩, 1, ITE⟨EVEN⟨?1⟩, ^(BEXP⟨?0, HALVE⟨?1⟩⟩, 2), *(?0, BEXP⟨?0, +(?1, neg(1))⟩)⟩⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "binary_exponentiation_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.binexp.recursive",
+          "discipline": "programming",
+          "template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))"
+        },
+        {
+          "statement_id": "programming.binexp.iterative",
+          "discipline": "programming",
+          "template": "BEXP(BASE, EXPN) = ITE(EQ(EXPN, 0), 1, ITE(EVEN(EXPN), BEXP(BASE, HALVE(EXPN)) ^ 2, BASE * BEXP(BASE, EXPN - 1)))"
+        }
+      ]
+    },
+    {
       "skeleton": "CARD⟨JOIN⟨?0, ?1⟩⟩ = +(CARD⟨?0⟩, CARD⟨?1⟩, neg(CARD⟨MEET⟨?0, ?1⟩⟩))",
       "disciplines": [
         "algebraic_topology",
@@ -30208,6 +30292,27 @@
       ]
     },
     {
+      "skeleton": "DFACT⟨?0⟩ = ITE⟨LEQ⟨?0, 1⟩, 1, *(?0, DFACT⟨+(?0, neg(2))⟩)⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "double_factorial_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.dfactorial.recursive",
+          "discipline": "programming",
+          "template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))"
+        },
+        {
+          "statement_id": "programming.dfactorial.iterative",
+          "discipline": "programming",
+          "template": "DFACT(N) = ITE(LEQ(N, 1), 1, N * DFACT(N - 2))"
+        }
+      ]
+    },
+    {
       "skeleton": "EXISTS⟨?0, MEET⟨?1 < +(1, ?0), ?0 <= ?1⟩⟩",
       "disciplines": [
         "lean_workbook"
@@ -30293,6 +30398,27 @@
           "statement_id": "leanworkbook.skel.lean_workbook_25898",
           "discipline": "lean_workbook",
           "template": "EXP(x) >= 1 + x"
+        }
+      ]
+    },
+    {
+      "skeleton": "FACT⟨?0⟩ = ITE⟨LEQ⟨?0, 1⟩, 1, *(?0, FACT⟨+(?0, neg(1))⟩)⟩",
+      "disciplines": [
+        "programming"
+      ],
+      "archetypes": [
+        "factorial_product_recurrence"
+      ],
+      "members": [
+        {
+          "statement_id": "programming.factorial.recursive",
+          "discipline": "programming",
+          "template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))"
+        },
+        {
+          "statement_id": "programming.factorial.iterative",
+          "discipline": "programming",
+          "template": "FACT(N) = ITE(LEQ(N, 1), 1, N * FACT(N - 1))"
         }
       ]
     },
