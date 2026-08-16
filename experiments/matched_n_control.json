@@ -1,0 +1,294 @@
+{
+  "schema": "self_grounding_curve.v1",
+  "route": 1,
+  "proxy_is": "control",
+  "selection_seed": 20260814,
+  "null_seeds": [
+    0,
+    1,
+    2
+  ],
+  "min_family": 2,
+  "pattern_membership": false,
+  "passes": [
+    "decompose.analyze_loaded"
+  ],
+  "not_run": [
+    "specialize.py"
+  ],
+  "ingested_layer": 12515,
+  "curated_layer": 262,
+  "inventory": {
+    "n_observed": 12515,
+    "n_ops": 176990,
+    "n_calls": 41506,
+    "n_leaves": 286383,
+    "n_rels": 45724,
+    "unique_ops": [
+      "*",
+      "+",
+      "^",
+      "inv",
+      "neg"
+    ],
+    "unique_calls": [
+      "COS",
+      "EVEN",
+      "EXISTS",
+      "EXP",
+      "FORALL",
+      "IMPLIES",
+      "IRRATIONAL",
+      "JOIN",
+      "LOG",
+      "MEET",
+      "MOD",
+      "NEG",
+      "ODD",
+      "PRIME",
+      "SIN",
+      "SQRT",
+      "TAN"
+    ],
+    "unique_rels": [
+      "<",
+      "<=",
+      "=",
+      ">",
+      ">="
+    ]
+  },
+  "points": [
+    {
+      "n": 157,
+      "selection_seed": 20260814,
+      "real": {
+        "ingested_statements": 157,
+        "considered": 2389,
+        "exact": 1576,
+        "isg": 578,
+        "xsg": 998,
+        "mixed": 0,
+        "proxy": 1563,
+        "dropped": 0,
+        "isg_rate": 0.24194223524487232,
+        "xsg_rate": 0.4177480117203851,
+        "mixed_rate": 0.0,
+        "isg_of_grounded": 0.366751269035533,
+        "xsg_of_grounded": 0.633248730964467,
+        "proxy_rate": 0.991751269035533,
+        "proxy_minus_isg_of_grounded": 0.625,
+        "most_common_subterm": {
+          "skeleton": "^(?0:V, 2)",
+          "host_statements": 83,
+          "occurrences": 323
+        }
+      },
+      "null": [
+        {
+          "seed": 0,
+          "ingested_statements": 157,
+          "considered": 846,
+          "exact": 323,
+          "isg": 154,
+          "xsg": 169,
+          "mixed": 0,
+          "proxy": 318,
+          "dropped": 0,
+          "isg_rate": 0.18203309692671396,
+          "xsg_rate": 0.19976359338061467,
+          "mixed_rate": 0.0,
+          "isg_of_grounded": 0.47678018575851394,
+          "xsg_of_grounded": 0.5232198142414861,
+          "proxy_rate": 0.9845201238390093,
+          "proxy_minus_isg_of_grounded": 0.5077399380804953,
+          "most_common_subterm": {
+            "skeleton": "inv(?0:V)",
+            "host_statements": 21,
+            "occurrences": 23
+          }
+        },
+        {
+          "seed": 1,
+          "ingested_statements": 157,
+          "considered": 885,
+          "exact": 319,
+          "isg": 184,
+          "xsg": 135,
+          "mixed": 0,
+          "proxy": 310,
+          "dropped": 0,
+          "isg_rate": 0.207909604519774,
+          "xsg_rate": 0.15254237288135594,
+          "mixed_rate": 0.0,
+          "isg_of_grounded": 0.5768025078369906,
+          "xsg_of_grounded": 0.4231974921630094,
+          "proxy_rate": 0.9717868338557993,
+          "proxy_minus_isg_of_grounded": 0.3949843260188088,
+          "most_common_subterm": {
+            "skeleton": "^(?0:V, ?1:V)",
+            "host_statements": 17,
+            "occurrences": 18
+          }
+        },
+        {
+          "seed": 2,
+          "ingested_statements": 157,
+          "considered": 791,
+          "exact": 284,
+          "isg": 148,
+          "xsg": 136,
+          "mixed": 0,
+          "proxy": 278,
+          "dropped": 0,
+          "isg_rate": 0.18710493046776233,
+          "xsg_rate": 0.17193426042983564,
+          "mixed_rate": 0.0,
+          "isg_of_grounded": 0.5211267605633803,
+          "xsg_of_grounded": 0.4788732394366197,
+          "proxy_rate": 0.9788732394366197,
+          "proxy_minus_isg_of_grounded": 0.45774647887323944,
+          "most_common_subterm": {
+            "skeleton": "*(?0:V, ?1:V)",
+            "host_statements": 19,
+            "occurrences": 20
+          }
+        }
+      ],
+      "s4": {
+        "dropped_skeleton": "^(?0:V, 2)",
+        "real": {
+          "ingested_statements": 157,
+          "considered": 2066,
+          "exact": 1253,
+          "isg": 578,
+          "xsg": 675,
+          "mixed": 0,
+          "proxy": 1240,
+          "dropped": 323,
+          "isg_rate": 0.2797676669893514,
+          "xsg_rate": 0.3267182962245886,
+          "mixed_rate": 0.0,
+          "isg_of_grounded": 0.461292897047087,
+          "xsg_of_grounded": 0.538707102952913,
+          "proxy_rate": 0.9896249002394254,
+          "proxy_minus_isg_of_grounded": 0.5283320031923384,
+          "most_common_subterm": {
+            "skeleton": "*(?0:V, ?1:V)",
+            "host_statements": 48,
+            "occurrences": 142
+          }
+        },
+        "null": [
+          {
+            "seed": 0,
+            "ingested_statements": 157,
+            "considered": 838,
+            "exact": 315,
+            "isg": 154,
+            "xsg": 161,
+            "mixed": 0,
+            "proxy": 310,
+            "dropped": 8,
+            "isg_rate": 0.18377088305489261,
+            "xsg_rate": 0.19212410501193317,
+            "mixed_rate": 0.0,
+            "isg_of_grounded": 0.4888888888888889,
+            "xsg_of_grounded": 0.5111111111111111,
+            "proxy_rate": 0.9841269841269841,
+            "proxy_minus_isg_of_grounded": 0.49523809523809526,
+            "most_common_subterm": {
+              "skeleton": "inv(?0:V)",
+              "host_statements": 21,
+              "occurrences": 23
+            }
+          },
+          {
+            "seed": 1,
+            "ingested_statements": 157,
+            "considered": 879,
+            "exact": 313,
+            "isg": 184,
+            "xsg": 129,
+            "mixed": 0,
+            "proxy": 304,
+            "dropped": 6,
+            "isg_rate": 0.20932878270762229,
+            "xsg_rate": 0.14675767918088736,
+            "mixed_rate": 0.0,
+            "isg_of_grounded": 0.5878594249201278,
+            "xsg_of_grounded": 0.41214057507987223,
+            "proxy_rate": 0.9712460063897763,
+            "proxy_minus_isg_of_grounded": 0.38338658146964855,
+            "most_common_subterm": {
+              "skeleton": "^(?0:V, ?1:V)",
+              "host_statements": 17,
+              "occurrences": 18
+            }
+          },
+          {
+            "seed": 2,
+            "ingested_statements": 157,
+            "considered": 787,
+            "exact": 280,
+            "isg": 148,
+            "xsg": 132,
+            "mixed": 0,
+            "proxy": 274,
+            "dropped": 4,
+            "isg_rate": 0.1880559085133418,
+            "xsg_rate": 0.16772554002541296,
+            "mixed_rate": 0.0,
+            "isg_of_grounded": 0.5285714285714286,
+            "xsg_of_grounded": 0.4714285714285714,
+            "proxy_rate": 0.9785714285714285,
+            "proxy_minus_isg_of_grounded": 0.45,
+            "most_common_subterm": {
+              "skeleton": "*(?0:V, ?1:V)",
+              "host_statements": 19,
+              "occurrences": 20
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "adjudication": {
+    "S1": {
+      "fired": true,
+      "isg_real": 0.24194223524487232,
+      "isg_null_mean": 0.19234921063808344,
+      "isg_null_spread": 0.02587650759306004,
+      "gap": 0.04959302460678888,
+      "n": 157
+    },
+    "S2": {
+      "fired": false,
+      "gaps": [
+        {
+          "n": 157,
+          "gap": 0.04959302460678888
+        }
+      ],
+      "spearman_n_gap": null
+    },
+    "S3": {
+      "fired": true,
+      "isg_rise": 0.0,
+      "xsg_fall": 0.0,
+      "xsg_at_smallest": 0.4177480117203851,
+      "xsg_at_largest": 0.4177480117203851,
+      "smallest_n": 157,
+      "largest_n": 157
+    },
+    "S4": {
+      "fired": true,
+      "isg_real": 0.2797676669893514,
+      "isg_null_mean": 0.19371852475861892,
+      "isg_null_spread": 0.02555789965272967,
+      "gap": 0.08604914223073248,
+      "dropped_skeleton": "^(?0:V, 2)",
+      "n": 157
+    }
+  }
+}
