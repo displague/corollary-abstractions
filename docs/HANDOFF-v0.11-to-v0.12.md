@@ -84,10 +84,14 @@ python scripts/validate_nodes.py
 python scripts/match_signatures.py --write-report reports/signature_matches.json
 python scripts/specialize.py --write-report reports/specializations.json
 python scripts/measure_compression.py --write-report reports/compression.json
+python scripts/ingest_wold.py reach
 python scripts/session_run.py --check
 ```
 
 Skip `decompose.py --write-report reports/decompositions.json`.
+`ingest_wold.py reach` needs the pinned WordNet archive; exit 2
+is **cannot verify**, not a skip. Without the archive, do not
+claim the reach ledger was refreshed.
 
 If `signature_matches.json` / `specializations.json` move only
 because the 12,777-node graph is live, that is expected. Do not
@@ -95,9 +99,13 @@ text-merge ledger JSON.
 
 ### 2.2 Suite on the tip
 
-Full `unittest discover` is 30+ minutes (several tests each reload
-12k nodes). One test is skipped on purpose: full-graph
-`min_family=1` above 1,000 statements.
+Full `unittest discover -s tests` on the v0.11.0 tip was **1,123
+tests, OK (skipped=3), 23,744s (6h35m)** — not “30+ minutes.”
+Several tests each reload the 12k graph; the named outlier is
+`test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded`
+(6+ minutes, ~5.4 GB). Do not kill a healthy run at the hour
+mark. One skip is by design: full-graph `min_family=1` above
+1,000 statements.
 
 Minimum that must be green before the tag:
 

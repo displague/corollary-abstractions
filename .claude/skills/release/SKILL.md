@@ -24,7 +24,18 @@ shipped without its notes file.
 .venv/Scripts/python.exe scripts/match_signatures.py --write-report reports/signature_matches.json
 .venv/Scripts/python.exe scripts/specialize.py     --write-report reports/specializations.json
 .venv/Scripts/python.exe scripts/measure_compression.py --write-report reports/compression.json
+.venv/Scripts/python.exe scripts/ingest_wold.py reach       # experiments/wold_reach.json; needs pinned WordNet archive
 ```
+
+`ingest_wold.py reach` is not optional. v0.11's programming second
+wave added six tokens and the committed reach ledger stayed at 840
+until the full-suite gate; no slice-level run saw it
+(TRIAGE-v0.11 §1.7). `run_reach()` **refuses** without the
+gitignored WordNet archive (exit 2) so it cannot silently
+undercount. Treat that refusal as **cannot verify**, not as a
+skip: either fetch the pinned archive and re-run, or do not claim
+the ledger was refreshed. A contributor without the archive must
+not tag.
 
 At ingested scale (~12k nodes), **do not** rewrite
 `reports/decompositions.json` as a release step. Live analysis is
@@ -37,6 +48,15 @@ format and its own prediction — not a hundred-megabyte clobber.
 touching tests green during a slice is not “the suite is green.”
 Re-run on the tip, or the notes must refuse that sentence and the
 tag waits. v0.11's gate 7 is the precedent.
+
+**Plan the suite from the measured cost, not from folklore.** Full
+`unittest discover -s tests` on the v0.11.0 tip was **1,123 tests,
+OK (skipped=3), 23,744s (6h35m)** — not “30+ minutes.” The cost
+is concentrated: `test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded`
+alone ran 6+ minutes. A healthy run will look hung if you expect
+half an hour. Two-tier is the honest gate: a named fast set per
+slice, the full discover per tag, with the wall-clock written
+down.
 
 ## 2. The document lifecycle (roadmap -> release notes -> next roadmap)
 

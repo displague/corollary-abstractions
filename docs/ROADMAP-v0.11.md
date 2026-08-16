@@ -23,8 +23,8 @@
 
 The cycle's forward-looking design (for v0.12, written before the
 blog) is [DESIGN-heldout-recovery.md](DESIGN-heldout-recovery.md).
-Triage: [TRIAGE-v0.11.md](TRIAGE-v0.11.md). This file is not yet
-closed — the tag has not been cut.
+Triage: [TRIAGE-v0.11.md](TRIAGE-v0.11.md). This file is closed
+at v0.11.0 (banner above).
 
 v0.10 authored ingested statements at hundreds and learned two things that
 set this cycle's agenda: a capability-blind baseline still wins on pair
