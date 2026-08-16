@@ -86,6 +86,11 @@ fake one, as the pile grows.
 | 512 | +0.042 |
 | 12,515 | +0.063 |
 
+*The last row is one larger than the 12,514 pages of this wave:
+the imported layer also contains a single older statement from
+an earlier experiment, and we did not exclude it to make the
+number rounder.*
+
 At eight statements, and again at thirty-two, the real library
 sits *below* the shuffle. Shared squares and small numerals do
 not beat random trees drawn from the same inventory. That is
@@ -135,12 +140,15 @@ merit: of the pairs the bag forms, how many are the matcher’s
 typed twins? **0.0220%.** A size-matched draw from the bag
 recovers one real twin in 1,991.
 
-The matcher misses one pair, and we know which. The importer
-prints a subtraction as “plus a negation.” A hand-written
-double-angle cosine writes an ordinary minus. Same skeleton,
-different ink. Precision 1.0 was always compatible with
-finding a small correct subset. At least now the denominator
-is in the open, and the one exception has a name.
+The bag misses one pair, and we know which. The importer
+prints a subtraction as “plus a negation”; a hand-written
+double-angle cosine writes an ordinary minus. Same statement,
+different ink — so the bag, which only looks at which symbols
+turn up, sees two unrelated things and never puts them
+together. The matcher pairs them anyway. It is the only true
+pair in the whole comparison that the bag misses and we catch —
+one, out of nine million it offered. The exception has a name,
+and the denominator is finally in the open.
 
 The bag still wins on volume. We still own correctness. The
 last chapter said we would not call that a win until both
@@ -174,8 +182,11 @@ nodes stay formal.
 The sign flip is the accident nobody wrote down as the thing
 to find. At the sizes we used to have, the real library loses
 to a shuffle. Compounding is a large-pile fact. That accident
-chose the next question, and the question was written down
-*before* this post, so the post could not choose it after.
+chose the next question, and the question was
+[written down](../DESIGN-heldout-recovery.md) *before* this
+post, so the post could not choose it after. That document is
+dated and in the repository; you do not have to take our word
+for the order.
 
 Does the same shape — worse than chance at thirty-two, better
 later — appear on a source the importer was not fitted to,

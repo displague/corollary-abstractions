@@ -70,6 +70,16 @@ improvise the next question in the blog.
 - The previous chapter is linked and its unpaid debt is named.
 - The next chapter’s question is the committed design, not a
   vibe.
+- **That design is linked.** The post claims the question was
+  written before the post; the link is the only way a reader
+  can check that, and the v0.11 draft made the claim without
+  it.
+- Every number that names a winner and a loser has been read
+  off the committed ledger, not recalled. The v0.11 draft had
+  the matcher and the bag the wrong way round on the one pair
+  where they disagree — `only_matcher_pairs` in
+  `experiments/item4_operator_bag.json` settles it, and
+  DISCOVERIES says it in English.
 - Every table’s columns are English.
 - The release notes still hold the inventory, the pins, and the
   commands.
