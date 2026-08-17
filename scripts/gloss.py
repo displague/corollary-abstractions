@@ -77,18 +77,43 @@ DEFINITIONAL_INVERTED = re.compile(
 )
 
 
+#: Words that may trail a definition request without making it a question
+#: about something else. Anything outside this set means the person asked
+#: about a compound thing, not about a word.
+_TRAILING_OK = frozenset(
+    "a an the is are was were of in on to for from by with and or "
+    "please then really actually exactly mean means".split()
+)
+
+_TOKEN = re.compile(r"[a-zA-Z][a-zA-Z0-9_'-]*")
+
+
 def definitional_target(text: str) -> str | None:
     """The word a definitional question asks about, or `None`.
 
     Returns the word from the QUESTION rather than the longest word in the
     line: "explain what an egg is from the perspective of a bird" is asking
     about the egg, not the perspective.
+
+    The forward form additionally requires the question to END at that word.
+    "what is a telescope" asks what a word means; "what is the capital city
+    of australia" asks a fact about a compound noun phrase, and answering it
+    with the dictionary sense of `capital` is a non-answer that the holdout
+    caught. The inverted form needs no such check because `is` already
+    bounds the target on the right.
     """
-    for pattern in (DEFINITIONAL_INVERTED, DEFINITIONAL):
-        found = pattern.search(text)
-        if found:
-            return found.group(1).lower()
-    return None
+    inverted = DEFINITIONAL_INVERTED.search(text)
+    if inverted:
+        return inverted.group(1).lower()
+    forward = DEFINITIONAL.search(text)
+    if not forward:
+        return None
+    rest = text[forward.end():]
+    if any(
+        token.lower() not in _TRAILING_OK for token in _TOKEN.findall(rest)
+    ):
+        return None
+    return forward.group(1).lower()
 
 
 @dataclass(frozen=True)
