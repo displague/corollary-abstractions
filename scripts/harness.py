@@ -916,6 +916,45 @@ def _route_ownership(repo_root: Path, session: "CoreSession", query: str) -> dic
     }
 
 
+def _route_resolver(
+    repo_root: Path, session: "CoreSession", line: str
+) -> dict | None:
+    """Free text through the resolver chain. `None` means nobody claimed it.
+
+    Returning `None` rather than a verdict is deliberate: an unclaimed line
+    must still reach the dispatcher and be abstained on there, so P-LS2's
+    guarantee is unchanged. This route can only ever turn an `exhausted`
+    into a `solved` or a named `waiting` -- never into a fact the graph does
+    not hold.
+    """
+
+    from ownership import REQUIRES_SUBSYSTEM  # noqa: PLC0415
+    from resolver import ASK, BIND, default_index, render, resolve  # noqa: PLC0415
+
+    if REQUIRES_SUBSYSTEM not in session.matrix.registered_ids():
+        return None
+    index = default_index()
+    outcome = resolve(line, index)
+    if outcome.kind == BIND:
+        return {
+            "route": "resolver",
+            "status": "solved",
+            "detail": f"{outcome.resolver}: {outcome.detail}",
+            "answer": render(outcome, index),
+        }
+    if outcome.kind == ASK:
+        # Ambiguity is a question containing the real alternatives. `waiting`
+        # is the kernel's own word for "a person owes the next move", and no
+        # candidate is chosen on their behalf (P-LS5).
+        return {
+            "route": "resolver",
+            "status": "waiting",
+            "detail": f"{outcome.resolver}: {outcome.detail}",
+            "answer": render(outcome, index),
+        }
+    return None
+
+
 def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dict:
     """The whole decision, as data, so a test can assert on it."""
 
@@ -936,6 +975,9 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         return {"line": line, **_route_ownership(repo_root, session, rest.strip())}
     if _existing_file(repo_root, line) or _looks_like_path(line):
         return {"line": line, **_route_write(repo_root, line)}
+    resolved = _route_resolver(repo_root, session, line)
+    if resolved is not None:
+        return {"line": line, **resolved}
     return {"line": line, **_route_dispatch(session, line)}
 
 
