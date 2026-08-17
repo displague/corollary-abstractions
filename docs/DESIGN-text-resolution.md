@@ -131,6 +131,55 @@ supposition and *inventing* one.
 supports it; the surface does not, because P-LS6 keeps the session to one
 line. Named here rather than left for a reader to discover.
 
+## 5b. The false-positive floor, and one refuted way past it
+
+Three mechanical measurements, each registered before its run, each sampled
+by a process with no knowledge of this project, each unscreened so that
+genuinely quantitative sentences stay in the pool and count against us:
+
+| | rate | sample | code state |
+|---|---:|---:|---|
+| F1 | 0.046 | 500 | no convergence rule |
+| F2 | 0.008 | 1000 | full-intersection convergence |
+| **F3** | **0.030** | 1000 | **winner-support convergence — ships** |
+
+F2 is the lowest and is not the number. Buying it cost held-out coverage
+0.944 → 0.611: a resolver that refuses a third of legitimate questions to
+gain two points of precision is not the better product, and shipping F2's
+code in order to quote F2's number would be the exact dishonesty this
+document exists to prevent.
+
+**The curve is the finding.**
+
+| rule | false positives | in-corpus coverage |
+|---|---:|---:|
+| none | 0.046 | 0.944 |
+| winner-support (ships) | 0.030 | 0.833 |
+| full intersection | 0.006 | 0.611 |
+
+### A refuted hypothesis, recorded because it was tested
+
+Three signals now filter a match — coverage, the unknown-word domain check,
+and winner-support convergence — and all three read the same impoverished
+evidence: which words appear where. The obvious way past that is *lexical
+semantics*: WordNet knows that `watch`, `crowd` and `meadow` are everyday
+objects while `entropy`, `curvature` and `quantifier` are abstract, so a
+query dominated by concrete senses should be refusable on those grounds
+alone.
+
+**Measured, and it does not separate.** Walking hypernyms to their roots for
+leaked glosses and for real in-corpus questions puts both groups under the
+same small set of ancestors — "that which is perceived or known", "perform
+an action, or work out" — with overlapping distributions. The abstraction
+hierarchy is too shallow at the top to distinguish a question about a game
+from a question about a curve.
+
+So the claim that materially beating 3% needs a signal that is not lexical
+is now evidence rather than assertion: the strongest available lexical
+alternative was tried and refuted. The next candidate is structural — the
+corpus states *relations*, and an everyday sentence usually does not — and
+it is not attempted here.
+
 ## 6. What this design does not claim
 
 - Not open-domain question answering. Outside the corpus the honest output is
