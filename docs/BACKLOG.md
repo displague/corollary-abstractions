@@ -3,6 +3,47 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## The gate is single-threaded and nobody has measured why
+
+- **The full suite is ~7 hours on one core, and the reason I have been
+  giving for it is wrong.** v0.11's triage said "several tests each reload
+  the 12k graph". Measured during the v0.12 release: **only four modules
+  rebuild the graph** (`test_matcher_mirror`, `test_programming_discipline`,
+  `test_readiness`, `test_resolver`), and they cache in `setUpClass`. The
+  cost is concentrated in the **eight torch-dependent modules**
+  (`test_corpus_analogy*`, `test_depth_consumer*`, `test_proof_curve`,
+  `test_tactic_policy`, `test_visual_oracle`, `test_write_stage`), which run
+  real training loops — the v0.12 gate spent hours inside
+  `experiments/train_analogy.py` building TransformerEncoders.
+
+  **Do the measurement before the optimisation.** Per-module wall-clock is
+  one `-v` run away and nobody has one; every claim about where the time
+  goes has so far been folklore, including mine.
+
+  Then, in this order:
+
+  1. **Parallelise by module, one git worktree per worker.** The modules are
+     independent, but several write to FIXED repo paths, so process-level
+     parallelism needs isolation — and this project already owns worktrees
+     for exactly that. 4–6 workers should take a 7-hour gate to under two.
+     `unittest` has no parallel runner; that is the work.
+  2. **Persist the resolver index.** 3.98s cold start (1.47s `load_trees`
+     + 2.51s over 219,416 subterm occurrences). This is a PROMPT
+     improvement, not a gate one — only four modules pay it. Worth doing
+     for interactive use, worth not confusing with the gate problem.
+  3. **Leave the GPU alone unless the per-module numbers demand it.** CUDA
+     is available (torch 2.13.0+cu130). But the models are deliberately
+     tiny, so kernel-launch overhead can make GPU *slower* at this scale,
+     and this machine has a documented history of 0x101 bugchecks under GPU
+     load — the throttled-GPU house rule exists for that reason. Riskiest
+     lever, least certain payoff, and it only touches eight modules.
+
+  Evidence: v0.12 gate started 08:20, still running at 14:00 with 19,936
+  CPU-seconds burned at 99% of one core. Also: the gate was run WITHOUT
+  `-v` this time, which made progress illegible and forced a CPU-counter
+  estimate. The release skill's two-tier note should say `-v` belongs in
+  the full-discover command.
+
 ## Parked at v0.12 triage
 
 - **PARKED: the write-recovery ranker (v0.12 item 6), because no fit was
