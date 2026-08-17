@@ -522,6 +522,36 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
             ),
         )
     top = tuple(sorted(s for s, n in hits.items() if n == best))
+
+    # Convergence. A question is about ONE thing, so the words a person types
+    # should point at one region of the graph. An accidental match scatters:
+    # "a self-winding watch" matched because `self` and `winding` are both
+    # words this corpus knows, from entirely unrelated corpora, and a score
+    # built by adding them up cannot tell that from a real query whose words
+    # agree. So the supporting words must share a corpus, and the winner must
+    # be in it.
+    #
+    # Single-word queries are exempt: one word cannot disagree with itself,
+    # and `parity` is a legitimate term lookup.
+    if len(used) >= 2:
+        common: set[str] | None = None
+        for word in used:
+            corpora = set()
+            for postings in (index.by_keyword, index.by_lexicon, index.by_prose):
+                for sid in postings.get(word, ()):
+                    corpora.add(index.corpus_of.get(sid, "?"))
+            common = corpora if common is None else (common & corpora)
+        winner_corpora = {index.corpus_of.get(s, "?") for s in top}
+        if not common or not (common & winner_corpora):
+            return Resolution(
+                PASS, "words",
+                detail=(
+                    f"{used} do not converge on one corpus; the match is "
+                    "incidental rather than about a single subject"
+                ),
+                evidence=(f"matched_words={used}",),
+            )
+
     return Resolution(
         BIND if len(top) == 1 else ASK,
         "words",
