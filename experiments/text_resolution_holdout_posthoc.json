@@ -4,20 +4,20 @@
   "note": "held out; authored and committed before the first run",
   "wordnet_present": true,
   "queries": 38,
-  "seconds": 364.02,
+  "seconds": 364.91,
   "adjudication": {
     "R1": {
-      "fired": true,
-      "coverage": 0.9444,
+      "fired": false,
+      "coverage": 0.6111,
       "threshold": 0.85,
-      "reached": 17,
+      "reached": 11,
       "of": 18
     },
     "R2": {
       "fired": true,
-      "refusal": 0.9,
+      "refusal": 1.0,
       "threshold": 0.9,
-      "refused": 9,
+      "refused": 10,
       "of": 10
     },
     "R3": {
@@ -37,18 +37,18 @@
     {
       "text": "sum of the interior angles of a triangle",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "waiting",
-      "ok": true,
-      "detail": "words: 6 statements match ['angles', 'interior', 'sum', 'triangle'] (score 3, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "derivative of a product of two functions",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "found",
-      "ok": true,
-      "detail": "words: 1 statements match ['derivative', 'functions', 'product', 'two'] (score 5, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "entropy in thermodynamics",
@@ -77,10 +77,10 @@
     {
       "text": "recursive definition of the fibonacci sequence",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "waiting",
-      "ok": true,
-      "detail": "words: 5 statements match ['definition', 'recursive', 'sequence'] (score 2, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "conservation of momentum",
@@ -109,18 +109,18 @@
     {
       "text": "curvature of a plane curve",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "found",
-      "ok": true,
-      "detail": "words: 1 statements match ['curvature', 'curve', 'plane'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "logarithm of a product",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "found",
-      "ok": true,
-      "detail": "words: 1 statements match ['logarithm', 'product'] (score 3, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "definition of a prime number",
@@ -157,10 +157,10 @@
     {
       "text": "arithmetic mean geometric mean inequality",
       "expect": "resolve",
-      "route": "resolver",
-      "status": "waiting",
-      "ok": true,
-      "detail": "words: 3 statements match ['arithmetic', 'geometric', 'inequality', 'mean'] (score 4, via ['keywords', 'lexicon', 'prose"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "euclidean distance between points",
@@ -181,10 +181,10 @@
     {
       "text": "what were the main causes of the second world war",
       "expect": "refuse",
-      "route": "resolver",
-      "status": "found",
-      "ok": false,
-      "detail": "words: 1 statements match ['causes', 'second', 'world'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
     },
     {
       "text": "recommend a hotel in barcelona for next week",

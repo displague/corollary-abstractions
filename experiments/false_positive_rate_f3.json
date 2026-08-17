@@ -1,0 +1,167 @@
+{
+  "schema": "false_positive_rate.v1",
+  "source": "Open English WordNet examples/glosses, unscreened",
+  "seed": 20261103,
+  "sampled": 1000,
+  "claimed": 30,
+  "false_positive_rate": 0.03,
+  "adjudication": {
+    "F3": {
+      "fired": true,
+      "rate": 0.03,
+      "threshold": 0.04
+    }
+  },
+  "claimed_samples": [
+    {
+      "text": "have a turn; make one's move in a game",
+      "kind": "ask",
+      "detail": "4 statements match ['make', 'move', 'one', 's', 'turn'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "ml.recurrence.belief_state_update"
+    },
+    {
+      "text": "the signal contained thousands of bits of information",
+      "kind": "ask",
+      "detail": "5 statements match ['bits', 'contained', 'information', 'signal'] (score 3, via ['keywords', 'lexicon', 'prose",
+      "top": "infotheory.channel.channel_capacity"
+    },
+    {
+      "text": "a second-string pitcher",
+      "kind": "ask",
+      "detail": "4 statements match ['second', 'string'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "morphology.wordformation.concat_associativity"
+    },
+    {
+      "text": "the ratio of the circumference to the diameter of a circle; approximately equal to 3.14159265358979323846 \u2026",
+      "kind": "ask",
+      "detail": "2 statements match ['approximately', 'circle', 'circumference', 'equal', 'ratio'] (score 6, via ['keywords', '",
+      "top": "geometry.circle_formulas.circle_area_from"
+    },
+    {
+      "text": "a person who gives up or transfers money or goods",
+      "kind": "bind",
+      "detail": "1 statements match ['gives', 'goods', 'money', 'person', 'up'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "economics.monetary.equation_of_exchange"
+    },
+    {
+      "text": "a way through or along which someone or something may pass",
+      "kind": "ask",
+      "detail": "2 statements match ['along', 'pass', 'someone', 'something', 'way'] (score 2, via ['lexicon', 'prose'])",
+      "top": "narrative.structure.complication_obstruction"
+    },
+    {
+      "text": "intermediate in size",
+      "kind": "ask",
+      "detail": "11 statements match ['intermediate', 'size'] (score 1, via ['keywords', 'lexicon', 'prose'])",
+      "top": "calculus.differentiation.chain_rule"
+    },
+    {
+      "text": "the coloring of a person's face",
+      "kind": "ask",
+      "detail": "4 statements match ['face', 'person', 's'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geotop.polyhedra.euler_polyhedron_formula"
+    },
+    {
+      "text": "your consciousness of your own identity",
+      "kind": "ask",
+      "detail": "2 statements match ['identity', 'own'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "logic.boolean_laws.identity_laws"
+    },
+    {
+      "text": "an extreme deviation from the mean",
+      "kind": "bind",
+      "detail": "1 statements match ['deviation', 'extreme', 'mean'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "ml.preference.grpo_group_relative_advantage"
+    },
+    {
+      "text": "the region that is outside of something",
+      "kind": "ask",
+      "detail": "3 statements match ['outside', 'region', 'something'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geotop.point_set.interior_boundary_exterior_partition"
+    },
+    {
+      "text": "the number of which a given number is the logarithm",
+      "kind": "bind",
+      "detail": "1 statements match ['given', 'logarithm', 'number'] (score 7, via ['keywords', 'lexicon', 'prose'])",
+      "top": "numanalysis.error.relative_condition_number"
+    },
+    {
+      "text": "A substance that acts as a base or an acid, depending on the pH of the solution into which it is introduced.",
+      "kind": "bind",
+      "detail": "1 statements match ['acid', 'base', 'depending', 'introduced', 'ph', 'solution', 'substance'] (score 7, via ['",
+      "top": "chemistry.acid_base.henderson_hasselbalch"
+    },
+    {
+      "text": "a measure of electric power",
+      "kind": "ask",
+      "detail": "2 statements match ['measure', 'power'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "graphtheory.walks.adjacency_power_walk_count"
+    },
+    {
+      "text": "a holiday where you do the same things you do at work",
+      "kind": "bind",
+      "detail": "1 statements match ['same', 'things', 'work'] (score 3, via ['lexicon', 'prose'])",
+      "top": "narrative.constraint.chekhov_gun"
+    },
+    {
+      "text": "the modal logic of belief and disbelief",
+      "kind": "bind",
+      "detail": "1 statements match ['belief', 'disbelief', 'logic', 'modal'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "temporal.modality.next_distributes_over_meet"
+    },
+    {
+      "text": "from the point of view of topology",
+      "kind": "ask",
+      "detail": "4 statements match ['point', 'topology'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "difftop.degree.brouwer_fixed_point"
+    },
+    {
+      "text": "A belief that Earth is the center of the universe and does not move.",
+      "kind": "ask",
+      "detail": "4 statements match ['belief', 'earth', 'move', 'universe'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "ml.recurrence.belief_state_update"
+    },
+    {
+      "text": "the center of gravity of a floating object",
+      "kind": "ask",
+      "detail": "2 statements match ['floating', 'gravity', 'object'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "narrative.frames.cartoon_gravity"
+    },
+    {
+      "text": "information set out in tabular form",
+      "kind": "bind",
+      "detail": "1 statements match ['form', 'information', 'out', 'set'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "top": "infotheory.mutualinfo.entropy_inclusion_exclusion"
+    },
+    {
+      "text": "re-examine one's witness",
+      "kind": "bind",
+      "detail": "1 statements match ['one', 're', 's', 'witness'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "top": "numbertheory.parity.odd_witness_definition"
+    },
+    {
+      "text": "change in physical make-up",
+      "kind": "ask",
+      "detail": "5 statements match ['change', 'make', 'physical', 'up'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "top": "calculus.differentiation.average_rate_of_change"
+    },
+    {
+      "text": "the amount of increase in signal power or voltage or current expressed as the ratio of output to input",
+      "kind": "ask",
+      "detail": "4 statements match ['amount', 'current', 'expressed', 'input', 'output', 'power', 'ratio', 'signal', 'voltage'",
+      "top": "calculus.growth.exponential_growth_law"
+    },
+    {
+      "text": "what are the 4 factors of 6?",
+      "kind": "bind",
+      "detail": "1 statements match ['factors'] (score 1, via ['prose'])",
+      "top": "numbertheory.parity.odd_product_closed"
+    },
+    {
+      "text": "a trifling sum of money",
+      "kind": "ask",
+      "detail": "2 statements match ['money', 'sum'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "economics.monetary.equation_of_exchange"
+    }
+  ]
+}

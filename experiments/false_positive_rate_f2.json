@@ -1,0 +1,65 @@
+{
+  "schema": "false_positive_rate.v1",
+  "source": "Open English WordNet examples/glosses, unscreened",
+  "seed": 20260901,
+  "sampled": 1000,
+  "claimed": 8,
+  "false_positive_rate": 0.008,
+  "adjudication": {
+    "F2": {
+      "fired": true,
+      "rate": 0.008,
+      "threshold": 0.02
+    }
+  },
+  "claimed_samples": [
+    {
+      "text": "one to whom something is addressed",
+      "kind": "ask",
+      "detail": "12 statements match ['one', 'something'] (score 2, via ['lexicon', 'prose'])",
+      "top": "geomodel.bezier.de_casteljau_step"
+    },
+    {
+      "text": "lying on the same line",
+      "kind": "bind",
+      "detail": "1 statements match ['line', 'same'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "diffgeo.stokes.stokes_zero_form_case"
+    },
+    {
+      "text": "the center of the circle of curvature",
+      "kind": "bind",
+      "detail": "1 statements match ['circle', 'curvature'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+      "top": "diffgeo.curves.circle_curvature"
+    },
+    {
+      "text": "work one's way through the crowd",
+      "kind": "bind",
+      "detail": "1 statements match ['one', 's', 'way', 'work'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+      "top": "narrative.constraint.chekhov_gun"
+    },
+    {
+      "text": "being one more than fifteen",
+      "kind": "ask",
+      "detail": "13 statements match ['more', 'one'] (score 2, via ['lexicon', 'prose'])",
+      "top": "diffgeo.stokes.stokes_theorem"
+    },
+    {
+      "text": "their military is the largest in the region",
+      "kind": "bind",
+      "detail": "1 statements match ['largest', 'region', 'their'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geotop.predicates.adjacency_symmetry"
+    },
+    {
+      "text": "a cross with three crossbars",
+      "kind": "bind",
+      "detail": "1 statements match ['cross', 'three'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geomodel.surfaces.surface_normal_cross_product"
+    },
+    {
+      "text": "a unit of information equal to 1000 zettabits or 10^24 bits",
+      "kind": "ask",
+      "detail": "8 statements match ['bits', 'equal', 'information', 'unit'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "infotheory.channel.channel_capacity"
+    }
+  ]
+}
