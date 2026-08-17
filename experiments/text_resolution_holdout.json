@@ -1,0 +1,53 @@
+{
+  "generated_by": "hand-authored held-out set for docs/DESIGN-text-resolution.md §7",
+  "note": "Authored in one pass and committed BEFORE being run even once. Disjoint from experiments/text_resolution_queries.json: no query here appears there, and none was checked against the resolver first. The first set was written while the resolver was being built and every failure it found was fixed, which makes it a development set. This is the holdout, and it is scored exactly once.",
+  "expect": {
+    "resolve": "should reach a statement (bind or ask)",
+    "refuse": "should PASS to the dispatcher; the corpus does not contain this",
+    "compute": "should be answered by exact arithmetic",
+    "define": "should reach a dictionary sense (requires COROLLARY_WORDNET)"
+  },
+  "queries": [
+    {"text": "sum of the interior angles of a triangle", "expect": "resolve"},
+    {"text": "derivative of a product of two functions", "expect": "resolve"},
+    {"text": "entropy in thermodynamics", "expect": "resolve"},
+    {"text": "expected value of a random variable", "expect": "resolve"},
+    {"text": "modular arithmetic residue", "expect": "resolve"},
+    {"text": "recursive definition of the fibonacci sequence", "expect": "resolve"},
+    {"text": "conservation of momentum", "expect": "resolve"},
+    {"text": "the incompleteness theorem", "expect": "resolve"},
+    {"text": "graph adjacency and walks", "expect": "resolve"},
+    {"text": "curvature of a plane curve", "expect": "resolve"},
+    {"text": "logarithm of a product", "expect": "resolve"},
+    {"text": "definition of a prime number", "expect": "resolve"},
+    {"text": "binomial coefficient", "expect": "resolve"},
+    {"text": "variance and standard deviation", "expect": "resolve"},
+    {"text": "universal quantifier distribution", "expect": "resolve"},
+    {"text": "arithmetic mean geometric mean inequality", "expect": "resolve"},
+    {"text": "euclidean distance between points", "expect": "resolve"},
+    {"text": "chemical reaction rate constant", "expect": "resolve"},
+
+    {"text": "what were the main causes of the second world war", "expect": "refuse"},
+    {"text": "recommend a hotel in barcelona for next week", "expect": "refuse"},
+    {"text": "my car makes a rattling noise when I brake", "expect": "refuse"},
+    {"text": "who directed the film citizen kane", "expect": "refuse"},
+    {"text": "how do I change a bicycle tyre", "expect": "refuse"},
+    {"text": "the best way to learn to play the piano", "expect": "refuse"},
+    {"text": "summarise the plot of hamlet for me", "expect": "refuse"},
+    {"text": "is it going to rain tomorrow afternoon", "expect": "refuse"},
+    {"text": "please order more printer paper for the office", "expect": "refuse"},
+    {"text": "what is the capital city of australia", "expect": "refuse"},
+
+    {"text": "if a = 7 then what is a ^ 3", "expect": "compute"},
+    {"text": "what is 144 / 12", "expect": "compute"},
+    {"text": "suppose n = 6, what is n * (n + 1) / 2", "expect": "compute"},
+    {"text": "does 3 ^ 4 = 81", "expect": "compute"},
+    {"text": "is 2 ^ 10 > 1000", "expect": "compute"},
+    {"text": "what is 1 / 7 + 1 / 14", "expect": "compute"},
+
+    {"text": "what is a telescope", "expect": "define"},
+    {"text": "define gravity", "expect": "define"},
+    {"text": "what is a harbour", "expect": "define"},
+    {"text": "the meaning of solitude", "expect": "define"}
+  ]
+}
