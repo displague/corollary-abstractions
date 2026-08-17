@@ -3,7 +3,7 @@
   "measures": "discrimination (title -> own node), not generalization",
   "graph_nodes": 14830,
   "queries": 14830,
-  "seconds": 3.01,
+  "seconds": 3.54,
   "curated": {
     "total": 262,
     "bind_self": 243,
@@ -66,7 +66,67 @@
     },
     "S4": {
       "fired": true,
-      "seconds": 3.01
+      "seconds": 3.54
+    },
+    "S5": {
+      "fired": false,
+      "structural_reach": 0.8127,
+      "threshold": 0.9,
+      "reached": 11840,
+      "checked": 14568,
+      "measures": "ingested node reached by its own formal template"
     }
-  }
+  },
+  "structural_reach_misses": [
+    {
+      "id": "leanworkbook.ground.lean_workbook_10628",
+      "kind": "pass",
+      "template": "12 * 3 + 4 * 5 = 56"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_1071",
+      "kind": "pass",
+      "template": "1998 = 2 * 3^3 * 37"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_10778",
+      "kind": "pass",
+      "template": "985 / 108 >= 985 / 108"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_10893",
+      "kind": "pass",
+      "template": "10112369 - 10113459 = -1090"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_11128",
+      "kind": "pass",
+      "template": "3 / 2 / 5 + 2 / 5 / 7 + 4 / 7 / 11 + 5 / 11 / 16 + 6 / 16 / 22 + 7 / 22 / 29 + 1 / 29 = 1 "
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_11319",
+      "kind": "ask",
+      "template": "SQRT(1) = 1"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_11349",
+      "kind": "pass",
+      "template": "(100 + 1) ^ 1000 >= 1000 * 100 ^ 1000"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_12045",
+      "kind": "pass",
+      "template": "27 / 4 + 64 / 27 >= 985 / 108"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_13563",
+      "kind": "pass",
+      "template": "1 + 1 = 2"
+    },
+    {
+      "id": "leanworkbook.ground.lean_workbook_14402",
+      "kind": "pass",
+      "template": "1 * (23 + 4 * 5) = 43"
+    }
+  ]
 }

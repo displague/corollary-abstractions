@@ -133,6 +133,13 @@ class GraphIndex:
     #: corpus already carried and nobody was reading. Every node has one.
     by_lexicon: dict[str, tuple[str, ...]] = field(default_factory=dict)
     lexicon_df: dict[str, int] = field(default_factory=dict)
+    #: Whole-statement skeletons. `by_skeleton` indexes SUBTERMS, because
+    #: `decompose.subterms` yields a relation's sides and never the relation
+    #: itself -- so typing a complete statement (`12 * 3 + 4 * 5 = 56`)
+    #: matched nothing at all. That is how 2,728 ground arithmetic nodes came
+    #: out unreachable: not because they lack a name, but because the only
+    #: query that fits them was the one shape the resolver refused.
+    by_statement: dict[str, tuple[str, ...]] = field(default_factory=dict)
 
     @property
     def size(self) -> int:
@@ -150,6 +157,7 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
     prose_df: Counter = Counter()
     by_lexicon: dict[str, list[str]] = defaultdict(list)
     lexicon_df: Counter = Counter()
+    by_statement: dict[str, list[str]] = defaultdict(list)
 
     for data_dir in data_dirs:
         if not data_dir.is_dir():
@@ -167,6 +175,10 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
                     if key not in seen:
                         seen.add(key)
                         by_skeleton[key].append(sid)
+                try:
+                    by_statement[skeleton(tree, classes[sid])].append(sid)
+                except (KeyError, TypeError, ValueError):
+                    pass
         # Keywords live on the corpus JSON, which `load_trees` does not carry.
         for path in sorted(data_dir.glob("*/nodes.json")):
             doc = json.loads(path.read_text(encoding="utf-8"))
@@ -218,6 +230,7 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
         prose_df=dict(prose_df),
         by_lexicon={k: tuple(v) for k, v in by_lexicon.items()},
         lexicon_df=dict(lexicon_df),
+        by_statement={k: tuple(v) for k, v in by_statement.items()},
     )
 
 
@@ -252,9 +265,28 @@ def resolve_expression(text: str, index: GraphIndex) -> Resolution:
         tree = canonicalize(Parser(tokenize(text)).parse())
     except (TemplateParseError, ValueError, IndexError):
         return Resolution(PASS, "expression", detail="not a template expression")
+    classes = {n: "V" for n in template_slots(tree)}
+    if tree[0] == "rel":
+        # A whole typed statement. Match it against whole-statement
+        # skeletons, which is the same equivalence the matcher calls a twin:
+        # `12 * 3 + 4 * 5 = 56` should find that statement, and anything
+        # structurally identical to it.
+        key = skeleton(tree, classes)
+        hosts = index.by_statement.get(key, ())
+        if not hosts:
+            return Resolution(
+                PASS, "statement", detail=f"no statement has the skeleton {key}"
+            )
+        return Resolution(
+            BIND if len(hosts) == 1 else ASK,
+            "statement",
+            candidates=hosts,
+            detail=f"{len(hosts)} statements have this exact structure",
+            evidence=(f"skeleton={key}",),
+        )
     if tree[0] not in {"op", "call"}:
         return Resolution(PASS, "expression", detail="not a compound term")
-    key = skeleton(tree, {n: "V" for n in template_slots(tree)})
+    key = skeleton(tree, classes)
     hosts = index.by_skeleton.get(key, ())
     if not hosts:
         return Resolution(PASS, "expression", detail=f"no statement hosts {key}")
