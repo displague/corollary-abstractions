@@ -5,7 +5,7 @@
   "resolve_queries": 28,
   "refuse_queries": 12,
   "graph_nodes": 14830,
-  "seconds_for_all_queries": 0.0078,
+  "seconds_for_all_queries": 0.0224,
   "adjudication": {
     "T1": {
       "fired": true,
@@ -16,9 +16,9 @@
     },
     "T2": {
       "fired": true,
-      "refusal": 0.9167,
+      "refusal": 1.0,
       "threshold": 0.9,
-      "passed": 11,
+      "passed": 12,
       "of": 12
     },
     "T3": {
@@ -704,25 +704,12 @@
     {
       "text": "how tall is the tallest building in the world",
       "expect": "refuse",
-      "kind": "bind",
-      "resolver": "words",
-      "reached": true,
-      "candidates": 1,
-      "bound": "narrative.world.marble_moved_box",
-      "ok": false,
-      "words_shown": [
-        "world"
-      ],
-      "words_asked": [
-        "building",
-        "how",
-        "tall",
-        "tallest",
-        "world"
-      ],
-      "shows_its_words": true,
-      "quotes_verbatim": true,
-      "answer_lines": 8
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
     }
   ]
 }

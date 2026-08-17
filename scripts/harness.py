@@ -1023,6 +1023,39 @@ def _route_resolver(
     return None
 
 
+def _route_story(session: "CoreSession", text: str) -> dict | None:
+    """A story request, answered by the committed story the verifier checks.
+
+    Gated on `narrative.story`. The system does not invent a story; it holds
+    one and can show that it is well formed, so the status is `found` and
+    never `solved`.
+    """
+
+    from story import REQUIRES_SUBSYSTEM, constraint_prose, is_story_request  # noqa: PLC0415
+    from story import render as render_story  # noqa: PLC0415
+    from story import tell  # noqa: PLC0415
+
+    if not is_story_request(text):
+        return None
+    if REQUIRES_SUBSYSTEM not in session.matrix.registered_ids():
+        return {
+            "route": "story",
+            "status": "exhausted",
+            "detail": f"{REQUIRES_SUBSYSTEM} did not register on this boot",
+            "missing_capability": REQUIRES_SUBSYSTEM,
+        }
+    told = tell()
+    return {
+        "route": "story",
+        "status": "found" if told.solved else "waiting",
+        "detail": (
+            f"one committed story, verified: {told.accepted} beats accepted, "
+            f"{told.rejected} rejected"
+        ),
+        "answer": render_story(told, constraint_prose()),
+    }
+
+
 def _route_belief(session: "CoreSession", text: str) -> dict | None:
     """`where does A think B is` — answered from A's frame, not the world.
 
@@ -1145,6 +1178,9 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         if computed is not None:
             return {"line": line, **computed}
         return {"line": line, **_route_suppose(rest.strip())}
+    told = _route_story(session, line)
+    if told is not None:
+        return {"line": line, **told}
     believed = _route_belief(session, line)
     if believed is not None:
         return {"line": line, **believed}

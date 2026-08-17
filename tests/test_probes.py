@@ -151,10 +151,24 @@ class Probes(unittest.TestCase):
                     "\n".join(verdict["answer"]),
                 )
 
+    def test_a_story_request_is_answered_by_the_verified_story(self) -> None:
+        """This abstained for all of v0.13 on a false premise.
+
+        Telling a story was said to require authoring or generating. The
+        repo has had a golden-chicken frame and a StoryFrameVerifier since
+        v0.8; nothing had let a person reach them.
+        """
+        verdict = self.verdict("tell me a story about a chicken")
+        self.assertEqual(verdict["route"], "story")
+        body = "\n".join(verdict["answer"])
+        self.assertIn("golden chicken", body)
+        self.assertIn("Chekhov", body)
+        self.assertNotIn(verdict["status"], {"solved", "verified", "proven"})
+
     def test_out_of_corpus_questions_abstain_and_offer_a_frame(self) -> None:
         for line in (
             "how many continents are on planet earth?",
-            "tell me a story about a chicken",
+            "book me a flight to lisbon next friday",
         ):
             with self.subTest(line=line):
                 verdict = self.verdict(line)

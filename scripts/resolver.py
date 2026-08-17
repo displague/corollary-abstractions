@@ -86,6 +86,8 @@ TERM_QUERY_WORDS = 2
 STOPWORDS = frozenset("""
 a an the is are was were be been being of in on at to for from by with
 what which who whom whose that this these those and or not do does did
+how why where when whether
+
 show tell find give me my we our you your it its
 into onto over under about above below between through during before after
 as if then than so but nor yet also very much many some any each every
