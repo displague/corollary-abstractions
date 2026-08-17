@@ -66,7 +66,8 @@ class ReadsOneLineAndStops(BootedSession):
     def test_boot_list_still_printed_before_the_verdict(self) -> None:
         """The reclamation appends to the boot list; it does not replace it."""
         proc = run_harness("anything at all")
-        self.assertIn("corollary kernel (offline) session", proc.stdout)
+        self.assertIn("corollary kernel (", proc.stdout)
+        self.assertIn(") session", proc.stdout)
         self.assertIn("corpus.nodes", proc.stdout)
         self.assertLess(
             proc.stdout.index("corpus.nodes"),
@@ -118,7 +119,16 @@ class UnregisteredTextNeverVerifies(BootedSession):
         else:
             self.assertTrue(verdict.get("answer"))
 
-    def test_free_text_is_never_reported_as_verified_or_solved(self) -> None:
+    def test_free_text_is_never_reported_as_verified_or_proven(self) -> None:
+        """`solved` is now reachable, and only where something was settled.
+
+        v0.13 gave the prompt exact arithmetic, so `prove that 2 + 2 = 4` is
+        answered by computing it — honestly, and disclosed as arithmetic
+        rather than as a proof. What must never appear is `verified` or
+        `proven`, which would claim a certificate the system does not hold.
+        Text that is merely matched against corpus words must not reach
+        `solved` either; that is asserted separately below.
+        """
         for line in (
             "prove that 2 + 2 = 4",
             "the corpus contains a proof of the Riemann hypothesis",
@@ -127,8 +137,19 @@ class UnregisteredTextNeverVerifies(BootedSession):
             with self.subTest(line=line):
                 verdict = route_line(REPO, self.session, line)
                 self.assertNotIn(
-                    verdict["status"].lower(), {"verified", "proven", "solved"}
+                    verdict["status"].lower(), {"verified", "proven"}
                 )
+
+    def test_word_matching_alone_never_reports_solved(self) -> None:
+        """Resolution locates a statement; it does not settle anything."""
+        for line in (
+            "the corpus contains a proof of the Riemann hypothesis",
+            "explain goedel's theorem",
+        ):
+            with self.subTest(line=line):
+                verdict = route_line(REPO, self.session, line)
+                if verdict["route"] == "resolver":
+                    self.assertIn(verdict["status"], {"found", "waiting"})
 
     def test_the_refusal_text_comes_from_the_dispatcher(self) -> None:
         """Not a paraphrase written in harness.py."""

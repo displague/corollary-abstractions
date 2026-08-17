@@ -131,8 +131,14 @@ def find_expression(text: str) -> str | None:
                 if not candidate or not any(c.isalnum() for c in candidate):
                     continue
                 try:
-                    Parser(tokenize(candidate)).parse()
+                    parsed = Parser(tokenize(candidate)).parse()
                 except (TemplateParseError, ValueError, IndexError):
+                    continue
+                # A lone identifier or numeral parses fine and is useless:
+                # "does 2+2=4" was yielding `does`, a bare slot, and the
+                # relation behind it was never seen. An expression worth
+                # evaluating is compound or a relation.
+                if parsed[0] in {"slot", "num"}:
                     continue
                 if best is None or len(candidate) > len(best):
                     best = candidate
@@ -180,6 +186,87 @@ def _eval_tree(tree: tuple, bindings: dict[str, Fraction],
             "that is a relation, not a value; ask for one side of it"
         )
     raise EvalError(f"no exact rule for {kind!r}")
+
+
+#: Relations the exact evaluator can decide. `NE` is the parser's spelling of
+#: the not-equal glyph.
+_RELATIONS = {
+    "=": lambda a, b: a == b,
+    "<": lambda a, b: a < b,
+    ">": lambda a, b: a > b,
+    "<=": lambda a, b: a <= b,
+    ">=": lambda a, b: a >= b,
+}
+
+
+@dataclass(frozen=True)
+class Verification:
+    """A relation decided exactly: `2 + 2 = 4` is true, and provably so."""
+
+    relation: str
+    left: Fraction
+    right: Fraction
+    holds: bool
+    bindings: dict[str, Fraction]
+
+    def _fmt(self, value: Fraction) -> str:
+        return (
+            str(value.numerator) if value.denominator == 1
+            else f"{value.numerator}/{value.denominator}"
+        )
+
+    def rendered(self) -> list[str]:
+        out = [
+            f"relation   : {self.relation}",
+            f"left       : {self._fmt(self.left)}",
+            f"right      : {self._fmt(self.right)}",
+            f"holds      : {'yes' if self.holds else 'no'}",
+        ]
+        if self.bindings:
+            out.append(
+                "given      : "
+                + ", ".join(
+                    f"{k} = {self._fmt(v)}" for k, v in sorted(self.bindings.items())
+                )
+            )
+        out.append(
+            "decided by exact arithmetic on what you typed; no corpus "
+            "statement was consulted and none is claimed"
+        )
+        return out
+
+
+def verify(text: str) -> Verification:
+    """Decide a typed relation exactly. `does 2+2=4?` is a question with an
+    answer, and refusing it because the parser calls it a relation was a gap,
+    not a principle. Truth here is arithmetic truth about the numbers typed —
+    never a claim that the corpus proves it.
+    """
+    bindings = find_bindings(text)
+    expression = find_expression(text)
+    if expression is None:
+        raise EvalError("no relation to check")
+    try:
+        tree = Parser(tokenize(expression)).parse()
+    except (TemplateParseError, ValueError, IndexError) as exc:
+        raise EvalError(f"cannot parse {expression!r}: {exc}") from None
+    if tree[0] != "rel" or tree[1] not in _RELATIONS:
+        raise EvalError("not a relation this evaluator can decide")
+    free: set[str] = set()
+    left = _eval_tree(tree[2][0], bindings, free)
+    right = _eval_tree(tree[2][1], bindings, free)
+    if free:
+        raise EvalError(
+            "nothing was said about " + ", ".join(sorted(free))
+            + "; bind it like `x = 5` and nothing will be assumed for you"
+        )
+    return Verification(
+        relation=expression,
+        left=left,
+        right=right,
+        holds=_RELATIONS[tree[1]](left, right),
+        bindings=bindings,
+    )
 
 
 def evaluate(text: str) -> Evaluation:

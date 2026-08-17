@@ -986,6 +986,41 @@ def _route_resolver(
     return None
 
 
+def _route_belief(session: "CoreSession", text: str) -> dict | None:
+    """`where does A think B is` — answered from A's frame, not the world.
+
+    Gated on `belief.ownership`, the subsystem that owns frame reasoning. If
+    it did not register, this route refuses rather than answering belief
+    questions from somewhere else.
+    """
+
+    from belief import answer  # noqa: PLC0415
+    from belief import render as render_belief  # noqa: PLC0415
+
+    result = answer(text)
+    if result is None:
+        return None
+    if "belief.ownership" not in session.matrix.registered_ids():
+        return {
+            "route": "belief",
+            "status": "exhausted",
+            "detail": "belief.ownership did not register on this boot",
+            "missing_capability": "belief.ownership",
+        }
+    return {
+        "route": "belief",
+        # `found` for the same reason resolution is: this reports what an
+        # agent believes, which is not a claim about the world.
+        "status": "found" if result.place else "waiting",
+        "detail": (
+            f"{result.agent}: located_in({result.subject}) = {result.place}"
+            if result.place
+            else f"{result.agent}: located_in({result.subject}) not derivable"
+        ),
+        "answer": render_belief(result),
+    }
+
+
 def _route_evaluate(text: str) -> dict | None:
     """Compute, if the line contains something computable. Else `None`.
 
@@ -994,9 +1029,22 @@ def _route_evaluate(text: str) -> dict | None:
     the chain rather than refusing on everyone else's behalf.
     """
 
-    from evaluate import EvalError, evaluate  # noqa: PLC0415
+    from evaluate import EvalError, evaluate, verify  # noqa: PLC0415
     from evaluate import render as render_eval  # noqa: PLC0415
 
+    # A typed relation ("does 2+2=4?") is a question with an exact answer,
+    # so it is decided before falling back to computing a value.
+    try:
+        checked = verify(text)
+    except EvalError:
+        pass
+    else:
+        return {
+            "route": "evaluate",
+            "status": "solved",
+            "detail": f"{checked.relation} holds: {'yes' if checked.holds else 'no'}",
+            "answer": checked.rendered(),
+        }
     try:
         result = evaluate(text)
     except EvalError:
@@ -1060,6 +1108,9 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         if computed is not None:
             return {"line": line, **computed}
         return {"line": line, **_route_suppose(rest.strip())}
+    believed = _route_belief(session, line)
+    if believed is not None:
+        return {"line": line, **believed}
     computed = _route_evaluate(line)
     if computed is not None:
         return {"line": line, **computed}
@@ -1092,8 +1143,19 @@ def main() -> int:
     """Print the offline boot matrix, then read one line and stop."""
 
     repo_root = Path(__file__).resolve().parent.parent
-    session = CoreSession.boot(repo_root, offline=True)
-    print(f"corollary kernel (offline) session {session.session_id[:12]}...")
+    # Detect what is actually installed rather than forcing the absent case.
+    # `offline=True` exists to reproduce a WordNet/Lean/Torch-less box on one
+    # that has them, which is what P-IH1 boots under — a TEST invariant that
+    # had leaked into the CLI, so the prompt reported three subsystems OFF on
+    # a machine where they were present. The probes are the honest answer;
+    # anything genuinely missing still reports OFF, and `--offline` restores
+    # the forced-absent boot for anyone reproducing that case.
+    import sys  # noqa: PLC0415
+
+    offline = "--offline" in sys.argv[1:]
+    session = CoreSession.boot(repo_root, offline=offline)
+    mode = "offline" if offline else "detected"
+    print(f"corollary kernel ({mode}) session {session.session_id[:12]}...")
     for line in session.matrix.render():
         print(line)
 
