@@ -97,6 +97,11 @@ class RequestDetection(unittest.TestCase):
             "the history of a story is long",
             "suppose x=5, what is x ^ 2",
             "where does dotty think bob is?",
+            # Holdout 2 caught this: a question ABOUT story structure is not
+            # a request FOR a story. `^story\b` matched any line beginning
+            # with the word; it now requires the word to BE the line.
+            "story setup complication resolution",
+            "story grammar constraints",
         ):
             with self.subTest(line=line):
                 self.assertFalse(is_story_request(line))

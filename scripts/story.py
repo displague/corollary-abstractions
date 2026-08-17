@@ -63,7 +63,7 @@ CONSTRAINT_IDS = (
 #: A request for a story. A registered question shape, like `owns`.
 STORY_REQUEST = re.compile(
     r"(?:\btell\s+me\s+a\s+story|\btell\s+a\s+story|\ba\s+story\s+about|"
-    r"^\s*story\b|\bwrite\s+me\s+a\s+story)",
+    r"\bwrite\s+me\s+a\s+story|^\s*story\s*$)",
     re.IGNORECASE,
 )
 
