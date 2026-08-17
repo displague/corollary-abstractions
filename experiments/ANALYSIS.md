@@ -3761,3 +3761,104 @@ group_counts {1027, 972, 971, 973, 5} → {1030, 975, 974, 976, 5}.
 but not the generous flag — first corpus besides provability to do
 so. Ninth acknowledgment in `tests/test_decompose_channels.py`.
 specialize.py still 713 curated edges; no programming nest claimed.
+
+---
+
+# v0.12 — the held-out cycle
+
+## Item 1: held-out structure recovery (H1-H6)
+
+Generator `scripts/measure_heldout_recovery.py`, route 1,
+`pattern_membership=False`, null seeds 0/1/2, selection seed 20260816.
+Each holdout is a quarantined corpus; the other holdout is never loaded
+into a run, and everything in `data/` -- including the 12,514
+Lean-workbook templates -- is the fixed curated-relative layer.
+
+| holdout | N | real ISG | null mean | gap |
+|---|---:|---:|---:|---:|
+| miniF2F (A) | 8 | 0.00000 | 0.01626 | -0.01626 |
+| | 32 | 0.00000 | 0.00991 | -0.00991 |
+| | 157 | 0.00547 | 0.04823 | -0.04276 |
+| Goedel-Pset (B) | 8 | 0.00000 | 0.00000 | 0.00000 (degenerate) |
+| | 32 | 0.00000 | 0.00936 | -0.00936 |
+| | 128 | 0.00725 | 0.05354 | -0.04629 |
+| | 512 | 0.01442 | 0.10750 | -0.09308 |
+| | 1896 | 0.02537 | 0.15125 | **-0.12588** |
+
+H1 **MISSED** (real far below null, gap monotonically more negative).
+H2 FIRED (both holdouts at/below null at N=8 and 32). H3 FIRED but
+weakly -- bag_gap -0.0058 with the bag saturated at 0.9937 vs 0.9995,
+so it discriminates nothing in a world where H1 missed. H4 FIRED
+decisively (proxy - ISG_of_grounded: 0.7003 on A, 0.8835 on B). H5
+MISSED and could not have fired -- it tests whether H1 survives dropping
+the top subterm, and H1 never held; dropping `^(?0:V, 2)` moves the gap
+-0.12588 -> -0.12474. H6 FIRED (isg_rise 0.0254 vs xsg_fall 0.0055).
+
+Goedel-Pset N=8 is degenerate: real 0.0 with all three nulls 0.0. Two
+zeros are not an agreement; excluded from the trend.
+
+## C1: the matched-N control
+
+Registered at 1b7b34f before the cell was computed.
+`scripts/measure_self_grounding.py --sizes 157 --no-all`.
+
+| source | real ISG | null mean | null seeds | gap |
+|---|---:|---:|---|---:|
+| Lean-workbook | 0.24194 | 0.19235 | 0.18203 / 0.20791 / 0.18710 | **+0.04959** |
+| miniF2F | 0.00547 | 0.04823 | 0.04211 / 0.06225 / 0.04035 | **-0.04276** |
+
+C1 FIRED on both clauses: opposite sign, and separated by 0.09235
+against combined null spreads of 0.04778 (1.9x). Vacuity passed --
+neither null near zero. Raw rates at matched N differ 44x; the proxy on
+Lean-workbook at 157 reads 0.992, saturating for the third time in two
+cycles.
+
+## Emitter reach on unfitted sources
+
+| source | considered | emitted | excluded | rate |
+|---|---:|---:|---:|---:|
+| Lean-workbook (fitted, v0.11) | 12,637 | 12,514 | 123 | 99.03% |
+| miniF2F (held-out A) | 160 | 157 | 3 | 98.12% |
+| Goedel-Pset (held-out B) | 2,048 | 1,896 | 152 | 92.58% |
+
+Goedel-Pset exclusions: `parse_fail` 114 vs `emit:` 38 -- B3 MISSED,
+a 3:1 inversion of both priors, and the first sample large enough to
+test it. 101 of the 114 (88.6%) carry one unrewritten constant,
+`Real.pi`, so 66% of all exclusions trace to a single unmapped nullary.
+Not fixed: design §3 forbids widening the emitter for a held-out source.
+
+## Item 5 and the conversational surface
+
+P-LS1-P-LS5 all fired (`docs/DESIGN-live-session.md` §8). Routes added
+after the refuse/abstain loop: exact ownership lookup, pooled-evidence
+resolution, WordNet glosses, exact arithmetic and relation checking,
+belief frames, the verified story.
+
+Text resolution, registered before each run:
+
+| | measure | result |
+|---|---|---|
+| T1/T2 | dev coverage / refusal | 1.0 / 0.9167 (T2 missed) |
+| S1/S2 | curated self-bind / precision | 0.6985 / 0.9385 (S2 missed) |
+| S5 | ingested structural reach | 0.8127 (missed) |
+| R1-R4 | holdout 1 | 0.9444 / **0.80 (missed)** / 6/6 / 4/4 |
+| R5-R8 | holdout 2, harder refuse arm | 0.9375 / 0.9167 / 6/6 / 4/4 |
+| F1 | 500 unselected WordNet sentences | 0.046 |
+| F2 | 1000, strict convergence | 0.008 |
+| F3 | 1000, shipping code | **0.030** |
+
+The precision/recall curve, measured not assumed:
+
+| rule | false positives | in-corpus coverage |
+|---|---:|---:|
+| no convergence | 0.046 | 0.944 |
+| winner-support (ships) | 0.030 | 0.833 |
+| full intersection | 0.006 | 0.611 |
+
+Refuted en route: WordNet hypernym roots do not separate leaked glosses
+from real questions -- both land under the same shallow ancestors, so
+the remaining error is not addressable by lexical semantics.
+
+Cost: index build 3.98s over 12,777 nodes (219,416 subterm occurrences,
+38,858 distinct skeletons), then 0.04us per resolution (~24M/sec),
+single core, no GPU.

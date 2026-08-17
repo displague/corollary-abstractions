@@ -1,3 +1,24 @@
+> **CLOSED at v0.12.0.** This file stays as the historical plan of record.
+> Where each item went:
+> item 1 (held-out structure recovery) — **shipped**, and the headline is
+> its central prediction **missing**: H1 failed on both holdouts, see
+> [RELEASE-v0.12.0.md](RELEASE-v0.12.0.md);
+> item 2 (groundedness gate) — **parked in writing**, because §8's parking
+> condition returned when H1 failed (`docs/BACKLOG.md`);
+> item 3 (programming second wave) — **shipped** on the v0.11 branch, and
+> its dependant H3 was **run** this cycle (fired, near-vacuously);
+> item 4 (verdict-backed ingestion RULE) — **shipped**;
+> item 5 (one typed line) — **shipped**, P-LS1–P-LS5 all fired, and the
+> surface grew past its acceptance (disclosed in
+> [TRIAGE-v0.12.md](TRIAGE-v0.12.md) §4, not sold as the headline);
+> item 6 (write-recovery measurement) — **parked in BACKLOG**, no fit named,
+> as this file required rather than carried a third time;
+> item 7 (budgeted-edit ranker) — **still parked**, one foil cell;
+> carried lanes — coverage and multi-turn context → [ROADMAP-v0.13.md](ROADMAP-v0.13.md)
+> items 1–3; the rest parked with reasons in §6 there.
+>
+> The answer to this file's title: **no.** The sign flip did not travel.
+
 # v0.12 roadmap — does the sign flip travel?
 
 v0.11 measured ingestion on the source the emitter was built for

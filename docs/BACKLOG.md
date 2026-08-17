@@ -3,6 +3,34 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Parked at v0.12 triage
+
+- **PARKED: the write-recovery ranker (v0.12 item 6), because no fit was
+  named.** `DESIGN-emergent-programming.md` P-Z1–P-Z4 wait on an
+  unsaturated training leftover that is not write-recovery itself, not the
+  parked family-holdout ranker, and not a re-fit of the vacant analogy
+  (0.104 vs 0.1069) or tactic (65 vs 64) constructions. v0.12's roadmap
+  said plainly: "if no fit is named by triage, park in BACKLOG rather than
+  carry a third time as a floating ranker." No fit was named. Parked.
+  **Unpark when** a design names the leftover and says what would falsify
+  it. Note the nearest candidate the cycle produced: v0.12's resolver
+  returns candidate sets and asks when it cannot choose, and
+  disambiguation-among-candidates is a genuinely graded leftover that is
+  not write-recovery — but it is *unmeasured*, which is why it is a note
+  here and not an unpark. `DESIGN-ambiguity-and-context.md` A1 measures
+  whether it exists at volume.
+
+- **PARKED: groundedness-at-all as an admission signal, pending a design.**
+  v0.12's vacuity check found that exact grounding by *any* owner beats its
+  null by +17.5 to +46.2 points on all three sources at every size, while
+  ISG spreads 44× across the same sources. That is the quantity an
+  admission gate should have rested on. It is **unregistered** — computed
+  after seeing the holdout data — so it is not a result. **Unpark when** it
+  has a design, a registered prediction, and a foil harder than random
+  trees: a gate must reject plausible-but-ungrounded statements, not just
+  noise. Carried as v0.13 item 4; park here if v0.13 triage finds no
+  design.
+
 ## Cognitive frames / lexical stores
 
 The delivered first cuts (frame ownership, visibility-derived and nested

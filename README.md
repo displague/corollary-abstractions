@@ -16,10 +16,37 @@ still stands: about a third on uncontrolled formal math.
 
 ## Three headline demonstrations
 
+**0. You can type at it.** Since [v0.12.0](docs/RELEASE-v0.12.0.md) the
+prompt reads one line and stops with a machine verdict. Every sentence it
+prints was written by a person and stored in the corpus, or comes from Open
+English WordNet; every value is computed exactly; every relation is a
+committed link. It does not author sentences.
+
+```
+$ echo "what is the cosine of a double angle" | python scripts/harness.py
+Double-Angle Cosine
+The cosine of twice an angle is the difference of the squared cosine and the squared sine.
+formally   : cos(2*x) = cos(x)^2 - sin(x)^2
+source     : trigonometry.identities.double_angle_cosine  [trigonometry.core.v1]
+
+$ echo "when x=5, what is x ^ 2?" | python scripts/harness.py
+exact      : 25
+
+$ echo "owns x ^ 2" | python scripts/harness.py
+6884 of 12777 statements host 'x ^ 2'
+```
+
+Ask it something the corpus does not contain and it says so: on 1,000
+sentences sampled from a dictionary it wrongly claimed 3.0% as corpus
+material. In-corpus coverage is 0.833–1.000 depending on the query set.
+Both numbers were registered before the runs that produced them.
+
 **1. The matcher discovers that sciences repeat one another.** From 12,777
 statement nodes across 27 corpora (263 curated including 9 verified-code
 and the recorded-session ingest, + 12,514 unique-covered Lean-workbook
-statements with matcher templates — 302 ground + 12,212 emitted),
+statements with matcher templates — 302 ground + 12,212 emitted), plus two
+**quarantined holdout corpora** in `data_holdout/` (miniF2F 157,
+Goedel-Pset 1,896) that are deliberately invisible to the merged graph,
 structure alone:
 
 ```
@@ -158,6 +185,9 @@ comparison is trusted.
 ```
 schema/                 Mathematical Statement Node JSON schema
 data/<discipline>/      statement corpora (27 corpora, 12,777 nodes)
+data_holdout/<name>/    quarantined holdouts (miniF2F 157, Goedel-Pset 1,896)
+                        committed and byte-reproducible, invisible to the
+                        merged graph — a holdout inside data/ is not held out
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation

@@ -13,6 +13,75 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The sign flip does not travel; it was a fact about Lean-workbook
+  (v0.12 item 1).** Two sources the emitter was not fitted to run the
+  *other* way. miniF2F (157 nodes) sits below its matched null at every
+  size: −0.016 at N=8, −0.010 at 32, −0.043 at 157. Goedel-Pset (1,896
+  nodes) is below its null at every non-degenerate size and diverges
+  monotonically: −0.009, −0.046, −0.093, **−0.126** at N=1,896, where
+  ISG reads 0.0254 against a null of 0.1513. H1 **missed**. This is not
+  a curve that failed to flip — it is a curve running the other way.
+  Ingestion still buys coverage; it does not buy a transferable
+  structure-recovery claim. Regenerable:
+  `scripts/measure_heldout_recovery.py`. Status: **empirical**.
+
+- **At matched N the fitted source compounds and the holdout does not
+  (v0.12, C1).** Registered before the cell was computed. At *identical*
+  N=157, same generator, same null, same seed protocol: Lean-workbook
+  **+0.0496** (ISG 0.2419 vs null 0.1923), miniF2F **−0.0428**. Opposite
+  in sign and separated by 1.9× the combined null spreads, with both
+  nulls far from zero. So the negative is not an artifact of holdout
+  size — the 128–512 objection is dead, because Lean-workbook shows the
+  effect *at* 157. **Source, not scale.** Regenerable:
+  `scripts/measure_self_grounding.py --sizes 157 --no-all`.
+  Status: **empirical**.
+
+- **The rejected proxy would have reported 71% and 92% self-grounding on
+  sources that recover nothing (v0.12, H4).** Proxy vs owner-ISG:
+  miniF2F 0.708 against 0.0077; Goedel-Pset 0.924 against 0.0404. Both
+  far past the registered 0.2 margin. Had v0.11 shipped the sharing
+  proxy as its headline, this cycle's negative would have been invisible
+  — the refusal to use it is what makes the negative legible.
+  Status: **empirical**.
+
+- **The parts are grounded; they are grounded elsewhere (v0.12, H6).**
+  XSG holds at 0.59–0.63 on Goedel-Pset and 0.70–0.81 on miniF2F across
+  every size. Holdout subterms are not ungrounded — their owners are the
+  curated and Lean-workbook layers. 157 competition problems and 1,896
+  formalized word problems do not own one another. Status: **empirical**.
+
+- **The emitter degrades measurably with distance from the source it was
+  fitted to (v0.12).** Emit rate through the *unwidened* emitter:
+  Lean-workbook 99.03%, miniF2F 98.12%, Goedel-Pset 92.58%. And 101 of
+  Goedel-Pset's 114 `parse_fail` exclusions (66% of all 152) carry one
+  unmapped constant, `Real.pi`. The coverage instrument admits those
+  statements while the emitter cannot round-trip them, so **coverage
+  overstates what is authorable** — a soft sampling frame inherited by
+  every downstream count. Regenerable: `experiments/goedel_pset_emit.json`.
+  Status: **exact**.
+
+- **Groundedness-at-all survives the holdouts where self-grounding does
+  not (v0.12, unregistered probe).** Exact grounding by *any* owner
+  beats its null by +17.5 to +46.2 points on all three sources at every
+  size, while ISG spreads 44× across the same sources (0.55% to 47.3%).
+  The quantity an admission gate should rest on is "is this grounded at
+  all", not "does it ground itself". **Unregistered** — computed after
+  seeing the holdout data — and therefore not scored this cycle; it owes
+  a design and a prediction, plus a harder foil than random trees.
+  Status: **probe, unregistered**.
+
+- **A holdout inside `data/` is not held out (v0.12).** Authoring
+  miniF2F into the merged graph moves the published v0.11 channel split
+  under *either* available discipline label: a novel discipline makes it
+  a universal `external` donor (share 0.391 → 0.581, `prior_corpus` 286
+  → 10), while `number_theory` makes it a 26,014-constituent
+  `prior_corpus` donor to the very layer it must be independent of. The
+  constituent total moves 181,909 → 183,305 either way. There is no free
+  label, so the premise was wrong rather than the label:
+  `data_holdout/` quarantines a corpus that stays git-versioned,
+  schema-validated and byte-reproducible while being invisible to the
+  merged graph. Status: **exact**.
+
 - **Ingestion compounds, and the proxy would have lied about it (v0.11
   item 1).** At 12,515 ingested nodes, 47.3% of considered subterms have
   another ingested node as their most-independent owner, against a
