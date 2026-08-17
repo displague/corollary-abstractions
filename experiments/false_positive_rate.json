@@ -1,0 +1,155 @@
+{
+  "schema": "false_positive_rate.v1",
+  "source": "Open English WordNet examples/glosses, unscreened",
+  "seed": 20260817,
+  "sampled": 500,
+  "claimed": 23,
+  "false_positive_rate": 0.046,
+  "adjudication": {
+    "F1": {
+      "fired": true,
+      "rate": 0.046,
+      "threshold": 0.1
+    }
+  },
+  "claimed_samples": [
+    {
+      "text": "the condition or result of being changeable",
+      "kind": "bind",
+      "detail": "1 statements match ['condition', 'result'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "numanalysis.error.relative_condition_number"
+    },
+    {
+      "text": "a holding in the form of land",
+      "kind": "bind",
+      "detail": "1 statements match ['form', 'holding', 'land'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "diffgeo.stokes.stokes_zero_form_case"
+    },
+    {
+      "text": "two of three equal parts of a divisible whole",
+      "kind": "bind",
+      "detail": "1 statements match ['equal', 'parts', 'three', 'two', 'whole'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "infotheory.divergence.gibbs_inequality"
+    },
+    {
+      "text": "the morphophonemics of a particular language",
+      "kind": "ask",
+      "detail": "3 statements match ['language', 'particular'] (score 2, via ['lexicon', 'prose'])",
+      "top": "logic.quantification.existential_generalization"
+    },
+    {
+      "text": "a small light basket used as a measure for fruits",
+      "kind": "ask",
+      "detail": "2 statements match ['basket', 'light', 'measure', 'small', 'used'] (score 3, via ['keywords', 'lexicon', 'pros",
+      "top": "geotop.measure.area_monotonicity"
+    },
+    {
+      "text": "the greatest possible degree",
+      "kind": "ask",
+      "detail": "5 statements match ['degree', 'greatest', 'possible'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "difftop.degree.degree_multiplicativity"
+    },
+    {
+      "text": "something used to beautify",
+      "kind": "bind",
+      "detail": "1 statements match ['something', 'used'] (score 2, via ['lexicon', 'prose'])",
+      "top": "narrative.constraint.no_deus_ex_machina"
+    },
+    {
+      "text": "double negative such as \u2018a not unwelcome outcome\u2019",
+      "kind": "ask",
+      "detail": "2 statements match ['double', 'negative', 'outcome', 'such'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "programming.dfactorial.iterative"
+    },
+    {
+      "text": "a freeze of prices at a given level",
+      "kind": "ask",
+      "detail": "2 statements match ['given', 'level', 'prices'] (score 2, via ['lexicon', 'prose'])",
+      "top": "economics.monetary.equation_of_exchange"
+    },
+    {
+      "text": "a person who supplies information",
+      "kind": "ask",
+      "detail": "3 statements match ['information', 'person', 'supplies'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "infotheory.entropy.surprisal"
+    },
+    {
+      "text": "a literal translation",
+      "kind": "bind",
+      "detail": "1 statements match ['literal', 'translation'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geomodel.transforms.homogeneous_rigid_transform"
+    },
+    {
+      "text": "a self-winding watch",
+      "kind": "bind",
+      "detail": "1 statements match ['self', 'winding'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "infotheory.entropy.surprisal"
+    },
+    {
+      "text": "the doctrine that formal structure rather than content is what should be represented",
+      "kind": "bind",
+      "detail": "1 statements match ['content', 'rather', 'represented', 'structure'] (score 5, via ['keywords', 'lexicon', 'pr",
+      "top": "narrative.structure.story_sequence"
+    },
+    {
+      "text": "a new or different interpretation",
+      "kind": "ask",
+      "detail": "4 statements match ['different', 'interpretation', 'new'] (score 2, via ['lexicon', 'prose'])",
+      "top": "ml.recurrence.belief_state_update"
+    },
+    {
+      "text": "(statistics) an unrestricted variable in a frequency distribution",
+      "kind": "ask",
+      "detail": "2 statements match ['distribution', 'frequency', 'statistics', 'variable'] (score 3, via ['keywords', 'lexicon",
+      "top": "infotheory.entropy.shannon_entropy"
+    },
+    {
+      "text": "the most important point",
+      "kind": "ask",
+      "detail": "4 statements match ['most', 'point'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "difftop.degree.brouwer_fixed_point"
+    },
+    {
+      "text": "(of a solution) having a lower osmotic pressure than a comparison solution",
+      "kind": "bind",
+      "detail": "1 statements match ['comparison', 'having', 'lower', 'pressure', 'solution'] (score 6, via ['keywords', 'lexic",
+      "top": "chemistry.solutions.molarity_definition"
+    },
+    {
+      "text": "roll out the big map",
+      "kind": "bind",
+      "detail": "1 statements match ['big', 'map', 'out'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "numanalysis.rootfinding.fixed_point_iteration"
+    },
+    {
+      "text": "he always reasons from the particular to the general",
+      "kind": "ask",
+      "detail": "3 statements match ['always', 'general', 'particular', 'reasons'] (score 3, via ['keywords', 'lexicon', 'prose",
+      "top": "provability.incompleteness.second_incompleteness"
+    },
+    {
+      "text": "laid edge to edge (not overlapping)",
+      "kind": "ask",
+      "detail": "8 statements match ['edge', 'laid', 'overlapping'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "top": "geometry.surface_area_formulas.cube_surface_area"
+    },
+    {
+      "text": "the prison sentence was suspended",
+      "kind": "ask",
+      "detail": "3 statements match ['sentence', 'suspended'] (score 2, via ['lexicon', 'prose'])",
+      "top": "provability.consistency.consistency_definition"
+    },
+    {
+      "text": "the branches hung low",
+      "kind": "bind",
+      "detail": "1 statements match ['branches', 'low'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "top": "ml.adaptation.lora_low_rank_update"
+    },
+    {
+      "text": "take (gas, light or heat) into a solution",
+      "kind": "bind",
+      "detail": "1 statements match ['gas', 'light', 'solution', 'take'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "top": "chemistry.solutions.molarity_definition"
+    }
+  ]
+}
