@@ -962,7 +962,14 @@ def _route_resolver(
         )
         return {
             "route": "resolver",
-            "status": "solved",
+            # `found`, not `solved`. Resolution locates a statement whose
+            # words match; it does not answer a question or confirm an
+            # assertion. Typing "the corpus contains a proof of the Riemann
+            # hypothesis" should surface related statements, and calling
+            # that `solved` would read as agreement. `solved` is reserved
+            # for exact computation and exact lookup, where something really
+            # was settled.
+            "status": "found",
             "detail": f"{outcome.resolver}: {outcome.detail}",
             "answer": body,
         }
@@ -977,6 +984,29 @@ def _route_resolver(
             "answer": render(outcome, index),
         }
     return None
+
+
+def _route_evaluate(text: str) -> dict | None:
+    """Compute, if the line contains something computable. Else `None`.
+
+    Only wins when it can actually produce a value: an expression with an
+    unbound variable, or no expression at all, falls through to the rest of
+    the chain rather than refusing on everyone else's behalf.
+    """
+
+    from evaluate import EvalError, evaluate  # noqa: PLC0415
+    from evaluate import render as render_eval  # noqa: PLC0415
+
+    try:
+        result = evaluate(text)
+    except EvalError:
+        return None
+    return {
+        "route": "evaluate",
+        "status": "solved",
+        "detail": f"{result.expression} = {result.formatted()}",
+        "answer": render_eval(result),
+    }
 
 
 def _route_suppose(claim: str) -> dict:
@@ -1022,7 +1052,17 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
     if head.lower() == OWNS_COMMAND:
         return {"line": line, **_route_ownership(repo_root, session, rest.strip())}
     if head.lower() == SUPPOSE_COMMAND:
+        # A supposition that binds a variable and then asks about it is a
+        # computation under a frame, not a claim to hold. `suppose x=5, what
+        # is x^2` should answer 25, because the frame supplies the binding
+        # and arithmetic is exact.
+        computed = _route_evaluate(rest.strip())
+        if computed is not None:
+            return {"line": line, **computed}
         return {"line": line, **_route_suppose(rest.strip())}
+    computed = _route_evaluate(line)
+    if computed is not None:
+        return {"line": line, **computed}
     if _existing_file(repo_root, line) or _looks_like_path(line):
         return {"line": line, **_route_write(repo_root, line)}
     resolved = _route_resolver(repo_root, session, line)

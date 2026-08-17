@@ -75,6 +75,12 @@ KEYWORD_DF_CEILING = 0.20
 #: to a score.
 COVERAGE_FLOOR = 0.60
 
+#: At most this many content words still counts as a TERM query, where
+#: matching every word is enough on its own. Above it the text is a
+#: sentence, and a sentence has to corroborate rather than lean on one
+#: surviving word.
+TERM_QUERY_WORDS = 2
+
 #: Dropped before keyword matching. Deliberately tiny and closed: this is not
 #: language understanding, it is removing tokens that match everything.
 STOPWORDS = frozenset("""
@@ -121,6 +127,12 @@ class GraphIndex:
     #: because 12,514 ingested nodes share a formulaic meaning sentence.
     by_prose: dict[str, tuple[str, ...]] = field(default_factory=dict)
     prose_df: dict[str, int] = field(default_factory=dict)
+    #: Inverted index over `symbol_lexicon` names and descriptions -- the
+    #: corpus's own glossary. This is where a node says that `GCD(a, b)` is
+    #: called "greatest common divisor", so it is the synonym layer the
+    #: corpus already carried and nobody was reading. Every node has one.
+    by_lexicon: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    lexicon_df: dict[str, int] = field(default_factory=dict)
 
     @property
     def size(self) -> int:
@@ -136,6 +148,8 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
     df: Counter = Counter()
     by_prose: dict[str, list[str]] = defaultdict(list)
     prose_df: Counter = Counter()
+    by_lexicon: dict[str, list[str]] = defaultdict(list)
+    lexicon_df: Counter = Counter()
 
     for data_dir in data_dirs:
         if not data_dir.is_dir():
@@ -179,6 +193,20 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
                 for word in prose_words - STOPWORDS:
                     by_prose[word].append(sid)
                     prose_df[word] += 1
+                lex = raw.get("symbol_lexicon") or {}
+                lex_words: set[str] = set()
+                for group in ("symbols", "operators", "functionals",
+                              "constants", "index_sets"):
+                    for entry in lex.get(group) or []:
+                        if not isinstance(entry, dict):
+                            continue
+                        for key in ("name", "description", "semantic_role"):
+                            value = entry.get(key)
+                            if isinstance(value, str):
+                                lex_words.update(_WORD.findall(value.lower()))
+                for word in lex_words - STOPWORDS:
+                    by_lexicon[word].append(sid)
+                    lexicon_df[word] += 1
 
     return GraphIndex(
         statement_ids=tuple(ids),
@@ -188,6 +216,8 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
         keyword_df=dict(df),
         by_prose={k: tuple(v) for k, v in by_prose.items()},
         prose_df=dict(prose_df),
+        by_lexicon={k: tuple(v) for k, v in by_lexicon.items()},
+        lexicon_df=dict(lexicon_df),
     )
 
 
@@ -197,8 +227,18 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
 
 
 def reduce_text(text: str) -> list[str]:
-    """Surface form -> content words. Lowercase, split, drop match-alls."""
-    return [w for w in _WORD.findall(text.lower()) if w not in STOPWORDS]
+    """Surface form -> content words. Lowercase, split, drop match-alls.
+
+    Bare numerals are dropped. `prove that 2 + 2 = 4` reduced to
+    ['prove','2','2','4'] and the digits matched prose all over the corpus,
+    binding a proof request to the quadratic formula. Numbers carry
+    structure, not topic, and the expression resolver already reads them
+    structurally — which is the right place for them.
+    """
+    return [
+        w for w in _WORD.findall(text.lower())
+        if w not in STOPWORDS and not w.isdigit()
+    ]
 
 
 # --------------------------------------------------------------------------
@@ -318,6 +358,20 @@ def _postings_resolver(
     )
 
 
+def resolve_lexicon(text: str, index: GraphIndex) -> Resolution:
+    """R4 — the corpus's own glossary of symbol and operator names.
+
+    This is the synonym layer, and it was already committed: a node that
+    writes `GCD(a, b)` records in `symbol_lexicon.functionals` that the
+    functional is called "greatest common divisor". A person types the name;
+    the corpus supplies the mapping. No synonym table is authored here,
+    because authoring one would be guessing at what the corpus means.
+    """
+    return _postings_resolver(
+        text, index, index.by_lexicon, index.lexicon_df, "lexicon"
+    )
+
+
 def resolve_prose(text: str, index: GraphIndex) -> Resolution:
     """R4 — the node's own authored title and meaning, word-indexed.
 
@@ -330,14 +384,84 @@ def resolve_prose(text: str, index: GraphIndex) -> Resolution:
     )
 
 
-#: Order matters: most exact first. An expression that parses is never
-#: second-guessed by a keyword match, and curated keywords are tried before
-#: the much larger prose index so a curator's short list wins ties.
+def resolve_words(text: str, index: GraphIndex) -> Resolution:
+    """R3-5 pooled: keywords, glossary and prose scored TOGETHER.
+
+    These were three resolvers in a priority chain, and the corpus-scale
+    sweep showed the ordering was an assumption that cost accuracy. A node's
+    own title is not in the keyword index -- keywords are a curator's
+    separate short list -- so `Pythagorean Theorem` matched another node's
+    keywords before reaching the prose index where its own title lives, and
+    bound confidently to the wrong statement.
+
+    First-resolver-wins discards evidence. Pooling asks the better question:
+    which statement does the MOST of what was typed point at, counting every
+    place the corpus records a name for something. A node matching in two
+    indexes outranks one matching in a single index, which is corroboration
+    applied across sources rather than only across words.
+
+    Exact resolvers still run first and are never pooled: a parsed
+    expression or a literal id is a different kind of evidence, not more of
+    the same kind.
+    """
+    words = reduce_text(text)
+    if not words:
+        return Resolution(PASS, "words", detail="no content words")
+    sources = (
+        (index.by_keyword, index.keyword_df, "keywords"),
+        (index.by_lexicon, index.lexicon_df, "lexicon"),
+        (index.by_prose, index.prose_df, "prose"),
+    )
+    ceiling = max(1, int(index.size * KEYWORD_DF_CEILING))
+    hits: Counter = Counter()
+    matched_words: set[str] = set()
+    where: set[str] = set()
+    for postings, doc_freq, label in sources:
+        for word in words:
+            found = postings.get(word)
+            if not found or doc_freq.get(word, 0) > ceiling:
+                continue
+            matched_words.add(word)
+            where.add(label)
+            for sid in found:
+                hits[sid] += 1
+    if not hits:
+        return Resolution(
+            PASS, "words", detail=f"no discriminating word matched {words}"
+        )
+    used = sorted(matched_words)
+    covered = len(used) / len(words)
+    best = max(hits.values())
+    # The "absorbed whole" shortcut is for TERM queries -- someone typing
+    # `parity` means the term. It is not for sentences: `prove that 2 + 2 = 4`
+    # reduces to one weak content word, and letting one word stand for a whole
+    # sentence is how a proof request became an answer about the quadratic
+    # formula. A sentence must corroborate.
+    absorbed = len(used) == len(words) and len(words) <= TERM_QUERY_WORDS
+    if not ((best >= 2 and covered >= COVERAGE_FLOOR) or absorbed):
+        return Resolution(
+            PASS, "words",
+            detail=(
+                f"{used} matched but that is only {covered:.0%} of {words}; "
+                "a partial match is not a resolution"
+            ),
+        )
+    top = tuple(sorted(s for s, n in hits.items() if n == best))
+    return Resolution(
+        BIND if len(top) == 1 else ASK,
+        "words",
+        top,
+        f"{len(top)} statements match {used} (score {best}, via {sorted(where)})",
+        evidence=(f"matched_words={used}", f"indexes={sorted(where)}"),
+    )
+
+
+#: Exact evidence first, then pooled word evidence. An expression that parses
+#: or an id that resolves is never second-guessed by word overlap.
 CHAIN = (
     resolve_expression,
     resolve_statement_id,
-    resolve_keywords,
-    resolve_prose,
+    resolve_words,
 )
 
 

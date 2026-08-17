@@ -65,10 +65,25 @@ class ItRefusesToClaimNonsense(ChainFixture):
 
 
 class ItBindsWhenExact(ChainFixture):
-    def test_two_corroborating_words_bind(self) -> None:
+    def test_two_corroborating_words_reach_the_right_statement(self) -> None:
+        """Reaching the right node is the requirement; binding is a bonus.
+
+        This asserted BIND until the corpus-scale sweep showed that
+        first-resolver-wins was discarding evidence. Pooling the word
+        indexes raised self-binding from 0.6985 to 0.9275 and bind
+        precision from 0.9385 to 0.9878, and made this particular query
+        less decisive: `pythagorean theorem` now ASKs between the geometry
+        node and Goedel's second incompleteness, which also carries
+        "theorem". Two candidates with the right one named is a worse
+        answer than one correct bind and a much better answer than one
+        confident wrong bind, which is what the old ordering produced
+        twelve times across the corpus.
+        """
         outcome = resolve("pythagorean theorem", self.index)
-        self.assertEqual(outcome.kind, BIND)
-        self.assertTrue(outcome.bound)
+        self.assertIn(outcome.kind, {BIND, ASK})
+        self.assertIn(
+            "geometry.right_triangles.pythagorean_theorem", outcome.candidates
+        )
 
     def test_an_exact_statement_id_binds(self) -> None:
         outcome = resolve("trigonometry.identities.double_angle_cosine", self.index)

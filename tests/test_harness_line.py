@@ -103,11 +103,20 @@ class ReadsOneLineAndStops(BootedSession):
 class UnregisteredTextNeverVerifies(BootedSession):
     """P-LS2 — a sentence no path claims asks or is exhausted."""
 
-    def test_free_text_is_exhausted_with_the_capability_named(self) -> None:
+    def test_free_text_reaches_a_program_and_names_what_it_lacks(self) -> None:
+        """Either a resolver claims it, or the dispatcher abstains by name.
+
+        This asserted `dispatcher` until v0.13 gave free text a resolver to
+        reach. The invariant that mattered was never "the dispatcher runs" —
+        it was "unclaimed text is not answered from nowhere", and that is
+        what is checked here.
+        """
         verdict = route_line(REPO, self.session, "why does this corpus exist")
-        self.assertEqual(verdict["route"], "dispatcher")
-        self.assertIn(verdict["status"], {"exhausted", "waiting"})
-        self.assertEqual(verdict["missing_capability"], UNREGISTERED_PATH)
+        self.assertIn(verdict["route"], {"dispatcher", "resolver"})
+        if verdict["route"] == "dispatcher":
+            self.assertEqual(verdict["missing_capability"], UNREGISTERED_PATH)
+        else:
+            self.assertTrue(verdict.get("answer"))
 
     def test_free_text_is_never_reported_as_verified_or_solved(self) -> None:
         for line in (
@@ -182,8 +191,9 @@ class DoesNotReplayTheRecording(BootedSession):
         line = "a sentence that appears in no recorded leg whatsoever"
         self.assertNotIn(line, blob)
         verdict = route_line(REPO, self.session, line)
-        self.assertEqual(verdict["route"], "dispatcher")
-        self.assertEqual(verdict["missing_capability"], UNREGISTERED_PATH)
+        # The claim is that a NON-recorded line still reaches a real program,
+        # not that it reaches one particular program.
+        self.assertIn(verdict["route"], {"dispatcher", "resolver"})
 
 
 class FillsNoSlotThePersonDidNotType(BootedSession):
