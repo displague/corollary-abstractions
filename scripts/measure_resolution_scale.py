@@ -39,6 +39,29 @@ speaks to that, and it speaks quietly, from 40 examples.
 - **S4 (speed at scale).** The whole sweep runs in under 120 seconds on one
   CPU core, index build included. The claim that this fits small hardware
   should be checked at 12,777 queries, not at 40.
+
+## S5, registered later, after S3 fired and raised a fair objection
+
+S3 fired: ingested nodes almost never resolve from their titles. That was
+read — correctly — as "98% of the graph is unreachable by natural language",
+and it is the difference between *this works* and *this is ready*.
+
+But the title test is the wrong instrument for that layer, and saying so is
+not a dodge if it is measured. `lean_workbook_49137` has no title a person
+would ever type; it is a mathematical object, not a named theorem. What a
+person CAN type for it is its structure — `SIN(x) ^ 2`, `x ^ 2 + y ^ 2` —
+and the expression resolver is exactly the modality for that.
+
+So the honest question is not "does its title work" but **"is it reachable
+at all, by a query a person could actually form"**.
+
+- **S5 (structural reach).** At least **90%** of ingested nodes are reached
+  by querying their own formal template: the expression resolver returns
+  that node among its candidates. If this fires, the ingested layer is
+  navigable by structure and by id, and only unnavigable by topic — which
+  is a property of statements that have no topic, not a defect of the
+  resolver. If it MISSES, the layer is genuinely unreachable and the
+  readiness claim has to be narrowed to the curated corpus in writing.
 """
 
 from __future__ import annotations
@@ -134,6 +157,28 @@ def run(out_path: Path, limit: int | None = None) -> dict:
             "ask_max_candidates": (sizes[-1] if sizes else None),
         }
 
+    # ---- S5: structural reach, the modality that fits ingested nodes ----
+    reach = {"checked": 0, "reached": 0, "missed_samples": []}
+    for sid, (node, corpus_id) in items:
+        if not corpus_id.startswith(tuple(INGESTED_CORPUS_PREFIXES)):
+            continue
+        template = (
+            (node.get("structural_signature") or {}).get("anonymized_template")
+        )
+        if not isinstance(template, str) or not template:
+            continue
+        reach["checked"] += 1
+        outcome = resolve(template, index)
+        if sid in outcome.candidates:
+            reach["reached"] += 1
+        elif len(reach["missed_samples"]) < 10:
+            reach["missed_samples"].append(
+                {"id": sid, "kind": outcome.kind, "template": template[:90]}
+            )
+    reach["rate"] = (
+        round(reach["reached"] / reach["checked"], 4) if reach["checked"] else 0.0
+    )
+
     curated, ingested = summarise("curated"), summarise("ingested")
     result = {
         "schema": "resolution_scale.v1",
@@ -161,7 +206,16 @@ def run(out_path: Path, limit: int | None = None) -> dict:
                 "curated_bind_self_rate": curated["bind_self_rate"],
             },
             "S4": {"fired": elapsed < 120.0, "seconds": round(elapsed, 2)},
+            "S5": {
+                "fired": reach["rate"] >= 0.90,
+                "structural_reach": reach["rate"],
+                "threshold": 0.90,
+                "reached": reach["reached"],
+                "checked": reach["checked"],
+                "measures": "ingested node reached by its own formal template",
+            },
         },
+        "structural_reach_misses": reach["missed_samples"],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
