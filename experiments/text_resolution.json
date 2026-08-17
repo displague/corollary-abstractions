@@ -1,0 +1,704 @@
+{
+  "schema": "text_resolution.v1",
+  "design": "docs/DESIGN-text-resolution.md",
+  "queries": 40,
+  "resolve_queries": 28,
+  "refuse_queries": 12,
+  "graph_nodes": 14830,
+  "seconds_for_all_queries": 0.0131,
+  "adjudication": {
+    "T1": {
+      "fired": true,
+      "coverage": 0.9643,
+      "threshold": 0.7,
+      "reached": 27,
+      "of": 28
+    },
+    "T2": {
+      "fired": true,
+      "refusal": 0.9167,
+      "threshold": 0.9,
+      "passed": 11,
+      "of": 12
+    },
+    "T3": {
+      "fired": true,
+      "binds_checked": 19,
+      "binds_showing_words": 19
+    },
+    "T4": {
+      "fired": true,
+      "binds_checked": 19,
+      "binds_quoting_verbatim": 19
+    }
+  },
+  "rows": [
+    {
+      "text": "what is the cosine of a double angle",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "trigonometry.identities.double_angle_cosine",
+      "ok": true,
+      "words_shown": [
+        "angle",
+        "cosine",
+        "double"
+      ],
+      "words_asked": [
+        "angle",
+        "cosine",
+        "double"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 11
+    },
+    {
+      "text": "pythagorean identity for sine and cosine",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "trigonometry.identities.pythagorean",
+      "ok": true,
+      "words_shown": [
+        "cosine",
+        "identity",
+        "pythagorean",
+        "sine"
+      ],
+      "words_asked": [
+        "cosine",
+        "identity",
+        "pythagorean",
+        "sine"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 8
+    },
+    {
+      "text": "sum of angles formula for sine",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "trigonometry.identities.sine_angle_sum",
+      "ok": true,
+      "words_shown": [
+        "angles",
+        "formula",
+        "sine",
+        "sum"
+      ],
+      "words_asked": [
+        "angles",
+        "formula",
+        "sine",
+        "sum"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 11
+    },
+    {
+      "text": "area of a circle",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 2,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "area of a square",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "geometry.area_formulas.square_area_formula",
+      "ok": true,
+      "words_shown": [
+        "area",
+        "square"
+      ],
+      "words_asked": [
+        "area",
+        "square"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 11
+    },
+    {
+      "text": "greatest common divisor euclid",
+      "expect": "resolve",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": false
+    },
+    {
+      "text": "binary exponentiation recurrence",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 10,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "double factorial",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 2,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "factorial product recurrence",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 17,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "handshake lemma degree sum",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "graphtheory.degree.handshake_lemma",
+      "ok": true,
+      "words_shown": [
+        "degree",
+        "handshake",
+        "lemma",
+        "sum"
+      ],
+      "words_asked": [
+        "degree",
+        "handshake",
+        "lemma",
+        "sum"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 13
+    },
+    {
+      "text": "even and odd parity dichotomy",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "numbertheory.parity.odd_is_not_even",
+      "ok": true,
+      "words_shown": [
+        "even",
+        "odd",
+        "parity"
+      ],
+      "words_asked": [
+        "dichotomy",
+        "even",
+        "odd",
+        "parity"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 8
+    },
+    {
+      "text": "law of large numbers",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "probstat.limit.law_of_large_numbers",
+      "ok": true,
+      "words_shown": [
+        "large",
+        "law",
+        "numbers"
+      ],
+      "words_asked": [
+        "large",
+        "law",
+        "numbers"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 8
+    },
+    {
+      "text": "normal approximation of a sample mean",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "probstat.limit.law_of_large_numbers",
+      "ok": true,
+      "words_shown": [
+        "mean",
+        "sample"
+      ],
+      "words_asked": [
+        "approximation",
+        "mean",
+        "normal",
+        "sample"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 8
+    },
+    {
+      "text": "chain rule for derivatives",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 3,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "linearity of the derivative",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 3,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "tangent line linearization",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "calculus.approximation.tangent_line_linearization",
+      "ok": true,
+      "words_shown": [
+        "line",
+        "linearization",
+        "tangent"
+      ],
+      "words_asked": [
+        "line",
+        "linearization",
+        "tangent"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 12
+    },
+    {
+      "text": "capm expected return",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "prose",
+      "reached": true,
+      "candidates": 1,
+      "bound": "economics.finance.capm_expected_return",
+      "ok": true,
+      "words_shown": [
+        "capm",
+        "expected",
+        "return"
+      ],
+      "words_asked": [
+        "capm",
+        "expected",
+        "return"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 12
+    },
+    {
+      "text": "equation of exchange monetary",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "economics.monetary.equation_of_exchange",
+      "ok": true,
+      "words_shown": [
+        "equation",
+        "exchange"
+      ],
+      "words_asked": [
+        "equation",
+        "exchange",
+        "monetary"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 12
+    },
+    {
+      "text": "gibbs entropy thermodynamics",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 2,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "galilean velocity addition",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "physics.frames.galilean_velocity_addition",
+      "ok": true,
+      "words_shown": [
+        "addition",
+        "galilean",
+        "velocity"
+      ],
+      "words_asked": [
+        "addition",
+        "galilean",
+        "velocity"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 8
+    },
+    {
+      "text": "hypothetical syllogism",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "logic.inference.hypothetical_syllogism",
+      "ok": true,
+      "words_shown": [
+        "hypothetical",
+        "syllogism"
+      ],
+      "words_asked": [
+        "hypothetical",
+        "syllogism"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 13
+    },
+    {
+      "text": "contraposition in logic",
+      "expect": "resolve",
+      "kind": "ask",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 11,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "arc length functional for a curve",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "diffgeo.curves.arc_length_functional",
+      "ok": true,
+      "words_shown": [
+        "arc",
+        "curve",
+        "functional",
+        "length"
+      ],
+      "words_asked": [
+        "arc",
+        "curve",
+        "functional",
+        "length"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 12
+    },
+    {
+      "text": "first fundamental form of a surface",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "diffgeo.surfaces.first_fundamental_form",
+      "ok": true,
+      "words_shown": [
+        "first",
+        "form",
+        "fundamental",
+        "surface"
+      ],
+      "words_asked": [
+        "first",
+        "form",
+        "fundamental",
+        "surface"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 13
+    },
+    {
+      "text": "morpheme count additivity",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "morphology.quantity.morpheme_count_additivity",
+      "ok": true,
+      "words_shown": [
+        "additivity",
+        "count",
+        "morpheme"
+      ],
+      "words_asked": [
+        "additivity",
+        "count",
+        "morpheme"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 13
+    },
+    {
+      "text": "story sequence structure narrative",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "narrative.structure.story_sequence",
+      "ok": true,
+      "words_shown": [
+        "narrative",
+        "story",
+        "structure"
+      ],
+      "words_asked": [
+        "narrative",
+        "sequence",
+        "story",
+        "structure"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 15
+    },
+    {
+      "text": "z standardization of a random variable",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "ml.preference.grpo_group_relative_advantage",
+      "ok": true,
+      "words_shown": [
+        "standardization",
+        "z"
+      ],
+      "words_asked": [
+        "random",
+        "standardization",
+        "variable",
+        "z"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 14
+    },
+    {
+      "text": "simple linear regression specification",
+      "expect": "resolve",
+      "kind": "bind",
+      "resolver": "keywords",
+      "reached": true,
+      "candidates": 1,
+      "bound": "economics.finance.simple_interest",
+      "ok": true,
+      "words_shown": [
+        "linear",
+        "simple"
+      ],
+      "words_asked": [
+        "linear",
+        "regression",
+        "simple",
+        "specification"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 11
+    },
+    {
+      "text": "how do I bake sourdough bread at home",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "who won the world cup in 1998",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "what is the airspeed velocity of an unladen swallow",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "please write me a poem about the sea",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "recommend a good italian restaurant nearby",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "what time does the train leave tomorrow morning",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "translate this sentence into portuguese",
+      "expect": "refuse",
+      "kind": "bind",
+      "resolver": "prose",
+      "reached": true,
+      "candidates": 1,
+      "bound": "provability.consistency.consistency_definition",
+      "ok": false,
+      "words_shown": [
+        "into",
+        "sentence"
+      ],
+      "words_asked": [
+        "into",
+        "portuguese",
+        "sentence",
+        "translate"
+      ],
+      "shows_its_words": true,
+      "quotes_verbatim": true,
+      "answer_lines": 14
+    },
+    {
+      "text": "my laptop battery drains very quickly",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "explain the plot of a science fiction novel",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "what should I cook for dinner tonight",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "book me a flight to lisbon next friday",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    },
+    {
+      "text": "how tall is the tallest building in the world",
+      "expect": "refuse",
+      "kind": "pass",
+      "resolver": "chain",
+      "reached": false,
+      "candidates": 0,
+      "bound": null,
+      "ok": true
+    }
+  ]
+}

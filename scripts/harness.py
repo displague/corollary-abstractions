@@ -771,6 +771,11 @@ UNREGISTERED_PATH = "tool.freeform_answer"
 #: is registered, English is not, and pretending otherwise is the costume.
 OWNS_COMMAND = "owns"
 
+#: Where fabrication is legal. Conjecture, hypotheticals, opinions and
+#: outright fiction are not errors — they are claims that belong in a frame
+#: the person owns, marked `conjectured`, never quotable as corpus fact.
+SUPPOSE_COMMAND = "suppose"
+
 
 def _looks_like_path(line: str) -> bool:
     """Closed form: is this line an *attempt* at a repository-relative path?
@@ -848,6 +853,16 @@ def _route_dispatch(session: "CoreSession", line: str) -> dict:
         "detail": result.reason,
         "missing_capability": UNREGISTERED_PATH,
         "materialized": result.materialized,
+        # Not a dead end. Text the corpus cannot ground is still sayable --
+        # as conjecture, in a frame the person owns. Offering the route
+        # rather than taking it silently is the difference between holding a
+        # supposition and inventing one.
+        "answer": [
+            "the corpus does not ground this, and nothing here will pretend "
+            "otherwise.",
+            f"to hold it as conjecture instead, type:  "
+            f"{SUPPOSE_COMMAND} {line}",
+        ],
     }
 
 
@@ -964,6 +979,30 @@ def _route_resolver(
     return None
 
 
+def _route_suppose(claim: str) -> dict:
+    """Hold a typed claim inside a frame the person owns."""
+
+    from supposition import render as render_supposition  # noqa: PLC0415
+    from supposition import suppose  # noqa: PLC0415
+
+    if not claim:
+        return {
+            "route": "supposition",
+            "status": "refused",
+            "detail": f"{SUPPOSE_COMMAND!r} needs a claim after it",
+        }
+    held = suppose(claim)
+    return {
+        "route": "supposition",
+        # `waiting` and not `solved`: a supposition is held, not answered.
+        # Calling it solved would be the one word that turns fiction into a
+        # result.
+        "status": "held" if held.accepted else "waiting",
+        "detail": f"held as {held.status} in a frame you own",
+        "answer": render_supposition(held),
+    }
+
+
 def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dict:
     """The whole decision, as data, so a test can assert on it."""
 
@@ -982,6 +1021,8 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
     head, _, rest = line.partition(" ")
     if head.lower() == OWNS_COMMAND:
         return {"line": line, **_route_ownership(repo_root, session, rest.strip())}
+    if head.lower() == SUPPOSE_COMMAND:
+        return {"line": line, **_route_suppose(rest.strip())}
     if _existing_file(repo_root, line) or _looks_like_path(line):
         return {"line": line, **_route_write(repo_root, line)}
     resolved = _route_resolver(repo_root, session, line)

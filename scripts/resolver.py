@@ -69,12 +69,21 @@ BIND, ASK, PASS = "bind", "ask", "pass"
 #: computed from the corpus rather than tuned against an answer key.
 KEYWORD_DF_CEILING = 0.20
 
+#: A match must account for at least this share of the query's content
+#: words. Below it, most of what the person typed went unexplained, and the
+#: part that matched is coincidence. Set at "most of the query", not tuned
+#: to a score.
+COVERAGE_FLOOR = 0.60
+
 #: Dropped before keyword matching. Deliberately tiny and closed: this is not
 #: language understanding, it is removing tokens that match everything.
 STOPWORDS = frozenset("""
 a an the is are was were be been being of in on at to for from by with
 what which who whom whose that this these those and or not do does did
 show tell find give me my we our you your it its
+into onto over under about above below between through during before after
+as if then than so but nor yet also very much many some any each every
+have has had will would can could should may might must shall
 """.split())
 
 _WORD = re.compile(r"[a-z0-9_]+")
@@ -284,12 +293,19 @@ def _postings_resolver(
     # resolution: "airspeed velocity of an unladen swallow" hits `velocity`
     # and would otherwise "resolve" to unrelated statements, which is
     # precisely the fluent-nonsense failure the dispatcher exists to refuse.
-    if not (best >= 2 or len(used) == len(words)):
+    # Two conditions, and the second was earned. Corroboration alone let
+    # "translate this sentence into portuguese" bind to a logic node on
+    # ['into', 'sentence'] -- two words agreeing, both weak, covering half
+    # the query. So a match must also ACCOUNT FOR most of what was asked:
+    # if half the query is unexplained, the half that matched is a
+    # coincidence, not a resolution.
+    covered = len(used) / len(words)
+    if not ((best >= 2 and covered >= COVERAGE_FLOOR) or len(used) == len(words)):
         return Resolution(
             PASS, name,
             detail=(
-                f"only {used} of {words} matched, and one word is not a "
-                "resolution"
+                f"{used} matched but that is only {covered:.0%} of {words}; "
+                "a partial match is not a resolution"
             ),
         )
     top = tuple(sorted(s for s, n in hits.items() if n == best))

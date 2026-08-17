@@ -58,7 +58,80 @@ all.
 T2 and T4 are the ones that must hold. T1 missing means "not ready yet"; T2
 or T4 missing means the thing is *unsafe*, and no coverage number redeems it.
 
-## 4. What this design does not claim
+## 4. Adjudication
+
+Run 1, against the rules as committed when T1–T4 were registered
+(`experiments/text_resolution.json`):
+
+| | result | threshold |
+|---|---|---|
+| **T1** coverage | **FIRED** — 0.9643 (27/28) | ≥ 0.70 |
+| **T2** refusal | **FIRED** — 0.9167 (11/12) | ≥ 0.90 |
+| **T3** shows its words | **FIRED** — 19/19 | all |
+| **T4** verbatim quotation | **FIRED** — 19/19 | all |
+
+All four fired as registered. Two failures were visible inside those
+numbers and both are recorded rather than rounded away:
+
+- **A false bind.** `translate this sentence into portuguese` bound to
+  `provability.consistency.consistency_definition`, corroborated by
+  `['into', 'sentence']` — "sentence" is a logic term, "into" a
+  preposition. Two weak words agreeing, covering half the query.
+- **A miss.** `greatest common divisor euclid` did not resolve; the corpus
+  writes `gcd`.
+
+**Post-hoc, and labelled as such.** After seeing that failure the rule was
+tightened: closed-class function words were added to the stopword list, and
+a match must now account for at least 60% of the query's content words
+(`COVERAGE_FLOOR`) rather than merely having two words agree. The rationale
+is stated in the code — *if half the query is unexplained, the half that
+matched is a coincidence*. Re-run in
+`experiments/text_resolution_posthoc.json`: **T2 rises to 1.000 (12/12)
+with coverage unchanged at 0.9643**. This second run is NOT the registered
+result; T2 is recorded as 0.9167 because that is what the committed rules
+produced when the prediction was scored. The improvement is reported as an
+improvement, not backdated.
+
+The `gcd` miss is left standing. Fixing it means a synonym layer, which is
+a design and not a patch.
+
+## 5. Correction: fabrication is a frame, not a refusal
+
+The first version of this design had two dispositions — resolve, or refuse
+— and that was wrong. Arbitrary text wants conjecture, hypotheticals,
+opinions and deliberate fiction. A system that refuses all four is honest
+and useless; one that answers them as facts is dishonest. There is a third
+option, and the project already had it: hold the claim in a **frame**, where
+the check is consistency with the frame's premises rather than truth.
+
+The corpus is already built for this. `narrative.frames.cartoon_gravity` is
+a committed Frame Declaration; the narrative corpus carries story structure,
+Chekhov's Gun and the no-deus-ex-machina condition as statements;
+`epistemic_status` already ranges over `formal`, `derived`, `assumed`,
+`conjectured`. A story is not an exception to the graph — it is a region of
+it with different rules.
+
+So there are three dispositions, not two:
+
+| the text | route | status |
+|---|---|---|
+| grounded in the corpus | resolver → quoted answer | `solved` |
+| conjecture, fiction, opinion | `suppose …` → a frame you own | `conjectured` |
+| neither | dispatcher | `exhausted`, **and it offers the frame** |
+
+`FrameSpec.on_exit` is `conjectured`, so nothing typed into a supposition
+can leave as a fact. `open_frame` refuses a frame that declares a
+contradiction and `assert_literal` refuses a claim contradicting one already
+held — consistency is enforced by the executor, not by care. And the
+unresolved branch no longer dead-ends: it names the `suppose` route rather
+than taking it silently, which is the difference between *holding* a
+supposition and *inventing* one.
+
+**Not yet reachable:** contradiction between two typed claims. The executor
+supports it; the surface does not, because P-LS6 keeps the session to one
+line. Named here rather than left for a reader to discover.
+
+## 6. What this design does not claim
 
 - Not open-domain question answering. Outside the corpus the honest output is
   a refusal, and the refuse arm exists to keep that true.
