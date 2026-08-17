@@ -534,22 +534,33 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
     # Single-word queries are exempt: one word cannot disagree with itself,
     # and `parity` is a legitimate term lookup.
     if len(used) >= 2:
-        common: set[str] | None = None
+        # Support is counted on the WINNER, not across the whole query. An
+        # earlier version demanded every matched word share one corpus, which
+        # is too strong: "entropy in thermodynamics" is legitimately physics
+        # AND information theory, and that rule cost holdout 1 a third of its
+        # coverage (0.9444 -> 0.6111) to buy a false-positive improvement.
+        # What actually distinguishes an accident is that only ONE word
+        # points at the winner: "a self-winding watch" reached
+        # entropy.surprisal on `self` alone, with `winding` pointing
+        # elsewhere entirely.
+        winner_corpus = {index.corpus_of.get(s, "?") for s in top}
+        supporting = 0
         for word in used:
-            corpora = set()
             for postings in (index.by_keyword, index.by_lexicon, index.by_prose):
-                for sid in postings.get(word, ()):
-                    corpora.add(index.corpus_of.get(sid, "?"))
-            common = corpora if common is None else (common & corpora)
-        winner_corpora = {index.corpus_of.get(s, "?") for s in top}
-        if not common or not (common & winner_corpora):
+                hit = postings.get(word)
+                if hit and any(
+                    index.corpus_of.get(sid, "?") in winner_corpus for sid in hit
+                ):
+                    supporting += 1
+                    break
+        if supporting < 2:
             return Resolution(
                 PASS, "words",
                 detail=(
-                    f"{used} do not converge on one corpus; the match is "
-                    "incidental rather than about a single subject"
+                    f"only one of {used} points at the winning corpus; a "
+                    "single supporting word is a coincidence, not a subject"
                 ),
-                evidence=(f"matched_words={used}",),
+                evidence=(f"matched_words={used}", f"supporting={supporting}"),
             )
 
     return Resolution(
