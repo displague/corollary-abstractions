@@ -820,6 +820,43 @@ def _route_write(repo_root: Path, line: str) -> dict:
     }
 
 
+def _route_gloss(session: "CoreSession", line: str) -> dict | None:
+    """A dictionary sense, when the corpus has nothing and WordNet does.
+
+    Ordered AFTER corpus resolution on purpose: this project's statements
+    outrank a dictionary entry for anything the graph actually holds. It
+    runs before the dispatcher abstains, so "what is a chicken" gets a real
+    human-written definition instead of a refusal — quoted, not generated.
+
+    Gated on the boot matrix. Without the archive the route reports nothing
+    and the dispatcher abstains as before, rather than silently answering
+    from an empty index.
+    """
+
+    from gloss import REQUIRES_SUBSYSTEM, definitional_target, look_up  # noqa: PLC0415
+    from gloss import render as render_gloss  # noqa: PLC0415
+
+    if REQUIRES_SUBSYSTEM not in session.matrix.registered_ids():
+        return None
+    # Only when a definition was actually asked for. Firing on any line that
+    # contains a dictionary word answered "tell me a story about a chicken"
+    # by defining chicken, which is a non-sequitur dressed as an answer.
+    word = definitional_target(line)
+    if not word:
+        return None
+    gloss = look_up(word)
+    if gloss is None or not gloss.found:
+        return None
+    return {
+        "route": "gloss",
+        # `found`, like resolution: a dictionary sense is not a settled
+        # question and never a corpus fact.
+        "status": "found",
+        "detail": f"{word}: {len(gloss.senses)} dictionary sense(s)",
+        "answer": render_gloss(gloss),
+    }
+
+
 def _route_dispatch(session: "CoreSession", line: str) -> dict:
     """Offer the line to the dispatcher as a need on an unregistered path."""
 
@@ -1119,6 +1156,9 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
     resolved = _route_resolver(repo_root, session, line)
     if resolved is not None:
         return {"line": line, **resolved}
+    defined = _route_gloss(session, line)
+    if defined is not None:
+        return {"line": line, **defined}
     return {"line": line, **_route_dispatch(session, line)}
 
 

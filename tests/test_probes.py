@@ -126,10 +126,34 @@ class Probes(unittest.TestCase):
         self.assertEqual(verdict["route"], "supposition")
         self.assertNotIn(verdict["status"], {"solved", "verified", "proven"})
 
+    def test_a_definitional_question_reaches_the_dictionary(self) -> None:
+        """Only when a definition was asked for.
+
+        An earlier version fired on any line containing a dictionary word,
+        so "tell me a story about a chicken" was answered by DEFINING
+        chicken — a non-sequitur dressed as an answer. Skipped when the
+        pinned archive is absent rather than passing on an empty index.
+        """
+        from gloss import archive_path  # noqa: PLC0415
+
+        if archive_path() is None:
+            self.skipTest("COROLLARY_WORDNET not set")
+        for line, word in (
+            ("what is a chicken?", "chicken"),
+            ("explain what an egg is from the perspective of a bird", "egg"),
+        ):
+            with self.subTest(line=line):
+                verdict = self.verdict(line)
+                self.assertEqual(verdict["route"], "gloss")
+                self.assertIn(word, verdict["detail"])
+                self.assertIn(
+                    "not a statement in this corpus",
+                    "\n".join(verdict["answer"]),
+                )
+
     def test_out_of_corpus_questions_abstain_and_offer_a_frame(self) -> None:
         for line in (
             "how many continents are on planet earth?",
-            "explain what an egg is from the perspective of a bird",
             "tell me a story about a chicken",
         ):
             with self.subTest(line=line):

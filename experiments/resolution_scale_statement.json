@@ -1,0 +1,81 @@
+{
+  "schema": "resolution_scale.v1",
+  "measures": "discrimination (title -> own node), not generalization",
+  "graph_nodes": 14830,
+  "queries": 14830,
+  "seconds": 3.05,
+  "curated": {
+    "total": 262,
+    "bind_self": 243,
+    "bind_other": 3,
+    "ask_contains_self": 11,
+    "ask_missing_self": 5,
+    "pass": 0,
+    "bind_self_rate": 0.9275,
+    "bind_precision": 0.9878,
+    "ask_median_candidates": 2,
+    "ask_max_candidates": 954
+  },
+  "ingested": {
+    "total": 14568,
+    "bind_self": 1,
+    "bind_other": 0,
+    "ask_contains_self": 0,
+    "ask_missing_self": 0,
+    "pass": 14567,
+    "bind_self_rate": 0.0001,
+    "bind_precision": 1.0,
+    "ask_median_candidates": null,
+    "ask_max_candidates": null
+  },
+  "wrong_bind_samples": [
+    {
+      "asked_for": "numbertheory.parity.dichotomy",
+      "got": "numbertheory.parity.odd_is_not_even",
+      "title": "Every Integer Is Even or Odd",
+      "resolver": "words"
+    },
+    {
+      "asked_for": "physics.mechanics.newton_second_law",
+      "got": "provability.incompleteness.second_incompleteness",
+      "title": "Newton's Second Law",
+      "resolver": "words"
+    },
+    {
+      "asked_for": "probstat.probability.bayes_rule",
+      "got": "logic.inference.modus_ponens",
+      "title": "Bayes Rule",
+      "resolver": "words"
+    }
+  ],
+  "adjudication": {
+    "S1": {
+      "fired": true,
+      "curated_bind_self_rate": 0.9275,
+      "threshold": 0.6
+    },
+    "S2": {
+      "fired": true,
+      "curated_bind_precision": 0.9878,
+      "threshold": 0.95
+    },
+    "S3": {
+      "fired": true,
+      "ingested_bind_self_rate": 0.0001,
+      "curated_bind_self_rate": 0.9275
+    },
+    "S4": {
+      "fired": true,
+      "seconds": 3.05
+    },
+    "S5": {
+      "fired": true,
+      "structural_reach": 1.0,
+      "threshold": 0.9,
+      "reached": 14568,
+      "checked": 14568,
+      "measures": "ingested node reached by its own formal template"
+    }
+  },
+  "structural_reach_misses": []
+}
