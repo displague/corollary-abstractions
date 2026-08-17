@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""Compose an answer about a statement — by quotation, never by generation.
+
+The v0.13 goal is arbitrary text in, and out an answer that is intelligible,
+factual, logical and grammatical. Three of those four are settled by refusing
+to write the sentences here:
+
+- **Grammatical** — every sentence in an answer is lifted verbatim from the
+  committed corpus (`title`, `semantic_interpretation.statement_meaning`).
+  A human wrote those sentences and a schema validates them. This module
+  contributes labels, never prose.
+- **Factual** — the sentences are attributed to the statement id they came
+  from, so any claim can be checked against `data/`. Nothing is paraphrased,
+  because paraphrase is where a claim quietly changes.
+- **Logical** — relations come from `inferential_links`, which are edges the
+  corpus asserts and `validate_nodes.py` checks for reciprocity. Following an
+  edge is deduction over committed data, not inference invented here.
+
+**Intelligible** is the one this module actually works for: ordering the
+material the way a reference entry does — what it is, what it says, how it is
+written formally, what it is connected to, and how strongly it is held.
+
+## The honesty this has to carry
+
+12,514 of 12,777 nodes are ingested, and their `statement_meaning` is
+machine-authored boilerplate ("The covered Lean-workbook claim stated by
+problem X, emitted as a matcher template"). Quoting that is honest but it is
+*provenance*, not mathematics. `Answer.prose_is_authored` records which kind
+of node was quoted so a caller can tell the difference, and the rendered
+answer says so in one line rather than letting a reader assume a person
+wrote it.
+
+Only 1.8% of nodes carry `inferential_links`. An answer about the other 98%
+has no relations to show, and says nothing rather than implying isolation is
+a finding.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "scripts"))
+
+#: Corpora authored mechanically in bulk. Their prose is a provenance
+#: sentence, not an explanation, and an answer must not pass it off as one.
+#: Read from `decompose` so there is one registry, not two.
+try:
+    from decompose import INGESTED_CORPUS_PREFIXES
+except ImportError:  # pragma: no cover - CLI import shim
+    INGESTED_CORPUS_PREFIXES = ("lean_workbook", "ingested_arithmetic")
+
+LINK_PHRASING = {
+    "entails": "entails",
+    "entailed_by": "is entailed by",
+    "equivalent_to": "is equivalent to",
+    "special_case_of": "is a special case of",
+    "generalizes": "generalizes",
+    "composed_with": "composes with",
+}
+
+
+@dataclass(frozen=True)
+class Answer:
+    statement_id: str
+    corpus: str
+    title: str
+    meaning: str
+    formal: str
+    status: str
+    disciplines: tuple[str, ...]
+    links: tuple[tuple[str, str], ...]
+    verified_by: tuple[str, ...]
+    prose_is_authored: bool
+
+    @property
+    def sources(self) -> tuple[str, ...]:
+        """Every id this answer quotes or cites. Nothing else is claimed."""
+        return (self.statement_id,) + tuple(sid for _kind, sid in self.links)
+
+
+@lru_cache(maxsize=1)
+def _corpus_records(roots: tuple[str, ...]) -> dict[str, tuple[dict, str]]:
+    """statement_id -> (node json, corpus_id). Read once, reused."""
+    out: dict[str, tuple[dict, str]] = {}
+    for root in roots:
+        base = Path(root)
+        if not base.is_dir():
+            continue
+        for path in sorted(base.glob("*/nodes.json")):
+            doc = json.loads(path.read_text(encoding="utf-8"))
+            corpus = doc.get("corpus_id", path.parent.name)
+            for node in doc.get("statement_nodes", []):
+                sid = node.get("statement_id")
+                if isinstance(sid, str):
+                    out[sid] = (node, corpus)
+    return out
+
+
+def records(roots: list[Path] | None = None) -> dict[str, tuple[dict, str]]:
+    paths = roots or [REPO / "data", REPO / "data_holdout"]
+    return _corpus_records(tuple(str(p) for p in paths))
+
+
+def compose(statement_id: str, roots: list[Path] | None = None) -> Answer | None:
+    """Assemble the answer for one statement from its committed fields."""
+    found = records(roots).get(statement_id)
+    if found is None:
+        return None
+    node, corpus = found
+    semantic = node.get("semantic_interpretation") or {}
+    theory = node.get("theory_context") or {}
+    formal = node.get("formal_statement") or {}
+    links: list[tuple[str, str]] = []
+    for kind, targets in (node.get("inferential_links") or {}).items():
+        for target in targets or []:
+            if isinstance(target, str):
+                links.append((kind, target))
+            elif isinstance(target, dict) and isinstance(
+                target.get("statement_id"), str
+            ):
+                links.append((kind, target["statement_id"]))
+    verified = tuple(
+        link.get("artifact", "")
+        for link in (node.get("verified_by") or [])
+        if isinstance(link, dict)
+    )
+    return Answer(
+        statement_id=statement_id,
+        corpus=corpus,
+        title=str(node.get("title", "")),
+        meaning=str(semantic.get("statement_meaning", "")),
+        formal=str(formal.get("canonical_ascii", "")),
+        status=str(node.get("epistemic_status", "")),
+        disciplines=tuple(theory.get("disciplines") or ()),
+        links=tuple(sorted(links)),
+        verified_by=verified,
+        prose_is_authored=not corpus.startswith(tuple(INGESTED_CORPUS_PREFIXES)),
+    )
+
+
+def render(answer: Answer, *, links: bool = True) -> list[str]:
+    """A reference entry. Labels are mine; every sentence is the corpus's."""
+    out: list[str] = []
+    if answer.title:
+        out.append(answer.title)
+    if answer.meaning:
+        out.append("")
+        out.append(answer.meaning)
+    if answer.formal:
+        out.append("")
+        out.append(f"formally   : {answer.formal}")
+    if answer.status:
+        out.append(f"held as    : {answer.status}")
+    if answer.disciplines:
+        out.append(f"discipline : {', '.join(answer.disciplines)}")
+    out.append(f"source     : {answer.statement_id}  [{answer.corpus}]")
+    if answer.verified_by:
+        out.append(f"checked by : {', '.join(a for a in answer.verified_by if a)}")
+    if not answer.prose_is_authored:
+        # Said plainly rather than left for the reader to discover: the
+        # sentence above describes where this node came from, not what the
+        # mathematics means.
+        out.append(
+            "note       : this text is an ingestion record, not an "
+            "explanation a person wrote"
+        )
+    if links and answer.links:
+        out.append("")
+        out.append("connected to:")
+        for kind, target in answer.links:
+            phrase = LINK_PHRASING.get(kind, kind)
+            out.append(f"  {phrase} {target}")
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("statement_id")
+    args = ap.parse_args(argv)
+    answer = compose(args.statement_id)
+    if answer is None:
+        print(f"no such statement: {args.statement_id}", file=sys.stderr)
+        return 1
+    print("\n".join(render(answer)))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

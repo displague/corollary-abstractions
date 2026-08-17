@@ -936,11 +936,20 @@ def _route_resolver(
     index = default_index()
     outcome = resolve(line, index)
     if outcome.kind == BIND:
+        from answer import compose  # noqa: PLC0415
+        from answer import render as render_answer  # noqa: PLC0415
+
+        composed = compose(outcome.bound or "")
+        body = (
+            render_answer(composed)
+            if composed is not None
+            else render(outcome, index)
+        )
         return {
             "route": "resolver",
             "status": "solved",
             "detail": f"{outcome.resolver}: {outcome.detail}",
-            "answer": render(outcome, index),
+            "answer": body,
         }
     if outcome.kind == ASK:
         # Ambiguity is a question containing the real alternatives. `waiting`

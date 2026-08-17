@@ -104,6 +104,14 @@ class GraphIndex:
     by_skeleton: dict[str, tuple[str, ...]] = field(default_factory=dict)
     by_keyword: dict[str, tuple[str, ...]] = field(default_factory=dict)
     keyword_df: dict[str, int] = field(default_factory=dict)
+    #: Inverted index over each node's AUTHORED PROSE -- its title and its
+    #: `statement_meaning`. This is what lets arbitrary text find a node at
+    #: all: keywords are a curator's short list, prose is what a person
+    #: actually types. Saturating words are excluded by the same
+    #: document-frequency ceiling, which matters more here than for keywords
+    #: because 12,514 ingested nodes share a formulaic meaning sentence.
+    by_prose: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    prose_df: dict[str, int] = field(default_factory=dict)
 
     @property
     def size(self) -> int:
@@ -117,6 +125,8 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
     by_skeleton: dict[str, list[str]] = defaultdict(list)
     by_keyword: dict[str, list[str]] = defaultdict(list)
     df: Counter = Counter()
+    by_prose: dict[str, list[str]] = defaultdict(list)
+    prose_df: Counter = Counter()
 
     for data_dir in data_dirs:
         if not data_dir.is_dir():
@@ -148,6 +158,18 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
                 for word in words - STOPWORDS:
                     by_keyword[word].append(sid)
                     df[word] += 1
+                prose_words: set[str] = set()
+                for text in (
+                    raw.get("title"),
+                    (raw.get("semantic_interpretation") or {}).get(
+                        "statement_meaning"
+                    ),
+                ):
+                    if isinstance(text, str):
+                        prose_words.update(_WORD.findall(text.lower()))
+                for word in prose_words - STOPWORDS:
+                    by_prose[word].append(sid)
+                    prose_df[word] += 1
 
     return GraphIndex(
         statement_ids=tuple(ids),
@@ -155,6 +177,8 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
         by_skeleton={k: tuple(v) for k, v in by_skeleton.items()},
         by_keyword={k: tuple(v) for k, v in by_keyword.items()},
         keyword_df=dict(df),
+        by_prose={k: tuple(v) for k, v in by_prose.items()},
+        prose_df=dict(prose_df),
     )
 
 
@@ -220,35 +244,49 @@ def resolve_keywords(text: str, index: GraphIndex) -> Resolution:
     the entire corpus. Candidates are scored by how many query words they
     match, and ties are NOT broken -- a tie is an ASK.
     """
+    return _postings_resolver(
+        text, index, index.by_keyword, index.keyword_df, "keywords"
+    )
+
+
+def _postings_resolver(
+    text: str,
+    index: GraphIndex,
+    postings: dict[str, tuple[str, ...]],
+    doc_freq: dict[str, int],
+    name: str,
+) -> Resolution:
+    """Shared body for the two inverted-index resolvers.
+
+    Factored so the corroboration rule exists once. It is the rule that
+    stops fluent nonsense from being claimed, and a second copy of it would
+    be a second place for it to rot.
+    """
     words = reduce_text(text)
     if not words:
-        return Resolution(PASS, "keywords", detail="no content words")
+        return Resolution(PASS, name, detail="no content words")
     ceiling = max(1, int(index.size * KEYWORD_DF_CEILING))
     hits: Counter = Counter()
     used: list[str] = []
     for word in words:
-        postings = index.by_keyword.get(word)
-        if not postings or index.keyword_df.get(word, 0) > ceiling:
+        found = postings.get(word)
+        if not found or doc_freq.get(word, 0) > ceiling:
             continue
         used.append(word)
-        for sid in postings:
+        for sid in found:
             hits[sid] += 1
     if not hits:
         return Resolution(
-            PASS, "keywords",
-            detail=f"no discriminating keyword matched {words}",
+            PASS, name, detail=f"no discriminating word matched {words}"
         )
     best = max(hits.values())
     # Corroboration, not enthusiasm. One stray word out of many is not a
     # resolution: "airspeed velocity of an unladen swallow" hits `velocity`
-    # and would otherwise "resolve" to two unrelated statements, which is
+    # and would otherwise "resolve" to unrelated statements, which is
     # precisely the fluent-nonsense failure the dispatcher exists to refuse.
-    # A match counts only when two query words agree on a candidate, or when
-    # the query was absorbed whole (every content word matched something).
-    corroborated = best >= 2 or len(used) == len(words)
-    if not corroborated:
+    if not (best >= 2 or len(used) == len(words)):
         return Resolution(
-            PASS, "keywords",
+            PASS, name,
             detail=(
                 f"only {used} of {words} matched, and one word is not a "
                 "resolution"
@@ -257,16 +295,34 @@ def resolve_keywords(text: str, index: GraphIndex) -> Resolution:
     top = tuple(sorted(s for s, n in hits.items() if n == best))
     return Resolution(
         BIND if len(top) == 1 else ASK,
-        "keywords",
+        name,
         top,
         f"{len(top)} statements match {used} ({best} of {len(used)})",
         evidence=(f"matched_words={used}",),
     )
 
 
+def resolve_prose(text: str, index: GraphIndex) -> Resolution:
+    """R4 — the node's own authored title and meaning, word-indexed.
+
+    This is what makes *arbitrary* text resolvable rather than only curated
+    keywords: a person types the words a mathematician would write, and the
+    corpus already contains those words in prose a human authored.
+    """
+    return _postings_resolver(
+        text, index, index.by_prose, index.prose_df, "prose"
+    )
+
+
 #: Order matters: most exact first. An expression that parses is never
-#: second-guessed by a keyword match.
-CHAIN = (resolve_expression, resolve_statement_id, resolve_keywords)
+#: second-guessed by a keyword match, and curated keywords are tried before
+#: the much larger prose index so a curator's short list wins ties.
+CHAIN = (
+    resolve_expression,
+    resolve_statement_id,
+    resolve_keywords,
+    resolve_prose,
+)
 
 
 def resolve(text: str, index: GraphIndex, *, chain=CHAIN) -> Resolution:
