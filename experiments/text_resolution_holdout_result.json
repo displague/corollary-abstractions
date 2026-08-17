@@ -1,0 +1,342 @@
+{
+  "schema": "text_resolution_holdout.v1",
+  "design": "docs/DESIGN-text-resolution.md",
+  "note": "held out; authored and committed before the first run",
+  "wordnet_present": true,
+  "queries": 38,
+  "seconds": 367.48,
+  "adjudication": {
+    "R1": {
+      "fired": true,
+      "coverage": 0.9444,
+      "threshold": 0.85,
+      "reached": 17,
+      "of": 18
+    },
+    "R2": {
+      "fired": false,
+      "refusal": 0.8,
+      "threshold": 0.9,
+      "refused": 8,
+      "of": 10
+    },
+    "R3": {
+      "fired": true,
+      "computed": 6,
+      "of": 6,
+      "threshold": 1.0
+    },
+    "R4": {
+      "fired": true,
+      "defined": 4,
+      "of": 4,
+      "threshold": 0.75
+    }
+  },
+  "rows": [
+    {
+      "text": "sum of the interior angles of a triangle",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 6 statements match ['angles', 'interior', 'sum', 'triangle'] (score 3, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "derivative of a product of two functions",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['derivative', 'functions', 'product', 'two'] (score 5, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "entropy in thermodynamics",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 6 statements match ['entropy', 'thermodynamics'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "expected value of a random variable",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['expected', 'random', 'value', 'variable'] (score 5, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "modular arithmetic residue",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 2 statements match ['arithmetic', 'modular', 'residue'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "recursive definition of the fibonacci sequence",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 5 statements match ['definition', 'recursive', 'sequence'] (score 2, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "conservation of momentum",
+      "expect": "resolve",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": false,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the incompleteness theorem",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['incompleteness', 'theorem'] (score 6, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "graph adjacency and walks",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['adjacency', 'graph', 'walks'] (score 8, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "curvature of a plane curve",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['curvature', 'curve', 'plane'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "logarithm of a product",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['logarithm', 'product'] (score 3, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "definition of a prime number",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['definition', 'number', 'prime'] (score 5, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "binomial coefficient",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 2 statements match ['binomial', 'coefficient'] (score 2, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "variance and standard deviation",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['deviation', 'standard', 'variance'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "universal quantifier distribution",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['distribution', 'quantifier', 'universal'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "arithmetic mean geometric mean inequality",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 3 statements match ['arithmetic', 'geometric', 'inequality', 'mean'] (score 4, via ['keywords', 'lexicon', 'prose"
+    },
+    {
+      "text": "euclidean distance between points",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['distance', 'euclidean', 'points'] (score 8, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "chemical reaction rate constant",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 2 statements match ['constant', 'rate', 'reaction'] (score 6, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "what were the main causes of the second world war",
+      "expect": "refuse",
+      "route": "resolver",
+      "status": "found",
+      "ok": false,
+      "detail": "words: 1 statements match ['causes', 'second', 'world'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "recommend a hotel in barcelona for next week",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "my car makes a rattling noise when I brake",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "who directed the film citizen kane",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "how do I change a bicycle tyre",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the best way to learn to play the piano",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "summarise the plot of hamlet for me",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "is it going to rain tomorrow afternoon",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "please order more printer paper for the office",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "what is the capital city of australia",
+      "expect": "refuse",
+      "route": "gloss",
+      "status": "found",
+      "ok": false,
+      "detail": "capital: 9 dictionary sense(s)"
+    },
+    {
+      "text": "if a = 7 then what is a ^ 3",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "a ^ 3 = 343"
+    },
+    {
+      "text": "what is 144 / 12",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "144 / 12 = 12"
+    },
+    {
+      "text": "suppose n = 6, what is n * (n + 1) / 2",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "n * (n + 1) / 2 = 21"
+    },
+    {
+      "text": "does 3 ^ 4 = 81",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "3 ^ 4 = 81 holds: yes"
+    },
+    {
+      "text": "is 2 ^ 10 > 1000",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "2 ^ 10 > 1000 holds: yes"
+    },
+    {
+      "text": "what is 1 / 7 + 1 / 14",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "1 / 7 + 1 / 14 = 3/14"
+    },
+    {
+      "text": "what is a telescope",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "telescope: 3 dictionary sense(s)"
+    },
+    {
+      "text": "define gravity",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "gravity: 3 dictionary sense(s)"
+    },
+    {
+      "text": "what is a harbour",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "harbour: 6 dictionary sense(s)"
+    },
+    {
+      "text": "the meaning of solitude",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "solitude: 3 dictionary sense(s)"
+    }
+  ]
+}
