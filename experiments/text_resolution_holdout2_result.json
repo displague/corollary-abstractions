@@ -1,0 +1,342 @@
+{
+  "schema": "text_resolution_holdout.v1",
+  "design": "docs/DESIGN-text-resolution.md",
+  "note": "held out; authored and committed before the first run",
+  "wordnet_present": true,
+  "queries": 38,
+  "seconds": 356.18,
+  "adjudication": {
+    "R1": {
+      "fired": true,
+      "coverage": 0.9375,
+      "threshold": 0.85,
+      "reached": 15,
+      "of": 16
+    },
+    "R2": {
+      "fired": true,
+      "refusal": 0.9167,
+      "threshold": 0.9,
+      "refused": 11,
+      "of": 12
+    },
+    "R3": {
+      "fired": true,
+      "computed": 6,
+      "of": 6,
+      "threshold": 1.0
+    },
+    "R4": {
+      "fired": true,
+      "defined": 4,
+      "of": 4,
+      "threshold": 0.75
+    }
+  },
+  "rows": [
+    {
+      "text": "difference of two squares",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['difference', 'squares', 'two'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "cosine of a sum of angles",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['angles', 'cosine', 'sum'] (score 6, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "the quadratic formula",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['formula', 'quadratic'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "gradient descent update step",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['descent', 'gradient', 'step', 'update'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "bayes theorem conditional probability",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 4 statements match ['bayes', 'conditional', 'probability', 'theorem'] (score 3, via ['keywords', 'lexicon', 'pros"
+    },
+    {
+      "text": "euler method for differential equations",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['differential', 'equations', 'euler', 'method'] (score 5, via ['keywords', 'lexicon', 'prose'"
+    },
+    {
+      "text": "cross entropy divergence",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['cross', 'divergence', 'entropy'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "existential quantifier negation",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['existential', 'negation', 'quantifier'] (score 8, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "arc length of a curve",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['arc', 'curve', 'length'] (score 9, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "beer lambert absorbance law",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['absorbance', 'beer', 'lambert', 'law'] (score 8, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "simple interest on a principal",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['interest', 'principal', 'simple'] (score 8, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "story setup complication resolution",
+      "expect": "resolve",
+      "route": "story",
+      "status": "found",
+      "ok": false,
+      "detail": "one committed story, verified: 5 beats accepted, 0 rejected"
+    },
+    {
+      "text": "greatest common divisor of two integers",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "waiting",
+      "ok": true,
+      "detail": "words: 4 statements match ['common', 'divisor', 'greatest', 'integers', 'two'] (score 5, via ['keywords', 'lexicon', 'pr"
+    },
+    {
+      "text": "binary exponentiation by squaring",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['binary', 'exponentiation', 'squaring'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "stokes theorem zero form",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['form', 'stokes', 'theorem', 'zero'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "molar concentration of a solution",
+      "expect": "resolve",
+      "route": "resolver",
+      "status": "found",
+      "ok": true,
+      "detail": "words: 1 statements match ['concentration', 'molar', 'solution'] (score 7, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "which programming language should I learn first",
+      "expect": "refuse",
+      "route": "resolver",
+      "status": "found",
+      "ok": false,
+      "detail": "words: 1 statements match ['first', 'i', 'language', 'programming'] (score 4, via ['keywords', 'lexicon', 'prose'])"
+    },
+    {
+      "text": "the average rainfall in scotland during winter",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "how many moons does jupiter have",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "what year did the berlin wall come down",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the boiling point of water at sea level",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "who invented the telephone and when",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the population of tokyo compared to london",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "why do leaves change colour in autumn",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the fastest land animal on earth",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "how long does it take to fly to sydney",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "what causes thunder during a storm",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "the ingredients for a victoria sponge cake",
+      "expect": "refuse",
+      "route": "dispatcher",
+      "status": "exhausted",
+      "ok": true,
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4"
+    },
+    {
+      "text": "what is 17 * 23",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "17 * 23 = 391"
+    },
+    {
+      "text": "if b = 4 then what is b ^ 5",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "b ^ 5 = 1024"
+    },
+    {
+      "text": "does 5 * 5 = 25",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "5 * 5 = 25 holds: yes"
+    },
+    {
+      "text": "what is 3 / 8 + 1 / 8",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "3 / 8 + 1 / 8 = 1/2"
+    },
+    {
+      "text": "is 7 ^ 2 < 50",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "7 ^ 2 < 50 holds: yes"
+    },
+    {
+      "text": "suppose k = 9, what is k / 3",
+      "expect": "compute",
+      "route": "evaluate",
+      "status": "solved",
+      "ok": true,
+      "detail": "k / 3 = 3"
+    },
+    {
+      "text": "what is a lighthouse",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "lighthouse: 1 dictionary sense(s)"
+    },
+    {
+      "text": "define courage",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "courage: 1 dictionary sense(s)"
+    },
+    {
+      "text": "what is a meadow",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "meadow: 1 dictionary sense(s)"
+    },
+    {
+      "text": "the meaning of patience",
+      "expect": "define",
+      "route": "gloss",
+      "status": "found",
+      "ok": true,
+      "detail": "patience: 2 dictionary sense(s)"
+    }
+  ]
+}
