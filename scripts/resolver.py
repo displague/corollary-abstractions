@@ -81,6 +81,24 @@ COVERAGE_FLOOR = 0.60
 #: surviving word.
 TERM_QUERY_WORDS = 2
 
+#: How many content words the corpus has NEVER SEEN, anywhere, before the
+#: query is judged to be about something else entirely.
+#:
+#: This is a different signal from coverage, and it uses information the
+#: coverage rule discards. A word can go unmatched for two very different
+#: reasons: it is too common to discriminate (`value`, `sum`), or the corpus
+#: has no record of it at all (`war`, `piano`, `lisbon`). The second is
+#: evidence about DOMAIN, not about phrasing.
+#:
+#: Measured across every query available: in-corpus questions carry zero or
+#: one unknown word — one being a morphology or synonym gap, like
+#: `derivatives` against a corpus that writes `derivative`. Out-of-corpus
+#: questions carry two or more, because their subject matter is simply
+#: absent. Two independent unknown content words is the corpus saying it
+#: does not cover this, and that outweighs any number of ordinary words
+#: that happen to overlap.
+UNKNOWN_WORD_LIMIT = 2
+
 #: Dropped before keyword matching. Deliberately tiny and closed: this is not
 #: language understanding, it is removing tokens that match everything.
 STOPWORDS = frozenset("""
@@ -449,16 +467,39 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
     ceiling = max(1, int(index.size * KEYWORD_DF_CEILING))
     hits: Counter = Counter()
     matched_words: set[str] = set()
+    seen_anywhere: set[str] = set()
     where: set[str] = set()
     for postings, doc_freq, label in sources:
         for word in words:
             found = postings.get(word)
-            if not found or doc_freq.get(word, 0) > ceiling:
+            if not found:
+                continue
+            # Present in the corpus, even if too common to discriminate.
+            # That distinction is the whole point of the domain check below.
+            seen_anywhere.add(word)
+            if doc_freq.get(word, 0) > ceiling:
                 continue
             matched_words.add(word)
             where.add(label)
             for sid in found:
                 hits[sid] += 1
+
+    # The domain check, before any scoring. Words the corpus has never
+    # recorded are evidence about SUBJECT MATTER, and enough of them means
+    # the question is about something this graph does not contain -- however
+    # many ordinary words happen to overlap. "what were the main causes of
+    # the second world war" matches three words and is still a history
+    # question, because `war` and `main` appear nowhere in the corpus.
+    unknown = sorted(set(words) - seen_anywhere)
+    if len(unknown) >= UNKNOWN_WORD_LIMIT:
+        return Resolution(
+            PASS, "words",
+            detail=(
+                f"{unknown} appear nowhere in the corpus; this question is "
+                "about something the graph does not cover"
+            ),
+            evidence=(f"unknown_words={unknown}",),
+        )
     if not hits:
         return Resolution(
             PASS, "words", detail=f"no discriminating word matched {words}"
