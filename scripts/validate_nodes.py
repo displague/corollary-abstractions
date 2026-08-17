@@ -307,6 +307,96 @@ def scope_errors(
     return errors
 
 
+def ingested_verdict_rule_errors(
+    nodes: list[dict], corpus_of: dict[str, str], repo_root: Path
+) -> list[str]:
+    """Verdict-backed ingestion as a RULE (v0.12 item 4).
+
+    v0.11 made this real for programming nodes only: a `python-tests`
+    citation must name a digest-pinned artifact carrying a PASS. That left
+    the Lean half open, and v0.12 authored the corpus that makes the hole
+    concrete — Goedel-Pset, whose proofs are all `sorry`. A Goedel-Pset node
+    that cited `verified_by` would be claiming a machine-checked bridge that
+    provably does not exist upstream. That is the case this rule refuses.
+
+    The rule, stated once: **an ingested node may cite `verified_by` only
+    when the cited artifact is pinned in the proof manifest AND carries a
+    PASS verdict claiming that node.** Any system, not just `python-tests`.
+
+    Why ingested corpora specifically. A curated node is written by hand and
+    reviewed; its citation is a claim a person made and can be asked about.
+    An ingested node is authored mechanically in bulk from an external
+    extract, so a citation on one is a claim nobody inspected. Bulk
+    authorship is exactly the regime where an unbacked link would enter
+    unnoticed, which is why the rule binds there first and hardest.
+
+    Keyed on **corpus identity**, not on statement-id shape, so a corpus
+    cannot dodge it by renaming its nodes. `decompose` owns the registry of
+    which corpora are ingested; importing it here keeps one list rather than
+    a second that can drift.
+
+    This is preventive: at the time it was written **no ingested node cited
+    `verified_by` at all**, so it refuses a case that does not yet exist.
+    That is the point — the rule has to be in place before the first
+    Goedel-Pset node tries it, not after. `tests/test_verdict_rule.py`
+    proves it fires, using a synthetic node, because there is no violator in
+    the corpus to point at.
+    """
+
+    try:
+        from decompose import INGESTED_CORPUS_PREFIXES
+    except ImportError:  # pragma: no cover - CLI import shim
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from decompose import INGESTED_CORPUS_PREFIXES
+
+    manifest_path = repo_root / "prover" / "proof-artifact-manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        entries = manifest.get("artifacts") or {}
+    except (OSError, ValueError):
+        entries = {}
+
+    errors: list[str] = []
+    for index, node in enumerate(nodes):
+        node_id = node.get("statement_id", f"<node-{index}>")
+        links = node.get("verified_by") or []
+        if not links or not isinstance(links, list):
+            continue
+        corpus = corpus_of.get(node_id, "")
+        if not corpus.startswith(tuple(INGESTED_CORPUS_PREFIXES)):
+            continue
+        for link_index, link in enumerate(links):
+            if not isinstance(link, dict):
+                continue
+            artifact = link.get("artifact")
+            where = f"{node_id}: verified_by[{link_index}]"
+            if not isinstance(artifact, str) or not artifact:
+                errors.append(
+                    f"{where} on ingested corpus {corpus!r} names no artifact; "
+                    "an ingested citation requires a digest-pinned artifact "
+                    "with a PASS verdict"
+                )
+                continue
+            entry = entries.get(artifact)
+            if not isinstance(entry, dict):
+                errors.append(
+                    f"{where} on ingested corpus {corpus!r} cites {artifact!r}, "
+                    "which is not pinned in prover/proof-artifact-manifest.json; "
+                    "an ingested corpus may not mint a verified_by link from an "
+                    "unpinned artifact"
+                )
+                continue
+            claimed = entry.get("verdicts") or []
+            if not claimed:
+                errors.append(
+                    f"{where} on ingested corpus {corpus!r} cites {artifact!r}, "
+                    "which carries no verdict; an ingested citation requires a "
+                    "PASS verdict claiming this statement (Goedel-Pset proofs "
+                    "are `sorry` — there is no proof to bridge to)"
+                )
+    return errors
+
+
 def verified_by_errors(nodes: list[dict], repo_root: Path) -> list[str]:
     """Check that proof links name real, exclusively-owned artifact theorems.
 
@@ -506,6 +596,7 @@ def main() -> int:
             return 1
 
     all_nodes: list[dict] = []
+    corpus_of: dict[str, str] = {}
     errors: list[str] = []
     for path in corpus_paths:
         data = load_json(path)
@@ -515,7 +606,16 @@ def main() -> int:
             continue
         errors.extend(minimal_schema_errors(schema, nodes))
         errors.extend(jsonschema_errors(schema, nodes))
+        corpus_id = data.get("corpus_id", path.parent.name)
+        for node in nodes:
+            sid = node.get("statement_id")
+            if isinstance(sid, str):
+                corpus_of[sid] = corpus_id
         all_nodes.extend(nodes)
+
+    # v0.12 item 4: verdict-backed ingestion as a RULE, widened past
+    # `python-tests` to every ingested corpus.
+    errors.extend(ingested_verdict_rule_errors(all_nodes, corpus_of, REPO_ROOT))
 
     # Link integrity and reciprocity over the merged cross-discipline graph.
     errors.extend(inferential_link_errors(schema, all_nodes))
