@@ -1,13 +1,14 @@
 {
-  "schema": "ambiguity_rate.v1",
+  "schema": "ambiguity_rate.v2",
   "design": "docs/DESIGN-ambiguity-and-context.md",
-  "measures": "how often an in-corpus query ends in ASK rather than BIND",
+  "measure": "ASK / all registered expect=resolve queries",
   "graph_nodes": 14830,
   "pooled": {
-    "resolve_queries": 59,
+    "registered_resolve_queries": 62,
     "bind": 43,
     "ask": 16,
-    "ask_rate": 0.2712
+    "pass": 3,
+    "ask_rate": 0.2581
   },
   "unregistered_probe": {
     "note": "A1 asks IF ambiguity happens; tractability is A2's",
@@ -18,9 +19,10 @@
   },
   "per_set": {
     "development": {
-      "resolve_queries": 28,
+      "registered_resolve_queries": 28,
       "bind": 21,
       "ask": 7,
+      "pass": 0,
       "ask_rate": 0.25,
       "ask_candidates_median": 2,
       "ask_candidates_max": 4,
@@ -63,10 +65,11 @@
       ]
     },
     "holdout_1": {
-      "resolve_queries": 15,
+      "registered_resolve_queries": 18,
       "bind": 9,
       "ask": 6,
-      "ask_rate": 0.4,
+      "pass": 3,
+      "ask_rate": 0.3333,
       "ask_candidates_median": 3.5,
       "ask_candidates_max": 6,
       "ask_examples": [
@@ -103,9 +106,10 @@
       ]
     },
     "holdout_2": {
-      "resolve_queries": 16,
+      "registered_resolve_queries": 16,
       "bind": 13,
       "ask": 3,
+      "pass": 0,
       "ask_rate": 0.1875,
       "ask_candidates_median": 4,
       "ask_candidates_max": 4,
@@ -131,10 +135,34 @@
   "adjudication": {
     "A1": {
       "fired": true,
-      "ask_rate": 0.2712,
+      "ask_rate": 0.2581,
       "threshold": 0.25,
       "ask": 16,
-      "of": 59
+      "of": 62
     }
+  },
+  "review_correction": {
+    "initial_rate": 0.2712,
+    "initial_denominator": "BIND + ASK only (16 / 59)",
+    "correction": "include all registered expect=resolve queries"
+  },
+  "provenance": {
+    "algorithm": "sha256",
+    "query_files": {
+      "experiments/text_resolution_queries.json": "4c19654c7357e25ecfaca5812241b86827c052dbd15e288fe040d41b988f4f74",
+      "experiments/text_resolution_holdout.json": "c2ed7c052ca9c9b24b4547ffce69fa6c3dfbb9ee37b81ad03db979dd37638a48",
+      "experiments/text_resolution_holdout2.json": "9b946b8e714aeb0b27c12387a552ed6ed6f00532990b26630b7a447a3cfe154c"
+    },
+    "resolver_sources": {
+      "scripts/measure_ambiguity.py": "e1ef2e0a9675afb42648508774b8d1692bc57cde848ce18aca4a5c6400bea834",
+      "scripts/resolver.py": "856ac914d40fa54d9833fe57a8fe01d8260386f10e7390301ea4240fcb4e83d1",
+      "scripts/decompose.py": "21e6334124570871f831cbdeaf877c5b1079e2ff65a3c92e04d299cc33bdd72a",
+      "scripts/match_signatures.py": "12fa9782e740ddc32695f43dd62388bdde7b7d8fc53c44b7375e7eddec1d09f6"
+    },
+    "corpus_nodes": {
+      "files": 29,
+      "manifest_sha256": "aa7cdf58aab4731b202483c99281ced5e7768f158e4f64b52ba8572cd259f4fd"
+    },
+    "measurement_inputs_sha256": "0231c148b41263b63e34a19d79b4e94ff0c9065250bcf1e20dce9967ddbc9d24"
   }
 }

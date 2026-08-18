@@ -98,7 +98,11 @@ def main(argv: list[str] | None = None) -> int:
     by_module: dict[str, float] = {}
     for _tid, elapsed, module in rows:
         by_module[module] = by_module.get(module, 0.0) + elapsed
-    print("\nby module:")
+    timed_seconds = sum(elapsed for _tid, elapsed, _module in rows)
+    fixture_and_overhead = max(0.0, total - timed_seconds)
+    print(f"\ntimed tests: {timed_seconds:.1f}s; "
+          f"fixtures/runner overhead: {fixture_and_overhead:.1f}s")
+    print("\ntimed test bodies by module (fixtures excluded):")
     for module, elapsed in sorted(by_module.items(), key=lambda kv: -kv[1]):
         share = 100 * elapsed / total if total else 0
         print(f"  {elapsed:8.1f}s  {share:5.1f}%  {module}")
@@ -112,8 +116,14 @@ def main(argv: list[str] | None = None) -> int:
             json.dumps(
                 {
                     "total_seconds": round(total, 2),
+                    "timed_test_seconds": round(timed_seconds, 2),
+                    "fixture_and_overhead_seconds": round(
+                        fixture_and_overhead, 2
+                    ),
                     "tests": len(rows),
-                    "by_module": {k: round(v, 2) for k, v in by_module.items()},
+                    "timed_tests_by_module": {
+                        k: round(v, 2) for k, v in by_module.items()
+                    },
                     "slowest": [
                         {"test": t, "seconds": round(e, 3)} for t, e, _ in rows
                     ],

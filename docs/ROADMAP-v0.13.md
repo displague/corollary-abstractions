@@ -62,9 +62,12 @@ The system is **not** required to pick the right reading unaided; it is
 required to enumerate readings and **name the one it took**. Guessing
 correctly without showing the reading is a miss.
 
-**Prerequisite, ordered first:** measure **A1**. If in-corpus queries
-almost always bind, the ASK substrate is an artifact of a small curated
-layer and this item is machinery for a problem that will solve itself.
+**Prerequisite, ordered first: SHIPPED — A1 FIRED, narrowly, at 0.2581
+(16 ASK / 62 registered in-corpus queries).** The initial implementation
+reported 0.2712 by conditioning on the 59 BIND-or-ASK outcomes; review restored
+the three registered queries ending in PASS to the promised denominator. The
+verdict did not change, but the corrected margin is 0.0081 rather than 0.0212.
+Item 2 remains justified, weakly; the holdout-2 constituent misses at 0.1875.
 
 **Named dependant:** item 1 — restatement is also a coverage tool, because
 a reading shown is a reading a person can correct.
@@ -140,8 +143,8 @@ and this cycle inherits:
 
 v0.13 is ready only if it contains:
 
-- A1 measured **first**, and item 2 abandoned or reshaped in writing if it
-  misses;
+- A1 measured **first** (**MET: FIRED at 0.2581 after denominator review**),
+  and item 2 abandoned or reshaped in writing if it misses;
 - coverage measured on a third registered holdout with the false-positive
   rate re-measured on a fresh mechanical seed, and the trade published if
   both did not improve;

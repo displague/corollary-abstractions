@@ -42,6 +42,13 @@ or commit history. Each item names the evidence that motivated it.
   Evidence: v0.12 gate, 1,240 tests, 592m serial / 320m across three shards.
   `python scripts/time_tests.py --json t.json tests.test_corpus_analogy_split`
 
+  **Receipt limitation:** the original 10,765-second command output was
+  observed and recorded in commit history and this ledger, but its JSON file
+  was not retained. These numbers are therefore human-readable evidence, not
+  a byte-pinned raw timing asset. Reproduction costs roughly three hours on
+  the recorded host. Do not infer balanced per-module shard weights from this
+  one module; the whole-suite per-module pass in item (1) remains open.
+
 ## The gate is single-threaded and nobody has measured why
 
 - **SUPERSEDED by the entry above, which has the numbers.** Kept because

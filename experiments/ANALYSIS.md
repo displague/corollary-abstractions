@@ -3862,3 +3862,33 @@ the remaining error is not addressable by lexical semantics.
 Cost: index build 3.98s over 12,777 nodes (219,416 subterm occurrences,
 38,858 distinct skeletons), then 0.04us per resolution (~24M/sec),
 single core, no GPU.
+
+## v0.13 A1 — ambiguity-rate prerequisite
+
+A1 was registered in `docs/DESIGN-ambiguity-and-context.md` before the
+measurement: at least 25% of the development and holdout questions registered
+as `expect=resolve` end in ASK. The reviewed result is:
+
+| set | registered | BIND | ASK | PASS | ASK / registered |
+|---|---:|---:|---:|---:|---:|
+| development | 28 | 21 | 7 | 0 | 0.2500 |
+| holdout 1 | 18 | 9 | 6 | 3 | 0.3333 |
+| holdout 2 | 16 | 13 | 3 | 0 | 0.1875 |
+| **pooled** | **62** | **43** | **16** | **3** | **0.2581** |
+
+**A1 FIRED, narrowly.** The first implementation reported 0.2712 (16/59),
+conditioning on BIND + ASK and silently excluding the three registered
+holdout-1 questions that ended in PASS. That denominator contradicted the
+query files' own definition of `expect=resolve` as corpus-covered. Review
+corrected the denominator to all 62 registered in-corpus questions. The
+verdict survives; its margin above 0.25 shrinks from 0.0212 to 0.0081, and
+holdout 2 misses on its own. The initial number remains recorded because the
+project reports corrections rather than erasing them.
+
+The unregistered candidate-size probe is median 2, maximum 6, with 10 of 16
+ASK sets at size two or three and none above ten. This describes the starting
+shape; it does not adjudicate A2's registered claim that context halves those
+sets. `experiments/ambiguity_rate.json` pins SHA-256 digests for all three
+query files, the measurement/resolver sources, and the complete corpus-node
+manifest so later query, implementation, or data drift is detectable without
+rescoring this registered result.
