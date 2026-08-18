@@ -55,6 +55,17 @@ budget rankers, general specialization indexing, deeper proof search,
 physics/affect/visual expansion, HTTP skin, and Open-English node authoring.
 Their evidence remains in BACKLOG; silence is not a carry.
 
+## Direction after this cycle
+
+[Compile the space before asking the question](DESIGN-compile-before-query.md)
+is the chosen architectural direction after v0.14's frozen clarification
+experiment.  It is not a v0.14 implementation item or release gate.  Its first
+slice asks whether two existing exact worlds can compile and independently
+check complete bounded possibility spaces before any target is selected.  The
+design explicitly suspends corpus growth, pair-count growth, and obligatory
+learned arms for that slice.  If its two-world or resource construction gate
+misses, it parks rather than manufacturing a toy world.
+
 ## Governance
 
 - Predictions, executable scorers, rows, controls, and provenance land before

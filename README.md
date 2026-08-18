@@ -318,6 +318,9 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   formula/diagram twins, SVG structure, and a pixel control. Its oracle layer
   is built (`experiments/visual/`); P-V1–P-V4 stay registered until the
   learned arms run
+- `docs/DESIGN-compile-before-query.md` — the chosen post-v0.14 direction:
+  compile a complete small possibility space before choosing a target, then
+  return a replayable path or an exact negative within the declared bound
 - `docs/blog/` — accessible project narratives, including the v0.8 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
