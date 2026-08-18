@@ -206,22 +206,63 @@ gh release create vX.Y.Z --title "vX.Y.Z — <headline>" \
     --notes-file docs/RELEASE-vX.Y.Z.md
 ```
 
-Then attach model checkpoints — the trained artifacts the release's
-claims rest on. At minimum the demo checkpoint; add any new headline
-models (rename assets to be self-describing). **Every asset must have
-its story in the release notes' Assets section** (claim, before/after,
-exercising command) — verify the notes and the upload list match
-one-to-one before uploading:
+### What to attach, and what not to
+
+Two rules, and the second one exists because this section used to demand
+work nobody did. v0.5.0 shipped four checkpoints and v0.6.0 shipped six;
+**v0.7.0 through v0.11.0 shipped none at all** while the skill kept saying
+"at minimum the demo checkpoint". Five silent no-ops is the drift this
+skill warns about elsewhere, applied to itself.
+
+**Rule 1 — upload only what a clone does not already have.** Committed
+artifacts are distributed by git. `experiments/*.json` measurement ledgers
+are tracked, so uploading them duplicates the repository and inflates the
+release for nothing. Link them by path in the notes instead. Only
+**gitignored** artifacts are candidates: `experiments/results/**/*.pt` is
+the whole list today.
+
+**Rule 2 — re-ship a checkpoint only when this cycle could have changed
+it.** Before uploading, check whether the cycle touched anything a
+checkpoint depends on:
+
+```
+git diff --name-only <previous-tag>..HEAD -- data/ experiments/
+```
+
+If no training data and no `experiments/*.py` changed, the existing
+checkpoints are still exactly correct, and re-uploading identical bytes
+under a new tag is noise that costs upload time and release size to say
+nothing new.
+
+When that is the case the notes **must say so explicitly** — which release
+carries the still-valid checkpoints, that they remain accurate for this
+version, and *why*, with the evidence that makes it checkable:
+
+> **Assets.** No new checkpoint, and the existing ones are not re-shipped.
+> `data/` and every `experiments/*.py` are byte-identical to `vA.B.C`
+> (`git diff --name-only vA.B.C..vX.Y.Z -- data/ experiments/` lists no
+> `.py`), so the checkpoints attached to **vN.N.N** remain accurate for
+> this release. Measurement ledgers are committed in-repo at
+> `experiments/*.json`.
+
+Silence is the thing to avoid, not the absence of an upload. A release
+with no assets and no sentence about assets leaves a reader unable to tell
+"nothing changed" from "nobody looked".
+
+**When you DO upload**, every asset carries its **story** in the notes'
+Assets section — the claim it evidences, the before/after it belongs to,
+and the command that exercises it. Verify the notes and the upload list
+match one-to-one first:
 
 ```
 gh release upload vX.Y.Z \
     experiments/results/solvex2_demo.pt#span-pointer-solvex2-treepos.pt
 ```
 
-Checkpoints are gitignored precisely so releases are their distribution
-channel. If a claimed result's checkpoint no longer exists, retrain it
-from the committed seed (the repro commands are in README) rather than
-shipping nothing — assets make results reproducible without a GPU.
+If a claimed result's checkpoint no longer exists **and this cycle's
+claims rest on it**, retrain from the committed seed (repro commands in
+README) rather than shipping nothing. Do not retrain a checkpoint that
+belongs to an older cycle's claim merely to have something to attach.
 
 ## 5. Verify
 

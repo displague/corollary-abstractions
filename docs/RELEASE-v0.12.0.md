@@ -204,7 +204,34 @@ an **unregistered probe**, not a result.
 
 ## Assets
 
-Symbolic cycle. No new checkpoint, and none is invented.
+**No new checkpoint, and the existing ones are deliberately not re-shipped.**
+
+This cycle changed nothing a trained artifact depends on. `data/` and every
+`experiments/*.py` are **byte-identical to v0.11.0** — check it yourself:
+
+```
+git diff --name-only v0.11.0..v0.12.0 -- data/ experiments/
+```
+
+That lists measurement JSON and `ANALYSIS.md` and **no `.py` and nothing
+under `data/`**. So the training corpus and every training script are
+unchanged, and the checkpoints attached to **[v0.6.0](https://github.com/displague/corollary-abstractions/releases/tag/v0.6.0)**
+(depth and tactic-policy models) and
+**[v0.5.0](https://github.com/displague/corollary-abstractions/releases/tag/v0.5.0)**
+(analogy and masked-skeleton encoders) **remain accurate for this release**.
+Re-uploading identical bytes under a new tag would cost size and time to say
+nothing new.
+
+Two script changes could in principle have moved a trained result and do
+not: `decompose.py` gained `INGESTED_CORPUS_PREFIXES` and
+`measure_operator_bag.py` gained the matching disciplines, both naming the
+holdout corpora. Both are **inert on `data/`**, because no corpus there
+carries those ids — the holdouts live in `data_holdout/`. The evidence is
+the pins, not the argument: `tests/test_decompose_channels` passes 27/27
+unchanged, and that suite exists to catch exactly this kind of movement.
+
+**Measurement artifacts are committed in-repo**, not uploaded — a clone
+already has them, so attaching copies would duplicate the repository:
 
 | artifact | story | command |
 |---|---|---|
@@ -217,7 +244,11 @@ Symbolic cycle. No new checkpoint, and none is invented.
 | `experiments/text_resolution*.json` | T1–T4 and both text holdouts | `python scripts/measure_holdout_text.py` |
 | `experiments/false_positive_rate*.json` | F1/F2/F3 on unselected input | `python scripts/measure_false_positive_f3.py` |
 
-No asset without a story. No licensed external data.
+No asset without a story. No licensed external data. Nothing uploaded that
+a clone already has, and nothing re-uploaded that this cycle did not change
+— the rule is written into `.claude/skills/release/SKILL.md` §4, which had
+been asking for checkpoint uploads that no release since v0.6.0 actually
+performed.
 
 ---
 
