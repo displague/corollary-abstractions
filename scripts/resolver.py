@@ -44,9 +44,11 @@ from __future__ import annotations
 import json
 import re
 import sys
+import unicodedata
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Iterator
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
@@ -124,6 +126,11 @@ class Resolution:
     candidates: tuple[str, ...] = ()
     detail: str = ""
     evidence: tuple[str, ...] = ()
+    #: A PASS that must not fall through. An exact resolver that recognized
+    #: the text and then found every candidate excluded has answered the
+    #: question: nothing allowed says this. Letting a weaker resolver retry
+    #: would be the resolve-then-filter path the negative design forbids.
+    terminal: bool = False
 
     @property
     def bound(self) -> str | None:
@@ -160,10 +167,38 @@ class GraphIndex:
     #: out unreachable: not because they lack a name, but because the only
     #: query that fits them was the one shape the resolver refused.
     by_statement: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    #: Reduced tokens from each node's own committed title, statement
+    #: meaning, keywords and `symbol_lexicon` values. This is not another
+    #: retrieval index and nothing scores against it: it is the only thing
+    #: an exclusion may read, because "requires TERM" has to be a fact the
+    #: corpus already states about a node rather than a judgement about it.
+    inventory: dict[str, frozenset[str]] = field(default_factory=dict)
 
     @property
     def size(self) -> int:
         return len(self.statement_ids)
+
+
+def _inventory_strings(node: dict) -> Iterator[str]:
+    """Every string in the four fields an exclusion is allowed to read."""
+
+    def walk(value: object) -> Iterator[str]:
+        if isinstance(value, str):
+            yield value
+        elif isinstance(value, dict):
+            for child in value.values():
+                yield from walk(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from walk(child)
+
+    for field_value in (
+        node.get("title", ""),
+        (node.get("semantic_interpretation") or {}).get("statement_meaning", ""),
+        node.get("keywords", []),
+        node.get("symbol_lexicon", {}),
+    ):
+        yield from walk(field_value)
 
 
 def build_index(data_dirs: list[Path]) -> GraphIndex:
@@ -178,6 +213,7 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
     by_lexicon: dict[str, list[str]] = defaultdict(list)
     lexicon_df: Counter = Counter()
     by_statement: dict[str, list[str]] = defaultdict(list)
+    inventory: dict[str, frozenset[str]] = {}
 
     for data_dir in data_dirs:
         if not data_dir.is_dir():
@@ -239,6 +275,17 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
                 for word in lex_words - STOPWORDS:
                     by_lexicon[word].append(sid)
                     lexicon_df[word] += 1
+                # The inventory is deliberately NOT any of the three indexes
+                # above. Those drop saturating words by document frequency,
+                # which is right for retrieval and wrong here: a node that
+                # says "square" a thousand nodes over still says it, and an
+                # exclusion that quietly stopped applying to common terms
+                # would be a veto with a popularity exemption.
+                inventory[sid] = frozenset(
+                    token
+                    for text in _inventory_strings(raw)
+                    for token in reduce_text(text)
+                )
 
     return GraphIndex(
         statement_ids=tuple(ids),
@@ -251,6 +298,7 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
         by_lexicon={k: tuple(v) for k, v in by_lexicon.items()},
         lexicon_df=dict(lexicon_df),
         by_statement={k: tuple(v) for k, v in by_statement.items()},
+        inventory=inventory,
     )
 
 
@@ -279,7 +327,32 @@ def reduce_text(text: str) -> list[str]:
 # --------------------------------------------------------------------------
 
 
-def resolve_expression(text: str, index: GraphIndex) -> Resolution:
+def _admit(candidates: tuple[str, ...], mask: frozenset[str]) -> tuple[str, ...]:
+    """The one place an exclusion touches a result: admission, not ranking.
+
+    Order is preserved rather than recomputed, so a masked run returns the
+    same sequence the unmasked run would have returned with those ids never
+    authored. Nothing is reweighted; a candidate is admitted or it is not.
+    """
+    return candidates if not mask else tuple(s for s in candidates if s not in mask)
+
+
+def _excluded(name: str, key: str, hosts: tuple[str, ...]) -> Resolution:
+    """Recognized the text, then found every reading excluded. Stop here."""
+    return Resolution(
+        PASS, name,
+        detail=(
+            f"{len(hosts)} statement(s) match {key!r} and the exclusion "
+            "removes all of them; no allowed reading exists"
+        ),
+        evidence=(f"excluded_all={len(hosts)}",),
+        terminal=True,
+    )
+
+
+def resolve_expression(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R1 — the text parses as a template expression: exact subterm lookup."""
     try:
         tree = canonicalize(Parser(tokenize(text)).parse())
@@ -297,11 +370,14 @@ def resolve_expression(text: str, index: GraphIndex) -> Resolution:
             return Resolution(
                 PASS, "statement", detail=f"no statement has the skeleton {key}"
             )
+        allowed = _admit(hosts, mask)
+        if not allowed:
+            return _excluded("statement", key, hosts)
         return Resolution(
-            BIND if len(hosts) == 1 else ASK,
+            BIND if len(allowed) == 1 else ASK,
             "statement",
-            candidates=hosts,
-            detail=f"{len(hosts)} statements have this exact structure",
+            candidates=allowed,
+            detail=f"{len(allowed)} statements have this exact structure",
             evidence=(f"skeleton={key}",),
         )
     if tree[0] not in {"op", "call"}:
@@ -310,34 +386,46 @@ def resolve_expression(text: str, index: GraphIndex) -> Resolution:
     hosts = index.by_skeleton.get(key, ())
     if not hosts:
         return Resolution(PASS, "expression", detail=f"no statement hosts {key}")
+    allowed = _admit(hosts, mask)
+    if not allowed:
+        return _excluded("expression", key, hosts)
     return Resolution(
-        BIND if len(hosts) == 1 else ASK,
+        BIND if len(allowed) == 1 else ASK,
         "expression",
-        candidates=hosts,
-        detail=f"{len(hosts)} statements host {key}",
+        candidates=allowed,
+        detail=f"{len(allowed)} statements host {key}",
         evidence=(f"skeleton={key}",),
     )
 
 
-def resolve_statement_id(text: str, index: GraphIndex) -> Resolution:
+def resolve_statement_id(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R2 — the text names a statement id, whole or by unique suffix."""
     probe = text.strip()
     if probe in index.corpus_of:
+        if probe in mask:
+            return _excluded("statement_id", probe, (probe,))
         return Resolution(BIND, "statement_id", (probe,), "exact statement id")
     if "." not in probe or " " in probe:
         return Resolution(PASS, "statement_id", detail="not an id")
     hits = tuple(s for s in index.statement_ids if s.endswith(probe))
     if not hits:
         return Resolution(PASS, "statement_id", detail="no id ends with that")
+    allowed = _admit(hits, mask)
+    if not allowed:
+        return _excluded("statement_id", probe, hits)
     return Resolution(
-        BIND if len(hits) == 1 else ASK,
+        BIND if len(allowed) == 1 else ASK,
         "statement_id",
-        hits,
-        f"{len(hits)} ids end with {probe!r}",
+        allowed,
+        f"{len(allowed)} ids end with {probe!r}",
     )
 
 
-def resolve_keywords(text: str, index: GraphIndex) -> Resolution:
+def resolve_keywords(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R3 — content words intersected against the corpus keyword index.
 
     Only keywords below the document-frequency ceiling participate: a word on
@@ -346,7 +434,7 @@ def resolve_keywords(text: str, index: GraphIndex) -> Resolution:
     match, and ties are NOT broken -- a tie is an ASK.
     """
     return _postings_resolver(
-        text, index, index.by_keyword, index.keyword_df, "keywords"
+        text, index, index.by_keyword, index.keyword_df, "keywords", mask=mask
     )
 
 
@@ -356,6 +444,7 @@ def _postings_resolver(
     postings: dict[str, tuple[str, ...]],
     doc_freq: dict[str, int],
     name: str,
+    mask: frozenset[str] = frozenset(),
 ) -> Resolution:
     """Shared body for the two inverted-index resolvers.
 
@@ -375,6 +464,8 @@ def _postings_resolver(
             continue
         used.append(word)
         for sid in found:
+            if sid in mask:
+                continue
             hits[sid] += 1
     if not hits:
         return Resolution(
@@ -410,7 +501,9 @@ def _postings_resolver(
     )
 
 
-def resolve_lexicon(text: str, index: GraphIndex) -> Resolution:
+def resolve_lexicon(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R4 — the corpus's own glossary of symbol and operator names.
 
     This is the synonym layer, and it was already committed: a node that
@@ -420,11 +513,13 @@ def resolve_lexicon(text: str, index: GraphIndex) -> Resolution:
     because authoring one would be guessing at what the corpus means.
     """
     return _postings_resolver(
-        text, index, index.by_lexicon, index.lexicon_df, "lexicon"
+        text, index, index.by_lexicon, index.lexicon_df, "lexicon", mask=mask
     )
 
 
-def resolve_prose(text: str, index: GraphIndex) -> Resolution:
+def resolve_prose(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R4 — the node's own authored title and meaning, word-indexed.
 
     This is what makes *arbitrary* text resolvable rather than only curated
@@ -432,11 +527,13 @@ def resolve_prose(text: str, index: GraphIndex) -> Resolution:
     corpus already contains those words in prose a human authored.
     """
     return _postings_resolver(
-        text, index, index.by_prose, index.prose_df, "prose"
+        text, index, index.by_prose, index.prose_df, "prose", mask=mask
     )
 
 
-def resolve_words(text: str, index: GraphIndex) -> Resolution:
+def resolve_words(
+    text: str, index: GraphIndex, *, mask: frozenset[str] = frozenset()
+) -> Resolution:
     """R3-5 pooled: keywords, glossary and prose scored TOGETHER.
 
     These were three resolvers in a priority chain, and the corpus-scale
@@ -479,9 +576,16 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
             seen_anywhere.add(word)
             if doc_freq.get(word, 0) > ceiling:
                 continue
+            # `matched_words` and `where` describe the QUERY, not the
+            # winner, so they are counted before masking. An exclusion may
+            # not change how much of what was asked the corpus recognized;
+            # if it did, removing a candidate could rescue an unrelated one
+            # by lowering the coverage bar it had to clear.
             matched_words.add(word)
             where.add(label)
             for sid in found:
+                if sid in mask:
+                    continue
                 hits[sid] += 1
 
     # The domain check, before any scoring. Words the corpus has never
@@ -572,6 +676,86 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
     )
 
 
+# --------------------------------------------------------------------------
+# exclusion (v0.14): one frozen surface rule, applied before selection
+# --------------------------------------------------------------------------
+
+#: The whole grammar. One marker, one TERM of one or two ASCII tokens, and a
+#: full match or nothing. It is deliberately not extensible: a synonym table
+#: or a second marker form would make "what counts as an exclusion" a thing
+#: this file decides, and the point of the exercise is that it cannot.
+_NEGATIVE_RE = re.compile(
+    r"^(?P<positive>.+?) without (?P<term>[a-z0-9]+(?: [a-z0-9]+)?)$"
+)
+#: A second `without` anywhere in the positive payload -- including next to
+#: punctuation -- means the sentence is not the shape this rule reads.
+_WITHOUT_BOUNDARY_RE = re.compile(r"(?<![a-z0-9])without(?![a-z0-9])")
+
+
+class NegativeGrammarError(ValueError):
+    """The text is not the one exclusion shape this resolver reads."""
+
+
+@dataclass(frozen=True)
+class NegativeResolution:
+    """The exclusion plan and the single resolution it produced."""
+
+    outcome: Resolution
+    positive: str
+    term: str
+    required_tokens: tuple[str, ...]
+    veto_ids: tuple[str, ...]
+
+
+def normalize_surface(text: str) -> str:
+    """NFKC, casefold, collapse whitespace. Punctuation stays visible."""
+    return " ".join(unicodedata.normalize("NFKC", text).casefold().split())
+
+
+def requires_term(
+    index: GraphIndex, statement_id: str, required_tokens: tuple[str, ...]
+) -> bool:
+    """A node requires TERM when it says so itself, in its own committed text."""
+    inventory = index.inventory.get(statement_id, frozenset())
+    return all(token in inventory for token in required_tokens)
+
+
+def resolve_negative(text: str, index: GraphIndex) -> NegativeResolution:
+    """Resolve `POSITIVE without TERM` once, with TERM's owners inadmissible.
+
+    The order is the load-bearing part. v0.13 bound "interest accumulated
+    without compounding" to continuous compounding because the exclusion,
+    if it had existed, could only have run on the answer -- and by then the
+    only reading left to filter was the wrong one. So the veto is computed
+    from the corpus first and handed to a SINGLE resolution as an admission
+    rule. There is no second pass: if nothing allowed matches, that is the
+    answer, not a reason to look again without the constraint.
+    """
+    normalized = normalize_surface(text)
+    match = _NEGATIVE_RE.fullmatch(normalized)
+    if match is None:
+        raise NegativeGrammarError("text does not match the frozen exclusion grammar")
+    positive = match.group("positive")
+    term = match.group("term")
+    if _WITHOUT_BOUNDARY_RE.search(positive):
+        raise NegativeGrammarError("more than one exclusion marker")
+    if not reduce_text(positive):
+        raise NegativeGrammarError("exclusion leaves no positive payload")
+    required_tokens = tuple(reduce_text(term))
+    if not required_tokens:
+        # An empty requirement is satisfied by every node, so this would be
+        # a veto of the entire graph dressed up as a constraint.
+        raise NegativeGrammarError("TERM reduces to no tokens")
+    veto_ids = tuple(
+        sorted(
+            sid for sid in index.inventory
+            if requires_term(index, sid, required_tokens)
+        )
+    )
+    outcome = resolve(positive, index, mask=frozenset(veto_ids))
+    return NegativeResolution(outcome, positive, term, required_tokens, veto_ids)
+
+
 #: Exact evidence first, then pooled word evidence. An expression that parses
 #: or an id that resolves is never second-guessed by word overlap.
 CHAIN = (
@@ -581,16 +765,33 @@ CHAIN = (
 )
 
 
-def resolve(text: str, index: GraphIndex, *, chain=CHAIN) -> Resolution:
-    """Run the chain. First resolver to BIND or ASK wins; PASS falls through."""
+def resolve(
+    text: str,
+    index: GraphIndex,
+    *,
+    chain=CHAIN,
+    mask: frozenset[str] = frozenset(),
+) -> Resolution:
+    """Run the chain. First resolver to BIND or ASK wins; PASS falls through.
+
+    A terminal PASS stops the chain instead of falling through. Only an
+    exact resolver raises one, and only when it recognized the text and the
+    exclusion left it nothing: retrying that same text against word overlap
+    would answer a question the exact evidence had already settled.
+    """
     tried: list[str] = []
     for resolver in chain:
-        outcome = resolver(text, index)
+        outcome = resolver(text, index, mask=mask)
         tried.append(f"{outcome.resolver}:{outcome.kind}")
         if outcome.kind != PASS:
             return Resolution(
                 outcome.kind, outcome.resolver, outcome.candidates,
                 outcome.detail, outcome.evidence + (f"tried={tried}",),
+            )
+        if outcome.terminal:
+            return Resolution(
+                PASS, outcome.resolver, outcome.candidates, outcome.detail,
+                outcome.evidence + (f"tried={tried}",), terminal=True,
             )
     return Resolution(
         PASS, "chain", detail="no resolver claimed this text",
