@@ -1,0 +1,140 @@
+{
+  "schema": "ambiguity_rate.v1",
+  "design": "docs/DESIGN-ambiguity-and-context.md",
+  "measures": "how often an in-corpus query ends in ASK rather than BIND",
+  "graph_nodes": 14830,
+  "pooled": {
+    "resolve_queries": 59,
+    "bind": 43,
+    "ask": 16,
+    "ask_rate": 0.2712
+  },
+  "unregistered_probe": {
+    "note": "A1 asks IF ambiguity happens; tractability is A2's",
+    "ask_candidates_median": 2.0,
+    "ask_candidates_max": 6,
+    "ask_sets_of_two_or_three": 10,
+    "ask_sets_over_ten": 0
+  },
+  "per_set": {
+    "development": {
+      "resolve_queries": 28,
+      "bind": 21,
+      "ask": 7,
+      "ask_rate": 0.25,
+      "ask_candidates_median": 2,
+      "ask_candidates_max": 4,
+      "ask_examples": [
+        {
+          "text": "area of a circle",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "greatest common divisor euclid",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "double factorial",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "factorial product recurrence",
+          "candidates": 4,
+          "resolver": "words"
+        },
+        {
+          "text": "even and odd parity dichotomy",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "chain rule for derivatives",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "gibbs entropy thermodynamics",
+          "candidates": 2,
+          "resolver": "words"
+        }
+      ]
+    },
+    "holdout_1": {
+      "resolve_queries": 15,
+      "bind": 9,
+      "ask": 6,
+      "ask_rate": 0.4,
+      "ask_candidates_median": 3.5,
+      "ask_candidates_max": 6,
+      "ask_examples": [
+        {
+          "text": "sum of the interior angles of a triangle",
+          "candidates": 6,
+          "resolver": "words"
+        },
+        {
+          "text": "entropy in thermodynamics",
+          "candidates": 6,
+          "resolver": "words"
+        },
+        {
+          "text": "modular arithmetic residue",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "recursive definition of the fibonacci sequence",
+          "candidates": 5,
+          "resolver": "words"
+        },
+        {
+          "text": "binomial coefficient",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "chemical reaction rate constant",
+          "candidates": 2,
+          "resolver": "words"
+        }
+      ]
+    },
+    "holdout_2": {
+      "resolve_queries": 16,
+      "bind": 13,
+      "ask": 3,
+      "ask_rate": 0.1875,
+      "ask_candidates_median": 4,
+      "ask_candidates_max": 4,
+      "ask_examples": [
+        {
+          "text": "bayes theorem conditional probability",
+          "candidates": 4,
+          "resolver": "words"
+        },
+        {
+          "text": "story setup complication resolution",
+          "candidates": 2,
+          "resolver": "words"
+        },
+        {
+          "text": "greatest common divisor of two integers",
+          "candidates": 4,
+          "resolver": "words"
+        }
+      ]
+    }
+  },
+  "adjudication": {
+    "A1": {
+      "fired": true,
+      "ask_rate": 0.2712,
+      "threshold": 0.25,
+      "ask": 16,
+      "of": 59
+    }
+  }
+}
