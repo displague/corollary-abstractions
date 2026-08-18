@@ -13,6 +13,21 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The corpus's own subject vocabulary is unreadable, and saying so does not
+  fix anything (post-v0.14, exploratory).**  Measured over the whole graph,
+  13 of 28 top-level id prefixes and 11 of 37 declared disciplines --
+  `chemistry`, `economics`, `trigonometry`, `finance`, `combinatorics`,
+  `computer_science`, `mathematics` -- occur in no word index, so the word
+  naming a subject is the one word the resolver cannot see.  `load_trees` has
+  always returned those disciplines and `build_index` has always discarded
+  them.  Indexing them changed nothing on 140 spent queries, 15 of which
+  contain a discipline word and could have moved, and cost one false positive
+  per thousand (0.0300 to 0.0310).  Two lessons, and the second is the
+  expensive one: a structural gap measured at corpus scale is still not
+  evidence that closing it helps, and the queries the fix did improve were
+  ones typed by hand after reading which rows had failed.  Branch
+  `explore/v015-ask-boundary`; deliberately unmerged.
+
 - **A capability-blind control can be beaten by the failure it was built to
   catch (v0.14 Q3, measured).**  Reciprocal candidate load pays `1/k` for
   returning the target in a small set, so the resolver's 0.7127 against the

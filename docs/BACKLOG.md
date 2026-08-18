@@ -60,6 +60,20 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **v0.14's ASK stratum mostly measured a prediction, not a resolver.**  Of
+  the 20 rows predicted to ASK, 8 bound directly to the intended id, 5 bound
+  elsewhere, 3 passed on vocabulary the graph lacks (`figure`, `sided`,
+  `nested`, `among`), and 4 asked.  The 18 rows not predicted to ASK scored
+  18/18 recall.  Q2 scored "right without needing to ask" identically to
+  "wrong", which is the metric's defect and not the resolver's.  At least one
+  wrong bind is a row-authoring error: A-08 asked for "story constraint on
+  setup and payoff" and the resolver returned `chekhov_gun`, which is that
+  constraint, against an intended `no_deus_ex_machina`.  A successor metric
+  needs a category for a correct bind on a row that predicted ambiguity, and
+  a successor stratum needs rows whose ambiguity is verified in the graph
+  before authoring rather than assumed.  Evidence:
+  `experiments/when_to_ask_result.raw.json`.
+
 - **Q4 was unfireable as registered.**  The mechanical precision arm never
   enters the candidate's masked path, so the clause measured the untouched
   baseline and reproduced it (pooled 0.03467 vs v0.13's 0.034).  Future
