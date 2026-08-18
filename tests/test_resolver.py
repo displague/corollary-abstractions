@@ -25,6 +25,7 @@ from resolver import (  # noqa: E402
     reduce_text,
     resolve,
     resolve_keywords,
+    resolve_negative,
 )
 
 
@@ -126,6 +127,36 @@ class Reduction(unittest.TestCase):
     def test_reduction_is_not_stemming(self) -> None:
         """No morphology is claimed; `theorems` is not `theorem`."""
         self.assertEqual(reduce_text("theorems"), ["theorems"])
+
+
+class ItDoesNotRepeatTheSpentExclusionFailure(ChainFixture):
+    """v0.13's public regression, kept as a regression and not as a score.
+
+    This sentence is the reason v0.14 exists, and the design keeps it out
+    of the scored holdout precisely because the candidate was built after
+    seeing it.  It stays here so the failure cannot come back unnoticed.
+    """
+
+    QUERY = "interest accumulated without compounding"
+
+    def test_the_old_path_still_binds_the_excluded_reading(self) -> None:
+        """Without the exclusion this is still wrong, which is the point."""
+        outcome = resolve(self.QUERY, self.index)
+        self.assertEqual(outcome.kind, BIND)
+        self.assertEqual(outcome.bound, "economics.finance.continuous_compounding")
+
+    def test_the_exclusion_reaches_a_reading_it_does_not_contradict(self) -> None:
+        plan = resolve_negative(self.QUERY, self.index)
+        self.assertEqual(plan.term, "compounding")
+        self.assertIn("economics.finance.continuous_compounding", plan.veto_ids)
+        self.assertEqual(plan.outcome.kind, BIND)
+        self.assertEqual(plan.outcome.bound, "economics.finance.simple_interest")
+
+    def test_the_excluded_reading_is_not_merely_deleted_afterwards(self) -> None:
+        """A filter would PASS here; only pre-selection finds the survivor."""
+        plan = resolve_negative(self.QUERY, self.index)
+        self.assertNotIn(plan.outcome.bound, plan.veto_ids)
+        self.assertNotEqual(plan.outcome.candidates, ())
 
 
 class ItIsFastEnoughToBeUseful(ChainFixture):
