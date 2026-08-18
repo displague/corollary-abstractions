@@ -167,6 +167,9 @@ class CommittedLedgerTests(unittest.TestCase):
         self.assertEqual(self.ledger["seeds"], list(SEEDS))
         self.assertEqual(self.ledger["pairs_per_source_per_seed"], PAIRS_PER_SOURCE)
         self.assertFalse(self.ledger["pattern_membership"])
+        self.assertEqual(
+            self.ledger["source_digest_algorithm"], "sha256-canonical-lf"
+        )
 
     def test_source_digests_cover_fixed_graph_and_both_holdouts(self):
         digests = self.ledger["source_digests"]

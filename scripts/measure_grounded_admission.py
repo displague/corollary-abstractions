@@ -53,8 +53,14 @@ HOLDOUT = REPO / "data_holdout"
 DEFAULT_OUT = REPO / "experiments" / "grounded_admission.json"
 
 
+def _canonical_bytes(path: Path) -> bytes:
+    """Hash text artifacts independently of the checkout's newline policy."""
+
+    return path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(_canonical_bytes(path)).hexdigest()
 
 
 def _tree_digest(root: Path) -> dict:
@@ -64,7 +70,7 @@ def _tree_digest(root: Path) -> dict:
     for path in paths:
         digest.update(path.relative_to(root).as_posix().encode("utf-8"))
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update(_canonical_bytes(path))
         digest.update(b"\0")
     return {"files": len(paths), "sha256": digest.hexdigest()}
 
@@ -516,6 +522,7 @@ def generate() -> dict:
         "pairs_per_source_per_seed": PAIRS_PER_SOURCE,
         "fixed_owner_scope": "data/*/nodes.json before candidates are attached",
         "pattern_membership": False,
+        "source_digest_algorithm": "sha256-canonical-lf",
         "source_digests": {
             "fixed_data": _tree_digest(DATA),
             **{

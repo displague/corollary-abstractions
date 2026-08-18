@@ -11,18 +11,19 @@
   "pairs_per_source_per_seed": 64,
   "fixed_owner_scope": "data/*/nodes.json before candidates are attached",
   "pattern_membership": false,
+  "source_digest_algorithm": "sha256-canonical-lf",
   "source_digests": {
     "fixed_data": {
       "files": 27,
-      "sha256": "ef18fdc912c23f9fbaee64863d0fa2880f17b5103fc8026411389b9d08b8203a"
+      "sha256": "583e8d783b14f9cd587393dcd5cd5bc5c847a06abe63a6d8556d39f3bd29939c"
     },
     "minif2f": {
       "path": "data_holdout/minif2f/nodes.json",
-      "sha256": "0da58ae883e53b0eb4081f4fc0d5c3cca8356443d6c90f6e41aa84667ab1bba8"
+      "sha256": "0e802d3ff18a2c379291fae2202eb54e4ae1503e32c9e56bbf646570f95230e4"
     },
     "goedel_pset": {
       "path": "data_holdout/goedel_pset/nodes.json",
-      "sha256": "def9c2e06a18fd8547b545946e8663fb0acf68afcc603b543a4aaf87ce89e940"
+      "sha256": "e87d6b61317349c4e2d331bbcd61c7e1b7fc99e071ef134fb4b1937a9f3b34e1"
     }
   },
   "runs": [

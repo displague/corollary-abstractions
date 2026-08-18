@@ -4016,3 +4016,10 @@ evidence that the separation does not survive this implementation of a
 plausible local edit. No threshold or mutation is tuned after the result. The
 gate parks; a future registered claim needs precommitted executable code and a
 fresh holdout.
+
+**Release audit correction.** The scores and rows above are unchanged.  The
+first ledger hashed two holdout files through a Windows CRLF working copy,
+which did not match the LF bytes in Git on a fresh checkout.  Source digests
+now use canonical-LF SHA-256 for all fixed and holdout inputs, and attributes
+pin the generated holdout/emit ledgers to LF.  This repairs reproducibility;
+it does not upgrade the exploratory provenance status.
