@@ -21,13 +21,10 @@ from resolver import (  # noqa: E402
     BIND,
     KEYWORD_DF_CEILING,
     PASS,
-    GraphIndex,
     default_index,
     reduce_text,
     resolve,
     resolve_keywords,
-    resolve_words,
-    surface_forms,
 )
 
 
@@ -126,37 +123,9 @@ class Reduction(unittest.TestCase):
     def test_stopwords_and_case_are_removed(self) -> None:
         self.assertEqual(reduce_text("What is THE Parity of x?"), ["parity", "x"])
 
-    def test_reduction_preserves_authored_surface(self) -> None:
-        """Morphology happens at lookup; evidence keeps what was typed."""
+    def test_reduction_is_not_stemming(self) -> None:
+        """No morphology is claimed; `theorems` is not `theorem`."""
         self.assertEqual(reduce_text("theorems"), ["theorems"])
-
-    def test_closed_form_surface_morphology(self) -> None:
-        self.assertIn("derivative", surface_forms("derivatives"))
-        self.assertIn("probability", surface_forms("probabilities"))
-        self.assertIn("matrix", surface_forms("matrices"))
-        self.assertIn("radius", surface_forms("radii"))
-        self.assertIn("euclidean", surface_forms("euclid"))
-        self.assertIn("euclid", surface_forms("euclidean"))
-        self.assertNotIn("analysi", surface_forms("analysis"))
-        self.assertNotIn("statu", surface_forms("status"))
-        self.assertNotIn("clas", surface_forms("class"))
-
-    def test_morphology_reads_corpus_prose_and_glossary(self) -> None:
-        index = GraphIndex(
-            statement_ids=("calculus.derivative", "geometry.euclid"),
-            corpus_of={
-                "calculus.derivative": "calculus",
-                "geometry.euclid": "geometry",
-            },
-            by_lexicon={"derivative": ("calculus.derivative",)},
-            lexicon_df={"derivative": 1},
-            by_prose={"euclidean": ("geometry.euclid",)},
-            prose_df={"euclidean": 1},
-        )
-        derivative = resolve_words("derivatives", index)
-        euclid = resolve_words("euclid", index)
-        self.assertEqual(derivative.bound, "calculus.derivative")
-        self.assertEqual(euclid.bound, "geometry.euclid")
 
 
 class ItIsFastEnoughToBeUseful(ChainFixture):
