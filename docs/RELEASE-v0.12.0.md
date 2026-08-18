@@ -198,6 +198,21 @@ an **unregistered probe**, not a result.
 - **Goedel-Pset N=8 is a degenerate cell** (real 0.0, all nulls 0.0) and is
   excluded from the trend rather than counted as agreement.
 - **Multi-turn is parked** (P-LS6) and enforced by a test.
+- **The gate is 1,240 tests, 3 skipped, zero failures — but it took 5h20m
+  across three parallel shards, and 9h52m serially.** It was run as three
+  shards in frozen worktrees rather than one `unittest discover`; same
+  tests, three processes, stated in [TRIAGE-v0.12.md](TRIAGE-v0.12.md) §1.1
+  along with why. The first serial attempt was **invalid**: editing
+  `README.md` during the doc rotation, in the same worktree the suite was
+  running in, tripped `test_write_stage`'s working-tree digest guard. The
+  guard was right; the release process was wrong.
+- **Nobody knew where the gate's time went until this cycle, and three
+  explanations were wrong before the fourth was measured.** Not graph
+  reloading (four modules), not torch (the slow modules do not train), not
+  imports (1.7s for 21 modules). It is `test_corpus_analogy_split`.
+  `scripts/time_tests.py` exists now because `unittest` has no
+  `--durations` flag; `pytest` does, and adopting it is an open dependency
+  question rather than a decision this release made.
 - A passing Python test is still not a proof.
 
 ---

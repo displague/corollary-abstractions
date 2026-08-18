@@ -24,9 +24,51 @@ to flatter this cycle's post. The blog leads with the negative
 
 ### 1.1 The suite, on the tip
 
-`python -m unittest discover -s tests`, run on the tagged tip. Planned from
-the measured cost rather than folklore: v0.11 recorded 6h35m, and this
-cycle added ~150 tests. Result recorded in §6 below.
+**1,240 tests, 3 skipped, zero failures.** That is the whole suite: 1,240 is
+exactly what `unittest discover` collects, so the sharded run covered every
+test. Skips are the same three environment- and design-gated ones as v0.11:
+pinned TheAlgorithms files absent from `archives/`, the deliberate
+full-graph `min_family=1` skip, and the gitignored tracer build directory.
+
+| shard | tests | wall | result |
+|---|---:|---:|---|
+| 0 | 465 | 186.6 m | OK (2 skipped) |
+| 1 | 450 | 319.7 m | OK |
+| 2 | 325 | 5.8 m | OK (1 skipped) |
+| **total** | **1,240** | **320 m wall / 592 m serial** | **OK** |
+
+**How it was run, stated plainly:** three shards across three *frozen,
+detached* worktrees at the same commit, not one `unittest discover`. Same
+tests, three processes. Two things forced that and both are recorded rather
+than hidden:
+
+1. **The first attempt was invalid, and the cause was the release process.**
+   A serial `discover` ran 1,240 tests in 35,547s (9h52m) and returned one
+   error — `test_write_stage.AcceptedWriteApplicationTests.tearDownClass`,
+   *"a WRITE-staging test changed the repository working tree"*. That guard
+   digests root files at `setUpClass` and re-checks at teardown. `README.md`
+   was edited during the doc rotation **while the suite ran in that same
+   worktree**. The guard worked exactly as designed; it caught the release,
+   not a stager bug. Frozen worktrees exist so that cannot recur.
+2. Sharding cut 9h52m to 5h20m — only 1.85×, because the split was
+   round-robin by module and shard 1 alone took 319.7 m. Balanced sharding
+   needs the per-module timings that did not exist until this cycle.
+
+**Gate commit vs tag commit.** The shards ran at `f1361ba`. The tag carries
+two later commits, and the delta is **`docs/` and `.claude/` only** — no
+scripts, data, tests, prover or schema — so the green result describes the
+code being tagged. Verify with
+`git diff --name-only f1361ba..v0.12.0`.
+
+**What the slow gate actually is, measured at last.** Three explanations
+were given this cycle and three were wrong: not "several tests reload the
+12k graph" (only four modules do), not "the eight torch modules" (the
+modules observed crawling contain no torch), and not imports (all 21
+shard-0 modules import in 1.7s total; `test_ask` runs 25 tests in 0.013s).
+It is concentrated in `test_corpus_analogy_split`, which burned 27+ minutes
+of CPU on one module. `scripts/time_tests.py` now exists because
+`unittest` has no `--durations` flag and every prior estimate came from a
+proxy.
 
 **What the notes may honestly claim.** "The shape did not recur" is TRUE and
 is the headline. "At matched N the fitted source compounds and the holdout
