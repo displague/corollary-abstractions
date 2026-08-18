@@ -60,6 +60,18 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **The gate measurement cannot run in the canonical checkout.**
+  `time_tests.assert_clean_source` refuses when any gitignored `*.py`, `*.pyc`,
+  `*.pyd`, `*.so` or `*.dll` sits outside `.venv/`, and `.worktrees/` is
+  gitignored — so every sibling worktree AGENTS.md tells us to create, plus the
+  stray `leandojo-scratch/venv`, trips it.  `plan_test_shards.py measure` also
+  refuses an `--out-dir` inside the worktree it measures.  Both refusals are
+  right and neither should be loosened; the consequence is that the run needs
+  a detached checkout of the exact tip outside the repo, with `--out-dir`
+  outside that too, invoked with `PYTHONDONTWRITEBYTECODE=1` so the parent
+  process does not dirty what it is measuring.  Writing it down because it
+  cost two failed starts to derive and is not documented anywhere.
+
 - **v0.14's ASK stratum mostly measured a prediction, not a resolver.**  Of
   the 20 rows predicted to ASK, 8 bound directly to the intended id, 5 bound
   elsewhere, 3 passed on vocabulary the graph lacks (`figure`, `sided`,
