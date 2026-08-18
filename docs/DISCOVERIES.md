@@ -13,6 +13,19 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Ambiguity is common enough to keep, but only just (v0.13 A1).** The
+  registered development and two holdout sets contain 62 questions labelled
+  `expect=resolve`: 43 BIND, 16 ASK, and 3 PASS. ASK therefore occupies
+  **0.2581**, just above A1's 0.25 line; A1 FIRED. The first implementation
+  reported 0.2712 (16/59) because it silently removed PASS outcomes. Review
+  restored all registered in-corpus questions to the denominator. The verdict
+  survives, but the stronger-looking margin does not. Holdout 2 alone is
+  0.1875, so this is weak evidence for continuing the context lane, not a
+  claim that ambiguity grows robustly across sets. Candidate-set size remains
+  an explicitly unregistered probe (median 2, maximum 6), not A2 evidence.
+  Regenerable from the pinned inputs in `experiments/ambiguity_rate.json` with
+  `scripts/measure_ambiguity.py`. Status: **empirical**.
+
 - **The sign flip does not travel; it was a fact about Lean-workbook
   (v0.12 item 1).** Two sources the emitter was not fitted to run the
   *other* way. miniF2F (157 nodes) sits below its matched null at every
