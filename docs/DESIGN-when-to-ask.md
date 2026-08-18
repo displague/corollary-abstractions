@@ -36,16 +36,42 @@ requiring the excluded concept cannot BIND.  It is not negative weight in a
 score and it cannot make another candidate win by relative advantage.
 
 The first protocol deliberately freezes one grammar rather than an expandable
-synonym table.  A negative row ends in the exact normalized suffix
-`without TERM`, where TERM is one or two `[a-z0-9]+` tokens and no conjunction
-or punctuation follows it.  `without` and that suffix are removed to form the
-negative-stripped ablation.  A candidate requires TERM exactly when every TERM
-token occurs in the union of `reduce_text` tokens from that candidate's
+synonym table.  Before parsing, apply Unicode NFKC, casefold, collapse
+whitespace only, and trim; punctuation is not erased.  A negative row must then
+full-match the literal Python regex
+`^(?P<positive>.+?) without (?P<term>[a-z0-9]+(?: [a-z0-9]+)?)$`, where TERM
+is one or two ASCII tokens.  Reject the match if `positive` matches the
+boundary regex `(?<![a-z0-9])without(?![a-z0-9])`.  Thus multiple markers,
+including ones adjacent to punctuation, conjunction after TERM, and
+punctuation after TERM are malformed rather than silently normalized.
+`without` and that suffix are removed to form the negative-stripped ablation.
+Set `required_tokens = tuple(reduce_text(TERM))` once and use that tuple for
+construction checks, veto inventory, and scoring; an empty tuple is malformed.
+A candidate requires TERM exactly when every required token occurs in the
+union of `reduce_text` tokens from that candidate's
 committed title, statement meaning, keywords, and `symbol_lexicon` values.  A
 required candidate is vetoed; every other candidate is unchanged.  The
 preregistration commit must contain the executable parser/veto skeleton and
 this complete inventory.  Candidate code may implement only that frozen
 algorithm—no row-specific licenses, mappings, exceptions, or new marker forms.
+
+The veto acts **inside resolution before candidate selection**, not on a
+resolver's returned tuple.  Parse the suffix, remove it to obtain the positive
+payload, and pass the veto-id mask into the resolver.  All membership,
+known-word, document-frequency, graph-size, posting, and ordering checks see
+the original graph.  Expression, literal-id, and every word-based candidate
+admission or accumulation path alone skips masked ids.  Masking the last owner
+of a known word therefore cannot make that word unknown or change any
+unmasked candidate's eligibility or score.  When an exact resolver recognized
+the positive payload before masking but has zero allowed candidates, it
+terminally PASSes rather than falling through to a weaker resolver.  Resolve
+the positive payload exactly once.  There is no resolve-then-filter path and
+no fallback or retry against the unmasked graph.  TERM is malformed when
+`reduce_text(TERM)` is empty, or when the positive payload has no reduced
+tokens; this prevents an empty-token universal veto or vacuous query.  At
+construction time every negative row must veto at least one committed id and
+must veto neither its primary id nor any retained id.  The stripped ablation
+resolves the identical positive payload once with an empty mask.
 
 The allowed outcomes remain BIND, ASK, and PASS.  After every veto, zero
 survivors deterministically PASS, one BINDs, and more than one ASK.  The
@@ -71,19 +97,91 @@ the candidate implementation.  Every row contains all of:
 - expected route: BIND, ASK, or PASS;
 - intended statement id, or an explicit `none` for refusal rows;
 - exact follow-up line, where clarification is expected;
-- allowed follow-up class;
+- allowed follow-up class: `corpus`, `discipline`, or `word` (never `id` in
+  this scored holdout);
 - the complete set of intended ids that must survive the follow-up;
 - whether negative/exclusion structure is present;
 - a short author rationale that cannot be used by the scorer.
+
+The 38 in-corpus rows have 38 distinct primary ids.  No score-credit-bearing
+primary or retained id may occur in the complete forbidden union from earlier
+sets, and no id may be reused across new rows.  ASK rows declare a nonempty
+`retained_ids` set containing their primary id.  BIND and PASS rows declare no
+retained ids.  Q3, Q5, blind initial credit, and every non-Q2 metric credit only that one
+`primary_id`; Q2 alone uses and requires every declared retained id.  New
+queries must also be mutually below the 0.50 trigram-Jaccard ceiling.
+Construction does not inspect or
+require candidate tuples; an absent primary or dropped retained id remains a
+scored miss.
+
+Every primary and retained id must exist exactly once in the merged `data/`
+graph, never in `data_holdout/`; nodes from either
+`decompose.INGESTED_CORPUS_PREFIXES` corpus (`lean_workbook` or
+`ingested_arithmetic`) are ineligible.
+The 38 primary ids span at least 10 top-level id prefixes, with no prefix used
+by more than 6 rows.  The blind universe remains the complete sorted id set
+from `data/`, including ids that are ineligible as authored targets.
+
+The 20 ASK rows freeze 20 distinct primary ids and an exact follow-up-class
+profile: 6 `corpus`, 6 `discipline`, and 8 `word`.  The structural validator
+enforces those declarations.  This is a score-time capability profile, not a
+license to inspect candidate tuples during construction.  The one-shot ledger
+reports Q2 by class, including post-follow-up survivor sizes and singleton
+counts.  In addition to retaining every declared id, halving must
+fire on at least 5/6 corpus rows, 5/6 discipline rows, and 6/8 word rows as well
+as 15/20 overall.  All 20 observed initial candidate tuples must be distinct;
+at least 10 must contain four or more candidates and at least 4 must contain
+eight or more.  Any profile miss fails Q2 and the shipping conjunction without
+replacement.  Every observed initial ASK set must also contain at most 25 ids;
+exceeding the registered reciprocal-load budget is a scored Q2/profile miss,
+never a reason to replace the row.
+
+Provenance has two chronological layers.  The preregistration manifest pins
+every already-existing score-affecting Git object and enumerates the only
+paths the later candidate commit may change; it cannot self-pin or invent a
+future object id.  The raw one-shot ledger later pins the preregistration
+commit/tree, candidate commit/tree and changed blobs, runtime, and canonical-LF
+digests, and verifies that the candidate diff is clean and confined to those
+declared paths.  Any mismatch refuses scoring.
 
 The executable scorer, schema tests, holdout rows, source digests, and blind
 baseline land in the same preregistration commit.  The mechanical arm uses
 OEWN archive SHA-256
 `7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51`,
-seed **20260825**, and `random.Random(seed).sample` over sentences sorted by
-their stable OEWN identifier; those choices land in that commit too.  The
-candidate implementation lands second.  The holdout and mechanical arm run
-once.  Raw output is committed before any compact view.
+seeds **20260825**, **20260826**, and **20260827**, and
+`random.Random(seed).sample` over sentences sorted by
+their stable OEWN key.  A key is `(synset_id, source_field, ordinal)`, where
+`source_field` is `examples` or `definitions` and `ordinal` is the zero-based
+position in that field.  Canonically reconstruct the v0.13 F4 pool with its
+pinned historical commit/tree, scorer Git blob
+`32dc0a0d45474dc5f2ba9d06d9f6f40e8fddb685`, WordNet-index dependency blobs,
+and the current disclosed CPython runtime: visit sorted synset ids, then
+examples followed by definitions, collapse whitespace with
+`" ".join(text.split())`, accept lengths 20 through 120 characters inclusive,
+and retain only the first acceptable sentence per synset.  CPython's committed
+`random.Random(20260818).shuffle` produces the canonical 1,000-key exclusion.
+The original run did not retain its keys or Python runtime, so identity with
+the historical lost 1,000 is not claimed.  Conservatively exclude both the
+canonical keys and every entry whose normalized text equals any of the 34
+published F4 claimed texts.  All 34 published texts must be found in the pinned
+archive, whether or not they occur in the canonical runtime reconstruction.
+For v0.14, build the same one-per-synset pool, remove those exclusions, then
+deduplicate the
+survivor pool by normalized text while keeping its lexicographically first
+three-part key.  Sort those unique survivors lexicographically by key.  In
+seed order, apply CPython's `random.Random(seed).sample(pool, 1000)`, then
+exclude every selected key and normalized text before constructing the next
+arm.  The three 1,000-row arms are mutually disjoint and disjoint from the
+recoverable canonical/text exclusions.  Absolute overlap with F4's 966
+unpublished historical non-claims is unprovable.  The preregistration records
+the Python implementation/version,
+spent and prior-arm exclusion counts, and each ordered selected-key digest,
+but no licensed sentence text or reversible stable-key payload.  Exact keys
+are reconstructed only from the external pinned archive.  Any row-level
+reconciliation uses one-way key digests.  Those choices land in that commit
+too.  The candidate implementation lands second.  The holdout and three
+mechanical arms run once.  Their raw ledger likewise excludes licensed text
+and keys and is committed before any compact view.
 
 Freshness is checked mechanically.  Normalize with Unicode NFKC, casefold,
 replace every non-alphanumeric run by one space, and trim.  No normalized
@@ -98,9 +196,9 @@ protocol before scoring; no replacement is allowed after any score is seen.
 
 Wrong row counts, unknown classes, duplicate queries, overlap violations,
 missing inputs, dirty score-affecting code, or provenance mismatch are hard
-protocol failures.  An intended id absent from the initial candidate set is a
-Q1/Q5 miss.  An intended id removed by its follow-up is a Q2 miss.  Both stay
-in their denominators and in the raw ledger.
+protocol failures.  A `primary_id` absent from the initial candidate set is a
+Q1/Q5 miss.  A declared `retained_id` removed by its follow-up is a Q2 miss.
+Both stay in their denominators and in the raw ledger.
 
 ## 4. Capability-blind controls
 
@@ -116,17 +214,21 @@ Its universe is the exact sorted statement-id set from merged `data/` only
 in the preregistration manifest.
 No stopword list, glossary, corpus field, resolver index, follow-up, or
 negative marker is visible.  The target score is **reciprocal candidate
-load**: `1/k` when any intended id is present in an arm's `k` returned ids,
+load**: `1/k` when the row's `primary_id` is present in an arm's `k` returned ids,
 otherwise 0.  The reported summary is the arithmetic mean over all 38
 in-corpus rows.  The resolver arm uses its complete BIND/ASK candidate set and
-the same rule.  For **either** arm, `k=0` or `k>25` scores 0; otherwise a
-retained intended id scores `1/k`.  PASS scores 0.  Thus a full-graph answer is
+the same rule.  For **either** arm, `k=0` or `k>25` scores 0; otherwise the
+`primary_id` scores `1/k`.  PASS scores 0.  Thus a full-graph answer is
 over budget and inclusion alone cannot pass.
 
 For each of the 20 clarification rows, the blind follow-up stage stays inside
 its initial 25 ids, computes title-token Jaccard against the normalized exact
-follow-up, and retains every id with score greater than zero, ordered by that
-score then id.  If none score above zero it preserves the initial 25, matching
+follow-up's VALUE string.  It obtains that string by applying the runtime's
+exact `_context_constraint` parse and stripping only the literal
+`narrow CLASS` prefix; normal normalization and tokenization then apply, with
+no further namespace stripping.  It retains every id with score greater than
+zero, ordered by that score then id.  If none score above zero it preserves
+the initial 25, matching
 the runtime's no-guess zero-match rule.  Its halving-and-retention statistic is
 computed identically to Q2.  Ties never disappear through an arbitrary top-1.
 
@@ -148,8 +250,10 @@ its registered prediction misses.
 - **Q3 — the blind arm is materially weaker.** Resolver mean reciprocal
   candidate load exceeds the 25-id blind arm by at least **0.10**, and the
   blind arm does not meet Q2's halving-and-retention bar.
-- **Q4 — precision does not pay.** On a fresh pinned-OEWN 1,000-sentence arm,
-  false positives are at most the v0.12 shipping ceiling, **0.030**.
+- **Q4 — precision does not pay.** Across three fresh, mutually disjoint
+  pinned-OEWN 1,000-sentence arms, pooled false positives are at most the
+  v0.12 shipping ceiling, **0.030**.  Each seed's rate, the pooled 3,000-row
+  rate, mean, and dispersion remain public; no weak seed is replaced.
 - **Q5 — coverage does not pay.** BIND-or-ASK reach on the 38 fresh in-corpus
   rows is at least **0.833**, directly comparable to the v0.12 shipping
   figure.  Separately, registered-target recall is at least **0.833**; that is

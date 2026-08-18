@@ -16,13 +16,24 @@ Commit one executable preregistration containing:
 - initial query, intended ids, expected route, exact follow-up, retained ids,
   and negative span for every applicable row;
 - the frozen `without TERM` parser/veto skeleton;
-- canonical-LF provenance and a manifest of every score-affecting Git object;
+- canonical-LF provenance split honestly across time: prereg pins every
+  existing input and allowed future path; the later raw ledger pins the exact
+  prereg/candidate commits, trees, changed blobs, runtime, and clean diff;
 - automated text/id disjointness from all spent conversational sets;
 - the exact 25-candidate title-only blind arm and negative-stripped ablation;
-- pinned OEWN archive, seed 20260825, and stable sampling algorithm.
+- pinned OEWN archive, seeds 20260825/20260826/20260827, and three disjoint
+  stable-key samples after excluding the canonical F4 reconstruction, all 34
+  published claimed texts, normalized-text duplicates, and each prior new arm;
+  absolute overlap with F4's lost unpublished keys remains unprovable.
 
 Malformed protocol is a refusal.  Absent or dropped targets are scored misses.
 No row replacement after any score is visible.
+
+The 20 scored follow-ups exclude answer-bearing `id` constraints: 6 use
+`corpus`, 6 `discipline`, and 8 `word`.  Q2 reports and must meet class-specific
+halving floors (5/6, 5/6, 6/8), 20 distinct observed initial candidate tuples,
+at least 10 sets of size 4+, and at least 4 of size 8+.  These are one-shot
+misses, never pre-run row-tuning criteria.
 
 ## 2. Exact negative contrast and clarification (headline)
 
