@@ -274,6 +274,47 @@ def reduce_text(text: str) -> list[str]:
     ]
 
 
+def surface_forms(word: str) -> tuple[str, ...]:
+    """Conservative query-side morphology, without a learned stemmer.
+
+    The v0.13 roadmap names two concrete misses before the third holdout is
+    scored: number (`derivatives` against `derivative`) and the productive
+    proper-name adjective `euclid`/`euclidean`.  The same small closed-form
+    expansion also carries ordinary ``-ies``, ``-ices`` and Latin ``-i``
+    plurals.  Original spelling is always retained; variants only matter when
+    the corpus itself already records them in keywords, glossary, or prose.
+    """
+    forms = {word}
+    if not word.isalpha():
+        return (word,)
+    if word.endswith("ices") and len(word) > 5:
+        stem = word[:-4]
+        forms.update((stem + "ex", stem + "ix"))
+    elif word.endswith("ies") and len(word) > 4:
+        forms.add(word[:-3] + "y")
+    elif (
+        word.endswith("s")
+        and len(word) > 3
+        and not word.endswith(("ss", "is", "us"))
+    ):
+        forms.add(word[:-1])
+    if word.endswith("i") and len(word) > 4:
+        forms.add(word[:-1] + "us")
+    if word.endswith("ean") and len(word) > 6:
+        forms.add(word[:-3])
+    elif len(word) >= 5:
+        forms.add(word + "ean")
+    return tuple(sorted(forms))
+
+
+def _morph_postings(
+    postings: dict[str, tuple[str, ...]], word: str
+) -> tuple[str, ...]:
+    """Union postings for one surface token without double-counting a node."""
+    return tuple(sorted({sid for form in surface_forms(word)
+                         for sid in postings.get(form, ())}))
+
+
 # --------------------------------------------------------------------------
 # resolvers
 # --------------------------------------------------------------------------
@@ -354,7 +395,7 @@ def _postings_resolver(
     text: str,
     index: GraphIndex,
     postings: dict[str, tuple[str, ...]],
-    doc_freq: dict[str, int],
+    _doc_freq: dict[str, int],
     name: str,
 ) -> Resolution:
     """Shared body for the two inverted-index resolvers.
@@ -370,8 +411,8 @@ def _postings_resolver(
     hits: Counter = Counter()
     used: list[str] = []
     for word in words:
-        found = postings.get(word)
-        if not found or doc_freq.get(word, 0) > ceiling:
+        found = _morph_postings(postings, word)
+        if not found or len(found) > ceiling:
             continue
         used.append(word)
         for sid in found:
@@ -469,15 +510,15 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
     matched_words: set[str] = set()
     seen_anywhere: set[str] = set()
     where: set[str] = set()
-    for postings, doc_freq, label in sources:
+    for postings, _doc_freq, label in sources:
         for word in words:
-            found = postings.get(word)
+            found = _morph_postings(postings, word)
             if not found:
                 continue
             # Present in the corpus, even if too common to discriminate.
             # That distinction is the whole point of the domain check below.
             seen_anywhere.add(word)
-            if doc_freq.get(word, 0) > ceiling:
+            if len(found) > ceiling:
                 continue
             matched_words.add(word)
             where.add(label)
@@ -547,7 +588,7 @@ def resolve_words(text: str, index: GraphIndex) -> Resolution:
         supporting = 0
         for word in used:
             for postings in (index.by_keyword, index.by_lexicon, index.by_prose):
-                hit = postings.get(word)
+                hit = _morph_postings(postings, word)
                 if hit and any(
                     index.corpus_of.get(sid, "?") in winner_corpus for sid in hit
                 ):
