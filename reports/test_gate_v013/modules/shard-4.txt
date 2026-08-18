@@ -1,0 +1,10 @@
+tests.test_belief
+tests.test_depth_consumer_analysis
+tests.test_entailment
+tests.test_harness_line
+tests.test_live_lean_search
+tests.test_programming_discipline
+tests.test_resolver
+tests.test_session_durability
+tests.test_theory_of_mind
+tests.test_write_stage

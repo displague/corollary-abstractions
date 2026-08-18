@@ -1,0 +1,10 @@
+tests.test_ambiguity
+tests.test_conversation_runtime
+tests.test_depth_interface
+tests.test_frames
+tests.test_langgen_roundtrip
+tests.test_narrative_realize
+tests.test_prose_authoring
+tests.test_search_controller
+tests.test_source_manifest
+tests.test_visual_oracle

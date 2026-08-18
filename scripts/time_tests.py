@@ -28,11 +28,18 @@ the suite take" — it is "which handful of tests are the suite".
 from __future__ import annotations
 
 import argparse
+import hashlib
+import importlib.metadata
 import json
+import os
+import platform
+import subprocess
 import sys
 import time
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Mapping
 
 # `python -m unittest` puts the repo root on sys.path; running this as a file
 # does not, so `tests.test_x` would not import. Both the root (for `tests`)
@@ -40,6 +47,150 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scripts"))
+
+PINNED_LEAN_TOOLCHAIN = "leanprover/lean4:v4.32.2"
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def runtime_identity() -> dict:
+    return {
+        "python_executable": sys.executable,
+        "python_implementation": platform.python_implementation(),
+        "python_version": platform.python_version(),
+        "python_build": sys.version,
+        "platform": platform.platform(),
+        "machine": platform.machine(),
+        "processor": platform.processor()
+        or os.environ.get("PROCESSOR_IDENTIFIER", ""),
+        "logical_cpus": os.cpu_count(),
+    }
+
+
+def sanitized_environment(source: Mapping[str, str] | None = None) -> dict[str, str]:
+    env = dict(os.environ if source is None else source)
+    for name in ("PYTHONPATH", "PYTHONHOME", "CORO_SESSION_KEYFILE", "HF_TOKEN"):
+        env.pop(name, None)
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    env["PYTHONNOUSERSITE"] = "1"
+    return env
+
+
+def _file_identity(path: Path) -> dict:
+    resolved = path.resolve()
+    if not resolved.is_file():
+        return {"present": False, "path": str(resolved)}
+    return {
+        "present": True,
+        "path": str(resolved),
+        "bytes": resolved.stat().st_size,
+        "sha256": _sha256_file(resolved),
+    }
+
+
+def _archive_identity(root: Path) -> dict:
+    archive_root = root / "data_sources" / "archives"
+    if not archive_root.is_dir():
+        return {"present": False, "files": [], "manifest_sha256": None}
+    files = []
+    for path in sorted(p for p in archive_root.rglob("*") if p.is_file()):
+        files.append({
+            "path": path.relative_to(root).as_posix(),
+            "bytes": path.stat().st_size,
+            "sha256": _sha256_file(path),
+        })
+    encoded = "".join(
+        f"{row['path']}\0{row['bytes']}\0{row['sha256']}\n" for row in files
+    ).encode("utf-8")
+    return {
+        "present": True,
+        "files": files,
+        "manifest_sha256": hashlib.sha256(encoded).hexdigest(),
+    }
+
+
+def _lean_identity() -> dict:
+    mangled = PINNED_LEAN_TOOLCHAIN.replace("/", "--").replace(":", "---")
+    binary = (
+        Path.home() / ".elan" / "toolchains" / mangled / "bin"
+        / ("lean.exe" if os.name == "nt" else "lean")
+    )
+    identity = _file_identity(binary)
+    identity["toolchain"] = PINNED_LEAN_TOOLCHAIN
+    return identity
+
+
+def environment_identity(
+    env: Mapping[str, str] | None = None, root: Path = REPO,
+) -> dict:
+    values = os.environ if env is None else env
+    distributions = sorted(
+        f"{dist.metadata.get('Name', '<unnamed>')}=={dist.version}"
+        for dist in importlib.metadata.distributions()
+    )
+    distribution_bytes = "".join(f"{row}\n" for row in distributions).encode(
+        "utf-8"
+    )
+    wordnet_value = values.get("COROLLARY_WORDNET")
+    return {
+        "distributions": {
+            "count": len(distributions),
+            "sha256": hashlib.sha256(distribution_bytes).hexdigest(),
+        },
+        "PATH_sha256": hashlib.sha256(values.get("PATH", "").encode("utf-8")).hexdigest(),
+        "PYTHONIOENCODING": values.get("PYTHONIOENCODING", ""),
+        "PYTHONDONTWRITEBYTECODE": values.get("PYTHONDONTWRITEBYTECODE", ""),
+        "PYTHONNOUSERSITE": values.get("PYTHONNOUSERSITE", ""),
+        "COROLLARY_WORDNET": (
+            {"present": False, "path": None}
+            if wordnet_value is None else _file_identity(Path(wordnet_value))
+        ),
+        "worktree_archives": _archive_identity(root),
+        "session22080_ast": _file_identity(
+            root / "prover" / "lean" / "session" / ".lake" / "build"
+            / "ir" / "Session22080.ast.json"
+        ),
+        "lean": _lean_identity(),
+        "removed_from_child": [
+            "PYTHONPATH", "PYTHONHOME", "CORO_SESSION_KEYFILE", "HF_TOKEN"
+        ],
+    }
+
+
+def assert_clean_source(root: Path = REPO) -> None:
+    status = subprocess.run(
+        ["git", "status", "--porcelain", "--untracked-files=all"],
+        cwd=root, check=True, capture_output=True, text=True, encoding="utf-8",
+    ).stdout
+    if status:
+        raise RuntimeError("timing JSON requires a clean tracked/untracked worktree")
+    ignored = subprocess.run(
+        ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "-z",
+         "--", "*.py", "*.pyc", "*.pyd", "*.so", "*.dll"],
+        cwd=root, check=True, capture_output=True,
+    ).stdout.split(b"\0")
+    unsafe = []
+    for raw in ignored:
+        if not raw:
+            continue
+        name = raw.decode("utf-8", errors="surrogateescape").replace("\\", "/")
+        if not name.startswith(".venv/"):
+            unsafe.append(name)
+    if unsafe:
+        raise RuntimeError(
+            "ignored executable Python files outside .venv: " + ", ".join(unsafe)
+        )
 
 
 class TimingResult(unittest.TextTestResult):
@@ -78,6 +229,18 @@ class TimingRunner(unittest.TextTestRunner):
     resultclass = TimingResult
 
 
+def _git_head() -> str:
+    """Return the exact source revision measured by this process."""
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout.strip()
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("targets", nargs="+", help="module or test ids")
@@ -85,11 +248,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", type=Path, default=None)
     args = ap.parse_args(argv)
 
+    if args.json:
+        assert_clean_source()
+    started_utc = _utc_now()
+
     suite = unittest.defaultTestLoader.loadTestsFromNames(args.targets)
     runner = TimingRunner(verbosity=0)
     started = time.perf_counter()
     result = runner.run(suite)
     total = time.perf_counter() - started
+    finished_utc = _utc_now()
 
     rows = sorted(result.timings, key=lambda r: -r[1])
     print(f"\n{len(rows)} tests in {total:.1f}s "
@@ -112,15 +280,27 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {elapsed:8.2f}s  {tid}")
 
     if args.json:
-        args.json.write_text(
-            json.dumps(
+        assert_clean_source()
+        with args.json.open("w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(
                 {
+                    "schema_version": 2,
+                    "head": _git_head(),
+                    "runtime": runtime_identity(),
+                    "environment": environment_identity(),
+                    "started_utc": started_utc,
+                    "finished_utc": finished_utc,
+                    "targets": args.targets,
+                    "successful": result.wasSuccessful(),
                     "total_seconds": round(total, 2),
                     "timed_test_seconds": round(timed_seconds, 2),
                     "fixture_and_overhead_seconds": round(
                         fixture_and_overhead, 2
                     ),
                     "tests": len(rows),
+                    "failures": len(result.failures),
+                    "errors": len(result.errors),
+                    "skipped": len(result.skipped),
                     "timed_tests_by_module": {
                         k: round(v, 2) for k, v in by_module.items()
                     },
@@ -129,10 +309,7 @@ def main(argv: list[str] | None = None) -> int:
                     ],
                 },
                 indent=2,
-            )
-            + "\n",
-            encoding="utf-8",
-        )
+            ) + "\n")
         print(f"\nwrote {args.json}")
     return 0 if result.wasSuccessful() else 1
 
