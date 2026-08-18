@@ -13,6 +13,18 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A negative veto must happen before candidate selection (v0.14 protocol,
+  unmeasured).** Filtering only a resolver's final tuple makes the registered
+  causal ablation incompatible with retained reach: when the stripped query
+  uniquely selects the excluded reading, post-hoc deletion yields PASS instead
+  of allowing a lower-scored non-contradictory reading to survive.  The frozen
+  evaluator therefore masks candidate admission inside expression, literal-id,
+  and word paths while preserving graph size, document frequencies, postings,
+  known-word status, and ordering.  Synthetic checks cover the lower-score
+  survivor, last-owner known word, and no-fallback terminal PASS.  This is a
+  **design/construction finding only**; no fresh row has been resolved and no
+  Q1–Q6 result exists.
+
 - **Ambiguity is common enough to keep, but only just (v0.13 A1).** The
   registered development and two holdout sets contain 62 questions labelled
   `expect=resolve`: 43 BIND, 16 ASK, and 3 PASS. ASK therefore occupies

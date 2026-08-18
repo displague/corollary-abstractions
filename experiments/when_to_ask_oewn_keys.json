@@ -1,0 +1,30 @@
+{
+  "schema": "when_to_ask_oewn_keys.v1",
+  "archive_sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51",
+  "f4_seed": 20260818,
+  "canonical_spent_keys": 1000,
+  "published_claimed_texts": 34,
+  "runtime": "cpython",
+  "python_version": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+  "arms": [
+    {
+      "seed": 20260825,
+      "sample_size": 1000,
+      "survivor_pool": 95830,
+      "ordered_key_sha256": "f179218f60f876d16ae3a66d4c1978f9c86293b63d4a249b13d8d2d3e599fd31"
+    },
+    {
+      "seed": 20260826,
+      "sample_size": 1000,
+      "survivor_pool": 94830,
+      "ordered_key_sha256": "54b3d90f58d2bf9205f1fc11f5430b1abb482c674f052b3cec97f5e06bae6fba"
+    },
+    {
+      "seed": 20260827,
+      "sample_size": 1000,
+      "survivor_pool": 93830,
+      "ordered_key_sha256": "98cd28dc05cc6d38594a1eee96d3f1bcb436c314da43d449e726520244aa84f8"
+    }
+  ],
+  "limitation": "F4 did not retain its keys/runtime; absolute overlap with 966 unpublished non-claims is unprovable. No OEWN text or reversible key is committed."
+}

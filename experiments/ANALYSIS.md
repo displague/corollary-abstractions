@@ -4023,3 +4023,42 @@ which did not match the LF bytes in Git on a fresh checkout.  Source digests
 now use canonical-LF SHA-256 for all fixed and holdout inputs, and attributes
 pin the generated holdout/emit ledgers to LF.  This repairs reproducibility;
 it does not upgrade the exploratory provenance status.
+
+---
+
+# v0.14 — clarification preregistration (no result)
+
+The evaluator prerequisite is frozen before candidate implementation.  It
+contains exactly 48 rows: 8 negative BIND predictions, 8 negative ASK
+predictions, 12 ordinary ASK predictions, 10 ordinary BIND predictions, and
+10 PASS predictions.  The 38 distinct primary ids span 20 top-level prefixes;
+the 20 ASK follow-ups are fixed at 6 corpus, 6 discipline, and 8 word
+constraints.  Construction validation checks exact schemas, pairwise and
+prior-query freshness below 0.50 trigram Jaccard, an independently
+regenerable 88-id spent-set exclusion, target existence, and veto inventories.
+
+The external precision arm is also construction-only: three 1,000-key OEWN
+samples at seeds 20260825–20260827 have key digests
+`f179218f…fd31`, `54b3d90f…6fba`, and `98cd28dc…84f8`.  They exclude the
+canonical F4 reconstruction, all 34 published F4 claimed texts, normalized
+duplicates, and prior new arms.  Because F4 did not retain the other 966 keys
+or its Python runtime, absolute historical overlap is unprovable and is not
+claimed.  No licensed text or reversible key is committed.
+
+One registered ambiguity is resolved in writing before the run rather than
+after it.  The design says non-Q2 metrics credit only `primary_id` while the
+blind follow-up statistic is “computed identically to Q2”, and Q2 requires every
+declared retained id.  All 20 ASK rows in fact declare a **singleton**
+`retained_ids` equal to their own primary id, and the structural validator
+enforces exactly 58 credit declarations, so a multi-id retained set is refused
+rather than merely unused.  On this holdout the two readings therefore
+coincide: Q2 retention, blind-arm retention, and primary retention are the same
+predicate.  The consequence is recorded rather than repaired — v0.14 does not
+test whether clarification preserves several simultaneously intended readings,
+only whether it keeps the one intended reading while at least halving the set.
+
+No v0.14 row has been resolved, no OEWN sentence has been classified, and no
+Q1–Q6 score or candidate result exists.  The only executed checks are
+construction/provenance and synthetic vacuity tests.  The raw-before-compact
+one-shot path refuses until the preregistration is an ancestor of a clean,
+allowlisted candidate commit.

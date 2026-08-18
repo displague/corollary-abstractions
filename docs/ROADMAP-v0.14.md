@@ -10,6 +10,15 @@ Governing design: [DESIGN-when-to-ask.md](DESIGN-when-to-ask.md).
 
 ## 1. Freeze the evaluator before the implementation (prerequisite)
 
+**PREREGISTERED (construction only).**  The 48 rows, exact schemas, forbidden
+id ledger, three-arm OEWN key receipt, scorer, and fail-closed manifest now
+exist together.  Construction checks pass without resolving any new row.
+No candidate, holdout score, OEWN classification, Q1–Q6 verdict, raw ledger,
+or compact view exists yet; item 2 remains blocked on this commit landing
+before candidate work begins.  `validate` reports provenance alongside
+construction, and refuses a follow-up that the live shell would parse
+differently or that cannot keep its own declared reading.
+
 Commit one executable preregistration containing:
 
 - exactly 48 rows in the four registered strata;

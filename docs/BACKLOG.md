@@ -51,6 +51,23 @@ or commit history. Each item names the evidence that motivated it.
 
 ## v0.13 conversational coverage: rejected morphology trade
 
+- **PREREGISTERED for v0.14; not adjudicated.**  The successor protocol now
+  freezes 48 fresh rows, primary-only credit, a 25-id title baseline, exact
+  negative parsing with mask-aware pre-selection, and three disjoint
+  canonical OEWN arms.  This closes the three evaluator-construction wants
+  below without claiming the candidate works.  The one-shot holdout and OEWN
+  classification have not run; any Q1–Q6 miss remains actionable evidence,
+  not a row-edit request.  Executable gate: `scripts/measure_when_to_ask.py`.
+
+- **Clarification is only tested against one intended reading.**  All 20 v0.14
+  ASK rows declare a singleton `retained_ids`, and the validator's 58-credit
+  shape refuses a multi-id set outright.  Q2 therefore cannot show that a
+  follow-up preserves several simultaneously acceptable readings — the case
+  where narrowing is most likely to discard one.  Evidence:
+  `experiments/when_to_ask_holdout.json` and the v0.14 ANALYSIS entry.  A later
+  cycle authoring multi-id retained sets needs a new holdout, not an edit to
+  this one.
+
 - **Morphology cannot ship on the measured precision trade.** The preregistered
   third holdout reached 24/24 under the closed-form surface expansion, but the
   fresh pinned-OEWN F4 arm claimed 34/1000 = **0.034**, above the 0.030 shipping

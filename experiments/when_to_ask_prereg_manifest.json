@@ -1,0 +1,67 @@
+{
+  "schema": "when_to_ask_prereg_manifest.v1",
+  "design": "docs/DESIGN-when-to-ask.md",
+  "base_commit": "f38678953cd884e7c9578dae944bee0db6b16fb3",
+  "base_tree": "5e25e1c5108289004e6aa2d12ac2642a151319c0",
+  "scripts_tree": {
+    "git_commit": "f38678953cd884e7c9578dae944bee0db6b16fb3",
+    "git_tree": "87331bb587f3827b1784de324b62fad3eb305d12",
+    "combined_canonical_lf_sha256": "5b4ce7ec374453fea77eeb5c64b6f4a881a10196ff28eacb824a4b7ea5b1393b",
+    "tracked_files": 96
+  },
+  "existing_inputs": [
+    {"path":"scripts/resolver.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"99002bed8b00e679bad9b892d11b72d2d39f6951","canonical_lf_sha256":"856ac914d40fa54d9833fe57a8fe01d8260386f10e7390301ea4240fcb4e83d1"},
+    {"path":"scripts/harness.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"c3c14212247982c9bb842b10273162be404925e4","canonical_lf_sha256":"18302bb4608de5184d5b795123459b880df2d2502badeffdc9d4919b91abf207"},
+    {"path":"scripts/answer.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"82ce31cf76377cd26e644cbfece7a2fa73e5e216","canonical_lf_sha256":"d6d0d1079cbe0c4d30afa20691d9bda921fe38940e2aab0ad0d2552933ab954a"},
+    {"path":"scripts/decompose.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"cf6e467ff236ae4c542549d8b2fac25eaa1b2bce","canonical_lf_sha256":"21e6334124570871f831cbdeaf877c5b1079e2ff65a3c92e04d299cc33bdd72a"},
+    {"path":"scripts/match_signatures.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"54c7b0315f5318471a9bd51691ed41206c16cd8b","canonical_lf_sha256":"12fa9782e740ddc32695f43dd62388bdde7b7d8fc53c44b7375e7eddec1d09f6"},
+    {"path":"scripts/specialize.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"5796cd7e03c75b7e732972214d889fcb565e2d70","canonical_lf_sha256":"0c551d9be266f2a1cb2a2b15737aa3f007e99eb38242f8eae8b3899b450a3ca2"},
+    {"path":"scripts/wordnet_store.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"fee76a5ded60cbba704cd4d00ee6532260595c49","canonical_lf_sha256":"a17e64a9744443ef97bcdb92c7117de509ee0a2a245547250ddffdafe56a00b7"},
+    {"path":"scripts/measure_false_positive_f4.py","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"32dc0a0d45474dc5f2ba9d06d9f6f40e8fddb685","canonical_lf_sha256":"64da2a17bc53b6eb7d5b134ec8685aade61c26f39dff16e848ea81a1352f9297"},
+    {"path":"experiments/false_positive_rate_f4.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"661f6b7a712909868e7e350c9c1bdebf15415cde","canonical_lf_sha256":"0c18e777a007993fad1bc2502dfa4c66adf510b90fef9de32c3a07969061dd6a"},
+    {"path":"experiments/text_resolution_queries.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"bbf94882842f01877c128c46d9bfe8cc2e550078","canonical_lf_sha256":"4c19654c7357e25ecfaca5812241b86827c052dbd15e288fe040d41b988f4f74"},
+    {"path":"experiments/text_resolution_holdout.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"4c4925bc389d6c5d5f0dc3c73c5d29fa4a9a1ac8","canonical_lf_sha256":"c2ed7c052ca9c9b24b4547ffce69fa6c3dfbb9ee37b81ad03db979dd37638a48"},
+    {"path":"experiments/text_resolution_holdout2.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"a6d3401547240d264d1095ecde2c496de4d115b6","canonical_lf_sha256":"9b946b8e714aeb0b27c12387a552ed6ed6f00532990b26630b7a447a3cfe154c"},
+    {"path":"experiments/text_resolution_holdout3.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"0e79501090dd0132c9451a3d73cd8fc8775f51d1","canonical_lf_sha256":"40c1cd11ef19cde3f7852320e88ef575f319b4c28b4be994630c7087686a53d3"},
+    {"path":"data_sources/manifest.json","git_commit":"f38678953cd884e7c9578dae944bee0db6b16fb3","git_blob":"932d292715875792cb617349e19f8b5f0883b73e","canonical_lf_sha256":"3431db7cf770657d7e975266bdf226bcfae0c7a95e45df0e6ebc1fdc59ae6703"}
+  ],
+  "data_trees": [
+    {
+      "path": "data",
+      "git_commit": "f38678953cd884e7c9578dae944bee0db6b16fb3",
+      "git_tree": "cc82a5768927dafb924e4a777cba7e86ebb17fa6",
+      "combined_canonical_lf_sha256": "7f313f2cf247302e76d19177884004d9459096e3f6dfb8d1400caa44ceeed241",
+      "node_files": 27
+    },
+    {
+      "path": "data_holdout",
+      "git_commit": "f38678953cd884e7c9578dae944bee0db6b16fb3",
+      "git_tree": "854a9ca72074046db852c0eee39f370a0999a03d",
+      "combined_canonical_lf_sha256": "42b1bcc7ace763669c6147162934f9a3d41693f37380dd2c584d6a5674a74f53",
+      "node_files": 2
+    }
+  ],
+  "preregistration_paths": [
+    "docs/BACKLOG.md",
+    "docs/DESIGN-when-to-ask.md",
+    "docs/DISCOVERIES.md",
+    "docs/ROADMAP-v0.14.md",
+    "experiments/ANALYSIS.md",
+    "experiments/when_to_ask_forbidden_ids.json",
+    "experiments/when_to_ask_holdout.json",
+    "experiments/when_to_ask_oewn_keys.json",
+    "experiments/when_to_ask_prereg_manifest.json",
+    "scripts/measure_when_to_ask.py",
+    "tests/test_when_to_ask_prereg.py"
+  ],
+  "allowed_candidate_paths": [
+    "scripts/resolver.py",
+    "tests/test_resolver.py",
+    "tests/test_when_to_ask_candidate.py"
+  ],
+  "raw_ledger_contract": {
+    "path": "experiments/when_to_ask_result.raw.json",
+    "exclusive_create": true,
+    "must_precede_compact": "experiments/when_to_ask_result.json"
+  }
+}
