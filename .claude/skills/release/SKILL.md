@@ -133,6 +133,15 @@ rotates the documents:
       command that exercises it. An asset without a story does not
       ship. Note anything seed-reproducible-only.
    10. **Reproduce** — copy-paste commands from a fresh clone.
+   **Mandatory design-direction gate — invoke exactly once before drafting the
+   next roadmap.** Read and follow
+   [`../forge-design-direction/SKILL.md`](../forge-design-direction/SKILL.md).
+   This call satisfies the forge skill's release context; neither skill invokes
+   the other again. It must produce or explicitly reaffirm a reviewed forward
+   DESIGN document, or record that no outside direction survived grounding.
+   If its isolated contexts or review cannot run, stop release rotation with a
+   blocked gate: do not draft the next roadmap, write the blog, tag, or publish.
+
 3. **Create `docs/ROADMAP-v<next>.md`.** Migrate every not-started and
    unfinished-half item there; seed it with the newly queued direction.
    Nothing planned is silently dropped — it either ships (release doc),

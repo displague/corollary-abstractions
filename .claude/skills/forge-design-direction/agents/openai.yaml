@@ -1,0 +1,4 @@
+interface:
+  display_name: "Forge Design Direction"
+  short_description: "Derive a bold, falsifiable release direction"
+  default_prompt: "Use $forge-design-direction to derive the next release design from independent outside perspectives."
