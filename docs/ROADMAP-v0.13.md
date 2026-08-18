@@ -1,3 +1,12 @@
+> **CLOSED at v0.13.0.** Item 1 shipped as a measured negative and its
+> resolver candidate was reverted; item 2 measured A1, shipped the candidate
+> object/restatement substrate, then parked A2–A4; item 3 shipped bounded
+> P-LS6; item 4 produced exploratory negative evidence and parked the gate;
+> item 5 parked unscored without a fourth source. Outcomes:
+> [RELEASE-v0.13.0.md](RELEASE-v0.13.0.md). The only forward work is named in
+> [ROADMAP-v0.14.md](ROADMAP-v0.14.md); other lanes are in
+> [BACKLOG.md](BACKLOG.md).
+
 # v0.13 roadmap — coverage, and questions asked badly on purpose
 
 v0.12 asked whether v0.11's sign flip was a fact about the architecture or
@@ -141,10 +150,10 @@ independent reason.
 
 | lane | named dependant | disposition |
 |---|---|---|
-| Multi-turn context (P-LS6) | item 2 | **prerequisite**, ordered before it |
-| Morphology / synonym layer | item 1 | **prerequisite** for the coverage number |
+| Multi-turn context (P-LS6) | item 2 | **SHIPPED**, bounded resolver clarification |
+| Morphology / synonym layer | item 1 | **MEASURED AND REJECTED**; exact revert |
 | Groundedness admission signal | item 4 | **exploratory measured negative**; executable provenance downgraded, gate parked |
-| What predicts the gap (W1–W3) | *none — needs a fourth source* | **carried as design** |
+| What predicts the gap (W1–W3) | *none — needs a fourth source* | **parked unscored** |
 | Write-recovery ranker | *none — no fit named* | **parked** at v0.12 triage |
 | Budgeted-edit ranker | *none* | **parked** (one foil cell) |
 | Groundedness *gate* (ISG-based) | *none* | **parked**; unpark only when a non-Lean-workbook source shows a positive gap surviving its own null |

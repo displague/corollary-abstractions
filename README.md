@@ -6,18 +6,20 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.11.0](docs/RELEASE-v0.11.0.md) — ingested
-self-grounding beats a matched random baseline at thousands, and
-sits *below* that baseline at thirty-two. Figure of merit for the
-name-blind bag against typed twins: 0.0220%. See
-[the curve changed sign](docs/blog/the-curve-changed-sign.md).
+interface. Latest release: [v0.13.0](docs/RELEASE-v0.13.0.md) — a candidate
+resolver reached 24/24 registered questions and was rejected because one
+answer contradicted an explicit negative and fresh false positives rose from
+3.0% to 3.4%. Figure of merit for the name-blind bag against typed twins:
+0.0220%. See [coverage is not correctness](docs/blog/coverage-is-not-correctness.md).
 The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
 still stands: about a third on uncontrolled formal math.
 
 ## Three headline demonstrations
 
 **0. You can type at it.** Since [v0.12.0](docs/RELEASE-v0.12.0.md) the
-prompt reads one line and stops with a machine verdict. Every sentence it
+prompt returns a machine verdict. In v0.13 a resolver ASK can survive the next
+line and accept an explicit hard constraint; cancellation, repeated-state
+cycles, and a four-hop ceiling terminate without guessing. Every sentence it
 prints was written by a person and stored in the corpus, or comes from Open
 English WordNet; every value is computed exactly; every relation is a
 committed link. It does not author sentences.
@@ -34,12 +36,16 @@ exact      : 25
 
 $ echo "owns x ^ 2" | python scripts/harness.py
 6884 of 12777 statements host 'x ^ 2'
+
+$ "double factorial`nnarrow word recursive" | python scripts/harness.py --offline
+reading : Double Factorial, Recursive (TheAlgorithms)
 ```
 
 Ask it something the corpus does not contain and it says so: on 1,000
-sentences sampled from a dictionary it wrongly claimed 3.0% as corpus
-material. In-corpus coverage is 0.833–1.000 depending on the query set.
-Both numbers were registered before the runs that produced them.
+sentences sampled from a dictionary the shipping resolver wrongly claims 3.0%
+as corpus material. A morphology candidate reached 1.000 on a fresh holdout
+but scored 3.4% false positives and one wrong BIND, so it was reverted. The
+shipping in-corpus point remains 0.833 coverage / 0.030 false positives.
 
 **1. The matcher discovers that sciences repeat one another.** From 12,777
 statement nodes across 27 corpora (263 curated including 9 verified-code

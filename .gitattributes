@@ -28,3 +28,4 @@ experiments/grounded_admission.json text eol=lf
 data/lean_workbook/nodes.json text eol=lf
 experiments/lean_workbook_emit.json text eol=lf
 experiments/skeleton_emitter_aggregates.json text eol=lf
+reports/test_gate_v013.json text eol=lf

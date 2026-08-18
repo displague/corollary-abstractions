@@ -70,52 +70,6 @@ or commit history. Each item names the evidence that motivated it.
   coverage slice needs a blind baseline with a candidate-budget or ranking
   metric registered before its new holdout.
 
-## The gate is single-threaded and nobody has measured why
-
-- **SUPERSEDED by the entry above, which has the numbers.** Kept because
-  its correction of the v0.11 folklore still stands, and because the
-  "measure before optimising" instruction in it was the right call and was
-  followed.
-
-- **The full suite is ~7 hours on one core, and the reason I have been
-  giving for it is wrong.** v0.11's triage said "several tests each reload
-  the 12k graph". Measured during the v0.12 release: **only four modules
-  rebuild the graph** (`test_matcher_mirror`, `test_programming_discipline`,
-  `test_readiness`, `test_resolver`), and they cache in `setUpClass`. The
-  cost is concentrated in the **eight torch-dependent modules**
-  (`test_corpus_analogy*`, `test_depth_consumer*`, `test_proof_curve`,
-  `test_tactic_policy`, `test_visual_oracle`, `test_write_stage`), which run
-  real training loops — the v0.12 gate spent hours inside
-  `experiments/train_analogy.py` building TransformerEncoders.
-
-  **Do the measurement before the optimisation.** Per-module wall-clock is
-  one `-v` run away and nobody has one; every claim about where the time
-  goes has so far been folklore, including mine.
-
-  Then, in this order:
-
-  1. **Parallelise by module, one git worktree per worker.** The modules are
-     independent, but several write to FIXED repo paths, so process-level
-     parallelism needs isolation — and this project already owns worktrees
-     for exactly that. 4–6 workers should take a 7-hour gate to under two.
-     `unittest` has no parallel runner; that is the work.
-  2. **Persist the resolver index.** 3.98s cold start (1.47s `load_trees`
-     + 2.51s over 219,416 subterm occurrences). This is a PROMPT
-     improvement, not a gate one — only four modules pay it. Worth doing
-     for interactive use, worth not confusing with the gate problem.
-  3. **Leave the GPU alone unless the per-module numbers demand it.** CUDA
-     is available (torch 2.13.0+cu130). But the models are deliberately
-     tiny, so kernel-launch overhead can make GPU *slower* at this scale,
-     and this machine has a documented history of 0x101 bugchecks under GPU
-     load — the throttled-GPU house rule exists for that reason. Riskiest
-     lever, least certain payoff, and it only touches eight modules.
-
-  Evidence: v0.12 gate started 08:20, still running at 14:00 with 19,936
-  CPU-seconds burned at 99% of one core. Also: the gate was run WITHOUT
-  `-v` this time, which made progress illegible and forced a CPU-counter
-  estimate. The release skill's two-tier note should say `-v` belongs in
-  the full-discover command.
-
 ## Parked at v0.12 triage
 
 - **PARKED: the write-recovery ranker (v0.12 item 6), because no fit was
@@ -149,6 +103,14 @@ or commit history. Each item names the evidence that motivated it.
   second mutation on these scored sources.** Unpark only with a new,
   independently motivated signal or semantic oracle, an executable protocol
   committed before measurement, and a fresh holdout.
+
+- **PARKED: W1–W3 has no independently motivated fourth formal source.**
+  `DESIGN-what-predicts-the-gap.md` needs four sources because three is an
+  anecdote and concentration can predict self-grounding by construction.
+  v0.13 did not author a fourth source for some other reason, so the design is
+  not scored and does not carry again without a dependant.  Unpark only when a
+  future headline independently requires another formal source; register the
+  source purpose before using it in this predictor.
 
 ## Cognitive frames / lexical stores
 
@@ -643,23 +605,6 @@ slash-command **demo launcher** in favor of a **microkernel session** that
 routes only along registered paths (registered ≠ PROVEN; PROVEN stays reserved
 for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
 `docs/DESIGN-interactive-harness.md`.
-
-- **SCHEDULED — one typed line after the boot list (v0.12 item 5).**
-  v0.8's notes said the system can be driven. `python scripts/harness.py`
-  still prints a liveness list and exits. Design and floors:
-  `docs/DESIGN-live-session.md` (P-LS1–P-LS5). Named dependant: a
-  person can type the illegal write that write-recovery later ranks.
-  Not implemented in v0.11. HTTP skin, ranker, open-English new
-  nodes, and a second user line in the same process are **not** this
-  slice (P-LS6 parked).
-
-  **v0.13 update — SHIPPED for resolver clarification.** The paragraph above
-  remains the v0.12 scope record.  The live process now accepts multiple
-  lines, but persistence is deliberately narrow: only an exact resolver ASK
-  candidate set survives.  Explicit `narrow` constraints use hard
-  intersection; `cancel`, repeated-state cycle reporting, and a visible
-  four-hop ceiling terminate it.  Story-beat and supposition continuation are
-  still unregistered work, not implied by P-LS6.
 
 - **A2 cannot be recovered from authored-after-the-fact follow-ups.** The
   registered prediction named discipline, corpus, or second-word context and

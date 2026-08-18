@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "release": "v0.13.0",
+  "head": "04c46489bbf343cfa7f51a292936c7536b9c010f",
+  "runner": "PowerShell 7 launching python -m unittest in five detached worktrees",
+  "environment": {
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "summary": {
+    "modules": 66,
+    "tests": 1282,
+    "skipped": 12,
+    "failures": 0,
+    "errors": 0,
+    "shards": 5,
+    "parallel_wall_seconds": 13594.69,
+    "sum_receipt_seconds": 22775.089
+  },
+  "shards": [
+    {
+      "shard": 0,
+      "started": "2026-08-18T02:58:43.1677885-04:00",
+      "elapsed_seconds": 184.282,
+      "unittest_seconds": 180.221,
+      "exit_code": 0,
+      "tests": 454,
+      "skipped": 3,
+      "modules": [
+        "tests.test_algorithms_ingest",
+        "tests.test_ask",
+        "tests.test_controller",
+        "tests.test_corpus_analogy_model_arm",
+        "tests.test_deixis",
+        "tests.test_depth_consumers",
+        "tests.test_emit_skeleton",
+        "tests.test_external_verifier",
+        "tests.test_goedel_pset",
+        "tests.test_item4_operator_bag",
+        "tests.test_legality_strata",
+        "tests.test_minif2f_ingest",
+        "tests.test_probes",
+        "tests.test_proof_curve",
+        "tests.test_request_grammar",
+        "tests.test_retrieval_tools",
+        "tests.test_session_dispatcher",
+        "tests.test_session_run",
+        "tests.test_tactic_policy",
+        "tests.test_verified_by",
+        "tests.test_wordnet_retrieval"
+      ]
+    },
+    {
+      "shard": 1,
+      "started": "2026-08-18T02:58:57.3279765-04:00",
+      "elapsed_seconds": 8279.901,
+      "unittest_seconds": 8275.83,
+      "exit_code": 0,
+      "tests": 45,
+      "skipped": 0,
+      "modules": [
+        "tests.test_corpus_analogy_split"
+      ]
+    },
+    {
+      "shard": 2,
+      "started": "2026-08-18T02:58:57.5073141-04:00",
+      "elapsed_seconds": 726.414,
+      "unittest_seconds": 720.08,
+      "exit_code": 0,
+      "tests": 328,
+      "skipped": 9,
+      "modules": [
+        "tests.test_answers",
+        "tests.test_compose_assert_frames",
+        "tests.test_corpus_analogy",
+        "tests.test_decompose_channels",
+        "tests.test_depth_consumer_runner",
+        "tests.test_discourse",
+        "tests.test_evaluate",
+        "tests.test_gloss",
+        "tests.test_index_language",
+        "tests.test_lean_workbook_ingest",
+        "tests.test_matcher_mirror",
+        "tests.test_preference",
+        "tests.test_proof_correspondence",
+        "tests.test_readiness",
+        "tests.test_retrieval",
+        "tests.test_self_grounding",
+        "tests.test_session_offline",
+        "tests.test_story",
+        "tests.test_verdict_rule",
+        "tests.test_wold_ingest",
+        "tests.test_context_narrowing",
+        "tests.test_coverage_holdout3",
+        "tests.test_grounded_admission",
+        "tests.test_measurement_tools"
+      ]
+    },
+    {
+      "shard": 3,
+      "started": "2026-08-18T02:58:57.6909031-04:00",
+      "elapsed_seconds": 4.48,
+      "unittest_seconds": 3.914,
+      "exit_code": 0,
+      "tests": 169,
+      "skipped": 0,
+      "modules": [
+        "tests.test_ambiguity",
+        "tests.test_conversation_runtime",
+        "tests.test_depth_interface",
+        "tests.test_frames",
+        "tests.test_langgen_roundtrip",
+        "tests.test_narrative_realize",
+        "tests.test_prose_authoring",
+        "tests.test_search_controller",
+        "tests.test_source_manifest",
+        "tests.test_visual_oracle"
+      ]
+    },
+    {
+      "shard": 4,
+      "started": "2026-08-18T02:58:57.8451809-04:00",
+      "elapsed_seconds": 13580.012,
+      "unittest_seconds": 13577.098,
+      "exit_code": 0,
+      "tests": 286,
+      "skipped": 0,
+      "modules": [
+        "tests.test_belief",
+        "tests.test_depth_consumer_analysis",
+        "tests.test_entailment",
+        "tests.test_harness_line",
+        "tests.test_live_lean_search",
+        "tests.test_programming_discipline",
+        "tests.test_resolver",
+        "tests.test_session_durability",
+        "tests.test_theory_of_mind",
+        "tests.test_write_stage"
+      ]
+    }
+  ],
+  "invalid_attempts": [
+    "A Windows PowerShell 5 launcher treated native stderr as terminating and did not produce reliable receipts; all of its results are excluded.",
+    "The first PowerShell 7 gate at 39e06bcca5aeb23c019d4674859927bf2e84eeed failed one ambiguity-artifact regeneration test because scripts/resolver.py no longer matched the registered provenance. That gate is excluded; the measured resolver blob was restored and every shard was rerun at the head recorded above."
+  ]
+}
