@@ -10,8 +10,9 @@ contributed three ideas worth keeping and one worth refusing:
 - **`<srai>`** (symbolic reduction) — many surface forms collapse to one
   canonical form. Kept, and pointed somewhere new: reduction produces a
   canonical **query**, not a canned reply.
-- **`<that>` / `<topic>`** — context narrows ambiguity. Kept in shape; the
-  multi-turn half is deliberately absent while P-LS6 is parked.
+- **`<that>` / `<topic>`** — context narrows ambiguity. Since v0.13 the live
+  harness keeps an ASK candidate set and accepts explicit hard constraints;
+  this resolver remains the stateless exact operation underneath it.
 - **`<template>`** — canned response text. **Refused.** Every answer here is
   rendered from graph data (ids, counts, corpora). Nothing is authored
   prose, so nothing can claim more than the graph knows.

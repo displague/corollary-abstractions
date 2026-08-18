@@ -35,7 +35,8 @@ Asking for a story about a rabbit gets the chicken, clearly labelled, plus
 the grammar — because inventing a rabbit story is the thing that would
 require authoring or generating. Multi-turn beat-by-beat authoring, where a
 person supplies each beat and the verifier accepts or refuses it, is the
-natural next step and is blocked by P-LS6, not by design.
+natural next step.  P-LS6 now supplies a terminating input loop for resolver
+clarification, but no story-beat continuation protocol has been registered.
 """
 
 from __future__ import annotations

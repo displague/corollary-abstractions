@@ -3862,3 +3862,26 @@ the remaining error is not addressable by lexical semantics.
 Cost: index build 3.98s over 12,777 nodes (219,416 subterm occurrences,
 38,858 distinct skeletons), then 0.04us per resolution (~24M/sec),
 single core, no GPU.
+
+## v0.13 P-LS6 implementation; A2 protocol refused before scoring
+
+P-LS6 **FIRED** on its bounded contract.  Resolver ASK state now survives
+input turns and can be intersected only by explicit `narrow` constraints.
+There is no relative score: zero matches preserve the ASK, ties keep asking,
+and a singleton is returned only with a committed title or statement meaning.
+`cancel`, repeated-state `cycle`, and a four-hop `hop_ceiling` are visible
+terminal outcomes, and the real binary stops on the terminal statuses.
+Registered commands and new questions escape clarification; a new ASK
+replaces the prior one.  The focused context, harness, and probe suite ran 56
+tests green (one skipped) before any aggregate experiment.
+
+**A2 was not scored.** Its frozen sentence names three legal follow-up classes
+and the ASK population in two existing holdouts, but those holdouts contain no
+follow-up lines or intended retained readings.  An attempted v0.13 scorer
+filled those fields after the resolver candidates were inspectable and did not
+initially prove that every ASK row was included.  Review rejected that as an
+oracle-selectable denominator before commit and before aggregate execution.
+Publishing its favorable reductions would turn implementation knowledge into
+a preregistered-looking result, so the tool and authored rows do not ship.
+A2 and its aggregate A3 check remain unadjudicated.  A4's Buffalo-class
+demonstration is also unimplemented and unadjudicated.

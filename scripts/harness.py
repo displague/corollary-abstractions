@@ -441,10 +441,12 @@ class CoreSession:
     retrieve subsystem's, reused for the frame-private ASK leg because a
     user-private ASK never touches the store.
 
-    Scope of THIS slice: a durable-for-the-session structured trace and the
-    WAITING channel. It is deliberately NOT the Phase-2 need dispatcher and
-    holds no session budget or cross-hop loop detection; ``_pruning`` on the
-    verifier is the substrate a later slice threads (P-IH7), untouched here.
+    Scope of THIS slice: a durable-for-the-session structured trace, the
+    WAITING channel, and the v0.13 resolver clarification subloop.  The latter
+    keeps only symbolic candidates, accepts explicit hard constraints, and
+    terminates visibly on repetition or at its hop ceiling.  It is deliberately
+    NOT the Phase-2 need dispatcher; ``_pruning`` on the verifier remains the
+    substrate a later slice threads (P-IH7), untouched here.
     """
 
     matrix: CapabilityMatrix
@@ -456,6 +458,18 @@ class CoreSession:
     state: RetrievalState | None = None
     active_slot: str | None = None
     events: list[SessionEvent] = field(default_factory=list)
+    # A resolver ASK is a real session object, not terminal text.  The next
+    # typed line narrows this exact candidate set; no candidate is chosen on
+    # the person's behalf.  These fields deliberately hold only symbolic
+    # graph identifiers and the person's own words.
+    pending_candidates: tuple[str, ...] = ()
+    pending_query: str | None = None
+    pending_resolver: str | None = None
+    context_hops: int = 0
+    context_seen: set[tuple[tuple[str, ...], tuple[str, ...]]] = field(
+        default_factory=set
+    )
+    resolver_index: object | None = None
 
     # -- boot -------------------------------------------------------------
 
@@ -968,6 +982,16 @@ def _route_ownership(repo_root: Path, session: "CoreSession", query: str) -> dic
     }
 
 
+def _resolver_index(session: "CoreSession"):
+    """Build the immutable graph index once per live session."""
+
+    if session.resolver_index is None:
+        from resolver import default_index  # noqa: PLC0415
+
+        session.resolver_index = default_index()
+    return session.resolver_index
+
+
 def _route_resolver(
     repo_root: Path, session: "CoreSession", line: str
 ) -> dict | None:
@@ -981,13 +1005,14 @@ def _route_resolver(
     """
 
     from ownership import REQUIRES_SUBSYSTEM  # noqa: PLC0415
-    from resolver import ASK, BIND, default_index, render, resolve  # noqa: PLC0415
+    from resolver import ASK, BIND, render, resolve  # noqa: PLC0415
 
     if REQUIRES_SUBSYSTEM not in session.matrix.registered_ids():
         return None
-    index = default_index()
+    index = _resolver_index(session)
     outcome = resolve(line, index)
     if outcome.kind == BIND:
+        _clear_pending(session)
         from answer import compose  # noqa: PLC0415
         from answer import render as render_answer  # noqa: PLC0415
 
@@ -1014,6 +1039,11 @@ def _route_resolver(
         # Ambiguity is a question containing the real alternatives. `waiting`
         # is the kernel's own word for "a person owes the next move", and no
         # candidate is chosen on their behalf (P-LS5).
+        session.pending_candidates = outcome.candidates
+        session.pending_query = line
+        session.pending_resolver = outcome.resolver
+        session.context_hops = 0
+        session.context_seen.clear()
         return {
             "route": "resolver",
             "status": "waiting",
@@ -1021,6 +1051,199 @@ def _route_resolver(
             "answer": render(outcome, index),
         }
     return None
+
+
+MAX_CONTEXT_HOPS = 4
+NARROW_COMMAND = "narrow"
+CANCEL_COMMAND = "cancel"
+CONTEXT_KINDS = frozenset({"corpus", "discipline", "word", "id"})
+
+
+def _context_constraint(line: str) -> tuple[str, str] | None:
+    """Parse ``narrow KIND VALUE`` without guessing omitted structure."""
+
+    parts = line.strip().split(maxsplit=2)
+    if len(parts) != 3 or parts[0].casefold() != NARROW_COMMAND:
+        return None
+    kind = parts[1].casefold()
+    value = parts[2].strip().casefold()
+    if kind not in CONTEXT_KINDS or not value:
+        return None
+    return kind, value
+
+
+def _narrow_candidates(
+    index,
+    candidates: tuple[str, ...],
+    kind: str,
+    value: str,
+) -> tuple[str, ...]:
+    """Apply one complete declared constraint; never rank or break a tie."""
+
+    from answer import compose  # noqa: PLC0415
+    from resolver import reduce_text  # noqa: PLC0415
+
+    if kind == "id":
+        return (value,) if value in candidates else ()
+    if kind == "corpus":
+        return tuple(
+            sid for sid in candidates
+            if index.corpus_of.get(sid, "").casefold() == value
+        )
+    if kind == "discipline":
+        return tuple(
+            sid
+            for sid in candidates
+            if (answer := compose(sid)) is not None
+            and value in {discipline.casefold() for discipline in answer.disciplines}
+        )
+    words = tuple(reduce_text(value.replace("_", " ").replace(".", " ")))
+    if len(words) != 1:
+        return ()
+    word = words[0]
+    owners: set[str] = set()
+    for postings in (index.by_keyword, index.by_lexicon, index.by_prose):
+        owners.update(postings.get(word, ()))
+    return tuple(sid for sid in candidates if sid in owners)
+
+
+def _restatement(statement_id: str) -> tuple[str, ...]:
+    """Verbatim corpus text naming the selected reading (A3)."""
+
+    from answer import compose  # noqa: PLC0415
+
+    answer = compose(statement_id)
+    if answer is None:
+        return ()
+    # Labels are rendered by the shell; every value here is copied verbatim
+    # from committed corpus fields.  Empty fields are omitted, never filled.
+    return tuple(text for text in (answer.title, answer.meaning) if text)
+
+
+def _clear_pending(session: "CoreSession") -> None:
+    session.pending_candidates = ()
+    session.pending_query = None
+    session.pending_resolver = None
+    session.context_hops = 0
+    session.context_seen.clear()
+
+
+def _route_pending_context(session: "CoreSession", line: str) -> dict:
+    """Narrow the live ASK with one more line, or name why it stopped.
+
+    Repeating a no-progress state is a visible cycle.  Four distinct
+    no-decision hops hit a visible ceiling.  Both terminate rather than
+    manufacturing a winner, which is P-LS6's load-bearing promise.
+    """
+
+    from resolver import ASK, Resolution, render  # noqa: PLC0415
+
+    if line.strip().casefold() == CANCEL_COMMAND:
+        _clear_pending(session)
+        return {
+            "route": "resolver_context",
+            "status": "canceled",
+            "detail": "pending candidate set canceled; no reading was chosen",
+        }
+    constraint = _context_constraint(line)
+    if constraint is None:
+        return {
+            "route": "resolver_context",
+            "status": "waiting",
+            "detail": (
+                "use 'narrow corpus VALUE', 'narrow discipline VALUE', "
+                "'narrow word VALUE', 'narrow id VALUE', or 'cancel'; "
+                "no reading was chosen"
+            ),
+        }
+
+    index = _resolver_index(session)
+    before = session.pending_candidates
+    kind, value = constraint
+    signature = (before, (kind, value))
+    if signature in session.context_seen:
+        original = session.pending_query or ""
+        _clear_pending(session)
+        return {
+            "route": "resolver_context",
+            "status": "cycle",
+            "detail": (
+                "context cycle: the same follow-up reached the same candidate "
+                f"set for {original!r}; no reading was chosen"
+            ),
+        }
+    session.context_seen.add(signature)
+    session.context_hops += 1
+
+    matched = _narrow_candidates(index, before, kind, value)
+    remaining = matched or before
+
+    if len(remaining) == 1:
+        chosen = remaining[0]
+        original = session.pending_query or ""
+        restatement = _restatement(chosen)
+        if not restatement:
+            if session.context_hops >= MAX_CONTEXT_HOPS:
+                _clear_pending(session)
+                return {
+                    "route": "resolver_context",
+                    "status": "hop_ceiling",
+                    "detail": (
+                        f"visible hop ceiling {MAX_CONTEXT_HOPS} reached with "
+                        "one unrenderable candidate; no reading was chosen"
+                    ),
+                }
+            session.pending_candidates = remaining
+            return {
+                "route": "resolver_context",
+                "status": "waiting",
+                "detail": (
+                    f"{chosen} is the sole candidate, but it has no committed "
+                    "title or statement meaning to quote; no reading was chosen"
+                ),
+            }
+        _clear_pending(session)
+        return {
+            "route": "resolver_context",
+            "status": "found",
+            "detail": (
+                f"context narrowed {len(before)} candidates to {chosen}; "
+                f"reading selected for {original!r}"
+            ),
+            "reading": restatement,
+            "answer": (f"source     : {chosen}",),
+        }
+
+    if session.context_hops >= MAX_CONTEXT_HOPS:
+        count = len(remaining)
+        _clear_pending(session)
+        return {
+            "route": "resolver_context",
+            "status": "hop_ceiling",
+            "detail": (
+                f"visible hop ceiling {MAX_CONTEXT_HOPS} reached with {count} "
+                "candidate(s); no reading was chosen"
+            ),
+        }
+
+    session.pending_candidates = remaining
+    detail = (
+        f"{kind}={value!r} narrowed {len(before)} candidates to {len(remaining)}"
+        if matched
+        else f"{kind}={value!r} matched none; kept {len(before)} candidates"
+    )
+    narrowed = Resolution(
+        ASK,
+        session.pending_resolver or "context",
+        remaining,
+        detail,
+    )
+    return {
+        "route": "resolver_context",
+        "status": "waiting",
+        "detail": narrowed.detail,
+        "answer": render(narrowed, index),
+    }
 
 
 def _route_story(session: "CoreSession", text: str) -> dict | None:
@@ -1166,6 +1389,9 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
                 "dispatched, nothing was staged, no slot was bound"
             ),
         }
+    head = line.partition(" ")[0].casefold()
+    if session.pending_candidates and head in {NARROW_COMMAND, CANCEL_COMMAND}:
+        return {"line": line, **_route_pending_context(session, line)}
     head, _, rest = line.partition(" ")
     if head.lower() == OWNS_COMMAND:
         return {"line": line, **_route_ownership(repo_root, session, rest.strip())}
@@ -1210,13 +1436,17 @@ def render_verdict(verdict: dict) -> list[str]:
         out.append(f"evidence: {item}")
     if verdict.get("missing_capability"):
         out.append(f"missing : {verdict['missing_capability']}")
+    if verdict.get("reading"):
+        out.append("reading :")
+        for item in verdict["reading"]:
+            out.append(f"  {item}")
     for item in verdict.get("answer", ()):
         out.append(f"  {item}")
     return out
 
 
 def main() -> int:
-    """Print the offline boot matrix, then read one line and stop."""
+    """Print the boot matrix, then dispatch typed lines until input ends."""
 
     repo_root = Path(__file__).resolve().parent.parent
     # Detect what is actually installed rather than forcing the absent case.
@@ -1235,10 +1465,20 @@ def main() -> int:
     for line in session.matrix.render():
         print(line)
 
-    typed = read_one_line()
-    verdict = route_line(repo_root, session, typed)
-    for row in render_verdict(verdict):
-        print(row)
+    # EOF after at least one turn ends quietly.  EOF before the first turn is
+    # still rendered as WAITING so a closed input channel is visible.  A
+    # resolver ASK survives between iterations in ``CoreSession``.
+    turns = 0
+    while True:
+        typed = read_one_line()
+        if typed is None and turns:
+            break
+        verdict = route_line(repo_root, session, typed)
+        for row in render_verdict(verdict):
+            print(row)
+        turns += 1
+        if typed is None or verdict["status"] in {"cycle", "hop_ceiling"}:
+            break
     return 0
 
 

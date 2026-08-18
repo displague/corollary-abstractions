@@ -189,3 +189,13 @@ it is not attempted here.
 - Not multi-turn. P-LS6 stays parked; one line, then stop.
 - Not a ranker. Where the query cannot separate candidates, the system asks
   with the candidates named. That seat stays empty on purpose.
+
+### v0.13 clarification addendum
+
+The bullet above records the v0.12 resolver surface.  v0.13 adds a bounded
+multi-turn wrapper without changing the stateless resolver: an ASK persists
+its exact candidates, and only explicit typed hard constraints may intersect
+that set.  No score or best candidate exists.  Zero matches preserve the ASK;
+ties continue asking; a singleton is shown with corpus-authored restatement
+text.  `cancel`, named cycle detection, and a visible four-hop ceiling bound
+the subloop.  `docs/DESIGN-live-session.md` §11 is the executable contract.

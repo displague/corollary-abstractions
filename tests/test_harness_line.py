@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""One typed line after the boot list — P-LS1–P-LS5 as executable checks.
+"""The live input loop — P-LS1–P-LS6 as executable checks.
 
 `docs/DESIGN-live-session.md` §7 froze five predictions before the loop
 existed. These tests are what keeps them true; §8 records the adjudication.
 
 The routing decision is tested through `route_line`, which returns the
 verdict as data, rather than by scraping stdout. Both are exercised: the
-process-level tests below pipe a line into `scripts/harness.py` so that
-"reads one line and stops" is checked against the real binary and not
-against a function that happens to be called from it.
+process-level tests below pipe one or more lines into `scripts/harness.py`,
+so the original one-line contract and v0.13's visible multi-turn termination
+are checked against the real binary, not only a callable helper.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
@@ -54,8 +55,8 @@ class BootedSession(unittest.TestCase):
         cls.session = CoreSession.boot(REPO, offline=True)
 
 
-class ReadsOneLineAndStops(BootedSession):
-    """P-LS1 — one line, then a structured stop."""
+class InteractiveProcess(BootedSession):
+    """P-LS1/P-LS6 — structured turns until input reaches EOF."""
 
     def test_process_exits_zero_after_a_single_line(self) -> None:
         proc = run_harness("what is the airspeed velocity of an unladen swallow")
@@ -74,21 +75,17 @@ class ReadsOneLineAndStops(BootedSession):
             proc.stdout.index("--- one typed line ---"),
         )
 
-    def test_only_one_line_is_consumed(self) -> None:
-        """A second line is not dispatched: the first slice is one line.
-
-        P-LS6 is parked, and this is the check that keeps it parked
-        honestly rather than by omission.
-        """
+    def test_a_second_line_is_dispatched_in_the_same_session(self) -> None:
+        """P-LS6: the process consumes turns until its input reaches EOF."""
         proc = subprocess.run(
             [PY, str(HARNESS)],
-            input="first line\nsecond line\n",
+            input="what is 2 + 2\nwhat is 3 + 3\n",
             capture_output=True, text=True, cwd=REPO, timeout=600,
         )
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertEqual(proc.stdout.count("--- one typed line ---"), 1)
-        self.assertIn("first line", proc.stdout)
-        self.assertNotIn("second line", proc.stdout)
+        self.assertEqual(proc.stdout.count("--- one typed line ---"), 2)
+        self.assertIn("what is 2 + 2", proc.stdout)
+        self.assertIn("what is 3 + 3", proc.stdout)
 
     def test_closed_stdin_is_a_waiting_verdict_not_a_traceback(self) -> None:
         proc = run_harness(None)
@@ -99,6 +96,143 @@ class ReadsOneLineAndStops(BootedSession):
     def test_read_one_line_reports_end_of_stream_as_none(self) -> None:
         self.assertIsNone(read_one_line(io.StringIO("")))
         self.assertEqual(read_one_line(io.StringIO("hello\nworld\n")), "hello")
+
+
+class MultiTurnResolverContext(unittest.TestCase):
+    """P-LS6 runtime: ASK state survives, narrows, and never guesses."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.session = CoreSession.boot(REPO, offline=True)
+
+    def setUp(self) -> None:
+        self.session.pending_candidates = ()
+        self.session.pending_query = None
+        self.session.pending_resolver = None
+        self.session.context_hops = 0
+        self.session.context_seen.clear()
+
+    def test_second_content_word_narrows_to_one_and_quotes_the_corpus(self) -> None:
+        first = route_line(REPO, self.session, "double factorial")
+        self.assertEqual(first["status"], "waiting")
+        self.assertEqual(len(self.session.pending_candidates), 2)
+
+        second = route_line(REPO, self.session, "narrow word recursive")
+        self.assertEqual(second["status"], "found")
+        self.assertIn("programming.dfactorial.recursive", second["detail"])
+        self.assertFalse(self.session.pending_candidates)
+
+        from answer import records
+
+        node, _corpus = records()["programming.dfactorial.recursive"]
+        allowed = {
+            node["title"],
+            node["semantic_interpretation"]["statement_meaning"],
+        }
+        self.assertTrue(second["reading"])
+        self.assertTrue(set(second["reading"]) <= allowed)
+
+    def test_discipline_followup_reduces_six_candidates_to_one(self) -> None:
+        first = route_line(REPO, self.session, "entropy in thermodynamics")
+        self.assertEqual(len(self.session.pending_candidates), 6)
+        second = route_line(
+            REPO, self.session, "narrow discipline machine_learning"
+        )
+        self.assertEqual(second["status"], "found")
+        self.assertIn("ml.objective.token_cross_entropy_loss", second["detail"])
+
+    def test_unhelpful_context_does_not_choose_a_candidate(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        before = self.session.pending_candidates
+        verdict = route_line(REPO, self.session, "narrow word unrelated")
+        self.assertEqual(verdict["status"], "waiting")
+        self.assertEqual(self.session.pending_candidates, before)
+
+    def test_repeated_no_progress_names_a_cycle_and_terminates(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        route_line(REPO, self.session, "narrow word unrelated")
+        verdict = route_line(REPO, self.session, "narrow word unrelated")
+        self.assertEqual(verdict["status"], "cycle")
+        self.assertIn("no reading was chosen", verdict["detail"])
+        self.assertFalse(self.session.pending_candidates)
+
+    def test_four_distinct_no_progress_hops_name_the_ceiling(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        verdict = None
+        for word in ("unrelated", "unhelpful", "irrelevant", "unknown"):
+            verdict = route_line(REPO, self.session, f"narrow word {word}")
+        assert verdict is not None
+        self.assertEqual(verdict["status"], "hop_ceiling")
+        self.assertIn("visible hop ceiling 4", verdict["detail"])
+        self.assertFalse(self.session.pending_candidates)
+
+    def test_quote_less_singleton_cannot_bypass_the_ceiling(self) -> None:
+        self.session.pending_candidates = ("synthetic.a", "synthetic.b")
+        self.session.pending_query = "synthetic ambiguous query"
+        self.session.pending_resolver = "synthetic"
+        with (
+            patch("harness._narrow_candidates", return_value=("synthetic.a",)),
+            patch("harness._restatement", return_value=()),
+        ):
+            verdict = None
+            for word in ("first", "second", "third", "fourth"):
+                verdict = route_line(REPO, self.session, f"narrow word {word}")
+        assert verdict is not None
+        self.assertEqual(verdict["status"], "hop_ceiling")
+        self.assertIn("unrenderable candidate", verdict["detail"])
+        self.assertFalse(self.session.pending_candidates)
+
+    def test_cancel_is_explicit_and_chooses_nothing(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        verdict = route_line(REPO, self.session, "cancel")
+        self.assertEqual(verdict["status"], "canceled")
+        self.assertIn("no reading was chosen", verdict["detail"])
+        self.assertFalse(self.session.pending_candidates)
+
+    def test_registered_command_escapes_pending_context(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        before = self.session.pending_candidates
+        verdict = route_line(REPO, self.session, "suppose x=5, what is x^2")
+        self.assertEqual(verdict["route"], "evaluate")
+        self.assertEqual(verdict["status"], "solved")
+        self.assertEqual(self.session.pending_candidates, before)
+
+    def test_a_new_ask_replaces_the_pending_question(self) -> None:
+        route_line(REPO, self.session, "area of a circle")
+        verdict = route_line(REPO, self.session, "double factorial")
+        self.assertEqual(verdict["status"], "waiting")
+        self.assertEqual(
+            set(self.session.pending_candidates),
+            {
+                "programming.dfactorial.iterative",
+                "programming.dfactorial.recursive",
+            },
+        )
+
+    def test_pending_ask_is_session_local(self) -> None:
+        other = CoreSession.boot(REPO, offline=True)
+        route_line(REPO, self.session, "area of a circle")
+        self.assertTrue(self.session.pending_candidates)
+        self.assertFalse(other.pending_candidates)
+
+    def test_real_process_stops_after_named_cycle(self) -> None:
+        proc = subprocess.run(
+            [PY, str(HARNESS), "--offline"],
+            input=(
+                "area of a circle\n"
+                "narrow word unrelated\n"
+                "narrow word unrelated\n"
+                "what is 2 + 2\n"
+            ),
+            capture_output=True,
+            text=True,
+            cwd=REPO,
+            timeout=600,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stdout.count("--- one typed line ---"), 3)
+        self.assertIn("status  : cycle", proc.stdout)
+        self.assertNotIn("what is 2 + 2", proc.stdout)
 
 
 class UnregisteredTextNeverVerifies(BootedSession):
