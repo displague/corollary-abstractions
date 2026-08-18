@@ -14,8 +14,11 @@ bindings), **near-miss** (informative failure, kept deliberately).
 ---
 
 - **Groundedness-at-all beats random trees and fails local near-misses
-  (v0.13 item 4).** A preregistered one-head foil keeps each statement's
-  relation, unlabeled tree, leaves, arities, and the batch head histogram.
+  (v0.13 item 4).** A one-head foil keeps each statement's relation,
+  unlabeled tree, leaves, arities, and the batch head histogram. Its threshold,
+  seeds, concept, and decision bars were stated before score inspection, but
+  its executable protocol first landed with the ledger; this is exploratory,
+  not fully auditable preregistered evidence.
   Its capability-blind paired baseline is exactly 0.5. All construction
   checks fired, but the fixed 0.50 gate scored balanced accuracy 0.505 on
   miniF2F and 0.510 on Goedel-Pset; authentic-vs-foil paired accuracy was
@@ -23,8 +26,8 @@ bindings), **near-miss** (informative failure, kept deliberately).
   +0.0245), which is evidence that the metric notices the edit and evidence
   that noticing is not enough to admit. The v0.12 probe was true against
   noise and false as permission for a gate. Regenerable:
-  `scripts/measure_grounded_admission.py`. Status: **empirical near-miss;
-  G1/G2 missed, G3/G4 fired**.
+  `scripts/measure_grounded_admission.py`. Status: **exploratory empirical
+  near-miss; ledger labels G1/G2 missed, G3/G4 fired; gate parked**.
 
 - **The sign flip does not travel; it was a fact about Lean-workbook
   (v0.12 item 1).** Two sources the emitter was not fitted to run the

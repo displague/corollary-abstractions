@@ -89,18 +89,21 @@ v0.12's vacuity check turned up a quantity that survives the holdouts where
 self-grounding does not: exact grounding by *any* owner beats its null by
 +17.5 to +46.2 points on all three sources, while ISG spreads 44×.
 
-[DESIGN-grounded-admission.md](DESIGN-grounded-admission.md) registered a
-0.50 fixed-owner gate and a harder paired foil before scoring: one internal
-head is swapped between authentic statements while relation, unlabeled tree,
-leaves, arities, and the batch head histogram stay fixed. The blind baseline
-is exactly 0.5 on every pair.
+[DESIGN-grounded-admission.md](DESIGN-grounded-admission.md) stated a 0.50
+fixed-owner gate, three seeds, a harder paired foil, and decision bars before
+the scores were inspected. Independent review found that the exact executable
+protocol and ledger first landed together, so this is exploratory/post-hoc
+implementation evidence rather than a fully auditable preregistered one-shot.
+The blind baseline is exactly 0.5 on every pair.
 
-**Result: G1/G2 MISSED; G3/G4 FIRED.** Across three seeds, balanced accuracy
-is 0.505 on miniF2F and 0.510 on Goedel-Pset. Authentic scores retain a small
+**Exploratory result (ledger labels): G1/G2 MISSED; G3/G4 FIRED.** Across
+three seeds, balanced accuracy is 0.505 on miniF2F and 0.510 on Goedel-Pset.
+Authentic scores retain a small
 positive paired margin (+0.0288 / +0.0245), but most foils still pass. The
 v0.12 probe separated authored corpora from random trees; it does not license
 candidate admission. Threshold and foil are not tuned after the miss. The
-gate is parked in BACKLOG.
+gate is parked in BACKLOG. Item 4 closes by publishing the auditable downgrade
+and parking the gate, not by claiming a registered admission result.
 
 ## 5. What predicts the gap (design carried, not scored)
 
@@ -117,7 +120,7 @@ independent reason.
 |---|---|---|
 | Multi-turn context (P-LS6) | item 2 | **prerequisite**, ordered before it |
 | Morphology / synonym layer | item 1 | **prerequisite** for the coverage number |
-| Groundedness admission signal | item 4 | **measured negative**; G1/G2 missed, gate parked |
+| Groundedness admission signal | item 4 | **exploratory measured negative**; executable provenance downgraded, gate parked |
 | What predicts the gap (W1–W3) | *none — needs a fourth source* | **carried as design** |
 | Write-recovery ranker | *none — no fit named* | **parked** at v0.12 triage |
 | Budgeted-edit ranker | *none* | **parked** (one foil cell) |
@@ -152,7 +155,8 @@ v0.13 is ready only if it contains:
   both did not improve;
 - item 3 shipped with P-LS6 adjudicated, or item 2 parked in writing;
 - item 4 designed with a registered prediction and a harder foil, or
-  parked in BACKLOG — **MET by measured negative; gate parked**;
+  parked in BACKLOG — **MET by exploratory negative, provenance correction,
+  and parked gate; not counted as a registered result**;
 - every carried lane naming its dependant or parked;
 - updated assets with winners, losers and controls;
 - the complete suite green, planned from the measured wall-clock.

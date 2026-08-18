@@ -62,10 +62,12 @@ or commit history. Each item names the evidence that motivated it.
   whether it exists at volume.
 
 - **PARKED: groundedness-at-all does not admit against a local near-miss.**
-  v0.13 preregistered the missing design and replaced random trees with a
-  paired one-head foil that preserves relation, head-blind tree, leaves,
-  arities, and the batch head histogram. All construction/vacuity checks
-  fired, but the 0.50 fixed-owner gate scored balanced accuracy only 0.505
+  v0.13 stated the threshold, seeds, foil concept, and decision bars before
+  inspecting scores, but the exact executable protocol and ledger first
+  landed together. Treat the resulting paired one-head measurement as
+  exploratory/post-hoc implementation evidence, not a fully auditable
+  preregistered one-shot. All construction/vacuity checks passed, but the
+  0.50 fixed-owner gate scored balanced accuracy only 0.505
   on miniF2F and 0.510 on Goedel-Pset; paired separation also missed
   (0.607 / 0.586). A small mean score margin survives (+0.0288 / +0.0245),
   but most foils are admitted. Artifact:
@@ -73,8 +75,8 @@ or commit history. Each item names the evidence that motivated it.
   `docs/DESIGN-grounded-admission.md`. The v0.12 random-tree probe was true;
   its proposed gate was not. **Do not unpark by tuning the threshold or a
   second mutation on these scored sources.** Unpark only with a new,
-  independently motivated signal or semantic oracle and a fresh registered
-  holdout.
+  independently motivated signal or semantic oracle, an executable protocol
+  committed before measurement, and a fresh holdout.
 
 ## Cognitive frames / lexical stores
 

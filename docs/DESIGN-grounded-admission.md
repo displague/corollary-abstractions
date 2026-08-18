@@ -12,6 +12,18 @@ The experiment does not decide truth, proof, usefulness, or semantic
 coherence. It tests one bounded admission signal: how much of a candidate is
 already an exact form in the committed graph.
 
+> **Audit correction (2026-08-18).** Commit
+> `3fe54cf28bdbcf9870538daf888898c9b234ac21` froze this prose — including the
+> 0.50 threshold, seeds, foil concept, and G1–G4 bars — before the result was
+> inspected, but it contained no generator or tests. The exact pair-selection,
+> canonicalization, caching, fixed-owner scoring, and adjudication code first
+> appeared together with the ledger in
+> `943c87cd9ddc7f381c8b20c316c4871c2e89707d`. No recoverable pre-result
+> staged, dangling, or worktree copy of that executable was found. Therefore
+> the numbers below are reproducible **exploratory/post-hoc executable
+> evidence**, not a fully auditable preregistered one-shot result. The ledger
+> and negative outcome are retained unchanged; the gate remains parked.
+
 ## 1. The candidate-level signal
 
 For a candidate statement, run `decompose.analyze_loaded` with
@@ -29,7 +41,7 @@ scoring a batch must not let near-misses ground one another. Pattern
 absorption stays off because the v0.12 probe was exact grounding and because
 an admission gate should not inherit the known absorption false positives.
 
-The registered gate is:
+The prose-stated gate is:
 
 ```
 ADMIT iff considered > 0 and grounded_at_all >= 0.50
@@ -103,12 +115,12 @@ The run is refused as vacuous if any of these construction invariants fails:
 The baseline does not read ids or paths. Ids exist only to make the ledger
 auditable.
 
-## 4. Registered predictions
+## 4. Prospective prose predictions
 
 All headline numbers are means over the three fixed seeds. Results are also
 reported per source and per seed; no single-seed win is a claim.
 
-- **G1 — admission.** At the registered 0.50 threshold, balanced accuracy is
+- **G1 — admission.** At the prose-stated 0.50 threshold, balanced accuracy is
   at least 0.70 on **each** source. Both authentic acceptance and foil
   rejection must be strictly above 0.50 on each source; a constant decision
   cannot fire G1.
@@ -149,18 +161,19 @@ test requirement.
 - G3 misses: repair only the construction invariant, then create a new design
   before scoring. Do not read an invalid run as evidence about admission.
 
-## 7. Adjudication
+## 7. Exploratory adjudication and provenance
 
-The design above was committed at
-`3fe54cf28bdbcf9870538daf888898c9b234ac21` before the foil was constructed
-or scored. The first valid run used the three registered seeds and wrote
-`experiments/grounded_admission.json`.
+The prose above predates inspection of the scores, but the executable protocol
+does not. The generator, tests, and ledger first landed together at
+`943c87cd9ddc7f381c8b20c316c4871c2e89707d`. Accordingly, the ledger's G1–G4
+labels report how the implementation compares with the earlier prose bars;
+they are not release-grade preregistered adjudications.
 
 All construction checks passed on all six source/seed cells: 64
 statement-level pairs per cell, identical head-blind trees and considered
 topology within each pair, identical authentic/foil batch head multisets, and
-blind paired accuracy 0.5. G3 **FIRED**, so the harder foil is valid and G1,
-G2, and G4 are scored rather than refused.
+blind paired accuracy 0.5. The exploratory ledger labels G3 **FIRED**, so its
+closed-form implementation scores G1, G2, and G4 rather than refusing them.
 
 | source (three-seed mean) | authentic acceptance | foil rejection | balanced accuracy | paired accuracy | mean score margin |
 |---|---:|---:|---:|---:|---:|
@@ -173,14 +186,17 @@ G2, and G4 are scored rather than refused.
 - **G2 MISSED.** The authentic statement outscores its paired one-head
   near-miss only 0.6068 / 0.5859 of the time with ties worth half, below 0.75
   on both sources.
-- **G3 FIRED.** The miss is not a random-tree or label-balance artifact; every
-  registered construction and vacuity check passed.
+- **G3 FIRED (exploratory ledger label).** The miss is not a random-tree or
+  label-balance artifact within this implementation; every construction and
+  vacuity check passed.
 - **G4 FIRED.** Authentic scores are higher by +0.0288 / +0.0245 on average.
   That is a small diagnostic sensitivity, not an admission gate: it did not
-  produce either registered separation result.
+  produce either prose-stated separation result.
 
-The v0.12 probe was true and its suggested consequence was false. Exact
+As exploratory evidence, the v0.12 probe's suggested consequence failed. Exact
 grounding by any owner separates authentic corpora from random trees, but a
 single arity-preserving head substitution retains enough known local parts to
 pass the 0.50 gate. The threshold and mutation are not tuned after this miss.
-Groundedness-at-all is parked as an admission signal.
+Groundedness-at-all is parked as an admission signal. A future claim requires
+an executable protocol committed before measurement and a fresh holdout; this
+ledger cannot be promoted by relabeling or rerunning it.

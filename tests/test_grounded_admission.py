@@ -1,4 +1,4 @@
-"""Tests for the registered grounded-admission measurement."""
+"""Tests for the exploratory grounded-admission measurement."""
 
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from measure_grounded_admission import (  # noqa: E402
-    DESIGN_COMMIT,
+    EXECUTABLE_LEDGER_COMMIT,
+    PROSE_DESIGN_COMMIT,
     PAIRS_PER_SOURCE,
     SEEDS,
     SOURCES,
@@ -94,7 +95,7 @@ def _source_row(
 
 
 class AdjudicationTests(unittest.TestCase):
-    def test_all_registered_predictions_fire_from_three_seed_means(self):
+    def test_all_prose_stated_bars_fire_from_three_seed_means(self):
         runs = [
             {"seed": seed, "sources": {source: _source_row() for source in SOURCES}}
             for seed in SEEDS
@@ -153,11 +154,16 @@ class CommittedLedgerTests(unittest.TestCase):
     def setUpClass(cls):
         path = ROOT / "experiments" / "grounded_admission.json"
         if not path.exists():
-            raise unittest.SkipTest("ledger is created only by the first registered run")
+            raise unittest.SkipTest("committed exploratory ledger is absent")
         cls.ledger = json.loads(path.read_text(encoding="utf-8"))
 
-    def test_ledger_links_the_frozen_design(self):
-        self.assertEqual(self.ledger["design_commit"], DESIGN_COMMIT)
+    def test_ledger_links_prose_design_without_overstating_provenance(self):
+        self.assertEqual(self.ledger["design_commit"], PROSE_DESIGN_COMMIT)
+        self.assertNotEqual(PROSE_DESIGN_COMMIT, EXECUTABLE_LEDGER_COMMIT)
+        self.assertEqual(
+            EXECUTABLE_LEDGER_COMMIT,
+            "943c87cd9ddc7f381c8b20c316c4871c2e89707d",
+        )
         self.assertEqual(self.ledger["seeds"], list(SEEDS))
         self.assertEqual(self.ledger["pairs_per_source_per_seed"], PAIRS_PER_SOURCE)
         self.assertFalse(self.ledger["pattern_membership"])
@@ -168,7 +174,7 @@ class CommittedLedgerTests(unittest.TestCase):
         for source in SOURCES:
             self.assertEqual(digests[source]["sha256"], _sha256(HOLDOUT / source / "nodes.json"))
 
-    def test_every_registered_cell_is_present_and_nonvacuous(self):
+    def test_every_measurement_cell_is_present_and_nonvacuous(self):
         self.assertEqual(len(self.ledger["runs"]), len(SEEDS))
         for run, seed in zip(self.ledger["runs"], SEEDS):
             self.assertEqual(run["seed"], seed)

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Measure groundedness-at-all on paired one-head near-misses.
 
-The frozen specification is docs/DESIGN-grounded-admission.md at commit
-3fe54cf28bdbcf9870538daf888898c9b234ac21.  This script constructs the
-registered three-seed foil, scores exact constituents only against owners in
-the pre-existing ``data/`` graph, and adjudicates G1--G4 without fitting the
-threshold or changing the construction after inspection.
+The threshold, seeds, foil concept, and G1--G4 bars were stated in prose at
+commit 3fe54cf28bdbcf9870538daf888898c9b234ac21.  This executable and its first
+ledger landed together at commit 943c87cd9ddc7f381c8b20c316c4871c2e89707d,
+so the measurement is reproducible exploratory evidence, not a fully
+auditable preregistered one-shot experiment.  See the design's audit
+correction before interpreting the ledger's historical field names.
 """
 
 from __future__ import annotations
@@ -38,7 +39,8 @@ from match_signatures import (  # noqa: E402
 )
 from measure_self_grounding import render_template  # noqa: E402
 
-DESIGN_COMMIT = "3fe54cf28bdbcf9870538daf888898c9b234ac21"
+PROSE_DESIGN_COMMIT = "3fe54cf28bdbcf9870538daf888898c9b234ac21"
+EXECUTABLE_LEDGER_COMMIT = "943c87cd9ddc7f381c8b20c316c4871c2e89707d"
 SCHEMA = "grounded_admission.v1"
 SEEDS = (20260818, 20260819, 20260820)
 SOURCES = ("minif2f", "goedel_pset")
@@ -160,7 +162,7 @@ def construct_pairs(
     corpus_of: dict[str, str],
     disciplines_of: dict[str, frozenset],
 ) -> list[dict]:
-    """Construct the first 32 disjoint valid swaps frozen by the design."""
+    """Construct the first 32 disjoint valid swaps under the prose design."""
     records = _eligible_records(source_ids, trees, seed)
     buckets: dict[tuple[str, int], list[dict]] = defaultdict(list)
     for record in records:
@@ -215,7 +217,7 @@ def construct_pairs(
     if len(swaps) != SWAPS_PER_SOURCE:
         raise RuntimeError(
             f"{source} seed {seed}: constructed {len(swaps)}/{SWAPS_PER_SOURCE} "
-            "registered disjoint swaps"
+            "required disjoint swaps"
         )
 
     out: list[dict] = []
@@ -263,6 +265,8 @@ def construction_checks(pairs: list[dict]) -> dict:
             and defined_head(authentic) == defined_head(foil)
         )
     checks = {
+        # Historical ledger key retained byte-for-byte. It means that the
+        # prose-stated count was met, not that this executable was registered.
         "registered_pair_count": len(pairs) == PAIRS_PER_SOURCE,
         "all_pairs_head_blind_identical": all(pair_checks),
         "batch_head_multiset_identical": authentic_heads == foil_heads,
@@ -504,7 +508,9 @@ def generate() -> dict:
     result = {
         "schema": SCHEMA,
         "design": "docs/DESIGN-grounded-admission.md",
-        "design_commit": DESIGN_COMMIT,
+        # Historical schema name: this points to the prose-only design, not
+        # to a commit containing the executable protocol.
+        "design_commit": PROSE_DESIGN_COMMIT,
         "threshold": THRESHOLD,
         "seeds": list(SEEDS),
         "pairs_per_source_per_seed": PAIRS_PER_SOURCE,
