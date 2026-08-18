@@ -61,16 +61,20 @@ or commit history. Each item names the evidence that motivated it.
   here and not an unpark. `DESIGN-ambiguity-and-context.md` A1 measures
   whether it exists at volume.
 
-- **PARKED: groundedness-at-all as an admission signal, pending a design.**
-  v0.12's vacuity check found that exact grounding by *any* owner beats its
-  null by +17.5 to +46.2 points on all three sources at every size, while
-  ISG spreads 44× across the same sources. That is the quantity an
-  admission gate should have rested on. It is **unregistered** — computed
-  after seeing the holdout data — so it is not a result. **Unpark when** it
-  has a design, a registered prediction, and a foil harder than random
-  trees: a gate must reject plausible-but-ungrounded statements, not just
-  noise. Carried as v0.13 item 4; park here if v0.13 triage finds no
-  design.
+- **PARKED: groundedness-at-all does not admit against a local near-miss.**
+  v0.13 preregistered the missing design and replaced random trees with a
+  paired one-head foil that preserves relation, head-blind tree, leaves,
+  arities, and the batch head histogram. All construction/vacuity checks
+  fired, but the 0.50 fixed-owner gate scored balanced accuracy only 0.505
+  on miniF2F and 0.510 on Goedel-Pset; paired separation also missed
+  (0.607 / 0.586). A small mean score margin survives (+0.0288 / +0.0245),
+  but most foils are admitted. Artifact:
+  `experiments/grounded_admission.json`; design and adjudication:
+  `docs/DESIGN-grounded-admission.md`. The v0.12 random-tree probe was true;
+  its proposed gate was not. **Do not unpark by tuning the threshold or a
+  second mutation on these scored sources.** Unpark only with a new,
+  independently motivated signal or semantic oracle and a fresh registered
+  holdout.
 
 ## Cognitive frames / lexical stores
 

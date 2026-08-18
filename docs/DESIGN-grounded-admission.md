@@ -151,4 +151,36 @@ test requirement.
 
 ## 7. Adjudication
 
-Frozen until the first valid run.
+The design above was committed at
+`3fe54cf28bdbcf9870538daf888898c9b234ac21` before the foil was constructed
+or scored. The first valid run used the three registered seeds and wrote
+`experiments/grounded_admission.json`.
+
+All construction checks passed on all six source/seed cells: 64
+statement-level pairs per cell, identical head-blind trees and considered
+topology within each pair, identical authentic/foil batch head multisets, and
+blind paired accuracy 0.5. G3 **FIRED**, so the harder foil is valid and G1,
+G2, and G4 are scored rather than refused.
+
+| source (three-seed mean) | authentic acceptance | foil rejection | balanced accuracy | paired accuracy | mean score margin |
+|---|---:|---:|---:|---:|---:|
+| miniF2F | 0.8698 | 0.1406 | **0.5052** | 0.6068 | +0.0288 |
+| Goedel-Pset | 0.6458 | 0.3750 | **0.5104** | 0.5859 | +0.0245 |
+
+- **G1 MISSED.** Both balanced accuracies are effectively the blind 0.5
+  baseline, far below 0.70. The gate admits authentic statements, but it also
+  admits 85.9% of miniF2F foils and 62.5% of Goedel-Pset foils.
+- **G2 MISSED.** The authentic statement outscores its paired one-head
+  near-miss only 0.6068 / 0.5859 of the time with ties worth half, below 0.75
+  on both sources.
+- **G3 FIRED.** The miss is not a random-tree or label-balance artifact; every
+  registered construction and vacuity check passed.
+- **G4 FIRED.** Authentic scores are higher by +0.0288 / +0.0245 on average.
+  That is a small diagnostic sensitivity, not an admission gate: it did not
+  produce either registered separation result.
+
+The v0.12 probe was true and its suggested consequence was false. Exact
+grounding by any owner separates authentic corpora from random trees, but a
+single arity-preserving head substitution retains enough known local parts to
+pass the 0.50 gate. The threshold and mutation are not tuned after this miss.
+Groundedness-at-all is parked as an admission signal.

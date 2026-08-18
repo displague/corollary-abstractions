@@ -13,6 +13,19 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Groundedness-at-all beats random trees and fails local near-misses
+  (v0.13 item 4).** A preregistered one-head foil keeps each statement's
+  relation, unlabeled tree, leaves, arities, and the batch head histogram.
+  Its capability-blind paired baseline is exactly 0.5. All construction
+  checks fired, but the fixed 0.50 gate scored balanced accuracy 0.505 on
+  miniF2F and 0.510 on Goedel-Pset; authentic-vs-foil paired accuracy was
+  0.607 / 0.586. Authentic scores do retain a small mean margin (+0.0288 /
+  +0.0245), which is evidence that the metric notices the edit and evidence
+  that noticing is not enough to admit. The v0.12 probe was true against
+  noise and false as permission for a gate. Regenerable:
+  `scripts/measure_grounded_admission.py`. Status: **empirical near-miss;
+  G1/G2 missed, G3/G4 fired**.
+
 - **The sign flip does not travel; it was a fact about Lean-workbook
   (v0.12 item 1).** Two sources the emitter was not fitted to run the
   *other* way. miniF2F (157 nodes) sits below its matched null at every
@@ -68,7 +81,8 @@ bindings), **near-miss** (informative failure, kept deliberately).
   all", not "does it ground itself". **Unregistered** — computed after
   seeing the holdout data — and therefore not scored this cycle; it owes
   a design and a prediction, plus a harder foil than random trees.
-  Status: **probe, unregistered**.
+  Status: **probe, unregistered**. Its proposed admission consequence was
+  tested and refuted by the v0.13 near-miss above.
 
 - **A holdout inside `data/` is not held out (v0.12).** Authoring
   miniF2F into the merged graph moves the published v0.11 channel split

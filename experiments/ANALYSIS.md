@@ -3862,3 +3862,35 @@ the remaining error is not addressable by lexical semantics.
 Cost: index build 3.98s over 12,777 nodes (219,416 subterm occurrences,
 38,858 distinct skeletons), then 0.04us per resolution (~24M/sec),
 single core, no GPU.
+
+---
+
+# v0.13 — groundedness-at-all admission
+
+Design commit `3fe54cf28bdbcf9870538daf888898c9b234ac21` froze the
+0.50 threshold, three seeds, and paired foil before construction or scoring.
+Each source/seed cell contains 64 statement-level authentic/foil pairs. A
+foil swaps one internal `call`/`op` head with a peer of the same kind and
+arity. Relation, head-blind tree, leaves, considered topology, and the batch
+head histogram are identical. Candidate-to-candidate owners are excluded;
+only exact constituent owners already present in `data/` count.
+
+| source (three-seed mean) | authentic acceptance | foil rejection | balanced accuracy | paired accuracy | authentic − foil score |
+|---|---:|---:|---:|---:|---:|
+| miniF2F | 0.8698 | 0.1406 | **0.5052** | 0.6068 | +0.0288 |
+| Goedel-Pset | 0.6458 | 0.3750 | **0.5104** | 0.5859 | +0.0245 |
+
+G3 **FIRED**: all six construction cells pass and the blind paired baseline
+is 0.5. G1 **MISSED**: balanced accuracy is effectively chance on both
+sources, far below the registered 0.70. G2 **MISSED**: paired accuracy is
+below 0.75 on both. G4 **FIRED**: the mean margin is positive on both, but it
+is only 2.5–2.9 points and produces no usable admission decision.
+
+Raw counts make the failure concrete. Of 192 examples per arm and source,
+miniF2F admits 167 authentic statements and rejects only 27 foils;
+Goedel-Pset admits 124 authentic statements and rejects 72 foils. The signal
+recognizes a small average disturbance while retaining nearly all of the
+local pieces that make the near-miss look grounded. The v0.12 unregistered
+probe separated real corpora from random trees; this registered result says
+that separation does not survive a plausible local edit. No threshold or
+mutation is tuned after the miss. The gate parks.
