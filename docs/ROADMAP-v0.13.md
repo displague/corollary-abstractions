@@ -96,6 +96,16 @@ session memory it does not have.
 
 **Named dependant:** item 2. This is a **prerequisite**, ordered before it.
 
+**SHIPPED — P-LS6 FIRED.** The resolver clarification subloop persists an
+ASK, accepts only explicit hard intersections, exposes `cancel`, and stops on
+a named repeated state or four-hop ceiling.  New questions and registered
+commands are not consumed as clarification.  The real binary and routing
+suite cover those boundaries.  **Item 2 is parked at the measurement gate:**
+A2 named a follow-up class but did not freeze the actual per-query follow-ups
+or intended retained readings before both holdouts were spent.  Review
+rejected an authored-after-the-fact protocol before any aggregate was run.
+A2/A3 therefore remain unadjudicated; A4 remains unimplemented at this point.
+
 ## 4. Groundedness as an admission signal (from the accident)
 
 v0.12's vacuity check turned up a quantity that survives the holdouts where

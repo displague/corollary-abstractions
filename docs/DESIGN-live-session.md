@@ -336,3 +336,24 @@ off.
 
 The registered sentences in §7 are the floors. The dialectic is
 not a result.
+
+## 11. v0.13 addendum — P-LS6 adjudication
+
+The one-line scope above is the frozen v0.12 record.  v0.13 deliberately
+unparks P-LS6 for resolver clarification only.  An ASK persists its exact
+candidate identifiers across input turns.  A continuation must be explicit:
+`narrow corpus VALUE`, `narrow discipline VALUE`, `narrow word VALUE`, or
+`narrow id VALUE`.  `cancel` discards it.  Registered commands and new
+questions continue through their normal routes; a new ASK replaces the old
+one rather than silently becoming its clarification.
+
+Narrowing is hard intersection, never relative scoring: every retained
+candidate satisfies the complete declared predicate.  Zero matches preserve
+the ASK and report the contradiction, more than one remains an ASK, and a
+singleton is returned only with a title or statement meaning quoted from the
+committed corpus.  Repeating a no-progress clarification names `cycle`; four
+clarification hops name `hop_ceiling`; the real process exits on either status.
+Focused process and routing tests exercise continuation, cancellation,
+command escape, ASK replacement, session isolation, cycles, and the ceiling.
+On that bounded contract P-LS6 **FIRED**.  This is not general conversational
+memory, story continuation, or a claim that arbitrary prose supplies context.

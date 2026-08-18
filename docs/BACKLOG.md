@@ -647,6 +647,24 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   nodes, and a second user line in the same process are **not** this
   slice (P-LS6 parked).
 
+  **v0.13 update — SHIPPED for resolver clarification.** The paragraph above
+  remains the v0.12 scope record.  The live process now accepts multiple
+  lines, but persistence is deliberately narrow: only an exact resolver ASK
+  candidate set survives.  Explicit `narrow` constraints use hard
+  intersection; `cancel`, repeated-state cycle reporting, and a visible
+  four-hop ceiling terminate it.  Story-beat and supposition continuation are
+  still unregistered work, not implied by P-LS6.
+
+- **A2 cannot be recovered from authored-after-the-fact follow-ups.** The
+  registered prediction named discipline, corpus, or second-word context and
+  the two holdouts, but neither holdout froze its actual continuation or the
+  reading that must survive.  A first scorer could therefore select favorable
+  constraints, omit hard ASK rows, or discard the intended reading and still
+  report halving.  Review stopped it before commit and before aggregate
+  execution.  Unpark only with a fresh holdout that commits query,
+  continuation, intended retained ids, capability-blind control, and complete
+  provenance before the resolver sees it.  The spent holdouts stay spent.
+
 - **Mechanics are live; demos are frozen policies.** `StoryVerifier` already
   mutates beats/obligations under GEN actions; `ConversationSession` opens and
   supersedes private slots; ToM derives belief from events. What is canned is

@@ -30,10 +30,11 @@ the graph; it is a region of it with different rules.
 Not truth evaluation — a supposition is not checked against the world, and
 saying "the chicken crossed the road" is neither true nor false here.
 
-Not multi-turn. P-LS6 is parked, so one line holds one claim and the frame
-does not survive the process. Contradiction *between* two typed claims is
-therefore not reachable yet; the executor supports it, the surface does not,
-and that gap is named rather than papered over.
+Not a multi-turn supposition editor.  P-LS6 now keeps resolver ASK state, but
+one `suppose` line still holds one claim; a later line is a new route, not an
+implicit continuation of that frame.  Contradiction *between* two typed
+claims is therefore not reachable yet; the executor supports it, the surface
+does not, and that gap is named rather than papered over.
 
 Not generation. The system does not continue the story. It records the
 supposition, marks its status, and — if the words also match committed
