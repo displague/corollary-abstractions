@@ -3975,3 +3975,44 @@ Publishing its favorable reductions would turn implementation knowledge into
 a preregistered-looking result, so the tool and authored rows do not ship.
 A2 and its aggregate A3 check remain unadjudicated.  A4's Buffalo-class
 demonstration is also unimplemented and unadjudicated.
+
+---
+
+# v0.13 — groundedness-at-all admission
+
+Design commit `3fe54cf28bdbcf9870538daf888898c9b234ac21` froze prose for
+the 0.50 threshold, three seeds, foil concept, and G1–G4 bars before score
+inspection. It did not contain the generator or tests: those first landed
+together with this ledger at
+`943c87cd9ddc7f381c8b20c316c4871c2e89707d`. The exact executable choices
+were therefore not Git-frozen before the result. This section retains the
+negative measurement as reproducible exploratory/post-hoc implementation
+evidence, not a fully auditable preregistered one-shot.
+Each source/seed cell contains 64 statement-level authentic/foil pairs. A
+foil swaps one internal `call`/`op` head with a peer of the same kind and
+arity. Relation, head-blind tree, leaves, considered topology, and the batch
+head histogram are identical. Candidate-to-candidate owners are excluded;
+only exact constituent owners already present in `data/` count.
+
+| source (three-seed mean) | authentic acceptance | foil rejection | balanced accuracy | paired accuracy | authentic − foil score |
+|---|---:|---:|---:|---:|---:|
+| miniF2F | 0.8698 | 0.1406 | **0.5052** | 0.6068 | +0.0288 |
+| Goedel-Pset | 0.6458 | 0.3750 | **0.5104** | 0.5859 | +0.0245 |
+
+The exploratory ledger labels G3 **FIRED**: all six construction cells pass
+and the blind paired baseline is 0.5. It labels G1 **MISSED**: balanced
+accuracy is effectively chance on both sources, far below the prose-stated
+0.70; G2 **MISSED**: paired accuracy is below 0.75 on both; and G4 **FIRED**:
+the mean margin is positive on both, but only 2.5–2.9 points and produces no
+usable admission decision.
+
+Raw counts make the failure concrete. Of 192 examples per arm and source,
+miniF2F admits 167 authentic statements and rejects only 27 foils;
+Goedel-Pset admits 124 authentic statements and rejects 72 foils. The signal
+recognizes a small average disturbance while retaining nearly all of the
+local pieces that make the near-miss look grounded. The v0.12 unregistered
+probe separated real corpora from random trees; this exploratory result is
+evidence that the separation does not survive this implementation of a
+plausible local edit. No threshold or mutation is tuned after the result. The
+gate parks; a future registered claim needs precommitted executable code and a
+fresh holdout.
