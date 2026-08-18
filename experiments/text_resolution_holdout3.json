@@ -1,0 +1,33 @@
+{
+  "schema": "text_resolution_holdout.v2",
+  "generated_by": "hand-authored third holdout for docs/DESIGN-coverage-holdout3.md",
+  "note": "Authored in one pass from roadmap-known morphology and corpus-authored titles/glossary metadata. Committed before resolve was invoked on any row. Score exactly once; do not tune from misses.",
+  "queries": [
+    {"text": "derivatives from limits of difference quotients", "target": "calculus.limits.derivative_definition", "group": "morphology"},
+    {"text": "linearity of derivatives", "target": "calculus.differentiation.linearity_of_derivative", "group": "morphology"},
+    {"text": "euclid distance formula for two points", "target": "geometry.metric_geometry.euclidean_distance_formula", "group": "morphology"},
+    {"text": "euclid line element for a flat metric", "target": "diffgeo.surfaces.euclidean_line_element", "group": "morphology"},
+    {"text": "powers of matrices count graph walks", "target": "graphtheory.walks.adjacency_power_walk_count", "group": "morphology"},
+    {"text": "probabilities sum to one over outcomes", "target": "probstat.probability.probability_normalization", "group": "morphology"},
+    {"text": "symmetries of spatial adjacency between regions", "target": "geotop.predicates.adjacency_symmetry", "group": "morphology"},
+    {"text": "circumferences of circles from radii", "target": "geometry.circle_formulas.circle_circumference_formula", "group": "morphology"},
+
+    {"text": "relative entropy cannot be negative", "target": "infotheory.divergence.gibbs_inequality", "group": "lexicon"},
+    {"text": "self information of one unlikely outcome", "target": "infotheory.entropy.surprisal", "group": "lexicon"},
+    {"text": "righthand head rule for a derivational affix", "target": "morphology.derivation.category_from_affix", "group": "lexicon"},
+    {"text": "forget and input gates update matrix memory", "target": "ml.recurrence.mlstm_matrix_memory_update", "group": "lexicon"},
+    {"text": "importance weight from current and behaviour policy probabilities", "target": "ml.policy.policy_probability_ratio", "group": "lexicon"},
+    {"text": "probability split over an exhaustive partition", "target": "probstat.probability.total_probability_partition", "group": "lexicon"},
+    {"text": "posterior probability of a hypothesis given evidence", "target": "probstat.probability.bayes_rule", "group": "lexicon"},
+    {"text": "normal approximation to the sample average", "target": "probstat.limit.normal_approximation_sample_mean", "group": "lexicon"},
+
+    {"text": "the exponential function differentiates to itself", "target": "calculus.differentiation.exponential_derivative", "group": "control"},
+    {"text": "interest accumulated without compounding", "target": "economics.finance.simple_interest", "group": "control"},
+    {"text": "binary greatest common divisor algorithm", "target": "programming.stein.binary", "group": "control"},
+    {"text": "recursive euclidean greatest divisor algorithm", "target": "programming.euclid.recursive", "group": "control"},
+    {"text": "infinitesimal distance in the flat plane metric", "target": "diffgeo.surfaces.euclidean_line_element", "group": "control"},
+    {"text": "boundary integral of a differential form", "target": "diffgeo.stokes.stokes_theorem", "group": "control"},
+    {"text": "curvature equals the reciprocal of circle radius", "target": "diffgeo.curves.circle_curvature", "group": "control"},
+    {"text": "entropy of equally likely outcomes", "target": "infotheory.entropy.uniform_entropy", "group": "control"}
+  ]
+}

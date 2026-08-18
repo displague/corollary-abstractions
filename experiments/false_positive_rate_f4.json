@@ -1,0 +1,387 @@
+{
+  "schema": "false_positive_rate.v2",
+  "design": "docs/DESIGN-coverage-holdout3.md",
+  "source": "Open English WordNet 2025 examples/glosses, unscreened",
+  "archive_sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51",
+  "seed": 20260818,
+  "sampled": 1000,
+  "claimed": 34,
+  "false_positive_rate": 0.034,
+  "adjudication": {
+    "F4": {
+      "fired": false,
+      "rate": 0.034,
+      "threshold": 0.03
+    }
+  },
+  "claimed_samples": [
+    {
+      "text": "a system of graduating sizes of type in multiples of the point",
+      "kind": "ask",
+      "detail": "6 statements match ['multiples', 'point', 'sizes', 'system', 'type'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "difftop.degree.brouwer_fixed_point",
+        "geomodel.bezier.bernstein_bezier_evaluation",
+        "numanalysis.floatingpoint.machine_epsilon_bound",
+        "numanalysis.ode.euler_method_step",
+        "numanalysis.rootfinding.fixed_point_iteration",
+        "numbertheory.parity.even_double"
+      ]
+    },
+    {
+      "text": "a hydrogen atom in an acid that forms a positive ion when the acid dissociates",
+      "kind": "ask",
+      "detail": "2 statements match ['acid', 'atom', 'forms', 'hydrogen', 'ion', 'positive'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "chemistry.acid_base.henderson_hasselbalch",
+        "chemistry.acid_base.ph_definition"
+      ]
+    },
+    {
+      "text": "The model is scaled down",
+      "kind": "bind",
+      "detail": "1 statements match ['model', 'scaled'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "infotheory.divergence.cross_entropy",
+      "candidates": [
+        "infotheory.divergence.cross_entropy"
+      ]
+    },
+    {
+      "text": "I wouldn't put it that way",
+      "kind": "ask",
+      "detail": "2 statements match ['i', 'put', 't', 'way'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "infotheory.mutualinfo.entropy_inclusion_exclusion",
+        "numanalysis.interpolation.linear_interpolation"
+      ]
+    },
+    {
+      "text": "ratio of the adjacent side to the hypotenuse of a right-angled triangle",
+      "kind": "bind",
+      "detail": "1 statements match ['adjacent', 'hypotenuse', 'ratio', 'right', 'side', 'triangle'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "geometry.right_triangles.pythagorean_theorem",
+      "candidates": [
+        "geometry.right_triangles.pythagorean_theorem"
+      ]
+    },
+    {
+      "text": "including only a part",
+      "kind": "ask",
+      "detail": "2 statements match ['including', 'only', 'part'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "morphology.inflection.category_preservation",
+        "temporal.order.strict_part_of_order"
+      ]
+    },
+    {
+      "text": "a favor that cannot be paid back",
+      "kind": "ask",
+      "detail": "2 statements match ['back', 'cannot', 'paid'] (score 2, via ['lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "narrative.constraint.chekhov_gun",
+        "temporal.order.strict_precedence_asymmetry"
+      ]
+    },
+    {
+      "text": "any polyhedron having twelve plane faces",
+      "kind": "bind",
+      "detail": "1 statements match ['faces', 'having', 'plane', 'polyhedron'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "geotop.polyhedra.euler_polyhedron_formula",
+      "candidates": [
+        "geotop.polyhedra.euler_polyhedron_formula"
+      ]
+    },
+    {
+      "text": "the sum of the values of a random variable divided by the number of values",
+      "kind": "bind",
+      "detail": "1 statements match ['divided', 'number', 'random', 'sum', 'values', 'variable'] (score 7, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "economics.finance.present_value_continuous",
+      "candidates": [
+        "economics.finance.present_value_continuous"
+      ]
+    },
+    {
+      "text": "all they had left was a bit of bread",
+      "kind": "ask",
+      "detail": "4 statements match ['all', 'bit', 'left', 'they'] (score 2, via ['lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "geotop.predicates.de9im_disjoint",
+        "ml.policy.boltzmann_softmax_policy",
+        "morphology.agreement.feature_percolation",
+        "morphology.inflection.paradigm_realization"
+      ]
+    },
+    {
+      "text": "for the entire time appropriate to an activity",
+      "kind": "ask",
+      "detail": "2 statements match ['activity', 'entire', 'time'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "chemistry.kinetics.half_life_first_order",
+        "economics.finance.continuous_compounding"
+      ]
+    },
+    {
+      "text": "we were floating on air at the news",
+      "kind": "ask",
+      "detail": "2 statements match ['floating', 'news'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "ml.recurrence.belief_state_update",
+        "numanalysis.floatingpoint.machine_epsilon_bound"
+      ]
+    },
+    {
+      "text": "the middle part of December",
+      "kind": "ask",
+      "detail": "4 statements match ['middle', 'part'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "graphtheory.enumeration.complete_bipartite_edge_count",
+        "logic.boolean_laws.complement_laws",
+        "morphology.inflection.category_preservation",
+        "temporal.order.strict_part_of_order"
+      ]
+    },
+    {
+      "text": "a variable that can be used to predict the value of another variable (as in statistical regression)",
+      "kind": "bind",
+      "detail": "1 statements match ['another', 'regression', 'statistical', 'used', 'value', 'variable'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "probstat.regression.slr_conditional_expectation",
+      "candidates": [
+        "probstat.regression.slr_conditional_expectation"
+      ]
+    },
+    {
+      "text": "a term is in inverse proportion to another term if it increases (or decreases) as the other decreases (or increases)",
+      "kind": "bind",
+      "detail": "1 statements match ['another', 'decreases', 'increases', 'inverse', 'other', 'proportion', 'term'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "logic.quantification.universal_instantiation",
+      "candidates": [
+        "logic.quantification.universal_instantiation"
+      ]
+    },
+    {
+      "text": "a life-size sculpture",
+      "kind": "ask",
+      "detail": "2 statements match ['life', 'size'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "calculus.growth.exponential_growth_law",
+        "chemistry.kinetics.half_life_first_order"
+      ]
+    },
+    {
+      "text": "It follows that your assertion is false",
+      "kind": "ask",
+      "detail": "10 statements match ['assertion', 'false', 'follows'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "logic.inference.ex_falso_quodlibet",
+        "narrative.frames.cartoon_gravity_hover",
+        "provability.consistency.consistency_definition",
+        "provability.incompleteness.formalized_second_incompleteness",
+        "provability.incompleteness.second_incompleteness",
+        "provability.modal.k_distribution",
+        "provability.modal.loeb_axiom",
+        "provability.modal.necessitation",
+        "temporal.past.once_unfolding",
+        "temporal.past.since_unfolding"
+      ]
+    },
+    {
+      "text": "the evaluation of something a second time (or more)",
+      "kind": "ask",
+      "detail": "8 statements match ['evaluation', 'more', 'second', 'something', 'time'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "chemistry.kinetics.half_life_first_order",
+        "economics.finance.continuous_compounding",
+        "logic.quantification.existential_disjunction_distribution",
+        "ml.recurrence.belief_state_update",
+        "provability.incompleteness.formalized_second_incompleteness",
+        "provability.incompleteness.second_incompleteness",
+        "temporal.order.strict_precedence_asymmetry",
+        "temporal.past.once_unfolding"
+      ]
+    },
+    {
+      "text": "a large piece of something without definite shape",
+      "kind": "ask",
+      "detail": "3 statements match ['definite', 'large', 'piece', 'shape', 'something', 'without'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "calculus.integration.ftc_evaluation_part",
+        "logic.quantification.unique_existence_expansion",
+        "probstat.limit.law_of_large_numbers"
+      ]
+    },
+    {
+      "text": "a periodic motion in which the displacement is either symmetrical about a point or is the sum of such motions",
+      "kind": "ask",
+      "detail": "2 statements match ['displacement', 'either', 'motion', 'motions', 'periodic', 'point', 'such', 'sum'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "geomodel.bezier.bernstein_bezier_evaluation",
+        "geomodel.transforms.homogeneous_rigid_transform"
+      ]
+    },
+    {
+      "text": "how could you do such a thing?",
+      "kind": "ask",
+      "detail": "6 statements match ['such', 'thing'] (score 1, via ['prose'])",
+      "bound": null,
+      "candidates": [
+        "graphtheory.enumeration.complete_graph_edge_count",
+        "logic.boolean_laws.idempotence",
+        "logic.inference.contraposition",
+        "logic.quantification.unique_existence_expansion",
+        "logic.quantification.universal_instantiation",
+        "ml.policy.ppo_clipped_surrogate"
+      ]
+    },
+    {
+      "text": "the level of the surface of a body of water",
+      "kind": "ask",
+      "detail": "5 statements match ['body', 'level', 'surface'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "algtop.invariants.euler_characteristic_surface",
+        "geometry.surface_area_formulas.cube_surface_area",
+        "geometry.surface_area_formulas.sphere_surface_area",
+        "geomodel.surfaces.surface_normal_cross_product",
+        "narrative.frames.cartoon_gravity_hover"
+      ]
+    },
+    {
+      "text": "a field that represents the energy lost from the radiator to space",
+      "kind": "ask",
+      "detail": "2 statements match ['energy', 'field', 'lost', 'represents', 'space'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "difftop.vectorfields.hairy_ball_theorem",
+        "difftop.vectorfields.poincare_hopf_index_theorem"
+      ]
+    },
+    {
+      "text": "This move will save money",
+      "kind": "bind",
+      "detail": "1 statements match ['money', 'move'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "economics.monetary.equation_of_exchange",
+      "candidates": [
+        "economics.monetary.equation_of_exchange"
+      ]
+    },
+    {
+      "text": "move in one direction and then into the opposite direction",
+      "kind": "bind",
+      "detail": "1 statements match ['direction', 'move', 'one', 'opposite'] (score 4, via ['lexicon', 'prose'])",
+      "bound": "ml.optimization.gradient_descent_step",
+      "candidates": [
+        "ml.optimization.gradient_descent_step"
+      ]
+    },
+    {
+      "text": "it occurs without human intervention",
+      "kind": "bind",
+      "detail": "1 statements match ['human', 'occurs', 'without'] (score 2, via ['lexicon', 'prose'])",
+      "bound": "narrative.causality.precedence_causation_bridge",
+      "candidates": [
+        "narrative.causality.precedence_causation_bridge"
+      ]
+    },
+    {
+      "text": "one part in a trillion equal parts",
+      "kind": "bind",
+      "detail": "1 statements match ['equal', 'one', 'part', 'parts'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "graphtheory.enumeration.complete_bipartite_edge_count",
+      "candidates": [
+        "graphtheory.enumeration.complete_bipartite_edge_count"
+      ]
+    },
+    {
+      "text": "being on a very small scale",
+      "kind": "bind",
+      "detail": "1 statements match ['scale', 'small'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "chemistry.acid_base.ph_definition",
+      "candidates": [
+        "chemistry.acid_base.ph_definition"
+      ]
+    },
+    {
+      "text": "sewn by hand rather than machine",
+      "kind": "ask",
+      "detail": "3 statements match ['hand', 'machine', 'rather'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "difftop.invariants.euler_characteristic_diffeomorphism_invariance",
+        "narrative.frames.cartoon_gravity",
+        "numanalysis.floatingpoint.machine_epsilon_bound"
+      ]
+    },
+    {
+      "text": "he is one of the party regulars",
+      "kind": "ask",
+      "detail": "12 statements match ['one', 'party', 'regulars'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "difftop.degree.brouwer_fixed_point",
+        "difftop.degree.degree_regular_value_count",
+        "geomodel.bezier.de_casteljau_step",
+        "ml.policy.ppo_clipped_surrogate",
+        "ml.preference.dpo_preference_loss",
+        "ml.recurrence.belief_state_update",
+        "narrative.causality.precedence_causation_bridge",
+        "numanalysis.integration.trapezoidal_rule",
+        "numanalysis.rootfinding.fixed_point_iteration",
+        "numbertheory.primality.two_is_prime",
+        "provability.incompleteness.formalized_second_incompleteness",
+        "temporal.modality.next_distributes_over_meet"
+      ]
+    },
+    {
+      "text": "(mechanics) the rate of change of acceleration",
+      "kind": "bind",
+      "detail": "1 statements match ['acceleration', 'change', 'mechanics', 'rate'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "calculus.differentiation.average_rate_of_change",
+      "candidates": [
+        "calculus.differentiation.average_rate_of_change"
+      ]
+    },
+    {
+      "text": "a problem of the first magnitude",
+      "kind": "ask",
+      "detail": "3 statements match ['first', 'magnitude', 'problem'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "bound": null,
+      "candidates": [
+        "chemistry.kinetics.first_order_integrated_rate_law",
+        "chemistry.kinetics.half_life_first_order",
+        "diffgeo.surfaces.first_fundamental_form"
+      ]
+    },
+    {
+      "text": "in such a way as to pose a problem",
+      "kind": "bind",
+      "detail": "1 statements match ['problem', 'such', 'way'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+      "bound": "numanalysis.error.relative_condition_number",
+      "candidates": [
+        "numanalysis.error.relative_condition_number"
+      ]
+    },
+    {
+      "text": "the system of phones used in a particular language",
+      "kind": "bind",
+      "detail": "1 statements match ['language', 'particular', 'system', 'used'] (score 3, via ['lexicon', 'prose'])",
+      "bound": "narrative.constraint.no_deus_ex_machina",
+      "candidates": [
+        "narrative.constraint.no_deus_ex_machina"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,599 @@
+{
+  "schema": "text_resolution_holdout3.v1",
+  "design": "docs/DESIGN-coverage-holdout3.md",
+  "spec": "experiments/text_resolution_holdout3.json",
+  "graph_nodes": 14830,
+  "adjudication": {
+    "C3-1": {
+      "fired": true,
+      "coverage": 1.0,
+      "reached": 24,
+      "of": 24,
+      "threshold": 0.875
+    },
+    "C3-2": {
+      "fired": true,
+      "target_recall": 0.9583,
+      "recalled": 23,
+      "of": 24,
+      "threshold": 0.833
+    },
+    "C3-3": {
+      "fired": false,
+      "wrong_binds": 1
+    },
+    "C3-4": {
+      "fired": true,
+      "blind_target_recall": 0.9167,
+      "resolver_target_recall": 0.9583
+    }
+  },
+  "groups": {
+    "control": {
+      "reached": 8,
+      "target_recalled": 7,
+      "of": 8
+    },
+    "lexicon": {
+      "reached": 8,
+      "target_recalled": 8,
+      "of": 8
+    },
+    "morphology": {
+      "reached": 8,
+      "target_recalled": 8,
+      "of": 8
+    }
+  },
+  "rows": [
+    {
+      "text": "derivatives from limits of difference quotients",
+      "target": "calculus.limits.derivative_definition",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "calculus.limits.derivative_definition",
+      "candidates": [
+        "calculus.limits.derivative_definition"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['derivatives', 'difference', 'limits', 'quotients'] (score 10, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "calculus.limits.derivative_definition"
+      ]
+    },
+    {
+      "text": "linearity of derivatives",
+      "target": "calculus.differentiation.linearity_of_derivative",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "calculus.differentiation.linearity_of_derivative",
+      "candidates": [
+        "calculus.differentiation.linearity_of_derivative"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['derivatives', 'linearity'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "calculus.differentiation.linearity_of_derivative"
+      ]
+    },
+    {
+      "text": "euclid distance formula for two points",
+      "target": "geometry.metric_geometry.euclidean_distance_formula",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "geometry.metric_geometry.euclidean_distance_formula",
+      "candidates": [
+        "geometry.metric_geometry.euclidean_distance_formula"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['distance', 'euclid', 'formula', 'points', 'two'] (score 11, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 2,
+      "blind_candidates_preview": [
+        "geometry.metric_geometry.euclidean_distance_formula",
+        "numanalysis.interpolation.linear_interpolation"
+      ]
+    },
+    {
+      "text": "euclid line element for a flat metric",
+      "target": "diffgeo.surfaces.euclidean_line_element",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "diffgeo.surfaces.euclidean_line_element",
+      "candidates": [
+        "diffgeo.surfaces.euclidean_line_element"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['element', 'euclid', 'flat', 'line', 'metric'] (score 10, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "diffgeo.surfaces.euclidean_line_element"
+      ]
+    },
+    {
+      "text": "powers of matrices count graph walks",
+      "target": "graphtheory.walks.adjacency_power_walk_count",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "graphtheory.walks.adjacency_power_walk_count",
+      "candidates": [
+        "graphtheory.walks.adjacency_power_walk_count"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['count', 'graph', 'matrices', 'powers', 'walks'] (score 12, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 3,
+      "blind_candidates_preview": [
+        "graphtheory.enumeration.complete_bipartite_edge_count",
+        "graphtheory.enumeration.complete_graph_edge_count",
+        "graphtheory.walks.adjacency_power_walk_count"
+      ]
+    },
+    {
+      "text": "probabilities sum to one over outcomes",
+      "target": "probstat.probability.probability_normalization",
+      "group": "morphology",
+      "kind": "ask",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": null,
+      "candidates": [
+        "ml.policy.boltzmann_softmax_policy",
+        "probstat.probability.probability_normalization"
+      ],
+      "blind_target_recalled": true,
+      "detail": "2 statements match ['one', 'outcomes', 'probabilities', 'sum'] (score 7, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 2,
+      "blind_candidates_preview": [
+        "geomodel.barycentric.barycentric_partition_of_unity",
+        "probstat.probability.probability_normalization"
+      ]
+    },
+    {
+      "text": "symmetries of spatial adjacency between regions",
+      "target": "geotop.predicates.adjacency_symmetry",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "geotop.predicates.adjacency_symmetry",
+      "candidates": [
+        "geotop.predicates.adjacency_symmetry"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['adjacency', 'regions', 'spatial', 'symmetries'] (score 11, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "geotop.predicates.adjacency_symmetry"
+      ]
+    },
+    {
+      "text": "circumferences of circles from radii",
+      "target": "geometry.circle_formulas.circle_circumference_formula",
+      "group": "morphology",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "geometry.circle_formulas.circle_circumference_formula",
+      "candidates": [
+        "geometry.circle_formulas.circle_circumference_formula"
+      ],
+      "blind_target_recalled": false,
+      "detail": "1 statements match ['circles', 'circumferences', 'radii'] (score 8, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 0,
+      "blind_candidates_preview": []
+    },
+    {
+      "text": "relative entropy cannot be negative",
+      "target": "infotheory.divergence.gibbs_inequality",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "infotheory.divergence.gibbs_inequality",
+      "candidates": [
+        "infotheory.divergence.gibbs_inequality"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['cannot', 'entropy', 'negative', 'relative'] (score 7, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 2,
+      "blind_candidates_preview": [
+        "infotheory.divergence.gibbs_inequality",
+        "infotheory.divergence.kl_divergence"
+      ]
+    },
+    {
+      "text": "self information of one unlikely outcome",
+      "target": "infotheory.entropy.surprisal",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "infotheory.entropy.surprisal",
+      "candidates": [
+        "infotheory.entropy.surprisal"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['information', 'one', 'outcome', 'self'] (score 8, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "infotheory.entropy.surprisal"
+      ]
+    },
+    {
+      "text": "righthand head rule for a derivational affix",
+      "target": "morphology.derivation.category_from_affix",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "morphology.derivation.category_from_affix",
+      "candidates": [
+        "morphology.derivation.category_from_affix"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['affix', 'derivational', 'head', 'righthand', 'rule'] (score 9, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "morphology.derivation.category_from_affix"
+      ]
+    },
+    {
+      "text": "forget and input gates update matrix memory",
+      "target": "ml.recurrence.mlstm_matrix_memory_update",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "ml.recurrence.mlstm_matrix_memory_update",
+      "candidates": [
+        "ml.recurrence.mlstm_matrix_memory_update"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['forget', 'gates', 'input', 'matrix', 'memory', 'update'] (score 14, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "ml.recurrence.mlstm_matrix_memory_update"
+      ]
+    },
+    {
+      "text": "importance weight from current and behaviour policy probabilities",
+      "target": "ml.policy.policy_probability_ratio",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "ml.policy.policy_probability_ratio",
+      "candidates": [
+        "ml.policy.policy_probability_ratio"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['behaviour', 'current', 'importance', 'policy', 'probabilities', 'weight'] (score 13, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "ml.policy.policy_probability_ratio"
+      ]
+    },
+    {
+      "text": "probability split over an exhaustive partition",
+      "target": "probstat.probability.total_probability_partition",
+      "group": "lexicon",
+      "kind": "ask",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": null,
+      "candidates": [
+        "ml.policy.boltzmann_softmax_policy",
+        "probstat.probability.total_probability_partition"
+      ],
+      "blind_target_recalled": true,
+      "detail": "2 statements match ['partition', 'probability', 'split'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 12,
+      "blind_candidates_preview": [
+        "geotop.point_set.interior_boundary_exterior_partition",
+        "logic.boolean_laws.absorption",
+        "logic.boolean_laws.distributivity_meet_over_join",
+        "logic.quantification.existential_disjunction_distribution",
+        "logic.quantification.universal_conjunction_distribution",
+        "ml.policy.policy_probability_ratio",
+        "probstat.probability.probability_normalization",
+        "probstat.probability.total_probability_partition",
+        "settheory.boolean_laws.absorption",
+        "settheory.boolean_laws.distributivity_meet_over_join",
+        "temporal.modality.next_distributes_over_meet",
+        "temporal.past.prev_distributes_over_meet"
+      ]
+    },
+    {
+      "text": "posterior probability of a hypothesis given evidence",
+      "target": "probstat.probability.bayes_rule",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "probstat.probability.bayes_rule",
+      "candidates": [
+        "probstat.probability.bayes_rule"
+      ],
+      "blind_target_recalled": false,
+      "detail": "1 statements match ['evidence', 'given', 'hypothesis', 'posterior', 'probability'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 3,
+      "blind_candidates_preview": [
+        "ml.policy.policy_probability_ratio",
+        "probstat.probability.probability_normalization",
+        "probstat.probability.total_probability_partition"
+      ]
+    },
+    {
+      "text": "normal approximation to the sample average",
+      "target": "probstat.limit.normal_approximation_sample_mean",
+      "group": "lexicon",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "probstat.limit.normal_approximation_sample_mean",
+      "candidates": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['approximation', 'average', 'normal', 'sample'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "probstat.limit.normal_approximation_sample_mean"
+      ]
+    },
+    {
+      "text": "the exponential function differentiates to itself",
+      "target": "calculus.differentiation.exponential_derivative",
+      "group": "control",
+      "kind": "ask",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": null,
+      "candidates": [
+        "calculus.differentiation.exponential_derivative",
+        "calculus.growth.exponential_growth_law"
+      ],
+      "blind_target_recalled": true,
+      "detail": "2 statements match ['exponential', 'function', 'itself'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 5,
+      "blind_candidates_preview": [
+        "calculus.differentiation.exponential_derivative",
+        "calculus.growth.exponential_growth_law",
+        "economics.macroeconomics.keynesian_consumption_function",
+        "economics.production.cobb_douglas_production_function",
+        "morphology.inflection.paradigm_realization"
+      ]
+    },
+    {
+      "text": "interest accumulated without compounding",
+      "target": "economics.finance.simple_interest",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": false,
+      "wrong_bind": true,
+      "bound": "economics.finance.continuous_compounding",
+      "candidates": [
+        "economics.finance.continuous_compounding"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['accumulated', 'compounding', 'interest', 'without'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 14571,
+      "blind_candidates_preview": [
+        "economics.finance.compound_interest_discrete",
+        "economics.finance.continuous_compounding",
+        "economics.finance.simple_interest",
+        "goedelpset.skel.goedel_pset_10013",
+        "goedelpset.skel.goedel_pset_1006180",
+        "goedelpset.skel.goedel_pset_100650",
+        "goedelpset.skel.goedel_pset_1007506",
+        "goedelpset.skel.goedel_pset_1008702",
+        "goedelpset.skel.goedel_pset_1009362",
+        "goedelpset.skel.goedel_pset_1010184",
+        "goedelpset.skel.goedel_pset_1010873",
+        "goedelpset.skel.goedel_pset_1010932",
+        "goedelpset.skel.goedel_pset_1010956",
+        "goedelpset.skel.goedel_pset_1010979",
+        "goedelpset.skel.goedel_pset_1011793",
+        "goedelpset.skel.goedel_pset_1012700",
+        "goedelpset.skel.goedel_pset_1014968",
+        "goedelpset.skel.goedel_pset_1015115",
+        "goedelpset.skel.goedel_pset_101540",
+        "goedelpset.skel.goedel_pset_1015655",
+        "goedelpset.skel.goedel_pset_1015778",
+        "goedelpset.skel.goedel_pset_1016832",
+        "goedelpset.skel.goedel_pset_101877",
+        "goedelpset.skel.goedel_pset_1018813",
+        "goedelpset.skel.goedel_pset_1019475"
+      ]
+    },
+    {
+      "text": "binary greatest common divisor algorithm",
+      "target": "programming.stein.binary",
+      "group": "control",
+      "kind": "ask",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": null,
+      "candidates": [
+        "programming.euclid.iterative",
+        "programming.euclid.recursive",
+        "programming.stein.binary"
+      ],
+      "blind_target_recalled": true,
+      "detail": "3 statements match ['algorithm', 'binary', 'common', 'divisor', 'greatest'] (score 3, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 3,
+      "blind_candidates_preview": [
+        "programming.binexp.iterative",
+        "programming.binexp.recursive",
+        "programming.stein.binary"
+      ]
+    },
+    {
+      "text": "recursive euclidean greatest divisor algorithm",
+      "target": "programming.euclid.recursive",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "programming.euclid.recursive",
+      "candidates": [
+        "programming.euclid.recursive"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['algorithm', 'divisor', 'euclidean', 'greatest', 'recursive'] (score 7, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "programming.euclid.recursive"
+      ]
+    },
+    {
+      "text": "infinitesimal distance in the flat plane metric",
+      "target": "diffgeo.surfaces.euclidean_line_element",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "diffgeo.surfaces.euclidean_line_element",
+      "candidates": [
+        "diffgeo.surfaces.euclidean_line_element"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['distance', 'flat', 'infinitesimal', 'metric', 'plane'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "diffgeo.surfaces.euclidean_line_element"
+      ]
+    },
+    {
+      "text": "boundary integral of a differential form",
+      "target": "diffgeo.stokes.stokes_theorem",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "diffgeo.stokes.stokes_theorem",
+      "candidates": [
+        "diffgeo.stokes.stokes_theorem"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['boundary', 'differential', 'form', 'integral'] (score 9, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 12,
+      "blind_candidates_preview": [
+        "algtop.homology.chain_rank_nullity",
+        "diffgeo.stokes.stokes_theorem",
+        "diffgeo.stokes.stokes_zero_form_case",
+        "diffgeo.surfaces.first_fundamental_form",
+        "economics.finance.capm_expected_return",
+        "economics.macroeconomics.fisher_equation",
+        "geotop.point_set.interior_boundary_exterior_partition",
+        "infotheory.mutualinfo.entropy_inclusion_exclusion",
+        "logic.boolean_laws.de_morgan_laws",
+        "logic.quantification.quantifier_negation_existential",
+        "logic.quantification.quantifier_negation_universal",
+        "settheory.boolean_laws.de_morgan_laws"
+      ]
+    },
+    {
+      "text": "curvature equals the reciprocal of circle radius",
+      "target": "diffgeo.curves.circle_curvature",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "diffgeo.curves.circle_curvature",
+      "candidates": [
+        "diffgeo.curves.circle_curvature"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['circle', 'curvature', 'equals', 'radius', 'reciprocal'] (score 11, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 1,
+      "blind_candidates_preview": [
+        "diffgeo.curves.circle_curvature"
+      ]
+    },
+    {
+      "text": "entropy of equally likely outcomes",
+      "target": "infotheory.entropy.uniform_entropy",
+      "group": "control",
+      "kind": "bind",
+      "resolver": "words",
+      "reached": true,
+      "target_recalled": true,
+      "wrong_bind": false,
+      "bound": "infotheory.entropy.uniform_entropy",
+      "candidates": [
+        "infotheory.entropy.uniform_entropy"
+      ],
+      "blind_target_recalled": true,
+      "detail": "1 statements match ['entropy', 'equally', 'likely', 'outcomes'] (score 9, via ['keywords', 'lexicon', 'prose'])",
+      "blind_candidate_count": 8,
+      "blind_candidates_preview": [
+        "infotheory.divergence.cross_entropy",
+        "infotheory.divergence.gibbs_inequality",
+        "infotheory.divergence.kl_divergence",
+        "infotheory.entropy.shannon_entropy",
+        "infotheory.entropy.uniform_entropy",
+        "infotheory.mutualinfo.entropy_inclusion_exclusion",
+        "ml.objective.token_cross_entropy_loss",
+        "physics.thermodynamics.gibbs_entropy"
+      ]
+    }
+  ]
+}

@@ -3892,3 +3892,63 @@ sets. `experiments/ambiguity_rate.json` pins SHA-256 digests for all three
 query files, the measurement/resolver sources, and the complete corpus-node
 manifest so later query, implementation, or data drift is detectable without
 rescoring this registered result.
+
+---
+
+# v0.13 — conversational coverage holdout 3
+
+The complete set, scorer, fresh WordNet seed, archive digest and predictions
+C3-1--C3-4/F4 were committed at `110fff4` before either new set was run.
+The only implementation (`7a9c7c3`) applied conservative query-side surface
+morphology to spellings already present in committed keyword, prose and
+`symbol_lexicon` indexes. No holdout miss authored a rule.
+
+Scored once:
+
+| measure | registered bar | result |
+|---|---:|---:|
+| C3-1 reach coverage | >= 0.875 | **24/24 = 1.000, FIRED** |
+| C3-2 registered-target recall | >= 0.833 | **23/24 = 0.9583, FIRED** |
+| C3-3 wrong single binds | 0 | **1, MISSED** |
+| C3-4 exact-title blind recall | < 1.0 and below resolver | **0.9167 vs 0.9583, FIRED** |
+| F4 pinned-OEWN false positives | <= 0.030 | **34/1000 = 0.034, MISSED** |
+
+Morphology 8/8 and lexicon 8/8 recalled their registered targets; controls
+recalled 7/8. The miss is sharper than a refusal: `interest accumulated
+without compounding` BINDs `economics.finance.continuous_compounding`. Word
+overlap has no representation of the negative contrast in `without`.
+
+The blind control is non-perfect but weak. One one-word title-overlap tie has
+14,571 candidates; target inclusion in a set that large is not useful
+resolution. It establishes only that exact title tokens do not attain 24/24,
+not that the resolver wins a hard ranking baseline.
+
+F4 used OEWN 2025 SHA-256
+`7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51`,
+seed 20260818, with no screening. Its 0.034 is four extra claims per thousand
+above F3's 0.030. Because the preregistered gate required coverage up **and**
+F-rate not worse, the conjunction failed. `98e0d36` reverted the resolver
+exactly. The honest result is a rejected precision/coverage trade, not 1.000
+shipping coverage. The fresh-seed comparison does not identify a causal
+effect of morphology; it adjudicates the frozen shipping rule.
+
+Regenerable from the spent specifications for audit only:
+`scripts/measure_text_resolution_holdout3.py` and
+`scripts/measure_false_positive_f4.py`. The committed ledgers are
+`experiments/text_resolution_holdout3_result.json` and
+`experiments/false_positive_rate_f4.json`; governance forbids using a rerun as
+a new score.
+
+**Raw-ledger repair, without a rerun.** Independent review found that the
+committed holdout ledger was the compact post-run view. The full output was
+recoverable from Git's object store because it had been staged first: blob
+`16abf1c51f449a3067b562d1dbeb9c7ae0871804`, 749,574 LF bytes, SHA-256
+`ffa68c7659c36a589f37e04a679d195b62c074cd564ca20f2ce7feb5c90b4532`.
+It is now committed as `text_resolution_holdout3_result.raw.json` and retains
+all blind candidate ids. The compact file is verified as one exact transform
+of the raw rows (full list -> count + first 25; nothing else changes), not
+called the one-shot ledger. `text_resolution_holdout3_provenance.json` records
+preregistration tree `2aa1d3c`, candidate tree `564c9e8`, and the exact spec,
+resolver, holdout-scorer and F4-scorer blobs. The recovery makes C3-4's baseline
+inclusion independently inspectable; it does not make the 14,571-way tie a
+strong baseline.
