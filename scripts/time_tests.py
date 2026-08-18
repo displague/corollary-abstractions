@@ -43,11 +43,20 @@ sys.path.insert(0, str(REPO / "scripts"))
 
 
 class TimingResult(unittest.TextTestResult):
-    """Records elapsed per test. Timing starts at startTest, not setUpClass.
+    """Records elapsed per test, from `startTest` to `stopTest`.
 
-    Class-level setup is attributed to the FIRST test of the class rather
-    than spread across it, which is honest: a 90-second `setUpClass` really
-    does make that first test 90 seconds slower to reach.
+    **Fixture time is NOT captured, and the gap is the point.** `unittest`
+    runs `setUpClass` and `setUpModule` before any `startTest`, so their cost
+    lands in no test's row. An earlier version of this docstring claimed the
+    cost was attributed to the first test of the class; that was wrong, and
+    the first real run proved it: `test_corpus_analogy_split` summed to
+    6,064.8s across its tests while the module took 10,765.0s. The missing
+    ~4,700s is class fixtures.
+
+    So read the output as two numbers, not one. `total` is what the module
+    costs a gate. The sum of the rows is what the *tests* cost. When they
+    diverge, the difference is fixture work, and no amount of speeding up
+    individual tests will touch it.
     """
 
     def __init__(self, *args, **kwargs):

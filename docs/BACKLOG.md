@@ -3,7 +3,51 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## The gate is one test, and now it is measured
+
+- **`test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer`
+  runs for 1 hour 34 minutes.** Measured with `scripts/time_tests.py`:
+
+  | | seconds | share of module |
+  |---|---:|---:|
+  | `test_no_blind_control_can_see_the_answer` | **5,619.8** | 52% |
+  | class fixtures (`setUpClass`, untimed) | ~4,700 | 44% |
+  | 3 determinism / verification tests | ~445 | 4% |
+  | the remaining 41 tests | ~1 | ~0% |
+  | **module total** | **10,765** | |
+
+  That single test is roughly **16% of the entire 592-minute serial gate**,
+  and 41 of the module's 45 tests together cost about one second.
+
+  **Three earlier explanations were folklore and are retracted here**: not
+  "several tests reload the 12k graph" (four modules do, and they cache),
+  not "the eight torch modules" (this module contains no torch), not imports
+  (all 21 shard-0 modules import in 1.7s; `test_ask` runs 25 tests in
+  0.013s).
+
+  **Two independent costs, and they need different fixes.** The 5,620s test
+  is a blind-control sweep — it exists to prove no capability-blind arm can
+  see the answer, which is exactly the kind of guard this project should
+  keep. Making it cheaper means sampling the control space with a registered
+  argument about what sampling costs, not deleting it. The ~4,700s of class
+  fixtures is separate, invisible to per-test timing, and untouched by any
+  amount of test-level speedup.
+
+  Wanted, in order: (1) time the whole suite per module now that the tool
+  exists, so sharding can be balanced rather than round-robin — v0.12's
+  split gave 5.8m / 186.6m / 319.7m for a 1.85x speedup where balance would
+  have given close to 3x; (2) decide whether the blind-control sweep can be
+  sampled; (3) find what the fixtures are doing.
+
+  Evidence: v0.12 gate, 1,240 tests, 592m serial / 320m across three shards.
+  `python scripts/time_tests.py --json t.json tests.test_corpus_analogy_split`
+
 ## The gate is single-threaded and nobody has measured why
+
+- **SUPERSEDED by the entry above, which has the numbers.** Kept because
+  its correction of the v0.11 folklore still stands, and because the
+  "measure before optimising" instruction in it was the right call and was
+  followed.
 
 - **The full suite is ~7 hours on one core, and the reason I have been
   giving for it is wrong.** v0.11's triage said "several tests each reload
