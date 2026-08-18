@@ -167,6 +167,15 @@ class GraphIndex:
     #: out unreachable: not because they lack a name, but because the only
     #: query that fits them was the one shape the resolver refused.
     by_statement: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    #: Inverted index over each node's DECLARED DISCIPLINES. The corpus has
+    #: always recorded these and the resolver has always thrown them away:
+    #: `load_trees` returned them and `build_index` unpacked them into `_disc`.
+    #: The cost was that 11 of 37 discipline names -- `chemistry`, `economics`,
+    #: `trigonometry`, `finance`, `combinatorics` -- appeared in no word index
+    #: at all, so the single most discriminating word a person can type about
+    #: a subject was the one word this resolver could not see.
+    by_discipline: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    discipline_df: dict[str, int] = field(default_factory=dict)
     #: Reduced tokens from each node's own committed title, statement
     #: meaning, keywords and `symbol_lexicon` values. This is not another
     #: retrieval index and nothing scores against it: it is the only thing
@@ -213,16 +222,29 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
     by_lexicon: dict[str, list[str]] = defaultdict(list)
     lexicon_df: Counter = Counter()
     by_statement: dict[str, list[str]] = defaultdict(list)
+    by_discipline: dict[str, list[str]] = defaultdict(list)
+    discipline_df: Counter = Counter()
     inventory: dict[str, frozenset[str]] = {}
 
     for data_dir in data_dirs:
         if not data_dir.is_dir():
             continue
-        nodes, trees, classes, corpus_map, _disc = load_trees(data_dir)
+        nodes, trees, classes, corpus_map, disciplines = load_trees(data_dir)
         for node in nodes:
             sid = node.statement_id
             ids.append(sid)
             corpus_of[sid] = corpus_map.get(sid, "?")
+            # A subject name is a word the corpus authored about itself, so
+            # it belongs in the word evidence with the rest. It carries no
+            # exemption: `mathematics` sits on most nodes and the ordinary
+            # document-frequency ceiling will drop it for exactly that
+            # reason, while `trigonometry` stays discriminating.
+            subject_words: set[str] = set()
+            for name in disciplines.get(sid, ()):  # noqa: PLC0206
+                subject_words.update(_WORD.findall(name.lower().replace("_", " ")))
+            for word in subject_words - STOPWORDS:
+                by_discipline[word].append(sid)
+                discipline_df[word] += 1
             tree = trees.get(sid)
             if tree is not None:
                 seen: set[str] = set()
@@ -298,6 +320,8 @@ def build_index(data_dirs: list[Path]) -> GraphIndex:
         by_lexicon={k: tuple(v) for k, v in by_lexicon.items()},
         lexicon_df=dict(lexicon_df),
         by_statement={k: tuple(v) for k, v in by_statement.items()},
+        by_discipline={k: tuple(v) for k, v in by_discipline.items()},
+        discipline_df=dict(discipline_df),
         inventory=inventory,
     )
 
@@ -560,6 +584,7 @@ def resolve_words(
         (index.by_keyword, index.keyword_df, "keywords"),
         (index.by_lexicon, index.lexicon_df, "lexicon"),
         (index.by_prose, index.prose_df, "prose"),
+        (index.by_discipline, index.discipline_df, "discipline"),
     )
     ceiling = max(1, int(index.size * KEYWORD_DF_CEILING))
     hits: Counter = Counter()
@@ -650,7 +675,7 @@ def resolve_words(
         winner_corpus = {index.corpus_of.get(s, "?") for s in top}
         supporting = 0
         for word in used:
-            for postings in (index.by_keyword, index.by_lexicon, index.by_prose):
+            for postings, _df, _label in sources:
                 hit = postings.get(word)
                 if hit and any(
                     index.corpus_of.get(sid, "?") in winner_corpus for sid in hit
