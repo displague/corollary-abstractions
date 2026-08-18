@@ -3862,3 +3862,49 @@ the remaining error is not addressable by lexical semantics.
 Cost: index build 3.98s over 12,777 nodes (219,416 subterm occurrences,
 38,858 distinct skeletons), then 0.04us per resolution (~24M/sec),
 single core, no GPU.
+
+---
+
+# v0.13 — conversational coverage holdout 3
+
+The complete set, scorer, fresh WordNet seed, archive digest and predictions
+C3-1--C3-4/F4 were committed at `110fff4` before either new set was run.
+The only implementation (`7a9c7c3`) applied conservative query-side surface
+morphology to spellings already present in committed keyword, prose and
+`symbol_lexicon` indexes. No holdout miss authored a rule.
+
+Scored once:
+
+| measure | registered bar | result |
+|---|---:|---:|
+| C3-1 reach coverage | >= 0.875 | **24/24 = 1.000, FIRED** |
+| C3-2 registered-target recall | >= 0.833 | **23/24 = 0.9583, FIRED** |
+| C3-3 wrong single binds | 0 | **1, MISSED** |
+| C3-4 exact-title blind recall | < 1.0 and below resolver | **0.9167 vs 0.9583, FIRED** |
+| F4 pinned-OEWN false positives | <= 0.030 | **34/1000 = 0.034, MISSED** |
+
+Morphology 8/8 and lexicon 8/8 recalled their registered targets; controls
+recalled 7/8. The miss is sharper than a refusal: `interest accumulated
+without compounding` BINDs `economics.finance.continuous_compounding`. Word
+overlap has no representation of the negative contrast in `without`.
+
+The blind control is non-perfect but weak. One one-word title-overlap tie has
+14,571 candidates; target inclusion in a set that large is not useful
+resolution. It establishes only that exact title tokens do not attain 24/24,
+not that the resolver wins a hard ranking baseline.
+
+F4 used OEWN 2025 SHA-256
+`7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51`,
+seed 20260818, with no screening. Its 0.034 is four extra claims per thousand
+above F3's 0.030. Because the preregistered gate required coverage up **and**
+F-rate not worse, the conjunction failed. `98e0d36` reverted the resolver
+exactly. The honest result is a rejected precision/coverage trade, not 1.000
+shipping coverage. The fresh-seed comparison does not identify a causal
+effect of morphology; it adjudicates the frozen shipping rule.
+
+Regenerable from the spent specifications for audit only:
+`scripts/measure_text_resolution_holdout3.py` and
+`scripts/measure_false_positive_f4.py`. The committed ledgers are
+`experiments/text_resolution_holdout3_result.json` and
+`experiments/false_positive_rate_f4.json`; governance forbids using a rerun as
+a new score.

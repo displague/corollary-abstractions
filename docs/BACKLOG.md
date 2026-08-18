@@ -3,6 +3,27 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## v0.13 conversational coverage: rejected morphology trade
+
+- **Morphology cannot ship on the measured precision trade.** The preregistered
+  third holdout reached 24/24 under the closed-form surface expansion, but the
+  fresh pinned-OEWN F4 arm claimed 34/1000 = **0.034**, above the 0.030 shipping
+  ceiling. The resolver change was reverted, not tuned against either spent
+  set. Unpark only with a new mechanism justified independently of these rows,
+  plus a fourth registered holdout and a fresh mechanical seed.
+- **Negative contrast is invisible to word overlap.** `interest accumulated
+  without compounding` confidently bound
+  `economics.finance.continuous_compounding`; a reach-only score counted it as
+  covered while registered-target recall and wrong-BIND auditing exposed it.
+  Wanted: an exact request representation in which negation or exclusion can
+  veto a contradictory candidate. Do not add `without` to stopwords or patch
+  this phrase: the spent row is evidence, not training data.
+- **The exact-title vacuity control has almost no precision.** Its 0.9167
+  target recall includes a tie of 14,571 ids, so it is only evidence that the
+  holdout is not perfectly solvable by literal title overlap. A future
+  coverage slice needs a blind baseline with a candidate-budget or ranking
+  metric registered before its new holdout.
+
 ## The gate is single-threaded and nobody has measured why
 
 - **The full suite is ~7 hours on one core, and the reason I have been

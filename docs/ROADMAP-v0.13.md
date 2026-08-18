@@ -50,6 +50,14 @@ registered before the run, with the false-positive rate re-measured on a
 fresh mechanical seed. Coverage up and F-rate not worse, or the trade is
 published and the change is not shipped.
 
+**ADJUDICATED — EXPERIMENT SHIPPED, RESOLVER CHANGE REJECTED.** Registered at
+`110fff4` and scored once on implementation `7a9c7c3`: coverage 24/24 =
+**1.000** (C3-1 fired), target recall 23/24 = **0.9583** (C3-2 fired), but one
+wrong BIND refuted C3-3. Fresh pinned-OEWN F4 was **0.034** (34/1000), worse
+than the 0.030 shipping ceiling. The frozen conjunction failed, so `98e0d36`
+restored the resolver. Ledgers and the full trade are published; neither spent
+set will be retuned or rerun.
+
 ## 2. Ambiguity and context (headline, ambitious)
 
 [DESIGN-ambiguity-and-context.md](DESIGN-ambiguity-and-context.md), A1–A5.

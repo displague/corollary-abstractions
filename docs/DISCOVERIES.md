@@ -13,6 +13,17 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The surface-morphology candidate reaches the whole registered set and
+  still loses the shipping conjunction (v0.13 item 1).** On the third
+  disjoint hand-authored holdout, conservative variants over corpus-owned
+  prose and glossary terms reached 24/24 and recalled 23/24 registered
+  targets. But the fresh pinned-OEWN arm measured **0.034** (34/1000) against
+  the **0.030**
+  shipping ceiling, so the resolver change was reverted as preregistered.
+  The one target miss was a confident contradiction: `without compounding`
+  bound continuous compounding. Coverage is not correctness, and morphology
+  cannot represent negative contrast. Status: **empirical, rejected trade**.
+
 - **The sign flip does not travel; it was a fact about Lean-workbook
   (v0.12 item 1).** Two sources the emitter was not fitted to run the
   *other* way. miniF2F (157 nodes) sits below its matched null at every

@@ -67,9 +67,10 @@ def run(out_path: Path = DEFAULT_OUT) -> dict:
             "wrong_bind": outcome.kind == BIND and outcome.bound != target,
             "bound": outcome.bound,
             "candidates": list(outcome.candidates),
-            "blind_candidates": list(blind),
             "blind_target_recalled": target in blind,
             "detail": outcome.detail,
+            "blind_candidate_count": len(blind),
+            "blind_candidates_preview": list(blind[:25]),
         }
         rows.append(row)
         groups[group].append(row)

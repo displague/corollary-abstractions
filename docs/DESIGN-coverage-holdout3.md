@@ -75,3 +75,28 @@ The resolver change ships only if C3-1 fires and F4 fires. Otherwise the
 trade-off and all rows are published, but the resolver change is reverted;
 experiment-only scorer, preregistration, and ledgers may remain. C3-2 through
 C3-4 are honesty diagnostics and are reported whether they fire or miss.
+
+## 5. One-shot adjudication
+
+Preregistered at `110fff4c06bdbe0fcb31cc8606ec29ed9502f6f1`.
+The morphology implementation was frozen at
+`7a9c7c344fab7e6a3986be3ff224e6833a4a8052`, then both scorers ran once.
+
+| prediction | result | disposition |
+|---|---:|---|
+| C3-1 coverage | **FIRED**, 24/24 = 1.000 | above 0.875 |
+| C3-2 target recall | **FIRED**, 23/24 = 0.9583 | above 0.833 |
+| C3-3 wrong certainty | **MISSED**, 1 wrong BIND | `without compounding` bound to continuous compounding |
+| C3-4 blind control | **FIRED**, 0.9167 vs 0.9583 | weak: one title tie contains 14,571 ids |
+| F4 false positives | **MISSED**, 34/1000 = 0.034 | worse than the 0.030 shipping ceiling |
+
+The morphology and lexicon groups each recalled 8/8 targets; controls recalled
+7/8. The sole target miss was not morphology: `interest accumulated without
+compounding` confidently bound `economics.finance.continuous_compounding`.
+The resolver scores matching words and has no closed-form representation of
+the contrast contributed by `without`.
+
+The shipping conjunction failed because F4 missed. Commit
+`98e0d369eb183930bd7d918fc7edad8ecbc91457` therefore restores the resolver
+and its tests exactly. The experiment is retained; the morphology change is
+not shipped and these spent samples will not be rescored.
