@@ -46,6 +46,18 @@ misses, never pre-run row-tuning criteria.
 
 ## 2. Exact negative contrast and clarification (headline)
 
+**ADJUDICATED — MISSED; the candidate is PARKED.**  Prereg `d53bb2e`,
+candidate `71ef468`, one run.  Q3 fired (blind gap 0.6801).  Q1 missed with
+one wrong negative BIND and 8/16 expected routes; Q2 missed at 3/20 because
+only four of twenty rows actually ASKed and no initial set reached four
+candidates; Q4 missed at 0.03467 pooled on a path the candidate does not
+touch; Q5 missed on target recall 0.789 while reach was 0.921; Q6 reached
+1/16 against a threshold of 4.  Numbers, the reason Q3's fire does not
+rescue the cycle, and the Q4 preregistration defect are in
+[ANALYSIS](../experiments/ANALYSIS.md).  The exclusion seam remains in the
+resolver as uncredited behaviour, with the spent v0.13 sentence kept as a
+regression.
+
 Implement only the preregistered grammar and run the holdout once.  Ship the
 candidate only if Q1–Q6 all fire: zero wrong negative BINDs; negative-stratum
 route/reach floors; follow-up halving with intended-reading retention; a
@@ -100,9 +112,13 @@ misses, it parks rather than manufacturing a toy world.
 
 v0.14 is ready only if:
 
-- the 48-row protocol passes its construction, overlap, and provenance checks;
-- Q1–Q6 are adjudicated once, with misses as prominent as fires;
-- the resolver candidate ships only on the complete conjunction;
+- the 48-row protocol passes its construction, overlap, and provenance checks
+  — **done**, with one pre-score repair to two assertions that could not
+  survive the cycle succeeding;
+- Q1–Q6 are adjudicated once, with misses as prominent as fires — **done**:
+  one fire, five misses, conjunction false;
+- the resolver candidate ships only on the complete conjunction — **held**:
+  it does not ship;
 - fresh precision and comparable coverage are both reported;
 - the full suite is green on a frozen tip with retained shard receipts;
 - every unfinished item above ships or parks in writing.

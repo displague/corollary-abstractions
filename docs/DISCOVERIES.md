@@ -13,6 +13,38 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A capability-blind control can be beaten by the failure it was built to
+  catch (v0.14 Q3, measured).**  Reciprocal candidate load pays `1/k` for
+  returning the target in a small set, so the resolver's 0.7127 against the
+  25-id blind arm's 0.0326 is largely a measure of how often it answered with
+  exactly one id: 25 of its 30 recalled targets came back alone, mean `1/k`
+  among them 0.9028.  The same decisiveness produced the wrong single BIND
+  that missed Q1 and the 0.789 target recall that missed Q5.  A control that
+  rewards small answers cannot separate precision from overconfidence, and
+  the gap it reports must not be quoted as reading comprehension.
+
+- **A preregistered clause the intervention cannot influence measures the
+  baseline, not the intervention (v0.14 Q4, measured).**  The mechanical
+  precision arm classifies OEWN sentences, which contain no `without TERM`
+  structure, so the candidate's masked admission path is never entered and
+  Q4 re-measured the untouched v0.13 resolver.  It reproduced v0.13's 0.034
+  almost exactly — 0.024/0.038/0.042, pooled 0.03467 — which is a useful
+  independent replication across three fresh disjoint samples and was never
+  a test of the exclusion.  Registering it as a shipping clause guaranteed a
+  miss.  Check, before freezing, that every clause has a path from the
+  intervention to the number.
+
+- **The fresh negative rows were easier than the sentence that motivated
+  them (v0.14 Q6, measured).**  Stripping the declared negative span changed
+  the bound on 1 of 16 rows, against a registered threshold of 4, and seven
+  of eight `negative_bind` rows bound correctly without needing the veto at
+  all.  The exclusion mechanism itself works — the spent v0.13 sentence moves
+  from `continuous_compounding` to `simple_interest` by promoting a
+  lower-scored survivor — but rows authored to *contain* negative structure
+  are not the same as rows where negative structure *decides* the answer, and
+  only the second kind can attribute a result to it.  See
+  [[a-negative-veto-must-happen-before-candidate-selection]].
+
 - **A frozen evaluator can freeze in its own expiry date (v0.14, pre-score).**
   Two preregistration tests asserted the absence of the candidate and of the
   result file by looking at the live import path and the working tree.  Both

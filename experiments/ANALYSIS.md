@@ -4078,3 +4078,87 @@ Q1–Q6 score or candidate result exists.  The only executed checks are
 construction/provenance and synthetic vacuity tests.  The raw-before-compact
 one-shot path refuses until the preregistration is an ancestor of a clean,
 allowlisted candidate commit.
+
+---
+
+# v0.14 — the one-shot clarification result (Q3 fired; Q1, Q2, Q4, Q5, Q6 missed)
+
+The holdout and the three mechanical arms ran once, against preregistration
+commit `d53bb2e` and candidate commit `71ef468`, with the candidate diff
+confined to `scripts/resolver.py`, `tests/test_resolver.py`, and
+`tests/test_when_to_ask_candidate.py`.  The raw ledger landed before this
+view.  **The shipping conjunction is false and the resolver candidate does
+not ship.**
+
+| Clause | Registered bar | Observed | |
+|---|---|---|---|
+| Q1 contradictions stop binding | 0 wrong negative BINDs; 14/16 reach; 14/16 routes | **1** wrong BIND; **12/16** reach; **8/16** routes | miss |
+| Q2 clarification retains the reading | 15/20 halved+retained; classes 5/6, 5/6, 6/8; 20 distinct tuples; 10 sets of 4+; 4 of 8+ | **3/20**; **1/6, 1/6, 1/8**; **18** distinct; **0** sets of 4+; **0** of 8+ | miss |
+| Q3 the blind arm is materially weaker | gap ≥ 0.10 and blind fails Q2's bar | gap **0.6801** (0.7127 vs 0.0326); blind 6/20 | **fired** |
+| Q4 precision does not pay | pooled ≤ 0.030 | **0.03467** (104/3000) | miss |
+| Q5 coverage does not pay | reach ≥ 0.833 and target recall ≥ 0.833 | reach **0.921** (35/38); recall **0.789** (30/38) | miss |
+| Q6 exclusion changes the decision | ≥ 4/16 stripped single BINDs to vetoed ids | **1/16** | miss |
+
+## The resolver did not ask
+
+The registered denominator assumed 20 rows would ASK.  Four did.  Thirteen
+BOUND and three PASSed, and the initial candidate sets on those 20 rows were
+sized `[0,0,0,1×13,2,2,2,3]` — not one set reached four candidates, let alone
+the eight the profile required.  Q2's entire apparatus therefore measured
+narrowing on sets that were already singletons, which is why halving fired on
+3 rows rather than 15.  This is not a scoring accident to be reweighted: the
+prediction was that the shipped clarification loop would have ambiguity to
+work on, and on fresh rows it did not.
+
+## Q3 fired, and the reason it fired is the reason the others missed
+
+Reciprocal candidate load pays `1/k` for finding the target in a small set.
+The resolver averaged 0.7127 against the 25-id blind arm's 0.0326, an enormous
+gap — but 25 of the 30 rows where it recalled the target returned that target
+alone, and the mean `1/k` among recalled rows was 0.9028.  The arm is
+measuring decisiveness, and decisiveness is exactly what v0.13 had too much
+of.  On the eight rows where the target was absent the score is 0 and the
+control says nothing at all.  Q3 is a true result about the blind baseline
+being weak; it is not evidence that the candidate reads questions well, and
+it should not be quoted as one.
+
+## Q4 could not have fired
+
+The mechanical arm classifies OEWN sentences with the plain resolver, because
+those sentences contain no `without TERM` structure.  The candidate changes
+`resolve` only by adding a mask parameter that this path never sets, so Q4
+re-measured the untouched v0.13 baseline on fresh samples and duly reproduced
+it: 0.024, 0.038, 0.042 across seeds 20260825–20260827, pooled 0.03467, mean
+0.03467, population σ 0.0077 — against v0.13's 0.034.  **Registering a clause
+the intervention cannot influence is a preregistration defect, not a candidate
+failure.**  What the arm did earn is worth keeping: three fresh, mutually
+disjoint 1,000-sentence samples independently replicate the 0.034 figure that
+sank v0.13, so that number was not a bad draw.
+
+## What the exclusion actually did
+
+The mechanism works where it was designed to work.  The spent v0.13 sentence
+now binds `economics.finance.simple_interest` instead of
+`economics.finance.continuous_compounding`, and it does so by promoting a
+lower-scored survivor after the veto — a resolve-then-filter implementation
+would have returned nothing there.  That is kept as a regression test and is
+still not a score.
+
+On the fresh negative stratum it barely mattered.  Stripping the negative
+span changed the bound on **one** of 16 rows (N-B03, ASK → BIND on a vetoed
+id), so Q6 reached 1/16 against a threshold of 4.  Seven of the eight
+`negative_bind` rows already bound correctly without needing the exclusion,
+which means the fresh negative rows were easier than the sentence that
+motivated them.  The one wrong negative BIND, N-A04, bound
+`difftop.vectorfields.poincare_hopf_index_theorem` where
+`difftop.invariants.euler_characteristic_diffeomorphism_invariance` was
+intended — a wrong reading the exclusion did not veto, because the excluded
+term appears nowhere in the winner's committed text.
+
+## Standing
+
+Per the design's stop conditions the implementation parks.  No row is
+replaced, no threshold is retuned, no fifth holdout is authored in this
+cycle, and `without` does not become a stopword.  The exclusion seam stays in
+the resolver as shipped behaviour that no gate credits.
+

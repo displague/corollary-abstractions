@@ -51,13 +51,38 @@ or commit history. Each item names the evidence that motivated it.
 
 ## v0.13 conversational coverage: rejected morphology trade
 
-- **PREREGISTERED for v0.14; not adjudicated.**  The successor protocol now
-  freezes 48 fresh rows, primary-only credit, a 25-id title baseline, exact
-  negative parsing with mask-aware pre-selection, and three disjoint
-  canonical OEWN arms.  This closes the three evaluator-construction wants
-  below without claiming the candidate works.  The one-shot holdout and OEWN
-  classification have not run; any Q1–Q6 miss remains actionable evidence,
-  not a row-edit request.  Executable gate: `scripts/measure_when_to_ask.py`.
+- **ADJUDICATED for v0.14; the candidate is PARKED.**  One fire (Q3) and five
+  misses.  The clarification loop had almost nothing to clarify: 4 of 20 rows
+  predicted to ASK actually asked, and no initial candidate set reached four
+  ids.  Before another clarification cycle is worth running, the open question
+  is not how to narrow better but **why fresh in-corpus questions resolve to
+  singletons** — a resolver that rarely offers a choice cannot be measured on
+  how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
+  and the v0.14 ANALYSIS entry.
+
+- **Q4 was unfireable as registered.**  The mechanical precision arm never
+  enters the candidate's masked path, so the clause measured the untouched
+  baseline and reproduced it (pooled 0.03467 vs v0.13's 0.034).  Future
+  preregistrations need a construction check that each shipping clause has a
+  causal path from the intervention to its number; the current validator
+  checks rows, ids, freshness and provenance but nothing about whether a
+  prediction is reachable.  Evidence: v0.14 Q4 and DISCOVERIES.
+
+- **Negative rows need to be decided by their negation, not merely to contain
+  one.**  Q6 reached 1/16.  Seven of eight `negative_bind` rows bound
+  correctly with the veto inert, so the stratum tested the resolver's ordinary
+  competence and only incidentally the exclusion.  A successor stratum should
+  require, at construction time, that the stripped query bind a vetoed id —
+  which is checkable from committed metadata before any candidate exists.
+
+- **The v0.14 protocol held; its subject did not.**  The successor froze 48
+  fresh rows, primary-only credit, a 25-id title baseline, exact negative
+  parsing with mask-aware pre-selection, and three disjoint canonical OEWN
+  arms, and it ran once without a row being replaced or a threshold moved.
+  That closed the three evaluator-construction wants below.  It did not
+  rescue the morphology trade or produce a shippable candidate, and the
+  misses above are the actionable evidence.  Executable gate:
+  `scripts/measure_when_to_ask.py`.
 
 - **Clarification is only tested against one intended reading.**  All 20 v0.14
   ASK rows declare a singleton `retained_ids`, and the validator's 58-credit
