@@ -4057,6 +4057,22 @@ predicate.  The consequence is recorded rather than repaired — v0.14 does not
 test whether clarification preserves several simultaneously intended readings,
 only whether it keeps the one intended reading while at least halving the set.
 
+Implementing against the frozen evaluator immediately falsified two of its
+own assertions, and the repair is recorded here rather than folded in
+quietly.  `test_candidate_scoring_api_is_deliberately_absent` imported the
+live resolver to prove no candidate existed, and
+`test_no_result_exists_in_preregistration` checked the working tree for a
+result file.  Both are true only until v0.14 succeeds: the first goes red the
+moment `resolve_negative` lands, the second the moment the one-shot run
+writes its ledger — and both live in a file the candidate commit is forbidden
+to touch.  The release gate demanding a green suite at the frozen tip was
+therefore unsatisfiable by construction.  Commit `3c17718` remains the
+preregistration; the amendment re-asks both questions of that commit's Git
+objects, which answer them permanently, and exercises the scorer's refusal
+against a stub module that really lacks the API.  No row, threshold,
+denominator, prediction, or scoring path changed, and the amendment landed
+before any candidate output existed.
+
 No v0.14 row has been resolved, no OEWN sentence has been classified, and no
 Q1–Q6 score or candidate result exists.  The only executed checks are
 construction/provenance and synthetic vacuity tests.  The raw-before-compact

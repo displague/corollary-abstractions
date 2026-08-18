@@ -7,11 +7,14 @@ Nothing in this module calls a resolver on a registered v0.14 query.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from copy import deepcopy
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -38,6 +41,27 @@ from measure_when_to_ask import (  # noqa: E402
     validate_structure,
     verify_manifest,
 )
+
+
+#: The commit that froze this evaluator.  Every chronology claim below is
+#: made about that object rather than about whatever is on disk when the
+#: suite happens to run.
+PREREG_COMMIT = "3c17718"
+
+
+def _git_show(commit: str, path: str) -> str:
+    return subprocess.run(
+        ["git", "show", f"{commit}:{path}"], cwd=ROOT, check=True,
+        capture_output=True, text=True, encoding="utf-8",
+    ).stdout
+
+
+def _git_tree_paths(commit: str) -> set[str]:
+    listing = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", commit], cwd=ROOT, check=True,
+        capture_output=True, text=True, encoding="utf-8",
+    ).stdout
+    return set(listing.splitlines())
 
 
 def node(title: str, *, meaning: str = "", keywords: list[str] | None = None) -> dict:
@@ -160,8 +184,17 @@ class RegisteredConstruction(unittest.TestCase):
         self.assertEqual(receipt["follow_up_profile"], {"corpus": 6, "discipline": 6, "word": 8})
 
     def test_no_result_exists_in_preregistration(self) -> None:
-        self.assertFalse((ROOT / "experiments" / "when_to_ask_result.raw.json").exists())
-        self.assertFalse((ROOT / "experiments" / "when_to_ask_result.json").exists())
+        """Chronology is proved against the commit, not the working tree.
+
+        Asserting that no result file exists on disk holds only until the
+        one-shot run writes one, so the frozen suite would have had to go
+        red exactly when v0.14 finished.  What the claim always meant is
+        that the preregistration commit carried no result, and Git answers
+        that permanently.
+        """
+        listing = _git_tree_paths(PREREG_COMMIT)
+        self.assertNotIn("experiments/when_to_ask_result.raw.json", listing)
+        self.assertNotIn("experiments/when_to_ask_result.json", listing)
 
     def test_key_receipt_contains_no_external_text_or_keys(self) -> None:
         path = ROOT / "experiments" / "when_to_ask_oewn_keys.json"
@@ -187,8 +220,23 @@ class RegisteredConstruction(unittest.TestCase):
         self.assertEqual(len(recomputed), 88)
 
     def test_candidate_scoring_api_is_deliberately_absent(self) -> None:
-        with self.assertRaisesRegex(ProtocolError, "candidate absent"):
-            _candidate_resolvers()
+        """The candidate was absent when this evaluator was frozen.
+
+        Importing the live resolver can only show that once, and the same
+        assertion then fails forever after the candidate lands -- inside a
+        file the candidate commit is forbidden to touch.  So the ordering
+        claim is checked where it is actually recorded, and the refusal
+        itself is checked against a module that genuinely lacks the API.
+        """
+        frozen = _git_show(PREREG_COMMIT, "scripts/resolver.py")
+        self.assertNotIn("def resolve_negative", frozen)
+        self.assertNotIn("def resolve_masked", frozen)
+
+        stub = types.ModuleType("resolver")
+        stub.resolve = lambda text, index: None  # noqa: ARG005
+        with mock.patch.dict(sys.modules, {"resolver": stub}):
+            with self.assertRaisesRegex(ProtocolError, "candidate absent"):
+                _candidate_resolvers()
 
     def test_follow_up_guards_refuse_before_the_one_shot_run(self) -> None:
         """Both new construction guards must be trippable, not decorative."""

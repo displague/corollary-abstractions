@@ -13,6 +13,18 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A frozen evaluator can freeze in its own expiry date (v0.14, pre-score).**
+  Two preregistration tests asserted the absence of the candidate and of the
+  result file by looking at the live import path and the working tree.  Both
+  claims are about chronology, and both were written as claims about the
+  present, so each was guaranteed to fail at exactly the moment the cycle
+  succeeded — inside the one file the candidate commit may not modify.
+  Freezing an evaluator therefore has a second requirement beyond running it
+  early: every assertion in it must be phrased about an object that stops
+  changing.  Git commits do; imports and directories do not.  Found by
+  implementing the candidate, which is the only thing that could have found
+  it.  See [[a-negative-veto-must-happen-before-candidate-selection]].
+
 - **A negative veto must happen before candidate selection (v0.14 protocol,
   unmeasured).** Filtering only a resolver's final tuple makes the registered
   causal ablation incompatible with retained reach: when the stripped query
