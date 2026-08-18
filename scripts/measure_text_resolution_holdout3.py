@@ -3,7 +3,10 @@
 
 Predictions C3-1--C3-4 and the complete row set are frozen in
 docs/DESIGN-coverage-holdout3.md before this program is run. The output keeps
-every row, including misses and wrong binds.
+every row, including misses and wrong binds. The candidate-commit version of
+this file emitted every blind candidate and its recovered immutable output is
+`text_resolution_holdout3_result.raw.json`. This post-adjudication version
+emits the separate compact view: exact count plus the first 25 ids.
 """
 
 from __future__ import annotations

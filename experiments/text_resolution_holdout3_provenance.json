@@ -1,0 +1,31 @@
+{
+  "schema": "text_resolution_holdout3_provenance.v1",
+  "preregister": {
+    "commit": "110fff4c06bdbe0fcb31cc8606ec29ed9502f6f1",
+    "tree": "2aa1d3cfcd333b490eee5990f8a416c38e458e46",
+    "spec_blob": "0e79501090dd0132c9451a3d73cd8fc8775f51d1"
+  },
+  "candidate_implementation": {
+    "commit": "7a9c7c344fab7e6a3986be3ff224e6833a4a8052",
+    "tree": "564c9e8e12b5f86fb3af9e0e9f77366dc803aa17",
+    "resolver_blob": "9043c555ac5b4f1407679705cd2f4af7e3718d9d",
+    "holdout_scorer_blob": "aca3f7d42ddc291b10646e3fe41b125b3ba29eeb",
+    "false_positive_scorer_blob": "32dc0a0d45474dc5f2ba9d06d9f6f40e8fddb685"
+  },
+  "raw_one_shot_ledger": {
+    "path": "experiments/text_resolution_holdout3_result.raw.json",
+    "git_blob": "16abf1c51f449a3067b562d1dbeb9c7ae0871804",
+    "sha256": "ffa68c7659c36a589f37e04a679d195b62c074cd564ca20f2ce7feb5c90b4532",
+    "bytes_lf": 749574,
+    "recovery": "Recovered from the dangling Git blob created when the raw scorer output was staged before the compact view replaced it. The blob preserves all blind_candidates arrays."
+  },
+  "compact_view": {
+    "path": "experiments/text_resolution_holdout3_result.json",
+    "sha256": "9b6780e42065c2d82a1b85c11b48e4c6ce2f5dec3b571a2400595efd258dc64c",
+    "derivation": "For each raw row, replace blind_candidates with its exact length and first 25 entries. Every other key and value is identical. This is a view, not the one-shot ledger."
+  },
+  "false_positive_ledger": {
+    "path": "experiments/false_positive_rate_f4.json",
+    "sha256": "5133d45d644242969ea2650756fe04159f04187142c424870eb30424d95d04c2"
+  }
+}

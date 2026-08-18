@@ -56,7 +56,9 @@ published and the change is not shipped.
 wrong BIND refuted C3-3. Fresh pinned-OEWN F4 was **0.034** (34/1000), worse
 than the 0.030 shipping ceiling. The frozen conjunction failed, so `98e0d36`
 restored the resolver. Ledgers and the full trade are published; neither spent
-set will be retuned or rerun.
+set will be retuned or rerun. The recovered raw holdout ledger is Git blob
+`16abf1c5` (SHA-256 `ffa68c76...c90b4532`); the shorter ledger is explicitly a
+derived count+preview view, not the one-shot artifact.
 
 ## 2. Ambiguity and context (headline, ambitious)
 

@@ -3908,3 +3908,17 @@ Regenerable from the spent specifications for audit only:
 `experiments/text_resolution_holdout3_result.json` and
 `experiments/false_positive_rate_f4.json`; governance forbids using a rerun as
 a new score.
+
+**Raw-ledger repair, without a rerun.** Independent review found that the
+committed holdout ledger was the compact post-run view. The full output was
+recoverable from Git's object store because it had been staged first: blob
+`16abf1c51f449a3067b562d1dbeb9c7ae0871804`, 749,574 LF bytes, SHA-256
+`ffa68c7659c36a589f37e04a679d195b62c074cd564ca20f2ce7feb5c90b4532`.
+It is now committed as `text_resolution_holdout3_result.raw.json` and retains
+all blind candidate ids. The compact file is verified as one exact transform
+of the raw rows (full list -> count + first 25; nothing else changes), not
+called the one-shot ledger. `text_resolution_holdout3_provenance.json` records
+preregistration tree `2aa1d3c`, candidate tree `564c9e8`, and the exact spec,
+resolver, holdout-scorer and F4-scorer blobs. The recovery makes C3-4's baseline
+inclusion independently inspectable; it does not make the 14,571-way tie a
+strong baseline.

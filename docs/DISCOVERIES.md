@@ -22,7 +22,10 @@ bindings), **near-miss** (informative failure, kept deliberately).
   shipping ceiling, so the resolver change was reverted as preregistered.
   The one target miss was a confident contradiction: `without compounding`
   bound continuous compounding. Coverage is not correctness, and morphology
-  cannot represent negative contrast. Status: **empirical, rejected trade**.
+  cannot represent negative contrast. Independent review recovered the full
+  raw one-shot ledger from its staged Git blob, so the weak 14,571-way blind
+  tie is inspectable rather than surviving only as a count and preview.
+  Status: **empirical, rejected trade**.
 
 - **The sign flip does not travel; it was a fact about Lean-workbook
   (v0.12 item 1).** Two sources the emitter was not fitted to run the

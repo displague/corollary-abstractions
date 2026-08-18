@@ -100,3 +100,25 @@ The shipping conjunction failed because F4 missed. Commit
 `98e0d369eb183930bd7d918fc7edad8ecbc91457` therefore restores the resolver
 and its tests exactly. The experiment is retained; the morphology change is
 not shipped and these spent samples will not be rescored.
+
+### Raw-ledger provenance
+
+Independent review correctly found that the initially committed ledger was a
+post-run compact view, not the raw bytes emitted by candidate commit `7a9c7c3`.
+The original output had been staged before compaction, so Git retained it as
+dangling blob `16abf1c51f449a3067b562d1dbeb9c7ae0871804`. It was recovered without
+invoking either scorer and is now the immutable canonical artifact:
+
+- `experiments/text_resolution_holdout3_result.raw.json`;
+- 749,574 LF bytes;
+- SHA-256
+  `ffa68c7659c36a589f37e04a679d195b62c074cd564ca20f2ce7feb5c90b4532`.
+
+It retains every `blind_candidates` array, including the complete 14,571-id
+tie. `text_resolution_holdout3_result.json` is only a derived compact view:
+each full array is replaced by its exact count and first 25 ids; every other
+value is identical. `text_resolution_holdout3_provenance.json` binds both to
+preregistration tree `2aa1d3c`, candidate implementation tree `564c9e8`, and
+the exact spec/scorer/resolver blobs. The dangling object proves which bytes
+survived staging; because it was not then committed, Git does not independently
+timestamp when those bytes were produced. No stronger chronology is claimed.
