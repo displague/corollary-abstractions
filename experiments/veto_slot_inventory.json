@@ -1,0 +1,944 @@
+{
+  "schema": "veto_slot_inventory.v1",
+  "design": "docs/DESIGN-coincidence-veto.md",
+  "population": "typed twin groups spanning more than one top-level id namespace with no ingested member",
+  "groups": 26,
+  "aligned_slots": 77,
+  "distinct_symbol_occurrences": 213,
+  "problems": [],
+  "inventory": [
+    {
+      "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "members": [
+        "diffgeo.surfaces.euclidean_line_element",
+        "geometry.right_triangles.pythagorean_theorem"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "diffgeo.surfaces.euclidean_line_element": "DU",
+            "geometry.right_triangles.pythagorean_theorem": "SIDE1"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "diffgeo.surfaces.euclidean_line_element": "DV",
+            "geometry.right_triangles.pythagorean_theorem": "SIDE2"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "diffgeo.surfaces.euclidean_line_element": "LINEELEMENT",
+            "geometry.right_triangles.pythagorean_theorem": "HYPOTENUSE"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:P = MEET\u27e8?1:V, NEG\u27e8?1:V\u27e9\u27e9",
+      "archetypes": [
+        "complement_annihilation"
+      ],
+      "members": [
+        "logic.boolean_laws.complement_laws",
+        "narrative.frame.frame_consistency",
+        "settheory.boolean_laws.complement_laws"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.complement_laws": "FALSITY",
+            "narrative.frame.frame_consistency": "INCONSISTENCY",
+            "settheory.boolean_laws.complement_laws": "EMPTYSET"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "logic.boolean_laws.complement_laws": "PROP1",
+            "narrative.frame.frame_consistency": "FRAMEPREMISE",
+            "settheory.boolean_laws.complement_laws": "SETA"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "members": [
+        "ml.preference.grpo_group_relative_advantage",
+        "probstat.transform.z_standardization"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "ml.preference.grpo_group_relative_advantage": "ADVANTAGE",
+            "probstat.transform.z_standardization": "STD"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "ml.preference.grpo_group_relative_advantage": "REWARD",
+            "probstat.transform.z_standardization": "RAW"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "ml.preference.grpo_group_relative_advantage": "MEANREWARD",
+            "probstat.transform.z_standardization": "CENTER"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "ml.preference.grpo_group_relative_advantage": "STDREWARD",
+            "probstat.transform.z_standardization": "SCALE"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "archetypes": [
+        "scaled_linear"
+      ],
+      "members": [
+        "geometry.circle_formulas.circle_circumference_formula",
+        "physics.circuits.ohms_law",
+        "physics.mechanics.newton_second_law"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "geometry.circle_formulas.circle_circumference_formula": "CIRCUMFERENCE",
+            "physics.circuits.ohms_law": "POTENTIAL",
+            "physics.mechanics.newton_second_law": "FORCE"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "geometry.circle_formulas.circle_circumference_formula": "CONSTANT",
+            "physics.circuits.ohms_law": "RESISTANCE",
+            "physics.mechanics.newton_second_law": "INERTIA"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "geometry.circle_formulas.circle_circumference_formula": "RADIUS",
+            "physics.circuits.ohms_law": "FLOW",
+            "physics.mechanics.newton_second_law": "RESPONSE"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "members": [
+        "geometry.area_formulas.trapezoid_area_formula",
+        "numanalysis.integration.trapezoidal_rule"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "geometry.area_formulas.trapezoid_area_formula": "AREA",
+            "numanalysis.integration.trapezoidal_rule": "AREA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "geometry.area_formulas.trapezoid_area_formula": "CONSTANT",
+            "numanalysis.integration.trapezoidal_rule": "CONSTANT"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "geometry.area_formulas.trapezoid_area_formula": "HEIGHT",
+            "numanalysis.integration.trapezoidal_rule": "STEPWIDTH"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "geometry.area_formulas.trapezoid_area_formula": "BASE1",
+            "numanalysis.integration.trapezoidal_rule": "VALUELEFT"
+          }
+        },
+        {
+          "slot": 4,
+          "symbols": {
+            "geometry.area_formulas.trapezoid_area_formula": "BASE2",
+            "numanalysis.integration.trapezoidal_rule": "VALUERIGHT"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "members": [
+        "chemistry.spectroscopy.beer_lambert_law",
+        "geometry.area_formulas.triangle_area_formula"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "chemistry.spectroscopy.beer_lambert_law": "ABSORBANCE",
+            "geometry.area_formulas.triangle_area_formula": "AREA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "chemistry.spectroscopy.beer_lambert_law": "ABSORPTIVITY",
+            "geometry.area_formulas.triangle_area_formula": "CONSTANT"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "chemistry.spectroscopy.beer_lambert_law": "PATHLENGTH",
+            "geometry.area_formulas.triangle_area_formula": "BASE"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "chemistry.spectroscopy.beer_lambert_law": "CONCENTRATION",
+            "geometry.area_formulas.triangle_area_formula": "HEIGHT"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8*(?2:P, ?3:V)\u27e9)",
+      "archetypes": [
+        "exponential_evolution"
+      ],
+      "members": [
+        "calculus.growth.exponential_growth_law",
+        "economics.finance.continuous_compounding"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "calculus.growth.exponential_growth_law": "AMOUNT",
+            "economics.finance.continuous_compounding": "VALUE"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "calculus.growth.exponential_growth_law": "INITIAL",
+            "economics.finance.continuous_compounding": "PRINCIPAL"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "calculus.growth.exponential_growth_law": "RATE",
+            "economics.finance.continuous_compounding": "RATE"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "calculus.growth.exponential_growth_law": "TIME",
+            "economics.finance.continuous_compounding": "TIME"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "archetypes": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "members": [
+        "chemistry.kinetics.first_order_integrated_rate_law",
+        "economics.finance.present_value_continuous",
+        "ml.policy.boltzmann_softmax_policy"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "chemistry.kinetics.first_order_integrated_rate_law": "AMOUNT",
+            "economics.finance.present_value_continuous": "PRESENT",
+            "ml.policy.boltzmann_softmax_policy": "PROBABILITY"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "chemistry.kinetics.first_order_integrated_rate_law": "INITIAL",
+            "economics.finance.present_value_continuous": "FUTURE",
+            "ml.policy.boltzmann_softmax_policy": "INVPARTITION"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "chemistry.kinetics.first_order_integrated_rate_law": "RATECONST",
+            "economics.finance.present_value_continuous": "RATE",
+            "ml.policy.boltzmann_softmax_policy": "INVTEMPERATURE"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "chemistry.kinetics.first_order_integrated_rate_law": "TIME",
+            "economics.finance.present_value_continuous": "HORIZON",
+            "ml.policy.boltzmann_softmax_policy": "ENERGY"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "archetypes": [
+        "bilinear_product"
+      ],
+      "members": [
+        "diffgeo.surfaces.gaussian_curvature_principal_product",
+        "geometry.area_formulas.rectangle_area_formula",
+        "graphtheory.enumeration.complete_bipartite_edge_count"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "diffgeo.surfaces.gaussian_curvature_principal_product": "GAUSSCURVATURE",
+            "geometry.area_formulas.rectangle_area_formula": "AREA",
+            "graphtheory.enumeration.complete_bipartite_edge_count": "EDGES"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "diffgeo.surfaces.gaussian_curvature_principal_product": "PRINCIPAL1",
+            "geometry.area_formulas.rectangle_area_formula": "DIM1",
+            "graphtheory.enumeration.complete_bipartite_edge_count": "PARTONE"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "diffgeo.surfaces.gaussian_curvature_principal_product": "PRINCIPAL2",
+            "geometry.area_formulas.rectangle_area_formula": "DIM2",
+            "graphtheory.enumeration.complete_bipartite_edge_count": "PARTTWO"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "members": [
+        "calculus.differentiation.average_rate_of_change",
+        "chemistry.solutions.molarity_definition",
+        "economics.microeconomics.price_elasticity_of_demand",
+        "ml.policy.policy_probability_ratio",
+        "numanalysis.error.relative_condition_number",
+        "physics.kinematics.average_speed",
+        "physics.materials.mass_density"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "calculus.differentiation.average_rate_of_change": "RATE",
+            "chemistry.solutions.molarity_definition": "CONCENTRATION",
+            "economics.microeconomics.price_elasticity_of_demand": "ELASTICITY",
+            "ml.policy.policy_probability_ratio": "RATIO",
+            "numanalysis.error.relative_condition_number": "CONDITION",
+            "physics.kinematics.average_speed": "RATE",
+            "physics.materials.mass_density": "RATE"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "calculus.differentiation.average_rate_of_change": "QUANTITY",
+            "chemistry.solutions.molarity_definition": "AMOUNT",
+            "economics.microeconomics.price_elasticity_of_demand": "PCT_QUANTITY",
+            "ml.policy.policy_probability_ratio": "POLICYNEW",
+            "numanalysis.error.relative_condition_number": "OUTPUTPERTURB",
+            "physics.kinematics.average_speed": "QUANTITY",
+            "physics.materials.mass_density": "QUANTITY"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "calculus.differentiation.average_rate_of_change": "INTERVAL",
+            "chemistry.solutions.molarity_definition": "VOLUME",
+            "economics.microeconomics.price_elasticity_of_demand": "PCT_PRICE",
+            "ml.policy.policy_probability_ratio": "POLICYOLD",
+            "numanalysis.error.relative_condition_number": "INPUTPERTURB",
+            "physics.kinematics.average_speed": "INTERVAL",
+            "physics.materials.mass_density": "INTERVAL"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "members": [
+        "geomodel.bezier.de_casteljau_step",
+        "numanalysis.interpolation.linear_interpolation",
+        "probstat.probability.two_component_mixture"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "geomodel.bezier.de_casteljau_step": "INTERMEDIATE",
+            "numanalysis.interpolation.linear_interpolation": "RESULT",
+            "probstat.probability.two_component_mixture": "MIXED"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "geomodel.bezier.de_casteljau_step": "PARAM",
+            "numanalysis.interpolation.linear_interpolation": "PARAM",
+            "probstat.probability.two_component_mixture": "WEIGHT"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "geomodel.bezier.de_casteljau_step": "RIGHT",
+            "numanalysis.interpolation.linear_interpolation": "FINISH",
+            "probstat.probability.two_component_mixture": "COMPONENT1"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "geomodel.bezier.de_casteljau_step": "LEFT",
+            "numanalysis.interpolation.linear_interpolation": "START",
+            "probstat.probability.two_component_mixture": "COMPONENT2"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "archetypes": [
+        "affine_operator"
+      ],
+      "members": [
+        "calculus.approximation.tangent_line_linearization",
+        "economics.finance.capm_expected_return",
+        "economics.macroeconomics.keynesian_consumption_function",
+        "geomodel.transforms.homogeneous_rigid_transform",
+        "probstat.transform.affine_location_scale"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "calculus.approximation.tangent_line_linearization": "LINEARIZED",
+            "economics.finance.capm_expected_return": "EXPECTED",
+            "economics.macroeconomics.keynesian_consumption_function": "CONSUMPTION",
+            "geomodel.transforms.homogeneous_rigid_transform": "POINTNEW",
+            "probstat.transform.affine_location_scale": "OUT"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "calculus.approximation.tangent_line_linearization": "BASEVALUE",
+            "economics.finance.capm_expected_return": "RISKFREE",
+            "economics.macroeconomics.keynesian_consumption_function": "AUTONOMOUS",
+            "geomodel.transforms.homogeneous_rigid_transform": "TRANSLATION",
+            "probstat.transform.affine_location_scale": "SHIFT"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "calculus.approximation.tangent_line_linearization": "SLOPE",
+            "economics.finance.capm_expected_return": "SENSITIVITY",
+            "economics.macroeconomics.keynesian_consumption_function": "PROPENSITY",
+            "geomodel.transforms.homogeneous_rigid_transform": "ROTATION",
+            "probstat.transform.affine_location_scale": "SCALE"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "calculus.approximation.tangent_line_linearization": "DISPLACEMENT",
+            "economics.finance.capm_expected_return": "PREMIUM",
+            "economics.macroeconomics.keynesian_consumption_function": "DISPOSABLE_INCOME",
+            "geomodel.transforms.homogeneous_rigid_transform": "POINT",
+            "probstat.transform.affine_location_scale": "IN"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "members": [
+        "algtop.homology.chain_rank_nullity",
+        "physics.frames.galilean_velocity_addition"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "algtop.homology.chain_rank_nullity": "CHAINRANK",
+            "physics.frames.galilean_velocity_addition": "OBJECT_VELOCITY"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "algtop.homology.chain_rank_nullity": "CYCLERANK",
+            "physics.frames.galilean_velocity_addition": "RELATIVE_VELOCITY"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "algtop.homology.chain_rank_nullity": "IMAGERANK",
+            "physics.frames.galilean_velocity_addition": "FRAME_VELOCITY"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?0:V, ?0:V\u27e9",
+      "archetypes": [
+        "idempotent_operation"
+      ],
+      "members": [
+        "logic.boolean_laws.idempotence",
+        "settheory.boolean_laws.idempotence"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.idempotence": "PROP1",
+            "settheory.boolean_laws.idempotence": "SETA"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?0:V, JOIN\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "lattice_absorption"
+      ],
+      "members": [
+        "logic.boolean_laws.absorption",
+        "settheory.boolean_laws.absorption"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.absorption": "PROP1",
+            "settheory.boolean_laws.absorption": "SETA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "logic.boolean_laws.absorption": "PROP2",
+            "settheory.boolean_laws.absorption": "SETB"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?1:P, ?0:V\u27e9",
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "members": [
+        "logic.boolean_laws.identity_laws",
+        "settheory.boolean_laws.identity_laws"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.identity_laws": "PROP1",
+            "settheory.boolean_laws.identity_laws": "SETA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "logic.boolean_laws.identity_laws": "TRUTH",
+            "settheory.boolean_laws.identity_laws": "UNIVERSE"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = NEG\u27e8NEG\u27e8?0:V\u27e9\u27e9",
+      "archetypes": [
+        "complement_involution"
+      ],
+      "members": [
+        "logic.boolean_laws.double_negation",
+        "settheory.boolean_laws.double_negation"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.double_negation": "PROP1",
+            "settheory.boolean_laws.double_negation": "SETA"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?2:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "members": [
+        "infotheory.entropy.shannon_entropy",
+        "physics.thermodynamics.gibbs_entropy"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "infotheory.entropy.shannon_entropy": "INFORMATION",
+            "physics.thermodynamics.gibbs_entropy": "ENTROPY"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "infotheory.entropy.shannon_entropy": "BASESCALE",
+            "physics.thermodynamics.gibbs_entropy": "SCALE"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "infotheory.entropy.shannon_entropy": "WEIGHT_i",
+            "physics.thermodynamics.gibbs_entropy": "PROBABILITY_i"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?3:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "members": [
+        "infotheory.divergence.cross_entropy",
+        "ml.objective.token_cross_entropy_loss"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "infotheory.divergence.cross_entropy": "CROSSINFORMATION",
+            "ml.objective.token_cross_entropy_loss": "LOSS"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "infotheory.divergence.cross_entropy": "BASESCALE",
+            "ml.objective.token_cross_entropy_loss": "BATCHSCALE"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "infotheory.divergence.cross_entropy": "WEIGHT_i",
+            "ml.objective.token_cross_entropy_loss": "TARGET_i"
+          }
+        },
+        {
+          "slot": 3,
+          "symbols": {
+            "infotheory.divergence.cross_entropy": "MODELWEIGHT_i",
+            "ml.objective.token_cross_entropy_loss": "PREDICTED_i"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = neg(LOG\u27e8?1:V\u27e9)",
+      "archetypes": [
+        "negated_logarithmic_scale"
+      ],
+      "members": [
+        "chemistry.acid_base.ph_definition",
+        "infotheory.entropy.surprisal"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "chemistry.acid_base.ph_definition": "PH",
+            "infotheory.entropy.surprisal": "SURPRISAL"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "chemistry.acid_base.ph_definition": "ACTIVITY",
+            "infotheory.entropy.surprisal": "WEIGHT"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = sum\u27e8*(?1:P, ?2:V)\u27e9",
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization",
+        "weighted_accumulation"
+      ],
+      "members": [
+        "algtop.homology.betti_alternating_sum",
+        "geomodel.barycentric.barycentric_point_reconstruction",
+        "geomodel.bezier.bernstein_bezier_evaluation",
+        "probstat.probability.total_probability_partition"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "algtop.homology.betti_alternating_sum": "EULERCHAR",
+            "geomodel.barycentric.barycentric_point_reconstruction": "POINT",
+            "geomodel.bezier.bernstein_bezier_evaluation": "POINT",
+            "probstat.probability.total_probability_partition": "MARGINAL"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "algtop.homology.betti_alternating_sum": "COEFF_i",
+            "geomodel.barycentric.barycentric_point_reconstruction": "BARY_i",
+            "geomodel.bezier.bernstein_bezier_evaluation": "BASIS_i",
+            "probstat.probability.total_probability_partition": "WEIGHT_i"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "algtop.homology.betti_alternating_sum": "BETTI_i",
+            "geomodel.barycentric.barycentric_point_reconstruction": "VERTEX_i",
+            "geomodel.bezier.bernstein_bezier_evaluation": "CONTROL_i",
+            "probstat.probability.total_probability_partition": "CONDITIONAL_i"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "CARD\u27e8JOIN\u27e8?0:V, ?1:V\u27e9\u27e9 = +(CARD\u27e8?0:V\u27e9, CARD\u27e8?1:V\u27e9, neg(CARD\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9))",
+      "archetypes": [
+        "inclusion_exclusion_correction"
+      ],
+      "members": [
+        "algtop.invariants.euler_characteristic_valuation",
+        "geotop.measure.area_inclusion_exclusion",
+        "infotheory.mutualinfo.entropy_inclusion_exclusion",
+        "settheory.cardinality.inclusion_exclusion_two_sets"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "algtop.invariants.euler_characteristic_valuation": "SPACEA",
+            "geotop.measure.area_inclusion_exclusion": "REGA",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion": "FIRST",
+            "settheory.cardinality.inclusion_exclusion_two_sets": "SETA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "algtop.invariants.euler_characteristic_valuation": "SPACEB",
+            "geotop.measure.area_inclusion_exclusion": "REGB",
+            "infotheory.mutualinfo.entropy_inclusion_exclusion": "SECOND",
+            "settheory.cardinality.inclusion_exclusion_two_sets": "SETB"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "IMPLIES\u27e8MEET\u27e8LEQ\u27e8?0:V, ?1:V\u27e9, LEQ\u27e8?1:V, ?2:V\u27e9\u27e9, LEQ\u27e8?0:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "members": [
+        "geotop.predicates.containment_transitivity",
+        "logic.inference.hypothetical_syllogism",
+        "settheory.order.subset_transitivity",
+        "temporal.order.precedence_transitivity"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "geotop.predicates.containment_transitivity": "REGA",
+            "logic.inference.hypothetical_syllogism": "PROP1",
+            "settheory.order.subset_transitivity": "SETA",
+            "temporal.order.precedence_transitivity": "EVENTA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "geotop.predicates.containment_transitivity": "REGB",
+            "logic.inference.hypothetical_syllogism": "PROP2",
+            "settheory.order.subset_transitivity": "SETB",
+            "temporal.order.precedence_transitivity": "EVENTB"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "geotop.predicates.containment_transitivity": "REGC",
+            "logic.inference.hypothetical_syllogism": "PROP3",
+            "settheory.order.subset_transitivity": "SETC",
+            "temporal.order.precedence_transitivity": "EVENTC"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "INTEGRAL\u27e8D\u27e8?0:V\u27e9\u27e9 = +(F\u27e8?1:V\u27e9, neg(F\u27e8?2:V\u27e9))",
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "members": [
+        "calculus.integration.ftc_evaluation_part",
+        "diffgeo.stokes.stokes_zero_form_case"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "calculus.integration.ftc_evaluation_part": "F",
+            "diffgeo.stokes.stokes_zero_form_case": "F"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "calculus.integration.ftc_evaluation_part": "UPPER",
+            "diffgeo.stokes.stokes_zero_form_case": "ENDPOINT"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "calculus.integration.ftc_evaluation_part": "LOWER",
+            "diffgeo.stokes.stokes_zero_form_case": "STARTPOINT"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN\u27e8MEET\u27e8?0:V, ?1:V\u27e9, MEET\u27e8?0:V, ?2:V\u27e9\u27e9 = MEET\u27e8?0:V, JOIN\u27e8?1:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "members": [
+        "logic.boolean_laws.distributivity_meet_over_join",
+        "settheory.boolean_laws.distributivity_meet_over_join"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.distributivity_meet_over_join": "PROP1",
+            "settheory.boolean_laws.distributivity_meet_over_join": "SETA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "logic.boolean_laws.distributivity_meet_over_join": "PROP2",
+            "settheory.boolean_laws.distributivity_meet_over_join": "SETB"
+          }
+        },
+        {
+          "slot": 2,
+          "symbols": {
+            "logic.boolean_laws.distributivity_meet_over_join": "PROP3",
+            "settheory.boolean_laws.distributivity_meet_over_join": "SETC"
+          }
+        }
+      ]
+    },
+    {
+      "skeleton": "JOIN\u27e8NEG\u27e8?0:V\u27e9, NEG\u27e8?1:V\u27e9\u27e9 = NEG\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "members": [
+        "logic.boolean_laws.de_morgan_laws",
+        "settheory.boolean_laws.de_morgan_laws"
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "symbols": {
+            "logic.boolean_laws.de_morgan_laws": "PROP1",
+            "settheory.boolean_laws.de_morgan_laws": "SETA"
+          }
+        },
+        {
+          "slot": 1,
+          "symbols": {
+            "logic.boolean_laws.de_morgan_laws": "PROP2",
+            "settheory.boolean_laws.de_morgan_laws": "SETB"
+          }
+        }
+      ]
+    }
+  ]
+}
