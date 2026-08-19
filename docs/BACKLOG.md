@@ -122,8 +122,19 @@ or commit history. Each item names the evidence that motivated it.
   environment, git or memory injection; or the three inquiries run on a system
   that has never seen this repository, with only the brief and the replies
   carried back; or a maintainer decision to change what the gate requires.
-  A dialect-free brief is drafted and hashed and can be reused when a channel
-  exists.  Evidence: `reports/design-direction-v0.15.json`.
+  The vendor documentation confirms both halves and closes the question:
+  *"There is no way to explicitly grant a subagent NO tools at all through
+  frontmatter configuration"*, and a non-fork subagent *"receives every level
+  of the CLAUDE.md hierarchy the main conversation loads"*, which only the
+  built-in Explore and Plan agents skip and no field controls.  So this is a
+  property of the platform, not a misconfiguration, and no restart or
+  frontmatter change lifts it.  Two levers do exist should the gate ever be
+  relaxed rather than met: `disallowedTools` can remove network and file
+  access, and `includeGitInstructions: false` removes the git snapshot — and
+  with it the commit subject that names the incumbent.  Neither can remove the
+  project instructions.  A dialect-free brief is drafted and hashed and can be
+  reused when a channel exists.  Evidence:
+  `reports/design-direction-v0.15.json`.
 
 - **The gate measurement cannot run in the canonical checkout.**
   `time_tests.assert_clean_source` refuses when any gitignored `*.py`, `*.pyc`,

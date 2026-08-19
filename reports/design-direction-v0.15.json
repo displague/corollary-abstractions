@@ -1,9 +1,9 @@
 {
   "schema": "design_direction_receipt.v1",
   "cycle": "v0.15",
-  "status": "blocked",
+  "status": "blocked_by_design",
   "requested_utc": "2026-08-19",
-  "reason": "platform cannot enforce the four required isolation properties",
+  "reason": "the platform documents that a subagent cannot be granted zero tools, and that custom subagents always receive the CLAUDE.md hierarchy",
   "required_isolation": [
     "no forked conversation turns",
     "no repository or workspace mount",
@@ -45,7 +45,15 @@
       "decisive_leak": "One of the injected commit subjects names the incumbent forward direction. The skill requires the incumbent to be withheld from the outside agents, and the harness supplies it before the brief is read.",
       "tool_availability": "unresolved by the probe; the agent declined to call anything, but its environment prose references Bash, Read and Write, and the registry reports all tools"
     },
-    "not_fixable_by": "Agent-definition frontmatter. The contamination arrives through the harness's own context injection (project instructions, environment block, git summary, user memory), which a subagent definition cannot suppress."
+    "not_fixable_by": "Agent-definition frontmatter. The contamination arrives through the harness's own context injection (project instructions, environment block, git summary, user memory), which a subagent definition cannot suppress.",
+    "vendor_documentation": {
+      "source": "https://code.claude.com/docs/en/sub-agents.md",
+      "zero_tools": "Cannot grant zero tools: There is no way to explicitly grant a subagent NO tools at all through frontmatter configuration.",
+      "empty_tools_behaviour": "An empty tools list, or one resolving to zero tools, makes Claude Code refuse to launch the subagent rather than launch it tool-less.",
+      "claude_md": "A non-fork subagent receives every level of the CLAUDE.md hierarchy the main conversation loads. Only the built-in Explore and Plan agents skip it, and no frontmatter field controls that.",
+      "git_status": "Git status is injected from a snapshot taken at parent-session start, and can be suppressed session-wide by the includeGitInstructions setting.",
+      "agreement_with_probe": "The documentation and the isolation probe agree on every point tested."
+    }
   },
   "brief_hash": null,
   "contexts": [],
@@ -55,5 +63,14 @@
     "an agent context that receives no project-instruction, environment, git, or memory injection; or",
     "running the three inquiries on a system with no knowledge of this repository and carrying only the brief and the replies back by hand; or",
     "an explicit decision by the maintainer to change what the gate requires"
-  ]
+  ],
+  "partially_enforceable_if_the_gate_were_relaxed": {
+    "no forked turns": "yes -- use any non-fork subagent",
+    "no network": "yes -- disallowedTools: WebFetch, WebSearch",
+    "no repository reads": "yes in practice -- disallowedTools covering Read, Grep, Glob, Bash, PowerShell, Edit, Write, NotebookEdit, ToolSearch, Skill",
+    "no git status leak": "yes -- set includeGitInstructions to false, which also removes the commit subject naming the incumbent",
+    "no tools at all": "never -- documented as impossible",
+    "no project instructions or memory": "not for a custom agent -- the CLAUDE.md hierarchy always loads, and this project's memory index arrives through it"
+  },
+  "correction": "An earlier note in this file implied the block might lift once the agent definition was registered. That was wrong. The block is a property of the platform, not of the definition, and no session restart or frontmatter change can lift it."
 }
