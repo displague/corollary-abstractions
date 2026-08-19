@@ -60,6 +60,33 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **The split fixture is rebuilt once per class, not once per module.**
+  `load_corpus` + `build_quadruples` costs **179.3 s** (87.0 + 92.2) and sits
+  in `setUpClass`, so `test_corpus_analogy_split`'s seven classes pay it seven
+  times: **1,255 s, of which 1,076 s is pure duplication**.  The inputs are the
+  committed corpus and the build is deterministic, so a module-scoped cache
+  changes nothing about what is tested.  A further ~2,179 s is `ceiling_table`
+  in `ControlTests.setUpClass`.  This is the cheapest real saving available and
+  it is still only 5% of the suite.
+
+- **Refusal tests pay full acceptance cost, and that is the O-level problem.**
+  `stage_write` runs the corpus-dependent pipeline — a `validate_nodes`
+  subprocess plus `match_signatures.load_nodes`/`build_report` over 12,777
+  nodes — on **every** candidate, including ones it refuses on a type error in
+  a declared delta dict.  One `stage()` call costs ~180 s and the suite makes
+  roughly seventy of them, so the module is O(tests x corpus).
+  `test_delta_declared_with_the_wrong_type_is_refused` spends **1,096.4 s**
+  rejecting six malformed dictionaries — six full corpus pipelines to
+  establish that `True` is not an `int`.  The fix is ordering, not a faster
+  algorithm: run the corpus-independent checks (schema, types, declared-delta
+  shape) before the corpus-dependent ones, making refusal O(1) and leaving
+  acceptance O(corpus).  Roughly 40 of 103 tests are refusal tests.
+  **Two cautions.**  Reordering changes which check refuses a candidate, and
+  tests assert on `refusal["check"]`, so the expected refusal identity moves
+  with it.  And a staging gate is a trust boundary: reordering must not let a
+  candidate reach a later check it currently never survives to.  Register the
+  intended order and its refusal identities before touching it.
+
 - **`test_write_stage` is the release gate.**  12,522.5 s of a 21,688 s
   suite, 103 tests, 8.5 s of fixture overhead, and four tests costing 3,088 s
   between them: `test_delta_declared_with_the_wr...` (1,096.4 s),
