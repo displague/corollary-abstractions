@@ -107,20 +107,23 @@ or commit history. Each item names the evidence that motivated it.
   runs the suite's own subprocess launches and asserts the tree is unchanged
   afterwards.
 
-- **The outside design inquiry has no isolated agent to run in.**  The gate
-  requires three contexts with no forked turns, no workspace, no network and
-  no tools, and explicitly refuses an instruction not to use tools as a
-  substitute.  Every agent type this platform offers carries repository read
-  access, and all but one carry `WebFetch`/`WebSearch`; none can be launched
-  tool-less.  A project agent definition declaring `tools: []` was written to
-  `.claude/agents/outside-designer.md`, but the registry is read at session
-  start so it was not selectable, and two things about it remain unverified:
-  whether an empty tool list is honoured rather than defaulting to all tools,
-  and whether a subagent inherits `AGENTS.md` or the user memory index — which
-  would leak project dialect even with no tools at all.  The next session must
-  re-run the isolation probe before trusting it.  Until then the gate is
-  BLOCKED and the incumbent direction stands.  Evidence:
-  `reports/design-direction-v0.15.json`.
+- **The outside design inquiry cannot be isolated on this platform, and the
+  reason is not the tool list.**  Both previously unverified questions are now
+  settled and both failed.  `tools: []` is read as unset, so the registry
+  grants the agent every tool.  More decisively, an isolation probe found that
+  a subagent's context carries the repository name and absolute path, the git
+  branch and the five most recent commit subjects, the user's persistent
+  memory index with prior-version direction and metrics, the user's name and
+  email, and the session scratchpad path — none of which an agent definition
+  can suppress, because the harness injects them.  One of those commit
+  subjects names the incumbent forward direction, which the skill requires to
+  be withheld from the outside agents, so the leak defeats the gate's purpose
+  and not merely its letter.  Unblocking needs a context with no project,
+  environment, git or memory injection; or the three inquiries run on a system
+  that has never seen this repository, with only the brief and the replies
+  carried back; or a maintainer decision to change what the gate requires.
+  A dialect-free brief is drafted and hashed and can be reused when a channel
+  exists.  Evidence: `reports/design-direction-v0.15.json`.
 
 - **The gate measurement cannot run in the canonical checkout.**
   `time_tests.assert_clean_source` refuses when any gitignored `*.py`, `*.pyc`,

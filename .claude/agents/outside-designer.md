@@ -1,6 +1,6 @@
 ---
 name: outside-designer
-description: Project-blind design inquiry. Receives only a plain-language brief and reasons without tools, repository access, or network. Used by forge-design-direction to obtain outside views uncontaminated by this project's vocabulary.
+description: DOES NOT ACHIEVE ISOLATION - do not use for forge-design-direction. Kept as the record of a tested and failed attempt. `tools: []` is read as unset and the registry grants all tools, and an isolation probe found the harness injects the repository name and path, git status and recent commit subjects, the user's memory index, and personal details into the subagent regardless. One injected commit subject names the incumbent design the skill requires to be withheld. See reports/design-direction-v0.15.json.
 tools: []
 model: opus
 ---

@@ -18,19 +18,42 @@
   },
   "evidence": {
     "available_agent_types": [
-      "claude", "claude-code-guide", "Explore", "general-purpose", "Plan",
+      "claude",
+      "claude-code-guide",
+      "Explore",
+      "general-purpose",
+      "Plan",
       "statusline-setup"
     ],
     "finding": "Every selectable agent type carries repository read access; claude, general-purpose, Explore, Plan and claude-code-guide additionally carry WebFetch and WebSearch. No selectable type can be launched without tools.",
     "attempted_fix": ".claude/agents/outside-designer.md declaring tools: []",
-    "attempted_fix_result": "Agent type 'outside-designer' not found -- the agent registry is read at session start, so a definition authored mid-session is not selectable.",
+    "attempted_fix_result": "Registered after a skills reload, but the agent registry reports it as 'Tools: All tools' -- an empty `tools: []` list is treated as unset, not as an empty tool set.",
     "unverified": [
-      "whether tools: [] is honoured as an empty tool set rather than a default",
-      "whether a subagent inherits project instructions (AGENTS.md) or the user memory index, which would leak project dialect even with no tools"
-    ]
+      "none remaining -- both previously unverified items are now settled, and both failed"
+    ],
+    "isolation_probe": {
+      "ran": true,
+      "method": "asked the registered agent to self-report its tools, its context, and any project identifiers, without calling tools",
+      "verdict": "not isolated",
+      "leaked_categories": [
+        "repository name and absolute working-directory path",
+        "git branch, working-tree status, and the five most recent commit subjects",
+        "the user's persistent memory index, including prior-version project direction and metrics",
+        "the user's name and email address",
+        "operating system, shell, and session scratchpad path"
+      ],
+      "decisive_leak": "One of the injected commit subjects names the incumbent forward direction. The skill requires the incumbent to be withheld from the outside agents, and the harness supplies it before the brief is read.",
+      "tool_availability": "unresolved by the probe; the agent declined to call anything, but its environment prose references Bash, Read and Write, and the registry reports all tools"
+    },
+    "not_fixable_by": "Agent-definition frontmatter. The contamination arrives through the harness's own context injection (project instructions, environment block, git summary, user memory), which a subagent definition cannot suppress."
   },
   "brief_hash": null,
   "contexts": [],
   "note": "No outside inquiry was run. No brief was issued, no round prompts were sent, and no direction was produced. Simulating three views inside one repository-aware context was declined because the skill forbids it and because that context is saturated with the project's vocabulary, which is the exact contamination the gate exists to prevent.",
-  "incumbent_retained": "docs/DESIGN-compile-before-query.md"
+  "incumbent_retained": "docs/DESIGN-compile-before-query.md",
+  "unblock_requires": [
+    "an agent context that receives no project-instruction, environment, git, or memory injection; or",
+    "running the three inquiries on a system with no knowledge of this repository and carrying only the brief and the replies back by hand; or",
+    "an explicit decision by the maintainer to change what the gate requires"
+  ]
 }

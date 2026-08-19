@@ -133,10 +133,13 @@ v0.14 is ready only if:
 - the full suite is green on a frozen tip with retained shard receipts —
   **done**: 1,341 tests, 0 failures, 0 errors at `55b4097`;
 - every unfinished item above ships or parks in writing;
-- the outside design inquiry gate is discharged — **currently BLOCKED**, see
-  `reports/design-direction-v0.15.json`.  The platform in use cannot launch an
-  agent without repository access, network access, or tools, so the three
-  isolated inquiries cannot be run and must not be simulated in a
-  repository-aware context.  The incumbent forward direction,
+- the outside design inquiry gate is discharged — **BLOCKED, now on tested
+  evidence**, see `reports/design-direction-v0.15.json`.  An isolation probe
+  shows a subagent receives the repository name and path, git status and
+  recent commit subjects, the user's memory index and personal details, and
+  all tools; one injected commit subject names the incumbent direction the
+  skill requires be withheld.  The harness supplies this, so no agent
+  definition can prevent it, and the three inquiries must not be simulated in
+  a repository-aware context.  The incumbent forward direction,
   [compile before query](DESIGN-compile-before-query.md), is retained
   unchanged; a blocked gate is not a licence to replace it.
