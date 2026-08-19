@@ -13,6 +13,21 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **No hand-authored statement is unreachable, and the reason is worth more
+  than the check (v0.15 inquiry, computed).**  An outside line of reasoning
+  proposed certifying which statements no query can ever single out: under
+  this reader's +1-per-word scoring, the strongest possible query for a
+  statement is all of its own discriminating features at once, so it can
+  never be named alone exactly when some other statement's features are a
+  superset of its own.  Computed over the 262 hand-authored statements, that
+  set is **empty**.  The cause is that hand-authored statements carry a median
+  of 43 discriminating features and a minimum of 9, so strict subsumption
+  essentially cannot occur.  The proposal's own construction gate required at
+  least three victims and refused it in about a minute, before any
+  measurement and without spending anything.  Recorded because the negative is
+  a fact about the collection rather than about the proposal: whatever makes
+  clarification hard here, it is not that statements are invisible.
+
 - **A parallel gate cannot be faster than its slowest module, and this one is
   57.7% of the suite (v0.14 item 3, measured).**  68 modules at a frozen tip:
   `test_write_stage` 12,522.5 s, `test_corpus_analogy_split` 8,045.0 s, and
