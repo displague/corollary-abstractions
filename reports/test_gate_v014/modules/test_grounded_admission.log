@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+Ran 11 tests in 0.149s
+
+OK
+
+11 tests in 0.1s (OK)
+
+timed tests: 0.1s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.1s   89.2%  tests.test_grounded_admission
+
+slowest 11 tests:
+      0.13s  tests.test_grounded_admission.CommittedLedgerTests.test_source_digests_cover_fixed_graph_and_both_holdouts
+      0.00s  tests.test_grounded_admission.ConstructionCheckTests.test_swapped_batch_preserves_head_multiset
+      0.00s  tests.test_grounded_admission.AdjudicationTests.test_all_prose_stated_bars_fire_from_three_seed_means
+      0.00s  tests.test_grounded_admission.CommittedLedgerTests.test_closed_form_adjudication_and_negative_outcome_are_pinned
+      0.00s  tests.test_grounded_admission.TreeFoilTests.test_replacing_a_leaf_is_refused
+      0.00s  tests.test_grounded_admission.AdjudicationTests.test_construction_miss_refuses_measurement_predictions
+      0.00s  tests.test_grounded_admission.TreeFoilTests.test_one_head_swap_preserves_blind_tree_and_leaves
+      0.00s  tests.test_grounded_admission.FixedOwnerScoreTests.test_candidate_only_owners_do_not_mint_grounding
+      0.00s  tests.test_grounded_admission.CommittedLedgerTests.test_every_measurement_cell_is_present_and_nonvacuous
+      0.00s  tests.test_grounded_admission.CommittedLedgerTests.test_ledger_links_prose_design_without_overstating_provenance
+      0.00s  tests.test_grounded_admission.FixedOwnerScoreTests.test_zero_denominator_refuses
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_grounded_admission.json

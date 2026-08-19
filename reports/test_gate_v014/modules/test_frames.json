@@ -1,0 +1,254 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:02:29+00:00",
+  "finished_utc": "2026-08-19T07:02:29+00:00",
+  "targets": [
+    "tests.test_frames"
+  ],
+  "successful": true,
+  "total_seconds": 0.01,
+  "timed_test_seconds": 0.01,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 46,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_frames": 0.01
+  },
+  "slowest": [
+    {
+      "test": "tests.test_frames.NoDeusTests.test_adapter_passes_through_the_refutation",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_frames.FrameControllerTests.test_rejected_transition_leaves_state_and_premises_unchanged",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_frames.FrameControllerTests.test_temporal_actions_use_the_generic_controller_contract",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_closed_frame_refuses_check_and_double_close",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_declaration_cannot_bypass_the_suspension_gate",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameControllerTests.test_frame_local_retrieval_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_open_frame_rejects_contradictory_declarations",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_accepted_assertion_becomes_frame_local_premise",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_incoherent_world_is_rejected_at_construction",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_assertion_cannot_introduce_owner_missing_from_declaration",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameControllerTests.test_malformed_polarity_is_refused_not_negated",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.NoDeusTests.test_adoption_changes_nothing_on_the_lawful_path",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_frame_members_must_agree_on_frame_properties",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_matching_discharge_allows_clean_close",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_frame_truths_demote_on_exit_and_frame_closes",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.NoDeusTests.test_refuted_discharge_leaves_ledger_and_close_unaffected",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_fresh_ids_are_not_idempotent_retries",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_contradiction_of_suspended_corpus_truth_is_admissible",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_duplicate_plant_and_discharge_are_idempotent",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_closed_frame_refuses_temporal_events",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_owned_scope_validates_and_owner_is_frame_level",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_outstanding_obligation_refuses_close_without_mutation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_reordered_set_valued_lists_are_not_a_disagreement",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_event_id_cannot_change_temporal_event_kind",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.NoDeusTests.test_adopting_frame_refutes_unheralded_discharge",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_unrelated_discharge_is_unknown_and_cannot_close_obligation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_already_grounded_assertion_does_not_duplicate_premises",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_event_id_conflicts_are_order_independent",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_agreeing_unsuspended_corpus_truth_grounds_assertion",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_suspension_does_not_verify_either_polarity_via_check",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_same_contradiction_without_suspension_is_refuted",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.StoryAdapterRobustnessTests.test_agentless_frame_refuses_instead_of_crashing",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_malformed_scope_values_error_instead_of_crashing",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_valid_scope_produces_no_errors",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_bad_frame_pattern_and_role_are_flagged",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_unresolvable_and_self_references_are_flagged",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_declaration_grounds_matching_assertion",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_blank_scope_owner_fails_closed",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_conflicting_premise_expressions_are_flagged",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_undeclared_compatible_property_stays_unknown",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.FrameLadderTests.test_declaration_plus_explicit_negation_is_refuted",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_null_scope_owner_fails_closed_without_jsonschema",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_frame_id_cannot_name_an_unscoped_or_assertion_node",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.NoDeusTests.test_non_adopting_frame_keeps_unknown_with_adoption_pointer",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_trailing_newline_in_frame_id_is_flagged",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_frames.ScopeValidatorTests.test_frame_id_must_resolve_to_its_declaration_node",
+      "seconds": 0.0
+    }
+  ]
+}

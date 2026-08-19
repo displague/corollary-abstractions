@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 29 tests in 31.852s
+
+OK
+
+29 tests in 31.9s (OK)
+
+timed tests: 31.9s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+      31.9s  100.0%  tests.test_external_verifier
+
+slowest 20 tests:
+     13.87s  tests.test_external_verifier.LeanNegativeControls.test_committed_lean_verdict_rechecks
+      4.55s  tests.test_external_verifier.HermeticRefusal.test_recheck_refuses_moved_bytes
+      2.47s  tests.test_external_verifier.PythonNegativeControls.test_out_of_sandbox_write_is_refused
+      2.47s  tests.test_external_verifier.PythonNegativeControls.test_network_attempt_is_refused_by_the_sandbox
+      2.43s  tests.test_external_verifier.PythonNegativeControls.test_a_low_level_write_outside_the_sandbox_is_refused
+      2.34s  tests.test_external_verifier.PythonNegativeControls.test_failing_test_fails
+      0.86s  tests.test_external_verifier.PythonNegativeControls.test_a_check_writes_no_bytecode_into_the_repository
+      0.82s  tests.test_external_verifier.PythonNegativeControls.test_committed_python_verdict_rechecks
+      0.45s  tests.test_external_verifier.CommittedNegativeRecord.test_a_non_pass_verdict_is_referenced_by_no_artifact
+      0.40s  tests.test_external_verifier.LeanNegativeControls.test_false_statement_fails
+      0.40s  tests.test_external_verifier.LedgerBytesArePortable.test_a_fresh_failing_run_is_path_free
+      0.40s  tests.test_external_verifier.LeanNegativeControls.test_sorry_fails_on_the_axiom_audit
+      0.32s  tests.test_external_verifier.VerdictObjectHonesty.test_committed_verdicts_and_ledger_are_green
+      0.03s  tests.test_external_verifier.LeanNegativeControls.test_wrong_surface_fails_containment
+      0.02s  tests.test_external_verifier.AttachRule.test_matching_chain_is_green
+      0.01s  tests.test_external_verifier.HermeticRefusal.test_missing_toolchain_refuses_and_never_downloads
+      0.01s  tests.test_external_verifier.VerdictObjectHonesty.test_pass_without_pinned_inputs_is_refused
+      0.01s  tests.test_external_verifier.AttachRule.test_tampered_input_fails_closed
+      0.01s  tests.test_external_verifier.AttachRule.test_pass_on_the_wrong_statement_does_not_attach
+      0.01s  tests.test_external_verifier.AttachRule.test_non_pass_verdict_cannot_back_an_artifact
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_external_verifier.json

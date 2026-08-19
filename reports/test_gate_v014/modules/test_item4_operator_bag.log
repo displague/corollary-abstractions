@@ -1,0 +1,20 @@
+----------------------------------------------------------------------
+Ran 5 tests in 84.634s
+
+OK
+
+5 tests in 84.6s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 84.6s
+
+timed test bodies by module (fixtures excluded):
+       0.0s    0.0%  tests.test_item4_operator_bag
+
+slowest 5 tests:
+      0.00s  tests.test_item4_operator_bag.OperatorBagBaseline.test_bag_forms_strictly_more_pairs
+      0.00s  tests.test_item4_operator_bag.OperatorBagBaseline.test_ff1_to_ff5_match_the_committed_adjudication
+      0.00s  tests.test_item4_operator_bag.OperatorBagBaseline.test_ingesting_ground_identities_worsens_bag_precision
+      0.00s  tests.test_item4_operator_bag.OperatorBagBaseline.test_matcher_precision_against_the_bag_is_one
+      0.00s  tests.test_item4_operator_bag.OperatorBagBaseline.test_zero_parse_problems
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_item4_operator_bag.json

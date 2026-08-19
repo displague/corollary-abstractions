@@ -1,0 +1,362 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:02:31+00:00",
+  "finished_utc": "2026-08-19T07:02:31+00:00",
+  "targets": [
+    "tests.test_goedel_pset"
+  ],
+  "successful": true,
+  "total_seconds": 0.02,
+  "timed_test_seconds": 0.02,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 73,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_goedel_pset": 0.02
+  },
+  "slowest": [
+    {
+      "test": "tests.test_goedel_pset.CarrierSignalLocality.test_carrier_residual_audit_sees_cross_segment_shielding",
+      "seconds": 0.02
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_embedded_shapes_cover",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_depth_cap_refuses_conservatively",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_typed_prefix_chains_cover",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_unreachable_shapes_keep_precise_labels",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_mixed_carrier_chain_does_not_shield",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_inner_leaf_defects_get_their_own_labels",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.CarrierSignalLocality.test_nat_div_in_nat_let_not_shielded_by_rat_typed_sibling",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.CarrierSignalLocality.test_local_signal_still_legitimizes_its_own_segment",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_mixed_carrier_controls",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.CarrierSignalLocality.test_monus_in_nat_let_not_shielded_by_rat_cast_in_body",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_embedded_hypothesis_unblocks_full_statement",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_bare_parity_and_primality_goals_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_nested_and_single_chain_agree",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_let_goal_parses_past_the_binding",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_carrier_audit_sees_quantifier_field_binder",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_integer_predicate_over_coerced_or_ascribed_arg_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.SelfCheckingAudit.test_totals_are_internally_consistent",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_field_prefix_does_not_shield_nested_nat_division",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_let_body_with_quantifier_prefix_now_covers",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_untyped_binder_defaults_to_nat_carrier",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_unused_statement_field_binder_does_not_shield",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_false_goal_is_the_contradiction_node",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_two_arg_log_blocked_one_arg_supported",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.ManifestPin.test_revision_and_four_parquets_pinned",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_carrier_audit_sees_mixed_chain_shield",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_field_binder_leaf_does_not_shield_sibling_monus",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_field_contact_in_the_atom_still_covers",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.CarrierSignalLocality.test_hyp_signal_does_not_shield_goal_monus",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_statement_field_contact_still_covers",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_negation_wrapped_chain_is_neg_composition",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_unused_field_binder_does_not_shield",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_field_binder_leaf_does_not_shield_sibling_nat_division",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_mixed_statement_keeps_the_disclosed_blanket",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_untyped_numeral_let_keeps_the_nat_carrier",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_pure_field_embedded_leaf_still_divides",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_quantified_let_rhs_still_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_quantifier_nat_binder_gaps_its_own_segment",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_bounded_binder_desugars_like_lean",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_predicate_composition_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_let_with_tuple_rhs_is_blocked_not_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_audit_normalizer_keeps_factorial_and_set_braces_foreign",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_quantified_let_rhs_is_embedded",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_quantified_let_rhs_stays_a_gap",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_untyped_embedded_binder_keeps_nat_default",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_enclosing_binder_shadow_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_term_position_quantifier_stays_embedded",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_uncarried_predicates_stay_gaps",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_quantified_hypothesis_unblocks_full_statement",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_imaginary_units_are_complex",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_hyp_nat_binder_does_not_gap_the_goal",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_irrational_over_supported_inner_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_negated_predicate_goal_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_statement_binder_shadow_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.LetBindingGoals.test_proof_terminator_not_confused_by_proof_side_let",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_exists_unique_rides_the_expansion",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_ordinary_inequality_still_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_star_operator_is_uninterpreted_notation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_aleph_cardinal_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_product_cross_and_smul_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_integer_predicate_over_field_carrier_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_goal_field_binder_does_not_shield_hyp_nat_division",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_cyrillic_and_script_l_are_variable_names",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_coprime_keeps_a_precise_gap_label",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_audit_normalizer_reaches_every_binder_group",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_predicate_over_unsupported_inner_not_covered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_lattice_min_max_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_predicate_arity_enforced",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.PredicateHeads.test_unapplied_predicate_is_not_a_proposition",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.NoHeadGlyphs.test_anonymous_constructor_blocked",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.QuantifierHeads.test_shadowed_binder_refused_precisely",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.SelfCheckingAudit.test_audit_counts_are_zero",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_goedel_pset.SelfCheckingAudit.test_duplicate_stats_consistent",
+      "seconds": 0.0
+    }
+  ]
+}

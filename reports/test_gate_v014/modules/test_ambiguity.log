@@ -1,0 +1,23 @@
+----------------------------------------------------------------------
+Ran 8 tests in 0.000s
+
+OK
+
+8 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   55.1%  tests.test_ambiguity
+
+slowest 8 tests:
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_hard_filter_before_prefer_never_on_raw_forest
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_all_eliminated_is_unknown
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_suite_m_ge_15_with_two_plus_candidates
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_constraint_reduces_to_unique
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_item_requires_two_candidates
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_prefer_keeps_multi_survivors_and_only_sees_filtered
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_prefer_oov_refused
+      0.00s  tests.test_ambiguity.PackedAmbiguityTests.test_multi_not_silent_unique_when_unfiltered
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_ambiguity.json

@@ -1,0 +1,150 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:07:27+00:00",
+  "finished_utc": "2026-08-19T07:09:05+00:00",
+  "targets": [
+    "tests.test_programming_discipline"
+  ],
+  "successful": true,
+  "total_seconds": 97.77,
+  "timed_test_seconds": 10.05,
+  "fixture_and_overhead_seconds": 87.73,
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_programming_discipline": 10.05
+  },
+  "slowest": [
+    {
+      "test": "tests.test_programming_discipline.EndToEnd.test_nine_pass_verdicts_recheck",
+      "seconds": 7.586
+    },
+    {
+      "test": "tests.test_programming_discipline.EndToEnd.test_n_minus_2_is_a_committed_fail_cited_by_nothing",
+      "seconds": 0.864
+    },
+    {
+      "test": "tests.test_programming_discipline.EndToEnd.test_drop_abs_is_a_committed_fail_cited_by_nothing",
+      "seconds": 0.848
+    },
+    {
+      "test": "tests.test_programming_discipline.RetrievalDoesNotTreatTestsAsProofs.test_store_loads_and_programming_nodes_are_not_proven",
+      "seconds": 0.464
+    },
+    {
+      "test": "tests.test_programming_discipline.EndToEnd.test_merged_validator_accepts_the_graph",
+      "seconds": 0.268
+    },
+    {
+      "test": "tests.test_programming_discipline.VerdictBackedRule.test_n_minus_2_fail_does_not_satisfy_the_rule",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_programming_discipline.VerdictBackedRule.test_drop_abs_fail_does_not_satisfy_the_rule",
+      "seconds": 0.005
+    },
+    {
+      "test": "tests.test_programming_discipline.VerdictBackedRule.test_unknown_statement_cannot_be_emitted",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_combined_programming_keyword_baseline_is_point_four",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_token_factorial_baseline_loses_on_precision",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_token_gcd_baseline_loses_on_precision",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.Vocabulary.test_lean4_against_py_candidate_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_volume_loops_are_real",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.Vocabulary.test_unmanifested_py_file_cannot_ground_a_link",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_second_wave_pairs_are_typed_twins_and_do_not_cross",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_euclid_pair_is_a_typed_twin_stein_is_not",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.Vocabulary.test_honesty_boundary_is_written_at_node_level",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.Vocabulary.test_programming_nodes_cite_python_tests",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.Vocabulary.test_python_tests_against_lean_triples_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_programming_discipline.TwinsAndBaseline.test_zero_parse_problems_and_slot_gaps",
+      "seconds": 0.0
+    }
+  ]
+}

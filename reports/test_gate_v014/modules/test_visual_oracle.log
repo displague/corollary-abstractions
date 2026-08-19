@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 53 tests in 3.445s
+
+OK
+
+53 tests in 3.4s (OK)
+
+timed tests: 0.6s; fixtures/runner overhead: 2.9s
+
+timed test bodies by module (fixtures excluded):
+       0.6s   16.2%  tests.test_visual_oracle
+
+slowest 20 tests:
+      0.14s  tests.test_visual_oracle.ParserTests.test_rerender_from_parsed_graph_is_byte_identical
+      0.09s  tests.test_visual_oracle.ParserTests.test_round_trip_equals_the_source_graph
+      0.09s  tests.test_visual_oracle.CorpusTests.test_committed_fixtures_regenerate_identically
+      0.06s  tests.test_visual_oracle.RegisteredProtocolTests.test_blind_baselines_can_still_see_something
+      0.04s  tests.test_visual_oracle.ParserTests.test_round_trip_preserves_verdict_and_localization
+      0.04s  tests.test_visual_oracle.RendererTests.test_rendered_geometry_is_exact_not_floating_point
+      0.02s  tests.test_visual_oracle.VerifierTests.test_every_gated_check_is_load_bearing
+      0.02s  tests.test_visual_oracle.CorpusTests.test_corpus_is_regenerable_from_the_seed
+      0.01s  tests.test_visual_oracle.SlotIdentityTests.test_scene_graph_json_round_trips
+      0.01s  tests.test_visual_oracle.VerifierTests.test_derived_checks_are_true_and_verdict_redundant
+      0.01s  tests.test_visual_oracle.RendererTests.test_styles_change_appearance_and_not_structure
+      0.01s  tests.test_visual_oracle.VerifierTests.test_each_check_alone_catches_exactly_its_own_class
+      0.01s  tests.test_visual_oracle.CorpusTests.test_a_figures_pair_set_shares_one_split
+      0.00s  tests.test_visual_oracle.VerifierTests.test_rejects_every_invalid_at_its_registered_gate
+      0.00s  tests.test_visual_oracle.VerifierTests.test_failures_localize_the_violated_elements
+      0.00s  tests.test_visual_oracle.RendererTests.test_render_is_a_pure_function_of_graph_and_style
+      0.00s  tests.test_visual_oracle.SlotIdentityTests.test_dangling_references_cannot_verify_ok
+      0.00s  tests.test_visual_oracle.InvalidGeneratorTests.test_right_angle_break_preserves_leg_lengths_exactly
+      0.00s  tests.test_visual_oracle.CorpusTests.test_fixture_figure_is_the_corpus_figure_it_claims_to_be
+      0.00s  tests.test_visual_oracle.CorpusTests.test_no_weights_leaked_into_the_oracle_layer
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_visual_oracle.json

@@ -1,0 +1,32 @@
+----------------------------------------------------------------------
+Ran 17 tests in 39.275s
+
+OK
+
+17 tests in 39.3s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 39.2s
+
+timed test bodies by module (fixtures excluded):
+       0.0s    0.1%  tests.test_resolver
+
+slowest 17 tests:
+      0.02s  tests.test_resolver.ItIsFastEnoughToBeUseful.test_resolution_is_microseconds_once_indexed
+      0.00s  tests.test_resolver.ItDoesNotRepeatTheSpentExclusionFailure.test_the_excluded_reading_is_not_merely_deleted_afterwards
+      0.00s  tests.test_resolver.ItDoesNotRepeatTheSpentExclusionFailure.test_the_exclusion_reaches_a_reading_it_does_not_contradict
+      0.00s  tests.test_resolver.ItDoesNotRepeatTheSpentExclusionFailure.test_the_old_path_still_binds_the_excluded_reading
+      0.00s  tests.test_resolver.ItBindsWhenExact.test_a_unique_id_suffix_binds
+      0.00s  tests.test_resolver.ItAsksWhenAmbiguous.test_a_real_but_broad_keyword_asks
+      0.00s  tests.test_resolver.ExactnessBeatsKeywords.test_a_parseable_expression_is_not_second_guessed
+      0.00s  tests.test_resolver.ItRefusesToClaimNonsense.test_prose_about_nothing_in_the_corpus_passes
+      0.00s  tests.test_resolver.ItAsksWhenAmbiguous.test_a_shared_subterm_asks_and_names_candidates
+      0.00s  tests.test_resolver.ItBindsWhenExact.test_two_corroborating_words_reach_the_right_statement
+      0.00s  tests.test_resolver.ItRefusesToClaimNonsense.test_a_saturating_keyword_cannot_resolve_the_corpus
+      0.00s  tests.test_resolver.ItRefusesToClaimNonsense.test_one_stray_word_is_not_a_resolution
+      0.00s  tests.test_resolver.ItAsksWhenAmbiguous.test_ask_never_silently_picks_one
+      0.00s  tests.test_resolver.ItRefusesToClaimNonsense.test_the_df_ceiling_actually_excludes_something
+      0.00s  tests.test_resolver.ItBindsWhenExact.test_an_exact_statement_id_binds
+      0.00s  tests.test_resolver.Reduction.test_reduction_is_not_stemming
+      0.00s  tests.test_resolver.Reduction.test_stopwords_and_case_are_removed
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_resolver.json

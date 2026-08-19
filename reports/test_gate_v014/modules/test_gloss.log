@@ -1,0 +1,22 @@
+----------------------------------------------------------------------
+Ran 7 tests in 1.016s
+
+OK
+
+7 tests in 1.0s (OK)
+
+timed tests: 1.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       1.0s  100.0%  tests.test_gloss
+
+slowest 7 tests:
+      1.02s  tests.test_gloss.GlossesAreQuoted.test_a_common_noun_has_human_written_senses
+      0.00s  tests.test_gloss.GlossesAreQuoted.test_a_gloss_is_labelled_as_not_a_corpus_statement
+      0.00s  tests.test_gloss.GlossesAreQuoted.test_ambiguity_is_reported_not_resolved
+      0.00s  tests.test_gloss.GlossesAreQuoted.test_every_printed_sentence_is_a_wordnet_string
+      0.00s  tests.test_gloss.GlossesAreQuoted.test_provenance_travels_with_the_answer
+      0.00s  tests.test_gloss.GlossesAreQuoted.test_an_unknown_word_is_reported_as_absent
+      0.00s  tests.test_gloss.WithoutTheArchive.test_lookup_reports_absence_rather_than_guessing
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_gloss.json

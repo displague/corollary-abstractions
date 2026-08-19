@@ -1,0 +1,17 @@
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+
+2 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   41.7%  tests.test_compose_assert_frames
+
+slowest 2 tests:
+      0.00s  tests.test_compose_assert_frames.ComposeAssertFrameTests.test_registered_runtime_sequence_and_exit_demotion
+      0.00s  tests.test_compose_assert_frames.ComposeAssertFrameTests.test_runtime_evidence_names_frame_rules_and_world_ground
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_compose_assert_frames.json

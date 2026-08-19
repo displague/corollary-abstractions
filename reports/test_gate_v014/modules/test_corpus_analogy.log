@@ -1,0 +1,21 @@
+----------------------------------------------------------------------
+Ran 6 tests in 402.928s
+
+OK
+
+6 tests in 402.9s (OK)
+
+timed tests: 313.3s; fixtures/runner overhead: 89.7s
+
+timed test bodies by module (fixtures excluded):
+     313.3s   77.7%  tests.test_corpus_analogy
+
+slowest 6 tests:
+    221.48s  tests.test_corpus_analogy.CorpusAnalogyTests.test_baselines_are_computed_on_the_live_targets
+     90.55s  tests.test_corpus_analogy.CorpusAnalogyTests.test_specialization_ledger_is_load_bearing
+      1.24s  tests.test_corpus_analogy.CorpusAnalogyTests.test_live_corpus_has_novel_cross_discipline_quadruples
+      0.00s  tests.test_corpus_analogy.CorpusAnalogyTests.test_vocabulary_refusal_depends_on_the_supplied_vocabulary
+      0.00s  tests.test_corpus_analogy.CorpusAnalogyTests.test_literal_checkpoint_vocabulary_is_not_silently_claimed
+      0.00s  tests.test_corpus_analogy.CorpusAnalogyTests.test_every_target_is_reconstructible_only_from_pointed_input
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_corpus_analogy.json

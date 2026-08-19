@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 42 tests in 4.738s
+
+OK
+
+42 tests in 4.7s (OK)
+
+timed tests: 4.7s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       4.7s  100.0%  tests.test_proof_curve
+
+slowest 20 tests:
+      2.71s  tests.test_proof_curve.StoryArmTests.test_frequency_story_order_is_degenerate
+      1.26s  tests.test_proof_curve.FrequencyBaselineTests.test_extraction_schema_matches_the_v06_mapper_row_for_row
+      0.70s  tests.test_proof_curve.StoryArmTests.test_one_held_out_brief_solves_through_the_shared_controller
+      0.03s  tests.test_proof_curve.TheoremSetTests.test_digest_is_checkout_newline_invariant
+      0.02s  tests.test_proof_curve.StoryArmTests.test_briefs_split_by_story_identity
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_published_time_curves_recompute_from_serialized_runs
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_state_level_leakage_control_stays_at_zero
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_primary_artifact_binds_theorem_and_project_sources
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_held_out_is_checked_against_the_training_extraction
+      0.00s  tests.test_proof_curve.PolicyTests.test_arms_differ_only_by_permutation
+      0.00s  tests.test_proof_curve.FrequencyBaselineTests.test_frequency_counts_come_from_the_v06_training_split
+      0.00s  tests.test_proof_curve.FrequencyBaselineTests.test_frequency_order_is_state_blind
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_every_witness_uses_only_registered_schemas
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_set_is_versioned_and_digested
+      0.00s  tests.test_proof_curve.StoryArmTests.test_every_generated_binding_is_accepted_by_the_frame
+      0.00s  tests.test_proof_curve.StoryArmTests.test_decoy_element_is_plantable_so_dead_branches_exist
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_two_proof_families_at_minimum_each_with_members
+      0.00s  tests.test_proof_curve.TheoremSetTests.test_project_family_declares_a_project_and_init_family_does_not
+      0.00s  tests.test_proof_curve.GrammarTests.test_syntax_order_reads_the_conclusion
+      0.00s  tests.test_proof_curve.PolicyTests.test_ordering_actually_changes
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_proof_curve.json

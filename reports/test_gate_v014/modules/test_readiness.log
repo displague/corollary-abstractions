@@ -1,0 +1,20 @@
+----------------------------------------------------------------------
+Ran 5 tests in 6.516s
+
+OK
+
+5 tests in 6.5s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 6.5s
+
+timed test bodies by module (fixtures excluded):
+       0.0s    0.6%  tests.test_readiness
+
+slowest 5 tests:
+      0.02s  tests.test_readiness.ReadinessFloor.test_every_ingested_node_stays_reachable
+      0.01s  tests.test_readiness.ReadinessFloor.test_curated_statements_stay_discriminable
+      0.00s  tests.test_readiness.ReadinessFloor.test_resolution_stays_fast_enough_for_small_hardware
+      0.00s  tests.test_readiness.ReadinessFloor.test_arbitrary_text_coverage_holds
+      0.00s  tests.test_readiness.ReadinessFloor.test_refusal_of_out_of_corpus_text_holds
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_readiness.json

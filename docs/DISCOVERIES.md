@@ -13,6 +13,28 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **A parallel gate cannot be faster than its slowest module, and this one is
+  57.7% of the suite (v0.14 item 3, measured).**  68 modules at a frozen tip:
+  `test_write_stage` 12,522.5 s, `test_corpus_analogy_split` 8,045.0 s, and
+  all 66 others 1,120.5 s combined.  The registered balanced assignment
+  therefore predicts the same 12,523 s wall clock at 2, 5 and 8 shards, so
+  the achievable speedup is 1.73x and the v0.13 gate's five shards were three
+  more than the work can use.  The useful consequence is negative: the
+  registered proposal to sample the capability-blind control could save at
+  most 4,317 s of serial time and exactly zero wall clock, so it is refused
+  on arithmetic rather than on principle and the control stays whole.
+
+- **The fourth consecutive explanation of the slow suite was also folklore
+  (v0.14 item 3, measured).**  The roadmap named a 5,620 s blind-control
+  sweep and a ~4,700 s fixture gap.  Measured, the blind control is 4,317.0 s
+  and the fixture gap is 3,434.2 s -- and neither is the problem, because
+  `test_write_stage` costs 12,522.5 s and appears nowhere in the roadmap's
+  investigation list.  Its fixture overhead is 8.5 s, so it is not a setup
+  artifact but 103 real tests.  `scripts/time_tests.py` was written because
+  three prior explanations had been folklore; the lesson repeating a fourth
+  time, in the very document that commissioned the measurement, is the
+  finding.
+
 - **The corpus's own subject vocabulary is unreadable, and saying so does not
   fix anything (post-v0.14, exploratory).**  Measured over the whole graph,
   13 of 28 top-level id prefixes and 11 of 37 declared disciplines --

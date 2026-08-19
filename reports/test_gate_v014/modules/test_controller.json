@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T04:38:58+00:00",
+  "finished_utc": "2026-08-19T04:38:59+00:00",
+  "targets": [
+    "tests.test_controller"
+  ],
+  "successful": true,
+  "total_seconds": 0.07,
+  "timed_test_seconds": 0.07,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 29,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_controller": 0.07
+  },
+  "slowest": [
+    {
+      "test": "tests.test_controller.LeanReplayTests.test_oracle_replays_three_contiguous_extracted_steps",
+      "seconds": 0.03
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_rejected_branch_is_not_a_premise_for_recovery",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_controller.LeanReplayTests.test_untrusted_extraction_cannot_assign_proven",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_closed_story_frame_refuses_new_beats",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_oracle_executes_three_verified_beats",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_trait_contradiction_is_refuted",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_undeclared_compatible_trait_is_unknown_not_refuted",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_out_of_order_beat_is_refuted_without_state_change",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_typed_records_anchor_every_element_in_its_own_beat",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_controller.LeanReplayTests.test_replay_is_state_sensitive",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_controller.LeanReplayTests.test_unrecorded_tactic_does_not_pass_replay_verifier",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_duplicate_rejected_action_is_pruned",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_mention_records_fail_closed_on_construction",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_discharge_of_an_element_the_resolution_never_names_is_unknown",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_element_ids_are_decoupled_from_the_rendered_prose",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_binding_failures_cite_the_law_they_rest_on",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_unreadable_bindings_refuse_and_ungrounded_ones_are_unknown",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_mutating_rejected_verifier_cannot_change_accepted_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_ledger_only_discharge_is_unknown_without_a_bound_resolution",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_duplicate_story_plant_does_not_duplicate_rendered_text",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_mutating_state_key_cannot_change_accepted_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.StoryFrameTests.test_plant_is_setup_only_and_must_name_its_element",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_mutating_goal_cannot_change_accepted_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_rejected_verification_cannot_supply_next_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_a_span_binds_only_a_declared_surface_form",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_a_word_fragment_cannot_stand_in_for_the_element",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.TypedEventBinderTests.test_a_plant_with_prose_but_no_binding_is_unknown",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_mutating_policy_cannot_change_accepted_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_controller.ControllerContractTests.test_public_action_vocabulary_is_complete",
+      "seconds": 0.0
+    }
+  ]
+}

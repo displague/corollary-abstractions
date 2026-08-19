@@ -1,0 +1,226 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:02:33+00:00",
+  "finished_utc": "2026-08-19T07:04:06+00:00",
+  "targets": [
+    "tests.test_harness_line"
+  ],
+  "successful": true,
+  "total_seconds": 92.88,
+  "timed_test_seconds": 88.01,
+  "fixture_and_overhead_seconds": 4.86,
+  "tests": 39,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_harness_line": 88.01
+  },
+  "slowest": [
+    {
+      "test": "tests.test_harness_line.InteractiveProcess.test_process_exits_zero_after_a_single_line",
+      "seconds": 8.759
+    },
+    {
+      "test": "tests.test_harness_line.InteractiveProcess.test_boot_list_still_printed_before_the_verdict",
+      "seconds": 8.577
+    },
+    {
+      "test": "tests.test_harness_line.UnregisteredTextNeverVerifies.test_free_text_is_never_reported_as_verified_or_proven",
+      "seconds": 7.229
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_real_process_stops_after_named_cycle",
+      "seconds": 7.088
+    },
+    {
+      "test": "tests.test_harness_line.RoutingIsAClosedForm.test_a_question_with_windows_illegal_characters_is_text",
+      "seconds": 6.993
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_english_does_not_reach_the_lookup",
+      "seconds": 6.964
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_a_new_ask_replaces_the_pending_question",
+      "seconds": 6.739
+    },
+    {
+      "test": "tests.test_harness_line.DoesNotReplayTheRecording.test_a_line_in_no_recorded_leg_still_reaches_a_program",
+      "seconds": 6.427
+    },
+    {
+      "test": "tests.test_harness_line.TypedPathReachesTheWriteGate.test_no_file_changes_and_no_staging_receipt_is_written",
+      "seconds": 4.154
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_the_answer_names_the_corpora",
+      "seconds": 4.122
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_an_unhosted_part_is_exhausted_not_solved",
+      "seconds": 4.086
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_the_lookup_agrees_with_the_committed_measurement",
+      "seconds": 3.735
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_a_hosted_part_solves_with_counts",
+      "seconds": 3.709
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_unparseable_query_is_refused_not_guessed",
+      "seconds": 2.053
+    },
+    {
+      "test": "tests.test_harness_line.InteractiveProcess.test_closed_stdin_is_a_waiting_verdict_not_a_traceback",
+      "seconds": 2.033
+    },
+    {
+      "test": "tests.test_harness_line.InteractiveProcess.test_a_second_line_is_dispatched_in_the_same_session",
+      "seconds": 2.019
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_a_bare_variable_is_refused",
+      "seconds": 1.959
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_pending_ask_is_session_local",
+      "seconds": 0.435
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_discipline_followup_reduces_six_candidates_to_one",
+      "seconds": 0.397
+    },
+    {
+      "test": "tests.test_harness_line.TypedPathReachesTheWriteGate.test_the_gate_reports_the_tree_byte_identical",
+      "seconds": 0.196
+    },
+    {
+      "test": "tests.test_harness_line.TypedPathReachesTheWriteGate.test_seed_replacing_proposal_refuses_at_seed_ownership",
+      "seconds": 0.179
+    },
+    {
+      "test": "tests.test_harness_line.RoutingIsAClosedForm.test_a_nonexistent_json_path_still_reaches_the_gate",
+      "seconds": 0.155
+    },
+    {
+      "test": "tests.test_harness_line.UnregisteredTextNeverVerifies.test_word_matching_alone_never_reports_solved",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_quote_less_singleton_cannot_bypass_the_ceiling",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_registered_command_escapes_pending_context",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.DoesNotReplayTheRecording.test_harness_never_reads_the_recorded_session",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_four_distinct_no_progress_hops_name_the_ceiling",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.UnregisteredTextNeverVerifies.test_free_text_reaches_a_program_and_names_what_it_lacks",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_second_content_word_narrows_to_one_and_quotes_the_corpus",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_repeated_no_progress_names_a_cycle_and_terminates",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_cancel_is_explicit_and_chooses_nothing",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.TypedPathReachesTheWriteGate.test_the_fixture_is_a_real_seed_replacement",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.MultiTurnResolverContext.test_unhelpful_context_does_not_choose_a_candidate",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.UnregisteredTextNeverVerifies.test_the_refusal_text_comes_from_the_dispatcher",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.FillsNoSlotThePersonDidNotType.test_empty_line_is_also_a_pause_not_a_default",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.InteractiveProcess.test_read_one_line_reports_end_of_stream_as_none",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.OwnershipIsTheFirstSolve.test_solved_requires_the_subsystem_to_have_registered",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.FillsNoSlotThePersonDidNotType.test_rendered_pause_names_no_value",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_harness_line.FillsNoSlotThePersonDidNotType.test_waiting_verdict_binds_no_line_and_no_route",
+      "seconds": 0.0
+    }
+  ]
+}

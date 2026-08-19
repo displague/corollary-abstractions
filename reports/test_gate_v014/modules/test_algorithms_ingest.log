@@ -1,0 +1,22 @@
+----------------------------------------------------------------------
+Ran 7 tests in 0.022s
+
+OK (skipped=1)
+
+7 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   98.9%  tests.test_algorithms_ingest
+
+slowest 7 tests:
+      0.01s  tests.test_algorithms_ingest.DerivedAttribution.test_extract_carries_the_citation_and_eight_functions
+      0.01s  tests.test_algorithms_ingest.DerivedAttribution.test_notice_carries_the_citation
+      0.00s  tests.test_algorithms_ingest.DerivedAttribution.test_vendored_license_is_mit
+      0.00s  tests.test_algorithms_ingest.Regeneration.test_extract_regenerates_when_archive_present
+      0.00s  tests.test_algorithms_ingest.ManifestPin.test_declined_sources_are_absent
+      0.00s  tests.test_algorithms_ingest.ManifestPin.test_entry_is_fully_pinned
+      0.00s  tests.test_algorithms_ingest.ManifestPin.test_license_records_mit_as_found
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_algorithms_ingest.json

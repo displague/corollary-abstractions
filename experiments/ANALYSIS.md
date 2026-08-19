@@ -4162,3 +4162,64 @@ replaced, no threshold is retuned, no fifth holdout is authored in this
 cycle, and `without` does not become a stopword.  The exclusion seam stays in
 the resolver as shipped behaviour that no gate credits.
 
+---
+
+# v0.14 — the release gate, measured (item 3)
+
+Every test module run singly at frozen tip `55b4097`, receipts retained in
+`reports/test_gate_v014/`.  **68 modules, 1,341 tests, 0 failures, 0 errors,
+5 skipped.**  Serial wall clock **21,688 s = 6.02 h**, not the ~10 h the
+cycle had been assuming.
+
+## The suite is two modules
+
+| module | seconds | share | fixture+overhead |
+|---|---|---|---|
+| `test_write_stage` | 12,522.5 | 57.7% | 8.5 s (0%) |
+| `test_corpus_analogy_split` | 8,045.0 | 37.1% | 3,434.2 s (43%) |
+| remaining 66 modules | 1,120.5 | 5.2% | — |
+
+## Every item-3 investigation was aimed at the wrong place
+
+The roadmap registered three things to investigate.  The measurement
+contradicts two of them and omits the actual cost entirely.
+
+- **"the 5,620-second blind-control sweep."**  The blind control is one test,
+  `ControlTests.test_no_blind_control_can_see_the...`, and it costs
+  **4,317.0 s** — 19.9% of the suite, not its dominant term.
+- **"roughly 4,700 seconds of `test_corpus_analogy_split` fixture/runner
+  gap."**  The gap is real and is **3,434.2 s**, 43% of that module.
+- **`test_write_stage` is not named anywhere in the roadmap**, and it is
+  **12,522.5 s** — more than everything else in the suite combined.  Its
+  fixture overhead is 8.5 s, so this is not a setup artifact: it is 103 real
+  tests, four of which cost 3,088 s between them.
+
+That is the fourth consecutive time an explanation of this suite's cost has
+been folklore, which is the pattern `scripts/time_tests.py` was written to
+end.  It ended it by measuring.
+
+## Sharding is not the lever
+
+The registered assignment rule — descending module seconds, module-name tie;
+assign to the lightest shard, shard-number tie — produces an identical
+predicted parallel wall clock at 2, 5 and 8 shards: **12,523 s (3.48 h)**.
+One module is a hard floor, so the maximum achievable speedup is **1.73x**
+and every shard beyond the second is idle capacity.  The v0.13 gate's five
+shards were already three more than the work can use.
+
+## The sampled-control question answers itself
+
+The third investigation asked whether a sampled capability-blind control
+could preserve the non-vacuity guarantee, under a registered constraint that
+no optimization may weaken such a control without a registered replacement.
+
+It does not need to be answered on principle, because the measurement
+disposes of it on arithmetic.  Sampling the blind control could remove at
+most 4,317 s of *serial* time and **exactly zero** parallel wall clock, since
+`test_write_stage` remains the floor at 12,522.5 s either way.  The
+optimization buys nothing it would have to be justified against.  The control
+stays whole, and not as a concession.
+
+The one lever that would move this gate is `test_write_stage`, which nobody
+had proposed touching because nobody had measured it.
+

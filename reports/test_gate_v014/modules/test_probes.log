@@ -1,0 +1,29 @@
+----------------------------------------------------------------------
+Ran 14 tests in 13.008s
+
+OK
+
+14 tests in 13.0s (OK)
+
+timed tests: 11.1s; fixtures/runner overhead: 1.9s
+
+timed test bodies by module (fixtures excluded):
+      11.1s   85.5%  tests.test_probes
+
+slowest 14 tests:
+      8.02s  tests.test_probes.Probes.test_a_definitional_question_reaches_the_dictionary
+      2.30s  tests.test_probes.BootReportsWhatIsInstalled.test_detection_is_not_forced_offline
+      0.47s  tests.test_probes.BootReportsWhatIsInstalled.test_forced_offline_still_available_for_reproduction
+      0.32s  tests.test_probes.Probes.test_a_story_request_is_answered_by_the_verified_story
+      0.00s  tests.test_probes.Probes.test_out_of_corpus_questions_abstain_and_offer_a_frame
+      0.00s  tests.test_probes.Probes.test_a_supposition_is_held_not_answered
+      0.00s  tests.test_probes.Probes.test_explain_and_tell_me_about_reach_the_corpus
+      0.00s  tests.test_probes.Probes.test_an_assertion_is_not_agreed_with
+      0.00s  tests.test_probes.Probes.test_square_under_a_supposed_binding
+      0.00s  tests.test_probes.Probes.test_a_false_relation_is_decided_false
+      0.00s  tests.test_probes.Probes.test_false_belief_reports_the_belief
+      0.00s  tests.test_probes.Probes.test_a_typed_relation_is_decided
+      0.00s  tests.test_probes.Probes.test_a_proof_request_is_not_answered_with_an_unrelated_formula
+      0.00s  tests.test_probes.Probes.test_the_dotty_probe
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_probes.json

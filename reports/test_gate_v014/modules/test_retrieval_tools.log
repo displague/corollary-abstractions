@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 67 tests in 10.073s
+
+OK
+
+67 tests in 10.1s (OK)
+
+timed tests: 9.2s; fixtures/runner overhead: 0.8s
+
+timed test bodies by module (fixtures excluded):
+       9.2s   91.7%  tests.test_retrieval_tools
+
+slowest 20 tests:
+      1.38s  tests.test_retrieval_tools.SessionPruningTests.test_speculative_evaluation_writes_no_evidence
+      1.36s  tests.test_retrieval_tools.SessionPruningTests.test_another_session_is_never_pruned_by_this_ones_dead_end
+      1.13s  tests.test_retrieval_tools.MissChainTests.test_derivation_material_binds_at_its_inherited_status
+      0.78s  tests.test_retrieval_tools.RankedNeighborhoodTests.test_exact_mode_declares_itself_unranked
+      0.75s  tests.test_retrieval_tools.MissChainTests.test_derivation_rung_answers_only_after_the_higher_rungs_miss
+      0.74s  tests.test_retrieval_tools.MissChainTests.test_composed_query_still_misses_what_only_derivation_answers
+      0.70s  tests.test_retrieval_tools.SessionPruningTests.test_a_second_dispatcher_hop_costs_no_store_queries
+      0.68s  tests.test_retrieval_tools.SessionPruningTests.test_exhausted_branch_is_pruned_on_a_later_run_in_the_session
+      0.67s  tests.test_retrieval_tools.MissChainTests.test_exhausted_chain_ends_in_explicit_abstention
+      0.33s  tests.test_retrieval_tools.SessionPruningTests.test_progress_in_the_same_session_reopens_the_branch
+      0.32s  tests.test_retrieval_tools.SessionPruningTests.test_verified_branches_are_never_recorded_as_pruning_evidence
+      0.06s  tests.test_retrieval_tools.ObservationAuthorityDoorTests.test_synset_id_impersonation_door
+      0.04s  tests.test_retrieval_tools.ObservationAdapterTests.test_small_clock_skew_is_tolerated_rather_than_refused
+      0.04s  tests.test_retrieval_tools.WordNetRelationTests.test_dangling_targets_are_skipped_not_invented
+      0.03s  tests.test_retrieval_tools.ObservationAdapterTests.test_outside_record_still_binds_a_key_nothing_committed_owns
+      0.02s  tests.test_retrieval_tools.ObservationAdapterTests.test_recorded_at_in_the_future_is_refused_with_the_file_named
+      0.02s  tests.test_retrieval_tools.ObservationAuthorityDoorTests.test_twin_ledger_door_an_outside_note_cannot_answer_a_group
+      0.02s  tests.test_retrieval_tools.ObservationAdapterTests.test_ambiguous_external_answer_cannot_bind
+      0.02s  tests.test_retrieval_tools.ObservationAdapterTests.test_rung_above_the_external_ceiling_is_refused_at_load
+      0.02s  tests.test_retrieval_tools.ObservationAuthorityDoorTests.test_lexical_only_reach_still_outranks_an_outside_note
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_retrieval_tools.json

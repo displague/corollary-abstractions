@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 103 tests in 12522.520s
+
+OK
+
+103 tests in 12522.5s (OK)
+
+timed tests: 12514.0s; fixtures/runner overhead: 8.5s
+
+timed test bodies by module (fixtures excluded):
+   12514.0s   99.9%  tests.test_write_stage
+
+slowest 20 tests:
+   1096.35s  tests.test_write_stage.ValidationAndDeltaTests.test_delta_declared_with_the_wrong_type_is_refused
+    724.61s  tests.test_write_stage.TrustedAppendTests.test_append_one_node_accepts_without_rewriting_the_seed
+    720.96s  tests.test_write_stage.TrustedAppendTests.test_seed_plus_append_reproduces_the_applied_corpus
+    546.12s  tests.test_write_stage.TrustedAppendTests.test_undeclared_delta_is_still_refused_on_the_append_lane
+    543.91s  tests.test_write_stage.TrustedAppendTests.test_two_node_append_is_confined_to_those_ids
+    370.48s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_is_written_and_deterministic
+    369.85s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_then_refuse_end_to_end
+    369.72s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_failure_rolls_the_application_back
+    366.82s  tests.test_write_stage.TrustedAppendTests.test_colliding_id_is_refused_and_tree_is_identical
+    366.55s  tests.test_write_stage.AcceptedWriteApplicationTests.test_other_corpora_are_byte_identical_after_acceptance
+    365.71s  tests.test_write_stage.AcceptedWriteApplicationTests.test_whole_tree_delta_catches_an_undeclared_change
+    365.40s  tests.test_write_stage.WorkingTreeIntegrityTests.test_the_digest_ignores_this_gates_own_receipts
+    365.26s  tests.test_write_stage.ProofGateTests.test_two_candidates_differing_only_in_rationale_get_two_receipts
+    363.47s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_is_written_and_records_the_transition
+    362.41s  tests.test_write_stage.AcceptedWriteApplicationTests.test_matcher_delta_reverified_against_the_applied_data
+    361.33s  tests.test_write_stage.AcceptedWriteApplicationTests.test_committed_seed_reproduces_the_applied_corpus
+    360.99s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_applies_seed_and_regenerates_corpus
+    360.89s  tests.test_write_stage.TrustedAppendTests.test_python_is_not_an_append
+    190.09s  tests.test_write_stage.ControllerAdapterTests.test_a_controller_run_stages_then_refuses_without_losing_state
+    189.72s  tests.test_write_stage.MaliciousPathTests.test_a_contained_seed_script_is_actually_read
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_write_stage.json

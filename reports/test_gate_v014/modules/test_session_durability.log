@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 38 tests in 5.457s
+
+OK
+
+38 tests in 5.5s (OK)
+
+timed tests: 5.5s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       5.5s  100.0%  tests.test_session_durability
+
+slowest 20 tests:
+      1.94s  tests.test_session_durability.AcceptanceScenarioTests.test_one_maintained_session_walks_all_five_stages
+      1.33s  tests.test_session_durability.RetrievalReceiptDurabilityTests.test_receipt_authorizes_point_after_a_restart
+      0.84s  tests.test_session_durability.RetrievalReceiptDurabilityTests.test_a_forged_receipt_is_still_refused_after_a_restart
+      0.16s  tests.test_session_durability.LedgerAttackTests.test_ledger_cannot_be_moved_to_another_session
+      0.12s  tests.test_session_durability.LedgerAttackTests.test_restore_then_supersede_then_replay_the_first_file
+      0.11s  tests.test_session_durability.AcceptanceScenarioTests.test_acceptance_scenario_runs_end_to_end
+      0.09s  tests.test_session_durability.AcceptanceScenarioTests.test_restart_keeps_owners_isolated_and_the_story_unasserted
+      0.09s  tests.test_session_durability.LedgerAttackTests.test_header_may_not_disagree_with_the_state_it_carries
+      0.08s  tests.test_session_durability.AcceptanceScenarioTests.test_restart_continues_revising
+      0.08s  tests.test_session_durability.LedgerAttackTests.test_ledger_rollback_is_refused
+      0.06s  tests.test_session_durability.LedgerAttackTests.test_truncated_ledger_is_refused_as_a_forgery
+      0.05s  tests.test_session_durability.KeyIdentityTests.test_rotation_keeps_old_material_verifiable
+      0.05s  tests.test_session_durability.LedgerAttackTests.test_rewriting_only_the_header_owner_is_refused
+      0.05s  tests.test_session_durability.KeyIdentityTests.test_key_id_confusion_between_rotated_keys_is_refused
+      0.04s  tests.test_session_durability.LedgerAttackTests.test_forged_ledger_cannot_advance_the_counter
+      0.04s  tests.test_session_durability.SessionCodecTests.test_codec_round_trips_the_whole_state
+      0.03s  tests.test_session_durability.PreRestartBindingTests.test_forged_pre_restart_binding_is_refused_by_name
+      0.03s  tests.test_session_durability.PreRestartBindingTests.test_restore_without_a_ledger_is_refused_not_defaulted
+      0.03s  tests.test_session_durability.PreRestartBindingTests.test_consumed_reply_replayed_after_restart_is_refused
+      0.03s  tests.test_session_durability.KeyIdentityTests.test_keyfile_never_contains_a_session_secret
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_session_durability.json

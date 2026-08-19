@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+Ran 11 tests in 0.168s
+
+OK
+
+11 tests in 0.2s (OK)
+
+timed tests: 0.2s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.2s   99.9%  tests.test_depth_consumer_runner
+
+slowest 11 tests:
+      0.06s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_resume_binds_result_to_checkpoint_labels
+      0.04s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_truncated_checkpoint_is_rejected_for_rerun
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_provenance_refuses_noncanonical_dataset_names
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_volatile_telemetry_is_not_resume_provenance
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_resume_refuses_checkpoint_from_separate_rerun
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_resume_refuses_changed_epochs
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_resume_refuses_cross_arm_checkpoint
+      0.01s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_resume_refuses_changed_evaluation_batch
+      0.00s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_missing_nvidia_smi_driver_fails_environment_gate
+      0.00s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_environment_fails_fast_before_matrix
+      0.00s  tests.test_depth_consumer_runner.DepthConsumerRunnerTests.test_safety_breach_stops_before_next_row
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_depth_consumer_runner.json

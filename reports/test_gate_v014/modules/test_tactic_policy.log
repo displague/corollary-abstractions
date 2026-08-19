@@ -1,0 +1,21 @@
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+
+6 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   90.3%  tests.test_tactic_policy
+
+slowest 6 tests:
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_learned_scores_only_reorder_registered_actions
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_frequency_palette_is_state_blind_and_complete
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_theorem_split_has_no_identity_leak
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_committed_result_contains_three_non_vacuous_seeds
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_nonlive_default_cannot_overwrite_canonical_result
+      0.00s  tests.test_tactic_policy.TacticPolicyTests.test_atomic_schema_mapping_is_fail_closed
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_tactic_policy.json

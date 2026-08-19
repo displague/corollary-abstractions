@@ -1,0 +1,22 @@
+----------------------------------------------------------------------
+Ran 7 tests in 0.000s
+
+OK
+
+7 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   41.2%  tests.test_deixis
+
+slowest 7 tests:
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_dialogue_turn_batch
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_empty_index_fields_refused
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_ten_resolutions_use_index_not_lexicon
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_fragment_id
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_unknown_token_fails_closed
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_missing_index_fails_closed
+      0.00s  tests.test_deixis.DeixisCompositionTests.test_wordnet_person_alone_is_not_enough
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_deixis.json

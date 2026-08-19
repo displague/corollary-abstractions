@@ -1,0 +1,20 @@
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+
+5 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   47.6%  tests.test_index_language
+
+slowest 5 tests:
+      0.00s  tests.test_index_language.FalseBeliefLanguageTests.test_five_surface_variants_belief_ok_world_refuted
+      0.00s  tests.test_index_language.FictionAssertTests.test_five_fiction_premises_and_exit_non_leak
+      0.00s  tests.test_index_language.FalseBeliefLanguageTests.test_surface_is_load_bearing_mismatch_refused
+      0.00s  tests.test_index_language.FalseBeliefLanguageTests.test_surface_wrong_content_package_refused
+      0.00s  tests.test_index_language.FictionAssertTests.test_world_starts_with_box_not_basket
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_index_language.json

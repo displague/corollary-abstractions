@@ -1,0 +1,29 @@
+----------------------------------------------------------------------
+Ran 14 tests in 0.965s
+
+OK (skipped=1)
+
+14 tests in 1.0s (OK)
+
+timed tests: 1.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       1.0s  100.0%  tests.test_session_run
+
+slowest 14 tests:
+      0.86s  tests.test_session_run.RecordedSession.test_the_record_still_verifies
+      0.10s  tests.test_session_run.EmptyExtractionIsRefused.test_no_tactics_writes_no_artifact
+      0.00s  tests.test_session_run.RecordedSession.test_the_authored_leg_was_applied_by_the_gate
+      0.00s  tests.test_session_run.RecordedSession.test_transcript_carries_no_machine_paths_or_timestamps
+      0.00s  tests.test_session_run.RecordedSession.test_the_refused_leg_was_refused_by_the_gate_not_the_caller
+      0.00s  tests.test_session_run.RecordedSession.test_the_matrix_is_recorded_as_liveness_only
+      0.00s  tests.test_session_run.RecordedSession.test_the_need_was_dead_before_the_write_and_met_after
+      0.00s  tests.test_session_run.RecordedSession.test_the_chicken_abstains_and_mints_nothing
+      0.00s  tests.test_session_run.TraceAttribution.test_the_committed_artifact_matches_a_fresh_post_process
+      0.00s  tests.test_session_run.TraceAttribution.test_an_oversized_state_is_refused_not_truncated
+      0.00s  tests.test_session_run.TraceAttribution.test_a_tactic_before_every_declaration_is_refused
+      0.00s  tests.test_session_run.TraceAttribution.test_a_tactic_is_attributed_to_the_declaration_above_it
+      0.00s  tests.test_session_run.TraceAttribution.test_the_tactic_text_is_a_byte_slice_not_a_guess
+      0.00s  tests.test_session_run.TraceAttribution.test_declarations_are_found_in_byte_order
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_session_run.json

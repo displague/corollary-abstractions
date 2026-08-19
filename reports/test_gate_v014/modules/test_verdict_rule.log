@@ -1,0 +1,23 @@
+----------------------------------------------------------------------
+Ran 8 tests in 0.279s
+
+OK
+
+8 tests in 0.3s (OK)
+
+timed tests: 0.3s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.3s   99.9%  tests.test_verdict_rule
+
+slowest 8 tests:
+      0.28s  tests.test_verdict_rule.TheLiveCorpusObeysIt.test_no_committed_ingested_node_violates_the_rule
+      0.00s  tests.test_verdict_rule.TheRuleFires.test_every_registered_ingested_corpus_is_covered
+      0.00s  tests.test_verdict_rule.TheRuleFires.test_a_link_with_no_artifact_is_refused
+      0.00s  tests.test_verdict_rule.TheRuleIsNotVacuous.test_a_pinned_artifact_with_a_verdict_passes
+      0.00s  tests.test_verdict_rule.TheRuleFires.test_goedel_pset_node_citing_verified_by_is_refused
+      0.00s  tests.test_verdict_rule.TheRuleFires.test_the_rule_is_not_limited_to_python_tests
+      0.00s  tests.test_verdict_rule.TheRuleIsNotVacuous.test_curated_nodes_are_untouched
+      0.00s  tests.test_verdict_rule.TheRuleIsNotVacuous.test_ingested_nodes_without_citations_are_untouched
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_verdict_rule.json

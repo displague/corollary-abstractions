@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:09:37+00:00",
+  "finished_utc": "2026-08-19T07:09:37+00:00",
+  "targets": [
+    "tests.test_request_grammar"
+  ],
+  "successful": true,
+  "total_seconds": 0.03,
+  "timed_test_seconds": 0.03,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 23,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_request_grammar": 0.03
+  },
+  "slowest": [
+    {
+      "test": "tests.test_request_grammar.DegradeToAskTests.test_a_foreign_owner_cannot_revise_another_session",
+      "seconds": 0.01
+    },
+    {
+      "test": "tests.test_request_grammar.DegradeToAskTests.test_the_asked_question_can_then_be_answered",
+      "seconds": 0.006
+    },
+    {
+      "test": "tests.test_request_grammar.DegradeToAskTests.test_a_second_failure_reuses_the_outstanding_question",
+      "seconds": 0.005
+    },
+    {
+      "test": "tests.test_request_grammar.DegradeToAskTests.test_parse_failure_asks_a_signed_question_and_binds_nothing",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_request_grammar.DegradeToAskTests.test_abstention_leaves_the_slot_unknown",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_every_registered_rule_fires",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_no_utterance_produces_a_value_outside_the_slot_vocabulary",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_owner_pronouns_resolve_to_the_speaker",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_lifetime_markers_declare_only_declarable_lifetimes",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_corrections_are_recognised_by_marker_and_by_history",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_foreign_owner_reference_is_refused_not_ignored",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_a_correction_may_carry_its_own_lifetime",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_value_may_repeat_its_own_slot_noun",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_empty_and_unmatched_utterances_are_named",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_normalization_is_case_and_punctuation_only",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_trailing_instead_marks_a_correction",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_slot_pronouns_resolve_against_the_open_goal",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_cross_slot_value_is_refused_rather_than_coerced",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_unregistered_slot_phrase_is_named",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_unregistered_value_is_named",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_unresolved_pronoun_without_an_open_slot_is_named",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarRefusalTests.test_a_marker_with_no_value_never_reuses_the_old_one",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_request_grammar.GrammarCoverageTests.test_rule_table_ids_are_unique_and_described",
+      "seconds": 0.0
+    }
+  ]
+}

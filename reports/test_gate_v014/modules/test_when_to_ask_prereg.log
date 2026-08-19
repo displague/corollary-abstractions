@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 26 tests in 47.450s
+
+OK
+
+26 tests in 47.5s (OK)
+
+timed tests: 47.4s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+      47.4s  100.0%  tests.test_when_to_ask_prereg
+
+slowest 20 tests:
+     20.25s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_follow_up_guards_refuse_before_the_one_shot_run
+     17.01s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_complete_preregistration_passes_without_scoring
+      7.12s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_forbidden_ids_recompute_from_the_pinned_spent_tree
+      2.78s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_existing_manifest_objects_and_trees_are_coherent
+      0.08s  tests.test_when_to_ask_prereg.FailClosedSchemas.test_holdout_rejects_wrong_field_types_and_nested_shapes
+      0.05s  tests.test_when_to_ask_prereg.FailClosedSchemas.test_manifest_rejects_extra_missing_and_nested_shape_drift
+      0.05s  tests.test_when_to_ask_prereg.FailClosedSchemas.test_forbidden_ledger_rejects_schema_count_order_and_digest_drift
+      0.03s  tests.test_when_to_ask_prereg.FailClosedSchemas.test_holdout_rejects_missing_extra_and_scalar_rows
+      0.02s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_no_result_exists_in_preregistration
+      0.02s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_candidate_scoring_api_is_deliberately_absent
+      0.02s  tests.test_when_to_ask_prereg.FailClosedSchemas.test_prior_query_documents_fail_closed
+      0.00s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_key_receipt_contains_no_external_text_or_keys
+      0.00s  tests.test_when_to_ask_prereg.FrozenNegativeGrammar.test_empty_reduced_term_and_positive_refuse
+      0.00s  tests.test_when_to_ask_prereg.BlindControl.test_followup_uses_value_only_and_keeps_all_positive_ties
+      0.00s  tests.test_when_to_ask_prereg.FrozenNegativeGrammar.test_exact_suffix_produces_positive_payload_and_veto
+      0.00s  tests.test_when_to_ask_prereg.FrozenNegativeGrammar.test_punctuation_conjunction_and_multiple_markers_refuse
+      0.00s  tests.test_when_to_ask_prereg.RegisteredConstruction.test_runtime_follow_up_parse_is_the_live_shell_parse
+      0.00s  tests.test_when_to_ask_prereg.MaskAwareSelectionContract.test_every_candidate_surface_obeys_same_mask
+      0.00s  tests.test_when_to_ask_prereg.FrozenNegativeGrammar.test_inventory_uses_nested_symbol_lexicon_values
+      0.00s  tests.test_when_to_ask_prereg.BlindControl.test_initial_is_title_only_jaccard_then_id
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_when_to_ask_prereg.json

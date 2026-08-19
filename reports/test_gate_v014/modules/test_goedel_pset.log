@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 73 tests in 0.025s
+
+OK
+
+73 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   98.3%  tests.test_goedel_pset
+
+slowest 20 tests:
+      0.02s  tests.test_goedel_pset.CarrierSignalLocality.test_carrier_residual_audit_sees_cross_segment_shielding
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_embedded_shapes_cover
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_depth_cap_refuses_conservatively
+      0.00s  tests.test_goedel_pset.QuantifierHeads.test_typed_prefix_chains_cover
+      0.00s  tests.test_goedel_pset.QuantifierHeads.test_unreachable_shapes_keep_precise_labels
+      0.00s  tests.test_goedel_pset.QuantifierHeads.test_mixed_carrier_chain_does_not_shield
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_inner_leaf_defects_get_their_own_labels
+      0.00s  tests.test_goedel_pset.CarrierSignalLocality.test_nat_div_in_nat_let_not_shielded_by_rat_typed_sibling
+      0.00s  tests.test_goedel_pset.CarrierSignalLocality.test_local_signal_still_legitimizes_its_own_segment
+      0.00s  tests.test_goedel_pset.QuantifierHeads.test_mixed_carrier_controls
+      0.00s  tests.test_goedel_pset.CarrierSignalLocality.test_monus_in_nat_let_not_shielded_by_rat_cast_in_body
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_embedded_hypothesis_unblocks_full_statement
+      0.00s  tests.test_goedel_pset.PredicateHeads.test_bare_parity_and_primality_goals_covered
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_nested_and_single_chain_agree
+      0.00s  tests.test_goedel_pset.LetBindingGoals.test_let_goal_parses_past_the_binding
+      0.00s  tests.test_goedel_pset.QuantifierHeads.test_carrier_audit_sees_quantifier_field_binder
+      0.00s  tests.test_goedel_pset.PredicateHeads.test_integer_predicate_over_coerced_or_ascribed_arg_blocked
+      0.00s  tests.test_goedel_pset.SelfCheckingAudit.test_totals_are_internally_consistent
+      0.00s  tests.test_goedel_pset.GoedelPsetEmbeddedQuantifierWalk.test_field_prefix_does_not_shield_nested_nat_division
+      0.00s  tests.test_goedel_pset.LetBindingGoals.test_let_body_with_quantifier_prefix_now_covers
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_goedel_pset.json

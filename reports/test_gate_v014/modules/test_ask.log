@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 25 tests in 0.012s
+
+OK
+
+25 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   97.5%  tests.test_ask
+
+slowest 20 tests:
+      0.01s  tests.test_ask.AskReturnTests.test_golden_chicken_revision_pauses_resumes_and_renders
+      0.00s  tests.test_ask.AskReturnTests.test_goal_exception_does_not_consume_uncommitted_reply
+      0.00s  tests.test_ask.AskReturnTests.test_consumed_reply_cannot_satisfy_reinstated_identical_need
+      0.00s  tests.test_ask.AskReturnTests.test_signed_reply_resumes_same_session_and_binds_user_frame
+      0.00s  tests.test_ask.AskReturnTests.test_rejected_reply_does_not_mutate_controller_state
+      0.00s  tests.test_ask.AskReturnTests.test_controller_stops_waiting_after_verified_question
+      0.00s  tests.test_ask.AskReturnTests.test_ask_transitions_refuse_dependency_smuggling
+      0.00s  tests.test_ask.AskReturnTests.test_reply_cannot_cross_question
+      0.00s  tests.test_ask.AskReturnTests.test_closed_frame_refuses_question_and_reply
+      0.00s  tests.test_ask.AskReturnTests.test_post_signature_answer_mutation_is_refused
+      0.00s  tests.test_ask.AskReturnTests.test_reply_cannot_clear_a_substituted_pending_need
+      0.00s  tests.test_ask.AskReturnTests.test_forged_public_question_cannot_receive_signed_reply
+      0.00s  tests.test_ask.AskReturnTests.test_policy_cannot_guess_user_reply_signature
+      0.00s  tests.test_ask.AskReturnTests.test_reply_cannot_cross_frame
+      0.00s  tests.test_ask.AskReturnTests.test_reply_rechecks_that_pending_literal_is_still_unknown
+      0.00s  tests.test_ask.AskReturnTests.test_reply_cannot_cross_session
+      0.00s  tests.test_ask.AskReturnTests.test_reply_cannot_cross_user_owner
+      0.00s  tests.test_ask.AskReturnTests.test_waiting_branch_refuses_every_non_reply_action
+      0.00s  tests.test_ask.AskReturnTests.test_second_verifier_cannot_accept_first_verifiers_question
+      0.00s  tests.test_ask.AskReturnTests.test_forged_blank_owner_and_invalid_channel_cannot_open_question
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_ask.json

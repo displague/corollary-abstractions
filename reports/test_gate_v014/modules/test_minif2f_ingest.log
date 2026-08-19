@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 27 tests in 0.771s
+
+OK
+
+27 tests in 0.8s (OK)
+
+timed tests: 0.8s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.8s  100.0%  tests.test_minif2f_ingest
+
+slowest 20 tests:
+      0.25s  tests.test_minif2f_ingest.CorpusHeadProvenance.test_binder_heads_actually_appear
+      0.25s  tests.test_minif2f_ingest.CorpusHeadProvenance.test_predicate_heads_actually_appear
+      0.25s  tests.test_minif2f_ingest.CorpusHeadProvenance.test_transcendental_heads_actually_appear
+      0.01s  tests.test_minif2f_ingest.CommittedArtifacts.test_coverage_regenerates_byte_for_byte
+      0.00s  tests.test_minif2f_ingest.CommittedArtifacts.test_covered_set_has_no_out_of_grammar_glyphs
+      0.00s  tests.test_minif2f_ingest.CorpusHeadProvenance.test_no_covered_statement_relies_on_an_unverified_head
+      0.00s  tests.test_minif2f_ingest.CommittedArtifacts.test_extract_is_complete_and_pinned
+      0.00s  tests.test_minif2f_ingest.CommittedArtifacts.test_totals_partition_the_statements
+      0.00s  tests.test_minif2f_ingest.ManifestPin.test_commit_and_files_are_pinned
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_quantifier_prefix_now_covers_and_embedded_beats_comma
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_bare_predicate_goal_now_covered
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_covered_conditional_identity
+      0.00s  tests.test_minif2f_ingest.ParserSoundness.test_parse_extracts_vars_hyps_goal
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_covered_with_supported_transcendentals
+      0.00s  tests.test_minif2f_ingest.ParserSoundness.test_function_and_domain_binders
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_bare_prop_variable_still_no_relation
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_hypothesis_carries_the_blocker
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_mathlib_norm_bars_are_blocked
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_big_operator_blocked
+      0.00s  tests.test_minif2f_ingest.ClassifierHonesty.test_function_unknown_blocks_full_but_maybe_not_goal
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_minif2f_ingest.json

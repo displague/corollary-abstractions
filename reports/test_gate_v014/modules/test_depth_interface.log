@@ -1,0 +1,22 @@
+----------------------------------------------------------------------
+Ran 7 tests in 0.068s
+
+OK
+
+7 tests in 0.1s (OK)
+
+timed tests: 0.1s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.1s   99.7%  tests.test_depth_interface
+
+slowest 7 tests:
+      0.04s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_pdi2_pending_without_treatment
+      0.02s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_verdict_preserved_and_pdi1_fires
+      0.01s  tests.test_depth_interface.DepthInterfacePredictionTests.test_predictions_registered_in_roadmap_interface_lane
+      0.00s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_incoherent_inclusion_refuses
+      0.00s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_non_integer_correct_count_refuses
+      0.00s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_capacity_exclusions_are_kept_per_depth
+      0.00s  tests.test_depth_interface.DepthInterfaceAccountingTests.test_unconditional_is_retained_times_kept_over_generated
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_depth_interface.json

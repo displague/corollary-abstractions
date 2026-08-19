@@ -1,0 +1,29 @@
+----------------------------------------------------------------------
+Ran 14 tests in 0.002s
+
+OK
+
+14 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   87.5%  tests.test_when_to_ask_candidate
+
+slowest 14 tests:
+      0.00s  tests.test_when_to_ask_candidate.FrozenGrammar.test_shapes_outside_the_rule_refuse_rather_than_normalize
+      0.00s  tests.test_when_to_ask_candidate.FrozenGrammar.test_one_marker_and_a_short_term_parse
+      0.00s  tests.test_when_to_ask_candidate.FrozenGrammar.test_a_second_marker_is_refused_even_beside_punctuation
+      0.00s  tests.test_when_to_ask_candidate.MaskedAdmission.test_a_lower_scored_survivor_wins_after_the_top_is_excluded
+      0.00s  tests.test_when_to_ask_candidate.VetoInventory.test_both_tokens_of_a_two_word_term_must_be_present
+      0.00s  tests.test_when_to_ask_candidate.FrozenGrammar.test_surface_normalization_precedes_the_match
+      0.00s  tests.test_when_to_ask_candidate.MaskedAdmission.test_graph_size_and_document_frequencies_are_untouched
+      0.00s  tests.test_when_to_ask_candidate.TerminalRefusal.test_a_terminal_pass_never_falls_through_to_word_overlap
+      0.00s  tests.test_when_to_ask_candidate.MaskedAdmission.test_masking_the_last_owner_does_not_unknow_its_word
+      0.00s  tests.test_when_to_ask_candidate.VetoInventory.test_a_node_is_vetoed_only_by_its_own_committed_words
+      0.00s  tests.test_when_to_ask_candidate.TerminalRefusal.test_zero_survivors_pass_rather_than_manufacture_a_winner
+      0.00s  tests.test_when_to_ask_candidate.VetoInventory.test_a_saturating_word_still_vetoes
+      0.00s  tests.test_when_to_ask_candidate.MaskedAdmission.test_unmasked_candidates_keep_their_scores_and_order
+      0.00s  tests.test_when_to_ask_candidate.TerminalRefusal.test_an_exact_id_whose_only_reading_is_excluded_passes
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_when_to_ask_candidate.json

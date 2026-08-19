@@ -1,0 +1,20 @@
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+
+5 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   31.6%  tests.test_legality_strata
+
+slowest 5 tests:
+      0.00s  tests.test_legality_strata.StrataSeparabilityTests.test_classify_allowed_trait_ok_at_l3
+      0.00s  tests.test_legality_strata.StrataSeparabilityTests.test_four_injected_failures_have_distinct_tags
+      0.00s  tests.test_legality_strata.StrataSeparabilityTests.test_classify_denied_trait_is_l3_not_l1
+      0.00s  tests.test_legality_strata.StrataSeparabilityTests.test_classify_undeclared_trait_is_l2
+      0.00s  tests.test_legality_strata.StrataSeparabilityTests.test_first_failure_preserves_order
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_legality_strata.json

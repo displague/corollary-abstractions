@@ -1,0 +1,25 @@
+----------------------------------------------------------------------
+Ran 10 tests in 86.165s
+
+OK
+
+10 tests in 86.2s (OK)
+
+timed tests: 0.5s; fixtures/runner overhead: 85.6s
+
+timed test bodies by module (fixtures excluded):
+       0.5s    0.6%  tests.test_matcher_mirror
+
+slowest 10 tests:
+      0.29s  tests.test_matcher_mirror.AuthoredScopeTests.test_past_recurrence_and_opening_persistence_boundaries
+      0.24s  tests.test_matcher_mirror.AuthoredScopeTests.test_first_scope_pair_agrees_and_resolves_in_the_merged_graph
+      0.00s  tests.test_matcher_mirror.AuthoredScopeTests.test_past_response_nodes_declare_past_box_metadata
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_only_the_five_registered_mirror_groups_are_reported
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_galilean_addition_fires_and_scope_only_prediction_misses
+      0.00s  tests.test_matcher_mirror.AuthoredScopeTests.test_hover_is_frame_assumed_not_falsely_entailed
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_sally_belief_and_world_location_share_content_not_scope
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_time_reversal_is_global_and_involutive
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_registered_group_counts_include_physics_frames_slice
+      0.00s  tests.test_matcher_mirror.MirrorReportTests.test_strict_order_is_related_to_but_not_aliased_with_leq
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_matcher_mirror.json

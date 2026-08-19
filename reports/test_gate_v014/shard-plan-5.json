@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "kind": "longest_processing_time_shard_plan",
+  "measurement_head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "measurement_manifest_sha256": "ed739ac7b9074e915f6f8fef97f22b81377e7a91e34409147c2e079a2e349065",
+  "inventory_sha256": "98244be3043c9f495617792eb2c7b308da2c1a84204ae9706e7e1c1972e470bf",
+  "rule": "descending module seconds, module-name tie; assign to lowest current seconds, shard-number tie",
+  "scope": "host-specific estimate for this exact measurement head and environment only; remeasure after test/source/environment changes",
+  "shards": [
+    {
+      "shard": 0,
+      "predicted_seconds": 12522.52,
+      "modules": [
+        "tests.test_write_stage"
+      ]
+    },
+    {
+      "shard": 1,
+      "predicted_seconds": 8045.02,
+      "modules": [
+        "tests.test_corpus_analogy_split"
+      ]
+    },
+    {
+      "shard": 2,
+      "predicted_seconds": 402.93,
+      "modules": [
+        "tests.test_corpus_analogy"
+      ]
+    },
+    {
+      "shard": 3,
+      "predicted_seconds": 358.59,
+      "modules": [
+        "tests.test_decompose_channels",
+        "tests.test_matcher_mirror",
+        "tests.test_item4_operator_bag",
+        "tests.test_external_verifier",
+        "tests.test_wordnet_retrieval",
+        "tests.test_probes",
+        "tests.test_readiness",
+        "tests.test_session_durability",
+        "tests.test_verified_by",
+        "tests.test_session_offline",
+        "tests.test_depth_consumers",
+        "tests.test_session_run",
+        "tests.test_minif2f_ingest",
+        "tests.test_story",
+        "tests.test_verdict_rule",
+        "tests.test_coverage_holdout3",
+        "tests.test_depth_consumer_runner",
+        "tests.test_controller",
+        "tests.test_depth_interface",
+        "tests.test_source_manifest",
+        "tests.test_emit_skeleton",
+        "tests.test_algorithms_ingest",
+        "tests.test_live_lean_search",
+        "tests.test_ask",
+        "tests.test_narrative_realize"
+      ]
+    },
+    {
+      "shard": 4,
+      "predicted_seconds": 358.58,
+      "modules": [
+        "tests.test_programming_discipline",
+        "tests.test_harness_line",
+        "tests.test_when_to_ask_prereg",
+        "tests.test_resolver",
+        "tests.test_proof_correspondence",
+        "tests.test_session_dispatcher",
+        "tests.test_retrieval",
+        "tests.test_retrieval_tools",
+        "tests.test_measurement_tools",
+        "tests.test_proof_curve",
+        "tests.test_visual_oracle",
+        "tests.test_lean_workbook_ingest",
+        "tests.test_gloss",
+        "tests.test_depth_consumer_analysis",
+        "tests.test_answers",
+        "tests.test_wold_ingest",
+        "tests.test_prose_authoring",
+        "tests.test_grounded_admission",
+        "tests.test_langgen_roundtrip",
+        "tests.test_corpus_analogy_model_arm",
+        "tests.test_conversation_runtime",
+        "tests.test_request_grammar",
+        "tests.test_goedel_pset",
+        "tests.test_self_grounding",
+        "tests.test_frames",
+        "tests.test_ambiguity",
+        "tests.test_belief",
+        "tests.test_compose_assert_frames",
+        "tests.test_context_narrowing",
+        "tests.test_deixis",
+        "tests.test_discourse",
+        "tests.test_entailment",
+        "tests.test_evaluate",
+        "tests.test_index_language",
+        "tests.test_legality_strata",
+        "tests.test_preference",
+        "tests.test_search_controller",
+        "tests.test_tactic_policy",
+        "tests.test_theory_of_mind",
+        "tests.test_when_to_ask_candidate"
+      ]
+    }
+  ],
+  "predicted_parallel_wall_seconds": 12522.52,
+  "measured_serial_seconds": 21687.64
+}

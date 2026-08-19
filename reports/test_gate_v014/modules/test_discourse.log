@@ -1,0 +1,22 @@
+----------------------------------------------------------------------
+Ran 7 tests in 0.000s
+
+OK
+
+7 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   57.8%  tests.test_discourse
+
+slowest 7 tests:
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_thirty_two_turn_scripts_meet_floors
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_empty_entity_id_refused
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_gender_incompatibility_skips
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_most_salient_wins_among_compatible
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_introduce_then_resolve_it
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_unknown_anaphor_string_fails_closed
+      0.00s  tests.test_discourse.DiscourseStoreTests.test_wipe_ablation_forces_miss
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_discourse.json

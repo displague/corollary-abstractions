@@ -1,0 +1,24 @@
+----------------------------------------------------------------------
+Ran 9 tests in 0.343s
+
+OK
+
+9 tests in 0.3s (OK)
+
+timed tests: 0.3s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.3s   98.9%  tests.test_story
+
+slowest 9 tests:
+      0.32s  tests.test_story.TheRulesAreQuoted.test_constraint_text_is_verbatim_from_the_corpus
+      0.02s  tests.test_story.TheRulesAreQuoted.test_the_answer_says_it_invents_nothing
+      0.00s  tests.test_story.TheRulesAreQuoted.test_every_constraint_resolves_to_a_committed_statement
+      0.00s  tests.test_story.RequestDetection.test_other_text_is_not_a_story_request
+      0.00s  tests.test_story.RequestDetection.test_story_requests_are_recognised
+      0.00s  tests.test_story.TheStoryVerifies.test_chekhov_is_actually_satisfied_not_merely_cited
+      0.00s  tests.test_story.TheStoryVerifies.test_it_reaches_a_complete_three_beat_story
+      0.00s  tests.test_story.TheStoryVerifies.test_the_desire_opened_is_the_desire_closed
+      0.00s  tests.test_story.TheStoryVerifies.test_the_verifier_accepted_every_beat
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_story.json

@@ -1,0 +1,238 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:09:23+00:00",
+  "finished_utc": "2026-08-19T07:09:28+00:00",
+  "targets": [
+    "tests.test_proof_curve"
+  ],
+  "successful": true,
+  "total_seconds": 4.74,
+  "timed_test_seconds": 4.74,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 42,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_proof_curve": 4.74
+  },
+  "slowest": [
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_frequency_story_order_is_degenerate",
+      "seconds": 2.713
+    },
+    {
+      "test": "tests.test_proof_curve.FrequencyBaselineTests.test_extraction_schema_matches_the_v06_mapper_row_for_row",
+      "seconds": 1.264
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_one_held_out_brief_solves_through_the_shared_controller",
+      "seconds": 0.705
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_digest_is_checkout_newline_invariant",
+      "seconds": 0.03
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_briefs_split_by_story_identity",
+      "seconds": 0.017
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_published_time_curves_recompute_from_serialized_runs",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_state_level_leakage_control_stays_at_zero",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_primary_artifact_binds_theorem_and_project_sources",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_held_out_is_checked_against_the_training_extraction",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_proof_curve.PolicyTests.test_arms_differ_only_by_permutation",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_proof_curve.FrequencyBaselineTests.test_frequency_counts_come_from_the_v06_training_split",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.FrequencyBaselineTests.test_frequency_order_is_state_blind",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_every_witness_uses_only_registered_schemas",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_set_is_versioned_and_digested",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_every_generated_binding_is_accepted_by_the_frame",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_decoy_element_is_plantable_so_dead_branches_exist",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_two_proof_families_at_minimum_each_with_members",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.TheoremSetTests.test_project_family_declares_a_project_and_init_family_does_not",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_syntax_order_reads_the_conclusion",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.PolicyTests.test_ordering_actually_changes",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.PolicyTests.test_within_schema_order_is_fixed_across_arms",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_syntax_order_never_prefers_the_dead_branch",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.PolicyTests.test_policy_only_ever_emits_gen_lean_tactic",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_a_binder_named_case_is_not_swallowed_as_a_block_header",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_syntax_order_falls_back_to_arbitrary_where_syntax_is_silent",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_clear_never_targets_a_sort_binder",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_bare_variables_offer_no_projection",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.BudgetDerivationTests.test_run_json_preserves_threshold_adjacent_time",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_every_schema_is_reachable_from_action_schema",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_syntax_story_ranker_follows_beat_structure",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_binder_names_cover_universals_then_fresh_arrow_names",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_opaque_project_types_still_offer_the_two_fields",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_projection_paths_follow_the_conjunction_tree",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.BudgetDerivationTests.test_solved_at_thresholds_both_axes",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_shared_controller_not_a_second_one",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_inaccessible_binders_never_reach_argument_generation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_parses_both_the_source_and_the_pretty_printed_spelling",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_fresh_names_avoid_existing_context_names",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_story_run_json_preserves_threshold_adjacent_time",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_reads_only_the_first_goal_of_a_multi_goal_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.StoryArmTests.test_story_vocabulary_is_disjoint_from_the_tactic_vocabulary",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_curve.GrammarTests.test_unbalanced_parentheses_fail_soft_not_wrong",
+      "seconds": 0.0
+    }
+  ]
+}

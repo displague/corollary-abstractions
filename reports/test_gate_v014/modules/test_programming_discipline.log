@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 20 tests in 97.773s
+
+OK
+
+20 tests in 97.8s (OK)
+
+timed tests: 10.0s; fixtures/runner overhead: 87.7s
+
+timed test bodies by module (fixtures excluded):
+      10.0s   10.3%  tests.test_programming_discipline
+
+slowest 20 tests:
+      7.59s  tests.test_programming_discipline.EndToEnd.test_nine_pass_verdicts_recheck
+      0.86s  tests.test_programming_discipline.EndToEnd.test_n_minus_2_is_a_committed_fail_cited_by_nothing
+      0.85s  tests.test_programming_discipline.EndToEnd.test_drop_abs_is_a_committed_fail_cited_by_nothing
+      0.46s  tests.test_programming_discipline.RetrievalDoesNotTreatTestsAsProofs.test_store_loads_and_programming_nodes_are_not_proven
+      0.27s  tests.test_programming_discipline.EndToEnd.test_merged_validator_accepts_the_graph
+      0.01s  tests.test_programming_discipline.VerdictBackedRule.test_n_minus_2_fail_does_not_satisfy_the_rule
+      0.00s  tests.test_programming_discipline.VerdictBackedRule.test_drop_abs_fail_does_not_satisfy_the_rule
+      0.00s  tests.test_programming_discipline.VerdictBackedRule.test_unknown_statement_cannot_be_emitted
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_combined_programming_keyword_baseline_is_point_four
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_token_factorial_baseline_loses_on_precision
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_token_gcd_baseline_loses_on_precision
+      0.00s  tests.test_programming_discipline.Vocabulary.test_lean4_against_py_candidate_is_refused
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_volume_loops_are_real
+      0.00s  tests.test_programming_discipline.Vocabulary.test_unmanifested_py_file_cannot_ground_a_link
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_second_wave_pairs_are_typed_twins_and_do_not_cross
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_euclid_pair_is_a_typed_twin_stein_is_not
+      0.00s  tests.test_programming_discipline.Vocabulary.test_honesty_boundary_is_written_at_node_level
+      0.00s  tests.test_programming_discipline.Vocabulary.test_programming_nodes_cite_python_tests
+      0.00s  tests.test_programming_discipline.Vocabulary.test_python_tests_against_lean_triples_is_refused
+      0.00s  tests.test_programming_discipline.TwinsAndBaseline.test_zero_parse_problems_and_slot_gaps
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_programming_discipline.json

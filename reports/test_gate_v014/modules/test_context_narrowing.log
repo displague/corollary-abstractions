@@ -1,0 +1,18 @@
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK
+
+3 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   89.9%  tests.test_context_narrowing
+
+slowest 3 tests:
+      0.00s  tests.test_context_narrowing.HardConstraintTests.test_complete_word_constraint_keeps_every_match_and_never_ranks
+      0.00s  tests.test_context_narrowing.HardConstraintTests.test_corpus_constraint_is_exact_not_a_score
+      0.00s  tests.test_context_narrowing.HardConstraintTests.test_zero_match_is_empty_for_the_runtime_to_preserve
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_context_narrowing.json

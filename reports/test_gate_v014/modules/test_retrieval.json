@@ -1,0 +1,254 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:10:18+00:00",
+  "finished_utc": "2026-08-19T07:10:34+00:00",
+  "targets": [
+    "tests.test_retrieval"
+  ],
+  "successful": true,
+  "total_seconds": 16.89,
+  "timed_test_seconds": 16.51,
+  "fixture_and_overhead_seconds": 0.38,
+  "tests": 46,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_retrieval": 16.51
+  },
+  "slowest": [
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_empirical_member_no_longer_gets_stronger_labeled_twin",
+      "seconds": 1.998
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_exact_skeleton_keys_preserve_distinct_operators",
+      "seconds": 1.972
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_truncated_word_does_not_reverse_match_one_letter_aliases",
+      "seconds": 1.88
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_unique_structural_group_key_can_bind_the_group_record",
+      "seconds": 1.375
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_unique_decomposition_only_key_can_bind_its_corpus_owner",
+      "seconds": 1.008
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_then_point_solves_and_binds_pointable_material",
+      "seconds": 0.854
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_exact_title_wins_over_another_nodes_neighborhood_match",
+      "seconds": 0.854
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_unrelated_miss_is_unknown_with_no_context",
+      "seconds": 0.745
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_truncated_id_uses_neighborhood_not_exact_lookup",
+      "seconds": 0.651
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_duplicate_retrieval_cannot_claim_progress_without_new_context",
+      "seconds": 0.629
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_ambiguous_single_symbol_cannot_bind_an_unrelated_lexicon",
+      "seconds": 0.621
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_short_nonexact_key_cannot_prefix_match_a_long_alias",
+      "seconds": 0.565
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_exact_truncation_is_reported_not_silent",
+      "seconds": 0.482
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_exact_query_unifies_all_five_committed_source_kinds",
+      "seconds": 0.335
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_point_rejects_authentic_item_without_retrieve_receipt",
+      "seconds": 0.329
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_point_on_closed_frame_names_the_closure",
+      "seconds": 0.327
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_frame_mutation_cannot_leave_a_stale_unknown_pointable",
+      "seconds": 0.327
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_point_rejects_context_material_forged_outside_the_store",
+      "seconds": 0.318
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_receipt_cannot_cross_into_frame_local_scope",
+      "seconds": 0.314
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_receipt_cannot_replay_into_another_session",
+      "seconds": 0.31
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_the_bare_numeral_seven_matches_exactly_not_by_prefix",
+      "seconds": 0.281
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_incomplete_or_unsupported_artifact_cannot_be_proven",
+      "seconds": 0.077
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_schema_valid_artifact_only_proof_link_loads",
+      "seconds": 0.057
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_local_no_goals_row_cannot_authenticate_whole_proof",
+      "seconds": 0.044
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_artifact_only_link_requires_one_theorem_identity",
+      "seconds": 0.044
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_trusted_digest_with_wrong_system_label_is_rejected",
+      "seconds": 0.039
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_empty_json_artifact_cannot_create_proven_material",
+      "seconds": 0.022
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_malformed_verified_by_shape_fails_with_named_statement",
+      "seconds": 0.021
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_out_of_root_artifact_cannot_mint_a_proof_record",
+      "seconds": 0.014
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_the_manifest_pin_still_equals_the_original_hardcoded_digest",
+      "seconds": 0.009
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_derivative_records_inherit_weakest_member_status",
+      "seconds": 0.006
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_empty_store_is_capability_blind_failure_and_does_not_mutate",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_an_unpinned_artifact_is_untrusted_even_if_it_parses",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_real_store_proof_records_carry_structured_trust",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_tokenless_symbol_can_exact_lookup_and_bind",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_verifier_rejects_a_directly_forged_pending_key",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_frame_gen_delegation_preserves_verdict_reason_and_evidence",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_unknown_retrieval_and_point_transition_names_are_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_factory_rejects_a_key_unrelated_to_the_unknown_literal",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_pending_key_blocks_cross_query_neighborhood_binding",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieval_session_can_only_begin_from_unknown",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_rejects_an_alias_of_the_pending_target",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_frame_local_refuses_before_store_and_routes_to_ask",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_cannot_replace_pending_key_with_unrelated_key",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_retrieve_requires_pending_unknown_and_nonempty_key",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_retrieval.RetrievalTests.test_point_before_retrieval_is_refused",
+      "seconds": 0.0
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 46 tests in 0.006s
+
+OK
+
+46 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   95.2%  tests.test_frames
+
+slowest 20 tests:
+      0.00s  tests.test_frames.NoDeusTests.test_adapter_passes_through_the_refutation
+      0.00s  tests.test_frames.FrameControllerTests.test_rejected_transition_leaves_state_and_premises_unchanged
+      0.00s  tests.test_frames.FrameControllerTests.test_temporal_actions_use_the_generic_controller_contract
+      0.00s  tests.test_frames.FrameLadderTests.test_closed_frame_refuses_check_and_double_close
+      0.00s  tests.test_frames.FrameLadderTests.test_declaration_cannot_bypass_the_suspension_gate
+      0.00s  tests.test_frames.FrameControllerTests.test_frame_local_retrieval_is_refused
+      0.00s  tests.test_frames.FrameLadderTests.test_open_frame_rejects_contradictory_declarations
+      0.00s  tests.test_frames.FrameLadderTests.test_accepted_assertion_becomes_frame_local_premise
+      0.00s  tests.test_frames.FrameLadderTests.test_incoherent_world_is_rejected_at_construction
+      0.00s  tests.test_frames.ScopeValidatorTests.test_assertion_cannot_introduce_owner_missing_from_declaration
+      0.00s  tests.test_frames.FrameControllerTests.test_malformed_polarity_is_refused_not_negated
+      0.00s  tests.test_frames.NoDeusTests.test_adoption_changes_nothing_on_the_lawful_path
+      0.00s  tests.test_frames.ScopeValidatorTests.test_frame_members_must_agree_on_frame_properties
+      0.00s  tests.test_frames.FrameLadderTests.test_matching_discharge_allows_clean_close
+      0.00s  tests.test_frames.FrameLadderTests.test_frame_truths_demote_on_exit_and_frame_closes
+      0.00s  tests.test_frames.NoDeusTests.test_refuted_discharge_leaves_ledger_and_close_unaffected
+      0.00s  tests.test_frames.FrameLadderTests.test_fresh_ids_are_not_idempotent_retries
+      0.00s  tests.test_frames.FrameLadderTests.test_contradiction_of_suspended_corpus_truth_is_admissible
+      0.00s  tests.test_frames.FrameLadderTests.test_duplicate_plant_and_discharge_are_idempotent
+      0.00s  tests.test_frames.FrameLadderTests.test_closed_frame_refuses_temporal_events
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_frames.json

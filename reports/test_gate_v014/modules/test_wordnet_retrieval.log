@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+Ran 11 tests in 17.025s
+
+OK
+
+11 tests in 17.0s (OK)
+
+timed tests: 17.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+      17.0s  100.0%  tests.test_wordnet_retrieval
+
+slowest 11 tests:
+     16.01s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_eval_reports_valid_archive_misses_without_crashing
+      0.42s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_unnamed_archive_preserves_five_store_baseline
+      0.40s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_explicitly_named_missing_archive_is_loud
+      0.05s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_polysemous_lexical_item_and_multi_sense_bridge_cannot_bind
+      0.05s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_ambiguous_synonym_bridge_cannot_bind
+      0.05s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_exact_committed_alias_precedes_lexical_bridge
+      0.01s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_wordnet_status_cannot_launder_from_formal_neighbor
+      0.01s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_existing_malformed_archive_fails_closed
+      0.00s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_authoritative_index_maps_are_immutable
+      0.00s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_retrieve_then_point_binds_without_changing_frame_verdict
+      0.00s  tests.test_wordnet_retrieval.WordNetRetrievalTests.test_synonym_bridge_reaches_unique_corpus_owner
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_wordnet_retrieval.json

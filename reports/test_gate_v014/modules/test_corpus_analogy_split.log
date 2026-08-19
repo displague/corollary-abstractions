@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 45 tests in 8045.024s
+
+OK
+
+45 tests in 8045.0s (OK)
+
+timed tests: 4610.8s; fixtures/runner overhead: 3434.2s
+
+timed test bodies by module (fixtures excluded):
+    4610.8s   57.3%  tests.test_corpus_analogy_split
+
+slowest 20 tests:
+   4316.95s  tests.test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer
+    100.31s  tests.test_corpus_analogy_split.VerificationTests.test_specialization_ledger_is_load_bearing
+     96.62s  tests.test_corpus_analogy_split.DeterminismTests.test_split_files_regenerate_byte_identically
+     96.19s  tests.test_corpus_analogy_split.DeterminismTests.test_generator_is_deterministic
+      0.25s  tests.test_corpus_analogy_split.ControlTests.test_the_blind_context_does_not_carry_corpus_metadata
+      0.19s  tests.test_corpus_analogy_split.PointabilityTests.test_serialization_round_trips_on_every_authored_statement
+      0.05s  tests.test_corpus_analogy_split.PointabilityTests.test_head_kind_table_matches_every_authored_template
+      0.04s  tests.test_corpus_analogy_split.ControlTests.test_committed_ceiling_report_is_not_stale
+      0.04s  tests.test_corpus_analogy_split.DeterminismTests.test_written_rows_carry_the_split_assignment
+      0.02s  tests.test_corpus_analogy_split.DedupTests.test_dedup_is_order_independent
+      0.02s  tests.test_corpus_analogy_split.HoldoutTests.test_axis_entanglement_is_pinned_not_assumed
+      0.02s  tests.test_corpus_analogy_split.HoldoutTests.test_shape_holdout_is_a_pinned_structural_sibling_of_family
+      0.02s  tests.test_corpus_analogy_split.HoldoutTests.test_the_original_three_holdouts_are_not_one_partition_renamed
+      0.02s  tests.test_corpus_analogy_split.VerificationTests.test_specializer_independently_accepts_c_to_d
+      0.02s  tests.test_corpus_analogy_split.HoldoutTests.test_splits_are_not_seeded_and_cannot_be_re_rolled
+      0.01s  tests.test_corpus_analogy_split.DeterminismTests.test_pointer_rows_are_deterministic
+      0.00s  tests.test_corpus_analogy_split.DedupTests.test_dedup_holds_across_every_split
+      0.00s  tests.test_corpus_analogy_split.PointabilityTests.test_every_target_token_is_pointed_at_in_the_input
+      0.00s  tests.test_corpus_analogy_split.VerificationTests.test_target_never_occurs_verbatim_in_the_input
+      0.00s  tests.test_corpus_analogy_split.HoldoutTests.test_vocabulary_holdout_removes_tokens_from_training_targets
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_corpus_analogy_split.json

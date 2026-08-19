@@ -1,0 +1,27 @@
+----------------------------------------------------------------------
+Ran 12 tests in 17.080s
+
+OK
+
+12 tests in 17.1s (OK)
+
+timed tests: 16.2s; fixtures/runner overhead: 0.9s
+
+timed test bodies by module (fixtures excluded):
+      16.2s   94.9%  tests.test_session_dispatcher
+
+slowest 12 tests:
+      2.07s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_pruning_evidence_genuinely_spans_hops
+      2.07s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_two_subsystem_cycle_terminates_by_naming_the_cycle
+      2.03s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_a_high_budget_still_stops_at_the_cycle_not_the_ceiling
+      2.02s  tests.test_session_dispatcher.DispatcherReviewFixRegressions.test_cycle_is_named_without_pruning
+      1.93s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_without_detection_the_same_topology_spins_to_the_ceiling
+      1.87s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_two_different_needs_are_not_conflated_as_a_loop
+      1.49s  tests.test_session_dispatcher.PIH7SessionLoopDetection.test_a_live_need_sharing_a_dead_needs_frame_name_still_answers
+      0.78s  tests.test_session_dispatcher.PIH4RegisteredPathsOnly.test_registered_path_is_actually_walked
+      0.56s  tests.test_session_dispatcher.DispatcherReviewFixRegressions.test_pendingless_registered_path_abstains_not_crashes
+      0.51s  tests.test_session_dispatcher.PIH4RegisteredPathsOnly.test_route_to_unknown_subsystem_id_abstains
+      0.44s  tests.test_session_dispatcher.DispatcherReviewFixRegressions.test_matrix_off_subsystem_cannot_be_walked_via_a_lying_flag
+      0.44s  tests.test_session_dispatcher.PIH4RegisteredPathsOnly.test_route_to_off_optional_subsystem_abstains_with_reason
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_session_dispatcher.json

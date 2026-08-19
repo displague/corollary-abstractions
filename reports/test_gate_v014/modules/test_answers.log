@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+Ran 11 tests in 0.738s
+
+OK
+
+11 tests in 0.7s (OK)
+
+timed tests: 0.7s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.7s  100.0%  tests.test_answers
+
+slowest 11 tests:
+      0.74s  tests.test_answers.AnswersAreQuotations.test_curated_prose_is_not_labelled_that_way
+      0.00s  tests.test_answers.AnswersAreQuotations.test_every_sentence_appears_in_the_corpus
+      0.00s  tests.test_answers.SuppositionsAreConjecture.test_a_supposition_is_held_as_conjectured
+      0.00s  tests.test_answers.AnswersAreQuotations.test_relations_come_from_committed_links
+      0.00s  tests.test_answers.SuppositionsAreConjecture.test_fiction_does_not_reach_the_factual_channel
+      0.00s  tests.test_answers.AnswersAreQuotations.test_ingested_prose_is_labelled_as_provenance
+      0.00s  tests.test_answers.AnswersAreQuotations.test_the_answer_names_its_source
+      0.00s  tests.test_answers.SuppositionsAreConjecture.test_negation_is_carried
+      0.00s  tests.test_answers.SuppositionsAreConjecture.test_it_never_claims_to_be_a_fact
+      0.00s  tests.test_answers.AnswersAreQuotations.test_unknown_statement_composes_nothing
+      0.00s  tests.test_answers.SuppositionsAreConjecture.test_it_runs_in_a_runtime_frame_owned_by_the_person
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_answers.json

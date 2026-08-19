@@ -1,0 +1,24 @@
+----------------------------------------------------------------------
+Ran 9 tests in 0.040s
+
+OK
+
+9 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   99.6%  tests.test_source_manifest
+
+slowest 9 tests:
+      0.03s  tests.test_source_manifest.VerifyLogic.test_sha256_matches_hashlib
+      0.01s  tests.test_source_manifest.VerifyLogic.test_verify_one_ok_missing_and_mismatch
+      0.00s  tests.test_source_manifest.VerifyLogic.test_env_token_reader_never_returns_a_stray_value
+      0.00s  tests.test_source_manifest.ManifestStructure.test_direct_sources_pin_a_real_sha_and_size
+      0.00s  tests.test_source_manifest.ManifestStructure.test_direct_filenames_are_unique_in_the_archive_dir
+      0.00s  tests.test_source_manifest.ManifestStructure.test_every_source_has_required_metadata
+      0.00s  tests.test_source_manifest.ManifestStructure.test_gated_sources_are_marked
+      0.00s  tests.test_source_manifest.ManifestStructure.test_ids_and_urls_are_unique
+      0.00s  tests.test_source_manifest.ManifestStructure.test_has_schema_and_sources
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_source_manifest.json

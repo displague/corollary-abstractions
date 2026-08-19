@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 29 tests in 0.066s
+
+OK
+
+29 tests in 0.1s (OK)
+
+timed tests: 0.1s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.1s   99.6%  tests.test_controller
+
+slowest 20 tests:
+      0.03s  tests.test_controller.LeanReplayTests.test_oracle_replays_three_contiguous_extracted_steps
+      0.01s  tests.test_controller.StoryFrameTests.test_rejected_branch_is_not_a_premise_for_recovery
+      0.00s  tests.test_controller.LeanReplayTests.test_untrusted_extraction_cannot_assign_proven
+      0.00s  tests.test_controller.StoryFrameTests.test_closed_story_frame_refuses_new_beats
+      0.00s  tests.test_controller.StoryFrameTests.test_oracle_executes_three_verified_beats
+      0.00s  tests.test_controller.StoryFrameTests.test_trait_contradiction_is_refuted
+      0.00s  tests.test_controller.StoryFrameTests.test_undeclared_compatible_trait_is_unknown_not_refuted
+      0.00s  tests.test_controller.StoryFrameTests.test_out_of_order_beat_is_refuted_without_state_change
+      0.00s  tests.test_controller.StoryFrameTests.test_typed_records_anchor_every_element_in_its_own_beat
+      0.00s  tests.test_controller.LeanReplayTests.test_replay_is_state_sensitive
+      0.00s  tests.test_controller.LeanReplayTests.test_unrecorded_tactic_does_not_pass_replay_verifier
+      0.00s  tests.test_controller.ControllerContractTests.test_duplicate_rejected_action_is_pruned
+      0.00s  tests.test_controller.TypedEventBinderTests.test_mention_records_fail_closed_on_construction
+      0.00s  tests.test_controller.StoryFrameTests.test_discharge_of_an_element_the_resolution_never_names_is_unknown
+      0.00s  tests.test_controller.TypedEventBinderTests.test_element_ids_are_decoupled_from_the_rendered_prose
+      0.00s  tests.test_controller.TypedEventBinderTests.test_binding_failures_cite_the_law_they_rest_on
+      0.00s  tests.test_controller.TypedEventBinderTests.test_unreadable_bindings_refuse_and_ungrounded_ones_are_unknown
+      0.00s  tests.test_controller.ControllerContractTests.test_mutating_rejected_verifier_cannot_change_accepted_state
+      0.00s  tests.test_controller.StoryFrameTests.test_ledger_only_discharge_is_unknown_without_a_bound_resolution
+      0.00s  tests.test_controller.StoryFrameTests.test_duplicate_story_plant_does_not_duplicate_rendered_text
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_controller.json

@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 22 tests in 1.674s
+
+OK
+
+22 tests in 1.7s (OK)
+
+timed tests: 1.7s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       1.7s   98.7%  tests.test_lean_workbook_ingest
+
+slowest 20 tests:
+      1.27s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_coverage_regenerates_byte_for_byte
+      0.12s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_covered_set_has_no_out_of_grammar_glyphs
+      0.07s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_no_covered_statement_uses_a_gap_head
+      0.06s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_duplicate_stats_are_consistent
+      0.06s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_totals_partition_rows
+      0.06s  tests.test_lean_workbook_ingest.CommittedArtifacts.test_extract_is_complete
+      0.00s  tests.test_lean_workbook_ingest.Lean4Dialect.test_capitalized_and_bare_transcendentals_covered
+      0.00s  tests.test_lean_workbook_ingest.ManifestPin.test_hf_revision_and_file_are_pinned
+      0.00s  tests.test_lean_workbook_ingest.Lean4Dialect.test_forward_trig_supported_inverse_trig_still_gap
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_coercion_signal_keeps_division_real
+      0.00s  tests.test_lean_workbook_ingest.Lean4Dialect.test_parse_full_proof_strips_preamble_and_comment
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_fractional_exponent_is_a_gap_regardless_of_carrier
+      0.00s  tests.test_lean_workbook_ingest.Lean4Dialect.test_lean4_complex_and_zmod_binders
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_int_division_is_a_gap
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_nat_inverse_is_a_gap
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_nat_division_is_a_gap
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_int_subtraction_over_Z_is_fine
+      0.00s  tests.test_lean_workbook_ingest.Lean4Dialect.test_greek_value_vars_are_covered
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_nat_monus_is_a_gap
+      0.00s  tests.test_lean_workbook_ingest.CarrierAwareness.test_real_division_is_covered
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_lean_workbook_ingest.json

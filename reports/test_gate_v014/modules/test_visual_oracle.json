@@ -1,0 +1,282 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:11:25+00:00",
+  "finished_utc": "2026-08-19T07:11:29+00:00",
+  "targets": [
+    "tests.test_visual_oracle"
+  ],
+  "successful": true,
+  "total_seconds": 3.45,
+  "timed_test_seconds": 0.56,
+  "fixture_and_overhead_seconds": 2.89,
+  "tests": 53,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_visual_oracle": 0.56
+  },
+  "slowest": [
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_rerender_from_parsed_graph_is_byte_identical",
+      "seconds": 0.137
+    },
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_round_trip_equals_the_source_graph",
+      "seconds": 0.091
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_committed_fixtures_regenerate_identically",
+      "seconds": 0.089
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_blind_baselines_can_still_see_something",
+      "seconds": 0.062
+    },
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_round_trip_preserves_verdict_and_localization",
+      "seconds": 0.041
+    },
+    {
+      "test": "tests.test_visual_oracle.RendererTests.test_rendered_geometry_is_exact_not_floating_point",
+      "seconds": 0.04
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_every_gated_check_is_load_bearing",
+      "seconds": 0.018
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_corpus_is_regenerable_from_the_seed",
+      "seconds": 0.016
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_scene_graph_json_round_trips",
+      "seconds": 0.014
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_derived_checks_are_true_and_verdict_redundant",
+      "seconds": 0.009
+    },
+    {
+      "test": "tests.test_visual_oracle.RendererTests.test_styles_change_appearance_and_not_structure",
+      "seconds": 0.008
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_each_check_alone_catches_exactly_its_own_class",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_a_figures_pair_set_shares_one_split",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_rejects_every_invalid_at_its_registered_gate",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_failures_localize_the_violated_elements",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_visual_oracle.RendererTests.test_render_is_a_pure_function_of_graph_and_style",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_dangling_references_cannot_verify_ok",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_right_angle_break_preserves_leg_lengths_exactly",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_fixture_figure_is_the_corpus_figure_it_claims_to_be",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_no_weights_leaked_into_the_oracle_layer",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_splits_are_md5_stable_not_process_hash",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_figures_are_distinct",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.CorpusTests.test_fixture_svg_parses_and_verifies_as_recorded",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_accepts_every_valid",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_generated_parameters_satisfy_the_contract",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_labels_and_background_are_appearance_only",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_disabling_everything_accepts_everything",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_degenerate_class_agrees_with_its_own_claim",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_mutations_rebind_referents_never_ids",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_every_valid_gets_one_near_miss_per_class",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_mutation_metadata_names_what_was_broken",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_parser_reads_geometry_from_geometry_not_metadata",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.ParserTests.test_parser_refuses_input_it_does_not_understand",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_ids_survive_every_parameter_change",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_rejects_an_ordinary_non_right_triangle",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_slot_only_mutation_changes_no_coordinate",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_out_of_contract_parameters_fail_loudly",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_a_single_unit_perturbation_is_not_tolerated",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.InvalidGeneratorTests.test_near_misses_are_near",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_incomplete_slot_inventory_is_refused_at_the_door",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_all_registered_predictions_fired",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RendererTests.test_serializer_refuses_a_non_terminating_coordinate",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_unknown_check_name_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_corpus_size_matches_the_registration",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo3_ablation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.SlotIdentityTests.test_no_id_encodes_geometry",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo2_rejection_and_diagonal_localization",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo1_acceptance",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.VerifierTests.test_check_inventory_is_exactly_the_gated_set",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo5_slot_identities",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo4_round_trip",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo7_no_surface_baseline_solves_a_class",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_visual_oracle.RegisteredProtocolTests.test_p_vo6_derived_redundancy",
+      "seconds": 0.0
+    }
+  ]
+}

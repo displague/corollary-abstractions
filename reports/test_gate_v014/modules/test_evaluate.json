@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:01:56+00:00",
+  "finished_utc": "2026-08-19T07:01:56+00:00",
+  "targets": [
+    "tests.test_evaluate"
+  ],
+  "successful": true,
+  "total_seconds": 0.0,
+  "timed_test_seconds": 0.0,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 12,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_evaluate": 0.0
+  },
+  "slowest": [
+    {
+      "test": "tests.test_evaluate.ComputationIsNotALookup.test_nothing_from_the_corpus_is_consulted",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_the_probe_questions",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItRefusesRatherThanGuesses.test_text_with_no_expression_refuses",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_a_third_times_three_is_one",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_fractions_stay_exact",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_negative_and_nested",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItRefusesRatherThanGuesses.test_a_relation_is_not_a_value",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItRefusesRatherThanGuesses.test_an_unbound_variable_is_named_not_defaulted",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItRefusesRatherThanGuesses.test_division_by_zero_refuses",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_the_expression_is_found_inside_a_sentence",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItComputesExactly.test_bindings_are_read_from_the_line",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_evaluate.ItRefusesRatherThanGuesses.test_a_binding_cannot_smuggle_in_a_computation",
+      "seconds": 0.0
+    }
+  ]
+}

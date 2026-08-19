@@ -1,0 +1,258 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:09:05+00:00",
+  "finished_utc": "2026-08-19T07:09:23+00:00",
+  "targets": [
+    "tests.test_proof_correspondence"
+  ],
+  "successful": true,
+  "total_seconds": 17.24,
+  "timed_test_seconds": 14.51,
+  "fixture_and_overhead_seconds": 2.73,
+  "tests": 47,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_proof_correspondence": 14.51
+  },
+  "slowest": [
+    {
+      "test": "tests.test_proof_correspondence.DeclaredDualTests.test_undeclared_lattice_bound_gets_no_dual",
+      "seconds": 3.17
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_one_pole_spelled_two_ways_still_unifies",
+      "seconds": 2.872
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_cli_exit_code_is_zero_when_nothing_mismatches",
+      "seconds": 2.793
+    },
+    {
+      "test": "tests.test_proof_correspondence.DeclaredDualTests.test_order_sensitive_heads_get_no_dual",
+      "seconds": 0.508
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstructedMismatchTests.test_two_theorem_artifact_adjudicates_the_cited_one",
+      "seconds": 0.37
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_floor_division_is_refused_not_guessed",
+      "seconds": 0.354
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_bare_term_is_not_a_proposition",
+      "seconds": 0.348
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_wrong_exponent_is_a_mismatch",
+      "seconds": 0.336
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_p_pw5_canonical_template_alone_would_reject_seven",
+      "seconds": 0.307
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_any_identifier_leaves_the_ground_fragment",
+      "seconds": 0.292
+    },
+    {
+      "test": "tests.test_proof_correspondence.CapabilityBlindControlTests.test_the_provenance_lint_still_passes_the_same_pair",
+      "seconds": 0.28
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_order_relations_are_outside_the_fragment",
+      "seconds": 0.28
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstructedMismatchTests.test_commutativity_theorem_cited_by_idempotence_is_a_mismatch",
+      "seconds": 0.278
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_decoy_node_claiming_seven_divides_is_a_mismatch",
+      "seconds": 0.274
+    },
+    {
+      "test": "tests.test_proof_correspondence.DeclaredFormSetTests.test_untranslatable_equivalent_forms_are_recorded_not_dropped",
+      "seconds": 0.266
+    },
+    {
+      "test": "tests.test_proof_correspondence.DeclaredDualTests.test_declared_dual_is_an_involution_on_the_lattice_fragment",
+      "seconds": 0.254
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_wrong_literal_in_the_theorem_is_a_mismatch",
+      "seconds": 0.254
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_the_committed_goal_state_corresponds",
+      "seconds": 0.252
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_hypothesis_line_makes_the_fragments_disjoint",
+      "seconds": 0.244
+    },
+    {
+      "test": "tests.test_proof_correspondence.CapabilityBlindControlTests.test_gravity_statement_citing_modus_ponens_is_a_mismatch",
+      "seconds": 0.244
+    },
+    {
+      "test": "tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_monus_is_refused_not_guessed",
+      "seconds": 0.234
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_external_data_dir_gets_stable_data_relative_input_labels",
+      "seconds": 0.145
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_missing_artifact_is_one_untranslatable_link_not_a_sweep_crash",
+      "seconds": 0.118
+    },
+    {
+      "test": "tests.test_proof_correspondence.DeclaredFormSetTests.test_a_statement_with_no_translatable_form_is_untranslatable",
+      "seconds": 0.011
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_the_true_pairing_still_corresponds",
+      "seconds": 0.008
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_the_declared_dual_of_the_false_claim_does_not_rescue_it",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_a_proof_of_p_and_bot_does_not_certify_p_and_top_equals_top",
+      "seconds": 0.006
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_committed_report_is_regenerable_from_digest_named_inputs",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstructedMismatchTests.test_reordering_artifact_rows_cannot_choose_the_opening_goal",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_arithmetic_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_p_pw6_structural_twins_make_ownership_undecidable",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstructedMismatchTests.test_windows_newlines_do_not_change_the_proposition_read",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_p_pw5_six_links_are_carried_by_the_declared_dual",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_no_committed_link_mismatches",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_lean_precedence_matches_lean",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_asserted_proposition_becomes_an_equation",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_the_pole_table_and_the_duality_table_agree",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_every_committed_link_is_adjudicated_with_its_route",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_chained_iff_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.ConstantIdentityTests.test_top_and_bot_never_share_a_class",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_multiple_goals_in_one_state",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_quantifier_body_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_p_pw2_counts",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_non_prop_binder",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_undeclared_name_is_refused",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.FragmentBoundaryTests.test_predicate_binder",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_untranslatable_link_names_the_first_order_binder",
+      "seconds": 0.0
+    }
+  ]
+}

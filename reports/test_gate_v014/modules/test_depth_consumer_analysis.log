@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 23 tests in 0.876s
+
+OK
+
+23 tests in 0.9s (OK)
+
+timed tests: 0.9s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.9s  100.0%  tests.test_depth_consumer_analysis
+
+slowest 20 tests:
+      0.10s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_complete_matrix_adjudicates_registered_predictions
+      0.07s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_reviewed_newline_bridge_accepts_only_bound_runtime_digest
+      0.07s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_materiality_boundary_prevents_epsilon_firing
+      0.05s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_implementation_drift_refuses_adjudication
+      0.05s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_pdc1_misses_when_in_distribution_collapses
+      0.05s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_pdc6_fires_at_exact_increment_boundary
+      0.05s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_mislabelled_result_refuses
+      0.04s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_pdc6_misses_when_evaluation_adds_over_half_gib
+      0.04s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_pdc3_blocks_when_control_is_not_parameter_matched
+      0.04s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_pdc7_misses_original_high_absolute_footprint_shape
+      0.04s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_manifest_refuses_cross_seed_checkpoint
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_matrix_refuses_unsafe_evaluation_batch
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_matrix_refuses_incomplete_gpu_environment
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_missing_diagnostics_refuses_instead_of_hiding_failure_shape
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_result_level_code_must_match_provenance
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_empty_by_depth_accounting_refuses
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_matrix_refuses_missing_cuda_memory_evidence
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_missing_inclusion_accounting_refuses
+      0.03s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_matrix_refuses_result_batch_binding_mismatch
+      0.02s  tests.test_depth_consumer_analysis.DepthConsumerAnalysisTests.test_matrix_refuses_mixed_dataset_provenance
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_depth_consumer_analysis.json

@@ -60,6 +60,26 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **`test_write_stage` is the release gate.**  12,522.5 s of a 21,688 s
+  suite, 103 tests, 8.5 s of fixture overhead, and four tests costing 3,088 s
+  between them: `test_delta_declared_with_the_wr...` (1,096.4 s),
+  `test_append_one_node_accepts_without...` (724.6 s),
+  `test_seed_plus_append_reproduces_the...` (721.0 s) and
+  `test_undeclared_delta_is_still_refus...` (546.1 s).  Nothing can make this
+  gate finish sooner than this one module, so it is the only optimization
+  target worth registering -- and it must not be sampled or trimmed without
+  the same registered-replacement rule that protects the blind control.
+  Evidence: `reports/test_gate_v014/`.
+
+- **Two tests write bytecode into the tree, and three did.**  `_min_env()`
+  hands children a bare environment on purpose, which is why
+  `PYTHONDONTWRITEBYTECODE` never reached them; fixed with `-B` at the three
+  call sites.  The general risk remains: any test that writes into the
+  repository root makes the gate measurement refuse the tree it is measuring,
+  and nothing enforces that they do not.  A cheap guard would be a test that
+  runs the suite's own subprocess launches and asserts the tree is unchanged
+  afterwards.
+
 - **The outside design inquiry has no isolated agent to run in.**  The gate
   requires three contexts with no forked turns, no workspace, no network and
   no tools, and explicitly refuses an instruction not to use tools as a

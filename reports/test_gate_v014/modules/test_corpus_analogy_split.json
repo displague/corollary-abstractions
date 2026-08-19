@@ -1,0 +1,250 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T04:45:47+00:00",
+  "finished_utc": "2026-08-19T06:59:52+00:00",
+  "targets": [
+    "tests.test_corpus_analogy_split"
+  ],
+  "successful": true,
+  "total_seconds": 8045.02,
+  "timed_test_seconds": 4610.8,
+  "fixture_and_overhead_seconds": 3434.23,
+  "tests": 45,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_corpus_analogy_split": 4610.8
+  },
+  "slowest": [
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer",
+      "seconds": 4316.954
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_specialization_ledger_is_load_bearing",
+      "seconds": 100.314
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DeterminismTests.test_split_files_regenerate_byte_identically",
+      "seconds": 96.617
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DeterminismTests.test_generator_is_deterministic",
+      "seconds": 96.19
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_the_blind_context_does_not_carry_corpus_metadata",
+      "seconds": 0.245
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.PointabilityTests.test_serialization_round_trips_on_every_authored_statement",
+      "seconds": 0.19
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.PointabilityTests.test_head_kind_table_matches_every_authored_template",
+      "seconds": 0.047
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_committed_ceiling_report_is_not_stale",
+      "seconds": 0.043
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DeterminismTests.test_written_rows_carry_the_split_assignment",
+      "seconds": 0.038
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DedupTests.test_dedup_is_order_independent",
+      "seconds": 0.022
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_axis_entanglement_is_pinned_not_assumed",
+      "seconds": 0.022
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_shape_holdout_is_a_pinned_structural_sibling_of_family",
+      "seconds": 0.022
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_the_original_three_holdouts_are_not_one_partition_renamed",
+      "seconds": 0.021
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_specializer_independently_accepts_c_to_d",
+      "seconds": 0.019
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_splits_are_not_seeded_and_cannot_be_re_rolled",
+      "seconds": 0.015
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DeterminismTests.test_pointer_rows_are_deterministic",
+      "seconds": 0.011
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DedupTests.test_dedup_holds_across_every_split",
+      "seconds": 0.005
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.PointabilityTests.test_every_target_token_is_pointed_at_in_the_input",
+      "seconds": 0.004
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_target_never_occurs_verbatim_in_the_input",
+      "seconds": 0.003
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_vocabulary_holdout_removes_tokens_from_training_targets",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.PointabilityTests.test_no_target_introduces_a_token_the_input_lacks",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_shape_holdout_actually_removes_whole_untyped_shapes",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.FamilyTests.test_the_family_holdout_removes_whole_untyped_shapes_too",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DedupTests.test_the_task_is_a_function_of_its_input",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_both_constructions_agree_on_every_admitted_row",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_discipline_holdout_actually_removes_disciplines",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_family_holdout_actually_removes_skeletons",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_no_target_is_an_authored_statement",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DedupTests.test_dedup_leaves_one_row_per_distinct_target",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_each_split_covers_every_deduplicated_target_exactly_once",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.PointabilityTests.test_compound_expansion_leaves_are_the_point_of_the_lane",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.HoldoutTests.test_all_splits_exist_and_all_are_two_sided",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.FamilyTests.test_families_are_non_isomorphic_under_the_stricter_untyped_quotient",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_blind_ceiling_is_below_one_on_every_holdout",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_novelty_sanity_controls_are_pinned_at_zero",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_ceilings_match_the_committed_numbers",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.FamilyTests.test_at_least_three_families_exist_before_a_family_split_is_named",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.DedupTests.test_dedup_actually_removes_rows",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_the_shape_holdout_closes_the_leak_by_construction",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.FamilyTests.test_every_family_has_a_cross_discipline_witness",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_the_symbolic_roof_is_exactly_the_declared_slot_classes",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_shuffling_c_collapses_every_control",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_the_blind_ceiling_is_untyped_shape_leakage",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.VerificationTests.test_head_identity_collapses_are_refused_as_unpointable",
+      "seconds": 0.0
+    },
+    {
+      "test": "tests.test_corpus_analogy_split.ControlTests.test_the_v06_killer_fails_on_every_holdout",
+      "seconds": 0.0
+    }
+  ]
+}

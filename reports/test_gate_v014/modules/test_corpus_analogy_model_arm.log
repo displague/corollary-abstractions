@@ -1,0 +1,28 @@
+----------------------------------------------------------------------
+Ran 13 tests in 0.071s
+
+OK
+
+13 tests in 0.1s (OK)
+
+timed tests: 0.1s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.1s   99.5%  tests.test_corpus_analogy_model_arm
+
+slowest 13 tests:
+      0.04s  tests.test_corpus_analogy_model_arm.CeilingPins.test_harness_reads_ceilings_from_committed_table_and_agrees
+      0.04s  tests.test_corpus_analogy_model_arm.CeilingPins.test_moved_ceiling_is_rejected
+      0.00s  tests.test_corpus_analogy_model_arm.ReportStructure.test_discipline_flagged_near_vacuous
+      0.00s  tests.test_corpus_analogy_model_arm.ReportStructure.test_holdout_report_shape
+      0.00s  tests.test_corpus_analogy_model_arm.Summary.test_mean_and_sample_sd
+      0.00s  tests.test_corpus_analogy_model_arm.CeilingPins.test_axes_are_exactly_the_frozen_split_names
+      0.00s  tests.test_corpus_analogy_model_arm.Summary.test_empty_refuses
+      0.00s  tests.test_corpus_analogy_model_arm.CeilingPins.test_strict_and_near_vacuous_labels
+      0.00s  tests.test_corpus_analogy_model_arm.ComparisonLogic.test_below_does_not_beat
+      0.00s  tests.test_corpus_analogy_model_arm.CeilingPins.test_expected_ceilings_are_the_disclosed_values
+      0.00s  tests.test_corpus_analogy_model_arm.ComparisonLogic.test_exact_match_is_not_beating
+      0.00s  tests.test_corpus_analogy_model_arm.Summary.test_single_seed_sd_is_zero
+      0.00s  tests.test_corpus_analogy_model_arm.ComparisonLogic.test_strictly_above_beats
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_corpus_analogy_model_arm.json

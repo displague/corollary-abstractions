@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 46 tests in 16.893s
+
+OK
+
+46 tests in 16.9s (OK)
+
+timed tests: 16.5s; fixtures/runner overhead: 0.4s
+
+timed test bodies by module (fixtures excluded):
+      16.5s   97.7%  tests.test_retrieval
+
+slowest 20 tests:
+      2.00s  tests.test_retrieval.RetrievalTests.test_empirical_member_no_longer_gets_stronger_labeled_twin
+      1.97s  tests.test_retrieval.RetrievalTests.test_exact_skeleton_keys_preserve_distinct_operators
+      1.88s  tests.test_retrieval.RetrievalTests.test_truncated_word_does_not_reverse_match_one_letter_aliases
+      1.38s  tests.test_retrieval.RetrievalTests.test_unique_structural_group_key_can_bind_the_group_record
+      1.01s  tests.test_retrieval.RetrievalTests.test_unique_decomposition_only_key_can_bind_its_corpus_owner
+      0.85s  tests.test_retrieval.RetrievalTests.test_retrieve_then_point_solves_and_binds_pointable_material
+      0.85s  tests.test_retrieval.RetrievalTests.test_exact_title_wins_over_another_nodes_neighborhood_match
+      0.74s  tests.test_retrieval.RetrievalTests.test_unrelated_miss_is_unknown_with_no_context
+      0.65s  tests.test_retrieval.RetrievalTests.test_truncated_id_uses_neighborhood_not_exact_lookup
+      0.63s  tests.test_retrieval.RetrievalTests.test_duplicate_retrieval_cannot_claim_progress_without_new_context
+      0.62s  tests.test_retrieval.RetrievalTests.test_ambiguous_single_symbol_cannot_bind_an_unrelated_lexicon
+      0.56s  tests.test_retrieval.RetrievalTests.test_short_nonexact_key_cannot_prefix_match_a_long_alias
+      0.48s  tests.test_retrieval.RetrievalTests.test_exact_truncation_is_reported_not_silent
+      0.34s  tests.test_retrieval.RetrievalTests.test_exact_query_unifies_all_five_committed_source_kinds
+      0.33s  tests.test_retrieval.RetrievalTests.test_point_rejects_authentic_item_without_retrieve_receipt
+      0.33s  tests.test_retrieval.RetrievalTests.test_point_on_closed_frame_names_the_closure
+      0.33s  tests.test_retrieval.RetrievalTests.test_frame_mutation_cannot_leave_a_stale_unknown_pointable
+      0.32s  tests.test_retrieval.RetrievalTests.test_point_rejects_context_material_forged_outside_the_store
+      0.31s  tests.test_retrieval.RetrievalTests.test_retrieve_receipt_cannot_cross_into_frame_local_scope
+      0.31s  tests.test_retrieval.RetrievalTests.test_retrieve_receipt_cannot_replay_into_another_session
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_retrieval.json

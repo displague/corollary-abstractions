@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 23 tests in 0.029s
+
+OK
+
+23 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   99.0%  tests.test_request_grammar
+
+slowest 20 tests:
+      0.01s  tests.test_request_grammar.DegradeToAskTests.test_a_foreign_owner_cannot_revise_another_session
+      0.01s  tests.test_request_grammar.DegradeToAskTests.test_the_asked_question_can_then_be_answered
+      0.00s  tests.test_request_grammar.DegradeToAskTests.test_a_second_failure_reuses_the_outstanding_question
+      0.00s  tests.test_request_grammar.DegradeToAskTests.test_parse_failure_asks_a_signed_question_and_binds_nothing
+      0.00s  tests.test_request_grammar.DegradeToAskTests.test_abstention_leaves_the_slot_unknown
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_every_registered_rule_fires
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_no_utterance_produces_a_value_outside_the_slot_vocabulary
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_owner_pronouns_resolve_to_the_speaker
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_lifetime_markers_declare_only_declarable_lifetimes
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_corrections_are_recognised_by_marker_and_by_history
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_foreign_owner_reference_is_refused_not_ignored
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_a_correction_may_carry_its_own_lifetime
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_value_may_repeat_its_own_slot_noun
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_empty_and_unmatched_utterances_are_named
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_normalization_is_case_and_punctuation_only
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_trailing_instead_marks_a_correction
+      0.00s  tests.test_request_grammar.GrammarCoverageTests.test_slot_pronouns_resolve_against_the_open_goal
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_cross_slot_value_is_refused_rather_than_coerced
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_unregistered_slot_phrase_is_named
+      0.00s  tests.test_request_grammar.GrammarRefusalTests.test_unregistered_value_is_named
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_request_grammar.json

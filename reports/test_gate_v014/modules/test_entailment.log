@@ -1,0 +1,21 @@
+----------------------------------------------------------------------
+Ran 6 tests in 0.000s
+
+OK
+
+6 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   44.7%  tests.test_entailment
+
+slowest 6 tests:
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_all_registered_pairs_match_query
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_contradiction_symmetric
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_registered_suite_n_ge_15
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_query_never_mutates_world
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_independent
+      0.00s  tests.test_entailment.EntailmentQueryTests.test_unknown_outside_inventory
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_entailment.json

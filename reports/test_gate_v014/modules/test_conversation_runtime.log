@@ -1,0 +1,20 @@
+----------------------------------------------------------------------
+Ran 5 tests in 0.048s
+
+OK
+
+5 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   99.6%  tests.test_conversation_runtime
+
+slowest 5 tests:
+      0.01s  tests.test_conversation_runtime.ConversationRuntimeTests.test_forged_cross_slot_metadata_cannot_revoke_real_binding
+      0.01s  tests.test_conversation_runtime.ConversationRuntimeTests.test_two_owner_frames_diverge_without_public_state_leakage
+      0.01s  tests.test_conversation_runtime.ConversationRuntimeTests.test_forged_current_request_cannot_choose_slot_to_revoke
+      0.01s  tests.test_conversation_runtime.ConversationRuntimeTests.test_revision_supersedes_prior_binding_with_provenance
+      0.01s  tests.test_conversation_runtime.ConversationRuntimeTests.test_public_state_surgery_cannot_resurrect_superseded_answer
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_conversation_runtime.json

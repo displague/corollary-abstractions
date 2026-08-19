@@ -1,0 +1,23 @@
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK
+
+8 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   92.3%  tests.test_search_controller
+
+slowest 8 tests:
+      0.00s  tests.test_search_controller.SearchControllerTests.test_accepted_cycle_is_traced_but_not_requeued
+      0.00s  tests.test_search_controller.SearchControllerTests.test_breadth_first_search_abandons_accepted_dead_branch
+      0.00s  tests.test_search_controller.SearchControllerTests.test_node_budget_is_distinct_from_proposal_budget
+      0.00s  tests.test_search_controller.SearchControllerTests.test_queued_but_unexpanded_sibling_is_not_called_dead
+      0.00s  tests.test_search_controller.SearchControllerTests.test_mid_enumeration_budget_is_not_called_exhaustion
+      0.00s  tests.test_search_controller.SearchControllerTests.test_proposal_budget_does_not_materialize_candidate_stream
+      0.00s  tests.test_search_controller.SearchControllerTests.test_policy_and_verifier_cannot_mutate_other_branches
+      0.00s  tests.test_search_controller.SearchControllerTests.test_exhaustion_is_not_reported_as_budget
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_search_controller.json

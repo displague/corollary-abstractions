@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 24 tests in 6.490s
+
+OK
+
+24 tests in 6.5s (OK)
+
+timed tests: 6.5s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       6.5s  100.0%  tests.test_measurement_tools
+
+slowest 20 tests:
+      6.24s  tests.test_measurement_tools.AmbiguityMeasurementTests.test_committed_artifact_regenerates_byte_identically
+      0.09s  tests.test_measurement_tools.TimingToolTests.test_success_json_and_fixture_gap_are_explicit
+      0.05s  tests.test_measurement_tools.ShardPlanningTests.test_new_manifest_satisfies_its_own_schema
+      0.03s  tests.test_measurement_tools.AmbiguityMeasurementTests.test_missing_and_malformed_query_sets_fail_closed
+      0.03s  tests.test_measurement_tools.ShardPlanningTests.test_plan_loader_binds_raw_receipt_and_log_bytes
+      0.03s  tests.test_measurement_tools.TimingToolTests.test_failure_returns_nonzero_and_still_writes_json
+      0.02s  tests.test_measurement_tools.AmbiguityMeasurementTests.test_text_digest_is_newline_stable_and_content_sensitive
+      0.00s  tests.test_measurement_tools.HistoricalGateReceiptTests.test_retained_v013_receipts_match_the_released_ledger
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_discovery_is_sorted_and_ignores_non_test_modules
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_nested_test_module_refuses_instead_of_disappearing
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_clean_source_refuses_ignored_importable_code
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_plan_git_provenance_requires_commit_and_exact_inventory
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_lpt_assignment_is_balanced_and_order_independent
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_environment_schema_and_nested_digests_fail_closed
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_incomplete_duplicate_and_nonfinite_evidence_refuses
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_ties_have_explicit_module_and_shard_order
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_git_inventory_excludes_an_untracked_test
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_committed_nested_test_refuses
+      0.00s  tests.test_measurement_tools.AmbiguityMeasurementTests.test_unexpected_outcome_fails_closed
+      0.00s  tests.test_measurement_tools.ShardPlanningTests.test_cleanliness_check_includes_untracked_files
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_measurement_tools.json

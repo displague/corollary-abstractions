@@ -69,6 +69,16 @@ scored row.  A miss publishes and parks the implementation.
 
 ## 3. Make the release gate observable
 
+**DONE, and it contradicted this item's own premise.**  68 modules, 1,341
+tests, 0 failures, 0 errors at frozen tip `55b4097`; receipts in
+`reports/test_gate_v014/`.  Serial 21,688 s (6.02 h).  `test_write_stage` is
+12,522.5 s of that and is named nowhere below; the blind-control sweep is
+4,317.0 s rather than 5,620 s and the fixture gap 3,434.2 s rather than
+~4,700 s.  The registered assignment rule predicts the same 12,523 s wall
+clock at 2, 5 and 8 shards, so sampling the blind control would save zero
+wall clock and is declined on arithmetic.  Numbers in
+[ANALYSIS](../experiments/ANALYSIS.md).
+
 Retain per-shard JSON receipts and module lists for the v0.13 gate.  Measure
 whole-suite module wall-clock without overwriting the historical result, then
 register a balanced assignment rule.  Investigate separately:
@@ -120,7 +130,8 @@ v0.14 is ready only if:
 - the resolver candidate ships only on the complete conjunction — **held**:
   it does not ship;
 - fresh precision and comparable coverage are both reported;
-- the full suite is green on a frozen tip with retained shard receipts;
+- the full suite is green on a frozen tip with retained shard receipts —
+  **done**: 1,341 tests, 0 failures, 0 errors at `55b4097`;
 - every unfinished item above ships or parks in writing;
 - the outside design inquiry gate is discharged — **currently BLOCKED**, see
   `reports/design-direction-v0.15.json`.  The platform in use cannot launch an

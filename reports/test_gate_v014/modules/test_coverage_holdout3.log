@@ -1,0 +1,24 @@
+----------------------------------------------------------------------
+Ran 9 tests in 0.170s
+
+OK
+
+9 tests in 0.2s (OK)
+
+timed tests: 0.2s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.2s   99.9%  tests.test_coverage_holdout3
+
+slowest 9 tests:
+      0.17s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_preregister_and_candidate_git_objects_exist
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_compact_ledger_is_only_a_view_of_raw
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_raw_ledger_has_the_recovered_identity
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_derived_and_false_positive_file_digests
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_result_rows_are_exactly_the_registered_rows
+      0.00s  tests.test_coverage_holdout3.FreshFalsePositiveLedger.test_archive_digest_is_the_manifest_pin
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_fired_and_missed_predictions_stay_honest
+      0.00s  tests.test_coverage_holdout3.FreshFalsePositiveLedger.test_f4_miss_and_all_claims_are_retained
+      0.00s  tests.test_coverage_holdout3.HoldoutThreeLedger.test_wrong_bind_is_named_not_rounded_away
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_coverage_holdout3.json

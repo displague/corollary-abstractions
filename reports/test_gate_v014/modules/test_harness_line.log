@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 39 tests in 92.875s
+
+OK
+
+39 tests in 92.9s (OK)
+
+timed tests: 88.0s; fixtures/runner overhead: 4.9s
+
+timed test bodies by module (fixtures excluded):
+      88.0s   94.8%  tests.test_harness_line
+
+slowest 20 tests:
+      8.76s  tests.test_harness_line.InteractiveProcess.test_process_exits_zero_after_a_single_line
+      8.58s  tests.test_harness_line.InteractiveProcess.test_boot_list_still_printed_before_the_verdict
+      7.23s  tests.test_harness_line.UnregisteredTextNeverVerifies.test_free_text_is_never_reported_as_verified_or_proven
+      7.09s  tests.test_harness_line.MultiTurnResolverContext.test_real_process_stops_after_named_cycle
+      6.99s  tests.test_harness_line.RoutingIsAClosedForm.test_a_question_with_windows_illegal_characters_is_text
+      6.96s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_english_does_not_reach_the_lookup
+      6.74s  tests.test_harness_line.MultiTurnResolverContext.test_a_new_ask_replaces_the_pending_question
+      6.43s  tests.test_harness_line.DoesNotReplayTheRecording.test_a_line_in_no_recorded_leg_still_reaches_a_program
+      4.15s  tests.test_harness_line.TypedPathReachesTheWriteGate.test_no_file_changes_and_no_staging_receipt_is_written
+      4.12s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_the_answer_names_the_corpora
+      4.09s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_an_unhosted_part_is_exhausted_not_solved
+      3.74s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_the_lookup_agrees_with_the_committed_measurement
+      3.71s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_a_hosted_part_solves_with_counts
+      2.05s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_unparseable_query_is_refused_not_guessed
+      2.03s  tests.test_harness_line.InteractiveProcess.test_closed_stdin_is_a_waiting_verdict_not_a_traceback
+      2.02s  tests.test_harness_line.InteractiveProcess.test_a_second_line_is_dispatched_in_the_same_session
+      1.96s  tests.test_harness_line.OwnershipIsTheFirstSolve.test_a_bare_variable_is_refused
+      0.43s  tests.test_harness_line.MultiTurnResolverContext.test_pending_ask_is_session_local
+      0.40s  tests.test_harness_line.MultiTurnResolverContext.test_discipline_followup_reduces_six_candidates_to_one
+      0.20s  tests.test_harness_line.TypedPathReachesTheWriteGate.test_the_gate_reports_the_tree_byte_identical
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_harness_line.json

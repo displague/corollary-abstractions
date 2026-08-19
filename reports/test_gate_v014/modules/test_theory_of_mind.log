@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 28 tests in 0.001s
+
+OK
+
+28 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   83.9%  tests.test_theory_of_mind
+
+slowest 20 tests:
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_graft_refusals_are_principled
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_owner_and_event_metadata_fail_closed
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_broken_subset_invariant_fails_loudly
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_nesting_refusals_are_principled
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_grandchild_needs_every_owner_on_the_path
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_a_rejecting_transition_cannot_smuggle_a_state_into_the_root
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_graft_rejects_a_model_carrying_a_forged_history
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_graft_back_replaces_exactly_one_model_tier
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_routed_mutation_returns_the_root_and_rejections_do_not
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_ambiguous_nonfunctional_belief_value_refuses_to_guess
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_runtime_and_corpus_frame_namespaces_are_explicit
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_cannot_nest_inside_a_closed_frame
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_owned_declarations_may_diverge_from_world_without_suspension
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_grafting_reaches_a_grandchild_through_its_owner_path
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_second_order_false_belief_is_derived
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_sally_false_belief_is_derived_from_missing_the_move
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_isolation_is_bidirectional
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_mutual_visibility_gates_model_updates
+      0.00s  tests.test_theory_of_mind.NestedBeliefTests.test_parent_cannot_learn_through_eyes_it_does_not_have
+      0.00s  tests.test_theory_of_mind.TheoryOfMindTests.test_nonfunctional_positive_values_accumulate
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_theory_of_mind.json

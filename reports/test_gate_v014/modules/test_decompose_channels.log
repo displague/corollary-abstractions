@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 27 tests in 101.971s
+
+OK (skipped=1)
+
+27 tests in 102.0s (OK)
+
+timed tests: 2.4s; fixtures/runner overhead: 99.5s
+
+timed test bodies by module (fixtures excluded):
+       2.4s    2.4%  tests.test_decompose_channels
+
+slowest 20 tests:
+      2.12s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_p_r1_owners_are_identity_not_a_rescoring
+      0.10s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_conservative_rollup_brackets_the_external_share
+      0.08s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_absorption_cross_discipline_share_does_not_beat_the_baseline
+      0.05s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_external_precedence_is_load_bearing_not_a_tie_break
+      0.02s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_every_constituent_carries_a_known_channel
+      0.01s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_prior_corpus_constituents_are_pinned
+      0.01s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_channel_shares_sum_to_groundedness
+      0.01s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_groundedness_is_still_grounded_over_considered
+      0.01s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_shipped_channel_scores_sum_within_rounding
+      0.01s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_channel_counts_partition_the_numerator
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_aggregate_totals_unchanged
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_recursive_channel_is_structurally_empty_at_defaults
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_provability_box_recurrence_is_same_corpus
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_provability_external_channel_is_near_zero
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_provability_still_aggregates_to_one
+      0.00s  tests.test_decompose_channels.ChannelClassification.test_conservative_rule_prefers_the_least_independent_owner
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_recursive_channel_is_reachable_at_min_family_one
+      0.00s  tests.test_decompose_channels.ChannelClassification.test_self_ownership_is_rejected_not_silently_recursive
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_provability_self_certifies_under_both_owner_rules
+      0.00s  tests.test_decompose_channels.ChannelSplitOverCorpus.test_loeb_boxed_premise_is_absorption_of_external_credit
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_decompose_channels.json

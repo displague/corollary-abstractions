@@ -1,0 +1,19 @@
+----------------------------------------------------------------------
+Ran 4 tests in 0.082s
+
+OK
+
+4 tests in 0.1s (OK)
+
+timed tests: 0.1s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.1s   91.8%  tests.test_langgen_roundtrip
+
+slowest 4 tests:
+      0.03s  tests.test_langgen_roundtrip.RoundTripRegistrationTests.test_p_ls1_floor_both_languages
+      0.03s  tests.test_langgen_roundtrip.RoundTripRegistrationTests.test_p_ls1b_lost_dual_zero
+      0.01s  tests.test_langgen_roundtrip.RoundTripRegistrationTests.test_suite_is_machine_generated_not_hand_picked
+      0.00s  tests.test_langgen_roundtrip.RoundTripRegistrationTests.test_deterministic_render_is_stable
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_langgen_roundtrip.json

@@ -1,0 +1,222 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:11:04+00:00",
+  "finished_utc": "2026-08-19T07:11:10+00:00",
+  "targets": [
+    "tests.test_session_durability"
+  ],
+  "successful": true,
+  "total_seconds": 5.46,
+  "timed_test_seconds": 5.46,
+  "fixture_and_overhead_seconds": 0.0,
+  "tests": 38,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_session_durability": 5.46
+  },
+  "slowest": [
+    {
+      "test": "tests.test_session_durability.AcceptanceScenarioTests.test_one_maintained_session_walks_all_five_stages",
+      "seconds": 1.944
+    },
+    {
+      "test": "tests.test_session_durability.RetrievalReceiptDurabilityTests.test_receipt_authorizes_point_after_a_restart",
+      "seconds": 1.332
+    },
+    {
+      "test": "tests.test_session_durability.RetrievalReceiptDurabilityTests.test_a_forged_receipt_is_still_refused_after_a_restart",
+      "seconds": 0.845
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_ledger_cannot_be_moved_to_another_session",
+      "seconds": 0.158
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_restore_then_supersede_then_replay_the_first_file",
+      "seconds": 0.116
+    },
+    {
+      "test": "tests.test_session_durability.AcceptanceScenarioTests.test_acceptance_scenario_runs_end_to_end",
+      "seconds": 0.114
+    },
+    {
+      "test": "tests.test_session_durability.AcceptanceScenarioTests.test_restart_keeps_owners_isolated_and_the_story_unasserted",
+      "seconds": 0.095
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_header_may_not_disagree_with_the_state_it_carries",
+      "seconds": 0.091
+    },
+    {
+      "test": "tests.test_session_durability.AcceptanceScenarioTests.test_restart_continues_revising",
+      "seconds": 0.085
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_ledger_rollback_is_refused",
+      "seconds": 0.083
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_truncated_ledger_is_refused_as_a_forgery",
+      "seconds": 0.06
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_rotation_keeps_old_material_verifiable",
+      "seconds": 0.051
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_rewriting_only_the_header_owner_is_refused",
+      "seconds": 0.051
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_key_id_confusion_between_rotated_keys_is_refused",
+      "seconds": 0.051
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_forged_ledger_cannot_advance_the_counter",
+      "seconds": 0.043
+    },
+    {
+      "test": "tests.test_session_durability.SessionCodecTests.test_codec_round_trips_the_whole_state",
+      "seconds": 0.039
+    },
+    {
+      "test": "tests.test_session_durability.PreRestartBindingTests.test_forged_pre_restart_binding_is_refused_by_name",
+      "seconds": 0.033
+    },
+    {
+      "test": "tests.test_session_durability.PreRestartBindingTests.test_restore_without_a_ledger_is_refused_not_defaulted",
+      "seconds": 0.03
+    },
+    {
+      "test": "tests.test_session_durability.PreRestartBindingTests.test_consumed_reply_replayed_after_restart_is_refused",
+      "seconds": 0.028
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_keyfile_never_contains_a_session_secret",
+      "seconds": 0.027
+    },
+    {
+      "test": "tests.test_session_durability.SessionCodecTests.test_wrong_schema_is_named",
+      "seconds": 0.023
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_revoked_key_refuses_the_whole_restore",
+      "seconds": 0.023
+    },
+    {
+      "test": "tests.test_session_durability.PreRestartBindingTests.test_stale_pre_restart_binding_is_refused_by_name",
+      "seconds": 0.02
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_durable_supersession_is_filed_under_the_owner_scope",
+      "seconds": 0.02
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_an_unrelated_keyring_cannot_restore",
+      "seconds": 0.019
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_durable_binding_crosses_sessions_and_session_binding_does_not",
+      "seconds": 0.012
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_derivation_separates_scope_and_domain",
+      "seconds": 0.011
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_default_verifiers_still_hold_unrelated_ephemeral_keys",
+      "seconds": 0.01
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_durable_binding_is_owner_scoped_not_owner_free",
+      "seconds": 0.009
+    },
+    {
+      "test": "tests.test_session_durability.LedgerAttackTests.test_public_supersession_can_kill_but_never_resurrect",
+      "seconds": 0.009
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_goal_local_binding_expires_when_the_slot_reopens",
+      "seconds": 0.008
+    },
+    {
+      "test": "tests.test_session_durability.SessionCodecTests.test_codec_refuses_unregistered_types_and_fields",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_declared_lifetime_is_signed_not_editable",
+      "seconds": 0.007
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_effective_lifetimes_cannot_be_declared",
+      "seconds": 0.002
+    },
+    {
+      "test": "tests.test_session_durability.SessionCodecTests.test_codec_preserves_tuple_identity",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_session_durability.KeyIdentityTests.test_hkdf_expands_past_one_block",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_belief_frames_answer_in_the_same_vocabulary",
+      "seconds": 0.001
+    },
+    {
+      "test": "tests.test_session_durability.LifetimeProtocolTests.test_protocol_table_matches_the_enum",
+      "seconds": 0.001
+    }
+  ]
+}

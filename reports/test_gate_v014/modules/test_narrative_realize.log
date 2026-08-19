@@ -1,0 +1,25 @@
+----------------------------------------------------------------------
+Ran 10 tests in 0.014s
+
+OK
+
+10 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   98.3%  tests.test_narrative_realize
+
+slowest 10 tests:
+      0.00s  tests.test_narrative_realize.OracleStillSolvesTests.test_alternate_brief_same_patterns_also_solves
+      0.00s  tests.test_narrative_realize.TraitDenyFluencyTests.test_twenty_silver_packages_all_refuted
+      0.00s  tests.test_narrative_realize.OracleStillSolvesTests.test_brief_driven_oracle_still_solves_five_verified_steps
+      0.00s  tests.test_narrative_realize.TraitDenyFluencyTests.test_five_golden_package_controls_verified
+      0.00s  tests.test_narrative_realize.RealizePatternsTests.test_oracle_actions_contain_no_magic_bind_literals_as_source
+      0.00s  tests.test_narrative_realize.RealizePatternsTests.test_binds_are_computed_not_hand_authored
+      0.00s  tests.test_narrative_realize.RealizePatternsTests.test_unknown_pattern_refuses_at_brief_construction
+      0.00s  tests.test_narrative_realize.OracleStillSolvesTests.test_bind_spec_helper_matches_adapter_expectations
+      0.00s  tests.test_narrative_realize.TraitDenyFluencyTests.test_unregistered_package_never_reaches_verifier
+      0.00s  tests.test_narrative_realize.RealizePatternsTests.test_plant_and_outcome_match_historical_oracle_prose
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_narrative_realize.json

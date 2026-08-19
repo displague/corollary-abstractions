@@ -1,0 +1,24 @@
+----------------------------------------------------------------------
+Ran 9 tests in 0.000s
+
+OK
+
+9 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   55.4%  tests.test_belief
+
+slowest 9 tests:
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_an_agent_who_saw_nothing_is_refused
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_false_belief_reports_the_belief_not_the_world
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_an_unobserved_subject_is_refused_not_guessed
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_the_probe_resolves_through_a_known_equality
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_the_disagreement_is_disclosed
+      0.00s  tests.test_belief.TheGrammarAdmitsItsLimits.test_equality_chains_terminate
+      0.00s  tests.test_belief.TheGrammarAdmitsItsLimits.test_unreadable_sentences_are_reported
+      0.00s  tests.test_belief.BeliefIsNotTheWorld.test_world_facts_never_enter_an_agents_store
+      0.00s  tests.test_belief.TheGrammarAdmitsItsLimits.test_non_belief_text_returns_nothing
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_belief.json

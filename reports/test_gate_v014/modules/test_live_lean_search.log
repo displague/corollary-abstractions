@@ -1,0 +1,21 @@
+----------------------------------------------------------------------
+Ran 6 tests in 0.016s
+
+OK
+
+6 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   98.9%  tests.test_live_lean_search
+
+slowest 6 tests:
+      0.01s  tests.test_live_lean_search.LiveLeanSearchTests.test_projection_ablation_is_load_bearing
+      0.01s  tests.test_live_lean_search.LiveLeanSearchTests.test_blind_palette_solves_and_abandons_clear_branch
+      0.00s  tests.test_live_lean_search.LiveLeanSearchTests.test_action_shape_and_dependencies_are_fail_closed
+      0.00s  tests.test_live_lean_search.LiveLeanSearchTests.test_public_state_forgery_is_refused_before_backend_call
+      0.00s  tests.test_live_lean_search.LiveLeanSearchTests.test_state_key_preserves_policy_relevant_tactic_history
+      0.00s  tests.test_live_lean_search.LiveLeanSearchTests.test_tactic_failure_has_no_next_state
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_live_lean_search.json

@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 21 tests in 0.323s
+
+OK (skipped=2)
+
+21 tests in 0.3s (OK)
+
+timed tests: 0.3s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.3s   99.9%  tests.test_wold_ingest
+
+slowest 20 tests:
+      0.29s  tests.test_wold_ingest.CommittedReach.test_repo_local_targets_recount_from_committed_lexicon
+      0.01s  tests.test_wold_ingest.CommittedExtractShape.test_meanings_have_concepticon_identity_and_nonempty_cells
+      0.01s  tests.test_wold_ingest.CommittedExtractShape.test_language_records_match_the_meanings_table
+      0.00s  tests.test_wold_ingest.CommittedExtractShape.test_language_subset_is_declared_and_closed
+      0.00s  tests.test_wold_ingest.CommittedExtractShape.test_meaning_count_is_the_full_core_list
+      0.00s  tests.test_wold_ingest.RequiredCitations.test_extract_embeds_the_attribution
+      0.00s  tests.test_wold_ingest.CommittedExtractShape.test_tier_is_empirical_in_the_artifact_itself
+      0.00s  tests.test_wold_ingest.CommittedReach.test_per_meaning_agrees_with_the_headline_numbers
+      0.00s  tests.test_wold_ingest.CommittedReach.test_totals_partition_the_meanings
+      0.00s  tests.test_wold_ingest.RequiredCitations.test_license_file_is_cc_by_40
+      0.00s  tests.test_wold_ingest.RequiredCitations.test_notice_carries_both_citations
+      0.00s  tests.test_wold_ingest.CandidateExtraction.test_article_and_alternation_normalization
+      0.00s  tests.test_wold_ingest.ManifestPin.test_entry_is_fully_pinned
+      0.00s  tests.test_wold_ingest.CandidateExtraction.test_english_forms_come_first_and_are_deduped
+      0.00s  tests.test_wold_ingest.CandidateExtraction.test_multiword_phrases_survive_for_wordnet
+      0.00s  tests.test_wold_ingest.RequiredCitations.test_manifest_attribution_verbatim
+      0.00s  tests.test_wold_ingest.CandidateExtraction.test_sense_index_and_infinitive_are_stripped
+      0.00s  tests.test_wold_ingest.ManifestPin.test_license_records_what_the_archive_says
+      0.00s  tests.test_wold_ingest.ManifestPin.test_purpose_pins_the_empirical_tier
+      0.00s  tests.test_wold_ingest.Regeneration.test_extract_regenerates_byte_for_byte
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_wold_ingest.json

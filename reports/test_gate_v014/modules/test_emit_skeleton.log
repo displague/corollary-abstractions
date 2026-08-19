@@ -1,0 +1,31 @@
+----------------------------------------------------------------------
+Ran 16 tests in 0.027s
+
+OK
+
+16 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   99.2%  tests.test_emit_skeleton
+
+slowest 16 tests:
+      0.03s  tests.test_emit_skeleton.EmitCensus.test_committed_census_matches_the_probed_cut
+      0.00s  tests.test_emit_skeleton.EmitOrReason.test_covered_inequality_emits
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_greek_romanized
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_exists_negated
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_hyps_become_implies_meet
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_field_inequality
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_trig_juxtaposition_and_parens
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_iff_is_meet_of_implies
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_quantifier_prefix
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_sqrt_juxtaposition
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_sqrt_paren_expr
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_predicate
+      0.00s  tests.test_emit_skeleton.EmitSamples.test_ne_is_neg_of_eq
+      0.00s  tests.test_emit_skeleton.TokenReStandaloneInequalities.test_le_ge_still_win
+      0.00s  tests.test_emit_skeleton.TokenReStandaloneInequalities.test_lt_eq_does_not_steal_le
+      0.00s  tests.test_emit_skeleton.TokenReStandaloneInequalities.test_lt_gt_tokenize
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_emit_skeleton.json

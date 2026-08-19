@@ -1,0 +1,34 @@
+C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-tip\tests\test_verified_by.py:196: SyntaxWarning: invalid escape sequence '\p'
+  [node("logic.example.slash", "prover\proof.json", "T")], root
+----------------------------------------------------------------------
+Ran 17 tests in 4.399s
+
+OK
+
+17 tests in 4.4s (OK)
+
+timed tests: 4.4s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       4.4s  100.0%  tests.test_verified_by
+
+slowest 17 tests:
+      3.98s  tests.test_verified_by.VerifiedByIntegrityTests.test_default_cli_paths_work_from_foreign_cwd
+      0.26s  tests.test_verified_by.VerifiedByIntegrityTests.test_live_merged_corpus_has_exclusive_resolving_links
+      0.05s  tests.test_verified_by.VerifiedByIntegrityTests.test_every_transition_field_must_be_nonblank
+      0.04s  tests.test_verified_by.VerifiedByIntegrityTests.test_theorem_has_only_one_statement_owner
+      0.03s  tests.test_verified_by.VerifiedByIntegrityTests.test_reference_free_link_requires_one_theorem
+      0.02s  tests.test_verified_by.VerifiedByIntegrityTests.test_artifact_row_without_theorem_identity_fails_closed
+      0.01s  tests.test_verified_by.VerifiedByIntegrityTests.test_absent_reference_is_named
+      0.01s  tests.test_verified_by.VerifiedByIntegrityTests.test_label_only_row_is_not_a_proof_transition
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_empty_reference_cannot_bypass_theorem_ownership
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_each_citer_of_a_broken_artifact_gets_its_own_error
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_malformed_artifact_fails_closed
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_wrong_statement_valid_theorem_is_capability_blind_control
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_artifact_must_stay_inside_repository_root
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_backslash_artifact_separators_are_refused
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_missing_artifact_fails_closed
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_malformed_link_shapes_fail_without_jsonschema
+      0.00s  tests.test_verified_by.VerifiedByIntegrityTests.test_unsupported_proof_system_fails_before_ownership
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_verified_by.json

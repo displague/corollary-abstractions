@@ -1,0 +1,30 @@
+----------------------------------------------------------------------
+Ran 15 tests in 0.019s
+
+OK
+
+15 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   99.0%  tests.test_self_grounding
+
+slowest 15 tests:
+      0.02s  tests.test_self_grounding.TinyGraphSmoke.test_measure_on_a_handful_of_nodes
+      0.00s  tests.test_self_grounding.NullGenerator.test_synthetic_templates_parse
+      0.00s  tests.test_self_grounding.SelectionAndSchema.test_committed_curve_schema_when_present
+      0.00s  tests.test_self_grounding.NullGenerator.test_render_round_trips_the_heads_the_null_uses
+      0.00s  tests.test_self_grounding.SelectionAndSchema.test_subsample_is_seeded_and_prefix_stable
+      0.00s  tests.test_self_grounding.AdjudicationPredicates.test_s1_fires_when_the_gap_beats_the_null_spread
+      0.00s  tests.test_self_grounding.AdjudicationPredicates.test_s3_misses_when_xsg_falls_more_than_isg_rises
+      0.00s  tests.test_self_grounding.ClassifyAndScore.test_proxy_fires_on_the_same_fixture_route1_calls_xsg
+      0.00s  tests.test_self_grounding.AdjudicationPredicates.test_s1_misses_when_real_tracks_the_null
+      0.00s  tests.test_self_grounding.ClassifyAndScore.test_raw_counts_travel_with_rates
+      0.00s  tests.test_self_grounding.AdjudicationPredicates.test_s4_misses_when_dropping_the_popular_term_kills_the_gap
+      0.00s  tests.test_self_grounding.NullGenerator.test_inventory_samples_observed_not_uniform
+      0.00s  tests.test_self_grounding.ClassifyAndScore.test_s4_drop_removes_the_skeleton_from_both_sides
+      0.00s  tests.test_self_grounding.ClassifyAndScore.test_winning_channel_curated_is_xsg_even_if_a_sibling_also_hosts
+      0.00s  tests.test_self_grounding.ClassifyAndScore.test_winning_channel_all_ingested_is_isg
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_self_grounding.json

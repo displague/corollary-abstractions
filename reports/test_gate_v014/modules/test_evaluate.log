@@ -1,0 +1,27 @@
+----------------------------------------------------------------------
+Ran 12 tests in 0.001s
+
+OK
+
+12 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   84.6%  tests.test_evaluate
+
+slowest 12 tests:
+      0.00s  tests.test_evaluate.ComputationIsNotALookup.test_nothing_from_the_corpus_is_consulted
+      0.00s  tests.test_evaluate.ItComputesExactly.test_the_probe_questions
+      0.00s  tests.test_evaluate.ItRefusesRatherThanGuesses.test_text_with_no_expression_refuses
+      0.00s  tests.test_evaluate.ItComputesExactly.test_a_third_times_three_is_one
+      0.00s  tests.test_evaluate.ItComputesExactly.test_fractions_stay_exact
+      0.00s  tests.test_evaluate.ItComputesExactly.test_negative_and_nested
+      0.00s  tests.test_evaluate.ItRefusesRatherThanGuesses.test_a_relation_is_not_a_value
+      0.00s  tests.test_evaluate.ItRefusesRatherThanGuesses.test_an_unbound_variable_is_named_not_defaulted
+      0.00s  tests.test_evaluate.ItRefusesRatherThanGuesses.test_division_by_zero_refuses
+      0.00s  tests.test_evaluate.ItComputesExactly.test_the_expression_is_found_inside_a_sentence
+      0.00s  tests.test_evaluate.ItComputesExactly.test_bindings_are_read_from_the_line
+      0.00s  tests.test_evaluate.ItRefusesRatherThanGuesses.test_a_binding_cannot_smuggle_in_a_computation
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_evaluate.json

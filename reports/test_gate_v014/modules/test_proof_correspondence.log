@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+Ran 47 tests in 17.235s
+
+OK
+
+47 tests in 17.2s (OK)
+
+timed tests: 14.5s; fixtures/runner overhead: 2.7s
+
+timed test bodies by module (fixtures excluded):
+      14.5s   84.2%  tests.test_proof_correspondence
+
+slowest 20 tests:
+      3.17s  tests.test_proof_correspondence.DeclaredDualTests.test_undeclared_lattice_bound_gets_no_dual
+      2.87s  tests.test_proof_correspondence.ConstantIdentityTests.test_one_pole_spelled_two_ways_still_unifies
+      2.79s  tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_cli_exit_code_is_zero_when_nothing_mismatches
+      0.51s  tests.test_proof_correspondence.DeclaredDualTests.test_order_sensitive_heads_get_no_dual
+      0.37s  tests.test_proof_correspondence.ConstructedMismatchTests.test_two_theorem_artifact_adjudicates_the_cited_one
+      0.35s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_floor_division_is_refused_not_guessed
+      0.35s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_bare_term_is_not_a_proposition
+      0.34s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_wrong_exponent_is_a_mismatch
+      0.31s  tests.test_proof_correspondence.CommittedCorpusCorrespondenceTests.test_p_pw5_canonical_template_alone_would_reject_seven
+      0.29s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_any_identifier_leaves_the_ground_fragment
+      0.28s  tests.test_proof_correspondence.CapabilityBlindControlTests.test_the_provenance_lint_still_passes_the_same_pair
+      0.28s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_order_relations_are_outside_the_fragment
+      0.28s  tests.test_proof_correspondence.ConstructedMismatchTests.test_commutativity_theorem_cited_by_idempotence_is_a_mismatch
+      0.27s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_decoy_node_claiming_seven_divides_is_a_mismatch
+      0.27s  tests.test_proof_correspondence.DeclaredFormSetTests.test_untranslatable_equivalent_forms_are_recorded_not_dropped
+      0.25s  tests.test_proof_correspondence.DeclaredDualTests.test_declared_dual_is_an_involution_on_the_lattice_fragment
+      0.25s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_wrong_literal_in_the_theorem_is_a_mismatch
+      0.25s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_the_committed_goal_state_corresponds
+      0.24s  tests.test_proof_correspondence.GroundArithmeticFragmentTests.test_a_hypothesis_line_makes_the_fragments_disjoint
+      0.24s  tests.test_proof_correspondence.CapabilityBlindControlTests.test_gravity_statement_citing_modus_ponens_is_a_mismatch
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_proof_correspondence.json

@@ -1,0 +1,482 @@
+{
+  "schema_version": 2,
+  "head": "55b4097ef7ab0238ec099fffa6bd4694ee991f7d",
+  "runtime": {
+    "python_executable": "C:\\Users\\displ\\Documents\\corollary-abstractions\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.13.12",
+    "python_build": "3.13.12 (main, Feb  3 2026, 22:53:26) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpus": 24
+  },
+  "environment": {
+    "distributions": {
+      "count": 22,
+      "sha256": "14e65e1bf8a7508c9f6aa2a71a70eb262d3b1689ce9224e1b62dd07ea7e25267"
+    },
+    "PATH_sha256": "52f337d96b8636d74cb9972ff602971a74b59b07559a37707e48ac41ab1c28f6",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "COROLLARY_WORDNET": {
+      "present": true,
+      "path": "C:\\Users\\displ\\Documents\\corollary-abstractions\\data_sources\\archives\\english-wordnet-2025-json.zip",
+      "bytes": 9986555,
+      "sha256": "7d749f6e2c39e6970e4997839dcf6e42fd281f3c2fae0171d2192bae8cfa4b51"
+    },
+    "worktree_archives": {
+      "present": false,
+      "files": [],
+      "manifest_sha256": null
+    },
+    "session22080_ast": {
+      "present": false,
+      "path": "C:\\Users\\displ\\AppData\\Local\\Temp\\claude\\C--Users-displ-Documents-corollary-abstractions\\7f6361a4-60eb-4b65-b102-279576afcdb1\\scratchpad\\gate-tip\\prover\\lean\\session\\.lake\\build\\ir\\Session22080.ast.json"
+    },
+    "lean": {
+      "present": true,
+      "path": "C:\\Users\\displ\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "bytes": 83968,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "toolchain": "leanprover/lean4:v4.32.2"
+    },
+    "removed_from_child": [
+      "PYTHONPATH",
+      "PYTHONHOME",
+      "CORO_SESSION_KEYFILE",
+      "HF_TOKEN"
+    ]
+  },
+  "started_utc": "2026-08-19T07:12:37+00:00",
+  "finished_utc": "2026-08-19T10:41:19+00:00",
+  "targets": [
+    "tests.test_write_stage"
+  ],
+  "successful": true,
+  "total_seconds": 12522.52,
+  "timed_test_seconds": 12514.04,
+  "fixture_and_overhead_seconds": 8.48,
+  "tests": 103,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timed_tests_by_module": {
+    "tests.test_write_stage": 12514.04
+  },
+  "slowest": [
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_delta_declared_with_the_wrong_type_is_refused",
+      "seconds": 1096.351
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_append_one_node_accepts_without_rewriting_the_seed",
+      "seconds": 724.606
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_seed_plus_append_reproduces_the_applied_corpus",
+      "seconds": 720.956
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_undeclared_delta_is_still_refused_on_the_append_lane",
+      "seconds": 546.124
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_two_node_append_is_confined_to_those_ids",
+      "seconds": 543.914
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_receipt_is_written_and_deterministic",
+      "seconds": 370.476
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_then_refuse_end_to_end",
+      "seconds": 369.848
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_failure_rolls_the_application_back",
+      "seconds": 369.725
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_colliding_id_is_refused_and_tree_is_identical",
+      "seconds": 366.821
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_other_corpora_are_byte_identical_after_acceptance",
+      "seconds": 366.553
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_whole_tree_delta_catches_an_undeclared_change",
+      "seconds": 365.707
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_the_digest_ignores_this_gates_own_receipts",
+      "seconds": 365.403
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_two_candidates_differing_only_in_rationale_get_two_receipts",
+      "seconds": 365.259
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_is_written_and_records_the_transition",
+      "seconds": 363.469
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_matcher_delta_reverified_against_the_applied_data",
+      "seconds": 362.406
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_committed_seed_reproduces_the_applied_corpus",
+      "seconds": 361.331
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_applies_seed_and_regenerates_corpus",
+      "seconds": 360.986
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_python_is_not_an_append",
+      "seconds": 360.891
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_a_controller_run_stages_then_refuses_without_losing_state",
+      "seconds": 190.093
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_a_contained_seed_script_is_actually_read",
+      "seconds": 189.719
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_partial_delta_declaration_is_refused",
+      "seconds": 189.118
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_receipt_replaces_a_hardlink_instead_of_overwriting_its_target",
+      "seconds": 188.592
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_undeclared_matcher_delta_is_refused",
+      "seconds": 188.561
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_the_declared_delta_is_recorded_even_when_it_is_wrong",
+      "seconds": 188.544
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_staged_record_carries_proof_identity_and_trace",
+      "seconds": 188.503
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_wrong_matcher_delta_is_refused_though_everything_else_passes",
+      "seconds": 188.27
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_mid_corpus_write_failure_leaves_tree_byte_identical",
+      "seconds": 188.103
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded",
+      "seconds": 188.058
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_cli_default_staging_follows_alternate_repo_root",
+      "seconds": 186.843
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_canonical_envelope_round_trips_any_valid_json_string",
+      "seconds": 184.659
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_preplanted_predictable_temp_link_is_never_opened",
+      "seconds": 184.517
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_nothing_is_promoted_into_the_mini_repo_corpus",
+      "seconds": 183.751
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_failed_post_application_verification_rolls_back",
+      "seconds": 183.572
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_staged_candidate_advances_only_a_receipt_ledger",
+      "seconds": 183.377
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_every_pipeline_stage_is_recorded_in_order",
+      "seconds": 183.237
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_correspondence_route_is_recorded",
+      "seconds": 183.156
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_the_receipt_carries_the_declared_delta_beside_the_measured_one",
+      "seconds": 182.339
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_proven_correspondent_candidate_stages",
+      "seconds": 182.041
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_an_undeclared_slot_schema_gap_is_refused",
+      "seconds": 180.49
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_every_matcher_summary_key_is_gated",
+      "seconds": 87.15
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_dangling_inferential_link_is_refused",
+      "seconds": 9.366
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_schema_invalid_candidate_is_refused",
+      "seconds": 8.931
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_two_theorem_artifact_cannot_lend_its_good_theorem",
+      "seconds": 6.138
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_proven_with_an_untranslatable_theorem_fails_closed",
+      "seconds": 5.836
+    },
+    {
+      "test": "tests.test_write_stage.ValidationAndDeltaTests.test_structural_twin_of_a_committed_statement_is_refused",
+      "seconds": 5.502
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_proven_with_a_mismatching_theorem_is_refused",
+      "seconds": 4.694
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_candidate_node_with_no_verified_by_link_is_refused",
+      "seconds": 3.666
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_candidate_node_citing_another_theorem_is_refused",
+      "seconds": 3.126
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_the_seed_is_handed_one_absolute_path_the_interpreters",
+      "seconds": 3.002
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_extending_an_existing_corpus_may_not_drop_its_statements",
+      "seconds": 2.83
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_corpus_envelope_metadata_is_part_of_the_gate",
+      "seconds": 2.799
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_manifested_non_json_artifact_is_still_refused",
+      "seconds": 2.793
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_declared_node_cannot_differ_from_the_regenerated_one",
+      "seconds": 2.767
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_refused_candidate_cannot_mutate_the_ledger",
+      "seconds": 2.654
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_a_crashing_candidate_refuses_the_step_not_the_run",
+      "seconds": 2.57
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_theorem_that_does_not_close_is_refused",
+      "seconds": 2.469
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_absolute_or_traversing_corpus_cannot_escape_scratch",
+      "seconds": 2.468
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_candidate_digest_cannot_authenticate_an_untrusted_artifact",
+      "seconds": 2.459
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_existing_multi_output_seed_is_refused_before_replacement",
+      "seconds": 2.445
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_an_unforeseen_crash_is_a_refusal_with_a_receipt",
+      "seconds": 2.441
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_seed_adding_an_undeclared_statement_is_refused",
+      "seconds": 2.429
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_already_owned_theorem_is_refused",
+      "seconds": 2.32
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_acceptance_never_executes_candidate_code",
+      "seconds": 2.275
+    },
+    {
+      "test": "tests.test_write_stage.TrustedAppendTests.test_literal_envelope_against_existing_seed_still_refused",
+      "seconds": 2.261
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_wrong_artifact_digest_is_refused",
+      "seconds": 2.199
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_seed_touching_another_corpus_is_refused",
+      "seconds": 2.075
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_frame_local_is_refused_at_every_rung",
+      "seconds": 1.89
+    },
+    {
+      "test": "tests.test_write_stage.BuildByproductExclusionTests.test_the_source_beside_the_build_tree_is_still_covered",
+      "seconds": 1.886
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_escaping_and_absolute_targets_are_refused",
+      "seconds": 1.859
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_refusal_still_writes_a_diffable_receipt",
+      "seconds": 1.846
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_refusal_leaves_the_working_tree_byte_identical",
+      "seconds": 1.844
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_failing_seed_is_refused_without_leaking_a_temp_path",
+      "seconds": 1.777
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_refused_candidate_applies_nothing_and_stays_byte_identical",
+      "seconds": 1.754
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_seed_runs_with_its_cwd_inside_the_scratch_tree",
+      "seconds": 1.73
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_extending_an_existing_corpus_may_not_rewrite_a_prior_node",
+      "seconds": 1.699
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_changed_artifact_is_refused_even_if_candidate_pins_new_bytes",
+      "seconds": 1.695
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_conjectured_is_refused",
+      "seconds": 1.668
+    },
+    {
+      "test": "tests.test_write_stage.BuildByproductExclusionTests.test_a_build_tree_moves_neither_the_digest_nor_the_copy",
+      "seconds": 1.645
+    },
+    {
+      "test": "tests.test_write_stage.RegenerationConfinementTests.test_seed_writing_malformed_json_is_refused_with_a_receipt",
+      "seconds": 1.645
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_verified_rung_advances_as_verified",
+      "seconds": 1.631
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_noncanonical_seed_path_logic_is_rejected_as_code",
+      "seconds": 1.605
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_a_targeting_the_durable_store_refusal_applies_nothing",
+      "seconds": 1.599
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_verified_stages_a_review_request_with_no_content",
+      "seconds": 1.555
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_candidate_code_targeting_root_never_executes",
+      "seconds": 1.492
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedWriteApplicationTests.test_orphaning_a_co_owned_seed_is_refused_before_application",
+      "seconds": 1.485
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_fabricated_transition_trace_is_refused",
+      "seconds": 1.458
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_contentless_transition_row_is_refused",
+      "seconds": 1.444
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_candidate_targeting_the_durable_store_is_refused",
+      "seconds": 1.439
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_digest_excludes_runtime_experiments_but_covers_source",
+      "seconds": 1.432
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_candidate_code_targeting_prover_never_executes",
+      "seconds": 1.397
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_candidate_code_targeting_schema_never_executes",
+      "seconds": 1.375
+    },
+    {
+      "test": "tests.test_write_stage.WorkingTreeIntegrityTests.test_candidate_code_targeting_scripts_never_executes",
+      "seconds": 1.354
+    },
+    {
+      "test": "tests.test_write_stage.GateMatrixTests.test_unknown_rung_is_refused",
+      "seconds": 1.28
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_unpinned_artifact_digest_is_refused",
+      "seconds": 1.103
+    },
+    {
+      "test": "tests.test_write_stage.ProofGateTests.test_empty_transition_trace_is_refused",
+      "seconds": 0.978
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_receipts_may_not_be_written_into_the_durable_store",
+      "seconds": 0.691
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_an_unreadable_proposal_file_refuses_rather_than_raises",
+      "seconds": 0.573
+    },
+    {
+      "test": "tests.test_write_stage.ControllerAdapterTests.test_non_write_actions_and_bad_proposals_are_refused",
+      "seconds": 0.538
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_windows_junction_cannot_redirect_receipts_outside_repo",
+      "seconds": 0.156
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_windows_staging_handle_blocks_directory_swap_during_write",
+      "seconds": 0.13
+    },
+    {
+      "test": "tests.test_write_stage.AcceptedCandidateTests.test_receipt_writer_retries_partial_os_writes",
+      "seconds": 0.119
+    },
+    {
+      "test": "tests.test_write_stage.MaliciousPathTests.test_proposal_seed_source_path_must_be_a_contained_seed_script",
+      "seconds": 0.118
+    },
+    {
+      "test": "tests.test_write_stage.BuildByproductExclusionTests.test_lake_and_pycache_are_ignored_by_copy_and_digest",
+      "seconds": 0.117
+    }
+  ]
+}

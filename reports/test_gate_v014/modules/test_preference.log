@@ -1,0 +1,23 @@
+----------------------------------------------------------------------
+Ran 8 tests in 0.000s
+
+OK
+
+8 tests in 0.0s (OK)
+
+timed tests: 0.0s; fixtures/runner overhead: 0.0s
+
+timed test bodies by module (fixtures excluded):
+       0.0s   66.7%  tests.test_preference
+
+slowest 8 tests:
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_suite_n_ge_30_fixed_sets
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_feature_must_score_exact_candidate_set
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_frequency_baseline_and_feature
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_length_feature_is_deterministic
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_rank_refuses_unregistered_feature_name
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_mixed_denotation_keys_refused
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_topic_tag_match_uses_discourse_snapshot_only
+      0.00s  tests.test_preference.PreferenceRegistryTests.test_registered_feature_names_match_implementations
+
+wrote C:\Users\displ\AppData\Local\Temp\claude\C--Users-displ-Documents-corollary-abstractions\7f6361a4-60eb-4b65-b102-279576afcdb1\scratchpad\gate-v014\modules\test_preference.json
