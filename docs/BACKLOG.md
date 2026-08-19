@@ -60,6 +60,27 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **SUSPENDED: the published cross-field match count is not a result.**  The
+  matcher reports 975 typed twin groups, 34 of them spanning more than one
+  namespace, and that figure has been cited as an achievement without ever
+  being adjudicated against a two-sided prediction.  Shape collisions are
+  cheapest exactly where the corpus is most formulaic, which is where most of
+  the count comes from.  Until
+  [the coincidence veto](DESIGN-coincidence-veto.md) reads out, or two release
+  cycles pass, the number does not appear in release notes or in any evidence
+  chain; it may appear in ANALYSIS with its denominator and this suspension
+  named.  Same failure shape as the v0.14 clarification benchmark: a belief
+  about the collection filed on the achievement side of the ledger.
+
+- **Range is uncertified while domain is certified.**  Committed digests prove
+  that these sources produce this artifact byte-for-byte.  Nothing proves that
+  the function from question to outcome is unchanged, so adding statements can
+  pass every regeneration check truthfully while silently moving an answer
+  nobody was looking at.  A sealed replay set reduced to a moved/unmoved bit
+  would certify it.  Parked behind its own prerequisite: evidence that the
+  range actually moves, since predicting churn from the source diff may
+  explain most of it for free.  Raised by the v0.15 design inquiry.
+
 - **The split fixture is rebuilt once per class, not once per module.**
   `load_corpus` + `build_quadruples` costs **179.3 s** (87.0 + 92.2) and sits
   in `setUpClass`, so `test_corpus_analogy_split`'s seven classes pay it seven

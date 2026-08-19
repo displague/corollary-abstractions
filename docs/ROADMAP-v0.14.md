@@ -101,7 +101,11 @@ Their evidence remains in BACKLOG; silence is not a carry.
 
 [Compile the space before asking the question](DESIGN-compile-before-query.md)
 is the chosen architectural direction after v0.14's frozen clarification
-experiment.  It is not a v0.14 implementation item or release gate.  Its first
+experiment.  [The veto on a match the corpus cannot support](DESIGN-coincidence-veto.md)
+is **design only** and parks behind it: an instrument scoped to twenty-six
+committed cross-field twin groups, not an architecture, and not a v0.14
+implementation item.  It suspends one standing habit — the published
+cross-field match count stops being cited as a result until adjudicated.  It is not a v0.14 implementation item or release gate.  Its first
 slice asks whether two existing exact worlds can compile and independently
 check complete bounded possibility spaces before any target is selected.  The
 design explicitly suspends corpus growth, pair-count growth, and obligatory
@@ -133,13 +137,15 @@ v0.14 is ready only if:
 - the full suite is green on a frozen tip with retained shard receipts —
   **done**: 1,341 tests, 0 failures, 0 errors at `55b4097`;
 - every unfinished item above ships or parks in writing;
-- the outside design inquiry gate is discharged — **BLOCKED, now on tested
-  evidence**, see `reports/design-direction-v0.15.json`.  An isolation probe
-  shows a subagent receives the repository name and path, git status and
-  recent commit subjects, the user's memory index and personal details, and
-  all tools; one injected commit subject names the incumbent direction the
-  skill requires be withheld.  The harness supplies this, so no agent
-  definition can prevent it, and the three inquiries must not be simulated in
-  a repository-aware context.  The incumbent forward direction,
+- the outside design inquiry gate is discharged — **done**, see
+  `reports/design-direction-v0.15.json`.  Subagents proved unusable: the
+  harness hands them the repository name, git status and recent commit
+  subjects — one of which names the incumbent the skill requires be withheld.
+  Isolation was achieved instead by running the CLI headless in a sandboxed
+  empty directory outside the repository, verified by an adversarial probe
+  that searched for the project and found nothing.  Three series ran, one
+  direction was selected as
+  [the veto on a match the corpus cannot support](DESIGN-coincidence-veto.md),
+  one was refused by its own construction gate, and one parked.  The incumbent forward direction,
   [compile before query](DESIGN-compile-before-query.md), is retained
   unchanged; a blocked gate is not a licence to replace it.
