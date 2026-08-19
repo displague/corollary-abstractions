@@ -121,4 +121,11 @@ v0.14 is ready only if:
   it does not ship;
 - fresh precision and comparable coverage are both reported;
 - the full suite is green on a frozen tip with retained shard receipts;
-- every unfinished item above ships or parks in writing.
+- every unfinished item above ships or parks in writing;
+- the outside design inquiry gate is discharged — **currently BLOCKED**, see
+  `reports/design-direction-v0.15.json`.  The platform in use cannot launch an
+  agent without repository access, network access, or tools, so the three
+  isolated inquiries cannot be run and must not be simulated in a
+  repository-aware context.  The incumbent forward direction,
+  [compile before query](DESIGN-compile-before-query.md), is retained
+  unchanged; a blocked gate is not a licence to replace it.

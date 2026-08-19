@@ -60,6 +60,21 @@ or commit history. Each item names the evidence that motivated it.
   how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
   and the v0.14 ANALYSIS entry.
 
+- **The outside design inquiry has no isolated agent to run in.**  The gate
+  requires three contexts with no forked turns, no workspace, no network and
+  no tools, and explicitly refuses an instruction not to use tools as a
+  substitute.  Every agent type this platform offers carries repository read
+  access, and all but one carry `WebFetch`/`WebSearch`; none can be launched
+  tool-less.  A project agent definition declaring `tools: []` was written to
+  `.claude/agents/outside-designer.md`, but the registry is read at session
+  start so it was not selectable, and two things about it remain unverified:
+  whether an empty tool list is honoured rather than defaulting to all tools,
+  and whether a subagent inherits `AGENTS.md` or the user memory index — which
+  would leak project dialect even with no tools at all.  The next session must
+  re-run the isolation probe before trusting it.  Until then the gate is
+  BLOCKED and the incumbent direction stands.  Evidence:
+  `reports/design-direction-v0.15.json`.
+
 - **The gate measurement cannot run in the canonical checkout.**
   `time_tests.assert_clean_source` refuses when any gitignored `*.py`, `*.pyc`,
   `*.pyd`, `*.so` or `*.dll` sits outside `.venv/`, and `.worktrees/` is
