@@ -45,7 +45,10 @@ class RecordedSession(unittest.TestCase):
     def test_the_record_still_verifies(self) -> None:
         """`--check` is the honest remainder of P5: re-verify, not re-run."""
         result = subprocess.run(
-            [sys.executable, str(REPO_ROOT / "scripts" / "session_run.py"),
+            # -B keeps the bare environment these launches assert on while
+            # stopping the child writing bytecode into scripts/, which the
+            # release gate's timing run treats as the tree changing under it.
+            [sys.executable, "-B", str(REPO_ROOT / "scripts" / "session_run.py"),
              "--check"],
             capture_output=True, text=True, check=False,
             env={"PYTHONIOENCODING": "utf-8", **_min_env()},
@@ -208,7 +211,7 @@ class EmptyExtractionIsRefused(unittest.TestCase):
             source.write_text("theorem t : True := trivial\n", encoding="utf-8")
             out = root / "out.json"
             result = subprocess.run(
-                [sys.executable,
+                [sys.executable, "-B",
                  str(REPO_ROOT / "scripts" / "trace_to_triples.py"),
                  "--ast", str(ast), "--source", str(source),
                  "--out", str(out)],

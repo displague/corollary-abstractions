@@ -308,6 +308,11 @@ class CommittedCorpusCorrespondenceTests(unittest.TestCase):
             result = subprocess.run(
                 [
                     sys.executable,
+                    # -B, not an env var: these launches assert the CLI works
+                    # with a bare environment, and a child that writes
+                    # bytecode into scripts/ makes the release gate's
+                    # timing run refuse the tree it just measured.
+                    "-B",
                     str(REPO_ROOT / "scripts" / "proof_correspondence.py"),
                 ],
                 cwd=temporary,
