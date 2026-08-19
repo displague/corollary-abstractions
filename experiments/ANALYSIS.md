@@ -4223,3 +4223,78 @@ stays whole, and not as a concession.
 The one lever that would move this gate is `test_write_stage`, which nobody
 had proposed touching because nobody had measured it.
 
+---
+
+# v0.15 - the coincidence veto, adjudicated once (partially)
+
+Registered order followed: inventory committed, then tags and table and
+prediction committed, then the blind control, then the flags.  Nothing was
+authored after a flag was visible.
+
+**Denominator.** 26 qualifying groups, **77 aligned slots**, 213 symbol
+occurrences of which 35 are `kind-unknown`.  The slot count was unknown when
+the design was written; it is what the committed inventory established.
+
+**Blind control, run first.** Case-folded symbol-name difference agrees with
+the kind-based labelling on **0.3958** of the 48 fully-tagged slots, against a
+0.80 threshold.  The direction survives its cheapest challenger: names alone
+do not reproduce the kinds, because almost every cross-field slot holds
+differently-named symbols whether or not they denote the same quantity.
+
+**Result.** **22 of 77 slots conflicting**, inside the registered band of
+20-60, across **8 of the 26 groups**.  All four named directional calls held:
+
+| call | predicted | observed |
+|---|---|---|
+| P1 `scaled_linear` | conflicting | conflicting |
+| P2 logic + set-theory groups | not conflicting | unjudged |
+| P3 `sum_of_squares` | not conflicting | unjudged |
+| P4 rank against velocity | conflicting | conflicting |
+
+P1 is the prediction the v0.14 release blog put in print, and its certificate
+is readable: `CIRCUMFERENCE(length)` against `POTENTIAL(electric_potential)`
+and against `FORCE(force)`.  Circle circumference, Ohm's law and Newton's
+second law share the skeleton and cannot share a quantity.
+
+P2 is the one that mattered most for the table's honesty.  Boolean algebra and
+set algebra were declared compatible on their merits before anything ran, and
+the four logic/set-theory groups came back unjudged.  A table that flagged
+them would have been a liar in the direction the object is supposed to be
+trustworthy.
+
+## The corruption control is invalid, and it is my defect
+
+The third registered control does not work, and it fails for a reason
+introduced at authoring time rather than found in the data.
+
+The incompatibility table was scoped to the 44 kind pairs that co-occur **under
+the authored tags**, on the argument that a row which cannot fire is
+unreviewable noise.  That argument is fine for reviewability and fatal for the
+control.  Permuting the tags raises pairs the table has no row for: **107 of
+133 permuted pairs are unrepresented, against 24 of 75 authored ones**.  The
+permuted baseline is crippled by construction and under-fires for reasons that
+have nothing to do with whether the authored tags carry information.
+
+Authored 22 against a permuted mean of 19.3.  That comparison is not evidence
+either way and is recorded as **neither passing nor voiding**.
+
+So the run is **partially adjudicated**: two registered controls passed and one
+could not run.  The instrument does not get to claim its tags carry
+information until the control is repeated against a table authored over the
+full kind cross-product, and that repetition is exploratory rather than
+preregistered, because the population is a census with no fresh half.
+
+## Standing
+
+The suspension on the published cross-field match count is **extended, not
+lifted**.  Eight of twenty-six hand-authored cross-field groups contain an
+aligned slot whose quantities cannot be the same, which is the doubt the
+suspension was raised about rather than an answer to it.
+
+Two reporting bugs were found immediately after the first run and fixed before
+anything was committed: the named-call comparison tested `unjudged` against the
+string `not conflicting`, and the group lookup split a slash-joined archetype
+name that the ledger stores as two entries.  Neither touched a flag; both had
+made held calls look like misses.  The lookup now raises rather than returning
+a default, so a name that matches nothing cannot read as a miss again.
+

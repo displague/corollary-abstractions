@@ -1,0 +1,1835 @@
+{
+  "schema": "veto_result.v1",
+  "design": "docs/DESIGN-coincidence-veto.md",
+  "blind_control": {
+    "ran": "first",
+    "agreement_with_kind_labelling": 0.3958,
+    "of_fully_tagged_slots": 48,
+    "threshold": 0.8,
+    "defeats_direction": false
+  },
+  "corruption_control": {
+    "authored_conflicting": 22,
+    "permuted_mean": 19.3,
+    "requirement": "authored strictly fewer than permuted mean",
+    "held": false,
+    "valid": false,
+    "invalid_because": "the incompatibility table was scoped to the kind pairs that co-occur under the AUTHORED tags, so a permuted assignment raises pairs the table has no row for and cannot fire: 107 of 133 permuted pairs are unrepresented against 24 of 75 authored ones. The baseline is crippled by construction, so this control neither passes nor voids the result. It is a defect in how the table was scoped at authoring time, not a finding about the tags."
+  },
+  "adjudication": {
+    "conflicting_slots": 22,
+    "unjudged_slots": 55,
+    "of": 77,
+    "band": [
+      20,
+      60
+    ],
+    "in_band": true,
+    "named_predictions": [
+      {
+        "id": "P1",
+        "predicted": "conflicting",
+        "observed": "conflicting",
+        "held": true
+      },
+      {
+        "id": "P2",
+        "predicted": "not conflicting",
+        "observed": "unjudged",
+        "held": true
+      },
+      {
+        "id": "P3",
+        "predicted": "not conflicting",
+        "observed": "unjudged",
+        "held": true
+      },
+      {
+        "id": "P4",
+        "predicted": "conflicting",
+        "observed": "conflicting",
+        "held": true
+      }
+    ]
+  },
+  "flags": [
+    {
+      "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "+(^(?0:V, 2), ^(?1:V, 2)) = ^(?2:V, 2)",
+      "archetypes": [
+        "sum_of_squares"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:P = MEET\u27e8?1:V, NEG\u27e8?1:V\u27e9\u27e9",
+      "archetypes": [
+        "complement_annihilation"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:P = MEET\u27e8?1:V, NEG\u27e8?1:V\u27e9\u27e9",
+      "archetypes": [
+        "complement_annihilation"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(+(?1:V, neg(?2:P)), inv(?3:P))",
+      "archetypes": [
+        "center_scale_map"
+      ],
+      "slot": 3,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "archetypes": [
+        "scaled_linear"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.circuits.ohms_law"
+          ],
+          "symbols": [
+            "CIRCUMFERENCE",
+            "POTENTIAL"
+          ],
+          "kinds": [
+            "length",
+            "electric_potential"
+          ]
+        },
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "CIRCUMFERENCE",
+            "FORCE"
+          ],
+          "kinds": [
+            "length",
+            "force"
+          ]
+        },
+        {
+          "statements": [
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "POTENTIAL",
+            "FORCE"
+          ],
+          "kinds": [
+            "electric_potential",
+            "force"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "archetypes": [
+        "scaled_linear"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.circuits.ohms_law"
+          ],
+          "symbols": [
+            "CONSTANT",
+            "RESISTANCE"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "resistance"
+          ]
+        },
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "CONSTANT",
+            "INERTIA"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "mass_inertia"
+          ]
+        },
+        {
+          "statements": [
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "RESISTANCE",
+            "INERTIA"
+          ],
+          "kinds": [
+            "resistance",
+            "mass_inertia"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V)",
+      "archetypes": [
+        "scaled_linear"
+      ],
+      "slot": 2,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.circuits.ohms_law"
+          ],
+          "symbols": [
+            "RADIUS",
+            "FLOW"
+          ],
+          "kinds": [
+            "length",
+            "electric_current"
+          ]
+        },
+        {
+          "statements": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "RADIUS",
+            "RESPONSE"
+          ],
+          "kinds": [
+            "length",
+            "velocity"
+          ]
+        },
+        {
+          "statements": [
+            "physics.circuits.ohms_law",
+            "physics.mechanics.newton_second_law"
+          ],
+          "symbols": [
+            "FLOW",
+            "RESPONSE"
+          ],
+          "kinds": [
+            "electric_current",
+            "velocity"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "slot": 3,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, +(?3:V, ?4:V))",
+      "archetypes": [
+        "scaled_sum_product"
+      ],
+      "slot": 4,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.spectroscopy.beer_lambert_law",
+            "geometry.area_formulas.triangle_area_formula"
+          ],
+          "symbols": [
+            "ABSORBANCE",
+            "AREA"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "area"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, ?2:V, ?3:V)",
+      "archetypes": [
+        "scaled_bilinear_product"
+      ],
+      "slot": 3,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.spectroscopy.beer_lambert_law",
+            "geometry.area_formulas.triangle_area_formula"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "HEIGHT"
+          ],
+          "kinds": [
+            "concentration",
+            "length"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8*(?2:P, ?3:V)\u27e9)",
+      "archetypes": [
+        "exponential_evolution"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8*(?2:P, ?3:V)\u27e9)",
+      "archetypes": [
+        "exponential_evolution"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8*(?2:P, ?3:V)\u27e9)",
+      "archetypes": [
+        "exponential_evolution"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8*(?2:P, ?3:V)\u27e9)",
+      "archetypes": [
+        "exponential_evolution"
+      ],
+      "slot": 3,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "archetypes": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "economics.finance.present_value_continuous"
+          ],
+          "symbols": [
+            "AMOUNT",
+            "PRESENT"
+          ],
+          "kinds": [
+            "concentration",
+            "money_value"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "ml.policy.boltzmann_softmax_policy"
+          ],
+          "symbols": [
+            "AMOUNT",
+            "PROBABILITY"
+          ],
+          "kinds": [
+            "concentration",
+            "probability"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.present_value_continuous",
+            "ml.policy.boltzmann_softmax_policy"
+          ],
+          "symbols": [
+            "PRESENT",
+            "PROBABILITY"
+          ],
+          "kinds": [
+            "money_value",
+            "probability"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "archetypes": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "economics.finance.present_value_continuous"
+          ],
+          "symbols": [
+            "INITIAL",
+            "FUTURE"
+          ],
+          "kinds": [
+            "concentration",
+            "money_value"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "archetypes": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = *(?1:P, EXP\u27e8neg(*(?2:P, ?3:V))\u27e9)",
+      "archetypes": [
+        "exponential_decay",
+        "normalized_exponential_tilt"
+      ],
+      "slot": 3,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.kinetics.first_order_integrated_rate_law",
+            "ml.policy.boltzmann_softmax_policy"
+          ],
+          "symbols": [
+            "TIME",
+            "ENERGY"
+          ],
+          "kinds": [
+            "time",
+            "energy"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.present_value_continuous",
+            "ml.policy.boltzmann_softmax_policy"
+          ],
+          "symbols": [
+            "HORIZON",
+            "ENERGY"
+          ],
+          "kinds": [
+            "time",
+            "energy"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "archetypes": [
+        "bilinear_product"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "geometry.area_formulas.rectangle_area_formula"
+          ],
+          "symbols": [
+            "GAUSSCURVATURE",
+            "AREA"
+          ],
+          "kinds": [
+            "curvature",
+            "area"
+          ]
+        },
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "graphtheory.enumeration.complete_bipartite_edge_count"
+          ],
+          "symbols": [
+            "GAUSSCURVATURE",
+            "EDGES"
+          ],
+          "kinds": [
+            "curvature",
+            "count"
+          ]
+        },
+        {
+          "statements": [
+            "geometry.area_formulas.rectangle_area_formula",
+            "graphtheory.enumeration.complete_bipartite_edge_count"
+          ],
+          "symbols": [
+            "AREA",
+            "EDGES"
+          ],
+          "kinds": [
+            "area",
+            "count"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "archetypes": [
+        "bilinear_product"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "geometry.area_formulas.rectangle_area_formula"
+          ],
+          "symbols": [
+            "PRINCIPAL1",
+            "DIM1"
+          ],
+          "kinds": [
+            "curvature",
+            "length"
+          ]
+        },
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "graphtheory.enumeration.complete_bipartite_edge_count"
+          ],
+          "symbols": [
+            "PRINCIPAL1",
+            "PARTONE"
+          ],
+          "kinds": [
+            "curvature",
+            "length"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, ?2:V)",
+      "archetypes": [
+        "bilinear_product"
+      ],
+      "slot": 2,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "geometry.area_formulas.rectangle_area_formula"
+          ],
+          "symbols": [
+            "PRINCIPAL2",
+            "DIM2"
+          ],
+          "kinds": [
+            "curvature",
+            "length"
+          ]
+        },
+        {
+          "statements": [
+            "diffgeo.surfaces.gaussian_curvature_principal_product",
+            "graphtheory.enumeration.complete_bipartite_edge_count"
+          ],
+          "symbols": [
+            "PRINCIPAL2",
+            "PARTTWO"
+          ],
+          "kinds": [
+            "curvature",
+            "length"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "chemistry.solutions.molarity_definition"
+          ],
+          "symbols": [
+            "RATE",
+            "CONCENTRATION"
+          ],
+          "kinds": [
+            "rate_per_time",
+            "concentration"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "economics.microeconomics.price_elasticity_of_demand"
+          ],
+          "symbols": [
+            "RATE",
+            "ELASTICITY"
+          ],
+          "kinds": [
+            "rate_per_time",
+            "elasticity"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "ml.policy.policy_probability_ratio"
+          ],
+          "symbols": [
+            "RATE",
+            "RATIO"
+          ],
+          "kinds": [
+            "rate_per_time",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "numanalysis.error.relative_condition_number"
+          ],
+          "symbols": [
+            "RATE",
+            "CONDITION"
+          ],
+          "kinds": [
+            "rate_per_time",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "economics.microeconomics.price_elasticity_of_demand"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "ELASTICITY"
+          ],
+          "kinds": [
+            "concentration",
+            "elasticity"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "ml.policy.policy_probability_ratio"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "RATIO"
+          ],
+          "kinds": [
+            "concentration",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "numanalysis.error.relative_condition_number"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "CONDITION"
+          ],
+          "kinds": [
+            "concentration",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "RATE"
+          ],
+          "kinds": [
+            "concentration",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "CONCENTRATION",
+            "RATE"
+          ],
+          "kinds": [
+            "concentration",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "economics.microeconomics.price_elasticity_of_demand",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "ELASTICITY",
+            "RATE"
+          ],
+          "kinds": [
+            "elasticity",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "economics.microeconomics.price_elasticity_of_demand",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "ELASTICITY",
+            "RATE"
+          ],
+          "kinds": [
+            "elasticity",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "ml.policy.policy_probability_ratio",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "RATIO",
+            "RATE"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "ml.policy.policy_probability_ratio",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "RATIO",
+            "RATE"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "numanalysis.error.relative_condition_number",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "CONDITION",
+            "RATE"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "rate_per_time"
+          ]
+        },
+        {
+          "statements": [
+            "numanalysis.error.relative_condition_number",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "CONDITION",
+            "RATE"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "rate_per_time"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "economics.microeconomics.price_elasticity_of_demand"
+          ],
+          "symbols": [
+            "AMOUNT",
+            "PCT_QUANTITY"
+          ],
+          "kinds": [
+            "concentration",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "ml.policy.policy_probability_ratio"
+          ],
+          "symbols": [
+            "AMOUNT",
+            "POLICYNEW"
+          ],
+          "kinds": [
+            "concentration",
+            "probability"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = *(?1:V, inv(?2:V))",
+      "archetypes": [
+        "ratio_rate"
+      ],
+      "slot": 2,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "chemistry.solutions.molarity_definition"
+          ],
+          "symbols": [
+            "INTERVAL",
+            "VOLUME"
+          ],
+          "kinds": [
+            "time",
+            "volume"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "economics.microeconomics.price_elasticity_of_demand"
+          ],
+          "symbols": [
+            "INTERVAL",
+            "PCT_PRICE"
+          ],
+          "kinds": [
+            "time",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.differentiation.average_rate_of_change",
+            "ml.policy.policy_probability_ratio"
+          ],
+          "symbols": [
+            "INTERVAL",
+            "POLICYOLD"
+          ],
+          "kinds": [
+            "time",
+            "probability"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "economics.microeconomics.price_elasticity_of_demand"
+          ],
+          "symbols": [
+            "VOLUME",
+            "PCT_PRICE"
+          ],
+          "kinds": [
+            "volume",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "ml.policy.policy_probability_ratio"
+          ],
+          "symbols": [
+            "VOLUME",
+            "POLICYOLD"
+          ],
+          "kinds": [
+            "volume",
+            "probability"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "VOLUME",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "volume",
+            "time"
+          ]
+        },
+        {
+          "statements": [
+            "chemistry.solutions.molarity_definition",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "VOLUME",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "volume",
+            "time"
+          ]
+        },
+        {
+          "statements": [
+            "economics.microeconomics.price_elasticity_of_demand",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "PCT_PRICE",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "time"
+          ]
+        },
+        {
+          "statements": [
+            "economics.microeconomics.price_elasticity_of_demand",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "PCT_PRICE",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "time"
+          ]
+        },
+        {
+          "statements": [
+            "ml.policy.policy_probability_ratio",
+            "physics.kinematics.average_speed"
+          ],
+          "symbols": [
+            "POLICYOLD",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "probability",
+            "time"
+          ]
+        },
+        {
+          "statements": [
+            "ml.policy.policy_probability_ratio",
+            "physics.materials.mass_density"
+          ],
+          "symbols": [
+            "POLICYOLD",
+            "INTERVAL"
+          ],
+          "kinds": [
+            "probability",
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = +(*(?1:P, ?2:V), *(?3:V, +(1, neg(?1:P))))",
+      "archetypes": [
+        "two_point_convex_combination"
+      ],
+      "slot": 3,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "archetypes": [
+        "affine_operator"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "economics.macroeconomics.keynesian_consumption_function"
+          ],
+          "symbols": [
+            "EXPECTED",
+            "CONSUMPTION"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "money_value"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "EXPECTED",
+            "POINTNEW"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "probstat.transform.affine_location_scale"
+          ],
+          "symbols": [
+            "EXPECTED",
+            "OUT"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "CONSUMPTION",
+            "POINTNEW"
+          ],
+          "kinds": [
+            "money_value",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.macroeconomics.keynesian_consumption_function",
+            "probstat.transform.affine_location_scale"
+          ],
+          "symbols": [
+            "CONSUMPTION",
+            "OUT"
+          ],
+          "kinds": [
+            "money_value",
+            "point"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "archetypes": [
+        "affine_operator"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "economics.macroeconomics.keynesian_consumption_function"
+          ],
+          "symbols": [
+            "RISKFREE",
+            "AUTONOMOUS"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "money_value"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "RISKFREE",
+            "TRANSLATION"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "AUTONOMOUS",
+            "TRANSLATION"
+          ],
+          "kinds": [
+            "money_value",
+            "point"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "archetypes": [
+        "affine_operator"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+      "archetypes": [
+        "affine_operator"
+      ],
+      "slot": 3,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "calculus.approximation.tangent_line_linearization",
+            "economics.finance.capm_expected_return"
+          ],
+          "symbols": [
+            "DISPLACEMENT",
+            "PREMIUM"
+          ],
+          "kinds": [
+            "length",
+            "dimensionless_ratio"
+          ]
+        },
+        {
+          "statements": [
+            "calculus.approximation.tangent_line_linearization",
+            "economics.macroeconomics.keynesian_consumption_function"
+          ],
+          "symbols": [
+            "DISPLACEMENT",
+            "DISPOSABLE_INCOME"
+          ],
+          "kinds": [
+            "length",
+            "money_value"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "economics.macroeconomics.keynesian_consumption_function"
+          ],
+          "symbols": [
+            "PREMIUM",
+            "DISPOSABLE_INCOME"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "money_value"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "PREMIUM",
+            "POINT"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.finance.capm_expected_return",
+            "probstat.transform.affine_location_scale"
+          ],
+          "symbols": [
+            "PREMIUM",
+            "IN"
+          ],
+          "kinds": [
+            "dimensionless_ratio",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.macroeconomics.keynesian_consumption_function",
+            "geomodel.transforms.homogeneous_rigid_transform"
+          ],
+          "symbols": [
+            "DISPOSABLE_INCOME",
+            "POINT"
+          ],
+          "kinds": [
+            "money_value",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "economics.macroeconomics.keynesian_consumption_function",
+            "probstat.transform.affine_location_scale"
+          ],
+          "symbols": [
+            "DISPOSABLE_INCOME",
+            "IN"
+          ],
+          "kinds": [
+            "money_value",
+            "point"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "algtop.homology.chain_rank_nullity",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "symbols": [
+            "CHAINRANK",
+            "OBJECT_VELOCITY"
+          ],
+          "kinds": [
+            "count",
+            "velocity"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "slot": 1,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "algtop.homology.chain_rank_nullity",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "symbols": [
+            "CYCLERANK",
+            "RELATIVE_VELOCITY"
+          ],
+          "kinds": [
+            "count",
+            "velocity"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = +(?1:V, ?2:V)",
+      "archetypes": [
+        "additive_frame_transformation",
+        "rank_decomposition"
+      ],
+      "slot": 2,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "algtop.homology.chain_rank_nullity",
+            "physics.frames.galilean_velocity_addition"
+          ],
+          "symbols": [
+            "IMAGERANK",
+            "FRAME_VELOCITY"
+          ],
+          "kinds": [
+            "count",
+            "velocity"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?0:V, ?0:V\u27e9",
+      "archetypes": [
+        "idempotent_operation"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?0:V, JOIN\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "lattice_absorption"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?0:V, JOIN\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "lattice_absorption"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?1:P, ?0:V\u27e9",
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = MEET\u27e8?1:P, ?0:V\u27e9",
+      "archetypes": [
+        "identity_element_law"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = NEG\u27e8NEG\u27e8?0:V\u27e9\u27e9",
+      "archetypes": [
+        "complement_involution"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?2:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?2:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?2:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_expected_log"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?3:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?3:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?3:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(*(?1:P, sum\u27e8*(?2:V, LOG\u27e8?3:V\u27e9)\u27e9))",
+      "archetypes": [
+        "negated_scaled_cross_log"
+      ],
+      "slot": 3,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(LOG\u27e8?1:V\u27e9)",
+      "archetypes": [
+        "negated_logarithmic_scale"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = neg(LOG\u27e8?1:V\u27e9)",
+      "archetypes": [
+        "negated_logarithmic_scale"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = sum\u27e8*(?1:P, ?2:V)\u27e9",
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization",
+        "weighted_accumulation"
+      ],
+      "slot": 0,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.barycentric.barycentric_point_reconstruction"
+          ],
+          "symbols": [
+            "EULERCHAR",
+            "POINT"
+          ],
+          "kinds": [
+            "count",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.bezier.bernstein_bezier_evaluation"
+          ],
+          "symbols": [
+            "EULERCHAR",
+            "POINT"
+          ],
+          "kinds": [
+            "count",
+            "point"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "?0:V = sum\u27e8*(?1:P, ?2:V)\u27e9",
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization",
+        "weighted_accumulation"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "?0:V = sum\u27e8*(?1:P, ?2:V)\u27e9",
+      "archetypes": [
+        "alternating_rank_sum",
+        "conditional_marginalization",
+        "weighted_accumulation"
+      ],
+      "slot": 2,
+      "label": "conflicting",
+      "certificate": [
+        {
+          "statements": [
+            "algtop.homology.betti_alternating_sum",
+            "geomodel.barycentric.barycentric_point_reconstruction"
+          ],
+          "symbols": [
+            "BETTI_i",
+            "VERTEX_i"
+          ],
+          "kinds": [
+            "count",
+            "point"
+          ]
+        },
+        {
+          "statements": [
+            "algtop.homology.betti_alternating_sum",
+            "probstat.probability.total_probability_partition"
+          ],
+          "symbols": [
+            "BETTI_i",
+            "CONDITIONAL_i"
+          ],
+          "kinds": [
+            "count",
+            "probability"
+          ]
+        },
+        {
+          "statements": [
+            "geomodel.barycentric.barycentric_point_reconstruction",
+            "probstat.probability.total_probability_partition"
+          ],
+          "symbols": [
+            "VERTEX_i",
+            "CONDITIONAL_i"
+          ],
+          "kinds": [
+            "point",
+            "probability"
+          ]
+        }
+      ]
+    },
+    {
+      "skeleton": "CARD\u27e8JOIN\u27e8?0:V, ?1:V\u27e9\u27e9 = +(CARD\u27e8?0:V\u27e9, CARD\u27e8?1:V\u27e9, neg(CARD\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9))",
+      "archetypes": [
+        "inclusion_exclusion_correction"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "CARD\u27e8JOIN\u27e8?0:V, ?1:V\u27e9\u27e9 = +(CARD\u27e8?0:V\u27e9, CARD\u27e8?1:V\u27e9, neg(CARD\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9))",
+      "archetypes": [
+        "inclusion_exclusion_correction"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "IMPLIES\u27e8MEET\u27e8LEQ\u27e8?0:V, ?1:V\u27e9, LEQ\u27e8?1:V, ?2:V\u27e9\u27e9, LEQ\u27e8?0:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "IMPLIES\u27e8MEET\u27e8LEQ\u27e8?0:V, ?1:V\u27e9, LEQ\u27e8?1:V, ?2:V\u27e9\u27e9, LEQ\u27e8?0:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "IMPLIES\u27e8MEET\u27e8LEQ\u27e8?0:V, ?1:V\u27e9, LEQ\u27e8?1:V, ?2:V\u27e9\u27e9, LEQ\u27e8?0:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "order_transitivity"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "INTEGRAL\u27e8D\u27e8?0:V\u27e9\u27e9 = +(F\u27e8?1:V\u27e9, neg(F\u27e8?2:V\u27e9))",
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "INTEGRAL\u27e8D\u27e8?0:V\u27e9\u27e9 = +(F\u27e8?1:V\u27e9, neg(F\u27e8?2:V\u27e9))",
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "INTEGRAL\u27e8D\u27e8?0:V\u27e9\u27e9 = +(F\u27e8?1:V\u27e9, neg(F\u27e8?2:V\u27e9))",
+      "archetypes": [
+        "boundary_difference_evaluation"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "JOIN\u27e8MEET\u27e8?0:V, ?1:V\u27e9, MEET\u27e8?0:V, ?2:V\u27e9\u27e9 = MEET\u27e8?0:V, JOIN\u27e8?1:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "JOIN\u27e8MEET\u27e8?0:V, ?1:V\u27e9, MEET\u27e8?0:V, ?2:V\u27e9\u27e9 = MEET\u27e8?0:V, JOIN\u27e8?1:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "JOIN\u27e8MEET\u27e8?0:V, ?1:V\u27e9, MEET\u27e8?0:V, ?2:V\u27e9\u27e9 = MEET\u27e8?0:V, JOIN\u27e8?1:V, ?2:V\u27e9\u27e9",
+      "archetypes": [
+        "meet_distributes_over_join"
+      ],
+      "slot": 2,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "JOIN\u27e8NEG\u27e8?0:V\u27e9, NEG\u27e8?1:V\u27e9\u27e9 = NEG\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "slot": 0,
+      "label": "unjudged",
+      "certificate": []
+    },
+    {
+      "skeleton": "JOIN\u27e8NEG\u27e8?0:V\u27e9, NEG\u27e8?1:V\u27e9\u27e9 = NEG\u27e8MEET\u27e8?0:V, ?1:V\u27e9\u27e9",
+      "archetypes": [
+        "de_morgan_duality"
+      ],
+      "slot": 1,
+      "label": "unjudged",
+      "certificate": []
+    }
+  ]
+}

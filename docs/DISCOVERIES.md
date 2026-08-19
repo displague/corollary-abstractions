@@ -13,6 +13,27 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Eight of twenty-six celebrated cross-field matches align quantities that
+  cannot be the same (v0.15, measured).**  Circle circumference, Ohm's law and
+  Newton's second law share one skeleton and were reported together as a
+  cross-field structural match; `CIRCUMFERENCE` is a length, `POTENTIAL` is a
+  voltage and `FORCE` is a force, so the match is shape.  The check that says
+  so has no way to say the opposite: its two values are `conflicting` and
+  `unjudged`, and the compatibility of Boolean with set algebra was declared
+  before anything ran, so the four logic/set-theory groups came back unjudged
+  as predicted.  A cheap control using symbol names alone agreed only 0.3958 of
+  the time, so names do not stand in for kinds.
+
+- **A control scoped to the thing it controls cannot control it (v0.15,
+  construction defect).**  The veto's corruption control permutes the kind tags
+  and requires the authored ones to flag fewer conflicts than chance.  It
+  cannot: the incompatibility table was scoped to the pairs that co-occur under
+  the authored tags, so permuted assignments raise pairs with no row and cannot
+  fire - 107 of 133 against 24 of 75.  The baseline under-fires by
+  construction.  Scoping a table to what is reviewable and scoping it to what a
+  null hypothesis needs are different requirements, and satisfying the first
+  silently destroyed the second.
+
 - **No hand-authored statement is unreachable, and the reason is worth more
   than the check (v0.15 inquiry, computed).**  An outside line of reasoning
   proposed certifying which statements no query can ever single out: under
