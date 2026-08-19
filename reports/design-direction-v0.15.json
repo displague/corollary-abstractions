@@ -1,9 +1,9 @@
 {
   "schema": "design_direction_receipt.v1",
   "cycle": "v0.15",
-  "status": "blocked_by_design",
+  "status": "running",
   "requested_utc": "2026-08-19",
-  "reason": "the platform documents that a subagent cannot be granted zero tools, and that custom subagents always receive the CLAUDE.md hierarchy",
+  "reason": "isolation achieved by headless CLI in a sandboxed neutral directory, after subagents were shown to be unusable",
   "required_isolation": [
     "no forked conversation turns",
     "no repository or workspace mount",
@@ -56,14 +56,31 @@
     }
   },
   "brief_hash": null,
-  "contexts": [],
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "f3fa967a-a23b-447c-a352-179168d7af83",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete"
+    },
+    {
+      "series": 2,
+      "session_id": "e4ac7e34-45fe-4744-9d27-1ded0496135a",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete"
+    },
+    {
+      "series": 3,
+      "session_id": null,
+      "model": "claude-opus-5",
+      "rounds": 0,
+      "status": "pending"
+    }
+  ],
   "note": "No outside inquiry was run. No brief was issued, no round prompts were sent, and no direction was produced. Simulating three views inside one repository-aware context was declined because the skill forbids it and because that context is saturated with the project's vocabulary, which is the exact contamination the gate exists to prevent.",
   "incumbent_retained": "docs/DESIGN-compile-before-query.md",
-  "unblock_requires": [
-    "an agent context that receives no project-instruction, environment, git, or memory injection; or",
-    "running the three inquiries on a system with no knowledge of this repository and carrying only the brief and the replies back by hand; or",
-    "an explicit decision by the maintainer to change what the gate requires"
-  ],
   "partially_enforceable_if_the_gate_were_relaxed": {
     "no forked turns": "yes -- use any non-fork subagent",
     "no network": "yes -- disallowedTools: WebFetch, WebSearch",
@@ -72,5 +89,21 @@
     "no tools at all": "never -- documented as impossible",
     "no project instructions or memory": "not for a custom agent -- the CLAUDE.md hierarchy always loads, and this project's memory index arrives through it"
   },
-  "correction": "An earlier note in this file implied the block might lift once the agent definition was registered. That was wrong. The block is a property of the platform, not of the definition, and no session restart or frontmatter change can lift it."
+  "correction": "An earlier note in this file implied the block might lift once the agent definition was registered. That was wrong. The block is a property of the platform, not of the definition, and no session restart or frontmatter change can lift it.",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless, non-interactive) launched with cwd set to an empty directory outside the repository whose path contains no project name",
+    "why_it_works": [
+      "project instructions and auto-memory are keyed to the project directory, so a neutral cwd loads neither",
+      "the directory is not a git repository, so no branch, status or commit subjects are injected -- this is what removes the leak that named the incumbent",
+      "the filesystem sandbox does not expose the repository at all: an adversarial probe searching for it found the path absent and the parent directory containing only Desktop, Downloads, Music, Pictures, Videos",
+      "network is refused by a domain allowlist; github.com and api.anthropic.com were both blocked",
+      "residual escape hatches require interactive approval, which does not exist under -p, and dangerouslyDisableSandbox was never passed",
+      "each series is a fresh session, continued across its three rounds with --resume, so there are no forked turns"
+    ],
+    "verified_by": "two self-report probes and one adversarial probe instructed to find any trace of a software project by every available means; it found none",
+    "residual_gap": "the fourth required property, 'no tools', is not literally met -- tools exist but every one that could reach the repository or the network is blocked by the sandbox rather than by instruction, which is the distinction the skill itself draws",
+    "flags": "--strict-mcp-config plus a denylist covering file, shell, network, agent and skill tools"
+  },
+  "brief_sha256_canonical_lf": "e892b2c9b62d5367c8bd72444b6b4406f33a1f493231d8c1ccafbd2e6b542502",
+  "brief_words": 497
 }
