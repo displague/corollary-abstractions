@@ -146,6 +146,7 @@ v0.14 is ready only if:
   that searched for the project and found nothing.  Three series ran, one
   direction was selected as
   [the veto on a match the corpus cannot support](DESIGN-coincidence-veto.md),
-  one was refused by its own construction gate, and one parked.  The incumbent forward direction,
-  [compile before query](DESIGN-compile-before-query.md), is retained
-  unchanged; a blocked gate is not a licence to replace it.
+  one was refused by its own construction gate, and one parked.  The incumbent
+  forward direction, [compile before query](DESIGN-compile-before-query.md),
+  is retained unchanged: the selected direction is an instrument and supplied
+  no grounded reason to supersede an architecture.
