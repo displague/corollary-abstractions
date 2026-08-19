@@ -1,3 +1,11 @@
+> **CLOSED at v0.14.0.**  Item 1 (freeze the evaluator) shipped.  Item 2
+> (negative contrast and clarification) was adjudicated once, missed, and is
+> parked — the exclusion seam remains in the resolver as behaviour no gate
+> credits.  Item 3 (observable release gate) shipped and contradicted its own
+> investigation list.  Item 4's parks are unchanged.  Outcomes and numbers are
+> in [RELEASE-v0.14.0](RELEASE-v0.14.0.md); carried lanes and their dependants
+> are in [ROADMAP-v0.15](ROADMAP-v0.15.md).
+
 # Roadmap v0.14 — when should it ask?
 
 The v0.13 candidate reached 24/24 questions and still could not ship: one

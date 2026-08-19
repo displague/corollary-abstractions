@@ -279,6 +279,9 @@ python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_re
 cd experiments && python -m visual.genvisual adjudicate --n 240 --seed 11
                                              # visual oracle: P-VO1..P-VO7
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
+# 68 modules, 1,341 tests, 0 failures at v0.14.0 -- but 6h02m serial, and one
+# module (test_write_stage) is 57.7% of it. Per-module receipts and the
+# balanced shard plan: reports/test_gate_v014/
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

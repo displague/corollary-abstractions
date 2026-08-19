@@ -51,15 +51,6 @@ or commit history. Each item names the evidence that motivated it.
 
 ## v0.13 conversational coverage: rejected morphology trade
 
-- **ADJUDICATED for v0.14; the candidate is PARKED.**  One fire (Q3) and five
-  misses.  The clarification loop had almost nothing to clarify: 4 of 20 rows
-  predicted to ASK actually asked, and no initial candidate set reached four
-  ids.  Before another clarification cycle is worth running, the open question
-  is not how to narrow better but **why fresh in-corpus questions resolve to
-  singletons** — a resolver that rarely offers a choice cannot be measured on
-  how it handles one.  Evidence: `experiments/when_to_ask_result.raw.json`
-  and the v0.14 ANALYSIS entry.
-
 - **SUSPENDED: the published cross-field match count is not a result.**  The
   matcher reports 975 typed twin groups, 34 of them spanning more than one
   namespace, and that figure has been cited as an achievement without ever
@@ -118,15 +109,6 @@ or commit history. Each item names the evidence that motivated it.
   target worth registering -- and it must not be sampled or trimmed without
   the same registered-replacement rule that protects the blind control.
   Evidence: `reports/test_gate_v014/`.
-
-- **Two tests write bytecode into the tree, and three did.**  `_min_env()`
-  hands children a bare environment on purpose, which is why
-  `PYTHONDONTWRITEBYTECODE` never reached them; fixed with `-B` at the three
-  call sites.  The general risk remains: any test that writes into the
-  repository root makes the gate measurement refuse the tree it is measuring,
-  and nothing enforces that they do not.  A cheap guard would be a test that
-  runs the suite's own subprocess launches and asserts the tree is unchanged
-  afterwards.
 
 - **The outside design inquiry cannot be isolated on this platform, and the
   reason is not the tool list.**  Both previously unverified questions are now
@@ -197,15 +179,6 @@ or commit history. Each item names the evidence that motivated it.
   competence and only incidentally the exclusion.  A successor stratum should
   require, at construction time, that the stripped query bind a vetoed id —
   which is checkable from committed metadata before any candidate exists.
-
-- **The v0.14 protocol held; its subject did not.**  The successor froze 48
-  fresh rows, primary-only credit, a 25-id title baseline, exact negative
-  parsing with mask-aware pre-selection, and three disjoint canonical OEWN
-  arms, and it ran once without a row being replaced or a threshold moved.
-  That closed the three evaluator-construction wants below.  It did not
-  rescue the morphology trade or produce a shippable candidate, and the
-  misses above are the actionable evidence.  Executable gate:
-  `scripts/measure_when_to_ask.py`.
 
 - **Clarification is only tested against one intended reading.**  All 20 v0.14
   ASK rows declare a singleton `retained_ids`, and the validator's 58-credit
