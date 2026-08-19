@@ -1,0 +1,69 @@
+{
+  "schema": "veto_prediction.v1",
+  "design": "docs/DESIGN-coincidence-veto.md",
+  "registered_before": "any conflict flag was computed; the inventory, kind tags and incompatibility table are committed and this file is committed with them",
+  "denominator": {
+    "groups": 26,
+    "aligned_slots": 77,
+    "symbol_occurrences": 213,
+    "kind_unknown_occurrences": 35,
+    "note": "the slot count was unknown when the design was written and is not a convenient number; it is what the committed inventory established"
+  },
+  "band": {
+    "measure": "aligned slots carrying at least one conflicting kind pair",
+    "floor": 20,
+    "ceiling": 60,
+    "of": 77,
+    "below_floor_means": "the ledger's cross-field matches are cleaner than suspected and this instrument was unnecessary; publish that and lift the suspension",
+    "above_ceiling_means": "the tags or the table are too aggressive rather than the ledger being noise; publish that and the instrument is at fault, not the matcher",
+    "rationale": "cross-field matching aligns quantities from different subjects, so conflicts should be common; but four logic/set-theory groups and at least one geometric group are expected to be genuine transfers, so a count near 77 would indicate the table is over-firing"
+  },
+  "named_directional_predictions": [
+    {
+      "id": "P1",
+      "group": "scaled_linear",
+      "members": "circle circumference, Ohm's law, Newton's second law",
+      "predicted": "conflicting",
+      "why": "CIRCUMFERENCE against POTENTIAL and FORCE is a length against a voltage and a force; this is the prediction the v0.14 release blog put in print"
+    },
+    {
+      "id": "P2",
+      "groups": "the four logic + set-theory groups (idempotent_operation, lattice_absorption, identity_element_law, complement_involution)",
+      "predicted": "not conflicting",
+      "why": "proposition and set are declared compatible on their merits; Boolean and set algebra are isomorphic and this is the genuine identity the matcher exists to find. If these flag, the table is wrong."
+    },
+    {
+      "id": "P3",
+      "group": "sum_of_squares",
+      "members": "Euclidean line element, Pythagorean theorem",
+      "predicted": "not conflicting",
+      "why": "every aligned slot holds a length"
+    },
+    {
+      "id": "P4",
+      "group": "additive_frame_transformation / rank_decomposition",
+      "members": "algebraic topology rank identity, physics velocity addition",
+      "predicted": "conflicting",
+      "why": "CHAINRANK against OBJECT_VELOCITY is a cardinality against a velocity"
+    }
+  ],
+  "blind_control": {
+    "run": "first, before the kind-based flags are read",
+    "rule": "flag a slot conflicting when its symbol names differ as case-folded strings",
+    "defeats_the_direction_if": "it agrees with the kind-based labelling on 80% or more of slots where every symbol is tagged",
+    "expectation": "it should agree poorly, because almost every cross-field slot holds differently-named symbols whether or not they denote the same quantity; if names alone reproduce the kinds, the tagging bought nothing"
+  },
+  "corruption_control": {
+    "rule": "permute the kind tags across symbol occurrences and recompute",
+    "requirement": "the authored tags must flag STRICTLY FEWER conflicts than the mean of 20 permutations",
+    "voids_the_result_if": "authored tags flag as many or more than chance, which would mean the tags carry no information",
+    "permutations": 20,
+    "seed": 20260819
+  },
+  "non_claims": [
+    "no unflagged match is asserted to be real",
+    "unjudged means nothing and is not a clean bill of health",
+    "no accuracy claim about retrieval; no spent question is re-used",
+    "nothing is claimed about the ingested corpus, which is excluded"
+  ]
+}

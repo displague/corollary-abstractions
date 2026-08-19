@@ -1,0 +1,318 @@
+{
+  "schema": "veto_incompatible_kinds.v1",
+  "design": "docs/DESIGN-coincidence-veto.md",
+  "scope": "the kind pairs that co-occur in an aligned slot of the committed inventory; a row that cannot fire is not authored",
+  "symmetric": true,
+  "deliberately_compatible": [
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "elasticity"
+      ],
+      "reason": "An elasticity is a ratio of proportional changes, itself dimensionless."
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "information"
+      ],
+      "reason": "Entropy in nats or bits carries no physical dimension."
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "linear_map"
+      ],
+      "reason": "A scalar is a linear map; scaling by a number and applying an operator are the same act here."
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "probability"
+      ],
+      "reason": "A probability is a dimensionless ratio."
+    },
+    {
+      "kinds": [
+        "length",
+        "point"
+      ],
+      "reason": "A position on a line and a distance along it are the same quantity in one dimension."
+    },
+    {
+      "kinds": [
+        "proposition",
+        "set"
+      ],
+      "reason": "Boolean algebra and set algebra are isomorphic; this is the genuine cross-field identity the matcher exists to find, not a collision."
+    }
+  ],
+  "incompatible": [
+    {
+      "kinds": [
+        "area",
+        "count"
+      ],
+      "reason": "a cardinality is not a measured magnitude"
+    },
+    {
+      "kinds": [
+        "area",
+        "curvature"
+      ],
+      "reason": "one is the reciprocal of the other's dimension, so they cannot be equal"
+    },
+    {
+      "kinds": [
+        "area",
+        "dimensionless_ratio"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "dimensionless_ratio"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "elasticity"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "length"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "money_value"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "probability"
+      ],
+      "reason": "a normalised measure in [0,1] is not an unbounded magnitude"
+    },
+    {
+      "kinds": [
+        "concentration",
+        "rate_per_time"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "count",
+        "curvature"
+      ],
+      "reason": "a cardinality is not a measured magnitude"
+    },
+    {
+      "kinds": [
+        "count",
+        "point"
+      ],
+      "reason": "a cardinality is not a measured magnitude"
+    },
+    {
+      "kinds": [
+        "count",
+        "probability"
+      ],
+      "reason": "a cardinality is not a measured magnitude"
+    },
+    {
+      "kinds": [
+        "count",
+        "velocity"
+      ],
+      "reason": "a cardinality is not a measured magnitude"
+    },
+    {
+      "kinds": [
+        "curvature",
+        "length"
+      ],
+      "reason": "one is the reciprocal of the other's dimension, so they cannot be equal"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "length"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "mass_inertia"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "money_value"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "point"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "rate_per_time"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "resistance"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "time"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "dimensionless_ratio",
+        "volume"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "elasticity",
+        "rate_per_time"
+      ],
+      "reason": "one carries a physical dimension the other does not"
+    },
+    {
+      "kinds": [
+        "electric_current",
+        "length"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "electric_current",
+        "velocity"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "electric_potential",
+        "force"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "electric_potential",
+        "length"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "energy",
+        "time"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "force",
+        "length"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "length",
+        "money_value"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "length",
+        "velocity"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "mass_inertia",
+        "resistance"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "money_value",
+        "point"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    },
+    {
+      "kinds": [
+        "money_value",
+        "probability"
+      ],
+      "reason": "a normalised measure in [0,1] is not an unbounded magnitude"
+    },
+    {
+      "kinds": [
+        "point",
+        "probability"
+      ],
+      "reason": "a normalised measure in [0,1] is not an unbounded magnitude"
+    },
+    {
+      "kinds": [
+        "probability",
+        "time"
+      ],
+      "reason": "a normalised measure in [0,1] is not an unbounded magnitude"
+    },
+    {
+      "kinds": [
+        "probability",
+        "volume"
+      ],
+      "reason": "a normalised measure in [0,1] is not an unbounded magnitude"
+    },
+    {
+      "kinds": [
+        "time",
+        "volume"
+      ],
+      "reason": "both are dimensioned, and not the same dimension"
+    }
+  ]
+}
