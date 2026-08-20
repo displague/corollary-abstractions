@@ -4298,3 +4298,57 @@ name that the ledger stores as two entries.  Neither touched a flag; both had
 made held calls look like misses.  The lookup now raises rather than returning
 a default, so a name that matches nothing cannot read as a miss again.
 
+## Where the veto's discrimination actually lives
+
+The corruption control could not run, so the question it was meant to answer -
+do these labels carry information - was asked a different way, by sensitivity
+analysis on the committed artifacts.  This changes nothing already published
+and re-scores nothing; it varies the table and reports what moves.
+
+| table | conflicting slots |
+|---|---|
+| nothing incompatible | 0 of 77 |
+| the authored table (38 incompatible, 6 exempt) | **22 of 77** |
+| every co-occurring pair incompatible | 42 of 77 |
+
+So the six exemptions suppress twenty slots and the thirty-eight
+incompatibility rows do the rest.  Removing each exemption in turn:
+
+| exemption removed | conflicting slots |
+|---|---|
+| `dimensionless_ratio` \| `elasticity` | 22 |
+| `length` \| `point` | 22 |
+| `dimensionless_ratio` \| `information` | 23 |
+| `dimensionless_ratio` \| `linear_map` | 23 |
+| `dimensionless_ratio` \| `probability` | 24 |
+| **`proposition` \| `set`** | **38** |
+
+One judgement carries the instrument.  Declaring Boolean algebra and set
+algebra to be the same thing suppresses sixteen slots; every other exemption
+moves the count by nothing or by two.  The remaining thirty-eight rows are
+close to a single rule: a cross-field slot conflicts unless specifically
+excused.
+
+This is a better answer than a passing corruption control would have been, and
+a less flattering one.  The veto is not a thirty-eight-row table doing subtle
+dimensional reasoning.  It is one very good domain judgement - Boolean and set
+algebra are isomorphic, which is textbook - sitting on top of the observation
+that quantities from different fields are usually different quantities.  Its
+trustworthiness rests almost entirely on that one exemption being right, which
+is a much smaller and much more checkable surface than the artifact's size
+suggests.
+
+It also explains the corruption control's behaviour rather than excusing it:
+permuting tags destroys the one clustering that matters, so 22 against a
+permuted 19.3 is noise around a mechanism dominated by a single row.
+
+A properly powered corruption control still does not exist.  The obvious fresh
+population - the nine hand-authored twin groups matching statements within one
+field - was measured and rejected as too weak before being run: only 29% of its
+fifty-one symbol occurrences are covered by names the committed tags already
+carry, so most of its twenty-four slots would be undecidable.  Establishing the
+information claim needs a table authored over the full kind cross-product
+before any tag, re-run on a population that has not been examined.  Neither
+exists today, and the claim stays unestablished rather than being propped up by
+a control chosen after the fact.
+
