@@ -197,7 +197,8 @@ def probe_wordnet(*, offline: bool, env: str | None) -> CapabilityRecord:
         return CapabilityRecord(
             "retrieve.wordnet",
             Liveness.OFF,
-            "no archive (set COROLLARY_WORDNET=...)",
+            "no archive (fetch_sources.py --fetch wordnet-2025-json, "
+            "or set COROLLARY_WORDNET=...)",
             True,
         )
     path = Path(env)
@@ -494,11 +495,23 @@ class CoreSession:
         is installed — the honest way to reproduce a WordNet/Lean/Torch-absent
         box on one that happens to have them, and what P-IH1 boots under.
         ``wordnet_env`` defaults to the ``COROLLARY_WORDNET`` environment
-        variable so an online boot honors the same archive the store does.
+        variable so an online boot honors the same archive the store does;
+        with that unset it falls back to the manifest-pinned fetch location
+        (``gloss.pinned_archive_path``), so a checkout that ran
+        ``fetch_sources.py --fetch wordnet-2025-json`` registers the
+        dictionary without configuration. The fallback only ever supplies a
+        file that exists, so P-IH5's loud FAIL stays reserved for a path a
+        person named by hand.
         """
 
         if wordnet_env is None and not offline:
             wordnet_env = os.environ.get("COROLLARY_WORDNET")
+            if wordnet_env is None:
+                from gloss import pinned_archive_path  # noqa: PLC0415
+
+                pinned = pinned_archive_path(repo_root)
+                if pinned is not None:
+                    wordnet_env = str(pinned)
 
         records = (
             probe_corpus(repo_root),

@@ -28,10 +28,14 @@ a template; it is a dictionary lookup with attribution, which is exactly the
 
 ## Why it is gated on the boot matrix
 
-The archive is gitignored and located by `COROLLARY_WORDNET`. On a machine
-without it the route must be OFF rather than silently empty — the same rule
-every optional subsystem follows, and the trap v0.11's WOLD ledger fell into
-when a missing archive produced a quiet wrong answer instead of a refusal.
+The archive is gitignored and located by `COROLLARY_WORDNET`; when that is
+unset, the manifest-pinned fetch location (`data_sources/archives/`, where
+`fetch_sources.py --fetch wordnet-2025-json` lands the zip) is checked, so a
+checkout that fetched the archive registers without configuration. On a
+machine with neither the route must be OFF rather than silently empty — the
+same rule every optional subsystem follows, and the trap v0.11's WOLD ledger
+fell into when a missing archive produced a quiet wrong answer instead of a
+refusal.
 """
 
 from __future__ import annotations
@@ -137,10 +141,45 @@ class Gloss:
         return bool(self.senses)
 
 
+#: The registry `fetch_sources.py` pins archives against. The WordNet entry
+#: is the source whose `group` is "wordnet"; its `filename` under the
+#: manifest's `archive_dir` is where `--fetch wordnet-2025-json` lands it.
+_MANIFEST = "data_sources/manifest.json"
+_WORDNET_GROUP = "wordnet"
+
+
+def pinned_archive_path(repo_root: Path = REPO) -> Path | None:
+    """The manifest-pinned WordNet archive, when it has been fetched.
+
+    A fallback, never an override: `archive_path` consults this only when
+    `COROLLARY_WORDNET` is unset. It reads the location out of the committed
+    manifest rather than hardcoding a filename, so a future WordNet pin does
+    not silently go dark. A manifest naming an unfetched archive is plain
+    absence (`None`) — the loud named-but-missing FAIL is reserved for a
+    path a person set by hand.
+    """
+    import json  # noqa: PLC0415
+
+    manifest_file = repo_root / _MANIFEST
+    if not manifest_file.is_file():
+        return None
+    try:
+        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    archive_dir = repo_root / manifest.get("archive_dir", "data_sources/archives")
+    for source in manifest.get("sources", ()):
+        if source.get("group") == _WORDNET_GROUP and source.get("filename"):
+            path = archive_dir / source["filename"]
+            if path.is_file():
+                return path
+    return None
+
+
 def archive_path() -> Path | None:
     raw = os.environ.get("COROLLARY_WORDNET")
     if not raw:
-        return None
+        return pinned_archive_path()
     path = Path(raw)
     return path if path.is_file() else None
 
@@ -214,7 +253,8 @@ def main(argv: list[str] | None = None) -> int:
     gloss = look_up(args.word)
     if gloss is None:
         print(
-            "no WordNet archive; set COROLLARY_WORDNET to the pinned zip",
+            "no WordNet archive; run scripts/fetch_sources.py --fetch "
+            "wordnet-2025-json or set COROLLARY_WORDNET to the pinned zip",
             file=sys.stderr,
         )
         return 2

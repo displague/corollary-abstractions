@@ -8,17 +8,23 @@ quiet wrong number instead of a refusal.
 
 from __future__ import annotations
 
+import json
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 
-from gloss import archive_path, look_up, render  # noqa: E402
+from gloss import archive_path, look_up, pinned_archive_path, render  # noqa: E402
 
 HAVE_ARCHIVE = archive_path() is not None
-REASON = "COROLLARY_WORDNET not set to the pinned archive"
+REASON = (
+    "no WordNet archive (fetch wordnet-2025-json or set COROLLARY_WORDNET)"
+)
 
 
 @unittest.skipUnless(HAVE_ARCHIVE, REASON)
@@ -69,6 +75,76 @@ class GlossesAreQuoted(unittest.TestCase):
 class WithoutTheArchive(unittest.TestCase):
     def test_lookup_reports_absence_rather_than_guessing(self) -> None:
         self.assertIsNone(look_up("chicken", archive=None) if not HAVE_ARCHIVE else None)
+
+
+class ArchiveIsLocatedWithoutConfiguration(unittest.TestCase):
+    """The manifest-pinned fetch location is a fallback, never an override.
+
+    The boot printed `[OFF] no archive` while the archive sat in the checkout
+    at the exact path `fetch_sources.py` chose for it. These pin the fix: an
+    unset env var falls back to the manifest's `archive_dir`; a hand-named
+    path keeps priority and keeps its loud named-but-missing semantics (the
+    fallback never rescues a misconfiguration).
+    """
+
+    def _repo(self, tmp: str, *, fetched: bool, manifest: bool = True) -> Path:
+        root = Path(tmp)
+        archives = root / "data_sources" / "archives"
+        archives.mkdir(parents=True)
+        if manifest:
+            pinned = {
+                "archive_dir": "data_sources/archives",
+                "sources": [
+                    {
+                        "id": "wordnet-2025-json",
+                        "group": "wordnet",
+                        "filename": "english-wordnet-2025-json.zip",
+                    }
+                ],
+            }
+            (root / "data_sources" / "manifest.json").write_text(
+                json.dumps(pinned), encoding="utf-8"
+            )
+        if fetched:
+            (archives / "english-wordnet-2025-json.zip").write_bytes(b"zip")
+        return root
+
+    def test_fetched_archive_is_found_from_the_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repo(tmp, fetched=True)
+            found = pinned_archive_path(root)
+            self.assertIsNotNone(found)
+            self.assertEqual(found.name, "english-wordnet-2025-json.zip")
+
+    def test_unfetched_archive_is_absence_not_a_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repo(tmp, fetched=False)
+            self.assertIsNone(pinned_archive_path(root))
+
+    def test_missing_manifest_is_absence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repo(tmp, fetched=True, manifest=False)
+            self.assertIsNone(pinned_archive_path(root))
+
+    def test_env_var_overrides_the_pinned_location(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            named = Path(tmp) / "my-own-wordnet.zip"
+            named.write_bytes(b"zip")
+            with patch.dict("os.environ", {"COROLLARY_WORDNET": str(named)}):
+                self.assertEqual(archive_path(), named)
+
+    def test_named_missing_env_path_is_not_rescued_by_the_fallback(self) -> None:
+        # A person who named a path gets the loud FAIL semantics the probe
+        # owns; silently answering from the pinned copy would hide the typo.
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = str(Path(tmp) / "no_such_archive.zip")
+            with patch.dict("os.environ", {"COROLLARY_WORDNET": missing}):
+                self.assertIsNone(archive_path())
+
+    def test_unset_env_falls_back_to_the_pinned_location(self) -> None:
+        with patch.dict("os.environ"):
+            os.environ.pop("COROLLARY_WORDNET", None)
+            self.assertEqual(archive_path(), pinned_archive_path())
 
 
 if __name__ == "__main__":
