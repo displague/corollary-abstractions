@@ -37,6 +37,27 @@ Implement DESIGN-retraction-closure §5 in its registered order:
 5. the two historical retractions replayed and reported at their true
    scope — calibration, explicitly not the gate.
 
+**Live status (2026-08-20): ADJUDICATED — R2 failed on both roots,
+capability VOID as frozen; the instruments ship unscored.** The seven
+registered steps (design §6a) ran once: R5 fired (byte-identical
+builds), R4 fired (the independently written recheck agrees on every
+field, 0.108 s of 600), R6 reported both historical replays at their
+true single-node scope, and the blind control came back 0/100 — the
+edges carry information no shuffle reproduces. But Root A floods to 54
+nodes against a cap of 33 with a clean 11/11 superset, Root B misses
+the two number-only claims and reaches 106 against 48, and R3 anchors
+2/14 release sections against a 0.90 floor. R1 fired as written
+(353/353) and the wording is vacuous; the intended measure reads 0.800
+all-five / 1.000 regenerable-four. Full readout: ANALYSIS "the
+retraction closure: built, independently rechecked, voided by its own
+gate". What survives unscored: writer provenance in all four ledger
+writers, the regeneration check (now in the release refresh), the
+graph/radius/recheck/control instruments, and the committed ground
+truths as the bar any successor citation mechanism must meet. The
+successor direction the void points at — citation discipline at
+authoring time, not a better regex — is a candidate for the v0.17
+course, not a patch to this cycle.
+
 The gate is §6 as frozen: R1 writers emit ≥95% of ledger edges themselves
 (fold checkpoint if a frozen instrument would have to be rewritten); R2
 each live-drift closure is a superset of its pre-committed ground truth at

@@ -4404,3 +4404,59 @@ battery's 20 inapplicable slots are a property of the visual world's shape
 (no accepted edges, no cells), reported rather than padded. Human-selected
 demonstration queries, when run, are demonstrations - the closures predate
 them, and no query is scored.
+
+
+# v0.16 - the retraction closure: built, independently rechecked, voided by its own gate
+
+Preregistration (`8b82e31`) landed the schemas, the hundred derived
+control seeds, and the two hand-audited ground truths before any
+assembler existed; the recheck was written by an agent forbidden to open
+the builder (`42673d5`, committed before the builder); the citation
+scan's six generic rules were frozen (`38d6eb0`) with a dated
+registration (`478fb32`) disclosing that the rule author had seen the
+audit and two development closures. Then the seven registered steps ran
+once, nothing edited, nothing rerun.
+
+**Adjudication (registered order, decided numbers):**
+
+| clause | verdict | deciding number |
+|---|---|---|
+| R1 writers emit their own edges | FIRED as written, and the wording is vacuous | 353/353 edges into ledger nodes non-inferred - but writer edges point OUT of ledgers, so the denominator holds only citation edges. Intended measure: 0.800 over all five ledgers (the declared snapshot's 27 edges are reconstructed), 1.000 over the regenerable four |
+| R2 the drifts are explained, superset-exactly | **FAILED on both roots - capability VOID** | Root A: 11/11 covered, 54 > 33 cap. Root B: 14/16 covered (b12, b16 missed), 106 > 48 cap |
+| R3 coverage floor | FAILED | 2/14 release-note sections anchor (0.143 vs 0.90); the release cites closures and veto ledgers the v1 registry does not carry |
+| R4 independent recheck | FIRED | both certificates re-derived by the never-saw-the-builder checker, every field equal, 0.108 s of 600 |
+| R5 byte reproducibility | FIRED | two builds, one graph, sha256_lf f7af36cb... |
+| R6 historical replays reported, not scored | REPORTED | both close as the root alone (size 1): interpretation-shaped retractions have no data lineage, the floor where the design put it |
+| blind control | did not void | **0/100** shuffles satisfy R2 on both roots; coverage collapses under every shuffle while degree preservation pins the sizes |
+
+**What the void actually says.** The graph is not noise: no
+degree-and-kind-preserving shuffle of its edges reproduces the audited
+coverage, so the real edges carry consequence-relevant information. The
+void is a *precision* failure with a clean mechanism, named per rule by
+the committed edge tags: Root A's flood arrives through R-d's backticked
+field vocabulary (34 of its 53 depth-1 claims, mostly the word `nodes`,
+which is both a compression-ledger field and half the repository's
+filenames); Root B's arrives through R-e's bare stem "decomposition" (34
+claims) and R-c's writer mentions (30). And the two claims no rule
+reaches (b12, b16) cite only derived decimals - 0.490 and its pin
+history - with no lexical trace of their artifact. A scan strict enough
+to stay inside 3x cannot reach them; a scan loose enough to reach them
+cannot stay inside 3x. On this document corpus, with these rules,
+lexical citation cannot price a retraction, and the gate was built to
+say so.
+
+**Self-reference, recorded.** The adjudication registration names both
+root ledgers, so the registration section itself joined both radii
+(53 -> 54, 105 -> 106). A claim about the graph is a claim in the graph.
+
+**What survives the void, unscored:** writer-emitted provenance blocks
+in all four ledger writers (byte-stable, additive); the regeneration
+check that answers all four ledgers (three clean, one declared
+divergence with its citation - the first machine answer the reports
+directory has ever given); the graph, radius, recheck, adjudicator, and
+control as green instruments; and the ground truths, which remain the
+committed test any future citation mechanism must meet. Per section 7
+the direction stops here for this cycle; what a successor owes is not a
+better regex but a citation discipline at authoring time - claims that
+name their artifacts - which is the design's own forward sentence, now
+with a measured floor under it.

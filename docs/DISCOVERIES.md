@@ -1643,3 +1643,19 @@ reconstructed from memory; this section covers v0.10.*
   classes are inapplicable there for want of an accepted edge or cell.
   Reporting the inapplicability is the control''s honesty, not its failure.
   *(reports/closures/visual.rt0000.closure.json)*
+- **A provenance graph can carry real information and still not price a
+  radius.** 0 of 100 degree- and kind-preserving shuffles reproduce the
+  audited coverage, yet the true closures overflow their 3x caps.
+  Information and precision are different capabilities, and a blind
+  control only tests the first. *(reports/radius/, blind_control.json)*
+- **Published claims cite numbers, not artifacts.** The two claims no
+  frozen scan rule could reach quote only derived decimals - a pin
+  history like "0.164, 0.156, 0.159, and then 0.490" - with no lexical
+  trace of the ledger they came from. Retrospective lineage over prose
+  has a floor; citation discipline at authoring time is the successor.
+  *(data/retraction_closure/ground_truth_root_b.json, b12/b16)*
+- **A claim about the graph is a claim in the graph.** Committing the
+  adjudication registration - which names both root ledgers - added one
+  claim node to each root''s radius before the run. Self-reference is
+  not a paradox here; it is the object working.
+  *(docs/DESIGN-retraction-closure.md section 6a)*

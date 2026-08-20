@@ -20,6 +20,8 @@ shipped without its notes file.
 
 ```
 .venv/Scripts/python.exe scripts/check_regeneration.py      # seed<->JSON coherence; must pass
+.venv/Scripts/python.exe scripts/check_report_regeneration.py  # reports/ ledgers regenerate; declared
+                                                            # snapshots reported, not regenerated (v0.16)
 .venv/Scripts/python.exe scripts/validate_nodes.py          # must pass
 .venv/Scripts/python.exe scripts/match_signatures.py --write-report reports/signature_matches.json
 .venv/Scripts/python.exe scripts/specialize.py     --write-report reports/specializations.json
