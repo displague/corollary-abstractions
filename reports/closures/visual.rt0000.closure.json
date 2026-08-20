@@ -1,0 +1,60 @@
+{
+  "action_schema_digest": "6aa3c582cb721ceab2cd5530c8f6dee56bcb8aa42121da2b7fd60a44d1258808",
+  "adapter_digest": "a4137cf30a09bea3ba8d74f433a7852e75a4e6b8904557c00090ed6a5736123e",
+  "adapter_id": "visual.scene.v1",
+  "closure_digest": "40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+  "convergence_cells": [],
+  "format_version": "bounded-closure/1",
+  "horizon": 1,
+  "initial_state_digest": "fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+  "source_manifest": [
+    {
+      "path": "data/closure_worlds/manifest.json",
+      "sha256_lf": "eef97f49697a5d27cb97c62978cf2aa8d193cd7bea0d0a22a6775af270f81fe2"
+    },
+    {
+      "path": "data/closure_worlds/visual_rt0000.json",
+      "sha256_lf": "d03bf620983dfe5c1a5826ef260055c705b23ed65e79bfae277c2da6dbe9f598"
+    }
+  ],
+  "states": [
+    {
+      "canonical_state": "{\"claim\":{\"leg_a_sq\":\"810144\",\"leg_b_sq\":\"810144\"},\"scene\":{\"angles\":[{\"arms\":[\"E.leg_a\",\"E.hypot\"],\"id\":\"A.acu_a\",\"measure\":\"acute\",\"role\":\"angle_at_a\",\"vertex\":\"V.leg_a\"},{\"arms\":[\"E.leg_b\",\"E.hypot\"],\"id\":\"A.acu_b\",\"measure\":\"acute\",\"role\":\"angle_at_b\",\"vertex\":\"V.leg_b\"},{\"arms\":[\"E.leg_a\",\"E.leg_b\"],\"id\":\"A.right\",\"measure\":\"right\",\"role\":\"right_angle\",\"vertex\":\"V.right\"}],\"edges\":[{\"from\":\"V.leg_a\",\"id\":\"E.hypot\",\"role\":\"hypotenuse\",\"to\":\"V.leg_b\",\"x1\":\"68\",\"x2\":\"-820\",\"y1\":\"990\",\"y2\":\"78\"},{\"from\":\"V.right\",\"id\":\"E.leg_a\",\"role\":\"leg_a\",\"to\":\"V.leg_a\",\"x1\":\"80\",\"x2\":\"68\",\"y1\":\"90\",\"y2\":\"990\"},{\"from\":\"V.right\",\"id\":\"E.leg_b\",\"role\":\"leg_b\",\"to\":\"V.leg_b\",\"x1\":\"80\",\"x2\":\"-820\",\"y1\":\"90\",\"y2\":\"78\"}],\"family\":\"right_triangle\",\"figure_id\":\"rt-0000\",\"schema\":\"visual-scene/1\",\"vertices\":[{\"id\":\"V.leg_a\",\"role\":\"leg_a_end\",\"x\":\"68\",\"y\":\"990\"},{\"id\":\"V.leg_b\",\"role\":\"leg_b_end\",\"x\":\"-820\",\"y\":\"78\"},{\"id\":\"V.right\",\"role\":\"right_angle\",\"x\":\"80\",\"y\":\"90\"}]}}",
+      "minimum_depth": 0,
+      "outgoing": [
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"degenerate_zero_leg\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: nondegenerate"
+        },
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"edge_disconnected\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: incidence"
+        },
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"hypotenuse_retargeted\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: topology"
+        },
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"leg_length\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: leg_lengths"
+        },
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"right_angle_epsilon\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: right_angle"
+        },
+        {
+          "canonical_action": "{\"name\":\"mutate\",\"params\":{\"kind\":\"right_angle_mislabeled\"}}",
+          "disposition": "illegal",
+          "refusal_code": "verify_failed: right_angle_slot"
+        }
+      ],
+      "state_digest": "fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870"
+    }
+  ],
+  "world_id": "visual.rt0000"
+}

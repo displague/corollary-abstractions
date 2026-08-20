@@ -25,7 +25,19 @@ Its own construction gate governs: if the two-world or resource gate misses,
 it parks rather than manufacturing a toy world. Nothing here promises an
 unrestricted negative.
 
-**Live status (2026-08-20): preregistration LANDED; builder not yet
+**Live status (2026-08-20, later): ADJUDICATED — all six gate clauses
+FIRED.** `closure_build.py` landed after the preregistration with an
+independently written traversal and cell derivation (it imports only the
+definitional pieces from the checker), both closures committed under
+`reports/closures/`, all 19 tests green, byte-identical rebuilds. B2: 75
+states, 20 actions/state, 0.014 s, 450 KB — all inside the frozen ceilings.
+B4: 90/90 applicable corruptions rejected, 20 honestly inapplicable on the
+one-state visual world, zero false rejections. B6: 12 convergence cells
+against the required 4, all twelve explained by two previously unstated
+properties of the committed story world (desire-blind plant/discharge,
+idempotent re-plant) — see ANALYSIS "the bounded closure: built,
+independently checked, all six gates fired" and DISCOVERIES. Earlier
+status (kept for the record):** preregistration LANDED; builder not yet
 written.** Committed before any builder exists: the three schemas
 (bounded-closure, closure-world, closure-receipt), the two frozen world
 registrations under `data/closure_worlds/` (story horizon 5 with the full

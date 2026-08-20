@@ -4352,3 +4352,55 @@ before any tag, re-run on a population that has not been examined.  Neither
 exists today, and the claim stays unestablished rather than being propped up by
 a control chosen after the fact.
 
+
+# v0.15 - the bounded closure: built, independently checked, all six gates fired
+
+Preregistration (`9fa4cba`) landed schemas, two frozen world registrations,
+the generic checker, the twelve-class corruption battery, and four tests red
+by construction; the builder landed after, wrote its own traversal and cell
+derivation, and imported from the checker only the definitional pieces
+(action enumeration and canonical bytes), so closure-vs-checker equality is
+evidence, not a tautology. The independently written BFS matched the checker
+byte-for-byte on the first run.
+
+**Adjudication (registered order, decided numbers):**
+
+| clause | verdict | deciding number |
+|---|---|---|
+| B1 two real worlds register | FIRED | 2 committed worlds, 0 invented |
+| B2 blind closure finishes | FIRED | 75 states <= 512; 20 actions/state <= 32; 0.014 s <= 30 s; 450,040 B <= 8 MiB |
+| B3 checking is complete | FIRED | checker ok on both; 74/74 predecessor witnesses; cells recomputed identically |
+| B4 corruption always caught | FIRED | 90/90 applicable mutations rejected with a named first disagreement; 20 honestly inapplicable (all visual: no accepted edge or cell to corrupt); 0 false rejections; class-12 reorder normalizes to identical bytes 10/10 |
+| B5 abstraction is shared | FIRED | 0 world-name literals in builder/checker/corruptor; byte-identical rebuilds |
+| B6 composition is exercised | FIRED | 12 convergence cells vs the required 4 (story 12, visual 0) |
+
+**The two closures** (`reports/closures/`): story.golden_chicken at horizon 5
+- 75 states (55 interior / 20 boundary), 110 accepted edges, 990 refusal
+edges, 12 cells, digest `27060b10...`; visual.rt0000 at horizon 1 - 1 state,
+6 refusal edges, 0 cells, digest `40295aa1...`. The visual shape is the
+honest one: its committed action vocabulary exists to be refused, and the
+closure records that as six named refusal edges rather than dressing the
+world up with invented moves.
+
+**What the cells actually are.** Decoding the twelve cells finds two
+mechanisms, both properties of committed code that no test had stated:
+(1) planting an already-planted element is ACCEPTED idempotently - routes of
+length n and n+1 converge on the same state bytes; (2) `plant` and
+`discharge` never read their `desire` argument - routes differing only in
+desire converge, including a plant whose desire contradicts the introduce it
+follows. Per the design's own non-claim, equal end bytes demonstrate only
+that the registered operations commute on these cases; they say nothing
+about narrative meaning. But "the story world's obligation transitions are
+desire-blind and re-plant-idempotent" is now a demonstrated fact about
+`oracle_controller_demo.py` + `frames.py`, surfaced by exhaustive bounded
+enumeration rather than by anyone thinking to test it - which is the
+instrument doing the thing it was built to do.
+
+**Limits, stated with the result:** the horizon-5 story closure and the
+horizon-1 visual closure are small worlds; nothing here claims the method
+scales past the frozen ceilings, and a query against these closures answers
+reachability within the bound, never possibility in general. The corruption
+battery's 20 inapplicable slots are a property of the visual world's shape
+(no accepted edges, no cells), reported rather than padded. Human-selected
+demonstration queries, when run, are demonstrations - the closures predate
+them, and no query is scored.

@@ -1629,3 +1629,17 @@ reconstructed from memory; this section covers v0.10.*
   external *rate* while its *count* grew. Retired in favour of the count
   floor, which strengthened to 5.31:1.
   *(tests/test_decompose_channels.py)*
+- **Exhaustive bounded enumeration finds the transitions nobody thought to
+  test.** The first two closures surfaced two unstated properties of the
+  committed story world: `plant`/`discharge` never read their `desire`
+  argument (routes differing only in desire converge), and re-planting an
+  already-planted element is accepted idempotently (routes of length n and
+  n+1 converge). Twelve convergence cells, all explained by those two
+  mechanisms; equal end bytes demonstrate commutation on those cases, not
+  narrative meaning. *(reports/closures/story.golden_chicken.closure.json)*
+- **A world whose whole vocabulary is refusals closes honestly as one state.**
+  The visual world''s six committed mutations exist to be caught, so its
+  closure is one state and six named refusal edges - and four corruption
+  classes are inapplicable there for want of an accepted edge or cell.
+  Reporting the inapplicability is the control''s honesty, not its failure.
+  *(reports/closures/visual.rt0000.closure.json)*
