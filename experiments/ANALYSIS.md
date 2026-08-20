@@ -4460,3 +4460,49 @@ the direction stops here for this cycle; what a successor owes is not a
 better regex but a citation discipline at authoring time - claims that
 name their artifacts - which is the design's own forward sentence, now
 with a measured floor under it.
+
+
+# v0.16 - the veto''s information claim, established blind
+
+The v0.15 corruption control failed for an authoring-time reason: the
+table only covered pairs that co-occur under the authored tags, so
+permutation starved it. Item 2''s registered fix: author the table over
+the FULL 26-kind cross-product (325 pairs), blind - an isolated context
+shown only the kind menu and the judging rules (brief sha256_lf
+e74f86ea..., session 1137c959, receipt in
+experiments/veto_full_cross_table.json) - then rerun the same
+permutation scheme with the same committed seed and count, criterion
+fixed before the table existed (experiments/veto_full_cross_protocol.md):
+established only if real sits strictly below the permuted 5th percentile.
+
+**Result: real 21; permuted min 45, 5th percentile 45, mean 52.7, max
+61.** Real is below half the permuted minimum. The authored kind tags
+carry consequence-relevant information, and the claim is labelled
+exploratory because the population is a census with no fresh half.
+
+**Convergence, twice.** The blind table agrees with the v0.15 scoped
+table on 43 of 44 shared pairs. The one disagreement - count|point,
+"a rank is a position in an ordered space" against "a cardinality is
+not a measured magnitude" - is a defensible reading, listed not
+reconciled, and moves the real count 22 -> 21. And the blind author
+independently exempted proposition|set, the single row the v0.15
+sensitivity analysis found carrying the whole instrument, having never
+seen that analysis. The veto''s load-bearing judgement has now been made
+twice by authors who could not see each other.
+
+**Standing.** The suspension''s own clause was "until the coincidence
+veto reads out, or two release cycles pass". It has read out: the
+name-difference control passed at v0.15, the permutation control now
+passes against a table it cannot starve, and the flags sit where the
+registered band said. The suspension LIFTS at v0.16, with two permanent
+riders wherever the cross-field match count is quoted: the veto''s
+conflicting readout rides with it (8 of 26 hand-authored groups contain
+a slot whose quantities cannot be the same), and the one-row finding
+rides with it (the instrument''s discrimination rests on the
+proposition|set exemption - now made independently, twice).
+
+**Population search, closed in writing.** The corpus has not changed
+since the v0.15 measurement; the only candidate population (the nine
+in-field twin groups) stays rejected at 29% name coverage. No fresh
+half exists, which is why "exploratory" is part of this result''s name
+and not a disclaimer to be shed later.

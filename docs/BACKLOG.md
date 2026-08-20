@@ -96,6 +96,15 @@ unpark condition.
   is established there, or the suspension expires at that release by this
   entry's own two-cycle clause, with the sensitivity analysis's one-row
   finding attached wherever the count is quoted.
+  **v0.16 status: LIFTED, by its own read-out clause, with two permanent
+  riders.**  The permutation control passed against a blind-authored full
+  cross-product table it cannot starve (real 21 vs permuted 45–61; the
+  blind author independently reproduced the proposition|set exemption).
+  The count may now be cited — always with the conflicting readout (8 of
+  26 groups) and the one-row finding beside it.  Established exploratory:
+  the census has no fresh half, and the label stays.  Readout: ANALYSIS
+  "the veto's information claim, established blind";
+  `experiments/veto_full_cross_result.json`.
 
 - **Range is uncertified while domain is certified.**  Committed digests prove
   that these sources produce this artifact byte-for-byte.  Nothing proves that

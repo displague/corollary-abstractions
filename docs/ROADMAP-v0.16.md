@@ -95,6 +95,22 @@ rather than drift:
 No new rate is frozen: the population is a census, the run is exploratory,
 and pretending otherwise is how controls get chosen after the fact.
 
+**Live status (2026-08-20): READ OUT — established, exploratory;
+suspension LIFTS with riders.** The 325-pair table was authored blind
+in the isolation channel (brief hash and session in
+`experiments/veto_full_cross_table.json`), the criterion was fixed
+before it existed (`experiments/veto_full_cross_protocol.md`), and the
+rerun with the committed v0.15 seed puts the real tags at 21
+conflicting slots against a permuted span of 45–61 — below half the
+permuted minimum. The blind table agrees with the scoped table on
+43/44 shared pairs and independently reproduces the proposition|set
+exemption, so the one-row finding is now a twice-made judgement. The
+suspension lifts by its own clause, with the conflicting readout and
+the one-row finding riding permanently beside any quotation of the
+count. The population search closed in writing: no fresh half exists.
+Full readout: ANALYSIS "the veto's information claim, established
+blind".
+
 ## 3. Carried, with dependants named
 
 | lane | named dependant | disposition |
