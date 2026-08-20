@@ -1,0 +1,109 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.16",
+  "status": "complete",
+  "requested_utc": "2026-08-20",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless, non-interactive) launched with cwd C:/Users/displ/AppData/Local/Temp/forge16 -- an empty non-git directory outside the repository whose path contains no project name",
+    "inherited_from": "reports/design-direction-v0.15.json enforced_isolation_mode, reused unchanged",
+    "flags": "--strict-mcp-config plus --disallowed-tools covering file, shell, network, agent, notebook and skill tools",
+    "sessions": "one fresh session per series, continued across its three rounds with --resume; no forked turns",
+    "residual_gap": "tools exist but every one reaching the repository or network is blocked by sandbox and denylist rather than absent, the same stated gap as v0.15"
+  },
+  "process_note": "First course run under the funnel refinement of the forge-design-direction skill made in this cycle: five directions per series at round one, narrowed to three under reactive constraints at round two, one preregistration-shaped lead plus named runner-up and unpriced residual risk at round three. Occupied-ground disclosure staged at round two so round-one collisions with held ground read as convergent evidence. Series run with staggered parallelism: a later series' round one alongside an earlier series' later rounds, exclusions drawn from round-one territory.",
+  "brief_sha256_canonical_lf": "845edffd95ef55b01793b5d791115d6ceef96965cb268bb05ec0a0d537242555",
+  "brief_words": 483,
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "845edffd95ef55b01793b5d791115d6ceef96965cb268bb05ec0a0d537242555",
+      "r2": "a175180af934a3eefef17cf82a996243f8c125218a0533ed0cb37b99c0d0023d",
+      "r3": "bc39f53151fc79ae4fc8fb6bf0935b83862bb5b1bd69b1d07727610b72322661"
+    },
+    "series_2": {
+      "r1": "fc01da8c234813ce7d98959f220a729be9d5807995cddf61b1ac0d7a63336cef",
+      "r2": "458b4105dde54e325ecf329fa07a5e9e735de67a8000a0e0664a06c322e92d0c",
+      "r3": "6b5b66b635b1618bc55d719763fba09e0332b5e33b4b5e7e72988f22e3466d22"
+    },
+    "series_3": {
+      "r1": "e6daed509dd7fd7204ef82f486739db226af28cf826f26d30c24df2f621703bd",
+      "r2": "035811a635e5501b63727283a72d56bbaaa43bcf0f4d788d1cb6a90636c2c6a3",
+      "r3": "581c2e2344e3183b1e4ac18bbe806e24b50ad68130c0dda569a0741fa67c33db"
+    }
+  },
+  "exclusion_note": "series 2 round 1 excluded series 1's entire round-one territory (five directions, one abstract line each); series 3 round 1 excluded both prior series' round-one territories plus the project's own occupied ground (incumbent atlas, spent conflict audit, parked movement ledger, gate-refused subsumption census). Exclusion text is embedded in the hashed r1 prompts above.",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "990bf523-4a36-4229-b075-6f32c10610a9",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 1.004
+    },
+    {
+      "series": 2,
+      "session_id": "1b7c670d-aa53-4f08-9193-bab9b8430075",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.859
+    },
+    {
+      "series": 3,
+      "session_id": "8ab9c313-5223-4ef7-8136-6286eaa88ca3",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.892
+    }
+  ],
+  "round_one_funnel": {
+    "series_1": [
+      "empty room -- certified absence via exhaustion certificates",
+      "blast radius -- computed retraction closure over a derived-from provenance graph",
+      "two witnesses -- one object under two code-independent verifiers, disagreement ledger",
+      "bounty board -- adversarial attestation by outside challengers",
+      "first light -- machinery-emitted novel statements adjudicated externally"
+    ],
+    "series_2": [
+      "load-bearing -- premise-necessity witnesses inside single statements",
+      "learning license -- discharged obligations before a graded component may own a task",
+      "conservativity compiler -- proved translation property over the library's parallel notations",
+      "tolerance zero -- exact witness-carrying answers in an approximation-native discipline",
+      "outside scoreboard -- calibration via preregistered forecasts scored by uncontrolled events"
+    ],
+    "series_3": [
+      "known blindness -- a machine-checkable metatheorem naming relationships the matcher provably cannot see",
+      "ticket price -- ex-ante cost of moving one epistemic rung",
+      "empty chair -- record sufficiency without its author",
+      "load-bearing fiction -- the narrative checker carrying geometry proof obligations",
+      "cold storage -- reproducibility as a dated, bounded environment warranty"
+    ],
+    "disclosed_drift": "series 2 disclosed and replaced a first candidate (seeded defect injection into the verifiers) as reducing to series 1's adversarial attestation with a machine actor"
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "blast radius -- retraction as an operation with a receipt: provenance graph, radius certificates, replay of the two historical retractions as the labeled test set",
+      "runner_up": "two witnesses",
+      "folded": "bounty board (into two witnesses' optional outside lane); first light (withdrawn until retraction is cheap)",
+      "residual_risk": "the graph records data lineage, not conceptual dependency; the gate is fit to n=2 retractions that were themselves data-shaped"
+    },
+    "series_2": {
+      "lead": "conservativity compiler -- exception-free translation between the canonical and one non-canonical notation, round-trip and matcher-parity tables, verdict vocabulary NO_POWER/PUBLISH/DELETE_FIELD",
+      "runner_up": "expiring license",
+      "dropped": "tolerance zero (pinned-license data constraint removes the contact with a real approximate practice); load-bearing kept at rank 3 but not final",
+      "residual_risk": "the shared normalizer can manufacture agreement over exactly the distinctions it collapses, and the permutation control cannot see it"
+    },
+    "series_3": {
+      "lead": "absent author -- machine-attested record sufficiency: hostile-environment provisioning, frozen extension task, unanswered-question log, tacit-dependency ledger, gutted-checkout control",
+      "runner_up": "load-bearing fiction",
+      "dropped": "ticket price (held-out set contaminated at the source and score-shaped); cold storage merged into the lead",
+      "residual_risk": "the task card's selection cannot be controlled away with one maintainer; the rung must carry (n=1 task, self-selected)"
+    }
+  },
+  "selection": {
+    "selected": "series 1 lead: blast radius (retraction closure)",
+    "design_doc": "docs/DESIGN-retraction-closure.md",
+    "grounding_note": "selection confirmed against the repository's actual retraction record before writing; see the design document's grounding section for what the outside proposal got wrong and how the gate absorbed it"
+  }
+}

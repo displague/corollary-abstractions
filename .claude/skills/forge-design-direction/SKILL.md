@@ -58,18 +58,40 @@ If the brief sounds like a roadmap summary, rewrite it.
 
 ## 3. Run three independent three-round inquiries
 
-Use three fresh high-divergence subagents or equivalent isolated contexts.
-Each context must be launched with:
+Use three fresh high-divergence isolated contexts. Each context must be
+launched with:
 
 - no forked conversation turns;
 - no repository or workspace mount;
 - no network access;
 - no tools.
 
-An instruction saying “do not use tools” is not isolation. If the platform
-cannot enforce all four properties, mark the design gate `BLOCKED` and stop.
+An instruction saying “do not use tools” is not isolation. Subagents cannot
+satisfy these properties on this platform — the harness injects project
+instructions, git subjects, and user memory into every selectable agent type
+(adjudicated in `reports/design-direction-v0.15.json`; a property of the
+platform, not of any agent definition). The sanctioned channel, verified by
+adversarial probe in the v0.15 cycle, is:
+
+- `claude -p` (headless, non-interactive), model pinned per series;
+- cwd set to an empty directory OUTSIDE the repository whose path contains
+  no project name (a neutral cwd loads no project instructions, no memory,
+  and — not being a git repository — injects no commit subjects);
+- `--strict-mcp-config` plus a denylist covering every file, shell,
+  network, agent, and skill tool;
+- one fresh session per series, continued across its rounds with
+  `--resume`, so there are no forked turns.
+
+The residual gap is stated, never hidden: tools exist but are blocked by
+sandbox and denylist rather than absent, which is the distinction this
+section itself draws. If even that channel is unavailable, mark the design
+gate `BLOCKED` and stop; do not simulate independence in one
+repository-aware context.
+
 Pass only the brief and the current series' exclusions. Run the series
-sequentially because later series depend on earlier exclusions.
+sequentially because later series depend on earlier exclusions; a later
+series' round one may run in parallel with an earlier series' rounds two
+and three, since exclusions derive from round-one territory.
 
 Before round one, hash the canonical-LF plain brief with SHA-256. Retain a
 compact receipt in `reports/design-direction-<cycle>.json` containing the
@@ -77,22 +99,44 @@ three context ids and provider/model names, enforced isolation mode, brief
 hash, start/order timestamps, each round-prompt hash, and each exclusion-card
 hash. The receipt contains no model responses or reasoning transcript.
 
-For each series, keep the same outside agent for all three rounds:
+For each series, keep the same outside context for all three rounds, and run
+the rounds as a funnel — wide, then narrowed, then decisive. The funnel is
+what feeds the synthesis: the discarded proposals are material, not waste.
 
-1. **Diverge.** Ask for one surprising conceptual boundary, one human ability
-   it unlocks, and the seductive wrong version. Reject grab bags.
-2. **Ground.** Translate only relevant repository constraints into plain
-   terms. Name existing capabilities that make a shallow version duplicative.
-   Ask for the minimum authored information, exact machinery, optional graded
-   residue, one bounded experiment, and its cheapest blind control.
-3. **Pressure-test.** Present the strongest remaining objections. Require the
-   agent to keep, narrow, or replace its direction. Demand one first-class
-   object, exact trust boundary, smallest non-anecdotal slice, human
-   demonstration, registered failure conditions, and one established habit to
-   suspend.
+1. **Diverge — five directions.** Ask for five distinct forward directions,
+   each with the new kind of claim it makes true, why the current shape
+   cannot make it, a falsifiable construction gate, and the cheapest honest
+   failure. Forbid the suspended proxies (more entries, more matches, a
+   model on an exact capability) and demand the five not be five flavors of
+   one idea. Round one carries NO occupied-ground disclosure beyond the
+   exclusion cards of earlier series: a round-one proposal that collides
+   with ground the project already holds is recorded in the synthesis as
+   convergent evidence for that ground, which staged disclosure makes
+   possible and up-front disclosure destroys.
+2. **Ground — narrow to three.** Written only AFTER reading round one, and
+   reactive to it: react to each proposal by name, disclose occupied ground
+   (this cycle's incumbent territory, spent instruments, parked and refused
+   directions) in plain terms so each proposal must differentiate or fold,
+   and impose the binding constraints — first slice fits one release cycle
+   for one maintainer and yields a committed checkable artifact, never a
+   score alone; outside participation must degrade honestly to "untested";
+   every survivor names its capability-blind control and what a perfect
+   control score voids; every survivor states its refusals. Ask for three
+   survivors (keep, merge, or replace) and a defended ranking by expected
+   information per unit of effort.
+3. **Pressure-test — one lead.** Accept or contest the ranking, then demand
+   the final form: one lead written as a preregistration-ready proposal
+   (larger move, first-class artifact with named fields, numbered frozen
+   gate clauses, blind control with its voiding sentence, stop conditions
+   and non-claims, the question that becomes askable next), one named
+   runner-up, and — asked for explicitly — the residual risk its own gate
+   does not price.
 
 Do not leak an intended solution during grounding. Constraints may kill an
-idea; that is success.
+idea; that is success. When a direction needs an outside participant, note
+that the isolation channel above can also provision a machine stranger — a
+fresh model instance whose only context is a clean checkout at a neutral
+path — which converts "requires volunteers" into a runnable slice.
 
 ### Force conceptual separation
 
@@ -126,6 +170,16 @@ Do not vote, score prose, or combine all three into a platform. Select one.
 Explicitly decline the others, or import only a sharply bounded lesson from
 each. It is acceptable to conclude that none survives; record that refusal
 instead of manufacturing a design for release symmetry.
+
+No proposal is wasted. The full funnel — every round-one direction across
+all series, not only the three finalists — is woven into the DESIGN
+document's "why this survived" section and the release blog's narrative:
+where each declined direction would fit, what would have to become true for
+it to be taken up, or the specific reason it is not the direction. A
+round-one proposal that independently reinvented ground the project already
+holds is cited as convergent evidence for that ground. This weaving is what
+turns three advisory series into one continuous story the next roadmap can
+inherit.
 
 When an incumbent exists, retain it unless the current release evidence or the
 selected direction supplies an explicit, grounded reason to supersede it. A
