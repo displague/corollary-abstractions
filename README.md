@@ -6,15 +6,17 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.13.0](docs/RELEASE-v0.13.0.md) — a candidate
-resolver reached 24/24 registered questions and was rejected because one
-answer contradicted an explicit negative and fresh false positives rose from
-3.0% to 3.4%. Figure of merit for the name-blind bag against typed twins:
-0.0220%. See [coverage is not correctness](docs/blog/coverage-is-not-correctness.md).
+interface. Latest release: [v0.15.0](docs/RELEASE-v0.15.0.md) — two
+committed worlds were compiled into complete bounded possibility spaces,
+independently checked, so "not reachable within this horizon" is now a
+checkable claim with a receipt instead of a timeout; and the cross-field
+veto's first adjudication found one textbook judgement carrying the whole
+table. See [one row was carrying the
+table](docs/blog/one-row-was-carrying-the-table.md).
 The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
 still stands: about a third on uncontrolled formal math.
 
-## Three headline demonstrations
+## Five headline demonstrations
 
 **0. You can type at it.** Since [v0.12.0](docs/RELEASE-v0.12.0.md) the
 prompt returns a machine verdict. In v0.13 a resolver ASK can survive the next
@@ -131,6 +133,28 @@ Live proof search requires PyPantograph 0.3.15 and the matching Lean toolchain;
 follow [`prover/FEASIBILITY.md`](prover/FEASIBILITY.md). The conversation and
 theory-of-mind demos require only the ordinary project environment.
 
+**4. A sealed closure answers "unreachable" as evidence, not as a timeout.**
+Since [v0.15.0](docs/RELEASE-v0.15.0.md), two committed worlds — the story
+frame and the right-triangle diagram — have their complete bounded
+possibility spaces compiled, independently checked, and sealed under a
+digest (`reports/closures/`). A query is a lookup against that sealed
+object: `REACHABLE` comes with a shortest route replayed through the
+world's own verifier; a state the world cannot reach within the horizon
+gets `NOT_REACHABLE_WITHIN_HORIZON` with the bound stated in the answer:
+
+```
+$ python scripts/closure_query.py reports/closures/story.golden_chicken.closure.json target.bytes
+...
+outcome: REACHABLE
+shortest_route: 5 action(s), replayed through the world's own verifier
+...
+```
+
+The enumeration also read the code more thoroughly than its authors: twelve
+route-convergence cells decoded into two previously unstated properties of
+the committed story world (its obligation transitions are desire-blind, and
+re-planting is idempotent).
+
 ## The models
 
 Five small architectures. Four share a **4-layer pre-norm Transformer
@@ -180,6 +204,8 @@ the graded residual.
 | Learned classification is not search gain | theorem-heldout evaluation models score 0.8125; separate all-data live checkpoints average 65 proposals and lose to a 64-proposal state-blind frequency order |
 | Private conversation needs revocation | Alice and Bob maintain divergent revisions over one story; authenticated supersession changes Alice's silver eggs to copper without changing world truth |
 | Corpus grounding is not task difficulty | 40 grounded analogy rows reduce to five targets in one ratio family; symbolic and blind last-slot number transfer both score 1.000 |
+| A bounded negative can carry evidence | two worlds' complete horizon-bounded spaces compile and check independently (75 and 1 states, byte-identical rebuilds); 90/90 applicable corruptions caught; "not reachable within the bound" is a property of the sealed object |
+| A veto can rest on one row | the cross-field kind check flags 22/77 aligned slots, but removing one exemption (proposition = set) moves it to 38 while every other removal moves it by ≤2 — the instrument is one textbook judgement on a strong default |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -212,7 +238,13 @@ scripts/
   conversation.py       ASK -> WAITING -> signed user reply -> resumed binding
   theory_of_mind.py     visibility-derived Sally-Anne false-belief control
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
-  measure_compression.py concept-token compression (11.24x on the real corpus)
+  measure_compression.py concept-token compression (32.10x char-to-concept
+                        at 12,777 nodes; the long-quoted 11.24x was the
+                        508-node v0.6 corpus — see RELEASE-v0.15.0 limits)
+  closure_worlds.py     the two registered worlds behind one 4-op contract
+  closure_build.py / closure_check.py   independent builder + checker pair
+  closure_corrupt.py / closure_query.py twelve-class corruption battery;
+                        query a sealed closure and get a receipted answer
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
@@ -264,12 +296,17 @@ python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
 python scripts/retrieval.py                 # exact five-store lookup then POINT
-python scripts/retrieval.py quickening --wordnet C:\path\to\english-wordnet-2025-json.zip
+python scripts/retrieval.py quickening --wordnet data_sources\archives\english-wordnet-2025-json.zip
+                                            # (the harness itself now finds the
+                                            # manifest-pinned archive unaided)
+python scripts/closure_query.py reports/closures/story.golden_chicken.closure.json target.bytes
+                                            # ask the sealed closure; REACHABLE
+                                            # routes replay through the verifier
 python scripts/retrieval.py --chain "ALWAYS(IMPLIES(PLANTED(ELEMENT), EVENTUALLY(DISCHARGED(ELEMENT))))"
                                             # walks the miss chain: exact and
                                             # neighborhood miss, derivation answers
 python scripts/retrieval.py --chain --observations path\to\notes note.tide_gauge_2026
-python scripts/wordnet_eval.py C:\path\to\english-wordnet-2025-json.zip
+python scripts/wordnet_eval.py data_sources\archives\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
 python prover/live_search.py                # live Lean search + projection ablation
@@ -321,9 +358,14 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   formula/diagram twins, SVG structure, and a pixel control. Its oracle layer
   is built (`experiments/visual/`); P-V1–P-V4 stay registered until the
   learned arms run
-- `docs/DESIGN-compile-before-query.md` — the chosen post-v0.14 direction:
-  compile a complete small possibility space before choosing a target, then
-  return a replayable path or an exact negative within the declared bound
+- `docs/DESIGN-compile-before-query.md` — shipped at v0.15: compile a
+  complete small possibility space before choosing a target, then return a
+  replayable path or an exact negative within the declared bound; the two
+  sealed closures in `reports/closures/` are its evidence
+- `docs/DESIGN-retraction-closure.md` — the chosen post-v0.15 direction:
+  retraction as an operation with a receipt — a writer-emitted provenance
+  graph and radius certificates that compute what else moves when one
+  committed thing is found wrong
 - `docs/blog/` — accessible project narratives, including the v0.8 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger

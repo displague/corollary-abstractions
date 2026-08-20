@@ -49,6 +49,33 @@ or commit history. Each item names the evidence that motivated it.
   the recorded host. Do not infer balanced per-module shard weights from this
   one module; the whole-suite per-module pass in item (1) remains open.
 
+## Parked at the v0.15 drift audit
+
+Two goals were found lost to attrition rather than decision — v0.14
+re-scoped the ambiguity lane to `when_to_ask` and nothing recorded what
+that dropped. Converted to parks here so the loss has an owner and an
+unpark condition.
+
+- **The v0.13 ambiguity acceptances A3, A4, A5 are parked, not dropped.**
+  A3 (every restatement is verbatim corpus), A4 (the Buffalo bar: enumerate
+  the readings and name the one taken), A5 (coverage does not pay for it)
+  were the ambitious half of DESIGN-ambiguity-and-context and were never
+  scored; v0.13 published that honestly and v0.14's re-scope silently
+  inherited their absence. Unpark condition: a successor clarification
+  holdout designed after the verified-ambiguity construction check (also
+  parked here) exists, because v0.14 proved that authoring ambiguity rows
+  on belief measures the author. A2's own park (authored-after-the-fact
+  follow-ups cannot recover it) stands separately.
+
+- **The resolver coverage lane (the 0.833 / 0.030 point) is parked as a
+  decision, not a hope.** v0.13 closed its coverage item correctly on a
+  published trade; no roadmap since has owned moving the number, while
+  three cycles improved the instruments around it. Recorded at v0.15:
+  the lane unparks only with a mechanism justified independently of the
+  score it would move (the standard the morphology trade already failed),
+  and any future roadmap that claims resolver improvement owes this entry
+  a citation.
+
 ## v0.13 conversational coverage: rejected morphology trade
 
 - **SUSPENDED: the published cross-field match count is not a result.**  The
@@ -62,6 +89,13 @@ or commit history. Each item names the evidence that motivated it.
   chain; it may appear in ANALYSIS with its denominator and this suspension
   named.  Same failure shape as the v0.14 clarification benchmark: a belief
   about the collection filed on the achievement side of the ledger.
+  **v0.15 status: extended, not lifted.**  The veto's first adjudication was
+  partial — two controls passed, the tag-permutation control invalid by an
+  authoring-time scoping defect — and eight of twenty-six groups contain a
+  conflicting slot.  ROADMAP-v0.16 item 2 is the decision point: the claim
+  is established there, or the suspension expires at that release by this
+  entry's own two-cycle clause, with the sensitivity analysis's one-row
+  finding attached wherever the count is quoted.
 
 - **Range is uncertified while domain is certified.**  Committed digests prove
   that these sources produce this artifact byte-for-byte.  Nothing proves that
@@ -72,43 +106,23 @@ or commit history. Each item names the evidence that motivated it.
   range actually moves, since predicting churn from the source diff may
   explain most of it for free.  Raised by the v0.15 design inquiry.
 
-- **The split fixture is rebuilt once per class, not once per module.**
-  `load_corpus` + `build_quadruples` costs **179.3 s** (87.0 + 92.2) and sits
-  in `setUpClass`, so `test_corpus_analogy_split`'s seven classes pay it seven
-  times: **1,255 s, of which 1,076 s is pure duplication**.  The inputs are the
-  committed corpus and the build is deterministic, so a module-scoped cache
-  changes nothing about what is tested.  A further ~2,179 s is `ceiling_table`
-  in `ControlTests.setUpClass`.  This is the cheapest real saving available and
-  it is still only 5% of the suite.
+- **`ceiling_table` is the split module's remaining duplication.**  The
+  corpus/quadruple fixture went module-scoped at v0.15 (`fa0a174`; the
+  1,076 s of per-class duplication is gone by construction), but
+  `ControlTests.setUpClass` still spends ~2,179 s computing `ceiling_table`,
+  and that cost was not touched.  Whether it can be cached, sampled under a
+  registered replacement, or is simply the honest price of the control is
+  unexamined.
 
-- **Refusal tests pay full acceptance cost, and that is the O-level problem.**
-  `stage_write` runs the corpus-dependent pipeline — a `validate_nodes`
-  subprocess plus `match_signatures.load_nodes`/`build_report` over 12,777
-  nodes — on **every** candidate, including ones it refuses on a type error in
-  a declared delta dict.  One `stage()` call costs ~180 s and the suite makes
-  roughly seventy of them, so the module is O(tests x corpus).
-  `test_delta_declared_with_the_wrong_type_is_refused` spends **1,096.4 s**
-  rejecting six malformed dictionaries — six full corpus pipelines to
-  establish that `True` is not an `int`.  The fix is ordering, not a faster
-  algorithm: run the corpus-independent checks (schema, types, declared-delta
-  shape) before the corpus-dependent ones, making refusal O(1) and leaving
-  acceptance O(corpus).  Roughly 40 of 103 tests are refusal tests.
-  **Two cautions.**  Reordering changes which check refuses a candidate, and
-  tests assert on `refusal["check"]`, so the expected refusal identity moves
-  with it.  And a staging gate is a trust boundary: reordering must not let a
-  candidate reach a later check it currently never survives to.  Register the
-  intended order and its refusal identities before touching it.
-
-- **`test_write_stage` is the release gate.**  12,522.5 s of a 21,688 s
-  suite, 103 tests, 8.5 s of fixture overhead, and four tests costing 3,088 s
-  between them: `test_delta_declared_with_the_wr...` (1,096.4 s),
-  `test_append_one_node_accepts_without...` (724.6 s),
-  `test_seed_plus_append_reproduces_the...` (721.0 s) and
-  `test_undeclared_delta_is_still_refus...` (546.1 s).  Nothing can make this
-  gate finish sooner than this one module, so it is the only optimization
-  target worth registering -- and it must not be sampled or trimmed without
+- **`test_write_stage` is the release gate.**  Still the floor, at a lower
+  number: the v0.15 registered reorder (`afafbc4` + `82aef3e`) made refusal
+  O(1) — the worst test fell 1,096.4 s → 46.2 s and the module 12,522.5 s →
+  10,770.9 s — but only the seven declared-delta refusals were paying for a
+  corpus pass, so the module remains the serial floor of the suite and the
+  parallel ceiling is unmoved.  It must not be sampled or trimmed without
   the same registered-replacement rule that protects the blind control.
-  Evidence: `reports/test_gate_v014/`.
+  Evidence: `reports/test_gate_v014/` (v0.14 baseline), ROADMAP-v0.15 §3
+  live status (v0.15 numbers), and the v0.15.0 release-gate timing receipt.
 
 - **The outside design inquiry cannot be isolated on this platform, and the
   reason is not the tool list.**  Both previously unverified questions are now
@@ -138,6 +152,13 @@ or commit history. Each item names the evidence that motivated it.
   project instructions.  A dialect-free brief is drafted and hashed and can be
   reused when a channel exists.  Evidence:
   `reports/design-direction-v0.15.json`.
+  **Resolved in practice:** the channel now exists and has run twice — `claude
+  -p` headless from an empty non-git directory whose path names no project,
+  with `--strict-mcp-config` and a full tool denylist, one fresh session per
+  series continued with `--resume`.  The residual gap (tools blocked rather
+  than absent) is recorded in each receipt.  Kept here as the platform record;
+  the working recipe lives in the forge skill and the receipts
+  (`reports/design-direction-v0.15.json`, `reports/design-direction-v0.16.json`).
 
 - **The gate measurement cannot run in the canonical checkout.**
   `time_tests.assert_clean_source` refuses when any gitignored `*.py`, `*.pyc`,
@@ -2162,6 +2183,16 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   Fix: extend `check_regeneration.py` (or add a sibling) to re-run each
   report writer into a temp path and diff, and put it in the release skill's
   step 1 alongside the data check.
+  **ABSORBED at v0.15, not closed:** this fix is now a named component of
+  [DESIGN-retraction-closure](DESIGN-retraction-closure.md) §4 ("the
+  regeneration check") and ROADMAP-v0.16 item 1 step 3. Note the v0.15
+  release refresh found this entry's own headline claim stale: the
+  `compression.json` drift healed at v0.11 (`1090aa5`) with no radius
+  computed, and the `decompositions.json` divergence is a documented
+  decision (TRIAGE-v0.11, gate table row 6 and §5). The corrected
+  adjudication roots are in
+  the design's §3 correction. Prune this entry when v0.16's headline
+  ships or folds.
 - **PARTIAL — `ingest_wold.py reach` is now in the release skill;
   a full generated-artifact census is not.** v0.11's programming
   second wave added six tokens and `experiments/wold_reach.json`
@@ -2170,8 +2201,9 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   missing WordNet archive as **cannot verify**, not a skip. The
   broader “enumerate every committed generated artifact, re-run
   into a temp path, diff” fix is still the entry above
-  (`reports/` having no regeneration check). Do not close that
-  one just because WOLD is named.
+  (`reports/` having no regeneration check), which at v0.15 was
+  absorbed into DESIGN-retraction-closure §4 / ROADMAP-v0.16
+  item 1. Do not close that one just because WOLD is named.
 - **PARTIAL — the wall-clock is written down; the two-tier gate is
   not built.** Full discover on the v0.11.0 tip: **1,123 tests,
   23,744s / 6h35m**. The “30+ minutes” figure is struck from the

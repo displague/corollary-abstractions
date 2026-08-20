@@ -4325,7 +4325,7 @@ incompatibility rows do the rest.  Removing each exemption in turn:
 
 One judgement carries the instrument.  Declaring Boolean algebra and set
 algebra to be the same thing suppresses sixteen slots; every other exemption
-moves the count by nothing or by two.  The remaining thirty-eight rows are
+moves the count by at most two.  The remaining thirty-eight rows are
 close to a single rule: a cross-field slot conflicts unless specifically
 excused.
 

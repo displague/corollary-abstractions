@@ -1,0 +1,17 @@
+{
+  "adapter_id": "story.frame.v1",
+  "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+  "horizon": 5,
+  "outcome": "REACHABLE",
+  "schema": "closure-receipt/1",
+  "shortest_route": [
+    "{\"name\":\"introduce\",\"params\":{\"desire\":\"to sing the sunrise awake\",\"trait\":\"golden\"}}",
+    "{\"name\":\"plant\",\"params\":{\"desire\":\"to out-crow the rooster\",\"element\":\"fallen feather\"}}",
+    "{\"name\":\"plant\",\"params\":{\"desire\":\"to out-crow the rooster\",\"element\":\"key\"}}",
+    "{\"name\":\"obstruct\",\"params\":{\"desire\":\"to sing the sunrise awake\",\"obstacle\":\"a sudden frost\"}}",
+    "{\"name\":\"resolve\",\"params\":{\"desire\":\"to sing the sunrise awake\",\"outcome\":\"It used a fallen feather as a lever, stepped outside, and sang until the sun rose\"}}"
+  ],
+  "target_digest": "06c9f958d8e623980096aca3fc80e30a5a6973dca958ea3f3c26384a01d6ab52",
+  "visited_states": 75,
+  "world_id": "story.golden_chicken"
+}

@@ -1,3 +1,16 @@
+> **CLOSED at v0.15.0.** Where each item went: **item 1** (compile the
+> space) shipped — all six gate clauses fired, see
+> [RELEASE-v0.15.0](RELEASE-v0.15.0.md) headline; **item 2** (coincidence
+> veto) shipped as a partial — adjudicated once, two controls passed, the
+> third invalid by an authoring defect, suspension extended in writing;
+> **item 3** (gate cost) shipped both lanes — registered reorder plus the
+> module-scoped fixture; **§4 carried lanes** moved to
+> [ROADMAP-v0.16](ROADMAP-v0.16.md) §carried or stayed parked in
+> [BACKLOG](BACKLOG.md); the **release gate** below was discharged clause
+> by clause in the release notes. The drift audit additionally converted
+> two attrition losses (v0.13's A3–A5 acceptances, the resolver coverage
+> lane) into recorded parks.
+
 # Roadmap v0.15 — check the belief before spending the evidence
 
 v0.14 spent a one-shot holdout discovering that its author's belief about the
@@ -36,8 +49,8 @@ one-state visual world, zero false rejections. B6: 12 convergence cells
 against the required 4, all twelve explained by two previously unstated
 properties of the committed story world (desire-blind plant/discharge,
 idempotent re-plant) — see ANALYSIS "the bounded closure: built,
-independently checked, all six gates fired" and DISCOVERIES. Earlier
-status (kept for the record):** preregistration LANDED; builder not yet
+independently checked, all six gates fired" and DISCOVERIES. **Earlier
+status (kept for the record): preregistration LANDED; builder not yet
 written.** Committed before any builder exists: the three schemas
 (bounded-closure, closure-world, closure-receipt), the two frozen world
 registrations under `data/closure_worlds/` (story horizon 5 with the full
@@ -109,7 +122,10 @@ A cheaper second lane, unblocked: the split fixture is rebuilt once per class
 and costs 179.3 s each time, 1,076 s of which is duplication of a
 deterministic build over an immutable corpus.
 
-**Live status (2026-08-20): first lane SHIPPED.** Check order registered
+**Live status (2026-08-20): first lane SHIPPED; second lane SHIPPED
+later the same day** — the split fixture went module-scoped (`fa0a174`)
+with every pinned control number byte-identical across a full 45-test
+verification run. First-lane record: check order registered
 before the move (`afafbc4`), reorder landed (`82aef3e`): all 103 tests keep
 their refusal identities, the worst test falls 1,096.4 s → 46.2 s, the
 module 12,522.5 s → 10,770.9 s — fourteen percent, less than the defect's

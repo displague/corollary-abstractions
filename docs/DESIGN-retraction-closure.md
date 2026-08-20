@@ -139,6 +139,45 @@ scope, and lets the two in-flight ledger drifts — real, current, with
 ground truth auditable by hand — carry the load the retraction replays
 cannot.
 
+### Correction (2026-08-20, before any preregistration): the anchors moved
+
+Re-verifying at the v0.15.0 release refresh: `compression.json`
+regenerates **byte-identically** at the current tip. The 46-line drift
+was real, but it was healed at the v0.11 release refresh
+(`1090aa5`, "refresh the ledgers … fix the drift it found") — and no one
+ever computed which published claims had consumed the stale ledger during
+its stale window. `decompositions.json` does diverge from its writer, but
+by a *documented decision* (TRIAGE-v0.11, gate table row 6 and §5: live
+analysis is the pin source; the committed file stays the pre-scale
+ledger), which is a
+different epistemic object than silent staleness. The paragraph above
+inherited "two ledgers are already stale on `main`" from a BACKLOG entry
+describing an older tip — an unprovenanced claim that drifted, in a
+design document about unprovenanced claims drifting. It stays visible
+above, corrected here rather than rewritten, because it is this design's
+own first exhibit.
+
+The two R2 adjudication roots are therefore restated, both still real
+and still hand-auditable:
+
+- **Root A — the healed silent drift.** `compression.json` was stale
+  from its last v0.10 write until `1090aa5`. The window, the diff, and
+  every claim published against the stale bytes are reconstructable from
+  git. Ground truth: the hand-audited list of claims that consumed the
+  stale ledger inside that window. The radius certificate's
+  falsification kind is `ledger_stale`; that the drift was repaired
+  without one is the defect being priced.
+- **Root B — the declared divergence.** `decompositions.json` is the
+  pre-scale ledger by decision, and the decision lives in prose that no
+  artifact links to. Ground truth: the hand-audited list of published
+  claims that cite the committed file's numbers as *current*. A correct
+  closure separates claims anchored to the declared snapshot from claims
+  that silently assume freshness — if the second set is empty, the
+  certificate proving it empty is the deliverable, not an embarrassment.
+
+R2's superset-and-≤3× arithmetic is unchanged; only the roots' stories
+are corrected. Everything else in this section stands as written.
+
 ## 4. The new objects
 
 **The provenance graph** — `reports/provenance_graph.jsonl`, generated,
