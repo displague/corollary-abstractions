@@ -1,0 +1,2710 @@
+{
+  "schema": "retraction-blind-control/1",
+  "graph_sha256": "f7af36cb2e5d7118a90209f41afb2e9a5b207b7b0313961326773bb6a702713f",
+  "seeds_run": 100,
+  "swaps_per_edge": 10,
+  "satisfying_seeds": [],
+  "satisfying_shuffles": 0,
+  "results": [
+    {
+      "seed": 2891171529,
+      "shuffle_digest": "29b1bc4b835e6f03b5acfb8a872c1669687a7b8e3daf951b071554c3ce69c751",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 925630370,
+      "shuffle_digest": "1b4ad1abee5dbaca4890ce605c2c9203bb6560a9df4e401f9ba62fb40ff67869",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1215449407,
+      "shuffle_digest": "246dc1884d92e63cc9481a1a87b7e3ac23d8b81603c4d6a94b9c2b629ccbe6e8",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 541640048,
+      "shuffle_digest": "0d48289161b863ae4a354a1648de98dd2a922c4097552bc40af7af57a9d546ab",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3745467580,
+      "shuffle_digest": "190a37a664936468607140149a88489a0758cc22b31be8daa2f89295a0fa28aa",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2572715153,
+      "shuffle_digest": "a45d9c0950e8b02e5dce1e6e72b0cda8b791b1033e6c312e6615ece4c9061063",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2330964760,
+      "shuffle_digest": "b78b52f26846a0907d997a238411f2c6eec5a9db6478492e849352e79f5ba700",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 2,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1748741614,
+      "shuffle_digest": "4f8c6c051bfbcc6c4d577acbb3ac76a8da774d0eb41579a6eabaa8c9661ff125",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 3,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3453356042,
+      "shuffle_digest": "c4766851979658043b8fa42c92f8527075eae8b951554a6c285a133bc5a99011",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 3,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2625649483,
+      "shuffle_digest": "a9f1ed1330266f6074e612d6b5acc29327be56c94dfa6b69eb18f93014c89db0",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2156057264,
+      "shuffle_digest": "aefa13cc26d20a83a0392c555c5fae81126209159276c0df299dd986b211390d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 316478507,
+      "shuffle_digest": "0e6f28630a6a3ab2d06852de57b1e00fafcbbbae4f044e5f8a189519d4146b3a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3573373945,
+      "shuffle_digest": "cf86409656abfd994fa15bc26d7180a4a4af7dd9669fa147f9a98b378bb0278d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 457964534,
+      "shuffle_digest": "bb16971c94ac4dea18de8d4ff62bf05eb9fed355c9ceecbda21f9aa8211e85d1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1807983286,
+      "shuffle_digest": "e3edfe18289a51e1d6f1acdc0e8b07dea77b5f2313acebc303256bf0c845bba4",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 191261413,
+      "shuffle_digest": "244d900ff4fbe4a513476966e0e0b9636a0e64601e276d338d3a518c86c4ee9c",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2855485645,
+      "shuffle_digest": "b7a2683293e599e03c13d7d6dface1304d43f9a45da8882992737ca24d42c2ac",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1169026097,
+      "shuffle_digest": "c5935c9cecea70fbd84ee03ac27d38331220a6fb8f25492fd3f5527eb1aaf867",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2010099772,
+      "shuffle_digest": "a8ef978964f2339870178ab04034841251fe14bd0e5fd44e8d2ef848385d0d43",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 492597842,
+      "shuffle_digest": "4cbc8fba30b58b3e988a2fb75d450e27b079a5dd69dd1c7c657df738541b1cd0",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 703399479,
+      "shuffle_digest": "08cc5126727fa7104d9df98c6fbe45e60c2b1f9a8ea6008a69266e764417f2f7",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1964827793,
+      "shuffle_digest": "721a1f3e69c97d7b8658c48845caa5cf5ba820ff3a5f7ce6f9c683485e8dc999",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 275291079,
+      "shuffle_digest": "f78478482fe1949d11f5015ee628b3ad9e3812846eaf125f47d20374af47ec1c",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2860489331,
+      "shuffle_digest": "5329024b1ecdf97599837a189a45d02a3bbf149e0420f06518db02653638e207",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 406927764,
+      "shuffle_digest": "31622e06c0feee5e945d45626a9d23f6e4af6a9159581f385a5f1879a5e3ad22",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 314247766,
+      "shuffle_digest": "38e513d53917afc6b0032ba7f55d956f22ade32c08a16d514cb3166572619049",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3294784514,
+      "shuffle_digest": "7bcdce7947ad2a483775b93102e6cdad2527d2fa09a2eb60720f8399df04bd98",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3945220659,
+      "shuffle_digest": "7badf5f218f459bdc370141cc90e40e4c4f5283b2b8711d4dc8aca34a5296fd1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 331137445,
+      "shuffle_digest": "0029da551766db9e0fd57916c0585227f0f62545e354db2253054e4fbf8a43e7",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1696867601,
+      "shuffle_digest": "5b049f02dba521d6190489ca05f3b4c6ddb78ebe0c1aea05ba81e374652c0d56",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1240617610,
+      "shuffle_digest": "6bebee59517a32aa02524fcaead8ea9792ee39ca63ec017cb737c2e0575e85c2",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3192046266,
+      "shuffle_digest": "1635b58995d96037f0b3de40f84bd003309f03277a1e4fe093efb1d7001096ce",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 692288959,
+      "shuffle_digest": "03b93bbee95a692b94fb03f1444a4a9a2f3a3f8f230cc1d09e2eb7233167f95a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4077608946,
+      "shuffle_digest": "13ea2ff11105e8640e6bb74abf107d87f346448a73ee382b6480354856977232",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2328393429,
+      "shuffle_digest": "e34c34047b681086b1ee00a8727c0be4e23297fe83f32c9e890432bdd12adc44",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1819243390,
+      "shuffle_digest": "51c95ea599063d3172ce840e32b19c01b848506246a32439f07a6a4c8564926f",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2238282514,
+      "shuffle_digest": "3fb12abf569a237a7a17ae5d95ba45b3bc1dae77d7e410b33b12c3337ead99d7",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 3,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1905035381,
+      "shuffle_digest": "86c0ebb2d1fdd93a9aa36aabf0d4a6ab5e6923f516851c6b2fe0bc56e4039288",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2333606631,
+      "shuffle_digest": "ce309d9119c90cd47806d0ed2ad7071626b667aee96d46b6739bf717fe73b747",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 324528048,
+      "shuffle_digest": "c9d78d6724686d39f87cccc39098c41dfa6fb65ab9a637a4ad9c4ffa817b701e",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 9,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3189521102,
+      "shuffle_digest": "8887dd2abdb75121d66392d973098a0057cf00e2cc83e16a4c4caf484e8b7bbd",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2761799279,
+      "shuffle_digest": "ca74f03556d0f426876d4dc0dfdb889e0120a2d00cbec2416466adb89ee90258",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2541580673,
+      "shuffle_digest": "0bfcc53faa384998c53684f520913488871b152fdc53c4c800a8bc9ba058715a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 88760847,
+      "shuffle_digest": "636c49f3066f11bf3f2175e499ce0b85615042aee44e3d1db2cf9741e457ee0e",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1073170858,
+      "shuffle_digest": "353f0e0cadfd38ba7b13f0d216211abca9d34ed3d3b45f1a66bfe90f355855fc",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1383275435,
+      "shuffle_digest": "5aba659faf500840e4e27d232aaf75d575ebb5ed17cffbb14034905071e284e8",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1455513191,
+      "shuffle_digest": "50e357472a20717369ed2b935eb0da183f5deaa6904ec7c4b54eff98bcbc3b34",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3010399225,
+      "shuffle_digest": "6b224c1a7faf2fc27f6a10e3d8fbe39baf60b3ae27b1b2d54a1709ffcaa6723d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1746670152,
+      "shuffle_digest": "a06418e40ba1cd52607e2d69b2758f163c178a2e8e95a63bf888f853d7071635",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1874279760,
+      "shuffle_digest": "a2e11c3e323f9cf5af24cd04b0e0603c0adac8d0989af20aa96d6a945230d588",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1522564635,
+      "shuffle_digest": "86fab036cb848f62a2deb0ca5bb788ab7d460b5b23b6773a1b4b551387f8e8ea",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3870324191,
+      "shuffle_digest": "2038e3b667efb759fc34be84111300e96647ce285d78a760724963d76ba854d0",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2960917764,
+      "shuffle_digest": "6ca0751cadaf4aeb6701d186f0cf95189d023e1df98159467a30ce85d143f652",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 11,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2547129045,
+      "shuffle_digest": "36ec56a0ecdcf925c36b6f3204cebf68de6694b684a8636ee1c4d74c3794cf52",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 11,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1100698271,
+      "shuffle_digest": "936c06d28346b95b8f75a7712a7256c199eec2d9010cecbfb47de29695e07131",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3551340043,
+      "shuffle_digest": "14a201d3c89608159e0492f93d5b53cc81cf204770e04c543a4995b24f4131fd",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3466515190,
+      "shuffle_digest": "bc04b457035213500c60c05ac103beefd094183b5044ee2d990fdcb21ba5c48d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1787694989,
+      "shuffle_digest": "1de2cc5dce77e914d211820dfc4ac635662b19744d4b3f6437540f31e8e2d8c1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4123938552,
+      "shuffle_digest": "15cffdf386f676bbb0de0ac08683d83a19c7df33430ca8e0fc9e668b3ae77200",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4126931498,
+      "shuffle_digest": "fe81a27ea83420a89032baf29cf1f0404addf067d5799405229b48587f10965e",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1655454393,
+      "shuffle_digest": "78b672043e98a2c2147bcad27c0ec66ad152eb05255f5d352de35fc5f1a2b7cf",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 9,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3747066064,
+      "shuffle_digest": "2b9bf76750e088140438b5bcfb51c564b558244201e712dccfa9f8253936ee6d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 325553311,
+      "shuffle_digest": "3f74e624ba98402c81dd713249bca4e569f517f78c503e748336c28ce334dc8b",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1359300256,
+      "shuffle_digest": "aa9b05e72553b59cb7b08e632678aed9201511f8a1a18e5ac436c39c4e70d760",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3066720962,
+      "shuffle_digest": "7b332ddcdea47e6bb5c0c9ce7d5ffa3bea8500d302393b934a27ba677f51bba6",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 10,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4183223571,
+      "shuffle_digest": "cf9433eb9e2730dc3440677b7bb17d816aadb5dc73023f37069d418d0fe8016d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4014168328,
+      "shuffle_digest": "d5620b13d00d2658c15e45d885a94b11f3c16f9a2f283971c3837e6a502fcee3",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1092290974,
+      "shuffle_digest": "9c5922c073dc18cf8a2375140a769eb17a3c910d82ef79f6693b0ccef139d8b7",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 13,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2318959491,
+      "shuffle_digest": "3d6d15778e518c4fa6f380f1ba87e14a3ad89c63c4dcd3fcd39b9acc0d0bf84a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2271089828,
+      "shuffle_digest": "fcf9eb4da689dbf834169436415e26da5f08688a3d49f5c863bb16feacb9cf28",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1523181650,
+      "shuffle_digest": "bd6e7f9075ced2a4fcabe59f3969b5d118a9c0545389d37b4ad2c564f620e6bd",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3858272689,
+      "shuffle_digest": "6892f3f0c6f3c2d3a739eb5b1947c3984ca06209a692a9160256b151e004634c",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4085321335,
+      "shuffle_digest": "08cd90a00482a1ce2cd86c458684de9afb3b4327fb5fac4d20a681091ad771ef",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4220206940,
+      "shuffle_digest": "627dc2d78c47782d98f0373f88d858e8308b8d10df7e88924fe683c61f932d88",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 4,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3734695628,
+      "shuffle_digest": "860beb218b71d664dd0fa785d473cb6597016efcf999a9d6ec764ca0f96a68fd",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1795248854,
+      "shuffle_digest": "f1018b4b5a7accb4ad973c2ea58e61565311c39c35a1cd6bcbe10fd18de7740a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3236342685,
+      "shuffle_digest": "f12cef8c5d1687714a8d52bb6e5194371a312af532d3aa40c8b55012b373aec1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3269722531,
+      "shuffle_digest": "9d9743e34a23a0ef2a43065fc43a33657603127eda9497eae07aa4b5dc405c8d",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 9,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 865821826,
+      "shuffle_digest": "acde971a2aa17ef79a76be41ff90272e9a92d99c6628fa323bede80951bfc374",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2664447830,
+      "shuffle_digest": "b567db8b9787aff527c3b54b323b2024d6a658dd38696a5bfaf7d712bc44b4d2",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4119418638,
+      "shuffle_digest": "7cfefa34123056a9c4afe1912d51beeb27c7193f038399fc128799730d43e1a1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3875969760,
+      "shuffle_digest": "07deaef274f8e669e92334e4074bd250b16adbc29dd9b4432d017fe4746ffe46",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 12,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3219712328,
+      "shuffle_digest": "5f37599440bb955d3734872ce43b46ef33bedc99c5cc820ae49b520ee45311f8",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 5,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2124577093,
+      "shuffle_digest": "143551166fa11fad4bdf30824a1ec380ad00c4dcbea42ee50ebcd1112c2c4683",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 3,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1013618628,
+      "shuffle_digest": "7d21ce7d0033dbf035866b118784796a0fcb2f71323e272e3850e3767d94293a",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2508417145,
+      "shuffle_digest": "45fcb03afcf3b8cd3d709593cc7204840aacb2c2b5bb4f4dcccd84be65cccf51",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 4197764529,
+      "shuffle_digest": "3487cdfce117ecb5a3d4a81cd5de236cae6f0e9faaccca094e0e4762bf793cd1",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 16444806,
+      "shuffle_digest": "b28a1e1391e1145cb4ef7fd63a92ebce62b0c165b2b03e1690e2e25ee85b9ad3",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2212936574,
+      "shuffle_digest": "f926c613facb3f36ef6f5f5b19aca6f7727782bbd93f50706b6910f4ebe112fe",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 11,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 311026638,
+      "shuffle_digest": "ccfb106cc79a3998de6c42ffc64921bbb29b10e4e9f93c74d76f53c22e627fb2",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1077298352,
+      "shuffle_digest": "25aa5fbbaa8d0c4f16f1b83a348739311bfe500ed7d5c0d261209419921ac296",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 4,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2942852972,
+      "shuffle_digest": "9ebf5f08544b83916efd9cd53113ca536ffe10fab397bed1243942db71c916d7",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 6,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 445927094,
+      "shuffle_digest": "2844ac63ad5e78a35d9f0ef59f95778e12fc2a72e306445dbab3f43f5129c69c",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 9,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 3035579640,
+      "shuffle_digest": "5236aa77e56880bf070028037ace649b684a95c13bf0af2ccef0ea71cce1d1b6",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1497483923,
+      "shuffle_digest": "06ffdff8136eff8ff48b3d5b2de3b5baaca800b01f080b909807f10acce20ba3",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 5,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 12,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1781182605,
+      "shuffle_digest": "96bb04bf870cc01f226ef972244a67bb47df73881b162d9b5c808c316cc6aaca",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 9,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 6,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2905491330,
+      "shuffle_digest": "03ce0d43f04f91a04fbe3a692988ead43057c117d8cd11e921991e829c230934",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 8,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 8,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 12648804,
+      "shuffle_digest": "c7e5cd1d505800b9cd57034b9e07ae1fa8566d7b8aaf4852ab06dfda7228b7f6",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 3,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 7,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 1099056786,
+      "shuffle_digest": "4353b26a935f5e243c8fc66615e5abb8a118cfab71e336d2231543705a9ab74f",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 13,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    },
+    {
+      "seed": 2099351840,
+      "shuffle_digest": "cc8eb0f2a5b6dffb59a716cb7ed0af94f3505718cc80303b51f947f37fe0ac0b",
+      "roots": {
+        "a": {
+          "root_node": "ledger:reports/compression.json",
+          "covered": 7,
+          "total": 11,
+          "closure_size": 54,
+          "cap": 33,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        },
+        "b": {
+          "root_node": "ledger:reports/decompositions.json",
+          "covered": 12,
+          "total": 16,
+          "closure_size": 106,
+          "cap": 48,
+          "superset_ok": false,
+          "ratio_ok": false,
+          "r2_ok": false
+        }
+      },
+      "satisfies_r2_on_both_roots": false
+    }
+  ]
+}
