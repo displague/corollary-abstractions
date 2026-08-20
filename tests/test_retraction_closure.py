@@ -59,6 +59,7 @@ import hashlib
 import json
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -444,13 +445,14 @@ class GroundTruthIsCommitted(unittest.TestCase):
 
 
 class GateAssemblerBuildsTheGraph(unittest.TestCase):
-    """Red by construction until the builder lands — that is the
-    preregistration working."""
+    """The assembler exists, and what it writes is what §4 registered."""
 
     def test_the_assembler_emits_records_that_validate(self) -> None:
-        # R1's emitted-edge fraction, R3's coverage floor, and R5's two-build
-        # reproduction are asserted here once the assembler exists; today the
-        # import is the assertion, and it fails.
+        # R1's emitted-edge fraction and R5's two-build reproduction are
+        # asserted here now that the assembler exists. R3's coverage floor
+        # is not: it is scored over the current release's claims against a
+        # certificate, not over the graph, and asserting a floor here would
+        # move that judgement into a unit test.
         import provenance_graph  # noqa: PLC0415
 
         provenance_graph.build_graph(REPO)
@@ -461,18 +463,150 @@ class GateAssemblerBuildsTheGraph(unittest.TestCase):
         for line in lines:
             validator.validate(json.loads(line))
 
+    def test_every_registered_kind_is_populated_except_ledger_section(
+        self,
+    ) -> None:
+        """Six kinds carry nodes; the seventh is empty, and says so.
+
+        ``ledger_section`` is zero *by decision*, not by oversight: no
+        published claim in this repository addresses a ledger's internal
+        section, so v1 mints no such nodes and R1's denominator is edges
+        into ``report_ledger`` nodes alone. Asserting the zero keeps that
+        decision visible — when this assertion starts failing, someone
+        added the kind and R1's denominator changed underneath the gate.
+        """
+
+        import provenance_graph  # noqa: PLC0415
+
+        provenance_graph.build_graph(REPO)
+        counts = {kind: 0 for kind in NODE_KINDS}
+        for line in GRAPH_PATH.read_text(encoding="utf-8").splitlines():
+            record = json.loads(line)
+            if record["record"] == "node":
+                counts[record["kind"]] += 1
+        self.assertEqual(counts["ledger_section"], 0)
+        for kind in sorted(NODE_KINDS - {"ledger_section"}):
+            self.assertGreater(counts[kind], 0, kind)
+        print(f"\nnode counts by kind: {dict(sorted(counts.items()))}")
+
+    def test_r1_the_writers_emit_their_own_edges(self) -> None:
+        """≥95% of edges into ledger nodes carry ``inferred: false``."""
+
+        import provenance_graph  # noqa: PLC0415
+
+        path = provenance_graph.build_graph(REPO)
+        report = provenance_graph.summarize(path)
+        print(
+            f"\nR1 = {report['edges_into_ledgers_emitted']}"
+            f"/{report['edges_into_ledgers']} = {report['r1_fraction']:.4f}"
+            f"\nedges by relation: {report['relations']}"
+            f"\nedges by emitter:  {report['emitted_by']}"
+        )
+        self.assertGreater(report["edges_into_ledgers"], 0)
+        self.assertGreaterEqual(
+            report["r1_fraction"], DESIGN_GATE["r1_emitted_edge_fraction"]
+        )
+
+    def test_r5_two_builds_reproduce_the_graph_byte_identically(self) -> None:
+        """The in-test half of R5: same tree in, same bytes out.
+
+        Not the whole clause — R5 says *clean* builds, and a second checkout
+        is the release step's job — but a builder that cannot reproduce
+        itself within one process will never reproduce itself across two
+        machines, and this catches that failure in seconds instead of at
+        publication.
+        """
+
+        import provenance_graph  # noqa: PLC0415
+
+        first = provenance_graph.build_graph(REPO).read_bytes()
+        second = provenance_graph.build_graph(REPO).read_bytes()
+        self.assertEqual(first, second)
+        self.assertNotIn(b"\r\n", first)
+
 
 class GateRadiusToolAnswers(unittest.TestCase):
-    """Red by construction until the builder lands — that is the
-    preregistration working."""
+    """The tool answers one root, and the receipt validates."""
 
     def test_the_radius_tool_certifies_a_root(self) -> None:
-        # R2 (superset-exact against the pre-committed ground truth, ratio
-        # ≤ 3) and R4 (recheck ≤ 600s, hashes matching) attach here when the
-        # tool and the two hand-audited drift lists both exist.
+        # R2 (superset-exact against the pre-committed hand-audited list,
+        # ratio ≤ 3) is deliberately NOT asserted here. R2 is adjudicated
+        # once, against a certificate written by the adjudicated run; a unit
+        # test that scored it would turn "no patch-and-rerun" into "rerun
+        # until green", which is the one thing §6 forbids by name.
+        import provenance_graph  # noqa: PLC0415
         import retraction_radius  # noqa: PLC0415
 
         self.assertTrue(hasattr(retraction_radius, "certify"))
+        if not GRAPH_PATH.is_file():
+            provenance_graph.build_graph(REPO)
+
+        root = f"ledger:{GROUND_TRUTH_ROOTS['a']}"
+        # A temp directory, not reports/radius/: the published certificate
+        # belongs to the adjudicated run, and a suite that wrote one every
+        # time it ran would make "one root, one certificate" meaningless.
+        with tempfile.TemporaryDirectory(prefix="radius-dev-") as tmp:
+            cert_path = retraction_radius.certify(
+                GRAPH_PATH, root, "ledger_stale", "root-a-dev", Path(tmp)
+            )
+            cert = _load(cert_path)
+
+        jsonschema.Draft202012Validator(_load(CERT_SCHEMA_PATH)).validate(cert)
+        self.assertEqual(cert["root_node"], root)
+        self.assertEqual(cert["root_falsification_kind"], "ledger_stale")
+        self.assertIn(root, cert["closure"])
+        self.assertGreater(cert["closure_size"], 0)
+        self.assertEqual(cert["closure_size"], len(cert["closure"]))
+        self.assertEqual(cert["closure"], sorted(set(cert["closure"])))
+        # The histogram is the closure re-counted by depth: it must account
+        # for every member exactly once, and depth 0 is the root alone.
+        self.assertEqual(
+            sum(cert["depth_histogram"].values()), cert["closure_size"]
+        )
+        self.assertEqual(cert["depth_histogram"]["0"], 1)
+        self.assertEqual(cert["standing_limitation"], STANDING_LIMITATION)
+        self.assertEqual(
+            cert["standing_limitation"],
+            _load(CERT_SCHEMA_PATH)["properties"]["standing_limitation"][
+                "const"
+            ],
+        )
+        print(
+            f"\nroot A dev closure_size = {cert['closure_size']}, "
+            f"depths {cert['depth_histogram']}, "
+            f"unprovenanced {len(cert['unprovenanced_nodes'])}, "
+            f"inferred excluded {len(cert['inferred_edges_excluded'])}"
+        )
+
+
+class TheScanNeverReadsTheAnswerKey(unittest.TestCase):
+    """§4's anti-tautology clause, made mechanical.
+
+    R2 compares a mechanically derived closure against an independently
+    hand-audited list. A citation scan that consumed that list would be
+    grading its own homework, and the clause would certify nothing. The
+    design registered a source scan as the enforcement — the same way
+    ``tests/test_bounded_closure.py::TheGenericLayerIsShared`` forbids
+    world-name literals in the generic closure layer — so the prohibition is
+    checked by arithmetic rather than by the author's memory.
+
+    The forbidden strings are the filename stem and the directory-qualified
+    prefix, not just an open() call: a module that merely *names* the
+    answer key has already made it available to the next person who edits
+    it, and a scan that only caught reads would pass the commit before the
+    one that matters.
+    """
+
+    SCANNED = ("provenance_graph.py", "retraction_radius.py")
+    FORBIDDEN = ("ground_truth", "retraction_closure/ground")
+
+    def test_neither_tool_names_the_hand_audited_lists(self) -> None:
+        for name in self.SCANNED:
+            path = REPO / "scripts" / name
+            self.assertTrue(path.is_file(), name)
+            source = path.read_text(encoding="utf-8").lower()
+            for forbidden in self.FORBIDDEN:
+                self.assertNotIn(forbidden, source, f"{name}: {forbidden}")
 
 
 class GateRegenerationCheckRuns(unittest.TestCase):
@@ -606,6 +740,213 @@ class WritersEmitTheirOwnProvenance(unittest.TestCase):
         # true` and excluded from every scored clause. When this assertion
         # starts failing, someone regenerated the snapshot.
         self.assertNotIn("provenance", _load(REPO / GROUND_TRUTH_ROOTS["b"]))
+
+
+class R2EvaluatorScoresTheAuditedList(unittest.TestCase):
+    """The adjudication evaluator, checked for internal consistency only.
+
+    Not for a verdict: R2 is adjudicated once, against the certificate of
+    the adjudicated run, and a suite that asserted PASS or FAIL here would
+    turn §6's "no patch-and-rerun" into "rerun until green". What is
+    asserted is that the evaluator counts what it says it counts — the
+    denominator is the frozen 11, every audited pair lands in exactly one
+    of covered/missed, and the cap it publishes is 3x that denominator.
+    """
+
+    def _dev_verdict(self, tmp: str) -> dict:
+        import provenance_graph  # noqa: PLC0415
+        import radius_adjudicate  # noqa: PLC0415
+        import retraction_radius  # noqa: PLC0415
+
+        if not GRAPH_PATH.is_file():
+            provenance_graph.build_graph(REPO)
+        cert_path = retraction_radius.certify(
+            GRAPH_PATH,
+            f"ledger:{GROUND_TRUTH_ROOTS['a']}",
+            "ledger_stale",
+            "root-a-dev",
+            Path(tmp),
+        )
+        return radius_adjudicate.evaluate(
+            cert_path, GROUND_TRUTH_PATHS["a"], GRAPH_PATH
+        )
+
+    def test_the_evaluator_is_internally_consistent_on_root_a(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="radius-adj-") as tmp:
+            verdict = self._dev_verdict(tmp)
+
+        self.assertEqual(verdict["total"], GROUND_TRUTH_COUNTS["a"])
+        self.assertEqual(
+            verdict["covered"] + len(verdict["misses"]), verdict["total"]
+        )
+        self.assertEqual(
+            verdict["cap"],
+            DESIGN_GATE["r2_closure_to_ground_truth_ratio"] * verdict["total"],
+        )
+        self.assertEqual(
+            verdict["ratio_ok"], verdict["closure_size"] <= verdict["cap"]
+        )
+        self.assertEqual(verdict["superset_ok"], not verdict["misses"])
+        self.assertEqual(
+            verdict["r2_ok"], verdict["superset_ok"] and verdict["ratio_ok"]
+        )
+        for miss in verdict["misses"]:
+            # A miss carries the reason it is a miss: either the anchor
+            # resolved to no claim node at all, or it resolved and the
+            # closure did not reach it. Those are different defects and the
+            # adjudication needs to tell them apart.
+            self.assertEqual(miss["covered_by"], [])
+            self.assertEqual(miss["anchored"], bool(miss["claim_nodes"]))
+        print(
+            f"\nroot A dev R2: covered {verdict['covered']}/{verdict['total']}, "
+            f"closure {verdict['closure_size']} (cap {verdict['cap']}), "
+            f"superset_ok={verdict['superset_ok']} ratio_ok={verdict['ratio_ok']}"
+        )
+
+    def test_the_producers_stay_blind_and_the_judge_is_exempt(self) -> None:
+        """The asymmetry §4 requires, asserted in both directions.
+
+        The two tools that PRODUCE the scored artifact must not name the
+        hand-audited lists — that is TheScanNeverReadsTheAnswerKey's job and
+        this re-states its scope. The tool that JUDGES must read them, so it
+        is exempt; the exemption is asserted here so that adding the
+        evaluator to the scanned set fails loudly rather than looking like
+        a tightening.
+        """
+
+        scanned = set(TheScanNeverReadsTheAnswerKey.SCANNED)
+        self.assertEqual(scanned, {"provenance_graph.py", "retraction_radius.py"})
+        self.assertNotIn("radius_adjudicate.py", scanned)
+        for name in sorted(scanned):
+            source = (REPO / "scripts" / name).read_text(encoding="utf-8").lower()
+            for forbidden in TheScanNeverReadsTheAnswerKey.FORBIDDEN:
+                self.assertNotIn(forbidden, source, f"{name}: {forbidden}")
+        judge = (REPO / "scripts" / "radius_adjudicate.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("EXEMPT", judge)
+
+
+class BlindControlShufflesReproducibly(unittest.TestCase):
+    """A smoke run of §6's control: three seeds, not the registered hundred.
+
+    The registered control is 100 seeds against both roots and is run once,
+    as its own adjudication. What a suite can usefully assert is the
+    property that makes that run auditable at all — same committed seed,
+    same shuffle, every time — plus the stability of the report's shape, so
+    that a later reader parsing a published control report is not parsing a
+    format that moved.
+    """
+
+    SMOKE_SEEDS = 3
+
+    def test_the_same_seed_reproduces_the_same_shuffle(self) -> None:
+        import provenance_graph  # noqa: PLC0415
+        import radius_blind_control as control  # noqa: PLC0415
+
+        if not GRAPH_PATH.is_file():
+            provenance_graph.build_graph(REPO)
+        seeds = control.load_seeds(REPO)[: self.SMOKE_SEEDS]
+        self.assertEqual(len(seeds), self.SMOKE_SEEDS)
+
+        first = control.run_control(GRAPH_PATH, seeds, REPO)
+        second = control.run_control(GRAPH_PATH, seeds, REPO)
+        self.assertEqual(
+            [row["shuffle_digest"] for row in first["results"]],
+            [row["shuffle_digest"] for row in second["results"]],
+        )
+        # Distinct seeds must actually produce distinct graphs, or the
+        # "100 shuffles" would be one shuffle counted a hundred times.
+        self.assertEqual(
+            len({row["shuffle_digest"] for row in first["results"]}),
+            self.SMOKE_SEEDS,
+        )
+        print(
+            f"\nblind-control smoke ({self.SMOKE_SEEDS} seeds): "
+            f"satisfying_shuffles {first['satisfying_shuffles']}"
+            f"/{first['seeds_run']}"
+        )
+
+    def test_the_control_report_shape_is_stable(self) -> None:
+        import radius_blind_control as control  # noqa: PLC0415
+
+        seeds = control.load_seeds(REPO)[: self.SMOKE_SEEDS]
+        report = control.run_control(GRAPH_PATH, seeds, REPO)
+        self.assertEqual(report["schema"], "retraction-blind-control/1")
+        self.assertEqual(
+            set(report),
+            {
+                "schema",
+                "graph_sha256",
+                "seeds_run",
+                "swaps_per_edge",
+                "satisfying_seeds",
+                "satisfying_shuffles",
+                "results",
+            },
+        )
+        self.assertEqual(
+            report["satisfying_shuffles"], len(report["satisfying_seeds"])
+        )
+        for row in report["results"]:
+            self.assertEqual(
+                set(row),
+                {"seed", "shuffle_digest", "roots", "satisfies_r2_on_both_roots"},
+            )
+            self.assertEqual(set(row["roots"]), {"a", "b"})
+            self.assertEqual(
+                row["satisfies_r2_on_both_roots"],
+                all(entry["r2_ok"] for entry in row["roots"].values()),
+            )
+            for key, entry in row["roots"].items():
+                self.assertEqual(entry["total"], GROUND_TRUTH_COUNTS[key])
+                self.assertEqual(
+                    entry["cap"],
+                    DESIGN_GATE["r2_closure_to_ground_truth_ratio"]
+                    * entry["total"],
+                )
+
+    def test_the_shuffle_preserves_degrees_and_kinds(self) -> None:
+        """The two adjectives §6 attaches to "shuffle", made arithmetic.
+
+        A shuffle that changed a node's degree would be comparing the real
+        graph against a differently-shaped one, and a shuffle that crossed
+        kinds would be comparing it against something that is not a
+        provenance graph at all. Either would make a clean control
+        meaningless in the direction that matters — it would let the real
+        edges look informative for a reason that has nothing to do with
+        consequence.
+        """
+
+        import radius_blind_control as control  # noqa: PLC0415
+        import retraction_radius  # noqa: PLC0415
+
+        nodes, edges = retraction_radius.load_graph(GRAPH_PATH)
+        kinds = {node_id: node["kind"] for node_id, node in nodes.items()}
+        shuffled = control.shuffle_edges(
+            edges, kinds, control.load_seeds(REPO)[0]
+        )
+        self.assertEqual(len(shuffled), len(edges))
+
+        def profile(rows: list[dict]) -> tuple[dict, dict, dict]:
+            out: dict[str, int] = {}
+            into: dict[str, int] = {}
+            classes: dict[tuple[str, str], int] = {}
+            for edge in rows:
+                if edge["relation"] != "derived_from" or edge["inferred"]:
+                    continue
+                out[edge["from_node"]] = out.get(edge["from_node"], 0) + 1
+                into[edge["to_node"]] = into.get(edge["to_node"], 0) + 1
+                key = (kinds[edge["from_node"]], kinds[edge["to_node"]])
+                classes[key] = classes.get(key, 0) + 1
+            return out, into, classes
+
+        self.assertEqual(profile(edges), profile(shuffled))
+        # Degree-preserving is not the same as unchanged: if the shuffle
+        # rewired nothing, this control would certify by doing nothing.
+        self.assertNotEqual(
+            control.shuffle_digest(edges), control.shuffle_digest(shuffled)
+        )
 
 
 if __name__ == "__main__":
