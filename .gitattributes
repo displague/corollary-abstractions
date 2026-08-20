@@ -31,3 +31,6 @@ experiments/skeleton_emitter_aggregates.json text eol=lf
 reports/test_gate_v013.json text eol=lf
 reports/test_gate_v013/** text eol=lf
 reports/test_timings_v014/** text eol=lf
+reports/provenance_graph.jsonl text eol=lf
+reports/radius/*.cert.json text eol=lf
+reports/radius/*.json text eol=lf

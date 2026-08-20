@@ -306,6 +306,65 @@ both roots, the real edges carry no consequence-relevant information and
 this capability is void.* A perfect-looking control kills the capability,
 not the control.
 
+## 6a. Adjudication registration (2026-08-20, before the single scored run)
+
+The gate in §6 is unchanged. This section registers, before the one run
+that counts, everything a reader needs to weigh what that run says.
+
+**The frozen instrument.** The citation scan is the six generic rules
+R-a–R-f as committed in `scripts/provenance_graph.py` at `38d6eb0`,
+tagged per edge. No rule names a document, a claim, or a ground-truth
+entry; a source-scanning test forbids the assembler and the radius tool
+from ever reading `data/retraction_closure/ground_truth_*.json`.
+
+**Disclosure, in full.** The rule author had sight of the committed
+ground truth and of two development closures while selecting and twice
+refining the rules (R-f added; R-d split into path components). The
+protections are the pre-committed ground truth, the ≤3× cap, the
+100-shuffle control, and the generic-rule constraint — but none of them
+can price the residual "a human who had seen the audit chose the rules,"
+so it is disclosed here instead of controlled away. Development passes
+at the frozen commit already indicate R2 will fail on both roots; the
+run below is still performed and adjudicated as registered, because the
+alternative — tuning until it passes — is the practice this project
+exists to end.
+
+**R1, as worded, cannot miss.** Writer-emitted edges point out of ledger
+nodes (ledger `derived_from` corpus), so "edges into `report_ledger`
+nodes" contains citation edges only, and every citation edge is
+`inferred: false` by the §4 clarification. R1 is adjudicated as written
+and, beside it, the intended quantities are reported: the writer-emitted
+fraction of ledger-provenance edges over all five ledgers, and over the
+regenerable four.
+
+**R3, operationalized.** "The current release's claims" = the
+`release_claim` nodes of `docs/RELEASE-v0.15.0.md`. "Resolve to anchored
+nodes with complete inbound edges" is read as: the claim node exists
+(anchored by heading + content hash) and carries at least one
+`inferred: false` `derived_from` citation edge. The wording gap between
+"inbound" and the graph's outbound-citation orientation is noted rather
+than reinterpreted silently.
+
+**R6 roots.** Retraction 1 (`0daf970`): root
+`claim:experiments/ANALYSIS.md#Emergence battery 1 — solve-for-X (span
+pointing, recombination splits)`, kind `standing_demoted`. Retraction 2
+(`dc3ff14`): root `claim:experiments/ANALYSIS.md#qa task
+(QA-as-unification, cross-language): the residual is real`, kind
+`witness_invalid`. In the v1 graph claims have no inbound
+`derived_from`, so both closures are expected to be the root alone —
+reported at that scope, calibrating the floor, never scored.
+
+**Protocol, one pass in this order.** (1) build the graph twice and
+byte-compare (R5); (2) certify Root A
+(`ledger:reports/compression.json`, `ledger_stale`) and Root B
+(`ledger:reports/decompositions.json`, `ledger_stale`) into
+`reports/radius/`; (3) `radius_recheck` both certificates (R4); (4)
+`radius_adjudicate` both against their ground truths (R2); (5)
+`radius_blind_control` over all 100 committed seeds (the control); (6)
+measure R3 over the release claims; (7) certify both R6 roots. No
+artifact produced by these steps is edited and re-run; whatever they
+say is the adjudication.
+
 ## 7. Stop conditions and non-claims
 
 Stop on R1's checkpoint, on any R2 miss, or on a clean control. This
