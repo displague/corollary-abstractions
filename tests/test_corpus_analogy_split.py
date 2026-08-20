@@ -24,6 +24,32 @@ from match_signatures import canonicalize  # noqa: E402
 from specialize import Search, op_count, render, spelling_ranker  # noqa: E402
 
 
+#: The one shared build. Seven classes inherit `Fixture`, and each used to
+#: run the full `load_corpus` + `build_quadruples` pipeline in its own
+#: `setUpClass` — 179.3 s per class, 1,076 s of pure duplication over an
+#: immutable corpus (BACKLOG, split-fixture entry). The inputs are committed
+#: files and the build is deterministic — `DeterminismTests` is the
+#: executable form of that claim, and it still rebuilds from scratch on
+#: purpose — so building once per module changes nothing about what is
+#: tested, PROVIDED no test mutates the shared objects. None does today: the
+#: one test that needs altered rows (`ControlTests`' poisoning test) already
+#: constructs fresh `Quadruple` copies. A future test that must mutate has to
+#: do the same.
+_SHARED: tuple | None = None
+
+
+def _build_once() -> tuple:
+    global _SHARED
+    if _SHARED is None:
+        corpus = cas.load_corpus(cas.DATA_DIR)
+        ledger = Counter()
+        raw = cas.build_quadruples(ledger=ledger)
+        quads = cas.dedup_by_target(raw)
+        splits = cas.build_splits(quads)
+        _SHARED = (corpus, ledger, raw, quads, splits)
+    return _SHARED
+
+
 class Fixture(unittest.TestCase):
     corpus: cas.Corpus
     raw: list
@@ -32,11 +58,7 @@ class Fixture(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.corpus = cas.load_corpus(cas.DATA_DIR)
-        cls.ledger = Counter()
-        cls.raw = cas.build_quadruples(ledger=cls.ledger)
-        cls.quads = cas.dedup_by_target(cls.raw)
-        cls.splits = cas.build_splits(cls.quads)
+        cls.corpus, cls.ledger, cls.raw, cls.quads, cls.splits = _build_once()
 
 
 # ---------------------------------------------------------------------------
@@ -434,9 +456,14 @@ class ControlTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.corpus = cas.load_corpus(cas.DATA_DIR)
-        cls.quads = cas.dedup_by_target(cas.build_quadruples())
-        cls.splits = cas.build_splits(cls.quads)
+        # The shared build, not a private rebuild: this class used to run
+        # `build_quadruples` a second time without a ledger, and the ledger
+        # is count-only (every use in the builder is an increment), so the
+        # admitted rows are identical either way — `DeterminismTests`
+        # asserts exactly that equality against a fresh no-ledger build.
+        # `ceiling_table` stays here: it is this class's own fixture and
+        # runs once either way.
+        cls.corpus, _, _, cls.quads, cls.splits = _build_once()
         cls.table = cas.ceiling_table(cls.quads, cls.splits, cls.corpus)
 
     def test_the_v06_killer_fails_on_every_holdout(self) -> None:
