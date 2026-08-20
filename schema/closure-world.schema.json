@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corollary-abstractions.local/schema/closure-world.schema.json",
+  "title": "Closure World Registration",
+  "$comment": "One frozen world registration for DESIGN-compile-before-query. Committed BEFORE the builder exists (ROADMAP-v0.15 item 1 preregistration), so the horizon, ceilings, source snapshot, and action schema cannot be tuned to make a construction gate pass. The action schema is DATA — a finite product of action names and typed parameter values — never a callback: the generic checker enumerates the product itself and does not trust a builder or adapter to reveal which actions exist. An adapter maps each enumerated (name, params) pair to its native action; that mapping is code, pinned by the adapter digest recorded in the closure, not declared here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "world_id",
+    "adapter_id",
+    "horizon",
+    "ceilings",
+    "source",
+    "action_schema"
+  ],
+  "properties": {
+    "schema": {
+      "const": "closure-world/1"
+    },
+    "world_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)+$"
+    },
+    "adapter_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)*\\.v[0-9]+$",
+      "$comment": "Selects the adapter implementation from the registry in scripts/closure_worlds.py. The generic builder and checker are forbidden from branching on a world name; this declared id is the one sanctioned selection mechanism (design §5)."
+    },
+    "horizon": {
+      "type": "integer",
+      "minimum": 1,
+      "$comment": "States at exactly this depth are boundary states: they are not called exhausted and make no claim about the next step. Frozen at preregistration; a closure that cannot finish under it reports a miss, it does not get a larger number."
+    },
+    "ceilings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_states",
+        "max_actions_per_state",
+        "max_seconds_per_closure",
+        "max_closure_bytes"
+      ],
+      "properties": {
+        "max_states": { "const": 512 },
+        "max_actions_per_state": { "const": 32 },
+        "max_seconds_per_closure": { "const": 30 },
+        "max_closure_bytes": { "const": 8388608 }
+      },
+      "$comment": "Design §8 constants as consts, not free integers: a registration that tried to relax a ceiling would fail schema validation rather than quietly moving the gate."
+    },
+    "source": {
+      "type": "object",
+      "$comment": "The frozen source snapshot the adapter builds the initial state and native actions from. Its shape is adapter-specific; its bytes are pinned by data/closure_worlds/manifest.json (canonical-LF SHA-256). Deliberately not closed here: closing it would force this schema to change for every new world, and the manifest digest is the integrity mechanism, not this schema."
+    },
+    "action_schema": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/actionFamily" }
+    }
+  },
+  "$defs": {
+    "actionFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "parameters"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameterDomain" }
+        }
+      }
+    },
+    "parameterDomain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "values"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "$comment": "String values only. The product of these lists IS the world's complete syntactic action set at every interior state; an action outside it does not exist, and an action inside it that the world rejects is recorded as a refusal edge, never omitted."
+        }
+      }
+    }
+  }
+}

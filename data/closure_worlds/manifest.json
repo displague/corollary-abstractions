@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "path": "data/closure_worlds/story_golden_chicken.json",
+      "sha256_lf": "6acdb269179a67a2aeba94caff8790eca0a9d8a86cc335e9349096c09b3c6be7"
+    },
+    {
+      "path": "data/closure_worlds/visual_rt0000.json",
+      "sha256_lf": "d03bf620983dfe5c1a5826ef260055c705b23ed65e79bfae277c2da6dbe9f598"
+    }
+  ],
+  "schema": "closure-world-manifest/1"
+}

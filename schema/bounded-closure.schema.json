@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corollary-abstractions.local/schema/bounded-closure.schema.json",
+  "title": "Bounded Closure",
+  "$comment": "The first-class object of DESIGN-compile-before-query §3: a complete, goal-free account of everything reachable within a declared horizon of one registered world. For every state below the horizon, `outgoing` contains EVERY syntactically possible action from the registered action schema, each recorded as either the native verifier's refusal or the exact successor. The object is generated, never hand-edited; it contains no desired endpoint, success predicate, reward, query text, or model score. It is untrusted by construction — the generic checker (scripts/closure_check.py) rebuilds the reachable graph independently from the frozen sources and requires exact bidirectional equality. Canonical form: states sorted by state_digest, outgoing rows sorted by canonical_action bytes, convergence cells sorted by end_state_digest, JSON serialized with sorted keys — so a semantics-preserving reorder (corruption class 12) normalizes to identical bytes and closure digest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "world_id",
+    "source_manifest",
+    "adapter_id",
+    "adapter_digest",
+    "action_schema_digest",
+    "horizon",
+    "initial_state_digest",
+    "states",
+    "convergence_cells",
+    "closure_digest"
+  ],
+  "properties": {
+    "format_version": {
+      "const": "bounded-closure/1"
+    },
+    "world_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)+$"
+    },
+    "source_manifest": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/sourceFile" },
+      "$comment": "Canonical-LF SHA-256 of every frozen source file this closure was built from. The checker reloads and digest-checks each one before trusting anything else in this object (design §5 step 1)."
+    },
+    "adapter_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)*\\.v[0-9]+$"
+    },
+    "adapter_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "action_schema_digest": {
+      "$ref": "#/$defs/sha256",
+      "$comment": "SHA-256 over the canonical JSON of the registration's action_schema. The checker recomputes it from the registration file, so a closure cannot claim to have enumerated a different product than the one registered."
+    },
+    "horizon": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "initial_state_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/stateRecord" }
+    },
+    "convergence_cells": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/convergenceCell" },
+      "$comment": "At most one cell per noninitial end state, derived — not chosen — by the checker's canonical rule (design §6): the primary route follows lexicographically-first minimum-depth predecessors; the alternate is the first other accepted incoming edge whose reconstructed route differs. The builder cannot omit, inject, or cherry-pick cells; the checker recomputes the exact set."
+    },
+    "closure_digest": {
+      "$ref": "#/$defs/sha256",
+      "$comment": "SHA-256 over the canonical serialization of this object with this field removed. Recomputed by the checker; never trusted from the file."
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256_lf"],
+      "properties": {
+        "path": { "type": "string" },
+        "sha256_lf": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "stateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_digest",
+        "canonical_state",
+        "minimum_depth",
+        "outgoing"
+      ],
+      "properties": {
+        "state_digest": { "$ref": "#/$defs/sha256" },
+        "canonical_state": {
+          "type": "string",
+          "$comment": "The exact canonical bytes of the state as UTF-8 text (the adapter's canonicalize output). A digest match with unequal canonical bytes is refused as corruption, so both travel together."
+        },
+        "minimum_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outgoing": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/outgoingEdge" },
+          "$comment": "Empty exactly when minimum_depth equals the horizon (a boundary state, which claims nothing about the next step). For every interior state this array carries one row per enumerated schema action — no more, no fewer."
+        }
+      }
+    },
+    "outgoingEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_action", "disposition"],
+      "properties": {
+        "canonical_action": {
+          "type": "string",
+          "$comment": "Canonical JSON of {name, params} with sorted keys — the enumerated schema action, not the adapter's native action."
+        },
+        "disposition": {
+          "enum": ["illegal", "successor"]
+        },
+        "successor_digest": { "$ref": "#/$defs/sha256" },
+        "refusal_code": {
+          "type": "string",
+          "$comment": "The world's own deterministic refusal, recorded verbatim (verdict and reason, or failed check names). Present exactly when disposition is 'illegal'; successor_digest exactly when 'successor'. JSON Schema cannot express that exclusivity without allOf gymnastics; the checker enforces it structurally."
+        }
+      }
+    },
+    "convergenceCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_state_digest",
+        "primary_route",
+        "alternate_route",
+        "end_state_digest"
+      ],
+      "properties": {
+        "start_state_digest": { "$ref": "#/$defs/sha256" },
+        "primary_route": { "$ref": "#/$defs/actionRoute" },
+        "alternate_route": { "$ref": "#/$defs/actionRoute" },
+        "end_state_digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "actionRoute": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "$comment": "An ordered list of canonical_action strings. Semantically ordered: corruption class 12 (meaning-preserving reorder) must never touch a route."
+    }
+  }
+}

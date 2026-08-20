@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corollary-abstractions.local/schema/closure-receipt.schema.json",
+  "title": "Closure Query Receipt",
+  "$comment": "The result of asking one sealed BoundedClosure about one exact canonical target state (DESIGN-compile-before-query §3, §7). A query supplies the target's canonical bytes; presence requires the bytes AND the digest to occur together (a digest match with unequal bytes is refused as corruption, not answered). Presence returns a shortest replayable native action sequence; absence returns NOT_REACHABLE_WITHIN_HORIZON, never plain 'impossible' — the receipt names the snapshot, horizon, visited-state count, closure digest, and native verifier so the bounded negative can never be quoted without its bound. Human-selected targets are a demonstration, not scored evidence: the closure predates them, and nothing here carries a score.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "world_id",
+    "closure_digest",
+    "horizon",
+    "visited_states",
+    "adapter_id",
+    "target_digest",
+    "outcome"
+  ],
+  "properties": {
+    "schema": {
+      "const": "closure-receipt/1"
+    },
+    "world_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)+$"
+    },
+    "closure_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "horizon": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "visited_states": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "adapter_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)*\\.v[0-9]+$"
+    },
+    "target_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": ["REACHABLE", "NOT_REACHABLE_WITHIN_HORIZON", "CORRUPT_TARGET"],
+      "$comment": "CORRUPT_TARGET is the digest-matches-bytes-differ refusal. There is deliberately no 'IMPOSSIBLE' member: this vocabulary cannot express an unrestricted negative."
+    },
+    "shortest_route": {
+      "type": "array",
+      "items": { "type": "string" },
+      "$comment": "Canonical action strings, present exactly when outcome is REACHABLE; replaying them through the world's own verifier from the initial state must reproduce the target bytes."
+    }
+  }
+}

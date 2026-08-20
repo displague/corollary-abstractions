@@ -1,0 +1,43 @@
+{
+  "action_schema": [
+    {
+      "name": "mutate",
+      "parameters": [
+        {
+          "name": "kind",
+          "values": [
+            "right_angle_epsilon",
+            "leg_length",
+            "edge_disconnected",
+            "hypotenuse_retargeted",
+            "degenerate_zero_leg",
+            "right_angle_mislabeled"
+          ]
+        }
+      ]
+    }
+  ],
+  "adapter_id": "visual.scene.v1",
+  "ceilings": {
+    "max_actions_per_state": 32,
+    "max_closure_bytes": 8388608,
+    "max_seconds_per_closure": 30,
+    "max_states": 512
+  },
+  "horizon": 1,
+  "schema": "closure-world/1",
+  "source": {
+    "figure_id": "rt-0000",
+    "params": {
+      "dih": 1,
+      "hand": 1,
+      "m": 12,
+      "n": 12,
+      "ox": 80,
+      "oy": 90,
+      "p": 75,
+      "q": 1
+    }
+  },
+  "world_id": "visual.rt0000"
+}

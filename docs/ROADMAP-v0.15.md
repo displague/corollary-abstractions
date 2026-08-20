@@ -25,6 +25,20 @@ Its own construction gate governs: if the two-world or resource gate misses,
 it parks rather than manufacturing a toy world. Nothing here promises an
 unrestricted negative.
 
+**Live status (2026-08-20): preregistration LANDED; builder not yet
+written.** Committed before any builder exists: the three schemas
+(bounded-closure, closure-world, closure-receipt), the two frozen world
+registrations under `data/closure_worlds/` (story horizon 5 with the full
+20-action product including the state-supplied desire argument; visual
+horizon 1 with the six committed mutations as name-only actions), seeded by
+`scripts/seed_closure_worlds.py`; the two adapters (`closure_worlds.py`);
+the generic checker (`closure_check.py`, §5 steps 1-9, no world-name
+conditionals); the complete twelve-class corruption battery
+(`closure_corrupt.py`, seeds 3/11/29/47/101 frozen); and
+`tests/test_bounded_closure.py`, whose four gate tests FAIL by construction
+until `closure_build.py` exists — that red is the preregistration working,
+not a broken suite.
+
 ## 2. The coincidence veto (headline, instrument)
 
 Implement [DESIGN-coincidence-veto.md](DESIGN-coincidence-veto.md) in its

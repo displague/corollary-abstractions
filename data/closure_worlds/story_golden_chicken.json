@@ -1,0 +1,132 @@
+{
+  "action_schema": [
+    {
+      "name": "introduce",
+      "parameters": [
+        {
+          "name": "desire",
+          "values": [
+            "to sing the sunrise awake",
+            "to out-crow the rooster"
+          ]
+        },
+        {
+          "name": "trait",
+          "values": [
+            "golden",
+            "silver"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "plant",
+      "parameters": [
+        {
+          "name": "desire",
+          "values": [
+            "to sing the sunrise awake",
+            "to out-crow the rooster"
+          ]
+        },
+        {
+          "name": "element",
+          "values": [
+            "fallen feather",
+            "key"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "obstruct",
+      "parameters": [
+        {
+          "name": "desire",
+          "values": [
+            "to sing the sunrise awake",
+            "to out-crow the rooster"
+          ]
+        },
+        {
+          "name": "obstacle",
+          "values": [
+            "the locked coop door",
+            "a sudden frost"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "resolve",
+      "parameters": [
+        {
+          "name": "desire",
+          "values": [
+            "to sing the sunrise awake",
+            "to out-crow the rooster"
+          ]
+        },
+        {
+          "name": "outcome",
+          "values": [
+            "It used a fallen feather as a lever, stepped outside, and sang until the sun rose",
+            "It waited quietly until morning came on its own"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "discharge",
+      "parameters": [
+        {
+          "name": "desire",
+          "values": [
+            "to sing the sunrise awake",
+            "to out-crow the rooster"
+          ]
+        },
+        {
+          "name": "element",
+          "values": [
+            "fallen feather",
+            "key"
+          ]
+        }
+      ]
+    }
+  ],
+  "adapter_id": "story.frame.v1",
+  "ceilings": {
+    "max_actions_per_state": 32,
+    "max_closure_bytes": 8388608,
+    "max_seconds_per_closure": 30,
+    "max_states": 512
+  },
+  "horizon": 5,
+  "schema": "closure-world/1",
+  "source": {
+    "agent": "the golden chicken",
+    "decoy_element": "key",
+    "decoy_surface": "key",
+    "denied_trait": "silver",
+    "desires": [
+      "to sing the sunrise awake",
+      "to out-crow the rooster"
+    ],
+    "element": "fallen feather",
+    "element_surface": "fallen feather",
+    "id": "golden_chicken",
+    "obstacles": [
+      "the locked coop door",
+      "a sudden frost"
+    ],
+    "outcomes": [
+      "It used a fallen feather as a lever, stepped outside, and sang until the sun rose",
+      "It waited quietly until morning came on its own"
+    ],
+    "plant_mention": "A fallen feather lay beside a key that fit no lock.",
+    "trait": "golden"
+  },
+  "world_id": "story.golden_chicken"
+}
