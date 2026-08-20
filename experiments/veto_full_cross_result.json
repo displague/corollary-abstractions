@@ -1,0 +1,27 @@
+{
+ "schema": "veto-full-cross-result/1",
+ "protocol": "experiments/veto_full_cross_protocol.md",
+ "exploratory": true,
+ "real_tags_conflicting_full_table": 21,
+ "real_tags_conflicting_scoped_table_v015": 22,
+ "permutations": 20,
+ "seed": 20260819,
+ "permuted_min": 45,
+ "permuted_5th_percentile": 45,
+ "permuted_mean": 52.7,
+ "permuted_max": 61,
+ "criterion": "established iff real < 5th percentile (fixed in the protocol before the table existed)",
+ "established": true,
+ "consequence_if_not": "the suspension expires at this release by its own two-cycle clause; the count returns as an unadjudicated observation carrying the one-row finding",
+ "scoped_overlap_pairs": 44,
+ "disagreements_with_scoped": [
+  {
+   "kinds": [
+    "count",
+    "point"
+   ],
+   "scoped_v015": "incompatible",
+   "blind_full": "compatible"
+  }
+ ]
+}

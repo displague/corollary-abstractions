@@ -1,0 +1,2291 @@
+{
+ "schema": "veto-full-cross-table/1",
+ "authored_blind": {
+  "channel": "claude -p headless, cwd C:/Users/displ/AppData/Local/Temp/veto16 (empty, non-git, no project name), --strict-mcp-config, full tool denylist, model claude-opus-5, single turn",
+  "shown": "the 26-entry kind menu with glosses and the judging rules only; not the corpus, tags, inventory, scoped table, or any co-occurrence fact",
+  "brief_sha256_canonical_lf": "e74f86eae6b657f1454b07d3a99d4c59b7c4aa8582ba23cc0702fa50299bd7a8",
+  "session_id": "1137c959-7945-4d0c-8a7d-e67f083d9186",
+  "cost_usd": 1.119,
+  "protocol": "experiments/veto_full_cross_protocol.md"
+ },
+ "pairs": 325,
+ "incompatible": [
+  {
+   "kinds": [
+    "area",
+    "concentration"
+   ],
+   "reason": "Area is L squared; concentration is amount per volume"
+  },
+  {
+   "kinds": [
+    "area",
+    "count"
+   ],
+   "reason": "Area carries length-squared dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "area",
+    "curvature"
+   ],
+   "reason": "L squared versus inverse length; opposite dimensions"
+  },
+  {
+   "kinds": [
+    "area",
+    "dimensionless_ratio"
+   ],
+   "reason": "Area has dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "area",
+    "elasticity"
+   ],
+   "reason": "Elasticity is dimensionless; area is length squared"
+  },
+  {
+   "kinds": [
+    "area",
+    "electric_current"
+   ],
+   "reason": "Length squared differs from charge per time"
+  },
+  {
+   "kinds": [
+    "area",
+    "electric_potential"
+   ],
+   "reason": "Geometric extent has no electrical dimension"
+  },
+  {
+   "kinds": [
+    "area",
+    "energy"
+   ],
+   "reason": "Length squared cannot equal work or heat"
+  },
+  {
+   "kinds": [
+    "area",
+    "force"
+   ],
+   "reason": "Area lacks mass and time dimensions"
+  },
+  {
+   "kinds": [
+    "area",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; area is not"
+  },
+  {
+   "kinds": [
+    "area",
+    "length"
+   ],
+   "reason": "L squared never equals L"
+  },
+  {
+   "kinds": [
+    "area",
+    "linear_map"
+   ],
+   "reason": "An extent is a scalar magnitude, not an operator"
+  },
+  {
+   "kinds": [
+    "area",
+    "mass_inertia"
+   ],
+   "reason": "Area has no mass dimension"
+  },
+  {
+   "kinds": [
+    "area",
+    "money_value"
+   ],
+   "reason": "Geometric extent is not a monetary amount"
+  },
+  {
+   "kinds": [
+    "area",
+    "point"
+   ],
+   "reason": "Area is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "area",
+    "probability"
+   ],
+   "reason": "Probabilities are dimensionless; area is length squared"
+  },
+  {
+   "kinds": [
+    "area",
+    "proposition"
+   ],
+   "reason": "A dimensional magnitude is not a boolean element"
+  },
+  {
+   "kinds": [
+    "area",
+    "rate_per_time"
+   ],
+   "reason": "Area is not any quantity divided by time"
+  },
+  {
+   "kinds": [
+    "area",
+    "resistance"
+   ],
+   "reason": "No shared dimension with volts per ampere"
+  },
+  {
+   "kinds": [
+    "area",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; area carries length-squared dimension"
+  },
+  {
+   "kinds": [
+    "area",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "area",
+    "temperature"
+   ],
+   "reason": "Thermal level has no length dimension"
+  },
+  {
+   "kinds": [
+    "area",
+    "time"
+   ],
+   "reason": "Length squared is never a duration"
+  },
+  {
+   "kinds": [
+    "area",
+    "velocity"
+   ],
+   "reason": "L squared differs from length per time"
+  },
+  {
+   "kinds": [
+    "area",
+    "volume"
+   ],
+   "reason": "L squared never equals L cubed"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "count"
+   ],
+   "reason": "Concentration is per volume; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "curvature"
+   ],
+   "reason": "Amount per volume differs from reciprocal length"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "dimensionless_ratio"
+   ],
+   "reason": "Concentration carries amount-per-volume dimension"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "elasticity"
+   ],
+   "reason": "Elasticity is dimensionless; concentration is not"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "electric_current"
+   ],
+   "reason": "No shared dimension with charge per time"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "electric_potential"
+   ],
+   "reason": "Amount per volume is not voltage"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "energy"
+   ],
+   "reason": "Concentration has no energy dimension"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "force"
+   ],
+   "reason": "Amount per volume is never a force"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; concentration is not"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "length"
+   ],
+   "reason": "A density is not a spatial extent"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "linear_map"
+   ],
+   "reason": "A density scalar is not an operator"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "mass_inertia"
+   ],
+   "reason": "Density differs from mass by a volume"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "money_value"
+   ],
+   "reason": "Concentration is not a monetary amount"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "point"
+   ],
+   "reason": "A density is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "probability"
+   ],
+   "reason": "Concentration has dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "proposition"
+   ],
+   "reason": "A dimensional density is not a boolean element"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "rate_per_time"
+   ],
+   "reason": "Concentration divides by volume, not by time"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "resistance"
+   ],
+   "reason": "No shared dimension with volts per ampere"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; concentration carries dimension"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "set"
+   ],
+   "reason": "A density is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "temperature"
+   ],
+   "reason": "Amount per volume is not thermal level"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "time"
+   ],
+   "reason": "Concentration is never a duration"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "velocity"
+   ],
+   "reason": "Amount per volume differs from length per time"
+  },
+  {
+   "kinds": [
+    "concentration",
+    "volume"
+   ],
+   "reason": "A per-volume density is not a volume"
+  },
+  {
+   "kinds": [
+    "count",
+    "curvature"
+   ],
+   "reason": "Counts are dimensionless; curvature is reciprocal length"
+  },
+  {
+   "kinds": [
+    "count",
+    "elasticity"
+   ],
+   "reason": "Elasticity is a real log-derivative, not a cardinality"
+  },
+  {
+   "kinds": [
+    "count",
+    "electric_current"
+   ],
+   "reason": "Charge per time is not an integer count"
+  },
+  {
+   "kinds": [
+    "count",
+    "electric_potential"
+   ],
+   "reason": "Voltage carries dimension; counts do not"
+  },
+  {
+   "kinds": [
+    "count",
+    "energy"
+   ],
+   "reason": "Energy carries dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "count",
+    "force"
+   ],
+   "reason": "Force carries dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "count",
+    "length"
+   ],
+   "reason": "Cardinality is dimensionless; length is not"
+  },
+  {
+   "kinds": [
+    "count",
+    "linear_map"
+   ],
+   "reason": "An integer magnitude is not an operator"
+  },
+  {
+   "kinds": [
+    "count",
+    "mass_inertia"
+   ],
+   "reason": "Mass number counts nucleons but is not mass"
+  },
+  {
+   "kinds": [
+    "count",
+    "money_value"
+   ],
+   "reason": "Counts are dimensionless; money carries monetary dimension"
+  },
+  {
+   "kinds": [
+    "count",
+    "probability"
+   ],
+   "reason": "A measure in [0,1] is not a cardinality"
+  },
+  {
+   "kinds": [
+    "count",
+    "proposition"
+   ],
+   "reason": "An integer is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "count",
+    "rate_per_time"
+   ],
+   "reason": "Counts per time are rates, not counts"
+  },
+  {
+   "kinds": [
+    "count",
+    "resistance"
+   ],
+   "reason": "Ohms carry dimension; counts do not"
+  },
+  {
+   "kinds": [
+    "count",
+    "set"
+   ],
+   "reason": "Cardinality measures a set; it is not one"
+  },
+  {
+   "kinds": [
+    "count",
+    "temperature"
+   ],
+   "reason": "Temperature has thermal dimension; counts do not"
+  },
+  {
+   "kinds": [
+    "count",
+    "time"
+   ],
+   "reason": "Durations carry time dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "count",
+    "velocity"
+   ],
+   "reason": "Velocity carries dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "count",
+    "volume"
+   ],
+   "reason": "Volume carries dimension; counts are dimensionless"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "dimensionless_ratio"
+   ],
+   "reason": "Reciprocal length has dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "elasticity"
+   ],
+   "reason": "Elasticity is dimensionless; curvature is reciprocal length"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "electric_current"
+   ],
+   "reason": "Reciprocal length is not charge per time"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "electric_potential"
+   ],
+   "reason": "Reciprocal length is not voltage"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "energy"
+   ],
+   "reason": "Inverse length is not work or heat"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "force"
+   ],
+   "reason": "Reciprocal length lacks mass dimension"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; curvature is not"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "length"
+   ],
+   "reason": "Inverse length never equals length"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "mass_inertia"
+   ],
+   "reason": "Reciprocal length has no mass dimension"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "money_value"
+   ],
+   "reason": "Curvature is not a monetary amount"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "point"
+   ],
+   "reason": "Curvature is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "probability"
+   ],
+   "reason": "Probability is dimensionless; curvature is not"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "proposition"
+   ],
+   "reason": "A dimensional scalar is not a boolean element"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "rate_per_time"
+   ],
+   "reason": "Curvature is per length, not per time"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "resistance"
+   ],
+   "reason": "Reciprocal length is not volts per ampere"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; curvature carries inverse-length dimension"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "temperature"
+   ],
+   "reason": "Reciprocal length is not thermal level"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "time"
+   ],
+   "reason": "Inverse length is never a duration"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "velocity"
+   ],
+   "reason": "Reciprocal length differs from length per time"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "volume"
+   ],
+   "reason": "Inverse length never equals length cubed"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "electric_current"
+   ],
+   "reason": "Amperes carry dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "electric_potential"
+   ],
+   "reason": "Volts carry dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "energy"
+   ],
+   "reason": "Energy carries dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "force"
+   ],
+   "reason": "Force carries dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "length"
+   ],
+   "reason": "Length carries dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "mass_inertia"
+   ],
+   "reason": "Mass carries dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "money_value"
+   ],
+   "reason": "Money carries a monetary dimension"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "point"
+   ],
+   "reason": "A magnitude is not a position in a space"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "proposition"
+   ],
+   "reason": "A number is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "rate_per_time"
+   ],
+   "reason": "Dividing by time introduces inverse-time dimension"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "resistance"
+   ],
+   "reason": "Ohms carry dimension; pure numbers do not"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "set"
+   ],
+   "reason": "A number is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "temperature"
+   ],
+   "reason": "Temperature carries thermal dimension"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "time"
+   ],
+   "reason": "Duration carries time dimension"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "velocity"
+   ],
+   "reason": "Velocity carries length-per-time dimension"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "volume"
+   ],
+   "reason": "Volume carries length-cubed dimension"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "electric_current"
+   ],
+   "reason": "A dimensionless ratio is not charge per time"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "electric_potential"
+   ],
+   "reason": "A dimensionless ratio is not voltage"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "energy"
+   ],
+   "reason": "A dimensionless ratio is not work or heat"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "force"
+   ],
+   "reason": "A dimensionless ratio is not a force"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "information"
+   ],
+   "reason": "Elasticity is not entropy or surprisal"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "length"
+   ],
+   "reason": "A dimensionless ratio is not spatial extent"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "linear_map"
+   ],
+   "reason": "A log-derivative coefficient is not an operator"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "mass_inertia"
+   ],
+   "reason": "A dimensionless ratio has no mass dimension"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "money_value"
+   ],
+   "reason": "Elasticity is unitless; money carries monetary dimension"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "point"
+   ],
+   "reason": "A ratio is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "probability"
+   ],
+   "reason": "Elasticities are unbounded; probabilities lie in [0,1]"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "proposition"
+   ],
+   "reason": "A number is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "rate_per_time"
+   ],
+   "reason": "Elasticity divides proportional changes, not time"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "resistance"
+   ],
+   "reason": "A dimensionless ratio is not volts per ampere"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "set"
+   ],
+   "reason": "A number is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "temperature"
+   ],
+   "reason": "A dimensionless ratio is not thermal level"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "time"
+   ],
+   "reason": "A dimensionless ratio is not a duration"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "velocity"
+   ],
+   "reason": "A dimensionless ratio is not length per time"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "volume"
+   ],
+   "reason": "A dimensionless ratio is not a spatial extent"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "electric_potential"
+   ],
+   "reason": "Amperes and volts are distinct dimensions"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "energy"
+   ],
+   "reason": "Charge per time is not work or heat"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "force"
+   ],
+   "reason": "Current has no mechanical force dimension"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; current is not"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "length"
+   ],
+   "reason": "Current has no length dimension"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "linear_map"
+   ],
+   "reason": "A current is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "mass_inertia"
+   ],
+   "reason": "Current has no mass dimension"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "money_value"
+   ],
+   "reason": "Amperes are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "point"
+   ],
+   "reason": "A current is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "probability"
+   ],
+   "reason": "Current carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "proposition"
+   ],
+   "reason": "A dimensional scalar is not a boolean element"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "resistance"
+   ],
+   "reason": "Amperes differ from volts per ampere"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; current carries dimension"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "temperature"
+   ],
+   "reason": "Charge per time is not thermal level"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "time"
+   ],
+   "reason": "Charge per time is never a duration"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "velocity"
+   ],
+   "reason": "Charge per time differs from length per time"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "volume"
+   ],
+   "reason": "Current has no length dimension"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "energy"
+   ],
+   "reason": "Volts differ from joules by a charge factor"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "force"
+   ],
+   "reason": "Voltage has no force dimension"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; voltage is not"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "length"
+   ],
+   "reason": "Voltage has no length dimension"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "linear_map"
+   ],
+   "reason": "A voltage is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "mass_inertia"
+   ],
+   "reason": "Voltage has no mass dimension"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "money_value"
+   ],
+   "reason": "Volts are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "point"
+   ],
+   "reason": "A potential is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "probability"
+   ],
+   "reason": "Voltage carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "proposition"
+   ],
+   "reason": "A dimensional scalar is not a boolean element"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "resistance"
+   ],
+   "reason": "Volts differ from volts per ampere"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; voltage carries dimension"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "temperature"
+   ],
+   "reason": "Voltage is not thermal level"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "time"
+   ],
+   "reason": "Voltage is never a duration"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "velocity"
+   ],
+   "reason": "Voltage is not length per time"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "volume"
+   ],
+   "reason": "Voltage has no length dimension"
+  },
+  {
+   "kinds": [
+    "energy",
+    "force"
+   ],
+   "reason": "Energy is force times distance, not force"
+  },
+  {
+   "kinds": [
+    "energy",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; energy carries dimension"
+  },
+  {
+   "kinds": [
+    "energy",
+    "length"
+   ],
+   "reason": "Energy has mass and time dimensions too"
+  },
+  {
+   "kinds": [
+    "energy",
+    "mass_inertia"
+   ],
+   "reason": "Mass and energy differ by factor c squared"
+  },
+  {
+   "kinds": [
+    "energy",
+    "money_value"
+   ],
+   "reason": "Joules are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "energy",
+    "point"
+   ],
+   "reason": "Energy is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "energy",
+    "probability"
+   ],
+   "reason": "Energy carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "energy",
+    "proposition"
+   ],
+   "reason": "A dimensional scalar is not a boolean element"
+  },
+  {
+   "kinds": [
+    "energy",
+    "rate_per_time"
+   ],
+   "reason": "Energy per time is power, not energy"
+  },
+  {
+   "kinds": [
+    "energy",
+    "resistance"
+   ],
+   "reason": "Joules differ from volts per ampere"
+  },
+  {
+   "kinds": [
+    "energy",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; energy carries dimension"
+  },
+  {
+   "kinds": [
+    "energy",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "energy",
+    "temperature"
+   ],
+   "reason": "Temperature and energy differ by Boltzmann's constant"
+  },
+  {
+   "kinds": [
+    "energy",
+    "time"
+   ],
+   "reason": "Energy times time is action, not energy"
+  },
+  {
+   "kinds": [
+    "energy",
+    "velocity"
+   ],
+   "reason": "Energy is not length per time"
+  },
+  {
+   "kinds": [
+    "energy",
+    "volume"
+   ],
+   "reason": "Energy per volume is density, not volume"
+  },
+  {
+   "kinds": [
+    "force",
+    "information"
+   ],
+   "reason": "Bits are dimensionless; force carries dimension"
+  },
+  {
+   "kinds": [
+    "force",
+    "length"
+   ],
+   "reason": "Force has mass and time dimensions too"
+  },
+  {
+   "kinds": [
+    "force",
+    "linear_map"
+   ],
+   "reason": "Force is a vector acted on, not an operator"
+  },
+  {
+   "kinds": [
+    "force",
+    "mass_inertia"
+   ],
+   "reason": "Weight is mass times acceleration, not mass"
+  },
+  {
+   "kinds": [
+    "force",
+    "money_value"
+   ],
+   "reason": "Newtons are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "force",
+    "point"
+   ],
+   "reason": "Force is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "force",
+    "probability"
+   ],
+   "reason": "Force carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "force",
+    "proposition"
+   ],
+   "reason": "A dimensional vector is not a boolean element"
+  },
+  {
+   "kinds": [
+    "force",
+    "resistance"
+   ],
+   "reason": "Newtons differ from volts per ampere"
+  },
+  {
+   "kinds": [
+    "force",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; force carries dimension"
+  },
+  {
+   "kinds": [
+    "force",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "force",
+    "temperature"
+   ],
+   "reason": "Force is not thermal level"
+  },
+  {
+   "kinds": [
+    "force",
+    "time"
+   ],
+   "reason": "Force is never a duration"
+  },
+  {
+   "kinds": [
+    "force",
+    "velocity"
+   ],
+   "reason": "Force has mass dimension; velocity does not"
+  },
+  {
+   "kinds": [
+    "force",
+    "volume"
+   ],
+   "reason": "Force has no length-cubed dimension"
+  },
+  {
+   "kinds": [
+    "information",
+    "length"
+   ],
+   "reason": "Bits are dimensionless; length is not"
+  },
+  {
+   "kinds": [
+    "information",
+    "linear_map"
+   ],
+   "reason": "Entropy is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "information",
+    "mass_inertia"
+   ],
+   "reason": "Bits are dimensionless; mass is not"
+  },
+  {
+   "kinds": [
+    "information",
+    "money_value"
+   ],
+   "reason": "Bits are unitless; money carries monetary dimension"
+  },
+  {
+   "kinds": [
+    "information",
+    "point"
+   ],
+   "reason": "Surprisal is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "information",
+    "probability"
+   ],
+   "reason": "Surprisal is minus log probability, not probability"
+  },
+  {
+   "kinds": [
+    "information",
+    "proposition"
+   ],
+   "reason": "A number is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "information",
+    "rate_per_time"
+   ],
+   "reason": "Bits per second is a rate, not information"
+  },
+  {
+   "kinds": [
+    "information",
+    "resistance"
+   ],
+   "reason": "Bits are dimensionless; ohms are not"
+  },
+  {
+   "kinds": [
+    "information",
+    "set"
+   ],
+   "reason": "A number is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "information",
+    "temperature"
+   ],
+   "reason": "Bits are dimensionless; temperature is not"
+  },
+  {
+   "kinds": [
+    "information",
+    "time"
+   ],
+   "reason": "Bits are dimensionless; duration is not"
+  },
+  {
+   "kinds": [
+    "information",
+    "velocity"
+   ],
+   "reason": "Bits are dimensionless; velocity is not"
+  },
+  {
+   "kinds": [
+    "information",
+    "volume"
+   ],
+   "reason": "Bits are dimensionless; volume is not"
+  },
+  {
+   "kinds": [
+    "length",
+    "linear_map"
+   ],
+   "reason": "An extent is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "length",
+    "mass_inertia"
+   ],
+   "reason": "Length has no mass dimension"
+  },
+  {
+   "kinds": [
+    "length",
+    "money_value"
+   ],
+   "reason": "Metres are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "length",
+    "probability"
+   ],
+   "reason": "Length carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "length",
+    "proposition"
+   ],
+   "reason": "A dimensional magnitude is not a boolean element"
+  },
+  {
+   "kinds": [
+    "length",
+    "rate_per_time"
+   ],
+   "reason": "Length per time is velocity, not length"
+  },
+  {
+   "kinds": [
+    "length",
+    "resistance"
+   ],
+   "reason": "Metres differ from volts per ampere"
+  },
+  {
+   "kinds": [
+    "length",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; length carries dimension"
+  },
+  {
+   "kinds": [
+    "length",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "length",
+    "temperature"
+   ],
+   "reason": "Spatial extent is not thermal level"
+  },
+  {
+   "kinds": [
+    "length",
+    "time"
+   ],
+   "reason": "Spatial extent and duration are distinct dimensions"
+  },
+  {
+   "kinds": [
+    "length",
+    "velocity"
+   ],
+   "reason": "Length lacks the inverse-time factor"
+  },
+  {
+   "kinds": [
+    "length",
+    "volume"
+   ],
+   "reason": "L never equals L cubed"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "money_value"
+   ],
+   "reason": "An operator is not a monetary amount"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "point"
+   ],
+   "reason": "Operators act on positions; they are not positions"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "probability"
+   ],
+   "reason": "A probability is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "score_reward"
+   ],
+   "reason": "A reward is a scalar signal, not an operator"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "set"
+   ],
+   "reason": "Set-algebra elements are collections, not operators"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "temperature"
+   ],
+   "reason": "Thermal level is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "time"
+   ],
+   "reason": "An instant or duration is not an operator"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "velocity"
+   ],
+   "reason": "Velocity is a vector, not an operator"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "volume"
+   ],
+   "reason": "An extent is a scalar, not an operator"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "money_value"
+   ],
+   "reason": "Kilograms are not a monetary amount"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "point"
+   ],
+   "reason": "Mass is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "probability"
+   ],
+   "reason": "Mass carries dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "proposition"
+   ],
+   "reason": "A dimensional scalar is not a boolean element"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "rate_per_time"
+   ],
+   "reason": "Mass flow per time is not mass"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "resistance"
+   ],
+   "reason": "Mechanical inertia is not volts per ampere"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; mass carries dimension"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "temperature"
+   ],
+   "reason": "Mass is not thermal level"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "time"
+   ],
+   "reason": "Mass is never a duration"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "velocity"
+   ],
+   "reason": "Mass lacks length and time dimensions"
+  },
+  {
+   "kinds": [
+    "mass_inertia",
+    "volume"
+   ],
+   "reason": "Mass differs from volume by a density"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "point"
+   ],
+   "reason": "A price is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "probability"
+   ],
+   "reason": "Money carries monetary dimension; probability is pure"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "proposition"
+   ],
+   "reason": "An amount is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "rate_per_time"
+   ],
+   "reason": "Income per time is a flow, not a stock"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "resistance"
+   ],
+   "reason": "Currency is not volts per ampere"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; money carries monetary dimension"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "set"
+   ],
+   "reason": "An amount is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "temperature"
+   ],
+   "reason": "Money is not thermal level"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "time"
+   ],
+   "reason": "A monetary amount is never a duration"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "velocity"
+   ],
+   "reason": "Money is not length per time"
+  },
+  {
+   "kinds": [
+    "money_value",
+    "volume"
+   ],
+   "reason": "Money has no length dimension"
+  },
+  {
+   "kinds": [
+    "point",
+    "probability"
+   ],
+   "reason": "A probability is a magnitude, not a location"
+  },
+  {
+   "kinds": [
+    "point",
+    "proposition"
+   ],
+   "reason": "A position is not a boolean-algebra element"
+  },
+  {
+   "kinds": [
+    "point",
+    "rate_per_time"
+   ],
+   "reason": "A position is not a quantity divided by time"
+  },
+  {
+   "kinds": [
+    "point",
+    "resistance"
+   ],
+   "reason": "Resistance is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "point",
+    "score_reward"
+   ],
+   "reason": "A reward signal is a scalar, not a location"
+  },
+  {
+   "kinds": [
+    "point",
+    "set"
+   ],
+   "reason": "A point is an element, not a collection"
+  },
+  {
+   "kinds": [
+    "point",
+    "temperature"
+   ],
+   "reason": "Thermal level is an intensity, not a position"
+  },
+  {
+   "kinds": [
+    "point",
+    "velocity"
+   ],
+   "reason": "Velocity is a rate vector, not a position"
+  },
+  {
+   "kinds": [
+    "point",
+    "volume"
+   ],
+   "reason": "An extent is a magnitude, not a position"
+  },
+  {
+   "kinds": [
+    "probability",
+    "proposition"
+   ],
+   "reason": "Probability measures a proposition; it is not one"
+  },
+  {
+   "kinds": [
+    "probability",
+    "rate_per_time"
+   ],
+   "reason": "Probability per time is a hazard rate"
+  },
+  {
+   "kinds": [
+    "probability",
+    "resistance"
+   ],
+   "reason": "Probability is pure; ohms carry dimension"
+  },
+  {
+   "kinds": [
+    "probability",
+    "set"
+   ],
+   "reason": "Probability measures a set; it is not one"
+  },
+  {
+   "kinds": [
+    "probability",
+    "temperature"
+   ],
+   "reason": "Probability is pure; temperature carries dimension"
+  },
+  {
+   "kinds": [
+    "probability",
+    "time"
+   ],
+   "reason": "Probability is pure; duration carries dimension"
+  },
+  {
+   "kinds": [
+    "probability",
+    "velocity"
+   ],
+   "reason": "Probability is pure; velocity carries dimension"
+  },
+  {
+   "kinds": [
+    "probability",
+    "volume"
+   ],
+   "reason": "Probability is pure; volume carries dimension"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "rate_per_time"
+   ],
+   "reason": "A boolean element is not a quantity per time"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "resistance"
+   ],
+   "reason": "A boolean element is not a dimensional magnitude"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "score_reward"
+   ],
+   "reason": "A boolean element is not a numeric signal"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "temperature"
+   ],
+   "reason": "A boolean element is not thermal level"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "time"
+   ],
+   "reason": "A boolean element is not an instant"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "velocity"
+   ],
+   "reason": "A boolean element is not a dimensional vector"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "volume"
+   ],
+   "reason": "A boolean element is not a spatial extent"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "resistance"
+   ],
+   "reason": "Ohms are not a quantity divided by time"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "score_reward"
+   ],
+   "reason": "Reward per time is a rate, not reward"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "set"
+   ],
+   "reason": "A collection is not a quantity per time"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "temperature"
+   ],
+   "reason": "Temperature per time is heating rate, not temperature"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "time"
+   ],
+   "reason": "Dividing by time cannot yield a duration"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "volume"
+   ],
+   "reason": "Volumetric flow rate is not a volume"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "score_reward"
+   ],
+   "reason": "Reward is unitless; ohms carry dimension"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "set"
+   ],
+   "reason": "A magnitude is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "temperature"
+   ],
+   "reason": "Ohms are not thermal level"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "time"
+   ],
+   "reason": "Resistance is never a duration"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "velocity"
+   ],
+   "reason": "Ohms are not length per time"
+  },
+  {
+   "kinds": [
+    "resistance",
+    "volume"
+   ],
+   "reason": "Ohms have no length-cubed dimension"
+  },
+  {
+   "kinds": [
+    "score_reward",
+    "set"
+   ],
+   "reason": "A numeric signal is not a set-algebra element"
+  },
+  {
+   "kinds": [
+    "score_reward",
+    "temperature"
+   ],
+   "reason": "Reward is unitless; temperature carries thermal dimension"
+  },
+  {
+   "kinds": [
+    "score_reward",
+    "time"
+   ],
+   "reason": "Reward is unitless; duration carries time dimension"
+  },
+  {
+   "kinds": [
+    "score_reward",
+    "velocity"
+   ],
+   "reason": "Reward is unitless; velocity carries dimension"
+  },
+  {
+   "kinds": [
+    "score_reward",
+    "volume"
+   ],
+   "reason": "Reward is unitless; volume carries dimension"
+  },
+  {
+   "kinds": [
+    "set",
+    "temperature"
+   ],
+   "reason": "A collection is not a thermal level"
+  },
+  {
+   "kinds": [
+    "set",
+    "time"
+   ],
+   "reason": "A collection is not an instant or duration"
+  },
+  {
+   "kinds": [
+    "set",
+    "velocity"
+   ],
+   "reason": "A collection is not a dimensional vector"
+  },
+  {
+   "kinds": [
+    "set",
+    "volume"
+   ],
+   "reason": "A set has a volume; it is not one"
+  },
+  {
+   "kinds": [
+    "temperature",
+    "time"
+   ],
+   "reason": "Thermal level is never a duration"
+  },
+  {
+   "kinds": [
+    "temperature",
+    "velocity"
+   ],
+   "reason": "Temperature is not length per time"
+  },
+  {
+   "kinds": [
+    "temperature",
+    "volume"
+   ],
+   "reason": "Temperature has no length dimension"
+  },
+  {
+   "kinds": [
+    "time",
+    "velocity"
+   ],
+   "reason": "Duration lacks the length factor"
+  },
+  {
+   "kinds": [
+    "time",
+    "volume"
+   ],
+   "reason": "Duration is not a spatial extent"
+  },
+  {
+   "kinds": [
+    "velocity",
+    "volume"
+   ],
+   "reason": "Length per time is not length cubed"
+  }
+ ],
+ "compatible": [
+  {
+   "kinds": [
+    "count",
+    "dimensionless_ratio"
+   ],
+   "reason": "An integer cardinality is itself a pure number"
+  },
+  {
+   "kinds": [
+    "count",
+    "information"
+   ],
+   "reason": "Entropy can be an integer number of bits"
+  },
+  {
+   "kinds": [
+    "count",
+    "point"
+   ],
+   "reason": "A rank is a position in an ordered space"
+  },
+  {
+   "kinds": [
+    "count",
+    "score_reward"
+   ],
+   "reason": "Number of successes serves directly as unitless reward"
+  },
+  {
+   "kinds": [
+    "curvature",
+    "linear_map"
+   ],
+   "reason": "Shape and Riemann curvature operators are linear maps"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "elasticity"
+   ],
+   "reason": "Elasticity is precisely a dimensionless ratio of changes"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "information"
+   ],
+   "reason": "Bits and nats are dimensionless pure numbers"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "linear_map"
+   ],
+   "reason": "A scaling factor is a one-dimensional linear map"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "probability"
+   ],
+   "reason": "A probability is a pure number in [0,1]"
+  },
+  {
+   "kinds": [
+    "dimensionless_ratio",
+    "score_reward"
+   ],
+   "reason": "Rewards are unitless scalars, hence pure numbers"
+  },
+  {
+   "kinds": [
+    "elasticity",
+    "score_reward"
+   ],
+   "reason": "Estimated elasticity can serve as unitless learning signal"
+  },
+  {
+   "kinds": [
+    "electric_current",
+    "rate_per_time"
+   ],
+   "reason": "Current is literally charge divided by time"
+  },
+  {
+   "kinds": [
+    "electric_potential",
+    "rate_per_time"
+   ],
+   "reason": "Faraday: EMF is magnetic flux change per time"
+  },
+  {
+   "kinds": [
+    "energy",
+    "linear_map"
+   ],
+   "reason": "The Hamiltonian operator is the system's energy"
+  },
+  {
+   "kinds": [
+    "force",
+    "rate_per_time"
+   ],
+   "reason": "Force is momentum change per unit time"
+  },
+  {
+   "kinds": [
+    "information",
+    "score_reward"
+   ],
+   "reason": "Information gain is a standard intrinsic reward"
+  },
+  {
+   "kinds": [
+    "length",
+    "point"
+   ],
+   "reason": "A coordinate is both a position and a length"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "mass_inertia"
+   ],
+   "reason": "The inertia tensor is an operator-valued inertia"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "proposition"
+   ],
+   "reason": "Quantum-logic propositions are projection operators"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "rate_per_time"
+   ],
+   "reason": "The angular velocity tensor is an operator-valued rate"
+  },
+  {
+   "kinds": [
+    "linear_map",
+    "resistance"
+   ],
+   "reason": "A multiport impedance matrix maps currents to voltages"
+  },
+  {
+   "kinds": [
+    "point",
+    "time"
+   ],
+   "reason": "An instant is a point in time"
+  },
+  {
+   "kinds": [
+    "probability",
+    "score_reward"
+   ],
+   "reason": "Success probability commonly serves as the reward signal"
+  },
+  {
+   "kinds": [
+    "proposition",
+    "set"
+   ],
+   "reason": "Events are both sets and propositions; Stone duality"
+  },
+  {
+   "kinds": [
+    "rate_per_time",
+    "velocity"
+   ],
+   "reason": "Velocity is literally length divided by time"
+  }
+ ]
+}
