@@ -16,12 +16,13 @@ spends **1,096.4 s rejecting six malformed dictionaries**.
 The cause is exact and is not a slow algorithm.  `_compare_declared_delta`
 takes the measurement as an argument, so `match_signatures.load_nodes` and
 `build_report` have already run over 12,777 nodes by the time it is called.
-Its first four refusals never read that measurement:
+Its first five refusals never read that measurement:
 
 - the declaration is not a dict;
 - the declaration carries unknown keys;
 - the declaration omits required keys;
-- a declared count is not an `int`.
+- a declared count is not an `int`;
+- `new_typed_twin_partners` is not a list of strings.
 
 Each of those is a fact about a dictionary the caller supplied.  None of them
 needs the corpus.
@@ -31,7 +32,7 @@ needs the corpus.
 Split the function, and nothing else:
 
 - **`_validate_declared_delta(candidate)`** — pure.  Raises
-  `matcher_delta_prediction` for the four conditions above.  Reads no corpus,
+  `matcher_delta_prediction` for the five conditions above.  Reads no corpus,
   no snapshot, no measurement.
 - **`_compare_declared_delta(candidate, measured)`** — unchanged in meaning.
   Keeps the value comparison, which genuinely needs the measurement.
@@ -83,3 +84,37 @@ reverted rather than the tests updated.
 - No claim about `test_corpus_analogy_split`, whose 3,434 s of per-class
   fixture rebuild is a separate and unblocked lane.
 - No change to what any check decides, only to when it runs.
+
+## Measured outcome
+
+**Registration was wrong about the size, right about the direction.**  The
+document first said four pure refusals; the `new_typed_twin_partners` list
+check is corpus-independent too, so it is five.  Corrected above rather than
+left right-in-code and wrong-on-paper.
+
+| | before | after |
+|---|---|---|
+| `test_delta_declared_with_the_wrong_type_is_refused` | 1,096.4 s | **46.2 s** |
+| `tests.test_write_stage` (103 tests) | 12,522.5 s | **10,770.9 s** |
+
+All 103 tests pass and every refusal assertion keeps its identity, which was
+the contract.
+
+The module drop is **14 %**, far less than the defect's shape suggested, and
+the reason is worth recording: only the *declared-delta* refusals were paying
+for a corpus pass.  The other identities — `declarative_seed` with ten
+assertions, `seed_ownership`, `path_containment` and the rest — already refuse
+before the measurement.  Seven assertions were over-paying, not forty, and the
+worst test alone accounts for about 1,050 s of the 1,752 s saved.
+
+**The comparison is indicative, not a receipt.**  The 12,522.5 s figure was
+measured by `plan_test_shards` in an isolated checkout at a frozen tip with
+bytecode writing disabled; the 10,770.9 s figure was a plain `unittest` run in
+a working tree.  A like-for-like number needs the gate tool re-run at the
+v0.15 tip, and the release gate will produce one.
+
+What this does not do is change the parallel floor.  At 10,770.9 s this module
+is still the largest by an order of magnitude and still sets the wall clock for
+any shard count.  The next lever is the one already parked: the split fixture's
+179.3 s rebuild, paid once per class rather than once per module.
+

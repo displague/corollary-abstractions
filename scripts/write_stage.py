@@ -1165,7 +1165,20 @@ def _measure_matcher_delta(
     }
 
 
-def _compare_declared_delta(candidate: WriteCandidate, measured: dict) -> str:
+def _validate_declared_delta(candidate: WriteCandidate) -> dict:
+    """Every declared-delta refusal that does not need the corpus.
+
+    Split out of `_compare_declared_delta` so it can run BEFORE
+    `_measure_matcher_delta`, which walks 12,777 nodes.  These five refusals
+    ask only whether a dictionary the caller supplied is well formed, and they
+    were costing a full corpus pass each: one test spent 1,096 seconds
+    establishing that six malformed dictionaries are malformed.
+
+    The identity `matcher_delta_prediction` is deliberately unchanged, and the
+    measurement skipped in between raises no refusal of its own, so no
+    candidate reaches a check it did not reach before.  See
+    docs/DESIGN-check-order.md.
+    """
     declared = candidate.expected_matcher_delta
     if not isinstance(declared, dict):
         raise Refusal(
@@ -1208,6 +1221,16 @@ def _compare_declared_delta(candidate: WriteCandidate, measured: dict) -> str:
             "matcher_delta_prediction",
             "declared `new_typed_twin_partners` must be a list of statement ids",
         )
+    return declared
+
+
+def _compare_declared_delta(candidate: WriteCandidate, measured: dict) -> str:
+    """Compare a declaration against the measurement it predicted.
+
+    Re-runs the pure validation so a direct caller cannot skip it; by the time
+    the gate reaches here it has already passed and costs nothing.
+    """
+    declared = _validate_declared_delta(candidate)
     actual = {key: measured["delta"][key] for key in _MATCHER_DELTA_KEYS}
     normalized = {
         key: (
@@ -1805,6 +1828,10 @@ def _gate(
         record.passed(
             "schema_and_link_validation", _validate(scratch, repo_root)
         )
+        # Pure declaration checks first: they refuse the same candidates with
+        # the same identity, and a corpus walk to reject a malformed dict is
+        # what made this module 57.7% of the suite.
+        _validate_declared_delta(candidate)
         measured = _measure_matcher_delta(
             repo_root / "data", scratch / "data", candidate.statement_id
         )
@@ -2244,6 +2271,7 @@ def _verify_application(
     with tempfile.TemporaryDirectory(prefix="write-accept-") as temporary:
         before_data = Path(temporary) / "data"
         _restore_snapshot(before_snapshot, before_data)
+        _validate_declared_delta(candidate)
         measured = _measure_matcher_delta(
             before_data, repo_root / "data", candidate.statement_id
         )
