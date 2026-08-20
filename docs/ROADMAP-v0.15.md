@@ -46,6 +46,19 @@ convenient denominator is how the last cycle got its answer wrong.
 structural match count does not appear in release notes or any evidence chain
 until this reads out, or two release cycles pass.
 
+**Live status (2026-08-20): adjudicated once, partially; suspension
+EXTENDED.** Registered order held: inventory (77 aligned slots across 26
+groups) before tags, blind control before flags. The name-difference control
+passed (0.3958 agreement against the 0.80 drop threshold); the flag count
+landed at 22 of 77, inside the registered 20–60 band, and all four named
+directional calls held. The third control — tag permutation — is invalid by
+an authoring-time scoping defect (the table only covers pairs that co-occur
+under the authored tags), so the tags' information claim stays
+unestablished, and a sensitivity analysis locates the instrument's
+discrimination in a single exemption row (proposition-equals-set). Full
+readout: ANALYSIS "v0.15 — the coincidence veto, adjudicated once
+(partially)".
+
 ## 3. Make the gate affordable without weakening it
 
 v0.14 measured the suite honestly and the answer was one module.
@@ -69,6 +82,14 @@ Two constraints, both binding:
 A cheaper second lane, unblocked: the split fixture is rebuilt once per class
 and costs 179.3 s each time, 1,076 s of which is duplication of a
 deterministic build over an immutable corpus.
+
+**Live status (2026-08-20): first lane SHIPPED.** Check order registered
+before the move (`afafbc4`), reorder landed (`82aef3e`): all 103 tests keep
+their refusal identities, the worst test falls 1,096.4 s → 46.2 s, the
+module 12,522.5 s → 10,770.9 s — fourteen percent, less than the defect's
+shape suggested because only the seven declared-delta refusals were paying
+for a corpus pass. Indicative comparison only; the like-for-like number
+needs the gate tool at the v0.15 tip. The parallel floor is unmoved.
 
 ## 4. Carried, with dependants named
 
