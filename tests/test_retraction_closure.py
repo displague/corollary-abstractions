@@ -476,8 +476,12 @@ class GateRadiusToolAnswers(unittest.TestCase):
 
 
 class GateRegenerationCheckRuns(unittest.TestCase):
-    """Red by construction until the builder lands — that is the
-    preregistration working."""
+    """Green as of the wave-1 builder: the check exists and runs.
+
+    This test really re-runs three corpus writers into a tempdir, so it
+    costs minutes, not milliseconds — the honest price of asserting
+    regeneration rather than asserting that a regeneration script parses.
+    """
 
     def test_the_regeneration_check_reports_the_live_drifts(self) -> None:
         # R2's roots per the design's §3 correction: a HEALED silent drift
@@ -489,6 +493,119 @@ class GateRegenerationCheckRuns(unittest.TestCase):
         import check_report_regeneration  # noqa: PLC0415
 
         self.assertTrue(hasattr(check_report_regeneration, "main"))
+
+        # The registry is the mapping design §3 complained lived only in a
+        # comment in verify_slice.py. Pinning it here means a ledger cannot
+        # be added to reports/ and left unchecked without this test noticing.
+        self.assertEqual(
+            set(check_report_regeneration.REGISTRY),
+            {
+                "reports/signature_matches.json",
+                "reports/specializations.json",
+                "reports/compression.json",
+                "reports/decompositions.json",
+            },
+        )
+        self.assertEqual(
+            set(check_report_regeneration.DECLARED_SNAPSHOTS),
+            {GROUND_TRUTH_ROOTS["b"]},
+        )
+        self.assertIn(
+            "TRIAGE-v0.11",
+            check_report_regeneration.DECLARED_SNAPSHOTS[GROUND_TRUTH_ROOTS["b"]],
+        )
+
+        self.assertEqual(check_report_regeneration.main([]), 0)
+
+
+#: The three ledgers whose writers adopted the provenance convention in
+#: wave 1, with the writer each must name. `decompositions.json` is absent
+#: on purpose — see the assertion at the end of the class.
+PROVENANCED_LEDGERS = {
+    "reports/signature_matches.json": "scripts/match_signatures.py",
+    "reports/specializations.json": "scripts/specialize.py",
+    "reports/compression.json": "scripts/measure_compression.py",
+}
+
+HEX64 = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _sha256_lf(path: Path) -> str:
+    """Canonical-LF digest, recomputed here rather than imported.
+
+    A test that hashed with the writer's own helper would agree with the
+    writer even if the helper were wrong; §6's R5 wants an independent
+    arithmetic.
+    """
+
+    return hashlib.sha256(
+        path.read_bytes().replace(b"\r\n", b"\n")
+    ).hexdigest()
+
+
+class WritersEmitTheirOwnProvenance(unittest.TestCase):
+    """§5 step 1 / gate R1: the ledgers name their writer and their inputs.
+
+    R1 scores edges into `report_ledger` nodes as `inferred: false` only
+    when a deterministic writer emitted them at generation time. These
+    blocks are those edges in ledger form, so their shape is checked here
+    before the assembler that reads them exists.
+    """
+
+    def test_each_regenerated_ledger_carries_its_writers_block(self) -> None:
+        for report_path, writer in sorted(PROVENANCED_LEDGERS.items()):
+            with self.subTest(report=report_path):
+                block = _load(REPO / report_path)["provenance"]
+                self.assertEqual(block["writer"], writer)
+                self.assertTrue(HEX64.match(block["writer_sha256_lf"]))
+                self.assertTrue(block["emitted_at_generation"])
+                self.assertTrue(block["inputs"])
+                paths = [row["path"] for row in block["inputs"]]
+                self.assertEqual(paths, sorted(paths))
+                for row in block["inputs"]:
+                    self.assertTrue(HEX64.match(row["sha256_lf"]), row)
+                    # Repo-relative, forward slashes, no drive letters: R5
+                    # forbids anything that differs between two checkouts
+                    # of the same bytes.
+                    self.assertNotIn("\\", row["path"])
+                    self.assertFalse(Path(row["path"]).is_absolute(), row)
+                    self.assertFalse(row["path"].startswith(".."), row)
+                    self.assertTrue((REPO / row["path"]).is_file(), row)
+
+    def test_the_writer_digest_matches_the_committed_writer(self) -> None:
+        for report_path, writer in sorted(PROVENANCED_LEDGERS.items()):
+            with self.subTest(report=report_path):
+                block = _load(REPO / report_path)["provenance"]
+                self.assertEqual(
+                    block["writer_sha256_lf"], _sha256_lf(REPO / writer)
+                )
+
+    def test_two_input_digests_per_ledger_match_the_committed_data(
+        self,
+    ) -> None:
+        # A spot-check, not a sweep: hashing all ~40 corpora three times
+        # over would put a multi-second cost on every suite run to re-prove
+        # the same arithmetic. The regeneration check is what catches a
+        # stale block wholesale; this proves the digests are real hashes of
+        # the named files rather than plausible-looking strings.
+        for report_path in sorted(PROVENANCED_LEDGERS):
+            with self.subTest(report=report_path):
+                rows = _load(REPO / report_path)["provenance"]["inputs"]
+                for row in (rows[0], rows[-1]):
+                    self.assertEqual(
+                        row["sha256_lf"], _sha256_lf(REPO / row["path"]), row
+                    )
+
+    def test_the_declared_snapshot_predates_the_convention(self) -> None:
+        # NOT an oversight, and not a TODO. reports/decompositions.json is
+        # the declared pre-scale ledger (TRIAGE-v0.11 gate table row 6);
+        # regenerating it at 12k scale to gain a provenance block would
+        # destroy the snapshot the decision preserved. Its missing block is
+        # therefore data — design §4's standing example of an edge that a
+        # writer should have emitted and did not, and so is `inferred:
+        # true` and excluded from every scored clause. When this assertion
+        # starts failing, someone regenerated the snapshot.
+        self.assertNotIn("provenance", _load(REPO / GROUND_TRUTH_ROOTS["b"]))
 
 
 if __name__ == "__main__":

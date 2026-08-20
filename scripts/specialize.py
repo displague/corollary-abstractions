@@ -105,6 +105,7 @@ from match_signatures import (
     TemplateParseError, canonicalize, identity_terms, load_nodes, slot_classes,
     template_slots, tokenize,
 )
+from report_provenance import corpus_provenance
 
 # ---------------------------------------------------------------------------
 # Cost model. See the module docstring for the reasoning; the numbers are
@@ -695,8 +696,12 @@ def main() -> int:
 
     if args.write_report:
         args.write_report.parent.mkdir(parents=True, exist_ok=True)
+        # Provenance leads the file (see match_signatures.main): additive
+        # over the committed bytes, and read before the payload.
         args.write_report.write_text(
-            json.dumps({"specialization_edges": edges}, indent=2,
+            json.dumps({"provenance": corpus_provenance(Path(__file__),
+                                                        args.data_dir),
+                        "specialization_edges": edges}, indent=2,
                        ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Report written to {args.write_report}")
     return 0

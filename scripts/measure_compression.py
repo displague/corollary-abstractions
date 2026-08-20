@@ -24,6 +24,7 @@ from collections import Counter
 from pathlib import Path
 
 from match_signatures import load_nodes
+from report_provenance import corpus_provenance
 
 
 def struct_token_count(shape: str) -> int:
@@ -89,7 +90,10 @@ def main() -> int:
 
     if args.write_report:
         args.write_report.parent.mkdir(parents=True, exist_ok=True)
+        # Provenance leads the file (see match_signatures.main): additive
+        # over the committed bytes, and read before the payload.
         args.write_report.write_text(json.dumps({
+            "provenance": corpus_provenance(Path(__file__), args.data_dir),
             "nodes": rows,
             "mean_char": mean("char_tokens"),
             "mean_struct": mean("struct_tokens"),

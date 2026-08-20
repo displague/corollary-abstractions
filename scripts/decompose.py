@@ -237,6 +237,7 @@ from match_signatures import (
     slot_classes, template_slots, tokenize,
 )
 from specialize import MatchState, match, op_count
+from report_provenance import corpus_provenance
 
 
 @dataclass(frozen=True)
@@ -869,7 +870,8 @@ def channel_summary(decompositions: list[dict]) -> dict:
     return {"graph": block(decompositions), "corpora": corpora}
 
 
-def report(result: dict, write_report: Path | None = None) -> None:
+def report(result: dict, write_report: Path | None = None,
+           provenance: dict | None = None) -> None:
     decompositions = result["decompositions"]
     summary = result["channel_summary"]
     n_with = sum(1 for d in decompositions if d["constituents"])
@@ -1024,10 +1026,21 @@ def report(result: dict, write_report: Path | None = None) -> None:
 
     if write_report:
         write_report.parent.mkdir(parents=True, exist_ok=True)
-        write_report.write_text(json.dumps(
-            {"decompositions": decompositions,
-             "channel_summary": summary}, indent=2, ensure_ascii=False)
-            + "\n", encoding="utf-8")
+        # Provenance leads the file (see match_signatures.main). It is
+        # emitted here so a future run carries it, but the COMMITTED
+        # reports/decompositions.json is deliberately not regenerated to
+        # gain it: that file is the declared pre-scale ledger (TRIAGE-v0.11
+        # gate table row 6 and §5), and rewriting it at 12k scale to add a
+        # provenance key would destroy the snapshot the decision preserved.
+        # Its missing block is therefore data, not an oversight — the
+        # standing example of design §4's `inferred: true`.
+        payload = {"decompositions": decompositions,
+                   "channel_summary": summary}
+        if provenance is not None:
+            payload = {"provenance": provenance, **payload}
+        write_report.write_text(json.dumps(payload, indent=2,
+                                           ensure_ascii=False)
+                                + "\n", encoding="utf-8")
         print(f"Report written to {write_report}")
 
 
@@ -1045,7 +1058,9 @@ def main() -> int:
     result = analyze(args.data_dir, min_family=args.min_family,
                      max_pattern_attempts=args.max_pattern_attempts,
                      pattern_membership=not args.no_pattern_membership)
-    report(result, args.write_report)
+    report(result, args.write_report,
+           corpus_provenance(Path(__file__), args.data_dir)
+           if args.write_report else None)
     return 0
 
 

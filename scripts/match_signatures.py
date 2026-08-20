@@ -61,6 +61,8 @@ from dataclasses import dataclass, field
 from itertools import permutations, product
 from pathlib import Path
 
+from report_provenance import corpus_provenance
+
 # --------------------------------------------------------------------------
 # Expression trees
 #
@@ -1229,8 +1231,16 @@ def main() -> int:
 
     if args.write_report:
         args.write_report.parent.mkdir(parents=True, exist_ok=True)
+        # Provenance leads the file, the way proof_correspondence.json's
+        # `inputs` block does: a reader opening the ledger sees what wrote
+        # it before it sees what it says. Leading also keeps the adoption
+        # diff purely additive over the committed bytes.
+        payload = {
+            "provenance": corpus_provenance(Path(__file__), args.data_dir),
+            **report,
+        }
         args.write_report.write_text(
-            json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+            json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         print(f"Report written to {args.write_report}")
     return 0
