@@ -231,12 +231,17 @@ fourteen directions would have been and why they are not the direction, is
 - The resolver still ships at v0.12's 0.833 / 0.030 point. Three cycles of
   instrument work have not moved it, and this release records that as a
   decision rather than a hope.
-- The README quoted "11.24x" concept-token compression for four releases
-  after the ledger behind it was rewritten at scale (`1090aa5` refreshed
-  `compression.json` from 508 to 12,777 nodes; the same formula now reads
-  32.10x). Corrected in this release, and recorded as a live specimen of
-  the claim-drift class the v0.16 design prices: a published number whose
-  supporting artifact was superseded, with nothing to notice.
+- The README carried "11.24x" concept-token compression from v0.6.0 —
+  the 221-node corpus where it was measured — through v0.14.0. It went
+  false during v0.10 as the corpus grew; the 508-node ledger already read
+  17.36x, and after `1090aa5` refreshed `compression.json` to 12,777
+  nodes the same formula reads 32.10x. Corrected in this release, and
+  recorded as a live specimen of the claim-drift class the v0.16 design
+  prices: a published number whose supporting artifact was rewritten
+  twice, with nothing to notice. (The first draft of this very bullet
+  misattributed the number to the 508-node era — the second hand audit
+  caught the first. That is not an irony to enjoy; it is the argument
+  for a tool.)
 - A passing Python test is not a Lean proof.
 
 ## Assets

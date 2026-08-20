@@ -240,7 +240,7 @@ scripts/
   oracle_controller_demo.py  oracle proof-replay + golden-chicken baseline
   measure_compression.py concept-token compression (32.10x char-to-concept
                         at 12,777 nodes; the long-quoted 11.24x was the
-                        508-node v0.6 corpus — see RELEASE-v0.15.0 limits)
+                        221-node v0.6 corpus — see RELEASE-v0.15.0 limits)
   closure_worlds.py     the two registered worlds behind one 4-op contract
   closure_build.py / closure_check.py   independent builder + checker pair
   closure_corrupt.py / closure_query.py twelve-class corruption battery;

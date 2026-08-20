@@ -127,10 +127,10 @@ beliefs: it has retracted results twice in its history, and both times
 the blast radius was worked out by hand, by the author, after the fact —
 and now even its claims about its own staleness were drifting unwatched.
 Pulling that thread found one more: the front page had been advertising a
-compression number measured on a 508-statement corpus for four releases
-after the corpus grew to 12,777 and the true figure nearly tripled. The
-drift was in our favour and nothing noticed, which is exactly as bad as
-the other direction.
+compression figure measured on a 221-statement corpus through five tagged
+releases while the corpus grew to 12,777 and the honest figure nearly
+tripled. The drift was in our favour and nothing noticed, which is
+exactly as bad as the other direction.
 
 The next design was chosen before this post was written, by a process
 built to resist our own momentum: three outside contexts, each isolated
