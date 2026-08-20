@@ -1,0 +1,110 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.17",
+  "status": "complete",
+  "requested_utc": "2026-08-20",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless, non-interactive) launched with cwd C:/Users/displ/AppData/Local/Temp/forge17 -- an empty non-git directory outside the repository whose path contains no project name",
+    "inherited_from": "reports/design-direction-v0.16.json enforced_isolation_mode, reused unchanged",
+    "flags": "--strict-mcp-config plus --disallowed-tools covering file, shell, network, agent, notebook and skill tools",
+    "sessions": "one fresh session per series, continued across its three rounds with --resume; no forked turns",
+    "residual_gap": "tools exist but every one reaching the repository or network is blocked by sandbox and denylist rather than absent, the same stated gap as v0.15 and v0.16"
+  },
+  "process_note": "Second course under the funnel refinement: five directions per series at round one, narrowed to three under reactive constraints at round two, one preregistration-shaped lead plus named runner-up and unpriced residual risk at round three. Occupied-ground disclosure staged at round two. Series staggered: a later series' round one alongside an earlier series' later rounds; exclusions drawn from round-one territory.",
+  "brief_sha256_canonical_lf": "dea43ebbdae8b6e500e11e06bfdb6bd49e018785f194a70fca5c16cb0042e65b",
+  "brief_words": 572,
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "2488a9e08b3ccd892112ef6a8635555948295827bd717bd95fbe10a304afc5e6",
+      "r2": "63a7c239f572f8196c1b4ff6621814c3cc0eb79754c91806773e17ce4a077e6b",
+      "r3": "d256431651d530282974fec7cbab0099306da2009a04fc47bf8dfca9a867723a"
+    },
+    "series_2": {
+      "r1": "41847ad29bbfaa9998cfba6dcc7d07ed41405758459110144ab550ba32ac995c",
+      "r2": "fc628817ac4d78ce5ff4f4491a1d22e60643d16301dd601eddbc9916592880dd",
+      "r3": "6213cbe5a16e67248889e9e11d43f2c4d482bfbc26b12f31eb82461b3d84d970"
+    },
+    "series_3": {
+      "r1": "2fae9b2bb8b9cbd9a914823c0dc383d8309a1be25694b157329d34ef498bc2bc",
+      "r2": "14347cd219c74d617de5ed872e9793109cc832c4819b87b35beec5efd68b1dfd",
+      "r3": "f6ef118dae63324937271cdaad55e733c58005f760d2e66ffe3d5080e1bc2450"
+    }
+  },
+  "exclusion_note": "series 2 round 1 excluded series 1's entire round-one territory (five directions, one abstract line each); series 3 round 1 excluded both prior series' round-one territories (ten lines). Exclusion text is embedded in the hashed r1 prompts above. Occupied ground disclosed at round two additionally covered the fifteen v0.16 course directions, the adjudicated retraction-closure territory, the spent veto census, and the frozen resolver.",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "e6d7e1b3-2d0f-4fcf-8668-bfa4ed2b10be",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.732
+    },
+    {
+      "series": 2,
+      "session_id": "af993a5d-569d-4f8e-bdf3-45938fdc40f6",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.81
+    },
+    {
+      "series": 3,
+      "session_id": "94cc4a92-b6fe-4764-a9b0-415bb6e2cda4",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.778
+    }
+  ],
+  "round_one_funnel": {
+    "series_1": [
+      "ledger-first claims -- published sentences emitted from typed artifact citations, blast radius read not recovered",
+      "mutation corps -- preregistered stranger-authored defect catalogues per gate with catch-rate floors",
+      "the refusal census -- refusal behavior scored against constructed answerability, both error directions",
+      "the kill floor -- hardened hostile-input intake where nothing uncertified exits, yield measured",
+      "twenty questions -- learned clarifying-question selection against exact answer-set reduction in sealed worlds"
+    ],
+    "series_2": [
+      "second machine -- cross-environment determinism with exactly enumerated divergences",
+      "two referees -- a second refusal instrument from a provenance-disjoint ontology source",
+      "unless-receipts -- constructive refusals carrying exhaustively computed minimal assumption sets",
+      "wild text -- external validity of the exact parser on licensed prose written outside the program",
+      "nothing vanishes -- a mechanized goal ledger with terminal states, outsider-checkable"
+    ],
+    "series_3": [
+      "half-life -- temporal validity against moving upstream vintages, staleness as a refusal ground",
+      "antibody -- scope-local internal contradiction census under exactly-checkable relations",
+      "detached receipt -- one answer re-verified from its receipt alone, no program code",
+      "audit clock -- verification cost of a published claim, measured in minutes",
+      "residual ledger -- model-blind ablation publishing where the code/weights split falls per family"
+    ],
+    "disclosed_drift": "series 2 disclosed and replaced two drafts (claim expiry toward series 1's ledger-first; library mutation toward series 1's mutation corps); series 3 disclosed and replaced one (a live retraction fire-drill toward series 1's ledger-first) and flagged half-life's boundary with wild text"
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "ledger-first claims -- claims/<release>.claims.jsonl with typed citations, radius certificate against the surviving instruments, the voided scan demoted to a completeness linter, gate proposed as L1-L11 and landed as L1-L13 after adversarial review (L6 replaced by a path-token control the original precision clause could not falsify; L12 purity imported from series 3; L13 exploratory floor added at grounding), the recheck's trust priced by stranger-authored mutants",
+      "runner_up": "mutation corps (priced inside the lead as clauses L7/L8/L10)",
+      "merged": "refusal census and twenty questions merged into 'the negative space' (construction-fact answerability labels); kill floor dropped, its machine-stranger mechanism reused as an authorship channel",
+      "residual_risk": "a citation that resolves to an artifact containing the value rather than the artifact the claim rests on survives every clause; pricing it requires premise-necessity, which is parked ground"
+    },
+    "series_2": {
+      "lead": "unless-receipts -- reading the 996 recorded refusal edges into constructive refusals with recompile-verified complete and minimal assumption sets, gate U1-U9, constant-alphabet and nearest-k controls",
+      "runner_up": "two referees (rebuilt as source-disjointness of the kind ontology; dimension-vector-only control could void the menu itself)",
+      "folded": "second machine reduced to an environment-matrix checklist line; nothing vanishes parked behind the working manual audit with a named unpark condition",
+      "residual_risk": "unless-sets can be exactly right about the compiler and wrong about the world; no oracle outside the world prices fidelity under one maintainer"
+    },
+    "series_3": {
+      "lead": "detached receipt -- a frozen receipt grammar and a stranger-authored checker that replays 50 answers with no program imports, purity clause D3, vintage rider for licensed lexical currency",
+      "runner_up": "residual ledger (inference-only model-blind ablation; per-family budgets, no aggregate number by refusal)",
+      "dropped": "audit clock (its checkable salvage is series 1's mechanism; its native output is testimony, not an artifact); half-life folded into the lead as the vintage parameter; antibody kept to round three's door but ranked behind on effort variance, with the scope-machinery probe named as the fact that would reorder",
+      "residual_risk": "spec and emitter share an author; a mutually held error replays green -- the gate certifies self-containment while reading as if it certified correctness"
+    }
+  },
+  "selection": {
+    "selected": "series 1 lead: ledger-first claims",
+    "design_doc": "docs/DESIGN-ledger-first-claims.md",
+    "convergence_note": "the program's own void post-mortem named 'citation discipline at authoring time' before this course ran; series 1 proposed it independently at round one and series 2 and 3 each disclosed and replaced drafts that drifted toward it. Four independent arrivals at one direction is the strongest convergence the course format has produced.",
+    "imports": "from series 3: the purity constraint (claims records checkable without program imports) as one clause; from series 2: the environment-matrix checklist line on the shipped artifact, and unless-receipts preserved whole as the sealed-worlds successor with its complete preregistration quoted in the design's declined section"
+  }
+}
