@@ -1,0 +1,232 @@
+{
+  "schema": "retraction-ground-truth/1",
+  "root": {
+    "artifact": "reports/decompositions.json",
+    "falsification_kind": "ledger_stale",
+    "story": "The declared pre-scale divergence: reports/decompositions.json is deliberately not rewritten at scale, and that decision is recorded only in prose (TRIAGE-v0.11 gate table row 6) that no artifact links to."
+  },
+  "audit": {
+    "method": "two-pass: mechanical sweep (Opus, read-only) then adjudication of every candidate (Fable); quotes verified as substrings by tests/test_retraction_closure.py",
+    "date": "2026-08-20"
+  },
+  "claims": [
+    {
+      "id": "b01",
+      "file": "docs/DESIGN-self-grounding-ingestion.md",
+      "anchor": "3. The measurement",
+      "quote": "so this is a query over `reports/decompositions.json`, not new machinery.",
+      "derives_from": [
+        "constituents[].channel",
+        "constituents[].owner_channels"
+      ],
+      "class": "assumes_fresh",
+      "note": "registers a measurement as answerable from the committed ledger as it stands"
+    },
+    {
+      "id": "b02",
+      "file": "docs/DESIGN-self-grounding-ingestion.md",
+      "anchor": "6. Correction, before any measurement ran",
+      "quote": "The committed ledger records, per constituent, its `channel`, an `owner_channels` TALLY, `recurs_in_n_statements`, and `instance_of_statements` — but **not the owner statement ids**",
+      "derives_from": [
+        "constituents[].channel",
+        "constituents[].owner_channels",
+        "constituents[].recurs_in_n_statements",
+        "constituents[].instance_of_statements"
+      ],
+      "class": "assumes_fresh",
+      "note": "states the committed file's schema as current fact, which a pre-scale file could make false without notice"
+    },
+    {
+      "id": "b03",
+      "file": "docs/DESIGN-grounded-admission.md",
+      "anchor": "5. Reproducibility and artifact",
+      "quote": "recomputes the candidate score from `constituents[].owners` intersected with the frozen fixed-id set.",
+      "derives_from": [
+        "constituents[].owners"
+      ],
+      "class": "assumes_fresh",
+      "note": "names a committed-ledger field as the scoring interface for a registered experiment"
+    },
+    {
+      "id": "b04",
+      "file": "docs/DESIGN-heldout-recovery.md",
+      "anchor": "7. Cost, inherited and new",
+      "quote": "A 2,048-node Goedel-Pset overlay on the existing 12,771-node graph is the cost to plan for: `analyze_loaded` with `keep` / `extra`, not a full `decompose.py` rewrite of `reports/decompositions.json`.",
+      "derives_from": [
+        "decompositions[]",
+        "constituents[]"
+      ],
+      "class": "assumes_fresh",
+      "note": "prices work against the committed file's assumed present state, and also cites 12,771 as the current graph size"
+    },
+    {
+      "id": "b05",
+      "file": "docs/DESIGN-epistemic-ladder.md",
+      "anchor": "The ladder",
+      "quote": "`data/provability` grades 1.000 aggregate while taking 0.967 of it from `same_corpus` (0.775) + `pattern_absorption` (0.192), against `external` 0.033",
+      "derives_from": [
+        "channel_summary.corpora",
+        "channel_means",
+        "channel_scores"
+      ],
+      "class": "assumes_fresh",
+      "note": "quotes per-corpus channel means as the measured present values of the committed ledger"
+    },
+    {
+      "id": "b06",
+      "file": "docs/DESIGN-epistemic-ladder.md",
+      "anchor": "The ladder",
+      "quote": "190 of the graph's 440 exact constituents are multi-owner (all 190 credited `external`)",
+      "derives_from": [
+        "channel_constituents",
+        "constituents[].owner_channels"
+      ],
+      "class": "assumes_fresh",
+      "note": "cites graph-wide exact-constituent counts as current totals of the committed ledger"
+    },
+    {
+      "id": "b07",
+      "file": "docs/BACKLOG.md",
+      "anchor": "Cognitive frames / lexical stores",
+      "quote": "keeps its 1.000 but resolves to `same_corpus` 0.775 + `pattern_absorption` 0.192 against `external` 0.033",
+      "derives_from": [
+        "channel_summary.corpora",
+        "channel_scores"
+      ],
+      "class": "assumes_fresh",
+      "note": "an open backlog readout of the regression corpus's channel scores; joins the three figures with \"against\" rather than a third plus sign, otherwise the readout adjudicated"
+    },
+    {
+      "id": "b08",
+      "file": "docs/BACKLOG.md",
+      "anchor": "Parser / matcher",
+      "quote": "the exact channel scores 352/440 (80.0%) and 162/440 (36.8%) on the same two readings",
+      "derives_from": [
+        "channel_constituents",
+        "constituents[].owner_channels"
+      ],
+      "class": "assumes_fresh",
+      "note": "states the exact channel's counts under both owner rules as current ledger readings"
+    },
+    {
+      "id": "b09",
+      "file": "docs/RELEASE-v0.10.0.md",
+      "anchor": "The second finding, which nobody designed for: ingestion compounds",
+      "quote": "Exact constituents went 552 → **1,235** while pattern stayed at 100.",
+      "derives_from": [
+        "grounded_exact",
+        "grounded_via_pattern",
+        "channel_constituents"
+      ],
+      "class": "assumes_fresh",
+      "note": "a release headline stating the ledger's constituent totals as the present state, with no snapshot scope"
+    },
+    {
+      "id": "b10",
+      "file": "docs/RELEASE-v0.10.0.md",
+      "anchor": "The second finding, which nobody designed for: ingestion compounds",
+      "quote": "reproduced that at scale with **614 `same_corpus` constituents inside the new corpus**",
+      "derives_from": [
+        "channel_constituents",
+        "constituents[].channel"
+      ],
+      "class": "assumes_fresh",
+      "note": "cites the same_corpus constituent count as a current ledger reading rather than a tagged snapshot"
+    },
+    {
+      "id": "b11",
+      "file": "docs/blog/the-bag-still-wins.md",
+      "anchor": "The thing nobody designed for",
+      "quote": "**614 constituents grounded inside the new corpus**, and `2^30` picked up a third owner.",
+      "derives_from": [
+        "channel_constituents",
+        "constituents[].channel"
+      ],
+      "class": "assumes_fresh",
+      "note": "the public prose form of b10, with no snapshot qualifier at all"
+    },
+    {
+      "id": "b12",
+      "file": "docs/blog/the-bag-still-wins.md",
+      "anchor": "What we retired",
+      "quote": "It moved in four consecutive releases — 0.164, 0.156, 0.159, and then 0.490.",
+      "derives_from": [
+        "channel_means",
+        "channel_means_lower",
+        "external_lower"
+      ],
+      "class": "assumes_fresh",
+      "note": "0.490 is the committed file's value, published as the latest point of a live series"
+    },
+    {
+      "id": "b13",
+      "file": "docs/TRIAGE-v0.11.md",
+      "anchor": "1. Release gate",
+      "quote": "`reports/decompositions.json` is **not** rewritten (181k constituents) — disclosed, live `analyze_loaded` is the pin source",
+      "derives_from": [
+        "decompositions[]",
+        "constituents[]"
+      ],
+      "class": "declared_snapshot",
+      "note": "THE declaring decision: gate table row 6 is where the committed file was designated the pre-scale snapshot"
+    },
+    {
+      "id": "b14",
+      "file": "docs/RELEASE-v0.11.0.md",
+      "anchor": "Honest limits carried forward",
+      "quote": "`reports/decompositions.json` is still the pre-scale file. Live analysis is the pin source at this size.",
+      "derives_from": [
+        "decompositions[]",
+        "constituents[]"
+      ],
+      "class": "declared_snapshot",
+      "note": "the release's own honest limit, restating the declaration for readers of the tag"
+    },
+    {
+      "id": "b15",
+      "file": "experiments/ANALYSIS.md",
+      "anchor": "v0.11 prerequisite — skeleton emitter for the unique-covered remainder",
+      "quote": "`reports/decompositions.json` is not rewritten at this scale (181k constituents × owner lists). Live `analyze` is the pin source.",
+      "derives_from": [
+        "decompositions[]",
+        "constituents[].owners"
+      ],
+      "class": "declared_snapshot",
+      "note": "ANALYSIS carries the declaration beside the slice whose pins come from live analysis instead"
+    },
+    {
+      "id": "b16",
+      "file": "docs/DESIGN-skeleton-emitter.md",
+      "anchor": "6. What this is not",
+      "quote": "Live `analyze` is the source of the pins; the committed report stays the pre-scale file.",
+      "derives_from": [
+        "decompositions[]",
+        "constituents[]"
+      ],
+      "class": "declared_snapshot",
+      "note": "the emitter design discloses the divergence at the point where it would otherwise be assumed away"
+    }
+  ],
+  "excluded": [
+    {
+      "what": "experiments/ANALYSIS.md chronological GC4-movement slice entries, and the \"Compounding, not accumulation\" and \"Rate-gap, flagged\" entries",
+      "reason": "chronological ledger entries under dated slice headings are declared by this file's own convention; recorded as an adjudication call — the radius tool may still reach them, and ground truth does not require it to"
+    },
+    {
+      "what": "claims citing live `analyze` / `analyze_loaded` readouts at scale",
+      "reason": "a different source than the committed file; they derive from the live graph, not this root"
+    },
+    {
+      "what": "tests/test_decompose_channels.py docstring acknowledgments of the pre-split file",
+      "reason": "tests are not published claims (claim kinds are analysis_claim and release_claim only); flagged separately because it computes live against data/ and never reads the committed ledger"
+    },
+    {
+      "what": "README.md's decompose.py row in the script list",
+      "reason": "describes the tool, makes no claim about the committed ledger's contents"
+    },
+    {
+      "what": "docs/TRIAGE-v0.11.md §5's asset line",
+      "reason": "duplicates b13's decision inside the same document; one node per decision"
+    }
+  ]
+}

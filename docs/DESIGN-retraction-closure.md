@@ -207,6 +207,38 @@ machine-locatable anchor — a section heading plus a committed hash of its
 text; prose with no anchor stays outside the graph and is listed as
 unprovenanced, never silently omitted.
 
+### Clarification (2026-08-20, before any builder): who counts as a writer
+
+Read strictly, the paragraph above makes R2 unsatisfiable: a claim's
+edges cannot be emitted by a ledger writer (the claim postdates the
+write), and if every non-writer edge is excluded from every scored
+clause, no scored closure can contain a claim. The intent is registered
+here, before the assembler exists:
+
+- `inferred: false` belongs to an edge whose emitter is a deterministic
+  function of committed bytes, run at generation time. That is two
+  cases: a **report writer** emitting its own input edges, and the
+  **assembler** emitting structural and citation edges (claim
+  `asserted_by` its section, section `published_in` its document, claim
+  `derived_from` an artifact it cites) computed by a fixed, committed
+  scan over the committed text. The assembler is those edges' writer;
+  R5's byte-reproducibility clause covers them exactly as it covers the
+  rest of the graph.
+- `inferred: true` is reserved for edges added by hand or recovered
+  heuristically where a writer should have emitted and did not — the
+  committed `decompositions.json`, written before provenance blocks
+  existed, is the standing example. These are excluded from every
+  scored clause, including closure traversal.
+- Scored closures (R2, and the blind control's shuffled closures)
+  traverse `inferred: false` edges only.
+- **The citation scan must not read the ground truth.** R2 compares a
+  mechanically derived closure against an independently hand-audited
+  list; an assembler that consumes
+  `data/retraction_closure/ground_truth_*.json` would make the clause a
+  tautology. A test enforces this by scanning the assembler's source,
+  the same way the bounded-closure suite forbids world-name literals in
+  the generic layer.
+
 **The radius certificate** — `reports/radius/<cert_id>.cert.json`:
 
 ```text

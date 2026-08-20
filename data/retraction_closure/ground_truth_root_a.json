@@ -1,0 +1,179 @@
+{
+  "schema": "retraction-ground-truth/1",
+  "root": {
+    "artifact": "reports/compression.json",
+    "falsification_kind": "ledger_stale",
+    "story": "The healed silent drift: reports/compression.json went stale after its last true write at e6d24cf, was consumed by published claims through the stale window 3e6356c..1090aa5, and was repaired at 1090aa5 with no radius ever computed."
+  },
+  "window": {
+    "last_true_write": "e6d24cf",
+    "staleness_begins": "3e6356c",
+    "healed": "1090aa5",
+    "note": "the README 11.24x lineage predates this window: measured at v0.6 (221 nodes), first false at c1c8202 (2026-08-11)"
+  },
+  "audit": {
+    "method": "two-pass: mechanical sweep (Opus, read-only) then adjudication of every candidate (Fable); quotes verified as substrings by tests/test_retraction_closure.py",
+    "date": "2026-08-20"
+  },
+  "claims": [
+    {
+      "id": "a01",
+      "file": "README.md",
+      "anchor": "Repository layout",
+      "quote": "concept-token compression (32.10x char-to-concept at 12,777 nodes; the long-quoted 11.24x was the 221-node v0.6 corpus",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept"
+      ],
+      "class": "assumes_fresh",
+      "note": "the front page states the current char-to-concept ratio and its own superseded lineage as live readings of this ledger"
+    },
+    {
+      "id": "a02",
+      "file": "docs/RELEASE-v0.15.0.md",
+      "anchor": "Honest limits carried forward",
+      "quote": "The README carried \"11.24x\" concept-token compression from v0.6.0 — the 221-node corpus where it was measured — through v0.14.0.",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept"
+      ],
+      "class": "assumes_fresh",
+      "note": "the correction bullet itself asserts what the ledger currently reads, so it consumes the post-heal ledger as current"
+    },
+    {
+      "id": "a03",
+      "file": "docs/blog/one-row-was-carrying-the-table.md",
+      "anchor": "What a retraction costs",
+      "quote": "compression figure measured on a 221-statement corpus through five tagged releases while the corpus grew to 12,777",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept"
+      ],
+      "class": "assumes_fresh",
+      "note": "published prose comparing the retired figure against the ledger's present node count and ratio"
+    },
+    {
+      "id": "a04",
+      "file": "docs/RELEASE-v0.6.0.md",
+      "anchor": "Release validation record",
+      "quote": "concept compression remained 11.24× versus characters;",
+      "derives_from": [
+        "mean_char",
+        "mean_concept"
+      ],
+      "class": "declared_snapshot",
+      "note": "a dated validation record of the 221-node release, true of the ledger as it stood at v0.6.0"
+    },
+    {
+      "id": "a05",
+      "file": "docs/RELEASE-v0.3.0.md",
+      "anchor": "Shipped beyond the roadmap",
+      "quote": "**Compression at scale**: concept encoding now 10.73× vs characters on the real 195-node corpus (8.44× at 67 nodes)",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept"
+      ],
+      "class": "declared_snapshot",
+      "note": "a v0.3.0 release reading, explicitly scoped to the 195-node and 67-node corpora it names"
+    },
+    {
+      "id": "a06",
+      "file": "experiments/ANALYSIS.md",
+      "anchor": "Milestone 2 on the real corpus (67 nodes, 7 disciplines)",
+      "quote": "| concept (family-skeleton id + slot fillers) | 4.4 | **8.44x** |",
+      "derives_from": [
+        "mean_char",
+        "mean_struct",
+        "mean_concept"
+      ],
+      "class": "declared_snapshot",
+      "note": "a milestone table under a heading that names its own 67-node corpus, which is this file's declaring convention"
+    },
+    {
+      "id": "a07",
+      "file": "experiments/ANALYSIS.md",
+      "anchor": "Milestone 2 on the real corpus (67 nodes, 7 disciplines)",
+      "quote": "concept decoding requires the skeleton vocabulary (49 skeletons for 67 nodes, 1.37 nodes/skeleton, 8 reused),",
+      "derives_from": [
+        "n_family_skeletons",
+        "skeletons_reused",
+        "nodes"
+      ],
+      "class": "declared_snapshot",
+      "note": "the only published claim citing n_family_skeletons and skeletons_reused directly; scoped by its 67-node heading"
+    },
+    {
+      "id": "a08",
+      "file": "docs/DESIGN-what-predicts-the-gap.md",
+      "anchor": "4. Candidates, registered",
+      "quote": "`reports/compression.json` already computes the underlying counts, so this is source-intrinsic and committed rather than invented for the occasion.",
+      "derives_from": [
+        "n_family_skeletons",
+        "skeletons_reused"
+      ],
+      "class": "assumes_fresh",
+      "note": "licenses a future measurement off the current ledger, so a stale ledger would silently define the registered predictor"
+    },
+    {
+      "id": "a09",
+      "file": "docs/DESIGN-retraction-closure.md",
+      "anchor": "3. Grounded against the record, including what the proposal got wrong",
+      "quote": "re-running the unmodified writers produces a 46-line diff in `compression.json` and a 290-line diff in `decompositions.json`",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept",
+        "n_family_skeletons"
+      ],
+      "class": "assumes_fresh",
+      "note": "assumed the ledger was stale at the current tip; retracted by this same document's own 2026-08-20 correction, and kept"
+    },
+    {
+      "id": "a10",
+      "file": "docs/BACKLOG.md",
+      "anchor": "Parser / matcher",
+      "quote": "re-running `measure_compression.py` and `decompose.py` with the *unmodified* v2 matcher already produces a 46-line diff in `reports/compression.json`",
+      "derives_from": [
+        "nodes",
+        "mean_char",
+        "mean_concept",
+        "n_family_skeletons"
+      ],
+      "class": "assumes_fresh",
+      "note": "asserted a live drift at an older tip as current; corrected in place by the entry's appended ABSORBED note"
+    },
+    {
+      "id": "a11",
+      "file": "docs/RELEASE-v0.10.0.md",
+      "anchor": "Assets",
+      "quote": "| `reports/*.json` | the twin, specialization, decomposition and correspondence ledgers at 508 nodes |",
+      "derives_from": [
+        "nodes"
+      ],
+      "class": "declared_snapshot",
+      "note": "an asset row pinned to the v0.10.0 tag's 508-node corpus, true of the ledger bytes shipped with that release"
+    }
+  ],
+  "excluded": [
+    {
+      "what": "experiments/ANALYSIS.md, the synthetic-world \"2.7x\" compression figure",
+      "reason": "derives from the twins train split, not from reports/compression.json; different root artifact"
+    },
+    {
+      "what": "test docstrings and inline comments citing compression numbers",
+      "reason": "tests are not published claims; the graph's claim kinds are analysis_claim and release_claim only (design §4)"
+    },
+    {
+      "what": "the signature_matches.json and wold_reach.json heals adjacent to 1090aa5",
+      "reason": "different root artifacts; outside this root's closure by construction"
+    },
+    {
+      "what": "surviving citations of 12,771 as the current node count",
+      "reason": "the sweep found only two, both already filed (b04's cost note and the a03-adjacent prose); no surviving citation of 840 as current at all"
+    }
+  ]
+}
