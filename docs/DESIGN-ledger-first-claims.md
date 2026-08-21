@@ -1,10 +1,16 @@
 # Claims are emitted, not written
 
-**Status: design only.** Nothing here is implemented. First slice targets
-v0.17. Chosen by the second full outside course (three isolated series,
-fifteen directions, receipts and prompt hashes in
-`reports/design-direction-v0.17.json`), then grounded against the
-repository.
+**Status: design only, PARKED (2026-08-21, maintainer redirect).**
+Nothing here is implemented. Chosen by the second full outside course
+(three isolated series, fifteen directions, receipts and prompt hashes
+in `reports/design-direction-v0.17.json`), grounded against the
+repository, hardened by adversarial review — and then superseded as the
+v0.17 headline by
+[DESIGN-grounded-throughput](DESIGN-grounded-throughput.md) §2, which
+records why. This document stays preregistration-ready as written; its
+unpark condition is named in ROADMAP-v0.17 §3 (the first cycle after
+the throughput readout, or immediately if a release again quotes a
+number its artifact no longer supports).
 
 ## 1. The boundary being moved
 

@@ -378,10 +378,17 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   voided by its own gate on precision; the instruments and ground truths
   survive unscored, and the §3 correction + §6a registration are the
   worked example of a design auditing itself
-- `docs/DESIGN-ledger-first-claims.md` — the chosen post-v0.16 direction:
-  claims are emitted, not written — published quantitative sentences
-  become generated artifacts of typed citations, with the voided scan
-  demoted to a completeness linter
+- `docs/DESIGN-grounded-throughput.md` — the v0.17 direction (maintainer
+  redirect, 2026-08-21): the knowledge graph served through an
+  OpenAI-compatible chat API by a microkernel of small programs and
+  optional small models, with a preregistered claim that grounded,
+  receipt-bearing answer tokens arrive many-fold faster than a language
+  model can generate them
+- `docs/DESIGN-ledger-first-claims.md` — parked whole (course-chosen,
+  review-hardened, preregistration-ready): claims are emitted, not
+  written — published quantitative sentences become generated artifacts
+  of typed citations, with the voided scan demoted to a completeness
+  linter
 - `docs/blog/` — accessible project narratives, including the v0.8 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger
