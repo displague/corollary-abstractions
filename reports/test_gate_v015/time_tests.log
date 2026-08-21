@@ -1,0 +1,118 @@
+
+1381 tests in 20521.7s (OK)
+
+timed tests: 17351.1s; fixtures/runner overhead: 3170.6s
+
+timed test bodies by module (fixtures excluded):
+   12133.3s   59.1%  tests.test_write_stage
+    4457.0s   21.7%  tests.test_corpus_analogy_split
+     305.4s    1.5%  tests.test_corpus_analogy
+     203.3s    1.0%  tests.test_harness_line
+      52.0s    0.3%  tests.test_when_to_ask_prereg
+      27.1s    0.1%  tests.test_session_dispatcher
+      26.0s    0.1%  tests.test_external_verifier
+      19.1s    0.1%  tests.test_proof_correspondence
+      16.5s    0.1%  tests.test_wordnet_retrieval
+      16.4s    0.1%  tests.test_probes
+      16.3s    0.1%  tests.test_retrieval
+      10.1s    0.0%  tests.test_programming_discipline
+       9.5s    0.0%  tests.test_measurement_tools
+       9.2s    0.0%  tests.test_session_offline
+       9.1s    0.0%  tests.test_retrieval_tools
+       7.6s    0.0%  tests.test_session_durability
+       5.8s    0.0%  tests.test_wold_ingest
+       4.9s    0.0%  tests.test_proof_curve
+       4.6s    0.0%  tests.test_verified_by
+       3.5s    0.0%  tests.test_gloss
+       2.3s    0.0%  tests.test_decompose_channels
+       2.1s    0.0%  tests.test_matcher_mirror
+       1.9s    0.0%  tests.test_depth_consumer_analysis
+       1.8s    0.0%  tests.test_lean_workbook_ingest
+       1.0s    0.0%  tests.test_minif2f_ingest
+       1.0s    0.0%  tests.test_depth_consumers
+       0.9s    0.0%  tests.test_session_run
+       0.8s    0.0%  tests.test_bounded_closure
+       0.6s    0.0%  tests.test_visual_oracle
+       0.4s    0.0%  tests.test_verdict_rule
+       0.4s    0.0%  tests.test_answers
+       0.2s    0.0%  tests.test_coverage_holdout3
+       0.2s    0.0%  tests.test_prose_authoring
+       0.2s    0.0%  tests.test_depth_consumer_runner
+       0.2s    0.0%  tests.test_depth_interface
+       0.1s    0.0%  tests.test_closure_query
+       0.1s    0.0%  tests.test_self_grounding
+       0.1s    0.0%  tests.test_langgen_roundtrip
+       0.1s    0.0%  tests.test_source_manifest
+       0.1s    0.0%  tests.test_grounded_admission
+       0.0s    0.0%  tests.test_conversation_runtime
+       0.0s    0.0%  tests.test_resolver
+       0.0s    0.0%  tests.test_readiness
+       0.0s    0.0%  tests.test_corpus_analogy_model_arm
+       0.0s    0.0%  tests.test_controller
+       0.0s    0.0%  tests.test_request_grammar
+       0.0s    0.0%  tests.test_live_lean_search
+       0.0s    0.0%  tests.test_goedel_pset
+       0.0s    0.0%  tests.test_narrative_realize
+       0.0s    0.0%  tests.test_ask
+       0.0s    0.0%  tests.test_frames
+       0.0s    0.0%  tests.test_tactic_policy
+       0.0s    0.0%  tests.test_story
+       0.0s    0.0%  tests.test_search_controller
+       0.0s    0.0%  tests.test_when_to_ask_candidate
+       0.0s    0.0%  tests.test_theory_of_mind
+       0.0s    0.0%  tests.test_emit_skeleton
+       0.0s    0.0%  tests.test_evaluate
+       0.0s    0.0%  tests.test_algorithms_ingest
+       0.0s    0.0%  tests.test_preference
+       0.0s    0.0%  tests.test_discourse
+       0.0s    0.0%  tests.test_belief
+       0.0s    0.0%  tests.test_ambiguity
+       0.0s    0.0%  tests.test_index_language
+       0.0s    0.0%  tests.test_entailment
+       0.0s    0.0%  tests.test_compose_assert_frames
+       0.0s    0.0%  tests.test_deixis
+       0.0s    0.0%  tests.test_item4_operator_bag
+       0.0s    0.0%  tests.test_legality_strata
+       0.0s    0.0%  tests.test_context_narrowing
+
+slowest 40 tests:
+   4183.72s  tests.test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer
+    805.40s  tests.test_write_stage.TrustedAppendTests.test_append_one_node_accepts_without_rewriting_the_seed
+    803.52s  tests.test_write_stage.TrustedAppendTests.test_seed_plus_append_reproduces_the_applied_corpus
+    603.40s  tests.test_write_stage.TrustedAppendTests.test_two_node_append_is_confined_to_those_ids
+    410.99s  tests.test_write_stage.TrustedAppendTests.test_undeclared_delta_is_still_refused_on_the_append_lane
+    408.71s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_is_written_and_deterministic
+    407.82s  tests.test_write_stage.ProofGateTests.test_two_candidates_differing_only_in_rationale_get_two_receipts
+    407.36s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_applies_seed_and_regenerates_corpus
+    407.32s  tests.test_write_stage.WorkingTreeIntegrityTests.test_the_digest_ignores_this_gates_own_receipts
+    405.86s  tests.test_write_stage.AcceptedWriteApplicationTests.test_whole_tree_delta_catches_an_undeclared_change
+    405.39s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_is_written_and_records_the_transition
+    403.97s  tests.test_write_stage.AcceptedWriteApplicationTests.test_other_corpora_are_byte_identical_after_acceptance
+    403.67s  tests.test_write_stage.AcceptedWriteApplicationTests.test_committed_seed_reproduces_the_applied_corpus
+    403.23s  tests.test_write_stage.TrustedAppendTests.test_colliding_id_is_refused_and_tree_is_identical
+    403.10s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_then_refuse_end_to_end
+    402.94s  tests.test_write_stage.AcceptedWriteApplicationTests.test_matcher_delta_reverified_against_the_applied_data
+    402.87s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_failure_rolls_the_application_back
+    401.95s  tests.test_write_stage.TrustedAppendTests.test_python_is_not_an_append
+    232.54s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_replaces_a_hardlink_instead_of_overwriting_its_target
+    214.98s  tests.test_corpus_analogy.CorpusAnalogyTests.test_baselines_are_computed_on_the_live_targets
+    208.36s  tests.test_write_stage.AcceptedCandidateTests.test_canonical_envelope_round_trips_any_valid_json_string
+    207.42s  tests.test_write_stage.MaliciousPathTests.test_a_contained_seed_script_is_actually_read
+    207.16s  tests.test_write_stage.AcceptedCandidateTests.test_correspondence_route_is_recorded
+    207.10s  tests.test_write_stage.AcceptedCandidateTests.test_cli_default_staging_follows_alternate_repo_root
+    206.82s  tests.test_write_stage.ValidationAndDeltaTests.test_an_undeclared_slot_schema_gap_is_refused
+    206.57s  tests.test_write_stage.ControllerAdapterTests.test_a_controller_run_stages_then_refuses_without_losing_state
+    206.35s  tests.test_write_stage.AcceptedCandidateTests.test_preplanted_predictable_temp_link_is_never_opened
+    206.26s  tests.test_write_stage.AcceptedCandidateTests.test_staged_record_carries_proof_identity_and_trace
+    205.95s  tests.test_write_stage.AcceptedCandidateTests.test_proven_correspondent_candidate_stages
+    205.83s  tests.test_write_stage.AcceptedCandidateTests.test_every_pipeline_stage_is_recorded_in_order
+    205.71s  tests.test_write_stage.ControllerAdapterTests.test_staged_candidate_advances_only_a_receipt_ledger
+    205.67s  tests.test_write_stage.AcceptedWriteApplicationTests.test_mid_corpus_write_failure_leaves_tree_byte_identical
+    205.60s  tests.test_write_stage.AcceptedCandidateTests.test_nothing_is_promoted_into_the_mini_repo_corpus
+    205.41s  tests.test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded
+    205.02s  tests.test_write_stage.AcceptedWriteApplicationTests.test_failed_post_application_verification_rolls_back
+    204.76s  tests.test_write_stage.ValidationAndDeltaTests.test_wrong_matcher_delta_is_refused_though_everything_else_passes
+    204.53s  tests.test_write_stage.ValidationAndDeltaTests.test_the_receipt_carries_the_declared_delta_beside_the_measured_one
+    203.16s  tests.test_write_stage.ValidationAndDeltaTests.test_the_declared_delta_is_recorded_even_when_it_is_wrong
+     96.82s  tests.test_write_stage.ValidationAndDeltaTests.test_every_matcher_summary_key_is_gated
+     90.90s  tests.test_corpus_analogy_split.VerificationTests.test_specialization_ledger_is_load_bearing

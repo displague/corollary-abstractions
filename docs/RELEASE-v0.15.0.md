@@ -166,15 +166,27 @@ still suppresses the store.
 matrix prints `[ON] retrieve.wordnet` when the manifest archive is present.
 Locator behaviour: `python -m unittest tests.test_gloss`.
 
-### The gate, measured like-for-like at this tip
+### The gate, measured at this tip — and the honest number is smaller
 
 **Before.** The v0.15 reorder numbers were flagged "indicative comparison
-only" — measured on a contended machine against v0.14's clean-run baseline.
+only" — measured on a contended machine against v0.14's clean-run
+baseline, and reading −14%.
 
-**Now.** The full-suite timing run at the frozen tip `fa0a174` is in
-flight as this file is first committed; its per-module table and verdict
-land in this section, and the tag waits for them. (Patched before tag —
-see the tagged version of this file for the numbers.)
+**Now.** The full timed suite at the frozen tip `fa0a174`: **1,381
+tests, 0 failures, 0 errors, 3 skipped, 20,521.7 s (5 h 42 m)** —
+receipts in `reports/test_gate_v015/`. Against v0.14's 1,341 tests /
+21,688 s, the suite is 5.4 % faster while 40 tests larger.
+`test_write_stage` test bodies read 12,133.3 s (59.1 %) against v0.14's
+12,522.5 s — **3.1 %, not the indicative 14 %** — and this run was not
+fully quiet either: light agent and course work shared the machine, and
+per-test inflation on the corpus-bound tests is visible in the receipt.
+The structural claims hold regardless of contention: the reordered
+refusal test that cost 1,096.4 s at v0.14 no longer appears in the
+slowest-40 at all (cutoff 90.9 s), and the split module's duplicate
+fixture builds are gone by construction, its worst remaining cost being
+the capability-blind control itself (4,183.7 s), which stays whole
+because it is the control. Wall-clock deltas on this machine are
+weather; the refusal identities and the fixture count are climate.
 
 ## Discoveries of the cycle
 
