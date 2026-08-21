@@ -312,7 +312,7 @@ The gate in §6 is unchanged. This section registers, before the one run
 that counts, everything a reader needs to weigh what that run says.
 
 **The frozen instrument.** The citation scan is the six generic rules
-R-a–R-f as committed in `scripts/provenance_graph.py` at `38d6eb0`,
+R-a–R-f as committed in `scripts/provenance_graph.py` at `0cc0c68`,
 tagged per edge. No rule names a document, a claim, or a ground-truth
 entry; a source-scanning test forbids the assembler and the radius tool
 from ever reading `data/retraction_closure/ground_truth_*.json`.

@@ -58,6 +58,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -370,18 +371,32 @@ class GroundTruthIsCommitted(unittest.TestCase):
                 self.assertTrue(claim["derives_from"], claim["id"])
                 self.assertTrue(claim["note"].strip(), claim["id"])
 
-    def test_every_quote_is_a_live_substring_of_its_file(self) -> None:
+    #: The tree the audit quoted: the rebased preregistration commit
+    #: ("Preregister the retraction closure before any assembler can
+    #: exist"). Quotes are anchors into the documents AS AUDITED. After
+    #: the adjudication, documents legitimately rotate — the v0.16
+    #: release pruned the BACKLOG entry claim a10 quotes, exactly as
+    #: that entry's own prune condition required — so demanding
+    #: liveness against the working tree forever would force either
+    #: frozen docs or edited ground truth, both wrong. Liveness against
+    #: the audited tree is the invariant that can and must hold.
+    AUDIT_TIP = "20581cc"
+
+    def _audited_text(self, rel_path: str) -> str:
+        blob = subprocess.run(
+            ["git", "show", f"{self.AUDIT_TIP}:{rel_path}"],
+            cwd=REPO, check=True, capture_output=True,
+        ).stdout.decode("utf-8")
+        return self._collapse(blob)
+
+    def test_every_quote_is_a_substring_of_its_file_as_audited(self) -> None:
         texts: dict[str, str] = {}
         for key, path in GROUND_TRUTH_PATHS.items():
             for claim in _load(path)["claims"]:
                 self.assertIsNotNone(claim["quote"], claim["id"])
                 self.assertNotIn("discrepancy", claim, claim["id"])
-                target = REPO / claim["file"]
-                self.assertTrue(target.is_file(), claim["file"])
                 if claim["file"] not in texts:
-                    texts[claim["file"]] = self._collapse(
-                        target.read_text(encoding="utf-8")
-                    )
+                    texts[claim["file"]] = self._audited_text(claim["file"])
                 haystack = texts[claim["file"]]
                 quote = self._collapse(claim["quote"])
                 self.assertGreaterEqual(len(quote.split()), 5, claim["id"])
@@ -445,7 +460,34 @@ class GroundTruthIsCommitted(unittest.TestCase):
 
 
 class GateAssemblerBuildsTheGraph(unittest.TestCase):
-    """The assembler exists, and what it writes is what §4 registered."""
+    """The assembler exists, and what it writes is what §4 registered.
+
+    Every build here goes to a TEMP path, never the committed one: the
+    committed graph is the adjudicated run's sealed input — certificates
+    pin its hash and the recheck refuses on mismatch — and a suite that
+    rebuilt it over a later tree would silently break every published
+    certificate. That is not hypothetical; it happened once, at the
+    v0.16 release gate, and this class is the fix.
+    """
+
+    _tmp: tempfile.TemporaryDirectory | None = None
+    _built: Path | None = None
+
+    @classmethod
+    def _fresh_build(cls) -> Path:
+        import provenance_graph  # noqa: PLC0415
+
+        if cls._built is None:
+            cls._tmp = tempfile.TemporaryDirectory(prefix="graph-dev-")
+            cls._built = provenance_graph.build_graph(
+                REPO, Path(cls._tmp.name) / "provenance_graph.jsonl"
+            )
+        return cls._built
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        if cls._tmp is not None:
+            cls._tmp.cleanup()
 
     def test_the_assembler_emits_records_that_validate(self) -> None:
         # R1's emitted-edge fraction and R5's two-build reproduction are
@@ -453,12 +495,10 @@ class GateAssemblerBuildsTheGraph(unittest.TestCase):
         # is not: it is scored over the current release's claims against a
         # certificate, not over the graph, and asserting a floor here would
         # move that judgement into a unit test.
-        import provenance_graph  # noqa: PLC0415
-
-        provenance_graph.build_graph(REPO)
+        built = self._fresh_build()
         schema = _load(GRAPH_SCHEMA_PATH)
         validator = jsonschema.Draft202012Validator(schema)
-        lines = GRAPH_PATH.read_text(encoding="utf-8").splitlines()
+        lines = built.read_text(encoding="utf-8").splitlines()
         self.assertGreater(len(lines), 0)
         for line in lines:
             validator.validate(json.loads(line))
@@ -476,11 +516,9 @@ class GateAssemblerBuildsTheGraph(unittest.TestCase):
         added the kind and R1's denominator changed underneath the gate.
         """
 
-        import provenance_graph  # noqa: PLC0415
-
-        provenance_graph.build_graph(REPO)
+        built = self._fresh_build()
         counts = {kind: 0 for kind in NODE_KINDS}
-        for line in GRAPH_PATH.read_text(encoding="utf-8").splitlines():
+        for line in built.read_text(encoding="utf-8").splitlines():
             record = json.loads(line)
             if record["record"] == "node":
                 counts[record["kind"]] += 1
@@ -494,8 +532,7 @@ class GateAssemblerBuildsTheGraph(unittest.TestCase):
 
         import provenance_graph  # noqa: PLC0415
 
-        path = provenance_graph.build_graph(REPO)
-        report = provenance_graph.summarize(path)
+        report = provenance_graph.summarize(self._fresh_build())
         print(
             f"\nR1 = {report['edges_into_ledgers_emitted']}"
             f"/{report['edges_into_ledgers']} = {report['r1_fraction']:.4f}"
@@ -519,8 +556,13 @@ class GateAssemblerBuildsTheGraph(unittest.TestCase):
 
         import provenance_graph  # noqa: PLC0415
 
-        first = provenance_graph.build_graph(REPO).read_bytes()
-        second = provenance_graph.build_graph(REPO).read_bytes()
+        with tempfile.TemporaryDirectory(prefix="graph-r5-") as tmp:
+            first = provenance_graph.build_graph(
+                REPO, Path(tmp) / "a.jsonl"
+            ).read_bytes()
+            second = provenance_graph.build_graph(
+                REPO, Path(tmp) / "b.jsonl"
+            ).read_bytes()
         self.assertEqual(first, second)
         self.assertNotIn(b"\r\n", first)
 
@@ -538,8 +580,11 @@ class GateRadiusToolAnswers(unittest.TestCase):
         import retraction_radius  # noqa: PLC0415
 
         self.assertTrue(hasattr(retraction_radius, "certify"))
-        if not GRAPH_PATH.is_file():
-            provenance_graph.build_graph(REPO)
+        self.assertTrue(
+            GRAPH_PATH.is_file(),
+            "the committed adjudicated graph is missing; it is an artifact, "
+            "never rebuilt by the suite",
+        )
 
         root = f"ledger:{GROUND_TRUTH_ROOTS['a']}"
         # A temp directory, not reports/radius/: the published certificate
@@ -758,8 +803,11 @@ class R2EvaluatorScoresTheAuditedList(unittest.TestCase):
         import radius_adjudicate  # noqa: PLC0415
         import retraction_radius  # noqa: PLC0415
 
-        if not GRAPH_PATH.is_file():
-            provenance_graph.build_graph(REPO)
+        self.assertTrue(
+            GRAPH_PATH.is_file(),
+            "the committed adjudicated graph is missing; it is an artifact, "
+            "never rebuilt by the suite",
+        )
         cert_path = retraction_radius.certify(
             GRAPH_PATH,
             f"ledger:{GROUND_TRUTH_ROOTS['a']}",
@@ -844,8 +892,11 @@ class BlindControlShufflesReproducibly(unittest.TestCase):
         import provenance_graph  # noqa: PLC0415
         import radius_blind_control as control  # noqa: PLC0415
 
-        if not GRAPH_PATH.is_file():
-            provenance_graph.build_graph(REPO)
+        self.assertTrue(
+            GRAPH_PATH.is_file(),
+            "the committed adjudicated graph is missing; it is an artifact, "
+            "never rebuilt by the suite",
+        )
         seeds = control.load_seeds(REPO)[: self.SMOKE_SEEDS]
         self.assertEqual(len(seeds), self.SMOKE_SEEDS)
 

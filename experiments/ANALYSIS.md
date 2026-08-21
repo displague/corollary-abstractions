@@ -4408,12 +4408,12 @@ them, and no query is scored.
 
 # v0.16 - the retraction closure: built, independently rechecked, voided by its own gate
 
-Preregistration (`8b82e31`) landed the schemas, the hundred derived
+Preregistration (`20581cc`) landed the schemas, the hundred derived
 control seeds, and the two hand-audited ground truths before any
 assembler existed; the recheck was written by an agent forbidden to open
-the builder (`42673d5`, committed before the builder); the citation
-scan's six generic rules were frozen (`38d6eb0`) with a dated
-registration (`478fb32`) disclosing that the rule author had seen the
+the builder (`a474101`, committed before the builder); the citation
+scan's six generic rules were frozen (`0cc0c68`) with a dated
+registration (`35dca02`) disclosing that the rule author had seen the
 audit and two development closures. Then the seven registered steps ran
 once, nothing edited, nothing rerun.
 

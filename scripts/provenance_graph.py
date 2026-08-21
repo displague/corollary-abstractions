@@ -414,12 +414,21 @@ def _ledger_inputs(doc: object) -> list[str]:
     return []
 
 
-def build_graph(repo_root: Path | str = REPO_ROOT) -> Path:
-    """Assemble the graph and write ``reports/provenance_graph.jsonl``.
+def build_graph(
+    repo_root: Path | str = REPO_ROOT, out_path: Path | None = None
+) -> Path:
+    """Assemble the graph and write it (default: the committed path).
 
     Returns the path written. Everything is derived from committed bytes;
     calling this twice on an unchanged tree produces identical bytes, which
     is R5 and is asserted in the suite rather than promised here.
+
+    ``out_path`` exists because the committed graph is an ADJUDICATION
+    input once certificates pin its hash: a build over a later tree is a
+    different graph, and writing it over the committed one silently breaks
+    every certificate's recheck. Callers that build for inspection (the
+    gate tests) build to a temp path; only a deliberate re-adjudication
+    writes the committed path.
     """
 
     repo_root = Path(repo_root).resolve()
@@ -605,7 +614,7 @@ def build_graph(repo_root: Path | str = REPO_ROOT) -> Path:
                 add_edge(node_id, target, "derived_from",
                          f"{EMITTER_CITATION}/{rule}", False)
 
-    return _write(repo_root, nodes, edges)
+    return _write(repo_root, nodes, edges, out_path)
 
 
 def _cited_artifacts(
@@ -726,7 +735,12 @@ def _glob_pattern(token: str) -> re.Pattern[str]:
     )
 
 
-def _write(repo_root: Path, nodes: dict[str, dict], edges: list[dict]) -> Path:
+def _write(
+    repo_root: Path,
+    nodes: dict[str, dict],
+    edges: list[dict],
+    out_path: Path | None = None,
+) -> Path:
     """Write the graph: sorted nodes, then sorted edges, LF, canonical JSON."""
 
     # One edge per (from, to, relation). If two rules produced the same
@@ -752,7 +766,9 @@ def _write(repo_root: Path, nodes: dict[str, dict], edges: list[dict]) -> Path:
         if edge["from_node"] in known and edge["to_node"] in known
     )
 
-    out = repo_root / GRAPH_RELATIVE_PATH
+    out = Path(out_path) if out_path is not None else (
+        repo_root / GRAPH_RELATIVE_PATH
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     payload = "".join(canonical_json(record) + "\n" for record in records)
     out.write_bytes(payload.encode("utf-8"))

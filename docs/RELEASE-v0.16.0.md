@@ -21,7 +21,7 @@ one committed thing is found wrong. The v0.15 rotation found the claim
 front page had carried a compression figure through five tagged releases
 while its ledger was rewritten twice.
 
-**Now.** The retraction closure was preregistered (`8b82e31`: schemas,
+**Now.** The retraction closure was preregistered (`20581cc`: schemas,
 100 derived control seeds, and two hand-audited ground truths committed
 before any assembler existed), built (a 1,046-node, 879-edge provenance
 graph over committed bytes — 1,045 and 877 before the adjudication
