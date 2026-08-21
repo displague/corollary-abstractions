@@ -49,6 +49,18 @@ or commit history. Each item names the evidence that motivated it.
   the recorded host. Do not infer balanced per-module shard weights from this
   one module; the whole-suite per-module pass in item (1) remains open.
 
+  **v0.16.0 status note (2026-08-21):** wanted-item (1) — whole-suite
+  per-module timing — is **DISCHARGED**, and twice: `reports/test_gate_v015/`
+  and `reports/test_gate_v016/` both carry byte-pinned per-module receipts,
+  so the "receipt limitation" above is superseded for those runs. Current
+  numbers: the v0.16.0 gate is **1,427 tests / 20,837.8 s**, of which
+  `test_write_stage` is 12,008.7 s (57.6%) and `test_corpus_analogy_split`
+  is 4,569.1 s (21.9%) — v0.15 read 1,381 tests / 20,521.7 s. The blind
+  control is now **4,289.6 s** inside `test_corpus_analogy_split`'s
+  4,569.1 s module, so the 5,619.8 s / 10,765 s table above is an
+  as-of-v0.12 reading, not a current one. Wanted-items (2) sampling the
+  blind control and (3) accounting for the fixtures remain open.
+
 ## Parked at the v0.15 drift audit
 
 Two goals were found lost to attrition rather than decision — v0.14
@@ -132,6 +144,15 @@ unpark condition.
   the same registered-replacement rule that protects the blind control.
   Evidence: `reports/test_gate_v014/` (v0.14 baseline), ROADMAP-v0.15 §3
   live status (v0.15 numbers), and the v0.15.0 release-gate timing receipt.
+
+  **v0.16.0 status note (2026-08-21):** ~~10,770.9 s~~ was the *indicative*
+  number and has since been retracted — it was not measured like-for-like
+  against the 12,522.5 s baseline. Measured like-for-like, v0.15 reads
+  **12,133.3 s** (a −3.1% reorder gain, not −14%), and the v0.16.0 gate
+  reads **12,008.7 s**. The claim the entry makes is unchanged and if
+  anything stronger: `test_write_stage` is still the serial floor, now
+  57.6% of a 20,837.8 s / 1,427-test suite. Evidence now also
+  `reports/test_gate_v015/` and `reports/test_gate_v016/`.
 
 - **The outside design inquiry cannot be isolated on this platform, and the
   reason is not the tool list.**  Both previously unverified questions are now
@@ -403,6 +424,24 @@ provability corpus) now live in `docs/RELEASE-v0.5.0.md`. Remaining friction:
   item 10's "report regeneration/coherence checks parallel to seed coherence"
   bullet and should land with it, not before it. Until then, treat every
   `reports/*.json` as a build artifact of an unknown commit.
+
+  **v0.16.0 status note (2026-08-21):** the "nothing detects it" premise is
+  **false** as of `scripts/check_report_regeneration.py`, which is run in the
+  release refresh and enumerates each committed report against a fresh run:
+  three ledgers regenerate clean, and `decompositions.json` is now a
+  *declared* divergence carrying its citation (TRIAGE-v0.11 §1 gate table
+  row 6 / §5; ground-truth claim b13), not an undetected drift. The closing
+  sentence above — "treat every `reports/*.json` as a build artifact of an
+  unknown commit" — is struck: the commit is now checkable. What remains
+  genuinely undischarged here is narrower than the entry's title: the
+  *regeneration* half. The committed `decompositions.json` still predates
+  the channel split (no `channels` / `channel_scores` / `channel_summary`),
+  and the adjudication numbers in this entry still come from a
+  scratch-directory run, so the shipped file and the shipped CLI still
+  disagree about the schema of their own output — the difference is that the
+  disagreement is now declared and checked rather than silent. Whether to
+  regenerate at all is a live call (see the 12k-scale entry below), and is
+  what this entry should be read as tracking from here on.
 - **Affect is design-gated, not embedding-first.** Directional review (2026-08-09)
   asked whether emotion classification maps/vectors belong beside math/science
   corpora. The answer is recorded in `docs/DESIGN-affect.md`: source-qualified
@@ -807,8 +846,16 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
 - **Boot capability matrix (kernel-style init).** On startup, probe corpuses,
   ledgers, narrative/belief/retrieve, optional WordNet/Lean/tools; print
   OK/OFF/FAIL with counts, digests, sizes—without requiring eager full loads
-  (P-IH5). Named missing WordNet stays loud FAIL for that probe; unnamed stays
-  OFF. Wikipedia/COCA `data_real` is not a default subsystem.
+  (P-IH5). Named missing WordNet stays loud FAIL for that probe; ~~unnamed
+  stays OFF~~. Wikipedia/COCA `data_real` is not a default subsystem.
+
+  **v0.16.0 status note (2026-08-21):** the "unnamed stays OFF" clause is
+  contradicted by shipped behaviour since `35f050f` ("Find the fetched
+  archive without being told where it is"): manifest auto-detection means an
+  *unnamed* WordNet resolves **ON** when the pinned archive is present where
+  the manifest says it is. The half of the rule that survives is the loud
+  one — env-set-but-missing still **FAIL**s, and fails by name. Read the
+  clause as "unnamed stays OFF *only when no pinned archive is found*".
 
 - **Status chrome and collapsed trace.** Map VERIFIED/SOLVED, REFUSED/REFUTED,
   WAITING (pulse), EXHAUSTED, BUDGET to characters/colors; stream optional CoT
@@ -827,8 +874,10 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   I/O — **conditional on session-scoped loop detection that does not exist
   yet**.
 
-- **BLOCKER — loop detection is run-local, not global.** `rejected` is a local
-  inside `Controller.run()` (`scripts/controller.py:271`) and
+- **BLOCKER (DISCHARGED at v0.16.0) — loop detection is run-local, not
+  global.** `rejected` is a local
+  inside `Controller.run()` (`scripts/controller.py:271` — stale line cite;
+  the local is now at `scripts/controller.py:346`) and
   `SearchController`'s `seen_states`/`attempted` are likewise per-search: every
   pruning structure is discarded on return. A need dispatcher issues one run
   per hop, so a session can cycle among **registered** paths with pruning reset
@@ -839,6 +888,15 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   Nothing that multiplies the hop graph — tool plugins especially — should land
   before it.
 
+  **v0.16.0 status note (2026-08-21):** **P-IH7 was adjudicated and this
+  blocker is DISCHARGED.** Session-scoped loop detection exists and is
+  tested: `tests/test_session_dispatcher.py`, green in both the v0.15.0 and
+  v0.16.0 release gates. The "nothing should land before it" hold no longer
+  applies — the tool-plugin lane is unblocked as far as this blocker is
+  concerned. The `Controller.run()` local described above is still a local;
+  what changed is that the session dispatcher threads its own record across
+  hops, so pruning is no longer discarded at each return.
+
 - **Chat Completions–compatible HTTP skin (Phase 4).** Same session engine as
   TTY; represent WAITING to external harnesses without inventing slot values
   (P-IH6). Durable multi-session auth remains blocked on the verifier
@@ -846,6 +904,20 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   (`scripts/retrieval.py:741-744`) — so a `Session` is a handle to live
   authority, not a value object (see conversation item below; ROADMAP-v0.7
   item 2 is the scheduled fix).
+
+  **v0.16.0 status note (2026-08-21):** three stale facts in the sentence
+  above. (1) ROADMAP-v0.7 item 2 is no longer "the scheduled fix" — it
+  **SHIPPED**; see the "Durable authenticated conversation resume: SHIPPED"
+  entry earlier in this file. Durable multi-session auth is therefore not
+  blocked. (2) The line cite `scripts/retrieval.py:741-744` is stale to the
+  point of being wrong: those lines are now WordNet synset code. The real
+  anchor for session restore is `ConversationSession.restore` — see
+  [DESIGN-interactive-harness.md](DESIGN-interactive-harness.md) §3.3 and
+  §4.3. (3) Park history, so the record is legible: this skin was parked at
+  v0.13, v0.14 and v0.15; a fourth park is recorded at ROADMAP-v0.16 §3 and
+  a fifth at ROADMAP-v0.17 §3. It is **unblocked in fact; unscheduled by
+  choice, until now** — the honest status is a standing deferral, not a
+  dependency.
 
 - **Need dispatcher before learned global policy.** Closed-form dispatch from
   epistemic state and registered paths first; learned ranking among legal
@@ -1260,8 +1332,11 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   pauses the generic controller as WAITING, and a channel-signed reply resumes
   the same session with a frame-private `UserBinding`. While waiting, every
   non-reply action is frozen. Signatures establish passage through the host
-  return-channel API, not real-world human identity. Still open: durable session
-  serialization, actual UI/transport integration, open-English parsing,
+  return-channel API, not real-world human identity. Still open: ~~durable session
+  serialization~~ (**v0.16.0 status note (2026-08-21):** struck as
+  self-contradictory with the next sentences — durable authenticated resume
+  **shipped** at ROADMAP-v0.7 item 2, `ConversationSession.restore`;
+  `scripts/conversation.py`), actual UI/transport integration, open-English parsing,
   learned question rendering, and the deterministic dispatcher across
   derivable/store/user/terminal channels before a learned chooser is evaluated.
   Consumption is verifier-private but commits only through the controller's
@@ -2195,6 +2270,14 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   (`reports/` having no regeneration check), which at v0.15 was
   absorbed into DESIGN-retraction-closure §4 / ROADMAP-v0.16
   item 1. Do not close that one just because WOLD is named.
+
+  **v0.16.0 status note (2026-08-21):** the pointer "the entry above" now
+  points at a **PRUNED** marker, which reads as a dead reference. Repointing:
+  the broader census fix **shipped** as `scripts/check_report_regeneration.py`
+  — see the "PRUNED at v0.16.0 — `reports/` regeneration is checked" marker
+  immediately above and [RELEASE-v0.16.0.md](RELEASE-v0.16.0.md). This entry
+  stays PARTIAL only for the `ingest_wold.py reach` half; the census half it
+  deferred to is discharged.
 - **PARTIAL — the wall-clock is written down; the two-tier gate is
   not built.** Full discover on the v0.11.0 tip: **1,123 tests,
   23,744s / 6h35m**. The “30+ minutes” figure is struck from the
@@ -2204,6 +2287,18 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   faster fixture for graph-scale tests, and a *checked* two-tier
   gate (fast set per slice, full discover per tag) rather than
   prose in the skill.
+
+  **v0.16.0 status note (2026-08-21):** two of the three "still wanted"
+  items are discharged. The **per-test timing pass exists and has run
+  twice** — `reports/test_gate_v015/` and `reports/test_gate_v016/`, the
+  latter reading 1,427 tests / 20,837.8 s. The **faster fixture** landed
+  (shared split fixture, `fa0a174`). The named outlier
+  `test_matcher_delta_is_measured_and_recorded` no longer costs 6+ minutes:
+  it reads **202.99 s**, mid-pack rather than worst. The still-open
+  remainder of this entry is only the **CHECKED two-tier gate** — a fast set
+  per slice and a full discover per tag, enforced rather than described in
+  prose. The 1,123-test / 23,744 s v0.11 reading above stands as an
+  as-of-v0.11 fact.
 - **The cost weights are the first numbers in the matcher with no corpus
   citation.** `HEAD_ALGEBRA` was built on the house rule that every algebraic
   claim names the node that justifies it; `COST_IDENTITY = 2` and
@@ -2833,8 +2928,18 @@ wants its own adversarial review, not a release-eve change.
 - **The test suite independently reloads the 12k-node graph.**
   `analyze` (~4 min), `load_nodes` (~90 s), and `measure` (~90 s) each
   run from several tests. A full `min_family=1` analyze was 20+ minutes
-  and is skipped above 1,000 statements. A shared fixture or a curated-
-  only analyze path would bring the suite back under ten minutes.
+  and is skipped above 1,000 statements. ~~A shared fixture or a curated-
+  only analyze path would bring the suite back under ten minutes.~~
+
+  **v0.16.0 status note (2026-08-21):** the shared fixture **shipped**
+  (`fa0a174`, built once per module with the pins proved not to move). The
+  prediction struck above was **wrong**, and worth keeping visible as a
+  wrong prediction: the v0.16.0 suite runs **20,837.8 s — 5h47m**, nowhere
+  near ten minutes. What the fixture actually removed was *duplicated*
+  reload work, not the floor. The floor is `test_write_stage` at 12,008.7 s
+  (57.6%), which no graph-reload fixture touches. The lesson: per-class
+  duplication and the serial floor are different costs, and only the first
+  was ever in this entry's reach.
 - **`reports/decompositions.json` is not regenerated at 12k scale.**
   Live `analyze` is 181,867 exact constituents with full owner lists —
   a hundred-megabyte artifact. The committed report stays the pre-scale
@@ -2843,6 +2948,17 @@ wants its own adversarial review, not a release-eve change.
   (`experiments/self_grounding_curve.json`). A summary-only decompose
   report remains the follow-on if a committed ledger at this scale
   becomes load-bearing.
+
+  **v0.16.0 status note (2026-08-21):** this is no longer an unexamined gap
+  — it is a **declared divergence**, checked on every release refresh by
+  `scripts/check_report_regeneration.py`, which regenerates the other three
+  ledgers clean and reports `decompositions.json` as divergent *by
+  declaration* with its citation attached. The declaring authority is
+  [TRIAGE-v0.11.md](TRIAGE-v0.11.md) §1 gate table row 6 (and §5):
+  `reports/decompositions.json` stays the pre-scale ledger, with live
+  `analyze_loaded` as the pin source. Recorded as ground-truth claim b13.
+  The entry stays open only as the standing question it always was: whether
+  a summary-only decompose report at 12k scale ever becomes load-bearing.
 
 ## Parked at v0.10.0 release triage (no named dependant in ROADMAP-v0.11)
 

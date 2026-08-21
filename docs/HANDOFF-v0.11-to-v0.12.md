@@ -60,6 +60,11 @@ emitted), 123 excluded.
 | `docs/DESIGN-emergent-programming.md` | Write-recovery ranker; waits on a fit |
 | `.claude/skills/release/SKILL.md` | How to tag; product-surface audit |
 
+**Correction (2026-08-21):** the `docs/TRIAGE-v0.11.md` row above ("Gate 6/7
+MET, **7 PARTIAL**") is stale as written — gate 7 was re-run on the tag tip
+and recorded **MET** (1123 tests, OK, skipped=3, 23,744 s); see TRIAGE-v0.11
+§1 row 7 and §1.7. The table is left as-is as the handoff's as-of record.
+
 **Honesty the notes already refuse:** “the suite is green,” “the
 external benchmark ran,” “a person can type into the harness.”
 

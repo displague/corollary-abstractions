@@ -1,3 +1,9 @@
+> **CLOSED — historical triage record for v0.13.** Since v0.14 the roadmap
+> triage lives inside the release notes ([RELEASE-v0.14.0.md](RELEASE-v0.14.0.md)
+> and later); nothing here is current. Suite counts, gate readings, and
+> open-friction lists below are as-of-v0.13 facts; several were later
+> discharged (see [BACKLOG.md](BACKLOG.md) and later release notes).
+
 # v0.13 release triage — coverage is not correctness
 
 Written before the release notes so the calls are visible as calls.  The

@@ -1,3 +1,15 @@
+> **CLOSED — historical triage record for v0.11.** Since v0.14 the roadmap
+> triage lives inside the release notes ([RELEASE-v0.14.0.md](RELEASE-v0.14.0.md)
+> and later); nothing here is current. Suite counts, gate readings, and
+> open-friction lists below are as-of-v0.11 facts; several were later
+> discharged (see [BACKLOG.md](BACKLOG.md) and later release notes).
+> One decision here remains standing authority and is cited by living code:
+> §1 gate table row 6 / §5 — `reports/decompositions.json` stays the
+> pre-scale ledger (cited by `scripts/check_report_regeneration.py`,
+> `scripts/provenance_graph.py`, `scripts/decompose.py`,
+> [DESIGN-retraction-closure.md](DESIGN-retraction-closure.md) §3, and
+> ground-truth claim b13).
+
 # v0.11 release triage — gate status, drift audit, and what the notes may claim
 
 Written before the release notes so the arguable calls are visible as

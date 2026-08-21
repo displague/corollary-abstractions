@@ -10,6 +10,18 @@ path is one a probe-initialized subsystem declared and the kernel will let a
 verifier adjudicate; registration is not a verdict.)
 
 Status: **kernel and dispatcher shipped; the live prompt did not.**
+> **Status correction (2026-08-21):** the line above is stale and kept
+> for the record. The live typed prompt SHIPPED at v0.12 and has grown
+> since (`scripts/harness.py` reads lines, routes the registered
+> grammar, answers with receipts, and asks/refuses; RELEASE-v0.14.0's
+> drift audit retired the "claims a live session it does not have"
+> warning with a runnable demonstration). Phases 0–2 of §9 are shipped
+> and adjudicated (P-IH1/P-IH2 in `tests/test_session_offline.py`,
+> P-IH7 in `tests/test_session_dispatcher.py`); Phases 3–6 are not.
+> Phase 4 is scheduled by
+> [DESIGN-grounded-throughput](DESIGN-grounded-throughput.md)
+> (ROADMAP-v0.17 headline). Some §10 adjudicating-test names below
+> predate the tests as landed; the tests themselves are authoritative.
 `scripts/harness.py` prints a boot list and exits.
 `scripts/dispatcher.py` routes registered paths.
 `scripts/session_run.py --check` re-verifies one recorded session.
