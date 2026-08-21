@@ -201,10 +201,31 @@ graph and four radius certificates plus the blind-control report
 result (`experiments/veto_full_cross_*.json`), and the two course
 receipts (`reports/design-direction-v0.16.json`, `-v0.17.json`).
 
-## The suite at the tip
+## The suite at the tip: red once, green once, both receipts kept
 
-[SUITE-GATE-V16: full-suite verdict and timing at the frozen v0.16 tip
-land here before the tag; the v0.15.0 receipt is the baseline.]
+The gate ran twice, and the first run is part of the record
+(`reports/test_gate_v016/run1-red.time_tests.log`): **1,427 tests, 2
+failures**. Both failures were the cycle grading itself — the A1
+measurement artifact's source-hash pins fired on the writers'
+provenance change (adjudicated by regeneration: every measured number
+identical, only the pins moved), and the ground-truth quote-liveness
+test broke when this rotation pruned the BACKLOG entry one audit claim
+quotes, exactly as that entry's prune condition required (the invariant
+is now liveness against the tree *as audited*). Chasing the second
+exposed two defects the suite could not see: the rebase onto the v0.15
+tag had orphaned every commit hash the v0.16 docs cited, and the
+assembler gate tests were rebuilding the sealed adjudicated graph in
+place. All four fixes are one commit (`114e3b9`), and the notes you are
+reading cite the repointed hashes.
+
+The second run, on the fixed tip: **1,427 tests, 0 failures, 0 errors,
+3 skipped, 20,837.8 s (5 h 47 m)** —
+`reports/test_gate_v016/run2-green.time_tests.log`. Against v0.15's
+1,381 tests / 20,521.7 s, the suite grew 46 tests (the retraction
+closure's 33 among them, costing 292.9 s of which ~290 s is the
+regeneration gate genuinely re-running three ledger writers) and 316 s
+of wall clock. `test_write_stage` remains the floor at 12,008.7 s
+(57.6 %).
 
 ## Reproduce
 
