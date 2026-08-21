@@ -6,13 +6,15 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.15.0](docs/RELEASE-v0.15.0.md) — two
-committed worlds were compiled into complete bounded possibility spaces,
-independently checked, so "not reachable within this horizon" is now a
-checkable claim with a receipt instead of a timeout; and the cross-field
-veto's first adjudication found one textbook judgement carrying the whole
-table. See [one row was carrying the
-table](docs/blog/one-row-was-carrying-the-table.md).
+interface. Latest release: [v0.16.0](docs/RELEASE-v0.16.0.md) — the
+retraction-radius machine was preregistered, built, independently
+rechecked, and voided by its own gate (the dependency edges carry real
+information — 0/100 shuffles fake them — but prose cites numbers, not
+artifacts, so lexical lineage cannot be precise); and the cross-field
+veto's information claim was established by a blind-authored full
+cross-product table, lifting a two-cycle suspension. See [the edges
+were real; the radius was
+not](docs/blog/the-edges-were-real-the-radius-was-not.md).
 The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
 still stands: about a third on uncontrolled formal math.
 
@@ -206,6 +208,8 @@ the graded residual.
 | Corpus grounding is not task difficulty | 40 grounded analogy rows reduce to five targets in one ratio family; symbolic and blind last-slot number transfer both score 1.000 |
 | A bounded negative can carry evidence | two worlds' complete horizon-bounded spaces compile and check independently (75 and 1 states, byte-identical rebuilds); 90/90 applicable corruptions caught; "not reachable within the bound" is a property of the sealed object |
 | A veto can rest on one row | the cross-field kind check flags 22/77 aligned slots, but removing one exemption (proposition = set) moves it to 38 while every other removal moves it by ≤2 — the instrument is one textbook judgement on a strong default |
+| Information is not precision | the provenance graph's edges are real (0/100 degree-and-kind-preserving shuffles reproduce the audited coverage) yet the retraction radius voided its own gate: lexical citation floods past its 3× cap and misses claims that cite only derived numbers |
+| A blind author repeats the load-bearing call | an isolated context shown only the 26-kind menu ruled all 325 pairs, agreed with the incumbent table on 43/44 shared pairs, independently made the proposition=set exemption, and put real tags at 21 conflicts against a permuted floor of 45 |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -245,6 +249,12 @@ scripts/
   closure_build.py / closure_check.py   independent builder + checker pair
   closure_corrupt.py / closure_query.py twelve-class corruption battery;
                         query a sealed closure and get a receipted answer
+  provenance_graph.py   committed-bytes provenance graph (writer lineage +
+                        six frozen citation rules, tagged per edge)
+  retraction_radius.py / radius_recheck.py  certifier + never-saw-the-builder
+                        recheck; radius_blind_control.py 100-shuffle control
+  check_report_regeneration.py  do committed ledgers match their writers
+                        (declared snapshots reported, not regenerated)
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
@@ -292,6 +302,7 @@ profiling and are never committed):
 
 ```
 python scripts/validate_nodes.py            # 12,777 nodes / 27 corpora green
+python scripts/check_report_regeneration.py # committed ledgers match writers
 python scripts/match_signatures.py          # twin ledger
 python scripts/specialize.py                # specialization edges
 python scripts/oracle_controller_demo.py    # one loop: 3 Lean replays + 3 story beats
@@ -362,10 +373,15 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   complete small possibility space before choosing a target, then return a
   replayable path or an exact negative within the declared bound; the two
   sealed closures in `reports/closures/` are its evidence
-- `docs/DESIGN-retraction-closure.md` — the chosen post-v0.15 direction:
-  retraction as an operation with a receipt — a writer-emitted provenance
-  graph and radius certificates that compute what else moves when one
-  committed thing is found wrong
+- `docs/DESIGN-retraction-closure.md` — adjudicated at v0.16: retraction
+  as an operation with a receipt. Built, independently rechecked, and
+  voided by its own gate on precision; the instruments and ground truths
+  survive unscored, and the §3 correction + §6a registration are the
+  worked example of a design auditing itself
+- `docs/DESIGN-ledger-first-claims.md` — the chosen post-v0.16 direction:
+  claims are emitted, not written — published quantitative sentences
+  become generated artifacts of typed citations, with the voided scan
+  demoted to a completeness linter
 - `docs/blog/` — accessible project narratives, including the v0.8 story
 - `docs/RELEASE-v*.md` — release notes; highest version is current
 - `docs/DISCOVERIES.md` — the human-readable findings ledger

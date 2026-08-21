@@ -1,3 +1,13 @@
+> **CLOSED at v0.16.0.** Where each item went: **item 1** (retraction
+> closure) adjudicated — R2 failed on both roots, capability VOID as
+> frozen, instruments shipped unscored; see
+> [RELEASE-v0.16.0](RELEASE-v0.16.0.md) headline and ANALYSIS. **Item
+> 2** (veto information claim) read out ESTABLISHED, exploratory, with
+> the suspension lifted under two permanent riders. **§3 carried
+> lanes** moved to [ROADMAP-v0.17](ROADMAP-v0.17.md) §3 or stayed
+> parked; the HTTP-skin paragraph escalates there. The **release gate**
+> below was discharged clause by clause in the release notes.
+
 # Roadmap v0.16 — say what a retraction costs before making one
 
 v0.15 built the machine that turns "no path found" into evidence within a

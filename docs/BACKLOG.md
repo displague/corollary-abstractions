@@ -2176,32 +2176,14 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   refresh. Generalisation worth keeping: any consumer that asks a matcher
   "did you need mechanism X" is silently asking "was X on the first path you
   happened to take", which is not a question about the statements at all.
-- **`reports/` has no regeneration check, and two of the four ledgers are
-  already stale on `main`.** `scripts/check_regeneration.py` enforces
-  seeds -> `data/` coherence and nothing else, so nothing notices when a
-  committed report stops matching what its script produces. Found while
-  regression-testing this branch: at `main` (6483a23, "Refresh all ledgers
-  post-head-algebra"), re-running `measure_compression.py` and `decompose.py`
-  with the *unmodified* v2 matcher already produces a 46-line diff in
-  `reports/compression.json` and a 290-line diff in
-  `reports/decompositions.json` — `logic.inference.hypothetical_syllogism` is
-  missing from the compression ledger entirely and several `family_reuse`
-  counts are one low, which smells like a corpus merge that refreshed some
-  ledgers and not others. Both files are therefore left untouched here rather
-  than refreshed, so that this branch's diff is only the matcher's doing.
-  Fix: extend `check_regeneration.py` (or add a sibling) to re-run each
-  report writer into a temp path and diff, and put it in the release skill's
-  step 1 alongside the data check.
-  **ABSORBED at v0.15, not closed:** this fix is now a named component of
-  [DESIGN-retraction-closure](DESIGN-retraction-closure.md) §4 ("the
-  regeneration check") and ROADMAP-v0.16 item 1 step 3. Note the v0.15
-  release refresh found this entry's own headline claim stale: the
-  `compression.json` drift healed at v0.11 (`1090aa5`) with no radius
-  computed, and the `decompositions.json` divergence is a documented
-  decision (TRIAGE-v0.11, gate table row 6 and §5). The corrected
-  adjudication roots are in
-  the design's §3 correction. Prune this entry when v0.16's headline
-  ships or folds.
+- **PRUNED at v0.16.0 — `reports/` regeneration is checked.** The entry
+  that stood here (committed reports drifting from their writers,
+  found via a 46-line compression diff at an old tip) shipped its fix as
+  `scripts/check_report_regeneration.py`, run in the release refresh:
+  three ledgers clean, `decompositions.json` a declared divergence with
+  its citation. Its prune condition (the v0.16 headline ships or folds)
+  was met by the adjudication. History: RELEASE-v0.16.0, ANALYSIS
+  "voided by its own gate".
 - **PARTIAL — `ingest_wold.py reach` is now in the release skill;
   a full generated-artifact census is not.** v0.11's programming
   second wave added six tokens and `experiments/wold_reach.json`
