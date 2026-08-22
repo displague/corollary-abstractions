@@ -34,3 +34,4 @@ reports/test_timings_v014/** text eol=lf
 reports/provenance_graph.jsonl text eol=lf
 reports/radius/*.cert.json text eol=lf
 reports/radius/*.json text eol=lf
+data/closure_targets/** -text

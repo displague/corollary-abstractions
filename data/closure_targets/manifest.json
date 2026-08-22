@@ -1,0 +1,95 @@
+{
+  "files": [
+    {
+      "arm": "reachable",
+      "index": 0,
+      "path": "data/closure_targets/story.golden_chicken.reachable.0.state.json",
+      "route_length": 0,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "reachable",
+      "index": 1,
+      "path": "data/closure_targets/story.golden_chicken.reachable.1.state.json",
+      "route_length": 1,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "reachable",
+      "index": 2,
+      "path": "data/closure_targets/story.golden_chicken.reachable.2.state.json",
+      "route_length": 2,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "reachable",
+      "index": 3,
+      "path": "data/closure_targets/story.golden_chicken.reachable.3.state.json",
+      "route_length": 3,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "reachable",
+      "index": 4,
+      "path": "data/closure_targets/story.golden_chicken.reachable.4.state.json",
+      "route_length": 4,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "unreachable",
+      "index": 0,
+      "path": "data/closure_targets/story.golden_chicken.unreachable.0.state.json",
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "unreachable",
+      "index": 1,
+      "path": "data/closure_targets/story.golden_chicken.unreachable.1.state.json",
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "arm": "reachable",
+      "index": 0,
+      "path": "data/closure_targets/visual.rt0000.reachable.0.state.json",
+      "route_length": 0,
+      "seed_script": "scripts/seed_closure_targets.py",
+      "sha256": "fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+      "world_id": "visual.rt0000"
+    }
+  ],
+  "generated_by": "scripts/seed_closure_targets.py",
+  "schema": "closure-target-manifest/1",
+  "worlds": [
+    {
+      "closure": "reports/closures/story.golden_chicken.closure.json",
+      "horizon": 5,
+      "reachable_targets": 5,
+      "unreachable_targets": 2,
+      "visited_states": 75,
+      "world_id": "story.golden_chicken"
+    },
+    {
+      "closure": "reports/closures/visual.rt0000.closure.json",
+      "horizon": 1,
+      "reachable_targets": 1,
+      "shortfall": "this world affords 1 reachable and 0 unreachable target(s), short of the spec §9 floors (3/2), which apply per world where the adapter affords them; its closure holds 1 state(s) within horizon 1 and no further state is accepted by its own verifier",
+      "unreachable_targets": 0,
+      "visited_states": 1,
+      "world_id": "visual.rt0000"
+    }
+  ]
+}

@@ -34,6 +34,7 @@ prediction (P-IH1) deterministic on a box where Torch happens to be present.
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import secrets
 from dataclasses import dataclass, field, replace
@@ -51,6 +52,7 @@ from controller import (
 from frames import FrameEvent, FrameExecutor, FrameSpec, Literal
 from oracle_controller_demo import StoryState, story_oracle_run
 from retrieval import (
+    RetrievalItem,
     RetrievalState,
     RetrievalVerifier,
     UnifiedKnowledgeStore,
@@ -83,6 +85,19 @@ class Liveness(str, Enum):
 #: the three §5 names an offline boot forces to OFF, and the set P-IH1 asserts
 #: contributes no registered subsystem when the session runs offline.
 OPTIONAL_SUBSYSTEMS = ("retrieve.wordnet", "prover.lean_live", "tool.torch")
+
+#: Probes over data this repository *ships* rather than over an installed
+#: dependency. They are deliberately NOT in :data:`OPTIONAL_SUBSYSTEMS`: that
+#: tuple names the three optional dependency *families*, and P-IH1 asserts an
+#: offline session registers none of them
+#: (``tests/test_session_offline.py:106``). ``offline=True`` reproduces a box
+#: where an optional install is absent — it has nothing to say about committed
+#: files, which are present either way, so forcing this probe OFF offline
+#: would withhold a route for a reason that is not true of the box. Recorded
+#: non-optional so a green offline matrix keeps meaning what P-IH1 says it
+#: means; the probe can never FAIL, so it can never block boot the way a
+#: required FAIL does.
+COMMITTED_ARTIFACT_SUBSYSTEMS = ("closure.worlds",)
 
 
 @dataclass(frozen=True)
@@ -305,6 +320,57 @@ def probe_narrative() -> CapabilityRecord:
     )
 
 
+def probe_closure_worlds(repo_root: Path) -> CapabilityRecord:
+    """OK when every registered closure world has a sealed closure beside it.
+
+    Reads the committed manifest and registrations with plain JSON rather than
+    importing the query stack: a boot probe must be able to say OFF about a
+    checkout it cannot parse, and importing ``closure_query`` here would let a
+    broken world raise out of ``boot`` instead.
+
+    Never FAIL, on ``probe_lean``'s shape: an absent closure set is an absent
+    artifact, and the ``reachable`` route degrades to a named refusal rather
+    than bricking the session.
+    """
+
+    manifest = repo_root / "data" / "closure_worlds" / "manifest.json"
+    if not manifest.is_file():
+        return CapabilityRecord(
+            "closure.worlds",
+            Liveness.OFF,
+            "no data/closure_worlds/manifest.json",
+            False,
+        )
+    try:
+        entries = json.loads(manifest.read_text(encoding="utf-8"))["files"]
+        world_ids = [
+            json.loads(
+                (repo_root / entry["path"]).read_text(encoding="utf-8")
+            )["world_id"]
+            for entry in entries
+        ]
+    except (OSError, TypeError, ValueError, KeyError) as exc:
+        return CapabilityRecord(
+            "closure.worlds", Liveness.OFF, f"unreadable registrations: {exc}", False
+        )
+    closures = repo_root / "reports" / "closures"
+    missing = [
+        world_id
+        for world_id in world_ids
+        if not (closures / f"{world_id}.closure.json").is_file()
+    ]
+    if missing:
+        return CapabilityRecord(
+            "closure.worlds",
+            Liveness.OFF,
+            "no sealed closure for: " + ", ".join(missing),
+            False,
+        )
+    return CapabilityRecord(
+        "closure.worlds", Liveness.OK, f"{len(world_ids)} worlds registered", False
+    )
+
+
 def probe_belief() -> CapabilityRecord:
     """Required. FrameExecutor opens an owned belief frame smoke."""
 
@@ -517,6 +583,7 @@ class CoreSession:
             probe_corpus(repo_root),
             probe_narrative(),
             probe_belief(),
+            probe_closure_worlds(repo_root),
             probe_wordnet(offline=offline, env=wordnet_env),
             probe_lean(offline=offline),
             probe_torch(offline=offline),
@@ -802,6 +869,46 @@ OWNS_COMMAND = "owns"
 #: outright fiction are not errors — they are claims that belong in a frame
 #: the person owns, marked `conjectured`, never quotable as corpus fact.
 SUPPOSE_COMMAND = "suppose"
+
+#: Wiring step W1 (`docs/SPEC-chat-completions-skin.md` §9, ¶DEV-2). The twin
+#: ledger is a REQUIRED_CORPUS_LEDGERS entry and `CoreSession.retrieve` has
+#: surfaced its groups all along, but no typed line ever called that method,
+#: so the material was line-unreachable over every skin. This command is the
+#: surface, not a new capability: it adds no rung to the miss chain.
+TWIN_COMMAND = "twin"
+
+#: The one artifact a twin answer rests on, quoted rather than paraphrased.
+TWIN_LEDGER_PATH = "reports/signature_matches.json"
+
+#: The subsystem that owns the twin ledger — it is one of
+#: :data:`REQUIRED_CORPUS_LEDGERS`, so `twin` is gated on the same probe the
+#: corpus graph is.
+CORPUS_SUBSYSTEM = "corpus.nodes"
+
+#: The ledger's own group order (`scripts/retrieval.py:487-517`), strongest
+#: first. A statement that appears in several groups is answered from the
+#: strongest one so the level in the answer is a floor, not a coin toss.
+TWIN_LEVEL_ORDER = ("typed", "family", "aliased", "mirror", "shape")
+
+#: Wiring step W2 (§9). `closure_query` shipped as a standalone CLI wired
+#: into no session route; this is its line form. `_looks_like_path` cannot
+#: capture the line (it rejects anything containing whitespace), so ordering
+#: it with the other head-guarded commands costs the write gate nothing.
+REACHABLE_COMMAND = "reachable"
+
+#: The subsystem `reachable` reads through. Gated for the same reason
+#: ownership is: the answer is read out of committed closures, and with none
+#: registered the route has nowhere else to read one from.
+CLOSURE_SUBSYSTEM = "closure.worlds"
+
+#: The registered target set, and the reason the route consults it at all
+#: (spec §9). ``closure_query.query`` certifies a bounded negative for
+#: *whatever bytes it is handed*, so an ungated route would mint a sealed
+#: "not reachable within horizon N" receipt naming a real closure for every
+#: file in the repository — the self-fulfilling-arm hole reopened from the
+#: other side. Answering only about listed paths also gives each receipt's
+#: ``target_digest`` committed provenance to recheck against.
+CLOSURE_TARGET_MANIFEST = "data/closure_targets/manifest.json"
 
 
 def _looks_like_path(line: str) -> bool:
@@ -1387,6 +1494,282 @@ def _route_suppose(claim: str) -> dict:
     }
 
 
+def _route_twin(session: "CoreSession", statement_id: str) -> dict:
+    """`twin <statement-id>` — the committed twin ledger, through the miss chain.
+
+    Walks ``CoreSession.retrieve``, which returns the ledger's groups as
+    pointable material on the exact rung, and reports the group that lists
+    this statement. Groups the chain returned for a *neighbouring* reason —
+    an alias or skeleton match that does not list this id — are dropped
+    rather than reported: the answer names member statement ids, and a group
+    the statement is not in has none to name for it.
+
+    Gated on `corpus.nodes`, which owns the ledger
+    (``REQUIRED_CORPUS_LEDGERS``); the session's pending resolver ASK is not
+    consulted or cleared, because `retrieve` opens its own frame and never
+    touches ``session.state``.
+    """
+
+    if CORPUS_SUBSYSTEM not in session.matrix.registered_ids():
+        return {
+            "route": "twin",
+            "status": "exhausted",
+            "detail": (
+                f"{CORPUS_SUBSYSTEM} did not register on this boot; the twin "
+                "ledger is one of its required ledgers and there is nowhere "
+                "else to read it from"
+            ),
+            "missing_capability": CORPUS_SUBSYSTEM,
+        }
+    if not statement_id:
+        return {
+            "route": "twin",
+            "status": "refused",
+            "detail": f"{TWIN_COMMAND!r} needs one statement id after it",
+        }
+    if any(ch.isspace() for ch in statement_id):
+        return {
+            "route": "twin",
+            "status": "refused",
+            "detail": (
+                f"{TWIN_COMMAND!r} takes exactly one statement id; "
+                f"{statement_id!r} carries whitespace"
+            ),
+        }
+
+    run = session.retrieve(statement_id)
+    groups = [
+        material.item
+        for material in run.final_state.context
+        if material.item.source == "twin_ledger"
+        and statement_id in material.item.source_ids
+    ]
+    if not groups:
+        return {
+            "route": "twin",
+            "status": "exhausted",
+            "detail": (
+                f"no group in {TWIN_LEDGER_PATH} lists {statement_id!r} as a "
+                "member; that is a statement about this committed ledger and "
+                "says nothing about statements it does not cover"
+            ),
+        }
+
+    def strength(item: RetrievalItem) -> tuple[int, int]:
+        _, level, index = item.item_id.split(":", 2)
+        order = (
+            TWIN_LEVEL_ORDER.index(level)
+            if level in TWIN_LEVEL_ORDER
+            else len(TWIN_LEVEL_ORDER)
+        )
+        return order, int(index)
+
+    chosen = min(groups, key=strength)
+    _, level, index = chosen.item_id.split(":", 2)
+    members = list(chosen.source_ids)
+    return {
+        "route": "twin",
+        # `found`, like resolution: the ledger locates statements that share a
+        # structure. It does not claim they say the same thing.
+        "status": "found",
+        "detail": (
+            f"{level} twin group {index}: {len(members)} member statement(s)"
+            + (
+                f"; {len(groups)} groups list this statement and the "
+                "strongest level is reported"
+                if len(groups) > 1
+                else ""
+            )
+        ),
+        "answer": (
+            f"level      : {level}",
+            *(f"member     : {member}" for member in members),
+            f"ledger     : {TWIN_LEDGER_PATH}",
+        ),
+        "receipt": {
+            "ledger_path": TWIN_LEDGER_PATH,
+            "level": level,
+            "group_index": int(index),
+            "member_ids": members,
+        },
+    }
+
+
+#: `closure_query`'s three receipt outcomes, in this route's vocabulary. A
+#: `CORRUPT_TARGET` receipt IS an answer, but it is not a grounding claim, so
+#: it lands on `refused` beside the exceptions rather than on `found`.
+CLOSURE_OUTCOME_STATUS = {
+    "REACHABLE": "found",
+    "NOT_REACHABLE_WITHIN_HORIZON": "exhausted",
+    "CORRUPT_TARGET": "refused",
+}
+
+
+def _unregistered_target(repo_root: Path, world_id: str, target: str) -> str | None:
+    """``None`` when ``target`` is a committed target of ``world_id``.
+
+    Otherwise the reason, for a refusal that names the registered set rather
+    than the file. A manifest that cannot be read is treated as no registered
+    set at all: the route then refuses everything, which is the safe end of
+    the failure — the unsafe end certifies bounded negatives about files
+    nobody committed as targets.
+    """
+
+    manifest = repo_root / CLOSURE_TARGET_MANIFEST
+    try:
+        entries = json.loads(manifest.read_text(encoding="utf-8"))["files"]
+        listed = [
+            entry for entry in entries
+            if entry["path"] == target.replace("\\", "/")
+        ]
+    except (OSError, TypeError, ValueError, KeyError) as exc:
+        return (
+            f"no readable target set at {CLOSURE_TARGET_MANIFEST} "
+            f"({type(exc).__name__}); with none committed there is no "
+            f"registered target to answer about"
+        )
+    if not listed:
+        return (
+            f"{target!r} is not listed in {CLOSURE_TARGET_MANIFEST}; "
+            f"{REACHABLE_COMMAND!r} answers about the committed target set, "
+            f"not about arbitrary repository files"
+        )
+    if not any(entry.get("world_id") == world_id for entry in listed):
+        owners = sorted({str(entry.get("world_id")) for entry in listed})
+        return (
+            f"{target!r} is a committed target of {', '.join(owners)}, not "
+            f"of {world_id}"
+        )
+    return None
+
+
+def _route_reachable(repo_root: Path, session: "CoreSession", rest: str) -> dict:
+    """`reachable <world-id> <target-path>` — one sealed closure, one target.
+
+    The target is a *file* and not a phrase because
+    ``closure_query.query`` refuses approximate targets by design: it takes
+    the target's exact canonical bytes. The committed set under
+    ``data/closure_targets/`` is what a typed line can name
+    (``scripts/seed_closure_targets.py``), and only that set: see
+    :data:`CLOSURE_TARGET_MANIFEST`.
+
+    Every refusal below is the query layer's own — its exception class name
+    travels in the detail — except the three this route owns: a malformed
+    line, a target outside the registered set, and a listed target whose file
+    is not there. None reaches the write gate: a line with whitespace in it is
+    not a path shape, and this branch has already claimed it.
+    """
+
+    # Gated before the import, not after: with no closure set registered
+    # there is nothing for the query stack to be loaded for.
+    if CLOSURE_SUBSYSTEM not in session.matrix.registered_ids():
+        return {
+            "route": "closure",
+            "status": "exhausted",
+            "detail": (
+                f"{CLOSURE_SUBSYSTEM} did not register on this boot; the "
+                "reachability answer is read out of a sealed closure and has "
+                "nowhere else to read one from"
+            ),
+            "missing_capability": CLOSURE_SUBSYSTEM,
+        }
+
+    from closure_check import load_closure  # noqa: PLC0415
+    from closure_query import (  # noqa: PLC0415
+        QueryRefused,
+        display_lines,
+        find_registration,
+        query,
+    )
+
+    parts = rest.split()
+    if len(parts) != 2:
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": (
+                f"{REACHABLE_COMMAND!r} takes exactly a world id and a "
+                f"repository-relative target path; got {len(parts)} argument(s)"
+            ),
+        }
+    world_id, target = parts
+    try:
+        registration = find_registration(world_id)
+    except QueryRefused as exc:
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
+    closure_path = Path("reports") / "closures" / f"{world_id}.closure.json"
+    if not (repo_root / closure_path).is_file():
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": (
+                f"{world_id} is registered but no sealed closure exists at "
+                f"{closure_path.as_posix()}"
+            ),
+        }
+    unregistered = _unregistered_target(repo_root, world_id, target)
+    if unregistered is not None:
+        return {"route": "closure", "status": "refused", "detail": unregistered}
+    if not _existing_file(repo_root, target):
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": (
+                f"no target file at {target!r}; a query takes the target's "
+                "exact canonical bytes, so there is nothing here to compare"
+            ),
+        }
+
+    try:
+        # `load_closure` reads and parses a committed file, so a truncated or
+        # unreadable closure must refuse here rather than raise out of
+        # `route_line` and end the session.
+        closure = load_closure(repo_root / closure_path)
+        target_bytes = (repo_root / target).read_bytes()
+        receipt = query(closure, registration, target_bytes, repo_root)
+    except QueryRefused as exc:
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
+    except (OSError, ValueError) as exc:
+        return {
+            "route": "closure",
+            "status": "refused",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
+
+    if receipt["outcome"] == "REACHABLE":
+        detail = (
+            f"{world_id}: reachable in {len(receipt['shortest_route'])} "
+            f"action(s), replayed through the world's own verifier"
+        )
+    elif receipt["outcome"] == "NOT_REACHABLE_WITHIN_HORIZON":
+        detail = (
+            f"{world_id}: not reachable within horizon {receipt['horizon']} "
+            f"of a closure that visited {receipt['visited_states']} states"
+        )
+    else:
+        detail = (
+            f"{world_id}: a state record carries this digest but different "
+            "canonical bytes"
+        )
+    return {
+        "route": "closure",
+        "status": CLOSURE_OUTCOME_STATUS[receipt["outcome"]],
+        "detail": detail,
+        # The committed §7 display, not a second rendering of the same
+        # receipt: the bound travels with the answer wherever it is shown.
+        "answer": tuple(display_lines(receipt, closure, closure_path)),
+        "receipt": receipt,
+    }
+
+
 def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dict:
     """The whole decision, as data, so a test can assert on it."""
 
@@ -1417,6 +1800,10 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         if computed is not None:
             return {"line": line, **computed}
         return {"line": line, **_route_suppose(rest.strip())}
+    if head.lower() == TWIN_COMMAND:
+        return {"line": line, **_route_twin(session, rest.strip())}
+    if head.lower() == REACHABLE_COMMAND:
+        return {"line": line, **_route_reachable(repo_root, session, rest)}
     told = _route_story(session, line)
     if told is not None:
         return {"line": line, **told}
