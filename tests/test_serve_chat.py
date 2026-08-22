@@ -31,6 +31,7 @@ import hashlib
 import json
 import sys
 import threading
+import time
 import unittest
 from pathlib import Path
 
@@ -70,10 +71,34 @@ REFUSED_LINE = "owns x"
 UNANSWERABLE_LINE = "explain what tomorrow's weather will be on a moon of mars"
 
 
-def engine_content(session: CoreSession, line: str) -> tuple[dict, str]:
-    """§6's content rule, written out here so the oracle is independent.
+def join_engine_content(verdict: dict) -> str:
+    """§6's content rule, written out here so the oracle is independent."""
 
-    reading + answer when a reading is present, else answer, else detail.
+    reading = tuple(verdict.get("reading") or ())
+    answer = tuple(verdict.get("answer") or ())
+    if reading:
+        return "\n".join((*reading, *answer))
+    if answer:
+        return "\n".join(answer)
+    return str(verdict["detail"])
+
+
+def replay_engine_content(session: CoreSession, lines) -> list[str]:
+    """Replay a whole conversation into ONE session, keeping its state.
+
+    Deliberately does NOT reset the pending candidate set between lines: a
+    `narrow …` line only means anything while its ASK is live, so an oracle
+    for a multi-turn conversation must carry exactly the state the server's
+    replay carries.
+    """
+
+    return [
+        join_engine_content(route_line(REPO, session, line)) for line in lines
+    ]
+
+
+def engine_content(session: CoreSession, line: str) -> tuple[dict, str]:
+    """One SINGLE-turn oracle line, from a session reset to look freshly booted.
 
     The oracle session's resolver ASK state is cleared first: the server
     replays every request into a *fresh* session (§4), so an oracle carrying a
@@ -87,13 +112,7 @@ def engine_content(session: CoreSession, line: str) -> tuple[dict, str]:
     session.context_hops = 0
     session.context_seen.clear()
     verdict = route_line(REPO, session, line)
-    reading = tuple(verdict.get("reading") or ())
-    answer = tuple(verdict.get("answer") or ())
-    if reading:
-        return verdict, "\n".join((*reading, *answer))
-    if answer:
-        return verdict, "\n".join(answer)
-    return verdict, str(verdict["detail"])
+    return verdict, join_engine_content(verdict)
 
 
 #: One in-process server on an ephemeral loopback port, started once for the
@@ -699,6 +718,205 @@ class ReplayEquivalence(ServedSkin):
         self.assertEqual(
             body["x_corollary"]["session"]["profile_session_id"], expected
         )
+
+
+# --------------------------------------------------------------------------
+# The pre-booted session pool — an optimization that must change no byte
+# --------------------------------------------------------------------------
+
+
+class SessionPool(ServedSkin):
+    """A11's second half: boot moved off the request path, provably invisibly.
+
+    `CoreSession.boot(offline=True)` costs ~415 ms, almost all of it
+    `UnifiedKnowledgeStore.load`. The pool removes that from the timed path,
+    so it is exactly the kind of change that buys a number by breaking a
+    guarantee if nobody checks. These tests are the check.
+    """
+
+    PROBES = (
+        TWIN_LINE,
+        DEFINITION_LINE,
+        RELATION_LINE,
+        REFUSED_LINE,
+        UNREACHABLE_LINE,
+        "",
+    )
+
+    def test_pooled_and_pool_disabled_bodies_are_byte_identical(self):
+        """The whole claim: a pooled session is a cold boot (§4 equivalence)."""
+
+        server, engine = serve_chat.build_server(REPO, 0, pool_size=0)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            self.assertEqual(engine.pool.size, 0)
+            self.assertFalse(engine.pool.running)
+            unpooled = OpenAI(
+                base_url=f"http://127.0.0.1:{server.server_port}/v1",
+                api_key="not-a-secret",
+            )
+            for line in self.PROBES:
+                with self.subTest(line=line or "(empty line)"):
+                    messages = [{"role": "user", "content": line}]
+                    cold = json.loads(
+                        unpooled.chat.completions.with_raw_response.create(
+                            model=KERNEL, messages=messages
+                        ).text
+                    )
+                    pooled = self.raw(KERNEL, messages)
+                    self.assertEqual(
+                        _modulo_id_and_created(cold),
+                        _modulo_id_and_created(pooled),
+                    )
+        finally:
+            server.shutdown()
+            server.server_close()
+
+    def test_the_pool_is_actually_exercised(self):
+        """Non-vacuity for the equivalence test above.
+
+        Without this, a pool that never handed out a session would make the
+        byte-identity assertion a comparison of two on-demand boots.
+        """
+
+        deadline = time.monotonic() + 20.0
+        while self.engine.pool._ready.empty() and time.monotonic() < deadline:
+            time.sleep(0.05)
+        before = self.engine.pool.hits
+        self.one(KERNEL, "twin nobody.committed.this.id")
+        self.assertGreater(
+            self.engine.pool.hits,
+            before,
+            "the refill thread never produced a session for a request to take",
+        )
+
+    def test_an_exhausted_pool_still_serves_the_same_answer(self):
+        """Correctness never depends on a pool hit."""
+
+        pool = self.engine.pool
+        drained = []
+        while True:
+            session = pool.take()
+            if session is None:
+                break
+            drained.append(session)
+        misses_before = pool.misses
+        body = self.one(KERNEL, TWIN_LINE)
+        self.assertGreater(pool.misses, misses_before)
+        self.assertEqual(self.x(body)["status"], "found")
+        _verdict, expected = engine_content(self.oracle, TWIN_LINE)
+        self.assertEqual(self.content(body), expected)
+
+    def test_a_pooled_session_carries_the_requests_own_prefix_hash(self):
+        """The realignment that makes a pooled session a cold boot."""
+
+        body = self.one(KERNEL, TWIN_LINE)
+        self.assertEqual(
+            self.x(body)["session"]["profile_session_id"],
+            serve_chat.prefix_hash([]),
+        )
+
+    def test_a_pooled_session_carries_no_state_from_another_conversation(self):
+        """The leak a session pool exists to be suspected of.
+
+        A `narrow …` line only reaches `resolver_context` while a candidate
+        set is pending on THAT session (`harness.route_line`). So sending one
+        as the first turn of a new conversation, right after another
+        conversation left candidates pending, is a direct read of whether the
+        session handed out was fresh: if it routes to `resolver_context`, the
+        pool leaked another conversation's ASK.
+        """
+
+        pending = self.one(KERNEL, RESOLVER_ASK_LINE)
+        self.assertEqual(self.x(pending)["status"], "waiting")
+        self.assertEqual(self.x(pending)["route"], "resolver")
+
+        fresh = self.one(KERNEL, NARROW_LINE)
+        self.assertNotEqual(
+            self.x(fresh)["route"],
+            "resolver_context",
+            "a pooled session carried a pending candidate set into a new "
+            "conversation",
+        )
+
+    def test_interleaved_sessions_over_a_shared_store_match_fresh_boots(self):
+        """The memoized store, adjudicated where it could actually leak.
+
+        `UnifiedKnowledgeStore.load` is memoized per process, so every session
+        in this server shares ONE store instance. The audit says the store is
+        immutable after load; this asserts it behaves that way through the
+        flows that carry state between turns — a resolver ASK and its narrow,
+        a twin retrieve (which walks the miss chain against the store), a
+        supposition, and a belief narration — interleaved between two
+        conversations, then compared line for line against sessions booted
+        one at a time with nothing else running.
+
+        Interleaving is the point: run serially, a leak between sessions
+        would be invisible.
+        """
+
+        left = [RESOLVER_ASK_LINE, NARROW_LINE, TWIN_LINE]
+        right = [
+            "suppose the corpus is complete",
+            RELATION_LINE,
+            "where does the observer think the marble is",
+        ]
+
+        # The oracle: each conversation replayed alone into its own session,
+        # with the store cache cleared first so the first boot parses afresh.
+        import retrieval
+
+        retrieval.clear_loaded_stores()
+        expected = {}
+        for name, lines in (("left", left), ("right", right)):
+            session = CoreSession.boot(
+                REPO, offline=True, session_id=f"alone-{name}"
+            )
+            session.resolver_index = self.engine._warm_index
+            expected[name] = replay_engine_content(session, lines)
+
+        # Now interleave them through the server, which shares one store.
+        served = {"left": [], "right": []}
+        history = {"left": [], "right": []}
+        for index in range(3):
+            for name, lines in (("left", left), ("right", right)):
+                history[name] = history[name] + [
+                    {"role": "user", "content": lines[index]}
+                ]
+                body = self.raw(KERNEL, history[name])
+                served[name].append(self.content(body))
+                history[name] = history[name] + [
+                    {"role": "assistant", "content": self.content(body)}
+                ]
+
+        for name in ("left", "right"):
+            with self.subTest(conversation=name):
+                self.assertEqual(served[name], expected[name])
+
+    def test_a_cached_multi_turn_reply_consumes_no_session_at_all(self):
+        """Item 3, asserted rather than timed: turn two pays one route.
+
+        A cache hit never calls `_kernel_session`, so neither a pool hit nor
+        a pool miss is recorded — which is a stable proof that turn two paid
+        no boot and no replay, where a wall-clock threshold would be flaky.
+        """
+
+        ask = self.one(KERNEL, RESOLVER_ASK_LINE)
+        self.assertEqual(self.x(ask)["status"], "waiting")
+        prefix = [
+            {"role": "user", "content": RESOLVER_ASK_LINE},
+            {"role": "assistant", "content": self.content(ask)},
+        ]
+        self.assert_cache_holds(prefix)
+
+        pool = self.engine.pool
+        before = (pool.hits, pool.misses)
+        body = self.raw(
+            KERNEL, prefix + [{"role": "user", "content": NARROW_LINE}]
+        )
+        self.assertEqual((pool.hits, pool.misses), before)
+        self.assertEqual(self.x(body)["route"], "resolver_context")
+        self.assertEqual(self.x(body)["status"], "found")
 
 
 # --------------------------------------------------------------------------

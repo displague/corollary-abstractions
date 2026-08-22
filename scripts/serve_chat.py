@@ -66,6 +66,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import queue
 import sys
 import threading
 import time
@@ -142,6 +143,20 @@ ANSWERING_STATUSES = frozenset({"solved", "found", "held", "PROVEN", "VERIFIED"}
 #: The pinned-baseline manifest the tokenizer digest is READ from (never
 #: hardcoded here: a second copy of a digest is a second thing to rot).
 BASELINE_MANIFEST = "experiments/throughput_baseline.json"
+
+#: A11, second half. `CoreSession.boot(offline=True)` costs ~415 ms on the
+#: reference host, of which ~405 ms is `UnifiedKnowledgeStore.load` re-parsing
+#: every committed `data/*/nodes.json` (the boot probes together are ~5 ms —
+#: the store, not the probes, is the cost). On a single-turn task that boot is
+#: most of the wall clock, so it is moved off the request path: a background
+#: thread keeps this many freshly booted sessions ready. Four is a balance
+#: against the measured ~27 MB a pooled session holds.
+#:
+#: The pool is an OPTIMIZATION ONLY. A request that finds it empty boots on
+#: demand and is served identically; correctness never depends on a pool hit,
+#: and `tests/test_serve_chat.py` asserts pooled and pool-disabled bodies are
+#: byte-identical.
+DEFAULT_POOL_SIZE = 4
 
 #: A11. One throwaway free-text line at startup so the resolver's graph index
 #: is built before the first request rather than inside it. Deliberately not a
@@ -1052,6 +1067,141 @@ class _CacheEntry:
         self.session = session
 
 
+class KernelSessionPool:
+    """Freshly booted kernel sessions, kept ready off the request path.
+
+    A pooled session is **indistinguishable from a cold boot**, and that is a
+    claim with a proof rather than a hope. `CoreSession.boot` takes an optional
+    `session_id` and otherwise mints a random one; nothing else in `boot`
+    reads it (the boot event it appends names only the registered and
+    optional-off subsystems). A fresh session's `state` is `None`, and no
+    field carried between turns — the pending candidate set, the hop counters,
+    the graph index — is derived from the id. So booting without an id and
+    assigning the prefix hash on the way out is the same object a cold boot
+    with `session_id=` would have produced. It is also the exact realignment
+    the cache-hit path already performs and documents (`_serve_locked`).
+
+    The pool never decides an answer. `take()` returns `None` when empty and
+    the caller boots on demand, so a slow refill costs latency and nothing
+    else. `hits`/`misses` are exposed so a test can prove the pool was
+    actually exercised rather than silently bypassed — an equivalence test
+    against a pool that never fired would be a test of nothing.
+    """
+
+    #: How long the server must stay idle before the refill thread starts a
+    #: boot. Booting holds the GIL for ~415 ms, so a refill that overlaps a
+    #: request makes BOTH slower — measured: with an always-on refill thread,
+    #: a pool miss cost ~1800 ms against the ~580 ms it costs with no pool at
+    #: all. Yielding to in-flight work bounds the miss at the no-pool cost,
+    #: which is the floor a pool must never push a request below.
+    QUIET_PERIOD_SECONDS = 0.05
+
+    def __init__(self, boot, size: int, idle: threading.Event | None = None) -> None:
+        self._boot = boot
+        self._idle = idle if idle is not None else threading.Event()
+        if idle is None:
+            self._idle.set()
+        self._size = max(0, int(size))
+        self._ready: "queue.Queue" = queue.Queue(maxsize=max(1, self._size))
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+        self._counts = threading.Lock()
+        self.hits = 0
+        self.misses = 0
+        self.boot_failures = 0
+
+    @property
+    def size(self) -> int:
+        return self._size
+
+    @property
+    def running(self) -> bool:
+        return self._thread is not None and self._thread.is_alive()
+
+    def start(self) -> None:
+        if self._size <= 0 or self._thread is not None:
+            return
+        self._thread = threading.Thread(
+            target=self._refill, name="corollary-skin-session-pool", daemon=True
+        )
+        self._thread.start()
+
+    def take(self):
+        """One ready session, or `None` — never a blocking wait.
+
+        Blocking here would trade the boot this pool exists to remove for a
+        wait of the same length, and would make a request's latency depend on
+        a background thread's progress. An empty pool is a miss the caller
+        handles by booting, which is exactly what happened before the pool.
+        """
+
+        if self._size <= 0:
+            with self._counts:
+                self.misses += 1
+            return None
+        try:
+            session = self._ready.get_nowait()
+        except queue.Empty:
+            with self._counts:
+                self.misses += 1
+            return None
+        with self._counts:
+            self.hits += 1
+        return session
+
+    def stop(self) -> None:
+        self._stop.set()
+        thread, self._thread = self._thread, None
+        if thread is not None:
+            thread.join(timeout=10.0)
+        while True:
+            try:
+                self._ready.get_nowait()
+            except queue.Empty:
+                return
+
+    def _wait_for_quiet(self) -> bool:
+        """True when the server has been idle long enough to spend a boot.
+
+        Under a tight sequential load this returns False forever and the pool
+        simply stops refilling — which is the right answer, not a failure: a
+        session booted into a queue that is drained the instant it lands has
+        bought nothing, and the boot it cost would have been stolen from the
+        request being served. The load then degrades to exactly the on-demand
+        behaviour that existed before this pool.
+        """
+
+        if not self._idle.wait(timeout=0.5):
+            return False
+        # The idle flag must HOLD, not merely have been observed: back-to-back
+        # requests leave sub-millisecond gaps, and starting a 415 ms boot in
+        # one of them is the contention this guard exists to avoid.
+        self._stop.wait(self.QUIET_PERIOD_SECONDS)
+        return self._idle.is_set() and not self._stop.is_set()
+
+    def _refill(self) -> None:
+        while not self._stop.is_set():
+            if not self._wait_for_quiet():
+                continue
+            try:
+                session = self._boot()
+            except Exception:  # pragma: no cover - a boot the probes refused
+                # The pool is not the place to decide a boot failure means
+                # anything: the on-demand path will raise it where a client
+                # can be told. Back off so a permanently broken tree does not
+                # spin a core.
+                with self._counts:
+                    self.boot_failures += 1
+                self._stop.wait(1.0)
+                continue
+            while not self._stop.is_set():
+                try:
+                    self._ready.put(session, timeout=0.25)
+                    break
+                except queue.Full:
+                    continue
+
+
 class ChatEngine:
     """One session engine behind the HTTP renderer (A-IH6).
 
@@ -1062,7 +1212,13 @@ class ChatEngine:
     condition instead of a second file.
     """
 
-    def __init__(self, repo_root: Path, *, cache_size: int = 32) -> None:
+    def __init__(
+        self,
+        repo_root: Path,
+        *,
+        cache_size: int = 32,
+        pool_size: int = DEFAULT_POOL_SIZE,
+    ) -> None:
         self.repo_root = repo_root
         self.tokens = TokenCounter(repo_root)
         self._lock = threading.Lock()
@@ -1071,6 +1227,15 @@ class ChatEngine:
         self._warm_index = None
         self._matrix = None
         self.created = int(time.time())
+        #: Clear while a request is being served. The pool's refill thread
+        #: waits on it so a background boot never competes with a live turn.
+        self._idle = threading.Event()
+        self._idle.set()
+        # The pool boots through this engine's own boot path, so it reads
+        # `_warm_index` at call time and inherits it as soon as prewarm has
+        # one. It is started at the END of prewarm, not here: a pool filled
+        # before the index existed would hand out sessions that pay for it.
+        self.pool = KernelSessionPool(self._boot_kernel, pool_size, self._idle)
 
     # -- A11 --------------------------------------------------------------
 
@@ -1096,6 +1261,13 @@ class ChatEngine:
         # P-IH3 fails the server at startup rather than at the first GET.
         assert_no_demo_name(self.capability_sheet(), "GET /v1/capabilities")
         assert_no_demo_name(self.model_list(), "GET /v1/models")
+        # Last, so every pooled session inherits the warm index above.
+        self.pool.start()
+
+    def shutdown(self) -> None:
+        """Stop the refill thread. Idempotent; safe on a pool never started."""
+
+        self.pool.stop()
 
     @property
     def matrix(self):
@@ -1105,14 +1277,36 @@ class ChatEngine:
 
     # -- session construction --------------------------------------------
 
-    def _kernel_session(self, session_id: str) -> CoreSession:
-        """§3/§4: the offline boot, threaded on the canonical prefix hash."""
+    def _boot_kernel(self) -> CoreSession:
+        """One offline boot with the shared graph index, id not yet assigned.
 
-        session = CoreSession.boot(
-            self.repo_root, offline=True, session_id=session_id
-        )
+        The id is deliberately left as `boot`'s random default here: this is
+        the pool's boot too, and a pooled session does not know which
+        conversation will claim it. :meth:`_kernel_session` assigns it.
+        """
+
+        session = CoreSession.boot(self.repo_root, offline=True)
         if self._warm_index is not None:
             session.resolver_index = self._warm_index
+        return session
+
+    def _kernel_session(self, session_id: str) -> CoreSession:
+        """§3/§4: the offline boot, threaded on the canonical prefix hash.
+
+        Served from the pool when one is ready and booted on demand when not.
+        Both arms end at the same object: see :class:`KernelSessionPool` for
+        why assigning the id after the boot is the same session a cold
+        `boot(session_id=…)` produces.
+        """
+
+        session = self.pool.take()
+        if session is None:
+            session = self._boot_kernel()
+        elif session.resolver_index is None and self._warm_index is not None:
+            # Booted before prewarm finished; give it the index a cold boot
+            # would now get, so a pooled turn never pays to rebuild it.
+            session.resolver_index = self._warm_index
+        session.session_id = session_id
         return session
 
     def _conversation_session(self, owner_hash: str):
@@ -1149,8 +1343,15 @@ class ChatEngine:
     # -- §4 replay --------------------------------------------------------
 
     def serve(self, request: ChatRequest) -> Rendered:
-        with self._lock:
-            return self._serve_locked(request)
+        # The idle flag brackets the WHOLE served turn, lock acquisition
+        # included: a request queued behind another is still in flight, and
+        # the refill thread must yield to it too.
+        self._idle.clear()
+        try:
+            with self._lock:
+                return self._serve_locked(request)
+        finally:
+            self._idle.set()
 
     def _serve_locked(self, request: ChatRequest) -> Rendered:
         entry = self._cache.pop(request.prefix_hash, None)
@@ -1563,10 +1764,18 @@ class SkinServer(ThreadingHTTPServer):
 
     daemon_threads = True
 
+    #: Set by :func:`build_server` so `server_close` can stop the refill thread.
+    engine: ChatEngine | None = None
+
     def handle_error(self, request, client_address) -> None:
         if isinstance(sys.exc_info()[1], (ConnectionError, BrokenPipeError)):
             return
         super().handle_error(request, client_address)
+
+    def server_close(self) -> None:
+        if self.engine is not None:
+            self.engine.shutdown()
+        super().server_close()
 
 
 def build_server(
@@ -1575,10 +1784,15 @@ def build_server(
     *,
     verbose: bool = False,
     prewarm: bool = True,
+    pool_size: int = DEFAULT_POOL_SIZE,
 ) -> tuple[SkinServer, ChatEngine]:
-    """A bound, warmed server plus its engine. Caller owns `serve_forever`."""
+    """A bound, warmed server plus its engine. Caller owns `serve_forever`.
 
-    engine = ChatEngine(repo_root or REPO)
+    `pool_size=0` disables the pre-booted session pool, which is what the
+    equivalence test's cold arm runs; the served bytes must not change.
+    """
+
+    engine = ChatEngine(repo_root or REPO, pool_size=pool_size)
     if prewarm:
         engine.prewarm()
 
@@ -1587,7 +1801,9 @@ def build_server(
 
     _Handler.engine = engine
     _Handler.verbose = verbose
-    return SkinServer((HOST, port), _Handler), engine
+    server = SkinServer((HOST, port), _Handler)
+    server.engine = engine
+    return server, engine
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1599,7 +1815,9 @@ def main(argv: list[str] | None = None) -> int:
         epilog=(
             "Startup pre-warms (spec A11): one kernel session is booted and "
             "one throwaway free-text line is routed so the resolver's graph "
-            "index is built before the first request. Both contenders are "
+            "index is built before the first request, and a background "
+            "thread then keeps --pool-size sessions booted so no request "
+            "pays the ~415 ms boot. Both contenders are "
             "warm before a registered run - the baseline manifest "
             f"({BASELINE_MANIFEST}) requires one unmeasured warmup request "
             "per system, so start this server and let it warm before timing "
@@ -1618,17 +1836,40 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="skip the A11 warm-up (the first request then pays for it)",
     )
+    parser.add_argument(
+        "--pool-size",
+        type=int,
+        default=DEFAULT_POOL_SIZE,
+        help=f"pre-booted kernel sessions kept ready off the request path "
+        f"(default {DEFAULT_POOL_SIZE}, ~27 MB each); 0 boots every request "
+        f"on demand",
+    )
+    parser.add_argument(
+        "--no-pool",
+        action="store_true",
+        help="equivalent to --pool-size 0; the served bytes are identical "
+        "either way, only the wall clock differs",
+    )
     parser.add_argument("--verbose", action="store_true", help="log every request")
     args = parser.parse_args(argv)
 
     server, engine = build_server(
-        REPO, args.port, verbose=args.verbose, prewarm=not args.no_prewarm
+        REPO,
+        args.port,
+        verbose=args.verbose,
+        prewarm=not args.no_prewarm,
+        pool_size=0 if args.no_pool else args.pool_size,
     )
     matrix = engine.matrix
     print(f"corollary chat skin on http://{HOST}:{server.server_port}/v1")
     for line in matrix.render():
         print(line)
     print(f"usage block: {engine.tokens.reason}")
+    print(
+        f"session pool: {engine.pool.size} pre-booted"
+        if engine.pool.running
+        else "session pool: off (every request boots on demand)"
+    )
     try:
         server.serve_forever()
     except KeyboardInterrupt:

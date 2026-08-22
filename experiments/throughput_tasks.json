@@ -89,7 +89,7 @@
     "scripts/harness.py": "6adf005588fc42a5bf37f4b4e94ceead519f8eef78479dd41cbc2151f2a67181",
     "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
     "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
-    "scripts/retrieval.py": "4126c3f0c09bd8e9377a5f171b319433e608ed051f8a67bb32c61073cfbd0047",
+    "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
     "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
     "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
   },

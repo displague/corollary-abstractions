@@ -243,7 +243,13 @@ W2 renders through its `display_lines` — plus `scripts/resolver.py`,
 `scripts/supposition.py`, `scripts/gloss.py`, and
 `scripts/retrieval.py`, whose minted ids and prompts surface in answer
 and waiting lines), and the registered run revalidates them before
-timing anything.
+timing anything. **Re-sealing rule (added 2026-08-22, before the
+registered run):** a witnessed module may change before the registered
+run only through an explicit re-seal — the change must alter no
+rendered byte (proven by byte-identity tests), the book is rebuilt so
+only `rendering_module_digests` moves (verified in the diff), and the
+commit records the reason. After the registered run the original
+sentence stands unqualified: a change voids the run.
 
 Everything else rides in the vendor extension:
 

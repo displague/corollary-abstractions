@@ -30,6 +30,7 @@ import hashlib
 import hmac
 import json
 import secrets
+import threading
 from dataclasses import dataclass, field, replace
 from enum import Enum
 from pathlib import Path
@@ -259,6 +260,21 @@ class QueryResult:
         return min(self.scores) if self.scores else None
 
 
+#: Process-local memo for :meth:`UnifiedKnowledgeStore.load`, keyed on the
+#: resolved ``(data_dir, reports_dir, wordnet_path)`` triple. See that
+#: method's docstring for the static-tree assumption this rests on and for
+#: why a store with observation sources is never cached.
+_LOADED_STORES: dict[tuple[str, str, str | None], "UnifiedKnowledgeStore"] = {}
+_LOADED_STORES_LOCK = threading.Lock()
+
+
+def clear_loaded_stores() -> None:
+    """Forget every memoized store. For a process that edits the tree it reads."""
+
+    with _LOADED_STORES_LOCK:
+        _LOADED_STORES.clear()
+
+
 class UnifiedKnowledgeStore:
     """Read local corpus/report artifacts through one exact interface.
 
@@ -320,6 +336,66 @@ class UnifiedKnowledgeStore:
 
     @classmethod
     def load(
+        cls,
+        data_dir: Path,
+        reports_dir: Path,
+        wordnet_path: Path | None = None,
+        observation_sources: tuple[ObservationSource, ...] = (),
+    ) -> "UnifiedKnowledgeStore":
+        """Load the committed graph, reusing an identical load in this process.
+
+        Parsing every ``data/*/nodes.json`` costs ~405 ms, and it was being
+        paid on every :meth:`harness.CoreSession.boot` — which the HTTP skin
+        performs per request, where it dominated the wall clock (~460 ms of a
+        ~475 ms single-turn answer). The load is a pure function of the files
+        it reads, so an identical call in one process returns the identical
+        store.
+
+        **The assumption, stated rather than assumed:** a process that loads
+        this store treats the committed tree as STATIC for its lifetime. That
+        is true of every caller this repository has — a serving process, a CLI
+        run, and a test process that builds a fixture tree and reads it — and
+        the release suite runs each test process fresh. A program that edits
+        `data/` and expects the next ``load`` in the same process to see the
+        edit must clear :func:`clear_loaded_stores` first. The cache key is
+        the RESOLVED path triple, so a temporary corpus tree is a distinct
+        entry rather than a collision with the repository's.
+
+        A caller supplying ``observation_sources`` **bypasses the cache
+        entirely**: those stores accumulate per-process minting evidence in
+        ``_minted_observations`` (:meth:`_observation_item`), which is the one
+        piece of post-load mutable state on this class, and sharing an
+        instance would let one caller's tool transactions authenticate
+        another's. No caller in this repository passes them today; the bypass
+        keeps that safe by construction rather than by inspection.
+        """
+
+        if observation_sources:
+            return cls._load_uncached(
+                data_dir, reports_dir, wordnet_path, observation_sources
+            )
+        key = (
+            str(Path(data_dir).resolve()),
+            str(Path(reports_dir).resolve()),
+            str(Path(wordnet_path).resolve()) if wordnet_path is not None else None,
+        )
+        with _LOADED_STORES_LOCK:
+            cached = _LOADED_STORES.get(key)
+        if cached is not None:
+            return cached
+        # Loaded OUTSIDE the lock: a 405 ms parse holding a process-wide lock
+        # would serialize every booting thread behind the first one. Two
+        # concurrent first loads each parse, and `setdefault` then makes them
+        # agree on one instance, so no caller ever sees a store another
+        # caller is not also seeing.
+        store = cls._load_uncached(
+            data_dir, reports_dir, wordnet_path, observation_sources
+        )
+        with _LOADED_STORES_LOCK:
+            return _LOADED_STORES.setdefault(key, store)
+
+    @classmethod
+    def _load_uncached(
         cls,
         data_dir: Path,
         reports_dir: Path,
