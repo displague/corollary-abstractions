@@ -36,9 +36,11 @@ line grammar); the task book (N ≥ 100 typed conversations in that
 grammar, halves by hash, half B sealed) authored from committed
 artifacts before the skin answers anything; the pinned baseline
 manifest — two arms, grounded and ungrounded — before K freezes;
-`scripts/serve_chat.py` over the existing session engine, with one
-named wiring step (closure reachability as a registered route; dropped
-from the book with the reason if unwired at sealing);
+`scripts/serve_chat.py` over the existing session engine, with two
+named wiring steps (W1 twin lookup, W2 closure reachability as
+registered routes — W1 added by the spec review's dated correction,
+SPEC-chat-completions-skin ¶DEV-2; either dropped from the book with
+the reason if unwired at sealing);
 `scripts/measure_throughput.py` speaking only the public API; one
 registered run.
 

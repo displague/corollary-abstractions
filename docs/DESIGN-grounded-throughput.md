@@ -90,6 +90,18 @@ the client's next message resumes it; streamed tokens are only ever
 renderings of accepted content. No token is sampled from a generative
 model anywhere in the serving path this cycle.
 
+> **Correction (2026-08-21, spec review, before implementation):**
+> `ConversationSession.restore` is **not in the serving path**. The
+> skin serves every request by replay into a fresh session object —
+> no ledger snapshot imported, no stored authority asserted — so
+> §4.3's restore-only clause is not exercised rather than violated;
+> [SPEC-chat-completions-skin](SPEC-chat-completions-skin.md) ¶DEV-1
+> records the deviation. The schedule rationale above stands on a
+> narrower fact than first written: the five-cycle park is over not
+> because restore is used, but because replay-per-request needs no
+> durable authority at all. Durable restore over HTTP stays unshipped
+> and unclaimed this cycle.
+
 **The language boundary, stated before anyone is disappointed by it.**
 The engine speaks the harness's **registered line grammar** — the
 bounded, documented request surface the typed prompt already accepts —
@@ -125,6 +137,16 @@ half ∈ A|B          (assigned by frozen hash rule; B sealed until the run)
 Answerable tasks are constructed FROM committed artifacts (the receipt
 exists before the question does — the lesson of the spent v0.14
 clarification holdout); refusal tasks are verified absences.
+
+> **Correction (2026-08-21, spec review, before implementation):**
+> `twin_lookup` is conditional too. This design assumed twins were
+> already line-answerable; the spec review verified that `route_line`
+> never calls `CoreSession.retrieve` (`scripts/harness.py:732` has no
+> caller in the routing chain), so twin material is line-unreachable
+> over any skin. [SPEC-chat-completions-skin](SPEC-chat-completions-skin.md)
+> ¶DEV-2 records the correction and names wiring step W1; the
+> drop-with-reason rule and T3's ≥50-answerable floor apply to it
+> exactly as to `closure_reachability`.
 
 **The stopwatch** — `scripts/measure_throughput.py` plus
 `experiments/throughput_result.json`: a client-side harness that speaks
