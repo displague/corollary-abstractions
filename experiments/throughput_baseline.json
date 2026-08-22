@@ -5,9 +5,11 @@
       "correctness": "scored by the same checks as the kernel (exact / receipt-content / verdict-content containment against the task book's expected record); B-grounded is a genuine contender and may win (C3), which falsifies the thesis at this scale",
       "gated": true,
       "prompt_template": {
-        "system": "Answer using only the provided materials. If the materials do not determine the answer, say so instead of guessing.",
+        "system": "Answer using only the provided materials. When the answer is contained in the materials, reproduce the relevant content verbatim - exact strings, exact notation. If the materials do not determine the answer, say so instead of guessing.",
         "user": "MATERIALS:\n{artifacts}\n\nQUESTION:\n{question}"
-      }
+      },
+      "prompt_template_amended": "2026-08-22, before the registered run: the original system line never told the model to quote, so it paraphrased and scored 5/45 on a half-A trial - a floored contender makes T4 vacuous (a zero B median turns K into infinity) and disarms C3. The task is verbatim delivery of grounded content, so instructing verbatim reproduction aligns the contender with the task rather than coaching it.",
+      "session_derived_kinds_note": "belief_query and exact_value hand the model no materials; their correctness checks require the kernel notation (located_in(x) = place, exact fractions), which a prose model rarely emits unprompted. Recorded as a known scoring asymmetry; per-kind results let a reader weigh it."
     },
     "B-ungrounded": {
       "context_rule": "none - the same model answering cold; expected to fail correctness on corpus-specific tasks; the gap between the arms is the grounding story told in numbers",
