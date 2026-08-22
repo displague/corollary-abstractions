@@ -13,6 +13,133 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The corpus outgrew its own template grammar, and nothing had asked it
+  to (the v0.18 cycle's first finding, produced during the v0.17 rotation;
+  measured).**  The forward design proposed rendering every committed
+  canonical term into English under a round-trip gate, and froze its first
+  draft floor at 90% of all 12,777 nodes.  Adversarial review did the one
+  thing that floor assumed: it ran the committed parser over the source
+  field.  `formal_statement.canonical_ascii` parses for **2,172 of 12,777
+  nodes — 17.0%**.  The single ingested corpus that is **97.9% of corpus
+  mass**, `lean_workbook.ground.v1`, parses at **16.3%**; the rest of its
+  content is Lean/Unicode syntax outside the template grammar.  Exactly
+  **one** corpus clears a 50-parseable-term bar (`lean_workbook.ground.v1`
+  at 2,040), so a per-corpus floor applies to it alone and the other 26
+  report individually.  A term that does not parse has no source skeleton
+  to round-trip against, so the floor was not merely optimistic — it was
+  **unmeasurable as written**, and it was falsified before implementation
+  rather than by a failed run.  Two things make this a finding rather than
+  a planning correction.  First, nobody had checked: the ownership,
+  coverage and compression ledgers all count nodes, and none of them counts
+  *parseable* nodes, because until something asked the graph to speak in
+  sentences there was no reason to.  Second, the number is now a
+  first-class published artifact rather than a footnote — the design's R0
+  makes the parse table, per corpus and per failure class, a construction
+  prerequisite that must be discharged **before** R1's floor is allowed to
+  freeze.  Status: **measured** (design-review finding, pre-implementation).
+  Evidence: `docs/DESIGN-sans-template-rendering.md` §1 and the §6 gate
+  history note; the table itself ships with
+  `experiments/realization_rate.json` at v0.18.
+
+- **A benchmark that times a cold cache measures the cache (v0.17, measured).**
+  The first half-A trial timed the product at **83 useful tok/s** and a
+  profile said why: every HTTP request paid ~460 ms of `CoreSession.boot`, of
+  which **405 ms was `UnifiedKnowledgeStore.load` re-parsing every committed
+  corpus from JSON, uncached, on every boot**.  The mechanism the thesis
+  claims — copy and compute rather than sample — was never what the stopwatch
+  was reading.  Memoizing the store load on the resolved path triple took boot
+  **389 ms → 7.5 ms** and one definition task end-to-end over HTTP
+  **674.8 ms → 7.5 ms** median, with **zero rendered bytes changed** (bodies
+  byte-identical back-to-back).  The registered run then read 3,451 tok/s.
+  Two things make the fix admissible rather than convenient: the shared-instance
+  hazard was audited by **AST**, not grep (every attribute written only at
+  `__init__`, frozen types throughout, and the one genuinely mutable path
+  bypasses the cache by construction), with two *interleaved* conversations
+  through the shared store matching fresh boots line for line — interleaved
+  because a serial test would hide exactly the leak being denied; and
+  `scripts/retrieval.py` is a seal-witness module, so the sealed task book was
+  **re-sealed in the open** under the spec's new explicit re-sealing rule
+  (`docs/SPEC-chat-completions-skin.md` §6): byte-identity proven, exactly one
+  digest leaf moved, ids/halves/expected records byte-identical, half B
+  undisturbed.  Status: **measured**.  Evidence: commit `025bd73`;
+  `experiments/throughput_trial_kernel_halfA.json` (post-fix half A, median
+  2,207.8 tok/s) against `experiments/throughput_result.json`.
+
+- **A grounded model must be told to quote, and even then it delivers
+  fragments (v0.17, measured).**  B-grounded is not a strawman: it receives the
+  same committed records the kernel's answer rests on, extracted verbatim.  Its
+  first prompt template never said to reproduce them, so it paraphrased, and
+  paraphrase does not survive an exact-content check — 5 of 45 on a half-A
+  trial.  The instruction was amended **before** the registered run, on the
+  fairness argument rather than a score argument (a floored contender makes T4
+  vacuous, because a zero denominator turns K into infinity, and it disarms C3,
+  the control that lets the baseline falsify the thesis).  **The instruction
+  did not move the score.**  The committed half-A trial ran under the amended
+  manifest — its `baseline_digest` `3be33a20…` is the amended file's canonical-LF
+  digest, and the pre-amendment file hashes `64a0d7c2…` — and it read the same
+  **5 of 45**; the registered half then read **4 of 49**, with **0 of 16** on
+  corpus definitions and **0 of 5** on twin lookups, its only credits being
+  4 of 13 exact values.  The amendment was right on its own argument and
+  bought nothing, which is the honest reading and the one worth recording.
+  The interesting part is that this is the thesis appearing
+  inside the contender: **exact content does not survive being sampled through
+  a decoder**, whether or not the decoder has the content in front of it.  The
+  exact-content contract is therefore the thesis's own diagnostic, not merely
+  its scoring rule.  Status: **measured**, with a named asymmetry recorded
+  rather than papered over: `belief_query` and `exact_value` hand the model no
+  materials, and their checks require kernel notation (`located_in(x) = place`,
+  exact fractions) a prose model rarely emits unprompted
+  (`experiments/throughput_baseline.json`, `arms.B-grounded.session_derived_kinds_note`).
+  Evidence: `experiments/throughput_result_bgrounded.json`;
+  `experiments/throughput_trial_bgrounded_halfA.json`; commit `441ec91`.
+
+- **The reviews were the instrument: a preregistered benchmark held against
+  its own authors (v0.17, construction).**  Four holes that would each have
+  produced a defensible-looking number were closed by review *before* the run,
+  and they are worth more than the number they protect.  (1) **Any repository
+  file could be minted into a certified bounded negative** — the closure route
+  would answer about any path handed to it, so an author could have grown the
+  answerable set at will; now only manifest-registered targets with a matching
+  `world_id` answer and everything else refuses by name (`4b2e2de`).  (2) **The
+  `num_ctx` amendment was inert**: the OpenAI-compat `/v1` layer drops the
+  body field, so the contender would have been silently truncated at ollama's
+  4,096 default and K would have been inflated by the exact mechanism the
+  manifest claimed to prevent; replaced by a server-side 32,768 that fits the
+  GPU, with a pre-declared secondary median over the tasks whose materials fit
+  (`38c9778`).  (3) **The answer key was re-derived independently** — 46
+  recomputed values and 73 verbatim artifact quotes, zero disagreements — and
+  the frozen half rule was reverified over every task with the shipped pool
+  ordering shown **less** hash-favorable than the alternatives it declined, so
+  hash-shopping is excluded by evidence rather than by assertion (`ca2262c`).
+  (4) **A fresh-eyes adversarial review of the skin could not construct any
+  path** where served `content` carries a byte the engine did not render —
+  200 KB lines, RTL unicode, prompt injection, essays requested and refused —
+  with the honesty oracle re-implementing the join rule independently and
+  mutation-checked for vacuity (`8059b4a`).  Status: **construction**, recorded
+  because the general lesson is transferable: a benchmark's authors are its
+  most motivated adversary, and the cheapest place to catch them is the
+  interval between preregistration and the run, while adding is still
+  legitimate.
+
+- **WAITING crossed the wire without anyone inventing a value (v0.17,
+  P-IH6 adjudicated).**  The substrate design registered the prediction in
+  v0.10 and it sat unadjudicated through five parks of the HTTP skin: can a
+  clarification question reach an external harness, and be answered by it,
+  without the server ever substituting a default for the missing slot?  It can.
+  An unmodified OpenAI-compatible client completes the triangle — a
+  receipt-bearing answer, a WAITING round-trip resumed by the next user
+  message, and a refusal delivered as a refusal — and the need record crosses
+  as `x_corollary.need` = `{slot, prompt}`, the exact two fields the `Need`
+  protocol exposes, with the next message binding through the verifier's signed
+  channel byte-for-byte.  The negatives are stated as what a **signatureless
+  wire can actually falsify**, and all three are pinned: an unparseable or
+  absent reply asks again and never fills; a reply naming a different slot
+  while one is awaiting is a `409`, not a reinterpretation; no slot binds on a
+  turn where the user sent none.  In the registered run the surviving half of
+  that leg reads **6 of 6 marked WAITING turns surfaced**.  Status: **fired**.
+  Evidence: `docs/SPEC-chat-completions-skin.md` §6.2; `tests/test_serve_chat.py`;
+  `experiments/throughput_result.json` `summary.clarification_gate`.
+
 - **Eight of twenty-six celebrated cross-field matches align quantities that
   cannot be the same (v0.15, measured).**  Circle circumference, Ohm's law and
   Newton's second law share one skeleton and were reported together as a

@@ -4506,3 +4506,166 @@ since the v0.15 measurement; the only candidate population (the nine
 in-field twin groups) stays rejected at 29% name coverage. No fresh
 half exists, which is why "exploratory" is part of this result''s name
 and not a disclaimer to be shed later.
+
+
+# v0.17 - grounded throughput: the registered run, and the trials that made it honest
+
+Design: `docs/DESIGN-grounded-throughput.md` (maintainer redirect,
+2026-08-21). Preregistration order, every artifact committed before the
+one that depends on it: the design; `docs/SPEC-chat-completions-skin.md`
+(`0e08bcb`); the W1/W2 wiring (`4b2e2de`); the sealed task book
+`experiments/throughput_tasks.json` (`ca2262c`, LF-pinned `55b0473`); the
+baseline manifest `experiments/throughput_baseline.json` (`9b635b6` -
+K = 5 freezes here); then `scripts/serve_chat.py` (`8059b4a`) and
+`scripts/measure_throughput.py` (`38c9778`); then one registered run
+(`c345dc9`).
+
+The book: 119 tasks over seven kinds, 94 answerable (70 with both
+conditional kinds dropped; T3's floor is 50), halves by the frozen hash
+rule, half B sealed - 61 tasks, 49 of them answerable. The seal witness is
+the canonical-LF digest of eleven rendering modules, revalidated by the run
+before anything is timed.
+
+## The registered run (half B, first and only execution)
+
+| arm | correct with receipt | median perceived tok/s (T4 statistic) | aggregate tok/s (design section-3 wording) | median TTFT-useful | useful tokens |
+|---|---|---|---|---|---|
+| kernel | **49/49 = 1.000** (1.000 in every kind) | **3,451.25** | 1,936.41 | **25.3 ms** | 5,784 |
+| B-grounded (gated contender) | 4/49 = 0.082 | **0.0** | 8.79 | 45.1 ms | 188 |
+| B-ungrounded (reported, never gated) | 1/49 = 0.020 | 0.0 | 0.112 | 53.0 ms | 20 |
+| C1 dump server | 0/49 | 0.0 | 0.0 | none | 0 |
+| C2 shuffled kernel | 0/49 | 0.0 | 0.0 | none | 0 |
+
+Kernel refusals 6/6 refused; marked WAITING turns 6/6 surfaced. T5's floors
+were 0.90 overall and 0.80 within every kind; the run cleared both at
+1.000, so the speed numbers were legitimately readable at all.
+
+**T4 adjudicates.** K = 5 froze at `9b635b6`, before the stopwatch existed.
+Measured: **220x** at the aggregate (1,936.41 / 8.79) and **unbounded** at
+the median, because the contender's median is zero. The TTFT leg holds too
+- 25.3 ms against 45.1 ms. C3 did not fire: B-grounded neither met nor beat
+the kernel at equal correctness, and it was not close on either axis.
+
+**The controls, against their own voiding sentences.** C1 - protocol-valid,
+maximum-rate, query-blind - must score under 1% of the kernel or the metric
+is crediting bandwidth: **0.0**, against a 34.5 tok/s threshold on the
+median. C2 - the kernel's own answers permuted across tasks by a Sattolo
+cycle seeded from the book digest (`derangement_seed`
+7953564568193198364, no fixed points by construction) - must score under 1%
+or the scoring fails to separate right from wrong: **0.0**. C2 derived
+**offline** from `experiments/throughput_result.json` (`--control-shuffle
+--from`), so the sealed half was never executed twice. One reading worth
+keeping: C2's clarification gate still reads 1.000, because permuting
+*answers* does not permute *statuses* - the shuffled kernel still asks when
+it should ask, and still scores zero, which is the scoring separating
+content from shape.
+
+## Trial-to-registered progression, and what each stage caught
+
+Half A was the debugging half by construction; the stopwatch refuses
+`--half B` without `--registered`. Every number below comes from a
+committed file except the first, which is recorded in `025bd73`'s message
+because the pre-fix trial file was superseded before the run.
+
+| stage | kernel | B-grounded | what the stage caught |
+|---|---|---|---|
+| first half-A trial (pre-fix) | **83 tok/s** | - | the boot tax: ~460 ms of `CoreSession.boot` per request in the live profile (389 ms in the commit's controlled measurement; the gap is serving load), 405 ms of it `UnifiedKnowledgeStore.load` re-parsing every committed corpus, uncached |
+| content-recording fix (`b906089`) | - | blank `content` on every record while five tasks scored correct | the response text lived only in `turns[]`; the number and the text behind it must tell one story |
+| quote instruction amended (`441ec91`) | - | **5/45**, median 0.0, aggregate 8.79 | the contender paraphrased what the checks match exactly; a floored contender makes T4 vacuous and disarms C3 |
+| post-memoization half-A trial (`025bd73`) | **45/45, median 2,207.78**, aggregate 725.41, TTFT 24.6 ms | - | boot 389 ms -> 7.5 ms; a definition task end-to-end over HTTP 674.8 ms -> 7.5 ms median, bodies byte-identical |
+| **registered half B** (`c345dc9`) | **49/49, median 3,451.25**, aggregate 1,936.41, TTFT 25.3 ms | **4/49**, median 0.0, aggregate 8.79, TTFT 45.1 ms | - |
+
+Two readings this table should not be allowed to blur.
+
+**The quote instruction bought nothing.** The committed half-A B-grounded
+trial carries `baseline_digest` `3be33a20...`, which is the *amended*
+manifest's canonical-LF digest (the pre-amendment file hashes
+`64a0d7c2...`), and it still read 5/45 - the same score the amendment's own
+rationale reports for the unamended prompt. The amendment was made on the
+fairness argument, before the run, and the record shows it did not move the
+score. That is the honest reading, and it strengthens rather than weakens
+the arm's standing: the contender was not floored by its instructions.
+
+**The number the release quotes is the registered one.** 83 tok/s measured
+a cold JSON parse, not a serving mechanism. It is kept here as the finding
+it produced, not as the before-number of a speedup claim.
+
+B-ungrounded's trial-to-registered movement (4/45 -> 1/49; aggregate 2.675
+-> 0.112) is noise around a floor and is not interpreted. The arm is
+reported, never gated, and its one job is to show the grounding gap in
+numbers - which it does: 0.112 tok/s against the grounded arm's 8.79 and
+the kernel's 1,936.41.
+
+## Metric reconciliation: two readings, both computed, both labelled
+
+The design's section-3 sentence defines perceived throughput as useful
+tokens over client wall-clock with a refusal time charge; T4's gate
+sentence takes the **median of the per-task ratio** over the half's
+answerable tasks. Those are different statistics, and the stopwatch was
+built to record both rather than to choose after the numbers landed
+(`metric_reconciliation`, in every result file, with both design sentences
+quoted verbatim inside it).
+
+- **Under the median the refusal time charge is inert.** A refused
+  answerable task scores zero useful tokens, so its ratio is zero at any
+  denominator; the charge moves a zero to a zero. Recorded per arm as
+  `refusal_time_charge_inert: true`, with the charged-task list beside it
+  so the claim is checkable rather than asserted.
+- **Under the aggregate the charge bites.** B-grounded's five
+  context-overflow tasks are charged up to that arm's slowest correct
+  answer (0.909773 s each), adding 2.569769 s to an 18.810595 s uncharged
+  clock for a charged 21.380364 s. The kernel's charge list is empty.
+- The kernel's non-answerable elapsed - 2.070535 s over 12 tasks - is
+  excluded from the median and included in `elapsed_total_s`. Both are
+  written down.
+
+Every other interpretive choice a reader could have argued about after the
+numbers landed is in the file too: sampling settings as
+requested-versus-applied (the `/v1` layer drops `top_k`, verified live; the
+model manifest applies it anyway), the B-side label-stripping correctness
+rule with its per-task residuals (committed pre-run), and the observed
+context length against per-task `materials_tokens`.
+
+## The grounded arm's secondary median, corrected in writing
+
+A secondary reading was pre-declared on 2026-08-22, before any timed run:
+beside T4's registered median over all half-B answerable tasks, report the
+same median restricted to tasks whose B-grounded materials fit the observed
+context untruncated - so a reader can see how much of K rides on tasks the
+baseline could not physically hold.
+
+`experiments/throughput_result_bgrounded.json` records
+`materials_fit_bound_tokens: 262144`, with the source string naming the
+defect out loud: `/api/ps` reported no loaded model, because the model was
+not loaded when the run started, so the probe fell back to `/api/show`,
+which reports the model's *capability* rather than the served context. The
+served context was **32,768**, and the same file proves it five times over
+- five `closure_reachability` tasks return HTTP 400 carrying
+`"request (130,475 ... 130,934 tokens) exceeds the available context size
+(32768 tokens)"`. Recomputed over the recorded `materials_tokens` at the
+true 32,768 bound, the restricted set is **44 tasks** and the restricted
+median is **0.0** - identical to the unrestricted median. The verdict is
+unchanged. The defect is filed in BACKLOG; the code was left exactly as it
+ran, and the correction lives here rather than in a quiet re-run.
+
+Related, and not a defect: the largest closure MATERIALS block measures
+~130 k tokens. **Full closure grounding does not fit this hardware in any
+configuration** - 32,768 was already the largest context whose KV cache
+fits the 16 GiB GPU (131,072 and up would spill the model to CPU, a
+strawman in the other direction), and the manifest disclosed that before
+the run. Those five tasks are reported per task as errors, not silently
+dropped.
+
+## What this establishes, and what it does not
+
+It establishes, for the registered paths only: a microkernel that copies
+and computes its tokens delivers correct, receipt-bearing answers at a
+median 3,451 useful tok/s where a grounded 4B instruct model holding the
+same records - on the same throttled laptop, with the GPU assigned to the
+*contender* - delivers 8.79 aggregate and a zero median. It does not
+establish open-domain parity; the released numbers say so in the same
+sentence. It says nothing about larger models, other runtimes, or
+unregistered surfaces. And the contender's failure is not a failure of the
+contender: it is the thesis appearing where the design predicted it would -
+exact content does not survive being sampled through a decoder, even when
+the decoder has the content in front of it.

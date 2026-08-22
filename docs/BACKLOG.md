@@ -3,6 +3,88 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.17 rotation (grounded throughput)
+
+- **The context probe reads `/api/ps` before the model is loaded, so it
+  reports a capability as a setting (2026-08-22).**
+  `scripts/measure_throughput.py`'s context probe queries `/api/ps` for the
+  served context of the loaded model and falls back to `/api/show` when no
+  loaded model reports one. On the registered B-grounded arm the model was
+  not yet resident when the run started, so `/api/ps` came back empty and
+  the fallback wrote **262144** — the model's *capability* — into
+  `experiments/throughput_result_bgrounded.json`'s
+  `materials_fit_bound_tokens`. The served context was **32768**, which the
+  same file proves five times over: five `closure_reachability` tasks
+  return HTTP 400 reading `request (130475 tokens) exceeds the available
+  context size (32768 tokens)`. Consequence, bounded: only the
+  pre-declared *secondary* median is affected, and recomputing it over the
+  recorded `materials_tokens` at the true bound gives **0.0 over 44 tasks**
+  — identical to the unrestricted median, verdict unchanged (ANALYSIS,
+  v0.17 §"the grounded arm's secondary median, corrected in writing").
+  The code was deliberately **left exactly as it ran**: a graded run is not
+  re-executed to make its own file prettier. Wanted: probe after the warmup
+  request rather than before it, and refuse the `/api/show` fallback for
+  any field the result labels *observed* — `cannot-verify` is the honest
+  reading there, per the WordNet-archive rule the tokenizer pin already
+  follows. Evidence: `experiments/throughput_result_bgrounded.json`
+  (`context_probe`, `summary.materials_fit_bound_source`, the five 400s in
+  `per_task`).
+
+- **`_route_ownership` throws away the object its own receipt needs
+  (2026-08-22).** `scripts/harness.py:1052` runs the expensive
+  `ownership.lookup`, renders it, and returns only the rendered string — so
+  `serve_chat._ownership_receipt` must run the identical lookup a second
+  time to cite the host set, roughly doubling the cost of the most
+  expensive route on the surface (~3.4 s for `owns x ^ 2` — **per a source
+  comment in `serve_chat.py`, not a committed timing artifact**; if this
+  entry is ever used to justify effort, measure it first). The skin
+  mitigates with an
+  `lru_cache` on the pure function rather than monkeypatching the engine,
+  which would be the renderer editing the record. **Why the real fix was
+  declined rather than missed:** `harness.py` is one of the eleven
+  seal-witnessed rendering modules, and until the registered run completed,
+  changing it would have voided the run. The fix now: have
+  `_route_ownership` return the answer object (or its host set) in the
+  verdict alongside `"answer": render(answer)`, and drop the cache — and it
+  must ride a book **re-seal** under the spec's §6 rule, since after the
+  registered run a witnessed-module change voids nothing but still moves a
+  digest. Related consequence, same root: replayed prefix turns pass
+  `with_receipt=False` (`scripts/serve_chat.py:815`) precisely to avoid a
+  whole second corpus scan per replayed turn.
+
+- **The B-side correctness rule is notation-limited on session-derived
+  kinds, and that asymmetry is scoring, not capability (2026-08-22).**
+  `belief_query` and `exact_value` tasks hand the contender no materials,
+  and their checks require the kernel's own notation — `located_in(x) =
+  place`, exact fractions — which a prose model rarely emits unprompted.
+  Recorded in `experiments/throughput_baseline.json`
+  (`arms.B-grounded.session_derived_kinds_note`) **before** the run rather
+  than discovered after it, and the per-kind results are published so a
+  reader can weigh it. It did not change the v0.17 verdict — the contender
+  scored 0 of 16 on `corpus_definition`, a kind where it *was* handed the
+  material verbatim — but any future cycle that quotes the B-side number
+  owes this entry a citation. What would discharge it: a registered
+  notation-normalizing check authored **before** its run, with a control
+  showing the normalizer cannot manufacture agreement, plus a fresh half.
+  Do not normalize against these spent tasks.
+
+- **The input side has no synonym layer, and the realization lexicon is the
+  first candidate that would not be a patch (2026-08-22).** The corpus
+  writes `gcd`; people write "greatest common divisor". DESIGN-text-resolution
+  §4 names the residual and its §7 records the refused lexical-semantics
+  route (the morphology trade failed at 0.034 against a 0.030 ceiling and
+  was reverted). `DESIGN-sans-template-rendering` §10 names the successor
+  question in the right order: **if R1 fires**, the committed
+  operator/constant lexicon — reviewed, bijective, and by then measured —
+  can be asked whether it runs backwards as a synonym layer for the
+  resolver. Parked deliberately behind that condition, and behind the v0.15
+  standing rule that the resolver coverage lane unparks only with a
+  mechanism justified independently of the score it would move. Note the
+  boundary the design states rather than discovers: the realizer's stage-1
+  inverter *is* an open-English reader, however narrow — it reads only
+  strings the realizer itself produced, is not offered on the input side,
+  and no request route calls it.
+
 ## The gate is one test, and now it is measured
 
 - **`test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer`
@@ -919,6 +1001,30 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   choice, until now** — the honest status is a standing deferral, not a
   dependency.
 
+  **v0.17.0 status note (2026-08-22): RESOLVED — the skin shipped.** Kept
+  here rather than pruned, because five recorded parks are the drift record
+  this file exists to hold, and deleting the entry would delete the
+  evidence that the deferral was real. `scripts/serve_chat.py` serves
+  `POST /v1/chat/completions`, `GET /v1/models` and `GET /v1/capabilities`
+  over the two shipped session objects, stdlib-only and loopback-only, one
+  owner, no auth — the substrate's shipped single-session scope, unchanged.
+  **P-IH6 is adjudicated and fired**: WAITING crosses the boundary as a
+  need record (`x_corollary.need` = `{slot, prompt}`), the next user
+  message binds through the verifier's signed channel byte-for-byte, and
+  the negatives are stated as what a signatureless wire can actually
+  falsify — an unparseable reply asks again and never fills, a cross-slot
+  reply is a `409` rather than a reinterpretation, and no slot binds on a
+  turn where the user sent none
+  (`tests/test_serve_chat.py::PIH6WireNegatives`). The blocker sentence at
+  the top of this entry is fully struck: durable multi-session auth is not
+  merely unblocked, it is **not used** — ¶DEV-1 of
+  `docs/SPEC-chat-completions-skin.md` records that
+  `ConversationSession.restore` is not in the serving path at all, because
+  every request is served by replay into a fresh session object. Durable
+  restore over HTTP therefore stays **unshipped and unclaimed**, which is a
+  narrower and more honest status than "shipped". Evidence:
+  [RELEASE-v0.17.0](RELEASE-v0.17.0.md); the spec; commit `8059b4a`.
+
 - **Need dispatcher before learned global policy.** Closed-form dispatch from
   epistemic state and registered paths first; learned ranking among legal
   actions only with frequency/oracle baselines (tactic-policy negative result).
@@ -983,6 +1089,27 @@ for digest-pinned Lean artifacts). Full mapping and predictions P-IH1–P-IH7:
   authoring (item 9, still last); learned question rendering; and the
   deterministic dispatcher across derivable/store/user/terminal channels before
   a learned chooser is evaluated. Limits shipped knowingly are filed above:
+
+  **v0.17.0 status note (2026-08-22):** two of those four have moved.
+  **Transport integration is done on the HTTP half** — the skin shipped
+  (see the Phase 4 entry above); the TTY half was already live.
+  **Unrestricted prose authoring is no longer "item 9, still last"**: it is
+  scheduled as the **v0.18 headline** under
+  [DESIGN-sans-template-rendering](DESIGN-sans-template-rendering.md),
+  earned by a trigger DESIGN-grounded-throughput §10 registered before the
+  run that fired it. Read the design before assuming what it covers: it
+  renders *terms the kernel already parses* — corpus formal statements and
+  session-accepted structures — under a two-stage gate whose second stage
+  is a byte-frozen parser that never saw the realizer. It does **not** read
+  open English on the input side, and it does **not** author narrative
+  (`prose.py`'s closed-algebra gate stays the only narrative authority), so
+  "unrestricted prose authoring" as this bullet's phrase means it is still
+  not scheduled and the phrase should stop being used for the Phase 6
+  slice. One number to carry into any planning: only **2,172 of 12,777**
+  canonical terms (17.0%) parse under the committed grammar today, measured
+  during the design's review, so the surface being opened is bounded by
+  that and the design's R0 publishes the table. Learned question rendering
+  and the deterministic dispatcher are unchanged and still open.
   root-key compromise, session forking, export invalidating earlier snapshots,
   and a two-slot grammar vocabulary.
 

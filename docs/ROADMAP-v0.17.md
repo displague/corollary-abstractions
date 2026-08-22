@@ -1,3 +1,32 @@
+> **CLOSED at v0.17.0.** Where each item went: **item 1** (grounded
+> throughput) SHIPPED — the registered run executed sealed half B once,
+> T1–T7 all adjudicated, T4's frozen K = 5 reading 220× on the aggregate
+> and satisfied unbounded rather than measured at the median (the
+> contender scores zero there), with both blind controls reading 0.0
+> against their 1 % voiding thresholds;
+> see [RELEASE-v0.17.0](RELEASE-v0.17.0.md) headline and ANALYSIS.
+> **Item 2** (session-native small models) read out **symbolic-only in
+> writing**, which is T6's registered honest outcome, not a miss — no
+> checkpoint was brought to the admission bar this cycle and the
+> serving path boots offline, so no learned component operates in it by
+> construction; the successor seat is named in
+> [DESIGN-sans-template-rendering](DESIGN-sans-template-rendering.md)
+> §9. **§3 carried lanes** moved to [ROADMAP-v0.18](ROADMAP-v0.18.md)
+> §3 or stayed parked in [BACKLOG](BACKLOG.md); the chat-skin row is
+> RESOLVED by shipping and its five-cycle park history is annotated in
+> BACKLOG rather than deleted; ledger-first claims stays parked with the
+> reason recorded (its own unpark rule made it a headline *candidate*
+> this cycle, and the v0.18 headline is maintainer-directed elsewhere).
+> **§4's instrument-headline suspension** expires with the cycle it was
+> scoped to; its lift condition was never triggered. The **release
+> gate** below was discharged clause by clause in the release notes, with
+> two clauses whose discharge lives elsewhere: the **outside design
+> inquiry** was not run for v0.18 and converts to the v0.19 gate carrying
+> both readouts — recorded in [ROADMAP-v0.18](ROADMAP-v0.18.md) §4 with
+> the wording-conflict ruling that cleared it — and the **full-suite
+> clause** is still open at `[SUITE-GATE-V17]` in the notes until the gate
+> runs on the frozen tip.
+
 > **REVISED 2026-08-21, by maintainer redirect.** This file's first
 > draft (committed hours earlier, preserved in git history) made
 > ledger-first claims the headline. The maintainer named the drift that

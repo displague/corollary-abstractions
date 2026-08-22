@@ -6,21 +6,47 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.16.0](docs/RELEASE-v0.16.0.md) — the
-retraction-radius machine was preregistered, built, independently
-rechecked, and voided by its own gate (the dependency edges carry real
-information — 0/100 shuffles fake them — but prose cites numbers, not
-artifacts, so lexical lineage cannot be precise); and the cross-field
-veto's information claim was established by a blind-authored full
-cross-product table, lifting a two-cycle suspension. See [the edges
-were real; the radius was
-not](docs/blog/the-edges-were-real-the-radius-was-not.md).
+interface. Latest release: [v0.17.0](docs/RELEASE-v0.17.0.md) — the graph
+now serves an OpenAI-compatible chat endpoint, and one registered run
+against a grounded 4B model holding the *same committed records* measured
+**49/49 correct with receipts at a median 3,451 useful tok/s** (1,936
+aggregate) against the model's 4/49, a median of zero and 8.79 aggregate —
+gate frozen at 5× beforehand, so 220× at the aggregate and satisfied
+unbounded rather than measured at the median.
+Both blind controls read 0.0. See [the answer was already written; the
+model had to type it](docs/blog/the-answer-was-already-written.md).
 The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
 still stands: about a third on uncontrolled formal math.
 
-## Five headline demonstrations
+## Six headline demonstrations
 
-**0. You can type at it.** Since [v0.12.0](docs/RELEASE-v0.12.0.md) the
+**0. Point any OpenAI-compatible client at it.** Since
+[v0.17.0](docs/RELEASE-v0.17.0.md) the same session engine the prompt
+drives is served over HTTP — stdlib only, loopback only, offline boot, no
+generative path anywhere in it. An attaching orchestrator reads the
+capability sheet once and configures itself from the registered line
+grammar, the way it reads a tool schema:
+
+```
+$ python scripts/serve_chat.py          # in one shell; 127.0.0.1:8377, no flags
+$ curl -s http://127.0.0.1:8377/v1/capabilities | python -m json.tool
+{ "schema": "corollary.capabilities/1",
+  "profiles": { "corollary/kernel": ..., "corollary/conversation": ... },
+  "line_grammar": [ { "form": "owns <template-expr>", "route": "ownership",
+                      "example": "owns x ^ 2", "served": true }, ... ],
+  "honesty": "offline boot; unregistered paths abstain (P-IH4); no generative path" }
+
+$ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
+    -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
+```
+
+The reply's `content` is the engine's rendered answer verbatim — the skin
+has zero rendering freedom — and everything else (route, status, receipt,
+what the request asked for and was ignored) rides in an `x_corollary`
+vendor field. A clarification question crosses the wire as a need record
+and the next message answers it; nothing ever invents a slot value.
+
+**1. You can type at it.** Since [v0.12.0](docs/RELEASE-v0.12.0.md) the
 prompt returns a machine verdict. In v0.13 a resolver ASK can survive the next
 line and accept an explicit hard constraint; cancellation, repeated-state
 cycles, and a four-hop ceiling terminate without guessing. Every sentence it
@@ -51,9 +77,11 @@ as corpus material. A morphology candidate reached 1.000 on a fresh holdout
 but scored 3.4% false positives and one wrong BIND, so it was reverted. The
 shipping in-corpus point remains 0.833 coverage / 0.030 false positives.
 
-**1. The matcher discovers that sciences repeat one another.** From 12,777
+**2. The matcher discovers that sciences repeat one another.** From 12,777
 statement nodes across 27 corpora (263 curated including 9 verified-code
-and the recorded-session ingest, + 12,514 unique-covered Lean-workbook
+and the recorded-session ingest — 263 by corpus curation, of which 262
+carry person-authored prose, the recorded-session ingest node being curated
+while its prose is an ingestion record — + 12,514 unique-covered Lean-workbook
 statements with matcher templates — 302 ground + 12,212 emitted), plus two
 **quarantined holdout corpora** in `data_holdout/` (miniF2F 157,
 Goedel-Pset 1,896) that are deliberately invisible to the merged graph,
@@ -80,7 +108,7 @@ theory of money (`M·V = P·Q`) is the ideal gas law with its dimensional
 constant suppressed — found mechanically, with the binding
 `MONEY→PRESSURE, VELOCITY→VOLUME, PRICE_LEVEL→AMOUNT`.
 
-**2. A tiny model answers foreign-language questions — and exact code makes
+**3. A tiny model answers foreign-language questions — and exact code makes
 the answer fluent.** Two invented languages (different vocabularies, word
 orders, question particles). The model gets a language-B question and three
 language-A statements, and points at the answer; symbolic code parses,
@@ -103,7 +131,7 @@ either pointed-at by the model or produced by exact code, so surface
 hallucination is structurally impossible. First run self-bootstraps
 (generates data, trains the ~800k-param pointer, ~4 min on GPU).
 
-**3. One verified loop searches a live proof and maintains a private story
+**4. One verified loop searches a live proof and maintains a private story
 revision.** The controller now asks Lean to apply tactics live and backtracks
 from an accepted dead branch. The conversation runtime keeps Alice's and Bob's
 egg-color revisions separate over one public golden-chicken story; Alice can
@@ -135,7 +163,7 @@ Live proof search requires PyPantograph 0.3.15 and the matching Lean toolchain;
 follow [`prover/FEASIBILITY.md`](prover/FEASIBILITY.md). The conversation and
 theory-of-mind demos require only the ordinary project environment.
 
-**4. A sealed closure answers "unreachable" as evidence, not as a timeout.**
+**5. A sealed closure answers "unreachable" as evidence, not as a timeout.**
 Since [v0.15.0](docs/RELEASE-v0.15.0.md), two committed worlds — the story
 frame and the right-triangle diagram — have their complete bounded
 possibility spaces compiled, independently checked, and sealed under a
@@ -210,6 +238,8 @@ the graded residual.
 | A veto can rest on one row | the cross-field kind check flags 22/77 aligned slots, but removing one exemption (proposition = set) moves it to 38 while every other removal moves it by ≤2 — the instrument is one textbook judgement on a strong default |
 | Information is not precision | the provenance graph's edges are real (0/100 degree-and-kind-preserving shuffles reproduce the audited coverage) yet the retraction radius voided its own gate: lexical citation floods past its 3× cap and misses claims that cite only derived numbers |
 | A blind author repeats the load-bearing call | an isolated context shown only the 26-kind menu ruled all 325 pairs, agreed with the incumbent table on 43/44 shared pairs, independently made the proposition=set exemption, and put real tags at 21 conflicts against a permuted floor of 45 |
+| Grounding moves answering into another speed class | one registered run on a sealed half: 49/49 correct with receipts at a median 3,451 useful tok/s (1,936 aggregate) and 25 ms to first useful token, against a grounded 4B model holding the same records at 4/49, a zero median and 8.79 tok/s aggregate — gate frozen at 5× beforehand, so 220× at the aggregate. A max-rate query-blind server and the kernel's own answers shuffled between tasks both score 0.0 |
+| Exact content does not survive a decoder | the contender is handed the source records verbatim and told to quote them, and still returns 0/16 corpus definitions and 0/5 twin lookups; the quote instruction did not move its score (5/45 before, 5/45 after) |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -255,6 +285,12 @@ scripts/
                         recheck; radius_blind_control.py 100-shuffle control
   check_report_regeneration.py  do committed ledgers match their writers
                         (declared snapshots reported, not regenerated)
+  serve_chat.py         OpenAI-compatible chat skin over the session engine
+                        (stdlib, loopback, offline boot, capability sheet)
+  build_throughput_tasks.py  the sealed task book, computed from committed
+                        artifacts and provably never run against the engine
+  measure_throughput.py the client-side stopwatch (public HTTP API only)
+  dump_server.py        control C1: max-rate, query-blind, scored the same
   seed_<discipline>.py  corpus generators (the authoring pattern)
 experiments/
   exprgen / langgen / qagen / syngen / solvex2   synthetic-world generators
@@ -320,6 +356,17 @@ python scripts/retrieval.py --chain --observations path\to\notes note.tide_gauge
 python scripts/wordnet_eval.py data_sources\archives\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
+python scripts/serve_chat.py                # the chat endpoint on 127.0.0.1:8377
+curl -s http://127.0.0.1:8377/v1/capabilities            # the capability sheet
+curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' `
+    -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
+python scripts/measure_throughput.py --system kernel --url http://127.0.0.1:8377 `
+    --half A --out halfA.repro.json         # the stopwatch on the development half
+                                            # (half B is sealed and refuses without
+                                            # --registered; counting useful tokens
+                                            # needs the digest-pinned tokenizer named
+                                            # in experiments/throughput_baseline.json,
+                                            # and refuses rather than approximating)
 python prover/live_search.py                # live Lean search + projection ablation
 python experiments/train_tactic_policy.py --live  # learned vs strong blind order
 python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_repro.json
@@ -327,9 +374,13 @@ python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_re
 cd experiments && python -m visual.genvisual adjudicate --n 240 --seed 11
                                              # visual oracle: P-VO1..P-VO7
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
-# 70 modules, 1,381 tests, 0 failures at v0.15.0 -- 5h42m serial, and one
-# module (test_write_stage) is 59.1% of it. Timing receipts:
-# reports/test_gate_v015/ (v0.14 baseline: reports/test_gate_v014/)
+# 1,427 tests, 0 failures, 3 skipped at v0.16.0 -- 5h47m serial, and one
+# module (test_write_stage) is 57.6% of it. Timing receipts:
+# reports/test_gate_v016/ (v0.15 baseline: reports/test_gate_v015/)
+# [SUITE-GATE-V17: v0.17.0's gate has not run yet; this line refreshes to the
+# v0.17 tip's numbers before the tag. This cycle adds four wholly new modules
+# -- test_measure_throughput (124), test_serve_chat (68),
+# test_throughput_tasks (53), test_wiring_routes (33).]
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
@@ -378,12 +429,21 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   voided by its own gate on precision; the instruments and ground truths
   survive unscored, and the §3 correction + §6a registration are the
   worked example of a design auditing itself
-- `docs/DESIGN-grounded-throughput.md` — the v0.17 direction (maintainer
+- `docs/DESIGN-grounded-throughput.md` — **measured at v0.17** (maintainer
   redirect, 2026-08-21): the knowledge graph served through an
   OpenAI-compatible chat API by a microkernel of small programs and
   optional small models, with a preregistered claim that grounded,
   receipt-bearing answer tokens arrive many-fold faster than a language
-  model can generate them
+  model can generate them. T1–T7 adjudicated on one registered run of a
+  sealed 119-task book; both blind controls read 0.0. The protocol subset
+  is pinned in `docs/SPEC-chat-completions-skin.md`
+- `docs/DESIGN-sans-template-rendering.md` — the v0.18 direction: the
+  kernel says its own structures in open English, each sentence gated by
+  re-parsing back to the exact term it renders through a byte-frozen
+  parser that never saw the realizer. Its review already produced a
+  finding — only 2,172 of 12,777 canonical terms (17.0%) parse under the
+  committed grammar today, so the corpus has outgrown its own template
+  grammar and the gate is scoped to the parseable denominator
 - `docs/DESIGN-ledger-first-claims.md` — parked whole (course-chosen,
   review-hardened, preregistration-ready): claims are emitted, not
   written — published quantitative sentences become generated artifacts

@@ -249,7 +249,13 @@ run only through an explicit re-seal — the change must alter no
 rendered byte (proven by byte-identity tests), the book is rebuilt so
 only `rendering_module_digests` moves (verified in the diff), and the
 commit records the reason. After the registered run the original
-sentence stands unqualified: a change voids the run.
+sentence stands unqualified: a change voids the run. **Post-run clause
+(added 2026-08-22, at v0.17 rotation):** the registered run's numbers
+stay frozen against the digests they were measured under; a later
+cycle that changes a witnessed module's rendered bytes does not
+"re-seal" this book — it retires this witness for future comparisons
+and seals a **new** book of its own, with the old artifact and its
+digests left untouched as the record of what was measured.
 
 Everything else rides in the vendor extension:
 
