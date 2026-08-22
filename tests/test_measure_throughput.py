@@ -275,12 +275,43 @@ def oracle_table(tasks) -> dict[str, dict]:
     return table
 
 
+def _real_tokenizers():
+    """Import the installed `tokenizers` package, not a repo shadow.
+
+    Several test modules prepend `experiments/` to sys.path for their own
+    imports, and `experiments/tokenizers.py` (the 2026-08 pair-encoding
+    experiment) then shadows the installed package for every module that
+    runs after them in the same suite process. The v0.17.0 gate's first
+    full run went red on exactly this — five setUpClass ImportErrors that
+    no standalone run of this file could reproduce. Import by site-packages
+    priority so this file's tests mean the same thing in both processes.
+    """
+
+    import importlib
+    import sysconfig
+
+    shadow = sys.modules.get("tokenizers")
+    if shadow is not None and "site-packages" not in str(
+        getattr(shadow, "__file__", "") or ""
+    ):
+        for name in [m for m in sys.modules if m.split(".")[0] == "tokenizers"]:
+            del sys.modules[name]
+    purelib = sysconfig.get_paths()["purelib"]
+    saved = list(sys.path)
+    sys.path.insert(0, purelib)
+    try:
+        return importlib.import_module("tokenizers")
+    finally:
+        sys.path[:] = saved
+
+
 def tiny_tokenizer(path: Path) -> str:
     """A real `tokenizers` file, so the digest gate is exercised for real."""
 
-    from tokenizers import Tokenizer
-    from tokenizers.models import WordLevel
-    from tokenizers.pre_tokenizers import Whitespace
+    tokenizers_pkg = _real_tokenizers()
+    Tokenizer = tokenizers_pkg.Tokenizer
+    WordLevel = tokenizers_pkg.models.WordLevel
+    Whitespace = tokenizers_pkg.pre_tokenizers.Whitespace
 
     tokenizer = Tokenizer(WordLevel(vocab={"[UNK]": 0}, unk_token="[UNK]"))
     tokenizer.pre_tokenizer = Whitespace()
