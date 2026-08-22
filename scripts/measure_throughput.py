@@ -1401,12 +1401,14 @@ def build_records(
             "waiting_legs": scored.waiting_legs,
             "http_status": final.http_status,
             "error": final.error,
-            # The response itself rides in the record. Two reasons, both
+            # The response itself rides in the record. Three reasons, all
             # named: T7 re-validates receipt fields client-side against the
-            # committed artifacts they cite, and M-5's offline C2 derives the
+            # committed artifacts they cite, M-5's offline C2 derives the
             # shuffled control from a finished result file rather than
-            # re-executing the sealed half. A result file that dropped the
-            # answers could support neither without spending half B twice.
+            # re-executing the sealed half, and a scored number nobody can
+            # see the text behind is not evidence. A result file that dropped
+            # the answers could support none of the three without spending
+            # half B twice.
             "turns": [
                 {
                     "index": index,
@@ -1439,6 +1441,28 @@ def build_records(
             ]
         if task["task_id"] in context:
             record.update(context[task["task_id"]])
+
+        # The scored response, at the TOP level of the record, on EVERY arm.
+        #
+        # This is where a reader looks, and until 2026-08-22 it was not here:
+        # the text lived only inside `turns[]`, so a live b-grounded trial
+        # read `record["content"]` and got the empty string on every task
+        # while the scorer had plainly seen real text. The number and the
+        # text behind it now sit in one place, and the assignment happens
+        # AFTER the per-task context merge above so that no key added to that
+        # dict later can ever silently empty the response again -- the bug
+        # class, not just the bug.
+        #
+        # `content` is exactly the string the scorer was handed: the FINAL
+        # turn's, which is the one `score_kernel`/`score_baseline` read. The
+        # per-turn copies stay, because a multi-turn task's earlier turns are
+        # what M-5's offline derivation and the clarification leg need.
+        record["content"] = final.content
+        record["content_chars"] = len(final.content)
+        record["x_corollary"] = final.x_corollary
+        record["scored_content_is"] = (
+            "the final turn's content, byte for byte, as handed to the scorer"
+        )
         records.append(record)
     return records
 

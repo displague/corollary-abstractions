@@ -1432,6 +1432,26 @@ class TheStopwatchScoresAWholeHalfAgainstAStub(unittest.TestCase):
             summary["median_perceived_throughput_tps_materials_fit"]
         )
 
+    def test_the_kernel_arm_carries_its_content_at_the_top_level_too(self) -> None:
+        """The same recording guarantee, on the arm the bug did not show on."""
+
+        for record in self.result["per_task"]:
+            if not record.get("applicable"):
+                continue
+            with self.subTest(task=record["task_id"]):
+                self.assertIn("content", record)
+                self.assertEqual(
+                    record["content"], record["turns"][-1]["content"]
+                )
+                self.assertEqual(
+                    record["content_chars"], len(record["content"])
+                )
+                self.assertEqual(
+                    record["x_corollary"], record["turns"][-1]["x_corollary"]
+                )
+                if record["answerable"]:
+                    self.assertNotEqual(record["content"], "")
+
     def test_materials_tokens_are_recorded_for_every_answerable_task(self) -> None:
         """C-1(a). Counted with the pinned tokenizer, on every arm."""
 
@@ -1728,6 +1748,152 @@ class TheStopwatchScoresAWholeHalfAgainstAStub(unittest.TestCase):
         # An ungrounded arm holds no materials, so nothing can be truncated.
         self.assertTrue(all(r["materials_tokens"] == 0 for r in measured))
         self.assertTrue(all(r["materials_truncated"] is False for r in measured))
+
+
+def unique_answer(task: dict) -> str:
+    """A per-task string no scorer could produce by accident.
+
+    Deliberately mixed: a line the book's rule WILL find, a line it will not,
+    a non-ASCII character, and the task id, so a record that carries the
+    wrong task's text, a truncated copy, or a re-encoded copy all read as
+    failures rather than as passes.
+    """
+
+    pinned = task["expected"]["content_must_contain"]
+    echo = mt.strip_label(pinned[0]) if pinned else "(nothing pinned)"
+    return (
+        f"answer for {task['task_id']}\n"
+        f"{echo}\n"
+        f"trailing prose the book never pinned — ünicode, 94\n"
+    )
+
+
+class ABaselineResultCarriesTheContentItScored(unittest.TestCase):
+    """The 2026-08-22 recording bug, pinned so it cannot come back.
+
+    A live half-A b-grounded trial produced per-task records whose `content`
+    was the empty string while the scorer had plainly seen real text -- five
+    `exact_value` tasks scored correct against it. The text was being written
+    only inside `turns[]`, never at the top level of the record where a
+    reader looks, so the arm's whole evidentiary surface read as blank.
+
+    The regression this file asserts is the strong one: **every applicable
+    record on a baseline arm carries the scored content verbatim**, including
+    the records that scored WRONG -- because recording must not depend on
+    scoring, which is exactly the coupling that let an empty string look
+    plausible.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.answers = {t["task_id"]: unique_answer(t) for t in HALF_A}
+        StubHandler.table = {
+            t["turns"][-1]["content"]: {
+                "content": cls.answers[t["task_id"]],
+                "x_corollary": None,
+            }
+            for t in HALF_A
+        }
+        StubHandler.ps_context_length = 32768
+        cls.fixture = ServerFixture(StubHandler)
+        cls.url = cls.fixture.__enter__()
+        cls.directory = tempfile.TemporaryDirectory()
+        root = Path(cls.directory.name)
+        tokenizer = root / "tokenizer.json"
+        digest = tiny_tokenizer(tokenizer)
+        cls.baseline = baseline_with_tokenizer(root, tokenizer, digest)
+        out = root / "ungrounded.json"
+        cls.proc = subprocess.run(
+            [PY, str(STOPWATCH), "--book", str(BOOK_PATH),
+             "--baseline", str(cls.baseline), "--system", "b-ungrounded",
+             "--url", cls.url, "--half", "A", "--out", str(out)],
+            capture_output=True, text=True, cwd=REPO, timeout=900,
+        )
+        cls.result = (
+            json.loads(out.read_text(encoding="utf-8")) if out.exists() else None
+        )
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.fixture.__exit__(None, None, None)
+        cls.directory.cleanup()
+        StubHandler.table = oracle_table(HALF_A)
+
+    def test_the_run_completed(self) -> None:
+        self.assertEqual(self.proc.returncode, 0, self.proc.stdout + self.proc.stderr)
+
+    def test_every_baseline_record_carries_its_content_verbatim(self) -> None:
+        measured = [r for r in self.result["per_task"] if r.get("applicable")]
+        self.assertEqual(len(measured), BOOK["counts"]["answerable_by_half"]["A"])
+        for record in measured:
+            with self.subTest(task=record["task_id"]):
+                expected = self.answers[record["task_id"]]
+                self.assertIn("content", record)
+                self.assertEqual(record["content"], expected)
+                self.assertEqual(record["content_chars"], len(expected))
+                self.assertGreater(record["tokens"], 0)
+
+    def test_the_content_is_recorded_even_where_the_task_scored_wrong(self) -> None:
+        """Recording must not depend on scoring; that coupling was the bug."""
+
+        measured = [r for r in self.result["per_task"] if r.get("applicable")]
+        wrong = [r for r in measured if not r["correct"]]
+        self.assertTrue(wrong, "this stub was supposed to miss some tasks")
+        for record in wrong:
+            with self.subTest(task=record["task_id"]):
+                self.assertEqual(
+                    record["content"], self.answers[record["task_id"]]
+                )
+                self.assertNotEqual(record["content"], "")
+
+    def test_no_record_carries_another_task_s_answer(self) -> None:
+        for record in self.result["per_task"]:
+            if record.get("applicable"):
+                with self.subTest(task=record["task_id"]):
+                    self.assertIn(record["task_id"], record["content"])
+
+    def test_the_turn_records_carry_it_too_for_the_offline_derivation(self) -> None:
+        """M-5 reads `turns[]`; the top-level copy did not replace it."""
+
+        for record in self.result["per_task"]:
+            if record.get("applicable"):
+                with self.subTest(task=record["task_id"]):
+                    self.assertEqual(len(record["turns"]), 1)
+                    self.assertEqual(
+                        record["turns"][-1]["content"], record["content"]
+                    )
+                    self.assertIn("x_corollary", record["turns"][-1])
+
+    def test_the_residuals_agree_with_the_recorded_content(self) -> None:
+        """The number and the text behind it now have to tell one story."""
+
+        for record in self.result["per_task"]:
+            if not record.get("applicable"):
+                continue
+            for entry in record["b_residuals"]:
+                with self.subTest(task=record["task_id"], pinned=entry["pinned"]):
+                    self.assertEqual(
+                        entry["found"], entry["residual"] in record["content"]
+                    )
+
+    def test_a_task_context_key_cannot_empty_the_response(self) -> None:
+        """The bug class, not the bug: the merge happens before the content.
+
+        `build_records` merges per-task context (materials sizes, prompt
+        tokens) into the record. If that merge ran last, any key added to it
+        later could silently blank the response -- so the response is written
+        after it, and a context dict that tries to carry a `content` key
+        loses.
+        """
+
+        task = next(t for t in HALF_A if t["kind"] == "exact_value")
+        observed = {task["task_id"]: [turn("real text 94", status=None)]}
+        records = mt.build_records(
+            [task], observed, "b-ungrounded", len, {
+                task["task_id"]: {"materials_tokens": 0, "content": ""}
+            },
+        )
+        self.assertEqual(records[0]["content"], "real text 94")
 
 
 class TheGroundedArmMeasuresWhatItCouldNotHold(unittest.TestCase):
