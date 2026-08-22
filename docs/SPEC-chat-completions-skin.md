@@ -85,7 +85,14 @@ that grammar because it *is* the registered surface. Per **P-IH3**, no
 demo name ("golden-chicken", "Sally–Anne") appears in `/v1/models`, the
 sheet, or any served description; those names stay in selftests and
 docs. The profile is described as what it is: the signed slot-filling
-session.
+session. One boundary made explicit (implementation review,
+2026-08-22): the session's own minted clarification prompt quotes its
+slot literal — "the golden chicken's eggs" — and §6's verbatim-content
+rule carries it; that is the engine's record crossing the wire, not a
+listing or description, so P-IH3 (which governs help/UX destinations)
+is not breached and the renderer does not scrub it (A-IH6 forbids
+rewriting the record). A demo-neutral literal would be an engine
+change, out of this cycle's scope.
 
 ## 4. Request mapping: messages in, session state out
 
@@ -483,8 +490,9 @@ profile has no TTY loop to inherit anything; §1).
 
 ## 11. Adjudication hooks
 
-`tests/test_serve_chat.py` (new, in-process over `http.client` — no
-network beyond loopback) adjudicates: T1's triangle with an unmodified
+`tests/test_serve_chat.py` (new, in-process against a loopback server —
+driven through the stock `openai` client, since T1's whole point is an
+unmodified client; no network beyond loopback) adjudicates: T1's triangle with an unmodified
 OpenAI-compatible client (WAITING leg on `corollary/conversation`,
 §6.2); T2's adversarial free-text probe; P-IH6's signed round-trip and
 its wire-falsifiable negative (§6.2 a–c); the cold/cached
