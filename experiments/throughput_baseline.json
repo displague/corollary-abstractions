@@ -35,6 +35,14 @@
   },
   "runtime": {
     "api": "OpenAI-compatible chat completions, streamed, same client library as the kernel arm",
+    "context": {
+      "amended": "2026-08-22, before any timed run; replaces an earlier same-day num_ctx amendment that review proved inert at the /v1 layer and unrunnable at 262144 on this GPU",
+      "configured_tokens": 32768,
+      "mechanism": "OLLAMA_CONTEXT_LENGTH environment variable on the serving process; the OpenAI-compat /v1 layer ignores a num_ctx body field (verified live 2026-08-22), so the setting must be server-side and the run must record the observed context_length from /api/ps",
+      "pre_declared_secondary": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+      "truncation_disclosure": "the largest closure MATERIALS block measures ~130k tokens - full closure grounding does not fit this hardware in any configuration. The stopwatch records materials_chars and materials_tokens per task; any task whose materials exceed the observed context is reported materials-truncated in the result.",
+      "why_32768": "the largest value whose KV cache fits the 16 GiB GPU (~5 GiB at 32k for qwen3-4b; 131072+ needs more VRAM than the machine has and would spill the model to CPU, a strawman in the other direction). ollama default 4096 would silently truncate most grounded materials."
+    },
     "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
     "engine": "ollama",
     "version": "0.32.15"
