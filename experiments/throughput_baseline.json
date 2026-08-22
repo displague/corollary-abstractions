@@ -1,0 +1,63 @@
+{
+  "arms": {
+    "B-grounded": {
+      "context_rule": "receives, injected into its context before the question, the same committed artifact records the kernel's answer rests on - scoped to the referenced record(s) named by the task's artifact_refs (the node record, the twin group entry, the closure's registration plus the routes and states for the queried world), extracted verbatim, not whole ledger files",
+      "correctness": "scored by the same checks as the kernel (exact / receipt-content / verdict-content containment against the task book's expected record); B-grounded is a genuine contender and may win (C3), which falsifies the thesis at this scale",
+      "gated": true,
+      "prompt_template": {
+        "system": "Answer using only the provided materials. If the materials do not determine the answer, say so instead of guessing.",
+        "user": "MATERIALS:\n{artifacts}\n\nQUESTION:\n{question}"
+      }
+    },
+    "B-ungrounded": {
+      "context_rule": "none - the same model answering cold; expected to fail correctness on corpus-specific tasks; the gap between the arms is the grounding story told in numbers",
+      "gated": false,
+      "reported": true
+    }
+  },
+  "committed": "before any timed run, per DESIGN-grounded-throughput §6 T4; K = 5 freezes at this commit",
+  "host": {
+    "assignment": "the baseline gets the GPU; the kernel is CPU-bound I/O on the same machine; nothing else heavy runs during the registered run (house rule: never two heavy suites at once)",
+    "cpu": "Intel Core Ultra 9 275HX",
+    "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU, 16303 MiB",
+    "os": "Windows 11 Home 10.0.26200"
+  },
+  "model": {
+    "context_length": 262144,
+    "family": "qwen3",
+    "license": "Apache-2.0",
+    "name": "Qwen3-4B-Instruct-2507",
+    "parameters": "4.0B",
+    "provider_tag": "ollama:qwen3:4b-instruct",
+    "quantization": "Q4_K_M",
+    "thinking": false,
+    "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9"
+  },
+  "runtime": {
+    "api": "OpenAI-compatible chat completions, streamed, same client library as the kernel arm",
+    "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+    "engine": "ollama",
+    "version": "0.32.15"
+  },
+  "sampling": {
+    "repeat_penalty": 1.0,
+    "source": "vendor defaults as shipped in the ollama model manifest; not tuned by this repository",
+    "temperature": 0.7,
+    "top_k": 20,
+    "top_p": 0.8
+  },
+  "sanity": {
+    "date": "2026-08-21",
+    "decode_tokens_per_second_single_sample": 113.7,
+    "note": "informational only; the registered run's own measurements govern"
+  },
+  "schema": "corollary.throughput-baseline/1",
+  "tokenizer": {
+    "counts_both_contenders": true,
+    "file": ".runtime/baseline/qwen3-4b-instruct-2507.tokenizer.json",
+    "policy": "gitignored local file, digest-pinned here; token counting REFUSES (exit 2) when the file is absent or its digest mismatches - cannot-verify, never skip (the WordNet-archive rule)",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "source_url": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/main/tokenizer.json"
+  },
+  "warmup": "both contenders warm: one unmeasured warmup request per system before the run; the baseline model is loaded and resident before timing starts"
+}

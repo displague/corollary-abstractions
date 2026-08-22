@@ -36,3 +36,4 @@ reports/radius/*.cert.json text eol=lf
 reports/radius/*.json text eol=lf
 data/closure_targets/** -text
 experiments/throughput_tasks.json text eol=lf
+experiments/throughput_baseline.json text eol=lf
