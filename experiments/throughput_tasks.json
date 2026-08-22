@@ -1,0 +1,4531 @@
+{
+  "built_by": "scripts/build_throughput_tasks.py",
+  "counts": {
+    "answerable_by_half": {
+      "A": 45,
+      "B": 49
+    },
+    "answerable_by_kind": {
+      "belief_query": 14,
+      "closure_reachability": 8,
+      "corpus_definition": 30,
+      "exact_value": 26,
+      "twin_lookup": 16
+    },
+    "answerable_total": 94,
+    "answerable_without_conditional_kinds": 70,
+    "by_half": {
+      "A": 58,
+      "B": 61
+    },
+    "by_kind": {
+      "belief_query": 14,
+      "clarification_due": 10,
+      "closure_reachability": 8,
+      "corpus_definition": 30,
+      "exact_value": 26,
+      "refusal_due": 15,
+      "twin_lookup": 16
+    },
+    "by_kind_half": {
+      "belief_query": {
+        "A": 5,
+        "B": 9
+      },
+      "clarification_due": {
+        "A": 4,
+        "B": 6
+      },
+      "closure_reachability": {
+        "A": 2,
+        "B": 6
+      },
+      "corpus_definition": {
+        "A": 14,
+        "B": 16
+      },
+      "exact_value": {
+        "A": 13,
+        "B": 13
+      },
+      "refusal_due": {
+        "A": 9,
+        "B": 6
+      },
+      "twin_lookup": {
+        "A": 11,
+        "B": 5
+      }
+    },
+    "by_outcome": {
+      "answer": 98,
+      "ask": 6,
+      "refuse": 15
+    },
+    "clarification_answer_tasks": 4,
+    "false_belief_tasks": 9,
+    "half_b_floor_per_answerable_kind": 5,
+    "id_provenance": {
+      "belief_query": "author-authored",
+      "clarification_due": "author-authored",
+      "closure_reachability": "artifact-derived",
+      "corpus_definition": "artifact-derived",
+      "exact_value": "author-authored",
+      "refusal_due": "author-authored",
+      "twin_lookup": "artifact-derived"
+    },
+    "population_capped": {
+      "closure_reachability": true
+    },
+    "total": 119,
+    "waiting_marked_turns": 10
+  },
+  "rendering_module_digests": {
+    "scripts/answer.py": "d6d0d1079cbe0c4d30afa20691d9bda921fe38940e2aab0ad0d2552933ab954a",
+    "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+    "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+    "scripts/evaluate.py": "4e2f7757380e2c1a6d59a3423ffd2a71d20d47ba7b42af256f1733a99c5eae25",
+    "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+    "scripts/harness.py": "6adf005588fc42a5bf37f4b4e94ceead519f8eef78479dd41cbc2151f2a67181",
+    "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+    "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+    "scripts/retrieval.py": "4126c3f0c09bd8e9377a5f171b319433e608ed051f8a67bb32c61073cfbd0047",
+    "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+    "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+  },
+  "schema": "corollary.throughput-tasks/1",
+  "scoring_rules": {
+    "bounded_negative_is_an_answer": "A closure task whose arm is 'unreachable' expects status 'exhausted' and outcome 'answer': SPEC §6.1 names it a certified bounded negative carrying its closure-receipt/1 verbatim. Likewise a relation check with holds:no is a correct answer, not a refusal.",
+    "clarification_leg": "T5's clarification leg is graded per marked WAITING turn, not per task. Every clarification_due task carries at least one turn with expected_status 'waiting'; the leg passes only if the skin returns a WAITING status at 100% of those turns. On corollary/conversation that turn must additionally carry x_corollary.need matching need_expect; on corollary/kernel a WAITING status with its candidate answer lines satisfies the leg (SPEC §6.2 emits no need record on that profile). A phase:'resume' task that never waited fails the leg even if its final answer is correct.",
+    "per_kind_floor": "T5's per-kind >=80% correctness-with-receipts floor applies to the five all-answer kinds (belief_query, closure_reachability, corpus_definition, exact_value, twin_lookup), which are the kinds counted in answerable_total. clarification_due and refusal_due are governed by their 100% gates only -- the WAITING leg above and T5's refusal gate -- and never by the 80% floor; their tasks may not be counted toward it in either direction.",
+    "receipt_subset": "receipt_expect and need_expect are subset assertions: every key present must match; absent keys are unconstrained.",
+    "zero_token_turns": "Refusal, WAITING and abstained turns contribute zero useful tokens whatever their content length (SPEC §6), which is why refusal tasks carry an empty content_must_contain: there is no prose there for a score to reward."
+  },
+  "seal": "Half B is sealed until the registered run: implementation and debugging may exercise half A only; half B's first execution is the registered run. The half rule is frozen: half = 'B' if int(sha256(task_id.encode()).hexdigest()[:2], 16) % 2 else 'A'.",
+  "tasks": [
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : ann",
+          "subject    : ball",
+          "believes   : located_in(ball) = box",
+          "ann observed  located_in(ball) = box"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": false,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/ann.ball.box",
+      "turns": [
+        {
+          "content": "ann sees ball go into the box. where does ann think ball is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": null
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : dotty",
+          "subject    : bob",
+          "believes   : located_in(bob) = room",
+          "dotty observed  located_in(bob) = room"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": false,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/dotty.bob.room",
+      "turns": [
+        {
+          "content": "dotty sees bob go into the room. where does dotty think bob is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": null
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : hugo",
+          "subject    : bob",
+          "believes   : located_in(bob) = room",
+          "world says : located_in(bob) = kitchen",
+          "divergence : belief and world differ; the question asked for the belief",
+          "hugo observed  located_in(bob) = room",
+          "narrator        located_in(bob) = kitchen"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/hugo.bob.room",
+      "turns": [
+        {
+          "content": "hugo sees bob go into the room. bob is in the kitchen. where does hugo think bob is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "in"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : ivo",
+          "subject    : dog",
+          "believes   : located_in(dog) = shed",
+          "world says : located_in(dog) = kennel",
+          "divergence : belief and world differ; the question asked for the belief",
+          "ivo observed  located_in(dog) = yard",
+          "ivo holds     same_as(yard) = shed",
+          "rewrite         located_in(dog) = shed",
+          "narrator        located_in(dog) = kennel"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/ivo.dog.yard",
+      "turns": [
+        {
+          "content": "ivo sees dog go into the yard. ivo knows the yard is the shed. dog moves to the kennel. where does ivo think dog is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : lena",
+          "subject    : vase",
+          "believes   : located_in(vase) = office",
+          "world says : located_in(vase) = cellar",
+          "divergence : belief and world differ; the question asked for the belief",
+          "lena observed  located_in(vase) = study",
+          "lena holds     same_as(study) = office",
+          "rewrite         located_in(vase) = office",
+          "narrator        located_in(vase) = cellar"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/lena.vase.study",
+      "turns": [
+        {
+          "content": "lena sees vase go into the study. lena knows the study is the office. vase is in the cellar. where does lena think vase is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "in"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : marco",
+          "subject    : cat",
+          "believes   : located_in(cat) = garden",
+          "marco observed  located_in(cat) = garden"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": false,
+      "half": "A",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/marco.cat.garden",
+      "turns": [
+        {
+          "content": "marco sees cat go into the garden. where does marco think cat is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": null
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : nina",
+          "subject    : kite",
+          "believes   : located_in(kite) = attic",
+          "world says : located_in(kite) = shed",
+          "divergence : belief and world differ; the question asked for the belief",
+          "nina observed  located_in(kite) = attic",
+          "narrator        located_in(kite) = shed"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/nina.kite.attic",
+      "turns": [
+        {
+          "content": "nina sees kite go into the attic. kite moves to the shed. where does nina think kite is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : omar",
+          "subject    : coin",
+          "believes   : located_in(coin) = drawer",
+          "world says : located_in(coin) = pocket",
+          "divergence : belief and world differ; the question asked for the belief",
+          "omar observed  located_in(coin) = drawer",
+          "narrator        located_in(coin) = pocket"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "A",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/omar.coin.drawer",
+      "turns": [
+        {
+          "content": "omar sees coin go into the drawer. coin moves to the pocket. where does omar think coin is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : pia",
+          "subject    : book",
+          "believes   : located_in(book) = shelf",
+          "world says : located_in(book) = table",
+          "divergence : belief and world differ; the question asked for the belief",
+          "pia observed  located_in(book) = shelf",
+          "narrator        located_in(book) = table"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "A",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/pia.book.shelf",
+      "turns": [
+        {
+          "content": "pia sees book go into the shelf. book moves to the table. where does pia think book is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : quinn",
+          "subject    : lamp",
+          "believes   : located_in(lamp) = corridor",
+          "quinn observed  located_in(lamp) = hall",
+          "quinn holds     same_as(hall) = corridor",
+          "rewrite         located_in(lamp) = corridor"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": false,
+      "half": "A",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/quinn.lamp.hall",
+      "turns": [
+        {
+          "content": "quinn sees lamp go into the hall. quinn knows the hall is the corridor. where does quinn think lamp is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": null
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : rosa",
+          "subject    : key",
+          "believes   : located_in(key) = veranda",
+          "rosa observed  located_in(key) = porch",
+          "rosa holds     same_as(porch) = veranda",
+          "rewrite         located_in(key) = veranda"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": false,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/rosa.key.porch",
+      "turns": [
+        {
+          "content": "rosa sees key go into the porch. rosa knows the porch is the veranda. where does rosa think key is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": null
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : sally",
+          "subject    : marble",
+          "believes   : located_in(marble) = basket",
+          "world says : located_in(marble) = box",
+          "divergence : belief and world differ; the question asked for the belief",
+          "sally observed  located_in(marble) = basket",
+          "narrator        located_in(marble) = box"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/sally.marble.basket",
+      "turns": [
+        {
+          "content": "sally sees marble go into the basket. marble moves to the box. where does sally think marble is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : sam",
+          "subject    : apple",
+          "believes   : located_in(apple) = bin",
+          "world says : located_in(apple) = sink",
+          "divergence : belief and world differ; the question asked for the belief",
+          "sam observed  located_in(apple) = crate",
+          "sam holds     same_as(crate) = bin",
+          "rewrite         located_in(apple) = bin",
+          "narrator        located_in(apple) = sink"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "B",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/sam.apple.crate",
+      "turns": [
+        {
+          "content": "sam sees apple go into the crate. sam knows the crate is the bin. apple moves to the sink. where does sam think apple is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [
+          "agent      : tess",
+          "subject    : hat",
+          "believes   : located_in(hat) = cupboard",
+          "world says : located_in(hat) = bench",
+          "divergence : belief and world differ; the question asked for the belief",
+          "tess observed  located_in(hat) = locker",
+          "tess holds     same_as(locker) = cupboard",
+          "rewrite         located_in(hat) = cupboard",
+          "narrator        located_in(hat) = bench"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "derivation": "session"
+        },
+        "status_expect": "found"
+      },
+      "false_belief": true,
+      "half": "A",
+      "kind": "belief_query",
+      "profile": "corollary/kernel",
+      "task_id": "belief_query/tess.hat.locker",
+      "turns": [
+        {
+          "content": "tess sees hat go into the locker. tess knows the locker is the cupboard. hat moves to the bench. where does tess think hat is",
+          "role": "user"
+        }
+      ],
+      "world_fact_form": "moves"
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "A",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/imperative_purple",
+      "turns": [
+        {
+          "content": "make the eggs purple",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/imperative_turquoise",
+      "turns": [
+        {
+          "content": "make the egg color turquoise",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/owner_lavender",
+      "turns": [
+        {
+          "content": "make my eggs lavender",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "A",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/set_magenta",
+      "turns": [
+        {
+          "content": "set the eggs magenta",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/slot_phrase_only",
+      "turns": [
+        {
+          "content": "the eggs",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "What value should fill 'egg_color' for"
+        ],
+        "need_expect": {
+          "slot": "egg_color"
+        },
+        "outcome": "ask",
+        "receipt_expect": {},
+        "status_expect": "waiting"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "ask",
+      "profile": "corollary/conversation",
+      "task_id": "clarification_due/ask/turn_chartreuse",
+      "turns": [
+        {
+          "content": "turn the eggs chartreuse",
+          "expected_status": "waiting",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py",
+          "data/programming/nodes.json#programming.dfactorial.recursive"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Double Factorial, Recursive (TheAlgorithms)",
+          "The double-factorial recurrence (step n-2), recursive evaluation, as implemented by TheAlgorithms/Python double_factorial_recursive (commit f5988cc, MIT). Name-similar non-twin of the factorial pair."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/programming/nodes.json",
+          "node_sha256": "4a7a47e48031ff59bb7abbc43b2023b9396d9ba3fff8e78e576b93ba30cccd48",
+          "statement_id": "programming.dfactorial.recursive"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "resume",
+      "profile": "corollary/kernel",
+      "task_id": "clarification_due/narrow/double_factorial",
+      "turns": [
+        {
+          "content": "double factorial",
+          "expected_status": "waiting",
+          "role": "user"
+        },
+        {
+          "content": "narrow word recursive",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py",
+          "data/machine_learning/nodes.json#ml.objective.token_cross_entropy_loss"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Token Cross-Entropy Training Loss",
+          "The training loss is the average surprisal the model assigns to the tokens that actually occurred."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/machine_learning/nodes.json",
+          "node_sha256": "fe6d3dd429b02c1a85cc9608746e3a1c8be49da92012cfad44b2fbbe78fdd324",
+          "statement_id": "ml.objective.token_cross_entropy_loss"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "clarification_due",
+      "phase": "resume",
+      "profile": "corollary/kernel",
+      "task_id": "clarification_due/narrow/entropy_in_thermodynamics",
+      "turns": [
+        {
+          "content": "entropy in thermodynamics",
+          "expected_status": "waiting",
+          "role": "user"
+        },
+        {
+          "content": "narrow discipline machine_learning",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "silver"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "binding": {
+            "slot": "egg_color",
+            "value": "silver"
+          },
+          "derivation": "user-frame"
+        },
+        "status_expect": "solved"
+      },
+      "half": "A",
+      "kind": "clarification_due",
+      "phase": "resume",
+      "profile": "corollary/conversation",
+      "resume_of": "clarification_due/ask/imperative_purple",
+      "task_id": "clarification_due/resume/imperative_purple",
+      "turns": [
+        {
+          "content": "make the eggs purple",
+          "expected_status": "waiting",
+          "role": "user"
+        },
+        {
+          "content": "silver",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "scripts/request_grammar.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "copper"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "binding": {
+            "slot": "egg_color",
+            "value": "copper"
+          },
+          "derivation": "user-frame"
+        },
+        "status_expect": "solved"
+      },
+      "half": "A",
+      "kind": "clarification_due",
+      "phase": "resume",
+      "profile": "corollary/conversation",
+      "resume_of": "clarification_due/ask/imperative_turquoise",
+      "task_id": "clarification_due/resume/imperative_turquoise",
+      "turns": [
+        {
+          "content": "make the egg color turquoise",
+          "expected_status": "waiting",
+          "role": "user"
+        },
+        {
+          "content": "copper",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.reachable.0.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+          "outcome: REACHABLE",
+          "shortest_route: 0 action(s), replayed through the world's own verifier",
+          "(the target IS the initial state)"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.reachable.0",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.0.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.reachable.1.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: 823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+          "outcome: REACHABLE",
+          "shortest_route: 1 action(s), replayed through the world's own verifier"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.reachable.1",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.1.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.reachable.2.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: 16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "outcome: REACHABLE",
+          "shortest_route: 2 action(s), replayed through the world's own verifier"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.reachable.2",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.2.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.reachable.3.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: 20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+          "outcome: REACHABLE",
+          "shortest_route: 3 action(s), replayed through the world's own verifier"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.reachable.3",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.3.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.reachable.4.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: 0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+          "outcome: REACHABLE",
+          "shortest_route: 4 action(s), replayed through the world's own verifier"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.reachable.4",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.4.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.unreachable.0.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+          "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "NOT_REACHABLE_WITHIN_HORIZON",
+          "schema": "closure-receipt/1",
+          "target_digest": "c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "A",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.unreachable.0",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.unreachable.0.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/story.golden_chicken.unreachable.1.state.json",
+          "reports/closures/story.golden_chicken.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/story.golden_chicken.closure.json",
+          "world_id: story.golden_chicken",
+          "horizon: 5",
+          "visited_states: 75",
+          "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "adapter_id: story.frame.v1",
+          "target_digest: 579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+          "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+          "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "story.frame.v1",
+          "closure_digest": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "horizon": 5,
+          "outcome": "NOT_REACHABLE_WITHIN_HORIZON",
+          "schema": "closure-receipt/1",
+          "target_digest": "579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+          "visited_states": 75,
+          "world_id": "story.golden_chicken"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/story.golden_chicken.unreachable.1",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/story.golden_chicken.unreachable.1.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/visual.rt0000.reachable.0.state.json",
+          "reports/closures/visual.rt0000.closure.json"
+        ],
+        "check": "verdict",
+        "content_must_contain": [
+          "closure: reports/closures/visual.rt0000.closure.json",
+          "world_id: visual.rt0000",
+          "horizon: 1",
+          "visited_states: 1",
+          "closure_digest: 40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+          "adapter_id: visual.scene.v1",
+          "target_digest: fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+          "outcome: REACHABLE",
+          "shortest_route: 0 action(s), replayed through the world's own verifier",
+          "(the target IS the initial state)"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "adapter_id": "visual.scene.v1",
+          "closure_digest": "40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+          "horizon": 1,
+          "outcome": "REACHABLE",
+          "schema": "closure-receipt/1",
+          "target_digest": "fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+          "visited_states": 1,
+          "world_id": "visual.rt0000"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "closure_reachability",
+      "profile": "corollary/kernel",
+      "task_id": "closure_reachability/visual.rt0000.reachable.0",
+      "turns": [
+        {
+          "content": "reachable visual.rt0000 data/closure_targets/visual.rt0000.reachable.0.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/algebra/nodes.json#algebra.polynomial_equations.quadratic_formula"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Quadratic Formula",
+          "Formula for solving quadratic equations of the form ax^2 + bx + c = 0"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/algebra/nodes.json",
+          "node_sha256": "9e38aacaae4b72364f265d70b52da83ea8d6b65d86791dfdee36bc62eb42f54d",
+          "statement_id": "algebra.polynomial_equations.quadratic_formula"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/algebra.polynomial_equations.quadratic_formula",
+      "turns": [
+        {
+          "content": "algebra.polynomial_equations.quadratic_formula",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/algebraic_topology/nodes.json#algtop.homology.betti_alternating_sum"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+          "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/algebraic_topology/nodes.json",
+          "node_sha256": "0e9ae9981fb7632301daa78d4c8f1199296171f1b2d68e4f2f7030b73092903a",
+          "statement_id": "algtop.homology.betti_alternating_sum"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/algtop.homology.betti_alternating_sum",
+      "turns": [
+        {
+          "content": "algtop.homology.betti_alternating_sum",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/algebraic_topology/nodes.json#algtop.homology.betti_number_rank"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Betti Number as Rank of Cycles Modulo Boundaries",
+          "The n-th Betti number counts the independent n-dimensional holes: the cycles that are not themselves boundaries, measured by rank."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/algebraic_topology/nodes.json",
+          "node_sha256": "b1c3f16429cd76bde1a15955169e8ba6a4538d8e3196a11ff22135be2a6ce757",
+          "statement_id": "algtop.homology.betti_number_rank"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/algtop.homology.betti_number_rank",
+      "turns": [
+        {
+          "content": "algtop.homology.betti_number_rank",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/calculus/nodes.json#calculus.approximation.tangent_line_linearization"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Tangent-Line Linearization",
+          "Near a chosen point, a differentiable function is replaced by the affine function that matches its value and slope there."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/calculus/nodes.json",
+          "node_sha256": "67df026415e7a00dfa51a0aa601ce50215da1ffdd352abb2cacd4b016f3c1fc8",
+          "statement_id": "calculus.approximation.tangent_line_linearization"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/calculus.approximation.tangent_line_linearization",
+      "turns": [
+        {
+          "content": "calculus.approximation.tangent_line_linearization",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/calculus/nodes.json#calculus.differentiation.average_rate_of_change"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Average Rate of Change",
+          "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/calculus/nodes.json",
+          "node_sha256": "07c04ac0988aac009236e9b08ec4223432aba16d2ba11348821cbe252feedd47",
+          "statement_id": "calculus.differentiation.average_rate_of_change"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/calculus.differentiation.average_rate_of_change",
+      "turns": [
+        {
+          "content": "calculus.differentiation.average_rate_of_change",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/chemistry/nodes.json#chemistry.acid_base.henderson_hasselbalch"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Henderson-Hasselbalch Equation",
+          "The pH of a buffer is its pKa displaced by the logarithm of the ratio of conjugate base to weak acid."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/chemistry/nodes.json",
+          "node_sha256": "af21bcb7bbe812d559d13d99bcd907f352788874c47ecc0348ffa6d37b92b333",
+          "statement_id": "chemistry.acid_base.henderson_hasselbalch"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/chemistry.acid_base.henderson_hasselbalch",
+      "turns": [
+        {
+          "content": "chemistry.acid_base.henderson_hasselbalch",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/chemistry/nodes.json#chemistry.acid_base.ph_definition"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Definition of pH",
+          "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/chemistry/nodes.json",
+          "node_sha256": "7cf27863d8ef10bc06e2bb08d92f0b7f185f1f41b299f33acb4c92d958748757",
+          "statement_id": "chemistry.acid_base.ph_definition"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/chemistry.acid_base.ph_definition",
+      "turns": [
+        {
+          "content": "chemistry.acid_base.ph_definition",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/differential_geometry/nodes.json#diffgeo.curves.arc_length_functional"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Arc Length of a Parameterized Curve",
+          "The length of a curve is the accumulated speed of any parameterization of it."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/differential_geometry/nodes.json",
+          "node_sha256": "41e2b6a65bb0c525e0d2046d20de585925ecdefe4fc2524cba26b0f13dbf0911",
+          "statement_id": "diffgeo.curves.arc_length_functional"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/diffgeo.curves.arc_length_functional",
+      "turns": [
+        {
+          "content": "diffgeo.curves.arc_length_functional",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/differential_geometry/nodes.json#diffgeo.curves.circle_curvature"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Curvature of a Circle",
+          "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/differential_geometry/nodes.json",
+          "node_sha256": "da6e97193a8715fed577c62f4e35997b08a716cc97b6d41350006d711739df02",
+          "statement_id": "diffgeo.curves.circle_curvature"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/diffgeo.curves.circle_curvature",
+      "turns": [
+        {
+          "content": "diffgeo.curves.circle_curvature",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/differential_topology/nodes.json#difftop.degree.brouwer_fixed_point"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Brouwer Fixed-Point Theorem",
+          "Every continuous map of a closed ball to itself leaves at least one point where it started."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/differential_topology/nodes.json",
+          "node_sha256": "2cc8e31af4aa0781c906c2a0b77c24600c1618513dc9f0cc864a1986d09ff718",
+          "statement_id": "difftop.degree.brouwer_fixed_point"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/difftop.degree.brouwer_fixed_point",
+      "turns": [
+        {
+          "content": "difftop.degree.brouwer_fixed_point",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/differential_topology/nodes.json#difftop.degree.degree_multiplicativity"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Multiplicativity of Degree Under Composition",
+          "Composing two maps multiplies their degrees, so degree turns composition into multiplication."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/differential_topology/nodes.json",
+          "node_sha256": "3886b78dccff63ce49374d98e2694d2b54800047846d8c433a4634861f424294",
+          "statement_id": "difftop.degree.degree_multiplicativity"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/difftop.degree.degree_multiplicativity",
+      "turns": [
+        {
+          "content": "difftop.degree.degree_multiplicativity",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/economics/nodes.json#economics.finance.capm_expected_return"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "CAPM Expected Return (Risk-Premium Form)",
+          "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/economics/nodes.json",
+          "node_sha256": "7d91459c428cf06adfcd1ee98b2a924a3018f76b37d3dcd1683c88eedb8e7b79",
+          "statement_id": "economics.finance.capm_expected_return"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/economics.finance.capm_expected_return",
+      "turns": [
+        {
+          "content": "economics.finance.capm_expected_return",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/geometry/nodes.json#geometry.area_formulas.circle_area_formula"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Circle Area Formula",
+          "The area of a circle is π times the square of its radius"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/geometry/nodes.json",
+          "node_sha256": "c1139760f3a16668bd287ee3f0543395543fee8dbb5fdc42724dcc99314b07ae",
+          "statement_id": "geometry.area_formulas.circle_area_formula"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/geometry.area_formulas.circle_area_formula",
+      "turns": [
+        {
+          "content": "geometry.area_formulas.circle_area_formula",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/geometric_modeling/nodes.json#geomodel.barycentric.barycentric_partition_of_unity"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Barycentric Coordinates Sum to One",
+          "The barycentric coordinates of a point with respect to a simplex add up to one."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/geometric_modeling/nodes.json",
+          "node_sha256": "92cb03cf21b85c61fb4282f675acef615ab74e9a83e03375ac4e996640e3cd51",
+          "statement_id": "geomodel.barycentric.barycentric_partition_of_unity"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/geomodel.barycentric.barycentric_partition_of_unity",
+      "turns": [
+        {
+          "content": "geomodel.barycentric.barycentric_partition_of_unity",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/geospatial_topology/nodes.json#geotop.measure.area_inclusion_exclusion"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Area of a Union (Inclusion-Exclusion for Overlapping Regions)",
+          "The area covered by two regions together is the sum of their areas less the area they share, because the overlap would otherwise be paid for twice."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/geospatial_topology/nodes.json",
+          "node_sha256": "abc4758f93bbb551b5d22f8940e896279bd7f7f9f5f480a8c90968acb4db8546",
+          "statement_id": "geotop.measure.area_inclusion_exclusion"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/geotop.measure.area_inclusion_exclusion",
+      "turns": [
+        {
+          "content": "geotop.measure.area_inclusion_exclusion",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/graph_theory/nodes.json#graphtheory.degree.average_degree_from_edge_count"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Average Degree of a Finite Graph",
+          "The average number of neighbours a vertex has is twice the edge count divided by the vertex count."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/graph_theory/nodes.json",
+          "node_sha256": "2c9239e5f062efaf034b339b1e662696d5d8fdc01e11d846211730fa9acab916",
+          "statement_id": "graphtheory.degree.average_degree_from_edge_count"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/graphtheory.degree.average_degree_from_edge_count",
+      "turns": [
+        {
+          "content": "graphtheory.degree.average_degree_from_edge_count",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/information_theory/nodes.json#infotheory.channel.channel_capacity"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Channel Capacity",
+          "Capacity is the largest mutual information any input distribution can push through a fixed channel."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/information_theory/nodes.json",
+          "node_sha256": "f4445ea2aa748e4cc7f4b475125aa0f9787f293b046cd7dccd86ccd00db198d2",
+          "statement_id": "infotheory.channel.channel_capacity"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/infotheory.channel.channel_capacity",
+      "turns": [
+        {
+          "content": "infotheory.channel.channel_capacity",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/logic/nodes.json#logic.boolean_laws.absorption"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Absorption Law (Conjunction over Disjunction)",
+          "Adding an alternative that is already implied by P, and then requiring P as well, tells you nothing beyond P."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/logic/nodes.json",
+          "node_sha256": "98a00ac67db60ba626ff1f6652067beda6ca6735f5de12fe9fc6dab074968870",
+          "statement_id": "logic.boolean_laws.absorption"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/logic.boolean_laws.absorption",
+      "turns": [
+        {
+          "content": "logic.boolean_laws.absorption",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/machine_learning/nodes.json#ml.adaptation.lora_low_rank_update"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "LoRA Low-Rank Weight Update",
+          "Adapt a pretrained model by adding a scaled product of two thin matrices to a frozen weight, and train only those two."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/machine_learning/nodes.json",
+          "node_sha256": "c9c550d71041db98c88af2585c1dc18064d35e8dacf967a35f469b499f9d823f",
+          "statement_id": "ml.adaptation.lora_low_rank_update"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/ml.adaptation.lora_low_rank_update",
+      "turns": [
+        {
+          "content": "ml.adaptation.lora_low_rank_update",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/morphology/nodes.json#morphology.agreement.feature_percolation"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Feature Percolation from the Affix",
+          "The morphosyntactic features of an inflected word are those its inflectional affix spells out; they percolate up to the whole word, where syntax can see them and agreement can copy them."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/morphology/nodes.json",
+          "node_sha256": "3e139c0ab3774fb832a08e3058187bba564b418bc840fb2eb89248656f86806d",
+          "statement_id": "morphology.agreement.feature_percolation"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/morphology.agreement.feature_percolation",
+      "turns": [
+        {
+          "content": "morphology.agreement.feature_percolation",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/narrative/nodes.json#narrative.belief.sally_marble_basket"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Sally's Marble-Location Belief",
+          "Sally's attributed belief places the marble in the basket."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/narrative/nodes.json",
+          "node_sha256": "d37a9a9195fbe7228bed0ca17baf3f3e1e100ce14d09b618664d820c59007b3e",
+          "statement_id": "narrative.belief.sally_marble_basket"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/narrative.belief.sally_marble_basket",
+      "turns": [
+        {
+          "content": "narrative.belief.sally_marble_basket",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/numerical_analysis/nodes.json#numanalysis.error.relative_condition_number"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Relative Condition Number",
+          "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/numerical_analysis/nodes.json",
+          "node_sha256": "a9ad62fcc26e48f734cc5b063c14402d730e0ad666601ebbb2524b5982b413fa",
+          "statement_id": "numanalysis.error.relative_condition_number"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/numanalysis.error.relative_condition_number",
+      "turns": [
+        {
+          "content": "numanalysis.error.relative_condition_number",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/number_theory/nodes.json#numbertheory.ingested.lean_workbook_10202"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "2^21 Is Congruent to 1 Modulo 7 (Ingested, Formal Without Bridge)",
+          "2^21 leaves remainder 1 on division by 7 (equivalently 7 divides 2^21 - 1): the congruence stated by Lean-workbook problem lean_workbook_10202, restated as its defining residue equation."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/number_theory/nodes.json",
+          "node_sha256": "af0ae40eff96d4bfcf5cf8e676fdddb13ecb87d4ec5bc689d6bec86ea8044d72",
+          "statement_id": "numbertheory.ingested.lean_workbook_10202"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/numbertheory.ingested.lean_workbook_10202",
+      "turns": [
+        {
+          "content": "numbertheory.ingested.lean_workbook_10202",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/physics/nodes.json#physics.circuits.ohms_law"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Ohm's Law",
+          "Voltage across an ohmic conductor is proportional to current."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/physics/nodes.json",
+          "node_sha256": "c8155f69c1f3eb06e7cc23b20dfb63929e979bf78d1879c4d7be90e39e968b5a",
+          "statement_id": "physics.circuits.ohms_law"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/physics.circuits.ohms_law",
+      "turns": [
+        {
+          "content": "physics.circuits.ohms_law",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/statistics/nodes.json#probstat.limit.clt_iid_standardized_mean"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Lindeberg-Levy Central Limit Theorem",
+          "Standardized sample means converge to standard normal."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/statistics/nodes.json",
+          "node_sha256": "be1fc7118607c13c5557e7b126b6adf908f0e325a236bce949eb80f4cc0f03c9",
+          "statement_id": "probstat.limit.clt_iid_standardized_mean"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/probstat.limit.clt_iid_standardized_mean",
+      "turns": [
+        {
+          "content": "probstat.limit.clt_iid_standardized_mean",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/programming/nodes.json#programming.binexp.iterative"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Binary Exponentiation, Iterative (TheAlgorithms)",
+          "The same binary-exponentiation recurrence, bit-shift evaluation, as implemented by TheAlgorithms/Python binary_exp_iterative (commit f5988cc, MIT)."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/programming/nodes.json",
+          "node_sha256": "2e510a030b0d3b9101bd2340e921ace59291589467aa94904e80259b024c65c2",
+          "statement_id": "programming.binexp.iterative"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/programming.binexp.iterative",
+      "turns": [
+        {
+          "content": "programming.binexp.iterative",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/provability/nodes.json#provability.consistency.consistency_definition"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Consistency as Unprovability of Falsum",
+          "A theory is consistent exactly when it cannot prove the absurd sentence; arithmetization turns that meta-level property into a single sentence of the theory's own language."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/provability/nodes.json",
+          "node_sha256": "67ec9f2bad152cee4dfdb5f38db3d6dea77cae43b0b609d82ecacfaa20f993f5",
+          "statement_id": "provability.consistency.consistency_definition"
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/provability.consistency.consistency_definition",
+      "turns": [
+        {
+          "content": "provability.consistency.consistency_definition",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/set_theory/nodes.json#settheory.boolean_laws.absorption"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Absorption Law (Intersection over Union)",
+          "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/set_theory/nodes.json",
+          "node_sha256": "9d0895e246c5981f2baaa343b118138d12d26e593ebe6fcae2bc05b1bbfba9a4",
+          "statement_id": "settheory.boolean_laws.absorption"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/settheory.boolean_laws.absorption",
+      "turns": [
+        {
+          "content": "settheory.boolean_laws.absorption",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/temporal_logic/nodes.json#temporal.induction.temporal_induction_axiom"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Temporal Induction",
+          "If a property is preserved by every single step, then holding it once is enough to hold it forever after."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/temporal_logic/nodes.json",
+          "node_sha256": "fa290fd513b92b9f0a9b66743f5199a16c76b77f25092c603bd797025a7adb4d",
+          "statement_id": "temporal.induction.temporal_induction_axiom"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/temporal.induction.temporal_induction_axiom",
+      "turns": [
+        {
+          "content": "temporal.induction.temporal_induction_axiom",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/trigonometry/nodes.json#trigonometry.definitions.tangent"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "Definition of Tangent",
+          "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish."
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "corpus_path": "data/trigonometry/nodes.json",
+          "node_sha256": "703995a59ea36b7704b109dcf7bb82ce86323a9fb9942b2620931882204e4110",
+          "statement_id": "trigonometry.definitions.tangent"
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "corpus_definition",
+      "profile": "corollary/kernel",
+      "task_id": "corpus_definition/trigonometry.definitions.tangent",
+      "turns": [
+        {
+          "content": "trigonometry.definitions.tangent",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 10 + 7 * 12",
+          "exact      : 94"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "94",
+          "expression": "10 + 7 * 12",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "94",
+        "expression": "10 + 7 * 12",
+        "form": "evaluate",
+        "line": "what is 10 + 7 * 12",
+        "tree": {
+          "args": [
+            {
+              "num": "10"
+            },
+            {
+              "args": [
+                {
+                  "num": "7"
+                },
+                {
+                  "num": "12"
+                }
+              ],
+              "op": "*"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/10+7*12",
+      "turns": [
+        {
+          "content": "what is 10 + 7 * 12",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 13 ^ 2 + 9",
+          "exact      : 178"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "178",
+          "expression": "13 ^ 2 + 9",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "178",
+        "expression": "13 ^ 2 + 9",
+        "form": "evaluate",
+        "line": "what is 13 ^ 2 + 9",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "num": "13"
+                },
+                {
+                  "num": "2"
+                }
+              ],
+              "op": "^"
+            },
+            {
+              "num": "9"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/13^2+9",
+      "turns": [
+        {
+          "content": "what is 13 ^ 2 + 9",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 16 / 15",
+          "exact      : 16/15"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "16/15",
+          "expression": "16 / 15",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "16/15",
+        "expression": "16 / 15",
+        "form": "evaluate",
+        "line": "what is 16 / 15",
+        "tree": {
+          "args": [
+            {
+              "num": "16"
+            },
+            {
+              "args": [
+                {
+                  "num": "15"
+                }
+              ],
+              "op": "inv"
+            }
+          ],
+          "op": "*"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/16over15",
+      "turns": [
+        {
+          "content": "what is 16 / 15",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 17 - 25",
+          "exact      : -8"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "-8",
+          "expression": "17 - 25",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "-8",
+        "expression": "17 - 25",
+        "form": "evaluate",
+        "line": "what is 17 - 25",
+        "tree": {
+          "args": [
+            {
+              "num": "17"
+            },
+            {
+              "args": [
+                {
+                  "num": "25"
+                }
+              ],
+              "op": "neg"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/17-25",
+      "turns": [
+        {
+          "content": "what is 17 - 25",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 19 * -28",
+          "exact      : -532"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "-532",
+          "expression": "19 * -28",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "-532",
+        "expression": "19 * -28",
+        "form": "evaluate",
+        "line": "what is 19 * -28",
+        "tree": {
+          "args": [
+            {
+              "num": "19"
+            },
+            {
+              "args": [
+                {
+                  "num": "28"
+                }
+              ],
+              "op": "neg"
+            }
+          ],
+          "op": "*"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/19*-28",
+      "turns": [
+        {
+          "content": "what is 19 * -28",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 19 / 13",
+          "exact      : 19/13"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "19/13",
+          "expression": "19 / 13",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "19/13",
+        "expression": "19 / 13",
+        "form": "evaluate",
+        "line": "what is 19 / 13",
+        "tree": {
+          "args": [
+            {
+              "num": "19"
+            },
+            {
+              "args": [
+                {
+                  "num": "13"
+                }
+              ],
+              "op": "inv"
+            }
+          ],
+          "op": "*"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/19over13",
+      "turns": [
+        {
+          "content": "what is 19 / 13",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 31 * 21 + 19",
+          "exact      : 670"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "670",
+          "expression": "31 * 21 + 19",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "670",
+        "expression": "31 * 21 + 19",
+        "form": "evaluate",
+        "line": "what is 31 * 21 + 19",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "num": "31"
+                },
+                {
+                  "num": "21"
+                }
+              ],
+              "op": "*"
+            },
+            {
+              "num": "19"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/31*21+19",
+      "turns": [
+        {
+          "content": "what is 31 * 21 + 19",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 34 + 23 * 20",
+          "exact      : 494"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "494",
+          "expression": "34 + 23 * 20",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "494",
+        "expression": "34 + 23 * 20",
+        "form": "evaluate",
+        "line": "what is 34 + 23 * 20",
+        "tree": {
+          "args": [
+            {
+              "num": "34"
+            },
+            {
+              "args": [
+                {
+                  "num": "23"
+                },
+                {
+                  "num": "20"
+                }
+              ],
+              "op": "*"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/34+23*20",
+      "turns": [
+        {
+          "content": "what is 34 + 23 * 20",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 37 ^ 2 + 25",
+          "exact      : 1394"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "1394",
+          "expression": "37 ^ 2 + 25",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "1394",
+        "expression": "37 ^ 2 + 25",
+        "form": "evaluate",
+        "line": "what is 37 ^ 2 + 25",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "num": "37"
+                },
+                {
+                  "num": "2"
+                }
+              ],
+              "op": "^"
+            },
+            {
+              "num": "25"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/37^2+25",
+      "turns": [
+        {
+          "content": "what is 37 ^ 2 + 25",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : 7 * 5 + 11",
+          "exact      : 46"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "46",
+          "expression": "7 * 5 + 11",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_exact": "46",
+        "expression": "7 * 5 + 11",
+        "form": "evaluate",
+        "line": "what is 7 * 5 + 11",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "num": "7"
+                },
+                {
+                  "num": "5"
+                }
+              ],
+              "op": "*"
+            },
+            {
+              "num": "11"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/7*5+11",
+      "turns": [
+        {
+          "content": "what is 7 * 5 + 11",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : x ^ 2 + 11 * x",
+          "given      : x = 16",
+          "exact      : 432"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "432",
+          "expression": "x ^ 2 + 11 * x",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {
+          "x": "16"
+        },
+        "expected_exact": "432",
+        "expression": "x ^ 2 + 11 * x",
+        "form": "evaluate",
+        "line": "suppose x = 16, what is x ^ 2 + 11 * x",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "var": "x"
+                },
+                {
+                  "num": "2"
+                }
+              ],
+              "op": "^"
+            },
+            {
+              "args": [
+                {
+                  "num": "11"
+                },
+                {
+                  "var": "x"
+                }
+              ],
+              "op": "*"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/x^2+11*x",
+      "turns": [
+        {
+          "content": "suppose x = 16, what is x ^ 2 + 11 * x",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "expression : x ^ 2 + 27 * x",
+          "given      : x = 40",
+          "exact      : 2680"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "exact": "2680",
+          "expression": "x ^ 2 + 27 * x",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {
+          "x": "40"
+        },
+        "expected_exact": "2680",
+        "expression": "x ^ 2 + 27 * x",
+        "form": "evaluate",
+        "line": "suppose x = 40, what is x ^ 2 + 27 * x",
+        "tree": {
+          "args": [
+            {
+              "args": [
+                {
+                  "var": "x"
+                },
+                {
+                  "num": "2"
+                }
+              ],
+              "op": "^"
+            },
+            {
+              "args": [
+                {
+                  "num": "27"
+                },
+                {
+                  "var": "x"
+                }
+              ],
+              "op": "*"
+            }
+          ],
+          "op": "+"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/evaluate/x^2+27*x",
+      "turns": [
+        {
+          "content": "suppose x = 40, what is x ^ 2 + 27 * x",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 13 * 4 = 52",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "13 * 4 = 52",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "13 * 4 = 52",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "13"
+            },
+            {
+              "num": "4"
+            }
+          ],
+          "op": "*"
+        },
+        "line": "does 13 * 4 = 52",
+        "relation": "=",
+        "right": {
+          "num": "52"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/13*4=52",
+      "turns": [
+        {
+          "content": "does 13 * 4 = 52",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 15 * 7 = 106",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "15 * 7 = 106",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "15 * 7 = 106",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "15"
+            },
+            {
+              "num": "7"
+            }
+          ],
+          "op": "*"
+        },
+        "line": "does 15 * 7 = 106",
+        "relation": "=",
+        "right": {
+          "num": "106"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/15*7=106",
+      "turns": [
+        {
+          "content": "does 15 * 7 = 106",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 17 + 10 > 26",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "17 + 10 > 26",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "17 + 10 > 26",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "17"
+            },
+            {
+              "num": "10"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 17 + 10 > 26",
+        "relation": ">",
+        "right": {
+          "num": "26"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/17+10>26",
+      "turns": [
+        {
+          "content": "does 17 + 10 > 26",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 19 + 13 > 33",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "19 + 13 > 33",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "19 + 13 > 33",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "19"
+            },
+            {
+              "num": "13"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 19 + 13 > 33",
+        "relation": ">",
+        "right": {
+          "num": "33"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/19+13>33",
+      "turns": [
+        {
+          "content": "does 19 + 13 > 33",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 21 + 16 < 38",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "21 + 16 < 38",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "21 + 16 < 38",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "21"
+            },
+            {
+              "num": "16"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 21 + 16 < 38",
+        "relation": "<",
+        "right": {
+          "num": "38"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/21+16<38",
+      "turns": [
+        {
+          "content": "does 21 + 16 < 38",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 23 + 19 < 41",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "23 + 19 < 41",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "23 + 19 < 41",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "23"
+            },
+            {
+              "num": "19"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 23 + 19 < 41",
+        "relation": "<",
+        "right": {
+          "num": "41"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/23+19<41",
+      "turns": [
+        {
+          "content": "does 23 + 19 < 41",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 29 * 28 = 812",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "29 * 28 = 812",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "29 * 28 = 812",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "29"
+            },
+            {
+              "num": "28"
+            }
+          ],
+          "op": "*"
+        },
+        "line": "does 29 * 28 = 812",
+        "relation": "=",
+        "right": {
+          "num": "812"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/29*28=812",
+      "turns": [
+        {
+          "content": "does 29 * 28 = 812",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 31 * 31 = 962",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "31 * 31 = 962",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "31 * 31 = 962",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "31"
+            },
+            {
+              "num": "31"
+            }
+          ],
+          "op": "*"
+        },
+        "line": "does 31 * 31 = 962",
+        "relation": "=",
+        "right": {
+          "num": "962"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/31*31=962",
+      "turns": [
+        {
+          "content": "does 31 * 31 = 962",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 33 + 34 > 66",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "33 + 34 > 66",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "33 + 34 > 66",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "33"
+            },
+            {
+              "num": "34"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 33 + 34 > 66",
+        "relation": ">",
+        "right": {
+          "num": "66"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/33+34>66",
+      "turns": [
+        {
+          "content": "does 33 + 34 > 66",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 35 + 37 > 73",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "35 + 37 > 73",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "35 + 37 > 73",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "35"
+            },
+            {
+              "num": "37"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 35 + 37 > 73",
+        "relation": ">",
+        "right": {
+          "num": "73"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/35+37>73",
+      "turns": [
+        {
+          "content": "does 35 + 37 > 73",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 37 + 40 < 78",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "37 + 40 < 78",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": true,
+        "expression": "37 + 40 < 78",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "37"
+            },
+            {
+              "num": "40"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 37 + 40 < 78",
+        "relation": "<",
+        "right": {
+          "num": "78"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/37+40<78",
+      "turns": [
+        {
+          "content": "does 37 + 40 < 78",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : 39 + 43 < 81",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "39 + 43 < 81",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {},
+        "expected_holds": false,
+        "expression": "39 + 43 < 81",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "num": "39"
+            },
+            {
+              "num": "43"
+            }
+          ],
+          "op": "+"
+        },
+        "line": "does 39 + 43 < 81",
+        "relation": "<",
+        "right": {
+          "num": "81"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/39+43<81",
+      "turns": [
+        {
+          "content": "does 39 + 43 < 81",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : y ^ 2 = 625",
+          "holds      : yes"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "y ^ 2 = 625",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {
+          "y": "25"
+        },
+        "expected_holds": true,
+        "expression": "y ^ 2 = 625",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "var": "y"
+            },
+            {
+              "num": "2"
+            }
+          ],
+          "op": "^"
+        },
+        "line": "suppose y = 25, does y ^ 2 = 625",
+        "relation": "=",
+        "right": {
+          "num": "625"
+        }
+      },
+      "half": "B",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/y^2=625",
+      "turns": [
+        {
+          "content": "suppose y = 25, does y ^ 2 = 625",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "exact",
+        "content_must_contain": [
+          "relation   : y ^ 2 = 730",
+          "holds      : no"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "expression": "y ^ 2 = 730",
+          "grounding": "computed"
+        },
+        "status_expect": "solved"
+      },
+      "expr_spec": {
+        "bindings": {
+          "y": "27"
+        },
+        "expected_holds": false,
+        "expression": "y ^ 2 = 730",
+        "form": "relation",
+        "left": {
+          "args": [
+            {
+              "var": "y"
+            },
+            {
+              "num": "2"
+            }
+          ],
+          "op": "^"
+        },
+        "line": "suppose y = 27, does y ^ 2 = 730",
+        "relation": "=",
+        "right": {
+          "num": "730"
+        }
+      },
+      "half": "A",
+      "kind": "exact_value",
+      "profile": "corollary/kernel",
+      "task_id": "exact_value/relation/y^2=730",
+      "turns": [
+        {
+          "content": "suppose y = 27, does y ^ 2 = 730",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {
+          "missing_capability": "tool.freeform_answer"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "dispatcher",
+      "task_id": "refusal_due/absent_statement_0",
+      "turns": [
+        {
+          "content": "zzqx.frobnitzim.glarblewurt",
+          "role": "user"
+        }
+      ],
+      "verified_absence": {
+        "searched": "data/*/nodes.json",
+        "tokens": [
+          "zzqx",
+          "frobnitzim",
+          "glarblewurt"
+        ]
+      }
+    },
+    {
+      "expected": {
+        "artifact_refs": [],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {
+          "missing_capability": "tool.freeform_answer"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "dispatcher",
+      "task_id": "refusal_due/absent_statement_1",
+      "turns": [
+        {
+          "content": "blorptaxis.wug.zzqx",
+          "role": "user"
+        }
+      ],
+      "verified_absence": {
+        "searched": "data/*/nodes.json",
+        "tokens": [
+          "blorptaxis",
+          "wug",
+          "zzqx"
+        ]
+      }
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {
+          "missing_capability": "tool.freeform_answer"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "dispatcher",
+      "task_id": "refusal_due/english_open_domain",
+      "turns": [
+        {
+          "content": "why did the chicken cross the road?",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {
+          "missing_capability": "tool.freeform_answer"
+        },
+        "status_expect": "exhausted"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "dispatcher",
+      "task_id": "refusal_due/english_owns_question",
+      "turns": [
+        {
+          "content": "who owns x^2?",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "ownership",
+      "task_id": "refusal_due/owns_bare_variable",
+      "turns": [
+        {
+          "content": "owns x",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "exhausted"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "ownership",
+      "task_id": "refusal_due/owns_unhosted_head",
+      "turns": [
+        {
+          "content": "owns ACKERMANN(x, y)",
+          "role": "user"
+        }
+      ],
+      "verified_absence": {
+        "searched": "data/*/nodes.json",
+        "tokens": [
+          "ACKERMANN"
+        ]
+      }
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_harness_line.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "ownership",
+      "task_id": "refusal_due/owns_unparseable",
+      "turns": [
+        {
+          "content": "owns ((((",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/manifest.json",
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_absent_target_file",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/no_such.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/manifest.json",
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_closure_is_not_a_target",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken reports/closures/story.golden_chicken.closure.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/manifest.json",
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_cross_world_target",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken data/closure_targets/visual.rt0000.reachable.0.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_missing_argument",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_unknown_world",
+      "turns": [
+        {
+          "content": "reachable nonsense.world data/closure_targets/story.golden_chicken.reachable.1.state.json",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "data/closure_targets/manifest.json",
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "closure",
+      "task_id": "refusal_due/reachable_unregistered_target",
+      "turns": [
+        {
+          "content": "reachable story.golden_chicken README.md",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "B",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "twin",
+      "task_id": "refusal_due/twin_bare_command",
+      "turns": [
+        {
+          "content": "twin",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "tests/test_wiring_routes.py"
+        ],
+        "check": "verdict",
+        "content_must_contain": [],
+        "outcome": "refuse",
+        "receipt_expect": {},
+        "status_expect": "refused"
+      },
+      "half": "A",
+      "kind": "refusal_due",
+      "profile": "corollary/kernel",
+      "route_expect": "twin",
+      "task_id": "refusal_due/twin_two_arguments",
+      "turns": [
+        {
+          "content": "twin logic.a logic.b",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "physics.frames.galilean_velocity_addition"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 194,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "algtop.homology.chain_rank_nullity",
+            "physics.frames.galilean_velocity_addition"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 194,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : algtop.homology.chain_rank_nullity",
+        "member     : physics.frames.galilean_velocity_addition",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/algtop.homology.chain_rank_nullity",
+      "turns": [
+        {
+          "content": "twin algtop.homology.chain_rank_nullity",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "geometry.right_triangles.pythagorean_theorem"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 152,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "diffgeo.surfaces.euclidean_line_element",
+            "geometry.right_triangles.pythagorean_theorem"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 152,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : diffgeo.surfaces.euclidean_line_element",
+        "member     : geometry.right_triangles.pythagorean_theorem",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/diffgeo.surfaces.euclidean_line_element",
+      "turns": [
+        {
+          "content": "twin diffgeo.surfaces.euclidean_line_element",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "numanalysis.integration.trapezoidal_rule"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 184,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "geometry.area_formulas.trapezoid_area_formula",
+            "numanalysis.integration.trapezoidal_rule"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 184,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : geometry.area_formulas.trapezoid_area_formula",
+        "member     : numanalysis.integration.trapezoidal_rule",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/geometry.area_formulas.trapezoid_area_formula",
+      "turns": [
+        {
+          "content": "twin geometry.area_formulas.trapezoid_area_formula",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "probstat.probability.probability_normalization"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 188,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "shape",
+          "member_ids": [
+            "geomodel.barycentric.barycentric_partition_of_unity",
+            "probstat.probability.probability_normalization"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "shape_twin_groups",
+        "group_index": 188,
+        "level": "shape",
+        "levels_listing_id": [
+          "shape"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : shape",
+        "member     : geomodel.barycentric.barycentric_partition_of_unity",
+        "member     : probstat.probability.probability_normalization",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/geomodel.barycentric.barycentric_partition_of_unity",
+      "turns": [
+        {
+          "content": "twin geomodel.barycentric.barycentric_partition_of_unity",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "ml.objective.token_cross_entropy_loss"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 203,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "infotheory.divergence.cross_entropy",
+            "ml.objective.token_cross_entropy_loss"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 203,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : infotheory.divergence.cross_entropy",
+        "member     : ml.objective.token_cross_entropy_loss",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/infotheory.divergence.cross_entropy",
+      "turns": [
+        {
+          "content": "twin infotheory.divergence.cross_entropy",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "physics.thermodynamics.gibbs_entropy"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 202,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "infotheory.entropy.shannon_entropy",
+            "physics.thermodynamics.gibbs_entropy"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 202,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : infotheory.entropy.shannon_entropy",
+        "member     : physics.thermodynamics.gibbs_entropy",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/infotheory.entropy.shannon_entropy",
+      "turns": [
+        {
+          "content": "twin infotheory.entropy.shannon_entropy",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "settheory.boolean_laws.absorption"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 199,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "logic.boolean_laws.absorption",
+            "settheory.boolean_laws.absorption"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 199,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : logic.boolean_laws.absorption",
+        "member     : settheory.boolean_laws.absorption",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/logic.boolean_laws.absorption",
+      "turns": [
+        {
+          "content": "twin logic.boolean_laws.absorption",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "settheory.boolean_laws.double_negation"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 201,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "logic.boolean_laws.double_negation",
+            "settheory.boolean_laws.double_negation"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 201,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : logic.boolean_laws.double_negation",
+        "member     : settheory.boolean_laws.double_negation",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/logic.boolean_laws.double_negation",
+      "turns": [
+        {
+          "content": "twin logic.boolean_laws.double_negation",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "settheory.boolean_laws.idempotence"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 198,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "logic.boolean_laws.idempotence",
+            "settheory.boolean_laws.idempotence"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 198,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : logic.boolean_laws.idempotence",
+        "member     : settheory.boolean_laws.idempotence",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/logic.boolean_laws.idempotence",
+      "turns": [
+        {
+          "content": "twin logic.boolean_laws.idempotence",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "settheory.boolean_laws.identity_laws"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 200,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "logic.boolean_laws.identity_laws",
+            "settheory.boolean_laws.identity_laws"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 200,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : logic.boolean_laws.identity_laws",
+        "member     : settheory.boolean_laws.identity_laws",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/logic.boolean_laws.identity_laws",
+      "turns": [
+        {
+          "content": "twin logic.boolean_laws.identity_laws",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "probstat.transform.z_standardization"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 182,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "ml.preference.grpo_group_relative_advantage",
+            "probstat.transform.z_standardization"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 182,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : ml.preference.grpo_group_relative_advantage",
+        "member     : probstat.transform.z_standardization",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/ml.preference.grpo_group_relative_advantage",
+      "turns": [
+        {
+          "content": "twin ml.preference.grpo_group_relative_advantage",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "morphology.wordformation.iterated_affixation"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 0,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "aliased",
+          "member_ids": [
+            "morphology.wordformation.iterated_affixation",
+            "morphology.syntax.iterated_intensification"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "aliased_twin_groups_beyond_typed",
+        "group_index": 0,
+        "level": "aliased",
+        "levels_listing_id": [
+          "aliased"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : aliased",
+        "member     : morphology.wordformation.iterated_affixation",
+        "member     : morphology.syntax.iterated_intensification",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/morphology.syntax.iterated_intensification",
+      "turns": [
+        {
+          "content": "twin morphology.syntax.iterated_intensification",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "narrative.world.marble_moved_box"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 180,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "narrative.belief.sally_marble_basket",
+            "narrative.world.marble_moved_box"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 180,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : narrative.belief.sally_marble_basket",
+        "member     : narrative.world.marble_moved_box",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/narrative.belief.sally_marble_basket",
+      "turns": [
+        {
+          "content": "twin narrative.belief.sally_marble_basket",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "physics.gravitation.newton_universal_gravitation"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 186,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "typed",
+          "member_ids": [
+            "physics.gravitation.newton_universal_gravitation",
+            "physics.electromagnetism.coulombs_law"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "typed_twin_groups",
+        "group_index": 186,
+        "level": "typed",
+        "levels_listing_id": [
+          "shape",
+          "typed"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : typed",
+        "member     : physics.gravitation.newton_universal_gravitation",
+        "member     : physics.electromagnetism.coulombs_law",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/physics.electromagnetism.coulombs_law",
+      "turns": [
+        {
+          "content": "twin physics.electromagnetism.coulombs_law",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "geometry.circle_formulas.circle_circumference_formula",
+          "physics.mechanics.newton_second_law",
+          "physics.circuits.ohms_law"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 0,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "family",
+          "member_ids": [
+            "geometry.circle_formulas.circle_circumference_formula",
+            "physics.mechanics.newton_second_law",
+            "physics.circuits.ohms_law",
+            "physics.mechanics.hookes_law"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "A",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "family_twin_groups_beyond_typed",
+        "group_index": 0,
+        "level": "family",
+        "levels_listing_id": [
+          "family"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : family",
+        "member     : geometry.circle_formulas.circle_circumference_formula",
+        "member     : physics.mechanics.newton_second_law",
+        "member     : physics.circuits.ohms_law",
+        "member     : physics.mechanics.hookes_law",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/physics.mechanics.hookes_law",
+      "turns": [
+        {
+          "content": "twin physics.mechanics.hookes_law",
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "expected": {
+        "artifact_refs": [
+          "reports/signature_matches.json"
+        ],
+        "check": "receipt",
+        "content_must_contain": [
+          "temporal.past.past_duality"
+        ],
+        "outcome": "answer",
+        "receipt_expect": {
+          "group_index": 0,
+          "ledger_path": "reports/signature_matches.json",
+          "level": "mirror",
+          "member_ids": [
+            "temporal.modality.temporal_duality",
+            "temporal.past.past_duality"
+          ]
+        },
+        "status_expect": "found"
+      },
+      "half": "B",
+      "kind": "twin_lookup",
+      "ledger_group": {
+        "field": "mirror_twin_groups",
+        "group_index": 0,
+        "level": "mirror",
+        "levels_listing_id": [
+          "mirror"
+        ]
+      },
+      "profile": "corollary/kernel",
+      "rendered_lines": [
+        "level      : mirror",
+        "member     : temporal.modality.temporal_duality",
+        "member     : temporal.past.past_duality",
+        "ledger     : reports/signature_matches.json"
+      ],
+      "task_id": "twin_lookup/temporal.modality.temporal_duality",
+      "turns": [
+        {
+          "content": "twin temporal.modality.temporal_duality",
+          "role": "user"
+        }
+      ]
+    }
+  ]
+}

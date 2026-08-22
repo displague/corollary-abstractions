@@ -284,7 +284,7 @@ client-side revalidation against committed artifacts:
 | `ownership` | `query_skeleton`, `hosts`, `searched`, `by_corpus` (top entries) — recheckable against `data/` |
 | `twin` (W1) | `ledger_path` (`reports/signature_matches.json`), `level`, `group_index`, `member_ids` |
 | `closure` (W2) | the `closure-receipt/1` object `closure_query.query` returns, verbatim |
-| `evaluate` | `expression`, `exact`, `grounding: "computed"` — plus the engine's own honesty line in `content` ("no corpus statement was consulted") |
+| `evaluate` | `expression`, `exact` (evaluation turns only — a relation check has no single value and carries `expression` + `grounding` alone), `grounding: "computed"` — plus the engine's own honesty line in `content` ("no corpus statement was consulted") |
 | `story` | `constraint_ids` (= `story.CONSTRAINT_IDS`, `scripts/story.py:57-62`), `corpus_path` (`data/narrative/nodes.json`) — the story's four constraints are committed corpus statements and the receipt says so |
 | `belief`, `supposition` | `derivation: "session"` — derived entirely from the conversation's own typed narration or owned frame, no external artifact claimed |
 | `write_gate` (`PROVEN`/`VERIFIED`) | `grounding: "working-tree"` — the gate's own `evidence` lines already ride in `x_corollary.evidence` (`scripts/harness.py:846`) and are the record |
@@ -293,6 +293,12 @@ client-side revalidation against committed artifacts:
 A receipt never claims an artifact the answer did not rest on; routes
 with no artifact say so (`"computed"` / `"session"`) instead of citing
 something decorative.
+
+Scoring against these receipts uses **subset assertion**: a task book's
+`receipt_expect` (and `need_expect`) constrains only the keys it names —
+every named key must match; absent keys are unconstrained. The wire may
+carry more (e.g. `shortest_route` on a REACHABLE closure receipt) than
+a task chooses to pin.
 
 ### 6.2 WAITING crosses the wire (P-IH6)
 
