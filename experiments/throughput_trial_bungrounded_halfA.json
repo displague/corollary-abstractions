@@ -1,0 +1,3709 @@
+{
+  "b_side_correctness_rule": "A baseline answer is correct iff every content_must_contain string, after stripping any leading label of the form ^[a-z_][a-z_ ]*: * (the kernel's frozen label padding), is a substring of the baseline's content -- e.g. the kernel line 'exact      : 449' requires '449'; unlabeled strings (titles, meanings, member ids) are unchanged. Receipts are not required of a model: receipted is false on this arm and is recorded, and T4 compares correctness and speed only (DESIGN-grounded-throughput 6 T4). Baseline arms never see receipt_expect, need_expect or x_corollary. Baseline arms run ANSWERABLE tasks only; refusal_due and clarification_due tasks gate the kernel and are recorded 'not-applicable' here. This rule was committed with the stopwatch, before any timed run.",
+  "baseline_arm": {
+    "arm": "b-ungrounded",
+    "context_rule": "none - the same model answering cold; expected to fail correctness on corpus-specific tasks; the gap between the arms is the grounding story told in numbers",
+    "materials_deviation": null,
+    "model": "qwen3:4b-instruct",
+    "prompt_template": null,
+    "sampling_requested": {
+      "repeat_penalty": 1.0,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.8
+    },
+    "sampling_source": "applied by the ollama model manifest; /v1 ignores top_k and repeat_penalty (verified 2026-08-22)"
+  },
+  "baseline_digest": "3be33a20e86ba31999a90fb56e9584ff252db8103c81ef3f2aad61dbeb4e6063",
+  "book": "experiments\\throughput_tasks.json",
+  "book_digest": "d4b84f6e292f7b94ecdf4abc115c9d942a9dd10134097f4d787715c094b021f8",
+  "context_pin": {
+    "amended": "2026-08-22, before any timed run; replaces an earlier same-day num_ctx amendment that review proved inert at the /v1 layer and unrunnable at 262144 on this GPU",
+    "configured_tokens": 32768,
+    "mechanism": "OLLAMA_CONTEXT_LENGTH environment variable on the serving process; the OpenAI-compat /v1 layer ignores a num_ctx body field (verified live 2026-08-22), so the setting must be server-side and the run must record the observed context_length from /api/ps",
+    "pre_declared_secondary": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "truncation_disclosure": "the largest closure MATERIALS block measures ~130k tokens - full closure grounding does not fit this hardware in any configuration. The stopwatch records materials_chars and materials_tokens per task; any task whose materials exceed the observed context is reported materials-truncated in the result.",
+    "why_32768": "the largest value whose KV cache fits the 16 GiB GPU (~5 GiB at 32k for qwen3-4b; 131072+ needs more VRAM than the machine has and would spill the model to CPU, a strawman in the other direction). ollama default 4096 would silently truncate most grounded materials."
+  },
+  "context_probe": {
+    "errors": [],
+    "matched_model": "qwen3:4b-instruct",
+    "observed_context_length": 32768,
+    "probed": [
+      "/api/ps",
+      "/api/show"
+    ],
+    "source": "/api/ps (served context of the loaded model)"
+  },
+  "control": {},
+  "metric_reconciliation": {
+    "adjudication": "K = 5 freezes on the median (T4). The aggregate is reported so a reader can see what the section-3 wording would have said over the same tasks; neither number is gated here",
+    "aggregate_charge_penalty_s": 0.0,
+    "aggregate_charged_elapsed_s": 161.84904,
+    "aggregate_perceived_tps": 2.675333,
+    "aggregate_perceived_tps_materials_fit": 2.675333,
+    "aggregate_task_set": "the half's answerable tasks, charged elapsed (the same set the median is taken over) -- the DESIGN section-3 literal reading, where the refusal time charge does bite",
+    "aggregate_uncharged_elapsed_s": 161.84904,
+    "aggregate_useful_tokens": 433,
+    "design_sentence_section_3": "Perceived throughput for a system = useful tokens / client wall-clock, where the numerator counts only correctly-and-receipted answers, the denominator counts every task's elapsed time, and an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "design_sentence_t4": "T4 -- the baseline is pinned before K. ... then K = 5 freezes: the kernel's median perceived throughput over half-B answerable tasks must be >= 5x B-grounded's, at correctness >= B-grounded's, with median time-to-first-useful-token also lower (DESIGN-grounded-throughput 6 T4)",
+    "median_perceived_tps_materials_fit": 0.0,
+    "t4_gate_statistic": "median of the per-task ratio useful_tokens / charged_elapsed_s, taken over the half's answerable tasks",
+    "t4_gate_value_tps": 0.0,
+    "under_the_median": {
+      "non_answerable_elapsed_excluded": true,
+      "non_answerable_elapsed_s": 0,
+      "non_answerable_tasks": 0,
+      "refusal_time_charge_inert": true,
+      "tasks_charged": [],
+      "why_inert": "a refused answerable task scores 0 useful tokens, so its ratio is zero at any denominator; the charge moves a zero to a zero and only bites in the aggregate below"
+    }
+  },
+  "per_task": [
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : marco",
+          "residual": "marco",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : cat",
+          "residual": "cat",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(cat) = garden",
+          "residual": "located_in(cat) = garden",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "marco observed  located_in(cat) = garden",
+          "residual": "marco observed  located_in(cat) = garden",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.489491,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.489491,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : marco",
+        "believes   : located_in(cat) = garden",
+        "marco observed  located_in(cat) = garden"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 16,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/marco.cat.garden",
+      "tokens": 67,
+      "ttft_s": 0.036653,
+      "turns": [
+        {
+          "chunks": 68,
+          "content": "Based on the sentence: *\"Marco sees cat go into the garden.\"*  \n\nWe know that Marco **sees** the cat **go into** the garden. That means the cat is **now inside** the garden.\n\nSo, Marco thinks the cat is **in the garden**.\n\n✅ Answer: **in the garden**.",
+          "content_chars": 251,
+          "elapsed_s": 0.489491,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.036653,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : omar",
+          "residual": "omar",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : coin",
+          "residual": "coin",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(coin) = drawer",
+          "residual": "located_in(coin) = drawer",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(coin) = pocket",
+          "residual": "located_in(coin) = pocket",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "omar observed  located_in(coin) = drawer",
+          "residual": "omar observed  located_in(coin) = drawer",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(coin) = pocket",
+          "residual": "narrator        located_in(coin) = pocket",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 1.294974,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.294974,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : omar",
+        "believes   : located_in(coin) = drawer",
+        "world says : located_in(coin) = pocket",
+        "divergence : belief and world differ; the question asked for the belief",
+        "omar observed  located_in(coin) = drawer",
+        "narrator        located_in(coin) = pocket"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 22,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/omar.coin.drawer",
+      "tokens": 168,
+      "ttft_s": 0.054773,
+      "turns": [
+        {
+          "chunks": 168,
+          "content": "Omar thinks the coin is in his **pocket**.\n\nExplanation:  \nThe sentence says: *\"Omar sees coin go into the drawer. Coin moves to the pocket.\"*  \nThis implies that the coin was **seen going into the drawer**, but then **moves to the pocket** — which suggests a change in location.\n\nHowever, the key point is that Omar **sees** the coin go into the drawer, and then **the coin moves to the pocket**. So, if Omar observes this sequence, and the coin ends up in the pocket, then **Omar would think the coin is in the pocket**, especially if he is not told otherwise.\n\nTherefore, based on what he sees and what happens, Omar thinks the coin is in **his pocket**. ✅\n\nAnswer: **in the pocket**.",
+          "content_chars": 687,
+          "elapsed_s": 1.294974,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.054773,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : pia",
+          "residual": "pia",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : book",
+          "residual": "book",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(book) = shelf",
+          "residual": "located_in(book) = shelf",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(book) = table",
+          "residual": "located_in(book) = table",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "pia observed  located_in(book) = shelf",
+          "residual": "pia observed  located_in(book) = shelf",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(book) = table",
+          "residual": "narrator        located_in(book) = table",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.731339,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.731339,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : pia",
+        "believes   : located_in(book) = shelf",
+        "world says : located_in(book) = table",
+        "divergence : belief and world differ; the question asked for the belief",
+        "pia observed  located_in(book) = shelf",
+        "narrator        located_in(book) = table"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 22,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/pia.book.shelf",
+      "tokens": 93,
+      "ttft_s": 0.05364,
+      "turns": [
+        {
+          "chunks": 94,
+          "content": "If Pia sees a book go into the shelf, and then the book moves to the table, Pia would likely think that the book is **on the table**.\n\nEven though the book was previously in the shelf, the observation that it \"moves to the table\" indicates that Pia has seen the book go from the shelf to the table. Therefore, based on what Pia has seen, **Pia thinks the book is on the table**.",
+          "content_chars": 378,
+          "elapsed_s": 0.731339,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05364,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : quinn",
+          "residual": "quinn",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : lamp",
+          "residual": "lamp",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(lamp) = corridor",
+          "residual": "located_in(lamp) = corridor",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "quinn observed  located_in(lamp) = hall",
+          "residual": "quinn observed  located_in(lamp) = hall",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "quinn holds     same_as(hall) = corridor",
+          "residual": "quinn holds     same_as(hall) = corridor",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(lamp) = corridor",
+          "residual": "rewrite         located_in(lamp) = corridor",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.286365,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.286365,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : quinn",
+        "believes   : located_in(lamp) = corridor",
+        "quinn observed  located_in(lamp) = hall",
+        "quinn holds     same_as(hall) = corridor",
+        "rewrite         located_in(lamp) = corridor"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 25,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/quinn.lamp.hall",
+      "tokens": 33,
+      "ttft_s": 0.048091,
+      "turns": [
+        {
+          "chunks": 34,
+          "content": "Quinn sees the lamp go into the hall, and Quinn knows the hall is the corridor.\n\nSo, Quinn thinks the lamp is in the **corridor**.",
+          "content_chars": 130,
+          "elapsed_s": 0.286365,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.048091,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : tess",
+          "residual": "tess",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : hat",
+          "residual": "hat",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(hat) = cupboard",
+          "residual": "located_in(hat) = cupboard",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(hat) = bench",
+          "residual": "located_in(hat) = bench",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "tess observed  located_in(hat) = locker",
+          "residual": "tess observed  located_in(hat) = locker",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "tess holds     same_as(locker) = cupboard",
+          "residual": "tess holds     same_as(locker) = cupboard",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(hat) = cupboard",
+          "residual": "rewrite         located_in(hat) = cupboard",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(hat) = bench",
+          "residual": "narrator        located_in(hat) = bench",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 2.337466,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 2.337466,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : tess",
+        "believes   : located_in(hat) = cupboard",
+        "world says : located_in(hat) = bench",
+        "divergence : belief and world differ; the question asked for the belief",
+        "tess observed  located_in(hat) = locker",
+        "tess holds     same_as(locker) = cupboard",
+        "rewrite         located_in(hat) = cupboard",
+        "narrator        located_in(hat) = bench"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 29,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/tess.hat.locker",
+      "tokens": 313,
+      "ttft_s": 0.029271,
+      "turns": [
+        {
+          "chunks": 314,
+          "content": "Let's break down the scenario step by step:\n\n1. **\"Tess sees hat go into the locker.\"**  \n   → Tess observes a \"hat\" entering a \"locker\".\n\n2. **\"Tess knows the locker is the cupboard.\"**  \n   → This is important: Tess realizes that the \"locker\" is actually a \"cupboard\". So, the object (the hat) went into a cupboard.\n\n3. **\"Hat moves to the bench.\"**  \n   → The hat is now at the bench.\n\n4. **Question: \"Where does Tess think hat is?\"**  \n   → We need to determine Tess's belief about the hat's location, based on what she sees and knows.\n\nNow, analyze the logic:\n\n- Initially, Tess sees the hat go into the locker → she thinks it's in the locker.\n- But she knows that the locker is actually a cupboard → so she understands the hat is now in the cupboard.\n- Then, the hat moves to the bench → this is a physical movement of the hat.\n\nSo, **what does Tess think**?\n\nShe sees the hat go into the locker (which she knows is a cupboard), so she knows it was in the cupboard.\n\nThen, the hat moves to the bench. Since she sees this movement, and she knows the cupboard is the locker, she would now believe the hat is on the bench.\n\nTherefore, **Tess thinks the hat is on the bench**.\n\n✅ Final answer: **Tess thinks the hat is on the bench.**",
+          "content_chars": 1236,
+          "elapsed_s": 2.337466,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.029271,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "residual": "16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 2 action(s), replayed through the world's own verifier",
+          "residual": "2 action(s), replayed through the world's own verifier",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 4.837626,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 4.837626,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "closure_reachability",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+        "outcome: REACHABLE",
+        "shortest_route: 2 action(s), replayed through the world's own verifier"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 21,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.2",
+      "tokens": 641,
+      "ttft_s": 0.062286,
+      "turns": [
+        {
+          "chunks": 642,
+          "content": "It looks like you're referring to a file path or a data structure related to a game or simulation system — specifically:\n\n```\nreachable story.golden_chicken data/closure_targets/story.golden_chicken.reachable.2.state.json\n```\n\nThis appears to be part of a **game or interactive narrative system**, possibly from a project using a data-driven architecture (like a game engine or narrative engine), where:\n\n- `story.golden_chicken` is the name of a narrative or game element (perhaps a level, a quest, or a scene).\n- `reachable` indicates whether certain actions, states, or paths are accessible from a current point.\n- `data/closure_targets/...` suggests this is part of a system that tracks **what is reachable** in a story or game world, possibly based on player progress or conditions.\n- `.state.json` implies it's a JSON file storing the current **state** of that reachability — like which paths are open, which events are triggered, etc.\n\n### What this file likely contains:\nA JSON object that defines:\n- Which paths or actions are accessible from a given point in the story.\n- The current state of the game or narrative (e.g., \"player has reached the golden chicken scene\").\n- Possibly conditions or dependencies (e.g., \"you must have unlocked the farm to reach this\").\n\nExample structure:\n```json\n{\n  \"reachable\": true,\n  \"conditions\": [\n    \"player_has_unlocked_farm\",\n    \"day_time_is_evening\"\n  ],\n  \"next_steps\": [\n    \"interact_with_golden_chicken\",\n    \"trigger_ending_sequence\"\n  ],\n  \"state_version\": \"2\"\n}\n```\n\n---\n\n### Possible Use Cases:\n- **Game Design**: Determining what the player can do in a scene.\n- **Narrative Branching**: Tracking which story paths are available based on player choices.\n- **AI or Simulation Systems**: Evaluating which states are reachable in a dynamic world.\n\n---\n\n### If you're asking:\n- **\"What does this file mean?\"** → It defines whether a story element (golden chicken) is reachable and under what conditions.\n- **\"How can I use this?\"** → You’d parse the JSON to check if a player can interact with the golden chicken.\n- **\"Is this public or from a known project?\"** → It doesn't appear to be a widely known public file or dataset. It might be from an internal game or simulation system.\n\n---\n\n✅ **Next Steps (if you want help):**\n1. **Parse the JSON** if you have the actual content.\n2. **Check conditions** — e.g., what must be true for the golden chicken to be reachable?\n3. **Modify or extend** the reachability logic (e.g., add new conditions).\n4. **Debug** or visualize the story flow.\n\n👉 If you can share the actual content of the `.json` file (or a snippet), I’d be happy to analyze it in detail!\n\nLet me know what you're trying to do — are you building a game, debugging a system, or analyzing narrative flow?",
+          "content_chars": 2769,
+          "elapsed_s": 4.837626,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.062286,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "residual": "c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+          "residual": "NOT_REACHABLE_WITHIN_HORIZON",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "residual": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 6.343262,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 6.343262,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "closure_reachability",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+        "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+        "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 21,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "exhausted",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.unreachable.0",
+      "tokens": 831,
+      "ttft_s": 0.079378,
+      "turns": [
+        {
+          "chunks": 819,
+          "content": "It looks like you're referring to a file path or a data structure related to a game or simulation system — specifically something involving \"story.golden_chicken\" and a \"closure_targets\" or \"unreachable\" state.\n\nHowever, there's no publicly known or widely recognized system or database called \"story.golden_chicken\" or \"reachable story.golden_chicken data/closure_targets/story.golden_chicken.unreachable.0.state.json\" in mainstream software, games, or open-source repositories.\n\nHere’s a breakdown of what this might mean:\n\n---\n\n### 🔍 1. **Possible Interpretation: Game or Simulation Engine**\n- The path `data/closure_targets/story.golden_chicken.unreachable.0.state.json` suggests it could be part of a **game engine** or **interactive narrative system** (like a story-driven game or AI-driven narrative).\n- \"closure_targets\" might refer to **goal states**, **event triggers**, or **story milestones**.\n- \"unreachable\" implies that a certain story state (like a scene or event) is **not accessible** from the current path — perhaps due to missing conditions, player choices, or logical flaws in the narrative flow.\n- `.json` indicates it's a structured data file, likely containing metadata about story states, transitions, or player progress.\n\n---\n\n### 📚 2. **\"Golden Chicken\" — What Could That Be?**\n- \"Golden Chicken\" is a known reference in some **indie games** or **narrative experiments**, such as:\n  - *The Golden Chicken* — a short story or puzzle game that explores themes of choice and consequence.\n  - It may also be a metaphor or symbolic element (e.g., a \"golden\" object, a rare event, a reward).\n- It might also be a **fictional or symbolic character** used in a branching narrative.\n\n---\n\n### ❓ What Do You Want to Do With This?\nSince this file appears to be part of a system that tracks **unreachable story states**, here are some possible next steps:\n\n#### ✅ Option 1: Understand the Narrative Flow\n- If you're working on a game or story system, you might want to:\n  - Analyze why a story state is \"unreachable\".\n  - Identify which player choices, conditions, or events prevent reaching it.\n  - Fix the logic (e.g., add a condition, modify a transition).\n\n#### ✅ Option 2: Debug or Visualize the Story Graph\n- You could use tools like:\n  - **Graphviz** or **Mermaid.js** to visualize the story flow.\n  - A JSON parser to read and understand the structure of the state file.\n\n#### ✅ Option  or 3: Reproduce or Create a Similar System\n- If you're building a narrative engine, you could design a system where:\n  - Each story node has a \"reachable\" flag.\n  - States are triggered by player input or conditions.\n  - \"Unreachable\" states are logged or highlighted for debugging.\n\n---\n\n### 🛠️ Example (Pseudocode)\n```json\n{\n  \"story\": \"golden_chicken\",\n  \"state\": \"unreachable.0\",\n  \"conditions\": [\n    \"player_has_key\",\n    \"player_reached_cave\"\n  ],\n  \"current_path\": \"path_to_cave\",\n  \"reason\": \"player did not complete cave entrance puzzle\"\n}\n```\n\n➡️ This would help identify why a story node is unreachable.\n\n---\n\n### 🚩 Note\nIf this is from a specific game, tool, or project (e.g., *The Walking Dead*, *Choice of Games*, *Unity Narrative*, or a custom engine), please provide more context so I can give a more precise answer.\n\n---\n\nWould you like help:\n- Parsing a JSON file like this?\n- Designing a story flow with reachable/unreachable states?\n- Debugging a narrative system?\n- Or understanding a specific game that uses \"Golden Chicken\"?\n\nLet me know — I'm happy to help! 🐣✨",
+          "content_chars": 3495,
+          "elapsed_s": 6.343262,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.079378,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+          "residual": "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces.",
+          "residual": "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.119683,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.119683,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+        "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/algtop.homology.betti_alternating_sum",
+      "tokens": 936,
+      "ttft_s": 0.072487,
+      "turns": [
+        {
+          "chunks": 925,
+          "content": "The function `algtop.homology.betti_alternating_sum` does **not** exist in any standard or widely known algebraic topology or computational topology library (such as SageMath, NumPy, SciPy, or others).\n\nLet’s clarify what you might be referring to:\n\n---\n\n### 🔍 What is the \"Betti alternating sum\"?\n\nIn algebraic topology, the **Betti numbers** are the ranks of the homology groups of a topological space.\n\nFor a finite CW complex or a simplicial complex, the **alternating sum of Betti numbers** is defined as:\n\n\\[\n\\sum_{i=0}^n (-1)^i b_i\n\\]\n\nwhere \\( b_i \\) is the \\( i \\)-th Betti number.\n\nThis alternating sum is **equal to the Euler characteristic** of the space:\n\n\\[\n\\chi = \\sum_{i=0}^n (-1)^i b_i\n\\]\n\nSo, if you're asking about a function like `betti_alternating_sum`, it would likely be a function that computes the Euler characteristic of a topological space by summing up the Betti numbers with alternating signs.\n\n---\n\n### 📚 Example in SageMath\n\nIn **SageMath**, which has a module for algebraic topology, you can compute Betti numbers and the Euler characteristic using:\n\n```python\nfrom sage.topology.homology import Homology\n\n# Example: a torus (or a simplicial complex)\n# Create a simplicial complex (e.g., a torus)\n# (For brevity, we'll just show the computation)\n\n# In practice, you'd create a simplicial complex first\n# Then compute homology, and then the alternating sum\n\n# Example: a 2-dimensional torus\n# The Betti numbers of a torus are: b0=1, b1=2, b2=1\n# Alternating sum = 1 - 2 + 1 = 0\n\n# So, the Euler characteristic is 0\n\n# In Sage, you might do:\n# (after creating a complex)\n\nbetti_numbers = [1, 2, 1]\nalternating_sum = sum((-1)**i * betti_numbers[i] for i in range(len(betti_numbers)))\nprint(alternating_sum)  # Output: 0\n```\n\n---\n\n### ❌ Does `algtop.homology.betti_alternating_sum` exist?\n\nNo — **there is no standard function** named `algtop.homology.betti_alternating_sum` in any major open-source or mathematical software.\n\n- The `algtop` module is **not** a standard Python package.\n- The structure `algtop.homology` does not exist in SageMath or any widely used library.\n\n> ⚠️ This might be a **custom or hypothetical function** you encountered in a tutorial, code snippet, or personal project.\n\n---\n\n### ✅ What You Should Do\n\nIf you're trying to compute the **Euler characteristic** (which is the alternating sum of Betti numbers), you can do it manually or via a known library.\n\n#### ✅ In SageMath:\n\n```python\n# Example: compute Euler characteristic of a simplicial complex\nfrom sage.topology.simplicial_complex import SimplicialComplex\n\n# Create a torus (a 2-dimensional simplicial complex)\n# (Simplified example)\n# You can create a complex and compute homology\n\n# After creating a complex, say 'C'\n# C = SimplicialComplex(...)\n\n# Get Betti numbers\nbetti = C.homology()\n\n# Compute alternating sum\nalternating_sum = sum((-1)**i * betti[i] for i in range(len(betti)))\nprint(\"Euler characteristic:\", alternating_sum)\n```\n\n---\n\n### 📝 Summary\n\n| Question | Answer |\n|--------|--------|\n| Does `algtop.homology.betti_alternating_sum` exist? | ❌ No — it is not a standard or recognized function |\n| What is the alternating sum of Betti numbers? | It is the Euler characteristic: \\( \\sum (-1)^i b_i \\) |\n| How to compute it in practice? | Use a library like SageMath, compute Betti numbers, then sum with alternating signs |\n\n---\n\nIf you can provide the context (e.g., a code snippet, software, or textbook), I can help you more precisely!\n\nLet me know if you'd like a full working example in SageMath or Python! 😊",
+          "content_chars": 3542,
+          "elapsed_s": 7.119683,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.072487,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Average Rate of Change",
+          "residual": "Average Rate of Change",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued.",
+          "residual": "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 4.202168,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 4.202168,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/calculus.differentiation.average_rate_of_change",
+      "tokens": 538,
+      "ttft_s": 0.111231,
+      "turns": [
+        {
+          "chunks": 530,
+          "content": "The **average rate of change** of a function over an interval is a fundamental concept in calculus, and it is closely related to the idea of **differentiation**.\n\n---\n\n### 🔍 Definition:\n\nFor a function $ f(x) $, the **average rate of change** of $ f $ from $ x = a $ to $ x = b $ (where $ a < b $) is given by:\n\n$$\n\\text{Average Rate of Change} = \\frac{f(b) - f(a)}{b - a}\n$$\n\n---\n\n### 📌 Interpretation:\n\n- This expression measures how much the function's output changes, on average, per unit change in the input over the interval $[a, b]$.\n- It is the slope of the **secant line** connecting the points $ (a, f(a)) $ and $ (b, f(b)) $ on the graph of $ f $.\n\n---\n\n### 🔗 Connection to Differentiation:\n\n- The **instantaneous rate of change** (i.e., the derivative) at a point $ x $ is the limit of the average rate of change as the interval shrinks to zero:\n  $$\n  f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}\n  $$\n- So, the average rate of change is a **precursor** to the derivative — it's the \"discrete version\" of the derivative.\n\n---\n\n### ✅ Example:\n\nLet $ f(x) = x^2 $\n\n- Find the average rate of change from $ x = 1 $ to $ x = 3 $.\n\n$$\n\\frac{f(3) - f(1)}{3 - 1} = \\frac{9 -  1}{2} = \\frac{8}{2} = 4\n$$\n\n✅ So, the average rate of change is $ 4 $.\n\n---\n\n### 📝 Summary:\n\n| Concept | Formula |\n|--------|--------|\n| Average Rate of Change | $ \\frac{f(b) - f(a)}{b - a} $ |\n| Derivative (Instantaneous Rate of Change) | $ \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h} $ |\n\n---\n\n💡 **Key Insight**:  \nWhile the derivative gives the instantaneous rate of change at a point, the average rate of change gives the overall \"slope\" of the function over an interval.\n\nLet me know if you'd like to see this applied to a specific function or interval! 😊",
+          "content_chars": 1739,
+          "elapsed_s": 4.202168,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.111231,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Definition of pH",
+          "residual": "Definition of pH",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale.",
+          "residual": "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.723609,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.723609,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 6,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/chemistry.acid_base.ph_definition",
+      "tokens": 492,
+      "ttft_s": 0.062741,
+      "turns": [
+        {
+          "chunks": 485,
+          "content": "The **pH definition** in acid-base chemistry is a fundamental concept used to measure the acidity or basicity of a solution.\n\n### 🔬 Definition of pH:\n\n**pH** is defined as the negative logarithm (base 10) of the **molar hydrogen ion concentration** in a solution.\n\n\\[\n\\text{pH} = -\\log_{10} [\\text{H}^+]\n\\]\n\nWhere:\n- \\([\\text{H}^+]\\) is the concentration of hydrogen ions (protons) in moles per liter (mol/L), also known as molarity.\n\n---\n\n### 🔍 Key Points:\n\n- **pH scale**: Ranges from **0 to 14** under standard conditions (25°C).\n  - pH < 7 → acidic\n  - pH = 7 → neutral (e.g., pure water)\n  - pH > 7 → basic (alkaline)\n\n- The **pH of pure water** at 25°C is **7.0**, because \\([\\text{H}^+] = 10^{-7}\\) mol/L.\n\n- pH is **dimensionless** (no units).\n\n- The **ion product of water** (\\(K_w\\)) at 25°C is:\n  \\[\n  K_w = [\\text{H}^+][\\text{OH}^-] = 1 \\times 10^{-14}\n  \\]\n  This relationship allows us to find \\([\\text{OH}^-]\\) from pH or vice versa.\n\n---\n\n### 📌 Example:\n\nIf \\([\\text{H}^+] = 1 \\times 10^{-3}\\) mol/L, then:\n\n\\[\n\\text{pH} = -\\log_{10}(1 \\times 0^{-3}) = 3\n\\]\n\nSo the solution is acidic.\n\n---\n\n### 📚 Summary:\n\n> **pH = -log₁₀[H⁺]**  \n> It quantifies how acidic or basic a solution is based on the concentration of hydrogen ions.\n\nThis definition is central to understanding acid-base equilibria, titrations, buffer systems, and many practical applications in chemistry and biology.\n\nLet me know if you'd like to see how pH relates to pOH, or how it's used in titrations or buffers! 😊",
+          "content_chars": 1497,
+          "elapsed_s": 3.723609,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.062741,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Curvature of a Circle",
+          "residual": "Curvature of a Circle",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly.",
+          "residual": "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.868594,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.868594,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 7,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/diffgeo.curves.circle_curvature",
+      "tokens": 985,
+      "ttft_s": 0.056692,
+      "turns": [
+        {
+          "chunks": 976,
+          "content": "The `diffgeo.curves.circle_curvature` function or module does not exist in any standard or widely recognized mathematical or computational library (such as NumPy, SciPy, SymPy, Matplotlib, or any official differential geometry package in Python).\n\nHowever, let's clarify what you might be asking:\n\n---\n\n### 📌 What is Circle Curvature?\n\nIn differential geometry, the **curvature** of a curve at a point measures how sharply the curve bends at that point.\n\nFor a **circle** of radius $ r $, the curvature $ \\kappa $ is:\n\n$$\n\\kappa = \\frac{1}{r}\n$$\n\nSo, the **curvature of a circle is constant** and inversely proportional to its radius.\n\n---\n\n### ✅ Example: Computing Curvature of a Circle in Python\n\nIf you're working with a circle in 2D (say, centered at the origin), you can compute its curvature analytically.\n\nHere's a simple Python example using SymPy to show the curvature of a circle:\n\n```python\nimport sympy as sp\n\n# Define variables\nt = sp.symbols('t')\n\n# Parametrize a circle of radius r\nr = sp.symbols('r')\nx = r * sp.cos(t)\ny = r * sp.sin(t)\n\n# Compute first and second derivatives\nx_prime = sp.diff(x, t)\ny_prime = sp.diff(y, t)\nx_double_prime = sp.diff(x_prime, t)\ny_double_prime = sp.diff(y_prime, t)\n\n# Formula for curvature: |x' y'' - x'' y'| / (x'^2 + y'^2)^(3/2)\nnumerator = sp.Abs(x_prime * y_double_prime - x_double_prime * y_prime)\ndenominator = (x_prime**2 + y_prime**2)**(3/2)\n\ncurvature = numerator / denominator\ncurvature_simplified = sp.simplify(curvature)\n\nprint(\"Curvature of a circle of radius r:\", curvature_simplified)\n```\n\n**Output:**\n```\nCurvature of a circle of radius r: 1/r\n```\n\n✅ So, the curvature of a circle is exactly $ \\frac{1}{r} $.\n\n---\n\n### ❌ Is there a module called `diffgeo.curves.circle_curvature`?\n\nAs of now (2024), there is **no official or widely used Python package** named `diffgeo` with a module `curves.circle_curvature`.\n\n- There are packages like `sympy`, `geodesy`, or `differential-geometry` libraries, but none standardly include such a function.\n- You may have seen this in a custom project or educational code.\n\n---\n\n### ✅ What You Can Do Instead\n\nIf you're working on a project involving differential geometry, consider:\n\n- Using **SymPy** for symbolic computation of curvature.\n- Using **NumPy** and **matplotlib** for numerical plotting.\n- Writing a custom function for curvature of parametric curves.\n\nExample (numerical):\n\n```python\nimport numpy as np\n\ndef circle_curvature(r, t):\n    # Parametric circle: x = r*cos(t), y = r*sin(t)\n    x = r * np.cos(t)\n    y = r * np.sin(t)\n    x_dot = -r * np.sin(t)\n    y_dot = r * np.cos(t)\n    x_ddot = -r * np.cos(t)\n    y_ddot = -r * np.sin(t)\n    \n    # Curvature formula: |x' y'' - x'' y'| / (x'^2 + y'^2)^(3/2)\n    numerator = abs(x_dot * y_ddot - x_ddot * y_dot)\n    denominator = (x_dot**2 + y_dot**2)**1.5\n    return numerator / denominator\n\n# Test\nr = 2\nt = np.pi / 4\nprint(\"Curvature at t =\", t, \":\", circle_curvature(r, t))\n# Output: 0.5 (which is 1/2, correct for r=2)\n```\n\n---\n\n### Summary\n\n| Question | Answer |\n|--------|--------|\n| Does `diffgeo.curves.circle_curvature` exist? | ❌ No, not in any standard library |\n| What is the curvature of a circle? | ✅ $ \\kappa = \\frac{1}{r} $ |\n| How to compute it in Python? | ✅ Use SymPy or manual parametric derivatives |\n\n---\n\nLet me know if you'd like a full implementation of curvature for any parametric curve, or if you're referring to a specific library (e.g., a university project or custom code). I’d be happy to help! 🚀",
+          "content_chars": 3494,
+          "elapsed_s": 7.868594,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.056692,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Multiplicativity of Degree Under Composition",
+          "residual": "Multiplicativity of Degree Under Composition",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Composing two maps multiplies their degrees, so degree turns composition into multiplication.",
+          "residual": "Composing two maps multiplies their degrees, so degree turns composition into multiplication.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 6.330476,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 6.330476,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Multiplicativity of Degree Under Composition",
+        "Composing two maps multiplies their degrees, so degree turns composition into multiplication."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 8,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/difftop.degree.degree_multiplicativity",
+      "tokens": 774,
+      "ttft_s": 0.111264,
+      "turns": [
+        {
+          "chunks": 775,
+          "content": "It seems like you're referring to a function or concept involving \"difftop,\" \"degree,\" and \"degree_multiplicativity.\" However, the combination of these terms—especially \"difftop.degree.degree_multiplicativity\"—does not correspond to a standard or widely recognized mathematical or computational function in established literature or software libraries (like MATLAB, Python, or mathematical software).\n\nLet’s break this down:\n\n1. **\"difftop\"**:\n   - This is not a standard term in mathematics or computer science.\n   - It might be a typo or a misstatement. Possible interpretations:\n     - Could you mean \"diff\" (as in differentiation)?\n     - Or \"topology\" (e.g., \"topological degree\")?\n     - Or perhaps a custom function or module in a specific software package?\n\n2. **\"degree\"**:\n   - In mathematics, \"degree\" can refer to:\n     - Degree of a polynomial.\n     - Degree of a map (in topology).\n     - Degree of a vertex in a graph.\n     - Degree of a field extension.\n   - In topology, the \"degree of a map\" between compact oriented manifolds is an integer that measures how many times the domain wraps around the codomain.\n\n3. **\"degree_multiplicativity\"**:\n   - This is not a standard mathematical term.\n   - \"Multiplicativity\" usually refers to a property of functions where \\( f(a \\cdot b) = f(a) \\cdot f(b) \\).\n   - \"Degree multiplicativity\" is not a known concept in standard math.\n\nPossible interpretations:\n\n- Are you referring to the **multiplicativity of topological degrees**?\n  - Yes, in algebraic topology, the degree of a composition of maps is the product of the degrees: \\( \\deg(f \\circ g) = \\deg(f) \\cdot \\deg(g) \\).\n  - This property is called **degree multiplicativity**.\n  - So, \"degree_multiplicativity\" might refer to this property.\n\n- Is \"difftop\" a typo or abbreviation?\n  - Possibly meant to be **\"topological degree\"** or **\"topological map\"**.\n  - \"Diff\" might stand for \"differentiable\" or \"differential.\"\n\n✅ Conclusion:\n\nIt's likely that you're referring to **the multiplicativity of topological degrees** in algebraic topology, where:\n\n> The degree of a composition of continuous maps between compact oriented manifolds satisfies:\n> \\[\n> \\deg(f \\circ g) = \\deg(f) \\cdot \\deg(g)\n> \\]\n> This property is known as **degree multiplicativity**.\n\nSo, **\"difftop.degree.degree_multiplicativity\"** may be a malformed or informal way of expressing:\n> \"The multiplicativity of topological degrees for differentiable maps.\"\n\n📌 Final Answer:\n\n**\"difftop.degree.degree_multiplicativity\"** is not a standard or recognized term in mathematics. However, it likely refers to the **multiplicativity of topological degrees** in algebraic topology — that is, the property that the degree of a composition of maps is the product of the degrees of the individual maps. This is a fundamental result in topology and is often stated as:\n\n\\[\n\\deg(f \\circ g) = \\deg(f) \\cdot \\deg(g)\n\\]\n\n✅ Therefore, the intended meaning is likely:\n> The degree of a composition of maps equals the product of the degrees — a property known as **degree multiplicativity** in algebraic topology.\n\nIf you're using this in a software or programming context (e.g., a custom library), please clarify the environment (e.g., Python, MATLAB, a specific math package). That would help provide a more precise answer.",
+          "content_chars": 3293,
+          "elapsed_s": 6.330476,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.111264,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "CAPM Expected Return (Risk-Premium Form)",
+          "residual": "CAPM Expected Return (Risk-Premium Form)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk.",
+          "residual": "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 5.031773,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 5.031773,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "CAPM Expected Return (Risk-Premium Form)",
+        "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 8,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/economics.finance.capm_expected_return",
+      "tokens": 623,
+      "ttft_s": 0.082813,
+      "turns": [
+        {
+          "chunks": 623,
+          "content": "The **CAPM Expected Return** (Capital Asset Pricing Model) is a financial model used to determine the expected return on an investment based on its risk relative to the market.\n\n### CAPM Formula:\n\\[\nE(R_i) = R_f + \\beta_i (E(R_m) - R_f)\n\\]\n\nWhere:\n- \\( E(R_i) \\) = Expected return on asset \\( i \\)\n- \\( R_f \\) = Risk-free rate (e.g., yield on a government bond)\n- \\( \\beta_i \\) = Beta of asset \\( i \\) (a measure of systematic risk relative to the market)\n- \\( E(R_m) \\) = Expected return of the market\n\n---\n\n### Interpretation:\n- The **risk premium** (\\( E(R_m) - R_f \\)) is the extra return investors expect for taking on market risk.\n- **Beta (\\( \\beta_i \\))** measures how sensitive the asset's returns are to market movements:\n  - \\( \\beta = 1 \\): Asset moves with the market.\n  - \\( \\beta > 1 \\): Higher volatility than the market.\n  - \\( \\beta <  1 \\): Lower volatility than the market.\n- The **risk-free rate** is typically the return on a short-term government security (e.g., 3-month Treasury bill).\n\n---\n\n### Example:\nSuppose:\n- Risk-free rate (\\( R_f \\)) = 2%\n- Market return (\\( E(R_m) \\)) = 8%\n- Beta (\\( \\beta_i \\)) = 1.5\n\nThen:\n\\[\nE(R_i) = 2\\% + 1.5 \\times (8\\% - 2\\%) = 2\\% + 1.5 \\times 6\\% = 2\\% + 9\\% = 11\\%\n\\]\n\n✅ So, the expected return on the asset is **11%**.\n\n---\n\n### Key Assumptions of CAPM:\n1. Investors are rational and risk-averse.\n2. All investors have the same information and expectations.\n3. Markets are efficient (prices reflect all available information).\n4. All assets are perfectly divisible and liquid.\n5. No transaction costs or taxes.\n\n---\n\n### Limitations:\n- Beta only captures **systematic risk**, not unsystematic (company-specific) risk.\n- The model assumes a single-factor model (market risk), which may not reflect real-world complexity.\n- Historical data used to estimate beta may not predict future returns.\n- The market return is hard to define and measure.\n\n---\n\n### Applications:\n- Valuation of stocks and other securities.\n- Portfolio management and asset allocation.\n- Determining required returns for investment decisions.\n\n---\n\n✅ Summary:\nThe **CAPM Expected Return** helps estimate how much return an investor should expect for holding a risky asset, given its sensitivity to market movements and the risk-free rate.\n\nLet me know if you'd like a Python example, a chart, or a real-world application!",
+          "content_chars": 2354,
+          "elapsed_s": 5.031773,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.082813,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Average Degree of a Finite Graph",
+          "residual": "Average Degree of a Finite Graph",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The average number of neighbours a vertex has is twice the edge count divided by the vertex count.",
+          "residual": "The average number of neighbours a vertex has is twice the edge count divided by the vertex count.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 5.119247,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 5.119247,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Average Degree of a Finite Graph",
+        "The average number of neighbours a vertex has is twice the edge count divided by the vertex count."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 8,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/graphtheory.degree.average_degree_from_edge_count",
+      "tokens": 623,
+      "ttft_s": 0.059529,
+      "turns": [
+        {
+          "chunks": 613,
+          "content": "It seems like you're asking about computing the **average degree** of a graph using the **number of edges**. Let's clarify and walk through this concept step by step.\n\n---\n\n### 🔷 What is the Average Degree of a Graph?\n\nIn graph theory, the **average degree** of a graph is the average number of edges incident to a vertex.\n\n---\n\n### 🔷 Formula for Average Degree\n\nFor a graph with:\n- $ n $ vertices\n- $ m $ edges\n\nThe **sum of all vertex degrees** is $ 2m $, because each edge contributes to two vertices (one at each end).\n\nSo, the **average degree** $ \\bar{d} $ is:\n\n$$\n\\bar{d} = \\frac{2m}{n}\n$$\n\n---\n\n### 🔷 Example\n\nSuppose you have a graph with:\n- $ n = 6 $ vertices\n- $ m = 9 $ edges\n\nThen:\n\n$$\n\\bar{d} = \\frac{2 \\times 9}{6} = \\frac{18}{6} = 3\n$$\n\nSo, the average degree is **3**.\n\n---\n\n### 🔷 Key Points\n\n- The **average degree** depends on both the number of edges and the number of vertices.\n- You **cannot** compute average degree from edge count alone — you also need the number of vertices.\n- Your question mentions \"average_degree_from_edge_count\", which suggests you might be thinking of a function or method that computes average degree given only edge count.\n\n❌ **But**: You **cannot** compute average degree from edge count **alone** — you need both $ m $ (edges) and $ n $ (vertices).\n\n✅ So, **\"average_degree_from_edge_count\"** is **not sufficient** — you need both edge count and vertex count.\n\n---\n\n### ✅ Correct Function (in pseudocode or code)\n\n```python\ndef average_degree(m, n):\n    return 2 * m / n\n```\n\nWhere:\n- `m` = number of edges\n- `n` = number of vertices\n\n---\n\n### 🚨 Common Misconception\n\nSome might think \"average degree\" can be derived just from edge count, but without knowing how many vertices exist, it's impossible.\n\n---\n\n### Final Answer\n\n> ❌ You **cannot** compute the average degree from edge count alone.  \n> ✅ You need **both** the number of edges and the number of vertices.  \n> The formula is:  \n> $$\n> \\text{Average degree} = \\frac{2 \\times \\text{edge count}}{\\text{vertex count}}\n> $$\n\nIf you're working in a software context (like NetworkX or a custom graph library), the function would be something like:\n\n```python\naverage_degree_from_edge_count(edge_count, vertex_count)\n```\n\nBut it's not valid to call it just with edge count.\n\n---\n\nLet me know if you'd like a real-world example or implementation in a specific language! 📚",
+          "content_chars": 2374,
+          "elapsed_s": 5.119247,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.059529,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Sally's Marble-Location Belief",
+          "residual": "Sally's Marble-Location Belief",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Sally's attributed belief places the marble in the basket.",
+          "residual": "Sally's attributed belief places the marble in the basket.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 1.932642,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.932642,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Sally's Marble-Location Belief",
+        "Sally's attributed belief places the marble in the basket."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 11,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/narrative.belief.sally_marble_basket",
+      "tokens": 232,
+      "ttft_s": 0.067761,
+      "turns": [
+        {
+          "chunks": 233,
+          "content": "It seems like you're referencing a narrative or belief system involving \"Sally Marble Basket,\" but there is no widely known or established narrative, character, or concept by that name in literature, mythology, psychology, or common cultural references. It's possible that \"Sally Marble Basket\" is either:\n\n- A fictional or original creation (e.g., from a story, game, or personal narrative you're working on),\n- A misunderstanding or misspelling of a known concept,\n- Or a reference to something specific within a niche community or private project.\n\nIf you're asking about a narrative or belief system involving Sally and a marble basket — perhaps symbolically (e.g., representing choices, values, or emotional journeys) — I’d be happy to help construct or explore that idea creatively.\n\nCould you clarify your question? For example:\n\n- Are you looking for a story involving Sally and a marble basket?\n- Is this part of a larger narrative or metaphor?\n- Are you exploring beliefs about choice, identity, or values through this image?\n\nWith a bit more context, I can help build a meaningful narrative or reflection around \"Sally and the Marble Basket.\"",
+          "content_chars": 1153,
+          "elapsed_s": 1.932642,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.067761,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Relative Condition Number",
+          "residual": "Relative Condition Number",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer.",
+          "residual": "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 4.844993,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 4.844993,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Relative Condition Number",
+        "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 6,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/numanalysis.error.relative_condition_number",
+      "tokens": 593,
+      "ttft_s": 0.084424,
+      "turns": [
+        {
+          "chunks": 592,
+          "content": "It seems like you're referring to `numanalysis.error.relative_condition_number`, but this is not a standard or recognized function or attribute in any major numerical analysis or scientific computing library (like NumPy, SciPy, or Matplotlib) as of now.\n\nLet’s clarify a few things:\n\n### 1. **Is `numanalysis` a real library?**\nThere is **no widely known or standard Python library** named `numanalysis`. It might be:\n- A custom or experimental module.\n- A typo or misremembered name (e.g., you might mean `scipy`, `numpy`, or `numpy.linalg`).\n- A fictional or hypothetical construct.\n\n### 2. **What is a \"relative condition number\"?**\nIn numerical analysis, the **relative condition number** of a function or matrix operation measures how sensitive the output is to small changes in the input, relative to the size of the input and output.\n\nFor example:\n- For a matrix inverse: the relative condition number is `‖A‖ · ‖A⁻¹‖`, where `‖·‖` is a matrix norm.\n- For a function `f(x)`, the relative condition number is `|f'(x)/f(x)|`.\n\nThis concept is used to assess numerical stability.\n\n### 3. **Where would you find such a function?**\nIn standard libraries:\n- **SciPy** has functions for matrix norms and condition numbers (e.g., `scipy.linalg.cond`).\n- **NumPy** has utilities for norms and matrix operations, but no direct `relative_condition_number`.\n\nExample usage in SciPy:\n```python\nimport numpy as np\nfrom scipy.linalg import cond\n\nA = np.array([[2, 1], [1, 2]])\nrelative_condition_number = cond(A, np.linalg.norm)\nprint(relative_condition_number)\n```\n\n> This computes the relative condition number of matrix `A` using the 2-norm.\n\n### 4. **Possible confusion**\nYou might have meant:\n- `scipy.linalg.cond` → computes the condition number.\n- Or you're looking at a custom or internal implementation (e.g., in a university course or research code) named `numanalysis.error.relative_condition_number`.\n\n---\n\n### ✅ Recommendation:\nIf you're trying to compute or use a **relative condition number** in a numerical analysis context, use:\n\n```python\nfrom scipy.linalg import cond\nimport numpy as np\n\nA = np.array([[2, 1], [1, 2]])\ncondition_number = cond(A, np.linalg.norm)\nprint(\"Relative condition number:\", condition_number)\n```\n\nIf you have a specific function or module in mind named `numanalysis`, please provide more context (e.g., code, documentation, or source), so I can help you better.\n\nLet me know if you'd like a derivation, example, or application of relative condition numbers in solving systems or matrix inversion!",
+          "content_chars": 2531,
+          "elapsed_s": 4.844993,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.084424,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Ohm's Law",
+          "residual": "Ohm's Law",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Voltage across an ohmic conductor is proportional to current.",
+          "residual": "Voltage across an ohmic conductor is proportional to current.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.653884,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.653884,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Voltage across an ohmic conductor is proportional to current."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/physics.circuits.ohms_law",
+      "tokens": 446,
+      "ttft_s": 0.065007,
+      "turns": [
+        {
+          "chunks": 443,
+          "content": "The **Ohm's Law** is a fundamental principle in electrical circuits that relates **voltage**, **current**, and **resistance** in a circuit. It is expressed by the following equation:\n\n\\[\nV = I \\times R\n\\]\n\nWhere:\n- \\( V \\) is the **voltage** (in volts, V),\n- \\( I \\) is the **current** (in amperes, A),\n- \\( R \\) is the **resistance** (in ohms, Ω).\n\n---\n\n### Key Points of Ohm's Law:\n\n1. **Voltage (V)** is the electrical potential difference that drives current through a circuit.\n2. **Current (I)** is the flow of electric charge through a conductor.\n3. **Resistance (R)** opposes the flow of current.\n\n---\n\n### Rearranged Forms:\n\nFrom \\( V = I \\times R \\), you can derive:\n\n- \\( I = \\frac{V}{R} \\) → Current = Voltage ÷ Resistance  \n- \\( R = \\frac{V}{I} \\) → Resistance = Voltage ÷ Current\n\n---\n\n### Example:\n\nIf a circuit has a voltage of 12 volts and a resistance of 4 ohms, what is the current?\n\n\\[\nI = \\frac{V}{R} = \\frac{12\\ \\text{V}}{4\\ \\Omega} = 3\\ \\text{A}\n\\]\n\nSo, the current is **3 amperes**.\n\n---\n\n### Important Notes:\n\n- Ohm's Law applies to **ohmic materials** (like metals) where resistance remains constant over a range of voltages and temperatures.\n- It does **not** apply to non-ohmic devices (like diodes, transistors, or incandescent bulbs), where resistance changes with voltage or current.\n\n---\n\n✅ **Summary**:\nOhm’s Law is essential for analyzing and designing simple electrical circuits. It allows you to calculate any one of the three variables if the other two are known.\n\nLet me know if you'd like a diagram, real-world application, or a problem to solve using Ohm's Law! 🔌⚡",
+          "content_chars": 1603,
+          "elapsed_s": 3.653884,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.065007,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Lindeberg-Levy Central Limit Theorem",
+          "residual": "Lindeberg-Levy Central Limit Theorem",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Standardized sample means converge to standard normal.",
+          "residual": "Standardized sample means converge to standard normal.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.784794,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.784794,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Lindeberg-Levy Central Limit Theorem",
+        "Standardized sample means converge to standard normal."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 10,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/probstat.limit.clt_iid_standardized_mean",
+      "tokens": 920,
+      "ttft_s": 0.076097,
+      "turns": [
+        {
+          "chunks": 920,
+          "content": "It seems like you're referring to a function or method named `probstat.limit.clt_iid_standardized_mean`, but this is not a standard or widely recognized function in common statistical software packages (like R, Python, MATLAB, etc.) or in established statistical literature.\n\nLet’s break this down and clarify what it might mean:\n\n---\n\n### 1. **Understanding the Name**\n- **`probstat`**: This could be a hypothetical or custom package, or a module within a probability/statistics library. There is no well-known public package named \"probstat\" in mainstream software.\n- **`limit`**: Suggests a concept related to limits in probability — possibly asymptotic behavior.\n- **`clt`**: Stands for the **Central Limit Theorem**.\n- **`iid`**: Independent and identically distributed random variables.\n- **`standardized_mean`**: Refers to the sample mean standardized (i.e., subtracted by the true mean and divided by standard error).\n\nSo, the name `probstat.limit.clt_iid_standardized_mean` likely refers to a function that computes or analyzes the **limiting distribution** of the **standardized sample mean** of i.i.d. random variables — which is a direct application of the Central Limit Theorem.\n\n---\n\n### 2. **What Does the Central Limit Theorem Say?**\n\nFor i.i.d. random variables with finite mean $ \\mu $ and variance $ \\sigma^2 $, the standardized sample mean converges in distribution to a standard normal distribution as the sample size increases:\n\n$$\n\\sqrt{n} \\left( \\bar{X}_n - \\mu \\right) / \\sigma \\xrightarrow{d} N(0,1)\n$$\n\nThis is the **limiting distribution** of the standardized mean.\n\n---\n\n### 3. **What Would This Function Do?**\n\nIf such a function existed, it might:\n\n- Take a sample of i.i.d. data.\n- Compute the sample mean.\n- Standardize it (i.e., subtract the mean and divide by standard error).\n- Return the asymptotic distribution (standard normal) or a computed approximation.\n- Possibly compute convergence rates or confidence intervals.\n\n---\n\n### 4. **In Practice (Example in Python)**\n\n```python\nimport numpy as np\nfrom scipy import stats\n\n# Example: i.i.d. sample from a normal distribution\nnp.random.seed(42)\nsample = np.random.normal(5, 2, 1000)  # mean=5, std=2, size=1000\n\n# Sample mean\nsample_mean = np.mean(sample)\n\n# Standard error\nse = np.std(sample) / np.sqrt(len(sample))\n\n# Standardized mean\nz_score = (sample_mean - 5) / se\n\n# Asymptotic distribution: standard normal\n# So, the limit is N(0,1)\nprint(\"Standardized mean (z-score):\", z_score)\nprint(\"Asymptotic distribution: Standard Normal (N(0,1))\")\n```\n\n---\n\n### 5. **Conclusion**\n\nThe expression `probstat.limit.clt_iid_standardized_mean` likely refers to a **function that computes or evaluates the limiting distribution** (standard normal) of the standardized sample mean under i.i.d. conditions — a core result of the Central Limit Theorem.\n\n⚠️ **Important**: There is **no known public function** by that exact name in any major statistical software (like R, Python, or MATLAB). It may be:\n\n- A custom function in a personal or academic project.\n- A function in a specific educational package.\n- A misremembered or misnamed function.\n\n---\n\n### ✅ Recommendation\n\nIf you're working on a project or paper involving the Central Limit Theorem and standardized means, you can:\n\n- Implement the CLT-based standardized mean computation manually.\n- Use built-in functions in R (`stats::t.test`, `stats::rnorm`, etc.) or Python (`numpy`, `scipy`) to simulate or compute it.\n- If you have a specific software or package in mind (e.g., a custom \"probstat\" package), share more context so I can help further.\n\n---\n\nLet me know:\n- What software or context you're using (e.g., R, Python, a textbook)?\n- What exact output or behavior you're trying to achieve?\n\nI’d be happy to help you write the code or explain the math more deeply!",
+          "content_chars": 3808,
+          "elapsed_s": 7.784794,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.076097,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Absorption Law (Intersection over Union)",
+          "residual": "Absorption Law (Intersection over Union)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing.",
+          "residual": "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 4.384804,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 4.384804,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Absorption Law (Intersection over Union)",
+        "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 7,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/settheory.boolean_laws.absorption",
+      "tokens": 541,
+      "ttft_s": 0.082134,
+      "turns": [
+        {
+          "chunks": 539,
+          "content": "The **absorption law** in set theory (and Boolean algebra) is a fundamental identity that governs how sets can be simplified or combined.\n\n### Absorption Laws in Set Theory\n\nFor any sets $ A $ and $ B $, the absorption laws state:\n\n1. **Absorption Law (Left):**  \n   $$\n   A \\cup (A \\cap B) = A\n   $$\n\n2. **Absorption Law (Right):**  \n   $$\n   A \\cap (A \\cup B) = A\n   $$\n\n---\n\n### Explanation\n\n- **Left absorption**:  \n  $ A \\cup (A \\cap B) $ means we take all elements in $ A $, and add those in $ A \\cap B $. But since $ A \\cap B $ is already a subset of $ A $, adding it doesn't change $ A $. So the result is just $ A $.\n\n- **Right absorption**:  \n  $ A \\cap (A \\cup B) $ means we take elements that are in both $ A $ and $ (A \\cup B) $. Since $ A \\subseteq (A \\cup B) $, the intersection is just $ A $.\n\n---\n\n### Example\n\nLet:\n- $ A = \\{1, 2, 3\\} $\n- $ B = \\{3, 4, 5\\} $\n\nThen:\n- $ A \\cap B = \\{3\\} $\n- $ A \\cup (A \\cap B) = \\{1,  2, 3\\} = A $ ✅\n\n- $ A \\cup B = \\{1, 2, 3, 4, 5\\} $\n- $ A \\cap (A \\cup B) = \\{1, 2, 3\\} = A $ ✅\n\n---\n\n### In Boolean Logic (Corresponding to Sets)\n\nIn Boolean algebra, if we treat sets as logical variables (e.g., membership in a set as true/false), the absorption laws correspond to:\n\n- $ x \\lor (x \\land y) = x $\n- $ x \\land (x \\lor y) = x $\n\n---\n\n### Summary\n\n✅ The **absorption law** in set theory is:\n\n$$\nA \\cup (A \\cap B) = A \\quad \\text{and} \\quad A \\cap (A \\cup B) = A\n$$\n\nThese laws are useful in simplifying expressions in set theory and logic.\n\nLet me know if you'd like a proof, a visual diagram, or a related identity! 😊",
+          "content_chars": 1568,
+          "elapsed_s": 4.384804,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.082134,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Temporal Induction",
+          "residual": "Temporal Induction",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "If a property is preserved by every single step, then holding it once is enough to hold it forever after.",
+          "residual": "If a property is preserved by every single step, then holding it once is enough to hold it forever after.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 6.205326,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 6.205326,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "If a property is preserved by every single step, then holding it once is enough to hold it forever after."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 10,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/temporal.induction.temporal_induction_axiom",
+      "tokens": 752,
+      "ttft_s": 0.105975,
+      "turns": [
+        {
+          "chunks": 749,
+          "content": "The term **\"temporal.induction.temporal_induction_axiom\"** does not correspond to a recognized or standard axiom in formal logic, mathematics, or philosophy as of now. Let's break this down and clarify what might be going on.\n\n---\n\n### 1. **Understanding the Components**\n\n- **Temporal**: Refers to time-related concepts — events, durations, sequences, or changes over time.\n- **Induction**: In logic, induction (especially *mathematical induction*) is a method of proving statements about natural numbers. In temporal reasoning, induction might refer to reasoning about sequences of events over time.\n- **Temporal Induction Axiom**: There is no widely accepted or standard \"temporal induction axiom\" in classical logic or formal systems.\n\n---\n\n### 2. **Is There a Known Axiom Called \"Temporal Induction\"?**\n\nIn formal systems such as:\n\n- **Temporal Logic** (e.g., Linear Temporal Logic — LTL, or Computation Tree Logic — CTL),\n- **Automata theory**,\n- **Philosophy of time**,\n\nthere are **temporal operators** (like `F` for \"eventually\", `G` for \"always\", `X` for \"next\"), and **rules of inference** about time, but **no standard \"temporal induction axiom\"**.\n\n- **Induction** is typically applied to natural numbers (mathematical induction), not directly to time.\n- Temporal logic does not usually include an \"induction\" rule in the same way as mathematical induction.\n\nThus, **\"temporal_induction_axiom\"** is not a known or defined axiom in established logical or mathematical frameworks.\n\n---\n\n### 3. **Possible Interpretations**\n\n- **Misstatement or Typo**: Perhaps you meant:\n  - *Temporal logic axioms* (e.g., axioms of LTL),\n  - *Induction in reasoning about time* (e.g., in AI or planning systems),\n  - Or a custom or domain-specific axiom in a system like a knowledge graph, AI agent, or reasoning engine.\n\n- **Domain-Specific Use**: In some AI or knowledge representation systems (e.g., in a temporal database or reasoning engine), a developer might define a \"temporal induction axiom\" as a rule to infer future states from past ones — but this would be a **custom rule**, not a standard logical axiom.\n\n---\n\n### 4. **Example of a Temporal Logic Axiom (for comparison)**\n\nIn Linear Temporal Logic (LTL), a basic axiom might be:\n\n> **F p → (p ∨ F p)**  \n> (If p will eventually be true, then either p is true now or p will be true later.)\n\nThis is not an \"induction\" axiom, but it's a valid temporal logic principle.\n\n---\n\n### 5. **Conclusion**\n\n> ❌ There is **no known standard or recognized axiom** called **\"temporal.induction.temporal_induction_axiom\"** in formal logic, mathematics, or philosophy.\n\n✅ If you're working in a specific domain (e.g., AI, robotics, knowledge graphs), and this is a custom or internal axiom, please provide more context so I can help interpret or construct it.\n\n---\n\n### Suggested Next Steps\n\n- Clarify the context (e.g., AI planning, temporal reasoning, formal logic, software system).\n- Specify if you're looking for:\n  - A formal logic axiom,\n  - A rule of inference,\n  - A principle in AI or planning,\n  - Or a system-level configuration.\n\nLet me know — I’d be happy to help you build or interpret it! 🚀",
+          "content_chars": 3150,
+          "elapsed_s": 6.205326,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.105975,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "Definition of Tangent",
+          "residual": "Definition of Tangent",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish.",
+          "residual": "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.985974,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.985974,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 7,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/trigonometry.definitions.tangent",
+      "tokens": 494,
+      "ttft_s": 0.071565,
+      "turns": [
+        {
+          "chunks": 487,
+          "content": "The **tangent** in trigonometry is one of the three primary trigonometric functions, along with sine and cosine.\n\n### Definition of Tangent:\n\nIn a right triangle:\n\n- The **tangent** of an angle (say, angle θ) is defined as the ratio of the length of the **opposite side** to the length of the **adjacent side**.\n\n$$\n\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}}\n$$\n\n---\n\n### Visual Example:\n\nConsider a right triangle with:\n\n- Angle θ (at the vertex),\n- Opposite side: the side opposite to angle θ,\n- Adjacent side: the side next to angle θ (but not the hypotenuse).\n\nThen:\n$$\n\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}}\n$$\n\n---\n\n### Unit Circle Definition:\n\nOn the unit circle (a circle with radius 1 centered at the origin), for an angle θ:\n\n- The tangent of θ is defined as:\n$$\n\\tan(\\theta) = \\frac{\\sin(\\theta)}{\\cos(\\theta)}\n$$\n\nThis is valid as long as $\\cos(\\theta) \\ne 0$, because division by zero is undefined.\n\n---\n\n### Key Properties:\n\n- Domain: All real numbers except where $\\cos(\\theta) = 0$, i.e., $\\theta = \\frac{\\pi}{2} + k\\pi$, $k \\in \\mathbb{Z}$.\n- Range: All real numbers (from $-\\infty$ to $+\\infty$).\n- Period: $\\pi$ (the tangent function repeats every $\\pi$ radians).\n- Tangent is an **odd function**: $\\tan(-\\theta) = -\\tan(\\theta)$.\n\n---\n\n### Example:\n\nIf in a right triangle, the opposite side is 3 and the adjacent side is 4:\n\n$$\n\\tan(\\theta) = \\frac{3}{4} = 0.75\n$$\n\n---\n\n✅ Summary:\n\n> **Tangent** is the ratio of the opposite side to the adjacent side in a right triangle, or $\\tan(\\theta) = \\frac{\\sin(\\theta)}{\\cos(\\theta)}$ on the unit circle.\n\nLet me know if you'd like a diagram, application, or a derivation! 📐📐",
+          "content_chars": 1666,
+          "elapsed_s": 3.985974,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.071565,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 13 ^ 2 + 9",
+          "residual": "13 ^ 2 + 9",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 178",
+          "residual": "178",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.774141,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.774141,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 13 ^ 2 + 9"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 11,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/13^2+9",
+      "tokens": 93,
+      "ttft_s": 0.0807,
+      "turns": [
+        {
+          "chunks": 94,
+          "content": "Let's solve the expression step by step:\n\nWe are given:\n\n$$\n13^2 + 9\n$$\n\nFirst, compute $13^2$:\n\n$$\n13^2 = 13 \\times 13 = 169\n$$\n\nNow add 9:\n\n$$\n169 + 9 = 178\n$$\n\n### Final Answer:\n$$\n\\boxed{178}\n$$",
+          "content_chars": 198,
+          "elapsed_s": 0.774141,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.0807,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 19 * -28",
+          "residual": "19 * -28",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : -532",
+          "residual": "-532",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.686328,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.686328,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 19 * -28"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/19*-28",
+      "tokens": 81,
+      "ttft_s": 0.049674,
+      "turns": [
+        {
+          "chunks": 82,
+          "content": "To calculate $ 19 \\times (-28) $:\n\nFirst, multiply the absolute values:\n\n$$\n19 \\times 28 = 532\n$$\n\nSince one number is positive and one is negative, the result is negative:\n\n$$\n19 \\times (-28) = -532\n$$\n\n✅ Final answer: **-532**",
+          "content_chars": 228,
+          "elapsed_s": 0.686328,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.049674,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 31 * 21 + 19",
+          "residual": "31 * 21 + 19",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 670",
+          "residual": "670",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.632982,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.632982,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 31 * 21 + 19"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 13,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/31*21+19",
+      "tokens": 198,
+      "ttft_s": 0.048883,
+      "turns": [
+        {
+          "chunks": 199,
+          "content": "Let's solve the expression step by step:\n\nWe are given:\n\n$$\n31 \\times 21 + 19\n$$\n\n**Step 1: Multiply 31 × 21**\n\nWe can break this down:\n\n$$\n31 \\times 21 = 31 \\times (20 + 1) = (31 \\times 20) + (31 \\times 1)\n$$\n\n$$\n31 \\times 20 = 620\n$$\n\n$$\n31 \\times 1 = 31\n$$\n\n$$\n620 + 31 = 651\n$$\n\nSo, $31 \\times 21 = 651$\n\n**Step 2: Add 19**\n\n$$\n651 + 19 = 670\n$$\n\n✅ Final answer:\n\n$$\n\\boxed{670}\n$$",
+          "content_chars": 385,
+          "elapsed_s": 1.632982,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.048883,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 37 ^ 2 + 25",
+          "residual": "37 ^ 2 + 25",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 1394",
+          "residual": "1394",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.402933,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.402933,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 37 ^ 2 + 25"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/37^2+25",
+      "tokens": 171,
+      "ttft_s": 0.056335,
+      "turns": [
+        {
+          "chunks": 172,
+          "content": "Let's compute:\n\n**37² + 25**\n\nFirst, calculate **37²**:\n\n$$\n37^2 = 37 \\times 37\n$$\n\nBreak it down:\n\n$$\n37 \\times 37 = (30 + 7)(30 + 7) = 30^2 + 2 \\times 30 \\times 7 + 7^2\n$$\n\n$$\n= 900 + 420 + 49 = 1369\n$$\n\nSo,\n\n$$\n37^2 = 1369\n$$\n\nNow add 25:\n\n$$\n1369 + 25 = 1394\n$$\n\n✅ Final answer: **1394**.",
+          "content_chars": 292,
+          "elapsed_s": 1.402933,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.056335,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 7 * 5 + 11",
+          "residual": "7 * 5 + 11",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 46",
+          "residual": "46",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.57149,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.57149,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 118.987209,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 11,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/7*5+11",
+      "tokens": 68,
+      "ttft_s": 0.047702,
+      "turns": [
+        {
+          "chunks": 68,
+          "content": "Let's solve the expression step by step:\n\nWe are given:\n\n**7 * 5 + 11**\n\nFirst, do the multiplication:\n\n7 * 5 = 35\n\nNow add 11:\n\n35 + 11 = 46\n\nSo, the final answer is:\n\n**46** ✅",
+          "content_chars": 177,
+          "elapsed_s": 0.57149,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.047702,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 68,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : x ^ 2 + 11 * x",
+          "residual": "x ^ 2 + 11 * x",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "given      : x = 16",
+          "residual": "x = 16",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 432",
+          "residual": "432",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.134365,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.134365,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : x ^ 2 + 11 * x"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 20,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/x^2+11*x",
+      "tokens": 135,
+      "ttft_s": 0.050324,
+      "turns": [
+        {
+          "chunks": 136,
+          "content": "We are given:\n\n$$\nx = 16\n$$\n\nWe need to compute:\n\n$$\nx^2 + 11 \\cdot x\n$$\n\n### Step 1: Compute $ x^2 $\n$$\nx^2 = 16^2 = 256\n$$\n\n### Step 2: Compute $ 11 \\cdot x $\n$$\n11 \\cdot 6 = 176\n$$\n\n### Step 3: Add them together\n$$\n256 + 176 = 432\n$$\n\n### Final Answer:\n$$\n\\boxed{432}\n$$",
+          "content_chars": 273,
+          "elapsed_s": 1.134365,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.050324,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : x ^ 2 + 27 * x",
+          "residual": "x ^ 2 + 27 * x",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "given      : x = 40",
+          "residual": "x = 40",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 2680",
+          "residual": "2680",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.16949,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.16949,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : x ^ 2 + 27 * x"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 20,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/x^2+27*x",
+      "tokens": 142,
+      "ttft_s": 0.051641,
+      "turns": [
+        {
+          "chunks": 143,
+          "content": "We are given:\n\n$$\nx = 40\n$$\n\nWe need to compute:\n\n$$\nx^2 + 27 \\cdot x\n$$\n\n### Step 1: Compute $ x^2 $\n$$\nx^2 = 40^2 = 1600\n$$\n\n### Step 2: Compute $ 27 \\cdot x $\n$$\n27 \\cdot 40 = 1080\n$$\n\n### Step 3: Add them together\n$$\n1600 + 1080 = 2680\n$$\n\n### Final Answer:\n$$\n\\boxed{2680}\n$$",
+          "content_chars": 280,
+          "elapsed_s": 1.16949,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.051641,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 21 + 16 < 38",
+          "residual": "21 + 16 < 38",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.101844,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.101844,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/21+16<38",
+      "tokens": 134,
+      "ttft_s": 0.048945,
+      "turns": [
+        {
+          "chunks": 130,
+          "content": "Let's evaluate the expression step by step:\n\nWe are asked:  \n**Does 21 + 16 < 38?**\n\nStep 1: Add 21 and 16.  \n21 + 16 = 37\n\nStep 2: Compare 37 with 38.  \nIs 37 < 38?  \nYes, 37 is less than 38.\n\n✅ So, the statement **21 + 16 < 38** is **true**.\n\n**Answer: Yes, 21 + 16 < 38 is true.** ✅",
+          "content_chars": 285,
+          "elapsed_s": 1.101844,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.048945,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 23 + 19 < 41",
+          "residual": "23 + 19 < 41",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.945365,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.945365,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : no"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/23+19<41",
+      "tokens": 114,
+      "ttft_s": 0.047122,
+      "turns": [
+        {
+          "chunks": 112,
+          "content": "Let's evaluate the expression step by step:\n\nWe are asked:  \n**Does 23 + 19 < 41?**\n\nFirst, add 23 and 19:  \n23 + 19 = 42\n\nNow compare 42 to 41:  \nIs 42 < 41?  \nNo, 42 is greater than 41.\n\nSo, the statement **23 + 19 < 41** is **false**.\n\n✅ Final answer: **No**.",
+          "content_chars": 262,
+          "elapsed_s": 0.945365,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.047122,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 33 + 34 > 66",
+          "residual": "33 + 34 > 66",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.868165,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.868165,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 122.096606,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/33+34>66",
+      "tokens": 106,
+      "ttft_s": 0.049132,
+      "turns": [
+        {
+          "chunks": 106,
+          "content": "Let's evaluate the expression step by step:\n\nWe are asked:  \n**Does 33 + 34 > 66?**\n\nStep 1: Add 33 and 34  \n33 + 34 = 67\n\nStep 2: Compare 67 to 66  \nIs 67 > 66?\n\nYes, 67 is greater than 66.\n\n✅ So, the answer is **yes**.\n\n**Final Answer: Yes**. ✅",
+          "content_chars": 246,
+          "elapsed_s": 0.868165,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.049132,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 106,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 35 + 37 > 73",
+          "residual": "35 + 37 > 73",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.192463,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 1.192463,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 119.081263,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/35+37>73",
+      "tokens": 142,
+      "ttft_s": 0.039333,
+      "turns": [
+        {
+          "chunks": 143,
+          "content": "Let's check the inequality step by step:\n\nWe are asked:  \n**Does 35 + 37 > 73?**\n\nFirst, add 35 and 37:\n\n35 + 37 = 72\n\nNow compare 72 to 73:\n\n72 > 73?  \nNo, 72 is **less than** 73.\n\nSo, the statement **35 + 37 > 73** is **false**.\n\n✅ Final answer: **No, 35 + 37 is not greater than 73.**  \nIt equals 72, which is less than 73.",
+          "content_chars": 326,
+          "elapsed_s": 1.192463,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.039333,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 142,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 39 + 43 < 81",
+          "residual": "39 + 43 < 81",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.068138,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 1.068138,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 109.536408,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/39+43<81",
+      "tokens": 117,
+      "ttft_s": 0.089955,
+      "turns": [
+        {
+          "chunks": 115,
+          "content": "Let's check if **39 + 43 < 81**.\n\nStep 1: Add 39 and 43.\n\n39 + 43 = 82\n\nStep 2: Compare 82 with 81.\n\nIs 82 < 81?\n\nNo, 82 is greater than 81.\n\nSo, **39 + 43 < 81** is **false**.\n\n✅ Final answer: **No, 39 + 43 is not less than 81.**",
+          "content_chars": 230,
+          "elapsed_s": 1.068138,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.089955,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 117,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : y ^ 2 = 730",
+          "residual": "y ^ 2 = 730",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.932403,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.932403,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : y ^ 2 = 730"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 18,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/y^2=730",
+      "tokens": 222,
+      "ttft_s": 0.059124,
+      "turns": [
+        {
+          "chunks": 222,
+          "content": "Let's check whether $ y^2 = 730 $ when $ y = 27 $.\n\nFirst, compute $ 27^2 $:\n\n$$\n27^2 = 27 \\times 27\n$$\n\nBreak it down:\n\n$$\n27 \\times 27 = (20 + 7) \\times (20 + 7) = 20^2 + 2 \\times 20 \\times 7 + 7^2\n$$\n\n$$\n= 400 + 280 + 49 = 729\n$$\n\nSo,\n\n$$\n27^2 = 729\n$$\n\nNow, compare to 730:\n\n$$\n729 \\ne 730\n$$\n\n✅ Therefore, **no**, $ y^2 \\ne 730 $ when $ y = 27 $.\n\n**Answer: No, $ y^2 = 729 $, not 730.** ✅",
+          "content_chars": 394,
+          "elapsed_s": 1.932403,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.059124,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.frames.galilean_velocity_addition",
+          "residual": "physics.frames.galilean_velocity_addition",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.06075,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.06075,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.frames.galilean_velocity_addition"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 10,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/algtop.homology.chain_rank_nullity",
+      "tokens": 868,
+      "ttft_s": 0.05977,
+      "turns": [
+        {
+          "chunks": 868,
+          "content": "It seems like you're asking about a function or concept related to algebraic topology, specifically homology, and possibly something involving \"chain rank\" and \"nullity\" in the context of a software package or library — such as `twin algtop.homology.chain_rank_nullity`.\n\nHowever, there is no well-known or standard mathematical or computational package called `twin algtop.homology.chain_rank_nullity` in established literature or widely used software (like SageMath, MATLAB, or GAP).\n\nLet’s break this down and clarify what you might be referring to:\n\n---\n\n### 1. **Algebraic Topology and Homology**\nIn algebraic topology:\n- **Homology** studies topological spaces using algebraic structures (like abelian groups).\n- A **chain complex** is a sequence of abelian groups connected by boundary maps.\n- The **homology groups** are defined as the kernel of a boundary map modulo the image of the previous one.\n\n---\n\n### 2. **Chain Rank and Nullity**\n- **Chain rank**: This is not a standard term. In a chain complex, one might refer to the **rank** of the chain group (i.e., the dimension of the free part of the group), but \"chain rank\" is not standard terminology.\n- **Nullity**: In linear algebra, the nullity of a matrix is the dimension of its null space. In homology, the **nullity** of a boundary map can be interpreted as the dimension of the kernel of that map — which is exactly the **homology group**.\n\nSo, for a boundary map $ \\partial_n: C_n \\to C_{n-1} $, we have:\n- $ \\text{Nullity}(\\partial_n) = \\dim \\ker(\\partial_n) = \\text{rank of } H_n $\n- This is the **homology group** of degree $ n $.\n\n---\n\n### 3. **What is `twin algtop.homology.chain_rank_nullity`?**\nThis appears to be a **non-standard or fictional** function name.\n- `twin` might be a typo or misremembered name.\n- `algtop` could refer to \"algebraic topology\" or a package in a software.\n- `homology.chain_rank_nullity` might be a hypothetical function in a custom or experimental software.\n\nThere is **no known software or library** named `twin algtop` that implements such a function.\n\n---\n\n### 4. What You Might Actually Want\nYou might be trying to:\n- Compute **homology groups** of a simplicial complex.\n- Determine the **rank** (free part) and **nullity** (kernel size) of boundary maps.\n- Use a software like **SageMath**, **GAP**, **MATLAB**, or **Perseus**, which has homology computation tools.\n\nFor example, in **SageMath**, you might do:\n\n```python\nfrom sage.topology.homology import Homology\n\n# Create a simplicial complex\nK = SimplicialComplex([[0,1], [1,2], [2,0]])\n\n# Compute homology\nH = K.homology()\nprint(H)\n```\n\nThis gives you the homology groups (with torsion and free parts), and from that, you can extract ranks and nullities.\n\n---\n\n### Summary\n❌ There is **no known function** named `twin algtop.homology.chain_rank_nullity`.\n\n✅ What you likely mean:\n- In homology, the **nullity** of a boundary map is the **homology group**.\n- The **rank** might refer to the free part of the homology group.\n- Use a software like **SageMath**, **GAP**, or **Perseus** to compute these.\n\n---\n\n### Suggested Next Step\nIf you're working with a specific software or codebase (e.g., a custom library), please clarify:\n- What software or language are you using?\n- What is the input (e.g., a simplicial complex)?\n- What output do you expect?\n\nWith more context, I can help you write the correct code or interpret the function.\n\nLet me know! 😊",
+          "content_chars": 3418,
+          "elapsed_s": 7.06075,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05977,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "geometry.right_triangles.pythagorean_theorem",
+          "residual": "geometry.right_triangles.pythagorean_theorem",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.975863,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.975863,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "geometry.right_triangles.pythagorean_theorem"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 11,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/diffgeo.surfaces.euclidean_line_element",
+      "tokens": 981,
+      "ttft_s": 0.083176,
+      "turns": [
+        {
+          "chunks": 972,
+          "content": "It seems like you're asking about a specific object or function in the context of differential geometry — possibly related to surfaces in Euclidean space and the **Euclidean line element** — and you've written `twin diffgeo.surfaces.euclidean_line_element`.\n\nHowever, this expression is not a standard or recognized syntax in any known mathematical or computational system (like SageMath, Mathematica, or a differential geometry library). Let's break this down and clarify what might be intended:\n\n---\n\n### 🔍 1. What is the \"Euclidean line element\"?\nIn differential geometry, the **line element** on a surface (or manifold) describes infinitesimal distance between two nearby points.\n\nFor a surface embedded in Euclidean 3-space (ℝ³), the **Euclidean line element** is typically written as:\n\n\\[\nds^2 = dx^2 + dy^2 + dz^2\n\\]\n\nBut if you're working on a **surface** (e.g., a sphere, plane, cylinder), the line element is **restricted** to that surface. For example:\n\n- On a sphere of radius \\( R \\), parameterized by spherical coordinates \\( (\\theta, \\phi) \\):\n  \\[\n  ds^2 = R^2 \\left( d\\theta^或^2 + \\sin^2\\theta \\, d\\phi^2 \\right)\n  \\]\n\nSo the \"Euclidean line element\" on a surface is the induced metric from the ambient Euclidean space.\n\n---\n\n### 🔍 2. What does `diffgeo.surfaces.euclidean_line_element` mean?\nThis appears to be a **hypothetical or custom** syntax, possibly from a differential geometry package (like `diffgeo` in SageMath or a custom library).\n\nAs of now, **SageMath** has a differential geometry module (`sage.manifolds`), but it does not have a built-in object named `twin diffgeo.surfaces.euclidean_line_element`.\n\n- `diffgeo` is not a standard module in SageMath or Python.\n- There is no known library with a function called `twin` or `euclidean_line_element` in this context.\n- \"Twin\" might be a typo or misstatement — perhaps you meant \"tangent\", \"induced\", or \"metric\"?\n\n---\n\n### ✅ Possible Interpretations & Corrections\n\n| Your Input | Likely Intended Meaning |\n|----------|------------------------|\n| `twin diffgeo.surfaces.euclidean_line_element` | ❌ Not a valid or known expression |\n| `diffgeo.surfaces.euclidean_line_element` | ❌ Not a real function or object in standard math software |\n| \"Euclidean line element on a surface\" | ✅ Yes — a well-defined concept in differential geometry |\n\n---\n\n### ✅ What You Might Actually Want\n\nIf you're trying to:\n\n- Compute the **line element** (metric) on a surface in 3D Euclidean space, you can do this in **SageMath** like this:\n\n```python\n# Example: Sphere in 3D\nfrom sage.manifolds import Manifold\n\n# Define a 2D manifold (surface) called 'S'\nS = Manifold(2, 'S', structure='topological')\nS.set_coordinate_system('spherical')\n\n# Define the spherical coordinates\ntheta, phi = S.chart('theta: (0,pi) phi: (0,2*pi)')\n\n# Define the metric (induced from Euclidean space)\ng = S.metric()\ng[0,0] = 1\ng[1,1] = sin(theta)^2\ng[0,1] = 0\ng[1,0] = 0\n\n# Print the line element\nprint(g.display())\n```\n\nThis outputs:\n```\nds^2 = dtheta^2 + sin(theta)^2 dphi^2\n```\n\nWhich is the Euclidean line element on a sphere.\n\n---\n\n### 🔍 Final Answer\n\n❌ `twin diffgeo.surfaces.euclidean_line_element` is **not a valid or recognized object** in any standard differential geometry or mathematical software.\n\n✅ You likely meant to ask about the **Euclidean line element on a surface** — which is the induced metric from ambient Euclidean space.\n\nIf you're working in a specific software (like SageMath, Mathematica, or a custom library), please clarify, and I can help you write the correct code.\n\nLet me know:\n- What software or language you're using?\n- What surface you're working on (e.g., sphere, cylinder)?\n- What do you want to compute (e.g., line element, curvature, area)?\n\nThen I can give you a precise, working example. 🚀",
+          "content_chars": 3773,
+          "elapsed_s": 7.975863,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.083176,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "numanalysis.integration.trapezoidal_rule",
+          "residual": "numanalysis.integration.trapezoidal_rule",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 1.879459,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.879459,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "numanalysis.integration.trapezoidal_rule"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/geometry.area_formulas.trapezoid_area_formula",
+      "tokens": 230,
+      "ttft_s": 0.092175,
+      "turns": [
+        {
+          "chunks": 231,
+          "content": "The **area of a trapezoid** is given by the following formula:\n\n$$\n\\text{Area} = \\frac{1}{2} \\times (b_1 + b_2) \\times h\n$$\n\n### Explanation:\n- $ b_1 $ and $ b_2 $ are the lengths of the two parallel sides (bases) of the trapezoid.\n- $ h $ is the height (the perpendicular distance between the two bases).\n\n### Example:\nIf a trapezoid has bases of lengths 6 units and 10 units, and a height of 4 units, then:\n\n$$\n\\text{Area} = \\frac{1}{2} \\times (6 + 10) \\times 4 = \\frac{1}{2} \\times 16 \\times 4 = 32 \\text{ square units}\n$$\n\n✅ This is the standard **trapezoid area formula**.\n\nLet me know if you'd like a version for a specific type of trapezoid (like isosceles) or a derivation!",
+          "content_chars": 681,
+          "elapsed_s": 1.879459,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.092175,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "ml.objective.token_cross_entropy_loss",
+          "residual": "ml.objective.token_cross_entropy_loss",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 9.605981,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 9.605981,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "ml.objective.token_cross_entropy_loss"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/infotheory.divergence.cross_entropy",
+      "tokens": 1191,
+      "ttft_s": 0.05677,
+      "turns": [
+        {
+          "chunks": 1183,
+          "content": "It seems like you're referring to a concept in information theory — specifically, **cross-entropy** — and possibly a \"twin\" version or variant of it. Let's break this down and clarify what you might mean.\n\n---\n\n### 🔍 1. **Cross-Entropy in Information Theory**\n\nIn information theory, **cross-entropy** measures the average number of bits needed to encode information from a source using a code that is optimized for a different (mismatched) probability distribution.\n\nGiven:\n- A true (or actual) probability distribution \\( P \\) (the data-generating distribution),\n- A model (or estimated) probability distribution \\( Q \\),\n\nThe **cross-entropy** is defined as:\n\n\\[\nH(P, Q) = \\sum_{x} P(x) \\log \\frac{1}{Q(x)} = -\\sum_{x} P(x) \\log Q(x)\n\\]\n\nThis is the expected value of \\( -\\log Q(x) \\) under distribution \\( P \\).\n\n- It is **not symmetric** in \\( P \\) and \\( Q \\).\n- It is **always ≥ entropy of \\( P \\)**, and equals it only when \\( P = Q \\).\n\n---\n\n### 🔍 2. What Does \"Twin\" Mean?\n\nThe phrase **\"twin infotheory.divergence.cross_entropy\"** is not a standard or widely recognized term in information theory.\n\nHowever, possible interpretations of \"twin\" could be:\n\n#### ✅ Possibility 1: **Twin Distributions**\n- You might be thinking about **two distributions** (say, \\( P \\) and \\( Q \\)) that are \"twins\" — perhaps symmetric, or used in a paired setting (like in machine learning, comparing two models).\n- In that case, cross-entropy between \\( P \\) and \\( Q \\) and between \\( Q \\) and \\( P \\) are **not equal**, but the **symmetric version** (like **JS divergence** or **Kullback-Leibler divergence**) is symmetric.\n\n> For example:\n> - \\( H(P, Q) \\neq H(Q, P) \\)\n> - But \\( H(P, Q) + H(Q, P) \\) is symmetric.\n\nSo, a \"twin\" could refer to the **pair** of cross-entropy terms.\n\n#### ✅ Possibility 2: **Twin Cross-Entropy in Machine Learning**\n- In deep learning, \"twin\" models are often used (e.g., **twin networks** or **twin loss functions**).\n- For example, in **twin loss** (like in **twin loss for contrastive learning**), two networks are trained to produce embeddings, and a loss function is defined using cross-entropy-like components between positive and negative pairs.\n\n> Example: Twin Loss (in triplet or contrastive learning):\n> \\[\n> \\mathcal{L} = \\max(0, \\text{margin} - \\text{sim}(p, p) + \\text{sim}(p, n))\n> \\]\n> where \\( p \\) is a positive pair and \\( n \\) a negative one.\n\nIn such cases, **cross-entropy** is not directly used, but **log-likelihoods** or **pairwise comparisons** are.\n\n#### ✅ Possibility  or 3: **Twin Information Theory Divergence**\n- This might be a reference to a **symmetrized divergence** (like Jensen-Shannon divergence), which is symmetric and often used in cases where you want a \"twin\" measure between two distributions.\n\n> Jensen-Shannon divergence:\n> \\[\n> D_{\\text{JS}}(P \\| Q) = \\frac{1}{2} D_{\\text{KL}}(P \\| M) + \\frac{1}{2} D_{\\text{KL}}(Q \\| M)\n> \\]\n> where \\( M = \\frac{1}{2}(P + Q) \\)\n\nThis is symmetric and is sometimes called a \"twin\" version of KL divergence or cross-entropy.\n\n---\n\n### ✅ Summary\n\n| Term | Meaning |\n|------|--------|\n| **Cross-entropy** | \\( H(P, Q) = -\\sum P(x) \\log Q(x) \\) |\n| **\"Twin\"** | Could mean: (1) a symmetric pair of distributions, (2) a symmetric divergence (like JS), or (3) twin models in ML |\n| **Twin Cross-Entropy** | Not standard, but might refer to symmetric form of cross-entropy or a paired loss function |\n\n---\n\n### 🚀 Final Answer\n\n> The phrase **\"twin infotheory.divergence.cross_entropy\"** is not a standard term in information theory. However, it may refer to:\n>\n> - A **pair of cross-entropies** between two distributions \\( P \\) and \\( Q \\), or\n> - A **symmetric divergence** (like Jensen-Shannon divergence), which is a \"twin\" of the asymmetric Kullback-Leibler divergence.\n>\n> In machine learning, \"twin\" often refers to **twin models** (e.g., in contrastive learning), where cross-entropy-like losses are used between positive and negative pairs.\n>\n> So, while **twin cross-entropy** isn't a standard concept, **symmetrized divergences** or **paired cross-entropy terms** are common in such contexts.\n\n---\n\nIf you can clarify what \"twin\" means in your context (e.g., machine learning, symmetry, or a specific paper), I can give a more precise answer!\n\nLet me know! 😊",
+          "content_chars": 4271,
+          "elapsed_s": 9.605981,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05677,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.thermodynamics.gibbs_entropy",
+          "residual": "physics.thermodynamics.gibbs_entropy",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 5.671538,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 5.671538,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.thermodynamics.gibbs_entropy"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/infotheory.entropy.shannon_entropy",
+      "tokens": 664,
+      "ttft_s": 0.096612,
+      "turns": [
+        {
+          "chunks": 658,
+          "content": "It seems like you're referring to a concept in information theory — specifically, **Shannon entropy** — and possibly a tool or script named `twin infotheory.entropy.shannon_entropy`. However, there is no widely known or standard software or library called `twin infotheory.entropy.shannon_entropy` in the field of information theory or computational tools.\n\nLet’s break this down and clarify:\n\n---\n\n### 🔍 1. **Shannon Entropy**\nShannon entropy is a measure of uncertainty or information content in a probability distribution. For a discrete random variable $ X $ with possible outcomes $ x_1, x_2, ..., x_n $ and probabilities $ p(x_i) $, the Shannon entropy is:\n\n$$\nH(X) = -\\sum_{i=1}^{n} p(x_i) \\log_2 p(x_i)\n$$\n\nIt's fundamental in information theory and used in data compression, machine learning, and cryptography.\n\n---\n\n### 🔍 2. What is `twin infotheory.entropy.shannon_entropy`?\n\n- There is **no known standard library or tool** with that exact name.\n- \"Twin\" might be a misstatement or confusion with something like **\"twin\" in data** (e.g., twin data sets), or perhaps a typo.\n- \"infotheory\" and \"entropy\" are common in scientific computing (e.g., Python libraries like `scipy`, `information-theory` packages), but no official module named `twin infotheory.entropy.shannon_entropy` exists.\n- In Python, you might find entropy functions in libraries like:\n  - `scipy.stats`\n  - `information-theory` (a small Python package)\n  - `scikit-learn` (for mutual information, not direct Shannon entropy)\n\n---\n\n### ✅ Example: Computing Shannon Entropy in Python\n\n```python\nimport numpy as np\nfrom scipy.stats import entropy\n\n# Example: probability distribution\np = np.array([0.1, 0.3, 0.6])\n\n# Compute Shannon entropy\nshannon_entropy = entropy(p, base=2)\nprint(f\"Shannon Entropy: {shannon_entropy} bits\")\n```\n\nOutput:\n```\nShannon Entropy: 1.570963585576382 bits\n```\n\n---\n\n### 🚩 Possible Misunderstandings\n\n- **\"Twin\"**: Maybe you meant \"twin data\", \"twin entropy\", or a specific dataset?\n- **\"Infotheory.entropy.shannon_entropy\"**: This looks like a path or filename, perhaps from a local script or a custom project?\n- Are you referring to a **specific software**, **academic paper**, or **custom code**?\n\n---\n\n### ✅ Next Steps\n\nIf you can clarify:\n- What do you want to do? (e.g., compute entropy, compare two distributions, etc.)\n- What programming language or environment?\n- Is this part of a larger project or script?\n\nI’d be happy to help you write a function, script, or explain how to compute Shannon entropy in your context.\n\n---\n\nLet me know more details, and I’ll tailor the answer! 😊",
+          "content_chars": 2593,
+          "elapsed_s": 5.671538,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.096612,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.absorption",
+          "residual": "settheory.boolean_laws.absorption",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.747497,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.747497,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.absorption"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 8,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.absorption",
+      "tokens": 458,
+      "ttft_s": 0.066648,
+      "turns": [
+        {
+          "chunks": 450,
+          "content": "The **absorption law** in Boolean algebra is a fundamental identity that helps simplify logical expressions. It consists of two laws:\n\n---\n\n### **Absorption Laws in Boolean Algebra**\n\n1. **Absorption (1):**  \n   $$\n   A + (A \\cdot B) = A\n   $$  \n   *This means: A OR (A AND B) is equal to A.*\n\n2. **Absorption (2):**  \n   $$\n   A \\cdot (A + B) = A  \n   $$  \n   *This means: A AND (A OR B) is equal to A.*\n\n---\n\n### 🔍 Explanation\n\n- These laws are called \"absorption\" because the term **B** (or **B**) is \"absorbed\" into **A** when combined with the appropriate operation.\n\n#### Example 1:  \nLet $ A = 1 $, $ B = 0 $  \nThen:  \n$ A + (A \\cdot B) = 1 + (1 \\cdot 0) = 1 + 0 = 1 = A $ ✅\n\n#### Example 2:  \nLet $ A = 0 $, $ B = 1 $  \nThen:  \n$ A \\cdot (A + B) = 0 \\cdot (0 + 0) = 0 \\cdot 1 = 0 = A $ ✅\n\n---\n\n### 📚 Why It's Useful\n\n- Used in **logic simplification** and **circuit design** to reduce the number of logic gates.\n- Helps transform complex expressions into simpler, more efficient forms.\n\n---\n\n### 📌 Summary\n\n| Law | Expression |\n|-----|-----------|\n| Absorption 1 | $ A + (A \\cdot B) = A $ |\n| Absorption 2 | $ A \\cdot (A + B) = A $ |\n\nThese laws are part of the **Boolean logic laws** and are essential in digital logic and computer science.\n\n✅ So, **`twin logic.boolean_laws.absorption`** refers to the **absorption laws** in Boolean logic as defined above.\n\nLet me know if you'd like a visual diagram or a truth table for these laws! 🚀",
+          "content_chars": 1445,
+          "elapsed_s": 3.747497,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.066648,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.double_negation",
+          "residual": "settheory.boolean_laws.double_negation",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.657394,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.657394,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.double_negation"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.double_negation",
+      "tokens": 448,
+      "ttft_s": 0.06434,
+      "turns": [
+        {
+          "chunks": 435,
+          "content": "The **double negation** law in logic is a fundamental principle in classical logic that states:\n\n> **¬(¬P) ≡ P**\n\nThis means:  \nThe negation of the negation of a proposition **P** is logically equivalent to **P** itself.\n\n---\n\n### 🔍 Explanation:\n\n- Let **P** be a proposition (a statement that is either true or false).\n- **¬P** means \"P is false\".\n- **¬(¬P)** means \"It is not true that P is false\", which is equivalent to saying \"P is true\".\n\nSo, double negation removes the negation and returns the original statement.\n\n---\n\n### ✅ Example:\n\nLet P = \"It is raining.\"\n\n- ¬P = \"It is not raining.\"\n- ¬(¬P) = \"It is not true that it is not raining\" → \"It is raining.\"\n\nSo:  \n¬(¬P) ≡ P → \"It is raining\" ≡ \"It is raining.\"\n\n✅ This is logically valid in **classical logic**.\n\n---\n\n### ⚠️ Note:\n\n- In **intuitionistic logic** (a variant of logic that does not accept the law of excluded middle), the double negation law is **not** generally valid.\n- However, in **classical logic**, double negation is a valid and widely accepted law.\n\n---\n\n### 📚 In Boolean Algebra:\n\nIn **Boolean logic**, this law corresponds to:\n\n> ¬(¬A) = A\n\nWhere A is a Boolean variable (0 or 1).\n\n- If A = 1 → ¬A = 0 → ¬(¬A) = 1 = A ✅\n- If A = 0 → ¬A = 1 → ¬(¬A) = 0 = A ✅\n\nSo, it holds for both values.\n\n---\n\n### Summary:\n\n✅ **Double Negation Law** (in classical logic):  \n> **¬(¬P) ≡ P**\n\nThis is a foundational truth in both propositional logic and Boolean algebra.\n\nLet me know if you'd like to see it applied in a real-world example or in a truth table! 🚀",
+          "content_chars": 1529,
+          "elapsed_s": 3.657394,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.06434,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.identity_laws",
+          "residual": "settheory.boolean_laws.identity_laws",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 3.863976,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 3.863976,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.identity_laws"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 9,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.identity_laws",
+      "tokens": 472,
+      "ttft_s": 0.075035,
+      "turns": [
+        {
+          "chunks": 473,
+          "content": "The **Identity Laws** in **Boolean Logic** are fundamental principles that define how a variable interacts with itself when combined with a constant (either 0 or 1). These laws are essential in simplifying and analyzing logical expressions.\n\n### Boolean Identity Laws\n\nThere are two main identity laws in Boolean algebra:\n\n---\n\n#### 1. **Identity Law for AND (Conjunction)**  \nFor any Boolean variable \\( A \\):\n\n\\[\nA \\cdot 1 = A\n\\]\n\n**Interpretation**:  \nMultiplying a variable by 1 (true) results in the variable itself.  \nThis is like saying: \"If you AND a statement with 'true', the result is the original statement.\"\n\n**Example**:  \nIf \\( A = 1 \\), then \\( 1 \\cdot 1 = 1 \\)  \nIf \\( A = 0 \\), then \\( 0 \\cdot 1 = 0 \\)\n\n---\n\n#### 2. **Identity Law for OR (Disjunction)**  \nFor any Boolean variable \\( A \\):\n\n\\[\nA + 0 = A\n\\]\n\n**Interpretation**:  \nAdding a variable to 0 (false) results in the variable itself.  \nThis is like saying: \"If you OR a statement with 'false', the result is the original statement.\"\n\n**Example**:  \nIf \\( A =  1 \\), then \\( 1 + 0 = 1 \\)  \nIf \\( A = 0 \\), then \\( 0 + 0 = 0 \\)\n\n---\n\n### Summary Table\n\n| Law | Expression | Meaning |\n|-----|-----------|--------|\n| AND Identity | \\( A \\cdot 1 = A \\) | AND with 1 leaves the variable unchanged |\n| OR Identity | \\( A + 0 = A \\) | OR with 0 leaves the variable unchanged |\n\n---\n\n✅ These laws are foundational in Boolean algebra and are used in simplifying logic circuits and expressions.\n\n📌 Note:  \n- In Boolean algebra, \\( \\cdot \\) represents AND, and \\( + \\) represents OR.  \n- The identity laws are analogous to the identity properties in arithmetic: \\( a \\cdot 1 = a \\) and \\( a + 0 = a \\).\n\nLet me know if you'd like a truth table or a visual explanation!",
+          "content_chars": 1734,
+          "elapsed_s": 3.863976,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.075035,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "narrative.world.marble_moved_box",
+          "residual": "narrative.world.marble_moved_box",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 2.332261,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 2.332261,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "narrative.world.marble_moved_box"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 11,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/narrative.belief.sally_marble_basket",
+      "tokens": 290,
+      "ttft_s": 0.055748,
+      "turns": [
+        {
+          "chunks": 291,
+          "content": "It seems like you're referring to a \"twin narrative\" involving a character named Sally and a \"marble basket,\" possibly tied to a belief system or symbolic theme. However, the phrase \"Sally Marble Basket\" doesn't correspond to any widely known literary, historical, or cultural reference in my knowledge base. It might be a fictional, metaphorical, or original creation.\n\nCould you clarify or expand on what you mean by:\n\n- A \"twin narrative\"? (e.g., two characters or stories told in parallel, or a dual perspective?)\n- \"Belief\" — do you mean a spiritual, psychological, or philosophical belief system?\n- \"Sally Marble Basket\" — is this a character, a metaphor, a symbolic object, or part of a story or artwork?\n\nWith more context, I’d be happy to help develop a meaningful twin narrative that explores beliefs through the lens of Sally and her marble basket — perhaps as a symbol of memory, choices, or duality in human experience.\n\nFor example:\n> In a twin narrative, Sally and her twin sister each carry a marble basket. One fills it with marbles of different colors, representing choices and beliefs. The other only adds marbles when they feel certain. The story unfolds as they grow apart, yet both believe their basket holds the truth of who they are.\n\nLet me know how you'd like to proceed — creative writing, philosophical exploration, or symbolic analysis?",
+          "content_chars": 1365,
+          "elapsed_s": 2.332261,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.055748,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.gravitation.newton_universal_gravitation",
+          "residual": "physics.gravitation.newton_universal_gravitation",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 7.885731,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 7.885731,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.gravitation.newton_universal_gravitation"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 13,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/physics.electromagnetism.coulombs_law",
+      "tokens": 997,
+      "ttft_s": 0.060671,
+      "turns": [
+        {
+          "chunks": 988,
+          "content": "It seems like you're referring to **Coulomb's Law** in the context of **electromagnetism**, possibly with a mention of \"twin physics\" — though \"twin physics\" is not a standard or recognized term in physics.\n\nLet me clarify and provide a clear explanation of **Coulomb's Law** in electromagnetism, which is a fundamental principle in physics.\n\n---\n\n### 🔬 Coulomb's Law (Electromagnetism)\n\n**Coulomb's Law** describes the electrostatic force between two point charges.\n\n> **Statement**:\n> The magnitude of the electrostatic force between two point charges is directly proportional to the product of the magnitudes of the charges and inversely proportional to the square of the distance between them.\n\n---\n\n### 📌 Mathematical Form:\n\n\\[\nF = k \\frac{|q_1 q_2|}{r^2}\n\\]\n\nWhere:\n- \\( F \\) = magnitude of the electrostatic force (in newtons, N)\n- \\( q_1, q_2 \\) = magnitudes of the two point charges (in coulombs, C)\n- \\( r \\) = distance between the centers of the two charges (in meters, m)\n- \\( k \\) = Coulomb's constant:  \n  \\[\n  k = \\frac{1}{4\\pi \\varepsilon_0} \\approx 8.99 \\times 10^9 \\, \\text{N·m}^2/\\text{C}^2\n  \\]\n  where \\( \\varepsilon_0 \\) is the vacuum permittivity.\n\n---\n\n### 🔍 Direction of the Force:\n- Like charges (both positive or both negative) → **repulsive** force.\n- Opposite charges → **attractive** force.\n\n---\n\n### 📚 Example:\nIf two charges of \\( +3 \\, \\mu\\text{C} \\) and \\( -2 \\, \\mu\\text{C} \\) are separated by 1 meter in vacuum:\n\n\\[\nF = (8.99 \\times  10^9) \\frac{|3 \\times 10^{-6} \\times (-2) \\times 10^{-6}|}{1^2} = 8.99 \\times 10^9 \\times 6 \\times 10^{-12}\n\\]\n\\[\nF = 5.394 \\times 10^{-2} \\, \\text{N} \\quad (\\text{attractive})\n\\]\n\n---\n\n### ⚠️ Important Notes:\n- Applies only to **point charges** or **spherically symmetric** charges (like a charged sphere).\n- Valid in **vacuum** or **non-conducting media**; in media, \\( k \\) is modified by the relative permittivity \\( \\varepsilon_r \\).\n- It is the electrostatic analog of Newton's law of universal gravitation.\n\n---\n\n### ❓ What is \"Twin Physics\"?\n\nThere is **no known standard concept** in physics called \"twin physics\" or \"twin electromagnetism.\"\n\nPossibilities:\n- A typo or misstatement (e.g., \"twin\" instead of \"two\" or \"vector\" or \"symmetry\").\n- Could be a reference to **symmetry in physics** (e.g., charge conjugation, parity), or **dualities** in electromagnetism (like electric and magnetic duality).\n- In some educational contexts, \"twin\" might refer to two identical charges being studied together.\n\nIf you meant something like:\n- \"Two charges\" → Coulomb's Law applies.\n- \"Symmetry\" in electromagnetism → Yes, electric and magnetic fields have symmetries.\n- \"Twin\" in a problem → Perhaps two identical charges interacting?\n\nLet me know if you'd like to explore:\n- Coulomb's Law with two identical charges,\n- Comparison with gravity,\n- Applications in capacitors or electric fields,\n- Or a \"twin\" concept in quantum physics (like particle-antiparticle)?\n\n---\n\n✅ Summary:\n\n| Concept | Detail |\n|--------|--------|\n| **Coulomb's Law** | Electrostatic force between point charges |\n| Formula | \\( F = k \\frac{|q_1 q_2|}{r^2} \\) |\n| Force Type | Attractive (opposite signs), repulsive (same signs) |\n| \"Twin Physics\"? | Not a standard term; likely a misstatement or typo |\n\n---\n\n📌 If you meant something like **\"two charges in electromagnetism\"**, or **\"Coulomb's law for two identical charges\"**, I’d be happy to expand!\n\nLet me know how you'd like to proceed! 😊",
+          "content_chars": 3441,
+          "elapsed_s": 7.885731,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.060671,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "geometry.circle_formulas.circle_circumference_formula",
+          "residual": "geometry.circle_formulas.circle_circumference_formula",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "physics.mechanics.newton_second_law",
+          "residual": "physics.mechanics.newton_second_law",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "physics.circuits.ohms_law",
+          "residual": "physics.circuits.ohms_law",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 5.179993,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 5.179993,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "geometry.circle_formulas.circle_circumference_formula",
+        "physics.mechanics.newton_second_law",
+        "physics.circuits.ohms_law"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 12,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/physics.mechanics.hookes_law",
+      "tokens": 668,
+      "ttft_s": 0.07513,
+      "turns": [
+        {
+          "chunks": 668,
+          "content": "It seems there might be a misunderstanding or a typo in your query. There is no widely recognized or standard scientific or educational resource titled *\"twin physics.mechanics.hookes_law\"*.\n\nLet’s break this down:\n\n- **\"twin\"**: This could refer to two objects or systems in physics (e.g., twin springs or twin pendulums), or it might be a misstatement.\n- **\"physics.mechanics.hookes_law\"**: This appears to be a path or structure (like in a software or educational framework) that references **Hooke's Law**, which is a fundamental principle in mechanics.\n\n✅ **Hooke's Law** is a well-known principle in physics, stating that:\n\n> The force \\( F \\) required to extend or compress a spring by some distance \\( x \\) is proportional to that distance:\n>\n> \\[\n> F = -kx\n> \\]\n>\n> where:\n> - \\( F \\) is the restoring force (in newtons),\n> - \\( k \\) is the spring constant (in N/m),\n> - \\( x \\) is the displacement from the equilibrium position (in meters),\n> - The negative sign indicates the force acts in the opposite direction to the displacement.\n\nThis law is a cornerstone of **mechanics**, particularly in the study of **elastic materials** and **simple harmonic motion**.\n\n❌ So, *\"twin physics.mechanics.hookes_law\"* is not a real or standard concept in physics. It may be:\n- A typo or misphrasing.\n- A reference to a specific software, simulation, or educational platform (e.g., a coding or simulation environment), where \"twin physics\" is a module or function.\n- A confusion with \"twin\" as in two identical systems (e.g., two springs in parallel or series).\n\n🔍 If you're asking about **two springs (twin springs)** and how Hooke's Law applies, here’s an example:\n\n**Example: Two identical springs in parallel**\n- Each spring has spring constant \\( k \\).\n- When combined in parallel, the effective spring constant becomes:\n  \\[\n  k_{\\text{eff}} = k_1 + k_2 = 2k\n  \\]\n- So the total force is \\( F = -2k x \\), still obeying Hooke's Law.\n\n**Example: Two springs in series**\n- Effective spring constant becomes:\n  \\[\n  \\frac{1}{k_{\\text{eff}}} = \\frac{1}{k} + \\frac{1}{k} = \\frac{2}{k} \\Rightarrow k_{\\text{eff}} = \\frac{k}{2}\n  \\]\n\n👉 So, if you're interested in how Hooke's Law applies to systems with two springs (twin springs), I can help with that!\n\nCould you clarify your question? For instance:\n- Are you asking about Hooke's Law in a system with two springs?\n- Are you referring to a software or simulation called \"twin physics\"?\n- Or is there a typo, like \"two\" instead of \"twin\"?\n\nI’d be happy to help with a clear, accurate explanation! 😊",
+          "content_chars": 2546,
+          "elapsed_s": 5.179993,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.07513,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/imperative_purple"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/set_magenta"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/resume/imperative_purple"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/resume/imperative_turquoise"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/absent_statement_0"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/absent_statement_1"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/english_owns_question"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/owns_unhosted_head"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/owns_unparseable"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_absent_target_file"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_cross_world_target"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_missing_argument"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/twin_two_arguments"
+    }
+  ],
+  "refusal_time_charge": {
+    "rule": "an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "slowest_correct_answer_s": 1.192463,
+    "tasks_charged": []
+  },
+  "rendering_digest_drift": [],
+  "rendering_digests_revalidated": true,
+  "run": {
+    "boundary": "public HTTP API only; no engine module imported (checked in this process, see the clean-imports line on stdout)",
+    "derived_offline_from": null,
+    "finished": "2026-08-22T08:16:31+00:00",
+    "forced_over_void": false,
+    "half": "A",
+    "measured_by": "scripts/measure_throughput.py",
+    "overwrote_existing_out": false,
+    "registered": false,
+    "started": "2026-08-22T08:13:49+00:00",
+    "system": "b-ungrounded",
+    "url": "http://127.0.0.1:11434",
+    "warmup": true,
+    "warmup_detail": {
+      "elapsed_s": 0.29758,
+      "error": null,
+      "http_status": 200,
+      "measured": false,
+      "sent": true
+    }
+  },
+  "schema": "corollary.throughput-result/1",
+  "scoring_rules_applied": {
+    "bounded_negative_is_an_answer": "A closure task whose arm is 'unreachable' expects status 'exhausted' and outcome 'answer': SPEC §6.1 names it a certified bounded negative carrying its closure-receipt/1 verbatim. Likewise a relation check with holds:no is a correct answer, not a refusal.",
+    "clarification_leg": "T5's clarification leg is graded per marked WAITING turn, not per task. Every clarification_due task carries at least one turn with expected_status 'waiting'; the leg passes only if the skin returns a WAITING status at 100% of those turns. On corollary/conversation that turn must additionally carry x_corollary.need matching need_expect; on corollary/kernel a WAITING status with its candidate answer lines satisfies the leg (SPEC §6.2 emits no need record on that profile). A phase:'resume' task that never waited fails the leg even if its final answer is correct.",
+    "per_kind_floor": "T5's per-kind >=80% correctness-with-receipts floor applies to the five all-answer kinds (belief_query, closure_reachability, corpus_definition, exact_value, twin_lookup), which are the kinds counted in answerable_total. clarification_due and refusal_due are governed by their 100% gates only -- the WAITING leg above and T5's refusal gate -- and never by the 80% floor; their tasks may not be counted toward it in either direction.",
+    "receipt_subset": "receipt_expect and need_expect are subset assertions: every key present must match; absent keys are unconstrained.",
+    "zero_token_turns": "Refusal, WAITING and abstained turns contribute zero useful tokens whatever their content length (SPEC §6), which is why refusal tasks carry an empty content_must_contain: there is no prose there for a score to reward."
+  },
+  "summary": {
+    "answerable_tasks": 45,
+    "book_expected_counts": {
+      "belief_query": {
+        "A": 5,
+        "B": 9
+      },
+      "clarification_due": {
+        "A": 4,
+        "B": 6
+      },
+      "closure_reachability": {
+        "A": 2,
+        "B": 6
+      },
+      "corpus_definition": {
+        "A": 14,
+        "B": 16
+      },
+      "exact_value": {
+        "A": 13,
+        "B": 13
+      },
+      "refusal_due": {
+        "A": 9,
+        "B": 6
+      },
+      "twin_lookup": {
+        "A": 11,
+        "B": 5
+      }
+    },
+    "clarification_gate": {
+      "floor": 1.0,
+      "graded": "per marked WAITING turn (book scoring_rules.clarification_leg)",
+      "marked_waiting_turns": 0,
+      "meets_floor": null,
+      "rate": null,
+      "waiting_returned": 0
+    },
+    "correctness_by_kind": {
+      "belief_query": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 5
+      },
+      "closure_reachability": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 2
+      },
+      "corpus_definition": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 14
+      },
+      "exact_value": {
+        "correct_with_receipt": 4,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.307692,
+        "tasks": 13
+      },
+      "twin_lookup": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 11
+      }
+    },
+    "correctness_overall": {
+      "correct_with_receipt": 4,
+      "floor": 0.9,
+      "meets_floor": false,
+      "rate": 0.088889,
+      "tasks": 45
+    },
+    "elapsed_total_answerable_s": 161.84904,
+    "elapsed_total_s": 161.84904,
+    "elapsed_total_task_set": "every task measured on this arm, charged elapsed -- answerable and non-answerable alike",
+    "gates_are_reported_not_enforced": "the stopwatch measures; adjudication reads this file (DESIGN-grounded-throughput 6, 7)",
+    "materials_fit_bound_source": "observed: /api/ps (served context of the loaded model)",
+    "materials_fit_bound_tokens": 32768,
+    "materials_fit_known_for": 45,
+    "materials_fit_task_ids": [
+      "belief_query/marco.cat.garden",
+      "belief_query/omar.coin.drawer",
+      "belief_query/pia.book.shelf",
+      "belief_query/quinn.lamp.hall",
+      "belief_query/tess.hat.locker",
+      "closure_reachability/story.golden_chicken.reachable.2",
+      "closure_reachability/story.golden_chicken.unreachable.0",
+      "corpus_definition/algtop.homology.betti_alternating_sum",
+      "corpus_definition/calculus.differentiation.average_rate_of_change",
+      "corpus_definition/chemistry.acid_base.ph_definition",
+      "corpus_definition/diffgeo.curves.circle_curvature",
+      "corpus_definition/difftop.degree.degree_multiplicativity",
+      "corpus_definition/economics.finance.capm_expected_return",
+      "corpus_definition/graphtheory.degree.average_degree_from_edge_count",
+      "corpus_definition/narrative.belief.sally_marble_basket",
+      "corpus_definition/numanalysis.error.relative_condition_number",
+      "corpus_definition/physics.circuits.ohms_law",
+      "corpus_definition/probstat.limit.clt_iid_standardized_mean",
+      "corpus_definition/settheory.boolean_laws.absorption",
+      "corpus_definition/temporal.induction.temporal_induction_axiom",
+      "corpus_definition/trigonometry.definitions.tangent",
+      "exact_value/evaluate/13^2+9",
+      "exact_value/evaluate/19*-28",
+      "exact_value/evaluate/31*21+19",
+      "exact_value/evaluate/37^2+25",
+      "exact_value/evaluate/7*5+11",
+      "exact_value/evaluate/x^2+11*x",
+      "exact_value/evaluate/x^2+27*x",
+      "exact_value/relation/21+16<38",
+      "exact_value/relation/23+19<41",
+      "exact_value/relation/33+34>66",
+      "exact_value/relation/35+37>73",
+      "exact_value/relation/39+43<81",
+      "exact_value/relation/y^2=730",
+      "twin_lookup/algtop.homology.chain_rank_nullity",
+      "twin_lookup/diffgeo.surfaces.euclidean_line_element",
+      "twin_lookup/geometry.area_formulas.trapezoid_area_formula",
+      "twin_lookup/infotheory.divergence.cross_entropy",
+      "twin_lookup/infotheory.entropy.shannon_entropy",
+      "twin_lookup/logic.boolean_laws.absorption",
+      "twin_lookup/logic.boolean_laws.double_negation",
+      "twin_lookup/logic.boolean_laws.identity_laws",
+      "twin_lookup/narrative.belief.sally_marble_basket",
+      "twin_lookup/physics.electromagnetism.coulombs_law",
+      "twin_lookup/physics.mechanics.hookes_law"
+    ],
+    "materials_fit_tasks": 45,
+    "median_perceived_throughput_tps": 0.0,
+    "median_perceived_throughput_tps_materials_fit": 0.0,
+    "median_ttfa_s": 0.062286,
+    "median_ttfa_task_set": "every answerable task that produced any content delta -- time to first any-token, reported beside the gate statistic and not the gate statistic",
+    "median_ttft_s": 0.048417,
+    "median_ttft_task_set": "answerable tasks with useful_tokens > 0 -- T4's time-to-first-USEFUL-token leg",
+    "pre_declared_secondary_label": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "refusal_gate": {
+      "floor": 1.0,
+      "meets_floor": null,
+      "rate": null,
+      "refused": 0,
+      "tasks": 0
+    },
+    "tasks_measured": 45,
+    "useful_tokens_total": 433
+  },
+  "tokenizer": {
+    "file": ".runtime/baseline/qwen3-4b-instruct-2507.tokenizer.json",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "verified": true
+  },
+  "useful_token_rule": "useful tokens = the tokens of the assistant message content field only, under the pinned baseline tokenizer; vendor extension payloads, receipt structures, ids and digests never count, and the server's usage block is never read (DESIGN-grounded-throughput 3; SPEC-chat-completions-skin 6)"
+}

@@ -1,0 +1,3717 @@
+{
+  "b_side_correctness_rule": "A baseline answer is correct iff every content_must_contain string, after stripping any leading label of the form ^[a-z_][a-z_ ]*: * (the kernel's frozen label padding), is a substring of the baseline's content -- e.g. the kernel line 'exact      : 449' requires '449'; unlabeled strings (titles, meanings, member ids) are unchanged. Receipts are not required of a model: receipted is false on this arm and is recorded, and T4 compares correctness and speed only (DESIGN-grounded-throughput 6 T4). Baseline arms never see receipt_expect, need_expect or x_corollary. Baseline arms run ANSWERABLE tasks only; refusal_due and clarification_due tasks gate the kernel and are recorded 'not-applicable' here. This rule was committed with the stopwatch, before any timed run.",
+  "baseline_arm": {
+    "arm": "b-grounded",
+    "context_rule": "receives, injected into its context before the question, the same committed artifact records the kernel's answer rests on - scoped to the referenced record(s) named by the task's artifact_refs (the node record, the twin group entry, the closure's registration plus the routes and states for the queried world), extracted verbatim, not whole ledger files",
+    "materials_deviation": "the closure reports carry no key named canonical_routes; the routes they hold are convergence_cells' primary_route / alternate_route pairs, and those are what this arm injected beside the world registration and the states array",
+    "model": "qwen3:4b-instruct",
+    "prompt_template": {
+      "system": "Answer using only the provided materials. When the answer is contained in the materials, reproduce the relevant content verbatim - exact strings, exact notation. If the materials do not determine the answer, say so instead of guessing.",
+      "user": "MATERIALS:\n{artifacts}\n\nQUESTION:\n{question}"
+    },
+    "sampling_requested": {
+      "repeat_penalty": 1.0,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.8
+    },
+    "sampling_source": "applied by the ollama model manifest; /v1 ignores top_k and repeat_penalty (verified 2026-08-22)"
+  },
+  "baseline_digest": "3be33a20e86ba31999a90fb56e9584ff252db8103c81ef3f2aad61dbeb4e6063",
+  "book": "experiments\\throughput_tasks.json",
+  "book_digest": "d4b84f6e292f7b94ecdf4abc115c9d942a9dd10134097f4d787715c094b021f8",
+  "context_pin": {
+    "amended": "2026-08-22, before any timed run; replaces an earlier same-day num_ctx amendment that review proved inert at the /v1 layer and unrunnable at 262144 on this GPU",
+    "configured_tokens": 32768,
+    "mechanism": "OLLAMA_CONTEXT_LENGTH environment variable on the serving process; the OpenAI-compat /v1 layer ignores a num_ctx body field (verified live 2026-08-22), so the setting must be server-side and the run must record the observed context_length from /api/ps",
+    "pre_declared_secondary": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "truncation_disclosure": "the largest closure MATERIALS block measures ~130k tokens - full closure grounding does not fit this hardware in any configuration. The stopwatch records materials_chars and materials_tokens per task; any task whose materials exceed the observed context is reported materials-truncated in the result.",
+    "why_32768": "the largest value whose KV cache fits the 16 GiB GPU (~5 GiB at 32k for qwen3-4b; 131072+ needs more VRAM than the machine has and would spill the model to CPU, a strawman in the other direction). ollama default 4096 would silently truncate most grounded materials."
+  },
+  "context_probe": {
+    "errors": [],
+    "matched_model": "qwen3:4b-instruct",
+    "observed_context_length": 32768,
+    "probed": [
+      "/api/ps",
+      "/api/show"
+    ],
+    "source": "/api/ps (served context of the loaded model)"
+  },
+  "control": {},
+  "metric_reconciliation": {
+    "adjudication": "K = 5 freezes on the median (T4). The aggregate is reported so a reader can see what the section-3 wording would have said over the same tasks; neither number is gated here",
+    "aggregate_charge_penalty_s": 0.0,
+    "aggregate_charged_elapsed_s": 12.85088,
+    "aggregate_perceived_tps": 8.793172,
+    "aggregate_perceived_tps_materials_fit": 9.395399,
+    "aggregate_task_set": "the half's answerable tasks, charged elapsed (the same set the median is taken over) -- the DESIGN section-3 literal reading, where the refusal time charge does bite",
+    "aggregate_uncharged_elapsed_s": 12.85088,
+    "aggregate_useful_tokens": 113,
+    "design_sentence_section_3": "Perceived throughput for a system = useful tokens / client wall-clock, where the numerator counts only correctly-and-receipted answers, the denominator counts every task's elapsed time, and an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "design_sentence_t4": "T4 -- the baseline is pinned before K. ... then K = 5 freezes: the kernel's median perceived throughput over half-B answerable tasks must be >= 5x B-grounded's, at correctness >= B-grounded's, with median time-to-first-useful-token also lower (DESIGN-grounded-throughput 6 T4)",
+    "median_perceived_tps_materials_fit": 0.0,
+    "t4_gate_statistic": "median of the per-task ratio useful_tokens / charged_elapsed_s, taken over the half's answerable tasks",
+    "t4_gate_value_tps": 0.0,
+    "under_the_median": {
+      "non_answerable_elapsed_excluded": true,
+      "non_answerable_elapsed_s": 0,
+      "non_answerable_tasks": 0,
+      "refusal_time_charge_inert": true,
+      "tasks_charged": [],
+      "why_inert": "a refused answerable task scores 0 useful tokens, so its ratio is zero at any denominator; the charge moves a zero to a zero and only bites in the aggregate below"
+    }
+  },
+  "per_task": [
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : marco",
+          "residual": "marco",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : cat",
+          "residual": "cat",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(cat) = garden",
+          "residual": "located_in(cat) = garden",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "marco observed  located_in(cat) = garden",
+          "residual": "marco observed  located_in(cat) = garden",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.300012,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.300012,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : marco",
+        "believes   : located_in(cat) = garden",
+        "marco observed  located_in(cat) = garden"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 68,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/marco.cat.garden",
+      "tokens": 34,
+      "ttft_s": 0.055352,
+      "turns": [
+        {
+          "chunks": 35,
+          "content": "The materials do not provide any information about Marco's thoughts on where the cat is after going into the garden. Therefore, the answer cannot be determined from the given materials.",
+          "content_chars": 185,
+          "elapsed_s": 0.300012,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.055352,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : omar",
+          "residual": "omar",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : coin",
+          "residual": "coin",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(coin) = drawer",
+          "residual": "located_in(coin) = drawer",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(coin) = pocket",
+          "residual": "located_in(coin) = pocket",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "omar observed  located_in(coin) = drawer",
+          "residual": "omar observed  located_in(coin) = drawer",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(coin) = pocket",
+          "residual": "narrator        located_in(coin) = pocket",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.262237,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.262237,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : omar",
+        "believes   : located_in(coin) = drawer",
+        "world says : located_in(coin) = pocket",
+        "divergence : belief and world differ; the question asked for the belief",
+        "omar observed  located_in(coin) = drawer",
+        "narrator        located_in(coin) = pocket"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 74,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/omar.coin.drawer",
+      "tokens": 33,
+      "ttft_s": 0.031343,
+      "turns": [
+        {
+          "chunks": 34,
+          "content": "The materials do not contain any information about Omar's thoughts or beliefs regarding the coin's location. Therefore, based on the provided materials, the answer cannot be determined.",
+          "content_chars": 185,
+          "elapsed_s": 0.262237,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.031343,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : pia",
+          "residual": "pia",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : book",
+          "residual": "book",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(book) = shelf",
+          "residual": "located_in(book) = shelf",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(book) = table",
+          "residual": "located_in(book) = table",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "pia observed  located_in(book) = shelf",
+          "residual": "pia observed  located_in(book) = shelf",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(book) = table",
+          "residual": "narrator        located_in(book) = table",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.38572,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.38572,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : pia",
+        "believes   : located_in(book) = shelf",
+        "world says : located_in(book) = table",
+        "divergence : belief and world differ; the question asked for the belief",
+        "pia observed  located_in(book) = shelf",
+        "narrator        located_in(book) = table"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 74,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/pia.book.shelf",
+      "tokens": 34,
+      "ttft_s": 0.044883,
+      "turns": [
+        {
+          "chunks": 35,
+          "content": "The materials do not provide any information about Pia's thoughts or beliefs regarding the book's location. Therefore, based on the given materials, the answer cannot be determined.",
+          "content_chars": 181,
+          "elapsed_s": 0.38572,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044883,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : quinn",
+          "residual": "quinn",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : lamp",
+          "residual": "lamp",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(lamp) = corridor",
+          "residual": "located_in(lamp) = corridor",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "quinn observed  located_in(lamp) = hall",
+          "residual": "quinn observed  located_in(lamp) = hall",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "quinn holds     same_as(hall) = corridor",
+          "residual": "quinn holds     same_as(hall) = corridor",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(lamp) = corridor",
+          "residual": "rewrite         located_in(lamp) = corridor",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.239875,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.239875,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : quinn",
+        "believes   : located_in(lamp) = corridor",
+        "quinn observed  located_in(lamp) = hall",
+        "quinn holds     same_as(hall) = corridor",
+        "rewrite         located_in(lamp) = corridor"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 77,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/quinn.lamp.hall",
+      "tokens": 26,
+      "ttft_s": 0.055425,
+      "turns": [
+        {
+          "chunks": 27,
+          "content": "The materials do not provide information about where Quinn thinks the lamp is. Therefore, the answer cannot be determined from the given materials.",
+          "content_chars": 147,
+          "elapsed_s": 0.239875,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.055425,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : tess",
+          "residual": "tess",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : hat",
+          "residual": "hat",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(hat) = cupboard",
+          "residual": "located_in(hat) = cupboard",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(hat) = bench",
+          "residual": "located_in(hat) = bench",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "tess observed  located_in(hat) = locker",
+          "residual": "tess observed  located_in(hat) = locker",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "tess holds     same_as(locker) = cupboard",
+          "residual": "tess holds     same_as(locker) = cupboard",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(hat) = cupboard",
+          "residual": "rewrite         located_in(hat) = cupboard",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(hat) = bench",
+          "residual": "narrator        located_in(hat) = bench",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.245795,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.245795,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : tess",
+        "believes   : located_in(hat) = cupboard",
+        "world says : located_in(hat) = bench",
+        "divergence : belief and world differ; the question asked for the belief",
+        "tess observed  located_in(hat) = locker",
+        "tess holds     same_as(locker) = cupboard",
+        "rewrite         located_in(hat) = cupboard",
+        "narrator        located_in(hat) = bench"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 81,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/tess.hat.locker",
+      "tokens": 28,
+      "ttft_s": 0.053451,
+      "turns": [
+        {
+          "chunks": 29,
+          "content": "The materials do not provide enough information to determine where Tess thinks the hat is. Therefore, the answer cannot be determined from the given materials.",
+          "content_chars": 159,
+          "elapsed_s": 0.245795,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.053451,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "residual": "16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 2 action(s), replayed through the world's own verifier",
+          "residual": "2 action(s), replayed through the world's own verifier",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.419891,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.419891,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130599 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130599,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "A",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 521349,
+      "materials_none": false,
+      "materials_tokens": 130515,
+      "materials_truncated": true,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 16e41f65756a0c446a5b85475f971b10b6f9836a6bb15d96d7da6b128af2e9a2",
+        "outcome: REACHABLE",
+        "shortest_route: 2 action(s), replayed through the world's own verifier"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130586,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.2",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.419891,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130599 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130599,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "residual": "c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+          "residual": "NOT_REACHABLE_WITHIN_HORIZON",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "residual": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.403826,
+      "check": "verdict",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.403826,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130930 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130930,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "A",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 522981,
+      "materials_none": false,
+      "materials_tokens": 130846,
+      "materials_truncated": true,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: c37481f04f966b238e8fd9dd3d563eb8c17b13608002d269f1e5e4f168c68db3",
+        "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+        "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130917,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "exhausted",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.unreachable.0",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.403826,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130930 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130930,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+          "residual": "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces.",
+          "residual": "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.197306,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.197306,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 8121,
+      "materials_none": false,
+      "materials_tokens": 2056,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Euler-Poincare Formula (Euler Characteristic as an Alternating Betti Sum)",
+        "The Euler characteristic is the alternating sum of the Betti numbers: the ranks of the homology groups combine with signs into the same integer the cell count produces."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2115,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/algtop.homology.betti_alternating_sum",
+      "tokens": 11,
+      "ttft_s": 0.106305,
+      "turns": [
+        {
+          "chunks": 12,
+          "content": "chi = sum_i (-1)^i * b_i",
+          "content_chars": 24,
+          "elapsed_s": 0.197306,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.106305,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Average Rate of Change",
+          "residual": "Average Rate of Change",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued.",
+          "residual": "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.200372,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.200372,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 4469,
+      "materials_none": false,
+      "materials_tokens": 1123,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Average Rate of Change",
+        "The average rate of change is the total change in the output divided by the extent of the input interval over which it accrued."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1182,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/calculus.differentiation.average_rate_of_change",
+      "tokens": 7,
+      "ttft_s": 0.150953,
+      "turns": [
+        {
+          "chunks": 8,
+          "content": "R = Delta_f / Delta_x",
+          "content_chars": 21,
+          "elapsed_s": 0.200372,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.150953,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Definition of pH",
+          "residual": "Definition of pH",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale.",
+          "residual": "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.205202,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.205202,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 4103,
+      "materials_none": false,
+      "materials_tokens": 1099,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Definition of pH",
+        "Acidity is reported as the negative logarithm of hydrogen-ion activity, compressing many orders of magnitude onto a small linear scale."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1155,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/chemistry.acid_base.ph_definition",
+      "tokens": 10,
+      "ttft_s": 0.133955,
+      "turns": [
+        {
+          "chunks": 11,
+          "content": "pH = -log10(a_H)",
+          "content_chars": 16,
+          "elapsed_s": 0.205202,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.133955,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Curvature of a Circle",
+          "residual": "Curvature of a Circle",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly.",
+          "residual": "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.188953,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.188953,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6052,
+      "materials_none": false,
+      "materials_tokens": 1521,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Curvature of a Circle",
+        "A circle curves at a rate equal to the reciprocal of its radius: small circles turn fast, large ones slowly."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1578,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/diffgeo.curves.circle_curvature",
+      "tokens": 6,
+      "ttft_s": 0.145102,
+      "turns": [
+        {
+          "chunks": 7,
+          "content": "K = 1 / R",
+          "content_chars": 9,
+          "elapsed_s": 0.188953,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.145102,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Multiplicativity of Degree Under Composition",
+          "residual": "Multiplicativity of Degree Under Composition",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Composing two maps multiplies their degrees, so degree turns composition into multiplication.",
+          "residual": "Composing two maps multiplies their degrees, so degree turns composition into multiplication.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.269261,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.269261,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 7929,
+      "materials_none": false,
+      "materials_tokens": 1931,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Multiplicativity of Degree Under Composition",
+        "Composing two maps multiplies their degrees, so degree turns composition into multiplication."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1989,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/difftop.degree.degree_multiplicativity",
+      "tokens": 13,
+      "ttft_s": 0.163875,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "deg(g o f) = deg(g) * deg(f)",
+          "content_chars": 28,
+          "elapsed_s": 0.269261,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.163875,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "CAPM Expected Return (Risk-Premium Form)",
+          "residual": "CAPM Expected Return (Risk-Premium Form)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk.",
+          "residual": "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.26785,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.26785,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6254,
+      "materials_none": false,
+      "materials_tokens": 1654,
+      "materials_truncated": false,
+      "missing_strings": [
+        "CAPM Expected Return (Risk-Premium Form)",
+        "An asset's expected return is the risk-free rate plus its sensitivity to market risk times the price the market charges for bearing that risk."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1712,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/economics.finance.capm_expected_return",
+      "tokens": 12,
+      "ttft_s": 0.173892,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "E[Ri] = rf + beta_i*MRP",
+          "content_chars": 23,
+          "elapsed_s": 0.26785,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.173892,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Average Degree of a Finite Graph",
+          "residual": "Average Degree of a Finite Graph",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The average number of neighbours a vertex has is twice the edge count divided by the vertex count.",
+          "residual": "The average number of neighbours a vertex has is twice the edge count divided by the vertex count.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.272785,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.272785,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6681,
+      "materials_none": false,
+      "materials_tokens": 1678,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Average Degree of a Finite Graph",
+        "The average number of neighbours a vertex has is twice the edge count divided by the vertex count."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1736,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/graphtheory.degree.average_degree_from_edge_count",
+      "tokens": 13,
+      "ttft_s": 0.168871,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "dbar = 2*|E| / |V|",
+          "content_chars": 18,
+          "elapsed_s": 0.272785,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.168871,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Sally's Marble-Location Belief",
+          "residual": "Sally's Marble-Location Belief",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Sally's attributed belief places the marble in the basket.",
+          "residual": "Sally's attributed belief places the marble in the basket.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.24486,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.24486,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 3616,
+      "materials_none": false,
+      "materials_tokens": 970,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Sally's Marble-Location Belief",
+        "Sally's attributed belief places the marble in the basket."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1031,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/narrative.belief.sally_marble_basket",
+      "tokens": 13,
+      "ttft_s": 0.146856,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "in Sally's belief frame, location(marble) = basket",
+          "content_chars": 50,
+          "elapsed_s": 0.24486,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.146856,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Relative Condition Number",
+          "residual": "Relative Condition Number",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer.",
+          "residual": "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.257243,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.257243,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 7662,
+      "materials_none": false,
+      "materials_tokens": 1904,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Relative Condition Number",
+        "How much a problem amplifies relative perturbations: the factor by which a small relative error in the data is multiplied on its way to the answer."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1960,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/numanalysis.error.relative_condition_number",
+      "tokens": 16,
+      "ttft_s": 0.128915,
+      "turns": [
+        {
+          "chunks": 17,
+          "content": "kappa = (relative change in output) / (relative change in input)",
+          "content_chars": 64,
+          "elapsed_s": 0.257243,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.128915,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Ohm's Law",
+          "residual": "Ohm's Law",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Voltage across an ohmic conductor is proportional to current.",
+          "residual": "Voltage across an ohmic conductor is proportional to current.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.196241,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.196241,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 2807,
+      "materials_none": false,
+      "materials_tokens": 750,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Ohm's Law",
+        "Voltage across an ohmic conductor is proportional to current."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 809,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/physics.circuits.ohms_law",
+      "tokens": 4,
+      "ttft_s": 0.165783,
+      "turns": [
+        {
+          "chunks": 5,
+          "content": "V = I*R",
+          "content_chars": 7,
+          "elapsed_s": 0.196241,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.165783,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Lindeberg-Levy Central Limit Theorem",
+          "residual": "Lindeberg-Levy Central Limit Theorem",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Standardized sample means converge to standard normal.",
+          "residual": "Standardized sample means converge to standard normal.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.262695,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.262695,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 3235,
+      "materials_none": false,
+      "materials_tokens": 877,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Lindeberg-Levy Central Limit Theorem",
+        "Standardized sample means converge to standard normal."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 937,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/probstat.limit.clt_iid_standardized_mean",
+      "tokens": 20,
+      "ttft_s": 0.107431,
+      "turns": [
+        {
+          "chunks": 21,
+          "content": "sqrt(n)*(X_bar - mu)/sigma converges in distribution to N(0,1)",
+          "content_chars": 62,
+          "elapsed_s": 0.262695,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.107431,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Absorption Law (Intersection over Union)",
+          "residual": "Absorption Law (Intersection over Union)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing.",
+          "residual": "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.201755,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.201755,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 5729,
+      "materials_none": false,
+      "materials_tokens": 1552,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Absorption Law (Intersection over Union)",
+        "Enlarging A by B and then intersecting back with A recovers A exactly: the detour through B adds nothing."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1609,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/settheory.boolean_laws.absorption",
+      "tokens": 11,
+      "ttft_s": 0.116552,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "A ∩ (A ∪ B) = A",
+          "content_chars": 15,
+          "elapsed_s": 0.201755,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.116552,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Temporal Induction",
+          "residual": "Temporal Induction",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "If a property is preserved by every single step, then holding it once is enough to hold it forever after.",
+          "residual": "If a property is preserved by every single step, then holding it once is enough to hold it forever after.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.265138,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.265138,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 8901,
+      "materials_none": false,
+      "materials_tokens": 2181,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Temporal Induction",
+        "If a property is preserved by every single step, then holding it once is enough to hold it forever after."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2241,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/temporal.induction.temporal_induction_axiom",
+      "tokens": 13,
+      "ttft_s": 0.163304,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "always(p implies next(p)) implies (p implies always(p))",
+          "content_chars": 55,
+          "elapsed_s": 0.265138,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.163304,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Definition of Tangent",
+          "residual": "Definition of Tangent",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish.",
+          "residual": "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.225529,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.225529,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 3545,
+      "materials_none": false,
+      "materials_tokens": 987,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Definition of Tangent",
+        "The tangent of an angle is the ratio of its sine to its cosine, defined wherever the cosine does not vanish."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1044,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/trigonometry.definitions.tangent",
+      "tokens": 10,
+      "ttft_s": 0.149507,
+      "turns": [
+        {
+          "chunks": 11,
+          "content": "tan(x) = sin(x)/cos(x)",
+          "content_chars": 22,
+          "elapsed_s": 0.225529,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.149507,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 13 ^ 2 + 9",
+          "residual": "13 ^ 2 + 9",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 178",
+          "residual": "178",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.25753,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.25753,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 81.543898,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 63,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/13^2+9",
+      "tokens": 21,
+      "ttft_s": 0.09936,
+      "turns": [
+        {
+          "chunks": 22,
+          "content": "13 ^ 2 + 9 = 169 + 9 = 178",
+          "content_chars": 26,
+          "elapsed_s": 0.25753,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.09936,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 21,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 19 * -28",
+          "residual": "19 * -28",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : -532",
+          "residual": "-532",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.119784,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.119784,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 91.831964,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 61,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/19*-28",
+      "tokens": 11,
+      "ttft_s": 0.04089,
+      "turns": [
+        {
+          "chunks": 12,
+          "content": "19 * -28 = -532",
+          "content_chars": 15,
+          "elapsed_s": 0.119784,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.04089,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 11,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 31 * 21 + 19",
+          "residual": "31 * 21 + 19",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 670",
+          "residual": "670",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.223354,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.223354,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 107.452743,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 65,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/31*21+19",
+      "tokens": 24,
+      "ttft_s": 0.046781,
+      "turns": [
+        {
+          "chunks": 25,
+          "content": "31 * 21 + 19 = 651 + 19 = 670",
+          "content_chars": 29,
+          "elapsed_s": 0.223354,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.046781,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 24,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 37 ^ 2 + 25",
+          "residual": "37 ^ 2 + 25",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "exact      : 1394",
+          "residual": "1394",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.137951,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.137951,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 37 ^ 2 + 25",
+        "exact      : 1394"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/37^2+25",
+      "tokens": 13,
+      "ttft_s": 0.041216,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "None of the provided materials can be used to answer the question.",
+          "content_chars": 66,
+          "elapsed_s": 0.137951,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.041216,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 7 * 5 + 11",
+          "residual": "7 * 5 + 11",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 46",
+          "residual": "46",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.188343,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.188343,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 106.18924,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 63,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/7*5+11",
+      "tokens": 20,
+      "ttft_s": 0.044205,
+      "turns": [
+        {
+          "chunks": 21,
+          "content": "7 * 5 + 11 = 35 + 11 = 46",
+          "content_chars": 25,
+          "elapsed_s": 0.188343,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044205,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 20,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : x ^ 2 + 11 * x",
+          "residual": "x ^ 2 + 11 * x",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "given      : x = 16",
+          "residual": "x = 16",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 432",
+          "residual": "432",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.099734,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.099734,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : x ^ 2 + 11 * x"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 72,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/x^2+11*x",
+      "tokens": 130,
+      "ttft_s": 0.030624,
+      "turns": [
+        {
+          "chunks": 131,
+          "content": "We are given that $ x = 16 $, and we are asked to compute:\n\n$$\nx^2 + 11 \\cdot x\n$$\n\nStep 1: Compute $ x^2 $\n\n$$\nx^2 = 16^2 = 256\n$$\n\nStep 2: Compute $ 11 \\cdot x $\n\n$$\n11 \\cdot 6 = 176\n$$\n\nStep 3: Add them together\n\n$$\n256 + 176 = 432\n$$\n\nSo, the final answer is:\n\n**432**",
+          "content_chars": 272,
+          "elapsed_s": 1.099734,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.030624,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : x ^ 2 + 27 * x",
+          "residual": "x ^ 2 + 27 * x",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "given      : x = 40",
+          "residual": "x = 40",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 2680",
+          "residual": "2680",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 1.052591,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.052591,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : x ^ 2 + 27 * x"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 72,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/x^2+27*x",
+      "tokens": 128,
+      "ttft_s": 0.053415,
+      "turns": [
+        {
+          "chunks": 129,
+          "content": "We are given that $ x = 40 $, and we are to compute:\n\n$$\nx^2 + 27 \\cdot x\n$$\n\nFirst, compute $ x^2 $:\n\n$$\n40^2 = 1600\n$$\n\nNext, compute $ 27 \\cdot 40 $:\n\n$$\n27 \\cdot 40 = 1080\n$$\n\nNow add them:\n\n$$\n1600 + 1080 = 2680\n$$\n\nFinal answer:\n\n$$\n\\boxed{2680}\n$$",
+          "content_chars": 254,
+          "elapsed_s": 1.052591,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.053415,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 21 + 16 < 38",
+          "residual": "21 + 16 < 38",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.338867,
+      "check": "exact",
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.338867,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 109.18738,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/21+16<38",
+      "tokens": 37,
+      "ttft_s": 0.065843,
+      "turns": [
+        {
+          "chunks": 36,
+          "content": "21 + 16 = 37  \n37 < 38 is true.  \n\nSo, yes, 21 + 16 < 38.",
+          "content_chars": 57,
+          "elapsed_s": 0.338867,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.065843,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 37,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 23 + 19 < 41",
+          "residual": "23 + 19 < 41",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.346644,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.346644,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : no"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/23+19<41",
+      "tokens": 40,
+      "ttft_s": 0.050357,
+      "turns": [
+        {
+          "chunks": 39,
+          "content": "23 + 19 = 42  \n42 < 41 is false.  \n\nSo, the statement \"23 + 19 < 41\" is false.",
+          "content_chars": 78,
+          "elapsed_s": 0.346644,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.050357,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 33 + 34 > 66",
+          "residual": "33 + 34 > 66",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.290406,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.290406,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/33+34>66",
+      "tokens": 32,
+      "ttft_s": 0.044319,
+      "turns": [
+        {
+          "chunks": 33,
+          "content": "33 + 34 = 67\n\n67 > 66\n\nYes, 33 + 34 > 66.",
+          "content_chars": 41,
+          "elapsed_s": 0.290406,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044319,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : 35 + 37 > 73",
+          "residual": "35 + 37 > 73",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.376303,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.376303,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : 35 + 37 > 73"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/35+37>73",
+      "tokens": 41,
+      "ttft_s": 0.056754,
+      "turns": [
+        {
+          "chunks": 42,
+          "content": "35 + 37 = 72  \n72 > 73? No  \n\nSo, 35 + 37 is not greater than 73.  \n\nAnswer: no",
+          "content_chars": 79,
+          "elapsed_s": 0.376303,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.056754,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 39 + 43 < 81",
+          "residual": "39 + 43 < 81",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.319926,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.319926,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : no"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/39+43<81",
+      "tokens": 36,
+      "ttft_s": 0.044916,
+      "turns": [
+        {
+          "chunks": 35,
+          "content": "39 + 43 = 82\n\n82 < 81 is false.\n\nSo, 39 + 43 < 81 is false.",
+          "content_chars": 59,
+          "elapsed_s": 0.319926,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044916,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : y ^ 2 = 730",
+          "residual": "y ^ 2 = 730",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.970196,
+      "check": "exact",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.970196,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : y ^ 2 = 730"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 70,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/y^2=730",
+      "tokens": 111,
+      "ttft_s": 0.05465,
+      "turns": [
+        {
+          "chunks": 112,
+          "content": "Let's check whether $ y^2 = 730 $ when $ y = 27 $.\n\nCompute $ 27^2 $:\n\n$$\n27^2 = 27 \\times 27 = 729\n$$\n\nSo, $ 27^2 = 729 $, not 730.\n\nTherefore, the statement \"does $ y^2 = 730 $\" when $ y = 27 $ is **false**.\n\nAnswer: **no**.",
+          "content_chars": 226,
+          "elapsed_s": 0.970196,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05465,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.frames.galilean_velocity_addition",
+          "residual": "physics.frames.galilean_velocity_addition",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.162186,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.162186,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 745,
+      "materials_none": false,
+      "materials_tokens": 212,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.frames.galilean_velocity_addition"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 272,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/algtop.homology.chain_rank_nullity",
+      "tokens": 12,
+      "ttft_s": 0.073997,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "CHAINRANK = CYCLERANK + IMAGERANK",
+          "content_chars": 33,
+          "elapsed_s": 0.162186,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.073997,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "geometry.right_triangles.pythagorean_theorem",
+          "residual": "geometry.right_triangles.pythagorean_theorem",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.152341,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.152341,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 710,
+      "materials_none": false,
+      "materials_tokens": 223,
+      "materials_truncated": false,
+      "missing_strings": [
+        "geometry.right_triangles.pythagorean_theorem"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 284,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/diffgeo.surfaces.euclidean_line_element",
+      "tokens": 12,
+      "ttft_s": 0.063643,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "LINEELEMENT^2 = DU^2 + DV^2",
+          "content_chars": 27,
+          "elapsed_s": 0.152341,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.063643,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "numanalysis.integration.trapezoidal_rule",
+          "residual": "numanalysis.integration.trapezoidal_rule",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.155762,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.155762,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 744,
+      "materials_none": false,
+      "materials_tokens": 218,
+      "materials_truncated": false,
+      "missing_strings": [
+        "numanalysis.integration.trapezoidal_rule"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 280,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/geometry.area_formulas.trapezoid_area_formula",
+      "tokens": 12,
+      "ttft_s": 0.068521,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "twin geometry.area_formulas.trapezoid_area_formula",
+          "content_chars": 50,
+          "elapsed_s": 0.155762,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.068521,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "ml.objective.token_cross_entropy_loss",
+          "residual": "ml.objective.token_cross_entropy_loss",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.227721,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.227721,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 791,
+      "materials_none": false,
+      "materials_tokens": 231,
+      "materials_truncated": false,
+      "missing_strings": [
+        "ml.objective.token_cross_entropy_loss"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 290,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/infotheory.divergence.cross_entropy",
+      "tokens": 22,
+      "ttft_s": 0.060471,
+      "turns": [
+        {
+          "chunks": 23,
+          "content": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))",
+          "content_chars": 69,
+          "elapsed_s": 0.227721,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.060471,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.thermodynamics.gibbs_entropy",
+          "residual": "physics.thermodynamics.gibbs_entropy",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.12499,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.12499,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 769,
+      "materials_none": false,
+      "materials_tokens": 228,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.thermodynamics.gibbs_entropy"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 287,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/infotheory.entropy.shannon_entropy",
+      "tokens": 9,
+      "ttft_s": 0.05462,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "twin infotheory.entropy.shannon_entropy",
+          "content_chars": 39,
+          "elapsed_s": 0.12499,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05462,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.absorption",
+          "residual": "settheory.boolean_laws.absorption",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.119336,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.119336,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 677,
+      "materials_none": false,
+      "materials_tokens": 220,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.absorption"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 278,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.absorption",
+      "tokens": 8,
+      "ttft_s": 0.062161,
+      "turns": [
+        {
+          "chunks": 9,
+          "content": "twin logic.boolean_laws.absorption",
+          "content_chars": 34,
+          "elapsed_s": 0.119336,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.062161,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.double_negation",
+          "residual": "settheory.boolean_laws.double_negation",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.137381,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.137381,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 646,
+      "materials_none": false,
+      "materials_tokens": 197,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.double_negation"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 256,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.double_negation",
+      "tokens": 12,
+      "ttft_s": 0.045972,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "\"NEG(NEG(PROP1)) = PROP1\"",
+          "content_chars": 25,
+          "elapsed_s": 0.137381,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.045972,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.identity_laws",
+          "residual": "settheory.boolean_laws.identity_laws",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.131306,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.131306,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 652,
+      "materials_none": false,
+      "materials_tokens": 204,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.identity_laws"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 263,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.identity_laws",
+      "tokens": 9,
+      "ttft_s": 0.065367,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "twin logic.boolean_laws.identity_laws",
+          "content_chars": 37,
+          "elapsed_s": 0.131306,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.065367,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "narrative.world.marble_moved_box",
+          "residual": "narrative.world.marble_moved_box",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.136511,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.136511,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 634,
+      "materials_none": false,
+      "materials_tokens": 191,
+      "materials_truncated": false,
+      "missing_strings": [
+        "narrative.world.marble_moved_box"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 252,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/narrative.belief.sally_marble_basket",
+      "tokens": 11,
+      "ttft_s": 0.051405,
+      "turns": [
+        {
+          "chunks": 12,
+          "content": "twin narrative.belief.sally_marble_basket",
+          "content_chars": 41,
+          "elapsed_s": 0.136511,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.051405,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "physics.gravitation.newton_universal_gravitation",
+          "residual": "physics.gravitation.newton_universal_gravitation",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.136578,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.136578,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 733,
+      "materials_none": false,
+      "materials_tokens": 229,
+      "materials_truncated": false,
+      "missing_strings": [
+        "physics.gravitation.newton_universal_gravitation"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 292,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/physics.electromagnetism.coulombs_law",
+      "tokens": 13,
+      "ttft_s": 0.04299,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "twin physics.electromagnetism.coulombs_law",
+          "content_chars": 42,
+          "elapsed_s": 0.136578,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.04299,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "geometry.circle_formulas.circle_circumference_formula",
+          "residual": "geometry.circle_formulas.circle_circumference_formula",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "physics.mechanics.newton_second_law",
+          "residual": "physics.mechanics.newton_second_law",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "physics.circuits.ohms_law",
+          "residual": "physics.circuits.ohms_law",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.132593,
+      "check": "receipt",
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.132593,
+      "error": null,
+      "half": "A",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 1031,
+      "materials_none": false,
+      "materials_tokens": 290,
+      "materials_truncated": false,
+      "missing_strings": [
+        "geometry.circle_formulas.circle_circumference_formula",
+        "physics.mechanics.newton_second_law",
+        "physics.circuits.ohms_law"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 352,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/physics.mechanics.hookes_law",
+      "tokens": 12,
+      "ttft_s": 0.044724,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "twin physics.mechanics.hookes_law",
+          "content_chars": 33,
+          "elapsed_s": 0.132593,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044724,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": []
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/imperative_purple"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/set_magenta"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/resume/imperative_purple"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/resume/imperative_turquoise"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/absent_statement_0"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/absent_statement_1"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/english_owns_question"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/owns_unhosted_head"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/owns_unparseable"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_absent_target_file"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_cross_world_target"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_missing_argument"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/twin_two_arguments"
+    }
+  ],
+  "refusal_time_charge": {
+    "rule": "an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "slowest_correct_answer_s": 0.338867,
+    "tasks_charged": []
+  },
+  "rendering_digest_drift": [],
+  "rendering_digests_revalidated": true,
+  "run": {
+    "boundary": "public HTTP API only; no engine module imported (checked in this process, see the clean-imports line on stdout)",
+    "derived_offline_from": null,
+    "finished": "2026-08-22T08:12:53+00:00",
+    "forced_over_void": false,
+    "half": "A",
+    "measured_by": "scripts/measure_throughput.py",
+    "overwrote_existing_out": true,
+    "registered": false,
+    "started": "2026-08-22T08:12:39+00:00",
+    "system": "b-grounded",
+    "url": "http://127.0.0.1:11434",
+    "warmup": true,
+    "warmup_detail": {
+      "elapsed_s": 0.399219,
+      "error": null,
+      "http_status": 200,
+      "measured": false,
+      "sent": true
+    }
+  },
+  "schema": "corollary.throughput-result/1",
+  "scoring_rules_applied": {
+    "bounded_negative_is_an_answer": "A closure task whose arm is 'unreachable' expects status 'exhausted' and outcome 'answer': SPEC §6.1 names it a certified bounded negative carrying its closure-receipt/1 verbatim. Likewise a relation check with holds:no is a correct answer, not a refusal.",
+    "clarification_leg": "T5's clarification leg is graded per marked WAITING turn, not per task. Every clarification_due task carries at least one turn with expected_status 'waiting'; the leg passes only if the skin returns a WAITING status at 100% of those turns. On corollary/conversation that turn must additionally carry x_corollary.need matching need_expect; on corollary/kernel a WAITING status with its candidate answer lines satisfies the leg (SPEC §6.2 emits no need record on that profile). A phase:'resume' task that never waited fails the leg even if its final answer is correct.",
+    "per_kind_floor": "T5's per-kind >=80% correctness-with-receipts floor applies to the five all-answer kinds (belief_query, closure_reachability, corpus_definition, exact_value, twin_lookup), which are the kinds counted in answerable_total. clarification_due and refusal_due are governed by their 100% gates only -- the WAITING leg above and T5's refusal gate -- and never by the 80% floor; their tasks may not be counted toward it in either direction.",
+    "receipt_subset": "receipt_expect and need_expect are subset assertions: every key present must match; absent keys are unconstrained.",
+    "zero_token_turns": "Refusal, WAITING and abstained turns contribute zero useful tokens whatever their content length (SPEC §6), which is why refusal tasks carry an empty content_must_contain: there is no prose there for a score to reward."
+  },
+  "summary": {
+    "answerable_tasks": 45,
+    "book_expected_counts": {
+      "belief_query": {
+        "A": 5,
+        "B": 9
+      },
+      "clarification_due": {
+        "A": 4,
+        "B": 6
+      },
+      "closure_reachability": {
+        "A": 2,
+        "B": 6
+      },
+      "corpus_definition": {
+        "A": 14,
+        "B": 16
+      },
+      "exact_value": {
+        "A": 13,
+        "B": 13
+      },
+      "refusal_due": {
+        "A": 9,
+        "B": 6
+      },
+      "twin_lookup": {
+        "A": 11,
+        "B": 5
+      }
+    },
+    "clarification_gate": {
+      "floor": 1.0,
+      "graded": "per marked WAITING turn (book scoring_rules.clarification_leg)",
+      "marked_waiting_turns": 0,
+      "meets_floor": null,
+      "rate": null,
+      "waiting_returned": 0
+    },
+    "correctness_by_kind": {
+      "belief_query": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 5
+      },
+      "closure_reachability": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 2
+      },
+      "corpus_definition": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 14
+      },
+      "exact_value": {
+        "correct_with_receipt": 5,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.384615,
+        "tasks": 13
+      },
+      "twin_lookup": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 11
+      }
+    },
+    "correctness_overall": {
+      "correct_with_receipt": 5,
+      "floor": 0.9,
+      "meets_floor": false,
+      "rate": 0.111111,
+      "tasks": 45
+    },
+    "elapsed_total_answerable_s": 12.85088,
+    "elapsed_total_s": 12.85088,
+    "elapsed_total_task_set": "every task measured on this arm, charged elapsed -- answerable and non-answerable alike",
+    "gates_are_reported_not_enforced": "the stopwatch measures; adjudication reads this file (DESIGN-grounded-throughput 6, 7)",
+    "materials_fit_bound_source": "observed: /api/ps (served context of the loaded model)",
+    "materials_fit_bound_tokens": 32768,
+    "materials_fit_known_for": 45,
+    "materials_fit_task_ids": [
+      "belief_query/marco.cat.garden",
+      "belief_query/omar.coin.drawer",
+      "belief_query/pia.book.shelf",
+      "belief_query/quinn.lamp.hall",
+      "belief_query/tess.hat.locker",
+      "corpus_definition/algtop.homology.betti_alternating_sum",
+      "corpus_definition/calculus.differentiation.average_rate_of_change",
+      "corpus_definition/chemistry.acid_base.ph_definition",
+      "corpus_definition/diffgeo.curves.circle_curvature",
+      "corpus_definition/difftop.degree.degree_multiplicativity",
+      "corpus_definition/economics.finance.capm_expected_return",
+      "corpus_definition/graphtheory.degree.average_degree_from_edge_count",
+      "corpus_definition/narrative.belief.sally_marble_basket",
+      "corpus_definition/numanalysis.error.relative_condition_number",
+      "corpus_definition/physics.circuits.ohms_law",
+      "corpus_definition/probstat.limit.clt_iid_standardized_mean",
+      "corpus_definition/settheory.boolean_laws.absorption",
+      "corpus_definition/temporal.induction.temporal_induction_axiom",
+      "corpus_definition/trigonometry.definitions.tangent",
+      "exact_value/evaluate/13^2+9",
+      "exact_value/evaluate/19*-28",
+      "exact_value/evaluate/31*21+19",
+      "exact_value/evaluate/37^2+25",
+      "exact_value/evaluate/7*5+11",
+      "exact_value/evaluate/x^2+11*x",
+      "exact_value/evaluate/x^2+27*x",
+      "exact_value/relation/21+16<38",
+      "exact_value/relation/23+19<41",
+      "exact_value/relation/33+34>66",
+      "exact_value/relation/35+37>73",
+      "exact_value/relation/39+43<81",
+      "exact_value/relation/y^2=730",
+      "twin_lookup/algtop.homology.chain_rank_nullity",
+      "twin_lookup/diffgeo.surfaces.euclidean_line_element",
+      "twin_lookup/geometry.area_formulas.trapezoid_area_formula",
+      "twin_lookup/infotheory.divergence.cross_entropy",
+      "twin_lookup/infotheory.entropy.shannon_entropy",
+      "twin_lookup/logic.boolean_laws.absorption",
+      "twin_lookup/logic.boolean_laws.double_negation",
+      "twin_lookup/logic.boolean_laws.identity_laws",
+      "twin_lookup/narrative.belief.sally_marble_basket",
+      "twin_lookup/physics.electromagnetism.coulombs_law",
+      "twin_lookup/physics.mechanics.hookes_law"
+    ],
+    "materials_fit_tasks": 43,
+    "median_perceived_throughput_tps": 0.0,
+    "median_perceived_throughput_tps_materials_fit": 0.0,
+    "median_ttfa_s": 0.060471,
+    "median_ttfa_task_set": "every answerable task that produced any content delta -- time to first any-token, reported beside the gate statistic and not the gate statistic",
+    "median_ttft_s": 0.046781,
+    "median_ttft_task_set": "answerable tasks with useful_tokens > 0 -- T4's time-to-first-USEFUL-token leg",
+    "pre_declared_secondary_label": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "refusal_gate": {
+      "floor": 1.0,
+      "meets_floor": null,
+      "rate": null,
+      "refused": 0,
+      "tasks": 0
+    },
+    "tasks_measured": 45,
+    "useful_tokens_total": 113
+  },
+  "tokenizer": {
+    "file": ".runtime/baseline/qwen3-4b-instruct-2507.tokenizer.json",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "verified": true
+  },
+  "useful_token_rule": "useful tokens = the tokens of the assistant message content field only, under the pinned baseline tokenizer; vendor extension payloads, receipt structures, ids and digests never count, and the server's usage block is never read (DESIGN-grounded-throughput 3; SPEC-chat-completions-skin 6)"
+}

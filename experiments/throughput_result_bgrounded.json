@@ -1,0 +1,4584 @@
+{
+  "b_side_correctness_rule": "A baseline answer is correct iff every content_must_contain string, after stripping any leading label of the form ^[a-z_][a-z_ ]*: * (the kernel's frozen label padding), is a substring of the baseline's content -- e.g. the kernel line 'exact      : 449' requires '449'; unlabeled strings (titles, meanings, member ids) are unchanged. Receipts are not required of a model: receipted is false on this arm and is recorded, and T4 compares correctness and speed only (DESIGN-grounded-throughput 6 T4). Baseline arms never see receipt_expect, need_expect or x_corollary. Baseline arms run ANSWERABLE tasks only; refusal_due and clarification_due tasks gate the kernel and are recorded 'not-applicable' here. This rule was committed with the stopwatch, before any timed run.",
+  "baseline_arm": {
+    "arm": "b-grounded",
+    "context_rule": "receives, injected into its context before the question, the same committed artifact records the kernel's answer rests on - scoped to the referenced record(s) named by the task's artifact_refs (the node record, the twin group entry, the closure's registration plus the routes and states for the queried world), extracted verbatim, not whole ledger files",
+    "materials_deviation": "the closure reports carry no key named canonical_routes; the routes they hold are convergence_cells' primary_route / alternate_route pairs, and those are what this arm injected beside the world registration and the states array",
+    "model": "qwen3:4b-instruct",
+    "prompt_template": {
+      "system": "Answer using only the provided materials. When the answer is contained in the materials, reproduce the relevant content verbatim - exact strings, exact notation. If the materials do not determine the answer, say so instead of guessing.",
+      "user": "MATERIALS:\n{artifacts}\n\nQUESTION:\n{question}"
+    },
+    "sampling_requested": {
+      "repeat_penalty": 1.0,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.8
+    },
+    "sampling_source": "applied by the ollama model manifest; /v1 ignores top_k and repeat_penalty (verified 2026-08-22)"
+  },
+  "baseline_digest": "3be33a20e86ba31999a90fb56e9584ff252db8103c81ef3f2aad61dbeb4e6063",
+  "book": "experiments\\throughput_tasks.json",
+  "book_digest": "6e60bcd5c149e91caca84678139fe8b6547cdf39b4bb666241cd4065976a7e9a",
+  "context_pin": {
+    "amended": "2026-08-22, before any timed run; replaces an earlier same-day num_ctx amendment that review proved inert at the /v1 layer and unrunnable at 262144 on this GPU",
+    "configured_tokens": 32768,
+    "mechanism": "OLLAMA_CONTEXT_LENGTH environment variable on the serving process; the OpenAI-compat /v1 layer ignores a num_ctx body field (verified live 2026-08-22), so the setting must be server-side and the run must record the observed context_length from /api/ps",
+    "pre_declared_secondary": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "truncation_disclosure": "the largest closure MATERIALS block measures ~130k tokens - full closure grounding does not fit this hardware in any configuration. The stopwatch records materials_chars and materials_tokens per task; any task whose materials exceed the observed context is reported materials-truncated in the result.",
+    "why_32768": "the largest value whose KV cache fits the 16 GiB GPU (~5 GiB at 32k for qwen3-4b; 131072+ needs more VRAM than the machine has and would spill the model to CPU, a strawman in the other direction). ollama default 4096 would silently truncate most grounded materials."
+  },
+  "context_probe": {
+    "errors": [
+      "/api/ps: no loaded model reported a context_length"
+    ],
+    "matched_model": "qwen3:4b-instruct",
+    "observed_context_length": 262144,
+    "probed": [
+      "/api/ps",
+      "/api/show"
+    ],
+    "source": "/api/show (model capability, NOT the served context: the model was not loaded when the run started)"
+  },
+  "control": {},
+  "metric_reconciliation": {
+    "adjudication": "K = 5 freezes on the median (T4). The aggregate is reported so a reader can see what the section-3 wording would have said over the same tasks; neither number is gated here",
+    "aggregate_charge_penalty_s": 2.569769,
+    "aggregate_charged_elapsed_s": 21.380364,
+    "aggregate_perceived_tps": 8.793115,
+    "aggregate_perceived_tps_materials_fit": 8.793115,
+    "aggregate_task_set": "the half's answerable tasks, charged elapsed (the same set the median is taken over) -- the DESIGN section-3 literal reading, where the refusal time charge does bite",
+    "aggregate_uncharged_elapsed_s": 18.810595,
+    "aggregate_useful_tokens": 188,
+    "design_sentence_section_3": "Perceived throughput for a system = useful tokens / client wall-clock, where the numerator counts only correctly-and-receipted answers, the denominator counts every task's elapsed time, and an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "design_sentence_t4": "T4 -- the baseline is pinned before K. ... then K = 5 freezes: the kernel's median perceived throughput over half-B answerable tasks must be >= 5x B-grounded's, at correctness >= B-grounded's, with median time-to-first-useful-token also lower (DESIGN-grounded-throughput 6 T4)",
+    "median_perceived_tps_materials_fit": 0.0,
+    "t4_gate_statistic": "median of the per-task ratio useful_tokens / charged_elapsed_s, taken over the half's answerable tasks",
+    "t4_gate_value_tps": 0.0,
+    "under_the_median": {
+      "non_answerable_elapsed_excluded": true,
+      "non_answerable_elapsed_s": 0,
+      "non_answerable_tasks": 0,
+      "refusal_time_charge_inert": true,
+      "tasks_charged": [
+        "closure_reachability/story.golden_chicken.reachable.0",
+        "closure_reachability/story.golden_chicken.reachable.1",
+        "closure_reachability/story.golden_chicken.reachable.3",
+        "closure_reachability/story.golden_chicken.reachable.4",
+        "closure_reachability/story.golden_chicken.unreachable.1"
+      ],
+      "why_inert": "a refused answerable task scores 0 useful tokens, so its ratio is zero at any denominator; the charge moves a zero to a zero and only bites in the aggregate below"
+    }
+  },
+  "per_task": [
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "agent      : ann",
+          "residual": "ann",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : ball",
+          "residual": "ball",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(ball) = box",
+          "residual": "located_in(ball) = box",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "ann observed  located_in(ball) = box",
+          "residual": "ann observed  located_in(ball) = box",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.348531,
+      "check": "verdict",
+      "content": "The materials do not provide any information about Ann's thoughts or beliefs regarding where the ball is after it goes into the box. Therefore, the answer cannot be determined from the given materials.\n\nAnswer: none",
+      "content_chars": 215,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.348531,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "believes   : located_in(ball) = box",
+        "ann observed  located_in(ball) = box"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 66,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/ann.ball.box",
+      "tokens": 40,
+      "ttft_s": 0.058637,
+      "turns": [
+        {
+          "chunks": 41,
+          "content": "The materials do not provide any information about Ann's thoughts or beliefs regarding where the ball is after it goes into the box. Therefore, the answer cannot be determined from the given materials.\n\nAnswer: none",
+          "content_chars": 215,
+          "elapsed_s": 0.348531,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.058637,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : dotty",
+          "residual": "dotty",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "subject    : bob",
+          "residual": "bob",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(bob) = room",
+          "residual": "located_in(bob) = room",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "dotty observed  located_in(bob) = room",
+          "residual": "dotty observed  located_in(bob) = room",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.317746,
+      "check": "verdict",
+      "content": "The materials do not provide any information about Dotty's thoughts or beliefs regarding where Bob is. Therefore, the question cannot be answered based on the given materials.",
+      "content_chars": 175,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.317746,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : dotty",
+        "subject    : bob",
+        "believes   : located_in(bob) = room",
+        "dotty observed  located_in(bob) = room"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 68,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/dotty.bob.room",
+      "tokens": 32,
+      "ttft_s": 0.058381,
+      "turns": [
+        {
+          "chunks": 33,
+          "content": "The materials do not provide any information about Dotty's thoughts or beliefs regarding where Bob is. Therefore, the question cannot be answered based on the given materials.",
+          "content_chars": 175,
+          "elapsed_s": 0.317746,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.058381,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : hugo",
+          "residual": "hugo",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "subject    : bob",
+          "residual": "bob",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(bob) = room",
+          "residual": "located_in(bob) = room",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(bob) = kitchen",
+          "residual": "located_in(bob) = kitchen",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "hugo observed  located_in(bob) = room",
+          "residual": "hugo observed  located_in(bob) = room",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(bob) = kitchen",
+          "residual": "narrator        located_in(bob) = kitchen",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.155817,
+      "check": "verdict",
+      "content": "Hugo thinks Bob is in the kitchen.",
+      "content_chars": 34,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.155817,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : hugo",
+        "subject    : bob",
+        "believes   : located_in(bob) = room",
+        "world says : located_in(bob) = kitchen",
+        "divergence : belief and world differ; the question asked for the belief",
+        "hugo observed  located_in(bob) = room",
+        "narrator        located_in(bob) = kitchen"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 74,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/hugo.bob.room",
+      "tokens": 9,
+      "ttft_s": 0.053156,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "Hugo thinks Bob is in the kitchen.",
+          "content_chars": 34,
+          "elapsed_s": 0.155817,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.053156,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : ivo",
+          "residual": "ivo",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : dog",
+          "residual": "dog",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(dog) = shed",
+          "residual": "located_in(dog) = shed",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(dog) = kennel",
+          "residual": "located_in(dog) = kennel",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "ivo observed  located_in(dog) = yard",
+          "residual": "ivo observed  located_in(dog) = yard",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "ivo holds     same_as(yard) = shed",
+          "residual": "ivo holds     same_as(yard) = shed",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(dog) = shed",
+          "residual": "rewrite         located_in(dog) = shed",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(dog) = kennel",
+          "residual": "narrator        located_in(dog) = kennel",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.324934,
+      "check": "verdict",
+      "content": "The materials do not provide enough information to determine where Ivo thinks the dog is. Therefore, the answer cannot be determined from the given materials.",
+      "content_chars": 158,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.324934,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : ivo",
+        "believes   : located_in(dog) = shed",
+        "world says : located_in(dog) = kennel",
+        "divergence : belief and world differ; the question asked for the belief",
+        "ivo observed  located_in(dog) = yard",
+        "ivo holds     same_as(yard) = shed",
+        "rewrite         located_in(dog) = shed",
+        "narrator        located_in(dog) = kennel"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 83,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/ivo.dog.yard",
+      "tokens": 29,
+      "ttft_s": 0.06445,
+      "turns": [
+        {
+          "chunks": 30,
+          "content": "The materials do not provide enough information to determine where Ivo thinks the dog is. Therefore, the answer cannot be determined from the given materials.",
+          "content_chars": 158,
+          "elapsed_s": 0.324934,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.06445,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : lena",
+          "residual": "lena",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : vase",
+          "residual": "vase",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(vase) = office",
+          "residual": "located_in(vase) = office",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(vase) = cellar",
+          "residual": "located_in(vase) = cellar",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "lena observed  located_in(vase) = study",
+          "residual": "lena observed  located_in(vase) = study",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "lena holds     same_as(study) = office",
+          "residual": "lena holds     same_as(study) = office",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(vase) = office",
+          "residual": "rewrite         located_in(vase) = office",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(vase) = cellar",
+          "residual": "narrator        located_in(vase) = cellar",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.343606,
+      "check": "verdict",
+      "content": "The materials do not provide any information about Lena's beliefs or thoughts regarding the vase's location. Therefore, based on the given materials, it is not possible to determine where Lena thinks the vase is.\n\nAnswer: none",
+      "content_chars": 226,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.343606,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : lena",
+        "believes   : located_in(vase) = office",
+        "world says : located_in(vase) = cellar",
+        "divergence : belief and world differ; the question asked for the belief",
+        "lena observed  located_in(vase) = study",
+        "lena holds     same_as(study) = office",
+        "rewrite         located_in(vase) = office",
+        "narrator        located_in(vase) = cellar"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 82,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/lena.vase.study",
+      "tokens": 43,
+      "ttft_s": 0.033449,
+      "turns": [
+        {
+          "chunks": 44,
+          "content": "The materials do not provide any information about Lena's beliefs or thoughts regarding the vase's location. Therefore, based on the given materials, it is not possible to determine where Lena thinks the vase is.\n\nAnswer: none",
+          "content_chars": 226,
+          "elapsed_s": 0.343606,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.033449,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : nina",
+          "residual": "nina",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "subject    : kite",
+          "residual": "kite",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(kite) = attic",
+          "residual": "located_in(kite) = attic",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(kite) = shed",
+          "residual": "located_in(kite) = shed",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "nina observed  located_in(kite) = attic",
+          "residual": "nina observed  located_in(kite) = attic",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(kite) = shed",
+          "residual": "narrator        located_in(kite) = shed",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.314999,
+      "check": "verdict",
+      "content": "The materials do not contain any information about where Nina thinks Kite is.\n\nAnswer: none of the above (since no information is provided in the materials).",
+      "content_chars": 157,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.314999,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : nina",
+        "subject    : kite",
+        "believes   : located_in(kite) = attic",
+        "world says : located_in(kite) = shed",
+        "divergence : belief and world differ; the question asked for the belief",
+        "nina observed  located_in(kite) = attic",
+        "narrator        located_in(kite) = shed"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 74,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/nina.kite.attic",
+      "tokens": 31,
+      "ttft_s": 0.059273,
+      "turns": [
+        {
+          "chunks": 32,
+          "content": "The materials do not contain any information about where Nina thinks Kite is.\n\nAnswer: none of the above (since no information is provided in the materials).",
+          "content_chars": 157,
+          "elapsed_s": 0.314999,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.059273,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : rosa",
+          "residual": "rosa",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : key",
+          "residual": "key",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(key) = veranda",
+          "residual": "located_in(key) = veranda",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "rosa observed  located_in(key) = porch",
+          "residual": "rosa observed  located_in(key) = porch",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rosa holds     same_as(porch) = veranda",
+          "residual": "rosa holds     same_as(porch) = veranda",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(key) = veranda",
+          "residual": "rewrite         located_in(key) = veranda",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.301024,
+      "check": "verdict",
+      "content": "The materials do not provide any information about where Rosa thinks the key is. Therefore, based on the given materials, the answer cannot be determined.",
+      "content_chars": 154,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.301024,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : rosa",
+        "believes   : located_in(key) = veranda",
+        "rosa observed  located_in(key) = porch",
+        "rosa holds     same_as(porch) = veranda",
+        "rewrite         located_in(key) = veranda"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 76,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/rosa.key.porch",
+      "tokens": 29,
+      "ttft_s": 0.056454,
+      "turns": [
+        {
+          "chunks": 30,
+          "content": "The materials do not provide any information about where Rosa thinks the key is. Therefore, based on the given materials, the answer cannot be determined.",
+          "content_chars": 154,
+          "elapsed_s": 0.301024,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.056454,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : sally",
+          "residual": "sally",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "subject    : marble",
+          "residual": "marble",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(marble) = basket",
+          "residual": "located_in(marble) = basket",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(marble) = box",
+          "residual": "located_in(marble) = box",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "sally observed  located_in(marble) = basket",
+          "residual": "sally observed  located_in(marble) = basket",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(marble) = box",
+          "residual": "narrator        located_in(marble) = box",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.28973,
+      "check": "verdict",
+      "content": "The materials do not contain any information about Sally's thoughts or beliefs regarding the marble's location. Therefore, the question cannot be answered based on the provided materials.\n\nAnswer: none",
+      "content_chars": 201,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.28973,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : sally",
+        "believes   : located_in(marble) = basket",
+        "world says : located_in(marble) = box",
+        "divergence : belief and world differ; the question asked for the belief",
+        "sally observed  located_in(marble) = basket",
+        "narrator        located_in(marble) = box"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 74,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/sally.marble.basket",
+      "tokens": 35,
+      "ttft_s": 0.041808,
+      "turns": [
+        {
+          "chunks": 36,
+          "content": "The materials do not contain any information about Sally's thoughts or beliefs regarding the marble's location. Therefore, the question cannot be answered based on the provided materials.\n\nAnswer: none",
+          "content_chars": 201,
+          "elapsed_s": 0.28973,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.041808,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "agent      : sam",
+          "residual": "sam",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "subject    : apple",
+          "residual": "apple",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "believes   : located_in(apple) = bin",
+          "residual": "located_in(apple) = bin",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world says : located_in(apple) = sink",
+          "residual": "located_in(apple) = sink",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "divergence : belief and world differ; the question asked for the belief",
+          "residual": "belief and world differ; the question asked for the belief",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "sam observed  located_in(apple) = crate",
+          "residual": "sam observed  located_in(apple) = crate",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "sam holds     same_as(crate) = bin",
+          "residual": "sam holds     same_as(crate) = bin",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "rewrite         located_in(apple) = bin",
+          "residual": "rewrite         located_in(apple) = bin",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "narrator        located_in(apple) = sink",
+          "residual": "narrator        located_in(apple) = sink",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.332518,
+      "check": "verdict",
+      "content": "The materials do not provide any information about Sam's beliefs or thoughts regarding where Apple is after it moves to the sink. Therefore, based on the given materials, the answer cannot be determined.",
+      "content_chars": 203,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.332518,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "belief_query",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "agent      : sam",
+        "subject    : apple",
+        "believes   : located_in(apple) = bin",
+        "world says : located_in(apple) = sink",
+        "divergence : belief and world differ; the question asked for the belief",
+        "sam observed  located_in(apple) = crate",
+        "sam holds     same_as(crate) = bin",
+        "rewrite         located_in(apple) = bin",
+        "narrator        located_in(apple) = sink"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 80,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "belief_query/sam.apple.crate",
+      "tokens": 38,
+      "ttft_s": 0.05582,
+      "turns": [
+        {
+          "chunks": 39,
+          "content": "The materials do not provide any information about Sam's beliefs or thoughts regarding where Apple is after it moves to the sink. Therefore, based on the given materials, the answer cannot be determined.",
+          "content_chars": 203,
+          "elapsed_s": 0.332518,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.05582,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+          "residual": "e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 0 action(s), replayed through the world's own verifier",
+          "residual": "0 action(s), replayed through the world's own verifier",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "(the target IS the initial state)",
+          "residual": "(the target IS the initial state)",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "verdict",
+      "content": "",
+      "content_chars": 0,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.404192,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130475 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130475,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "B",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 520777,
+      "materials_none": false,
+      "materials_tokens": 130391,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: e58e6b4aa58b6d489f80c564fdccb36036e6fe05d9913b8aa8b7c0755ec59228",
+        "outcome: REACHABLE",
+        "shortest_route: 0 action(s), replayed through the world's own verifier",
+        "(the target IS the initial state)"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130462,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.0",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.404192,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130475 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130475,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+          "residual": "823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 1 action(s), replayed through the world's own verifier",
+          "residual": "1 action(s), replayed through the world's own verifier",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "verdict",
+      "content": "",
+      "content_chars": 0,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.368099,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130544 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130544,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "B",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 521075,
+      "materials_none": false,
+      "materials_tokens": 130460,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 823c3ef96f3f6c7400c75589783ec557b67fadb45933972dd1416e9c31ef5037",
+        "outcome: REACHABLE",
+        "shortest_route: 1 action(s), replayed through the world's own verifier"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130531,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.1",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.368099,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130544 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130544,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+          "residual": "20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 3 action(s), replayed through the world's own verifier",
+          "residual": "3 action(s), replayed through the world's own verifier",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "verdict",
+      "content": "",
+      "content_chars": 0,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.431433,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130712 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130712,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "B",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 521905,
+      "materials_none": false,
+      "materials_tokens": 130628,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 20e4b12b74e6001ed4e2a83a0aafea3be16ca6da286eddca690e7c343334cca5",
+        "outcome: REACHABLE",
+        "shortest_route: 3 action(s), replayed through the world's own verifier"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130699,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.3",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.431433,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130712 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130712,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+          "residual": "0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 4 action(s), replayed through the world's own verifier",
+          "residual": "4 action(s), replayed through the world's own verifier",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "verdict",
+      "content": "",
+      "content_chars": 0,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.389287,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130811 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130811,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "B",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 522402,
+      "materials_none": false,
+      "materials_tokens": 130727,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 0347ed7c038bb40c9c1eb2e699ec6f853be752c5f9edff78a3c776a473779ce9",
+        "outcome: REACHABLE",
+        "shortest_route: 4 action(s), replayed through the world's own verifier"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130798,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.reachable.4",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.389287,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130811 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130811,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/story.golden_chicken.closure.json",
+          "residual": "reports/closures/story.golden_chicken.closure.json",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "world_id: story.golden_chicken",
+          "residual": "story.golden_chicken",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 5",
+          "residual": "5",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 75",
+          "residual": "75",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "residual": "27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: story.frame.v1",
+          "residual": "story.frame.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: 579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+          "residual": "579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+          "residual": "NOT_REACHABLE_WITHIN_HORIZON",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "residual": "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "verdict",
+      "content": "",
+      "content_chars": 0,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.386085,
+      "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130934 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130934,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+      "half": "B",
+      "http_status": 400,
+      "kind": "closure_reachability",
+      "materials_chars": 522977,
+      "materials_none": false,
+      "materials_tokens": 130850,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/story.golden_chicken.closure.json",
+        "world_id: story.golden_chicken",
+        "horizon: 5",
+        "visited_states: 75",
+        "closure_digest: 27060b109c1a27d36b1b75e978d09d2c4f05c3b7322bab4286e89a4e38a4c103",
+        "adapter_id: story.frame.v1",
+        "target_digest: 579dcb77e9206499f4e94d138b8f59196a34dd2d5b3a3b078e726a09600fbbe9",
+        "outcome: NOT_REACHABLE_WITHIN_HORIZON",
+        "these canonical bytes are not reachable within horizon 5 of the closure named above, which visited 75 states"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 130921,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": true,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "exhausted",
+      "status_ok": true,
+      "task_id": "closure_reachability/story.golden_chicken.unreachable.1",
+      "tokens": 0,
+      "ttft_s": null,
+      "turns": [
+        {
+          "chunks": 0,
+          "content": "",
+          "content_chars": 0,
+          "elapsed_s": 0.386085,
+          "error": "HTTP 400: {\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (130934 tokens) exceeds the available context size (32768 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":130934,\\\"n_ctx\\\":32768}}\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+          "finish_reason": null,
+          "http_status": 400,
+          "index": 0,
+          "status": null,
+          "ttft_s": null,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "closure: reports/closures/visual.rt0000.closure.json",
+          "residual": "reports/closures/visual.rt0000.closure.json",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "world_id: visual.rt0000",
+          "residual": "visual.rt0000",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "horizon: 1",
+          "residual": "1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "visited_states: 1",
+          "residual": "1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "closure_digest: 40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+          "residual": "40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "adapter_id: visual.scene.v1",
+          "residual": "visual.scene.v1",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "target_digest: fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+          "residual": "fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "outcome: REACHABLE",
+          "residual": "REACHABLE",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "shortest_route: 0 action(s), replayed through the world's own verifier",
+          "residual": "0 action(s), replayed through the world's own verifier",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "(the target IS the initial state)",
+          "residual": "(the target IS the initial state)",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 1.371276,
+      "check": "verdict",
+      "content": "The provided materials do not contain any information about reachable states or a file named \"visual.rt0000.reachable.0.state.json\". The materials include a description of the initial state, possible mutations, and their dispositions, but there is no data indicating which states are reachable or the existence of a file with the specified path.\n\nTherefore, based on the materials, the answer is:\n\nNone of the provided materials contain the reachable visual.rt0000 data/closure_targets/visual.rt0000.reachable.0.state.json.",
+      "content_chars": 523,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 1.371276,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "closure_reachability",
+      "materials_chars": 6346,
+      "materials_none": false,
+      "materials_tokens": 2236,
+      "materials_truncated": false,
+      "missing_strings": [
+        "closure: reports/closures/visual.rt0000.closure.json",
+        "horizon: 1",
+        "visited_states: 1",
+        "closure_digest: 40295aa1cc5cea181e8129592ae832a08e57a5b117659b73700fee79b5610dfe",
+        "adapter_id: visual.scene.v1",
+        "target_digest: fa84c994d9e78133d5bcf8f35e75db8cf75b69a1384dd98a6bbd685220de9870",
+        "outcome: REACHABLE",
+        "shortest_route: 0 action(s), replayed through the world's own verifier",
+        "(the target IS the initial state)"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2310,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "closure_reachability/visual.rt0000.reachable.0",
+      "tokens": 111,
+      "ttft_s": 0.392676,
+      "turns": [
+        {
+          "chunks": 112,
+          "content": "The provided materials do not contain any information about reachable states or a file named \"visual.rt0000.reachable.0.state.json\". The materials include a description of the initial state, possible mutations, and their dispositions, but there is no data indicating which states are reachable or the existence of a file with the specified path.\n\nTherefore, based on the materials, the answer is:\n\nNone of the provided materials contain the reachable visual.rt0000 data/closure_targets/visual.rt0000.reachable.0.state.json.",
+          "content_chars": 523,
+          "elapsed_s": 1.371276,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.392676,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Quadratic Formula",
+          "residual": "Quadratic Formula",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Formula for solving quadratic equations of the form ax^2 + bx + c = 0",
+          "residual": "Formula for solving quadratic equations of the form ax^2 + bx + c = 0",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.427007,
+      "check": "receipt",
+      "content": "x = (-b ± sqrt(b^2 - 4ac)) / (2a)",
+      "content_chars": 33,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.427007,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 4164,
+      "materials_none": false,
+      "materials_tokens": 1141,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Quadratic Formula",
+        "Formula for solving quadratic equations of the form ax^2 + bx + c = 0"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1200,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/algebra.polynomial_equations.quadratic_formula",
+      "tokens": 19,
+      "ttft_s": 0.290068,
+      "turns": [
+        {
+          "chunks": 20,
+          "content": "x = (-b ± sqrt(b^2 - 4ac)) / (2a)",
+          "content_chars": 33,
+          "elapsed_s": 0.427007,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.290068,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Betti Number as Rank of Cycles Modulo Boundaries",
+          "residual": "Betti Number as Rank of Cycles Modulo Boundaries",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The n-th Betti number counts the independent n-dimensional holes: the cycles that are not themselves boundaries, measured by rank.",
+          "residual": "The n-th Betti number counts the independent n-dimensional holes: the cycles that are not themselves boundaries, measured by rank.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.46328,
+      "check": "receipt",
+      "content": "b_n = rank(Z_n) - rank(B_n)",
+      "content_chars": 27,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.46328,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 7089,
+      "materials_none": false,
+      "materials_tokens": 1850,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Betti Number as Rank of Cycles Modulo Boundaries",
+        "The n-th Betti number counts the independent n-dimensional holes: the cycles that are not themselves boundaries, measured by rank."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1908,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/algtop.homology.betti_number_rank",
+      "tokens": 12,
+      "ttft_s": 0.369681,
+      "turns": [
+        {
+          "chunks": 13,
+          "content": "b_n = rank(Z_n) - rank(B_n)",
+          "content_chars": 27,
+          "elapsed_s": 0.46328,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.369681,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Tangent-Line Linearization",
+          "residual": "Tangent-Line Linearization",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Near a chosen point, a differentiable function is replaced by the affine function that matches its value and slope there.",
+          "residual": "Near a chosen point, a differentiable function is replaced by the affine function that matches its value and slope there.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.451794,
+      "check": "receipt",
+      "content": "L(x) = f(a) + f'(a)(x - a)",
+      "content_chars": 26,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.451794,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 5469,
+      "materials_none": false,
+      "materials_tokens": 1389,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Tangent-Line Linearization",
+        "Near a chosen point, a differentiable function is replaced by the affine function that matches its value and slope there."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1449,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/calculus.approximation.tangent_line_linearization",
+      "tokens": 16,
+      "ttft_s": 0.327942,
+      "turns": [
+        {
+          "chunks": 17,
+          "content": "L(x) = f(a) + f'(a)(x - a)",
+          "content_chars": 26,
+          "elapsed_s": 0.451794,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.327942,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Henderson-Hasselbalch Equation",
+          "residual": "Henderson-Hasselbalch Equation",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The pH of a buffer is its pKa displaced by the logarithm of the ratio of conjugate base to weak acid.",
+          "residual": "The pH of a buffer is its pKa displaced by the logarithm of the ratio of conjugate base to weak acid.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.432819,
+      "check": "receipt",
+      "content": "pH = pKa + log10([A-]/[HA])",
+      "content_chars": 27,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.432819,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 5036,
+      "materials_none": false,
+      "materials_tokens": 1351,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Henderson-Hasselbalch Equation",
+        "The pH of a buffer is its pKa displaced by the logarithm of the ratio of conjugate base to weak acid."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1412,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/chemistry.acid_base.henderson_hasselbalch",
+      "tokens": 16,
+      "ttft_s": 0.309548,
+      "turns": [
+        {
+          "chunks": 17,
+          "content": "pH = pKa + log10([A-]/[HA])",
+          "content_chars": 27,
+          "elapsed_s": 0.432819,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.309548,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Arc Length of a Parameterized Curve",
+          "residual": "Arc Length of a Parameterized Curve",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The length of a curve is the accumulated speed of any parameterization of it.",
+          "residual": "The length of a curve is the accumulated speed of any parameterization of it.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.526787,
+      "check": "receipt",
+      "content": "L(c) = \\int_a^b \\lVert c'(t) \\rVert \\, dt",
+      "content_chars": 41,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.526787,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6773,
+      "materials_none": false,
+      "materials_tokens": 1719,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Arc Length of a Parameterized Curve",
+        "The length of a curve is the accumulated speed of any parameterization of it."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1777,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/diffgeo.curves.arc_length_functional",
+      "tokens": 22,
+      "ttft_s": 0.347365,
+      "turns": [
+        {
+          "chunks": 23,
+          "content": "L(c) = \\int_a^b \\lVert c'(t) \\rVert \\, dt",
+          "content_chars": 41,
+          "elapsed_s": 0.526787,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.347365,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Brouwer Fixed-Point Theorem",
+          "residual": "Brouwer Fixed-Point Theorem",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Every continuous map of a closed ball to itself leaves at least one point where it started.",
+          "residual": "Every continuous map of a closed ball to itself leaves at least one point where it started.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.487441,
+      "check": "receipt",
+      "content": "there exists x with f(x) = x",
+      "content_chars": 28,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.487441,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 7806,
+      "materials_none": false,
+      "materials_tokens": 1938,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Brouwer Fixed-Point Theorem",
+        "Every continuous map of a closed ball to itself leaves at least one point where it started."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1997,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/difftop.degree.brouwer_fixed_point",
+      "tokens": 9,
+      "ttft_s": 0.404691,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "there exists x with f(x) = x",
+          "content_chars": 28,
+          "elapsed_s": 0.487441,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.404691,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Circle Area Formula",
+          "residual": "Circle Area Formula",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The area of a circle is π times the square of its radius",
+          "residual": "The area of a circle is π times the square of its radius",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.294821,
+      "check": "receipt",
+      "content": "A = pi*r^2",
+      "content_chars": 10,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.294821,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 3248,
+      "materials_none": false,
+      "materials_tokens": 865,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Circle Area Formula",
+        "The area of a circle is π times the square of its radius"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 922,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/geometry.area_formulas.circle_area_formula",
+      "tokens": 6,
+      "ttft_s": 0.240303,
+      "turns": [
+        {
+          "chunks": 7,
+          "content": "A = pi*r^2",
+          "content_chars": 10,
+          "elapsed_s": 0.294821,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.240303,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Barycentric Coordinates Sum to One",
+          "residual": "Barycentric Coordinates Sum to One",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The barycentric coordinates of a point with respect to a simplex add up to one.",
+          "residual": "The barycentric coordinates of a point with respect to a simplex add up to one.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.444174,
+      "check": "receipt",
+      "content": "sum_(i=0)^(d) lambda_i = 1",
+      "content_chars": 26,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.444174,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6938,
+      "materials_none": false,
+      "materials_tokens": 1725,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Barycentric Coordinates Sum to One",
+        "The barycentric coordinates of a point with respect to a simplex add up to one."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1789,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/geomodel.barycentric.barycentric_partition_of_unity",
+      "tokens": 14,
+      "ttft_s": 0.326529,
+      "turns": [
+        {
+          "chunks": 15,
+          "content": "sum_(i=0)^(d) lambda_i = 1",
+          "content_chars": 26,
+          "elapsed_s": 0.444174,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.326529,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Area of a Union (Inclusion-Exclusion for Overlapping Regions)",
+          "residual": "Area of a Union (Inclusion-Exclusion for Overlapping Regions)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The area covered by two regions together is the sum of their areas less the area they share, because the overlap would otherwise be paid for twice.",
+          "residual": "The area covered by two regions together is the sum of their areas less the area they share, because the overlap would otherwise be paid for twice.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.681712,
+      "check": "receipt",
+      "content": "area(A union B) = area(A) + area(B) - area(A inter B)",
+      "content_chars": 53,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.681712,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 9694,
+      "materials_none": false,
+      "materials_tokens": 2515,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Area of a Union (Inclusion-Exclusion for Overlapping Regions)",
+        "The area covered by two regions together is the sum of their areas less the area they share, because the overlap would otherwise be paid for twice."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2574,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/geotop.measure.area_inclusion_exclusion",
+      "tokens": 19,
+      "ttft_s": 0.50404,
+      "turns": [
+        {
+          "chunks": 20,
+          "content": "area(A union B) = area(A) + area(B) - area(A inter B)",
+          "content_chars": 53,
+          "elapsed_s": 0.681712,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.50404,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Channel Capacity",
+          "residual": "Channel Capacity",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Capacity is the largest mutual information any input distribution can push through a fixed channel.",
+          "residual": "Capacity is the largest mutual information any input distribution can push through a fixed channel.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.537135,
+      "check": "receipt",
+      "content": "C = max over p(x) of I(X;Y)",
+      "content_chars": 27,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.537135,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 7553,
+      "materials_none": false,
+      "materials_tokens": 1847,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Channel Capacity",
+        "Capacity is the largest mutual information any input distribution can push through a fixed channel."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1902,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/infotheory.channel.channel_capacity",
+      "tokens": 13,
+      "ttft_s": 0.439705,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "C = max over p(x) of I(X;Y)",
+          "content_chars": 27,
+          "elapsed_s": 0.537135,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.439705,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Absorption Law (Conjunction over Disjunction)",
+          "residual": "Absorption Law (Conjunction over Disjunction)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Adding an alternative that is already implied by P, and then requiring P as well, tells you nothing beyond P.",
+          "residual": "Adding an alternative that is already implied by P, and then requiring P as well, tells you nothing beyond P.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.451498,
+      "check": "receipt",
+      "content": "P and (P or Q) = P",
+      "content_chars": 18,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.451498,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 6458,
+      "materials_none": false,
+      "materials_tokens": 1707,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Absorption Law (Conjunction over Disjunction)",
+        "Adding an alternative that is already implied by P, and then requiring P as well, tells you nothing beyond P."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1763,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/logic.boolean_laws.absorption",
+      "tokens": 9,
+      "ttft_s": 0.379407,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "P and (P or Q) = P",
+          "content_chars": 18,
+          "elapsed_s": 0.451498,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.379407,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "LoRA Low-Rank Weight Update",
+          "residual": "LoRA Low-Rank Weight Update",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "Adapt a pretrained model by adding a scaled product of two thin matrices to a frozen weight, and train only those two.",
+          "residual": "Adapt a pretrained model by adding a scaled product of two thin matrices to a frozen weight, and train only those two.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.652198,
+      "check": "receipt",
+      "content": "ml.adaptation.lora_low_rank_update",
+      "content_chars": 34,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.652198,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 10775,
+      "materials_none": false,
+      "materials_tokens": 2846,
+      "materials_truncated": false,
+      "missing_strings": [
+        "LoRA Low-Rank Weight Update",
+        "Adapt a pretrained model by adding a scaled product of two thin matrices to a frozen weight, and train only those two."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2905,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/ml.adaptation.lora_low_rank_update",
+      "tokens": 9,
+      "ttft_s": 0.564037,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "ml.adaptation.lora_low_rank_update",
+          "content_chars": 34,
+          "elapsed_s": 0.652198,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.564037,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Feature Percolation from the Affix",
+          "residual": "Feature Percolation from the Affix",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The morphosyntactic features of an inflected word are those its inflectional affix spells out; they percolate up to the whole word, where syntax can see them and agreement can copy them.",
+          "residual": "The morphosyntactic features of an inflected word are those its inflectional affix spells out; they percolate up to the whole word, where syntax can see them and agreement can copy them.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.528876,
+      "check": "receipt",
+      "content": "morphology.agreement.feature_percolation",
+      "content_chars": 40,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.528876,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 8122,
+      "materials_none": false,
+      "materials_tokens": 1994,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Feature Percolation from the Affix",
+        "The morphosyntactic features of an inflected word are those its inflectional affix spells out; they percolate up to the whole word, where syntax can see them and agreement can copy them."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2052,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/morphology.agreement.feature_percolation",
+      "tokens": 8,
+      "ttft_s": 0.460787,
+      "turns": [
+        {
+          "chunks": 9,
+          "content": "morphology.agreement.feature_percolation",
+          "content_chars": 40,
+          "elapsed_s": 0.528876,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.460787,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "2^21 Is Congruent to 1 Modulo 7 (Ingested, Formal Without Bridge)",
+          "residual": "2^21 Is Congruent to 1 Modulo 7 (Ingested, Formal Without Bridge)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "2^21 leaves remainder 1 on division by 7 (equivalently 7 divides 2^21 - 1): the congruence stated by Lean-workbook problem lean_workbook_10202, restated as its defining residue equation.",
+          "residual": "2^21 leaves remainder 1 on division by 7 (equivalently 7 divides 2^21 - 1): the congruence stated by Lean-workbook problem lean_workbook_10202, restated as its defining residue equation.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.423059,
+      "check": "receipt",
+      "content": "2^21 % 7 = 1 % 7",
+      "content_chars": 16,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.423059,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 4604,
+      "materials_none": false,
+      "materials_tokens": 1290,
+      "materials_truncated": false,
+      "missing_strings": [
+        "2^21 Is Congruent to 1 Modulo 7 (Ingested, Formal Without Bridge)",
+        "2^21 leaves remainder 1 on division by 7 (equivalently 7 divides 2^21 - 1): the congruence stated by Lean-workbook problem lean_workbook_10202, restated as its defining residue equation."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1355,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/numbertheory.ingested.lean_workbook_10202",
+      "tokens": 13,
+      "ttft_s": 0.320546,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "2^21 % 7 = 1 % 7",
+          "content_chars": 16,
+          "elapsed_s": 0.423059,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.320546,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Binary Exponentiation, Iterative (TheAlgorithms)",
+          "residual": "Binary Exponentiation, Iterative (TheAlgorithms)",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "The same binary-exponentiation recurrence, bit-shift evaluation, as implemented by TheAlgorithms/Python binary_exp_iterative (commit f5988cc, MIT).",
+          "residual": "The same binary-exponentiation recurrence, bit-shift evaluation, as implemented by TheAlgorithms/Python binary_exp_iterative (commit f5988cc, MIT).",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.372928,
+      "check": "receipt",
+      "content": "programming.binexp.iterative",
+      "content_chars": 28,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.372928,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 5886,
+      "materials_none": false,
+      "materials_tokens": 1619,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Binary Exponentiation, Iterative (TheAlgorithms)",
+        "The same binary-exponentiation recurrence, bit-shift evaluation, as implemented by TheAlgorithms/Python binary_exp_iterative (commit f5988cc, MIT)."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 1674,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/programming.binexp.iterative",
+      "tokens": 5,
+      "ttft_s": 0.327691,
+      "turns": [
+        {
+          "chunks": 6,
+          "content": "programming.binexp.iterative",
+          "content_chars": 28,
+          "elapsed_s": 0.372928,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.327691,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "Consistency as Unprovability of Falsum",
+          "residual": "Consistency as Unprovability of Falsum",
+          "stripped": false
+        },
+        {
+          "found": false,
+          "pinned": "A theory is consistent exactly when it cannot prove the absurd sentence; arithmetization turns that meta-level property into a single sentence of the theory's own language.",
+          "residual": "A theory is consistent exactly when it cannot prove the absurd sentence; arithmetization turns that meta-level property into a single sentence of the theory's own language.",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.539209,
+      "check": "receipt",
+      "content": "provability.consistency.consistency_definition",
+      "content_chars": 46,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.539209,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "corpus_definition",
+      "materials_chars": 9083,
+      "materials_none": false,
+      "materials_tokens": 2301,
+      "materials_truncated": false,
+      "missing_strings": [
+        "Consistency as Unprovability of Falsum",
+        "A theory is consistent exactly when it cannot prove the absurd sentence; arithmetization turns that meta-level property into a single sentence of the theory's own language."
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 2358,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "corpus_definition/provability.consistency.consistency_definition",
+      "tokens": 7,
+      "ttft_s": 0.477362,
+      "turns": [
+        {
+          "chunks": 8,
+          "content": "provability.consistency.consistency_definition",
+          "content_chars": 46,
+          "elapsed_s": 0.539209,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.477362,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 10 + 7 * 12",
+          "residual": "10 + 7 * 12",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 94",
+          "residual": "94",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.285994,
+      "check": "exact",
+      "content": "10 + 7 * 12 = 10 + 84 = 94",
+      "content_chars": 26,
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.285994,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 73.428114,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/10+7*12",
+      "tokens": 21,
+      "ttft_s": 0.136381,
+      "turns": [
+        {
+          "chunks": 22,
+          "content": "10 + 7 * 12 = 10 + 84 = 94",
+          "content_chars": 26,
+          "elapsed_s": 0.285994,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.136381,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 21,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 16 / 15",
+          "residual": "16 / 15",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "exact      : 16/15",
+          "residual": "16/15",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.250682,
+      "check": "exact",
+      "content": "16 / 15 = 1.0666666666666666... (repeating)",
+      "content_chars": 43,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.250682,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "exact      : 16/15"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 61,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/16over15",
+      "tokens": 31,
+      "ttft_s": 0.044197,
+      "turns": [
+        {
+          "chunks": 32,
+          "content": "16 / 15 = 1.0666666666666666... (repeating)",
+          "content_chars": 43,
+          "elapsed_s": 0.250682,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.044197,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 17 - 25",
+          "residual": "17 - 25",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : -8",
+          "residual": "-8",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.097223,
+      "check": "exact",
+      "content": "17 - 25 = -8",
+      "content_chars": 12,
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.097223,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 92.570688,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 61,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/17-25",
+      "tokens": 9,
+      "ttft_s": 0.036655,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "17 - 25 = -8",
+          "content_chars": 12,
+          "elapsed_s": 0.097223,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.036655,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 9,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "expression : 19 / 13",
+          "residual": "19 / 13",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "exact      : 19/13",
+          "residual": "19/13",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.261324,
+      "check": "exact",
+      "content": "19 / 13 = 1.4615384615384615... (repeating)",
+      "content_chars": 43,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.261324,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "exact      : 19/13"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 61,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/19over13",
+      "tokens": 31,
+      "ttft_s": 0.051584,
+      "turns": [
+        {
+          "chunks": 32,
+          "content": "19 / 13 = 1.4615384615384615... (repeating)",
+          "content_chars": 43,
+          "elapsed_s": 0.261324,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.051584,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "expression : 34 + 23 * 20",
+          "residual": "34 + 23 * 20",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "exact      : 494",
+          "residual": "494",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.711815,
+      "check": "exact",
+      "content": "To solve $ 34 + 23 \\times 20 $, we follow the order of operations (PEMDAS/BODMAS):\n\n1. First, perform multiplication:  \n$ 23 \\times 20 = 460 $\n\n2. Then, add:  \n$ 34 + 460 = 494 $\n\nSo, the result is:  \n**494**",
+      "content_chars": 208,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.711815,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "expression : 34 + 23 * 20"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 65,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/evaluate/34+23*20",
+      "tokens": 88,
+      "ttft_s": 0.050323,
+      "turns": [
+        {
+          "chunks": 89,
+          "content": "To solve $ 34 + 23 \\times 20 $, we follow the order of operations (PEMDAS/BODMAS):\n\n1. First, perform multiplication:  \n$ 23 \\times 20 = 460 $\n\n2. Then, add:  \n$ 34 + 460 = 494 $\n\nSo, the result is:  \n**494**",
+          "content_chars": 208,
+          "elapsed_s": 0.711815,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.050323,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 13 * 4 = 52",
+          "residual": "13 * 4 = 52",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.13092,
+      "check": "exact",
+      "content": "Yes, 13 * 4 = 52.",
+      "content_chars": 17,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.13092,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 63,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/13*4=52",
+      "tokens": 13,
+      "ttft_s": 0.037688,
+      "turns": [
+        {
+          "chunks": 14,
+          "content": "Yes, 13 * 4 = 52.",
+          "content_chars": 17,
+          "elapsed_s": 0.13092,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.037688,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : 15 * 7 = 106",
+          "residual": "15 * 7 = 106",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.183065,
+      "check": "exact",
+      "content": "No, 15 * 7 = 105, not 106.",
+      "content_chars": 26,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.183065,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : 15 * 7 = 106"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/15*7=106",
+      "tokens": 20,
+      "ttft_s": 0.045129,
+      "turns": [
+        {
+          "chunks": 21,
+          "content": "No, 15 * 7 = 105, not 106.",
+          "content_chars": 26,
+          "elapsed_s": 0.183065,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.045129,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 17 + 10 > 26",
+          "residual": "17 + 10 > 26",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.276876,
+      "check": "exact",
+      "content": "17 + 10 = 27  \n27 > 26  \n\nYes, 17 + 10 > 26.",
+      "content_chars": 44,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.276876,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/17+10>26",
+      "tokens": 32,
+      "ttft_s": 0.055185,
+      "turns": [
+        {
+          "chunks": 33,
+          "content": "17 + 10 = 27  \n27 > 26  \n\nYes, 17 + 10 > 26.",
+          "content_chars": 44,
+          "elapsed_s": 0.276876,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.055185,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 19 + 13 > 33",
+          "residual": "19 + 13 > 33",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.332036,
+      "check": "exact",
+      "content": "19 + 13 = 32  \n32 > 33? No.  \n\nSo, 19 + 13 > 33 is false.  \n\nAnswer: no.",
+      "content_chars": 72,
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.332036,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 126.492308,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/19+13>33",
+      "tokens": 42,
+      "ttft_s": 0.026861,
+      "turns": [
+        {
+          "chunks": 43,
+          "content": "19 + 13 = 32  \n32 > 33? No.  \n\nSo, 19 + 13 > 33 is false.  \n\nAnswer: no.",
+          "content_chars": 72,
+          "elapsed_s": 0.332036,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.026861,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 42,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 29 * 28 = 812",
+          "residual": "29 * 28 = 812",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.909773,
+      "check": "exact",
+      "content": "No, 29 * 28 does not equal 812.\n\nLet's verify:\n\n29 * 28 = (30 - 1) * 28 = 30*28 - 1*28 = 840 - 28 = 812.\n\nWait — this calculation shows 29 * 28 = 812.\n\nSo, the statement \"does 29 * 28 = 812\" is **true**.\n\nFinal answer: **yes**.",
+      "content_chars": 227,
+      "content_ok": true,
+      "correct": true,
+      "elapsed_s": 0.909773,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 127.504333,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 65,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/29*28=812",
+      "tokens": 116,
+      "ttft_s": 0.053536,
+      "turns": [
+        {
+          "chunks": 117,
+          "content": "No, 29 * 28 does not equal 812.\n\nLet's verify:\n\n29 * 28 = (30 - 1) * 28 = 30*28 - 1*28 = 840 - 28 = 812.\n\nWait — this calculation shows 29 * 28 = 812.\n\nSo, the statement \"does 29 * 28 = 812\" is **true**.\n\nFinal answer: **yes**.",
+          "content_chars": 227,
+          "elapsed_s": 0.909773,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.053536,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 116,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : 31 * 31 = 962",
+          "residual": "31 * 31 = 962",
+          "stripped": true
+        },
+        {
+          "found": true,
+          "pinned": "holds      : no",
+          "residual": "no",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.200757,
+      "check": "exact",
+      "content": "No, 31 * 31 = 961, not 962.",
+      "content_chars": 27,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.200757,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : 31 * 31 = 962"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 65,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/31*31=962",
+      "tokens": 21,
+      "ttft_s": 0.048655,
+      "turns": [
+        {
+          "chunks": 22,
+          "content": "No, 31 * 31 = 961, not 962.",
+          "content_chars": 27,
+          "elapsed_s": 0.200757,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.048655,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": true,
+          "pinned": "relation   : 37 + 40 < 78",
+          "residual": "37 + 40 < 78",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.324244,
+      "check": "exact",
+      "content": "37 + 40 = 77  \n77 < 78 is true.  \n\nTherefore, the statement \"37 + 40 < 78\" is true.",
+      "content_chars": 83,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.324244,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 64,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/37+40<78",
+      "tokens": 40,
+      "ttft_s": 0.038579,
+      "turns": [
+        {
+          "chunks": 39,
+          "content": "37 + 40 = 77  \n77 < 78 is true.  \n\nTherefore, the statement \"37 + 40 < 78\" is true.",
+          "content_chars": 83,
+          "elapsed_s": 0.324244,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.038579,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "relation   : y ^ 2 = 625",
+          "residual": "y ^ 2 = 625",
+          "stripped": true
+        },
+        {
+          "found": false,
+          "pinned": "holds      : yes",
+          "residual": "yes",
+          "stripped": true
+        }
+      ],
+      "charged_elapsed_s": 0.200774,
+      "check": "exact",
+      "content": "Yes, if y = 25, then y² = 25² = 625.",
+      "content_chars": 36,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.200774,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "exact_value",
+      "materials_chars": 0,
+      "materials_none": true,
+      "materials_tokens": 0,
+      "materials_truncated": false,
+      "missing_strings": [
+        "relation   : y ^ 2 = 625",
+        "holds      : yes"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 70,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "solved",
+      "status_ok": true,
+      "task_id": "exact_value/relation/y^2=625",
+      "tokens": 23,
+      "ttft_s": 0.038511,
+      "turns": [
+        {
+          "chunks": 24,
+          "content": "Yes, if y = 25, then y² = 25² = 625.",
+          "content_chars": 36,
+          "elapsed_s": 0.200774,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.038511,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "probstat.probability.probability_normalization",
+          "residual": "probstat.probability.probability_normalization",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.194939,
+      "check": "receipt",
+      "content": "twin geomodel.barycentric.barycentric_partition_of_unity",
+      "content_chars": 56,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.194939,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 705,
+      "materials_none": false,
+      "materials_tokens": 200,
+      "materials_truncated": false,
+      "missing_strings": [
+        "probstat.probability.probability_normalization"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 266,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/geomodel.barycentric.barycentric_partition_of_unity",
+      "tokens": 16,
+      "ttft_s": 0.07839,
+      "turns": [
+        {
+          "chunks": 17,
+          "content": "twin geomodel.barycentric.barycentric_partition_of_unity",
+          "content_chars": 56,
+          "elapsed_s": 0.194939,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.07839,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "settheory.boolean_laws.idempotence",
+          "residual": "settheory.boolean_laws.idempotence",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.144667,
+      "check": "receipt",
+      "content": "twin logic.boolean_laws.idempotence",
+      "content_chars": 35,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.144667,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 644,
+      "materials_none": false,
+      "materials_tokens": 204,
+      "materials_truncated": false,
+      "missing_strings": [
+        "settheory.boolean_laws.idempotence"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 263,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/logic.boolean_laws.idempotence",
+      "tokens": 9,
+      "ttft_s": 0.077174,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "twin logic.boolean_laws.idempotence",
+          "content_chars": 35,
+          "elapsed_s": 0.144667,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.077174,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "probstat.transform.z_standardization",
+          "residual": "probstat.transform.z_standardization",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.198987,
+      "check": "receipt",
+      "content": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+      "content_chars": 43,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.198987,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 713,
+      "materials_none": false,
+      "materials_tokens": 203,
+      "materials_truncated": false,
+      "missing_strings": [
+        "probstat.transform.z_standardization"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 263,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/ml.preference.grpo_group_relative_advantage",
+      "tokens": 16,
+      "ttft_s": 0.086949,
+      "turns": [
+        {
+          "chunks": 17,
+          "content": "ADVANTAGE = (REWARD - MEANREWARD)/STDREWARD",
+          "content_chars": 43,
+          "elapsed_s": 0.198987,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.086949,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "morphology.wordformation.iterated_affixation",
+          "residual": "morphology.wordformation.iterated_affixation",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.166662,
+      "check": "receipt",
+      "content": "twin morphology.syntax.iterated_intensification",
+      "content_chars": 47,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.166662,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 762,
+      "materials_none": false,
+      "materials_tokens": 226,
+      "materials_truncated": false,
+      "missing_strings": [
+        "morphology.wordformation.iterated_affixation"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 285,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/morphology.syntax.iterated_intensification",
+      "tokens": 9,
+      "ttft_s": 0.099513,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "twin morphology.syntax.iterated_intensification",
+          "content_chars": 47,
+          "elapsed_s": 0.166662,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.099513,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "answerable": true,
+      "applicable": true,
+      "b_residuals": [
+        {
+          "found": false,
+          "pinned": "temporal.past.past_duality",
+          "residual": "temporal.past.past_duality",
+          "stripped": false
+        }
+      ],
+      "charged_elapsed_s": 0.145842,
+      "check": "receipt",
+      "content": "twin temporal.modality.temporal_duality",
+      "content_chars": 39,
+      "content_ok": false,
+      "correct": false,
+      "elapsed_s": 0.145842,
+      "error": null,
+      "half": "B",
+      "http_status": 200,
+      "kind": "twin_lookup",
+      "materials_chars": 690,
+      "materials_none": false,
+      "materials_tokens": 218,
+      "materials_truncated": false,
+      "missing_strings": [
+        "temporal.past.past_duality"
+      ],
+      "need_ok": true,
+      "outcome_expect": "answer",
+      "perceived_tps": 0.0,
+      "profile": "corollary/kernel",
+      "prompt_tokens": 277,
+      "receipt_ok": true,
+      "receipted": false,
+      "refs_skipped": [],
+      "refusal_charge_applied": false,
+      "refusal_gate_ok": null,
+      "route": null,
+      "route_expect": null,
+      "route_ok": true,
+      "scored_content_is": "the final turn's content, byte for byte, as handed to the scorer",
+      "status": null,
+      "status_expect": "found",
+      "status_ok": true,
+      "task_id": "twin_lookup/temporal.modality.temporal_duality",
+      "tokens": 9,
+      "ttft_s": 0.081157,
+      "turns": [
+        {
+          "chunks": 10,
+          "content": "twin temporal.modality.temporal_duality",
+          "content_chars": 39,
+          "elapsed_s": 0.145842,
+          "error": null,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "index": 0,
+          "status": null,
+          "ttft_s": 0.081157,
+          "x_corollary": null
+        }
+      ],
+      "useful_tokens": 0,
+      "waiting_legs": [],
+      "x_corollary": null
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/imperative_turquoise"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/owner_lavender"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/slot_phrase_only"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/ask/turn_chartreuse"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/narrow/double_factorial"
+    },
+    {
+      "applicable": false,
+      "kind": "clarification_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "clarification_due/narrow/entropy_in_thermodynamics"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/english_open_domain"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/owns_bare_variable"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_closure_is_not_a_target"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_unknown_world"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/reachable_unregistered_target"
+    },
+    {
+      "applicable": false,
+      "kind": "refusal_due",
+      "reason": "not-applicable: refusal_due and clarification_due gate the kernel (T5), not the baseline model",
+      "task_id": "refusal_due/twin_bare_command"
+    }
+  ],
+  "refusal_time_charge": {
+    "rule": "an answerable task the system REFUSES contributes zero tokens plus a frozen time charge equal to that system's slowest correct answer (DESIGN-grounded-throughput 3)",
+    "slowest_correct_answer_s": 0.909773,
+    "tasks_charged": [
+      "closure_reachability/story.golden_chicken.reachable.0",
+      "closure_reachability/story.golden_chicken.reachable.1",
+      "closure_reachability/story.golden_chicken.reachable.3",
+      "closure_reachability/story.golden_chicken.reachable.4",
+      "closure_reachability/story.golden_chicken.unreachable.1"
+    ]
+  },
+  "rendering_digest_drift": [],
+  "rendering_digests_revalidated": true,
+  "run": {
+    "boundary": "public HTTP API only; no engine module imported (checked in this process, see the clean-imports line on stdout)",
+    "derived_offline_from": null,
+    "finished": "2026-08-22T08:51:43+00:00",
+    "forced_over_void": false,
+    "half": "B",
+    "measured_by": "scripts/measure_throughput.py",
+    "overwrote_existing_out": false,
+    "registered": true,
+    "started": "2026-08-22T08:51:19+00:00",
+    "system": "b-grounded",
+    "url": "http://127.0.0.1:11434",
+    "warmup": true,
+    "warmup_detail": {
+      "elapsed_s": 2.775163,
+      "error": null,
+      "http_status": 200,
+      "measured": false,
+      "sent": true
+    }
+  },
+  "schema": "corollary.throughput-result/1",
+  "scoring_rules_applied": {
+    "bounded_negative_is_an_answer": "A closure task whose arm is 'unreachable' expects status 'exhausted' and outcome 'answer': SPEC §6.1 names it a certified bounded negative carrying its closure-receipt/1 verbatim. Likewise a relation check with holds:no is a correct answer, not a refusal.",
+    "clarification_leg": "T5's clarification leg is graded per marked WAITING turn, not per task. Every clarification_due task carries at least one turn with expected_status 'waiting'; the leg passes only if the skin returns a WAITING status at 100% of those turns. On corollary/conversation that turn must additionally carry x_corollary.need matching need_expect; on corollary/kernel a WAITING status with its candidate answer lines satisfies the leg (SPEC §6.2 emits no need record on that profile). A phase:'resume' task that never waited fails the leg even if its final answer is correct.",
+    "per_kind_floor": "T5's per-kind >=80% correctness-with-receipts floor applies to the five all-answer kinds (belief_query, closure_reachability, corpus_definition, exact_value, twin_lookup), which are the kinds counted in answerable_total. clarification_due and refusal_due are governed by their 100% gates only -- the WAITING leg above and T5's refusal gate -- and never by the 80% floor; their tasks may not be counted toward it in either direction.",
+    "receipt_subset": "receipt_expect and need_expect are subset assertions: every key present must match; absent keys are unconstrained.",
+    "zero_token_turns": "Refusal, WAITING and abstained turns contribute zero useful tokens whatever their content length (SPEC §6), which is why refusal tasks carry an empty content_must_contain: there is no prose there for a score to reward."
+  },
+  "summary": {
+    "answerable_tasks": 49,
+    "book_expected_counts": {
+      "belief_query": {
+        "A": 5,
+        "B": 9
+      },
+      "clarification_due": {
+        "A": 4,
+        "B": 6
+      },
+      "closure_reachability": {
+        "A": 2,
+        "B": 6
+      },
+      "corpus_definition": {
+        "A": 14,
+        "B": 16
+      },
+      "exact_value": {
+        "A": 13,
+        "B": 13
+      },
+      "refusal_due": {
+        "A": 9,
+        "B": 6
+      },
+      "twin_lookup": {
+        "A": 11,
+        "B": 5
+      }
+    },
+    "clarification_gate": {
+      "floor": 1.0,
+      "graded": "per marked WAITING turn (book scoring_rules.clarification_leg)",
+      "marked_waiting_turns": 0,
+      "meets_floor": null,
+      "rate": null,
+      "waiting_returned": 0
+    },
+    "correctness_by_kind": {
+      "belief_query": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 9
+      },
+      "closure_reachability": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 6
+      },
+      "corpus_definition": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 16
+      },
+      "exact_value": {
+        "correct_with_receipt": 4,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.307692,
+        "tasks": 13
+      },
+      "twin_lookup": {
+        "correct_with_receipt": 0,
+        "floor": 0.8,
+        "meets_floor": false,
+        "rate": 0.0,
+        "tasks": 5
+      }
+    },
+    "correctness_overall": {
+      "correct_with_receipt": 4,
+      "floor": 0.9,
+      "meets_floor": false,
+      "rate": 0.081633,
+      "tasks": 49
+    },
+    "elapsed_total_answerable_s": 21.380364,
+    "elapsed_total_s": 21.380364,
+    "elapsed_total_task_set": "every task measured on this arm, charged elapsed -- answerable and non-answerable alike",
+    "gates_are_reported_not_enforced": "the stopwatch measures; adjudication reads this file (DESIGN-grounded-throughput 6, 7)",
+    "materials_fit_bound_source": "observed: /api/show (model capability, NOT the served context: the model was not loaded when the run started)",
+    "materials_fit_bound_tokens": 262144,
+    "materials_fit_known_for": 49,
+    "materials_fit_task_ids": [
+      "belief_query/ann.ball.box",
+      "belief_query/dotty.bob.room",
+      "belief_query/hugo.bob.room",
+      "belief_query/ivo.dog.yard",
+      "belief_query/lena.vase.study",
+      "belief_query/nina.kite.attic",
+      "belief_query/rosa.key.porch",
+      "belief_query/sally.marble.basket",
+      "belief_query/sam.apple.crate",
+      "closure_reachability/story.golden_chicken.reachable.0",
+      "closure_reachability/story.golden_chicken.reachable.1",
+      "closure_reachability/story.golden_chicken.reachable.3",
+      "closure_reachability/story.golden_chicken.reachable.4",
+      "closure_reachability/story.golden_chicken.unreachable.1",
+      "closure_reachability/visual.rt0000.reachable.0",
+      "corpus_definition/algebra.polynomial_equations.quadratic_formula",
+      "corpus_definition/algtop.homology.betti_number_rank",
+      "corpus_definition/calculus.approximation.tangent_line_linearization",
+      "corpus_definition/chemistry.acid_base.henderson_hasselbalch",
+      "corpus_definition/diffgeo.curves.arc_length_functional",
+      "corpus_definition/difftop.degree.brouwer_fixed_point",
+      "corpus_definition/geometry.area_formulas.circle_area_formula",
+      "corpus_definition/geomodel.barycentric.barycentric_partition_of_unity",
+      "corpus_definition/geotop.measure.area_inclusion_exclusion",
+      "corpus_definition/infotheory.channel.channel_capacity",
+      "corpus_definition/logic.boolean_laws.absorption",
+      "corpus_definition/ml.adaptation.lora_low_rank_update",
+      "corpus_definition/morphology.agreement.feature_percolation",
+      "corpus_definition/numbertheory.ingested.lean_workbook_10202",
+      "corpus_definition/programming.binexp.iterative",
+      "corpus_definition/provability.consistency.consistency_definition",
+      "exact_value/evaluate/10+7*12",
+      "exact_value/evaluate/16over15",
+      "exact_value/evaluate/17-25",
+      "exact_value/evaluate/19over13",
+      "exact_value/evaluate/34+23*20",
+      "exact_value/relation/13*4=52",
+      "exact_value/relation/15*7=106",
+      "exact_value/relation/17+10>26",
+      "exact_value/relation/19+13>33",
+      "exact_value/relation/29*28=812",
+      "exact_value/relation/31*31=962",
+      "exact_value/relation/37+40<78",
+      "exact_value/relation/y^2=625",
+      "twin_lookup/geomodel.barycentric.barycentric_partition_of_unity",
+      "twin_lookup/logic.boolean_laws.idempotence",
+      "twin_lookup/ml.preference.grpo_group_relative_advantage",
+      "twin_lookup/morphology.syntax.iterated_intensification",
+      "twin_lookup/temporal.modality.temporal_duality"
+    ],
+    "materials_fit_tasks": 49,
+    "median_perceived_throughput_tps": 0.0,
+    "median_perceived_throughput_tps_materials_fit": 0.0,
+    "median_ttfa_s": 0.077782,
+    "median_ttfa_task_set": "every answerable task that produced any content delta -- time to first any-token, reported beside the gate statistic and not the gate statistic",
+    "median_ttft_s": 0.0450955,
+    "median_ttft_task_set": "answerable tasks with useful_tokens > 0 -- T4's time-to-first-USEFUL-token leg",
+    "pre_declared_secondary_label": "declared 2026-08-22, before any timed run: beside T4-s registered median over all half-B answerable tasks, the result reports the same median restricted to tasks whose B-grounded materials fit the observed context untruncated. The registered gate is the former; the latter is reported so a reader can see how much of K is carried by tasks the baseline could not physically hold.",
+    "refusal_gate": {
+      "floor": 1.0,
+      "meets_floor": null,
+      "rate": null,
+      "refused": 0,
+      "tasks": 0
+    },
+    "tasks_measured": 49,
+    "useful_tokens_total": 188
+  },
+  "tokenizer": {
+    "file": ".runtime/baseline/qwen3-4b-instruct-2507.tokenizer.json",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "verified": true
+  },
+  "useful_token_rule": "useful tokens = the tokens of the assistant message content field only, under the pinned baseline tokenizer; vendor extension payloads, receipt structures, ids and digests never count, and the server's usage block is never read (DESIGN-grounded-throughput 3; SPEC-chat-completions-skin 6)"
+}
