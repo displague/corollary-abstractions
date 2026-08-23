@@ -441,8 +441,32 @@ class TokenCounter:
             )
             return
         try:
-            from tokenizers import Tokenizer  # noqa: PLC0415
-        except ImportError as exc:
+            # Import by site-packages priority: experiments/tokenizers.py (the
+            # 2026-08 pair-encoding experiment) shadows the installed package
+            # in any process where a caller has prepended experiments/ to
+            # sys.path -- the v0.17.0 gate's suite process was one, and usage
+            # silently vanished there while every standalone run stayed green.
+            # Production serving is unaffected (its process never carries that
+            # path entry); this keeps the optional usage block meaning the
+            # same thing in both.
+            import importlib  # noqa: PLC0415
+            import sysconfig  # noqa: PLC0415
+
+            shadow = sys.modules.get("tokenizers")
+            if shadow is not None and "site-packages" not in str(
+                getattr(shadow, "__file__", "") or ""
+            ):
+                for name in [
+                    m for m in sys.modules if m.split(".")[0] == "tokenizers"
+                ]:
+                    del sys.modules[name]
+            saved = list(sys.path)
+            sys.path.insert(0, sysconfig.get_paths()["purelib"])
+            try:
+                Tokenizer = importlib.import_module("tokenizers").Tokenizer
+            finally:
+                sys.path[:] = saved
+        except (ImportError, AttributeError) as exc:
             self.reason = f"tokenizers package unavailable: {exc}"
             return
         try:
