@@ -177,10 +177,16 @@ surface**, the honest degradation); and any ranking component (§9).
 ## 5. Smallest slice
 
 - The lexicon over the operator/constant heads the parseable corpus
-  actually carries (calibration from the committed tree: 95 distinct
-  call heads across templates, 39 of them singletons, mass dominated
-  by a top-10 led by `IMPLIES` and `MEET`; heads without lexicon rows
-  refuse, they do not improvise).
+  actually carries. **Calibration corrected by implementation
+  (2026-08-23):** the first draft's figures (95 heads, 39 singletons,
+  top-10 led by `IMPLIES` and `MEET`) read the `anonymized_template`
+  inventory — the wrong field for this cycle. The `canonical_ascii`
+  parseable subset carries **64 heads, 35 singletons, and neither
+  `IMPLIES` nor `MEET` at all**; on the template side the re-measured
+  truth is 95 heads, 30 singletons, `MEET` (22,653) ahead of
+  `IMPLIES` (10,202). Heads without lexicon rows refuse, they do not
+  improvise — and the shipped lexicon chose to cover both inventories
+  whole, so the refusal path is exercised by injection, not accident.
 - `realize_term.py` + receipts; wire ONE new line into
   `answer.render`: `in words   : <surface>` emitted **only when the
   round-trip gate passes at render time**, for authored and ingested
@@ -248,16 +254,19 @@ surface**, the honest degradation); and any ranking component (§9).
 
 ## 7. Blind controls, each with its voiding sentence
 
-- **C-R1 — the scrambled realizer, as a contrast.** Realization with
-  a shuffled lexicon (operators mapped to the wrong words, numerals
-  through a scrambled digit map): fluent-looking, wrong. *The control
-  is informative only if the true realizer's round-trip pass rate on
-  the same term set is ≥ 20× the scrambled realizer's; if both are
-  near zero the gate is untested and the reading is void; if the
-  scrambled realizer passes ≥ 1% the gate is not reading the words
-  and is void.* (A one-sided threshold cannot distinguish "re-parse
-  reads the words" from "re-parse rejects everything" — the contrast
-  form can.)
+- **C-R1 — the scrambled realizer, as a contrast, and one-sided by
+  construction.** Realization emits through a shuffled lexicon
+  (operators mapped to the wrong words, numerals through a scrambled
+  digit map) and the reading path uses the **committed** table — never
+  the shuffled one. The implementation probe (2026-08-23) proved why
+  this must be said: a two-sided scramble is a consistent renaming,
+  still a bijection, and round-trips near-perfectly — the control
+  would void the reading for a reason with nothing to do with whether
+  the gate reads the words. *The control is informative only if the
+  true realizer's round-trip pass rate on the same term set is ≥ 20×
+  the scrambled realizer's; if both are near zero the gate is
+  untested and the reading is void; if the scrambled realizer passes
+  ≥ 1% the gate is not reading the words and is void.*
 - **C-R2 — the near-miss.** Mutations one operator word away from
   correct, **constructed only from swaps verified to change the
   canonical skeleton before realizing** (commutative-argument swaps
@@ -294,7 +303,13 @@ sentence governs the inverter); **no narrative prose**; **no claim of
 fluency** — the sentences are correct and re-parseable, and their
 style is whatever the grammar produces; **no throughput claim** —
 rendering changes touch seal-witnessed modules, so any future timed
-comparison starts a fresh seal cycle (§5's bookkeeping note).
+comparison starts a fresh seal cycle (§5's bookkeeping note); and
+**no claim that slots speak their names** — `canonicalize` erases
+slot identity, so the realized surface says "variable zero", not
+"x"; the source identifiers ride in the receipt
+(`parameters.slot_names`) and an R2-gated identifier surface is named
+follow-on work, not smuggled in (registered honestly 2026-08-23 as
+the served surface's biggest limitation).
 
 ## 9. The optional learned seat (bounded, behind the bar)
 
