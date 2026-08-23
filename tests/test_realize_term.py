@@ -107,6 +107,62 @@ CURATED = [
     "x = 824",
     "x = 1000000007",
     "x = 190.3676248",
+    # the plus-minus operator: the one row nothing in data/ exercises
+    "x = a ± b*c",
+    # H1's case, taken verbatim from lean_workbook: shape_resort re-orders the
+    # two indistinguishable summands before numbering, so the sentence's
+    # "variable zero" (p) is NOT the skeleton's `?0` (q).
+    "p + q = (q + 1)^2",
+]
+
+#: GOLDEN PAIRS — the exact sentence, pinned.
+#:
+#: R5 as written ("same term, same lexicon, same parameters -> byte-identical
+#: sentence") is satisfied by any deterministic function, including a
+#: deterministically WRONG one. Re-realizing twice in one process proves only
+#: that the code has no hidden state. These pairs make R5 mean *the same
+#: sentences as last time*: a lexicon edit or a grammar change that alters an
+#: emitted surface must show up in a diff here, and the registered run's
+#: artifact will carry a digest over a fixed surface sample for the same
+#: reason at corpus scale.
+GOLDEN = [
+    ("a + b = c",
+     "variable zero equals variable one plus variable two"),
+    ("a^2 + b^2 = c^2",
+     "variable zero to the power of two plus variable one to the power of two "
+     "equals variable two to the power of two"),
+    ("a - b = c",
+     "variable zero equals variable one plus the opposite of variable two"),
+    ("p + q = (q + 1)^2",
+     "variable zero plus variable one equals the quantity one plus variable "
+     "one end quantity to the power of two"),
+    ("a/b = c",
+     "variable zero equals variable one divided by variable two"),
+    ("(a + b)/(c - d) = 1",
+     "one equals the quantity variable zero plus variable one end quantity "
+     "divided by the quantity variable two plus the opposite of variable three "
+     "end quantity"),
+    ("sin(x)^2 + cos(x)^2 = 1",
+     "one equals the cosine of the quantity variable zero end quantity to the "
+     "power of two plus the sine of the quantity variable zero end quantity to "
+     "the power of two"),
+    ("GCD(a, b) = c",
+     "variable zero equals the greatest common divisor of the quantity "
+     "variable one next argument variable two end quantity"),
+    ("E[X|Y] = mean(X)",
+     "the bracketed expectation of the bracket variable zero next argument "
+     "variable one end bracket equals the mean of the quantity variable zero "
+     "end quantity"),
+    ("x = 19/13",
+     "variable zero equals nineteen divided by thirteen"),
+    ("x = (0.375 + 2.5)*n",
+     "variable zero equals variable one times the quantity zero point three "
+     "seven five plus two point five end quantity"),
+    ("x = -1",
+     "variable zero equals the opposite of one"),
+    ("x = a ± b*c",
+     "variable zero equals variable one give or take variable two times "
+     "variable three"),
 ]
 
 
@@ -128,6 +184,15 @@ class RoundTripTests(unittest.TestCase):
                 self.assertEqual(result.term_skeleton, source_skeleton(source))
                 self.assertTrue(result.served)
 
+    def test_golden_surfaces_are_the_same_sentences_as_last_time(self) -> None:
+        """R5 with teeth: the exact bytes, pinned, so an edit shows in a diff."""
+        for source, expected in GOLDEN:
+            with self.subTest(source=source):
+                result = rt.realize(source, LEX)
+                self.assertIsInstance(result, rt.Realization)
+                self.assertEqual(result.surface, expected)
+                self.assertEqual(result.round_trip, "EXACT")
+
     def test_receipt_carries_every_field_the_design_names(self) -> None:
         result = rt.realize("a^2 + b^2 = c^2", LEX)
         payload = result.as_dict()
@@ -138,8 +203,66 @@ class RoundTripTests(unittest.TestCase):
         keys = {row["key"] for row in payload["lexicon_entries"]}
         self.assertEqual(keys, {"+", "=", "^", "slot_marker:variable"})
         self.assertEqual(payload["parameters"]["order"], "canonical")
-        self.assertEqual(payload["parameters"]["slot_names"],
+        self.assertEqual(payload["parameters"]["surface_slot_names"],
                          {"a": 0, "b": 1, "c": 2})
+
+    def test_receipt_publishes_both_slot_numberings(self) -> None:
+        """H1: the surface's numbering and the skeleton's are not the same map.
+
+        `?N` in `term_skeleton` comes from `render_skeleton` over
+        `shape_resort`'s tree; the sentence's "variable N" comes from
+        `canonicalize`'s tree. `shape_resort` re-orders indistinguishable
+        arguments before numbering, so the two disagree on real terms — 110 of
+        the 2,170 served in the census. Publishing one map as `slot_names`
+        would have made the receipt wrong about its own skeleton.
+        """
+        agreeing = rt.realize("a^2 + b^2 = c^2", LEX).parameters
+        self.assertTrue(agreeing["slot_index_basis"]["agree"])
+        self.assertEqual(agreeing["surface_slot_names"],
+                         agreeing["skeleton_slot_names"])
+
+        found = None
+        for source in CURATED:
+            params = rt.realize(source, LEX).parameters
+            if not params["slot_index_basis"]["agree"]:
+                found = (source, params)
+                break
+        self.assertIsNotNone(
+            found, "the curated set must contain a term where the two "
+                   "numberings diverge, or this gate proves nothing"
+        )
+        source, params = found
+        self.assertNotEqual(params["surface_slot_names"],
+                            params["skeleton_slot_names"])
+        for basis in ("surface_slot_names", "skeleton_slot_names"):
+            self.assertIn(basis, params["slot_index_basis"])
+
+    def test_skeleton_slot_names_actually_match_the_placeholders(self) -> None:
+        """The published skeleton numbering is checked against the skeleton."""
+        import re
+
+        for source in CURATED:
+            with self.subTest(source=source):
+                result = rt.realize(source, LEX)
+                names = result.parameters["skeleton_slot_names"]
+                placeholders = re.findall(r"\?(\d+)", result.term_skeleton)
+                self.assertEqual(sorted({int(p) for p in placeholders}),
+                                 sorted(names.values()))
+                # first occurrence in the rendered skeleton is index 0
+                if placeholders:
+                    self.assertEqual(int(placeholders[0]), 0)
+
+    def test_receipt_names_every_numeral_it_emitted(self) -> None:
+        """L8/R2: the receipt evidences both sources on its own."""
+        result = rt.realize("x = (0.375 + 2.5)*n", LEX)
+        numerals = result.parameters["numerals_used"]
+        literals = [row["value"] for row in numerals if row["role"] == "literal"]
+        self.assertEqual(sorted(literals), [0.375, 2.5])
+        indices = [row["value"] for row in numerals if row["role"] == "slot_index"]
+        self.assertEqual(sorted(set(indices)), [0, 1])
+        for row in numerals:
+            for word in row["words"].split():
+                self.assertTrue(nw.is_numeral_word(word), word)
 
     def test_r2_every_surface_word_traces_to_a_row_or_the_numeral_pair(self) -> None:
         vocabulary = {w for phrase in LEX.phrase_to_token for w in phrase}
@@ -220,14 +343,48 @@ class RefusalTests(unittest.TestCase):
         self.assertIsInstance(result, rt.Refusal)
         self.assertEqual(result.reason, "unsupported_numeral")
 
-    def test_bare_inverse_refuses(self) -> None:
-        """A canonical `*` with no non-inv factor has no template spelling."""
+    def test_leading_divisor_refuses(self) -> None:
+        """A canonical `*` with no non-inv factor has no template spelling.
+
+        Hand-built: `parse_product` only ever creates `inv` as an infix
+        continuation, so every real `inv` arrives with a non-`inv` sibling and
+        the frozen grammar cannot currently reach this shape. Kept and tested
+        because that is a fact about today's parser, not a theorem.
+        """
         tree = ("op", "*", (("op", "inv", (("slot", "a"),)),
                             ("op", "inv", (("slot", "b"),))))
         linearizer = rt._Linearizer(LEX, {"a": 0, "b": 1})
         with self.assertRaises(rt.RefusalError) as caught:
             linearizer.emit(tree, rt.LEVEL_RELATION)
         self.assertEqual(caught.exception.reason, "leading_divisor")
+
+    def test_leading_pm_refuses(self) -> None:
+        """The same shape one operator over: a `+` whose every summand is `pm`.
+
+        `±` reaches `parse_sum` only as an infix continuation — `parse_atom`
+        has no `±` branch at all — so a sum that opens with one cannot be
+        written, and this too is hand-built.
+        """
+        tree = ("op", "+", (("op", "pm", (("slot", "a"),)),
+                            ("op", "pm", (("slot", "b"),))))
+        linearizer = rt._Linearizer(LEX, {"a": 0, "b": 1})
+        with self.assertRaises(rt.RefusalError) as caught:
+            linearizer.emit(tree, rt.LEVEL_RELATION)
+        self.assertEqual(caught.exception.reason, "leading_pm")
+
+    def test_bare_inverse_refuses(self) -> None:
+        """The third unreachable shape: `inv` with no `*` parent."""
+        linearizer = rt._Linearizer(LEX, {"a": 0})
+        with self.assertRaises(rt.RefusalError) as caught:
+            linearizer.emit(("op", "inv", (("slot", "a"),)), rt.LEVEL_RELATION)
+        self.assertEqual(caught.exception.reason, "bare_inverse")
+
+    def test_the_unreachable_reasons_are_documented_as_such(self) -> None:
+        """L3: the module says which reasons no corpus term can reach."""
+        doc = rt.__doc__ or ""
+        self.assertIn("structurally unreachable", doc)
+        for reason in ("leading_divisor", "leading_pm", "bare_inverse"):
+            self.assertIn(reason, doc)
 
     def test_every_refusal_reason_is_in_the_closed_set(self) -> None:
         for source in ["not(P and Q) = R", "ZORPLE(x) = y", "   ",
@@ -400,17 +557,32 @@ class NearMissTests(unittest.TestCase):
                 self.assertEqual(rt.realize(right, LEX).reparse_skeleton,
                                  source_skeleton(left))
 
-    def test_an_alias_class_swap_also_round_trips_legitimately(self) -> None:
-        """The other case the design names: same operation, two spellings.
+    def test_a_symmetric_relation_swap_also_round_trips_legitimately(self) -> None:
+        """The second kind of legitimate erasure: `=` is a SYMMETRIC relation.
 
-        `MOD` and `CONCAT` are one declared alias class, and `=` is declared
-        symmetric — so a mutation drawn from either would round-trip to the
-        source at the level that erases the difference. Recorded here so the
-        near-miss set above is visibly free of both kinds.
+        `canonicalize` orders a symmetric relation's sides by `shape_key`, so
+        `a = b` and `b = a` are one skeleton and one sentence. A near-miss set
+        drawn from side swaps would void the gate for behaving correctly, and
+        the set above is visibly free of them.
+
+        NOT alias classes, which an earlier version of this test claimed.
+        `canonicalize` does NO head aliasing: `alias_heads` is a separate pass
+        that only the ALIASED match level runs, and `MOD`/`CONCAT` — one
+        declared `ordered_compose` class — canonicalize to DIFFERENT skeletons
+        at the level this gate compares. A mutation swapping them would be a
+        legitimate skeleton-changing near-miss, not an erasure, which is the
+        opposite of what the old name and docstring said.
         """
         self.assertEqual(source_skeleton("a = b"), source_skeleton("b = a"))
         self.assertEqual(rt.realize("a = b", LEX).surface,
                          rt.realize("b = a", LEX).surface)
+
+    def test_alias_class_heads_do_not_canonicalize_together(self) -> None:
+        """The correction above, measured rather than asserted."""
+        self.assertNotEqual(source_skeleton("MOD(a, b) = c"),
+                            source_skeleton("CONCAT(a, b) = c"))
+        recovered = rt.realize("CONCAT(a, b) = c", LEX).reparse_skeleton
+        self.assertNotEqual(recovered, source_skeleton("MOD(a, b) = c"))
 
 
 class StageOneTests(unittest.TestCase):
@@ -524,9 +696,34 @@ class CensusTests(unittest.TestCase):
         self.assertEqual(totals["round_trip_exact"], 19)
         self.assertEqual(totals["round_trip_failed"], 0)
         self.assertEqual(totals["r1_verdict"], "FIRES")
+        self.assertEqual(totals["r2_words_outside_sources"], 0)
+        self.assertEqual(totals["r2_verdict"], "CLEAN")
+        self.assertEqual(report["r2_offenders"], [])
         for row in report["corpora"]:
             self.assertTrue(row["thin_denominator"],
                             "both slices are under 50 and must say so")
+
+    def test_census_refuses_a_directory_with_no_corpora(self) -> None:
+        """M7: 0/0 reads as a passing gate, so it must not be reachable."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(rt.CensusError):
+                rt.census(Path(tmp), LEX)
+            with self.assertRaises(rt.CensusError):
+                rt.census(Path(tmp) / "does-not-exist", LEX)
+
+    def test_census_cli_exits_nonzero_on_an_empty_data_dir(self) -> None:
+        import contextlib
+        import io
+        import tempfile
+
+        stderr = io.StringIO()
+        with tempfile.TemporaryDirectory() as tmp:
+            with contextlib.redirect_stderr(stderr):
+                code = rt.main(["--census", "--data-dir", tmp])
+        self.assertEqual(code, 2)
+        self.assertIn("census refused", stderr.getvalue())
 
     def test_census_names_its_denominator_and_disclaims_the_registered_run(self):
         import tempfile

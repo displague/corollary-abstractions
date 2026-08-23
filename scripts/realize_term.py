@@ -59,6 +59,25 @@ particular parser:
   the prefix form `sum_i EXPR` is never emitted; `sum(EXPR)` parses to the
   identical node and needs no special grammar.
 
+## Two slot numberings, because there are genuinely two
+
+The receipt carries `surface_slot_names` AND `skeleton_slot_names`, and they
+disagree on about 5% of served terms.  This is not redundancy and it is not a
+bug — it is a fact about the frozen pipeline that a single field would have
+quietly misreported:
+
+- the SURFACE numbers slots by first occurrence in `canonicalize`'s tree,
+  because that is the tree this file walks and the order the words come out in;
+- `term_skeleton`'s `?N` placeholders come from `render_skeleton` walking
+  `shape_resort`'s tree, and `shape_resort` re-orders arguments that
+  `shape_key` cannot tell apart before the numbering happens.
+
+So "variable zero" in the sentence is not always `?0` in the skeleton.  Both
+maps are in the receipt and `slot_index_basis` names which is which.  Neither
+affects the gate: the round trip compares skeletons, and `skeleton()` is
+invariant under slot renaming — but a reader matching a receipt's names
+against its own skeleton would have been misled, so both are published.
+
 ## What refuses, and why refusing is the honest move
 
 `REFUSAL_REASONS` is closed.  A term that does not parse has no source skeleton
@@ -67,6 +86,18 @@ numeral outside the registered pair would have to be rounded; a canonical `*`
 whose every argument is an `inv` has no leading factor to divide.  Each of
 those returns a `Refusal` with its class named, and the census counts them by
 class rather than folding them into the round-trip rate.
+
+**Three of the nine reasons are structurally unreachable from real parser
+output, and are kept anyway.**  `leading_divisor`, `leading_pm` and
+`bare_inverse` describe canonical shapes the frozen grammar cannot currently
+produce: `parse_product` and `parse_sum` only ever build `inv` and `pm` nodes
+as infix continuations, so every one of them arrives with a sibling that is
+not an `inv`/`pm`, and neither node kind is ever created without an `op`
+parent.  They are reachable from a hand-built tree, they are tested that way,
+and they stay because "the parser cannot currently produce this" is a fact
+about today's `HEAD_ALGEBRA` and tokenizer, not a theorem — a refusal is the
+correct behaviour if that ever changes, and an unreachable-but-tested branch
+is cheaper than a `KeyError` in a later cycle.
 """
 
 from __future__ import annotations
@@ -86,6 +117,7 @@ from match_signatures import (
     Parser,
     TemplateParseError,
     canonicalize,
+    shape_resort,
     skeleton,
     tokenize,
 )
@@ -112,6 +144,10 @@ REFUSAL_REASONS = (
 )
 
 
+class CensusError(RuntimeError):
+    """The census was pointed at nothing. 0/0 must not read as a pass."""
+
+
 class RefusalError(Exception):
     """Internal control flow: a linearization that must not be improvised."""
 
@@ -131,8 +167,14 @@ class Refusal:
     source: str
     statement_id: str | None = None
 
-    round_trip: str = "REFUSED"
-    served: bool = False
+    @property
+    def round_trip(self) -> str:
+        return "REFUSED"
+
+    @property
+    def served(self) -> bool:
+        """R3: a refusal never reaches a surface. Same shape as `Realization`."""
+        return False
 
     def as_dict(self) -> dict:
         return {
@@ -189,6 +231,11 @@ class _Linearizer:
         self.lex = lexicon
         self.slot_index = slot_index
         self.used: dict[str, str] = {}
+        #: Every numeral this sentence emitted, in emission order. R2 asks that
+        #: each content word trace to a lexicon row OR the registered numeral
+        #: pair; `used` is the first half and this is the second, so a single
+        #: receipt is self-evidencing without re-deriving anything.
+        self.numerals: list[dict] = []
 
     # -- lexicon access, recording every row consumed (R2's evidence) ------
     def _row(self, key: str, missing: str) -> list[str]:
@@ -212,14 +259,20 @@ class _Linearizer:
         kind = node[0]
         if kind == "num":
             try:
-                return nw.number_to_words(node[1]).split(), LEVEL_ATOM
+                words = nw.number_to_words(node[1]).split()
             except nw.NumeralError as exc:
                 raise RefusalError("unsupported_numeral", str(exc)) from None
+            self.numerals.append({"role": "literal", "value": node[1],
+                                  "words": " ".join(words)})
+            return words, LEVEL_ATOM
         if kind == "slot":
             index = self.slot_index[node[1]]
             marker = self.lex.slot_marker
             self.used[f"slot_marker:{marker}"] = marker
-            return [marker] + nw.int_to_words(index).split(), LEVEL_ATOM
+            index_words = nw.int_to_words(index).split()
+            self.numerals.append({"role": "slot_index", "value": index,
+                                  "words": " ".join(index_words)})
+            return [marker] + index_words, LEVEL_ATOM
         if kind == "rel":
             return self._emit_relation(node)
         if kind == "op":
@@ -419,9 +472,17 @@ def realize(canonical_ascii: str, lexicon: rlex.Lexicon | None = None,
     except (TemplateParseError, RecursionError) as exc:
         return Refusal("unparseable_term", str(exc), source, statement_id)
 
-    names: list[str] = []
-    _slot_order(tree, names)
-    slot_index = {name: i for i, name in enumerate(names)}
+    # Two numberings, because the pipeline genuinely has two (see the module
+    # docstring). The surface walks `canonicalize`'s tree; the skeleton's `?N`
+    # come from `render_skeleton` over `shape_resort`'s tree, which re-orders
+    # indistinguishable arguments BEFORE numbering them.
+    surface_names: list[str] = []
+    _slot_order(tree, surface_names)
+    slot_index = {name: i for i, name in enumerate(surface_names)}
+
+    skeleton_names: list[str] = []
+    _slot_order(shape_resort(tree), skeleton_names)
+    skeleton_index = {name: i for i, name in enumerate(skeleton_names)}
 
     linearizer = _Linearizer(lex, slot_index)
     try:
@@ -449,7 +510,29 @@ def realize(canonical_ascii: str, lexicon: rlex.Lexicon | None = None,
             "lexicon_id": lex.lexicon_id,
             "order": "canonical",
             "grouping": "minimal",
-            "slot_names": {name: i for name, i in slot_index.items()},
+            "surface_slot_names": dict(slot_index),
+            "skeleton_slot_names": dict(skeleton_index),
+            "slot_index_basis": {
+                "surface_slot_names": (
+                    "first occurrence in canonicalize()'s tree — the numbering "
+                    "the emitted sentence uses, so `variable N` means N here"
+                ),
+                "skeleton_slot_names": (
+                    "render_skeleton()'s numbering over shape_resort()'s tree "
+                    "— what the `?N` placeholders in term_skeleton mean"
+                ),
+                "agree": slot_index == skeleton_index,
+                "why_they_can_differ": (
+                    "shape_resort picks the commutativity-permitted ordering "
+                    "with the smallest rendering BEFORE slots are numbered, so "
+                    "arguments shape_key cannot tell apart may swap. Measured "
+                    "on the committed tree: they disagree on 110 of 2,170 "
+                    "served terms (5.07%). The gate is unaffected — skeleton() "
+                    "is invariant under slot renaming — but a reader matching "
+                    "these names against ?N would have been misled by one map."
+                ),
+            },
+            "numerals_used": list(linearizer.numerals),
         },
         statement_id=statement_id,
         reparse_tokens=tokens,
@@ -478,13 +561,22 @@ def census(data_dir: Path, lexicon: rlex.Lexicon | None = None,
     R1's floor is read against a denominator that was published first.
     """
     lex = lexicon or rlex.load()
+    if not data_dir.is_dir():
+        raise CensusError(f"no such data directory: {data_dir}")
+    paths = sorted(data_dir.glob("*/nodes.json"))
+    if not paths:
+        # A census over nothing reports 0/0 and reads as a passing gate. That
+        # is the shape of a silently mis-pointed --data-dir, so it refuses.
+        raise CensusError(f"{data_dir} contains no */nodes.json corpora")
+
     corpora: list[dict] = []
     totals = Counter()
     refusal_classes: Counter = Counter()
     parse_failures: Counter = Counter()
     examples: dict[str, list[dict]] = {}
+    r2_offenders: list[dict] = []
 
-    for path in sorted(data_dir.glob("*/nodes.json")):
+    for path in paths:
         doc = json.loads(path.read_text(encoding="utf-8"))
         name = doc.get("discipline", path.parent.name)
         row = Counter()
@@ -509,6 +601,14 @@ def census(data_dir: Path, lexicon: rlex.Lexicon | None = None,
             row["parseable"] += 1
             if result.round_trip == "EXACT":
                 row["round_trip_exact"] += 1
+                # R2's own sweep, over exactly the surfaces that would be
+                # served. Counted rather than asserted, so a non-zero result
+                # is a published number and not a crashed run.
+                if not surface_words_are_covered(result.surface, lex):
+                    row["r2_words_outside_sources"] += 1
+                    if len(r2_offenders) < examples_per_class:
+                        r2_offenders.append({"statement_id": sid,
+                                             "surface": result.surface[:200]})
             else:
                 row["round_trip_failed"] += 1
                 bucket = examples.setdefault("round_trip_failed", [])
@@ -531,6 +631,7 @@ def census(data_dir: Path, lexicon: rlex.Lexicon | None = None,
             "refused_after_parse": row["refused_after_parse"],
             "round_trip_rate_over_parseable": _rate(row["round_trip_exact"],
                                                     row["parseable"]),
+            "r2_words_outside_sources": row["r2_words_outside_sources"],
             "thin_denominator": row["parseable"] < 50,
         })
 
@@ -547,6 +648,10 @@ def census(data_dir: Path, lexicon: rlex.Lexicon | None = None,
             "failure classes named — published before R1's floor is read.",
             "R1's floor is a fraction of the PARSEABLE denominator, which is "
             "reported beside every rate here.",
+            "R2's sweep runs here too: `r2_words_outside_sources` counts "
+            "served surfaces carrying a word that is neither a lexicon phrase "
+            "word nor a word the registered numeral pair can emit. It is "
+            "counted, not asserted, so a breach is a published number.",
             "This is not the registered full-corpus run "
             "(experiments/realization_rate.json); it is the table that run's "
             "denominator comes from.",
@@ -564,8 +669,12 @@ def census(data_dir: Path, lexicon: rlex.Lexicon | None = None,
             "r1_verdict": ("FIRES" if _rate(totals["round_trip_exact"],
                                             totals["parseable"]) >= 0.90
                            else "MISSES"),
+            "r2_words_outside_sources": totals["r2_words_outside_sources"],
+            "r2_verdict": ("CLEAN" if not totals["r2_words_outside_sources"]
+                           else "BREACHED"),
         },
         "corpora": corpora,
+        "r2_offenders": r2_offenders,
         "refusal_classes": dict(sorted(refusal_classes.items())),
         "parse_failure_classes": dict(sorted(parse_failures.items(),
                                              key=lambda kv: (-kv[1], kv[0]))),
@@ -611,6 +720,8 @@ def _print_census(report: dict) -> None:
     print(f"R1 floor 0.90 over the parseable denominator "
           f"({totals['parseable']}): {totals['r1_verdict']} at "
           f"{totals['round_trip_rate_over_parseable']:.4f}")
+    print(f"R2 words outside the lexicon and the numeral pair: "
+          f"{totals['r2_words_outside_sources']} ({totals['r2_verdict']})")
     if report["refusal_classes"]:
         print("\nrefusal classes:")
         for name, count in report["refusal_classes"].items():
@@ -643,7 +754,11 @@ def main(argv: list[str] | None = None) -> int:
     if not args.census:
         parser.error("nothing to do: pass --census or --term")
 
-    report = census(args.data_dir, lex)
+    try:
+        report = census(args.data_dir, lex)
+    except CensusError as exc:
+        print(f"census refused: {exc}", file=sys.stderr)
+        return 2
     _print_census(report)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

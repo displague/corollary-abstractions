@@ -308,16 +308,17 @@ def words_to_fraction(text: str) -> Fraction:
     if marker not in text:
         return Fraction(words_to_int(text))
     head, _, tail = text.partition(marker)
-    negative = head.split()[:1] == [NEGATIVE_WORD]
     numerator = words_to_int(head)
     denominator = words_to_int(tail)
     if denominator <= 0:
         raise NumeralError(f"non-positive denominator in {text!r}")
     value = Fraction(numerator, denominator)
+    # The re-render is the whole check, sign included: `fraction_to_words`
+    # emits `negative` exactly when the value is negative, so a lost or
+    # invented sign cannot survive this comparison. An extra sign guard after
+    # it was unreachable and is gone.
     if fraction_to_words(value) != text:
         raise NumeralError(f"non-canonical fraction words: {text!r}")
-    if negative and value >= 0:  # pragma: no cover - covered by the check above
-        raise NumeralError(f"sign lost reading {text!r}")
     return value
 
 

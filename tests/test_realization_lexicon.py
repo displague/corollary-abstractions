@@ -122,9 +122,59 @@ class LexiconLoadTests(unittest.TestCase):
 
     def test_r2b_refuses_a_non_identifier_head_token(self) -> None:
         injured = copy.deepcopy(self.raw)
-        injured["call_heads"]["9LIVES"] = "the nine lived of"
-        with self.assertRaises(rl.LexiconError):
+        injured["call_heads"]["9x"] = "the digit headed thing of"
+        with self.assertRaisesRegex(rl.LexiconError, "B7"):
             rl.build(injured)
+
+    def test_b7_refuses_an_operator_row_that_emits_an_identifier(self) -> None:
+        """The hole a key-only B7 left open — 8910138's bug, respelled.
+
+        `operator_tokens: {"neg": "negg"}` tokenizes cleanly and means a SLOT.
+        The old check looked only at call-head keys, i.e. everywhere except
+        the place the bug it was written for actually lived.
+        """
+        injured = copy.deepcopy(self.raw)
+        injured["operator_tokens"]["neg"] = "negg"
+        with self.assertRaisesRegex(rl.LexiconError, "B7"):
+            rl.build(injured)
+
+    def test_b7_refuses_a_token_the_frozen_tokenizer_splits(self) -> None:
+        injured = copy.deepcopy(self.raw)
+        injured["operator_tokens"]["inv"] = "//"
+        with self.assertRaisesRegex(rl.LexiconError, "splits into"):
+            rl.build(injured)
+
+    def test_b7_refuses_a_head_spelled_like_a_slot_token(self) -> None:
+        """A head named `V0` is indistinguishable from the first variable."""
+        injured = copy.deepcopy(self.raw)
+        injured["call_heads"]["V0"] = "the zeroth vee of"
+        with self.assertRaisesRegex(rl.LexiconError, "B7"):
+            rl.build(injured)
+
+    def test_b7_refuses_a_slot_prefix_that_is_not_an_identifier(self) -> None:
+        injured = copy.deepcopy(self.raw)
+        injured["slot_marker"]["token_prefix"] = "9"
+        with self.assertRaisesRegex(rl.LexiconError, "B7"):
+            rl.build(injured)
+
+    def test_b7_runs_over_every_emitted_token_not_only_keys(self) -> None:
+        """The generalization itself: keys, values and the slot prefix alike."""
+        for section, key, value in [
+            ("operator_tokens", "neg", "negg"),
+            ("operator_tokens", "inv", "wibble"),
+        ]:
+            with self.subTest(key=key):
+                injured = copy.deepcopy(self.raw)
+                injured[section][key] = value
+                with self.assertRaisesRegex(rl.LexiconError, "B7"):
+                    rl.build(injured)
+
+    def test_the_committed_table_emits_the_glyphs_it_means(self) -> None:
+        """The positive side of B7, so the gate is not vacuously satisfied."""
+        self.assertEqual(self.lex.phrase_to_token[("the", "opposite", "of")], "-")
+        self.assertEqual(self.lex.phrase_to_token[("divided", "by")], "/")
+        self.assertEqual(self.lex.phrase_to_token[("plus",)], "+")
+        self.assertEqual(self.lex.phrase_to_token[("give", "or", "take")], "±")
 
 
 class LongestMatchTests(unittest.TestCase):

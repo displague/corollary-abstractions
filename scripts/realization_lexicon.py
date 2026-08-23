@@ -51,11 +51,28 @@ bracketing logic of its own".
   B5  every phrase is lowercase ASCII words, and L2 holds;
   B6  L1 holds;
   B7  every emitted token is one the byte-frozen tokenizer accepts *as the
-      thing the row means*: call-head tokens must be identifiers, must not
-      collide with the relation word `approx`, and must not lower-case to a
-      big-operator prefix (`sum_`, `prod_`, `lim_`, `max_`, `min_`), because
-      `Parser.parse_atom` would then read the emitted call as a big operator
-      over the following product and stage 2 would recover a different head.
+      thing the row means*.  This is `_check_emitted_token`, and it runs over
+      EVERY token any row can emit — the structural, operator and relation
+      keys, the VALUES of `operator_tokens`, the slot marker's token prefix
+      and every call-head token — because the one bug this table has actually
+      had (commit 8910138: `neg` emitted as the identifier `neg` and re-read
+      as a call head) was in exactly the place a key-only check does not look.
+      The rules:
+
+        * the frozen tokenizer must read the token as exactly one token, and
+          that token must be the token itself;
+        * a structural / operator / relation row must NOT emit an identifier
+          — `operator_tokens: {"neg": "negg"}` tokenizes fine and means a slot,
+          which is 8910138's bug wearing a different spelling. The single
+          exception is `approx`, the one relation the grammar spells as a word;
+        * a call-head row MUST emit an identifier, must not be `approx`, and
+          must not lower-case to a big-operator prefix (`sum_`, `prod_`,
+          `lim_`, `max_`, `min_`) — `Parser.parse_atom` would read the emitted
+          call as a big operator over the following product and stage 2 would
+          recover a different head;
+        * no row may emit `<slot_prefix><digits>` (`V0`), because the slot
+          marker synthesizes exactly those tokens and a head spelled `V0`
+          would be indistinguishable from the first variable.
 
 A table that fails any of these raises `LexiconError` at load.  Nothing
 downstream gets a chance to work around it.
@@ -68,6 +85,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from match_signatures import TemplateParseError, tokenize
 from numeral_words import is_numeral_word
 
 DEFAULT_LEXICON_PATH = (
@@ -87,6 +105,64 @@ _SECTIONS = ("structural", "operators", "relations", "call_heads")
 
 class LexiconError(ValueError):
     """The table is not a bijection, or not readable by longest match."""
+
+
+#: Sections whose rows spell a piece of GRAMMAR, not a name. Their tokens must
+#: not be identifiers, because an identifier in operator position is a slot.
+_GLYPH_SECTIONS = frozenset({"structural", "operators", "relations"})
+
+#: The one relation the frozen grammar spells as a word
+#: (`Parser.parse_relation` tests `tok == "approx"` explicitly).
+_WORD_RELATION = "approx"
+
+
+def _check_emitted_token(key: str, token: str, section: str,
+                         slot_prefix: str) -> None:
+    """B7 for one row. Raises `LexiconError`; returns nothing on success.
+
+    Factored out and applied to every emitted token — keys, `operator_tokens`
+    values, the slot prefix and head tokens alike — because the table's one
+    real bug lived in a value, not a key.
+    """
+    if not isinstance(token, str) or not token:
+        raise LexiconError(f"B7: {key!r} emits {token!r}, which is not a token")
+    try:
+        produced = tokenize(token)
+    except TemplateParseError as exc:
+        raise LexiconError(
+            f"B7: {key!r} emits {token!r}, which the byte-frozen tokenizer "
+            f"cannot read ({exc})"
+        ) from None
+    if produced != [token]:
+        raise LexiconError(
+            f"B7: {key!r} emits {token!r}, which the byte-frozen tokenizer "
+            f"splits into {produced!r}"
+        )
+
+    if re.fullmatch(rf"{re.escape(slot_prefix)}\d+", token):
+        raise LexiconError(
+            f"B7: {key!r} emits {token!r}, which is the spelling the slot "
+            f"marker synthesizes for a variable index"
+        )
+
+    identifier = bool(_IDENTIFIER_RE.fullmatch(token))
+    if section in _GLYPH_SECTIONS:
+        if identifier and token != _WORD_RELATION:
+            raise LexiconError(
+                f"B7: the {section} row {key!r} emits the identifier {token!r}; "
+                f"the frozen parser would read it as a slot or a call head, not "
+                f"as {key!r}"
+            )
+        return
+    if not identifier:
+        raise LexiconError(f"B7: call head {key!r} emits a non-identifier token")
+    if token == _WORD_RELATION:
+        raise LexiconError("B7: `approx` is a relation word, not a call head")
+    if token.lower().startswith(BIG_OP_PREFIXES):
+        raise LexiconError(
+            f"B7: call head {key!r} lower-cases to a big-operator prefix; "
+            f"stage 2 would read it as an operator over the following product"
+        )
 
 
 def head_token(head: str) -> str:
@@ -171,18 +247,22 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
             f"`operator_tokens` names {sorted(unknown)}, which are not operator rows"
         )
 
-    rows: list[tuple[str, str, str]] = []
-    for key, phrase in raw["structural"].items():
-        rows.append((key, phrase, key))
-    for key, phrase in raw["operators"].items():
-        rows.append((key, phrase, operator_tokens.get(key, key)))
-    for key, phrase in raw["relations"].items():
-        rows.append((key, phrase, key))
-    for key, phrase in raw["call_heads"].items():
-        rows.append((key, phrase, head_token(key)))
-    rows.append((f"slot_marker:{slot_word}", slot_word, marker.get("token_prefix", "V")))
+    slot_prefix = marker.get("token_prefix", "V")
 
-    for key, phrase, _ in rows:
+    # (key, phrase, emitted token, section) — the section decides which half
+    # of B7 applies, and every row goes through it, values included.
+    rows: list[tuple[str, str, str, str]] = []
+    for key, phrase in raw["structural"].items():
+        rows.append((key, phrase, key, "structural"))
+    for key, phrase in raw["operators"].items():
+        rows.append((key, phrase, operator_tokens.get(key, key), "operators"))
+    for key, phrase in raw["relations"].items():
+        rows.append((key, phrase, key, "relations"))
+    for key, phrase in raw["call_heads"].items():
+        rows.append((key, phrase, head_token(key), "call_heads"))
+    rows.append((f"slot_marker:{slot_word}", slot_word, slot_prefix, "call_heads"))
+
+    for key, phrase, _, _section in rows:
         if not isinstance(phrase, str) or not _PHRASE_RE.fullmatch(phrase):
             raise LexiconError(
                 f"B5: phrase for {key!r} is not lowercase ASCII words: {phrase!r}"
@@ -196,7 +276,7 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
 
     # -- B2 / B3: injective in both directions -----------------------------
     by_phrase: dict[str, str] = {}
-    for key, phrase, _ in rows:
+    for key, phrase, _, _section in rows:
         if phrase in by_phrase:
             raise LexiconError(
                 f"B2: phrase {phrase!r} maps to both {by_phrase[phrase]!r} "
@@ -204,7 +284,7 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
             )
         by_phrase[phrase] = key
     by_token: dict[str, str] = {}
-    for key, _, token in rows:
+    for key, _phrase, token, _section in rows:
         if token in by_token:
             raise LexiconError(
                 f"B3: token {token!r} is emitted by both {by_token[token]!r} "
@@ -213,16 +293,16 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
         by_token[token] = key
 
     # -- B4: both compositions are the identity ----------------------------
-    key_to_phrase = {key: phrase for key, phrase, _ in rows}
-    phrase_to_key = {phrase: key for key, phrase, _ in rows}
-    for key, phrase, _ in rows:
+    key_to_phrase = {key: phrase for key, phrase, _t, _s in rows}
+    phrase_to_key = {phrase: key for key, phrase, _t, _s in rows}
+    for key, phrase, _token, _section in rows:
         if phrase_to_key[key_to_phrase[key]] != key:
             raise LexiconError(f"B4: reverse(forward({key!r})) is not {key!r}")
         if key_to_phrase[phrase_to_key[phrase]] != phrase:
             raise LexiconError(f"B4: forward(reverse({phrase!r})) is not {phrase!r}")
 
     # -- B6 / L1: prefix-free ----------------------------------------------
-    word_seqs = {tuple(phrase.split()): key for key, phrase, _ in rows}
+    word_seqs = {tuple(phrase.split()): key for key, phrase, _t, _s in rows}
     ordered = sorted(word_seqs)
     for i, seq in enumerate(ordered):
         for other in ordered[i + 1:]:
@@ -236,20 +316,15 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
                 f"match cannot resolve them"
             )
 
-    # -- B7: emitted call-head tokens survive the byte-frozen tokenizer ----
-    for key in raw["call_heads"]:
-        token = head_token(key)
-        if not _IDENTIFIER_RE.fullmatch(token):
-            raise LexiconError(f"B7: call head {key!r} emits a non-identifier token")
-        if token == "approx":
-            raise LexiconError("B7: `approx` is a relation word, not a call head")
-        if token.lower().startswith(BIG_OP_PREFIXES):
-            raise LexiconError(
-                f"B7: call head {key!r} lower-cases to a big-operator prefix; "
-                f"stage 2 would read it as an operator over the following product"
-            )
+    # -- B7: EVERY emitted token survives the byte-frozen tokenizer --------
+    # Keys, `operator_tokens` values and the slot prefix alike: the table's
+    # one real bug was in a value, so a key-only check is a check with a hole
+    # exactly where the bug was.
+    for key, _phrase, token, section in rows:
+        _check_emitted_token(key, token, section, slot_prefix)
 
-    phrase_to_token = {tuple(phrase.split()): token for _, phrase, token in rows}
+    phrase_to_token = {tuple(phrase.split()): token
+                       for _k, phrase, token, _s in rows}
     return Lexicon(
         path=path,
         lexicon_id=raw.get("lexicon_id", "<unnamed>"),

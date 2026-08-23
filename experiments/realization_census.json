@@ -7,6 +7,7 @@
   "note": [
     "R0's construction prerequisite (design §6): the parse rate of the source field under the byte-frozen parser, per corpus, with failure classes named — published before R1's floor is read.",
     "R1's floor is a fraction of the PARSEABLE denominator, which is reported beside every rate here.",
+    "R2's sweep runs here too: `r2_words_outside_sources` counts served surfaces carrying a word that is neither a lexicon phrase word nor a word the registered numeral pair can emit. It is counted, not asserted, so a breach is a published number.",
     "This is not the registered full-corpus run (experiments/realization_rate.json); it is the table that run's denominator comes from."
   ],
   "totals": {
@@ -18,7 +19,9 @@
     "refused_after_parse": 2,
     "round_trip_rate_over_parseable": 0.999079,
     "r1_floor": 0.9,
-    "r1_verdict": "FIRES"
+    "r1_verdict": "FIRES",
+    "r2_words_outside_sources": 0,
+    "r2_verdict": "CLEAN"
   },
   "corpora": [
     {
@@ -30,6 +33,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 2,
       "round_trip_rate_over_parseable": 0.99902,
+      "r2_words_outside_sources": 0,
       "thin_denominator": false
     },
     {
@@ -41,6 +45,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -52,6 +57,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -63,6 +69,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -74,6 +81,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -85,6 +93,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -96,6 +105,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -107,6 +117,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -118,6 +129,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -129,6 +141,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -140,6 +153,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -151,6 +165,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -162,6 +177,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -173,6 +189,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -184,6 +201,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -195,6 +213,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -206,6 +225,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -217,6 +237,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -228,6 +249,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -239,6 +261,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -250,6 +273,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -261,6 +285,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 1.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -272,6 +297,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 0.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -283,6 +309,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 0.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -294,6 +321,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 0.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -305,6 +333,7 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 0.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     },
     {
@@ -316,9 +345,11 @@
       "round_trip_failed": 0,
       "refused_after_parse": 0,
       "round_trip_rate_over_parseable": 0.0,
+      "r2_words_outside_sources": 0,
       "thin_denominator": true
     }
   ],
+  "r2_offenders": [],
   "refusal_classes": {
     "unparseable_term": 10605,
     "unsupported_numeral": 2

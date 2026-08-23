@@ -20,25 +20,25 @@
     {
       "path": "scripts/numeral_words.py",
       "role": "numeral_pair",
-      "sha256_lf": "2cb4a61f898f576a3d142cb075ce7ec47203fe02dbff06e24d1335fd591bdba1",
+      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
       "why": "The registered numeral pair (design 3: numerals are not a table). Frozen here so the pair cannot be widened after a round-trip rate is read."
     },
     {
       "path": "data/realization/lexicon.json",
       "role": "lexicon",
-      "sha256_lf": "6d6191eff6158efbdba2ea6f472ce8d1f00e2e02953fab70522832277572dd8b",
+      "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
       "why": "The trusted bijective table. Extending it is a diff with tests; this digest is what a later diff is read against."
     },
     {
       "path": "scripts/realization_lexicon.py",
       "role": "lexicon_loader",
-      "sha256_lf": "5a9761d1ab59c1152e2e6a6786452a738a14c48d936f9ae64ef0c43b65d00e62",
+      "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
       "why": "The R2b load gate. Recorded with the table because a table is only as bijective as the loader that refuses a non-bijective one."
     },
     {
       "path": "scripts/realize_term.py",
       "role": "inverter",
-      "sha256_lf": "bf616d279aa47f8e9a552b941eb934607a68487ee554231e0aa0250919484fbc",
+      "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
       "recorded": "2026-08-23",
       "why": [
         "Design §7 C-R3: \"the inverter's digest is recorded beside them\". It could not be in the commit that froze the parser BEFORE the realizer existed, so it lands with the realizer and carries its own `recorded` date. The ordering is itself the record: the parser digest predates this file, and tests/test_realize_term.py re-checks the parser digest from inside the realizer's own module.",
@@ -83,6 +83,73 @@
         "Corrected in the table, not by relaxing the comparison. Recorded here rather than amended into the preregistration commit, because a silently-fixed prereg artifact is worth less than a dated one."
       ],
       "not_a_c_r3_event": "scripts/match_signatures.py is byte-unchanged; its digest below is the one the preregistration commit recorded. C-R3 is a claim about the parser and it holds."
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "H1 (adversarial review)",
+      "artifact": "scripts/realize_term.py",
+      "what": "`parameters.slot_names` split into `surface_slot_names` and `skeleton_slot_names`, with `slot_index_basis` naming both. The inverter digest below is re-recorded.",
+      "why": [
+        "The single published map numbered slots by first occurrence in canonicalize()'s tree, which is the order the SURFACE uses. term_skeleton's ?N placeholders do not come from that tree: skeleton() applies shape_resort() first, which re-orders arguments shape_key cannot tell apart, and render_skeleton numbers slots by first occurrence in THAT tree.",
+        "Measured on the committed tree: the two numberings disagree on 110 of the 2,170 served terms (5.0691%). `p + q = (q + 1)^2` is the compact corpus case - the sentence says `variable zero` for p while the skeleton's ?0 is q.",
+        "No served sentence and no round-trip verdict changes: skeleton() is invariant under slot renaming, so the gate never depended on the numbering. What was wrong was the RECEIPT: a reader matching parameters.slot_names against term_skeleton's ?N would have been misled on one term in twenty. Both maps are now published and the divergent corpus term is pinned in the curated set."
+      ]
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "M3 / M4 (adversarial review)",
+      "artifact": "data/realization/lexicon.json + scripts/realization_lexicon.py",
+      "what": "B7 factored into `_check_emitted_token(key, token, section, slot_prefix)` and run over EVERY emitted token, not only call-head keys.",
+      "why": [
+        "The B7 check introduced with the operator_tokens fix looked only at call-head KEYS - the one place the bug it was fixing was not. Two holes were open: operator_tokens {\"neg\": \"negg\"} loaded fine and meant a slot (8910138's bug in a new spelling), and a call head spelled `V0` loaded fine and was indistinguishable from the first variable's synthesized token.",
+        "The check now asks the byte-frozen tokenizer directly: the token must tokenize to exactly itself; a structural/operator/relation row must not emit an identifier (except `approx`, the one relation the grammar spells as a word); a call head must emit an identifier that is not `approx` and does not lower-case to a big-operator prefix; and no row may emit <slot_prefix><digits>.",
+        "Six injected holes are now refused by the loader and asserted in tests: negg, 9x, V0, a numeric slot prefix, a token the tokenizer splits, and a big-operator head spelling."
+      ]
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "M6 / M7 (adversarial review)",
+      "artifact": "scripts/realize_term.py + experiments/realization_census.json",
+      "what": "The census gains totals.r2_words_outside_sources (R2's sweep over every served surface) and refuses a data dir that does not exist or holds no */nodes.json. The census artifact is regenerated - permitted, since this is the pre-registered-run prerequisite table and not the registered run.",
+      "why": [
+        "R2 asks for a sweep asserting zero words outside the lexicon and the registered numeral pair across the full run. The census measured R0 and R1 and left R2 to the unit tests, so the corpus-scale number did not exist. It is COUNTED rather than asserted, so a breach would be a published number instead of a crashed run. Measured: 0 of 2,170.",
+        "A census over an empty or mis-pointed --data-dir reported 0 parseable, 0 exact and an R1 rate of 0.0, which prints as a table and reads as a run. It now exits 2 with the reason on stderr."
+      ]
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "M2 / L3 / L4 (adversarial review)",
+      "artifact": "tests/test_realize_term.py",
+      "what": "13 golden (source, exact-surface) pairs pinned; hand-built tests added for leading_pm and bare_inverse; a plus-minus case pinned in both the curated and golden sets.",
+      "why": [
+        "R5 as written is satisfied by any deterministic function, including a deterministically wrong one - re-realizing twice in one process only proves the code holds no hidden state. The golden pairs make R5 mean 'the same sentences as last time', so a lexicon edit that changes an emitted surface shows up in a diff. The registered run's artifact will carry a digest over a fixed surface sample for the same reason at corpus scale.",
+        "The plus-minus row is the one operator nothing in data/ exercises; `x = a ± b*c` is now pinned EXACT.",
+        "leading_divisor, leading_pm and bare_inverse are structurally unreachable from real parser output (inv and pm are only ever built as infix continuations). All three are now hand-built and tested, and the module docstring says which three and why they are kept."
+      ]
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "M5 (adversarial review)",
+      "artifact": "tests/test_realize_term.py",
+      "what": "test_an_alias_class_swap_also_round_trips_legitimately renamed to test_a_symmetric_relation_swap_also_round_trips_legitimately, docstring corrected, and the claim it got wrong now measured in its own test.",
+      "why": [
+        "The test asserted `a = b` and `b = a` share a skeleton and attributed it to head aliasing. That is wrong: canonicalize does NO aliasing - alias_heads is a separate pass only the ALIASED match level runs - and the erasure it actually demonstrated is SYMMETRIC RELATIONS, which canonicalize orders by shape_key.",
+        "Measured and asserted: MOD and CONCAT are one declared ordered_compose class and canonicalize to DIFFERENT skeletons at the level this gate compares. A mutation swapping them would be a legitimate skeleton-changing near-miss, not an erasure - the opposite of what the old docstring implied. The design's C-R2 sentence is being corrected in parallel by the orchestrator."
+      ]
+    },
+    {
+      "dated": "2026-08-23",
+      "finding": "L1 / L2 / L6 / L7 / L8 / L9 (adversarial review)",
+      "artifact": "data/realization/lexicon.json, scripts/numeral_words.py, scripts/realize_term.py",
+      "what": "Prose and hygiene, each moving a digest-pinned artifact.",
+      "why": [
+        "L1: lexicon.json's reading_rules had three orphaned continuation lines left behind when the GLYPHS paragraph was rewritten as a single string in 8910138; the list is restored to one-line-per-element. The head_coverage note claiming 'design says 39' singletons is now stale - the design at main says 30, which is what this cycle measured - so it is rewritten to record the measurement and the fact that the design has since agreed.",
+        "L2: 3c56c81's commit message says the two unsupported_numeral refusals are 'two 76-digit literals'. They are one 76-digit literal (leanworkbook.ground.lean_workbook_37421, 4.44e75) and one 48-digit literal (leanworkbook.ground.lean_workbook_plus_68304, 4.44e47). The count and the verdict are unaffected; the description was wrong and a commit message cannot be corrected in place.",
+        "L6: words_to_fraction's post-check `if negative and value >= 0` was unreachable - the re-render comparison above it already rejects any sign disagreement - and is removed with the reason recorded at the line.",
+        "L7: parameters' slot map was built with an identity dict comprehension instead of dict().",
+        "L8: the receipt gains parameters.numerals_used, listing every literal and slot index the sentence emitted with its words, so R2's two permitted sources (lexicon_entries and the numeral pair) are both evidenced by the receipt alone.",
+        "L9: Refusal.served and Refusal.round_trip were dataclass FIELDS while Realization's were properties, so a Refusal could be constructed claiming served=True. Both are properties now."
+      ]
     }
   ],
   "pending_note": "Empty since 2026-08-23: the inverter row moved into `frozen` when scripts/realize_term.py was written."
