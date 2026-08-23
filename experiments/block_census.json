@@ -1,0 +1,89 @@
+{
+  "corpus": {
+    "nodes_with_meaning": 12777,
+    "titles": 12777,
+    "total_surface_words": 268533
+  },
+  "ngram_census": {
+    "n2_freq_ge_32": 29,
+    "n2_freq_ge_100": 26,
+    "n2_freq_ge_500": 16,
+    "n3_freq_ge_32": 22,
+    "n3_freq_ge_100": 22,
+    "n3_freq_ge_500": 13,
+    "n4_freq_ge_32": 18,
+    "n4_freq_ge_100": 18,
+    "n4_freq_ge_500": 10,
+    "n5_freq_ge_32": 12,
+    "n5_freq_ge_100": 12,
+    "n5_freq_ge_500": 7,
+    "n6_freq_ge_32": 7,
+    "n6_freq_ge_100": 7,
+    "n6_freq_ge_500": 4,
+    "n7_freq_ge_32": 3,
+    "n7_freq_ge_100": 3,
+    "n7_freq_ge_500": 1,
+    "n8_freq_ge_32": 1,
+    "n8_freq_ge_100": 1,
+    "n8_freq_ge_500": 0
+  },
+  "greedy_block_encoding": {
+    "dictionary_blocks_freq_ge_32": 92,
+    "tokens_emitted": 68711,
+    "words_per_emitted_token": 3.908,
+    "fraction_of_words_inside_multiword_blocks": 0.8846
+  },
+  "ingested_prose_templates": {
+    "ingested_meanings": 12515,
+    "distinct_templates": 5,
+    "top10_coverage": 1.0,
+    "top_templates": [
+      {
+        "count": 7673,
+        "template": "The covered Lean-workbook claim stated by problem lean_workbook_{N}, emitted as a matcher template {F}"
+      },
+      {
+        "count": 4539,
+        "template": "The covered Lean-workbook claim stated by problem lean_workbook_plus_{N}, emitted as a matcher template {F}"
+      },
+      {
+        "count": 152,
+        "template": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_plus_{N}, restated from the pinned extract."
+      },
+      {
+        "count": 150,
+        "template": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_{N}, restated from the pinned extract."
+      },
+      {
+        "count": 1,
+        "template": "{F} leaves remainder {F} on division by {N}: the ground residue fact stated by Lean-workbook problem lean_workbook_{N}, restated verbatim from the pinned extrac"
+      }
+    ]
+  },
+  "formal_side_reuse": {
+    "nodes_with_anonymized_template": 12777,
+    "distinct_anonymized_templates": 11904,
+    "top5_template_hosts": [
+      {
+        "count": 5,
+        "template": "IMPLIES(MEET(MEET(0 < a, 0 < b), 0 < c), IMPLIES(1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1)"
+      },
+      {
+        "count": 5,
+        "template": "(x + y + z) ^ 2 >= 3 * (x * y + y * z + z * x)"
+      },
+      {
+        "count": 5,
+        "template": "IMPLIES(MEET(1 < a, 1 < b), a ^ 2 / (b + -1) + b ^ 2 / (a + -1) >= 8)"
+      },
+      {
+        "count": 5,
+        "template": "IMPLIES(x + y + z >= x * y * z, x ^ 2 + y ^ 2 + z ^ 2 >= x * y * z)"
+      },
+      {
+        "count": 4,
+        "template": "IMPLIES(MEET(MEET(MEET(x > 0, y > 0), z > 0), x * y * z = 1), 1 / (x ^ 2 + x + 1) + 1 / (y ^ 2 + y +"
+      }
+    ]
+  }
+}
