@@ -1,0 +1,1215 @@
+{
+  "run_id": "realization.registered.v1",
+  "registered": "2026-08-23",
+  "design": "docs/DESIGN-sans-template-rendering.md",
+  "roadmap": "docs/ROADMAP-v0.18.md",
+  "provenance": {
+    "writer": "scripts/measure_realization.py",
+    "writer_sha256_lf": "3870f82057b969c2ac98de3fa5c230bcab4527f1c39bff53bba73e903c673a39",
+    "inputs": [
+      {
+        "path": "data/algebra/nodes.json",
+        "sha256_lf": "ddadd7134e687d4f7b7c6fcc6085ba858d5583c8bcf2d72ca2d58f76d8ea90a3"
+      },
+      {
+        "path": "data/algebraic_topology/nodes.json",
+        "sha256_lf": "79fc174c2f3cc74139c44465cf84d1fb40631940b6dd587c92e14af1cd137b60"
+      },
+      {
+        "path": "data/calculus/nodes.json",
+        "sha256_lf": "42465086821490d7366715bc703799ce7c9309819b40937fd71ea2e72d02e059"
+      },
+      {
+        "path": "data/chemistry/nodes.json",
+        "sha256_lf": "9ac039b23d7feaf8be8b44404a9b3a6997d4a3b5c96c5f1430527014645faed0"
+      },
+      {
+        "path": "data/differential_geometry/nodes.json",
+        "sha256_lf": "83c6a3928cfe577cb0360c776085ca9a51a8d28809d10cbccc3a202b84154fb0"
+      },
+      {
+        "path": "data/differential_topology/nodes.json",
+        "sha256_lf": "f66370167c27cfb3118996f7ab99142d97053a6aaabcdf8ae3cd4bc5355b70df"
+      },
+      {
+        "path": "data/economics/nodes.json",
+        "sha256_lf": "6f110c42a54ed490ae11b2dce0cb3bcc65381d0472de630307ddeb3cefd540d1"
+      },
+      {
+        "path": "data/geometric_modeling/nodes.json",
+        "sha256_lf": "8ad24415cd4a5fee88a9addacdfe29fb00890bc1f63156ab7bc60fb653b0f3a7"
+      },
+      {
+        "path": "data/geometry/nodes.json",
+        "sha256_lf": "dfe25f99d8ecddccc23999a1b9033c94ba6f5ee2fa22e718d029c1cce49a7287"
+      },
+      {
+        "path": "data/geospatial_topology/nodes.json",
+        "sha256_lf": "207fe4fff677a05fb540142ae402a58d54ef23ff7578809ce1e931c5ffbcff05"
+      },
+      {
+        "path": "data/graph_theory/nodes.json",
+        "sha256_lf": "4455013e79d53040abc3c4335152a411f22644cc70600f3b5c0f9ddf9b1c4677"
+      },
+      {
+        "path": "data/information_theory/nodes.json",
+        "sha256_lf": "17be2d8cebe4ac91df2ef255fd0cba7997c9884cc5f5f1a8a93667ed66d0e8d9"
+      },
+      {
+        "path": "data/ingested_arithmetic/nodes.json",
+        "sha256_lf": "6e19d72abcfac49dfb36b03103919cc860f1dc76c3f2d94a102b0892fc9a549d"
+      },
+      {
+        "path": "data/lean_workbook/nodes.json",
+        "sha256_lf": "bf6a5efd62fc298cb2a7e7558792f0c2c968a53ce80133a30f9c3244ad266468"
+      },
+      {
+        "path": "data/logic/nodes.json",
+        "sha256_lf": "a46cdc1ce7e070028b6096001e0656b748a0c5f6f74cbd13a6c1c73090fbe018"
+      },
+      {
+        "path": "data/machine_learning/nodes.json",
+        "sha256_lf": "333753fe8329c4569ae83d534dc1d8ece58498859524164f15044328b2486528"
+      },
+      {
+        "path": "data/morphology/nodes.json",
+        "sha256_lf": "524112d2a0053006dce95e3b5554b6bd331d2dacb0c21ad90da16d4105df17e1"
+      },
+      {
+        "path": "data/narrative/nodes.json",
+        "sha256_lf": "8d7605f7ce60c2a0c19d1e04ef17c80c1f7b4f7363bbfcc88bf572f4fcc2dd08"
+      },
+      {
+        "path": "data/number_theory/nodes.json",
+        "sha256_lf": "330c1f7bfc51ba0df4edca8c0f94376c0231a1699812dd90c68d2d9a2ebe5037"
+      },
+      {
+        "path": "data/numerical_analysis/nodes.json",
+        "sha256_lf": "fe816fbe02847fd816a8a8980cf1c7010370911b4fbdf5e22460e6d714f9fe59"
+      },
+      {
+        "path": "data/physics/nodes.json",
+        "sha256_lf": "56c0bd01b33293845ab7ef313ba2d44f5df67a5bc429fa68e79ca4d1835e985b"
+      },
+      {
+        "path": "data/programming/nodes.json",
+        "sha256_lf": "09408f5b6ccf832b789619daa73d4d0ccb7a3087b3750427dc15fed9d078d741"
+      },
+      {
+        "path": "data/provability/nodes.json",
+        "sha256_lf": "a562bf2d4c23f03d46f9649ee56be1e9b709dcd75e789918d678d36cbb8e04ee"
+      },
+      {
+        "path": "data/realization/lexicon.json",
+        "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587"
+      },
+      {
+        "path": "data/set_theory/nodes.json",
+        "sha256_lf": "cf6d12b00585156a333af4770b2860861b34d48c57fcf865df4fc9172a1e184c"
+      },
+      {
+        "path": "data/statistics/nodes.json",
+        "sha256_lf": "9849a90aeb4d9db98b5eefff563a5b0244cb352e3b969c00994ac02fe041f85d"
+      },
+      {
+        "path": "data/temporal_logic/nodes.json",
+        "sha256_lf": "e798dddfc71ece9156b291d9779fbee7fd268cf97a0954f53e82f1c49c04cdd2"
+      },
+      {
+        "path": "data/trigonometry/nodes.json",
+        "sha256_lf": "b98b18235968f980ccea32bc029075211edfc662afbd9ed7da5bc7b5ff199a03"
+      },
+      {
+        "path": "experiments/realization_prereg.json",
+        "sha256_lf": "2c4f42891a0291661e194f2829e916a07394c29307bd7c841e526c5d6562e45a"
+      },
+      {
+        "path": "scripts/match_signatures.py",
+        "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599"
+      },
+      {
+        "path": "scripts/numeral_words.py",
+        "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4"
+      },
+      {
+        "path": "scripts/realization_lexicon.py",
+        "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea"
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac"
+      }
+    ],
+    "emitted_at_generation": true
+  },
+  "what_this_is": [
+    "The ONE registered full-corpus run named in DESIGN-sans-template-rendering §10. R0's parse table, R1's round-trip rate over the parseable denominator, R2's corpus-scale sweep, R5's surface digest, and the three blind controls C-R1..C-R3.",
+    "It is byte-reproducible: no timestamp, no elapsed time, no absolute path. The C-R1 derangement is seeded from the committed lexicon's own digest and C-R2's mutation choice is the first applicable node in a fixed pre-order walk.",
+    "It refuses to exist if C-R3 fails. The digest revalidation runs before a single term is realized."
+  ],
+  "c_r3": {
+    "control": "C-R3 (the tautology probe)",
+    "prereg": "experiments/realization_prereg.json",
+    "prereg_sha256_lf": "2c4f42891a0291661e194f2829e916a07394c29307bd7c841e526c5d6562e45a",
+    "verdict": "HOLDS",
+    "what_it_means": "Every artifact frozen before the realizer was written is byte-identical to what the preregistration commit recorded, so stage 2 is the same reader that had never seen the realizer. If any row disagreed this writer would refuse to emit the artifact.",
+    "revalidated": [
+      {
+        "path": "scripts/match_signatures.py",
+        "role": "parser",
+        "recorded_sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+        "observed_sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+        "agrees": true
+      },
+      {
+        "path": "scripts/numeral_words.py",
+        "role": "numeral_pair",
+        "recorded_sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+        "observed_sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+        "agrees": true
+      },
+      {
+        "path": "data/realization/lexicon.json",
+        "role": "lexicon",
+        "recorded_sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+        "observed_sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+        "agrees": true
+      },
+      {
+        "path": "scripts/realization_lexicon.py",
+        "role": "lexicon_loader",
+        "recorded_sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+        "observed_sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+        "agrees": true
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "role": "inverter",
+        "recorded_sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+        "observed_sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+        "agrees": true
+      }
+    ]
+  },
+  "r0": {
+    "gate": "R0 — construction prerequisite, discharged before R1 is read",
+    "source_field": "formal_statement.canonical_ascii",
+    "parser": "scripts/match_signatures.py (byte-frozen, C-R3-pinned)",
+    "nodes_total": 12777,
+    "nodes_parseable": 2172,
+    "parse_rate": 0.169993,
+    "failure_classes": {
+      "unexpected character": 10432,
+      "trailing tokens": 111,
+      "expected": 53,
+      "unexpected token '|'": 6,
+      "unexpected token '['": 2,
+      "unexpected token '>'": 1
+    },
+    "failure_classes_note": "Named per corpus in the table below as well. A term that does not parse has no source skeleton to round-trip to, so it never enters R1's denominator.",
+    "stop_condition_check": {
+      "rule": "Stop and publish if R0 leaves NO corpus with >= 50 parseable terms.",
+      "corpora_at_or_above_50_parseable": [
+        "lean_workbook"
+      ],
+      "fired": false
+    },
+    "table": [
+      {
+        "corpus": "lean_workbook",
+        "nodes": 12514,
+        "parseable": 2040,
+        "parse_rate": 0.163017,
+        "round_trip_exact": 2038,
+        "round_trip_failed": 0,
+        "refused_after_parse": 2,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.99902,
+        "thin_denominator": false,
+        "r1_per_corpus_floor_applies": true,
+        "r1_per_corpus_verdict": "FIRES",
+        "parse_failure_classes": {
+          "unexpected character": 10403,
+          "trailing tokens": 55,
+          "expected": 16
+        }
+      },
+      {
+        "corpus": "geometry",
+        "nodes": 15,
+        "parseable": 14,
+        "parse_rate": 0.933333,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 1
+        }
+      },
+      {
+        "corpus": "machine_learning",
+        "nodes": 14,
+        "parseable": 14,
+        "parse_rate": 1.0,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {}
+      },
+      {
+        "corpus": "physics",
+        "nodes": 15,
+        "parseable": 14,
+        "parse_rate": 0.933333,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 1
+        }
+      },
+      {
+        "corpus": "economics",
+        "nodes": 11,
+        "parseable": 11,
+        "parse_rate": 1.0,
+        "round_trip_exact": 11,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {}
+      },
+      {
+        "corpus": "morphology",
+        "nodes": 11,
+        "parseable": 10,
+        "parse_rate": 0.909091,
+        "round_trip_exact": 10,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 1
+        }
+      },
+      {
+        "corpus": "calculus",
+        "nodes": 11,
+        "parseable": 9,
+        "parse_rate": 0.818182,
+        "round_trip_exact": 9,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 1,
+          "unexpected character": 1
+        }
+      },
+      {
+        "corpus": "chemistry",
+        "nodes": 10,
+        "parseable": 8,
+        "parse_rate": 0.8,
+        "round_trip_exact": 8,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected token '['": 2
+        }
+      },
+      {
+        "corpus": "trigonometry",
+        "nodes": 8,
+        "parseable": 8,
+        "parse_rate": 1.0,
+        "round_trip_exact": 8,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {}
+      },
+      {
+        "corpus": "differential_geometry",
+        "nodes": 9,
+        "parseable": 7,
+        "parse_rate": 0.777778,
+        "round_trip_exact": 7,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected character": 2
+        }
+      },
+      {
+        "corpus": "information_theory",
+        "nodes": 10,
+        "parseable": 7,
+        "parse_rate": 0.7,
+        "round_trip_exact": 7,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected character": 2,
+          "expected": 1
+        }
+      },
+      {
+        "corpus": "statistics",
+        "nodes": 11,
+        "parseable": 5,
+        "parse_rate": 0.454545,
+        "round_trip_exact": 5,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 3,
+          "expected": 2,
+          "unexpected token '>'": 1
+        }
+      },
+      {
+        "corpus": "algebraic_topology",
+        "nodes": 8,
+        "parseable": 4,
+        "parse_rate": 0.5,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 2,
+          "trailing tokens": 2
+        }
+      },
+      {
+        "corpus": "narrative",
+        "nodes": 13,
+        "parseable": 4,
+        "parse_rate": 0.307692,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 5,
+          "expected": 3,
+          "unexpected character": 1
+        }
+      },
+      {
+        "corpus": "number_theory",
+        "nodes": 16,
+        "parseable": 4,
+        "parse_rate": 0.25,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 9,
+          "unexpected character": 3
+        }
+      },
+      {
+        "corpus": "differential_topology",
+        "nodes": 7,
+        "parseable": 3,
+        "parse_rate": 0.428571,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 3,
+          "expected": 1
+        }
+      },
+      {
+        "corpus": "geometric_modeling",
+        "nodes": 8,
+        "parseable": 3,
+        "parse_rate": 0.375,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 3,
+          "unexpected character": 2
+        }
+      },
+      {
+        "corpus": "numerical_analysis",
+        "nodes": 8,
+        "parseable": 3,
+        "parse_rate": 0.375,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 2,
+          "expected": 1,
+          "unexpected character": 1,
+          "unexpected token '|'": 1
+        }
+      },
+      {
+        "corpus": "geospatial_topology",
+        "nodes": 7,
+        "parseable": 1,
+        "parse_rate": 0.142857,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 3,
+          "trailing tokens": 3
+        }
+      },
+      {
+        "corpus": "graph_theory",
+        "nodes": 8,
+        "parseable": 1,
+        "parse_rate": 0.125,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected token '|'": 5,
+          "trailing tokens": 2
+        }
+      },
+      {
+        "corpus": "set_theory",
+        "nodes": 10,
+        "parseable": 1,
+        "parse_rate": 0.1,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "trailing tokens": 6,
+          "expected": 3
+        }
+      },
+      {
+        "corpus": "temporal_logic",
+        "nodes": 16,
+        "parseable": 1,
+        "parse_rate": 0.0625,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 1.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 11,
+          "trailing tokens": 4
+        }
+      },
+      {
+        "corpus": "algebra",
+        "nodes": 1,
+        "parseable": 0,
+        "parse_rate": 0.0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 1
+        }
+      },
+      {
+        "corpus": "ingested_arithmetic",
+        "nodes": 1,
+        "parseable": 0,
+        "parse_rate": 0.0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected character": 1
+        }
+      },
+      {
+        "corpus": "logic",
+        "nodes": 20,
+        "parseable": 0,
+        "parse_rate": 0.0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected character": 8,
+          "expected": 6,
+          "trailing tokens": 6
+        }
+      },
+      {
+        "corpus": "programming",
+        "nodes": 9,
+        "parseable": 0,
+        "parse_rate": 0.0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "unexpected character": 6,
+          "trailing tokens": 3
+        }
+      },
+      {
+        "corpus": "provability",
+        "nodes": 6,
+        "parseable": 0,
+        "parse_rate": 0.0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0,
+        "r2_words_outside_sources": 0,
+        "round_trip_rate_over_parseable": 0.0,
+        "thin_denominator": true,
+        "r1_per_corpus_floor_applies": false,
+        "r1_per_corpus_verdict": "n/a (thin denominator: reported individually, never averaged)",
+        "parse_failure_classes": {
+          "expected": 2,
+          "trailing tokens": 2,
+          "unexpected character": 2
+        }
+      }
+    ]
+  },
+  "r1": {
+    "gate": "R1 — round-trip floor",
+    "floor": 0.9,
+    "denominator": 2172,
+    "numerator": 2170,
+    "rate": 0.999079,
+    "verdict": "FIRES",
+    "sentence": "2170 of 2172 parseable terms round-trip to the source skeleton (0.9991); the floor is 0.90 of the same parseable denominator of 2172, out of 12777 corpus nodes.",
+    "per_corpus_floor_applies_to": [
+      "lean_workbook"
+    ],
+    "thin_corpora_reported_individually": [
+      {
+        "corpus": "geometry",
+        "parseable": 14,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "machine_learning",
+        "parseable": 14,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "physics",
+        "parseable": 14,
+        "round_trip_exact": 14,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "economics",
+        "parseable": 11,
+        "round_trip_exact": 11,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "morphology",
+        "parseable": 10,
+        "round_trip_exact": 10,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "calculus",
+        "parseable": 9,
+        "round_trip_exact": 9,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "chemistry",
+        "parseable": 8,
+        "round_trip_exact": 8,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "trigonometry",
+        "parseable": 8,
+        "round_trip_exact": 8,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "differential_geometry",
+        "parseable": 7,
+        "round_trip_exact": 7,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "information_theory",
+        "parseable": 7,
+        "round_trip_exact": 7,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "statistics",
+        "parseable": 5,
+        "round_trip_exact": 5,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "algebraic_topology",
+        "parseable": 4,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "narrative",
+        "parseable": 4,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "number_theory",
+        "parseable": 4,
+        "round_trip_exact": 4,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "differential_topology",
+        "parseable": 3,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "geometric_modeling",
+        "parseable": 3,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "numerical_analysis",
+        "parseable": 3,
+        "round_trip_exact": 3,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "geospatial_topology",
+        "parseable": 1,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "graph_theory",
+        "parseable": 1,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "set_theory",
+        "parseable": 1,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "temporal_logic",
+        "parseable": 1,
+        "round_trip_exact": 1,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "algebra",
+        "parseable": 0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "ingested_arithmetic",
+        "parseable": 0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "logic",
+        "parseable": 0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "programming",
+        "parseable": 0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      },
+      {
+        "corpus": "provability",
+        "parseable": 0,
+        "round_trip_exact": 0,
+        "round_trip_failed": 0,
+        "refused_after_parse": 0
+      }
+    ],
+    "stop_condition_check": {
+      "rule": "Stop and publish the failure list if R1 lands under 50%.",
+      "fired": false
+    },
+    "lost_is_zero": {
+      "rule": "Every term in the parseable denominator that did not round-trip is listed here by statement id. Nothing is summarized away.",
+      "round_trip_failures": [],
+      "refused_after_parse": [
+        {
+          "statement_id": "leanworkbook.ground.lean_workbook_37421",
+          "corpus": "lean_workbook",
+          "reason": "unsupported_numeral",
+          "detail": "magnitude 4444444444444444117954583006583106326705792067553190610056206310134943580160 is outside the registered numeral domain (|n| < 1000000000000000)",
+          "source": "(4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888888888888888888888888888888888888888) = -4444444444444444444444444444444444444444444444444444444444444444444444444444"
+        },
+        {
+          "statement_id": "leanworkbook.ground.lean_workbook_plus_68304",
+          "corpus": "lean_workbook",
+          "reason": "unsupported_numeral",
+          "detail": "magnitude 444444444444444454917081529522011969194131718144 is outside the registered numeral domain (|n| < 1000000000000000)",
+          "source": "(444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444444444444444444444444444444444444"
+        }
+      ],
+      "accounted": 2172,
+      "denominator": 2172,
+      "balances": true
+    }
+  },
+  "r2": {
+    "gate": "R2 — no invented surface",
+    "swept": 2170,
+    "words_outside_the_lexicon_or_numeral_pair": 0,
+    "rate": 0.0,
+    "verdict": "CLEAN",
+    "breaches": [],
+    "what_counts_as_a_source": "A lexicon phrase word, or a word the registered numeral pair (scripts/numeral_words) can emit. Nothing else."
+  },
+  "r5": {
+    "what": "The served surfaces, pinned. `digest_over_all` is sha256 over '<statement_id>\\t<surface>' for every served realization, sorted by statement_id and joined with newlines. It is R5 at corpus scale: same terms, same lexicon, same parameters, same bytes.",
+    "served_count": 2170,
+    "digest_algorithm": "sha256 of '\\n'.join(f'{statement_id}\\t{surface}') over all served realizations sorted by statement_id, UTF-8",
+    "digest_over_all": "d3b6ee9bc278644a47ec697aad07474fd14c78be41ccfd1146cb978072c8ab27",
+    "first_n_by_statement_id": 25,
+    "sample": [
+      {
+        "statement_id": "algtop.homology.betti_alternating_sum",
+        "corpus": "algebraic_topology",
+        "surface": "variable zero equals the summation of the quantity variable one times the opposite of one to the power of variable two end quantity",
+        "term_skeleton": "?0 = sum⟨*(?1, ^(neg(1), ?2))⟩"
+      },
+      {
+        "statement_id": "algtop.homology.betti_number_rank",
+        "corpus": "algebraic_topology",
+        "surface": "variable zero equals the rank of the quantity variable one end quantity plus the opposite of the rank of the quantity variable two end quantity",
+        "term_skeleton": "?0 = +(rank⟨?1⟩, neg(rank⟨?2⟩))"
+      },
+      {
+        "statement_id": "algtop.invariants.euler_characteristic_complex",
+        "corpus": "algebraic_topology",
+        "surface": "variable zero equals variable one plus variable two plus the opposite of variable three",
+        "term_skeleton": "?0 = +(?1, ?2, neg(?3))"
+      },
+      {
+        "statement_id": "algtop.invariants.euler_characteristic_surface",
+        "corpus": "algebraic_topology",
+        "surface": "the chi of the quantity variable zero end quantity equals two plus the opposite of the quantity two times variable one end quantity",
+        "term_skeleton": "chi⟨?0⟩ = +(2, neg(*(2, ?1)))"
+      },
+      {
+        "statement_id": "calculus.differentiation.average_rate_of_change",
+        "corpus": "calculus",
+        "surface": "variable zero equals variable one divided by variable two",
+        "term_skeleton": "?0 = *(?1, inv(?2))"
+      },
+      {
+        "statement_id": "calculus.differentiation.chain_rule",
+        "corpus": "calculus",
+        "surface": "the capital dee operator of the quantity the capital composition of the quantity variable zero next argument variable one end quantity end quantity equals the capital composition of the quantity the capital dee operator of the quantity variable zero end quantity next argument variable one end quantity times the capital dee operator of the quantity variable one end quantity",
+        "term_skeleton": "D⟨COMPOSE⟨?0, ?1⟩⟩ = *(COMPOSE⟨D⟨?0⟩, ?1⟩, D⟨?1⟩)"
+      },
+      {
+        "statement_id": "calculus.differentiation.exponential_derivative",
+        "corpus": "calculus",
+        "surface": "the capital dee operator of the quantity the capital exponential of the quantity variable zero times variable one end quantity end quantity equals variable zero times the capital exponential of the quantity variable zero times variable one end quantity",
+        "term_skeleton": "D⟨EXP⟨*(?0, ?1)⟩⟩ = *(?0, EXP⟨*(?0, ?1)⟩)"
+      },
+      {
+        "statement_id": "calculus.differentiation.linearity_of_derivative",
+        "corpus": "calculus",
+        "surface": "the capital dee operator of the quantity variable zero times variable one plus variable two times variable three end quantity equals variable zero times the capital dee operator of the quantity variable one end quantity plus variable two times the capital dee operator of the quantity variable three end quantity",
+        "term_skeleton": "D⟨+(*(?0, ?1), *(?2, ?3))⟩ = +(*(?0, D⟨?1⟩), *(?2, D⟨?3⟩))"
+      },
+      {
+        "statement_id": "calculus.differentiation.power_rule",
+        "corpus": "calculus",
+        "surface": "the capital dee operator of the quantity variable zero to the power of variable one end quantity equals variable one times variable zero to the power of the quantity variable one plus the opposite of one end quantity",
+        "term_skeleton": "D⟨^(?0, ?1)⟩ = *(?1, ^(?0, +(?1, neg(1))))"
+      },
+      {
+        "statement_id": "calculus.differentiation.product_rule",
+        "corpus": "calculus",
+        "surface": "the capital dee operator of the quantity variable zero times variable one end quantity equals variable one times the capital dee operator of the quantity variable zero end quantity plus variable zero times the capital dee operator of the quantity variable one end quantity",
+        "term_skeleton": "D⟨*(?0, ?1)⟩ = +(*(?0, D⟨?1⟩), *(?1, D⟨?0⟩))"
+      },
+      {
+        "statement_id": "calculus.growth.exponential_growth_law",
+        "corpus": "calculus",
+        "surface": "variable zero equals variable one times the capital exponential of the quantity variable two times variable three end quantity",
+        "term_skeleton": "?0 = *(?1, EXP⟨*(?2, ?3)⟩)"
+      },
+      {
+        "statement_id": "calculus.integration.ftc_differentiation_part",
+        "corpus": "calculus",
+        "surface": "variable zero equals the capital dee operator of the quantity the integral of the quantity variable zero end quantity end quantity",
+        "term_skeleton": "?0 = D⟨INTEGRAL⟨?0⟩⟩"
+      },
+      {
+        "statement_id": "calculus.integration.ftc_evaluation_part",
+        "corpus": "calculus",
+        "surface": "the integral of the quantity the capital dee operator of the quantity variable zero end quantity end quantity equals the eff function of the quantity variable one end quantity plus the opposite of the eff function of the quantity variable two end quantity",
+        "term_skeleton": "INTEGRAL⟨D⟨?0⟩⟩ = +(f⟨?1⟩, neg(f⟨?2⟩))"
+      },
+      {
+        "statement_id": "chemistry.acid_base.ph_definition",
+        "corpus": "chemistry",
+        "surface": "variable zero equals the opposite of the common logarithm of the quantity variable one end quantity",
+        "term_skeleton": "?0 = neg(log10⟨?1⟩)"
+      },
+      {
+        "statement_id": "chemistry.kinetics.arrhenius_equation",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one times the exponential of the quantity the opposite of variable four divided by the quantity variable two times variable three end quantity end quantity",
+        "term_skeleton": "?0 = *(?1, exp⟨*(inv(*(?2, ?3)), neg(?4))⟩)"
+      },
+      {
+        "statement_id": "chemistry.kinetics.first_order_integrated_rate_law",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one times the exponential of the quantity variable two times the opposite of variable three end quantity",
+        "term_skeleton": "?0 = *(?1, exp⟨*(?2, neg(?3))⟩)"
+      },
+      {
+        "statement_id": "chemistry.kinetics.half_life_first_order",
+        "corpus": "chemistry",
+        "surface": "variable zero equals the natural logarithm of the quantity two end quantity divided by variable one",
+        "term_skeleton": "?0 = *(ln⟨2⟩, inv(?1))"
+      },
+      {
+        "statement_id": "chemistry.solutions.molarity_definition",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one divided by variable two",
+        "term_skeleton": "?0 = *(?1, inv(?2))"
+      },
+      {
+        "statement_id": "chemistry.spectroscopy.beer_lambert_law",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one times variable two times variable three",
+        "term_skeleton": "?0 = *(?1, ?2, ?3)"
+      },
+      {
+        "statement_id": "chemistry.thermodynamics.gibbs_free_energy",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one plus the opposite of the quantity variable two times variable three end quantity",
+        "term_skeleton": "?0 = +(?1, neg(*(?2, ?3)))"
+      },
+      {
+        "statement_id": "chemistry.thermodynamics.helmholtz_free_energy",
+        "corpus": "chemistry",
+        "surface": "variable zero equals variable one plus the opposite of the quantity variable two times variable three end quantity",
+        "term_skeleton": "?0 = +(?1, neg(*(?2, ?3)))"
+      },
+      {
+        "statement_id": "diffgeo.curves.circle_curvature",
+        "corpus": "differential_geometry",
+        "surface": "variable zero equals one divided by variable one",
+        "term_skeleton": "?0 = *(1, inv(?1))"
+      },
+      {
+        "statement_id": "diffgeo.stokes.stokes_theorem",
+        "corpus": "differential_geometry",
+        "surface": "the boundary integral of the quantity variable zero end quantity equals the integral of the quantity the dee operator of the quantity variable zero end quantity end quantity",
+        "term_skeleton": "BOUNDARYINTEGRAL⟨?0⟩ = INTEGRAL⟨d⟨?0⟩⟩"
+      },
+      {
+        "statement_id": "diffgeo.stokes.stokes_zero_form_case",
+        "corpus": "differential_geometry",
+        "surface": "the integral of the quantity the dee operator of the quantity variable zero end quantity end quantity equals the eff function of the quantity variable one end quantity plus the opposite of the eff function of the quantity variable two end quantity",
+        "term_skeleton": "INTEGRAL⟨d⟨?0⟩⟩ = +(f⟨?1⟩, neg(f⟨?2⟩))"
+      },
+      {
+        "statement_id": "diffgeo.surfaces.euclidean_line_element",
+        "corpus": "differential_geometry",
+        "surface": "variable zero to the power of two plus variable one to the power of two equals variable two to the power of two",
+        "term_skeleton": "+(^(?0, 2), ^(?1, 2)) = ^(?2, 2)"
+      }
+    ]
+  },
+  "c_r1": {
+    "control": "C-R1 (the scrambled realizer, as a contrast)",
+    "one_sided": true,
+    "why_one_sided": "Emitted through the deranged table, read back through the COMMITTED one. A two-sided scramble — deranging the table and then reading through that same deranged table — is a consistent relabelling, still a bijection, and round-trips at 4 of 4 (pinned in tests/test_realize_term.py). It would report a near-perfect control and void this reading under the >= 1% clause for a reason with nothing to do with whether the gate reads the words.",
+    "scramble": {
+      "seed": "derived from the committed lexicon's own sha256_lf, so the derangement is a function of the table under test and not of a number someone chose",
+      "seed_source_digest": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+      "method": "a fixed-point-free permutation of the phrases WITHIN each of operators, relations and call_heads; grouping words and the slot marker are untouched, because a scramble that broke parenthesization would fail at the tokenizer and prove nothing about whether stage 2 reads the words",
+      "rows_moved": {
+        "operators": 6,
+        "relations": 7,
+        "call_heads": 150
+      },
+      "digit_map": {
+        "0": "4",
+        "1": "9",
+        "2": "7",
+        "3": "0",
+        "4": "8",
+        "5": "6",
+        "6": "5",
+        "7": "3",
+        "8": "2",
+        "9": "1"
+      },
+      "slot_indices_deliberately_not_scrambled": "skeleton() is invariant under slot RENAMING, so a bijective index scramble would pass 100% and measure nothing. Only a non-injective one would change a skeleton, and that is a different control than the one §7 registers."
+    },
+    "denominator": 2172,
+    "true_realizer": {
+      "passes": 2170,
+      "rate": 0.999079
+    },
+    "scrambled_realizer": {
+      "passes": 0,
+      "rate": 0.0,
+      "failed_unreadable": 822,
+      "failed_different_skeleton": 1348,
+      "refused_before_reading": 2,
+      "failure_modes_note": "Counted separately on purpose. `failed_unreadable` means the wrong tokens did not parse — that would be the tokenizer rejecting nonsense, not stage 2 reading words. `failed_different_skeleton` means the sentence parsed perfectly well and meant something else, which is the failure this control is supposed to produce."
+    },
+    "contrast_multiple": null,
+    "contrast": "unbounded (the scrambled realizer passed zero terms)",
+    "thresholds": {
+      "informative_if_contrast_at_least": 20.0,
+      "void_if_scrambled_rate_at_least": 0.01,
+      "void_if_both_below": 0.05
+    },
+    "verdict": "INFORMATIVE",
+    "scrambled_passes_examples": []
+  },
+  "c_r2": {
+    "control": "C-R2 (the near-miss)",
+    "construction": "Mechanical, and verified BEFORE realizing: every mutation is applied to the canonical TREE and its skeleton compared to the source's before any sentence exists. A mutation that does not change the skeleton is DISCARDED and never counted, which is the design's rule — canonicalize legitimately erases commutative-argument order and symmetric-relation sides, and a control built from those would void the gate for behaving correctly.",
+    "alias_classes_included": "Per the design's 2026-08-23 correction: canonicalize does NO head aliasing (alias_heads is a separate pass only the ALIASED match level runs), so MOD vs CONCAT is a real skeleton-changing near-miss and belongs IN the set rather than among its exclusions.",
+    "one_mutation_per_rule_per_served_term": true,
+    "denominator_terms": 2172,
+    "mutations_generated": 3722,
+    "reparsed_to_a_different_skeleton": 3720,
+    "failed_to_parse_or_refused": 2,
+    "round_tripped_to_source": 0,
+    "reparse_rate": 0.999463,
+    "thresholds": {
+      "void_if_any_round_trips_to_source": 0,
+      "uninformative_below_reparse_rate": 0.5
+    },
+    "verdict": "INFORMATIVE",
+    "per_rule_accounting": "Every term gets exactly one disposition per rule: `not_applicable` (the rule found no node to mutate), `discarded_skeleton_unchanged` (it mutated something but the canonical skeleton did not move, so it is NOT a near-miss and is not counted as one), or one of the four outcomes `refused`, `failed_to_parse`, `round_tripped_to_source`, `reparsed_to_a_different_skeleton`. `generated` is the sum of those four. The discards matter: `a < b` and `b < a` are the same skeleton because render_skeleton erases slot identity and renumbers by first occurrence, so a set built on the assumption that swapping a non-symmetric relation always changes the skeleton would be full of non-mutations, every one of which would 'round-trip to the source' and void this control for behaving correctly.",
+    "per_rule": {
+      "alias_class_swap": {
+        "generated": 15,
+        "not_applicable": 2157,
+        "reparsed_to_a_different_skeleton": 15
+      },
+      "head_swap": {
+        "generated": 105,
+        "not_applicable": 2067,
+        "reparsed_to_a_different_skeleton": 105
+      },
+      "operator_word_swap": {
+        "generated": 2170,
+        "not_applicable": 2,
+        "refused": 2,
+        "reparsed_to_a_different_skeleton": 2168
+      },
+      "swap_noncommutative_args": {
+        "discarded_skeleton_unchanged": 31,
+        "generated": 1432,
+        "not_applicable": 709,
+        "reparsed_to_a_different_skeleton": 1432
+      }
+    },
+    "per_rule_examples": {
+      "alias_class_swap": {
+        "statement_id": "algtop.homology.betti_alternating_sum",
+        "source": "chi = sum_i (-1)^i * b_i",
+        "source_skeleton": "?0 = sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_skeleton": "?0 = INTEGRAL⟨*(?1, ^(neg(1), ?2))⟩",
+        "recovered_skeleton": "?0 = INTEGRAL⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_surface": "variable zero equals the integral of the quantity variable one times the opposite of one to the power of variable two end quantity"
+      },
+      "head_swap": {
+        "statement_id": "algtop.homology.betti_alternating_sum",
+        "source": "chi = sum_i (-1)^i * b_i",
+        "source_skeleton": "?0 = sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_skeleton": "?0 = t⟨*(?1, ^(neg(1), ?2))⟩",
+        "recovered_skeleton": "?0 = t⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_surface": "variable zero equals the tee function of the quantity variable one times the opposite of one to the power of variable two end quantity"
+      },
+      "operator_word_swap": {
+        "statement_id": "algtop.homology.betti_alternating_sum",
+        "source": "chi = sum_i (-1)^i * b_i",
+        "source_skeleton": "?0 = sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_skeleton": "?0 < sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "recovered_skeleton": "?0 < sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_surface": "variable zero is less than the summation of the quantity variable one times the opposite of one to the power of variable two end quantity"
+      },
+      "swap_noncommutative_args": {
+        "statement_id": "algtop.homology.betti_alternating_sum",
+        "source": "chi = sum_i (-1)^i * b_i",
+        "source_skeleton": "?0 = sum⟨*(?1, ^(neg(1), ?2))⟩",
+        "mutated_skeleton": "?0 = sum⟨*(?1, ^(?2, neg(1)))⟩",
+        "recovered_skeleton": "?0 = sum⟨*(?1, ^(?2, neg(1)))⟩",
+        "mutated_surface": "variable zero equals the summation of the quantity variable one times variable two to the power of the opposite of one end quantity"
+      }
+    },
+    "voiding_cases": []
+  }
+}
