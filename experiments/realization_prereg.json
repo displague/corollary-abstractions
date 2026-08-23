@@ -1,0 +1,71 @@
+{
+  "prereg_id": "realization.prereg.v1",
+  "registered": "2026-08-23",
+  "design": "docs/DESIGN-sans-template-rendering.md",
+  "roadmap": "docs/ROADMAP-v0.18.md",
+  "control": "C-R3 (the tautology probe)",
+  "what_this_records": [
+    "Design 7 C-R3: \"The parser+canonicalizer are byte-frozen before the realizer is written (digests recorded in the prereg commit); the inverter digest is recorded beside them. If implementing the realizer requires changing the parser, the independence claim is void and the change needs its own review naming the reason.\"",
+    "This file is that record. It is written in the preregistration commit, BEFORE scripts/realize_term.py exists, which is why the inverter row below is empty rather than absent.",
+    "tests/test_realization_lexicon.py asserts these digests against the working tree. That test is the thing that goes red if the parser is edited to make the realizer work."
+  ],
+  "digest_algorithm": "sha256 over file bytes with CRLF normalized to LF (scripts/report_provenance.sha256_lf_file)",
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "why": "The byte-frozen parser and canonicalizer. Stage 2 of the realization gate is this file and nothing else; it has never seen the realizer. C-R3: if implementing realize_term.py requires changing it, the independence claim is void and the change needs its own review naming the reason."
+    },
+    {
+      "path": "scripts/numeral_words.py",
+      "role": "numeral_pair",
+      "sha256_lf": "2cb4a61f898f576a3d142cb075ce7ec47203fe02dbff06e24d1335fd591bdba1",
+      "why": "The registered numeral pair (design 3: numerals are not a table). Frozen here so the pair cannot be widened after a round-trip rate is read."
+    },
+    {
+      "path": "data/realization/lexicon.json",
+      "role": "lexicon",
+      "sha256_lf": "7b7a171766bca45a7f314a3c9cdd0ddcaaacdc482709be43741cef1ff885cc10",
+      "why": "The trusted bijective table. Extending it is a diff with tests; this digest is what a later diff is read against."
+    },
+    {
+      "path": "scripts/realization_lexicon.py",
+      "role": "lexicon_loader",
+      "sha256_lf": "7a73bbe2a6902994dd357bf0d661b77c40b42ff708a1cb0e46a17a09a9bff384",
+      "why": "The R2b load gate. Recorded with the table because a table is only as bijective as the loader that refuses a non-bijective one."
+    }
+  ],
+  "pending": [
+    {
+      "path": "scripts/realize_term.py",
+      "role": "inverter",
+      "sha256_lf": null,
+      "why": "The stage-1 inverter. Design 7 records its digest \"beside\" the parser digests; it cannot be recorded in the same commit that freezes the parser BEFORE the realizer exists, so it is added in the realize_term commit with its own dated entry, and the ordering itself is the record."
+    }
+  ],
+  "head_inventory_measured": {
+    "source_field": "formal_statement.canonical_ascii",
+    "nodes_total": 12777,
+    "nodes_parseable": 2172,
+    "parse_rate": 0.169993,
+    "distinct_call_heads": 64,
+    "singleton_call_heads": 35,
+    "operators_present": [
+      "*",
+      "^",
+      "+",
+      "neg",
+      "inv"
+    ],
+    "relations_present": [
+      "=",
+      ">",
+      ">=",
+      "<",
+      "<=",
+      "approx"
+    ],
+    "note": "R0 proper -- the per-corpus table with failure classes named -- is discharged by scripts/realize_term.py --census and by the registered run. These are the calibration figures the lexicon was authored against."
+  }
+}

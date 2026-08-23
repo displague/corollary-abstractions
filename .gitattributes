@@ -40,3 +40,7 @@ experiments/throughput_baseline.json text eol=lf
 experiments/throughput_result*.json text eol=lf
 experiments/throughput_trial_*.json text eol=lf
 reports/test_gate_v017/** text eol=lf
+data/realization/*.json text eol=lf
+experiments/realization_prereg.json text eol=lf
+experiments/realization_rate.json text eol=lf
+experiments/realization_census.json text eol=lf
