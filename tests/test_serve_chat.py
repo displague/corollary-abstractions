@@ -61,6 +61,16 @@ UNREACHABLE_LINE = (
 )
 UNREGISTERED_TARGET_LINE = "reachable story.golden_chicken README.md"
 DEFINITION_LINE = "logic.boolean_laws.de_morgan_laws"
+
+#: A definition whose canonical term round-trips, so its answer carries the
+#: v0.18 `in words` line. `DEFINITION_LINE` deliberately does NOT — its term
+#: never parses — so the two together cover both arms of R3 over the wire.
+REALIZED_DEFINITION_LINE = "algtop.homology.betti_alternating_sum"
+
+#: A definition whose term parses and is then REFUSED: 76-digit literals,
+#: outside the registered numeral domain. Named from the registered run's
+#: exhaustive refusal list (`experiments/realization_rate.json`).
+REFUSED_REALIZATION_LINE = "leanworkbook.ground.lean_workbook_37421"
 #: Free text the graph claims ambiguously, and the constraint that settles it
 #: — §5 rows 10 and 1, the one kernel pair where turn n reads state turn n-1
 #: left on the session.
@@ -516,6 +526,87 @@ class T2AdversarialProbe(ServedSkin):
         # A REFUSED gate is non-answering, so it makes no grounding claim.
         self.assertEqual(extension["receipt"], {})
         self._assert_is_engine_rendering(body, "staging/proposal.json")
+
+    def test_R4_a_realized_definition_is_still_exactly_the_engine_rendering(self):
+        """R4: the honesty oracle extends over the new `in words` line.
+
+        The line is the first thing a served answer says that is not copied
+        from a corpus field, so T2's property is re-adjudicated with it
+        present: `content` must still byte-equal what `answer.render`
+        produced, line for line, with nothing the engine did not emit.
+        """
+
+        body = self.one(KERNEL, REALIZED_DEFINITION_LINE)
+        self.assertEqual(self.x(body)["status"], "found")
+        served = self.content(body).split("\n")
+        realized = [line for line in served if line.startswith("in words")]
+        self.assertEqual(len(realized), 1, "expected exactly one realized line")
+        # The oracle: byte-equality against the engine's own rendering.
+        self._assert_is_engine_rendering(body, REALIZED_DEFINITION_LINE)
+
+        # And the line the skin passed through is the realizer's own surface,
+        # behind a receipt that says EXACT.
+        import answer as answer_module
+        from realize_term import realize
+
+        composed = answer_module.compose(REALIZED_DEFINITION_LINE)
+        receipt = realize(
+            composed.formal,
+            answer_module._realization_lexicon(),
+            REALIZED_DEFINITION_LINE,
+        )
+        self.assertEqual(receipt.round_trip, "EXACT")
+        self.assertEqual(realized[0], f"in words   : {receipt.surface}")
+
+    def test_R4_a_refused_realization_is_served_without_the_line(self):
+        """R3 over the wire: absence, and nothing said about the absence."""
+
+        body = self.one(KERNEL, REFUSED_REALIZATION_LINE)
+        self.assertEqual(self.x(body)["status"], "found")
+        content = self.content(body)
+        self.assertNotIn("in words", content)
+        for leak in ("REFUSED", "unsupported_numeral", "round_trip"):
+            self.assertNotIn(leak, content)
+        # Still an ordinary, complete answer — the term itself is there.
+        self.assertIn("formally   :", content)
+        self._assert_is_engine_rendering(body, REFUSED_REALIZATION_LINE)
+
+    def test_R4_the_vendor_fields_are_unchanged_in_shape(self):
+        """The new line rides in `content`; nothing else moved."""
+
+        realized = self.x(self.one(KERNEL, REALIZED_DEFINITION_LINE))
+        refused = self.x(self.one(KERNEL, REFUSED_REALIZATION_LINE))
+        for extension in (realized, refused):
+            self.assertEqual(extension["schema"], "corollary.chat/1")
+            self.assertEqual(extension["profile"], KERNEL)
+            self.assertEqual(extension["route"], "resolver")
+            self.assertEqual(
+                set(extension) - {"evidence", "need"},
+                {
+                    "schema",
+                    "profile",
+                    "route",
+                    "status",
+                    "detail",
+                    "receipt",
+                    "ignored",
+                    "session",
+                },
+            )
+            # §6.1's resolver row, unchanged by the realization work.
+            self.assertEqual(
+                set(extension["receipt"]),
+                {"statement_id", "node_sha256", "corpus_path"},
+            )
+
+    def test_R5_the_served_sentence_is_byte_identical_across_requests(self):
+        """Determinism has to hold on the served surface too, not just in-process."""
+
+        first = self.content(self.one(KERNEL, REALIZED_DEFINITION_LINE))
+        for _ in range(2):
+            self.assertEqual(
+                self.content(self.one(KERNEL, REALIZED_DEFINITION_LINE)), first
+            )
 
     def test_T2_conversation_profile_never_emits_unsent_prose(self):
         """The conversation profile's whole content surface is three shapes."""
@@ -1226,6 +1317,40 @@ class CapabilitySheet(ServedSkin):
         for served in (sheet_bytes.lower(), models_bytes.lower()):
             for name in serve_chat.DEMO_NAMES:
                 self.assertNotIn(name, served)
+
+    def test_capability_sheet_publishes_the_realization_row(self):
+        """§5: the sheet gains a `realization` row, quoted from the live run."""
+
+        sheet, _text = self.served_sheet()
+        row = sheet["realization"]
+        self.assertTrue(row["served"])
+        self.assertEqual(row["surface"], "in words")
+        self.assertEqual(row["run"], "experiments/realization_rate.json")
+
+        # Quoted, not pasted: every number matches the registered run on disk.
+        run = json.loads(
+            (REPO / "experiments" / "realization_rate.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(row["round_trip_rate"], run["r1"]["rate"])
+        self.assertEqual(row["round_trip_floor"], run["r1"]["floor"])
+        self.assertEqual(row["parseable_denominator"], run["r1"]["denominator"])
+        self.assertEqual(row["corpus_nodes"], run["r0"]["nodes_total"])
+        self.assertEqual(row["sentence"], run["r1"]["sentence"])
+        # R1's rate never travels without its parseable denominator.
+        self.assertIn(str(run["r1"]["denominator"]), row["sentence"])
+
+    def test_the_realization_row_says_served_false_without_the_run(self):
+        """A checkout missing the artifact publishes the absence, not a number."""
+
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as empty:
+            row = serve_chat.realization_row(empty)
+        self.assertFalse(row["served"])
+        self.assertIn("detail", row)
+        self.assertNotIn("round_trip_rate", row)
 
     def test_demo_name_lint_is_enforced_when_the_sheet_is_built(self):
         """L7: the lint lives in the server, not only in this file.

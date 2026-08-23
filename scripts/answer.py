@@ -143,6 +143,59 @@ def compose(statement_id: str, roots: list[Path] | None = None) -> Answer | None
     )
 
 
+@lru_cache(maxsize=1)
+def _realization_lexicon():
+    """The committed realization table, read once per process, or None.
+
+    Read once because `realization_lexicon.load` re-reads and re-gates the
+    file on every call (~0.7 ms warm against the ~0.1 ms a realization
+    costs), and this renderer runs per answer. The table is a committed
+    artifact, so a process treats it as static for its lifetime — the same
+    assumption every other committed-artifact read here makes.
+
+    A table that will not load returns None rather than raising: an absent
+    or invalid lexicon is an absent capability, and `in words` is then
+    simply not emitted (R3). A reference entry that has always rendered must
+    not start crashing because an optional surface lost its table.
+    """
+
+    try:
+        from realization_lexicon import load  # noqa: PLC0415
+
+        return load()
+    except (ImportError, OSError, ValueError):
+        return None
+
+
+def _in_words(formal: str, statement_id: str) -> str | None:
+    """The English surface for one canonical term, or None (R3).
+
+    R3 is refusal *at the surface*: a term that does not parse, a term whose
+    operator head has no lexicon row, and a sentence whose re-parse does not
+    canonicalize back to the source skeleton all produce **no line at all** —
+    not an error string, not a placeholder, not a hedge. Absence is the
+    refusal. Anyone who wants the reason calls `realize_term.realize`
+    directly and reads the receipt it returns; a reference entry is not the
+    place to explain why a sentence the reader never saw was not written.
+
+    The gate is `Realization.served`, which is `round_trip == "EXACT"` and
+    nothing looser. `Refusal` exposes the same property as False, so this
+    function branches on one attribute rather than on which type came back.
+    """
+
+    lexicon = _realization_lexicon()
+    if not formal or lexicon is None:
+        return None
+    from realize_term import realize  # noqa: PLC0415
+
+    # `realize` is documented never to raise on corpus input; it returns a
+    # Refusal instead. Trusting that contract keeps the refusal path here a
+    # single readable branch rather than an except block that would also
+    # swallow a real bug.
+    result = realize(formal, lexicon, statement_id)
+    return result.surface if result.served else None
+
+
 def render(answer: Answer, *, links: bool = True) -> list[str]:
     """A reference entry. Labels are mine; every sentence is the corpus's."""
     out: list[str] = []
@@ -154,6 +207,12 @@ def render(answer: Answer, *, links: bool = True) -> list[str]:
     if answer.formal:
         out.append("")
         out.append(f"formally   : {answer.formal}")
+        # Immediately under the term it realizes, because that is what it
+        # is: the same statement, read aloud. Emitted only behind the
+        # round-trip gate (R3); see `_in_words`.
+        surface = _in_words(answer.formal, answer.statement_id)
+        if surface is not None:
+            out.append(f"in words   : {surface}")
     if answer.status:
         out.append(f"held as    : {answer.status}")
     if answer.disciplines:

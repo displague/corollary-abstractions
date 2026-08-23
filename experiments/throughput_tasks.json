@@ -81,7 +81,7 @@
     "waiting_marked_turns": 10
   },
   "rendering_module_digests": {
-    "scripts/answer.py": "d6d0d1079cbe0c4d30afa20691d9bda921fe38940e2aab0ad0d2552933ab954a",
+    "scripts/answer.py": "c1131d87435c3afc94c6b4d2a5eb515f24aeb7a101d98326df7f74017ac5df1f",
     "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
     "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
     "scripts/evaluate.py": "4e2f7757380e2c1a6d59a3423ffd2a71d20d47ba7b42af256f1733a99c5eae25",

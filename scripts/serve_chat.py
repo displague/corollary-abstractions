@@ -144,6 +144,12 @@ ANSWERING_STATUSES = frozenset({"solved", "found", "held", "PROVEN", "VERIFIED"}
 #: hardcoded here: a second copy of a digest is a second thing to rot).
 BASELINE_MANIFEST = "experiments/throughput_baseline.json"
 
+#: The ONE registered realization run (DESIGN-sans-template-rendering §10).
+#: The capability sheet quotes R1 from THIS file rather than from a number
+#: pasted into this module: a rate that can go stale in a docstring is a rate
+#: that will, and the sheet is generated from live artifacts by §7's rule.
+REALIZATION_RUN = "experiments/realization_rate.json"
+
 #: A11, second half. `CoreSession.boot(offline=True)` costs ~415 ms on the
 #: reference host, of which ~405 ms is `UnifiedKnowledgeStore.load` re-parsing
 #: every committed `data/*/nodes.json` (the boot probes together are ~5 ms —
@@ -344,6 +350,54 @@ def assert_no_demo_name(payload: dict, where: str) -> str:
                 f"{name!r}; those names stay in selftests and docs"
             )
     return text
+
+
+@lru_cache(maxsize=8)
+def realization_row(repo_root_str: str) -> dict:
+    """The sheet's `realization` row, read from the registered run (§5).
+
+    `served: true` describes the *surface*, not any particular term: the
+    `in words` line exists and reaches both skins. Which terms get one is
+    what `rate` and `denominator` say, and they are quoted from the run
+    rather than restated here — R1's own sentence insists the parseable
+    denominator travel with the rate, so the row carries both and the
+    corpus total beside them.
+
+    A missing or unreadable run file publishes `served: false` with the
+    reason. That is the honest row for a checkout without the artifact, and
+    it is not a refusal to serve: `answer.render` gates itself on its own
+    round trip and needs nothing from this file.
+    """
+
+    path = Path(repo_root_str) / REALIZATION_RUN
+    row = {
+        "surface": "in words",
+        "rendered_in": "answer lines, under `formally`",
+        "description": (
+            "canonical terms realized as English sentences, emitted only "
+            "when the sentence re-parses to the source skeleton"
+        ),
+        "refusal": (
+            "a term that does not parse, an uncovered operator head, or a "
+            "failed re-parse emits no line at all (R3)"
+        ),
+        "run": REALIZATION_RUN,
+    }
+    try:
+        run = json.loads(path.read_text(encoding="utf-8"))
+        r0, r1 = run["r0"], run["r1"]
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        row["served"] = False
+        row["detail"] = f"no readable registered run at {REALIZATION_RUN}: {exc}"
+        return row
+    row["served"] = True
+    row["realizer_id"] = run.get("run_id")
+    row["round_trip_rate"] = r1["rate"]
+    row["round_trip_floor"] = r1["floor"]
+    row["parseable_denominator"] = r1["denominator"]
+    row["corpus_nodes"] = r0["nodes_total"]
+    row["sentence"] = r1["sentence"]
+    return row
 
 
 def conversation_owner(session_prefix_hash: str) -> str:
@@ -1512,6 +1566,7 @@ class ChatEngine:
                 "write_gate": list(WRITE_GATE_STATUSES),
                 "skin_assigned": list(SKIN_ASSIGNED_STATUSES),
             },
+            "realization": realization_row(str(self.repo_root)),
             "honesty": HONESTY_LINE,
             "replay": (
                 "every request replays its user turns into a fresh session; "

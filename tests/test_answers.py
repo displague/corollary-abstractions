@@ -21,13 +21,31 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 
+from answer import _realization_lexicon as lexicon  # noqa: E402
 from answer import compose, records  # noqa: E402
 from answer import render as render_answer  # noqa: E402
+from realization_lexicon import load as load_lexicon  # noqa: E402
+from realize_term import realize, surface_words_are_covered  # noqa: E402
 from supposition import render as render_supposition  # noqa: E402
 from supposition import suppose  # noqa: E402
 
 CURATED = "trigonometry.identities.double_angle_cosine"
 INGESTED = "leanworkbook.skel.lean_workbook_49137"
+
+#: A curated node whose `canonical_ascii` parses and round-trips, so the
+#: `in words` line is served (DESIGN-sans-template-rendering §5).
+REALIZED = "algtop.homology.betti_alternating_sum"
+
+#: An INGESTED node that also round-trips — the case where the provenance
+#: disclaimer and the realized sentence must coexist.
+REALIZED_INGESTED = "leanworkbook.ground.lean_workbook_13563"
+
+#: One of exactly two nodes in the committed corpus that parse and are then
+#: refused (`experiments/realization_rate.json`, `r1.lost_is_zero`): its
+#: literals are 76 digits long, past the registered numeral domain. Named
+#: from the run's exhaustive refusal list rather than invented, so a term
+#: that stopped refusing would surface here as a failure.
+NUMERAL_REFUSAL = "leanworkbook.ground.lean_workbook_37421"
 
 
 class AnswersAreQuotations(unittest.TestCase):
@@ -69,6 +87,120 @@ class AnswersAreQuotations(unittest.TestCase):
 
     def test_unknown_statement_composes_nothing(self) -> None:
         self.assertIsNone(compose("no.such.statement"))
+
+
+def in_words_line(statement_id: str) -> str | None:
+    """The rendered `in words` line for one statement, or None if absent."""
+
+    lines = [
+        line
+        for line in render_answer(compose(statement_id))
+        if line.startswith("in words")
+    ]
+    return lines[0] if lines else None
+
+
+class TheRealizedSentence(unittest.TestCase):
+    """`in words`, and the gate that decides whether it exists at all.
+
+    The line is the one thing a reference entry says that is not copied from
+    the corpus, so it is the one thing here that needs its own guarantees:
+    it appears only behind an EXACT round trip (R3), every word in it traces
+    to the lexicon or the registered numeral pair (R2), and the same term
+    renders the same bytes every time (R5).
+    """
+
+    def test_a_round_tripping_term_is_rendered_in_words(self) -> None:
+        answer = compose(REALIZED)
+        receipt = realize(answer.formal, lexicon(), REALIZED)
+        # The receipt is what licenses the line; assert it passed, then that
+        # the line is exactly its surface.
+        self.assertEqual(receipt.round_trip, "EXACT")
+        self.assertTrue(receipt.served)
+        self.assertEqual(in_words_line(REALIZED), f"in words   : {receipt.surface}")
+
+    def test_the_line_sits_under_the_term_it_realizes(self) -> None:
+        rendered = render_answer(compose(REALIZED))
+        formal = next(i for i, l in enumerate(rendered) if l.startswith("formally"))
+        self.assertEqual(rendered[formal + 1][:8], "in words")
+
+    def test_the_label_column_matches_the_files_convention(self) -> None:
+        """Eleven characters, then the colon — like every other label here."""
+
+        rendered = render_answer(compose(REALIZED))
+        labelled = [
+            line for line in rendered
+            if len(line) > 11 and line[11] == ":" and not line.startswith(" ")
+        ]
+        self.assertIn(in_words_line(REALIZED), labelled)
+        for line in labelled:
+            self.assertEqual(line[10:13], " : ", line)
+
+    def test_a_refused_term_is_rendered_without_the_line(self) -> None:
+        """R3: refusal at the surface is ABSENCE — no error text, no hedge."""
+
+        answer = compose(NUMERAL_REFUSAL)
+        receipt = realize(answer.formal, lexicon(), NUMERAL_REFUSAL)
+        self.assertFalse(receipt.served)
+        self.assertEqual(receipt.round_trip, "REFUSED")
+        self.assertEqual(receipt.reason, "unsupported_numeral")
+        rendered = "\n".join(render_answer(answer))
+        self.assertIsNone(in_words_line(NUMERAL_REFUSAL))
+        # Absence, not an explanation of the absence.
+        for leak in ("REFUSED", "unsupported_numeral", "refus", "cannot"):
+            self.assertNotIn(leak, rendered)
+        # And the rest of the entry is undisturbed.
+        self.assertIn(f"formally   : {answer.formal}", rendered)
+
+    def test_the_ingestion_disclaimer_coexists_with_the_realized_sentence(self):
+        """Both are true of the same node, so both are said."""
+
+        answer = compose(REALIZED_INGESTED)
+        self.assertFalse(answer.prose_is_authored)
+        rendered = "\n".join(render_answer(answer))
+        self.assertIn("ingestion record", rendered)
+        self.assertIsNotNone(in_words_line(REALIZED_INGESTED))
+
+    def test_the_disclaimer_is_unchanged_where_no_sentence_is_served(self):
+        answer = compose(NUMERAL_REFUSAL)
+        self.assertFalse(answer.prose_is_authored)
+        self.assertIn(
+            "note       : this text is an ingestion record, not an "
+            "explanation a person wrote",
+            render_answer(answer),
+        )
+
+    def test_R2_every_word_traces_to_the_lexicon_or_the_numeral_pair(self):
+        """The renderer still authors nothing: it translates under a table."""
+
+        checked = 0
+        for statement_id in (REALIZED, REALIZED_INGESTED):
+            line = in_words_line(statement_id)
+            self.assertIsNotNone(line, statement_id)
+            surface = line.split(": ", 1)[1]
+            self.assertTrue(
+                surface_words_are_covered(surface, lexicon()),
+                f"{statement_id}: a word outside the lexicon and the numerals",
+            )
+            checked += 1
+        self.assertGreater(checked, 0, "vacuous: nothing was checked")
+
+    def test_R5_the_same_term_renders_the_same_bytes(self) -> None:
+        first = in_words_line(REALIZED)
+        for _ in range(3):
+            self.assertEqual(in_words_line(REALIZED), first)
+        # And through a freshly loaded table, not just the cached one.
+        answer = compose(REALIZED)
+        reloaded = realize(answer.formal, load_lexicon(), REALIZED)
+        self.assertEqual(f"in words   : {reloaded.surface}", first)
+
+    def test_a_term_that_does_not_parse_is_simply_absent(self) -> None:
+        """The 83% case: most canonical_ascii does not parse, and says nothing."""
+
+        answer = compose("logic.boolean_laws.de_morgan_laws")
+        receipt = realize(answer.formal, lexicon(), answer.statement_id)
+        self.assertFalse(receipt.served)
+        self.assertIsNone(in_words_line(answer.statement_id))
 
 
 class SuppositionsAreConjecture(unittest.TestCase):
