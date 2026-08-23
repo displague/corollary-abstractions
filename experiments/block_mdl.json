@@ -1,0 +1,485 @@
+{
+  "design": "docs/DESIGN-block-vocabulary.md",
+  "section": "3c",
+  "bit_model": {
+    "total_bits": "terminal_lexicon_bits + encoded_bits + dictionary_bits",
+    "code_width": "w = ceil(log2(terminals + rules)), one width for all",
+    "encoded_bits": "stream_symbols * w",
+    "dictionary_bits": "ceil(rules * multiplier * 2 * w)",
+    "terminal_lexicon_bits": "sum over terminals of (utf8_len + 1) * 8",
+    "gate": "mint iff total_bits strictly falls",
+    "model_a_multiplier": 1.0,
+    "model_b_multiplier": 2.0,
+    "model_c": "order-0 entropy stream cost, no fixed-width cliff; its stop is heuristic, so its rule count is a LOWER bound",
+    "known_defect": "Models A and B use a fixed-width code, which refuses every mint once terminals+rules reaches a power of two. Arms carry at_power_of_two_cliff; where it is true the dictionary size was chosen by the code width, not by the data."
+  },
+  "streams": {
+    "prose": {
+      "stream": "prose",
+      "surfaces": 25554,
+      "slotted_words": 268527,
+      "initial_stream_symbols": 294081,
+      "flat_word_baseline": {
+        "distinct_words": 2242,
+        "stream_symbols": 294081,
+        "word_code_width_bits": 12,
+        "terminal_lexicon_bits": 152776,
+        "flat_word_bits": 3681748,
+        "words": 268527
+      },
+      "compression_baselines": {
+        "slotted_text_chars": 2249823,
+        "slotted_text_bytes": 2249835,
+        "raw_text_bytes": 2674272,
+        "distinct_chars_slotted": 66,
+        "char_encoding_bits": 15748761,
+        "utf8_byte_bits": 17998680,
+        "zstd_available": true,
+        "zstd19_slotted_bits": 118328,
+        "zstd19_raw_bits": 500400,
+        "zstd19_per_document_bits": 17277360,
+        "zstd19_dict_bits": 5159496,
+        "zstd19_dict_size_bits": 22528,
+        "zstd19_dict_plus_payload_bits": 5182024
+      },
+      "mdl_arms": {
+        "model_a": {
+          "bit_model_mode": "fixed",
+          "terminals": 2242,
+          "rules": 186,
+          "symbol_count": 2428,
+          "code_width_bits": 12,
+          "symbols_below_next_width": 1668,
+          "at_power_of_two_cliff": false,
+          "encoded_stream_symbols": 55984,
+          "terminal_lexicon_bits": 152776,
+          "encoded_bits": 671808,
+          "dictionary_bits": 4464,
+          "total_bits": 829048,
+          "words_per_stream_symbol": 8.824,
+          "mean_words_per_rule": 3.005,
+          "max_rule_expansion_words": 14,
+          "max_composition_depth": 6,
+          "composition_depth_histogram": {
+            "1": 117,
+            "2": 38,
+            "3": 12,
+            "4": 9,
+            "5": 6,
+            "6": 4
+          },
+          "live_symbol_depth_histogram": {
+            "0": 4662,
+            "1": 606,
+            "2": 108,
+            "3": 22,
+            "4": 306,
+            "5": 12212,
+            "6": 12514
+          },
+          "dictionary_cost_multiplier": 1.0,
+          "ratio_vs_flat_word_bits": 4.441,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 1399600,
+            "dictionary_bits_at_25": 9300,
+            "total_bits_at_25": 1561676
+          }
+        },
+        "model_b_2x_dictionary": {
+          "bit_model_mode": "fixed",
+          "terminals": 2242,
+          "rules": 94,
+          "symbol_count": 2336,
+          "code_width_bits": 12,
+          "symbols_below_next_width": 1760,
+          "at_power_of_two_cliff": false,
+          "encoded_stream_symbols": 56286,
+          "terminal_lexicon_bits": 152776,
+          "encoded_bits": 675432,
+          "dictionary_bits": 4512,
+          "total_bits": 832720,
+          "words_per_stream_symbol": 8.738,
+          "mean_words_per_rule": 3.489,
+          "max_rule_expansion_words": 14,
+          "max_composition_depth": 6,
+          "composition_depth_histogram": {
+            "1": 57,
+            "2": 11,
+            "3": 8,
+            "4": 8,
+            "5": 6,
+            "6": 4
+          },
+          "live_symbol_depth_histogram": {
+            "0": 5142,
+            "1": 515,
+            "2": 33,
+            "3": 14,
+            "4": 302,
+            "5": 12212,
+            "6": 12514
+          },
+          "dictionary_cost_multiplier": 2.0,
+          "ratio_vs_flat_word_bits": 4.421,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 1407150,
+            "dictionary_bits_at_25": 9400,
+            "total_bits_at_25": 1569326
+          }
+        },
+        "model_c_entropy": {
+          "bit_model_mode": "entropy",
+          "terminals": 2242,
+          "rules": 80,
+          "symbol_count": 2322,
+          "code_width_bits": 12,
+          "symbols_below_next_width": 1774,
+          "at_power_of_two_cliff": false,
+          "encoded_stream_symbols": 56356,
+          "terminal_lexicon_bits": 152776,
+          "encoded_bits": 187985,
+          "dictionary_bits": 1920,
+          "total_bits": 342681,
+          "words_per_stream_symbol": 8.718,
+          "mean_words_per_rule": 3.688,
+          "max_rule_expansion_words": 14,
+          "max_composition_depth": 6,
+          "composition_depth_histogram": {
+            "1": 47,
+            "2": 8,
+            "3": 7,
+            "4": 8,
+            "5": 6,
+            "6": 4
+          },
+          "live_symbol_depth_histogram": {
+            "0": 5262,
+            "1": 480,
+            "2": 23,
+            "3": 9,
+            "4": 302,
+            "5": 12212,
+            "6": 12514
+          },
+          "dictionary_cost_multiplier": 1.0,
+          "ratio_vs_flat_word_bits": 10.744,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 1408900,
+            "dictionary_bits_at_25": 4000,
+            "total_bits_at_25": 1565676
+          }
+        }
+      },
+      "template_readout": {
+        "note": "DESIGN \u00a72 recorded 5 distinct templates over ingested prose after hand-chosen slotting. These are the patterns the MDL induction chose, over the same slotting, with no threshold.",
+        "all_meanings": {
+          "surfaces": 12777,
+          "distinct_patterns": 267,
+          "patterns_that_are_one_symbol": 4,
+          "coverage_curve": {
+            "top1": 0.6005,
+            "top5": 0.9795,
+            "top10": 0.9799,
+            "top50": 0.983,
+            "top100": 0.9869
+          },
+          "top_patterns": [
+            {
+              "count": 7673,
+              "symbols": 1,
+              "rendered": "The covered Lean-workbook claim stated by problem lean_workbook_{N}, emitted as a matcher template {F}"
+            },
+            {
+              "count": 4539,
+              "symbols": 1,
+              "rendered": "The covered Lean-workbook claim stated by problem lean_workbook_plus_{N}, emitted as a matcher template {F}"
+            },
+            {
+              "count": 152,
+              "symbols": 1,
+              "rendered": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_plus_{N}, restated from the pinned extract."
+            },
+            {
+              "count": 150,
+              "symbols": 1,
+              "rendered": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_{N}, restated from the pinned extract."
+            },
+            {
+              "count": 1,
+              "symbols": 12,
+              "rendered": "Formula for solving quadratic equations of the form {F} bx {F} c {F}"
+            }
+          ]
+        },
+        "titles": {
+          "surfaces": 12777,
+          "distinct_patterns": 267,
+          "patterns_that_are_one_symbol": 5,
+          "coverage_curve": {
+            "top1": 0.6005,
+            "top5": 0.9795,
+            "top10": 0.9799,
+            "top50": 0.983,
+            "top100": 0.9869
+          },
+          "top_patterns": [
+            {
+              "count": 7673,
+              "symbols": 1,
+              "rendered": "lean_workbook_{N} (Ingested, Emitted Skeleton, Formal Without Bridge)"
+            },
+            {
+              "count": 4539,
+              "symbols": 1,
+              "rendered": "lean_workbook_plus_{N} (Ingested, Emitted Skeleton, Formal Without Bridge)"
+            },
+            {
+              "count": 152,
+              "symbols": 1,
+              "rendered": "lean_workbook_plus_{N} (Ingested, Formal Without Bridge)"
+            },
+            {
+              "count": 150,
+              "symbols": 1,
+              "rendered": "lean_workbook_{N} (Ingested, Formal Without Bridge)"
+            },
+            {
+              "count": 1,
+              "symbols": 8,
+              "rendered": "{F} Is Congruent to {F} Modulo {F} (Ingested, Formal Without Bridge)"
+            }
+          ]
+        },
+        "ingested_prose_only": {
+          "surfaces": 12515,
+          "distinct_patterns": 5,
+          "patterns_that_are_one_symbol": 4,
+          "coverage_curve": {
+            "top1": 0.6131,
+            "top5": 1.0,
+            "top10": 1.0,
+            "top50": 1.0,
+            "top100": 1.0
+          },
+          "top_patterns": [
+            {
+              "count": 7673,
+              "symbols": 1,
+              "rendered": "The covered Lean-workbook claim stated by problem lean_workbook_{N}, emitted as a matcher template {F}"
+            },
+            {
+              "count": 4539,
+              "symbols": 1,
+              "rendered": "The covered Lean-workbook claim stated by problem lean_workbook_plus_{N}, emitted as a matcher template {F}"
+            },
+            {
+              "count": 152,
+              "symbols": 1,
+              "rendered": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_plus_{N}, restated from the pinned extract."
+            },
+            {
+              "count": 150,
+              "symbols": 1,
+              "rendered": "The ground arithmetic claim stated by Lean-workbook problem lean_workbook_{N}, restated from the pinned extract."
+            },
+            {
+              "count": 1,
+              "symbols": 12,
+              "rendered": "{F} leaves remainder {F} on division by {N}: the ground residue fact stated by Lean-workbook problem lean_workbook_{N}, restated verbatim from the pinned extrac"
+            }
+          ]
+        }
+      }
+    },
+    "canonical_ascii": {
+      "stream": "canonical_ascii",
+      "surfaces": 12777,
+      "slotted_words": 465006,
+      "initial_stream_symbols": 477783,
+      "flat_word_baseline": {
+        "distinct_words": 497,
+        "stream_symbols": 477783,
+        "word_code_width_bits": 9,
+        "terminal_lexicon_bits": 20240,
+        "flat_word_bits": 4320287,
+        "words": 465006
+      },
+      "compression_baselines": {
+        "slotted_text_chars": 1120334,
+        "slotted_text_bytes": 1154184,
+        "raw_text_bytes": 863529,
+        "distinct_chars_slotted": 110,
+        "char_encoding_bits": 7842338,
+        "utf8_byte_bits": 9233472,
+        "zstd_available": true,
+        "zstd19_slotted_bits": 1016576,
+        "zstd19_raw_bits": 1336664,
+        "zstd19_per_document_bits": 6005056,
+        "zstd19_dict_bits": 3395232,
+        "zstd19_dict_size_bits": 609224,
+        "zstd19_dict_plus_payload_bits": 4004456
+      },
+      "mdl_arms": {
+        "model_a": {
+          "bit_model_mode": "fixed",
+          "terminals": 497,
+          "rules": 15,
+          "symbol_count": 512,
+          "code_width_bits": 9,
+          "symbols_below_next_width": 0,
+          "at_power_of_two_cliff": true,
+          "encoded_stream_symbols": 336308,
+          "terminal_lexicon_bits": 20240,
+          "encoded_bits": 3026772,
+          "dictionary_bits": 270,
+          "total_bits": 3047282,
+          "words_per_stream_symbol": 1.437,
+          "mean_words_per_rule": 2.333,
+          "max_rule_expansion_words": 4,
+          "max_composition_depth": 3,
+          "composition_depth_histogram": {
+            "1": 11,
+            "2": 3,
+            "3": 1
+          },
+          "live_symbol_depth_histogram": {
+            "0": 211902,
+            "1": 85536,
+            "2": 22340,
+            "3": 3753
+          },
+          "dictionary_cost_multiplier": 1.0,
+          "ratio_vs_flat_word_bits": 1.418,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 8407700,
+            "dictionary_bits_at_25": 750,
+            "total_bits_at_25": 8428690
+          }
+        },
+        "model_b_2x_dictionary": {
+          "bit_model_mode": "fixed",
+          "terminals": 497,
+          "rules": 15,
+          "symbol_count": 512,
+          "code_width_bits": 9,
+          "symbols_below_next_width": 0,
+          "at_power_of_two_cliff": true,
+          "encoded_stream_symbols": 336308,
+          "terminal_lexicon_bits": 20240,
+          "encoded_bits": 3026772,
+          "dictionary_bits": 540,
+          "total_bits": 3047552,
+          "words_per_stream_symbol": 1.437,
+          "mean_words_per_rule": 2.333,
+          "max_rule_expansion_words": 4,
+          "max_composition_depth": 3,
+          "composition_depth_histogram": {
+            "1": 11,
+            "2": 3,
+            "3": 1
+          },
+          "live_symbol_depth_histogram": {
+            "0": 211902,
+            "1": 85536,
+            "2": 22340,
+            "3": 3753
+          },
+          "dictionary_cost_multiplier": 2.0,
+          "ratio_vs_flat_word_bits": 1.418,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 8407700,
+            "dictionary_bits_at_25": 1500,
+            "total_bits_at_25": 8429440
+          }
+        },
+        "model_c_entropy": {
+          "bit_model_mode": "entropy",
+          "terminals": 497,
+          "rules": 55,
+          "symbol_count": 552,
+          "code_width_bits": 10,
+          "symbols_below_next_width": 472,
+          "at_power_of_two_cliff": false,
+          "encoded_stream_symbols": 256266,
+          "terminal_lexicon_bits": 20240,
+          "encoded_bits": 1585506,
+          "dictionary_bits": 1100,
+          "total_bits": 1606846,
+          "words_per_stream_symbol": 1.91,
+          "mean_words_per_rule": 3.055,
+          "max_rule_expansion_words": 10,
+          "max_composition_depth": 5,
+          "composition_depth_histogram": {
+            "1": 25,
+            "2": 21,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          },
+          "live_symbol_depth_histogram": {
+            "0": 117787,
+            "1": 66410,
+            "2": 46941,
+            "3": 10156,
+            "4": 1016,
+            "5": 1179
+          },
+          "dictionary_cost_multiplier": 1.0,
+          "ratio_vs_flat_word_bits": 2.689,
+          "round_trip_ok": true,
+          "fixed_width_id_arm": {
+            "note": "DESIGN \u00a74: 2^24 structured ids are fixed-width by design. This arm prices the same encoded stream at the design's own id width instead of the MDL-minimal width.",
+            "id_width_bits": 25,
+            "encoded_bits_at_25": 6406650,
+            "dictionary_bits_at_25": 2750,
+            "total_bits_at_25": 6429640
+          }
+        }
+      }
+    }
+  },
+  "append_only_probe": {
+    "path_independence": {
+      "note": "blocks are compared by the words they expand to, since mint order differs between the two paths",
+      "monolithic_rules": 186,
+      "grown_rules": 186,
+      "blocks_in_both": 186,
+      "blocks_only_when_grown": [],
+      "blocks_only_when_monolithic": [],
+      "identical_dictionary": true,
+      "monolithic_total_bits": 829048
+    },
+    "holdout_corpus": "logic",
+    "base_surfaces": 25514,
+    "increment_surfaces": 40,
+    "increment_words": 485,
+    "rules_before": 174,
+    "rules_after": 186,
+    "new_rules_minted_by_increment": 12,
+    "existing_rules_reapplied_to_increment": 18,
+    "terminals_before": 2099,
+    "terminals_after": 2242,
+    "new_terminals_minted_by_increment": 143,
+    "existing_ids_unchanged": true,
+    "increment_symbols_after_encoding": 430,
+    "increment_words_per_symbol": 1.128,
+    "increment_round_trips": true,
+    "total_bits_before": 812744,
+    "total_bits_after": 829048
+  }
+}
