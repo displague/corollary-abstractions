@@ -222,6 +222,56 @@ criterion; composition depth as a measured histogram, not a guess;
 and the census script's successor must *induce* the dictionary under
 MDL and report what the data chose.
 
+## 3d. What the induction run measured (2026-08-23, `explore/v019-block-mdl`)
+
+The §3c experiment ran (`scripts/measure_block_mdl.py` →
+`experiments/block_mdl.json`, on its branch): Re-Pair with explicit
+MDL accounting under three bit models, 19 tests, determinism and
+byte-identical regeneration pinned. It corrected this design in five
+places, and the corrections are binding on the course:
+
+1. **MDL alone does not choose the count — the bit model does.**
+   Under fixed-width codes the answer is quantized at power-of-two
+   cliffs (the formal stream stopped dead at V=512, its rule count
+   chosen by the code width, not the corpus). A named bit model is
+   part of any preregistration, with the cliff flagged per arm.
+   Measured counts: 186 rules (fixed-width, 1× dictionary price),
+   94 (2× price), 80 (entropy-priced) — conclusions must survive the
+   price doubling, and here they do (words/symbol moves 1%).
+2. **The prefix-chain picture is not what MDL mints.** "this is" →
+   "this is a" → "this is a test" describes left-extending
+   successors; the criterion built balanced compositions ("this is" +
+   "a test") and never minted the middle link. Composition is real
+   (69 of 186 ids composed, depth ≤ 6 — a 3-bit depth field
+   suffices); its shape is not the successor chain.
+3. **The recurrence yield lives in the generator, which is the one
+   place it does not count.** Split by authorship: the
+   machine-generated ingested prose runs 10.47 words/symbol over 45
+   word types; the 524 person-authored surfaces run **1.035** —
+   essentially no block structure, ~4% over flat words. §2's 88.5%
+   and both words-per-token figures measure one seed script's
+   output. Every future denominator must name its population.
+4. **The ratio headline is conceded to zstd, and the surviving claim
+   is addressability — measured, and it is large.** zstd -19 beats
+   the grammar 7.0× on the archive. But compressing the same
+   surfaces as **separately addressable units** — the access pattern
+   this design exists for — costs 6.25× MORE than the grammar even
+   with a trained shared dictionary. The dictionary's value is being
+   the corpus's *address space and index*, not its archive. The
+   formal layer confirms §2's granularity split: a second flat
+   grammar over operator tokens loses to zstd 3× and is not worth
+   building — composition there addresses into the skeleton algebra
+   that already exists.
+5. **Runtime growth is lexical at the frontier, and
+   path-independent.** The holdout increment minted 143 terminals
+   against 12 rules — the write-gate's expected-vocabulary-delta is
+   mostly new words, a cheaper object than §3b implied. And the
+   grown dictionary came out **identical** to the monolithic one
+   (both difference sets empty): growth here is not merely
+   append-compatible but order-independent, a stronger property
+   than §3b required and worth registering as a gate if the course
+   adopts the design.
+
 ## 4. Questions the course must answer before this becomes a preregistration
 
 - **Fixed-width vs variable-length ids.** 2^24 fixed-width with
