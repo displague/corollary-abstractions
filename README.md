@@ -6,15 +6,18 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.17.0](docs/RELEASE-v0.17.0.md) — the graph
-now serves an OpenAI-compatible chat endpoint, and one registered run
-against a grounded 4B model holding the *same committed records* measured
-**49/49 correct with receipts at a median 3,451 useful tok/s** (1,936
-aggregate) against the model's 4/49, a median of zero and 8.79 aggregate —
-gate frozen at 5× beforehand, so 220× at the aggregate and satisfied
-unbounded rather than measured at the median.
-Both blind controls read 0.0. See [the answer was already written; the
-model had to type it](docs/blog/the-answer-was-already-written.md).
+interface. Latest release: [v0.18.0](docs/RELEASE-v0.18.0.md) — the graph
+now **says its own structures in English**, in sentences no person wrote
+and no template contains, each one gated at render time by re-parsing it
+back through a parser byte-frozen before the writer existed: **2,170 of
+2,172 parseable terms round-trip (0.9991), out of 12,777 corpus nodes** —
+zero wrong sentences, zero invented words, two honest refusals. A
+shuffled-lexicon contrast scores 0.0000 and none of 3,722 one-word
+near-misses reads back as its source. See [the alphabet was half the
+wall](docs/blog/the-alphabet-was-half-the-wall.md).
+[v0.17.0](docs/RELEASE-v0.17.0.md) still stands behind it: served over an
+OpenAI-compatible endpoint, 49/49 correct with receipts at a median 3,451
+useful tok/s against a grounded 4B model's 4/49 and a median of zero.
 The grammar-reach measurement from [v0.9.0](docs/RELEASE-v0.9.0.md)
 still stands: about a third on uncontrolled formal math.
 
@@ -52,13 +55,16 @@ line and accept an explicit hard constraint; cancellation, repeated-state
 cycles, and a four-hop ceiling terminate without guessing. Every sentence it
 prints was written by a person and stored in the corpus, or comes from Open
 English WordNet; every value is computed exactly; every relation is a
-committed link. It does not author sentences.
+committed link. Since v0.18 it *does* author one line — the `in words`
+rendering of the formal statement — and that line is emitted only when the
+sentence re-parses to exactly the term it renders (below).
 
 ```
 $ echo "what is the cosine of a double angle" | python scripts/harness.py
 Double-Angle Cosine
 The cosine of twice an angle is the difference of the squared cosine and the squared sine.
 formally   : cos(2*x) = cos(x)^2 - sin(x)^2
+in words   : the cosine of the quantity two times variable zero end quantity equals the cosine of the quantity variable zero end quantity to the power of two plus the opposite of the quantity the sine of the quantity variable zero end quantity to the power of two end quantity
 source     : trigonometry.identities.double_angle_cosine  [trigonometry.core.v1]
 
 $ echo "when x=5, what is x ^ 2?" | python scripts/harness.py
@@ -69,6 +75,21 @@ $ echo "owns x ^ 2" | python scripts/harness.py
 
 $ "double factorial`nnarrow word recursive" | python scripts/harness.py --offline
 reading : Double Factorial, Recursive (TheAlgorithms)
+```
+
+That `in words` line is one long line, printed whole. It is not a template
+and not a quotation: a grammar composed it from the term, and it is served
+only because re-parsing it recovers `cos⟨*(2, ?0)⟩ = +(^(cos⟨?0⟩, 2),
+neg(^(sin⟨?0⟩, 2)))` — the source skeleton, exactly. A term that does not
+parse, an operator with no lexicon row, or a sentence that fails the round
+trip produces **no line at all**: absence is the refusal. It says
+"variable zero" rather than "x" because canonicalization erases slot
+identity; the source identifiers ride in the receipt, not the sentence.
+
+```
+$ PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "1 + 1 = 2"
+  "surface": "two equals one plus one",
+  "round_trip": "EXACT",
 ```
 
 Ask it something the corpus does not contain and it says so: on 1,000
@@ -240,6 +261,8 @@ the graded residual.
 | A blind author repeats the load-bearing call | an isolated context shown only the 26-kind menu ruled all 325 pairs, agreed with the incumbent table on 43/44 shared pairs, independently made the proposition=set exemption, and put real tags at 21 conflicts against a permuted floor of 45 |
 | Grounding moves answering into another speed class | one registered run on a sealed half: 49/49 correct with receipts at a median 3,451 useful tok/s (1,936 aggregate) and 25 ms to first useful token, against a grounded 4B model holding the same records at 4/49, a zero median and 8.79 tok/s aggregate — gate frozen at 5× beforehand, so 220× at the aggregate. A max-rate query-blind server and the kernel's own answers shuffled between tasks both score 0.0 |
 | Exact content does not survive a decoder | the contender is handed the source records verbatim and told to quote them, and still returns 0/16 corpus definitions and 0/5 twin lookups; the quote instruction did not move its score (5/45 before, 5/45 after) |
+| A composed sentence can carry its own proof | a realization grammar linearizes canonical terms into English and re-parses each sentence through a byte-frozen parser: 2,170 of 2,172 parseable terms round-trip exactly (0.9991 — of 12,777 corpus nodes), 0 wrong sentences, 0 words outside the lexicon and the registered numeral pair, 2 oversized numerals refusing rather than rounding. Shuffled lexicon scores 0.0000; none of 3,722 one-operator near-misses round-trips to its source |
+| A design's claims about a tree are checkable before they cost a run | five sentences in the governing design were corrected by measurement — an unmeasurable 90% floor (only 17.0% parse), a head inventory read off the wrong field (64 heads, not 95), a control that a two-sided scramble would have voided, an aliasing behaviour the canonicaliser does not have, and a receipt whose two slot numberings disagree on 5.07% of terms |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -287,6 +310,15 @@ scripts/
                         (declared snapshots reported, not regenerated)
   serve_chat.py         OpenAI-compatible chat skin over the session engine
                         (stdlib, loopback, offline boot, capability sheet)
+  realize_term.py       canonical term -> English sentence, gated by a
+                        re-parse through the byte-frozen parser; --census
+                        publishes R0's denominator, --term shows a receipt
+  realization_lexicon.py  the reviewed lexicon loader: injectivity,
+                        prefix-freeness, numeral-disjointness, all gated
+  numeral_words.py      the registered numeral pair (|n| < 10^15, exact
+                        decimals, Fractions as "N over M"); refuses outside
+  measure_realization.py  the registered realization run and its three
+                        controls; refuses (exit 3) on any prereg digest drift
   build_throughput_tasks.py  the sealed task book, computed from committed
                         artifacts and provably never run against the engine
   measure_throughput.py the client-side stopwatch (public HTTP API only)
@@ -356,6 +388,14 @@ python scripts/retrieval.py --chain --observations path\to\notes note.tide_gauge
 python scripts/wordnet_eval.py data_sources\archives\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
+python scripts/realize_term.py --census     # R0: 2,172 of 12,777 parseable
+PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "1 + 1 = 2"
+                                            # one sentence and its receipt
+python scripts/measure_realization.py --out realization_rate.repro.json
+                                            # the registered run, byte-identical
+                                            # to experiments/realization_rate.json;
+                                            # exit 3 and writes nothing if any of
+                                            # the five preregistered digests moved
 python scripts/serve_chat.py                # the chat endpoint on 127.0.0.1:8377
 curl -s http://127.0.0.1:8377/v1/capabilities            # the capability sheet
 curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' `
@@ -377,8 +417,9 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # 1,705 tests, 0 failures, 3 skipped at v0.17.0 -- 7h31m serial (27,068.5s),
 # test_write_stage still the bulk of it. Receipts incl. the five pre-green
 # runs: reports/test_gate_v017/ (baselines: test_gate_v016/, test_gate_v015/).
-# This cycle's four new modules: test_measure_throughput (124),
-# test_serve_chat (68), test_throughput_tasks (53), test_wiring_routes (33).
+# [SUITE-GATE-V18: refreshes to the v0.18 tip's numbers before the tag.
+# v0.18 adds test_realize_term (44), test_realization_lexicon (37),
+# test_measure_realization (26), and takes test_serve_chat 68 -> 74.]
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
@@ -435,13 +476,31 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   model can generate them. T1–T7 adjudicated on one registered run of a
   sealed 119-task book; both blind controls read 0.0. The protocol subset
   is pinned in `docs/SPEC-chat-completions-skin.md`
-- `docs/DESIGN-sans-template-rendering.md` — the v0.18 direction: the
+- `docs/DESIGN-sans-template-rendering.md` — **measured at v0.18**: the
   kernel says its own structures in open English, each sentence gated by
   re-parsing back to the exact term it renders through a byte-frozen
-  parser that never saw the realizer. Its review already produced a
-  finding — only 2,172 of 12,777 canonical terms (17.0%) parse under the
-  committed grammar today, so the corpus has outgrown its own template
-  grammar and the gate is scoped to the parseable denominator
+  parser that never saw the realizer. R1 fires at 0.9991 over the 2,172
+  parseable terms (17.0% of 12,777 — R0 makes that denominator
+  inseparable from the rate); R2 clean; all three controls read out. Five
+  of its own sentences were corrected by measurement, four before
+  implementation
+- `docs/DESIGN-foreign-voice.md` — the v0.19 direction, selected by the
+  outside course (`reports/design-direction-v0.19.json`): render the
+  statements the parser *cannot* read by borrowing a lexicon, and gate the
+  result with the already-pinned external Lean checker rather than a
+  parser this project owns. Its headline artifact is the **register** — a
+  frozen, digested inventory of what the system still cannot say, with the
+  blocking construct named and counted. Grounding already corrected it:
+  half the mute corpus (6,414 statements, 50.2% of the graph) is not
+  foreign at all, just two glyphs away from parseable, and is excluded
+  from the claim. *Under adversarial review at the v0.18 rotation*
+- `docs/DESIGN-block-vocabulary.md` — **adopted** as a bounded v0.19 item
+  rather than displaced by the course: one question — is the unified
+  dictionary a real object, or two existing objects wearing one id space?
+  — probed against three baselines pre-registered from its own concessions
+  (the keyword channel at its measured floors, zstd-with-shared-dictionary,
+  and the canon token encoding at 8.4×). Beat none of them and it parks
+  with the numbers
 - `docs/DESIGN-ledger-first-claims.md` — parked whole (course-chosen,
   review-hardened, preregistration-ready): claims are emitted, not
   written — published quantitative sentences become generated artifacts

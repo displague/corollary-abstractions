@@ -1,0 +1,108 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.19",
+  "status": "complete",
+  "requested_utc": "2026-08-23",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless, non-interactive) launched with cwd C:/Users/displ/AppData/Local/Temp/forge19 -- an empty non-git directory outside the repository whose path contains no project name",
+    "denylist": "strict-mcp-config plus disallowedTools covering every file, shell, network, agent, and skill tool",
+    "residual_gap": "tools exist but are blocked by sandbox and denylist rather than absent",
+    "inherited_from": "reports/design-direction-v0.17.json enforced_isolation_mode, reused unchanged"
+  },
+  "incumbent": "docs/DESIGN-block-vocabulary.md (maintainer-seeded, no-silent-disposal instruction recorded in the doc) -- NOT revealed at round one; disclosed abstractly at round two per the staged-disclosure rule",
+  "brief_sha256_canonical_lf": "ddd55f3f7aa139e02c141ff588b63e5e1b33ae565f3f03bc8b00f62869c627e0",
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "ddd55f3f7aa139e02c141ff588b63e5e1b33ae565f3f03bc8b00f62869c627e0",
+      "r2": "cc2be01ce493ae64926f35fe1b75d77ab36164e636b3d277ec2d2a4003227e86",
+      "r3": "658e92544366fbbe45f07875134f9ee6bf567cfecf23654c09770b7f1d15e4f6"
+    },
+    "series_2": {
+      "r1": "1a1babfba36efbd13a347cd5bf05a4d164e123df51225bd3f68607a0b57223b5",
+      "r2": "44901aa9fdef51fe9c686786d3b9f51245b070e6db937975a632173e34084046",
+      "r3": "7cb6c6d8593b986be6217c90b8fdd46d928f8a5d87a699a5457178a87db35422"
+    },
+    "series_3": {
+      "r1": "9caae1e3b51fe879faf04c300026c31617a50150969e677ad4919eba2c632009",
+      "r2": "a4d09d6819a19c5e4160d65d92e4b461b4b72ad1e99e7fd4ae245d1bd66df04c",
+      "r3": "4ac82ef7081a5dd77646abaf09392f4fa3fc883f4aa349e02903bbbed66720a4"
+    }
+  },
+  "exclusion_note": "series 2 round 1 excluded series 1 round-one territory (five abstract lines); series 3 excluded both (ten lines); exclusion text embedded in the hashed r1 prompts",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "4a103349-3c40-4e8c-996b-60d3d0a334c7",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 1.358
+    },
+    {
+      "series": 2,
+      "session_id": "491f6b4e-c372-4abd-998d-82c3111a5942",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.779
+    },
+    {
+      "series": 3,
+      "session_id": "0c104602-26fa-4117-8742-3189ec084793",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.921
+    }
+  ],
+  "round_one_funnel": {
+    "series_1": [
+      "LOANWORD - foreign-dialect voice via pinned checker as oracle",
+      "TWO-STEP - composed answers with per-step licensed receipts",
+      "RUNNABLE - statements compiled to evaluators of user quantities",
+      "SIDECAR - user-owned graph layers through the write gate",
+      "STRANGER - outside askers scoring answers and refusals"
+    ],
+    "series_2": [
+      "REDLINE - the graph checks others prose per-span",
+      "DEADLINE - p99.9 latency contract with typed in-budget refusal",
+      "FORK - counterfactual seed rebuild served as a diff",
+      "NEGATIVE SPACE - typed refusals scored on consequence",
+      "EXAMINER - the graph examines a person"
+    ],
+    "series_3": [
+      "NO SUCH THING - licensed negatives with impossibility receipts",
+      "FINE PRINT - hypotheses as first-class guards",
+      "TWO RIGHTS - served convention forks from co-present statements",
+      "ROSETTA TRANSPORT - method transport across twin skeletons",
+      "CONJECTURE FOUNDRY - prover-certified self-originated statements"
+    ]
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "LOANWORD (B0-B6, dual controls, untranslatable register as headline artifact)",
+      "runner_up": "TWO-STEP"
+    },
+    "series_2": {
+      "lead": "FORK (sealed blind affected-set predictions; residual risk: mechanically perfect, semantically misnamed)",
+      "runner_up": "DEADLINE"
+    },
+    "series_3": {
+      "lead": "TWO RIGHTS (ConventionPair sealed pre-inspection; B0 both branches yield artifacts)",
+      "runner_up": "THE GRADED NO (NO SUCH THING + FINE PRINT merged)"
+    }
+  },
+  "selection": {
+    "selected": "series 1 lead: LOANWORD -> docs/DESIGN-foreign-voice.md",
+    "incumbent_disposition": "ADOPTED as bounded roadmap item 2 (address-space probe with pre-registered falsifiers) -- not displaced, not silently parked; the maintainer no-silent-disposal instruction is discharged by adoption",
+    "declined": {
+      "FORK": "parked with named trigger: wants the voice layer first so its diffs are readable; residual risk (semantic misnaming) partially priced by LOANWORD register vocabulary",
+      "TWO RIGHTS": "its B0 one-hour probe is adopted as a registered probe inside v0.19; the full direction waits on the probe branch",
+      "TWO-STEP": "parked; its one-afternoon hand-probe named as a future cheap gate",
+      "STRANGER": "gap-object intake parked to BACKLOG with the degradation rule quoted",
+      "DEADLINE": "parked; near-zero marginal cost noted for a slack slice",
+      "GRADED NO": "parked; the licensed-negative answer-type recorded as the strongest new-vocabulary candidate"
+    },
+    "convergence_note": "all fifteen round-one directions differentiated from the incumbent unprompted; the two cross-series near-collisions (NEGATIVE SPACE vs STRANGER gap objects; TWO RIGHTS vs FORK convention deltas) were disclosed by the advisors themselves"
+  }
+}

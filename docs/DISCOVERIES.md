@@ -13,6 +13,144 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **Half the mute corpus was an alphabet problem, not a grammar problem
+  (v0.19 grounding, measured).**  v0.18 shipped a voice for the 2,172
+  parseable terms and named the silence honestly: **10,605 nodes (83.0%)**
+  carry a `formal_statement.canonical_ascii` the committed parser cannot
+  read.  The v0.19 course proposed treating that mass as a *foreign
+  dialect* and borrowing a rendering for it through an external checker.
+  Grounding measured the mass before the design committed to it, and the
+  premise did not survive: **6,414 of the 10,605 parse under the
+  byte-frozen committed parser after substituting exactly two glyphs** —
+  `≥`→`>=` and `≤`→`<=`.  That is **50.2% of the whole corpus**, mute for
+  want of two rows in an ASCII-only `TOKEN_RE`, not for want of a bridge
+  to another language.  What is genuinely foreign is the **4,191-statement
+  residue (32.8%)** — quantifiers and typed binders, logical connectives,
+  type ascriptions, namespaced heads — of which **2,319 are
+  oracle-eligible by outcome** under the frozen interpretation rule (an
+  earlier blocklist-derived 1,456 was retired by the design review's
+  operational definition); 4,060 of the 4,191 are
+  `lean_workbook.ground.v1` and the remaining 131 spread across 23 small
+  corpora, led by `logic.boolean_foundations.v1` (20, all of it) and
+  `temporal_logic.linear_time.v1` (15, all of it).  Two things make this
+  worth recording as a finding rather than a scoping note.  First, the
+  measurement **took territory away from the design that proposed it**: a
+  loanword pipeline over the transliterable half would have claimed a hard
+  result for easy ground, so the 6,414 are excluded from the claim and
+  handed to a separate probe on the existing native path.  Second, it
+  reframes v0.18's own headline — 17.0% was never a statement about how
+  much of this corpus is *structurally* beyond the grammar; roughly half
+  of the gap is an encoding boundary that two rows close.  Status:
+  **measured** (grounding finding, pre-implementation).  Evidence:
+  `docs/DESIGN-foreign-voice.md` §1 Correction 1 — a document **under
+  adversarial review at the v0.18 rotation**, so these figures may be
+  restated with a dated correction; the claim recorded here is the
+  measurement, not the design that quotes it.
+
+- **Five design sentences were corrected by measurement, four of them
+  before implementation could act on them (v0.18, construction).**  A
+  design is a claim about a tree, and this cycle checked five of them
+  rather than building on them.  (1) R1's floor was frozen at **90% of all
+  12,777 terms**; only **2,172 (17.0%)** parse at all, so the floor was
+  unmeasurable as written — R0 was created as a construction prerequisite
+  and R1 rescoped to the parseable denominator (falsified at the *v0.17*
+  rotation, before a line existed).  (2) The head calibration — 95 heads,
+  39 singletons, a top-10 led by `IMPLIES` and `MEET` — read
+  `anonymized_template`, **the wrong field for a cycle rendering
+  `canonical_ascii`**; the parseable subset carries **64 heads, 35
+  singletons, and neither `IMPLIES` nor `MEET` at all**, and the template
+  side re-measured is 95 heads, **30** singletons, `MEET` (22,653) ahead of
+  `IMPLIES` (10,202).  (3) C-R1 as written was a scrambled realizer; a
+  *two-sided* scramble is a bijection and round-trips near-perfectly, so
+  the control had to become one-sided by construction (own entry below).
+  (4) `canonicalize` was credited with head aliasing and it does **none** —
+  `alias_heads` is a separate pass only the ALIASED match level runs, and
+  `MOD` vs `CONCAT` canonicalize to *different* skeletons at this gate's
+  level — so alias-class swaps moved from C-R2's **exclusions into its
+  set**, which made the control harder on the strength of a correction
+  (`72cc7d6`).  (5) The receipt published **one** slot-name map, and the
+  surface's numbering (first occurrence in `canonicalize()`'s tree)
+  disagrees with `term_skeleton`'s `?N` (from `render_skeleton` over
+  `shape_resort()`'s tree) on **110 of 2,170 served terms, 5.07%**; both
+  maps are now published with a basis note.  No sentence and no verdict
+  moved on that last one — `skeleton()` is invariant under slot renaming —
+  **only a reader would have been misled**, on one term in twenty.  The
+  transferable part is the shape: every one of the five was cheap to check
+  and expensive to discover afterwards, and each is a **dated correction**
+  in the design or in `experiments/realization_prereg.json`'s `corrections`
+  list rather than a quiet patch.  Status: **construction**.
+
+- **A two-sided scramble is a renaming (v0.18, C-R1, measured).**  A blind
+  control that deranges a bijective lexicon must be **one-sided**: emit
+  through the deranged table, read back through the **committed** one.  The
+  implementation probe proved why the sentence has to be written down.
+  Derange the table and then *also* read through that same deranged table
+  and you have performed a consistent relabelling — still a bijection, so
+  the round trip succeeds near-perfectly (4 of 4 pinned in tests).  Such a
+  control would report a **near-perfect scrambled arm and void its own
+  reading** under the ≥1% clause, for a reason with nothing to do with
+  whether the gate reads the words.  Two corollaries were designed in for
+  the same reason.  Grouping words and the slot marker are deliberately
+  **untouched** by the scramble, because a scramble that broke
+  parenthesisation would fail at the tokenizer and prove nothing about
+  stage 2.  Slot indices are deliberately **not** scrambled, because
+  `skeleton()` is invariant under slot renaming, so a bijective index
+  scramble would pass 100% and measure nothing — only a *non-injective*
+  one would move a skeleton, and that is a different control.  And the
+  registered run keeps the two-sided run as the **aiming test** (7 of 7),
+  which is what demonstrates the scramble breaks word identity rather than
+  the grammar; if the two-sided arm had also failed, the contrast would
+  have been measuring collateral damage.  Measured: true 0.9991 vs
+  scrambled 0.0000, with the failure modes reported **separately** because
+  "the control failed" is uninformative — 1,348 scrambled sentences parsed
+  perfectly well and meant something else; 822 did not parse.  Status:
+  **measured**.  Evidence: `experiments/realization_rate.json` `c_r1`;
+  `9879b06`; `tests/test_realize_term.py`.
+
+- **Longest match is a policy; prefix-freeness is the guarantee (v0.18,
+  construction).**  The design required an inverter that is table-driven
+  "with no operator-precedence or bracketing logic of its own", and
+  longest-match decoding looks like enough until you write "plus" beside
+  "plus or minus".  The lexicon loader therefore gates two properties that
+  make longest match **provably the unique match**: **L1**, no phrase is a
+  proper word-prefix of another; **L2**, no phrase word is a word the
+  registered numeral pair can emit.  Both are checked constructively over
+  the whole table — every ordered pair for L1, and the decode of all 169
+  phrases concatenated for the unique-match claim — never sampled.  The
+  consequences are recorded in the table itself rather than discovered
+  later: `-` and `/` get **no rows**, because `canonicalize()` has already
+  rewritten them into `neg` and `inv` and a second row for one glyph would
+  break R2b injectivity; `~` gets no row because the frozen `TOKEN_RE` has
+  no alternative for it and the row would be unreachable surface; and `neg`
+  is *"the opposite of"* rather than *"the negative of"* because
+  "negative" is numeral vocabulary and L2 forbids the collision.  The
+  general lesson is that a bijection claimed over a phrase table is a claim
+  about the *whole table at once*, and the cheap check is structural, not
+  per-row.  Status: **construction**.  Evidence:
+  `scripts/realization_lexicon.py` L1/L2; `data/realization/lexicon.json`
+  `reading_rules`; `ccac853`.  Landed here at the v0.18 rotation to pay a
+  recorded debt — this lesson and C-R1's had lived only in a commit body
+  and a module docstring.
+
+- **The first machine-ingested record with a voice (v0.18, shipped).**
+  12,515 of this corpus's 12,777 nodes are ingestion records whose
+  `statement_meaning` is boilerplate, served for five releases under the
+  disclaimer *"this text is an ingestion record, not an explanation a
+  person wrote"*.  `leanworkbook.ground.lean_workbook_13563` carries the
+  `canonical_ascii` `1 + 1 = 2`, and now answers with the disclaimer **and**
+  `in words   : two equals one plus one`, with a receipt showing the
+  sentence re-parses to `2 = +(1, 1)` — the source skeleton, exactly.  What
+  is worth recording is not the sentence, which is trivial, but that the
+  system authored a sentence **no person wrote and no bank contained** and
+  was still able to prove it.  The disclaimer stays: the ingestion record
+  is still an ingestion record, and the realized line makes a claim about
+  the *formal statement*, not about the prose.  R3 keeps the boundary
+  honest by making refusal silent — a term that does not parse, an
+  uncovered head, or a failed re-parse produces **no line at all**, not an
+  error string and not a placeholder.  Status: **shipped**.  Evidence:
+  `scripts/answer.py`; `experiments/realization_rate.json` `r5`;
+  `5357740`.
+
 - **The corpus outgrew its own template grammar, and nothing had asked it
   to (the v0.18 cycle's first finding, produced during the v0.17 rotation;
   measured).**  The forward design proposed rendering every committed

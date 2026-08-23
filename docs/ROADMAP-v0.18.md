@@ -1,3 +1,33 @@
+> **CLOSED at v0.18.0.** Where each item went: **item 1** (sans-template
+> rendering) SHIPPED — R0 discharged first and published (2,172 of 12,777
+> parseable, 17.0%, failure classes named per corpus), **R1 FIRES at
+> 0.9991** (2,170 of 2,172, floor 0.90 of that same denominator; LOST = 0
+> balances exactly, both refusals listed by id), R2 CLEAN (0 of 2,170
+> surfaces carry a word outside the lexicon and the registered numeral
+> pair), R5 pinned by a digest over all 2,170 served surfaces, and all
+> three controls read out — C-R1 INFORMATIVE at an unbounded contrast
+> (true 0.9991 vs scrambled 0.0000), C-R2 INFORMATIVE with zero of 3,722
+> skeleton-changing mutations round-tripping to source, C-R3 HOLDS on all
+> five pinned digests; see [RELEASE-v0.18.0](RELEASE-v0.18.0.md) headline
+> and ANALYSIS. **Item 2** (the learned preference seat) **SHIPS EMPTY, in
+> writing**, which is §9's registered outcome and not a miss: the grammar
+> emits exactly one surface per term, so no candidate set exists for a
+> ranker to order — licensed variant generation is named as the
+> prerequisite and carried to [ROADMAP-v0.19](ROADMAP-v0.19.md) §4.
+> **Release-gate obligations**, clause by clause: R0 published before R1
+> was read; the registered run committed with its artifact; the empty seat
+> read out; the first rendering commit **retired the v0.17 witness and
+> sealed a successor book** under the SPEC post-run clause (one digest leaf
+> moved, all 119 task records byte-identical, v0.17's results verified
+> still frozen against their own `book_digest` pin); the refresh ran clean;
+> and **the outside design inquiry was INVOKED, not reaffirmed** — three
+> isolated series, nine rounds, receipt
+> `reports/design-direction-v0.19.json`, with the incumbent
+> DESIGN-block-vocabulary **adopted** rather than displaced. The strict
+> wording this file restored is satisfied on its first use, and the loop §4
+> opened is closed. The full-suite clause is open at `[SUITE-GATE-V18]` in
+> the notes until the gate runs on the frozen tip.
+
 # Roadmap v0.18 — the graph answered at wire speed; now make it speak
 
 v0.17 put the knowledge graph behind an OpenAI-compatible endpoint and

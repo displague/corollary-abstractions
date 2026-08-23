@@ -3,6 +3,83 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.18 rotation (sans-template rendering)
+
+- **The realized surface cannot say a variable's name, and that is the
+  biggest thing it cannot do (2026-08-23).** `canonicalize` erases slot
+  identity, so every realized sentence says **"variable zero"** where the
+  source says `x`. Registered honestly in
+  `docs/DESIGN-sans-template-rendering.md` §8 as a non-claim before the run
+  rather than discovered in the output. The source identifiers *do* ride in
+  the receipt (`parameters.surface_slot_names`), so the information is not
+  lost — it simply is not served. **Why this is not a small fix:** an
+  identifier surface must be **R2-gated**, and R2's rule is that every
+  content word traces to a lexicon row or the registered numeral pair.
+  Corpus identifiers are neither. Admitting them means either a third
+  registered source with its own injectivity and prefix-freeness
+  obligations (`x` must not collide with a lexicon phrase or a numeral
+  word), or a scheme that quotes them as opaque spans the reader can
+  recover. Both are designs, not patches. Wanted before anyone tries: a
+  count of how many distinct identifiers the parseable set actually
+  carries, and a check on whether any of them collide with the 169 phrases
+  already in the table.
+
+- **`±` has a lexicon row that no committed statement exercises
+  (2026-08-23).** The operators section carries six rows and `±` is one of
+  them, but nothing in `data/` uses it, so the registered run's 2,170
+  served surfaces never touch it. Review caught this and pinned
+  `x = a ± b*c` EXACT by hand (L4) so the row is not merely decorative —
+  but a hand-pinned case is a weaker guarantee than corpus exercise, and it
+  is worth knowing this row is in that category. Two honest options when it
+  next matters: author a statement that uses it, or move the row out of the
+  table and let `±` refuse as an uncovered head until something needs it.
+  Do not treat the current green test as coverage.
+
+- **The parser collapses the conditional bar, and the realized sentence
+  inherits that (2026-08-23).** `E[Y|X]` reads as a two-argument
+  expectation and round-trips as one, so the surface renders the bar as
+  "next argument". The distinction survives in the source term and is lost
+  in the sentence. Registered as a non-claim in the design's §8 rather than
+  left to be discovered by a reader of conditional-probability statements.
+  This is a **parser** limitation surfaced by the renderer, not a renderer
+  bug, and fixing it means touching `match_signatures.py` — which is
+  digest-pinned as the realization gate's stage-2 parser, so it inherits
+  the whole re-freeze discipline in ROADMAP-v0.19 §3a. Filed together with
+  the transliteration lane because they are the same file and the same
+  discipline.
+
+- **The transliteration lane: two glyphs reach half the corpus, and the
+  seal will not notice (2026-08-23).** Grounding for the v0.19 course
+  measured that **6,414 of the 10,605 mute statements — 50.2% of the whole
+  corpus — parse under the byte-frozen committed parser after substituting
+  exactly two glyphs**, `≥`→`>=` and `≤`→`<=`. Scheduled as a registered
+  probe in [ROADMAP-v0.19](ROADMAP-v0.19.md) §3a on v0.18's existing native
+  path, deliberately **not** as a headline, because the preview makes it
+  look easy and easy is what a register exists to keep honest. **Read the
+  re-freeze discipline in that section before touching the tokenizer.** The
+  part worth repeating here, because it is the part a green test would hide:
+  `scripts/match_signatures.py` is **not** in the task book's
+  `rendering_module_digests` (that witness lists eleven modules and this is
+  not one of them), but widening the tokenizer changes *which* terms parse
+  and therefore changes what `answer.render` emits — **rendered output moves
+  while every witnessed module digest stands still.** The lane owes an
+  explicit before/after diff of served answer lines, committed with the
+  probe. Evidence: `docs/DESIGN-foreign-voice.md` §1 Correction 1 (a
+  document under adversarial review at the v0.18 rotation — the figures may
+  be restated with a dated correction).
+
+- **STRANGER — outside-asker gap-object intake, parked from the v0.19
+  course (2026-08-23).** One of the fifteen round-one directions: outside
+  askers score the system's answers *and its refusals*, and the gaps they
+  find become first-class objects the graph can hold. Declined at selection
+  and parked here with its degradation rule quoted from the course receipt
+  rather than summarised away. Unpark condition, from the same receipt: it
+  needs a population of outside askers whose questions were not authored by
+  this repository, which is the same fresh-half problem the veto census and
+  the clarification holdouts both hit — so it does not unpark on
+  enthusiasm. Evidence: `reports/design-direction-v0.19.json`
+  (`selection.declined.STRANGER`).
+
 ## Filed at the v0.17 rotation (grounded throughput)
 
 - **The context probe reads `/api/ps` before the model is loaded, so it
@@ -51,6 +128,20 @@ or commit history. Each item names the evidence that motivated it.
   digest. Related consequence, same root: replayed prefix turns pass
   `with_receipt=False` (`scripts/serve_chat.py:815`) precisely to avoid a
   whole second corpus scan per replayed turn.
+
+  **v0.18.0 status note (2026-08-23): still open, and the excuse has
+  lapsed.** This is now the entry's second cycle. The reason it was
+  declined at v0.17 — that `harness.py` was seal-witnessed by a run still
+  in progress — no longer holds: the v0.17 run is closed and its numbers
+  are frozen against their own artifact. What remains is that the fix moves
+  a witnessed module's digest and therefore rides a book **re-seal**, and
+  v0.18 has now made that procedure routine rather than novel (`5357740`
+  retired the v0.17 witness and sealed a successor book, verified by
+  structural diff: exactly one leaf moved). So the cost of doing this
+  correctly is known and small. It is carried, not parked — but a third
+  cycle without either the fix or a written decision to stop caring is the
+  shape this file exists to catch, and the ~3.4 s figure above still has no
+  timing artifact behind it, so **measure before spending**.
 
 - **The B-side correctness rule is notation-limited on session-derived
   kinds, and that asymmetry is scoring, not capability (2026-08-22).**

@@ -24,8 +24,10 @@
 > inquiry** was not run for v0.18 and converts to the v0.19 gate carrying
 > both readouts — recorded in [ROADMAP-v0.18](ROADMAP-v0.18.md) §4 with
 > the wording-conflict ruling that cleared it — and the **full-suite
-> clause** is still open at `[SUITE-GATE-V17]` in the notes until the gate
-> runs on the frozen tip.
+> clause**, open at `[SUITE-GATE-V17]` when this banner was first written,
+> was discharged before the tag: 1,705 tests, 0 failures, 3 skipped,
+> 27,068.5 s, green on the sixth run, with all six runs kept as the record
+> in `reports/test_gate_v017/`.
 
 > **REVISED 2026-08-21, by maintainer redirect.** This file's first
 > draft (committed hours earlier, preserved in git history) made

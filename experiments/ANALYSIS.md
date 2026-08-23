@@ -4669,3 +4669,210 @@ unregistered surfaces. And the contender's failure is not a failure of the
 contender: it is the thesis appearing where the design predicted it would -
 exact content does not survive being sampled through a decoder, even when
 the decoder has the content in front of it.
+
+
+# v0.18 - the graph speaks: the census, the registered run, and three controls
+
+Design: `docs/DESIGN-sans-template-rendering.md` (maintainer-directed
+Phase 6; trigger registered in DESIGN-grounded-throughput 10 before the run
+that fired it). Preregistration order, every artifact committed before the
+one that depends on it: the design; the lexicon, the numeral pair and the
+frozen digests (`ccac853`, with `e28f8d6` correcting two node-keyed
+operator rows); `realize_term.py` and its two-stage gate (`9879b06`); the
+adversarial review closed at 1 High / 6 Medium / 9 Low, each dated
+(`98ea2cf`); the one registered run (`ecb906d`); then the wiring
+(`5357740`).
+
+The claim is a split, so the implementation is judged on where it put the
+structure. All precedence lives in the FORWARD grammar as a five-level
+ladder read off the frozen recursive descent (relation 0, sum 1, product 2,
+power 3, atom 4). Stage 1 (`delexicalize`) gets none of it - longest
+matching phrase or numeral run, surface order, no bracket counter, no arity,
+no precedence table; a test hands it an unbalanced grouping word and pins
+that it emits `(` anyway, because noticing is stage 2's job. Stage 2 is
+`tokenize -> Parser -> canonicalize -> skeleton`, imported and never
+reimplemented, and a test greps the module to prove it defines no parser of
+its own.
+
+## R0: the census, and the denominator it publishes
+
+R0 is a construction prerequisite, discharged and published BEFORE R1 is
+read, because a floor frozen without a denominator is a wish.
+
+| | count | rate |
+|---|---:|---:|
+| corpus nodes | 12,777 | |
+| parseable under the byte-frozen parser | **2,172** | **0.169993** |
+| `lean_workbook` nodes / parseable | 12,514 / 2,040 | 0.163017 |
+
+Failure classes over the 10,605 that do not parse, named rather than
+summarized: **10,432** unexpected character (Lean and Unicode syntax
+outside the template grammar), **111** trailing tokens, **53**
+expected-delimiter, **6** unexpected `|`, **2** unexpected `[`, **1**
+unexpected `>`.
+
+The stop condition did NOT fire: the rule was "stop if NO corpus has >= 50
+parseable terms", and `lean_workbook` clears it at 2,040. That is also the
+only corpus the per-corpus floor applies to; the other 26 are reported
+individually and never averaged, per R1's own thin-denominator clause.
+
+The census artifact (`experiments/realization_census.json`) and the
+registered run agree exactly - 2,172 parseable, 2,170 exact, 0 failed, 2
+refused - which is expected and is the point: the census is the
+prerequisite table, regenerable, and the registered run is the sealed
+reading of the same measurement under revalidated digests.
+
+## The registered run
+
+| gate | verdict | deciding number |
+|---|---|---|
+| R1 round-trip floor 0.90 of the parseable denominator | **FIRES** | 2,170 / 2,172 = **0.999079**; `lean_workbook` alone at 0.99902, also FIRES |
+| R2 no invented surface | **CLEAN** | 0 of 2,170 served surfaces carry a word outside the lexicon and the registered numeral pair |
+| R5 determinism | pinned | sha256 over all 2,170 served surfaces = `d3b6ee9bc278644a...`, first 25 by statement id pinned verbatim |
+| C-R1 scrambled realizer (one-sided) | **INFORMATIVE** | true 0.999079 vs scrambled **0.0**; contrast unbounded vs a >= 20x bar; the >= 1% voiding bar nowhere near |
+| C-R2 near-miss | **INFORMATIVE** | 3,722 mutations, 3,720 re-parsed to a DIFFERENT skeleton (0.999463 vs a 0.50 floor), **0** round-tripped to source |
+| C-R3 tautology probe | **HOLDS** | all five pinned artifacts byte-identical to the preregistration commit's record |
+
+**LOST = 0, balanced exactly.** 2,170 served + 0 round-trip failures + 2
+refusals = 2,172, printed in the artifact as an arithmetic check rather
+than a claim. Both refusals are listed by statement id with full detail:
+`leanworkbook.ground.lean_workbook_37421` (76-digit literal) and
+`leanworkbook.ground.lean_workbook_plus_68304` (48-digit), both
+`unsupported_numeral` against the registered domain `|n| < 10^15`. They
+refuse rather than round. A commit message earlier in the cycle called them
+"two 76-digit literals"; the correction is recorded in the prereg (L2)
+because a commit message cannot be corrected in place, and neither the
+count nor the verdict moves.
+
+**C-R1's failure modes, reported separately on purpose.** Of the 2,172
+scrambled sentences: **1,348 parsed and meant something else**, **822** did
+not parse, 2 refused before reading. Only the first population demonstrates
+what the control is for. A scramble producing only the second would be
+exercising the tokenizer. The derangement seed is derived from the
+committed lexicon's own sha256_lf (`f2c22a5c...`), so it is a function of
+the table under test rather than a number someone chose; 6 operator rows, 7
+relation rows and 150 call-head rows moved.
+
+**C-R2's construction check, and the 31 discards.** Every mutation is
+applied to the canonical TREE and its skeleton compared to the source's
+BEFORE any sentence exists; a mutation that does not change the skeleton is
+discarded and never counted. 31 were discarded in this run. The reason is a
+finding in its own right (below). The two mutations that failed to parse are
+the same two oversized-numeral terms refusing in both arms.
+
+## Two properties of the frozen grammar that the controls surfaced
+
+**`a < b` and `b < a` are the same skeleton.** `<` is not symmetric, but
+`render_skeleton` erases slot identity and renumbers by first occurrence,
+so two bare slots either side of ANY relation are indistinguishable at the
+level this gate compares. A near-miss set built on "non-symmetric relation
+implies swapping changes the skeleton" would have been full of
+non-mutations, every one would have "round-tripped to the source", and the
+control would have voided the gate for behaving correctly.
+
+**`canonicalize` does no head aliasing.** The design credited it with
+aliasing and excluded alias-class swaps from C-R2 on that basis.
+`alias_heads` is a separate pass that only the ALIASED match level runs,
+and `MOD` vs `CONCAT` - one declared ordered_compose class - canonicalize
+to DIFFERENT skeletons here. So alias-class swaps are legitimate
+skeleton-changing near-misses and belong IN the mutation set. The control
+got harder on the strength of a correction, which is the direction a
+correction should move a control (`72cc7d6`).
+
+## The corrected receipt numbering
+
+Adversarial review's single High finding made a published receipt field
+wrong. `parameters.slot_names` numbered slots by first occurrence in
+`canonicalize()`'s tree - the order the SURFACE uses - while
+`term_skeleton`'s `?N` come from `render_skeleton` walking
+`shape_resort()`'s tree, and `shape_resort` re-orders arguments `shape_key`
+cannot tell apart BEFORE the numbering happens.
+
+Measured: the two disagree on **110 of the 2,170 served terms (5.0691%)**,
+reproduced exactly. The compact corpus case is `p + q = (q + 1)^2`, where
+the sentence says "variable zero" for `p` while the skeleton's `?0` is `q`.
+
+The receipt now publishes BOTH maps - `surface_slot_names` and
+`skeleton_slot_names`, with `slot_index_basis` naming which is which - that
+corpus term is pinned in the curated set so the divergence is exercised,
+and a test checks `skeleton_slot_names` against the actual `?N`
+placeholders. **No sentence and no verdict moves**: `skeleton()` is
+invariant under slot renaming, so the gate never depended on the numbering.
+Only a reader matching the published names against `?N` would have been
+misled, on one term in twenty. Recorded because "the gate was unaffected"
+is the tempting sentence and it is not the whole sentence.
+
+## Byte reproducibility and the separate runner
+
+A second full run over `data/` reproduces the committed artifact's digest
+exactly, and a third re-run during the v0.18 rotation reproduced it again:
+canonical-LF sha256 `803fe00adb660a7b8536e61d6230904af9f496f997e959a3590dfa5e7c5ed3fe`,
+identical to the committed file. No timestamp, no elapsed time, no absolute
+path rides in the artifact, and a test asserts their absence over KEYS
+rather than substrings. Wall clock is deliberately excluded for exactly
+that reason - 37.2 s at the run commit, 55.5 s on the rotation re-run, same
+bytes. 107 tests across the three realization modules green at the run
+commit (44 + 37 + 26).
+
+The runner is `scripts/measure_realization.py` rather than a `--registered`
+mode on `realize_term.py`, and the reason is structural: `realize_term.py`
+is digest-pinned as the inverter, so a registered mode would have moved the
+very digest that certifies the number the mode produced. C-R2 needs to
+realize mutated trees, so it reuses `realize_term`'s own `_Linearizer`,
+`_slot_order` and `reparse` with local glue - same linearizer, same
+two-stage gate, transcribed entry point.
+
+One defect the refusal test caught by failing to SEE a refusal:
+`revalidate_prereg(prereg_path=PREREG_PATH)` bound the module global at
+definition time, so a caller pointing it at a different preregistration was
+silently revalidated against the committed one and the run was written
+anyway. The default is now read at call time, `--prereg` exists, and the
+test asserts exit 3, the reason on stderr, and that no file was created.
+
+## Indicative previews from the v0.19 grounding pass
+
+Recorded here so the v0.19 gate can be read against numbers that already
+existed, and labelled **INDICATIVE** because they were measured during a
+design grounding pass, not under a preregistered run, and the design that
+carries them (`docs/DESIGN-foreign-voice.md`) was **under adversarial
+review at this rotation**. Each becomes a published B0 table under v0.19's
+own gate, either confirming these or correcting them with a dated note.
+
+| quantity | indicative value | share of 12,777 |
+|---|---:|---:|
+| mute nodes (do not parse) | 10,605 | 83.0% |
+| of those, **transliterable** - parse after substituting `>=` for `≥` and `<=` for `≤` | **6,414** | **50.2%** |
+| foreign residue (unreachable at any alphabet) | **4,191** | 32.8% |
+| of the residue, oracle-eligible by outcome (pinned binary, rule R, autoImplicit false; an earlier blocklist-derived 1,456 retired by dated correction) | **2,319** | 18.1% |
+
+The residue's shape, also indicative: 4,060 of the 4,191 are
+`lean_workbook.ground.v1`; the remaining 131 spread across nine small
+corpora, led by `logic.boolean_foundations.v1` (20, all of it) and
+`temporal_logic.linear_time.v1` (15, all of it). The blocking constructs
+named are quantifiers and typed binders (`forall a b c : R,`), logical
+connectives, type ascriptions, and namespaced heads.
+
+Elaborated-term serialization was prototyped under the pinned Lean binary
+during the same pass, with **binder-name independence proven** on two
+prototype pairs. That prototype becomes v0.19's B-P, discharged before its
+B0 freezes.
+
+**What the transliterable number does to this cycle's headline, stated
+plainly.** 17.0% was never a claim that 83% of this corpus is structurally
+beyond the grammar. Roughly half the gap is an encoding boundary that two
+tokenizer rows close, and the honest reading of R1's 0.9991 is unchanged by
+that - it is a rate over terms the parser can read, and the parser's reach
+is a separate, now-measured question.
+
+## What this establishes, and what it does not
+
+It establishes that a realization grammar can linearize committed canonical
+terms into English and that the sentences are recoverable: 2,170 of 2,172,
+zero round-trip failures, zero invented words, with a shuffled-lexicon
+contrast at zero and 3,722 near-misses none of which round-trips to its
+source. It does not establish fluency - the sentences are correct and
+re-parseable and their style is whatever the grammar produces. It does not
+establish that slots speak their names; `canonicalize` erases slot identity
+and the surface says "variable zero". It says nothing about the 83% the
+parser cannot read, which is the next cycle's territory and, per the
+numbers above, is two different problems rather than one.
