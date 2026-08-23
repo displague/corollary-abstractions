@@ -270,9 +270,15 @@ surface**, the honest degradation); and any ranking component (§9).
 - **C-R2 — the near-miss.** Mutations one operator word away from
   correct, **constructed only from swaps verified to change the
   canonical skeleton before realizing** (commutative-argument swaps
-  and alias-class synonyms round-trip to the source legitimately —
-  `canonicalize` sorts commutative arguments and aliases heads, and a
-  control that voids on correct behavior is not a control). *If any
+  and symmetric-relation flips round-trip to the source legitimately —
+  `canonicalize` sorts commutative arguments, and a control that
+  voids on correct behavior is not a control. **Corrected by
+  measurement, 2026-08-23:** the first draft also credited
+  `canonicalize` with head aliasing; it does none — `alias_heads` is
+  a separate pass used only by the ALIASED match level, and `MOD` vs
+  `CONCAT` canonicalize to different skeletons — so alias-class swaps
+  ARE legitimate skeleton-changing mutations at this gate's level,
+  not exclusions). *If any
   skeleton-changing near-miss round-trips to the SOURCE skeleton,
   canonicalization is collapsing a distinction and the gate is
   void.* Floor: ≥ 50% of the mutation set must re-parse to a
@@ -309,7 +315,12 @@ slot identity, so the realized surface says "variable zero", not
 "x"; the source identifiers ride in the receipt
 (`parameters.slot_names`) and an R2-gated identifier surface is named
 follow-on work, not smuggled in (registered honestly 2026-08-23 as
-the served surface's biggest limitation).
+the served surface's biggest limitation); and **no claim on
+conditional notation** — the parser collapses the conditional bar
+into an argument separator (`E[Y|X]` reads as a two-argument
+expectation and round-trips as one), so the realized sentence renders
+the bar as "next argument" and the distinction, where it matters,
+lives in the source term, not the surface.
 
 ## 9. The optional learned seat (bounded, behind the bar)
 
