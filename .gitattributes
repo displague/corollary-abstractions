@@ -39,3 +39,4 @@ experiments/throughput_tasks.json text eol=lf
 experiments/throughput_baseline.json text eol=lf
 experiments/throughput_result*.json text eol=lf
 experiments/throughput_trial_*.json text eol=lf
+reports/test_gate_v017/** text eol=lf

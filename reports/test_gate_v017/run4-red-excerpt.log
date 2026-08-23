@@ -1,0 +1,25 @@
+======================================================================
+FAIL: test_streaming_include_usage_behavior (tests.test_serve_chat.Streaming.test_streaming_include_usage_behavior)
+A usage chunk only when asked — and never approximated (§6).
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_serve_chat.py", line 980, in test_streaming_include_usage_behavior
+    self.assertIsNotNone(with_usage)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: unexpectedly None
+
+----------------------------------------------------------------------
+Ran 1705 tests in 20970.778s
+
+FAILED (failures=1, skipped=3)
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+...
+
+=== final tally ===
+Ran 1705 tests in 20970.778s
+FAILED (failures=1, skipped=3)
+EXIT 1
+
+full log sha256: f55eedbcd8b5afc2fe6406ccbee60a2dc954f6e4aa0549fa8d1f36518abf2941

@@ -1,0 +1,97 @@
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.ABaselineResultCarriesTheContentItScored)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1803, in setUpClass
+    digest = tiny_tokenizer(tokenizer)
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+    from tokenizers import Tokenizer
+ImportError: cannot import name 'Tokenizer' from 'tokenizers' (C:\Users\displ\Documents\corollary-abstractions\experiments\tokenizers.py)
+
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheGroundedArmMeasuresWhatItCouldNotHold)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1926, in setUpClass
+    digest = tiny_tokenizer(tokenizer)
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+...
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheGroundedArmMeasuresWhatItCouldNotHold)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1926, in setUpClass
+    digest = tiny_tokenizer(tokenizer)
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+    from tokenizers import Tokenizer
+ImportError: cannot import name 'Tokenizer' from 'tokenizers' (C:\Users\displ\Documents\corollary-abstractions\experiments\tokenizers.py)
+
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheRunRefusesBeforeItCanProduceAVoidNumber)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1060, in setUpClass
+    tiny_tokenizer(tokenizer)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^
+...
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheRunRefusesBeforeItCanProduceAVoidNumber)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1060, in setUpClass
+    tiny_tokenizer(tokenizer)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+    from tokenizers import Tokenizer
+ImportError: cannot import name 'Tokenizer' from 'tokenizers' (C:\Users\displ\Documents\corollary-abstractions\experiments\tokenizers.py)
+
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheStopwatchScoresAWholeHalfAgainstAStub)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1276, in setUpClass
+    digest = tiny_tokenizer(tokenizer)
+...
+======================================================================
+ERROR: setUpClass (tests.test_measure_throughput.TheStopwatchScoresAWholeHalfAgainstAStub)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1276, in setUpClass
+    digest = tiny_tokenizer(tokenizer)
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+    from tokenizers import Tokenizer
+ImportError: cannot import name 'Tokenizer' from 'tokenizers' (C:\Users\displ\Documents\corollary-abstractions\experiments\tokenizers.py)
+
+======================================================================
+ERROR: test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence (tests.test_measure_throughput.TheTokenizerPinRefusesRatherThanApproximates.test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1024, in test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence
+    tiny_tokenizer(tokenizer)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^
+...
+======================================================================
+ERROR: test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence (tests.test_measure_throughput.TheTokenizerPinRefusesRatherThanApproximates.test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 1024, in test_a_wrong_digest_exits_2_with_the_cannot_verify_sentence
+    tiny_tokenizer(tokenizer)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_measure_throughput.py", line 281, in tiny_tokenizer
+    from tokenizers import Tokenizer
+ImportError: cannot import name 'Tokenizer' from 'tokenizers' (C:\Users\displ\Documents\corollary-abstractions\experiments\tokenizers.py)
+
+----------------------------------------------------------------------
+Ran 1655 tests in 21726.598s
+
+FAILED (errors=5, skipped=3)
+ok: certificate_schema
+ok: graph_sha256
+...
+
+=== final tally ===
+Ran 1655 tests in 21726.598s
+FAILED (errors=5, skipped=3)
+EXIT 1
+
+full log sha256: 16ad0261e2eaa2e382e03ce6928bd31ccf296caf84e0bf526f2917b1379b89b7

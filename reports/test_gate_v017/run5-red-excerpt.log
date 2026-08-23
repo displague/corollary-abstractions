@@ -1,0 +1,25 @@
+======================================================================
+ERROR: tearDownClass (tests.test_write_stage.WorkingTreeIntegrityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\displ\Documents\corollary-abstractions\tests\test_write_stage.py", line 289, in tearDownClass
+    raise AssertionError(
+    ...<2 lines>...
+    )
+AssertionError: a WRITE-staging test changed the repository working tree (root files, data/, prover/, schema/ or scripts/)
+
+----------------------------------------------------------------------
+Ran 1705 tests in 21180.262s
+
+FAILED (errors=1, skipped=3)
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+...
+
+=== final tally ===
+Ran 1705 tests in 21180.262s
+FAILED (errors=1, skipped=3)
+EXIT 1
+
+full log sha256: 91f2eb6205a12002df4d583e7403155f62dd4235e082e9b898b82b1760385a8f

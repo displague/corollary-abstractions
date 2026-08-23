@@ -374,13 +374,11 @@ python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_re
 cd experiments && python -m visual.genvisual adjudicate --n 240 --seed 11
                                              # visual oracle: P-VO1..P-VO7
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
-# 1,427 tests, 0 failures, 3 skipped at v0.16.0 -- 5h47m serial, and one
-# module (test_write_stage) is 57.6% of it. Timing receipts:
-# reports/test_gate_v016/ (v0.15 baseline: reports/test_gate_v015/)
-# [SUITE-GATE-V17: v0.17.0's gate has not run yet; this line refreshes to the
-# v0.17 tip's numbers before the tag. This cycle adds four wholly new modules
-# -- test_measure_throughput (124), test_serve_chat (68),
-# test_throughput_tasks (53), test_wiring_routes (33).]
+# 1,705 tests, 0 failures, 3 skipped at v0.17.0 -- 7h31m serial (27,068.5s),
+# test_write_stage still the bulk of it. Receipts incl. the five pre-green
+# runs: reports/test_gate_v017/ (baselines: test_gate_v016/, test_gate_v015/).
+# This cycle's four new modules: test_measure_throughput (124),
+# test_serve_chat (68), test_throughput_tasks (53), test_wiring_routes (33).
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

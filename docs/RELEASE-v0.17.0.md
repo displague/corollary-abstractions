@@ -515,12 +515,20 @@ divergence carrying its TRIAGE-v0.11 citation.
 
 ## The suite at the tip
 
-[SUITE-GATE-V17: full-suite verdict and timing at the frozen v0.17 tip land
-here before the tag; the v0.16.0 receipt (1,427 tests, 0 failures, 3
-skipped, 20,837.8 s, `reports/test_gate_v016/run2-green.time_tests.log`) is
-the baseline, and this cycle adds four wholly new test modules —
-`test_measure_throughput` (124), `test_serve_chat` (68),
-`test_throughput_tasks` (53), `test_wiring_routes` (33).]
+**1,705 tests, OK (3 environment skips), 27,068.5 s (7h31m) at the frozen
+tip `ab45c23`** — up from v0.16.0's 1,427 (20,837.8 s), the growth being
+this cycle's four wholly new modules: `test_measure_throughput` (124),
+`test_serve_chat` (68), `test_throughput_tasks` (53), `test_wiring_routes`
+(33). Green on the sixth run, and the five before it are part of the
+record (`reports/test_gate_v017/runs.md`, red receipts included): two
+operator errors the instruments caught — including the tree-integrity
+guard catching its own operator mid-run — and two real defects no
+standalone run could see: a `sys.path` shadow that turned five tests red
+only in company, and an environment-gated test branch that first executed
+inside this gate, was misdiagnosed once, and had its wrong story corrected
+in the commit record before the right fix landed. The serving code needed
+no change; the gate spent its runs on the tests and the operator, which is
+what it is for.
 
 ## Reproduce
 
