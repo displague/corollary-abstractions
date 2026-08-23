@@ -936,7 +936,16 @@ class Streaming(ServedSkin):
             extra = chunk.model_extra or {}
             if extra.get("x_corollary"):
                 extension = extra["x_corollary"]
-            if extra.get("usage"):
+            # `usage` is a first-class field of ChatCompletionChunk, so the
+            # client parses it out of model_extra; reading only model_extra
+            # missed the usage chunk entirely. The miss stayed invisible in
+            # every worktree run because the pinned tokenizer file exists
+            # only in the main checkout -- tokens.available was False, the
+            # else-branch ran, and the strict leg first executed inside the
+            # v0.17.0 release gate, twice red, before anyone saw it fail.
+            if getattr(chunk, "usage", None):
+                usage = chunk.usage.model_dump()
+            elif extra.get("usage"):
                 usage = extra["usage"]
             for choice in chunk.choices:
                 if choice.delta and choice.delta.content is not None:
