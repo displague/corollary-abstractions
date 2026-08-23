@@ -161,6 +161,67 @@ learning here is dictionary growth plus graph growth, both exact,
 both receipted, immediately queryable — weights, when they appear at
 all, only rank among licensed alternatives.
 
+## 3c. Composition, and the criterion that decides how many templates
+
+Directed follow-up (2026-08-23), recorded with its delegation: §2's
+"five templates" is a snapshot of one generator's output, not a
+design number — *the correct number should be based on what
+effectively fits data*, and the id space could carry **composition
+bits**: multiples, recursion, templates built from templates. The
+maintainer leaves the determination to the design track explicitly —
+the course is a relay where the idea is passed through several strong
+readers who emerge with a better one — and this section is the first
+pass.
+
+**"What effectively fits data" has an exact name: minimum description
+length.** The promotion gate's self-evaluation (§3, item 5) becomes
+two-part MDL accounting: `total_bits = dictionary_bits +
+encoded_corpus_bits`, and a candidate template (or block, or
+composed rule) is admitted iff it strictly reduces the total. That
+criterion answers the count question without anyone choosing a
+number: five templates win only if a sixth costs more dictionary
+than it saves in encoding — and it polices both failure directions
+(under-templating leaves recurrence unpriced; over-templating turns
+the dictionary into a copy of the corpus).
+
+**Composition bits are grammar induction wearing an id format.** A
+template whose slots accept *other template ids* — with a small depth
+field — makes the dictionary a grammar, and admitting composed rules
+under the same MDL gate is exactly what grammar-based compressors
+(Re-Pair, SEQUITUR) do: promote the most valuable pair, recursively,
+until promotion stops paying. The maintainer's "this is" → "this is
+a" → "this is a test" chain is Re-Pair run at word granularity. For
+the formal layer the composition grammar **already exists** — the
+skeleton algebra is a recursive typed grammar over subterm ids — so
+composition bits there mean addressing into it, not inventing a
+second one.
+
+**Why the neural mainstream stopped short of this (the directed
+question, answered honestly).** BPE stops at subwords for reasons
+that are real but contingent: a dense embedding table and softmax
+scale with vocabulary size, and Zipf's law starves rare-token
+gradients — a 2^24 *learned-per-id* table is untrainable, so vocabs
+sit near 10^5 and stay subword so every token trains often enough.
+The directed design dodges all three constraints at once, because
+its ids are **not opaque**: embeddings can be computed from the bit
+fields (namespace + template + filler — factorized, tiny tables),
+which is the only regime where a 2^24 vocabulary is even coherent.
+And models do not consume zstd streams because LZ77-family codes are
+**position-dependent** — the same content gets different codes in
+different windows, destroying the stable symbol→meaning mapping an
+embedding requires. Compression optimizes bits; models need
+referential stability. The design's append-only, stable-id
+dictionary is precisely "a compressor whose codes are also symbols"
+— LZ78/grammar-family, not LZ77 — and that, plus the posting-list
+index and the exact/receipted corpus underneath, is the ground the
+existing literature (large-vocab tokenizers, byte-latent patching,
+speculative drafters) does not occupy.
+
+The course inherits from this section: the MDL gate as the promotion
+criterion; composition depth as a measured histogram, not a guess;
+and the census script's successor must *induce* the dictionary under
+MDL and report what the data chose.
+
 ## 4. Questions the course must answer before this becomes a preregistration
 
 - **Fixed-width vs variable-length ids.** 2^24 fixed-width with
