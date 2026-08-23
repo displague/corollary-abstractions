@@ -366,9 +366,10 @@ class TautologyProbeTests(unittest.TestCase):
         """If implementing the realizer forced a parser change, this goes red."""
         self.assertEqual(self.prereg["prereg_id"], "realization.prereg.v1")
         frozen = {row["role"]: row for row in self.prereg["frozen"]}
-        self.assertEqual(
-            set(frozen),
+        self.assertLessEqual(
             {"parser", "numeral_pair", "lexicon", "lexicon_loader"},
+            set(frozen),
+            "the four artifacts frozen before the realizer must all be recorded",
         )
         for role, row in frozen.items():
             with self.subTest(role=role):
@@ -387,11 +388,23 @@ class TautologyProbeTests(unittest.TestCase):
         self.assertEqual(frozen["numeral_pair"], "scripts/numeral_words.py")
         self.assertEqual(frozen["lexicon"], "data/realization/lexicon.json")
 
-    def test_the_inverter_slot_is_named_and_pending(self) -> None:
-        """The realizer does not exist yet, and the file says so out loud."""
+    def test_the_inverter_row_dates_itself(self) -> None:
+        """§7 records the inverter's digest *beside* the parser's.
+
+        It cannot be in the commit that freezes the parser before the realizer
+        exists, so when it appears it must carry the date that says so. While
+        it is still absent, `pending` names it — either state is honest; a row
+        that claims to predate the parser freeze would not be.
+        """
+        frozen = {row["role"]: row for row in self.prereg["frozen"]}
         pending = {row["path"]: row for row in self.prereg["pending"]}
-        self.assertIn("scripts/realize_term.py", pending)
-        self.assertEqual(pending["scripts/realize_term.py"]["role"], "inverter")
+        if "inverter" in frozen:
+            self.assertEqual(frozen["inverter"]["path"], "scripts/realize_term.py")
+            self.assertIn("recorded", frozen["inverter"])
+            self.assertEqual(self.prereg["pending"], [])
+        else:
+            self.assertIn("scripts/realize_term.py", pending)
+            self.assertEqual(pending["scripts/realize_term.py"]["role"], "inverter")
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -1,0 +1,365 @@
+{
+  "census_id": "realization.census.v1",
+  "realizer_id": "realization.grammar.v1",
+  "lexicon_id": "realization.lexicon.v1",
+  "source_field": "formal_statement.canonical_ascii",
+  "data_dir": "data",
+  "note": [
+    "R0's construction prerequisite (design §6): the parse rate of the source field under the byte-frozen parser, per corpus, with failure classes named — published before R1's floor is read.",
+    "R1's floor is a fraction of the PARSEABLE denominator, which is reported beside every rate here.",
+    "This is not the registered full-corpus run (experiments/realization_rate.json); it is the table that run's denominator comes from."
+  ],
+  "totals": {
+    "nodes": 12777,
+    "parseable": 2172,
+    "parse_rate": 0.169993,
+    "round_trip_exact": 2170,
+    "round_trip_failed": 0,
+    "refused_after_parse": 2,
+    "round_trip_rate_over_parseable": 0.999079,
+    "r1_floor": 0.9,
+    "r1_verdict": "FIRES"
+  },
+  "corpora": [
+    {
+      "corpus": "lean_workbook",
+      "nodes": 12514,
+      "parseable": 2040,
+      "parse_rate": 0.163017,
+      "round_trip_exact": 2038,
+      "round_trip_failed": 0,
+      "refused_after_parse": 2,
+      "round_trip_rate_over_parseable": 0.99902,
+      "thin_denominator": false
+    },
+    {
+      "corpus": "geometry",
+      "nodes": 15,
+      "parseable": 14,
+      "parse_rate": 0.933333,
+      "round_trip_exact": 14,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "machine_learning",
+      "nodes": 14,
+      "parseable": 14,
+      "parse_rate": 1.0,
+      "round_trip_exact": 14,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "physics",
+      "nodes": 15,
+      "parseable": 14,
+      "parse_rate": 0.933333,
+      "round_trip_exact": 14,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "economics",
+      "nodes": 11,
+      "parseable": 11,
+      "parse_rate": 1.0,
+      "round_trip_exact": 11,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "morphology",
+      "nodes": 11,
+      "parseable": 10,
+      "parse_rate": 0.909091,
+      "round_trip_exact": 10,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "calculus",
+      "nodes": 11,
+      "parseable": 9,
+      "parse_rate": 0.818182,
+      "round_trip_exact": 9,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "chemistry",
+      "nodes": 10,
+      "parseable": 8,
+      "parse_rate": 0.8,
+      "round_trip_exact": 8,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "trigonometry",
+      "nodes": 8,
+      "parseable": 8,
+      "parse_rate": 1.0,
+      "round_trip_exact": 8,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "differential_geometry",
+      "nodes": 9,
+      "parseable": 7,
+      "parse_rate": 0.777778,
+      "round_trip_exact": 7,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "information_theory",
+      "nodes": 10,
+      "parseable": 7,
+      "parse_rate": 0.7,
+      "round_trip_exact": 7,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "statistics",
+      "nodes": 11,
+      "parseable": 5,
+      "parse_rate": 0.454545,
+      "round_trip_exact": 5,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "algebraic_topology",
+      "nodes": 8,
+      "parseable": 4,
+      "parse_rate": 0.5,
+      "round_trip_exact": 4,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "narrative",
+      "nodes": 13,
+      "parseable": 4,
+      "parse_rate": 0.307692,
+      "round_trip_exact": 4,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "number_theory",
+      "nodes": 16,
+      "parseable": 4,
+      "parse_rate": 0.25,
+      "round_trip_exact": 4,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "differential_topology",
+      "nodes": 7,
+      "parseable": 3,
+      "parse_rate": 0.428571,
+      "round_trip_exact": 3,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "geometric_modeling",
+      "nodes": 8,
+      "parseable": 3,
+      "parse_rate": 0.375,
+      "round_trip_exact": 3,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "numerical_analysis",
+      "nodes": 8,
+      "parseable": 3,
+      "parse_rate": 0.375,
+      "round_trip_exact": 3,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "geospatial_topology",
+      "nodes": 7,
+      "parseable": 1,
+      "parse_rate": 0.142857,
+      "round_trip_exact": 1,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "graph_theory",
+      "nodes": 8,
+      "parseable": 1,
+      "parse_rate": 0.125,
+      "round_trip_exact": 1,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "set_theory",
+      "nodes": 10,
+      "parseable": 1,
+      "parse_rate": 0.1,
+      "round_trip_exact": 1,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "temporal_logic",
+      "nodes": 16,
+      "parseable": 1,
+      "parse_rate": 0.0625,
+      "round_trip_exact": 1,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 1.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "algebra",
+      "nodes": 1,
+      "parseable": 0,
+      "parse_rate": 0.0,
+      "round_trip_exact": 0,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 0.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "ingested_arithmetic",
+      "nodes": 1,
+      "parseable": 0,
+      "parse_rate": 0.0,
+      "round_trip_exact": 0,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 0.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "logic",
+      "nodes": 20,
+      "parseable": 0,
+      "parse_rate": 0.0,
+      "round_trip_exact": 0,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 0.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "programming",
+      "nodes": 9,
+      "parseable": 0,
+      "parse_rate": 0.0,
+      "round_trip_exact": 0,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 0.0,
+      "thin_denominator": true
+    },
+    {
+      "corpus": "provability",
+      "nodes": 6,
+      "parseable": 0,
+      "parse_rate": 0.0,
+      "round_trip_exact": 0,
+      "round_trip_failed": 0,
+      "refused_after_parse": 0,
+      "round_trip_rate_over_parseable": 0.0,
+      "thin_denominator": true
+    }
+  ],
+  "refusal_classes": {
+    "unparseable_term": 10605,
+    "unsupported_numeral": 2
+  },
+  "parse_failure_classes": {
+    "unexpected character": 10432,
+    "trailing tokens": 111,
+    "expected": 53,
+    "unexpected token '|'": 6,
+    "unexpected token '['": 2,
+    "unexpected token '>'": 1
+  },
+  "examples": {
+    "unparseable_term": [
+      {
+        "statement_id": "algebra.polynomial_equations.quadratic_formula",
+        "source": "x = (-b ± sqrt(b^2 - 4ac)) / (2a)",
+        "detail": "expected `)`"
+      },
+      {
+        "statement_id": "algtop.invariants.euler_characteristic_valuation",
+        "source": "chi(A union B) = chi(A) + chi(B) - chi(A inter B)",
+        "detail": "expected `)`"
+      },
+      {
+        "statement_id": "algtop.homology.chain_rank_nullity",
+        "source": "rank(C_n) = rank(ker d_n) + rank(im d_n)",
+        "detail": "expected `)`"
+      }
+    ],
+    "unsupported_numeral": [
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_37421",
+        "source": "(4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888",
+        "detail": "magnitude 4444444444444444117954583006583106326705792067553190610056206310134943580160 is outside the registered numeral"
+      },
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_plus_68304",
+        "source": "(444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444",
+        "detail": "magnitude 444444444444444454917081529522011969194131718144 is outside the registered numeral domain (|n| < 1000000000000"
+      }
+    ]
+  }
+}

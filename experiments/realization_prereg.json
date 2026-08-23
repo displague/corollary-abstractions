@@ -34,16 +34,19 @@
       "role": "lexicon_loader",
       "sha256_lf": "5a9761d1ab59c1152e2e6a6786452a738a14c48d936f9ae64ef0c43b65d00e62",
       "why": "The R2b load gate. Recorded with the table because a table is only as bijective as the loader that refuses a non-bijective one."
-    }
-  ],
-  "pending": [
+    },
     {
       "path": "scripts/realize_term.py",
       "role": "inverter",
-      "sha256_lf": null,
-      "why": "The stage-1 inverter. Design 7 records its digest \"beside\" the parser digests; it cannot be recorded in the same commit that freezes the parser BEFORE the realizer exists, so it is added in the realize_term commit with its own dated entry, and the ordering itself is the record."
+      "sha256_lf": "bf616d279aa47f8e9a552b941eb934607a68487ee554231e0aa0250919484fbc",
+      "recorded": "2026-08-23",
+      "why": [
+        "Design §7 C-R3: \"the inverter's digest is recorded beside them\". It could not be in the commit that froze the parser BEFORE the realizer existed, so it lands with the realizer and carries its own `recorded` date. The ordering is itself the record: the parser digest predates this file, and tests/test_realize_term.py re-checks the parser digest from inside the realizer's own module.",
+        "Recorded, not sealed shut: a later commit that must change this file re-records the digest with a dated `corrections` entry, exactly as the lexicon's operator_tokens correction did."
+      ]
     }
   ],
+  "pending": [],
   "head_inventory_measured": {
     "source_field": "formal_statement.canonical_ascii",
     "nodes_total": 12777,
@@ -81,5 +84,6 @@
       ],
       "not_a_c_r3_event": "scripts/match_signatures.py is byte-unchanged; its digest below is the one the preregistration commit recorded. C-R3 is a claim about the parser and it holds."
     }
-  ]
+  ],
+  "pending_note": "Empty since 2026-08-23: the inverter row moved into `frozen` when scripts/realize_term.py was written."
 }
