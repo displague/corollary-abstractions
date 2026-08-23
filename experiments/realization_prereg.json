@@ -26,13 +26,13 @@
     {
       "path": "data/realization/lexicon.json",
       "role": "lexicon",
-      "sha256_lf": "7b7a171766bca45a7f314a3c9cdd0ddcaaacdc482709be43741cef1ff885cc10",
+      "sha256_lf": "6d6191eff6158efbdba2ea6f472ce8d1f00e2e02953fab70522832277572dd8b",
       "why": "The trusted bijective table. Extending it is a diff with tests; this digest is what a later diff is read against."
     },
     {
       "path": "scripts/realization_lexicon.py",
       "role": "lexicon_loader",
-      "sha256_lf": "7a73bbe2a6902994dd357bf0d661b77c40b42ff708a1cb0e46a17a09a9bff384",
+      "sha256_lf": "5a9761d1ab59c1152e2e6a6786452a738a14c48d936f9ae64ef0c43b65d00e62",
       "why": "The R2b load gate. Recorded with the table because a table is only as bijective as the loader that refuses a non-bijective one."
     }
   ],
@@ -67,5 +67,19 @@
       "approx"
     ],
     "note": "R0 proper -- the per-corpus table with failure classes named -- is discharged by scripts/realize_term.py --census and by the registered run. These are the calibration figures the lexicon was authored against."
-  }
+  },
+  "corrections": [
+    {
+      "dated": "2026-08-23",
+      "artifact": "data/realization/lexicon.json + scripts/realization_lexicon.py",
+      "what": "Added `operator_tokens` = {\"inv\": \"/\", \"neg\": \"-\"} and the loader clause that reads it. The lexicon and loader digests below are re-recorded; the parser digest is not touched.",
+      "why": [
+        "The first preregistration commit emitted every operator row's KEY as its token. That is correct for `+`, `*`, `^`, `±` and every relation, and wrong for the two rows keyed by a canonical NODE name.",
+        "`canonicalize` rewrites binary `-` into `+ neg(.)` and `/` into `* inv(.)`, so those rows are keyed `neg` and `inv` while `match_signatures.TOKEN_RE` only knows the glyphs `-` and `/`.",
+        "Emitting the literal token `neg` produced a fluent sentence that stage 2 re-parsed as a CALL head: `exp(-(r*t))` came back as `exp⟨neg⟨*(?1, ?2)⟩⟩` against a source of `exp⟨neg(*(?1, ?2))⟩`. Fluent, and wrong — which is exactly the failure mode C-R1's scrambled control is built to make visible, arriving here by accident instead.",
+        "Corrected in the table, not by relaxing the comparison. Recorded here rather than amended into the preregistration commit, because a silently-fixed prereg artifact is worth less than a dated one."
+      ],
+      "not_a_c_r3_event": "scripts/match_signatures.py is byte-unchanged; its digest below is the one the preregistration commit recorded. C-R3 is a claim about the parser and it holds."
+    }
+  ]
 }

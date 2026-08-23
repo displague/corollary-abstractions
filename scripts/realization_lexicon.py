@@ -157,11 +157,25 @@ def build(raw: dict, path: Path | str = "<memory>") -> Lexicon:
     slot_word = marker["word"]
 
     # -- collect every row as (key, phrase, token) -------------------------
+    # Most keys ARE their token. Two are not: the canonical tree spells unary
+    # minus `neg` and reciprocal `inv` (`Parser.parse_sum` / `parse_product`
+    # rewrite `-` and `/` into them), while the tokenizer only knows the
+    # glyphs. `operator_tokens` states that mapping in the file rather than
+    # letting the loader guess it, because a row whose emitted token is not
+    # the token the frozen tokenizer expects produces a fluent sentence that
+    # re-parses to a DIFFERENT tree — `neg` reads back as a call head.
+    operator_tokens = raw.get("operator_tokens", {})
+    unknown = set(operator_tokens) - set(raw["operators"])
+    if unknown:
+        raise LexiconError(
+            f"`operator_tokens` names {sorted(unknown)}, which are not operator rows"
+        )
+
     rows: list[tuple[str, str, str]] = []
     for key, phrase in raw["structural"].items():
         rows.append((key, phrase, key))
     for key, phrase in raw["operators"].items():
-        rows.append((key, phrase, key))
+        rows.append((key, phrase, operator_tokens.get(key, key)))
     for key, phrase in raw["relations"].items():
         rows.append((key, phrase, key))
     for key, phrase in raw["call_heads"].items():

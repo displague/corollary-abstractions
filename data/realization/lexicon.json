@@ -216,6 +216,10 @@
     "MOD is modifier application MOD(base, modifier), declared as such in",
     "match_signatures.HEAD_ALIASES' ordered_compose class."
   ],
+  "operator_tokens": {
+    "inv": "/",
+    "neg": "-"
+  },
   "operators": {
     "*": "times",
     "+": "plus",
@@ -253,7 +257,7 @@
     "BRACKET HEADS: a head spelled `X[]` emits the token `X` and takes its",
     "arguments between the `[` and `]` structural rows; the trailing marker is",
     "grammar, not name (match_signatures.lint_stem says the same).",
-    "GLYPHS `-` AND `/`: they have no rows of their own. canonicalize() has",
+    "GLYPHS `-` AND `/`: they have no rows of their own. canonicalize() has already rewritten every binary `-` into `+ neg(.)` and every `/` into `* inv(.)`, so the canonical term only ever needs `neg` and `inv`, and a second row spelling the same glyph would break R2b injectivity. Those two rows are keyed by the NODE name and emit the GLYPH, which is what `operator_tokens` below states: a row that emitted the literal token `neg` would re-parse as a call head and the sentence would be fluent and wrong.",
     "already rewritten every binary `-` into `+ neg(.)` and every `/` into",
     "`* inv(.)`, so the canonical term only ever needs `neg` and `inv`, and a",
     "second row spelling the same glyph would break R2b injectivity.",
