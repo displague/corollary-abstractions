@@ -113,6 +113,54 @@ New, and worth a design:
    round-trips byte-identical. Promotion that fails any leg refuses.
    "Self-evaluated" means measured gates, not vibes.
 
+## 3b. Runtime growth is the point, not a convenience
+
+Clarified by the maintainer while this seed was being written, and
+promoted here to a design constraint because it reorders the
+priorities: **the corpora expand during runtime — more is added, and
+what exists is not changed.** This system is not pretrained on world
+knowledge — it consumes knowledge as it encounters it and learns
+progressively; the self-expanding property is why the idea exists at
+all. Additive growth on the corpus side is what makes the vocabulary
+side clean: with neither statements nor ids ever mutating, there is
+no invalidation problem anywhere in the design — only append, count,
+promote. Consequences the course must treat as
+requirements, not options:
+
+- **Id stability under growth.** A vocabulary that re-tokenizes when
+  it grows (retrained BPE reassigns every id) is disqualified by
+  construction. Promotion is **append-only**: new blocks mint new ids
+  inside their namespace; no existing id ever changes meaning. The
+  structured bit fields make room for this natively — appending
+  within a namespace is just the low bits counting up.
+- **Promotion happens at write time.** The runtime ingestion path
+  already exists and already has the right discipline: the WRITE
+  gate stages PROVEN candidates with a declared
+  `expected_matcher_delta` before measurement and refuses byte-drift.
+  The dictionary extends the same pattern — a write carries its
+  **expected vocabulary delta** (which blocks cross the promotion
+  floor because of this statement), measured at the gate, receipted
+  like everything else. Learning-by-encounter becomes: the statement
+  lands in the graph, its recurrences land in the count ledger, and
+  the ones that cross the registered floor become addressable — no
+  gradient anywhere.
+- **Regeneration discipline survives.** The reconciliation between
+  "runtime-grown" and this repository's regeneration rule is an
+  **append-only promotion ledger**: the dictionary's seed is its own
+  event log, and replaying the log reproduces the dictionary
+  byte-identically. `check_regeneration` gets one more artifact, not
+  one exception.
+- **The census is a snapshot, and says so.** §2's numbers describe
+  today's tree; the design's gates must be stated over the ledger's
+  replay (any prefix of history yields a valid dictionary), so the
+  measured properties hold at every growth point, not just at the
+  release that happened to measure them.
+
+This is also the honest frame for the progressive-learning claim:
+learning here is dictionary growth plus graph growth, both exact,
+both receipted, immediately queryable — weights, when they appear at
+all, only rank among licensed alternatives.
+
 ## 4. Questions the course must answer before this becomes a preregistration
 
 - **Fixed-width vs variable-length ids.** 2^24 fixed-width with
@@ -148,7 +196,7 @@ New, and worth a design:
 No neural component is proposed here — the maintainer's framing is
 explicit that this is pre-neural substrate work; the drafter seat is
 optional and bar-gated. No claim that this replaces the seeds or the
-schema: the dictionary is a derived, regenerable artifact with a
-seed-script of its own, or it is nothing. No claim on v0.18's scope:
+schema: the dictionary regenerates byte-identically from its
+append-only promotion ledger (§3b), or it is nothing. No claim on v0.18's scope:
 this seed waits for the v0.19 course by design, and the census above
 is its evidence budget until then.
