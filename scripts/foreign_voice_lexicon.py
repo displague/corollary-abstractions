@@ -223,6 +223,15 @@ def build(raw: dict, path: Path | str = "<memory>") -> ForeignLexicon:
         by_token[token] = key
 
     # -- F4: both compositions are the identity ----------------------------
+    # Stated rather than discovered: given F2 and F3 above, this loop CANNOT
+    # fail — the two dicts are built from the same rows and F2 has already
+    # refused any duplicate phrase. It is kept because F4 is the property the
+    # design actually leans on ("forward and reverse readings of every row
+    # compose to the identity on both sides"), and a gate list whose entries
+    # are only implied by other entries is a gate list a reader has to derive.
+    # v0.18's loader carries the same tautology for the same reason. If F2 or
+    # F3 is ever weakened, this stops being redundant, which is exactly when a
+    # reader would want it to have been here all along.
     key_to_phrase = {key: phrase for key, phrase, _t, _s in rows}
     phrase_to_key = {phrase: key for key, phrase, _t, _s in rows}
     for key, phrase, _token, _section in rows:

@@ -87,7 +87,21 @@ def flatten (s : String) : String :=
 
 end ForeignVoice
 
-/-- `#ser "tag" => term` — elaborate and serialize, or report why not. -/
+/-- `#ser "tag" => term` — elaborate and serialize, or report why not.
+
+The two rejections after `instantiateMVars` are not tidiness.  `ser` maps
+EVERY `.mvar` to the constant string `(mv)`, so a term that still carries an
+unassigned metavariable is serialized to a string that erases which
+metavariable it was: `#ser "a" => (1 2 3)` and `#ser "b" => (4 5 6 7)` are
+different propositions and would digest identically.  A witness that says two
+different things are the same is worse than no witness, so a residual
+metavariable REFUSES.
+
+`hasSorry` is the same failure by the other door.  `withoutErrToSorry` stops
+`elabTerm` from turning its own errors into `sorryAx`, but a term whose SOURCE
+contains `sorry` still elaborates cleanly to one — and every such term shares
+the same `sorryAx` skeleton, so they too would collide.  Nothing in this cycle
+serializes a proof, and this is where that is enforced rather than assumed. -/
 elab "#ser " tag:str " => " t:term : command => do
   liftTermElabM do
     let name := tag.getString
@@ -95,7 +109,14 @@ elab "#ser " tag:str " => " t:term : command => do
       let e ← Term.withoutErrToSorry (Term.elabTerm t none)
       Term.synthesizeSyntheticMVarsNoPostponing
       let e ← instantiateMVars e
-      logInfo s!"FVSER {name} {ForeignVoice.ser e}"
+      if e.hasExprMVar then
+        logInfo s!"FVERR {name} residual metavariable: the elaborated term is \
+          not fully determined, and every such term serializes to the same (mv)"
+      else if e.hasSorry then
+        logInfo s!"FVERR {name} the elaborated term contains sorryAx; nothing \
+          in this cycle serializes a proof"
+      else
+        logInfo s!"FVSER {name} {ForeignVoice.ser e}"
     catch ex =>
       let msg ← ex.toMessageData.toString
       logInfo s!"FVERR {name} {ForeignVoice.flatten msg}"

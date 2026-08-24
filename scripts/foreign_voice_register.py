@@ -13,31 +13,58 @@ and §8: *"Coverage percent is not the headline. The register is. No release
 sentence leads with a coverage number. If the register is thin and the
 coverage is high, the cycle under-delivered on its actual product."*
 
-## Every class is decided by outcome, not by an author's guess
+## Most of this is decided by outcome. Two pieces are authored, and say so.
 
 The design retired an authored blocklist once already — *"a hand-written
-eligibility filter measures the filter"* — and the same discipline applies to
-the register or the inventory of silence becomes an inventory of expectations.
-So:
+eligibility filter measures the filter"* — so where a class can be read off
+the oracle's own behaviour, it is:
 
 * **the Mathlib head vocabulary is read out of the oracle's own diagnostics.**
   Every name the pinned binary reported as `Unknown identifier` or `Unknown
   constant` across the whole residue is collected, committed as
   `oracle_unknown_heads`, and a statement carrying one is
-  `mathlib_head_vocabulary`.  Nobody wrote that list; the toolchain did.  It
-  is why `Nat.Prime` is in it and why nothing is in it that the oracle never
-  complained about.
-* **`√` is added to that test by rule and the rule is stated**: it is
-  Mathlib's notation for a head core Lean does not have, so it fails at the
-  *parser* and never reaches the diagnostic that would name it.  A class that
-  counted it as pseudo-mathematics would be filing a Mathlib budget
-  consequence under a design consequence, and B3 exists precisely to keep
-  those two apart.
-* **`interpretation_absent` is exactly the set the design's B0b+B0c branch
-  clause names** — the Prop-valued and relational corpora — because branch
-  (ii) was taken and the clause says those statements carry that reason.
-* the remaining classes fall out of the diagnostic: a parse-level rejection is
-  `ascii_pseudo_math`, anything else is `typeclass_instance_absent`.
+  `mathlib_head_vocabulary`.  It is why `Nat.Prime` is in it.
+* a parse-level rejection with no such head is `ascii_pseudo_math`; anything
+  else is `typeclass_instance_absent`.
+
+**Two inputs to that are authored lists, and pretending otherwise would be the
+exact dishonesty this artifact exists to prevent:**
+
+* **`NOTATION_HEADS`** — currently just `√`.  It is Mathlib's notation for a
+  head core Lean does not have, so it fails at the *parser* and never reaches
+  the diagnostic that would name it.  Nothing measured could have put it in
+  the list; a human read the parse errors and decided.  A class that counted
+  it as pseudo-mathematics would file a Mathlib budget consequence under a
+  design consequence, and B3 exists to keep those apart — but that judgement
+  is a judgement.
+* **`rule_r.json`'s `frozen_constants.names`** — the bare heads rule R
+  declines to bind.  `Even`, `Odd`, `Prime` and `Irrational` were added by a
+  dated correction after review finding H3; before it, the preamble bound them
+  at `Rat` and the oracle said `Function expected at`, which routed seven
+  statements into a class about this repository's own ASCII notation when the
+  real reason was the Mathlib budget.  Adding a name to that list is a
+  judgement too.
+  What bounds it: a name in `frozen_constants` can only move a statement from
+  one *blocked* bucket to another — never into the covered set — so the list
+  cannot buy coverage, and every addition is a diff against a digest with the
+  count it moved written down.
+
+* **`prop_interpretation_absent` is exactly the set the design's B0b+B0c
+  branch clause names** — the Prop-valued and relational corpora — because
+  branch (ii) was taken and the clause says those statements carry that
+  reason.  That set is the design's, not this module's.
+
+## The two `interpretation_absent` reasons were one reason, and are not now
+
+An earlier version gave both the branch-(ii) corpora and the ASCII pseudo-math
+statements the reason `interpretation_absent`, which made one string mean two
+different things: *"a second interpretation was measured and deliberately not
+registered"* and *"this is not Lean in any alphabet and no interpretation
+would help"*.  The first is a decision this cycle took and could revisit; the
+second is a fact about how the corpus was authored.  The register_id for the
+first is now `prop_interpretation_absent`, it alone carries the reason
+`interpretation_absent`, and `ascii_pseudo_math` carries `oracle_rejected` —
+which is what actually happened to it.
 
 Three further classes cover statements the oracle ACCEPTED and the lexicon
 still cannot say: `coercion`, `unsupported_numeral`, `noncanonical_numeral`.
@@ -95,7 +122,11 @@ NOTATION_HEADS = ("√",)
 
 _UNKNOWN_RE = re.compile(r"Unknown (?:identifier|constant) .(.+?).$")
 _PARSE_ERROR = ("unexpected token", "expected token", "Function expected")
-_NUMERAL_RE = re.compile(r"\d+(?:\.\d+)?")
+#: A numeral literal, and NOT the digits inside an identifier: `x_2` and
+#: `a1` carry digit runs that no numeral pair is ever asked to spell, and a
+#: variable spelled `v1000000000000000000` would otherwise be filed as an
+#: out-of-domain literal.
+_NUMERAL_RE = re.compile(r"(?<![A-Za-z0-9_'₀-₉])\d+(?:\.\d+)?")
 
 
 class RegisterError(ValueError):
@@ -161,7 +192,7 @@ def classify(preview: dict, refusal_glyphs: list[str]) -> dict[str, list[dict]]:
         if _carries_head(row["interpreted"], heads):
             put("mathlib_head_vocabulary", row)
         elif row["corpus"] in PROP_CORPORA:
-            put("interpretation_absent", row)
+            put("prop_interpretation_absent", row)
         elif row["error"].startswith(_PARSE_ERROR):
             put("ascii_pseudo_math", row)
         else:
@@ -196,7 +227,23 @@ _ENTRY_PROSE: dict[str, dict] = {
             "not.",
             "This is a BUDGET consequence, not a design consequence. The",
             "maintainer can lift it by deciding the Mathlib question; this cycle",
-            "cannot and does not."
+            "cannot and does not.",
+            "How membership is decided, stated exactly rather than flatteringly:",
+            "MOSTLY by outcome — `oracle_unknown_heads` is every name the pinned",
+            "binary itself reported as an unknown identifier or constant across",
+            "the residue — but TWO authored inputs feed it and neither is",
+            "measured. `notation_heads` (√) is a human reading parse errors and",
+            "deciding that Mathlib notation for an absent head belongs in the",
+            "budget bucket. `rule_r.json`'s `frozen_constants.names` decides which",
+            "bare names the preamble declines to bind, and `Even`, `Odd`, `Prime`",
+            "and `Irrational` were added to it by a dated correction (review",
+            "finding H3) — before which seven statements sat in",
+            "`ascii_pseudo_math`, blamed on this repository's own notation when",
+            "the real reason was Mathlib.",
+            "What bounds the authored half: a name in `frozen_constants` can only",
+            "move a statement between BLOCKED buckets, never into the covered",
+            "set, so widening it cannot buy coverage — and every widening is a",
+            "diff against a digest with the count it moved written down."
         ],
         "revisit_trigger": (
             "a decision on the Mathlib budget. Until then this entry is the "
@@ -204,7 +251,7 @@ _ENTRY_PROSE: dict[str, dict] = {
             "quoting a coverage number owes it."
         ),
     },
-    "interpretation_absent": {
+    "prop_interpretation_absent": {
         "dialect_construct": "propositional, modal, provability and set-theoretic statements",
         "bucket": NO_ROW_BUCKET,
         "reason": "interpretation_absent",
@@ -237,7 +284,7 @@ _ENTRY_PROSE: dict[str, dict] = {
     "ascii_pseudo_math": {
         "dialect_construct": "house ASCII notation that is not Lean in any alphabet",
         "bucket": NO_ROW_BUCKET,
-        "reason": "interpretation_absent",
+        "reason": "oracle_rejected",
         "why": [
             "These statements are not a foreign dialect of the same grammar;",
             "they are a different notation entirely — subscripted sums written",
@@ -416,19 +463,47 @@ def build(preview_path: Path = PREVIEW_PATH,
             "reading B1 is §8's stop condition."
         ],
         "how_the_classes_were_decided": [
-            "By outcome, not by an author's guess. The Mathlib head vocabulary",
-            "below is every name the PINNED BINARY reported as an unknown",
-            "identifier or constant across the whole residue — nobody wrote that",
-            "list, which is why Nat.Prime is in it and why nothing is in it that",
-            "the oracle never complained about.",
-            "√ is added to that test by a stated rule: it is Mathlib's notation",
-            "for a head core Lean does not have, so it fails at the PARSER and",
-            "never reaches the diagnostic that would name it. Counting it as",
+            "MOSTLY by outcome, and the exceptions are named rather than",
+            "smoothed over — an inventory of silence that overstates its own",
+            "objectivity is the failure mode this artifact exists to prevent.",
+            "MEASURED: `oracle_unknown_heads` is every name the PINNED BINARY",
+            "reported as an unknown identifier or constant across the 4,191",
+            "residue statements. Nobody wrote it, which is why `Nat.Prime` is in",
+            "it and why nothing is in it the oracle never complained about. A",
+            "parse-level rejection carrying no such head is `ascii_pseudo_math`;",
+            "anything else is `typeclass_instance_absent`.",
+            "AUTHORED (1): `notation_heads`, currently just √. It is Mathlib's",
+            "notation for a head core Lean does not have, so it fails at the",
+            "PARSER and never reaches the diagnostic that would name it — nothing",
+            "measured could have put it in the list. Counting it as",
             "pseudo-mathematics would file a budget consequence under a design",
-            "consequence, and B3 exists to keep those apart.",
-            "interpretation_absent is exactly the set B0b+B0c's branch clause",
-            "names, because branch (ii) was taken."
+            "consequence, and B3 exists to keep those apart, but that judgement",
+            "is a judgement.",
+            "AUTHORED (2): `rule_r.json`'s `frozen_constants.names`, the bare",
+            "heads the preamble declines to bind. `Even`, `Odd`, `Prime` and",
+            "`Irrational` were added by a dated correction (review finding H3);",
+            "before it the preamble bound them at Rat, the oracle said `Function",
+            "expected at`, and seven statements sat in `ascii_pseudo_math` blamed",
+            "on this repository's own notation.",
+            "WHAT BOUNDS THE AUTHORED HALF: a name in `frozen_constants` can only",
+            "move a statement between BLOCKED buckets, never into the covered",
+            "set. The list cannot buy coverage, and each addition is a diff",
+            "against a digest with the count it moved recorded.",
+            "`prop_interpretation_absent` is exactly the set B0b+B0c's branch",
+            "clause names, because branch (ii) was taken. That set is the",
+            "design's, not this module's."
         ],
+        "authored_inputs": {
+            "notation_heads": list(NOTATION_HEADS),
+            "frozen_constants_source": "data/foreign_voice/rule_r.json",
+            "prop_corpora": list(PROP_CORPORA),
+            "note": (
+                "The three places a human decided, named here so a reader can "
+                "find them without reading the builder. `prop_corpora` is the "
+                "design's own set rather than this module's, and is listed for "
+                "completeness."
+            ),
+        },
         "lexicon_digest_at_freeze": _sha256_lf(lexicon_path),
         "interpretation_digest_at_freeze": _sha256_lf(rule_path),
         "eligibility_preview_digest_at_freeze": _sha256_lf(preview_path),

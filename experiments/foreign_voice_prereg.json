@@ -28,6 +28,187 @@
   ],
   "frozen": [
     {
+      "path": "data/foreign_voice/b0d_appendix.json",
+      "role": "b0d_appendix_not_the_hundred",
+      "sha256_lf": "9b4a2a2815b93285e549727131ecac6583c9700d6c41cfe6d1a1d1724a68c772",
+      "recorded": "2026-08-24",
+      "why": [
+        "Five hand-authored renderings that are NOT part of B0d's sealed hundred and must never enter its denominator, its rate or its divergence report. The file says so in a top-level flag and every row repeats it.",
+        "They exist because the seeded draw took no statement carrying `>=`, `<=`, `%` or a decimal literal, and a golden set with no row for a construct the corpus carries 55, 13, 2 and 34 times has a hole exactly where this cycle's one dated table correction landed. One row carries BOTH orderings in a single statement, which is the case that would have been silently wrong before the digraph correction.",
+        "One of the five is `numbertheory.ingested.lean_workbook_10202`, one of only three non-lean_workbook statements in the entire covered set. A hundred-statement seeded draw over a 99.87%-one-corpus pool could not have been expected to reach it, and a golden set that never exercises the other 0.13% is a golden set that agrees with the headline it is supposed to check.",
+        "The separation is the point: B0d's hundred were drawn by a rule with no hand-picking, these five were chosen by a human to cover named constructs, and mixing them would turn a random sample into a curated one."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/b0d_ids.json",
+      "role": "b0d_id_list",
+      "sha256_lf": "f226c6b1d0990bced0cf3cc9f51aca9a82d16b6ebb0630076426bea378ba59df",
+      "recorded": "2026-08-24",
+      "why": [
+        "The hundred the rule drew, against the CORRECTED lexicon digest (3a3459d6...). No draw was ever committed against the superseded digest; see `corrections` entry 1.",
+        "Nothing is removed from the pool, including the six statements the lexicon refuses — four carrying a coercion arrow, one a 433-digit literal, one the non-canonical decimals 23.50 / 39.50. None of the six was drawn; had one been, its sealed entry would be a refusal with its reason and the implementation would have had to reproduce the refusal."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/b0d_sealed_renderings.json",
+      "role": "b0d_sealed_prediction",
+      "sha256_lf": "72d620eceb234ef4cfcb0fc9a0dbab1aeeecc2be6a289924862066cd85b72e4b",
+      "recorded": "2026-08-24",
+      "why": [
+        "The 100 hand-renderings, committed verbatim as the sealed prediction scripts/foreign_voice.py must later reproduce BYTE-IDENTICALLY, with every divergence reported in the run artifact and never repaired.",
+        "Authored against R(s) rather than against the corpus source, because with autoImplicit off the surface must carry an explicit binder preamble (Correction 3), so the sentence a reader sees is the sentence for the statement under the declared interpretation.",
+        "What was mechanically checked is stated in the file rather than implied: every word of every surface traces to a lexicon row or the registered numeral pair (v0.18's R2 sweep). The TOKEN SEQUENCE was not mechanically checked, because checking it means writing the literal inverse and the inverse is the implementation. Divergences at B0d time may therefore be authoring slips as well as grammar disagreements, and the run artifact must classify them rather than count them."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/eligibility_preview.json",
+      "role": "b0_preview",
+      "sha256_lf": "d2892203e106ad8cf72d221f193e9a3ec50c79ff8a64476793d3c4ab620e2787",
+      "recorded": "2026-08-24",
+      "why": [
+        "The committed output of the probe above, so B0d's id selection is reproducible WITHOUT re-running the pinned binary, and so a reader can recompute every number in the lexicon's `coverage` block and in the register.",
+        "It is a PREVIEW recorded in the preregistration commit, not the registered run. B0a and B0b+B0c remain the registered probes and the registered run recomputes them."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by correction 3 (eight rows moved when the four predicate heads were frozen)"
+    },
+    {
+      "path": "data/foreign_voice/lexicon.json",
+      "role": "lexicon_and_inverse_table",
+      "sha256_lf": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+      "recorded": "2026-08-24",
+      "re_recorded": "2026-08-24, correction 1 below (the `>=` / `<=` rows)",
+      "why": [
+        "B7's `the lexicon digest` AND `the inverse-table digest` — see `there_is_no_separate_inverse_table` above. This is also the digest B0d's id-selection rule is seeded from, and it is frozen in THIS commit, before the 100 hand-renderings exist, which is the three-line separation the design's review required."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/register.json",
+      "role": "frozen_register",
+      "sha256_lf": "5166f8013691ae59b12726ab5001865a445c7a4b892ad7cd08d0738401ce70e2",
+      "recorded": "2026-08-24, promoted from `pending` when B4 landed",
+      "why": [
+        "B4: committed with its blocked_set_digest BEFORE scripts/foreign_voice.py renders anything. Seven entries, 1,878 statements registered exhaustively by id, each entry carrying its own blocked_statement_set_digest, its surface witness with what the oracle actually said, its per-corpus split, and its revisit trigger.",
+        "A post-freeze entry is permitted only as a dated amendment commit that RE-RUNS B1 FROM SCRATCH. An amendment chased after reading B1 is §8's stop condition."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by corrections 3 and 8"
+    },
+    {
+      "path": "data/foreign_voice/rule_r.json",
+      "role": "interpretation",
+      "sha256_lf": "1fc087c8374b6390a3b65679cec5b84255dcccd920ca8bc92889277e40408940",
+      "recorded": "2026-08-24",
+      "why": [
+        "B7's `rule R's digest`. R is a trusted, reviewed artifact applied IDENTICALLY to both sides of the identity relation; extending it is a diff with tests and a re-run. Frozen before the lexicon's hand-renderings and before the serializer exist, which is §5's ordering."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by correction 3 (H3: Even/Odd/Prime/Irrational frozen)"
+    },
+    {
+      "path": "prover/lean/normalizer/Serialize.lean",
+      "role": "serializer",
+      "sha256_lf": "9ba3ad7625323f924fa1b76107c917f1bab64a196fd007943bd86258b3551a5e",
+      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
+      "why": [
+        "B-P's deliverable and the identity witness of §3.2. It walks `Expr` and drops the `Name` field of every `forallE`, `lam` and `letE`, so binder-name independence is a property of the serializer's TYPE rather than of a normalization pass over text. Every `Expr` constructor is matched explicitly rather than through a catch-all, so a toolchain that adds one is a compile error here instead of a silently-dropped subterm.",
+        "Measured against the pinned v4.32.2 binary in this commit: the prototype's two retained pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b3312063d7b9754afbb2f3694775f83c5d7726d4925c7486dce3c3 and f89095af7546ebd1b61e2374119fa2e041d8c89af2ece93c6f11016c893bae7f. The design quotes the 16-hex prefixes of both; the full values are pinned by tests/test_foreign_voice_oracle.py.",
+        "It never becomes an `.olean` and is never imported: the driver concatenates it with the `#ser` commands into one temporary source file, so there is no build artifact that can go stale against this digest.",
+        "`#ser \"tag\" => term` answers under its own tag rather than by line number. That is a deliberate correction of how the B0 eligibility probe had to work — attribution by position is what let the frontend's 100-error cutoff report 2,982 eligible against a truth of 2,319 — and it means silence is never read as success."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by correction 5 (H2: residual metavariable and sorryAx refuse)"
+    },
+    {
+      "path": "prover/lean/normalizer/Serialize.prototype.lean",
+      "role": "serializer_prototype",
+      "sha256_lf": "01a7cc2000b39a98a7952bfb85ad59c0a0ab9a19b61c705af12ea9f50de03759",
+      "recorded": "2026-08-24",
+      "why": [
+        "Retained by the design's adversarial review (H4) so the quoted serializer digests are reproducible rather than remembered, and the design quotes this exact LF sha256 at §3.2. Verified against the tree in this commit and RE-RUN against the pinned binary: the two pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b33120... and f89095af7546ebd1... — the values the design records.",
+        "It is a prototype and not the B-P deliverable. B-P's first two test cases are these two pairs."
+      ]
+    },
+    {
+      "path": "prover/lean/normalizer/lean-toolchain",
+      "role": "toolchain_pin",
+      "sha256_lf": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "recorded": "2026-08-24",
+      "toolchain": "leanprover/lean4:v4.32.2",
+      "why": [
+        "The pin the foreign-voice harness reads, committed as a file so the toolchain name is a digestible artifact and not an argument. Same toolchain as prover/lean/ingested, prover/lean/proofcurve and prover/lean/session; a separate file because the normalizer is a separate hermetic unit and a shared pin would couple its lifetime to theirs."
+      ]
+    },
+    {
+      "path": "scripts/external_verifier.py",
+      "role": "hermetic_rule",
+      "sha256_lf": "0db59b36f2a5db6b52fa2b8be0fa07ae937a375d67a3eb4299173a5c7e6de16c",
+      "recorded": "2026-08-24",
+      "why": [
+        "Two things this cycle takes from it and must not re-decide: `toolchain_binary`, which resolves the pinned binary BY PATH and returns None rather than downloading (:14-17, :181-205), and the authority boundary at :6-7 — 'a passing check certifies what it checks, not correctness in general' — with :35-40 governing the output, so a verdict alone never mints a `verified_by` link and this cycle mints none.",
+        "Frozen rather than merely cited because the eligibility probe and the B-P driver both import from it, so a change here changes what 'hermetic' means for every number this cycle publishes."
+      ]
+    },
+    {
+      "path": "scripts/foreign_voice_eligibility.py",
+      "role": "b0_probe",
+      "sha256_lf": "6d7a5f208b015701d18205e808bbcf1e29337e76a0792836d779e4071de9d3fe",
+      "recorded": "2026-08-24",
+      "why": [
+        "B0a's split and B0b+B0c's eligibility are computed by this module. It is frozen because the preview numbers the lexicon and the register were authored against are only reproducible if the thing that produced them is pinned."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by correction 4 (H4: return-code guard and batch sentinels)"
+    },
+    {
+      "path": "scripts/foreign_voice_lexicon.py",
+      "role": "lexicon_gate",
+      "sha256_lf": "38c7f3d7e1c14928ee6413f8f637112f9400edd2440ae2f7e65752cc4657a3be",
+      "recorded": "2026-08-24",
+      "why": [
+        "F1-F8. A table is only as bijective as the loader that refuses a non-bijective one, so the two digests travel together (v0.18's own pairing, imported)."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by correction 7 (L1: the F4 redundancy note)"
+    },
+    {
+      "path": "scripts/foreign_voice_oracle.py",
+      "role": "serializer_driver",
+      "sha256_lf": "976991138dfe4de4056fe9beb66c9eacd4572e5d1b8af1720d72337e1fc8b5df",
+      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
+      "why": [
+        "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's committed settings and returns sha256(serialize(elaborate(text))). The identity relation of §3.2 calls it twice per statement and compares.",
+        "Hermetic by import rather than by re-decision: the toolchain name comes from the committed `lean-toolchain` file and is resolved through `external_verifier.toolchain_binary`, which returns None rather than downloading. An absent toolchain RAISES — B2, a refusal aborts the run and is not a data point.",
+        "A parse error can swallow the commands that follow it, so a missing tag is RE-PROBED in a batch of its own before it is called a failure. A tag still missing when it is the only command in the file is genuinely unparseable; one that reappears was a bystander. Recorded here because 'silence is not a data point' is a rule this module implements rather than merely respects."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by corrections 4 and 6 (H4 return codes and sentinels; C2 unaccounted-diagnostic guard)"
+    },
+    {
+      "path": "scripts/foreign_voice_register.py",
+      "role": "register_builder",
+      "sha256_lf": "2935d7c42f198f539bb43c0bad99bee4aa22a35b1fa634f7e75fc78aa34a609f",
+      "recorded": "2026-08-24",
+      "why": [
+        "The register is the cycle's headline artifact, so how its classes were decided has to be a committed, re-runnable rule rather than a paragraph. This module is that rule.",
+        "Every class is decided BY OUTCOME. The Mathlib head vocabulary is read out of the pinned binary's own diagnostics — every name it reported as an unknown identifier or constant across the 4,191 residue statements — so nobody authored it. That is why `Nat.Prime` is in it and why nothing is in it the oracle never complained about. The design retired an authored blocklist once for exactly this reason.",
+        "The builder REFUSES if B3's census does not close at 10,605, and refuses if a statement lands in two classes. A register that does not add up is not an inventory of silence, it is an estimate."
+      ],
+      "re_recorded": "2026-08-24, re-recorded by corrections 3 and 8 (H3 counts; M6 authored-input honesty and the reason split)"
+    },
+    {
+      "path": "scripts/foreign_voice_rule_r.py",
+      "role": "interpretation_applier",
+      "sha256_lf": "3ca7a5ba25c69e7fb06fb3c04ebb274d8824ee158e0fe4f72dc73b919bb5eb20",
+      "recorded": "2026-08-24",
+      "why": [
+        "Recorded beside the rule for the same reason v0.18 recorded the lexicon loader beside the lexicon: a rule is only as frozen as the module that refuses a malformed one. This module holds no policy of its own — every substitution, frozen constant and preamble step is read out of the JSON — so that a behaviour change is a change in a digested artifact."
+      ]
+    },
+    {
+      "path": "scripts/foreign_voice_select.py",
+      "role": "b0d_selection_rule",
+      "sha256_lf": "085f15bcd1bda5890bb3a8594896205cd3d2b90dbed4a5841fba08ce99dec7dc",
+      "recorded": "2026-08-24",
+      "why": [
+        "B0d's `committed deterministic rule seeded from the lexicon digest`. The pool is every oracle-eligible id sorted, the seed is int(sha256_lf(lexicon.json)[:16], 16), the draw is a seeded shuffle's first hundred returned sorted. v0.18's C-R1 idiom: a seed someone chose would be a knob; the table under test is not.",
+        "`random.Random.shuffle` is deterministic for a seed on a given CPython and not by language guarantee — the same caveat v0.18's derangement lives under. So the draw is committed as a file AND re-derived by tests/test_foreign_voice_b0d.py. If a future interpreter moves the shuffle, that test goes red and the change is a visible event with a dated amendment, rather than a sealed prediction quietly pointing at a different hundred."
+      ]
+    },
+    {
       "path": "scripts/match_signatures.py",
       "role": "parser",
       "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
@@ -53,167 +234,6 @@
       "recorded": "2026-08-24",
       "why": [
         "The design cites this file rather than restating it: L1 at :30-38, L2 at :34-38, what the two together buy at :39-41, and the refuse-at-load discipline at :295-317. scripts/foreign_voice_lexicon.py's F1-F8 are that gate list carried into a different dialect, and F7 is the one clause that could NOT be carried whole — v0.18 asks the byte-frozen Python tokenizer, this cycle's stage-2 reader is the pinned Lean binary and is not callable at import time. The digest is here so 'cited, not restated' names a fixed text."
-      ]
-    },
-    {
-      "path": "scripts/external_verifier.py",
-      "role": "hermetic_rule",
-      "sha256_lf": "0db59b36f2a5db6b52fa2b8be0fa07ae937a375d67a3eb4299173a5c7e6de16c",
-      "recorded": "2026-08-24",
-      "why": [
-        "Two things this cycle takes from it and must not re-decide: `toolchain_binary`, which resolves the pinned binary BY PATH and returns None rather than downloading (:14-17, :181-205), and the authority boundary at :6-7 — 'a passing check certifies what it checks, not correctness in general' — with :35-40 governing the output, so a verdict alone never mints a `verified_by` link and this cycle mints none.",
-        "Frozen rather than merely cited because the eligibility probe and the B-P driver both import from it, so a change here changes what 'hermetic' means for every number this cycle publishes."
-      ]
-    },
-    {
-      "path": "prover/lean/normalizer/lean-toolchain",
-      "role": "toolchain_pin",
-      "sha256_lf": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
-      "recorded": "2026-08-24",
-      "toolchain": "leanprover/lean4:v4.32.2",
-      "why": [
-        "The pin the foreign-voice harness reads, committed as a file so the toolchain name is a digestible artifact and not an argument. Same toolchain as prover/lean/ingested, prover/lean/proofcurve and prover/lean/session; a separate file because the normalizer is a separate hermetic unit and a shared pin would couple its lifetime to theirs."
-      ]
-    },
-    {
-      "path": "prover/lean/normalizer/Serialize.prototype.lean",
-      "role": "serializer_prototype",
-      "sha256_lf": "01a7cc2000b39a98a7952bfb85ad59c0a0ab9a19b61c705af12ea9f50de03759",
-      "recorded": "2026-08-24",
-      "why": [
-        "Retained by the design's adversarial review (H4) so the quoted serializer digests are reproducible rather than remembered, and the design quotes this exact LF sha256 at §3.2. Verified against the tree in this commit and RE-RUN against the pinned binary: the two pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b33120... and f89095af7546ebd1... — the values the design records.",
-        "It is a prototype and not the B-P deliverable. B-P's first two test cases are these two pairs."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/rule_r.json",
-      "role": "interpretation",
-      "sha256_lf": "ade4fd332e5c7ad80e2f0f8042e3b16c5bdbb6a43e2b87470691aad5a1df055c",
-      "recorded": "2026-08-24",
-      "why": [
-        "B7's `rule R's digest`. R is a trusted, reviewed artifact applied IDENTICALLY to both sides of the identity relation; extending it is a diff with tests and a re-run. Frozen before the lexicon's hand-renderings and before the serializer exist, which is §5's ordering."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_rule_r.py",
-      "role": "interpretation_applier",
-      "sha256_lf": "3ca7a5ba25c69e7fb06fb3c04ebb274d8824ee158e0fe4f72dc73b919bb5eb20",
-      "recorded": "2026-08-24",
-      "why": [
-        "Recorded beside the rule for the same reason v0.18 recorded the lexicon loader beside the lexicon: a rule is only as frozen as the module that refuses a malformed one. This module holds no policy of its own — every substitution, frozen constant and preamble step is read out of the JSON — so that a behaviour change is a change in a digested artifact."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/lexicon.json",
-      "role": "lexicon_and_inverse_table",
-      "sha256_lf": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
-      "recorded": "2026-08-24",
-      "re_recorded": "2026-08-24, correction 1 below (the `>=` / `<=` rows)",
-      "why": [
-        "B7's `the lexicon digest` AND `the inverse-table digest` — see `there_is_no_separate_inverse_table` above. This is also the digest B0d's id-selection rule is seeded from, and it is frozen in THIS commit, before the 100 hand-renderings exist, which is the three-line separation the design's review required."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_lexicon.py",
-      "role": "lexicon_gate",
-      "sha256_lf": "aebbffc858ed5a3a02d951ea8e4275609e16e91fae085316a7e4afa994944926",
-      "recorded": "2026-08-24",
-      "why": [
-        "F1-F8. A table is only as bijective as the loader that refuses a non-bijective one, so the two digests travel together (v0.18's own pairing, imported)."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_eligibility.py",
-      "role": "b0_probe",
-      "sha256_lf": "1273e9a9e9627edc6b19109721ec0f9554de86d0596487059becca36a59aae8c",
-      "recorded": "2026-08-24",
-      "why": [
-        "B0a's split and B0b+B0c's eligibility are computed by this module. It is frozen because the preview numbers the lexicon and the register were authored against are only reproducible if the thing that produced them is pinned."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/eligibility_preview.json",
-      "role": "b0_preview",
-      "sha256_lf": "c0d22418115bcb35343fdcf5569997177ccce4815ded0af12be4d1a44e14ccd8",
-      "recorded": "2026-08-24",
-      "why": [
-        "The committed output of the probe above, so B0d's id selection is reproducible WITHOUT re-running the pinned binary, and so a reader can recompute every number in the lexicon's `coverage` block and in the register.",
-        "It is a PREVIEW recorded in the preregistration commit, not the registered run. B0a and B0b+B0c remain the registered probes and the registered run recomputes them."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_select.py",
-      "role": "b0d_selection_rule",
-      "sha256_lf": "085f15bcd1bda5890bb3a8594896205cd3d2b90dbed4a5841fba08ce99dec7dc",
-      "recorded": "2026-08-24",
-      "why": [
-        "B0d's `committed deterministic rule seeded from the lexicon digest`. The pool is every oracle-eligible id sorted, the seed is int(sha256_lf(lexicon.json)[:16], 16), the draw is a seeded shuffle's first hundred returned sorted. v0.18's C-R1 idiom: a seed someone chose would be a knob; the table under test is not.",
-        "`random.Random.shuffle` is deterministic for a seed on a given CPython and not by language guarantee — the same caveat v0.18's derangement lives under. So the draw is committed as a file AND re-derived by tests/test_foreign_voice_b0d.py. If a future interpreter moves the shuffle, that test goes red and the change is a visible event with a dated amendment, rather than a sealed prediction quietly pointing at a different hundred."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/b0d_ids.json",
-      "role": "b0d_id_list",
-      "sha256_lf": "f226c6b1d0990bced0cf3cc9f51aca9a82d16b6ebb0630076426bea378ba59df",
-      "recorded": "2026-08-24",
-      "why": [
-        "The hundred the rule drew, against the CORRECTED lexicon digest (3a3459d6...). No draw was ever committed against the superseded digest; see `corrections` entry 1.",
-        "Nothing is removed from the pool, including the six statements the lexicon refuses — four carrying a coercion arrow, one a 433-digit literal, one the non-canonical decimals 23.50 / 39.50. None of the six was drawn; had one been, its sealed entry would be a refusal with its reason and the implementation would have had to reproduce the refusal."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/b0d_sealed_renderings.json",
-      "role": "b0d_sealed_prediction",
-      "sha256_lf": "72d620eceb234ef4cfcb0fc9a0dbab1aeeecc2be6a289924862066cd85b72e4b",
-      "recorded": "2026-08-24",
-      "why": [
-        "The 100 hand-renderings, committed verbatim as the sealed prediction scripts/foreign_voice.py must later reproduce BYTE-IDENTICALLY, with every divergence reported in the run artifact and never repaired.",
-        "Authored against R(s) rather than against the corpus source, because with autoImplicit off the surface must carry an explicit binder preamble (Correction 3), so the sentence a reader sees is the sentence for the statement under the declared interpretation.",
-        "What was mechanically checked is stated in the file rather than implied: every word of every surface traces to a lexicon row or the registered numeral pair (v0.18's R2 sweep). The TOKEN SEQUENCE was not mechanically checked, because checking it means writing the literal inverse and the inverse is the implementation. Divergences at B0d time may therefore be authoring slips as well as grammar disagreements, and the run artifact must classify them rather than count them."
-      ]
-    },
-    {
-      "path": "prover/lean/normalizer/Serialize.lean",
-      "role": "serializer",
-      "sha256_lf": "a77d6b0229d55a57d0fc8da0cca2c9cd2fcc7ca16eee6a5e2dda705a9873c8ea",
-      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
-      "why": [
-        "B-P's deliverable and the identity witness of §3.2. It walks `Expr` and drops the `Name` field of every `forallE`, `lam` and `letE`, so binder-name independence is a property of the serializer's TYPE rather than of a normalization pass over text. Every `Expr` constructor is matched explicitly rather than through a catch-all, so a toolchain that adds one is a compile error here instead of a silently-dropped subterm.",
-        "Measured against the pinned v4.32.2 binary in this commit: the prototype's two retained pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b3312063d7b9754afbb2f3694775f83c5d7726d4925c7486dce3c3 and f89095af7546ebd1b61e2374119fa2e041d8c89af2ece93c6f11016c893bae7f. The design quotes the 16-hex prefixes of both; the full values are pinned by tests/test_foreign_voice_oracle.py.",
-        "It never becomes an `.olean` and is never imported: the driver concatenates it with the `#ser` commands into one temporary source file, so there is no build artifact that can go stale against this digest.",
-        "`#ser \"tag\" => term` answers under its own tag rather than by line number. That is a deliberate correction of how the B0 eligibility probe had to work — attribution by position is what let the frontend's 100-error cutoff report 2,982 eligible against a truth of 2,319 — and it means silence is never read as success."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_oracle.py",
-      "role": "serializer_driver",
-      "sha256_lf": "72e916d937f79d8f26c29b5676b38bab2c2682afcf28a98bc0e5e93e9a114fff",
-      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
-      "why": [
-        "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's committed settings and returns sha256(serialize(elaborate(text))). The identity relation of §3.2 calls it twice per statement and compares.",
-        "Hermetic by import rather than by re-decision: the toolchain name comes from the committed `lean-toolchain` file and is resolved through `external_verifier.toolchain_binary`, which returns None rather than downloading. An absent toolchain RAISES — B2, a refusal aborts the run and is not a data point.",
-        "A parse error can swallow the commands that follow it, so a missing tag is RE-PROBED in a batch of its own before it is called a failure. A tag still missing when it is the only command in the file is genuinely unparseable; one that reappears was a bystander. Recorded here because 'silence is not a data point' is a rule this module implements rather than merely respects."
-      ]
-    },
-    {
-      "path": "scripts/foreign_voice_register.py",
-      "role": "register_builder",
-      "sha256_lf": "fd68b0b9c7f2d252d1d09cd8449627339e6e23d932aa9ef227d8532ff7712933",
-      "recorded": "2026-08-24",
-      "why": [
-        "The register is the cycle's headline artifact, so how its classes were decided has to be a committed, re-runnable rule rather than a paragraph. This module is that rule.",
-        "Every class is decided BY OUTCOME. The Mathlib head vocabulary is read out of the pinned binary's own diagnostics — every name it reported as an unknown identifier or constant across the 4,191 residue statements — so nobody authored it. That is why `Nat.Prime` is in it and why nothing is in it the oracle never complained about. The design retired an authored blocklist once for exactly this reason.",
-        "The builder REFUSES if B3's census does not close at 10,605, and refuses if a statement lands in two classes. A register that does not add up is not an inventory of silence, it is an estimate."
-      ]
-    },
-    {
-      "path": "data/foreign_voice/register.json",
-      "role": "frozen_register",
-      "sha256_lf": "fe4d3b2adca8f1f50708c0ea79c32dd0bfc899a15ffd0f4526b6109173e45c70",
-      "recorded": "2026-08-24, promoted from `pending` when B4 landed",
-      "why": [
-        "B4: committed with its blocked_set_digest BEFORE scripts/foreign_voice.py renders anything. Seven entries, 1,878 statements registered exhaustively by id, each entry carrying its own blocked_statement_set_digest, its surface witness with what the oracle actually said, its per-corpus split, and its revisit trigger.",
-        "A post-freeze entry is permitted only as a dated amendment commit that RE-RUNS B1 FROM SCRATCH. An amendment chased after reading B1 is §8's stop condition."
       ]
     }
   ],
@@ -258,8 +278,8 @@
       ],
       "transliterable": 6414,
       "covered": 2313,
-      "registered_blocked_mathlib_head": 1699,
-      "registered_blocked_no_row": 179,
+      "registered_blocked_mathlib_head": 1706,
+      "registered_blocked_no_row": 172,
       "total": 10605,
       "closes_exactly": true,
       "covered_composition": {
@@ -267,7 +287,7 @@
         "other_corpora": 3,
         "lean_workbook_share": 0.9987
       },
-      "superseded_note": "The preregistration commit recorded 1,698 / 180 here, computed during authoring by scanning statement SOURCES with a regex over the Mathlib head names. B4 replaced that with the outcome-derived rule: the head list is read out of the pinned binary's own diagnostics. That moves five `Nat.Prime` statements into the Mathlib bucket and four others out of it, net +1. See corrections entry 2. The total is unchanged and still closes at 10,605."
+      "superseded_note": "Two dated moves. The preregistration commit recorded 1,698 / 180, computed during authoring by scanning statement SOURCES with a regex over the Mathlib head names; B4 replaced that with the outcome-derived rule (corrections 2). Review finding H3 then froze `Even`, `Odd`, `Prime` and `Irrational` in rule R, moving seven more statements out of a class about this repository's own notation and into the Mathlib budget where they belong (corrections 3). The total is unchanged through both and still closes at 10,605."
     }
   },
   "prop_branch": {
@@ -329,6 +349,213 @@
         "Recorded rather than silently improved, because the two buckets are the one place in this cycle where a number moving between them changes what the number MEANS: the Mathlib bucket is a budget consequence the maintainer can lift, and the no-row bucket is a design consequence this cycle owns."
       ],
       "not_a_b7_event": "No frozen artifact moved. The parser, the interpretation and the lexicon are byte-unchanged and their digests above are the recorded ones."
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review H3",
+      "artifact": "data/foreign_voice/rule_r.json + data/foreign_voice/eligibility_preview.json + data/foreign_voice/register.json",
+      "what": "`Even`, `Odd`, `Prime` and `Irrational` added to `frozen_constants.names`. The register moves 1,699 -> 1,706 in `registered_blocked_mathlib_head` and 179 -> 172 in `registered_blocked_no_row`. The census still closes at 10,605.",
+      "why": [
+        "These are Mathlib PREDICATE heads with no core-Lean referent. Left unfrozen, rule R's preamble bound them at `Rat` and the oracle answered `Function expected at` - so eight statements were filed under a class about this repository's own ASCII notation when the real reason was the Mathlib budget. Seven moved; the eighth was already in the Mathlib bucket because it also carries `Real.sqrt`.",
+        "This matters more than seven statements. `registered_blocked_mathlib_head` is a BUDGET consequence the maintainer can lift and `registered_blocked_no_row` is a DESIGN consequence this cycle owns. A statement in the wrong one is a statement whose blame is on the wrong party, which is the one error this register exists to prevent.",
+        "Exactly eight rows of the eligibility preview changed and none of them is in B0d's sealed hundred, so the draw, the ids and the hundred renderings are byte-unchanged. Verified before the change was kept."
+      ],
+      "not_a_b7_event": "scripts/match_signatures.py and data/foreign_voice/lexicon.json are byte-unchanged. The interpretation moved, which B7 permits as a reviewed diff with tests and a re-run, and both happened."
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review H4",
+      "artifact": "scripts/foreign_voice_eligibility.py + scripts/foreign_voice_oracle.py",
+      "what": "Both harnesses refuse a return code outside {0, 1}, and every batch now carries two sentinels: one that must succeed and one that must fail with a known diagnostic.",
+      "why": [
+        "The eligibility probe reads acceptance from the ABSENCE of a diagnostic. That makes two silent failures indistinguishable from a clean run: a frontend that died halfway through, and a frontend that stopped reporting. The first is caught by the return code; the second is caught by a sentinel that MUST produce a diagnostic - if its known error is missing, the batch refuses.",
+        "The passing sentinel catches the third: a file that did not elaborate to its end, because the preamble failed or a parse error swallowed the tail. Everything above such a point is an answer to a file we did not write.",
+        "This is the maxErrors bug generalised. That one cost 663 statements of false eligibility and was caught by a single substring; these are the other doors into the same room."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review H2",
+      "artifact": "prover/lean/normalizer/Serialize.lean",
+      "what": "`#ser` now answers FVERR when the elaborated term still carries a metavariable or contains `sorryAx`.",
+      "why": [
+        "`ser` maps EVERY `.mvar` to the constant string `(mv)`. Two different propositions that both end in an unassigned metavariable therefore serialize to the same string and digest identically - `(1 2 3)` and `(4 5 6 7)` are the reviewer's pair and they collided. A witness that says two different things are the same is worse than no witness.",
+        "`sorryAx` is the same failure by the other door. `withoutErrToSorry` stops `elabTerm` from turning its OWN errors into a sorry, but a term whose source contains `sorry` still elaborates cleanly to one, and every such term shares the same skeleton.",
+        "Both now refuse. Measured after the change: all 2,319 eligible statements still serialize, so the guard costs nothing on the covered set and closes a collision that would have been invisible in B1's rate."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review C2, implemented as `unaccounted diagnostics refuse` rather than `any diagnostic refuses` - A DEVIATION, stated",
+      "artifact": "scripts/foreign_voice_oracle.py",
+      "what": "A batch refuses when the return code is outside {0, 1}, or when an `error:` line belongs to no `#ser` command, or when it belongs to a command whose tag reported SUCCESS.",
+      "why": [
+        "The review asked for a two-line guard refusing on `returncode != 0 or ': error' in output`, and that guard was safe against the serializer as it stood. H2 changed what it is safe against: since `#ser` now rejects a residual metavariable, a term like `(1 2 3)` produces a frontend error line AND a correctly-reported FVERR for its tag. Under the blunt rule, one pathological statement would abort an entire registered run.",
+        "B2 reserves aborting for REFUSALS, not FAILURES: 'FAIL - the surface elaborated with errors - counts against B1. REFUSED - the toolchain is absent or an input escapes containment - aborts the run.' A statement that fails to elaborate is a data point. A batch whose diagnostics do not add up is not.",
+        "So the guard is stated over TAGS instead of over the whole output, which is strictly stronger where it matters: it catches an error in the PREAMBLE (which the blunt rule would also catch) and an error on a command that claimed success (which the blunt rule catches only by refusing everything). Attribution is exact because exactly one `#ser` command is emitted per line.",
+        "An error on a command that produced NO line is deliberately allowed through: that is a parse error, the one failure no elaborator can catch, and `_run_with_reprobe` owns it - re-probing the tag alone before calling it a failure."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review L1 and L7",
+      "artifact": "scripts/foreign_voice_lexicon.py, and a note that data/foreign_voice/lexicon.json was DELIBERATELY NOT TOUCHED",
+      "what": "The F4 check carries a note saying it is implied by F2 and F3 and why it is kept. The lexicon's units mismatch is recorded here instead of being fixed in the file.",
+      "why": [
+        "L1: F4 cannot fail given F2 and F3, and a gate list whose entries are only implied by other entries is a gate list a reader has to derive. The note says so at the line, and says that if F2 or F3 is ever weakened this stops being redundant.",
+        "L7, and the reason it is here rather than in the table: `coverage.constructive_check` says the coercion arrow appears as '7 runs across 4 statements' while the refusal row says '9 occurrences across 4 statements'. Both are true and the units differ - 9 arrow CHARACTERS form 7 maximal operator RUNS, because two statements carry adjacent arrows. Reading them as contradictory is the natural reading and it is wrong.",
+        "THE TABLE WAS NOT EDITED TO FIX IT, and that is now a standing rule rather than a one-off: `data/foreign_voice/lexicon.json`'s digest is the seed of B0d's draw, so any change to it re-draws the hundred and un-seals a hundred hand-authored sentences. From this commit forward, a lexicon change requires a re-draw AND a re-authoring, both recorded - and a prose nit does not buy that."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review M6",
+      "artifact": "scripts/foreign_voice_register.py + data/foreign_voice/register.json",
+      "what": "The register header stops claiming every class is decided by outcome and names the two authored inputs. The branch-(ii) class is renamed `prop_interpretation_absent`, and `ascii_pseudo_math` now carries the reason `oracle_rejected`.",
+      "why": [
+        "The header said the classes were decided 'by outcome, not by an author's guess'. Two inputs are authored and neither is measured: `notation_heads` (the sole entry is a human reading parse errors and deciding that Mathlib notation for an absent head belongs in the budget bucket), and rule R's `frozen_constants.names` (whose four newest entries arrived by the correction above). An inventory of silence that overstates its own objectivity is the failure this artifact exists to prevent.",
+        "What bounds the authored half is now written down: a name in `frozen_constants` can only move a statement between BLOCKED buckets, never into the covered set, so it cannot buy coverage.",
+        "The reason split: two entries carried the string `interpretation_absent`, which made it mean both 'a second interpretation was measured and deliberately not registered' and 'this is not Lean in any alphabet and no interpretation would help'. The first is a decision this cycle took and could revisit; the second is a fact about how the corpus was authored. Only the branch-(ii) set keeps the reason now, and it is renamed to say so."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review M4",
+      "artifact": "docs/DESIGN-foreign-voice.md path names vs the tree",
+      "what": "The design's §3.1 names `data/foreign/loanword_lexicon.json` and `scripts/foreign_voice.py`; §3.3 names `experiments/foreign_register.json`. The tree uses `data/foreign_voice/lexicon.json`, `data/foreign_voice/register.json` and (in phase 2) `scripts/foreign_voice.py`.",
+      "why": [
+        "The lexicon sits beside its interpretation, its preview, its selection rule, its sealed renderings and its register in one directory, mirroring `data/realization/`. A `data/foreign/` holding one file and `experiments/` holding another would scatter six artifacts that are read together and digested together.",
+        "The register lives in `data/` rather than `experiments/` because it is INPUT to the run, not output of one: B4 makes freezing it a precondition of rendering. `experiments/` in this repository holds what a run produced - `realization_rate.json`, `realization_census.json` - and `experiments/foreign_voice_rate.json` will land there when the run happens.",
+        "Recorded rather than left for a reader to reconcile, because the design is the preregistration record and a path in it that does not exist is exactly the kind of drift this project reads as a warning."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "review L5",
+      "artifact": "scripts/foreign_voice_register.py",
+      "what": "The numeral-literal regex no longer matches a digit run inside an identifier.",
+      "why": [
+        "`x_2`, `a1` and `v0` carry digit runs the numeral pair is never asked to spell. Harmless today - `2` is in the registered domain - and not harmless in principle: a slot spelled `v1000000000000000000` would have been filed as an out-of-domain literal and the statement registered as unrenderable for a reason that is not true of it."
+      ]
     }
-  ]
+  ],
+  "c_v4": {
+    "registered": "2026-08-24",
+    "control": "C-V4 - the near-miss null, and the control this design did not have",
+    "registered_before": "any run of scripts/measure_foreign_voice.py, and before scripts/foreign_voice.py existed in the tree",
+    "what_it_measures": [
+      "B1 compares digests of ELABORATED TERMS, so any rendering error that elaboration erases, or that rule R silently regenerates, is invisible to it. C-V4 measures how large that blind spot is.",
+      "The design states the bound as part of the claim rather than as a caveat: identity holds 'up to what elaboration erases and what the preamble rule regenerates; a rendering error confined to either is invisible to B1; C-V4 bounds how often that is the case.'"
+    ],
+    "procedure": [
+      "For each mutation class below, draw a sample from the COVERED set by the committed seeded rule; apply exactly ONE mechanical mutation to the RENDERED ENGLISH; invert; elaborate; compare the digest against the unmutated round trip's digest.",
+      "The mutation is applied to the English, never to R(s) and never to the inverse output, because the question is whether the SENTENCE determines the term."
+    ],
+    "an_fverr_counts_as_the_digest_differing": [
+      "A mutation that breaks elaboration IS DETECTED. If the mutated sentence inverts to something the pinned binary refuses, the gate has distinguished the mutant from the original just as decisively as a differing digest would, and counting it as 'no difference' would score the control against itself.",
+      "So for every threshold below, `differs` = (the digest differs) OR (the mutant produced FVERR).",
+      "The artifact reports the two sub-counts separately anyway, because a class whose detections are ALL elaboration failures is a class where the gate is reading Lean's grammar rather than the rendering, and a reader is owed that distinction even though it does not change the pass or fail."
+    ],
+    "sample_rule": [
+      "pool = the covered set, sorted by statement id;",
+      "for each mutation class, keep only statements that ADMIT the mutation - a preamble with at least two binders for swap_binder, at least one grouping pair for drop_group, and so on;",
+      "seed = int(sha256_lf(data/foreign_voice/lexicon.json)[:16], 16), the same seed B0d's draw uses, so no sample in this cycle is a knob;",
+      "random.Random(seed).shuffle(pool); take the first `sample_size`; report the admitting denominator beside the sample size."
+    ],
+    "sample_size": 50,
+    "mutations": [
+      {
+        "name": "drop_ascription",
+        "what": "delete the `of type <typeword>` phrase from the preamble",
+        "threshold": 0.9,
+        "in_voiding_pool": true
+      },
+      {
+        "name": "swap_binder",
+        "what": "exchange two `variable <numeral>` tokens IN THE PREAMBLE PHRASE ONLY, leaving their occurrences in the body alone",
+        "threshold": 0.9,
+        "in_voiding_pool": true
+      },
+      {
+        "name": "drop_group",
+        "what": "delete one matched `the quantity` / `end quantity` pair",
+        "threshold": 0.9,
+        "in_voiding_pool": true
+      },
+      {
+        "name": "shift_group",
+        "what": "move one `end quantity` one token later, reassociating a single operator",
+        "threshold": 0.9,
+        "in_voiding_pool": true
+      },
+      {
+        "name": "drop_binder",
+        "what": "delete one `variable <numeral>` token from the preamble binder list",
+        "threshold": null,
+        "in_voiding_pool": false,
+        "blind_by_construction": true
+      }
+    ],
+    "per_class_thresholds_replace_the_pooled_95": [
+      "The design's section 7 sets one pooled floor: 'If fewer than 95% of mutations change the digest, B1 is measuring the preamble rule and not the rendering, and the reading is void.'",
+      "A pooled floor over a mix that includes a mutation which is blind BY CONSTRUCTION does not measure what it says it measures - it measures the mix. Four blind drop_binders out of a hundred would eat the whole 5% budget without telling anyone anything, and a thousand of them would void a reading that is fine.",
+      "So the pooled floor is replaced, before any run, by FOUR per-class floors at 0.90 each, and the fifth mutation is excluded from the voiding pool and reported as a measurement in its own right. Any one of the four classes falling below 0.90 voids the C-V4 reading and, through it, the sentence B1 is allowed to make.",
+      "Replacing a floor is a preregistration act, and this is it: dated, in a file whose digest predates the run and predates the renderer."
+    ],
+    "drop_binder_is_blind_by_construction": {
+      "claim": "The preamble rule REGENERATES what this mutation deletes. Rule R collects the free identifiers of the body and prepends a binder for each, so deleting a binder from the preamble phrase leaves the round trip's R(s) identical to the original's in almost every case, and B1 cannot see the deletion.",
+      "why_it_is_not_a_bug_in_the_control": "It is the concrete, countable form of the section 8 non-claim. 'Up to what the preamble rule regenerates' is an abstraction until a number is put under it. This is the number.",
+      "expectation_carried_from_the_review_audit": {
+        "measured": "1 of 24 mutations moved the digest",
+        "the_one_that_moved": "a binder whose type was Int rather than Rat - deleting it let the preamble rule rebind that identifier at Rat, which IS a different term",
+        "measured_by": "the fresh-eyes review's independent inverse audit, not by this repository's renderer",
+        "why_it_is_an_expectation_and_not_a_result": "Preregistering a threshold from a number this cycle's own instrument produced would be setting the bar where the arrow landed. The registered run RE-MEASURES this with scripts/foreign_voice.py, and a divergence from 1-of-24 is itself a reportable finding rather than a discrepancy to reconcile."
+      },
+      "what_the_run_must_report": [
+        "the fraction of drop_binder mutations that moved the digest, with its denominator;",
+        "for each one that moved, WHY - the review's single mover was a type change, and a mover with a different cause is a different fact;",
+        "the sentence naming this as the measured boundary of what B1 cannot see, in the same artifact as B1's rate."
+      ]
+    },
+    "correction_to_the_designs_s7_prediction": {
+      "dated": "2026-08-24",
+      "design_says": "section 7, C-V4: 'The binder-swap mutation is expected to be the one that most often fails to move the digest, precisely because rule R regenerates the preamble from the inverse output.'",
+      "measured": "16 of 16 binder-swap mutations MOVED the digest",
+      "why_the_prediction_was_wrong": [
+        "Rule R regenerates the preamble by collecting the free identifiers of the BODY and SORTING them. The design read 'regenerates' as 'restores whatever the preamble said', which would indeed hide a swap.",
+        "But a sorted regeneration cannot reproduce an unsorted swap. The mutation leaves the body alone, so the inverse hands back a binder list in swapped order while the body's occurrences are unchanged; the identifiers therefore bind in a different order than the original, which is a genuinely different forallE nesting. The serializer reports it faithfully because de Bruijn indices carry binding structure and the names are already gone.",
+        "So the very property the design expected to cause blindness - the preamble being regenerated by rule - is what makes the swap visible.",
+        "drop_binder is blind for the reason section 7 attributed to swap_binder, and the two are not interchangeable. The design's sentence is corrected here rather than in the design, because the design is the preregistration record and this file is where its dated corrections live."
+      ]
+    }
+  },
+  "b1_composition_requirements": {
+    "registered": "2026-08-24",
+    "finding": "review M5",
+    "rule": [
+      "EVERY sentence that quotes B1 states the covered set's composition in the same sentence. The design fixes two of the three parts - 'n of N, of which X% is lean_workbook.ground.v1' - and this block adds the third, which the review found missing.",
+      "THE THIRD PART: the number of DISTINCT elaborated-term digests in the covered set, beside the number of statements. B1 is a rate over digest identities, and a covered set whose statements do not have distinct terms is a covered set whose rate is over fewer independent things than its denominator suggests.",
+      "The run artifact carries all three and the release sentence quotes all three. A B1 rate published with n and without the distinct-digest count is a rate that overstates its own resolution."
+    ],
+    "measured_2026_08_24": {
+      "measured_by": "scripts/foreign_voice_oracle.py over R(s) for the eligible set, before any rendering existed",
+      "eligible": {
+        "statements": 2319,
+        "distinct_digests": 2180,
+        "collision_classes": 116,
+        "statements_in_a_collision": 255,
+        "largest_collision_class": 5
+      },
+      "covered": {
+        "statements": 2313,
+        "distinct_digests": 2176,
+        "collision_classes": 116,
+        "statements_in_a_collision": 253,
+        "largest_collision_class": 5
+      },
+      "reproduces": "the fresh-eyes review's independent audit measured 2,180 distinct over 2,319 with 116 collision classes; this repository's own instrument reproduces both figures exactly",
+      "what_a_collision_is": "Two corpus statements whose R(s) elaborate to the SAME term - `∀ a b : Rat, a^2 + b^2 ≥ 2*a*b` and `∀ x y : Rat, x^2 + y^2 ≥ 2*x*y` are two statement ids and one theorem, and the serializer is binder-name-independent by construction, so it says so. That is the serializer working, not failing.",
+      "why_it_must_be_quoted": "94.0% of the covered set is a statement with a term of its own; the other 6.0% shares. A reader told '2,313 statements' and not told '2,176 distinct terms' will read the rate as covering 2,313 independent facts. It does not, and the difference is the kind of thing this project retracts later if it is not said first."
+    }
+  }
 }

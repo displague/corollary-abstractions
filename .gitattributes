@@ -46,3 +46,7 @@ experiments/realization_rate.json text eol=lf
 experiments/realization_census.json text eol=lf
 reports/test_gate_v018/** text eol=lf
 experiments/convention_pairs_probe.json text eol=lf
+data/foreign_voice/*.json text eol=lf
+experiments/foreign_voice_prereg.json text eol=lf
+experiments/foreign_voice_rate.json text eol=lf
+prover/lean/normalizer/** text eol=lf

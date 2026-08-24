@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -185,27 +186,63 @@ class ClassesWereMeasuredNotAuthored(unittest.TestCase):
         self.assertEqual([e["register_id"] for e in rebuilt["entries"]],
                          [e["register_id"] for e in self.register["entries"]])
 
+    def _build_from(self, preview: dict) -> dict:
+        """Call the real `build()` against a mutated preview.
+
+        The earlier version of these tests re-implemented the guard inside the
+        test and asserted its own copy raised, which is a test of the test. The
+        builder reads its preview from a path, so the mutation goes through a
+        temporary file and `build()` runs unmodified — the guard that fires is
+        the shipped one.
+        """
+        with tempfile.TemporaryDirectory() as scratch:
+            path = Path(scratch) / "preview.json"
+            path.write_text(json.dumps(preview, ensure_ascii=False),
+                            encoding="utf-8", newline="\n")
+            return fvreg.build(preview_path=path)
+
+    def test_the_real_builder_accepts_the_committed_preview(self) -> None:
+        """The control for the two injections below: unmutated, it builds."""
+        rebuilt = self._build_from(self.preview)
+        self.assertEqual(rebuilt["blocked_set_digest"],
+                         self.register["blocked_set_digest"])
+
     def test_a_class_with_no_committed_reason_refuses(self) -> None:
         """An entry with a count and no reason is a code name, not an inventory."""
         preview = json.loads(json.dumps(self.preview))
-        preview["statements"][0]["accepted"] = False
-        preview["statements"][0]["corpus"] = "a_corpus_nobody_wrote_prose_for"
-        preview["statements"][0]["error"] = "something entirely new"
-        preview["statements"][0]["interpreted"] = "totally_unknown_head 1 = 1"
         original = fvreg._ENTRY_PROSE.pop("typeclass_instance_absent")
         try:
-            with self.assertRaises(fvreg.RegisterError):
-                classes = fvreg.classify(preview, ["↑"])
-                unknown = set(classes) - set(fvreg._ENTRY_PROSE)
-                if unknown:
-                    raise fvreg.RegisterError(f"{sorted(unknown)} have no prose")
+            with self.assertRaises(fvreg.RegisterError) as caught:
+                self._build_from(preview)
         finally:
             fvreg._ENTRY_PROSE["typeclass_instance_absent"] = original
+        self.assertIn("no committed entry prose", str(caught.exception))
+
+    def test_a_census_that_does_not_close_refuses(self) -> None:
+        """B3's arithmetic is a gate in the builder, not a claim in the file."""
+        preview = json.loads(json.dumps(self.preview))
+        preview["b0a"]["totals"]["transliterable"] += 1
+        with self.assertRaises(fvreg.RegisterError) as caught:
+            self._build_from(preview)
+        self.assertIn("B3 does not close", str(caught.exception))
+
+    def test_a_statement_registered_twice_refuses(self) -> None:
+        """Two classes over one statement would double-count the silence.
+
+        Injected by giving one already-blocked statement a duplicate row under
+        a different corpus, so `classify` files the same id twice.
+        """
+        preview = json.loads(json.dumps(self.preview))
+        rejected = next(row for row in preview["statements"]
+                        if not row["accepted"])
+        preview["statements"].append(dict(rejected))
+        with self.assertRaises(fvreg.RegisterError):
+            self._build_from(preview)
 
     def test_the_interpretation_absent_set_is_the_branch_clauses_own(self) -> None:
         """Branch (ii) was taken, so exactly those corpora carry that reason."""
         entry = {e["register_id"]: e for e in self.register["entries"]}[
-            "interpretation_absent"]
+            "prop_interpretation_absent"]
         self.assertEqual(set(entry["per_corpus"]), set(fvreg.PROP_CORPORA))
         self.assertEqual(entry["blocking_count"], 75)
         self.assertEqual(self.register["prop_branch"], "branch_ii")

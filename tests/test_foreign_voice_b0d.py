@@ -36,10 +36,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import foreign_voice_lexicon as fvl  # noqa: E402
 import foreign_voice_select as fvs  # noqa: E402
 import numeral_words as nw  # noqa: E402
+from git_ordering import (  # noqa: E402
+    assert_added_before,
+    first_added,
+    is_ancestor,
+)
 
 LEXICON_PATH = ROOT / "data" / "foreign_voice" / "lexicon.json"
 PREVIEW_PATH = ROOT / "data" / "foreign_voice" / "eligibility_preview.json"
@@ -189,23 +195,38 @@ class SealOrderingTests(unittest.TestCase):
             sealed["id_selection_seed"],
             frozen["data/foreign_voice/lexicon.json"]["sha256_lf"])
 
-    def test_the_seal_predates_the_serializer_in_the_record(self) -> None:
-        """B0d precedes B-P in the design's §10 order, and the record says so.
+    def test_the_seal_predates_the_serializer_in_the_git_history(self) -> None:
+        """§10's order, checked against the history rather than against prose.
 
-        Written in the B0d commit, where `Serialize.lean` did not yet exist and
-        this asserted its absence. When B-P landed, the assertion was restated
-        as the durable form of the same fact: the serializer's row was PROMOTED
-        out of `pending`, and it says so. A row that had always been frozen
-        would carry no promotion note, and the ordering would be unrecorded.
+        Two earlier versions of this test asserted, in turn, that
+        `Serialize.lean` did not exist and that its prereg row said
+        "promoted" — the first a fact about one tree, the second a string
+        somebody could type. The ordering the design registers is a fact about
+        WHEN things were written, so this asks git.
         """
-        rows = {row["role"]: row for row in
-                self.prereg["frozen"] + self.prereg["pending"]}
-        serializer = rows["serializer"]
-        if serializer["sha256_lf"] == "pending":
-            self.assertFalse((ROOT / "prover" / "lean" / "normalizer" /
-                              "Serialize.lean").exists())
-        else:
-            self.assertIn("promoted", serializer["recorded"])
+        assert_added_before(
+            self, "data/foreign_voice/b0d_sealed_renderings.json",
+            "prover/lean/normalizer/Serialize.lean",
+            "§10 orders the seal before B-P, so the hundred are a prediction "
+            "and not a transcript of something that already ran")
+
+    def test_the_ids_predate_the_renderings_in_the_git_history(self) -> None:
+        """The review's three-line separation, in the order it requires."""
+        ids = first_added("data/foreign_voice/b0d_ids.json")
+        renderings = first_added("data/foreign_voice/b0d_sealed_renderings.json")
+        self.assertTrue(
+            is_ancestor(ids, renderings) or ids == renderings,
+            "the drawn ids must not postdate the renderings authored for them; "
+            "same commit is permitted here because the review's separation puts "
+            "the DIGEST before both, not the ids before the sentences")
+
+    def test_the_lexicon_predates_the_draw_in_the_git_history(self) -> None:
+        """The first line of the separation: the seed is frozen before the draw."""
+        assert_added_before(
+            self, "data/foreign_voice/lexicon.json",
+            "data/foreign_voice/b0d_ids.json",
+            "the lexicon whose digest seeds the draw must be frozen before the "
+            "draw, or the seed is a choice rather than a consequence")
 
     def test_no_renderer_exists_yet(self) -> None:
         """The seal is only a prediction if nothing has run against it."""

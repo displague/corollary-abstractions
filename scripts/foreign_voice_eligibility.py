@@ -83,6 +83,23 @@ TRANSLITERATION = (("≥", ">="), ("≤", "<="))
 _ERROR_RE = re.compile(r"^.*?:(\d+):(\d+): error(?:\([^)]*\))?: (.*)$", re.M)
 _CUTOFF = "maximum number of errors"
 
+#: Return codes the pinned frontend produces in normal operation: 0 when it
+#: logged nothing, 1 when it logged a diagnostic. Anything else is a crash, a
+#: rejected flag, or a binary that is not the one this file thinks it is — and
+#: none of those is a measurement. Without this, a frontend that died halfway
+#: through a batch would leave every statement after the death looking accepted,
+#: which is the maxErrors bug wearing a different hat.
+_EXPECTED_RETURNCODES = (0, 1)
+
+#: Appended to the end of every batch. The first must NOT error, proving the
+#: file elaborated all the way down; the second MUST error with a known
+#: diagnostic, proving the frontend is still reporting at all. A run that has
+#: stopped reporting looks exactly like a run with nothing to report, and this
+#: probe reads acceptance from the absence of a diagnostic.
+_SENTINEL_OK = "example : (0 : Nat) = 0 := rfl"
+_SENTINEL_ERR = "example : fv_sentinel_no_such_identifier := sorry"
+_SENTINEL_ERR_EXPECT = "fv_sentinel_no_such_identifier"
+
 
 class EligibilityError(RuntimeError):
     """The probe could not run, or ran and cannot be trusted. Never a rate."""
@@ -191,11 +208,15 @@ def probe(items: list[tuple[str, str]], rule: rule_r.RuleR, binary: Path,
                 )
             lines.append(f"theorem fv_{start + offset} : {text} := sorry")
             spans[len(lines)] = key
+        lines.append(_SENTINEL_OK)
+        sentinel_ok_line = len(lines)
+        lines.append(_SENTINEL_ERR)
+        sentinel_err_line = len(lines)
         source = "\n".join(lines) + "\n"
 
         with tempfile.TemporaryDirectory() as scratch:
             probe_file = Path(scratch) / "Probe.lean"
-            probe_file.write_text(source, encoding="utf-8")
+            probe_file.write_text(source, encoding="utf-8", newline="\n")
             completed = subprocess.run(
                 [str(binary), *rule.command_line_options(), str(probe_file)],
                 cwd=scratch,
@@ -205,6 +226,13 @@ def probe(items: list[tuple[str, str]], rule: rule_r.RuleR, binary: Path,
                 errors="replace",
             )
         output = ((completed.stdout or "") + (completed.stderr or "")).replace("\r\n", "\n")
+        if completed.returncode not in _EXPECTED_RETURNCODES:
+            raise EligibilityError(
+                f"the pinned binary exited {completed.returncode}; the frontend "
+                f"exits 0 or 1 in normal operation, and this probe reads "
+                f"acceptance from the ABSENCE of a diagnostic — so a frontend "
+                f"that died is a frontend that accepted everything after it"
+            )
         if _CUTOFF in output:
             raise EligibilityError(
                 "the frontend's error cutoff fired; every statement after it "
@@ -212,14 +240,35 @@ def probe(items: list[tuple[str, str]], rule: rule_r.RuleR, binary: Path,
                 "Batch results discarded rather than published."
             )
 
+        errors_by_line: dict[int, str] = {}
+        for match in _ERROR_RE.finditer(output):
+            errors_by_line.setdefault(int(match.group(1)), match.group(3))
+        if sentinel_ok_line in errors_by_line:
+            raise EligibilityError(
+                f"the batch's passing sentinel failed "
+                f"({errors_by_line[sentinel_ok_line][:120]}); the file did not "
+                f"elaborate cleanly to its end, so nothing above it is a reading"
+            )
+        if _SENTINEL_ERR_EXPECT not in errors_by_line.get(sentinel_err_line, ""):
+            raise EligibilityError(
+                "the batch's failing sentinel did not report its known "
+                "diagnostic; a frontend that has stopped reporting looks exactly "
+                "like a batch with nothing to report, and this probe cannot tell "
+                "those apart without a sentinel"
+            )
+
         failed: dict[str, str] = {}
         boundaries = sorted(spans)
-        for match in _ERROR_RE.finditer(output):
-            line = int(match.group(1))
+        for line, message in errors_by_line.items():
+            if line >= sentinel_ok_line:
+                # The sentinels live past the last statement and are adjudicated
+                # above. Attributing their diagnostics to the final statement of
+                # the batch would make the last row of every batch a failure.
+                continue
             owners = [b for b in boundaries if b <= line]
             if not owners:
                 continue
-            failed.setdefault(spans[owners[-1]], match.group(3)[:240])
+            failed.setdefault(spans[owners[-1]], message[:240])
         for key, text in chunk:
             verdicts[key] = {
                 "accepted": key not in failed,

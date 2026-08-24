@@ -44,10 +44,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import foreign_voice_lexicon as fvl  # noqa: E402
 import foreign_voice_rule_r as fvr  # noqa: E402
 import numeral_words as nw  # noqa: E402
+from git_ordering import (  # noqa: E402
+    assert_absent_or_added_after,
+    assert_added_before,
+)
 
 LEXICON_PATH = ROOT / "data" / "foreign_voice" / "lexicon.json"
 RULE_PATH = ROOT / "data" / "foreign_voice" / "rule_r.json"
@@ -480,19 +485,55 @@ class PreregDigestTests(unittest.TestCase):
                         "B7 names an inverse-table digest; if there is no "
                         "separate file, the prereg has to say so in writing")
 
-    def test_a_pending_row_is_pending_not_absent(self) -> None:
-        """The ordering IS the record: an artifact not yet written has a row.
+    def test_a_pending_row_is_pending_and_names_a_file_that_is_not_there(
+            self) -> None:
+        """A row leaves `pending` only when the file it names exists.
 
-        Written for the preregistration commit, where the serializer was the
-        pending row. It is stated as the invariant rather than as that commit's
-        fact, because the roll-forward is the whole discipline: a row leaves
-        `pending` only when the file it names exists, and it leaves carrying a
-        `recorded` note saying it was promoted.
+        Vacuous once `pending` empties, which is why the ordering it was
+        standing in for is now checked against the git history below instead.
+        Kept because the invariant is still the rule for anything added later.
         """
         for row in self.prereg["pending"]:
             with self.subTest(role=row["role"]):
                 self.assertEqual(row["sha256_lf"], "pending")
                 self.assertTrue(row.get("why"))
+                self.assertFalse((ROOT / row["path"]).exists())
+
+    def test_b7s_order_holds_in_the_git_history(self) -> None:
+        """B7: the digests are recorded BEFORE the artifacts they gate exist.
+
+        The prereg's `pending` list said this while it had rows in it and says
+        nothing now that it is empty. The history still says it, and will keep
+        saying it after every row has landed — which is the point at which a
+        reader is most likely to want to check.
+        """
+        assert_added_before(
+            self, "experiments/foreign_voice_prereg.json",
+            "prover/lean/normalizer/Serialize.lean",
+            "B7 records the freeze list before `Serialize.lean` is written")
+        assert_added_before(
+            self, "data/foreign_voice/rule_r.json",
+            "data/foreign_voice/b0d_sealed_renderings.json",
+            "§5: rule R is committed with its digest before the lexicon's hand "
+            "renderings or the serializer exist")
+
+    def test_nothing_that_renders_predates_the_things_that_gate_it(self) -> None:
+        """B4 and B7 as one ordering claim, checked whenever the renderer exists.
+
+        Silent while `scripts/foreign_voice.py` is absent — and it is absent at
+        the commit that writes this — and load-bearing the moment it lands.
+        """
+        for gate in ("data/foreign_voice/lexicon.json",
+                     "data/foreign_voice/rule_r.json",
+                     "data/foreign_voice/register.json",
+                     "data/foreign_voice/b0d_sealed_renderings.json",
+                     "prover/lean/normalizer/Serialize.lean"):
+            with self.subTest(gate=gate):
+                assert_absent_or_added_after(
+                    self, gate, "scripts/foreign_voice.py",
+                    "B4 makes freezing the register a precondition of rendering, "
+                    "and the sealed hundred are only a prediction if nothing "
+                    "that could produce them existed first")
 
     def test_every_frozen_row_carries_the_date_it_was_recorded(self) -> None:
         """A digest with no date cannot be read against an ordering."""

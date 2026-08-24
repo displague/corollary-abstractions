@@ -29,9 +29,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import foreign_voice_oracle as fvo  # noqa: E402
 import foreign_voice_rule_r as fvr  # noqa: E402
+from git_ordering import assert_added_before  # noqa: E402
 
 PREREG_PATH = ROOT / "experiments" / "foreign_voice_prereg.json"
 PROTOTYPE = ROOT / "prover" / "lean" / "normalizer" / "Serialize.prototype.lean"
@@ -42,6 +44,47 @@ PAIR_ONE = "25ec23fb13b3312063d7b9754afbb2f3694775f83c5d7726d4925c7486dce3c3"
 PAIR_TWO = "f89095af7546ebd1b61e2374119fa2e041d8c89af2ece93c6f11016c893bae7f"
 PAIR_ONE_LENGTH = 475
 PAIR_TWO_LENGTH = 2627
+
+
+def _strip_lean_comments(text: str) -> str:
+    """Drop `/- … -/` blocks (nested), `--` line comments, and string literals.
+
+    `Serialize.lean` discusses `sorry` at length in order to say it is absent,
+    and its FVERR messages name `sorryAx` in order to report refusing one. A
+    substring check over the raw file is therefore a check that the file does
+    not TALK about the thing it forbids, which is the opposite of what is
+    wanted. Comments and string literals come out; what is left is the terms
+    the program actually elaborates.
+    """
+    out: list[str] = []
+    depth = 0
+    i = 0
+    while i < len(text):
+        if text.startswith("/-", i):
+            depth += 1
+            i += 2
+            continue
+        if text.startswith("-/", i) and depth:
+            depth -= 1
+            i += 2
+            continue
+        if depth:
+            i += 1
+            continue
+        if text.startswith("--", i):
+            newline = text.find("\n", i)
+            i = len(text) if newline == -1 else newline
+            continue
+        if text[i] == '"':
+            i += 1
+            while i < len(text) and text[i] != '"':
+                i += 2 if text[i] == "\\" else 1
+            i += 1
+            out.append('""')
+            continue
+        out.append(text[i])
+        i += 1
+    return "".join(out)
 
 
 def _have_toolchain() -> bool:
@@ -251,12 +294,23 @@ class FailureIsNamedNotSilent(unittest.TestCase):
         """No `sorry`, no axiom audit, no verdict. §4's boundary, in the bytes."""
         text = (ROOT / "prover" / "lean" / "normalizer" /
                 "Serialize.lean").read_text(encoding="utf-8")
-        # The header comment names these in order to say they are absent, so
-        # the check is over the code, not over the prose about the code.
-        code = text.split("-/", 1)[1]
+        code = _strip_lean_comments(text)
+        # `hasSorry` survives the strip and must: it is the guard, not a use.
+        code = code.replace("hasSorry", "")
         for forbidden in ("#print axioms", "sorry", ":= by", "theorem ",
                           "example ", "axiom "):
-            self.assertNotIn(forbidden, code)
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, code)
+
+    def test_the_guards_h2_added_are_in_the_code_and_not_only_the_comment(
+            self) -> None:
+        """A guard described in a docstring and absent from the code is prose."""
+        code = _strip_lean_comments(
+            (ROOT / "prover" / "lean" / "normalizer" /
+             "Serialize.lean").read_text(encoding="utf-8"))
+        self.assertIn("hasExprMVar", code)
+        self.assertIn("hasSorry", code)
+        self.assertIn("withoutErrToSorry", code)
 
 
 class PreregOrdering(unittest.TestCase):
@@ -284,18 +338,19 @@ class PreregOrdering(unittest.TestCase):
         self.assertEqual(
             digest, frozen["prover/lean/normalizer/Serialize.prototype.lean"]["sha256_lf"])
 
-    def test_b_p_precedes_the_frozen_register_in_the_record(self) -> None:
-        """§10's order: B-P, then B4. Written in the B-P commit, where the
-        register was the only pending row; restated as the durable form of the
-        same fact when B4 landed, so a later reader can still check the order
-        instead of taking the commit that wrote it on trust."""
-        rows = {row["role"]: row for row in
-                self.prereg["frozen"] + self.prereg["pending"]}
-        register = rows["frozen_register"]
-        if register["sha256_lf"] == "pending":
-            self.assertFalse((ROOT / register["path"]).exists())
-        else:
-            self.assertIn("promoted", register["recorded"])
+    def test_b_p_precedes_the_frozen_register_in_the_git_history(self) -> None:
+        """§10's order: B-P, then B4.
+
+        Two earlier versions of this asserted, in turn, that the register was
+        the only `pending` row and that its prereg row said "promoted". The
+        first was true of one commit; the second was a string. The history is
+        neither.
+        """
+        assert_added_before(
+            self, "prover/lean/normalizer/Serialize.lean",
+            "data/foreign_voice/register.json",
+            "§10 discharges B-P before the register is frozen, so the identity "
+            "witness exists before the inventory of what it cannot witness")
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI

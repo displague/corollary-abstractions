@@ -3840,15 +3840,12 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Odd`",
    "interpretation_shift": [
     "ℤ→Int"
    ],
-   "interpreted": "∀ Even Odd : Rat, ∀ a b : Int, Odd a ∧ Odd b → Even (a^2 + b^2 + 26) ∧ Odd (5 * a * b)",
-   "preamble_binders": [
-    "Even",
-    "Odd"
-   ],
+   "interpreted": "∀ a b : Int, Odd a ∧ Odd b → Even (a^2 + b^2 + 26) ∧ Odd (5 * a * b)",
+   "preamble_binders": [],
    "source": "∀ a b : ℤ, Odd a ∧ Odd b → Even (a^2 + b^2 + 26) ∧ Odd (5 * a * b)",
    "statement_id": "leanworkbook.skel.lean_workbook_14810"
   },
@@ -12985,14 +12982,12 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Even`",
    "interpretation_shift": [
     "ℤ→Int"
    ],
-   "interpreted": "∀ Even : Rat, ∀ x y z : Int, Even (x * y * (x ^ 2 - y ^ 2) + y * z * (y ^ 2 - z ^ 2) + z * x * (z ^ 2 - x ^ 2))",
-   "preamble_binders": [
-    "Even"
-   ],
+   "interpreted": "∀ x y z : Int, Even (x * y * (x ^ 2 - y ^ 2) + y * z * (y ^ 2 - z ^ 2) + z * x * (z ^ 2 - x ^ 2))",
+   "preamble_binders": [],
    "source": "∀ x y z : ℤ, Even (x * y * (x ^ 2 - y ^ 2) + y * z * (y ^ 2 - z ^ 2) + z * x * (z ^ 2 - x ^ 2))",
    "statement_id": "leanworkbook.skel.lean_workbook_3009"
   },
@@ -15206,14 +15201,12 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Odd`",
    "interpretation_shift": [
     "ℤ→Int"
    ],
-   "interpreted": "∀ Odd : Rat, ∀ y : Int, Odd (y^4 + y^3 + y^2 + y + 1)",
-   "preamble_binders": [
-    "Odd"
-   ],
+   "interpreted": "∀ y : Int, Odd (y^4 + y^3 + y^2 + y + 1)",
+   "preamble_binders": [],
    "source": "∀ y : ℤ, Odd (y^4 + y^3 + y^2 + y + 1)",
    "statement_id": "leanworkbook.skel.lean_workbook_33650"
   },
@@ -19035,15 +19028,12 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Odd`",
    "interpretation_shift": [
     "ℤ→Int"
    ],
-   "interpreted": "∀ Even Odd : Rat, ∀ n m : Int, Odd n ∧ Odd m → Even (n - m)",
-   "preamble_binders": [
-    "Even",
-    "Odd"
-   ],
+   "interpreted": "∀ n m : Int, Odd n ∧ Odd m → Even (n - m)",
+   "preamble_binders": [],
    "source": "∀ n m : ℤ, Odd n ∧ Odd m → Even (n - m)",
    "statement_id": "leanworkbook.skel.lean_workbook_39748"
   },
@@ -24006,12 +23996,10 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Irrational`",
    "interpretation_shift": [],
-   "interpreted": "∀ Irrational : Rat, Irrational (Real.sqrt 2)",
-   "preamble_binders": [
-    "Irrational"
-   ],
+   "interpreted": "Irrational (Real.sqrt 2)",
+   "preamble_binders": [],
    "source": "Irrational (Real.sqrt 2)",
    "statement_id": "leanworkbook.skel.lean_workbook_49423"
   },
@@ -25169,11 +25157,10 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Even`",
    "interpretation_shift": [],
-   "interpreted": "∀ Even m n : Rat, Even m ∨ Even n",
+   "interpreted": "∀ m n : Rat, Even m ∨ Even n",
    "preamble_binders": [
-    "Even",
     "m",
     "n"
    ],
@@ -39342,14 +39329,12 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Even`",
    "interpretation_shift": [
     "ℤ→Int"
    ],
-   "interpreted": "∀ Even : Rat, ∀ n : Int, Even n → Even (n^2)",
-   "preamble_binders": [
-    "Even"
-   ],
+   "interpreted": "∀ n : Int, Even n → Even (n^2)",
+   "preamble_binders": [],
    "source": "∀ n : ℤ, Even n → Even (n^2)",
    "statement_id": "leanworkbook.skel.lean_workbook_plus_38235"
   },
@@ -43938,11 +43923,10 @@
   {
    "accepted": false,
    "corpus": "lean_workbook",
-   "error": "Function expected at",
+   "error": "Unknown identifier `Even`",
    "interpretation_shift": [],
-   "interpreted": "∀ Even d : Rat, Even d",
+   "interpreted": "∀ d : Rat, Even d",
    "preamble_binders": [
-    "Even",
     "d"
    ],
    "source": "Even d",

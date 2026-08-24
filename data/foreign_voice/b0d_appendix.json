@@ -1,0 +1,67 @@
+{
+ "NOT_PART_OF_THE_SEALED_HUNDRED": true,
+ "appendix_id": "foreign_voice.b0d_appendix.v1",
+ "authored_the_same_way": [
+  "Same grammar, same table, same registered numeral pair, same authoring discipline as the sealed hundred - and the same limitation: the token sequence was not mechanically checked, because checking it means writing the inverse."
+ ],
+ "count": 5,
+ "design": "docs/DESIGN-foreign-voice.md",
+ "registered": "2026-08-24",
+ "rows": [
+  {
+   "corpus": "lean_workbook",
+   "in_sealed_hundred": false,
+   "interpreted": "∀ x : Rat, 2*x+1 >= 0 ↔ x >= -1/2",
+   "predicted": "rendered",
+   "source": "2*x+1 >= 0 ↔ x >= -1/2",
+   "statement_id": "leanworkbook.skel.lean_workbook_7992",
+   "surface": "for every variable zero of type rational it holds that two times variable zero plus one at least equals zero exactly when variable zero at least equals minus one divided by two",
+   "why_this_row": "the ASCII ordering `>=`, the row the digraph correction added"
+  },
+  {
+   "corpus": "lean_workbook",
+   "in_sealed_hundred": false,
+   "interpreted": "∀ a b c : Rat, a^2 <= 1 ∧ b^2 <= 1 ∧ c^2 <= 1",
+   "predicted": "rendered",
+   "source": "a^2 <= 1 ∧ b^2 <= 1 ∧ c^2 <= 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_43951",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of two at most equals one and also variable one to the power of two at most equals one and also variable two to the power of two at most equals one",
+   "why_this_row": "the ASCII ordering `<=`, three times in one statement"
+  },
+  {
+   "corpus": "lean_workbook",
+   "in_sealed_hundred": false,
+   "interpreted": "∀ x : Rat, x^2 - 4*x >= 0 ↔ x ≤ 0 ∨ x ≥ 4",
+   "predicted": "rendered",
+   "source": "x^2 - 4*x >= 0 ↔ x ≤ 0 ∨ x ≥ 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_31314",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of two minus four times variable zero at least equals zero exactly when variable zero is at most zero or else variable zero is at least four",
+   "why_this_row": "BOTH spellings of the ordering relations in one statement - `>=` and the glyphs. This is the row that would have been silently wrong before the digraph correction, and it is the reason the appendix exists"
+  },
+  {
+   "corpus": "number_theory",
+   "in_sealed_hundred": false,
+   "interpreted": "2^21 % 7 = 1 % 7",
+   "predicted": "rendered",
+   "source": "2^21 % 7 = 1 % 7",
+   "statement_id": "numbertheory.ingested.lean_workbook_10202",
+   "surface": "two to the power of twenty-one modulo seven equals one modulo seven",
+   "why_this_row": "the `%` row, which two statements in the whole corpus exercise; a statement with NO preamble because rule R found no free identifiers; AND one of the three non-lean_workbook statements in the entire covered set, which the seeded hundred could not have been expected to reach"
+  },
+  {
+   "corpus": "lean_workbook",
+   "in_sealed_hundred": false,
+   "interpreted": "∀ x y : Rat, x = 0.5 ∧ y = 0.5",
+   "predicted": "rendered",
+   "source": "x = 0.5 ∧ y = 0.5",
+   "statement_id": "leanworkbook.skel.lean_workbook_13038",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero equals zero point five and also variable one equals zero point five",
+   "why_this_row": "a decimal literal, which the registered numeral pair spells with `point` - the one numeral word a foreign-voice surface can carry besides the digits themselves"
+  }
+ ],
+ "what_this_is": [
+  "Five hand-authored renderings that are NOT part of B0d's sealed hundred and must never be counted in B0d's denominator, its rate, or its divergence report. They exist because the seeded draw took no statement carrying `>=`, `<=`, `%`, or a decimal literal, and a golden set with no row for a construct the corpus carries 55, 13, 2 and 34 times is a golden set with a hole exactly where the cycle's one dated table correction landed.",
+  "They are golden pairs for tests/test_foreign_voice.py, in the sense v0.18's 13 pinned (source, exact-surface) pairs are golden: a lexicon edit that changes an emitted surface shows up as a diff.",
+  "The separation is the point. B0d's hundred were drawn by a rule seeded from the lexicon digest with no hand-picking; these five were CHOSEN, by a human, to cover named constructs. Mixing them would turn a random sample into a curated one and B0d's number into something that cannot be read as a rate."
+ ]
+}

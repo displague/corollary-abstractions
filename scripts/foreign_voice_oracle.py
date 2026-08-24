@@ -48,6 +48,39 @@ is **re-probed in a batch of its own** before it is called a failure.  A tag
 that is still missing when it is the only command in the file is genuinely
 unparseable; one that reappears was a bystander.  Silence is never read as
 success.
+
+## The three guards on a batch, and why the middle one is not the blunt form
+
+**Return code.**  Anything outside `{0, 1}` refuses.  Lean exits 1 when it
+logged a diagnostic and 0 when it did not; anything else is a crash, a bad
+flag, or a binary that is not the one we think it is, and none of those is a
+measurement.
+
+**Unaccounted diagnostics.**  Every `error:` line the frontend prints must be
+attributable to a `#ser` command **whose tag answered `FVERR`**.  An error on
+a preamble line, or on a command whose tag answered `FVSER`, means the output
+is not the output we think it is, and the batch refuses.
+
+This is deliberately *not* the blunter "refuse if the output contains any
+error at all", and the reason is H2.  Since `#ser` rejects a residual
+metavariable, a term like `(1 2 3)` produces a frontend error line *and* an
+`FVERR` for its tag — a fully accounted-for, correctly-reported failure.
+Under the blunt rule that one pathological statement would abort an entire
+run, and B2 reserves aborting for **refusals**, not for **failures**: *"FAIL —
+the surface elaborated with errors — counts against B1. REFUSED — the
+toolchain is absent or an input escapes containment — aborts the run."*  A
+statement that fails to elaborate is a data point.  A batch whose diagnostics
+do not add up is not.  Attribution is exact here because exactly one `#ser`
+command is emitted per line.
+
+**Sentinels.**  Two commands are appended to every batch: one that must answer
+`FVSER` with a serialization identical to every other batch's, and one that
+must answer `FVERR` with a known diagnostic.  The first proves the file
+elaborated all the way to the end — so the preamble compiled and no parse
+error swallowed the tail.  The second proves diagnostics are still being
+*produced*, which is the class of failure the frontend's 100-error cutoff
+belongs to: a run that stops reporting looks exactly like a run with nothing
+to report.
 """
 
 from __future__ import annotations
@@ -75,7 +108,30 @@ DEFAULT_TOOLCHAIN_FILE = NORMALIZER_DIR / "lean-toolchain"
 
 _TAG_RE = re.compile(r"[A-Za-z0-9._-]+")
 _LINE_RE = re.compile(r"FV(SER|ERR) (\S+) (.*)$")
+_ERROR_RE = re.compile(r"^.*?:(\d+):(\d+): error(?:\([^)]*\))?: ", re.M)
+
+#: Belt and braces. `rule_r.json` freezes `maxErrors` at a million and the
+#: harness passes it on the command line, so this line should be unreachable —
+#: but the option lives in a digested file that a later commit could lower, and
+#: a truncated diagnostic stream is indistinguishable from a clean one. The
+#: guard costs a substring search; the failure it catches cost 663 statements
+#: of false eligibility the one time it was not there.
 _CUTOFF = "maximum number of errors"
+
+#: Return codes the pinned frontend produces in normal operation: 0 when it
+#: logged nothing, 1 when it logged a diagnostic. Anything else is a crash, a
+#: rejected flag, or a different binary.
+_EXPECTED_RETURNCODES = (0, 1)
+
+#: Appended to every batch. The first must answer, proving the file elaborated
+#: to the end; the second must FAIL with a known diagnostic, proving the
+#: frontend is still reporting at all.
+_SENTINEL_OK = "fv-sentinel-ok"
+_SENTINEL_OK_TERM = "(0 : Nat) = 0"
+_SENTINEL_ERR = "fv-sentinel-err"
+_SENTINEL_ERR_TERM = "fv_sentinel_no_such_identifier"
+_SENTINEL_ERR_EXPECT = "fv_sentinel_no_such_identifier"
+_SENTINELS = (_SENTINEL_OK, _SENTINEL_ERR)
 
 
 class OracleRefusal(RuntimeError):
@@ -102,15 +158,22 @@ def _digest(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-@dataclass(frozen=True)
+@dataclass
 class Oracle:
-    """A resolved, pinned oracle. Constructing one proves the toolchain is there."""
+    """A resolved, pinned oracle. Constructing one proves the toolchain is there.
+
+    Mutable in exactly one field: `_sentinel`, the serialization the good
+    sentinel produced the first time a batch ran. Every later batch must
+    reproduce it byte for byte, which is B5's two-run stability asserted
+    continuously rather than only in a test.
+    """
 
     binary: Path
     toolchain: str
     serializer: Path
     serializer_text: str
     rule: rule_r.RuleR
+    _sentinel: str = ""
 
     def preamble(self) -> str:
         """The bytes every batch carries: the serializer, then rule R's settings.
@@ -133,6 +196,10 @@ class Oracle:
                     f"tag {tag!r} is not [A-Za-z0-9._-]+; a tag goes into a Lean "
                     f"string literal and this module will not escape one for you"
                 )
+            if tag in _SENTINELS:
+                raise OracleRefusal(
+                    f"tag {tag!r} is reserved for this module's batch sentinels"
+                )
             if tag in seen:
                 raise OracleRefusal(f"tag {tag!r} appears twice; tags are the identity")
             seen.add(tag)
@@ -153,6 +220,17 @@ class Oracle:
     def _run_with_reprobe(self, chunk: list[tuple[str, str]]) -> dict[str, Serialization]:
         answered = self._run(chunk)
         missing = [(tag, term) for tag, term in chunk if tag not in answered]
+        if missing and len(missing) == len(chunk) and len(chunk) > 1:
+            # EVERY tag missing is not N parse errors, it is one file-level
+            # failure — a preamble that did not compile, or a first command
+            # that swallowed the rest. Reporting it as N failures would put a
+            # harness fault into the rate as data. The sentinels normally
+            # catch this first; this is the guard for the case where they do
+            # not, and it refuses rather than attributing.
+            raise OracleRefusal(
+                f"none of the {len(chunk)} tags in this batch answered; that is a "
+                f"file-level failure, not {len(chunk)} unparseable statements"
+            )
         if missing and len(missing) < len(chunk):
             # A parse error swallows the commands after it. Re-probe the
             # bystanders without the offender before calling them failures.
@@ -167,9 +245,15 @@ class Oracle:
         return answered
 
     def _run(self, chunk: list[tuple[str, str]]) -> dict[str, Serialization]:
-        lines = [self.preamble()]
-        for tag, term in chunk:
+        requested = list(chunk) + [(_SENTINEL_OK, _SENTINEL_OK_TERM),
+                                   (_SENTINEL_ERR, _SENTINEL_ERR_TERM)]
+        lines = self.preamble().split("\n")
+        #: line number (1-based) -> tag, for diagnostic attribution. Exactly
+        #: one `#ser` command per line is what makes this exact.
+        owner: dict[int, str] = {}
+        for tag, term in requested:
             lines.append(f'#ser "{tag}" => ({term})')
+            owner[len(lines)] = tag
         source = "\n".join(lines) + "\n"
 
         with tempfile.TemporaryDirectory() as scratch:
@@ -185,13 +269,20 @@ class Oracle:
             )
         output = ((completed.stdout or "") + (completed.stderr or "")).replace(
             "\r\n", "\n")
+
+        if completed.returncode not in _EXPECTED_RETURNCODES:
+            raise OracleRefusal(
+                f"the pinned binary exited {completed.returncode}; the frontend "
+                f"exits 0 or 1 in normal operation and anything else is a crash, "
+                f"a rejected flag, or a different binary — not a measurement"
+            )
         if _CUTOFF in output:
             raise OracleRefusal(
                 "the frontend's error cutoff fired; diagnostics are truncated and "
                 "a truncated stream cannot be told from a clean one"
             )
 
-        by_term = dict(chunk)
+        by_term = dict(requested)
         answered: dict[str, Serialization] = {}
         for line in output.split("\n"):
             match = _LINE_RE.search(line)
@@ -214,7 +305,70 @@ class Oracle:
                 digest=_digest(payload) if ok else "",
                 error="" if ok else payload,
             )
+
+        self._check_sentinels(answered)
+        self._check_diagnostics_are_accounted_for(output, owner, answered)
+        for sentinel in _SENTINELS:
+            answered.pop(sentinel, None)
         return answered
+
+    def _check_sentinels(self, answered: dict[str, Serialization]) -> None:
+        """The file reached its end, and diagnostics are still being produced."""
+        good = answered.get(_SENTINEL_OK)
+        if good is None or not good.ok:
+            raise OracleRefusal(
+                "the batch's closing sentinel did not serialize; the file did "
+                "not elaborate to its end, so every answer above it is an answer "
+                "to a file we did not write"
+            )
+        if self._sentinel and good.serialization != self._sentinel:
+            raise OracleRefusal(
+                "the closing sentinel serialized differently than it did earlier "
+                "in this run; the oracle is not a function and no digest identity "
+                "means anything"
+            )
+        self._sentinel = good.serialization
+
+        bad = answered.get(_SENTINEL_ERR)
+        if bad is None or bad.ok or _SENTINEL_ERR_EXPECT not in bad.error:
+            raise OracleRefusal(
+                "the batch's failing sentinel did not report its known "
+                "diagnostic; a frontend that has stopped reporting looks exactly "
+                "like a batch with nothing to report"
+            )
+
+    @staticmethod
+    def _check_diagnostics_are_accounted_for(
+            output: str, owner: dict[int, str],
+            answered: dict[str, Serialization]) -> None:
+        """C2's guard, stated over TAGS rather than over the whole output.
+
+        Every `error:` line must belong to a `#ser` command whose tag answered
+        `FVERR`. An error on a preamble line, or on a command that reported
+        success, means the output is not the output we think it is.
+        """
+        for match in _ERROR_RE.finditer(output):
+            line = int(match.group(1))
+            tag = owner.get(line)
+            if tag is None:
+                raise OracleRefusal(
+                    f"the pinned binary reported an error on line {line}, which "
+                    f"is not one of this batch's `#ser` commands; the preamble "
+                    f"itself did not elaborate"
+                )
+            row = answered.get(tag)
+            if row is None:
+                # The command did not answer at all: a parse error, which is
+                # the one failure no elaborator can catch. `_run_with_reprobe`
+                # owns that case and re-probes the tag alone before calling it
+                # a failure, so it is accounted for — just not here.
+                continue
+            if row.ok:
+                raise OracleRefusal(
+                    f"the pinned binary reported an error for {tag!r}, which "
+                    f"answered successfully; a diagnostic nobody accounted for "
+                    f"means the batch's answers cannot be trusted"
+                )
 
 
 def load(serializer: Path | None = None,
