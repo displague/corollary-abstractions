@@ -42,6 +42,7 @@ import foreign_voice_lexicon as fvl  # noqa: E402
 import foreign_voice_select as fvs  # noqa: E402
 import numeral_words as nw  # noqa: E402
 from git_ordering import (  # noqa: E402
+    assert_absent_or_added_after,
     assert_added_before,
     first_added,
     is_ancestor,
@@ -228,9 +229,18 @@ class SealOrderingTests(unittest.TestCase):
             "the lexicon whose digest seeds the draw must be frozen before the "
             "draw, or the seed is a choice rather than a consequence")
 
-    def test_no_renderer_exists_yet(self) -> None:
-        """The seal is only a prediction if nothing has run against it."""
-        self.assertFalse((ROOT / "scripts" / "foreign_voice.py").exists())
+    def test_the_renderer_did_not_exist_when_the_seal_was_written(self) -> None:
+        """The seal is only a prediction if nothing could have produced it.
+
+        Written in the B0d commit as "the renderer does not exist", which was
+        true of that tree and stopped being true the moment phase 2 landed.
+        The durable claim is about the ORDER, so it is read from the history.
+        """
+        assert_absent_or_added_after(
+            self, "data/foreign_voice/b0d_sealed_renderings.json",
+            "scripts/foreign_voice.py",
+            "a hundred sentences authored after the renderer existed would be "
+            "a transcript, not a prediction")
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI

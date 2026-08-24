@@ -32,8 +32,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import foreign_voice_register as fvreg  # noqa: E402
+from git_ordering import assert_absent_or_added_after  # noqa: E402
 
 REGISTER_PATH = ROOT / "data" / "foreign_voice" / "register.json"
 PREVIEW_PATH = ROOT / "data" / "foreign_voice" / "eligibility_preview.json"
@@ -267,9 +269,22 @@ class B4Ordering(unittest.TestCase):
         """Every artifact §10 orders before the renderer now exists and is pinned."""
         self.assertEqual(self.prereg["pending"], [])
 
-    def test_no_renderer_exists_yet(self) -> None:
-        """B4: freezing the register is a PRECONDITION of rendering anything."""
-        self.assertFalse((ROOT / "scripts" / "foreign_voice.py").exists())
+    def test_the_register_was_frozen_before_anything_could_render(self) -> None:
+        """B4: freezing the register is a PRECONDITION of rendering anything.
+
+        Written in the B4 commit as "the renderer does not exist". That was a
+        fact about one tree; this is the rule, and it keeps holding after the
+        renderer lands.
+        """
+        assert_absent_or_added_after(
+            self, "data/foreign_voice/register.json",
+            "scripts/foreign_voice.py",
+            "B4 makes the frozen register a precondition of rendering, so the "
+            "inventory of silence cannot be edited after seeing what the "
+            "renderer failed on")
+
+    def test_the_registered_run_has_not_happened(self) -> None:
+        """Phase 2 was scoped to stop before it, and this is what that means."""
         self.assertFalse(
             (ROOT / "experiments" / "foreign_voice_rate.json").exists())
 
