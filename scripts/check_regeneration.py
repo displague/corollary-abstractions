@@ -94,9 +94,18 @@ def main() -> int:
         print(f"coherence OK: {len(seeds)} seeds regenerate committed data "
               f"byte-identically across {'/, '.join(roots)}/")
 
+    # Hand-authored preregistration artifacts, not seeded corpora: their
+    # regeneration discipline lives in their own digest pins and tests
+    # (experiments/realization_prereg.json, experiments/foreign_voice_prereg
+    # .json), not in a seed script. Registered here explicitly because
+    # data/realization was previously escaping the orphan check only by a
+    # name-coincidence substring match in an unrelated seed -- an exclusion
+    # that exists by accident is an exclusion nobody decided.
+    hand_authored_prereg = {"realization", "foreign_voice"}
+
     orphans: list[str] = []
     for root in roots:
-        owned = set()
+        owned = set(hand_authored_prereg) if root == "data" else set()
         for seed in seeds:
             text = seed.read_text(encoding="utf-8", errors="replace")
             for d in (REPO / root).iterdir():
