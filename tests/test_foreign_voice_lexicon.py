@@ -310,11 +310,20 @@ class ConstructiveCoverageTests(unittest.TestCase):
         cls.preview = json.loads(PREVIEW_PATH.read_text(encoding="utf-8"))
         cls.eligible = [row for row in cls.preview["statements"] if row["accepted"]]
 
-    _IDENT = re.compile(r"[A-Za-z_α-ωΑ-Ω]"
-                        r"[A-Za-z_α-ωΑ-Ω0-9'₀-₉ₐ-ₜ]*")
+    _IDENT_CHARS = r"A-Za-z_α-ωΑ-Ω0-9'₀-₉ₐ-ₜ"
+    _IDENT = re.compile(r"[A-Za-z_α-ωΑ-Ω][" + _IDENT_CHARS + r"]*")
     _NUMERAL = re.compile(r"\d+(?:\.\d+)?")
+    _RUN = re.compile(r"[^" + _IDENT_CHARS + r"\s]+")
 
     def _leftovers(self, text: str) -> set[str]:
+        """Longest-first munch. Leftovers are TOKENS, not characters.
+
+        The character-level version of this check reported no leftover for
+        `>=`, because `>` and `=` are both rows — while the renderer would
+        emit `is greater than equals` and the inverse would hand the pinned
+        binary `> =`, which is not a term. So the scan takes the longest table
+        token at each position and a leftover is whatever no token matches.
+        """
         tokens = self.lex.tokens
         out: set[str] = set()
         i = 0
@@ -339,6 +348,54 @@ class ConstructiveCoverageTests(unittest.TestCase):
                 out.add(text[i])
                 i += 1
         return out
+
+    def test_the_pinned_operator_runs_are_the_ones_in_the_tree(self) -> None:
+        """The check the character-level sweep did not have.
+
+        Every maximal run of non-identifier, non-digit, non-space characters in
+        the eligible set, counted, pinned in the lexicon. A new run shape —
+        a dialect construct nobody expected — turns this red instead of
+        rendering to something the inverse cannot say.
+        """
+        raw = json.loads(LEXICON_PATH.read_text(encoding="utf-8"))
+        occurrences: dict[str, int] = {}
+        statements: dict[str, int] = {}
+        for row in self.eligible:
+            seen = set()
+            for match in self._RUN.finditer(row["interpreted"]):
+                run = match.group(0)
+                occurrences[run] = occurrences.get(run, 0) + 1
+                seen.add(run)
+            for run in seen:
+                statements[run] = statements.get(run, 0) + 1
+        measured = [[run, occurrences[run], statements[run]]
+                    for run in sorted(occurrences)]
+        self.assertEqual(measured, raw["coverage"]["operator_runs"])
+
+    def test_every_operator_run_decomposes_into_rows_of_this_table(self) -> None:
+        """`>=` is the case this exists for: two rows that are not the right row."""
+        raw = json.loads(LEXICON_PATH.read_text(encoding="utf-8"))
+        refused = set(self.lex.refusals)
+        for run, _occ, _stmts in raw["coverage"]["operator_runs"]:
+            with self.subTest(run=run):
+                rest = run
+                while rest:
+                    if rest[0] in refused or rest[0] == ".":
+                        # The refusal row, and the numeral pair's decimal point.
+                        rest = rest[1:]
+                        continue
+                    for token in self.lex.tokens:
+                        if rest.startswith(token):
+                            rest = rest[len(token):]
+                            break
+                    else:
+                        self.fail(f"{run!r} leaves {rest!r}, which no row can say")
+
+    def test_the_ascii_and_unicode_orderings_are_both_rows(self) -> None:
+        """Both spellings are in the corpus, so both are rows — see corrections."""
+        for glyph in ("≥", "≤", ">=", "<="):
+            self.assertIn(glyph, self.lex.relations, f"{glyph} has no row")
+        self.assertNotEqual(self.lex.relations["≥"], self.lex.relations[">="])
 
     def test_the_eligible_set_is_the_size_the_preview_records(self) -> None:
         self.assertEqual(len(self.eligible), 2319)

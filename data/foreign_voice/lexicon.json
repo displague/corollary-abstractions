@@ -85,12 +85,27 @@
   },
   "relations": {
     "<": "is less than",
+    "<=": "at most equals",
     "=": "equals",
     ">": "is greater than",
+    ">=": "at least equals",
     "≠": "differs from",
     "≤": "is at most",
     "≥": "is at least"
   },
+  "relations_note": [
+    "`≥` and `>=` are the SAME relation spelled two ways, and they get two rows",
+    "rather than one. The dialect really does carry both -- measured on the",
+    "eligible set, 55 statements spell it `>=` and 772 spell it `≥` -- and this",
+    "table is a token table, so a spelling the corpus uses is a row. Two rows",
+    "also make the round trip preserve the spelling, which is strictly stronger",
+    "than normalizing: the inverse hands back the same characters the corpus",
+    "wrote.",
+    "The ASCII phrases are `at least equals` / `at most equals` rather than the",
+    "obvious `is greater than or equal to`, because `is greater than` is already",
+    "the `>` row and would be a proper word-prefix of it. L1 refuses that at",
+    "load, which is how the spelling was chosen."
+  ],
   "operators": {
     "%": "modulo",
     "*": "times",
@@ -173,15 +188,32 @@
     },
     "constructive_check": [
       "Every one of the 2,319 oracle-eligible statements was tokenized under R",
-      "with exactly this table's tokens, the identifier grammar of rule_r.json",
-      "and the registered numeral pair. Leftover characters: ONE -- the coercion",
-      "arrow, 9 occurrences across 4 statements, which has a refusal row above.",
+      "with exactly this table's tokens, longest first, the identifier grammar of",
+      "rule_r.json and the registered numeral pair. Leftover: ONE construct -- the",
+      "coercion arrow, 7 runs across 4 statements, which has a refusal row above.",
       "Nothing else in the eligible set is outside this table.",
       "This is the whole-table check v0.18's `head_coverage` block does for the",
       "realization lexicon, done constructively rather than by head census,",
       "because this dialect's vocabulary is closed and small enough to enumerate",
-      "exhaustively."
+      "exhaustively.",
+      "`operator_runs` below is the second half of that check and the half the",
+      "first version of this file did not have. A character-level sweep reports",
+      "no leftover for `>=` -- because `>` and `=` are BOTH rows -- while the",
+      "renderer would emit `is greater than equals` and the inverse would hand",
+      "the pinned binary `> =`, which is not a term at all. The runs are",
+      "enumerated so the check is about TOKENS rather than characters."
     ],
+    "operator_runs_note": [
+      "Every maximal run of non-identifier, non-digit, non-space characters in",
+      "the 2,319 rule-R surfaces, with its occurrence and statement counts. Each",
+      "run must decompose under longest-first munch into rows of this table; the",
+      "only exception is the coercion arrow, which has a refusal row. Pinning the",
+      "runs means a NEW run shape -- a dialect construct nobody expected, or a",
+      "corpus that grew one -- turns a test red instead of rendering to something",
+      "the inverse cannot say. `.` is the decimal point of the 34 decimal",
+      "literals; the registered numeral pair owns it, not this table."
+    ],
+    "operator_runs": [["%", 3, 2], ["(", 5466, 1461], ["((", 98, 70], ["(((-", 1, 1], ["((-", 5, 2], ["((↑", 1, 1], ["(-", 55, 35], ["(-(", 3, 3], ["(↑", 1, 1], ["(∃", 52, 51], [")", 4924, 1451], ["))", 250, 159], [")))", 14, 10], ["))^", 8, 5], [")*", 10, 7], [")*(", 63, 39], [")*((", 4, 4], [")+", 2, 2], ["),", 16, 16], [")-", 1, 1], [")/", 23, 12], [")/(", 16, 7], [")/((", 3, 1], ["):", 2, 2], [")<", 1, 1], [")=(", 1, 1], [")^", 434, 224], [")^(", 7, 4], [")^(-", 4, 3], ["*", 7863, 1640], ["*(", 33, 18], ["*(-", 1, 1], ["+", 10026, 1876], ["+(", 13, 5], [",", 2351, 2242], ["-", 2456, 925], ["-(", 25, 18], ["-((", 1, 1], [".", 34, 20], ["/", 2998, 961], ["/(", 55, 22], ["/((", 1, 1], [":", 2559, 2289], ["<", 319, 175], ["<=", 19, 13], ["=", 2409, 1090], ["=-", 3, 2], [">", 748, 283], [">=", 86, 55], ["^", 6493, 1416], ["^(", 16, 7], ["^(-", 20, 3], ["¬", 71, 71], ["¬(", 6, 6], ["¬∃", 18, 18], ["↑", 7, 4], ["→", 688, 656], ["↔", 363, 363], ["∀", 2184, 2168], ["∃", 113, 110], ["∧", 2062, 1066], ["∨", 280, 168], ["≠", 42, 26], ["≤", 950, 577], ["≥", 1134, 772]],
     "constructor_occurrences": {
       "(": 6069,
       ")": 6069,
@@ -259,6 +291,38 @@
       ]
     }
   },
+
+  "corrections": [
+    {
+      "dated": "2026-08-24",
+      "found_by": "the B0d authoring pass, before any hand-rendering was written",
+      "what": "Added the `>=` and `<=` rows and the `operator_runs` inventory. The lexicon digest is re-recorded in experiments/foreign_voice_prereg.json with a dated correction; rule R and the frozen parser are byte-unchanged.",
+      "why": [
+        "The first version of this file had rows for `≥` and `≤` and none for the",
+        "ASCII spellings `>=` and `<=`, which the residue also carries -- 55",
+        "statements and 13 statements of the eligible set respectively.",
+        "The constructive coverage check did not catch it because the check was",
+        "at the CHARACTER level: `>` is a row and `=` is a row, so `>=` reports",
+        "no leftover character while the renderer would say `is greater than",
+        "equals` and the inverse would hand the pinned binary `> =`. That is the",
+        "same shape as v0.18's commit 8910138 -- a fluent sentence that re-reads",
+        "as something else -- arriving through a check that looked at the wrong",
+        "granularity rather than through a missing check.",
+        "Corrected in the table AND in the check: `operator_runs` pins every",
+        "maximal operator run in the eligible set, so coverage is now asserted",
+        "over tokens.",
+        "Recorded here and dated rather than folded into the preregistration",
+        "commit, because a silently-fixed prereg artifact is worth less than a",
+        "dated one (v0.18's own rule, imported).",
+        "Consequence for B0d, stated because it matters: the id-selection rule is",
+        "seeded from THIS file's digest, so the correction moves the hundred",
+        "drawn statements. The draw had not been taken when the correction",
+        "landed, and the sealed renderings are authored against the corrected",
+        "draw. A correction taken AFTER a draw would need the draw re-taken and",
+        "both recorded."
+      ]
+    }
+  ],
 
   "not_claimed": [
     "Not fluency, and not translation quality. The sentences are invertible;",

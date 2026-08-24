@@ -110,8 +110,9 @@
     {
       "path": "data/foreign_voice/lexicon.json",
       "role": "lexicon_and_inverse_table",
-      "sha256_lf": "271a62c7cfc22b819fe622d840d59f2c75d4167e2979346a5b3e3283dfe4d75c",
+      "sha256_lf": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
       "recorded": "2026-08-24",
+      "re_recorded": "2026-08-24, correction 1 below (the `>=` / `<=` rows)",
       "why": [
         "B7's `the lexicon digest` AND `the inverse-table digest` — see `there_is_no_separate_inverse_table` above. This is also the digest B0d's id-selection rule is seeded from, and it is frozen in THIS commit, before the 100 hand-renderings exist, which is the three-line separation the design's review required."
       ]
@@ -257,5 +258,26 @@
     "The design's §10 puts B-P at step 4 of the preregistration order and ROADMAP-v0.19 item 1 puts it at step 2 of the implementation order ('B-P first'). Both are satisfied: B-P is discharged before B0 FREEZES as the registered probe, and after the preregistration record that B7 requires to predate it. Nothing downstream of step 4 is written before step 4 lands."
   ],
 
-  "corrections": []
+  "corrections": [
+    {
+      "dated": "2026-08-24",
+      "finding": "the B0d authoring pass, before any hand-rendering was written",
+      "artifact": "data/foreign_voice/lexicon.json + tests/test_foreign_voice_lexicon.py",
+      "what": "Added the `>=` and `<=` rows and the `operator_runs` inventory; the constructive coverage check moved from characters to tokens. The lexicon digest above is re-recorded; rule R and the frozen parser are byte-unchanged.",
+      "why": [
+        "The preregistration commit's table had rows for `≥` and `≤` and none for the ASCII spellings the residue also carries — 55 statements spell it `>=` and 13 spell it `<=`.",
+        "The constructive coverage check did not catch it because it was at the CHARACTER level: `>` is a row and `=` is a row, so `>=` reports no leftover character, while the renderer would say `is greater than equals` and the inverse would hand the pinned binary `> =`, which is not a term at all.",
+        "That is v0.18's commit 8910138 in a new dialect — a fluent sentence that re-reads as something else — reached this time through a check at the wrong granularity rather than through a missing check. The check now enumerates every maximal operator run in the eligible set and pins them, so coverage is asserted over tokens.",
+        "The ASCII phrases are `at least equals` / `at most equals` and not `is greater than or equal to`, because `is greater than` is already the `>` row and L1 refuses a phrase that has another phrase as a proper word-prefix. The gate chose the spelling."
+      ],
+      "not_a_b7_event": [
+        "scripts/match_signatures.py and data/foreign_voice/rule_r.json are byte-unchanged; their digests above are the ones the preregistration commit recorded. B7 is a claim about the parser and the interpretation, and it holds.",
+        "The lexicon is a TRUSTED artifact whose correctness is carried by review, and this is a reviewed diff with tests — the same standing v0.18's `operator_tokens` correction had. It moved because it was wrong about the corpus, not because it was making the oracle agree: no oracle result had been read when it moved."
+      ],
+      "consequence_for_b0d": [
+        "B0d's id-selection rule is seeded from this file's digest, so the correction moves the hundred drawn statements.",
+        "The draw had NOT been taken when the correction landed. The sealed renderings are authored against the corrected draw, and no draw against the superseded digest was ever committed. A correction taken after a draw would require the draw to be re-taken and both recorded."
+      ]
+    }
+  ]
 }
