@@ -45,3 +45,4 @@ experiments/realization_prereg.json text eol=lf
 experiments/realization_rate.json text eol=lf
 experiments/realization_census.json text eol=lf
 reports/test_gate_v018/** text eol=lf
+experiments/convention_pairs_probe.json text eol=lf
