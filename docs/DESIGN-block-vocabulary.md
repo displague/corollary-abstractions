@@ -272,6 +272,72 @@ places, and the corrections are binding on the course:
    than §3b required and worth registering as a gate if the course
    adopts the design.
 
+## 3e. What the address-space probe measured (2026-08-24, `explore/v019-address-probe`)
+
+ROADMAP-v0.19 item 2 adopted this design bounded and scoped it to §4's
+second bullet — *is the unified dictionary a real object, or two existing
+objects wearing one id space?* — against three baselines taken from §4's
+own falsifier list and **pre-registered in their own commit before any
+measurement** (`experiments/address_space_probe_prereg.json`, ordering
+asserted out of git by `tests/test_address_space_probe.py`). The probe ran
+(`scripts/probe_address_space.py` → `experiments/address_space_probe.json`,
+20 tests). **The answer is: two existing objects wearing one id space.**
+
+| baseline (§4's own) | floor | measured | verdict |
+|---|---:|---:|---|
+| retrieval — the keyword channel | coverage 0.833 / FP 0.030 | **0.3256 / 0.2059** | **NOT BEATEN** |
+| compression — zstd as an archive | 118,328 bits | 829,048 | **NOT BEATEN** (7.01×) |
+| compression — zstd separately addressable | 5,182,024 bits | 829,048 | BEATEN (6.25×) |
+| term layer — canon tokens | 8.44× (32.10× same-population) | **6.91×** | **NOT BEATEN** |
+
+Four readings, and the first two are the ones that cost something.
+
+1. **§3 item 3 is refuted as retrieval.** "Multi-word exact blocks are
+   radically higher-precision retrieval keys than the single keywords the
+   resolver fights its 0.030 false-positive floor with today" was built as
+   a block channel and scored on the committed populations the floors were
+   measured on. It is worse than the keyword channel on **both legs at
+   once** — 0.3256 coverage against 0.9302, claiming 0.2059 of the authored
+   refuse rows against 0.0294, same rows, same process. Under the keyword
+   channel's own corroboration and convergence rules it reaches 0.0465.
+   §3d correction 3 predicted this and the prereg registered the
+   prediction: the blocks MDL mints are the generator's boilerplate, and
+   boilerplate is the one thing a person never types.
+2. **The addressability claim survives against scans and dies against a
+   tag bit.** The unified id space touches 210,248× fewer bytes than
+   grepping raw prose and 9,013× fewer than zstd-decompress-then-scan — and
+   the prereg registered *in advance* that neither is evidence for
+   unification, because both existing indexes already had it separately.
+   The arm that isolates the variable is the same two indexes carrying
+   **one tag bit** saying which owns the key. Against that, the unified
+   space measures **0.9981** — very slightly *worse*, because merging 217
+   block keys with 50,184 subterm skeleton keys grows the directory and
+   buys one more binary-search probe. **What unification sells is dispatch,
+   and a namespace bit already sells it cheaper.**
+3. **The one baseline beaten is a restatement.** The addressable-zstd
+   reading is arithmetic already published in `block_mdl.json`; the prereg
+   registered it as such (E2) so it could not be read afterwards as this
+   probe's finding.
+4. **The cliff reproduced itself by accident.** A case-folded dictionary
+   arm, added during construction because the keyword channel lowercases
+   every query, merged terminals until `terminals + rules` landed on
+   exactly 2048 = 2^11 and the fixed-width code refused every further
+   mint — §3d correction 1, arrived at from a different direction. The arm
+   is kept with `at_power_of_two_cliff` beside it.
+
+**Disposition: the design parks with these numbers**, which is the rule
+ROADMAP-v0.19 item 2 registered (*"Beat none of them and it parks with the
+numbers"*) read as it was meant: of the two baselines that required this
+probe to produce something new, both are NOT BEATEN. What is *not* parked
+is the append-only, order-independent growth property §3d correction 5
+measured, which no baseline here tested and which remains the strongest
+uncontested thing this design has said.
+
+Unpark needs a consumer that reads block ids for something the two
+existing indexes cannot already do separately — §4's third bullet named
+three candidates and this probe only built the first. It does not need
+another retrieval arm.
+
 ## 4. Questions the course must answer before this becomes a preregistration
 
 - **Fixed-width vs variable-length ids.** 2^24 fixed-width with
