@@ -1,0 +1,274 @@
+{
+  "lexicon_id": "foreign_voice.lexicon.v1",
+  "registered": "2026-08-24",
+  "design": "docs/DESIGN-foreign-voice.md",
+  "interpretation": "data/foreign_voice/rule_r.json",
+
+  "purpose": [
+    "The trusted half of the foreign-voice gate (design 3.1). Each row maps one",
+    "constructor of the FOREIGN DIALECT -- a binder, a connective, a relation, an",
+    "operator, a type name or a grouping mark -- to one English word phrase.",
+    "Forward it lexicalizes; reversed it de-lexicalizes. It is not an independent",
+    "check and is not claimed as one: its correctness is carried by review,",
+    "exactly as data/realization/lexicon.json's rows are. The independent check",
+    "is the PINNED EXTERNAL LEAN CHECKER, which this repository did not build and",
+    "which has never seen this table.",
+    "It inherits v0.18's lexicon rules WHOLE rather than restating them:",
+    "prefix-freeness (L1) and numeral-disjointness (L2) at",
+    "scripts/realization_lexicon.py:30-38, which :39-41 explains are together",
+    "what make stage one 'a table lookup with no lookahead policy of its own'."
+  ],
+
+  "what_is_rendered": [
+    "THE RENDERER RENDERS R(s), NOT s. Correction 3 of the design is why: with",
+    "autoImplicit off -- and it must be off -- the surface handed to the oracle",
+    "has to carry an explicit binder preamble, so the sentence a reader sees is",
+    "the sentence for the statement UNDER THE DECLARED INTERPRETATION. Every",
+    "receipt carries `interpretation_shift` naming each substitution rule R",
+    "applied. A rate quoted without that field beside it is a number pretending",
+    "to be a fact."
+  ],
+
+  "reading_rules": [
+    "LONGEST MATCH: reading a surface left to right, take the longest phrase in",
+    "this table that matches the upcoming words; if none matches, expect a",
+    "numeral run (scripts/numeral_words). The loader makes longest match the",
+    "UNIQUE match by enforcing two properties, so the inverter needs no lookahead",
+    "policy of its own:",
+    "  L1 prefix-free -- no phrase is a proper word-prefix of another phrase;",
+    "  L2 numeral-disjoint -- no phrase word is a word the registered numeral",
+    "     pair can emit, so one word decides numeral-run versus phrase and a",
+    "     numeral run may be scanned greedily.",
+    "SLOT MARKER: the word `variable` is followed by a numeral run giving the",
+    "slot's index; the pair emits the token v<index>. Identifiers are erased to",
+    "indices ON PURPOSE and this is the one place the design's own prerequisite",
+    "pays for itself: Serialize.lean drops the `Name` field of every forallE, lam",
+    "and letE, so binder names are invisible to the identity witness by",
+    "CONSTRUCTION. Rendering a name would put information in the sentence that",
+    "the gate cannot see, which is the shape of a rendering error B1 could never",
+    "catch. The source's own identifiers are carried in the receipt's",
+    "`parameters.surface_slot_names` instead. Indices are assigned by first",
+    "occurrence in R(s), left to right.",
+    "TOKENS ARE SPACE-SEPARATED ON THE WAY BACK. The inverse writes each token",
+    "with a single space around it, so the pinned binary's lexer never has to",
+    "decide a maximal munch this table could have got wrong. `- 5` and `-5` are",
+    "the same term to Lean; `v1 0` and `v10` are not, which is exactly why the",
+    "separation is a rule and not a convenience.",
+    "NUMERALS ARE UNSIGNED. `-` is always the operator row, never part of a",
+    "literal, so the numeral pair is only ever asked for non-negative values and",
+    "its word `negative` never appears in a foreign-voice surface. This is what",
+    "removes v0.18's neg/sub collision at the root instead of legislating around",
+    "it: there is exactly one `-` row and it emits exactly one token.",
+    "PRECEDENCE IS CARRIED, NOT REBUILT. The rendering keeps R(s)'s own",
+    "parentheses as `the quantity` / `end quantity` rows and adds none, because",
+    "the inverse feeds the result back to the SAME grammar it came from -- Lean's",
+    "-- so the source's bracketing is already exactly the bracketing the reader",
+    "needs. This is narrower than v0.18's realizer, which had to re-bracket for a",
+    "different grammar, and the narrowing is stated rather than discovered: a",
+    "renderer that added minimal brackets here would be adding surface outside",
+    "this table.",
+    "NO ROW IS IMPROVISED. A dialect construct with no row REFUSES AT THE",
+    "SURFACE, with a reason from `refusal_reasons`, and the statement lands in",
+    "the frozen register instead of in a rendering."
+  ],
+
+  "binders": {
+    "∀": "for every",
+    "∃": "for some"
+  },
+  "connectives": {
+    "¬": "it fails that",
+    "→": "implies that",
+    "↔": "exactly when",
+    "∧": "and also",
+    "∨": "or else"
+  },
+  "relations": {
+    "<": "is less than",
+    "=": "equals",
+    ">": "is greater than",
+    "≠": "differs from",
+    "≤": "is at most",
+    "≥": "is at least"
+  },
+  "operators": {
+    "%": "modulo",
+    "*": "times",
+    "+": "plus",
+    "-": "minus",
+    "/": "divided by",
+    "^": "to the power of"
+  },
+  "types": {
+    "Int": "integer",
+    "Nat": "natural",
+    "Rat": "rational"
+  },
+  "structural": {
+    "(": "the quantity",
+    ")": "end quantity",
+    ",": "it holds that",
+    ":": "of type"
+  },
+  "slot_marker": {
+    "token_prefix": "v",
+    "word": "variable"
+  },
+
+  "refusal_reasons": [
+    "no_lexicon_row",
+    "unsupported_numeral",
+    "noncanonical_numeral",
+    "interpretation_absent",
+    "oracle_rejected"
+  ],
+  "refusal_reasons_note": [
+    "A closed vocabulary, in the spirit of v0.18's nine reasons",
+    "(scripts/realize_term.py:134-145). `oracle_rejected` and",
+    "`interpretation_absent` are decided before rendering; the other three are",
+    "decided by this table and the registered numeral pair."
+  ],
+
+  "refusals": {
+    "↑": {
+      "construct": "coercion arrow",
+      "reason": "no_lexicon_row",
+      "why": [
+        "An up-arrow is a request to insert a coercion whose target type the",
+        "elaborator chooses. Rendering it as a word would put a phrase in the",
+        "sentence whose meaning depends on an elaboration decision the reader",
+        "cannot see, and inverting that phrase would name a coercion this table",
+        "cannot commit to. Measured on the eligible set: 9 occurrences across 4",
+        "statements. They are registered, not rendered."
+      ]
+    }
+  },
+
+  "naming_conventions": [
+    "Every phrase is lowercase ASCII words separated by single spaces.",
+    "The connectives read as sentence glue rather than as symbol names -- `and",
+    "also`, `or else`, `implies that`, `exactly when`, `it fails that` -- because",
+    "the surface has to be one readable sentence for C-V3's determinacy sheet to",
+    "be answerable at all, and because a phrase like `logical and` would put the",
+    "word `and` in a position where L1 has to work harder than it needs to.",
+    "The two binder phrases share a first word (`for every` / `for some`) and the",
+    "two `it ...` connectives share theirs; both pairs differ at the second word,",
+    "so L1 holds with room to spare. This is checked by the loader, not by the",
+    "reader of this note.",
+    "`divided by` rather than `over`, and `minus` rather than `negative`, because",
+    "`over` and `negative` are both words the registered numeral pair emits and",
+    "L2 would refuse the table at load. The gate caught both spellings during",
+    "authoring, which is the gate working."
+  ],
+
+  "coverage": {
+    "measured": "2026-08-24, against the committed tree",
+    "denominator": {
+      "corpus_nodes": 12777,
+      "parseable_v018": 2172,
+      "mute": 10605,
+      "transliterable": 6414,
+      "foreign_residue": 4191,
+      "oracle_eligible": 2319
+    },
+    "constructive_check": [
+      "Every one of the 2,319 oracle-eligible statements was tokenized under R",
+      "with exactly this table's tokens, the identifier grammar of rule_r.json",
+      "and the registered numeral pair. Leftover characters: ONE -- the coercion",
+      "arrow, 9 occurrences across 4 statements, which has a refusal row above.",
+      "Nothing else in the eligible set is outside this table.",
+      "This is the whole-table check v0.18's `head_coverage` block does for the",
+      "realization lexicon, done constructively rather than by head census,",
+      "because this dialect's vocabulary is closed and small enough to enumerate",
+      "exhaustively."
+    ],
+    "constructor_occurrences": {
+      "(": 6069,
+      ")": 6069,
+      "*": 7974,
+      "+": 10041,
+      ",": 2367,
+      "-": 2575,
+      "/": 3096,
+      ":": 2561,
+      "<": 339,
+      "=": 2518,
+      ">": 834,
+      "%": 3,
+      "^": 6982,
+      "¬": 95,
+      "→": 688,
+      "↔": 363,
+      "∀": 2184,
+      "∃": 183,
+      "∧": 2062,
+      "∨": 280,
+      "≠": 42,
+      "≤": 950,
+      "≥": 1134
+    },
+    "constructor_statements": {
+      "(": 1551,
+      "*": 1658,
+      "+": 1876,
+      ",": 2258,
+      "-": 965,
+      "/": 980,
+      ":": 2291,
+      "<": 188,
+      "=": 1132,
+      ">": 331,
+      "%": 2,
+      "^": 1461,
+      "¬": 95,
+      "→": 656,
+      "↔": 363,
+      "∀": 2168,
+      "∃": 174,
+      "∧": 1066,
+      "∨": 168,
+      "≠": 26,
+      "≤": 577,
+      "≥": 772
+    },
+    "type_ascriptions": {
+      "Int": 176,
+      "Nat": 53,
+      "Rat": 2332
+    },
+    "identifiers": {
+      "distinct_in_eligible_set": 86,
+      "max_distinct_in_one_statement": 16,
+      "note": "All opaque variable names, all erased to `variable <index>` by the slot marker; none of them needs a row."
+    },
+    "numerals": {
+      "distinct_literals": 287,
+      "decimals": 34,
+      "outside_registered_domain": 1,
+      "noncanonical_spelling": 1,
+      "note": [
+        "One lean_workbook statement carries a 433-digit integer, which is outside",
+        "scripts/numeral_words' registered domain (abs < 10^15) and refuses as",
+        "`unsupported_numeral`. One carries the literals `23.50` and `39.50`,",
+        "whose canonical decimal spellings are `23.5` and `39.5`; the numeral",
+        "pair is exact rather than approximately exact, so it cannot reproduce a",
+        "trailing zero, and `23.50` and `23.5` are DIFFERENT `OfScientific`",
+        "terms to the elaborator. That statement refuses as",
+        "`noncanonical_numeral` rather than round-tripping to a term the corpus",
+        "did not write. Both are register entries."
+      ]
+    }
+  },
+
+  "not_claimed": [
+    "Not fluency, and not translation quality. The sentences are invertible;",
+    "their style is whatever this table produces. C-V3 is the only instrument",
+    "that touches readability.",
+    "No internal-grammar reading capability is gained. scripts/match_signatures.py",
+    "reads exactly what it read before. The inverse reads only strings this",
+    "cycle's own renderer produced; it is not offered on the input side and no",
+    "request route calls it.",
+    "No truth claim and no verified_by links. scripts/external_verifier.py:6-7",
+    "and :35-40 govern, unweakened."
+  ]
+}

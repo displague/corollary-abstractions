@@ -1,0 +1,261 @@
+{
+  "prereg_id": "foreign_voice.prereg.v1",
+  "registered": "2026-08-24",
+  "design": "docs/DESIGN-foreign-voice.md",
+  "roadmap": "docs/ROADMAP-v0.19.md",
+  "control": "B7 (the oracle is not the renderer, and the parser is not either)",
+
+  "what_this_records": [
+    "DESIGN-foreign-voice §6 B7, verbatim: \"Recorded in the preregistration commit, BEFORE `Serialize.lean` is written and BEFORE any hand-rendering exists: the lexicon digest, the inverse-table digest, rule R's digest, and `scripts/match_signatures.py` at LF sha256 `65fead2f47b6a2ce…` — the frozen parser, in the freeze list because B0a's split and C-V2's contrast are both computed with it and a parser that moves mid-cycle would move the denominator under the claim. The serializer's digest is recorded beside them (C-R3's discipline, imported). If making the oracle agree requires editing the lexicon, the interpretation, or the parser, the independence claim is void and the change needs its own review naming the reason.\"",
+    "This file is that record. It is written in the preregistration commit, BEFORE prover/lean/normalizer/Serialize.lean exists, which is why the serializer rows below are in `pending` rather than absent.",
+    "§6 B0d extends the ordering: the lexicon digest and the inverse-table digest are frozen BEFORE the hand-renderings exist; the 100 ids follow from that digest by a committed rule; and the 100 hand-renderings are committed verbatim as a sealed prediction. The ordering is itself the record, so each commit's additions carry their own `recorded` date.",
+    "tests/test_foreign_voice_lexicon.py asserts these digests against the working tree. That test is the thing that goes red if the parser, the interpretation or the table is edited to make the oracle agree."
+  ],
+
+  "digest_algorithm": "sha256 over file bytes with CRLF normalized to LF (scripts/report_provenance.sha256_lf_file)",
+
+  "there_is_no_separate_inverse_table": [
+    "B7 names four artifacts and one of them, the `inverse-table digest`, does",
+    "not exist as its own file — deliberately, and this is where the record says",
+    "so rather than leaving a reader to notice a missing row.",
+    "v0.18's inverse reads the SAME committed table backwards",
+    "(scripts/realization_lexicon.py:7-14: \"de-lexicalized back to template",
+    "tokens by the *same committed lexicon table used forward*, read in",
+    "reverse\"), and the loader gates that both compositions are the identity",
+    "(F4 here, B4 there). A second file would be a second thing to keep in sync",
+    "with the first, and a bijection that needs two files to state it is not one",
+    "artifact but two that can disagree.",
+    "So `data/foreign_voice/lexicon.json` IS the inverse table, and its digest",
+    "below discharges both of B7's rows. The reading is recorded here, in the",
+    "preregistration commit, and not argued for later."
+  ],
+
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "recorded": "2026-08-24",
+      "why": [
+        "B7 names it explicitly. B0a's transliterable/foreign split and C-V2's contrast are both computed with this file, so a parser that moved mid-cycle would move the denominator under the claim.",
+        "This is the SAME digest experiments/realization_prereg.json froze for v0.18 (role `parser`), verified against the tree in this commit. ROADMAP-v0.19 item 3a will widen its TOKEN_RE; §5's ordering rule says that change may not land before v0.19's registered run, and when it lands it retires this pin for future comparisons by dated amendment rather than amending any measured rate."
+      ]
+    },
+    {
+      "path": "scripts/numeral_words.py",
+      "role": "numeral_pair",
+      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+      "recorded": "2026-08-24",
+      "why": [
+        "Inherited from v0.18 unchanged. The foreign lexicon's L2 gate is defined against this module's NUMERAL_VOCABULARY, and the two register entries `unsupported_numeral` and `noncanonical_numeral` are consequences of its registered domain (integers with abs < 10^15; decimals whose repr is a plain decimal). Frozen here so the domain cannot be widened after a rate is read."
+      ]
+    },
+    {
+      "path": "scripts/realization_lexicon.py",
+      "role": "lexicon_gate_precedent",
+      "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+      "recorded": "2026-08-24",
+      "why": [
+        "The design cites this file rather than restating it: L1 at :30-38, L2 at :34-38, what the two together buy at :39-41, and the refuse-at-load discipline at :295-317. scripts/foreign_voice_lexicon.py's F1-F8 are that gate list carried into a different dialect, and F7 is the one clause that could NOT be carried whole — v0.18 asks the byte-frozen Python tokenizer, this cycle's stage-2 reader is the pinned Lean binary and is not callable at import time. The digest is here so 'cited, not restated' names a fixed text."
+      ]
+    },
+    {
+      "path": "scripts/external_verifier.py",
+      "role": "hermetic_rule",
+      "sha256_lf": "0db59b36f2a5db6b52fa2b8be0fa07ae937a375d67a3eb4299173a5c7e6de16c",
+      "recorded": "2026-08-24",
+      "why": [
+        "Two things this cycle takes from it and must not re-decide: `toolchain_binary`, which resolves the pinned binary BY PATH and returns None rather than downloading (:14-17, :181-205), and the authority boundary at :6-7 — 'a passing check certifies what it checks, not correctness in general' — with :35-40 governing the output, so a verdict alone never mints a `verified_by` link and this cycle mints none.",
+        "Frozen rather than merely cited because the eligibility probe and the B-P driver both import from it, so a change here changes what 'hermetic' means for every number this cycle publishes."
+      ]
+    },
+    {
+      "path": "prover/lean/normalizer/lean-toolchain",
+      "role": "toolchain_pin",
+      "sha256_lf": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "recorded": "2026-08-24",
+      "toolchain": "leanprover/lean4:v4.32.2",
+      "why": [
+        "The pin the foreign-voice harness reads, committed as a file so the toolchain name is a digestible artifact and not an argument. Same toolchain as prover/lean/ingested, prover/lean/proofcurve and prover/lean/session; a separate file because the normalizer is a separate hermetic unit and a shared pin would couple its lifetime to theirs."
+      ]
+    },
+    {
+      "path": "prover/lean/normalizer/Serialize.prototype.lean",
+      "role": "serializer_prototype",
+      "sha256_lf": "01a7cc2000b39a98a7952bfb85ad59c0a0ab9a19b61c705af12ea9f50de03759",
+      "recorded": "2026-08-24",
+      "why": [
+        "Retained by the design's adversarial review (H4) so the quoted serializer digests are reproducible rather than remembered, and the design quotes this exact LF sha256 at §3.2. Verified against the tree in this commit and RE-RUN against the pinned binary: the two pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b33120... and f89095af7546ebd1... — the values the design records.",
+        "It is a prototype and not the B-P deliverable. B-P's first two test cases are these two pairs."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/rule_r.json",
+      "role": "interpretation",
+      "sha256_lf": "ade4fd332e5c7ad80e2f0f8042e3b16c5bdbb6a43e2b87470691aad5a1df055c",
+      "recorded": "2026-08-24",
+      "why": [
+        "B7's `rule R's digest`. R is a trusted, reviewed artifact applied IDENTICALLY to both sides of the identity relation; extending it is a diff with tests and a re-run. Frozen before the lexicon's hand-renderings and before the serializer exist, which is §5's ordering."
+      ]
+    },
+    {
+      "path": "scripts/foreign_voice_rule_r.py",
+      "role": "interpretation_applier",
+      "sha256_lf": "3ca7a5ba25c69e7fb06fb3c04ebb274d8824ee158e0fe4f72dc73b919bb5eb20",
+      "recorded": "2026-08-24",
+      "why": [
+        "Recorded beside the rule for the same reason v0.18 recorded the lexicon loader beside the lexicon: a rule is only as frozen as the module that refuses a malformed one. This module holds no policy of its own — every substitution, frozen constant and preamble step is read out of the JSON — so that a behaviour change is a change in a digested artifact."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/lexicon.json",
+      "role": "lexicon_and_inverse_table",
+      "sha256_lf": "271a62c7cfc22b819fe622d840d59f2c75d4167e2979346a5b3e3283dfe4d75c",
+      "recorded": "2026-08-24",
+      "why": [
+        "B7's `the lexicon digest` AND `the inverse-table digest` — see `there_is_no_separate_inverse_table` above. This is also the digest B0d's id-selection rule is seeded from, and it is frozen in THIS commit, before the 100 hand-renderings exist, which is the three-line separation the design's review required."
+      ]
+    },
+    {
+      "path": "scripts/foreign_voice_lexicon.py",
+      "role": "lexicon_gate",
+      "sha256_lf": "aebbffc858ed5a3a02d951ea8e4275609e16e91fae085316a7e4afa994944926",
+      "recorded": "2026-08-24",
+      "why": [
+        "F1-F8. A table is only as bijective as the loader that refuses a non-bijective one, so the two digests travel together (v0.18's own pairing, imported)."
+      ]
+    },
+    {
+      "path": "scripts/foreign_voice_eligibility.py",
+      "role": "b0_probe",
+      "sha256_lf": "1273e9a9e9627edc6b19109721ec0f9554de86d0596487059becca36a59aae8c",
+      "recorded": "2026-08-24",
+      "why": [
+        "B0a's split and B0b+B0c's eligibility are computed by this module. It is frozen because the preview numbers the lexicon and the register were authored against are only reproducible if the thing that produced them is pinned."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/eligibility_preview.json",
+      "role": "b0_preview",
+      "sha256_lf": "c0d22418115bcb35343fdcf5569997177ccce4815ded0af12be4d1a44e14ccd8",
+      "recorded": "2026-08-24",
+      "why": [
+        "The committed output of the probe above, so B0d's id selection is reproducible WITHOUT re-running the pinned binary, and so a reader can recompute every number in the lexicon's `coverage` block and in the register.",
+        "It is a PREVIEW recorded in the preregistration commit, not the registered run. B0a and B0b+B0c remain the registered probes and the registered run recomputes them."
+      ]
+    }
+  ],
+
+  "pending": [
+    {
+      "path": "prover/lean/normalizer/Serialize.lean",
+      "role": "serializer",
+      "sha256_lf": "pending",
+      "why": "B-P's deliverable. Frozen in the B-P commit, with its digest recorded here and dated, exactly as v0.18's inverter row landed with the realizer rather than before it."
+    },
+    {
+      "path": "scripts/foreign_voice_oracle.py",
+      "role": "serializer_driver",
+      "sha256_lf": "pending",
+      "why": "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's settings, obtains the elaborated-term serialization, returns its digest. Frozen in the B-P commit."
+    },
+    {
+      "path": "data/foreign_voice/b0d_ids.json",
+      "role": "b0d_id_list",
+      "sha256_lf": "pending",
+      "why": "The 100 statement ids drawn by the committed deterministic rule seeded from the lexicon digest above. Frozen in the B0d commit."
+    },
+    {
+      "path": "data/foreign_voice/b0d_sealed_renderings.json",
+      "role": "b0d_sealed_prediction",
+      "sha256_lf": "pending",
+      "why": "The 100 hand-renderings, committed VERBATIM as a sealed prediction the implementation must later reproduce byte-identically. Divergences are REPORTED in the run artifact, never repaired. Frozen in the B0d commit."
+    },
+    {
+      "path": "data/foreign_voice/register.json",
+      "role": "frozen_register",
+      "sha256_lf": "pending",
+      "why": "B4: the register is committed with its blocked_set_digest BEFORE anything is rendered. A post-freeze entry is permitted only as a dated amendment commit that re-runs B1 from scratch; an amendment chased AFTER reading B1 is §8's stop."
+    }
+  ],
+
+  "b0_preview_2026_08_24": {
+    "note": [
+      "Recomputed by scripts/foreign_voice_eligibility.py against the committed",
+      "tree in this commit. These are PREVIEW figures; B0a and B0b+B0c remain the",
+      "registered probes and the registered run recomputes them."
+    ],
+    "b0a": {
+      "corpus_nodes": 12777,
+      "parseable_v018": 2172,
+      "mute": 10605,
+      "transliterable": 6414,
+      "foreign_residue": 4191,
+      "floor": 2000,
+      "floor_met": true,
+      "agrees_with_design_preview": true
+    },
+    "b0bc": {
+      "residue": 4191,
+      "accepted": 2319,
+      "rejected": 1872,
+      "accepted_by_corpus": {
+        "geometric_modeling": 1,
+        "ingested_arithmetic": 1,
+        "lean_workbook": 2316,
+        "number_theory": 1
+      },
+      "floor": 1000,
+      "floor_met": true,
+      "agrees_with_design_preview": true,
+      "note": "The design's §6 preview says 2,319 accepted, 2,316 lean_workbook and 3 everything else. An independently written rule R reproduces both figures exactly."
+    },
+    "b3_preview": {
+      "note": [
+        "B3's five buckets at preview scale, before anything is rendered. The two",
+        "`registered_blocked_*` buckets are reported separately and NEVER summed:",
+        "the first is a budget consequence the maintainer can lift, the second is",
+        "a design consequence this cycle owns."
+      ],
+      "transliterable": 6414,
+      "covered": 2313,
+      "registered_blocked_mathlib_head": 1698,
+      "registered_blocked_no_row": 180,
+      "total": 10605,
+      "closes_exactly": true,
+      "covered_composition": {
+        "lean_workbook": 2310,
+        "other_corpora": 3,
+        "lean_workbook_share": 0.9987
+      }
+    }
+  },
+
+  "prop_branch": {
+    "decision": "branch_ii",
+    "decided_at": "2026-08-24",
+    "recorded_in": "data/foreign_voice/rule_r.json (`prop_branch`)",
+    "one_line": "No second Prop-valued interpretation is registered; the 75 statements of the Prop-valued and relational corpora are `registered_blocked_no_row` with reason `interpretation_absent`.",
+    "measured_before_deciding": {
+      "denominator": 75,
+      "branch_i_would_reach": 13,
+      "by_corpus": {"logic": 12, "narrative": 1},
+      "covered_share_lean_workbook_with_branch_i": 0.9931,
+      "covered_share_lean_workbook_as_registered": 0.9987
+    },
+    "why": "The design prefers branch (i) on one stated ground — that it is 'the only route this design has to a covered set that is not almost entirely one corpus'. Measured before the branch was chosen, a deliberately generous Prop interpretation reaches 13 of 75 and moves the covered set from 99.87% one corpus to 99.31% one corpus. The ground does not survive the measurement, so the preference does not either. Full reasoning, including what the other 62 would actually require, is in rule_r.json."
+  },
+
+  "ordering_this_commit_establishes": [
+    "1. the design (committed on main; its dated corrections are part of the preregistration record);",
+    "2. THIS COMMIT — rule R, the lexicon, the frozen parser digest, the B0 preview (B7);",
+    "3. B0d's committed id-selection rule and its 100 sealed hand-renderings;",
+    "4. B-P — Serialize.lean, its Python driver, and its tests;",
+    "5. the frozen register with its blocked_set_digest (B4);",
+    "6. scripts/foreign_voice.py, per-statement receipts and tests;",
+    "7. one registered run, experiments/foreign_voice_rate.json.",
+    "The design's §10 puts B-P at step 4 of the preregistration order and ROADMAP-v0.19 item 1 puts it at step 2 of the implementation order ('B-P first'). Both are satisfied: B-P is discharged before B0 FREEZES as the registered probe, and after the preregistration record that B7 requires to predate it. Nothing downstream of step 4 is written before step 4 lands."
+  ],
+
+  "corrections": []
+}

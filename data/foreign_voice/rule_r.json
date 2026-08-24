@@ -1,0 +1,317 @@
+{
+  "rule_id": "foreign_voice.rule_r.v1",
+  "registered": "2026-08-24",
+  "design": "docs/DESIGN-foreign-voice.md",
+  "roadmap": "docs/ROADMAP-v0.19.md",
+  "purpose": [
+    "Rule R is THE DECLARED INTERPRETATION of DESIGN-foreign-voice 3.2. It is a",
+    "trusted, reviewed artifact with its own digest -- not inverter logic, and not",
+    "a blocklist. It is applied IDENTICALLY to both sides of the identity",
+    "relation: orig_elab_digest = sha256(serialize(elaborate(R(s)))) and",
+    "rt_elab_digest = sha256(serialize(elaborate(R(r)))) where r is the literal",
+    "inverse of the rendering of s. A preamble mismatch is a B1 FAILURE, never a",
+    "repair.",
+    "What a passing identity certifies is bounded and the bound is part of the",
+    "claim: identity holds up to what elaboration erases and what the preamble",
+    "rule regenerates. C-V4 is the instrument that measures how large that blind",
+    "spot is; no sentence quoting B1 may omit it."
+  ],
+  "why_a_rule_at_all": [
+    "Correction 3 of the design measured it: fed to the pinned binary at Lean's",
+    "DEFAULTS, 680 of a 1,000-statement sample of the mute set 'elaborated",
+    "cleanly'; with autoImplicit false and relaxedAutoImplicit false, 1 of 1,000.",
+    "The 679-statement difference is Lean auto-binding every unknown identifier",
+    "-- including the type glyph itself, which becomes an auto-bound TYPE",
+    "variable, turning a statement about the reals into a statement about an",
+    "arbitrary type. An oracle run at the defaults would certify round trips",
+    "between two elaborations of a proposition nobody wrote. So autoImplicit must",
+    "be off; with it off the surface must carry an explicit binder preamble; and",
+    "choosing binder types is semantic work. That work is this file, frozen,",
+    "rather than a decision the inverter takes at run time."
+  ],
+
+  "type_substitutions": {
+    "ℝ": "Rat",
+    "ℚ": "Rat",
+    "ℤ": "Int",
+    "ℕ": "Nat"
+  },
+  "type_substitution_notes": [
+    "Correction 2(b): the pinned toolchain carries no Mathlib, so `#check ℝ` and",
+    "`#check Real.sqrt` both return Unknown identifier. The review's correction,",
+    "adopted: substitute the TYPE, so the real-analysis mass is carried under a",
+    "declared domain rather than blocked. What stays blocked is Mathlib's HEAD",
+    "vocabulary, which has no core-Lean referent at all.",
+    "This is an INTERPRETATION, not a discovery. Where a statement's source",
+    "meaning is over the reals and rule R elaborates it over the rationals, that",
+    "is recorded per statement in the receipt's `interpretation_shift` field and",
+    "named in every sentence that quotes B1.",
+    "Substitution is literal, single-character, left-to-right, over the whole",
+    "source text, in the key order listed above. The four keys are pairwise",
+    "distinct single characters and no replacement value contains a key, so the",
+    "result does not depend on the order and the operation is idempotent."
+  ],
+
+  "elaboration_settings": {
+    "autoImplicit": false,
+    "relaxedAutoImplicit": false
+  },
+  "elaboration_settings_notes": [
+    "These are SEMANTIC and are emitted as `set_option` lines in the source text",
+    "handed to the pinned binary, so they are inside the bytes the run digests.",
+    "B5 asserts them as committed settings by a test rather than leaving them to",
+    "a flag."
+  ],
+
+  "harness_settings": {
+    "maxHeartbeats": 1000000,
+    "maxErrors": 1000000
+  },
+  "harness_settings_notes": [
+    "maxHeartbeats is emitted as a `set_option` line and IS part of the",
+    "acceptance definition: a statement that exhausts it is rejected, and the",
+    "budget is frozen here so it cannot be raised after a rate is read.",
+    "maxErrors is passed to the binary as `-DmaxErrors=1000000` and affects only",
+    "how many diagnostics the frontend prints. It is recorded because leaving it",
+    "at the default is a MEASUREMENT BUG, not a style choice: the pinned",
+    "toolchain stops reporting after 100 errors with `maximum number of errors",
+    "(100; from option maxErrors) reached, exiting`, and a batch prober that",
+    "infers acceptance from the ABSENCE of an error then reads every statement",
+    "after the hundredth error as accepted. Measured on this tree, that bug",
+    "alone reported 2,982 eligible where the truth is 2,319. The harness detects",
+    "the cutoff line and refuses the batch rather than trusting it.",
+    "`set_option maxErrors` inside the file does not work -- the frontend reads",
+    "the option before elaborating the file -- so the command-line form is the",
+    "only one that takes effect. Verified against the pinned binary 2026-08-24."
+  ],
+
+  "identifier_grammar": {
+    "start_class": "A-Za-z_ and the Greek letters α-ω, Α-Ω",
+    "continue_class": "the start class plus 0-9, the apostrophe, and the subscripts ₀-₉ and ₐ-ₜ",
+    "qualified_separator": ".",
+    "note": [
+      "A deliberately narrow reading of Lean's identifier grammar, chosen to",
+      "cover exactly what the committed residue carries (measured: 295 distinct",
+      "identifiers across the 4,191 residue statements, 86 across the eligible",
+      "set) rather than to be a general Lean lexer. Widening it moves the",
+      "eligibility denominator and is therefore a dated amendment with its own",
+      "re-run, not a fix-up."
+    ]
+  },
+
+  "binder_scan": {
+    "openers": ["∀", "∃"],
+    "optional_bang": true,
+    "optional_open_paren": true,
+    "group": "a whitespace-separated run of identifiers immediately after the opener",
+    "note": [
+      "The scan is LEXICAL, NOT SCOPED. Every name that appears in any binder",
+      "group anywhere in the statement is treated as bound everywhere in it.",
+      "This is a simplification and its consequence is stated rather than",
+      "hidden: an identifier that is genuinely free in one sub-term while a",
+      "same-spelled binder exists in another sub-term is NOT bound by the",
+      "preamble, and the statement is then rejected by the oracle as an unknown",
+      "identifier rather than silently reinterpreted. Rejection is the safe",
+      "direction: it costs coverage, it cannot invent a proposition."
+    ]
+  },
+
+  "frozen_constants": {
+    "rule": "an identifier containing the qualified separator `.` is NEVER bound",
+    "rule_why": [
+      "A qualified name cannot be a binder name in Lean, so binding one is not a",
+      "possible reading. This rule -- not a list -- is what keeps `Real.sqrt`,",
+      "`Real.cos`, `Real.sin`, `Real.log` and every other Mathlib head out of the",
+      "preamble, so their rejection is reported as `Unknown identifier",
+      "'Real.sqrt'` and is attributable to the register's",
+      "`mathlib_head_vocabulary` entry rather than to a preamble accident."
+    ],
+    "names": [
+      "Bool",
+      "False",
+      "Int",
+      "Nat",
+      "Prop",
+      "Rat",
+      "Sort",
+      "True",
+      "Type",
+      "abs",
+      "arccos",
+      "arcsin",
+      "arctan",
+      "cos",
+      "cosh",
+      "exp",
+      "log",
+      "logb",
+      "max",
+      "min",
+      "sin",
+      "sinh",
+      "sqrt",
+      "tan",
+      "tanh"
+    ],
+    "names_why": [
+      "Two groups, and they are here for different reasons.",
+      "The nine type-and-sort names are the values this rule's own substitution",
+      "produces plus core Lean's sort vocabulary; binding `Rat` at `Rat` would",
+      "shadow the type the preamble ascribes.",
+      "The sixteen bare analytic heads are Mathlib's head vocabulary spelled",
+      "without a namespace. They are named so that a statement carrying `sin x`",
+      "is rejected with `Unknown identifier 'sin'` -- attributable to",
+      "`mathlib_head_vocabulary` -- rather than with `function expected` after",
+      "the preamble has bound `sin` to a rational. Both readings reject; only one",
+      "of them names the real reason, and the register is this cycle's product."
+    ]
+  },
+
+  "preamble_rule": {
+    "steps": [
+      "1. Apply `type_substitutions` to the source text.",
+      "2. Collect BOUND names by `binder_scan` over the substituted text.",
+      "3. Collect FREE names: every identifier occurrence in the substituted text that is not bound, does not contain `.`, and is not in `frozen_constants.names`.",
+      "4. Sort the free names ascending by Unicode code point and remove duplicates.",
+      "5. If the sorted free list is empty, R(s) is the substituted text. Otherwise R(s) is `∀ ` + the free names joined by single spaces + ` : Rat, ` + the substituted text."
+    ],
+    "preamble_type": "Rat",
+    "preamble_type_why": [
+      "One type for every regenerated binder, because the preamble rule may not",
+      "do semantic work per identifier without becoming the thing it is supposed",
+      "to make honest. `Rat` rather than `Int` or `Nat` because the residue's",
+      "mass is inequalities over a field: measured on the eligible set, 2,332",
+      "type ascriptions read `Rat` against 176 `Int` and 53 `Nat`, and those two",
+      "hundred-odd come from the statement's OWN binder groups, which rule R",
+      "leaves exactly as the corpus wrote them.",
+      "A statement whose free identifiers are not rationals is therefore",
+      "rejected, not coerced. That is a coverage cost paid on purpose."
+    ],
+    "determinism": [
+      "R is a pure function of the source text and this file. Same statement,",
+      "same rule file -> byte-identical R(s). The sort in step 4 is what makes",
+      "the preamble independent of the order the identifiers happen to appear in,",
+      "which is what lets R be applied independently on the original and on the",
+      "inverse output and still produce the same preamble when the rendering was",
+      "faithful. C-V4's binder-swap mutation is the measurement of how much that",
+      "regeneration hides."
+    ]
+  },
+
+  "eligibility": {
+    "definition": [
+      "A residue statement is ORACLE-ELIGIBLE iff, after rule R, the pinned",
+      "binary accepts it with `autoImplicit false` and `relaxedAutoImplicit",
+      "false`. Eligibility is defined BY OUTCOME. There is no blocklist: the",
+      "first draft of the design used an authored regex naming what its writer",
+      "guessed Lean would reject, and the review was right that a hand-written",
+      "eligibility filter measures the filter."
+    ],
+    "acceptance_form": "theorem <name> : <R(s)> := sorry",
+    "acceptance_form_why": [
+      "`sorry` makes the declaration well-formed without asserting anything about",
+      "the statement's truth; it produces a warning, never an error, so it cannot",
+      "be mistaken for a rejection. Nothing in this cycle reads a `sorry`",
+      "declaration as a proof, and no `verified_by` link is minted anywhere."
+    ],
+    "measured_2026_08_24": {
+      "residue": 4191,
+      "accepted": 2319,
+      "rejected": 1872,
+      "accepted_by_corpus": {
+        "geometric_modeling": 1,
+        "ingested_arithmetic": 1,
+        "lean_workbook": 2316,
+        "number_theory": 1
+      },
+      "note": [
+        "This reproduces the design's 6.B0b+B0c preview -- 2,319 accepted, 2,316",
+        "lean_workbook and 3 everything else -- from an independently written",
+        "rule R. It is a PREVIEW recorded in the preregistration commit, not the",
+        "registered run: B0b+B0c remains the registered probe."
+      ]
+    }
+  },
+
+  "prop_branch": {
+    "clause": "DESIGN-foreign-voice 6, B0b+B0c, the two-branch clause",
+    "decision": "branch_ii",
+    "decided_at": "2026-08-24",
+    "decided_by": "the v0.19 implementer, before any render, and recorded here",
+    "what_branch_ii_means": [
+      "No second Prop-valued interpretation is registered this cycle. The 75",
+      "statements of the Prop-valued and relational corpora are",
+      "`registered_blocked_no_row` with reason `interpretation_absent`, and they",
+      "appear in the frozen register as their own entry with that reason and a",
+      "named revisit trigger."
+    ],
+    "why_not_branch_i": [
+      "The design prefers branch (i) for one stated reason: it is 'the only route",
+      "this design has to a covered set that is not almost entirely one corpus'.",
+      "That reason was MEASURED before the branch was chosen, and it does not",
+      "survive the measurement.",
+      "A deliberately generous second interpretation was built and scored by",
+      "outcome exactly as rule R is: it rewrites the corpora's ASCII connective",
+      "vocabulary into core Lean's (`implies`/`entails` to `→`, `and` to `∧`,",
+      "`or` to `∨`, `not` to `¬`, `iff` to `↔`, `if X then Y` to `X → Y`,",
+      "`forall x.` to `∀ x,`, `exists x.` to `∃ x,`, `true`/`false` to",
+      "`True`/`False`) and binds every remaining free identifier at `Prop`. Run",
+      "against the pinned binary over the 75 statements of logic (20),",
+      "temporal_logic (15), set_theory (9), programming (9), narrative (9),",
+      "graph_theory (7) and provability (6): 13 accepted -- 12 logic rows and one",
+      "narrative row.",
+      "Thirteen statements move the covered set's composition from 99.87%",
+      "lean_workbook to 99.31% lean_workbook. Branch (i) does not deliver the",
+      "outcome that is the honest reason to prefer it, so preferring it would be",
+      "paying a second trusted artifact's review cost for a number that still",
+      "reads as 'one corpus'.",
+      "The 62 that stay out are not out for want of table rows. They are out",
+      "because they are not Lean in any alphabet: temporal_logic needs",
+      "`always`/`eventually`/`until`/`next`/`since`/`once`/`historically`,",
+      "provability needs `provable`/`falsum`/`Con` and a turnstile, set_theory",
+      "needs `inter`/`union`/`complement`/`emptyset`/`subset`/`CARD`, narrative",
+      "and programming carry English prose and Python-shaped conditional",
+      "expressions, and the eight remaining logic rows need a genuine dependent",
+      "binder (`F : α → Prop` in `(forall x. F(x)) implies F(t)`), which the",
+      "register already names as a blocked construct class. Reaching them means",
+      "AXIOMATIZING those constants inside the preamble -- and then the oracle is",
+      "adjudicating a theory this cycle wrote, which is exactly the independence",
+      "B7 exists to protect.",
+      "This is a deviation from the design's stated PREFERENCE, not from its",
+      "rule: the design requires that the branch be chosen at B0 time, before any",
+      "render, and that whichever branch is taken be recorded. Both are done",
+      "here, with the measurement that decided it."
+    ],
+    "branch_i_measurement_2026_08_24": {
+      "denominator": 75,
+      "accepted": 13,
+      "accepted_by_corpus": {"logic": 12, "narrative": 1},
+      "covered_set_composition_if_registered": {
+        "covered": 2326,
+        "lean_workbook_share": 0.9931
+      },
+      "covered_set_composition_as_registered": {
+        "covered": 2313,
+        "lean_workbook_share": 0.9987
+      }
+    },
+    "revisit_trigger": [
+      "A cycle that decides the Mathlib budget question, or a design that says",
+      "what licenses axiomatizing a modal/set-theoretic signature inside the",
+      "preamble without the oracle grading this repository's own theory. Either",
+      "reopens branch (i) with a real denominator; neither is true today."
+    ]
+  },
+
+  "not_claimed": [
+    "Rule R is not a translation and not a discovery. It is a declared reading,",
+    "carried in every receipt.",
+    "A passing identity under rule R certifies that the English determines the",
+    "term under this reading, up to what elaboration erases and what this file's",
+    "preamble regenerates. It certifies nothing about the statement's truth,",
+    "nothing about whether this reading is the one the corpus author meant, and",
+    "nothing about the English being good English.",
+    "Extending this file is a diff with tests and a re-run, exactly as extending",
+    "the lexicon is."
+  ]
+}
