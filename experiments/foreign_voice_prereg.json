@@ -146,6 +146,17 @@
       ]
     },
     {
+      "path": "scripts/foreign_voice.py",
+      "role": "renderer_and_inverse",
+      "sha256_lf": "c8247678c0ec0f92229fb97ee4948115cffdd2a6a64bbabe40ba86ccf2cddf3d",
+      "recorded": "2026-08-24, with the artifact rather than before it",
+      "why": [
+        "C-R3's discipline, imported from v0.18: 'the inverter's digest is recorded beside them.' It could not be in the commit that froze the parser BEFORE the renderer existed, so it lands with the renderer and carries its own date. The ordering is itself the record, and tests/git_ordering.py checks it against the history rather than against this sentence.",
+        "This module is UNTRUSTED and measured (§4): the renderer, the literal inverse and the two-stage gate. Recording its digest is not a claim that it is correct; it is what makes 'the run measured THIS renderer' a checkable statement.",
+        "Its first obligation was discharged before this row existed: it reproduces B0d's hundred sealed surfaces byte-identically, 100 of 100, and the five appendix rows 5 of 5."
+      ]
+    },
+    {
       "path": "scripts/foreign_voice_eligibility.py",
       "role": "b0_probe",
       "sha256_lf": "6d7a5f208b015701d18205e808bbcf1e29337e76a0792836d779e4071de9d3fe",
@@ -216,6 +227,17 @@
       "why": [
         "B7 names it explicitly. B0a's transliterable/foreign split and C-V2's contrast are both computed with this file, so a parser that moved mid-cycle would move the denominator under the claim.",
         "This is the SAME digest experiments/realization_prereg.json froze for v0.18 (role `parser`), verified against the tree in this commit. ROADMAP-v0.19 item 3a will widen its TOKEN_RE; §5's ordering rule says that change may not land before v0.19's registered run, and when it lands it retires this pin for future comparisons by dated amendment rather than amending any measured rate."
+      ]
+    },
+    {
+      "path": "scripts/measure_foreign_voice.py",
+      "role": "registered_run",
+      "sha256_lf": "8dd42c3269f3efba5a7164c1a6d177a8b5ff6819ae6b51b77a5b065dcdc675ef",
+      "recorded": "2026-08-24, written and dry-checked; NOT YET EXECUTED",
+      "why": [
+        "The runner for B0a-B0d, B1-B5 and every control. Frozen here so the artifact it eventually writes names the instrument that wrote it.",
+        "It refuses to publish unless every digest in this file revalidates against the tree first, which is B7 with teeth: a run that had to move a frozen artifact does not get to publish a rate.",
+        "It has NOT been run. Phase 2 was scoped to stop at the run boundary, and executing it requires `--perform-the-registered-run` — a long flag on purpose, because the registered run is a once-only act and a runner that executes by typing its name can spend the one run on a rehearsal."
       ]
     },
     {
