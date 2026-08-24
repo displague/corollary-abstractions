@@ -284,9 +284,18 @@ class PreregOrdering(unittest.TestCase):
         self.assertEqual(
             digest, frozen["prover/lean/normalizer/Serialize.prototype.lean"]["sha256_lf"])
 
-    def test_the_register_is_the_only_thing_still_pending(self) -> None:
-        pending = {row["role"] for row in self.prereg["pending"]}
-        self.assertEqual(pending, {"frozen_register"})
+    def test_b_p_precedes_the_frozen_register_in_the_record(self) -> None:
+        """§10's order: B-P, then B4. Written in the B-P commit, where the
+        register was the only pending row; restated as the durable form of the
+        same fact when B4 landed, so a later reader can still check the order
+        instead of taking the commit that wrote it on trust."""
+        rows = {row["role"]: row for row in
+                self.prereg["frozen"] + self.prereg["pending"]}
+        register = rows["frozen_register"]
+        if register["sha256_lf"] == "pending":
+            self.assertFalse((ROOT / register["path"]).exists())
+        else:
+            self.assertIn("promoted", register["recorded"])
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI

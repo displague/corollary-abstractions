@@ -194,16 +194,30 @@
         "Hermetic by import rather than by re-decision: the toolchain name comes from the committed `lean-toolchain` file and is resolved through `external_verifier.toolchain_binary`, which returns None rather than downloading. An absent toolchain RAISES — B2, a refusal aborts the run and is not a data point.",
         "A parse error can swallow the commands that follow it, so a missing tag is RE-PROBED in a batch of its own before it is called a failure. A tag still missing when it is the only command in the file is genuinely unparseable; one that reappears was a bystander. Recorded here because 'silence is not a data point' is a rule this module implements rather than merely respects."
       ]
-    }
-  ],
-  "pending": [
+    },
+    {
+      "path": "scripts/foreign_voice_register.py",
+      "role": "register_builder",
+      "sha256_lf": "fd68b0b9c7f2d252d1d09cd8449627339e6e23d932aa9ef227d8532ff7712933",
+      "recorded": "2026-08-24",
+      "why": [
+        "The register is the cycle's headline artifact, so how its classes were decided has to be a committed, re-runnable rule rather than a paragraph. This module is that rule.",
+        "Every class is decided BY OUTCOME. The Mathlib head vocabulary is read out of the pinned binary's own diagnostics — every name it reported as an unknown identifier or constant across the 4,191 residue statements — so nobody authored it. That is why `Nat.Prime` is in it and why nothing is in it the oracle never complained about. The design retired an authored blocklist once for exactly this reason.",
+        "The builder REFUSES if B3's census does not close at 10,605, and refuses if a statement lands in two classes. A register that does not add up is not an inventory of silence, it is an estimate."
+      ]
+    },
     {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",
-      "sha256_lf": "pending",
-      "why": "B4: the register is committed with its blocked_set_digest BEFORE anything is rendered. A post-freeze entry is permitted only as a dated amendment commit that re-runs B1 from scratch; an amendment chased AFTER reading B1 is §8's stop."
+      "sha256_lf": "fe4d3b2adca8f1f50708c0ea79c32dd0bfc899a15ffd0f4526b6109173e45c70",
+      "recorded": "2026-08-24, promoted from `pending` when B4 landed",
+      "why": [
+        "B4: committed with its blocked_set_digest BEFORE scripts/foreign_voice.py renders anything. Seven entries, 1,878 statements registered exhaustively by id, each entry carrying its own blocked_statement_set_digest, its surface witness with what the oracle actually said, its per-corpus split, and its revisit trigger.",
+        "A post-freeze entry is permitted only as a dated amendment commit that RE-RUNS B1 FROM SCRATCH. An amendment chased after reading B1 is §8's stop condition."
+      ]
     }
   ],
+  "pending": [],
   "b0_preview_2026_08_24": {
     "note": [
       "Recomputed by scripts/foreign_voice_eligibility.py against the committed",
@@ -244,15 +258,16 @@
       ],
       "transliterable": 6414,
       "covered": 2313,
-      "registered_blocked_mathlib_head": 1698,
-      "registered_blocked_no_row": 180,
+      "registered_blocked_mathlib_head": 1699,
+      "registered_blocked_no_row": 179,
       "total": 10605,
       "closes_exactly": true,
       "covered_composition": {
         "lean_workbook": 2310,
         "other_corpora": 3,
         "lean_workbook_share": 0.9987
-      }
+      },
+      "superseded_note": "The preregistration commit recorded 1,698 / 180 here, computed during authoring by scanning statement SOURCES with a regex over the Mathlib head names. B4 replaced that with the outcome-derived rule: the head list is read out of the pinned binary's own diagnostics. That moves five `Nat.Prime` statements into the Mathlib bucket and four others out of it, net +1. See corrections entry 2. The total is unchanged and still closes at 10,605."
     }
   },
   "prop_branch": {
@@ -302,6 +317,18 @@
         "B0d's id-selection rule is seeded from this file's digest, so the correction moves the hundred drawn statements.",
         "The draw had NOT been taken when the correction landed. The sealed renderings are authored against the corrected draw, and no draw against the superseded digest was ever committed. A correction taken after a draw would require the draw to be re-taken and both recorded."
       ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "B4, the register build",
+      "artifact": "experiments/foreign_voice_prereg.json (`b3_preview`)",
+      "what": "The two blocked-bucket figures move from 1,698 / 180 to 1,699 / 179. The total is unchanged.",
+      "why": [
+        "The preregistration commit's figures came from a regex over statement SOURCES naming the Mathlib heads its author had seen. The register replaces that with the rule the design's own discipline requires: the head list is every name the PINNED BINARY reported as an unknown identifier or constant across the residue, so the inventory of silence is measured rather than expected.",
+        "The rule finds `Nat.Prime`, which the authoring regex did not — five statements — and declines four the regex had claimed on a source spelling the oracle never objected to. Net +1 into the Mathlib bucket.",
+        "Recorded rather than silently improved, because the two buckets are the one place in this cycle where a number moving between them changes what the number MEANS: the Mathlib bucket is a budget consequence the maintainer can lift, and the no-row bucket is a design consequence this cycle owns."
+      ],
+      "not_a_b7_event": "No frozen artifact moved. The parser, the interpretation and the lexicon are byte-unchanged and their digests above are the recorded ones."
     }
   ]
 }
