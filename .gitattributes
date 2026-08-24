@@ -50,3 +50,6 @@ data/foreign_voice/*.json text eol=lf
 experiments/foreign_voice_prereg.json text eol=lf
 experiments/foreign_voice_rate.json text eol=lf
 prover/lean/normalizer/** text eol=lf
+experiments/transliteration_prereg.json text eol=lf
+experiments/transliteration_rate.json text eol=lf
+experiments/transliteration_served_diff.json text eol=lf

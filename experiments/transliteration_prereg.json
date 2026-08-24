@@ -31,6 +31,13 @@
   },
   "frozen": [
     {
+      "path": "data/realization/lexicon.json",
+      "role": "lexicon",
+      "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+      "recorded": "2026-08-24",
+      "why": "Byte-identical to the digest realization_prereg.json froze on 2026-08-23 (f2c22a5c…), and re-recorded here so this lane's round-trip reading names the table it read through rather than pointing at another file's pin. If these two digests ever disagree, one of the two preregs is stale."
+    },
+    {
       "path": "scripts/match_signatures.py",
       "role": "parser",
       "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
@@ -46,18 +53,21 @@
       "why": "The post-amendment parser. It is recorded in the same commit that changes it and BEFORE any artifact quotes a rate measured through it, which is the whole content of rule 2. A digest recorded after the run it certifies certifies nothing."
     },
     {
-      "path": "data/realization/lexicon.json",
-      "role": "lexicon",
-      "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+      "path": "scripts/measure_transliteration.py",
+      "role": "registered_run",
+      "sha256_lf": "58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d",
       "recorded": "2026-08-24",
-      "why": "Byte-identical to the digest realization_prereg.json froze on 2026-08-23 (f2c22a5c…), and re-recorded here so this lane's round-trip reading names the table it read through rather than pointing at another file's pin. If these two digests ever disagree, one of the two preregs is stale."
+      "why": [
+        "The lane's measurement script. It could not be in the commit that froze the floors above, because a floor recorded after the instrument that reads it is not a floor - so it lands with the run and carries its own `recorded` date, exactly as realization_prereg.json's inverter row did.",
+        "Recorded, not sealed shut: a later commit that must change this file re-records the digest with a dated entry saying why."
+      ]
     },
     {
-      "path": "scripts/realize_term.py",
-      "role": "inverter",
-      "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+      "path": "scripts/numeral_words.py",
+      "role": "numeral_pair",
+      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
       "recorded": "2026-08-24",
-      "why": "v0.18's realizer, re-used UNCHANGED. This lane writes no rendering code: the round-trip reading below is v0.18's machinery pointed at statements it could not previously reach, which is the only way the two rates are comparable at all."
+      "why": "The registered numeral pair, unchanged. R2's two permitted sources for a served word are this and the lexicon; both are pinned here so the newly-reached set's sentences are read under the same rule the v0.18 set's were."
     },
     {
       "path": "scripts/realization_lexicon.py",
@@ -67,24 +77,14 @@
       "why": "The load gate whose B2/B7 clauses are what make the no-new-lexicon-rows finding above a measurement and not an opinion. Frozen so that finding stays checkable."
     },
     {
-      "path": "scripts/numeral_words.py",
-      "role": "numeral_pair",
-      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+      "path": "scripts/realize_term.py",
+      "role": "inverter",
+      "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
       "recorded": "2026-08-24",
-      "why": "The registered numeral pair, unchanged. R2's two permitted sources for a served word are this and the lexicon; both are pinned here so the newly-reached set's sentences are read under the same rule the v0.18 set's were."
+      "why": "v0.18's realizer, re-used UNCHANGED. This lane writes no rendering code: the round-trip reading below is v0.18's machinery pointed at statements it could not previously reach, which is the only way the two rates are comparable at all."
     }
   ],
-  "pending": [
-    {
-      "path": "scripts/measure_transliteration.py",
-      "role": "registered_run",
-      "sha256_lf": "pending",
-      "why": [
-        "The lane's measurement script does not exist when this file is written, and could not: the floors below have to be frozen before the instrument that reads them, or they are not floors.",
-        "Its row moves into `frozen` with its own `recorded` date in the commit that writes it, exactly as realization_prereg.json's inverter row did."
-      ]
-    }
-  ],
+  "pending": [],
   "frozen_floors": {
     "parse_gain": {
       "floor": 6000,
@@ -130,5 +130,6 @@
     "It does not claim anything about the 4,191-statement foreign residue. That is DESIGN-foreign-voice's territory, it is measured under a different gate, and the two sets are disjoint by construction.",
     "It does not re-open, re-measure or re-interpret experiments/realization_rate.json or experiments/foreign_voice_rate.json. Both were declared historical artifacts by the amendment, in writing, in the previous commit.",
     "Parse rate is not rendering rate, which is why both are reported. v0.18's own R0/R1 split is the reason this lane knows to separate them and the reason the round-trip reading is not optional even though the parse gain is the headline number."
-  ]
+  ],
+  "pending_note": "Empty since 2026-08-24: the registered-run row moved into `frozen` when scripts/measure_transliteration.py was written. The floors it reads were frozen one commit earlier, which is the ordering the row exists to record."
 }

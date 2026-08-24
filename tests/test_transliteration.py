@@ -35,6 +35,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -303,6 +304,257 @@ class ServedDiffTests(unittest.TestCase):
             env={**os.environ, "PYTHONIOENCODING": "utf-8"},
         )
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+
+
+def _synthetic_corpus(root: Path, rows: list[tuple[str, str]]) -> Path:
+    """A tiny data dir of hand-written statements.
+
+    The committed corpora cannot serve here: every glyph-carrying statement in
+    the tree is in `lean_workbook` (12,514 nodes, ~76 s to walk), and no small
+    corpus carries a glyph at all. So determinism and the refusal path are
+    exercised over statements written for the purpose, which also lets a test
+    ASK for a refusal instead of hoping the corpus supplies one.
+    """
+    target = root / "synthetic"
+    target.mkdir(parents=True)
+    (target / "nodes.json").write_text(json.dumps({
+        "schema": "corollary.corpus.v1",
+        "corpus_id": "synthetic",
+        "discipline": "synthetic",
+        "version": "1",
+        "statement_nodes": [
+            {"statement_id": sid, "formal_statement": {"canonical_ascii": src}}
+            for sid, src in rows
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
+class RegisteredRunTests(unittest.TestCase):
+    """The lane's artifact: its floors, its partition, and its witness."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.path = ROOT / "experiments" / "transliteration_rate.json"
+        cls.doc = json.loads(cls.path.read_text(encoding="utf-8"))
+
+    def test_it_is_lf(self) -> None:
+        self.assertNotIn(b"\r\n", self.path.read_bytes())
+
+    def test_it_carries_no_wall_clock(self) -> None:
+        """A timestamp would make "the registered run" unreproducible."""
+        def keys(node):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    yield key
+                    yield from keys(value)
+            elif isinstance(node, list):
+                for item in node:
+                    yield from keys(item)
+
+        found = set(keys(self.doc))
+        for forbidden in ("elapsed", "timestamp", "wall_clock", "started_at",
+                          "generated_at", "run_at", "duration"):
+            self.assertNotIn(forbidden, found)
+
+    def test_it_is_the_run_over_the_committed_corpus(self) -> None:
+        self.assertTrue(self.doc["over_the_committed_corpus"]["yes"])
+
+    def test_the_parse_gain_floor_is_met(self) -> None:
+        parse = self.doc["parse_rate"]
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        floor = prereg["frozen_floors"]["parse_gain"]["floor"]
+        self.assertEqual(parse["floor"], floor)
+        self.assertGreaterEqual(parse["newly_reached"], floor)
+        self.assertTrue(parse["floor_met"])
+
+    def test_the_parse_arithmetic_closes(self) -> None:
+        parse = self.doc["parse_rate"]
+        self.assertEqual(
+            parse["under_the_retired_parser"]["parseable"] + parse["newly_reached"],
+            parse["parseable"],
+        )
+        self.assertLessEqual(parse["parseable"], parse["nodes_total"])
+
+    def test_the_retired_parser_count_reproduces_v018(self) -> None:
+        """2,172 was v0.18's R0. Recomputed on the same walk, it must agree.
+
+        This is what makes the two artifacts comparable statement for statement
+        instead of approximately: if the walk had drifted, the denominators
+        would differ and nobody quoting both rates would know.
+        """
+        historical = json.loads(
+            (ROOT / "experiments" / "realization_rate.json").read_text(
+                encoding="utf-8"))
+        self.assertEqual(
+            self.doc["parse_rate"]["under_the_retired_parser"]["parseable"],
+            historical["r1"]["denominator"],
+        )
+
+    def test_the_round_trip_partition_balances(self) -> None:
+        trip = self.doc["round_trip"]
+        self.assertTrue(trip["partition_balances"])
+        self.assertEqual(trip["served"] + trip["refused"] + trip["failed"],
+                         trip["denominator"])
+        self.assertEqual(trip["denominator"],
+                         self.doc["parse_rate"]["newly_reached"])
+
+    def test_no_round_trip_floor_was_pre_committed(self) -> None:
+        """The probe's defining property, asserted in the artifact too."""
+        self.assertTrue(self.doc["round_trip"]["no_floor_was_pre_committed"])
+        self.assertNotIn("floor_met", self.doc["round_trip"])
+
+    def test_refusals_are_reported_by_class(self) -> None:
+        """Not aggregated, even when the count is zero.
+
+        A zero here is a fact about which statements the two glyphs unlock, and
+        it stays checkable only if the shape that would hold a non-zero is
+        present rather than omitted.
+        """
+        trip = self.doc["round_trip"]
+        self.assertIsInstance(trip["refusals_by_reason"], dict)
+        self.assertEqual(sum(trip["refusals_by_reason"].values()),
+                         trip["refused"])
+        self.assertEqual(len(trip["failures"]), trip["failed"])
+
+    def test_the_cross_check_agrees_with_its_independent_witness(self) -> None:
+        cross = self.doc["parse_rate"]["cross_check"]
+        self.assertTrue(cross["agrees"])
+        self.assertEqual(
+            cross["witness_gained"],
+            self.doc["parse_rate"]["newly_reached"]
+            - self.doc["round_trip"]["refused"]
+            - self.doc["round_trip"]["failed"],
+        )
+        self.assertEqual(
+            cross["witness_sha256_lf"],
+            _sha256_lf(ROOT / "experiments" / "transliteration_served_diff.json"))
+
+    def test_the_composition_travels_with_the_rate(self) -> None:
+        """R1's rule imported: a rate never travels without its denominator."""
+        comp = self.doc["newly_reached_composition"]
+        self.assertEqual(comp["statements"],
+                         self.doc["round_trip"]["denominator"])
+        self.assertEqual(sum(row["newly_reached"] for row in comp["per_corpus"]),
+                         comp["statements"])
+        self.assertEqual(sum(comp["relations_present"].values()),
+                         sum(comp["glyph_occurrences"].values()))
+        self.assertTrue(comp["reading"])
+
+    def test_it_says_what_the_rate_does_not_establish(self) -> None:
+        """A 1.0 over a narrow set must not be readable as corpus coverage."""
+        said = self.doc["round_trip"]["what_this_rate_does_and_does_not_establish"]
+        self.assertTrue(any("DOES NOT ESTABLISH" in line for line in said))
+
+    def test_it_does_not_blend_with_the_historical_artifact(self) -> None:
+        self.assertIn("never blended",
+                      self.doc["round_trip"]["not_averaged_with_v018"])
+
+    def test_the_prereg_revalidation_holds_and_names_the_parser(self) -> None:
+        gate = self.doc["prereg_revalidated"]
+        self.assertEqual(gate["verdict"], "HOLDS")
+        used = gate["the_parser_this_run_used"]
+        self.assertEqual(used["supersedes"], RETIRED_DIGEST)
+        self.assertEqual(used["sha256_lf"],
+                         _sha256_lf(ROOT / "scripts" / "match_signatures.py"))
+        for row in gate["revalidated"]:
+            self.assertTrue(row["agrees"], row["path"])
+
+
+class RegisteredRunRefusalTests(unittest.TestCase):
+    """The writer's own stop conditions, exercised rather than described."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import measure_transliteration as mt
+
+        cls.mt = mt
+
+    def test_a_drifted_pin_refuses_to_write(self) -> None:
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        for row in prereg["frozen"]:
+            if row["role"] == "parser":
+                row["sha256_lf"] = "0" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            injured = Path(tmp) / "prereg.json"
+            injured.write_text(json.dumps(prereg), encoding="utf-8")
+            with self.assertRaises(self.mt.PreregMismatch) as caught:
+                self.mt.revalidate_prereg(injured)
+        self.assertIn("match_signatures.py", str(caught.exception))
+
+    def test_a_pending_row_whose_file_exists_refuses_to_write(self) -> None:
+        """A freeze written after the thing it froze is not a freeze."""
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        prereg["pending"] = [{"path": "scripts/match_signatures.py",
+                              "role": "invented", "sha256_lf": "pending"}]
+        with tempfile.TemporaryDirectory() as tmp:
+            injured = Path(tmp) / "prereg.json"
+            injured.write_text(json.dumps(prereg), encoding="utf-8")
+            with self.assertRaises(self.mt.PreregMismatch) as caught:
+                self.mt.revalidate_prereg(injured)
+        self.assertIn("still `pending`", str(caught.exception))
+
+    def test_a_partial_corpus_says_its_cross_check_was_skipped(self) -> None:
+        """Skipping is fine; skipping silently is not."""
+        with tempfile.TemporaryDirectory() as tmp:
+            data = _synthetic_corpus(Path(tmp) / "data",
+                                     [("s.a", "a ≥ b"), ("s.b", "a >= b")])
+            doc = self.mt.build_artifact(data)
+        self.assertFalse(doc["over_the_committed_corpus"]["yes"])
+        cross = doc["parse_rate"]["cross_check"]
+        self.assertIsNone(cross["agrees"])
+        self.assertIn("not_applicable", cross)
+
+    def test_an_uncovered_head_is_reported_as_a_refusal_with_its_class(
+            self) -> None:
+        """The refusal path by injection rather than by accident.
+
+        The committed corpus happens to hand this lane a set the lexicon covers
+        completely. That is a fact about the corpus, not a property of the
+        writer, and a refusal table that has never been non-empty is a table
+        nobody has checked. So a statement with a head no lexicon row covers is
+        written on purpose and its class asserted.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            data = _synthetic_corpus(Path(tmp) / "data", [
+                ("s.covered", "a ≥ b"),
+                ("s.uncovered", "NOSUCHHEAD(a) ≥ b"),
+            ])
+            doc = self.mt.build_artifact(data)
+        trip = doc["round_trip"]
+        self.assertEqual(trip["denominator"], 2)
+        self.assertEqual(trip["served"], 1)
+        self.assertEqual(trip["refused"], 1)
+        self.assertEqual(trip["refusals_by_reason"], {"uncovered_head": 1})
+        self.assertTrue(trip["partition_balances"])
+
+    def test_two_runs_over_one_tree_are_byte_identical(self) -> None:
+        """R5 at artifact scale, on a slice so it costs a second not a minute."""
+        sources = ["a ≥ b", "a ≤ b", "1 + 2 ≥ 3",
+                   "x*y ≤ z^2", "a >= b", "c = d"]
+        rows = [("s.%d" % i, src) for i, src in enumerate(sources)]
+        with tempfile.TemporaryDirectory() as tmp:
+            data = _synthetic_corpus(Path(tmp) / "data", rows)
+            first = self.mt.build_artifact(data)
+            second = self.mt.build_artifact(data)
+
+        def dump(doc: dict) -> str:
+            return json.dumps(doc, indent=2, ensure_ascii=False)
+
+        self.assertEqual(dump(first), dump(second))
+        self.assertEqual(first["round_trip"]["denominator"], 4)
+
+    @unittest.skipUnless(os.environ.get("COROLLARY_SLOW_TESTS") == "1",
+                         "~76 s over the full corpus. Run with "
+                         "COROLLARY_SLOW_TESTS=1, or directly: python "
+                         "scripts/measure_transliteration.py --no-write")
+    def test_the_committed_artifact_regenerates(self) -> None:
+        committed = json.loads(
+            (ROOT / "experiments" / "transliteration_rate.json").read_text(
+                encoding="utf-8"))
+        fresh = self.mt.build_artifact(ROOT / "data")
+        self.assertEqual(json.dumps(fresh, indent=2, ensure_ascii=False),
+                         json.dumps(committed, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":  # pragma: no cover

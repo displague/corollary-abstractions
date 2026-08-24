@@ -1,0 +1,321 @@
+{
+  "run_id": "transliteration.registered.v1",
+  "registered": "2026-08-24",
+  "lane": "ROADMAP-v0.19 item 3a — the transliteration lane",
+  "prereg": "experiments/transliteration_prereg.json",
+  "design": [
+    "docs/DESIGN-sans-template-rendering.md — the realizer path this run re-uses unchanged, and the R0/R1 split that is why two rates are reported instead of one",
+    "docs/DESIGN-foreign-voice.md §5 — the ordering rule that gated this lane behind v0.19's registered run, satisfied by commit 46edefd"
+  ],
+  "provenance": {
+    "writer": "scripts/measure_transliteration.py",
+    "writer_sha256_lf": "58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d",
+    "inputs": [
+      {
+        "path": "data/algebra/nodes.json",
+        "sha256_lf": "ddadd7134e687d4f7b7c6fcc6085ba858d5583c8bcf2d72ca2d58f76d8ea90a3"
+      },
+      {
+        "path": "data/algebraic_topology/nodes.json",
+        "sha256_lf": "79fc174c2f3cc74139c44465cf84d1fb40631940b6dd587c92e14af1cd137b60"
+      },
+      {
+        "path": "data/calculus/nodes.json",
+        "sha256_lf": "42465086821490d7366715bc703799ce7c9309819b40937fd71ea2e72d02e059"
+      },
+      {
+        "path": "data/chemistry/nodes.json",
+        "sha256_lf": "9ac039b23d7feaf8be8b44404a9b3a6997d4a3b5c96c5f1430527014645faed0"
+      },
+      {
+        "path": "data/differential_geometry/nodes.json",
+        "sha256_lf": "83c6a3928cfe577cb0360c776085ca9a51a8d28809d10cbccc3a202b84154fb0"
+      },
+      {
+        "path": "data/differential_topology/nodes.json",
+        "sha256_lf": "f66370167c27cfb3118996f7ab99142d97053a6aaabcdf8ae3cd4bc5355b70df"
+      },
+      {
+        "path": "data/economics/nodes.json",
+        "sha256_lf": "6f110c42a54ed490ae11b2dce0cb3bcc65381d0472de630307ddeb3cefd540d1"
+      },
+      {
+        "path": "data/geometric_modeling/nodes.json",
+        "sha256_lf": "8ad24415cd4a5fee88a9addacdfe29fb00890bc1f63156ab7bc60fb653b0f3a7"
+      },
+      {
+        "path": "data/geometry/nodes.json",
+        "sha256_lf": "dfe25f99d8ecddccc23999a1b9033c94ba6f5ee2fa22e718d029c1cce49a7287"
+      },
+      {
+        "path": "data/geospatial_topology/nodes.json",
+        "sha256_lf": "207fe4fff677a05fb540142ae402a58d54ef23ff7578809ce1e931c5ffbcff05"
+      },
+      {
+        "path": "data/graph_theory/nodes.json",
+        "sha256_lf": "4455013e79d53040abc3c4335152a411f22644cc70600f3b5c0f9ddf9b1c4677"
+      },
+      {
+        "path": "data/information_theory/nodes.json",
+        "sha256_lf": "17be2d8cebe4ac91df2ef255fd0cba7997c9884cc5f5f1a8a93667ed66d0e8d9"
+      },
+      {
+        "path": "data/ingested_arithmetic/nodes.json",
+        "sha256_lf": "6e19d72abcfac49dfb36b03103919cc860f1dc76c3f2d94a102b0892fc9a549d"
+      },
+      {
+        "path": "data/lean_workbook/nodes.json",
+        "sha256_lf": "bf6a5efd62fc298cb2a7e7558792f0c2c968a53ce80133a30f9c3244ad266468"
+      },
+      {
+        "path": "data/logic/nodes.json",
+        "sha256_lf": "a46cdc1ce7e070028b6096001e0656b748a0c5f6f74cbd13a6c1c73090fbe018"
+      },
+      {
+        "path": "data/machine_learning/nodes.json",
+        "sha256_lf": "333753fe8329c4569ae83d534dc1d8ece58498859524164f15044328b2486528"
+      },
+      {
+        "path": "data/morphology/nodes.json",
+        "sha256_lf": "524112d2a0053006dce95e3b5554b6bd331d2dacb0c21ad90da16d4105df17e1"
+      },
+      {
+        "path": "data/narrative/nodes.json",
+        "sha256_lf": "8d7605f7ce60c2a0c19d1e04ef17c80c1f7b4f7363bbfcc88bf572f4fcc2dd08"
+      },
+      {
+        "path": "data/number_theory/nodes.json",
+        "sha256_lf": "330c1f7bfc51ba0df4edca8c0f94376c0231a1699812dd90c68d2d9a2ebe5037"
+      },
+      {
+        "path": "data/numerical_analysis/nodes.json",
+        "sha256_lf": "fe816fbe02847fd816a8a8980cf1c7010370911b4fbdf5e22460e6d714f9fe59"
+      },
+      {
+        "path": "data/physics/nodes.json",
+        "sha256_lf": "56c0bd01b33293845ab7ef313ba2d44f5df67a5bc429fa68e79ca4d1835e985b"
+      },
+      {
+        "path": "data/programming/nodes.json",
+        "sha256_lf": "09408f5b6ccf832b789619daa73d4d0ccb7a3087b3750427dc15fed9d078d741"
+      },
+      {
+        "path": "data/provability/nodes.json",
+        "sha256_lf": "a562bf2d4c23f03d46f9649ee56be1e9b709dcd75e789918d678d36cbb8e04ee"
+      },
+      {
+        "path": "data/realization/lexicon.json",
+        "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587"
+      },
+      {
+        "path": "data/set_theory/nodes.json",
+        "sha256_lf": "cf6d12b00585156a333af4770b2860861b34d48c57fcf865df4fc9172a1e184c"
+      },
+      {
+        "path": "data/statistics/nodes.json",
+        "sha256_lf": "9849a90aeb4d9db98b5eefff563a5b0244cb352e3b969c00994ac02fe041f85d"
+      },
+      {
+        "path": "data/temporal_logic/nodes.json",
+        "sha256_lf": "e798dddfc71ece9156b291d9779fbee7fd268cf97a0954f53e82f1c49c04cdd2"
+      },
+      {
+        "path": "data/trigonometry/nodes.json",
+        "sha256_lf": "b98b18235968f980ccea32bc029075211edfc662afbd9ed7da5bc7b5ff199a03"
+      },
+      {
+        "path": "experiments/transliteration_prereg.json",
+        "sha256_lf": "f3f3d5f89daaf547c15936bb34b3bacd34f3c94cb8f575f12b2ba3307ae5eafd"
+      },
+      {
+        "path": "experiments/transliteration_served_diff.json",
+        "sha256_lf": "5decd0cffd0e0c150d1736f41e89abb511ab7d312ace4ecd0643fdba86b718b1"
+      },
+      {
+        "path": "scripts/match_signatures.py",
+        "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7"
+      },
+      {
+        "path": "scripts/numeral_words.py",
+        "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4"
+      },
+      {
+        "path": "scripts/realization_lexicon.py",
+        "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea"
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac"
+      }
+    ],
+    "emitted_at_generation": true
+  },
+  "what_this_is": [
+    "The transliteration lane's registered artifact. It is a PROBE, committed whichever way it lands (ROADMAP-v0.19 item 3: \"both of these commit their result whichever way it lands\").",
+    "It carries two rates because parsing is not rendering: the parse rate over the whole corpus under the post-amendment parser, and the round-trip rate over the set the two glyphs newly reach.",
+    "It does NOT amend, re-open or blend with experiments/realization_rate.json. That artifact was declared historical, in writing, by the dated amendment this lane's parser change was authorized by."
+  ],
+  "prereg_revalidated": {
+    "prereg": "experiments/transliteration_prereg.json",
+    "prereg_sha256_lf": "f3f3d5f89daaf547c15936bb34b3bacd34f3c94cb8f575f12b2ba3307ae5eafd",
+    "verdict": "HOLDS",
+    "what_it_means": "Every artifact this lane froze before the run is byte-identical to what the preregistration commit recorded — the post-amendment parser included. If any row disagreed this writer would refuse to emit the artifact.",
+    "the_parser_this_run_used": {
+      "path": "scripts/match_signatures.py",
+      "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+      "supersedes": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "retired_by": "realization.prereg.v1.amendment.transliteration-2026-08-24, recorded in experiments/realization_prereg.json and experiments/foreign_voice_prereg.json"
+    },
+    "revalidated": [
+      {
+        "path": "data/realization/lexicon.json",
+        "role": "lexicon",
+        "recorded_sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+        "observed_sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+        "agrees": true
+      },
+      {
+        "path": "scripts/match_signatures.py",
+        "role": "parser",
+        "recorded_sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+        "observed_sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+        "agrees": true
+      },
+      {
+        "path": "scripts/measure_transliteration.py",
+        "role": "registered_run",
+        "recorded_sha256_lf": "58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d",
+        "observed_sha256_lf": "58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d",
+        "agrees": true
+      },
+      {
+        "path": "scripts/numeral_words.py",
+        "role": "numeral_pair",
+        "recorded_sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+        "observed_sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+        "agrees": true
+      },
+      {
+        "path": "scripts/realization_lexicon.py",
+        "role": "lexicon_loader",
+        "recorded_sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+        "observed_sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+        "agrees": true
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "role": "inverter",
+        "recorded_sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+        "observed_sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+        "agrees": true
+      }
+    ]
+  },
+  "over_the_committed_corpus": {
+    "yes": true,
+    "why_it_is_recorded": "only a run over the committed data/ is the registered run. A run over a slice is a useful thing to have (the determinism and refusal tests build one) and must not be mistakable for the artifact of record, so the flag is in the file rather than in whoever remembers how it was invoked."
+  },
+  "parse_rate": {
+    "gate": "the lane's headline number",
+    "nodes_total": 12777,
+    "parseable": 8586,
+    "rate": 0.671989,
+    "under_the_retired_parser": {
+      "parseable": 2172,
+      "digest": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "note": "the v0.18 figure, recomputed here on the same walk so the two are comparable statement for statement; experiments/realization_rate.json remains the artifact of record for what was MEASURED under it"
+    },
+    "newly_reached": 6414,
+    "sentence": "8586 of 12777 statements parse (0.6720), of which 6414 are newly reached by two glyph equivalences; 2172 parsed before.",
+    "floor": 6000,
+    "floor_met": true,
+    "how_newly_reached_was_decided": [
+      "parses now AND carries `≥` or `≤`. The two parsers differ only in whether those two characters tokenize, so a source without them parses under both or neither, and a source with them could not tokenize at all under the retired parser.",
+      "The argument is not taken on trust: see `cross_check` below."
+    ],
+    "cross_check": {
+      "witness": "experiments/transliteration_served_diff.json",
+      "witness_sha256_lf": "5decd0cffd0e0c150d1736f41e89abb511ab7d312ace4ecd0643fdba86b718b1",
+      "how_the_witness_decided": "it loaded the retired parser from git in its own interpreter and diffed answer._in_words over all 12,777 statements; its `gained` are statements that served no line under the retired parser and serve one now",
+      "witness_gained": 6414,
+      "this_run_newly_reached": 6414,
+      "agrees": true,
+      "this_run_newly_served": 6414,
+      "adjustment": {
+        "refused": 0,
+        "failed": 0,
+        "why": "a statement can parse and still serve no line; the witness sees served lines, this run sees parses, and the gap is exactly the refusals and round-trip failures below"
+      }
+    }
+  },
+  "newly_reached_composition": {
+    "why": "DESIGN-sans-template-rendering R1's rule, imported: a rate never travels without its denominator, and a denominator nobody has described is not one a reader can check.",
+    "statements": 6414,
+    "per_corpus": [
+      {
+        "corpus": "lean_workbook",
+        "nodes": 12514,
+        "parseable": 8454,
+        "newly_reached": 6414,
+        "served": 6414,
+        "refused": 0,
+        "failed": 0
+      }
+    ],
+    "corpora_reached": 1,
+    "concentration": "6414 of 6414 in the largest corpus",
+    "glyph_occurrences": {
+      "≤": 1681,
+      "≥": 4733
+    },
+    "relations_present": {
+      "<=": 1681,
+      ">=": 4733
+    },
+    "distinct_call_heads": 2,
+    "call_heads_by_mass": [
+      {
+        "head": "sin",
+        "count": 5
+      },
+      {
+        "head": "exp",
+        "count": 2
+      }
+    ],
+    "reading": [
+      "The set is 1 corpus and 2 distinct call heads over 6414 statements. It is LARGE AND STRUCTURALLY NARROW: numeric inequalities, overwhelmingly, with almost no function application in them at all.",
+      "That is the honest shape of what two glyphs unlock, and it is stated here rather than left for a reader to infer from a table, because the round-trip rate below is read against this denominator and not against the corpus."
+    ]
+  },
+  "round_trip": {
+    "gate": "the lane's second rate — v0.18's realizer machinery, unchanged, over statements it could not previously reach",
+    "no_floor_was_pre_committed": true,
+    "why_no_floor": [
+      "DELIBERATE, and the reason is recorded before the reading rather than after it. This is a probe, not a headline: the artifact publishes whatever it reads and BOTH branches are results.",
+      "A high rate is the finding that the newly-reached statements are the same grammar in every respect that matters, not just at the tokenizer. A low rate is the more interesting finding — that parsing bought reach without buying voice — and it is exactly the finding a pre-committed floor would have pressured this lane to avoid publishing.",
+      "v0.18's R1 floor (≥ 90% of the parseable denominator) is NOT imported and does not govern this set. It was frozen against a different denominator under a different prereg, and borrowing it here would let a number adjudicated in one cycle grade another cycle's work."
+    ],
+    "denominator": 6414,
+    "served": 6414,
+    "refused": 0,
+    "failed": 0,
+    "rate_over_newly_reached": 1.0,
+    "sentence": "6414 of 6414 newly-reached statements round-trip EXACTLY (1.0000); 0 refused and 0 failed the round trip.",
+    "partition_balances": true,
+    "refusals_by_reason": {},
+    "refusal_examples": {},
+    "failures": [],
+    "what_this_rate_does_and_does_not_establish": [
+      "ESTABLISHES: the 6414 statements the two glyphs reach are the same grammar in every respect the realizer touches, not only at the tokenizer. 6414 of them realize to a sentence that re-parses and canonicalizes back to the source skeleton, with 0 refusals and 0 round-trip failures.",
+      "DOES NOT ESTABLISH that the realization lexicon covers the corpus. The lexicon's head coverage was authored against v0.18's parseable set, and the reason it is not strained here is that this set carries almost no call heads — see the composition above. A rate of 1.0 over arithmetic inequalities is a weaker fact than a rate of 1.0 over a set with the corpus's head inventory in it, and the two must not be read as the same sentence.",
+      "DOES NOT ESTABLISH anything about rendering QUALITY. The gate is skeleton identity under re-parse, which is a claim about a machine reading its own output. Whether a person recovers the mathematics from the English is a determinacy claim, and this lane runs no control that could license one."
+    ],
+    "not_averaged_with_v018": "This rate is over the newly-reached set. v0.18's 0.9991 is over its own 2,172, measured under the retired parser. The two are reported side by side and never blended — blending them is the figure the amendment declined to produce by re-running."
+  },
+  "non_claims": [
+    "The parse rate is not a rendering rate and neither is a claim that a reader can recover the mathematics from the English. That claim needs a determinacy control this lane does not run.",
+    "Nothing here is a claim about the 4,191-statement foreign residue, which is disjoint from this set by construction and measured under DESIGN-foreign-voice's own gate.",
+    "A high round-trip rate over this set is not evidence that the realization lexicon covers the corpus. It is evidence that the newly-reached statements carry the heads it already had, which is a fact about which statements the two glyphs unlock."
+  ]
+}
