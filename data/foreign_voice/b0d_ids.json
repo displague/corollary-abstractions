@@ -1,0 +1,721 @@
+{
+ "design": "docs/DESIGN-foreign-voice.md",
+ "drawn": [
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ ∃ x : Rat, x^4 + x^3 - x + 1 = 0",
+   "source": "¬ ∃ x : ℝ, x^4 + x^3 - x + 1 = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_10049"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k x y z : Rat, (x^2 + y^2 + z^2 + k * x * y * z) ≤ 1 + k/27 ∨ (x^2 + y^2 + z^2 + k * x * y * z) ≥ 1 + k/27",
+   "source": "(x^2 + y^2 + z^2 + k * x * y * z) ≤ 1 + k/27 ∨ (x^2 + y^2 + z^2 + k * x * y * z) ≥ 1 + k/27",
+   "statement_id": "leanworkbook.skel.lean_workbook_10307"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (2 * a ^ 2 - c ^ 2) ^ 2 + (2 * b ^ 2 - c ^ 2) ^ 2 ≥ 0",
+   "source": "∀ a b c : ℝ, (2 * a ^ 2 - c ^ 2) ^ 2 + (2 * b ^ 2 - c ^ 2) ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_1046"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x = 2 ∨ x = -2 ∨ y = 2 ∨ y = -2",
+   "source": "x = 2 ∨ x = -2 ∨ y = 2 ∨ y = -2",
+   "statement_id": "leanworkbook.skel.lean_workbook_10917"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a^2 + b^2 ≥ 2*a*b",
+   "source": "∀ a b : ℝ, a^2 + b^2 ≥ 2*a*b",
+   "statement_id": "leanworkbook.skel.lean_workbook_11792"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x ≠ 1 → (x^2 + x + 1) / (x - 1) ^ 2 ≥ 1 / 4",
+   "source": "∀ x : ℝ, x ≠ 1 → (x^2 + x + 1) / (x - 1) ^ 2 ≥ 1 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_12009"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b + c = 1 → 9 / 2 * (2 - a) * (2 - b) * (2 - c) ≥ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ∧ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ≥ 104 / 25 * (2 - a) * (2 - b) * (2 - c)",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b + c = 1 → 9 / 2 * (2 - a) * (2 - b) * (2 - c) ≥ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ∧ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ≥ 104 / 25 * (2 - a) * (2 - b) * (2 - c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_12549"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ d : Rat, d^2 = 2 * d ↔ d = 0 ∨ d = 2",
+   "source": "d^2 = 2 * d ↔ d = 0 ∨ d = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_15200"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 ≥ 2*a*b ∧ b^2 + c^2 ≥ 2*b*c ∧ a^2 + c^2 ≥ 2*a*c",
+   "source": "a^2 + b^2 ≥ 2*a*b ∧ b^2 + c^2 ≥ 2*b*c ∧ a^2 + c^2 ≥ 2*a*c",
+   "statement_id": "leanworkbook.skel.lean_workbook_15618"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 2 * x ^ 2 + 8 * x ≤ -6 ↔ -3 ≤ x ∧ x ≤ -1",
+   "source": "2 * x ^ 2 + 8 * x ≤ -6 ↔ -3 ≤ x ∧ x ≤ -1",
+   "statement_id": "leanworkbook.skel.lean_workbook_17167"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x^2 + y^2 ≥ 2 * x * y",
+   "source": "∀ x y : ℝ, x^2 + y^2 ≥ 2 * x * y",
+   "statement_id": "leanworkbook.skel.lean_workbook_17366"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a = 20 ∧ b = -16) ∨ (a = 10 ∧ b = -6) ∨ (a = 50 ∧ b = 14) ∨ (a = 40 ∧ b = 24)",
+   "source": "(a = 20 ∧ b = -16) ∨ (a = 10 ∧ b = -6) ∨ (a = 50 ∧ b = 14) ∨ (a = 40 ∧ b = 24)",
+   "statement_id": "leanworkbook.skel.lean_workbook_20627"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k : Int, (k - 1) * k * (k + 1) * (k + 2) = (k ^ 3 - k) * (k + 2)",
+   "source": "∀ k : ℤ, (k - 1) * k * (k + 1) * (k + 2) = (k ^ 3 - k) * (k + 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_20940"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 0 ≤ x ∧ x ≤ 4",
+   "source": "0 ≤ x ∧ x ≤ 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_2117"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, 9 * (a ^ 2 + 3 * b ^ 2 + 5 * c ^ 2) ≥ (a + 3 * b + 5 * c) ^ 2",
+   "source": "∀ a b c : ℝ, 9 * (a ^ 2 + 3 * b ^ 2 + 5 * c ^ 2) ≥ (a + 3 * b + 5 * c) ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_21364"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ b c : Rat, b^2 - b*c + c^2 ≥ (b + c)^2 / 4",
+   "source": "∀ b c : ℝ, b^2 - b*c + c^2 ≥ (b + c)^2 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_22189"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a^8 + b^8 - a^6 * b^2 - b^6 * a^2) ≥ 0",
+   "source": "∀ a b : ℝ, (a^8 + b^8 - a^6 * b^2 - b^6 * a^2) ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_23933"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a * b * c ≤ 1 ∧ a * b + b * c + c * a ≤ 3",
+   "source": "a * b * c ≤ 1 ∧ a * b + b * c + c * a ≤ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_24181"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a^2 + b^2 + c^2)^2 ≥ (a * (a - b + c) + b * (b - c + a) + c * (c - a + b))^2",
+   "source": "∀ a b c : ℝ, (a^2 + b^2 + c^2)^2 ≥ (a * (a - b + c) + b * (b - c + a) + c * (c - a + b))^2",
+   "statement_id": "leanworkbook.skel.lean_workbook_26914"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a → a / (a + b) + b / (b + c) + c / (c + a) < 2",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a → a / (a + b) + b / (b + c) + c / (c + a) < 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_27453"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a / (b + 2 * c) + b / (c + 2 * a) + c / (a + 2 * b) ≥ 1) ∧ (a = b ∧ b = c → a = b ∧ b = c)",
+   "source": "(a / (b + 2 * c) + b / (c + 2 * a) + c / (a + 2 * b) ≥ 1) ∧ (a = b ∧ b = c → a = b ∧ b = c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_2931"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, 0 ≤ a ∧ a ≤ 2 → 0 ≤ (-2 * a + 4) / (a ^ 2 + 1)",
+   "source": "∀ a : ℝ, 0 ≤ a ∧ a ≤ 2 → 0 ≤ (-2 * a + 4) / (a ^ 2 + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_29569"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (36:Rat) / (x ^ 3 + 1) ≤ 16 * x ^ 2 - 59 * x + 61",
+   "source": "(36:ℝ) / (x ^ 3 + 1) ≤ 16 * x ^ 2 - 59 * x + 61",
+   "statement_id": "leanworkbook.skel.lean_workbook_3051"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (4 * (a ^ 2 + b ^ 2 + c ^ 2) ^ 3) ≥ (3 * (a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c) ^ 2)",
+   "source": "∀ a b c : ℝ, (4 * (a ^ 2 + b ^ 2 + c ^ 2) ^ 3) ≥ (3 * (a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c) ^ 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_32385"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ n : Rat, n = 0 ∨ n = 1 ∨ n = 2",
+   "source": "n = 0 ∨ n = 1 ∨ n = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_32550"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x > 0 ∧ y > 0 ∧ z > 0 → (1 + x * y * z) * (1 / (x * (y + 1)) + 1 / (y * (z + 1)) + 1 / (z * (x + 1))) ≥ 3",
+   "source": "∀ x y z : ℝ, x > 0 ∧ y > 0 ∧ z > 0 → (1 + x * y * z) * (1 / (x * (y + 1)) + 1 / (y * (z + 1)) + 1 / (z * (x + 1))) ≥ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_32774"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 → 9 * (a ^ 3 + b ^ 3 + c ^ 3) ≥ (a + b + c) ^ 3",
+   "source": "a > 0 ∧ b > 0 ∧ c > 0 → 9 * (a ^ 3 + b ^ 3 + c ^ 3) ≥ (a + b + c) ^ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_33665"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≤ 1 ∧ 1 ≤ a / (b + c + 1) + b / (c + a + 1) + c / (a + b + 1))",
+   "source": "(1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≤ 1 ∧ 1 ≤ a / (b + c + 1) + b / (c + a + 1) + c / (a + b + 1))",
+   "statement_id": "leanworkbook.skel.lean_workbook_33811"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (5*x-6-x^2)/2 ≥ 0 ↔ 2 ≤ x ∧ x ≤ 3",
+   "source": "(5*x-6-x^2)/2 ≥ 0 ↔ 2 ≤ x ∧ x ≤ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_3422"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, (x^2 * y^2 + y^2 * z^2) / 2 ≥ x * y^2 * z ∧ (y^2 * z^2 + z^2 * x^2) / 2 ≥ x * y * z^2 ∧ (x^2 * y^2 + z^2 * x^2) / 2 ≥ x^2 * y * z",
+   "source": "(x^2 * y^2 + y^2 * z^2) / 2 ≥ x * y^2 * z ∧ (y^2 * z^2 + z^2 * x^2) / 2 ≥ x * y * z^2 ∧ (x^2 * y^2 + z^2 * x^2) / 2 ≥ x^2 * y * z",
+   "statement_id": "leanworkbook.skel.lean_workbook_34751"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, 1 - x * y ≥ 0 ∧ 1 - x * z ≥ 0 ∧ 1 - y * z ≥ 0",
+   "source": "1 - x * y ≥ 0 ∧ 1 - x * z ≥ 0 ∧ 1 - y * z ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_35622"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, 2 * (a^3 + b^3 + c^3) < (a + b + c) * (a^2 + b^2 + c^2) ∧ (a + b + c) * (a^2 + b^2 + c^2) ≤ 3 * (a^3 + b^3 + c^3)",
+   "source": "2 * (a^3 + b^3 + c^3) < (a + b + c) * (a^2 + b^2 + c^2) ∧ (a + b + c) * (a^2 + b^2 + c^2) ≤ 3 * (a^3 + b^3 + c^3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_35869"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d : Rat, a + b + c + d = 0 → a^3 + b^3 + c^3 + d^3 = 3 * (a * b * c + b * c * d + c * d * a + d * a * b)",
+   "source": "∀ a b c d : ℝ, a + b + c + d = 0 → a^3 + b^3 + c^3 + d^3 = 3 * (a * b * c + b * c * d + c * d * a + d * a * b)",
+   "statement_id": "leanworkbook.skel.lean_workbook_35927"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a + b + c > 0 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a / (c + a) - 1 + b / (a + b) - 1 + c / (b + c) - 1 > 1 - 3)",
+   "source": "∀ a b c : ℝ, (a + b + c > 0 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a / (c + a) - 1 + b / (a + b) - 1 + c / (b + c) - 1 > 1 - 3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_3710"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 → a^2 + b^2 + c^2 + 2 * a * b * c + 3 ≥ (1 + a) * (1 + b) * (1 + c)",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 → a^2 + b^2 + c^2 + 2 * a * b * c + 3 ≥ (1 + a) * (1 + b) * (1 + c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_37520"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "2^10 = 1024 → 2^20 = 1024^2",
+   "source": "2^10 = 1024 → 2^20 = 1024^2",
+   "statement_id": "leanworkbook.skel.lean_workbook_38419"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ x y : Int, x^2 + 4 = y^5",
+   "source": "¬∃ x y : ℤ, x^2 + 4 = y^5",
+   "statement_id": "leanworkbook.skel.lean_workbook_39257"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a^2 * b + b^2 * c + c^2 * a - 3 * a * b * c)^2 ≥ 0",
+   "source": "∀ a b c : ℝ, (a^2 * b + b^2 * c + c^2 * a - 3 * a * b * c)^2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_41330"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ a b : Int, a^3 + (a + 1)^3 + (a + 2)^3 + (a + 3)^3 + (a + 4)^3 + (a + 5)^3 + (a + 6)^3 = b^4 + (b + 1)^4",
+   "source": "¬∃ a b : ℤ, a^3 + (a + 1)^3 + (a + 2)^3 + (a + 3)^3 + (a + 4)^3 + (a + 5)^3 + (a + 6)^3 = b^4 + (b + 1)^4",
+   "statement_id": "leanworkbook.skel.lean_workbook_41668"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^4 + b^4 + c^4 ≥ a * b * c * (a + b + c)",
+   "source": "∀ a b c : ℝ, a^4 + b^4 + c^4 ≥ a * b * c * (a + b + c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_42614"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ u v w : Rat, (2 * u - v - w) ^ 2 / 4 + 3 * (v - w) ^ 2 / 4 ≥ 0",
+   "source": "∀ u v w : ℝ, (2 * u - v - w) ^ 2 / 4 + 3 * (v - w) ^ 2 / 4 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_43025"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a₁ a₂ a₃ : Rat, a₁ * a₂ * a₃ ≤ 1",
+   "source": "a₁ * a₂ * a₃ ≤ 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_43739"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^3 + b^3 + c^3 - 3 * a * b * c = (a + b + c) * (a^2 + b^2 + c^2 - a * b - b * c - c * a)",
+   "source": "∀ a b c : ℝ, a^3 + b^3 + c^3 - 3 * a * b * c = (a + b + c) * (a^2 + b^2 + c^2 - a * b - b * c - c * a)",
+   "statement_id": "leanworkbook.skel.lean_workbook_44108"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a * b + b * c + c * a = 1 ↔ a * (b + c) = 1 - b * c",
+   "source": "a * b + b * c + c * a = 1 ↔ a * (b + c) = 1 - b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_47146"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ (∃ v w : Int, v^2 + w^2 = 2019)",
+   "source": "¬ (∃ v w : ℤ, v^2 + w^2 = 2019)",
+   "statement_id": "leanworkbook.skel.lean_workbook_47444"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c m_a m_b m_c : Rat, a / m_a = b / m_b ∧ b / m_b = c / m_c → a / m_a = c / m_c",
+   "source": "a / m_a = b / m_b ∧ b / m_b = c / m_c → a / m_a = c / m_c",
+   "statement_id": "leanworkbook.skel.lean_workbook_47558"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 1 + x ^ 2 ≥ 2 * x ↔ (1 - x) ^ 2 ≥ 0",
+   "source": "∀ x : ℝ, 1 + x ^ 2 ≥ 2 * x ↔ (1 - x) ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_50974"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, 12 * (x^3 + 14 * x^2 - 2 * x - (y^3 + 14 * y^2 - 2 * y)) = (x - y) * (3 * (2 * x + y + 14)^2 + (3 * y + 14)^2 - 808)",
+   "source": "∀ x y : ℝ, 12 * (x^3 + 14 * x^2 - 2 * x - (y^3 + 14 * y^2 - 2 * y)) = (x - y) * (3 * (2 * x + y + 14)^2 + (3 * y + 14)^2 - 808)",
+   "statement_id": "leanworkbook.skel.lean_workbook_52662"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Int, x^5 + x + 1 = (x^2+x+1)*(x^3-x^2+1)",
+   "source": "∀ x : ℤ, x^5 + x + 1 = (x^2+x+1)*(x^3-x^2+1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_54132"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ (x y z : Rat), (x > 0 ∧ y > 0 ∧ z > 0 ∧ x + y + z = 20 ∧ x*y + y*z + z*x = 150)",
+   "source": "¬∃ (x y z : ℝ), (x > 0 ∧ y > 0 ∧ z > 0 ∧ x + y + z = 20 ∧ x*y + y*z + z*x = 150)",
+   "statement_id": "leanworkbook.skel.lean_workbook_54220"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ ∃ x : Rat, x^4 + x^3 + x^2 + x + 1 = 0",
+   "source": "¬ ∃ x : ℝ, x^4 + x^3 + x^2 + x + 1 = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_54614"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a^2 - a + 1) * (b^2 - b + 1) ≥ (a^2 + b^2) / 2 ∧ (a^2 + b^2) / 2 ≥ (a^2 + a*b + b^2) / 3",
+   "source": "(a^2 - a + 1) * (b^2 - b + 1) ≥ (a^2 + b^2) / 2 ∧ (a^2 + b^2) / 2 ≥ (a^2 + a*b + b^2) / 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_54798"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x = 25 / 4 + 49 / 12 → 60 * x = 620",
+   "source": "x = 25 / 4 + 49 / 12 → 60 * x = 620",
+   "statement_id": "leanworkbook.skel.lean_workbook_55116"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ m : Nat, (1 : Rat) / (m + 1) < 1 / (3 * m + 2) + 1 / (3 * m + 3) + 1 / (3 * m + 4)",
+   "source": "∀ m : ℕ, (1 : ℝ) / (m + 1) < 1 / (3 * m + 2) + 1 / (3 * m + 3) + 1 / (3 * m + 4)",
+   "statement_id": "leanworkbook.skel.lean_workbook_55971"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≥ 1 → a * b + b * c + c * a ≤ 3)",
+   "source": "(1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≥ 1 → a * b + b * c + c * a ≤ 3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_6302"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Int, x^7 + x^2 + 1 = (x^2 + x + 1) * (x^5 - x^4 + x^2 - x + 1)",
+   "source": "∀ x : ℤ, x^7 + x^2 + 1 = (x^2 + x + 1) * (x^5 - x^4 + x^2 - x + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_7476"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ b c : Rat, b^2 * c^2 + b^2 + 1 ≥ b + b^2 * c + b * c",
+   "source": "∀ b c : ℝ, b^2 * c^2 + b^2 + 1 ≥ b + b^2 * c + b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_7569"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a^2 * (1 + b^4) + b^2 * (1 + a^4) ≤ (1 + a^4) * (1 + b^4)",
+   "source": "∀ a b : ℝ, a^2 * (1 + b^4) + b^2 * (1 + a^4) ≤ (1 + a^4) * (1 + b^4)",
+   "statement_id": "leanworkbook.skel.lean_workbook_7830"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^4 + x^2 + 1 = (x^2 - x + 1) * (x^2 + x + 1)",
+   "source": "∀ x : ℝ, x^4 + x^2 + 1 = (x^2 - x + 1) * (x^2 + x + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_811"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 ≥ 2 * a * b ∧ b^2 + c^2 ≥ 2 * b * c ∧ c^2 + a^2 ≥ 2 * c * a",
+   "source": "a^2 + b^2 ≥ 2 * a * b ∧ b^2 + c^2 ≥ 2 * b * c ∧ c^2 + a^2 ≥ 2 * c * a",
+   "statement_id": "leanworkbook.skel.lean_workbook_9185"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ n : Rat, n ≠ 0 ∧ n + 5 ≠ 0 → 5 / (n * (n + 5)) = 1 / n - 1 / (n + 5)",
+   "source": "∀ n : ℝ, n ≠ 0 ∧ n + 5 ≠ 0 → 5 / (n * (n + 5)) = 1 / n - 1 / (n + 5)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_11894"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a + b + c = 3 → a / b + b / c + c / a ≥ a ^ 2 + b ^ 2 + c ^ 2",
+   "source": "a + b + c = 3 → a / b + b / c + c / a ≥ a ^ 2 + b ^ 2 + c ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_13514"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ p : Rat, ∃ x y z : Nat, x^2 + y^2 + z^2 = 4 * p^2 + 1",
+   "source": "∃ x y z : ℕ, x^2 + y^2 + z^2 = 4 * p^2 + 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_15488"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Int, a * b * c = b * c * a → a^3 * (b - c) + b^3 * (c - a) + c^3 * (a - b) = (b - a) * (c * (b^2 + b * a + a^2) - b * a * (b + a) - c^3)",
+   "source": "∀ a b c : ℤ, a * b * c = b * c * a → a^3 * (b - c) + b^3 * (c - a) + c^3 * (a - b) = (b - a) * (c * (b^2 + b * a + a^2) - b * a * (b + a) - c^3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_16365"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, a = -7 ∨ a = 5",
+   "source": "a = -7 ∨ a = 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_17785"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 10 * x ^ 6 - 24 * x ^ 5 + 15 * x ^ 4 + 40 * x ^ 2 ≥ 0",
+   "source": "∀ x : ℝ, 10 * x ^ 6 - 24 * x ^ 5 + 15 * x ^ 4 + 40 * x ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_20385"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, ∃ x y, (x^2 / a^2 + y^2 / b^2 = 1 ∧ (x - a / 2)^2 + y^2 = (a / 2)^2)",
+   "source": "∃ x y, (x^2 / a^2 + y^2 / b^2 = 1 ∧ (x - a / 2)^2 + y^2 = (a / 2)^2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_22008"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + 5*x + 6 = 0 ↔ x = -2 ∨ x = -3",
+   "source": "x^2 + 5*x + 6 = 0 ↔ x = -2 ∨ x = -3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_25806"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x = x ∧ y = y",
+   "source": "x = x ∧ y = y",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_2657"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d : Rat, 6 ≥ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ∧ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ≥ 1 / 2",
+   "source": "6 ≥ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ∧ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ≥ 1 / 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_33270"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k n : Rat, n = (2 * k ^ 2) ^ 2 + (2 * k) ^ 2 → n + 1 = (2 * k ^ 2 + 1) ^ 2 + 0 ^ 2 ∧ n + 2 = (2 * k ^ 2 + 1) ^ 2 + 1 ^ 2",
+   "source": "n = (2 * k ^ 2) ^ 2 + (2 * k) ^ 2 → n + 1 = (2 * k ^ 2 + 1) ^ 2 + 0 ^ 2 ∧ n + 2 = (2 * k ^ 2 + 1) ^ 2 + 1 ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34264"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, (x = 0 ∧ y = 1 ∧ z = -1) ∨ (x = 0 ∧ y = -1 ∧ z = 1) ∨ (x = 1 ∧ y = 0 ∧ z = -1) ∨ (x = 1 ∧ y = -1 ∧ z = 0) ∨ (x = -1 ∧ y = 0 ∧ z = 1) ∨ (x = -1 ∧ y = 1 ∧ z = 0)",
+   "source": "(x = 0 ∧ y = 1 ∧ z = -1) ∨ (x = 0 ∧ y = -1 ∧ z = 1) ∨ (x = 1 ∧ y = 0 ∧ z = -1) ∨ (x = 1 ∧ y = -1 ∧ z = 0) ∨ (x = -1 ∧ y = 0 ∧ z = 1) ∨ (x = -1 ∧ y = 1 ∧ z = 0)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34400"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d e : Rat, a = 1 ∧ b = 2 ∧ c = 3 ∧ d = 4 ∧ e = 5",
+   "source": "a = 1 ∧ b = 2 ∧ c = 3 ∧ d = 4 ∧ e = 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_37283"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 4 < x^3 ∧ x^3 < 17",
+   "source": "4 < x^3 ∧ x^3 < 17",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_38747"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ E I S : Rat, S / (E + I) = 25 → E + I = S / 25",
+   "source": "S / (E + I) = 25 → E + I = S / 25",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_40203"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, 2 > a ∧ a ≥ 0 → a / (2 - a) + 1 / (2 * a + 1) ≥ 4 / 5",
+   "source": "∀ a : ℝ, 2 > a ∧ a ≥ 0 → a / (2 - a) + 1 / (2 * a + 1) ≥ 4 / 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_41053"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 + c^2 = 9 → 2 * (a + b + c) - a * b * c ≤ 10",
+   "source": "∀ a b c : ℝ, a^2 + b^2 + c^2 = 9 → 2 * (a + b + c) - a * b * c ≤ 10",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4235"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, 3 / 4 ≤ y * z + z * x + x * y ∧ y * z + z * x + x * y < 1 ∧ x * y * z ≤ 1 / 8",
+   "source": "3 / 4 ≤ y * z + z * x + x * y ∧ y * z + z * x + x * y < 1 ∧ x * y * z ≤ 1 / 8",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_45208"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b k₁ k₂ : Rat, k₁ * k₂ * a ^ 3 + (k₁ ^ 2 + k₂ ^ 2 + k₁ * k₂) * (a ^ 2 * b + a * b ^ 2) + k₁ * k₂ * b ^ 3 ≤ (k₁ + k₂) ^ 2 * (a + b) ^ 3 / 4",
+   "source": "k₁ * k₂ * a ^ 3 + (k₁ ^ 2 + k₂ ^ 2 + k₁ * k₂) * (a ^ 2 * b + a * b ^ 2) + k₁ * k₂ * b ^ 3 ≤ (k₁ + k₂) ^ 2 * (a + b) ^ 3 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_45452"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x + y + z = 7 ∧ x^2 + y^2 + z^2 = 21 ∧ x*z = y^2 ↔ x = 1 ∧ y = 2 ∧ z = 4 ∨ x = 4 ∧ y = 2 ∧ z = 1",
+   "source": "x + y + z = 7 ∧ x^2 + y^2 + z^2 = 21 ∧ x*z = y^2 ↔ x = 1 ∧ y = 2 ∧ z = 4 ∨ x = 4 ∧ y = 2 ∧ z = 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4697"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^3 - 6 * x^2 + 9 * x - 4 = 0 ↔ x = 1 ∨ x = 1 ∨ x = 4",
+   "source": "x^3 - 6 * x^2 + 9 * x - 4 = 0 ↔ x = 1 ∨ x = 1 ∨ x = 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_48321"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ t : Rat, (118 / 7 * t ^ 4 + 8 * t ^ 3 + 12 * t ^ 2 + 8 * t + 10 / 7) ≥ 0",
+   "source": "∀ t : ℝ, (118 / 7 * t ^ 4 + 8 * t ^ 3 + 12 * t ^ 2 + 8 * t + 10 / 7) ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_49610"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + x - 3/4 = 0 ↔ x = 1/2 ∨ x = -3/2",
+   "source": "x^2 + x - 3/4 = 0 ↔ x = 1/2 ∨ x = -3/2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_50206"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, 2 * a^2 / b + 3 * b / a ≥ 5 ∧ a^3 / b + 2 * b / a ≥ 3",
+   "source": "2 * a^2 / b + 3 * b / a ≥ 5 ∧ a^3 / b + 2 * b / a ≥ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_56938"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c α β γ : Rat, a > 0 ∧ b > 0 ∧ c > 0 → α = a^2 / b / c ∧ β = b^2 / c / a ∧ γ = c^2 / a / b → a^2 / b / c + b^2 / c / a + c^2 / a / b ≤ α + β + γ",
+   "source": "a > 0 ∧ b > 0 ∧ c > 0 → α = a^2 / b / c ∧ β = b^2 / c / a ∧ γ = c^2 / a / b → a^2 / b / c + b^2 / c / a + c^2 / a / b ≤ α + β + γ",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_59333"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x = 2/3 ∧ y = 2/3 ∧ z = 1/3",
+   "source": "x = 2/3 ∧ y = 2/3 ∧ z = 1/3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_60997"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b x y z : Nat, a = 10 * x + y ∧ b = 10 * x + z → a * b = 100 * x^2 + 10 * x * (y + z) + y * z",
+   "source": "∀ a b x y z : ℕ, a = 10 * x + y ∧ b = 10 * x + z → a * b = 100 * x^2 + 10 * x * (y + z) + y * z",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_61891"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (x-20)*(x+15) = 0 ↔ x = 20 ∨ x = -15",
+   "source": "(x-20)*(x+15) = 0 ↔ x = 20 ∨ x = -15",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_64395"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + 6*x - 16 = 0 ↔ x = -8 ∨ x = 2",
+   "source": "x^2 + 6*x - 16 = 0 ↔ x = -8 ∨ x = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_6839"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 2 * x ^ 2 + 3 * x - 5 = 0 ↔ x = 1 ∨ x = -5 / 2",
+   "source": "2 * x ^ 2 + 3 * x - 5 = 0 ↔ x = 1 ∨ x = -5 / 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_69447"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, ¬ ((x^2 - 2)^2 + (y^2 - 2)^2 = (z^2 - 2)^2 + 2)",
+   "source": "¬ ((x^2 - 2)^2 + (y^2 - 2)^2 = (z^2 - 2)^2 + 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_71232"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^3 + b^3 + c^3 = (a + b + c)^3 ↔ a + b = 0 ∨ b + c = 0 ∨ c + a = 0",
+   "source": "a^3 + b^3 + c^3 = (a + b + c)^3 ↔ a + b = 0 ∨ b + c = 0 ∨ c + a = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_72946"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x^3 + y^3 = 2 → x + y ≤ 2",
+   "source": "∀ x y : ℝ, x^3 + y^3 = 2 → x + y ≤ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_74718"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 - a) * (1 - b) * (1 - c) ≥ 0 ↔ 1 + a * b + b * c + c * a ≥ a + b + c + a * b * c",
+   "source": "∀ a b c : ℝ, (1 - a) * (1 - b) * (1 - c) ≥ 0 ↔ 1 + a * b + b * c + c * a ≥ a + b + c + a * b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_75079"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a ≥ 0 ∧ b ≥ 0 ∧ c ≥ 0 ∧ a^2 + b^2 + c^2 + 3 ≤ 2 * (a * b + b * c + a * c) → 4 * a * b * c ≥ 1 + a + b + c",
+   "source": "∀ a b c : ℝ, a ≥ 0 ∧ b ≥ 0 ∧ c ≥ 0 ∧ a^2 + b^2 + c^2 + 3 ≤ 2 * (a * b + b * c + a * c) → 4 * a * b * c ≥ 1 + a + b + c",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_75197"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (3^2 + 4^2 - 2*3*4*x = 5^2 + 6^2 - 2*5*6*(-x)) ↔ x = -3/7",
+   "source": "(3^2 + 4^2 - 2*3*4*x = 5^2 + 6^2 - 2*5*6*(-x)) ↔ x = -3/7",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_8050"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, ¬(a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a)",
+   "source": "¬(a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_81434"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a + b) * (b + c) * (c + a) = 1 → a * b + b * c + c * a ≤ 3 / 4",
+   "source": "(a + b) * (b + c) * (c + a) = 1 → a * b + b * c + c * a ≤ 3 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_81847"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (2 - a) / (2 + a) + (2 - b) / (2 + b) + (2 - c) / (2 + c) ≥ 15 / 7 ↔ 4 / (2 + a) + 4 / (2 + b) + 4 / (2 + c) ≥ 36 / 7",
+   "source": "(2 - a) / (2 + a) + (2 - b) / (2 + b) + (2 - c) / (2 + c) ≥ 15 / 7 ↔ 4 / (2 + a) + 4 / (2 + b) + 4 / (2 + c) ≥ 36 / 7",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_8898"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a > 0 ∧ b > 0 → (1 / a + 2 / (a + b) : Rat) ≤ 9 / 8 * (1 / a + 1 / b)",
+   "source": "∀ a b : ℝ, a > 0 ∧ b > 0 → (1 / a + 2 / (a + b) : ℝ) ≤ 9 / 8 * (1 / a + 1 / b)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_9700"
+  }
+ ],
+ "gate": "B0d — the inverse direction, unpreviewed and the real probe",
+ "no_hand_picking": "The pool is every oracle-eligible statement with nothing removed, including the six the lexicon refuses. Excluding them would be selecting for renderability.",
+ "pool_size": 2319,
+ "registered": "2026-08-24",
+ "rule": [
+  "pool = every oracle-eligible statement id in data/foreign_voice/eligibility_preview.json, sorted ascending;",
+  "seed = int(sha256_lf(data/foreign_voice/lexicon.json)[:16], 16);",
+  "random.Random(seed).shuffle(pool); take the first 100; return them sorted."
+ ],
+ "sample_size": 100,
+ "seed_source": "data/foreign_voice/lexicon.json",
+ "seed_source_digest": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+ "seed_why": "v0.18's C-R1 idiom: a seed someone chose would be a knob; the table under test is not. The draw is a function of the artifact being probed, so nobody can shop for an easy hundred.",
+ "selection_id": "foreign_voice.b0d_ids.v1",
+ "statement_ids": [
+  "leanworkbook.skel.lean_workbook_10049",
+  "leanworkbook.skel.lean_workbook_10307",
+  "leanworkbook.skel.lean_workbook_1046",
+  "leanworkbook.skel.lean_workbook_10917",
+  "leanworkbook.skel.lean_workbook_11792",
+  "leanworkbook.skel.lean_workbook_12009",
+  "leanworkbook.skel.lean_workbook_12549",
+  "leanworkbook.skel.lean_workbook_15200",
+  "leanworkbook.skel.lean_workbook_15618",
+  "leanworkbook.skel.lean_workbook_17167",
+  "leanworkbook.skel.lean_workbook_17366",
+  "leanworkbook.skel.lean_workbook_20627",
+  "leanworkbook.skel.lean_workbook_20940",
+  "leanworkbook.skel.lean_workbook_2117",
+  "leanworkbook.skel.lean_workbook_21364",
+  "leanworkbook.skel.lean_workbook_22189",
+  "leanworkbook.skel.lean_workbook_23933",
+  "leanworkbook.skel.lean_workbook_24181",
+  "leanworkbook.skel.lean_workbook_26914",
+  "leanworkbook.skel.lean_workbook_27453",
+  "leanworkbook.skel.lean_workbook_2931",
+  "leanworkbook.skel.lean_workbook_29569",
+  "leanworkbook.skel.lean_workbook_3051",
+  "leanworkbook.skel.lean_workbook_32385",
+  "leanworkbook.skel.lean_workbook_32550",
+  "leanworkbook.skel.lean_workbook_32774",
+  "leanworkbook.skel.lean_workbook_33665",
+  "leanworkbook.skel.lean_workbook_33811",
+  "leanworkbook.skel.lean_workbook_3422",
+  "leanworkbook.skel.lean_workbook_34751",
+  "leanworkbook.skel.lean_workbook_35622",
+  "leanworkbook.skel.lean_workbook_35869",
+  "leanworkbook.skel.lean_workbook_35927",
+  "leanworkbook.skel.lean_workbook_3710",
+  "leanworkbook.skel.lean_workbook_37520",
+  "leanworkbook.skel.lean_workbook_38419",
+  "leanworkbook.skel.lean_workbook_39257",
+  "leanworkbook.skel.lean_workbook_41330",
+  "leanworkbook.skel.lean_workbook_41668",
+  "leanworkbook.skel.lean_workbook_42614",
+  "leanworkbook.skel.lean_workbook_43025",
+  "leanworkbook.skel.lean_workbook_43739",
+  "leanworkbook.skel.lean_workbook_44108",
+  "leanworkbook.skel.lean_workbook_47146",
+  "leanworkbook.skel.lean_workbook_47444",
+  "leanworkbook.skel.lean_workbook_47558",
+  "leanworkbook.skel.lean_workbook_50974",
+  "leanworkbook.skel.lean_workbook_52662",
+  "leanworkbook.skel.lean_workbook_54132",
+  "leanworkbook.skel.lean_workbook_54220",
+  "leanworkbook.skel.lean_workbook_54614",
+  "leanworkbook.skel.lean_workbook_54798",
+  "leanworkbook.skel.lean_workbook_55116",
+  "leanworkbook.skel.lean_workbook_55971",
+  "leanworkbook.skel.lean_workbook_6302",
+  "leanworkbook.skel.lean_workbook_7476",
+  "leanworkbook.skel.lean_workbook_7569",
+  "leanworkbook.skel.lean_workbook_7830",
+  "leanworkbook.skel.lean_workbook_811",
+  "leanworkbook.skel.lean_workbook_9185",
+  "leanworkbook.skel.lean_workbook_plus_11894",
+  "leanworkbook.skel.lean_workbook_plus_13514",
+  "leanworkbook.skel.lean_workbook_plus_15488",
+  "leanworkbook.skel.lean_workbook_plus_16365",
+  "leanworkbook.skel.lean_workbook_plus_17785",
+  "leanworkbook.skel.lean_workbook_plus_20385",
+  "leanworkbook.skel.lean_workbook_plus_22008",
+  "leanworkbook.skel.lean_workbook_plus_25806",
+  "leanworkbook.skel.lean_workbook_plus_2657",
+  "leanworkbook.skel.lean_workbook_plus_33270",
+  "leanworkbook.skel.lean_workbook_plus_34264",
+  "leanworkbook.skel.lean_workbook_plus_34400",
+  "leanworkbook.skel.lean_workbook_plus_37283",
+  "leanworkbook.skel.lean_workbook_plus_38747",
+  "leanworkbook.skel.lean_workbook_plus_40203",
+  "leanworkbook.skel.lean_workbook_plus_41053",
+  "leanworkbook.skel.lean_workbook_plus_4235",
+  "leanworkbook.skel.lean_workbook_plus_45208",
+  "leanworkbook.skel.lean_workbook_plus_45452",
+  "leanworkbook.skel.lean_workbook_plus_4697",
+  "leanworkbook.skel.lean_workbook_plus_48321",
+  "leanworkbook.skel.lean_workbook_plus_49610",
+  "leanworkbook.skel.lean_workbook_plus_50206",
+  "leanworkbook.skel.lean_workbook_plus_56938",
+  "leanworkbook.skel.lean_workbook_plus_59333",
+  "leanworkbook.skel.lean_workbook_plus_60997",
+  "leanworkbook.skel.lean_workbook_plus_61891",
+  "leanworkbook.skel.lean_workbook_plus_64395",
+  "leanworkbook.skel.lean_workbook_plus_6839",
+  "leanworkbook.skel.lean_workbook_plus_69447",
+  "leanworkbook.skel.lean_workbook_plus_71232",
+  "leanworkbook.skel.lean_workbook_plus_72946",
+  "leanworkbook.skel.lean_workbook_plus_74718",
+  "leanworkbook.skel.lean_workbook_plus_75079",
+  "leanworkbook.skel.lean_workbook_plus_75197",
+  "leanworkbook.skel.lean_workbook_plus_8050",
+  "leanworkbook.skel.lean_workbook_plus_81434",
+  "leanworkbook.skel.lean_workbook_plus_81847",
+  "leanworkbook.skel.lean_workbook_plus_8898",
+  "leanworkbook.skel.lean_workbook_plus_9700"
+ ]
+}

@@ -4,16 +4,13 @@
   "design": "docs/DESIGN-foreign-voice.md",
   "roadmap": "docs/ROADMAP-v0.19.md",
   "control": "B7 (the oracle is not the renderer, and the parser is not either)",
-
   "what_this_records": [
     "DESIGN-foreign-voice §6 B7, verbatim: \"Recorded in the preregistration commit, BEFORE `Serialize.lean` is written and BEFORE any hand-rendering exists: the lexicon digest, the inverse-table digest, rule R's digest, and `scripts/match_signatures.py` at LF sha256 `65fead2f47b6a2ce…` — the frozen parser, in the freeze list because B0a's split and C-V2's contrast are both computed with it and a parser that moves mid-cycle would move the denominator under the claim. The serializer's digest is recorded beside them (C-R3's discipline, imported). If making the oracle agree requires editing the lexicon, the interpretation, or the parser, the independence claim is void and the change needs its own review naming the reason.\"",
     "This file is that record. It is written in the preregistration commit, BEFORE prover/lean/normalizer/Serialize.lean exists, which is why the serializer rows below are in `pending` rather than absent.",
     "§6 B0d extends the ordering: the lexicon digest and the inverse-table digest are frozen BEFORE the hand-renderings exist; the 100 ids follow from that digest by a committed rule; and the 100 hand-renderings are committed verbatim as a sealed prediction. The ordering is itself the record, so each commit's additions carry their own `recorded` date.",
     "tests/test_foreign_voice_lexicon.py asserts these digests against the working tree. That test is the thing that goes red if the parser, the interpretation or the table is edited to make the oracle agree."
   ],
-
   "digest_algorithm": "sha256 over file bytes with CRLF normalized to LF (scripts/report_provenance.sha256_lf_file)",
-
   "there_is_no_separate_inverse_table": [
     "B7 names four artifacts and one of them, the `inverse-table digest`, does",
     "not exist as its own file — deliberately, and this is where the record says",
@@ -29,7 +26,6 @@
     "below discharges both of B7's rows. The reading is recorded here, in the",
     "preregistration commit, and not argued for later."
   ],
-
   "frozen": [
     {
       "path": "scripts/match_signatures.py",
@@ -144,9 +140,39 @@
         "The committed output of the probe above, so B0d's id selection is reproducible WITHOUT re-running the pinned binary, and so a reader can recompute every number in the lexicon's `coverage` block and in the register.",
         "It is a PREVIEW recorded in the preregistration commit, not the registered run. B0a and B0b+B0c remain the registered probes and the registered run recomputes them."
       ]
+    },
+    {
+      "path": "scripts/foreign_voice_select.py",
+      "role": "b0d_selection_rule",
+      "sha256_lf": "085f15bcd1bda5890bb3a8594896205cd3d2b90dbed4a5841fba08ce99dec7dc",
+      "recorded": "2026-08-24",
+      "why": [
+        "B0d's `committed deterministic rule seeded from the lexicon digest`. The pool is every oracle-eligible id sorted, the seed is int(sha256_lf(lexicon.json)[:16], 16), the draw is a seeded shuffle's first hundred returned sorted. v0.18's C-R1 idiom: a seed someone chose would be a knob; the table under test is not.",
+        "`random.Random.shuffle` is deterministic for a seed on a given CPython and not by language guarantee — the same caveat v0.18's derangement lives under. So the draw is committed as a file AND re-derived by tests/test_foreign_voice_b0d.py. If a future interpreter moves the shuffle, that test goes red and the change is a visible event with a dated amendment, rather than a sealed prediction quietly pointing at a different hundred."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/b0d_ids.json",
+      "role": "b0d_id_list",
+      "sha256_lf": "f226c6b1d0990bced0cf3cc9f51aca9a82d16b6ebb0630076426bea378ba59df",
+      "recorded": "2026-08-24",
+      "why": [
+        "The hundred the rule drew, against the CORRECTED lexicon digest (3a3459d6...). No draw was ever committed against the superseded digest; see `corrections` entry 1.",
+        "Nothing is removed from the pool, including the six statements the lexicon refuses — four carrying a coercion arrow, one a 433-digit literal, one the non-canonical decimals 23.50 / 39.50. None of the six was drawn; had one been, its sealed entry would be a refusal with its reason and the implementation would have had to reproduce the refusal."
+      ]
+    },
+    {
+      "path": "data/foreign_voice/b0d_sealed_renderings.json",
+      "role": "b0d_sealed_prediction",
+      "sha256_lf": "72d620eceb234ef4cfcb0fc9a0dbab1aeeecc2be6a289924862066cd85b72e4b",
+      "recorded": "2026-08-24",
+      "why": [
+        "The 100 hand-renderings, committed verbatim as the sealed prediction scripts/foreign_voice.py must later reproduce BYTE-IDENTICALLY, with every divergence reported in the run artifact and never repaired.",
+        "Authored against R(s) rather than against the corpus source, because with autoImplicit off the surface must carry an explicit binder preamble (Correction 3), so the sentence a reader sees is the sentence for the statement under the declared interpretation.",
+        "What was mechanically checked is stated in the file rather than implied: every word of every surface traces to a lexicon row or the registered numeral pair (v0.18's R2 sweep). The TOKEN SEQUENCE was not mechanically checked, because checking it means writing the literal inverse and the inverse is the implementation. Divergences at B0d time may therefore be authoring slips as well as grammar disagreements, and the run artifact must classify them rather than count them."
+      ]
     }
   ],
-
   "pending": [
     {
       "path": "prover/lean/normalizer/Serialize.lean",
@@ -161,25 +187,12 @@
       "why": "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's settings, obtains the elaborated-term serialization, returns its digest. Frozen in the B-P commit."
     },
     {
-      "path": "data/foreign_voice/b0d_ids.json",
-      "role": "b0d_id_list",
-      "sha256_lf": "pending",
-      "why": "The 100 statement ids drawn by the committed deterministic rule seeded from the lexicon digest above. Frozen in the B0d commit."
-    },
-    {
-      "path": "data/foreign_voice/b0d_sealed_renderings.json",
-      "role": "b0d_sealed_prediction",
-      "sha256_lf": "pending",
-      "why": "The 100 hand-renderings, committed VERBATIM as a sealed prediction the implementation must later reproduce byte-identically. Divergences are REPORTED in the run artifact, never repaired. Frozen in the B0d commit."
-    },
-    {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",
       "sha256_lf": "pending",
       "why": "B4: the register is committed with its blocked_set_digest BEFORE anything is rendered. A post-freeze entry is permitted only as a dated amendment commit that re-runs B1 from scratch; an amendment chased AFTER reading B1 is §8's stop."
     }
   ],
-
   "b0_preview_2026_08_24": {
     "note": [
       "Recomputed by scripts/foreign_voice_eligibility.py against the committed",
@@ -231,7 +244,6 @@
       }
     }
   },
-
   "prop_branch": {
     "decision": "branch_ii",
     "decided_at": "2026-08-24",
@@ -240,13 +252,15 @@
     "measured_before_deciding": {
       "denominator": 75,
       "branch_i_would_reach": 13,
-      "by_corpus": {"logic": 12, "narrative": 1},
+      "by_corpus": {
+        "logic": 12,
+        "narrative": 1
+      },
       "covered_share_lean_workbook_with_branch_i": 0.9931,
       "covered_share_lean_workbook_as_registered": 0.9987
     },
     "why": "The design prefers branch (i) on one stated ground — that it is 'the only route this design has to a covered set that is not almost entirely one corpus'. Measured before the branch was chosen, a deliberately generous Prop interpretation reaches 13 of 75 and moves the covered set from 99.87% one corpus to 99.31% one corpus. The ground does not survive the measurement, so the preference does not either. Full reasoning, including what the other 62 would actually require, is in rule_r.json."
   },
-
   "ordering_this_commit_establishes": [
     "1. the design (committed on main; its dated corrections are part of the preregistration record);",
     "2. THIS COMMIT — rule R, the lexicon, the frozen parser digest, the B0 preview (B7);",
@@ -257,7 +271,6 @@
     "7. one registered run, experiments/foreign_voice_rate.json.",
     "The design's §10 puts B-P at step 4 of the preregistration order and ROADMAP-v0.19 item 1 puts it at step 2 of the implementation order ('B-P first'). Both are satisfied: B-P is discharged before B0 FREEZES as the registered probe, and after the preregistration record that B7 requires to predate it. Nothing downstream of step 4 is written before step 4 lands."
   ],
-
   "corrections": [
     {
       "dated": "2026-08-24",

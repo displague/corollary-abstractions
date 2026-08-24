@@ -1,0 +1,877 @@
+{
+ "authoring": [
+  "Hand-authored, one statement at a time, using only the committed lexicon",
+  "table and the registered numeral pair — the two sources the design permits.",
+  "No renderer was written and none was run: scripts/foreign_voice.py does not",
+  "exist at this commit.",
+  "What WAS mechanically checked is stated so the seal's strength is not",
+  "overstated: tests/test_foreign_voice_b0d.py sweeps every word of every",
+  "surface and asserts it is a lexicon phrase word or a numeral word (v0.18's",
+  "R2 sweep, imported). The TOKEN SEQUENCE was not mechanically checked,",
+  "because checking it means writing the inverse and the inverse is the",
+  "implementation. So divergences at B0d time may be authoring slips as well as",
+  "grammar disagreements, and the run artifact must classify them rather than",
+  "count them."
+ ],
+ "count": 100,
+ "design": "docs/DESIGN-foreign-voice.md",
+ "gate": "B0d — the inverse direction, unpreviewed and the real probe",
+ "id_selection_digest_source": "data/foreign_voice/lexicon.json",
+ "id_selection_seed": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+ "id_source": "data/foreign_voice/b0d_ids.json",
+ "interpretation": "data/foreign_voice/rule_r.json",
+ "lexicon": "data/foreign_voice/lexicon.json",
+ "prediction": [
+  "All 100 are predicted to RENDER; none is predicted to refuse. The draw took",
+  "no unrenderable statement — the six the lexicon refuses (four coercion, one",
+  "433-digit literal, one non-canonical decimal) are 6 of the 2,319-statement",
+  "pool and none was drawn. Had one been drawn its sealed entry would be a",
+  "refusal with its reason, and the implementation would have had to reproduce",
+  "the refusal.",
+  "B0d's floor is that at least 90 of these 100, inverted, ELABORATE at all.",
+  "Identity is B1's business, not B0d's."
+ ],
+ "registered": "2026-08-24",
+ "renderings": [
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ ∃ x : Rat, x^4 + x^3 - x + 1 = 0",
+   "predicted": "rendered",
+   "source": "¬ ∃ x : ℝ, x^4 + x^3 - x + 1 = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_10049",
+   "surface": "it fails that for some variable zero of type rational it holds that variable zero to the power of four plus variable zero to the power of three minus variable zero plus one equals zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k x y z : Rat, (x^2 + y^2 + z^2 + k * x * y * z) ≤ 1 + k/27 ∨ (x^2 + y^2 + z^2 + k * x * y * z) ≥ 1 + k/27",
+   "predicted": "rendered",
+   "source": "(x^2 + y^2 + z^2 + k * x * y * z) ≤ 1 + k/27 ∨ (x^2 + y^2 + z^2 + k * x * y * z) ≥ 1 + k/27",
+   "statement_id": "leanworkbook.skel.lean_workbook_10307",
+   "surface": "for every variable zero variable one variable two variable three of type rational it holds that the quantity variable one to the power of two plus variable two to the power of two plus variable three to the power of two plus variable zero times variable one times variable two times variable three end quantity is at most one plus variable zero divided by twenty-seven or else the quantity variable one to the power of two plus variable two to the power of two plus variable three to the power of two plus variable zero times variable one times variable two times variable three end quantity is at least one plus variable zero divided by twenty-seven"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (2 * a ^ 2 - c ^ 2) ^ 2 + (2 * b ^ 2 - c ^ 2) ^ 2 ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (2 * a ^ 2 - c ^ 2) ^ 2 + (2 * b ^ 2 - c ^ 2) ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_1046",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity two times variable zero to the power of two minus variable two to the power of two end quantity to the power of two plus the quantity two times variable one to the power of two minus variable two to the power of two end quantity to the power of two is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x = 2 ∨ x = -2 ∨ y = 2 ∨ y = -2",
+   "predicted": "rendered",
+   "source": "x = 2 ∨ x = -2 ∨ y = 2 ∨ y = -2",
+   "statement_id": "leanworkbook.skel.lean_workbook_10917",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero equals two or else variable zero equals minus two or else variable one equals two or else variable one equals minus two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a^2 + b^2 ≥ 2*a*b",
+   "predicted": "rendered",
+   "source": "∀ a b : ℝ, a^2 + b^2 ≥ 2*a*b",
+   "statement_id": "leanworkbook.skel.lean_workbook_11792",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of two plus variable one to the power of two is at least two times variable zero times variable one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x ≠ 1 → (x^2 + x + 1) / (x - 1) ^ 2 ≥ 1 / 4",
+   "predicted": "rendered",
+   "source": "∀ x : ℝ, x ≠ 1 → (x^2 + x + 1) / (x - 1) ^ 2 ≥ 1 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_12009",
+   "surface": "for every variable zero of type rational it holds that variable zero differs from one implies that the quantity variable zero to the power of two plus variable zero plus one end quantity divided by the quantity variable zero minus one end quantity to the power of two is at least one divided by four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b + c = 1 → 9 / 2 * (2 - a) * (2 - b) * (2 - c) ≥ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ∧ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ≥ 104 / 25 * (2 - a) * (2 - b) * (2 - c)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b + c = 1 → 9 / 2 * (2 - a) * (2 - b) * (2 - c) ≥ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ∧ (3 - a) * (3 - b) * (3 - c) + (1 - a) * (1 - b) * (1 - c) ≥ 104 / 25 * (2 - a) * (2 - b) * (2 - c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_12549",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero and also variable zero plus variable one plus variable two equals one implies that nine divided by two times the quantity two minus variable zero end quantity times the quantity two minus variable one end quantity times the quantity two minus variable two end quantity is at least the quantity three minus variable zero end quantity times the quantity three minus variable one end quantity times the quantity three minus variable two end quantity plus the quantity one minus variable zero end quantity times the quantity one minus variable one end quantity times the quantity one minus variable two end quantity and also the quantity three minus variable zero end quantity times the quantity three minus variable one end quantity times the quantity three minus variable two end quantity plus the quantity one minus variable zero end quantity times the quantity one minus variable one end quantity times the quantity one minus variable two end quantity is at least one hundred four divided by twenty-five times the quantity two minus variable zero end quantity times the quantity two minus variable one end quantity times the quantity two minus variable two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ d : Rat, d^2 = 2 * d ↔ d = 0 ∨ d = 2",
+   "predicted": "rendered",
+   "source": "d^2 = 2 * d ↔ d = 0 ∨ d = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_15200",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of two equals two times variable zero exactly when variable zero equals zero or else variable zero equals two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 ≥ 2*a*b ∧ b^2 + c^2 ≥ 2*b*c ∧ a^2 + c^2 ≥ 2*a*c",
+   "predicted": "rendered",
+   "source": "a^2 + b^2 ≥ 2*a*b ∧ b^2 + c^2 ≥ 2*b*c ∧ a^2 + c^2 ≥ 2*a*c",
+   "statement_id": "leanworkbook.skel.lean_workbook_15618",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of two plus variable one to the power of two is at least two times variable zero times variable one and also variable one to the power of two plus variable two to the power of two is at least two times variable one times variable two and also variable zero to the power of two plus variable two to the power of two is at least two times variable zero times variable two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 2 * x ^ 2 + 8 * x ≤ -6 ↔ -3 ≤ x ∧ x ≤ -1",
+   "predicted": "rendered",
+   "source": "2 * x ^ 2 + 8 * x ≤ -6 ↔ -3 ≤ x ∧ x ≤ -1",
+   "statement_id": "leanworkbook.skel.lean_workbook_17167",
+   "surface": "for every variable zero of type rational it holds that two times variable zero to the power of two plus eight times variable zero is at most minus six exactly when minus three is at most variable zero and also variable zero is at most minus one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x^2 + y^2 ≥ 2 * x * y",
+   "predicted": "rendered",
+   "source": "∀ x y : ℝ, x^2 + y^2 ≥ 2 * x * y",
+   "statement_id": "leanworkbook.skel.lean_workbook_17366",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of two plus variable one to the power of two is at least two times variable zero times variable one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a = 20 ∧ b = -16) ∨ (a = 10 ∧ b = -6) ∨ (a = 50 ∧ b = 14) ∨ (a = 40 ∧ b = 24)",
+   "predicted": "rendered",
+   "source": "(a = 20 ∧ b = -16) ∨ (a = 10 ∧ b = -6) ∨ (a = 50 ∧ b = 14) ∨ (a = 40 ∧ b = 24)",
+   "statement_id": "leanworkbook.skel.lean_workbook_20627",
+   "surface": "for every variable zero variable one of type rational it holds that the quantity variable zero equals twenty and also variable one equals minus sixteen end quantity or else the quantity variable zero equals ten and also variable one equals minus six end quantity or else the quantity variable zero equals fifty and also variable one equals fourteen end quantity or else the quantity variable zero equals forty and also variable one equals twenty-four end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k : Int, (k - 1) * k * (k + 1) * (k + 2) = (k ^ 3 - k) * (k + 2)",
+   "predicted": "rendered",
+   "source": "∀ k : ℤ, (k - 1) * k * (k + 1) * (k + 2) = (k ^ 3 - k) * (k + 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_20940",
+   "surface": "for every variable zero of type integer it holds that the quantity variable zero minus one end quantity times variable zero times the quantity variable zero plus one end quantity times the quantity variable zero plus two end quantity equals the quantity variable zero to the power of three minus variable zero end quantity times the quantity variable zero plus two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 0 ≤ x ∧ x ≤ 4",
+   "predicted": "rendered",
+   "source": "0 ≤ x ∧ x ≤ 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_2117",
+   "surface": "for every variable zero of type rational it holds that zero is at most variable zero and also variable zero is at most four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, 9 * (a ^ 2 + 3 * b ^ 2 + 5 * c ^ 2) ≥ (a + 3 * b + 5 * c) ^ 2",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, 9 * (a ^ 2 + 3 * b ^ 2 + 5 * c ^ 2) ≥ (a + 3 * b + 5 * c) ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_21364",
+   "surface": "for every variable zero variable one variable two of type rational it holds that nine times the quantity variable zero to the power of two plus three times variable one to the power of two plus five times variable two to the power of two end quantity is at least the quantity variable zero plus three times variable one plus five times variable two end quantity to the power of two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ b c : Rat, b^2 - b*c + c^2 ≥ (b + c)^2 / 4",
+   "predicted": "rendered",
+   "source": "∀ b c : ℝ, b^2 - b*c + c^2 ≥ (b + c)^2 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_22189",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of two minus variable zero times variable one plus variable one to the power of two is at least the quantity variable zero plus variable one end quantity to the power of two divided by four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a^8 + b^8 - a^6 * b^2 - b^6 * a^2) ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ a b : ℝ, (a^8 + b^8 - a^6 * b^2 - b^6 * a^2) ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_23933",
+   "surface": "for every variable zero variable one of type rational it holds that the quantity variable zero to the power of eight plus variable one to the power of eight minus variable zero to the power of six times variable one to the power of two minus variable one to the power of six times variable zero to the power of two end quantity is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a * b * c ≤ 1 ∧ a * b + b * c + c * a ≤ 3",
+   "predicted": "rendered",
+   "source": "a * b * c ≤ 1 ∧ a * b + b * c + c * a ≤ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_24181",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero times variable one times variable two is at most one and also variable zero times variable one plus variable one times variable two plus variable two times variable zero is at most three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a^2 + b^2 + c^2)^2 ≥ (a * (a - b + c) + b * (b - c + a) + c * (c - a + b))^2",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (a^2 + b^2 + c^2)^2 ≥ (a * (a - b + c) + b * (b - c + a) + c * (c - a + b))^2",
+   "statement_id": "leanworkbook.skel.lean_workbook_26914",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero to the power of two plus variable one to the power of two plus variable two to the power of two end quantity to the power of two is at least the quantity variable zero times the quantity variable zero minus variable one plus variable two end quantity plus variable one times the quantity variable one minus variable two plus variable zero end quantity plus variable two times the quantity variable two minus variable zero plus variable one end quantity end quantity to the power of two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a → a / (a + b) + b / (b + c) + c / (c + a) < 2",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a → a / (a + b) + b / (b + c) + c / (c + a) < 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_27453",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero and also variable zero plus variable one is greater than variable two and also variable zero plus variable two is greater than variable one and also variable one plus variable two is greater than variable zero implies that variable zero divided by the quantity variable zero plus variable one end quantity plus variable one divided by the quantity variable one plus variable two end quantity plus variable two divided by the quantity variable two plus variable zero end quantity is less than two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a / (b + 2 * c) + b / (c + 2 * a) + c / (a + 2 * b) ≥ 1) ∧ (a = b ∧ b = c → a = b ∧ b = c)",
+   "predicted": "rendered",
+   "source": "(a / (b + 2 * c) + b / (c + 2 * a) + c / (a + 2 * b) ≥ 1) ∧ (a = b ∧ b = c → a = b ∧ b = c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_2931",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero divided by the quantity variable one plus two times variable two end quantity plus variable one divided by the quantity variable two plus two times variable zero end quantity plus variable two divided by the quantity variable zero plus two times variable one end quantity is at least one end quantity and also the quantity variable zero equals variable one and also variable one equals variable two implies that variable zero equals variable one and also variable one equals variable two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, 0 ≤ a ∧ a ≤ 2 → 0 ≤ (-2 * a + 4) / (a ^ 2 + 1)",
+   "predicted": "rendered",
+   "source": "∀ a : ℝ, 0 ≤ a ∧ a ≤ 2 → 0 ≤ (-2 * a + 4) / (a ^ 2 + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_29569",
+   "surface": "for every variable zero of type rational it holds that zero is at most variable zero and also variable zero is at most two implies that zero is at most the quantity minus two times variable zero plus four end quantity divided by the quantity variable zero to the power of two plus one end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (36:Rat) / (x ^ 3 + 1) ≤ 16 * x ^ 2 - 59 * x + 61",
+   "predicted": "rendered",
+   "source": "(36:ℝ) / (x ^ 3 + 1) ≤ 16 * x ^ 2 - 59 * x + 61",
+   "statement_id": "leanworkbook.skel.lean_workbook_3051",
+   "surface": "for every variable zero of type rational it holds that the quantity thirty-six of type rational end quantity divided by the quantity variable zero to the power of three plus one end quantity is at most sixteen times variable zero to the power of two minus fifty-nine times variable zero plus sixty-one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (4 * (a ^ 2 + b ^ 2 + c ^ 2) ^ 3) ≥ (3 * (a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c) ^ 2)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (4 * (a ^ 2 + b ^ 2 + c ^ 2) ^ 3) ≥ (3 * (a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c) ^ 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_32385",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity four times the quantity variable zero to the power of two plus variable one to the power of two plus variable two to the power of two end quantity to the power of three end quantity is at least the quantity three times the quantity variable zero to the power of three plus variable one to the power of three plus variable two to the power of three plus three times variable zero times variable one times variable two end quantity to the power of two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ n : Rat, n = 0 ∨ n = 1 ∨ n = 2",
+   "predicted": "rendered",
+   "source": "n = 0 ∨ n = 1 ∨ n = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_32550",
+   "surface": "for every variable zero of type rational it holds that variable zero equals zero or else variable zero equals one or else variable zero equals two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x > 0 ∧ y > 0 ∧ z > 0 → (1 + x * y * z) * (1 / (x * (y + 1)) + 1 / (y * (z + 1)) + 1 / (z * (x + 1))) ≥ 3",
+   "predicted": "rendered",
+   "source": "∀ x y z : ℝ, x > 0 ∧ y > 0 ∧ z > 0 → (1 + x * y * z) * (1 / (x * (y + 1)) + 1 / (y * (z + 1)) + 1 / (z * (x + 1))) ≥ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_32774",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero implies that the quantity one plus variable zero times variable one times variable two end quantity times the quantity one divided by the quantity variable zero times the quantity variable one plus one end quantity end quantity plus one divided by the quantity variable one times the quantity variable two plus one end quantity end quantity plus one divided by the quantity variable two times the quantity variable zero plus one end quantity end quantity end quantity is at least three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 → 9 * (a ^ 3 + b ^ 3 + c ^ 3) ≥ (a + b + c) ^ 3",
+   "predicted": "rendered",
+   "source": "a > 0 ∧ b > 0 ∧ c > 0 → 9 * (a ^ 3 + b ^ 3 + c ^ 3) ≥ (a + b + c) ^ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_33665",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero implies that nine times the quantity variable zero to the power of three plus variable one to the power of three plus variable two to the power of three end quantity is at least the quantity variable zero plus variable one plus variable two end quantity to the power of three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≤ 1 ∧ 1 ≤ a / (b + c + 1) + b / (c + a + 1) + c / (a + b + 1))",
+   "predicted": "rendered",
+   "source": "(1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≤ 1 ∧ 1 ≤ a / (b + c + 1) + b / (c + a + 1) + c / (a + b + 1))",
+   "statement_id": "leanworkbook.skel.lean_workbook_33811",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity one divided by the quantity variable zero plus variable one plus one end quantity plus one divided by the quantity variable one plus variable two plus one end quantity plus one divided by the quantity variable two plus variable zero plus one end quantity is at most one and also one is at most variable zero divided by the quantity variable one plus variable two plus one end quantity plus variable one divided by the quantity variable two plus variable zero plus one end quantity plus variable two divided by the quantity variable zero plus variable one plus one end quantity end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (5*x-6-x^2)/2 ≥ 0 ↔ 2 ≤ x ∧ x ≤ 3",
+   "predicted": "rendered",
+   "source": "(5*x-6-x^2)/2 ≥ 0 ↔ 2 ≤ x ∧ x ≤ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_3422",
+   "surface": "for every variable zero of type rational it holds that the quantity five times variable zero minus six minus variable zero to the power of two end quantity divided by two is at least zero exactly when two is at most variable zero and also variable zero is at most three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, (x^2 * y^2 + y^2 * z^2) / 2 ≥ x * y^2 * z ∧ (y^2 * z^2 + z^2 * x^2) / 2 ≥ x * y * z^2 ∧ (x^2 * y^2 + z^2 * x^2) / 2 ≥ x^2 * y * z",
+   "predicted": "rendered",
+   "source": "(x^2 * y^2 + y^2 * z^2) / 2 ≥ x * y^2 * z ∧ (y^2 * z^2 + z^2 * x^2) / 2 ≥ x * y * z^2 ∧ (x^2 * y^2 + z^2 * x^2) / 2 ≥ x^2 * y * z",
+   "statement_id": "leanworkbook.skel.lean_workbook_34751",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero to the power of two times variable one to the power of two plus variable one to the power of two times variable two to the power of two end quantity divided by two is at least variable zero times variable one to the power of two times variable two and also the quantity variable one to the power of two times variable two to the power of two plus variable two to the power of two times variable zero to the power of two end quantity divided by two is at least variable zero times variable one times variable two to the power of two and also the quantity variable zero to the power of two times variable one to the power of two plus variable two to the power of two times variable zero to the power of two end quantity divided by two is at least variable zero to the power of two times variable one times variable two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, 1 - x * y ≥ 0 ∧ 1 - x * z ≥ 0 ∧ 1 - y * z ≥ 0",
+   "predicted": "rendered",
+   "source": "1 - x * y ≥ 0 ∧ 1 - x * z ≥ 0 ∧ 1 - y * z ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_35622",
+   "surface": "for every variable zero variable one variable two of type rational it holds that one minus variable zero times variable one is at least zero and also one minus variable zero times variable two is at least zero and also one minus variable one times variable two is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, 2 * (a^3 + b^3 + c^3) < (a + b + c) * (a^2 + b^2 + c^2) ∧ (a + b + c) * (a^2 + b^2 + c^2) ≤ 3 * (a^3 + b^3 + c^3)",
+   "predicted": "rendered",
+   "source": "2 * (a^3 + b^3 + c^3) < (a + b + c) * (a^2 + b^2 + c^2) ∧ (a + b + c) * (a^2 + b^2 + c^2) ≤ 3 * (a^3 + b^3 + c^3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_35869",
+   "surface": "for every variable zero variable one variable two of type rational it holds that two times the quantity variable zero to the power of three plus variable one to the power of three plus variable two to the power of three end quantity is less than the quantity variable zero plus variable one plus variable two end quantity times the quantity variable zero to the power of two plus variable one to the power of two plus variable two to the power of two end quantity and also the quantity variable zero plus variable one plus variable two end quantity times the quantity variable zero to the power of two plus variable one to the power of two plus variable two to the power of two end quantity is at most three times the quantity variable zero to the power of three plus variable one to the power of three plus variable two to the power of three end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d : Rat, a + b + c + d = 0 → a^3 + b^3 + c^3 + d^3 = 3 * (a * b * c + b * c * d + c * d * a + d * a * b)",
+   "predicted": "rendered",
+   "source": "∀ a b c d : ℝ, a + b + c + d = 0 → a^3 + b^3 + c^3 + d^3 = 3 * (a * b * c + b * c * d + c * d * a + d * a * b)",
+   "statement_id": "leanworkbook.skel.lean_workbook_35927",
+   "surface": "for every variable zero variable one variable two variable three of type rational it holds that variable zero plus variable one plus variable two plus variable three equals zero implies that variable zero to the power of three plus variable one to the power of three plus variable two to the power of three plus variable three to the power of three equals three times the quantity variable zero times variable one times variable two plus variable one times variable two times variable three plus variable two times variable three times variable zero plus variable three times variable zero times variable one end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a + b + c > 0 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a / (c + a) - 1 + b / (a + b) - 1 + c / (b + c) - 1 > 1 - 3)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (a + b + c > 0 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a / (c + a) - 1 + b / (a + b) - 1 + c / (b + c) - 1 > 1 - 3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_3710",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero plus variable one plus variable two is greater than zero and also variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero implies that variable zero divided by the quantity variable two plus variable zero end quantity minus one plus variable one divided by the quantity variable zero plus variable one end quantity minus one plus variable two divided by the quantity variable one plus variable two end quantity minus one is greater than one minus three end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a > 0 ∧ b > 0 ∧ c > 0 → a^2 + b^2 + c^2 + 2 * a * b * c + 3 ≥ (1 + a) * (1 + b) * (1 + c)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a > 0 ∧ b > 0 ∧ c > 0 → a^2 + b^2 + c^2 + 2 * a * b * c + 3 ≥ (1 + a) * (1 + b) * (1 + c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_37520",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero implies that variable zero to the power of two plus variable one to the power of two plus variable two to the power of two plus two times variable zero times variable one times variable two plus three is at least the quantity one plus variable zero end quantity times the quantity one plus variable one end quantity times the quantity one plus variable two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "2^10 = 1024 → 2^20 = 1024^2",
+   "predicted": "rendered",
+   "source": "2^10 = 1024 → 2^20 = 1024^2",
+   "statement_id": "leanworkbook.skel.lean_workbook_38419",
+   "surface": "two to the power of ten equals one thousand twenty-four implies that two to the power of twenty equals one thousand twenty-four to the power of two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ x y : Int, x^2 + 4 = y^5",
+   "predicted": "rendered",
+   "source": "¬∃ x y : ℤ, x^2 + 4 = y^5",
+   "statement_id": "leanworkbook.skel.lean_workbook_39257",
+   "surface": "it fails that for some variable zero variable one of type integer it holds that variable zero to the power of two plus four equals variable one to the power of five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a^2 * b + b^2 * c + c^2 * a - 3 * a * b * c)^2 ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (a^2 * b + b^2 * c + c^2 * a - 3 * a * b * c)^2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_41330",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero to the power of two times variable one plus variable one to the power of two times variable two plus variable two to the power of two times variable zero minus three times variable zero times variable one times variable two end quantity to the power of two is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ a b : Int, a^3 + (a + 1)^3 + (a + 2)^3 + (a + 3)^3 + (a + 4)^3 + (a + 5)^3 + (a + 6)^3 = b^4 + (b + 1)^4",
+   "predicted": "rendered",
+   "source": "¬∃ a b : ℤ, a^3 + (a + 1)^3 + (a + 2)^3 + (a + 3)^3 + (a + 4)^3 + (a + 5)^3 + (a + 6)^3 = b^4 + (b + 1)^4",
+   "statement_id": "leanworkbook.skel.lean_workbook_41668",
+   "surface": "it fails that for some variable zero variable one of type integer it holds that variable zero to the power of three plus the quantity variable zero plus one end quantity to the power of three plus the quantity variable zero plus two end quantity to the power of three plus the quantity variable zero plus three end quantity to the power of three plus the quantity variable zero plus four end quantity to the power of three plus the quantity variable zero plus five end quantity to the power of three plus the quantity variable zero plus six end quantity to the power of three equals variable one to the power of four plus the quantity variable one plus one end quantity to the power of four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^4 + b^4 + c^4 ≥ a * b * c * (a + b + c)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a^4 + b^4 + c^4 ≥ a * b * c * (a + b + c)",
+   "statement_id": "leanworkbook.skel.lean_workbook_42614",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of four plus variable one to the power of four plus variable two to the power of four is at least variable zero times variable one times variable two times the quantity variable zero plus variable one plus variable two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ u v w : Rat, (2 * u - v - w) ^ 2 / 4 + 3 * (v - w) ^ 2 / 4 ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ u v w : ℝ, (2 * u - v - w) ^ 2 / 4 + 3 * (v - w) ^ 2 / 4 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_43025",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity two times variable zero minus variable one minus variable two end quantity to the power of two divided by four plus three times the quantity variable one minus variable two end quantity to the power of two divided by four is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a₁ a₂ a₃ : Rat, a₁ * a₂ * a₃ ≤ 1",
+   "predicted": "rendered",
+   "source": "a₁ * a₂ * a₃ ≤ 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_43739",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero times variable one times variable two is at most one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^3 + b^3 + c^3 - 3 * a * b * c = (a + b + c) * (a^2 + b^2 + c^2 - a * b - b * c - c * a)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a^3 + b^3 + c^3 - 3 * a * b * c = (a + b + c) * (a^2 + b^2 + c^2 - a * b - b * c - c * a)",
+   "statement_id": "leanworkbook.skel.lean_workbook_44108",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of three plus variable one to the power of three plus variable two to the power of three minus three times variable zero times variable one times variable two equals the quantity variable zero plus variable one plus variable two end quantity times the quantity variable zero to the power of two plus variable one to the power of two plus variable two to the power of two minus variable zero times variable one minus variable one times variable two minus variable two times variable zero end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a * b + b * c + c * a = 1 ↔ a * (b + c) = 1 - b * c",
+   "predicted": "rendered",
+   "source": "a * b + b * c + c * a = 1 ↔ a * (b + c) = 1 - b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_47146",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero times variable one plus variable one times variable two plus variable two times variable zero equals one exactly when variable zero times the quantity variable one plus variable two end quantity equals one minus variable one times variable two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ (∃ v w : Int, v^2 + w^2 = 2019)",
+   "predicted": "rendered",
+   "source": "¬ (∃ v w : ℤ, v^2 + w^2 = 2019)",
+   "statement_id": "leanworkbook.skel.lean_workbook_47444",
+   "surface": "it fails that the quantity for some variable zero variable one of type integer it holds that variable zero to the power of two plus variable one to the power of two equals two thousand nineteen end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c m_a m_b m_c : Rat, a / m_a = b / m_b ∧ b / m_b = c / m_c → a / m_a = c / m_c",
+   "predicted": "rendered",
+   "source": "a / m_a = b / m_b ∧ b / m_b = c / m_c → a / m_a = c / m_c",
+   "statement_id": "leanworkbook.skel.lean_workbook_47558",
+   "surface": "for every variable zero variable one variable two variable three variable four variable five of type rational it holds that variable zero divided by variable three equals variable one divided by variable four and also variable one divided by variable four equals variable two divided by variable five implies that variable zero divided by variable three equals variable two divided by variable five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 1 + x ^ 2 ≥ 2 * x ↔ (1 - x) ^ 2 ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ x : ℝ, 1 + x ^ 2 ≥ 2 * x ↔ (1 - x) ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_50974",
+   "surface": "for every variable zero of type rational it holds that one plus variable zero to the power of two is at least two times variable zero exactly when the quantity one minus variable zero end quantity to the power of two is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, 12 * (x^3 + 14 * x^2 - 2 * x - (y^3 + 14 * y^2 - 2 * y)) = (x - y) * (3 * (2 * x + y + 14)^2 + (3 * y + 14)^2 - 808)",
+   "predicted": "rendered",
+   "source": "∀ x y : ℝ, 12 * (x^3 + 14 * x^2 - 2 * x - (y^3 + 14 * y^2 - 2 * y)) = (x - y) * (3 * (2 * x + y + 14)^2 + (3 * y + 14)^2 - 808)",
+   "statement_id": "leanworkbook.skel.lean_workbook_52662",
+   "surface": "for every variable zero variable one of type rational it holds that twelve times the quantity variable zero to the power of three plus fourteen times variable zero to the power of two minus two times variable zero minus the quantity variable one to the power of three plus fourteen times variable one to the power of two minus two times variable one end quantity end quantity equals the quantity variable zero minus variable one end quantity times the quantity three times the quantity two times variable zero plus variable one plus fourteen end quantity to the power of two plus the quantity three times variable one plus fourteen end quantity to the power of two minus eight hundred eight end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Int, x^5 + x + 1 = (x^2+x+1)*(x^3-x^2+1)",
+   "predicted": "rendered",
+   "source": "∀ x : ℤ, x^5 + x + 1 = (x^2+x+1)*(x^3-x^2+1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_54132",
+   "surface": "for every variable zero of type integer it holds that variable zero to the power of five plus variable zero plus one equals the quantity variable zero to the power of two plus variable zero plus one end quantity times the quantity variable zero to the power of three minus variable zero to the power of two plus one end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬∃ (x y z : Rat), (x > 0 ∧ y > 0 ∧ z > 0 ∧ x + y + z = 20 ∧ x*y + y*z + z*x = 150)",
+   "predicted": "rendered",
+   "source": "¬∃ (x y z : ℝ), (x > 0 ∧ y > 0 ∧ z > 0 ∧ x + y + z = 20 ∧ x*y + y*z + z*x = 150)",
+   "statement_id": "leanworkbook.skel.lean_workbook_54220",
+   "surface": "it fails that for some the quantity variable zero variable one variable two of type rational end quantity it holds that the quantity variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero and also variable zero plus variable one plus variable two equals twenty and also variable zero times variable one plus variable one times variable two plus variable two times variable zero equals one hundred fifty end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "¬ ∃ x : Rat, x^4 + x^3 + x^2 + x + 1 = 0",
+   "predicted": "rendered",
+   "source": "¬ ∃ x : ℝ, x^4 + x^3 + x^2 + x + 1 = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_54614",
+   "surface": "it fails that for some variable zero of type rational it holds that variable zero to the power of four plus variable zero to the power of three plus variable zero to the power of two plus variable zero plus one equals zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, (a^2 - a + 1) * (b^2 - b + 1) ≥ (a^2 + b^2) / 2 ∧ (a^2 + b^2) / 2 ≥ (a^2 + a*b + b^2) / 3",
+   "predicted": "rendered",
+   "source": "(a^2 - a + 1) * (b^2 - b + 1) ≥ (a^2 + b^2) / 2 ∧ (a^2 + b^2) / 2 ≥ (a^2 + a*b + b^2) / 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_54798",
+   "surface": "for every variable zero variable one of type rational it holds that the quantity variable zero to the power of two minus variable zero plus one end quantity times the quantity variable one to the power of two minus variable one plus one end quantity is at least the quantity variable zero to the power of two plus variable one to the power of two end quantity divided by two and also the quantity variable zero to the power of two plus variable one to the power of two end quantity divided by two is at least the quantity variable zero to the power of two plus variable zero times variable one plus variable one to the power of two end quantity divided by three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x = 25 / 4 + 49 / 12 → 60 * x = 620",
+   "predicted": "rendered",
+   "source": "x = 25 / 4 + 49 / 12 → 60 * x = 620",
+   "statement_id": "leanworkbook.skel.lean_workbook_55116",
+   "surface": "for every variable zero of type rational it holds that variable zero equals twenty-five divided by four plus forty-nine divided by twelve implies that sixty times variable zero equals six hundred twenty"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ m : Nat, (1 : Rat) / (m + 1) < 1 / (3 * m + 2) + 1 / (3 * m + 3) + 1 / (3 * m + 4)",
+   "predicted": "rendered",
+   "source": "∀ m : ℕ, (1 : ℝ) / (m + 1) < 1 / (3 * m + 2) + 1 / (3 * m + 3) + 1 / (3 * m + 4)",
+   "statement_id": "leanworkbook.skel.lean_workbook_55971",
+   "surface": "for every variable zero of type natural it holds that the quantity one of type rational end quantity divided by the quantity variable zero plus one end quantity is less than one divided by the quantity three times variable zero plus two end quantity plus one divided by the quantity three times variable zero plus three end quantity plus one divided by the quantity three times variable zero plus four end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≥ 1 → a * b + b * c + c * a ≤ 3)",
+   "predicted": "rendered",
+   "source": "(1 / (a + b + 1) + 1 / (b + c + 1) + 1 / (c + a + 1) ≥ 1 → a * b + b * c + c * a ≤ 3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_6302",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity one divided by the quantity variable zero plus variable one plus one end quantity plus one divided by the quantity variable one plus variable two plus one end quantity plus one divided by the quantity variable two plus variable zero plus one end quantity is at least one implies that variable zero times variable one plus variable one times variable two plus variable two times variable zero is at most three end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Int, x^7 + x^2 + 1 = (x^2 + x + 1) * (x^5 - x^4 + x^2 - x + 1)",
+   "predicted": "rendered",
+   "source": "∀ x : ℤ, x^7 + x^2 + 1 = (x^2 + x + 1) * (x^5 - x^4 + x^2 - x + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_7476",
+   "surface": "for every variable zero of type integer it holds that variable zero to the power of seven plus variable zero to the power of two plus one equals the quantity variable zero to the power of two plus variable zero plus one end quantity times the quantity variable zero to the power of five minus variable zero to the power of four plus variable zero to the power of two minus variable zero plus one end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ b c : Rat, b^2 * c^2 + b^2 + 1 ≥ b + b^2 * c + b * c",
+   "predicted": "rendered",
+   "source": "∀ b c : ℝ, b^2 * c^2 + b^2 + 1 ≥ b + b^2 * c + b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_7569",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of two times variable one to the power of two plus variable zero to the power of two plus one is at least variable zero plus variable zero to the power of two times variable one plus variable zero times variable one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a^2 * (1 + b^4) + b^2 * (1 + a^4) ≤ (1 + a^4) * (1 + b^4)",
+   "predicted": "rendered",
+   "source": "∀ a b : ℝ, a^2 * (1 + b^4) + b^2 * (1 + a^4) ≤ (1 + a^4) * (1 + b^4)",
+   "statement_id": "leanworkbook.skel.lean_workbook_7830",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of two times the quantity one plus variable one to the power of four end quantity plus variable one to the power of two times the quantity one plus variable zero to the power of four end quantity is at most the quantity one plus variable zero to the power of four end quantity times the quantity one plus variable one to the power of four end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^4 + x^2 + 1 = (x^2 - x + 1) * (x^2 + x + 1)",
+   "predicted": "rendered",
+   "source": "∀ x : ℝ, x^4 + x^2 + 1 = (x^2 - x + 1) * (x^2 + x + 1)",
+   "statement_id": "leanworkbook.skel.lean_workbook_811",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of four plus variable zero to the power of two plus one equals the quantity variable zero to the power of two minus variable zero plus one end quantity times the quantity variable zero to the power of two plus variable zero plus one end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 ≥ 2 * a * b ∧ b^2 + c^2 ≥ 2 * b * c ∧ c^2 + a^2 ≥ 2 * c * a",
+   "predicted": "rendered",
+   "source": "a^2 + b^2 ≥ 2 * a * b ∧ b^2 + c^2 ≥ 2 * b * c ∧ c^2 + a^2 ≥ 2 * c * a",
+   "statement_id": "leanworkbook.skel.lean_workbook_9185",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of two plus variable one to the power of two is at least two times variable zero times variable one and also variable one to the power of two plus variable two to the power of two is at least two times variable one times variable two and also variable two to the power of two plus variable zero to the power of two is at least two times variable two times variable zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ n : Rat, n ≠ 0 ∧ n + 5 ≠ 0 → 5 / (n * (n + 5)) = 1 / n - 1 / (n + 5)",
+   "predicted": "rendered",
+   "source": "∀ n : ℝ, n ≠ 0 ∧ n + 5 ≠ 0 → 5 / (n * (n + 5)) = 1 / n - 1 / (n + 5)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_11894",
+   "surface": "for every variable zero of type rational it holds that variable zero differs from zero and also variable zero plus five differs from zero implies that five divided by the quantity variable zero times the quantity variable zero plus five end quantity end quantity equals one divided by variable zero minus one divided by the quantity variable zero plus five end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a + b + c = 3 → a / b + b / c + c / a ≥ a ^ 2 + b ^ 2 + c ^ 2",
+   "predicted": "rendered",
+   "source": "a + b + c = 3 → a / b + b / c + c / a ≥ a ^ 2 + b ^ 2 + c ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_13514",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero plus variable one plus variable two equals three implies that variable zero divided by variable one plus variable one divided by variable two plus variable two divided by variable zero is at least variable zero to the power of two plus variable one to the power of two plus variable two to the power of two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ p : Rat, ∃ x y z : Nat, x^2 + y^2 + z^2 = 4 * p^2 + 1",
+   "predicted": "rendered",
+   "source": "∃ x y z : ℕ, x^2 + y^2 + z^2 = 4 * p^2 + 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_15488",
+   "surface": "for every variable zero of type rational it holds that for some variable one variable two variable three of type natural it holds that variable one to the power of two plus variable two to the power of two plus variable three to the power of two equals four times variable zero to the power of two plus one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Int, a * b * c = b * c * a → a^3 * (b - c) + b^3 * (c - a) + c^3 * (a - b) = (b - a) * (c * (b^2 + b * a + a^2) - b * a * (b + a) - c^3)",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℤ, a * b * c = b * c * a → a^3 * (b - c) + b^3 * (c - a) + c^3 * (a - b) = (b - a) * (c * (b^2 + b * a + a^2) - b * a * (b + a) - c^3)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_16365",
+   "surface": "for every variable zero variable one variable two of type integer it holds that variable zero times variable one times variable two equals variable one times variable two times variable zero implies that variable zero to the power of three times the quantity variable one minus variable two end quantity plus variable one to the power of three times the quantity variable two minus variable zero end quantity plus variable two to the power of three times the quantity variable zero minus variable one end quantity equals the quantity variable one minus variable zero end quantity times the quantity variable two times the quantity variable one to the power of two plus variable one times variable zero plus variable zero to the power of two end quantity minus variable one times variable zero times the quantity variable one plus variable zero end quantity minus variable two to the power of three end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, a = -7 ∨ a = 5",
+   "predicted": "rendered",
+   "source": "a = -7 ∨ a = 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_17785",
+   "surface": "for every variable zero of type rational it holds that variable zero equals minus seven or else variable zero equals five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 10 * x ^ 6 - 24 * x ^ 5 + 15 * x ^ 4 + 40 * x ^ 2 ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ x : ℝ, 10 * x ^ 6 - 24 * x ^ 5 + 15 * x ^ 4 + 40 * x ^ 2 ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_20385",
+   "surface": "for every variable zero of type rational it holds that ten times variable zero to the power of six minus twenty-four times variable zero to the power of five plus fifteen times variable zero to the power of four plus forty times variable zero to the power of two is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, ∃ x y, (x^2 / a^2 + y^2 / b^2 = 1 ∧ (x - a / 2)^2 + y^2 = (a / 2)^2)",
+   "predicted": "rendered",
+   "source": "∃ x y, (x^2 / a^2 + y^2 / b^2 = 1 ∧ (x - a / 2)^2 + y^2 = (a / 2)^2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_22008",
+   "surface": "for every variable zero variable one of type rational it holds that for some variable two variable three it holds that the quantity variable two to the power of two divided by variable zero to the power of two plus variable three to the power of two divided by variable one to the power of two equals one and also the quantity variable two minus variable zero divided by two end quantity to the power of two plus variable three to the power of two equals the quantity variable zero divided by two end quantity to the power of two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + 5*x + 6 = 0 ↔ x = -2 ∨ x = -3",
+   "predicted": "rendered",
+   "source": "x^2 + 5*x + 6 = 0 ↔ x = -2 ∨ x = -3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_25806",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of two plus five times variable zero plus six equals zero exactly when variable zero equals minus two or else variable zero equals minus three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x = x ∧ y = y",
+   "predicted": "rendered",
+   "source": "x = x ∧ y = y",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_2657",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero equals variable zero and also variable one equals variable one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d : Rat, 6 ≥ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ∧ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ≥ 1 / 2",
+   "predicted": "rendered",
+   "source": "6 ≥ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ∧ (a + b) / (c + d) * ((a + c) / (a + d) + (b + c) / (b + d)) ≥ 1 / 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_33270",
+   "surface": "for every variable zero variable one variable two variable three of type rational it holds that six is at least the quantity variable zero plus variable one end quantity divided by the quantity variable two plus variable three end quantity times the quantity the quantity variable zero plus variable two end quantity divided by the quantity variable zero plus variable three end quantity plus the quantity variable one plus variable two end quantity divided by the quantity variable one plus variable three end quantity end quantity and also the quantity variable zero plus variable one end quantity divided by the quantity variable two plus variable three end quantity times the quantity the quantity variable zero plus variable two end quantity divided by the quantity variable zero plus variable three end quantity plus the quantity variable one plus variable two end quantity divided by the quantity variable one plus variable three end quantity end quantity is at least one divided by two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ k n : Rat, n = (2 * k ^ 2) ^ 2 + (2 * k) ^ 2 → n + 1 = (2 * k ^ 2 + 1) ^ 2 + 0 ^ 2 ∧ n + 2 = (2 * k ^ 2 + 1) ^ 2 + 1 ^ 2",
+   "predicted": "rendered",
+   "source": "n = (2 * k ^ 2) ^ 2 + (2 * k) ^ 2 → n + 1 = (2 * k ^ 2 + 1) ^ 2 + 0 ^ 2 ∧ n + 2 = (2 * k ^ 2 + 1) ^ 2 + 1 ^ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34264",
+   "surface": "for every variable zero variable one of type rational it holds that variable one equals the quantity two times variable zero to the power of two end quantity to the power of two plus the quantity two times variable zero end quantity to the power of two implies that variable one plus one equals the quantity two times variable zero to the power of two plus one end quantity to the power of two plus zero to the power of two and also variable one plus two equals the quantity two times variable zero to the power of two plus one end quantity to the power of two plus one to the power of two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, (x = 0 ∧ y = 1 ∧ z = -1) ∨ (x = 0 ∧ y = -1 ∧ z = 1) ∨ (x = 1 ∧ y = 0 ∧ z = -1) ∨ (x = 1 ∧ y = -1 ∧ z = 0) ∨ (x = -1 ∧ y = 0 ∧ z = 1) ∨ (x = -1 ∧ y = 1 ∧ z = 0)",
+   "predicted": "rendered",
+   "source": "(x = 0 ∧ y = 1 ∧ z = -1) ∨ (x = 0 ∧ y = -1 ∧ z = 1) ∨ (x = 1 ∧ y = 0 ∧ z = -1) ∨ (x = 1 ∧ y = -1 ∧ z = 0) ∨ (x = -1 ∧ y = 0 ∧ z = 1) ∨ (x = -1 ∧ y = 1 ∧ z = 0)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34400",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero equals zero and also variable one equals one and also variable two equals minus one end quantity or else the quantity variable zero equals zero and also variable one equals minus one and also variable two equals one end quantity or else the quantity variable zero equals one and also variable one equals zero and also variable two equals minus one end quantity or else the quantity variable zero equals one and also variable one equals minus one and also variable two equals zero end quantity or else the quantity variable zero equals minus one and also variable one equals zero and also variable two equals one end quantity or else the quantity variable zero equals minus one and also variable one equals one and also variable two equals zero end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c d e : Rat, a = 1 ∧ b = 2 ∧ c = 3 ∧ d = 4 ∧ e = 5",
+   "predicted": "rendered",
+   "source": "a = 1 ∧ b = 2 ∧ c = 3 ∧ d = 4 ∧ e = 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_37283",
+   "surface": "for every variable zero variable one variable two variable three variable four of type rational it holds that variable zero equals one and also variable one equals two and also variable two equals three and also variable three equals four and also variable four equals five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 4 < x^3 ∧ x^3 < 17",
+   "predicted": "rendered",
+   "source": "4 < x^3 ∧ x^3 < 17",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_38747",
+   "surface": "for every variable zero of type rational it holds that four is less than variable zero to the power of three and also variable zero to the power of three is less than seventeen"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ E I S : Rat, S / (E + I) = 25 → E + I = S / 25",
+   "predicted": "rendered",
+   "source": "S / (E + I) = 25 → E + I = S / 25",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_40203",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable two divided by the quantity variable zero plus variable one end quantity equals twenty-five implies that variable zero plus variable one equals variable two divided by twenty-five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a : Rat, 2 > a ∧ a ≥ 0 → a / (2 - a) + 1 / (2 * a + 1) ≥ 4 / 5",
+   "predicted": "rendered",
+   "source": "∀ a : ℝ, 2 > a ∧ a ≥ 0 → a / (2 - a) + 1 / (2 * a + 1) ≥ 4 / 5",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_41053",
+   "surface": "for every variable zero of type rational it holds that two is greater than variable zero and also variable zero is at least zero implies that variable zero divided by the quantity two minus variable zero end quantity plus one divided by the quantity two times variable zero plus one end quantity is at least four divided by five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^2 + b^2 + c^2 = 9 → 2 * (a + b + c) - a * b * c ≤ 10",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a^2 + b^2 + c^2 = 9 → 2 * (a + b + c) - a * b * c ≤ 10",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4235",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of two plus variable one to the power of two plus variable two to the power of two equals nine implies that two times the quantity variable zero plus variable one plus variable two end quantity minus variable zero times variable one times variable two is at most ten"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, 3 / 4 ≤ y * z + z * x + x * y ∧ y * z + z * x + x * y < 1 ∧ x * y * z ≤ 1 / 8",
+   "predicted": "rendered",
+   "source": "3 / 4 ≤ y * z + z * x + x * y ∧ y * z + z * x + x * y < 1 ∧ x * y * z ≤ 1 / 8",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_45208",
+   "surface": "for every variable zero variable one variable two of type rational it holds that three divided by four is at most variable one times variable two plus variable two times variable zero plus variable zero times variable one and also variable one times variable two plus variable two times variable zero plus variable zero times variable one is less than one and also variable zero times variable one times variable two is at most one divided by eight"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b k₁ k₂ : Rat, k₁ * k₂ * a ^ 3 + (k₁ ^ 2 + k₂ ^ 2 + k₁ * k₂) * (a ^ 2 * b + a * b ^ 2) + k₁ * k₂ * b ^ 3 ≤ (k₁ + k₂) ^ 2 * (a + b) ^ 3 / 4",
+   "predicted": "rendered",
+   "source": "k₁ * k₂ * a ^ 3 + (k₁ ^ 2 + k₂ ^ 2 + k₁ * k₂) * (a ^ 2 * b + a * b ^ 2) + k₁ * k₂ * b ^ 3 ≤ (k₁ + k₂) ^ 2 * (a + b) ^ 3 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_45452",
+   "surface": "for every variable zero variable one variable two variable three of type rational it holds that variable two times variable three times variable zero to the power of three plus the quantity variable two to the power of two plus variable three to the power of two plus variable two times variable three end quantity times the quantity variable zero to the power of two times variable one plus variable zero times variable one to the power of two end quantity plus variable two times variable three times variable one to the power of three is at most the quantity variable two plus variable three end quantity to the power of two times the quantity variable zero plus variable one end quantity to the power of three divided by four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x + y + z = 7 ∧ x^2 + y^2 + z^2 = 21 ∧ x*z = y^2 ↔ x = 1 ∧ y = 2 ∧ z = 4 ∨ x = 4 ∧ y = 2 ∧ z = 1",
+   "predicted": "rendered",
+   "source": "x + y + z = 7 ∧ x^2 + y^2 + z^2 = 21 ∧ x*z = y^2 ↔ x = 1 ∧ y = 2 ∧ z = 4 ∨ x = 4 ∧ y = 2 ∧ z = 1",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4697",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero plus variable one plus variable two equals seven and also variable zero to the power of two plus variable one to the power of two plus variable two to the power of two equals twenty-one and also variable zero times variable two equals variable one to the power of two exactly when variable zero equals one and also variable one equals two and also variable two equals four or else variable zero equals four and also variable one equals two and also variable two equals one"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^3 - 6 * x^2 + 9 * x - 4 = 0 ↔ x = 1 ∨ x = 1 ∨ x = 4",
+   "predicted": "rendered",
+   "source": "x^3 - 6 * x^2 + 9 * x - 4 = 0 ↔ x = 1 ∨ x = 1 ∨ x = 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_48321",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of three minus six times variable zero to the power of two plus nine times variable zero minus four equals zero exactly when variable zero equals one or else variable zero equals one or else variable zero equals four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ t : Rat, (118 / 7 * t ^ 4 + 8 * t ^ 3 + 12 * t ^ 2 + 8 * t + 10 / 7) ≥ 0",
+   "predicted": "rendered",
+   "source": "∀ t : ℝ, (118 / 7 * t ^ 4 + 8 * t ^ 3 + 12 * t ^ 2 + 8 * t + 10 / 7) ≥ 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_49610",
+   "surface": "for every variable zero of type rational it holds that the quantity one hundred eighteen divided by seven times variable zero to the power of four plus eight times variable zero to the power of three plus twelve times variable zero to the power of two plus eight times variable zero plus ten divided by seven end quantity is at least zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + x - 3/4 = 0 ↔ x = 1/2 ∨ x = -3/2",
+   "predicted": "rendered",
+   "source": "x^2 + x - 3/4 = 0 ↔ x = 1/2 ∨ x = -3/2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_50206",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of two plus variable zero minus three divided by four equals zero exactly when variable zero equals one divided by two or else variable zero equals minus three divided by two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, 2 * a^2 / b + 3 * b / a ≥ 5 ∧ a^3 / b + 2 * b / a ≥ 3",
+   "predicted": "rendered",
+   "source": "2 * a^2 / b + 3 * b / a ≥ 5 ∧ a^3 / b + 2 * b / a ≥ 3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_56938",
+   "surface": "for every variable zero variable one of type rational it holds that two times variable zero to the power of two divided by variable one plus three times variable one divided by variable zero is at least five and also variable zero to the power of three divided by variable one plus two times variable one divided by variable zero is at least three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c α β γ : Rat, a > 0 ∧ b > 0 ∧ c > 0 → α = a^2 / b / c ∧ β = b^2 / c / a ∧ γ = c^2 / a / b → a^2 / b / c + b^2 / c / a + c^2 / a / b ≤ α + β + γ",
+   "predicted": "rendered",
+   "source": "a > 0 ∧ b > 0 ∧ c > 0 → α = a^2 / b / c ∧ β = b^2 / c / a ∧ γ = c^2 / a / b → a^2 / b / c + b^2 / c / a + c^2 / a / b ≤ α + β + γ",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_59333",
+   "surface": "for every variable zero variable one variable two variable three variable four variable five of type rational it holds that variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero implies that variable three equals variable zero to the power of two divided by variable one divided by variable two and also variable four equals variable one to the power of two divided by variable two divided by variable zero and also variable five equals variable two to the power of two divided by variable zero divided by variable one implies that variable zero to the power of two divided by variable one divided by variable two plus variable one to the power of two divided by variable two divided by variable zero plus variable two to the power of two divided by variable zero divided by variable one is at most variable three plus variable four plus variable five"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, x = 2/3 ∧ y = 2/3 ∧ z = 1/3",
+   "predicted": "rendered",
+   "source": "x = 2/3 ∧ y = 2/3 ∧ z = 1/3",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_60997",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero equals two divided by three and also variable one equals two divided by three and also variable two equals one divided by three"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b x y z : Nat, a = 10 * x + y ∧ b = 10 * x + z → a * b = 100 * x^2 + 10 * x * (y + z) + y * z",
+   "predicted": "rendered",
+   "source": "∀ a b x y z : ℕ, a = 10 * x + y ∧ b = 10 * x + z → a * b = 100 * x^2 + 10 * x * (y + z) + y * z",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_61891",
+   "surface": "for every variable zero variable one variable two variable three variable four of type natural it holds that variable zero equals ten times variable two plus variable three and also variable one equals ten times variable two plus variable four implies that variable zero times variable one equals one hundred times variable two to the power of two plus ten times variable two times the quantity variable three plus variable four end quantity plus variable three times variable four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (x-20)*(x+15) = 0 ↔ x = 20 ∨ x = -15",
+   "predicted": "rendered",
+   "source": "(x-20)*(x+15) = 0 ↔ x = 20 ∨ x = -15",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_64395",
+   "surface": "for every variable zero of type rational it holds that the quantity variable zero minus twenty end quantity times the quantity variable zero plus fifteen end quantity equals zero exactly when variable zero equals twenty or else variable zero equals minus fifteen"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, x^2 + 6*x - 16 = 0 ↔ x = -8 ∨ x = 2",
+   "predicted": "rendered",
+   "source": "x^2 + 6*x - 16 = 0 ↔ x = -8 ∨ x = 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_6839",
+   "surface": "for every variable zero of type rational it holds that variable zero to the power of two plus six times variable zero minus sixteen equals zero exactly when variable zero equals minus eight or else variable zero equals two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, 2 * x ^ 2 + 3 * x - 5 = 0 ↔ x = 1 ∨ x = -5 / 2",
+   "predicted": "rendered",
+   "source": "2 * x ^ 2 + 3 * x - 5 = 0 ↔ x = 1 ∨ x = -5 / 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_69447",
+   "surface": "for every variable zero of type rational it holds that two times variable zero to the power of two plus three times variable zero minus five equals zero exactly when variable zero equals one or else variable zero equals minus five divided by two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y z : Rat, ¬ ((x^2 - 2)^2 + (y^2 - 2)^2 = (z^2 - 2)^2 + 2)",
+   "predicted": "rendered",
+   "source": "¬ ((x^2 - 2)^2 + (y^2 - 2)^2 = (z^2 - 2)^2 + 2)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_71232",
+   "surface": "for every variable zero variable one variable two of type rational it holds that it fails that the quantity the quantity variable zero to the power of two minus two end quantity to the power of two plus the quantity variable one to the power of two minus two end quantity to the power of two equals the quantity variable two to the power of two minus two end quantity to the power of two plus two end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a^3 + b^3 + c^3 = (a + b + c)^3 ↔ a + b = 0 ∨ b + c = 0 ∨ c + a = 0",
+   "predicted": "rendered",
+   "source": "a^3 + b^3 + c^3 = (a + b + c)^3 ↔ a + b = 0 ∨ b + c = 0 ∨ c + a = 0",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_72946",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero to the power of three plus variable one to the power of three plus variable two to the power of three equals the quantity variable zero plus variable one plus variable two end quantity to the power of three exactly when variable zero plus variable one equals zero or else variable one plus variable two equals zero or else variable two plus variable zero equals zero"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x y : Rat, x^3 + y^3 = 2 → x + y ≤ 2",
+   "predicted": "rendered",
+   "source": "∀ x y : ℝ, x^3 + y^3 = 2 → x + y ≤ 2",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_74718",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero to the power of three plus variable one to the power of three equals two implies that variable zero plus variable one is at most two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (1 - a) * (1 - b) * (1 - c) ≥ 0 ↔ 1 + a * b + b * c + c * a ≥ a + b + c + a * b * c",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, (1 - a) * (1 - b) * (1 - c) ≥ 0 ↔ 1 + a * b + b * c + c * a ≥ a + b + c + a * b * c",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_75079",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity one minus variable zero end quantity times the quantity one minus variable one end quantity times the quantity one minus variable two end quantity is at least zero exactly when one plus variable zero times variable one plus variable one times variable two plus variable two times variable zero is at least variable zero plus variable one plus variable two plus variable zero times variable one times variable two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, a ≥ 0 ∧ b ≥ 0 ∧ c ≥ 0 ∧ a^2 + b^2 + c^2 + 3 ≤ 2 * (a * b + b * c + a * c) → 4 * a * b * c ≥ 1 + a + b + c",
+   "predicted": "rendered",
+   "source": "∀ a b c : ℝ, a ≥ 0 ∧ b ≥ 0 ∧ c ≥ 0 ∧ a^2 + b^2 + c^2 + 3 ≤ 2 * (a * b + b * c + a * c) → 4 * a * b * c ≥ 1 + a + b + c",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_75197",
+   "surface": "for every variable zero variable one variable two of type rational it holds that variable zero is at least zero and also variable one is at least zero and also variable two is at least zero and also variable zero to the power of two plus variable one to the power of two plus variable two to the power of two plus three is at most two times the quantity variable zero times variable one plus variable one times variable two plus variable zero times variable two end quantity implies that four times variable zero times variable one times variable two is at least one plus variable zero plus variable one plus variable two"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ x : Rat, (3^2 + 4^2 - 2*3*4*x = 5^2 + 6^2 - 2*5*6*(-x)) ↔ x = -3/7",
+   "predicted": "rendered",
+   "source": "(3^2 + 4^2 - 2*3*4*x = 5^2 + 6^2 - 2*5*6*(-x)) ↔ x = -3/7",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_8050",
+   "surface": "for every variable zero of type rational it holds that the quantity three to the power of two plus four to the power of two minus two times three times four times variable zero equals five to the power of two plus six to the power of two minus two times five times six times the quantity minus variable zero end quantity end quantity exactly when variable zero equals minus three divided by seven"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, ¬(a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a)",
+   "predicted": "rendered",
+   "source": "¬(a > 0 ∧ b > 0 ∧ c > 0 ∧ a + b > c ∧ a + c > b ∧ b + c > a)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_81434",
+   "surface": "for every variable zero variable one variable two of type rational it holds that it fails that the quantity variable zero is greater than zero and also variable one is greater than zero and also variable two is greater than zero and also variable zero plus variable one is greater than variable two and also variable zero plus variable two is greater than variable one and also variable one plus variable two is greater than variable zero end quantity"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (a + b) * (b + c) * (c + a) = 1 → a * b + b * c + c * a ≤ 3 / 4",
+   "predicted": "rendered",
+   "source": "(a + b) * (b + c) * (c + a) = 1 → a * b + b * c + c * a ≤ 3 / 4",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_81847",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity variable zero plus variable one end quantity times the quantity variable one plus variable two end quantity times the quantity variable two plus variable zero end quantity equals one implies that variable zero times variable one plus variable one times variable two plus variable two times variable zero is at most three divided by four"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b c : Rat, (2 - a) / (2 + a) + (2 - b) / (2 + b) + (2 - c) / (2 + c) ≥ 15 / 7 ↔ 4 / (2 + a) + 4 / (2 + b) + 4 / (2 + c) ≥ 36 / 7",
+   "predicted": "rendered",
+   "source": "(2 - a) / (2 + a) + (2 - b) / (2 + b) + (2 - c) / (2 + c) ≥ 15 / 7 ↔ 4 / (2 + a) + 4 / (2 + b) + 4 / (2 + c) ≥ 36 / 7",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_8898",
+   "surface": "for every variable zero variable one variable two of type rational it holds that the quantity two minus variable zero end quantity divided by the quantity two plus variable zero end quantity plus the quantity two minus variable one end quantity divided by the quantity two plus variable one end quantity plus the quantity two minus variable two end quantity divided by the quantity two plus variable two end quantity is at least fifteen divided by seven exactly when four divided by the quantity two plus variable zero end quantity plus four divided by the quantity two plus variable one end quantity plus four divided by the quantity two plus variable two end quantity is at least thirty-six divided by seven"
+  },
+  {
+   "corpus": "lean_workbook",
+   "interpreted": "∀ a b : Rat, a > 0 ∧ b > 0 → (1 / a + 2 / (a + b) : Rat) ≤ 9 / 8 * (1 / a + 1 / b)",
+   "predicted": "rendered",
+   "source": "∀ a b : ℝ, a > 0 ∧ b > 0 → (1 / a + 2 / (a + b) : ℝ) ≤ 9 / 8 * (1 / a + 1 / b)",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_9700",
+   "surface": "for every variable zero variable one of type rational it holds that variable zero is greater than zero and also variable one is greater than zero implies that the quantity one divided by variable zero plus two divided by the quantity variable zero plus variable one end quantity of type rational end quantity is at most nine divided by eight times the quantity one divided by variable zero plus one divided by variable one end quantity"
+  }
+ ],
+ "sealed_id": "foreign_voice.b0d_sealed_renderings.v1",
+ "the_grammar_these_seal": [
+  "The renderings fix the grammar before the renderer exists, which is the",
+  "point of sealing them. In words:",
+  "1. R(s) is read left to right as a token stream: the longest matching row of",
+  "   the committed lexicon, else a numeric literal, else an identifier.",
+  "2. Every lexicon token emits its phrase. Every numeric literal emits the",
+  "   registered numeral pair's words. Every identifier that is not a type name",
+  "   emits `variable ` followed by the numeral words of its slot index, where",
+  "   indices are assigned by FIRST OCCURRENCE in R(s), left to right, from",
+  "   zero.",
+  "3. Emissions are joined by single spaces. Nothing else is emitted.",
+  "PRECEDENCE IS CARRIED, NOT REBUILT: R(s)'s own parentheses become `the",
+  "quantity` / `end quantity` and no bracket is added, because the inverse",
+  "feeds the result back to the same grammar it came from. This is narrower",
+  "than v0.18's realizer, which had to re-bracket for a different grammar.",
+  "IDENTIFIERS ARE ERASED TO INDICES on purpose: Serialize.lean drops the Name",
+  "field of every binder, so a rendered name would be information the identity",
+  "witness cannot see — a rendering error B1 could never catch.",
+  "NUMERALS ARE UNSIGNED: `-` is always the operator row, so the numeral pair's",
+  "word `negative` never appears and there is exactly one `-` row.",
+  "A parenthesised binder group renders its parentheses like any other, so",
+  "`∃ (x y z : Rat),` reads `for some the quantity variable zero variable one",
+  "variable two of type rational end quantity it holds that` — awkward, and",
+  "correct, and sealed rather than tidied."
+ ],
+ "what_this_is": [
+  "One hundred hand-authored renderings, committed VERBATIM as a SEALED",
+  "PREDICTION. DESIGN-foreign-voice's adversarial review required the",
+  "three-line separation this file is the third line of: the lexicon digest is",
+  "frozen before these exist; the ids follow from that digest by a committed",
+  "rule; and these renderings are what scripts/foreign_voice.py must later",
+  "reproduce BYTE-IDENTICALLY. Every divergence is REPORTED in the run",
+  "artifact, never repaired. 'A hand probe whose outputs are never compared",
+  "against the implementation is a rehearsal, not a gate.'",
+  "They are authored against R(s), not against the corpus source, because with",
+  "autoImplicit off the surface must carry an explicit binder preamble and the",
+  "sentence a reader sees is the sentence for the statement UNDER THE DECLARED",
+  "INTERPRETATION (Correction 3)."
+ ]
+}
