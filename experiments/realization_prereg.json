@@ -15,7 +15,17 @@
       "path": "scripts/match_signatures.py",
       "role": "parser",
       "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
-      "why": "The byte-frozen parser and canonicalizer. Stage 2 of the realization gate is this file and nothing else; it has never seen the realizer. C-R3: if implementing realize_term.py requires changing it, the independence claim is void and the change needs its own review naming the reason."
+      "why": "The byte-frozen parser and canonicalizer. Stage 2 of the realization gate is this file and nothing else; it has never seen the realizer. C-R3: if implementing realize_term.py requires changing it, the independence claim is void and the change needs its own review naming the reason.",
+      "retired_for_future_comparisons": {
+        "amendment": "transliteration-2026-08-24",
+        "status": "retired for future comparisons",
+        "dated": "2026-08-24",
+        "read_this_row_as": [
+          "The digest this row records is the parser AS THE v0.18 REGISTERED RUN MEASURED IT, and it is left byte-unchanged for exactly that reason: experiments/realization_rate.json's numbers are readings of THIS parser and must stay checkable against the pin they were taken under.",
+          "It is no longer the pin a FUTURE comparison is read against. The successor pin is the `parser` row of experiments/transliteration_prereg.json, recorded by the amendment named above BEFORE the run that quotes it.",
+          "So this row is history, not a live gate: a revalidator must check the successor pin against the tree and this one against the artifact that quoted it. See `amendments` at the foot of this file."
+        ]
+      }
     },
     {
       "path": "scripts/numeral_words.py",
@@ -149,6 +159,80 @@
         "L7: parameters' slot map was built with an identity dict comprehension instead of dict().",
         "L8: the receipt gains parameters.numerals_used, listing every literal and slot index the sentence emitted with its words, so R2's two permitted sources (lexicon_entries and the numeral pair) are both evidenced by the receipt alone.",
         "L9: Refusal.served and Refusal.round_trip were dataclass FIELDS while Realization's were properties, so a Refusal could be constructed claiming served=True. Both are properties now."
+      ]
+    }
+  ],
+  "amendments": [
+    {
+      "amendment_id": "realization.prereg.v1.amendment.transliteration-2026-08-24",
+      "dated": "2026-08-24",
+      "cycle": "v0.19",
+      "lane": "ROADMAP-v0.19 item 3a — the transliteration lane",
+      "authority": [
+        "ROADMAP-v0.19 item 3a, the re-freeze discipline blockquote, rules 1 and 2.",
+        "DESIGN-foreign-voice §5, the ordering rule for the tokenizer work.",
+        "This file's own control, C-R3 (the tautology probe), which is what the retirement is being read against."
+      ],
+      "ordering": [
+        "This amendment is the FIRST commit of the lane. No line of scripts/match_signatures.py has changed when it lands, and the successor prereg does not exist yet. That order is the point: the retirement is a preregistration act, so it is recorded before the act it authorizes, not explained after it.",
+        "DESIGN-foreign-voice §5's ordering rule — the TOKEN_RE change \"may not land before v0.19's registered run\" — is SATISFIED: the registered run landed in commit 46edefd with artifact experiments/foreign_voice_rate.json. The lane is unblocked, and this entry is the first thing it does."
+      ],
+      "what_this_retires": [
+        "The `parser` row — role `parser`, scripts/match_signatures.py, LF sha256 65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599 — is RETIRED FOR FUTURE COMPARISONS as of this dated amendment.",
+        "Retired, not deleted and not overwritten. The row stays in `frozen` with its original digest because it is the record of what v0.18's registered run and v0.19's registered run were measured under, and an artifact whose pin has been edited underneath it cannot be checked at all.",
+        "The successor pin is recorded in experiments/transliteration_prereg.json, in the commit that lands the tokenizer change and BEFORE any run quotes it — ROADMAP-v0.19 item 3a rule 2: \"A re-freeze is a preregistration act, not a fix-up.\""
+      ],
+      "successor_prereg": {
+        "path": "experiments/transliteration_prereg.json",
+        "recorded_in": "the next commit on this branch, which is also the commit that changes the tokenizer",
+        "carries": [
+          "the post-amendment LF sha256 of scripts/match_signatures.py",
+          "the two glyph equivalences, described",
+          "the lane's frozen floors: a parse-gain floor of >= 6,000 newly parseable statements",
+          "the round-trip measurement rule, with NO floor pre-committed — this is a probe and the artifact publishes whichever branch it reads"
+        ]
+      },
+      "the_change_this_authorizes": [
+        "scripts/match_signatures.py gains exactly two glyph equivalences in TOKEN_RE: U+2265 GREATER-THAN OR EQUAL TO reads as the existing `>=` relation token and U+2264 LESS-THAN OR EQUAL TO reads as the existing `<=` relation token. No new relation, no new grammar, no other unicode.",
+        "Measured against the committed tree before the amendment was written: 2,172 of 12,777 statements parse under the retired pin; 6,414 more parse once those two glyphs are read; 8,586 of 12,777 (67.2%) after. That is the gain ROADMAP-v0.19 item 3a previews and the reason the change is worth a re-freeze at all.",
+        "Why it is an amendment and not a bug fix: DESIGN-sans-template-rendering §7 C-R3 byte-freezes the parser before the realizer is written, and DESIGN-foreign-voice §6 B7 freezes the same file because B0a's split and C-V2's contrast are computed with it. Editing it moves a denominator under two published claims. The only honest way to move it is in writing, dated, before the code changes — which is what this entry is."
+      ],
+      "declared_historical_artifacts": [
+        {
+          "path": "experiments/realization_rate.json",
+          "what_it_says": "R1 = 0.9991 — 2,170 of 2,172 parseable terms round-trip, zero round-trip failures, two honest refusals; R0's parse rate 2,172 of 12,777 = 17.0%.",
+          "declaration": "DECLARED A HISTORICAL ARTIFACT, measured under the PRE-AMENDMENT parser (65fead2f…). Its numbers are true of that parser and are not, and may not be quoted as, current facts about the post-amendment parser. Both denominators in it — 2,172 parseable and 12,777 total — are readings of the retired pin; under the successor pin the parseable denominator is 8,586, and 0.9991 has not been measured over that set by this artifact or any other.",
+          "why_this_sentence_exists": "DESIGN-foreign-voice §5: \"the alternative — declaring experiments/realization_rate.json a historical artifact measured under the pre-amendment parser — must be said in writing in the amendment commit.\" This is that sentence, said in writing, in the amendment commit, before the code moved.",
+          "the_artifact_is_not_edited": "realization_rate.json is byte-untouched by this amendment and by the commits that follow it. Rule 1 of ROADMAP-v0.19 item 3a: \"Changing the parser does not amend realization_rate.json; it retires that pin for future comparisons.\""
+        },
+        {
+          "path": "experiments/foreign_voice_rate.json",
+          "what_it_says": "The v0.19 registered foreign-voice run (commit 46edefd): B1 identity 1.0 over 2,313 covered statements, B0a's 4,191/6,414 split, C-V2's contrast over the transliterable 6,414 — and C-V4 VOID on drop_group, which voids the reading.",
+          "declaration": "DECLARED A HISTORICAL ARTIFACT on the same terms, and for a reason of its own: B0a's transliterable/foreign split and C-V2's contrast are both COMPUTED WITH the retired parser, so its 6,414 and its 4,191 are readings of 65fead2f… and not of the successor. Its C-V4 VOID verdict is unaffected — a void reading stays void — but every denominator in it is now a historical denominator.",
+          "the_artifact_is_not_edited": "foreign_voice_rate.json is byte-untouched. The registered run happened before this amendment (DESIGN-foreign-voice §5's ordering rule: the TOKEN_RE change \"may not land before v0.19's registered run\"), which is the precondition that unblocks this lane and the reason the amendment could be written at all."
+        }
+      ],
+      "the_v018_registered_run_is_not_re_run": [
+        "THE v0.18 REGISTERED RUN IS NOT RE-RUN UNDER THE NEW PARSER. Recorded here in writing, with the reason, because a choice this size made silently is indistinguishable from an oversight.",
+        "The reason: the transliteration lane ships its OWN registered artifact, experiments/transliteration_rate.json, and that artifact carries the new parser's rates — the parse rate over the whole corpus and the round-trip rate over the newly-reached set — measured under the successor pin and reported against it.",
+        "Re-running scripts/measure_realization.py under the new parser would produce a single number spanning two cycles' denominators: an R1 over 8,586 terms of which 2,172 were measured, reviewed and adjudicated in v0.18 and 6,414 were reached by a change v0.18's gate never saw. A reader handed one rate could not tell which cycle's discipline any part of it was produced under, and neither cycle's floor would be checkable against it.",
+        "So the two readings stay separate and stay comparable: 0.9991 over the v0.18 parseable set under the retired pin, and the transliteration lane's own rate over the newly-reached set under the successor pin. Anyone who wants the blended figure can compute it from two published artifacts and will have to say which two they blended.",
+        "This is not a park and nothing is owed later: there is no pending re-run. If a future cycle wants a single R1 over the widened parseable set, that is a new registered run with its own prereg and its own frozen digests, exactly as rule 1 says."
+      ],
+      "what_stays_true": [
+        "C-R3's claim about v0.18 stands and is not weakened: the parser that stage 2 used had never seen the realizer, and implementing the realizer did not require changing it. This amendment is not a C-R3 event — it is a later cycle widening the tokenizer for a reason that has nothing to do with making a realizer agree, which is the distinction C-R3 was written to let a reader draw.",
+        "B7's claim about v0.19's foreign-voice run stands on the same footing: the oracle was not made to agree by editing the parser. The registered run had already been written when this amendment was.",
+        "Every other row in `frozen` is untouched and stays live: numeral_pair, lexicon, lexicon_loader and inverter revalidate against the tree exactly as before. Only the parser row is retired, and only for future comparisons.",
+        "data/realization/lexicon.json needs no new rows for the two glyphs and gets none. The equivalence is resolved in the tokenizer, so the canonical tree carries the existing `>=` / `<=` relations and the existing rows \"is at least\" / \"is at most\" already realize them. A `≥` row phrased \"is at least\" would be refused at load by the loader's own B2 (non-injective forward) and by B7 (the emitted token would not tokenize to itself) — so the alternative is not merely unnecessary, it is one the committed gate rejects."
+      ],
+      "how_the_tests_change": [
+        "The digest assertions that read this file's `parser` row against the working tree would go red on the next commit, and going red is what they are for — so they are not deleted and not relaxed.",
+        "They are RE-AIMED, in the same commit as the code, at the successor pin: the tree is checked against experiments/transliteration_prereg.json, and this row is checked against the historical digest it records. Each such test cites this amendment by id in its docstring, so a reader who finds a digest-check pointing somewhere new is told, at the assertion, who authorized it.",
+        "A test re-aimed without an amendment to cite would be a test edited to make a change pass. That is the failure mode the citation requirement exists to make visible."
+      ],
+      "why_this_file_gets_the_entry": [
+        "This is the file that pinned the parser first (2026-08-23, commit ccac853's five rows), so it is the file a reader goes to when they want to know what 0.9991 was measured under. The retirement has to be here or the pin looks live.",
+        "`corrections` above is a different thing and the two must not be confused: a correction fixes what a row SAYS about an artifact that did not move. An amendment retires a pin because the artifact DID move. Every correction above carries the sentence \"scripts/match_signatures.py is byte-unchanged\"; this entry is the first one that cannot."
       ]
     }
   ],
