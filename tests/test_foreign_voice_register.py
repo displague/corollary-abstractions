@@ -283,10 +283,19 @@ class B4Ordering(unittest.TestCase):
             "inventory of silence cannot be edited after seeing what the "
             "renderer failed on")
 
-    def test_the_registered_run_has_not_happened(self) -> None:
-        """Phase 2 was scoped to stop before it, and this is what that means."""
-        self.assertFalse(
-            (ROOT / "experiments" / "foreign_voice_rate.json").exists())
+    def test_the_register_was_frozen_before_the_run_that_quotes_it(self) -> None:
+        """B4, carried past the run.
+
+        Written while the run had not happened, as "the artifact does not
+        exist". That was a fact about one tree. The rule it stood for outlives
+        it: the inventory of silence is frozen BEFORE the rate that leans on
+        it, so it cannot be edited after seeing what the renderer failed on.
+        """
+        assert_absent_or_added_after(
+            self, "data/foreign_voice/register.json",
+            "experiments/foreign_voice_rate.json",
+            "B4 makes freezing the register a precondition of the run, and B3's "
+            "two blocked buckets in the artifact are read straight out of it")
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI

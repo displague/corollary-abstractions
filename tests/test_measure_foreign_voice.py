@@ -31,6 +31,7 @@ import foreign_voice as fv  # noqa: E402
 import foreign_voice_lexicon as fvl  # noqa: E402
 import foreign_voice_rule_r as fvr  # noqa: E402
 import measure_foreign_voice as mfv  # noqa: E402
+from git_ordering import assert_absent_or_added_after  # noqa: E402
 
 LEX = fvl.load()
 RULE = fvr.load()
@@ -276,10 +277,27 @@ class TheRunDoesNotHappenByAccident(unittest.TestCase):
     def test_the_registered_run_needs_an_explicit_flag(self) -> None:
         self.assertIn("--perform-the-registered-run", _cli_help())
 
-    def test_the_artifact_does_not_exist_yet(self) -> None:
-        """Phase 2 stops BEFORE the run, and this is what that means."""
-        self.assertFalse(
-            (ROOT / "experiments" / "foreign_voice_rate.json").exists())
+    def test_the_run_came_last_in_the_history(self) -> None:
+        """§10 puts the run at the end, after everything that gates it.
+
+        Written while the run had not happened, as "the artifact does not
+        exist"; restated once it did, so the ordering stays checkable instead
+        of expiring the moment it starts to matter.
+        """
+        for gate in ("experiments/foreign_voice_prereg.json",
+                     "data/foreign_voice/lexicon.json",
+                     "data/foreign_voice/rule_r.json",
+                     "data/foreign_voice/b0d_sealed_renderings.json",
+                     "prover/lean/normalizer/Serialize.lean",
+                     "data/foreign_voice/register.json",
+                     "scripts/foreign_voice.py",
+                     "scripts/measure_foreign_voice.py"):
+            with self.subTest(gate=gate):
+                assert_absent_or_added_after(
+                    self, gate, "experiments/foreign_voice_rate.json",
+                    "the registered run is last in §10's order; a rate that "
+                    "predated a thing it quotes would be quoting a file that "
+                    "did not exist when it was measured")
 
     def test_c_v3_is_recorded_absent_with_the_claim_it_gates(self) -> None:
         block = mfv.c_v3_absent()
