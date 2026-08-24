@@ -146,6 +146,52 @@ class PreregRevalidationTests(unittest.TestCase):
                 mr.revalidate_prereg(path)
             self.assertIn("no such amendment", str(caught.exception))
 
+    def test_the_writer_is_closed_and_cannot_overwrite_the_record(self) -> None:
+        """The amendment said the v0.18 run would not be re-run. This enforces it.
+
+        Added 2026-08-24 with `realization.prereg.v1.amendment.
+        transliteration-2026-08-24`. `revalidate_prereg` follows the retirement
+        so the digest check stays alive - which also means this writer could
+        re-measure under the SUCCESSOR parser and overwrite
+        experiments/realization_rate.json with an R1 over 8,586 terms. That is
+        the blended figure the amendment declined to produce, and a prohibition
+        that lives only in prose is one command away from being violated.
+        """
+        import contextlib
+        import io
+
+        reason = mr.closed_by_amendment()
+        self.assertIsNotNone(reason)
+        self.assertIn("CLOSED", reason)
+        self.assertIn("transliteration_rate.json", reason)
+
+        artifact = ROOT / "experiments" / "realization_rate.json"
+        before = artifact.read_bytes()
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = mr.main([])
+        self.assertEqual(code, 4)
+        self.assertEqual(artifact.read_bytes(), before)
+        self.assertIn("REFUSING TO WRITE", stderr.getvalue())
+
+    def test_reading_the_numbers_without_writing_is_still_allowed(self) -> None:
+        """Closed to WRITES, not to reads. --no-write is the escape and it works.
+
+        The prohibition is on rewriting the record, not on looking at the
+        numbers. A closed run whose numbers could not be recomputed at all would
+        make the amendment's own claims uncheckable.
+        """
+        import contextlib
+        import io
+
+        with tempfile.TemporaryDirectory() as tmp:
+            data = _slice_corpora(Path(tmp) / "data", ("trigonometry",))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = mr.main(["--data-dir", str(data), "--no-write"])
+        self.assertEqual(code, 0)
+        self.assertIn("parseable", out.getvalue())
+
     def test_the_retired_row_reports_both_digests(self) -> None:
         """A reader of the artifact must be able to see the substitution."""
         block = mr.revalidate_prereg()
@@ -158,7 +204,14 @@ class PreregRevalidationTests(unittest.TestCase):
         self.assertTrue(row["agrees"])
 
     def test_the_writer_refuses_to_write_on_mismatch(self) -> None:
-        """Revalidating and then writing anyway would revalidate nothing."""
+        """Revalidating and then writing anyway would revalidate nothing.
+
+        The retirement marker is stripped from the injured copy (2026-08-24) so
+        this keeps testing the C-R3 refusal it was written for. Without that,
+        the closed-run gate above fires first and returns 4, and this test would
+        pass for a reason that has nothing to do with digest revalidation — a
+        green test measuring the wrong refusal.
+        """
         import contextlib
         import io
 
@@ -166,6 +219,10 @@ class PreregRevalidationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             prereg = json.loads(mr.PREREG_PATH.read_text(encoding="utf-8"))
             for row in prereg["frozen"]:
+                row.pop("retired_for_future_comparisons", None)
+                if row["role"] == "parser":
+                    row["sha256_lf"] = mr.sha256_lf_file(
+                        mr.REPO_ROOT / row["path"])
                 if row["role"] == "inverter":
                     row["sha256_lf"] = "1" * 64
             injured = Path(tmp) / "prereg.json"

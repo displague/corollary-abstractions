@@ -121,6 +121,49 @@ class PreregMismatch(RuntimeError):
     """C-R3 failed. The run does not get written."""
 
 
+def closed_by_amendment(prereg_path: Path | None = None) -> str | None:
+    """The reason this registered run may no longer WRITE, or None.
+
+    Added 2026-08-24 by `realization.prereg.v1.amendment.transliteration-
+    2026-08-24` (ROADMAP-v0.19 item 3a), and it closes a hazard the amendment
+    would otherwise only have described.
+
+    `revalidate_prereg` follows the retirement, which is right: the digest check
+    must stay alive, and the mechanics stay testable. But following it also
+    means this writer would happily re-measure under the SUCCESSOR parser and
+    overwrite `experiments/realization_rate.json` with an R1 over 8,586 terms —
+    2,172 adjudicated under v0.18's gate and 6,414 reached by a change that gate
+    never saw. That blended figure is precisely what the amendment declined to
+    produce, and a prohibition that lives only in prose is one command away from
+    being violated by someone who never read it.
+
+    So the CLI is closed while `revalidate_prereg` stays open. The two answer
+    different questions: "does the tree still match a pin recorded somewhere"
+    (bookkeeping, must keep working) versus "may this run be executed and its
+    artifact rewritten" (authority, and the answer is no). `--no-write` still
+    runs, because reading the numbers is not the thing being prevented.
+    """
+    prereg_path = Path(prereg_path) if prereg_path is not None else PREREG_PATH
+    prereg = json.loads(prereg_path.read_text(encoding="utf-8"))
+    for row in prereg["frozen"]:
+        marker = row.get("retired_for_future_comparisons")
+        if marker is None:
+            continue
+        return (
+            f"this registered run is CLOSED. {row['path']}'s pin was retired "
+            f"for future comparisons by amendment {marker['amendment']} "
+            f"({marker['dated']}), which declared "
+            f"experiments/realization_rate.json a HISTORICAL ARTIFACT measured "
+            f"under the pre-amendment parser and recorded, in writing, that the "
+            f"v0.18 run would not be re-run. Re-running it now would blend two "
+            f"cycles' denominators into one rate neither cycle's floor can be "
+            f"checked against. The new parser's rates are in "
+            f"experiments/transliteration_rate.json. Use --no-write to read the "
+            f"numbers without overwriting the record."
+        )
+    return None
+
+
 def _successor_row(prereg: dict, row: dict) -> tuple[dict, str]:
     """The live pin for a row retired by a dated amendment, and its file.
 
@@ -1047,6 +1090,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-write", action="store_true")
     parser.add_argument("--prereg", type=Path, default=None)
     args = parser.parse_args(argv)
+
+    closed = closed_by_amendment(args.prereg)
+    if closed is not None and not args.no_write:
+        print(f"REFUSING TO WRITE: {closed}", file=sys.stderr)
+        return 4
 
     started = time.time()
     try:

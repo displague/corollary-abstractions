@@ -46,10 +46,57 @@ SPECIMEN = "∀ a b : Rat, (a + b) * (a - b) = a^2 - b^2"
 class RevalidationGate(unittest.TestCase):
     """B7 with teeth: no rate is published if a frozen artifact moved."""
 
-    def test_the_committed_tree_revalidates(self) -> None:
-        validated = mfv.revalidate()
-        self.assertEqual(validated["prereg_id"], "foreign_voice.prereg.v1")
-        self.assertGreaterEqual(len(validated["revalidated"]), 20)
+    def test_the_run_is_closed_now_that_its_parser_pin_was_retired(self) -> None:
+        """B7 refuses, and refusing is the CORRECT outcome. Renamed 2026-08-24.
+
+        This test used to assert that the committed tree revalidates. It cannot
+        any more, and the reason is not a regression: `foreign_voice.prereg.v1.
+        amendment.transliteration-2026-08-24` (ROADMAP-v0.19 item 3a) retired
+        the `parser` row, and `scripts/measure_foreign_voice.py` is byte-frozen
+        by its own `registered_run` pin — so the writer cannot be taught to
+        follow the retirement without retiring a second pin to do it.
+
+        Leaving it refusing is the better outcome, not the cheaper one. The
+        v0.19 registered run HAPPENED, under 65fead2f…, and its artifact
+        `experiments/foreign_voice_rate.json` is the record. Re-executing it
+        under a different parser would silently rewrite that artifact with
+        B0a/C-V2 numbers computed on a moved denominator — which is exactly
+        what B7 exists to prevent and exactly what the amendment declared it
+        would not do. The run is CLOSED, and this assertion is what closes it.
+
+        Note the deliberate difference from `test_foreign_voice_lexicon`'s
+        digest sweep, which DOES follow the retirement and stays green. The two
+        ask different questions: the sweep asks "does the tree still match a pin
+        recorded somewhere" — bookkeeping, and it must keep working. This asks
+        "may this run be executed and its artifact rewritten" — authority, and
+        the answer is no.
+        """
+        with self.assertRaises(mfv.RunRefusal) as caught:
+            mfv.revalidate()
+        message = str(caught.exception)
+        self.assertIn("B7 VOID", message)
+        self.assertIn("match_signatures.py", message)
+        self.assertIn("No rate is published", message)
+
+    def test_the_retirement_that_closed_it_is_recorded_in_the_prereg(self) -> None:
+        """A run closed by a refusal must be closed by a written reason.
+
+        Without this, the refusal above is indistinguishable from someone
+        having edited the parser without telling anyone — which is the failure
+        B7 was built for. The amendment is what makes it the other thing.
+        """
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        parser = {row["role"]: row for row in prereg["frozen"]}["parser"]
+        marker = parser["retired_for_future_comparisons"]
+        self.assertEqual(marker["amendment"], "transliteration-2026-08-24")
+        amendment = [entry for entry in prereg["amendments"]
+                     if entry["amendment_id"].endswith(marker["amendment"])]
+        self.assertEqual(len(amendment), 1)
+        self.assertEqual(amendment[0]["successor_prereg"]["path"],
+                         "experiments/transliteration_prereg.json")
+        historical = [row["path"] for row
+                      in amendment[0]["declared_historical_artifacts"]]
+        self.assertIn("experiments/foreign_voice_rate.json", historical)
 
     def test_a_moved_digest_refuses_and_names_the_file(self) -> None:
         prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
@@ -267,12 +314,24 @@ class SamplePlan(unittest.TestCase):
 class TheRunDoesNotHappenByAccident(unittest.TestCase):
     """A once-only act should not be reachable by typing a module name."""
 
-    def test_the_bare_cli_reports_readiness_and_writes_nothing(self) -> None:
+    def test_the_bare_cli_refuses_and_writes_nothing(self) -> None:
+        """Was "reports readiness"; the run is closed, so it reports refusal.
+
+        Amended 2026-08-24 alongside `RevalidationGate` above: the parser pin
+        was retired by `foreign_voice.prereg.v1.amendment.transliteration-
+        2026-08-24`, B7 refuses, and `main` maps a RunRefusal to exit 2. The
+        half of this test that mattered most is unchanged and still asserted:
+        WRITES NOTHING. A closed run must not touch the artifact that records
+        what it measured.
+        """
         out = ROOT / "experiments" / "foreign_voice_rate.json"
         existed = out.exists()
+        before = out.read_bytes() if existed else None
         code = mfv.main([])
-        self.assertEqual(code, 0)
+        self.assertEqual(code, 2)
         self.assertEqual(out.exists(), existed)
+        if existed:
+            self.assertEqual(out.read_bytes(), before)
 
     def test_the_registered_run_needs_an_explicit_flag(self) -> None:
         self.assertIn("--perform-the-registered-run", _cli_help())
