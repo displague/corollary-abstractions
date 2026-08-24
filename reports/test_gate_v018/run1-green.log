@@ -1,0 +1,161 @@
+C:\Users\displ\Documents\corollary-abstractions\experiments\train_analogy.py:199: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(enc_layer, n_layers)
+C:\Users\displ\Documents\corollary-abstractions\experiments\train_analogy.py:199: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(enc_layer, n_layers)
+----------------------------------------------------------------------
+Ran 1827 tests in 24117.302s
+
+OK (skipped=3)
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+ok: closure
+ok: closure_order
+ok: closure_size
+ok: depth_histogram
+ok: inferred_edges_excluded
+ok: recheck_seconds 0.002 of 600 allowed
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+MISMATCH: closure expected node claim.release.v015 at depth 3, which is reachable from ledger.compression over emitted derived_from edges; the certificate does not list it
+ok: recheck_seconds 0.002 of 600 allowed
+ok: certificate_schema
+MISMATCH: graph_sha256 expected f112db180819eb7b92e14f19e109729d687a6b2c1089a5269fe60dedd1486b7f, found b83e4c246968d93c72a280cf570eb37390cdf8627b1a90b004d085087a2392c1; refusing to re-derive from a graph this certificate was not computed against
+ok: recheck_seconds 0.000 of 600 allowed
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+ok: closure
+ok: closure_order
+ok: closure_size
+ok: depth_histogram
+MISMATCH: inferred_edges_excluded expected edge e14 to land on a closure member, found to_node corpus.beta outside the closure; it would not have joined this closure had it been scored
+ok: recheck_seconds 0.002 of 600 allowed
+
+blind-control smoke (3 seeds): satisfying_shuffles 0/3
+
+node counts by kind: {'analysis_claim': 138, 'corpus_file': 29, 'external_source': 18, 'ledger_section': 0, 'release_claim': 997, 'report_ledger': 5, 'seed_script': 25}
+
+R1 = 391/391 = 1.0000
+edges by relation: {'derived_from': 938, 'pinned_from': 6}
+edges by emitter:  {'provenance_graph.py/citation-scan/R-a': 72, 'provenance_graph.py/citation-scan/R-b': 18, 'provenance_graph.py/citation-scan/R-c': 120, 'provenance_graph.py/citation-scan/R-d': 101, 'provenance_graph.py/citation-scan/R-e': 112, 'provenance_graph.py/citation-scan/R-f': 365, 'provenance_graph.py/reconstructed': 27, 'provenance_graph.py/structure': 21, 'scripts/match_signatures.py': 27, 'scripts/measure_compression.py': 27, 'scripts/proof_correspondence.py': 27, 'scripts/specialize.py': 27}
+
+root A dev closure_size = 54, depths {'0': 1, '1': 53}, unprovenanced 736, inferred excluded 0
+reports/signature_matches.json clean
+reports/specializations.json clean
+reports/compression.json clean
+reports/decompositions.json declared_divergence (declared pre-scale snapshot; TRIAGE-v0.11 gate table row 6 and section 5 — live analysis is the pin source)
+
+root A dev R2: covered 11/11, closure 54 (cap 33), superset_ok=True ratio_ok=False
+
+1827 tests in 24117.3s (OK)
+
+timed tests: 19703.5s; fixtures/runner overhead: 4413.8s
+
+timed test bodies by module (fixtures excluded):
+   12918.6s   53.6%  tests.test_write_stage
+    5526.1s   22.9%  tests.test_corpus_analogy_split
+     465.8s    1.9%  tests.test_corpus_analogy
+     295.1s    1.2%  tests.test_retraction_closure
+     150.5s    0.6%  tests.test_harness_line
+      90.7s    0.4%  tests.test_serve_chat
+      55.6s    0.2%  tests.test_when_to_ask_prereg
+      21.0s    0.1%  tests.test_proof_correspondence
+      18.7s    0.1%  tests.test_wiring_routes
+      16.3s    0.1%  tests.test_wordnet_retrieval
+      15.9s    0.1%  tests.test_retrieval
+      14.4s    0.1%  tests.test_probes
+      12.9s    0.1%  tests.test_measure_realization
+      11.7s    0.0%  tests.test_measure_throughput
+      11.1s    0.0%  tests.test_external_verifier
+      10.7s    0.0%  tests.test_programming_discipline
+      10.1s    0.0%  tests.test_session_dispatcher
+      10.0s    0.0%  tests.test_measurement_tools
+       8.7s    0.0%  tests.test_retrieval_tools
+       5.0s    0.0%  tests.test_proof_curve
+       4.5s    0.0%  tests.test_verified_by
+       4.4s    0.0%  tests.test_wold_ingest
+       4.0s    0.0%  tests.test_gloss
+       3.9s    0.0%  tests.test_session_durability
+       2.7s    0.0%  tests.test_throughput_tasks
+       2.3s    0.0%  tests.test_decompose_channels
+       1.8s    0.0%  tests.test_lean_workbook_ingest
+       1.8s    0.0%  tests.test_depth_consumer_analysis
+       1.2s    0.0%  tests.test_bounded_closure
+       1.1s    0.0%  tests.test_depth_consumers
+       1.0s    0.0%  tests.test_session_run
+       1.0s    0.0%  tests.test_session_offline
+       0.9s    0.0%  tests.test_minif2f_ingest
+       0.7s    0.0%  tests.test_answers
+       0.6s    0.0%  tests.test_matcher_mirror
+       0.5s    0.0%  tests.test_visual_oracle
+       0.4s    0.0%  tests.test_verdict_rule
+       0.3s    0.0%  tests.test_coverage_holdout3
+       0.2s    0.0%  tests.test_closure_query
+       0.2s    0.0%  tests.test_prose_authoring
+       0.2s    0.0%  tests.test_depth_consumer_runner
+       0.2s    0.0%  tests.test_depth_interface
+       0.1s    0.0%  tests.test_radius_recheck
+       0.1s    0.0%  tests.test_realize_term
+       0.1s    0.0%  tests.test_langgen_roundtrip
+       0.1s    0.0%  tests.test_realization_lexicon
+       0.1s    0.0%  tests.test_controller
+       0.1s    0.0%  tests.test_grounded_admission
+       0.1s    0.0%  tests.test_corpus_analogy_model_arm
+       0.1s    0.0%  tests.test_conversation_runtime
+       0.1s    0.0%  tests.test_source_manifest
+       0.0s    0.0%  tests.test_resolver
+       0.0s    0.0%  tests.test_readiness
+       0.0s    0.0%  tests.test_self_grounding
+       0.0s    0.0%  tests.test_request_grammar
+       0.0s    0.0%  tests.test_ask
+       0.0s    0.0%  tests.test_live_lean_search
+       0.0s    0.0%  tests.test_goedel_pset
+       0.0s    0.0%  tests.test_narrative_realize
+       0.0s    0.0%  tests.test_tactic_policy
+       0.0s    0.0%  tests.test_frames
+       0.0s    0.0%  tests.test_story
+       0.0s    0.0%  tests.test_search_controller
+       0.0s    0.0%  tests.test_when_to_ask_candidate
+       0.0s    0.0%  tests.test_theory_of_mind
+       0.0s    0.0%  tests.test_emit_skeleton
+       0.0s    0.0%  tests.test_evaluate
+       0.0s    0.0%  tests.test_algorithms_ingest
+       0.0s    0.0%  tests.test_preference
+       0.0s    0.0%  tests.test_compose_assert_frames
+       0.0s    0.0%  tests.test_discourse
+       0.0s    0.0%  tests.test_belief
+       0.0s    0.0%  tests.test_ambiguity
+       0.0s    0.0%  tests.test_index_language
+       0.0s    0.0%  tests.test_entailment
+       0.0s    0.0%  tests.test_context_narrowing
+       0.0s    0.0%  tests.test_deixis
+       0.0s    0.0%  tests.test_item4_operator_bag
+       0.0s    0.0%  tests.test_legality_strata
+
+slowest 20 tests:
+   5249.92s  tests.test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer
+    824.33s  tests.test_write_stage.TrustedAppendTests.test_append_one_node_accepts_without_rewriting_the_seed
+    823.60s  tests.test_write_stage.TrustedAppendTests.test_seed_plus_append_reproduces_the_applied_corpus
+    620.34s  tests.test_write_stage.TrustedAppendTests.test_two_node_append_is_confined_to_those_ids
+    423.31s  tests.test_write_stage.TrustedAppendTests.test_undeclared_delta_is_still_refused_on_the_append_lane
+    420.45s  tests.test_write_stage.WorkingTreeIntegrityTests.test_the_digest_ignores_this_gates_own_receipts
+    419.41s  tests.test_write_stage.ProofGateTests.test_two_candidates_differing_only_in_rationale_get_two_receipts
+    417.72s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_is_written_and_deterministic
+    415.79s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_is_written_and_records_the_transition
+    414.50s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_then_refuse_end_to_end
+    414.11s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_applies_seed_and_regenerates_corpus
+    414.02s  tests.test_write_stage.AcceptedWriteApplicationTests.test_matcher_delta_reverified_against_the_applied_data
+    413.27s  tests.test_write_stage.TrustedAppendTests.test_colliding_id_is_refused_and_tree_is_identical
+    411.94s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_failure_rolls_the_application_back
+    411.53s  tests.test_write_stage.TrustedAppendTests.test_python_is_not_an_append
+    411.37s  tests.test_write_stage.AcceptedWriteApplicationTests.test_other_corpora_are_byte_identical_after_acceptance
+    409.69s  tests.test_write_stage.AcceptedWriteApplicationTests.test_whole_tree_delta_catches_an_undeclared_change
+    409.55s  tests.test_write_stage.AcceptedWriteApplicationTests.test_committed_seed_reproduces_the_applied_corpus
+    322.41s  tests.test_write_stage.AcceptedCandidateTests.test_correspondence_route_is_recorded
+    321.66s  tests.test_corpus_analogy.CorpusAnalogyTests.test_baselines_are_computed_on_the_live_targets
+EXIT 0

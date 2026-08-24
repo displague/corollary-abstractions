@@ -119,7 +119,8 @@ read. The registered run committed with its artifact and byte-reproducible
 The first rendering commit **retired the v0.17 witness and sealed a
 successor book** (below). The refresh ran clean. And **the outside design
 inquiry was invoked, not reaffirmed** (below). The full-suite clause is
-open at `[SUITE-GATE-V18]`.
+discharged: 1,827 green at the frozen tip, first run ("The suite at the
+tip", below).
 
 **Drift audit** (v0.16 and v0.17 re-read, per the rule). Nothing was found
 lost to attrition. Two lanes are now on their third recorded pass-over and
@@ -416,14 +417,18 @@ carrying its TRIAGE-v0.11 citation.
 
 ## The suite at the tip
 
-[SUITE-GATE-V18: full-suite verdict and timing at the frozen v0.18 tip land
-here before the tag. The baseline is v0.17.0's gate — **1,705 tests, 0
-failures, 3 skipped, 27,068.5 s (7 h 31 m)**, receipts in
-`reports/test_gate_v017/` including the five pre-green runs. This cycle
-adds three wholly new modules — `test_realize_term` (44),
-`test_realization_lexicon` (37), `test_measure_realization` (26) — and
-takes `test_serve_chat` from 68 to 74, so the expected count is 1,705 + 107
-+ 6 plus whatever `test_answers` gained.]
+**1,827 tests, OK (3 environment skips), 24,117.3 s (6 h 42 m) at the
+frozen tip `30bf74d` — green on the first run**
+(`reports/test_gate_v018/run1-green.log`). Up from v0.17.0's 1,705
+(27,068.5 s, green on its sixth run) by this cycle's three new modules —
+`test_realize_term` (44), `test_realization_lexicon` (37),
+`test_measure_realization` (26) — plus the wiring's additions to
+`test_answers` and `test_serve_chat`. First-run green is the v0.17
+gate's six-run tuition paid forward: the shadow-import class fixed at
+both sites, the environment-gated branch now tested where its
+environment is real, module names built in-process, and main untouched
+from launch to verdict — the receipt says so in
+`reports/test_gate_v018/runs.md`.
 
 ## Reproduce
 

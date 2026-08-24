@@ -414,12 +414,12 @@ python experiments/corpus_analogy.py --out experiments/results/corpus_analogy_re
 cd experiments && python -m visual.genvisual adjudicate --n 240 --seed 11
                                              # visual oracle: P-VO1..P-VO7
 python -m unittest discover -s tests -v     # controller contracts + vacuity checks
-# 1,705 tests, 0 failures, 3 skipped at v0.17.0 -- 7h31m serial (27,068.5s),
-# test_write_stage still the bulk of it. Receipts incl. the five pre-green
-# runs: reports/test_gate_v017/ (baselines: test_gate_v016/, test_gate_v015/).
-# [SUITE-GATE-V18: refreshes to the v0.18 tip's numbers before the tag.
-# v0.18 adds test_realize_term (44), test_realization_lexicon (37),
-# test_measure_realization (26), and takes test_serve_chat 68 -> 74.]
+# 1,827 tests, 0 failures, 3 skipped at v0.18.0 -- 6h42m serial (24,117.3s),
+# green on the first run; test_write_stage still the bulk of it. Receipts:
+# reports/test_gate_v018/ (baselines: test_gate_v017/ incl. its five
+# pre-green runs, test_gate_v016/, test_gate_v015/). v0.18's new modules:
+# test_realize_term (44), test_realization_lexicon (37),
+# test_measure_realization (26); test_serve_chat 68 -> 74.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
