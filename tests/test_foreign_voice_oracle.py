@@ -280,6 +280,31 @@ class FailureIsNamedNotSilent(unittest.TestCase):
         self.assertFalse(row.ok)
         self.assertIn("unbound_name", row.error)
 
+    def test_a_batch_where_every_tag_fails_to_parse_is_not_a_refusal(self) -> None:
+        """The bug C-V1 found before it ever ran.
+
+        An earlier guard read "every tag in this batch is missing" as a
+        file-level failure and refused. But C-V1 is the one control built to
+        feed the oracle deliberate nonsense — text inverted through a SCRAMBLED
+        table — and a batch of that can legitimately have every tag fail to
+        parse. The guard turned the control into a run abort.
+
+        The sentinels are the authority on file-level failure instead, and are
+        strictly better at it: they sit after every statement, so a preamble
+        that did not compile leaves them unanswered. If they answered, the file
+        was fine and the missing tags are genuine parse errors, however many.
+        """
+        answers = self.oracle.serialize([
+            ("a", "∀ a b : Rat, ((a + b"),
+            ("b", "∀ x y : Rat, ((x * y"),
+            ("c", "∀ p q : Rat, ((p - q"),
+        ])
+        self.assertEqual(set(answers), {"a", "b", "c"})
+        for tag in ("a", "b", "c"):
+            with self.subTest(tag=tag):
+                self.assertFalse(answers[tag].ok)
+                self.assertIn("parse_error", answers[tag].error)
+
     def test_a_bystander_of_a_parse_error_still_gets_its_answer(self) -> None:
         """A swallowed command is re-probed alone before it is called a failure."""
         answers = self.oracle.serialize([

@@ -220,17 +220,19 @@ class Oracle:
     def _run_with_reprobe(self, chunk: list[tuple[str, str]]) -> dict[str, Serialization]:
         answered = self._run(chunk)
         missing = [(tag, term) for tag, term in chunk if tag not in answered]
-        if missing and len(missing) == len(chunk) and len(chunk) > 1:
-            # EVERY tag missing is not N parse errors, it is one file-level
-            # failure — a preamble that did not compile, or a first command
-            # that swallowed the rest. Reporting it as N failures would put a
-            # harness fault into the rate as data. The sentinels normally
-            # catch this first; this is the guard for the case where they do
-            # not, and it refuses rather than attributing.
-            raise OracleRefusal(
-                f"none of the {len(chunk)} tags in this batch answered; that is a "
-                f"file-level failure, not {len(chunk)} unparseable statements"
-            )
+        # There is deliberately NO "every tag missing means a file-level
+        # failure" guard here, and the reason is a bug C-V1 found before it
+        # ever ran. That control feeds the oracle deliberate nonsense — text
+        # inverted through a SCRAMBLED table — and a batch of it can legitimately
+        # have every single tag fail to parse. A guard that read "all missing"
+        # as breakage turned the one control built to produce garbage into a
+        # run abort.
+        # The sentinels are the authority on file-level failure and are strictly
+        # better at it: they sit AFTER every statement, so a preamble that did
+        # not compile, or a parse error that swallowed the file to EOF, leaves
+        # them unanswered and `_check_sentinels` refuses. If they answered, the
+        # file was fine and the missing tags are genuine parse errors — however
+        # many of them there are.
         if missing and len(missing) < len(chunk):
             # A parse error swallows the commands after it. Re-probe the
             # bystanders without the offender before calling them failures.

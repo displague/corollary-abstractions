@@ -577,48 +577,125 @@ _NO_ROW = "registered_blocked_no_row"
 
 def c_v1(oracle: fvo.Oracle, lexicon: fvl.ForeignLexicon,
          scrambled: fvl.ForeignLexicon, moved: dict, rule: fvr.RuleR,
-         rows: list[dict], batch_size: int) -> dict:
-    """Rendered with a WRONG table, read back through the COMMITTED one."""
+         rows: list[dict], b1_identity: dict[str, bool],
+         batch_size: int) -> dict:
+    """Rendered with a WRONG table, read back through the COMMITTED one.
+
+    The **failure-mode split** is what makes this control readable rather than
+    merely low. A skeleton rate of zero has two entirely different meanings and
+    §7's voiding sentence turns on which one it is:
+
+    * zero because every scrambled sentence **elaborated to a different term** —
+      the gate is reading the words and the control has done its job;
+    * zero because every scrambled sentence **failed to elaborate at all** —
+      the pinned binary never got to compare two terms, and *"both are near
+      zero, the gate is untested and the reading is void"*.
+
+    So the non-identity outcomes are split four ways: the scrambled table
+    refused to render, the literal inverse refused to read it back, the binary
+    refused to elaborate it, or it elaborated to a different digest.
+
+    The contrast is computed **on the same statement set**, because §7 says
+    *"the true renderer's identity rate on the same statement set"* and a ratio
+    between two different denominators is not a ratio.
+    """
     terms: list[tuple[str, str]] = []
-    pairs: list[str] = []
+    attempted: list[str] = []
+    renderer_refused: Counter = Counter()
+    inverse_refused = 0
     for index, row in enumerate(rows):
         got = fv.render_interpreted(row["interpreted"], scrambled)
         if isinstance(got, fv.Refusal):
+            renderer_refused[got.reason] += 1
             continue
         try:
             inverse = fv.delexicalize(got.surface, lexicon)
         except fv.ForeignVoiceError:
+            inverse_refused += 1
             continue
-        pairs.append(row["statement_id"])
+        attempted.append(row["statement_id"])
         terms.append((f"o{index}", row["interpreted"]))
         terms.append((f"s{index}", rule.apply(inverse).text))
     answers = oracle.serialize(terms, batch_size=batch_size) if terms else {}
-    identical = 0
+
+    identical = differed = elaboration_failed = orig_failed = 0
     for index, row in enumerate(rows):
         orig, scram = answers.get(f"o{index}"), answers.get(f"s{index}")
-        if orig and scram and orig.ok and scram.ok and orig.digest == scram.digest:
+        if orig is None or scram is None:
+            continue
+        if not orig.ok:
+            orig_failed += 1
+        elif not scram.ok:
+            elaboration_failed += 1
+        elif orig.digest == scram.digest:
             identical += 1
-    rate = _rate(identical, len(pairs))
+        else:
+            differed += 1
+
+    rate = _rate(identical, len(attempted))
+    true_identity = sum(1 for sid in attempted if b1_identity.get(sid))
+    true_rate = _rate(true_identity, len(attempted))
+    ratio = round(true_rate / rate, 3) if rate else None
+    both_near_zero = rate <= C_V1_CEILING and true_rate <= C_V1_CEILING
+    ratio_short = ratio is not None and ratio < C_V1_RATIO
+    voided = rate > C_V1_CEILING or both_near_zero or ratio_short
+    if rate > C_V1_CEILING:
+        void_reason = ("the skeleton renderer cleared the ceiling: the gate is "
+                       "not reading the words")
+    elif both_near_zero:
+        void_reason = "both rates are near zero: the gate is untested"
+    elif ratio_short:
+        void_reason = "the ratio is below the required multiple"
+    else:
+        void_reason = ""
     return {
         "control": "C-V1 — the skeleton renderer, one-sided by construction",
         "one_sided": (
             "produced with the scrambled table, read back through the "
             "committed one. v0.18 measured why: a two-sided scramble is a "
             "consistent renaming, still a bijection, and round-trips "
-            "near-perfectly"
+            "near-perfectly, so it would void the reading for a reason that "
+            "has nothing to do with whether the gate reads the words"
         ),
         "scramble_seed_source": "data/foreign_voice/lexicon.json",
         "phrases_moved": moved,
-        "attempted": len(pairs),
+        "covered_offered": len(rows),
+        "attempted": len(attempted),
         "identity": identical,
         "rate": rate,
+        "failure_modes": {
+            "scrambled_renderer_refused": dict(renderer_refused),
+            "scrambled_renderer_refused_total": sum(renderer_refused.values()),
+            "inverse_refused": inverse_refused,
+            "original_failed_to_elaborate": orig_failed,
+            "scrambled_failed_to_elaborate": elaboration_failed,
+            "elaborated_to_a_different_digest": differed,
+            "reading": (
+                "a skeleton rate of zero means the control worked ONLY if the "
+                "misses are `elaborated_to_a_different_digest`. If they are "
+                "`scrambled_failed_to_elaborate`, the pinned binary never got "
+                "to compare two terms and the gate is untested"
+            ),
+        },
+        "contrast_on_the_same_statement_set": {
+            "statements": len(attempted),
+            "true_renderer_identity": true_identity,
+            "true_renderer_identity_rate": true_rate,
+            "skeleton_identity": identical,
+            "skeleton_identity_rate": rate,
+            "ratio": ratio,
+            "ratio_required": C_V1_RATIO,
+            "note": ("§7 compares against the true renderer's rate ON THE SAME "
+                     "STATEMENT SET, so this is not B1's headline denominator"),
+        },
         "voiding": (
             f"informative only if the true renderer's rate is >= {C_V1_RATIO}x "
             f"this one; if this clears {C_V1_CEILING}, the gate is not reading "
             f"the words and the reading is void; if both are near zero the gate "
             f"is untested and the reading is void"
         ),
-        "voided": rate > C_V1_CEILING,
+        "voided": voided,
+        "void_reason": void_reason,
     }
 
 
@@ -820,6 +897,163 @@ def c_v3_absent() -> dict:
 # --------------------------------------------------------------------------
 
 
+# --------------------------------------------------------------------------
+# The verdicts: every gate adjudicated against the design's own sentence
+# --------------------------------------------------------------------------
+
+
+def verdicts(result: dict) -> dict:
+    """FIRES / MISSES / VOID per gate, decided in the artifact rather than in prose.
+
+    A run that reports numbers and leaves the adjudication to whoever writes
+    the release is a run whose verdict can drift from its data. So the artifact
+    carries the design's §6 and §7 sentences beside each reading and says which
+    way each one went.
+
+    The ordering matters and is the design's: a VOID control voids the reading
+    it gates, so C-V1, C-V2 and C-V4 going void makes B1's rate unquotable even
+    if B1's own floor was cleared. `overall` says so.
+    """
+    def gate(name: str, sentence: str, met: bool, reading: str) -> dict:
+        return {"gate": name, "sentence": sentence,
+                "verdict": "FIRES" if met else "MISSES", "reading": reading}
+
+    def control(name: str, sentence: str, void: bool, reading: str,
+                reason: str = "") -> dict:
+        out = {"control": name, "sentence": sentence,
+               "verdict": "VOID" if void else "HOLDS", "reading": reading}
+        if void and reason:
+            out["void_reason"] = reason
+        return out
+
+    b0a, b0bc, b0d_ = result["b0a"], result["b0bc"], result["b0d"]
+    b1_, b3_ = result["b1"], result["b3"]
+    cv1, cv2, cv4 = result["c_v1"], result["c_v2"], result["c_v4"]
+
+    rows = [
+        gate("B-P", "the Lean-side serializer exists, runs under the hermetic "
+                    "rule, and its tests assert binder-name independence and "
+                    "byte-identical output across two runs",
+             True,
+             "discharged before B0 froze; the prototype's two retained pairs "
+             "reproduce at 475 and 2,627 characters"),
+        gate("B0a", "the foreign residue must be >= 2,000 statements, or the "
+                    "claim has no territory and the cycle stops",
+             b0a["floor_met"],
+             f"{b0a['totals']['residue']} residue of {b0a['totals']['mute']} "
+             f"mute ({b0a['totals']['transliterable']} transliterable)"),
+        gate("B0b+B0c", "at least 1,000 accepted, or the oracle cannot reach "
+                        "enough of the residue to gate anything",
+             b0bc["floor_met"],
+             f"{b0bc['accepted']} accepted of {b0bc['residue']}"),
+        gate("B0d", ">= 90 of 100 must elaborate at all — identity is B1's "
+                    "business; B0d only asks whether the inverse produces Lean",
+             b0d_["floor_met"],
+             f"{b0d_['inverted_and_elaborated']} of {b0d_['sealed']} elaborated; "
+             f"{b0d_['divergence_count']} divergences from the seal"),
+        gate("B1", ">= 99.5% of the covered set, both digests recomputed in the run",
+             b1_["floor_met"],
+             b1_["composition"]["required_sentence"]),
+        gate("B2", "the oracle's three outcomes are distinguished and none is a "
+                   "silent drop; a REFUSAL aborts and publishes zero rates",
+             True,
+             f"outcomes {b1_['outcomes']}; the run completed, so no refusal fired"),
+        gate("B3", "the five buckets must close at 10,605 exactly; any statement "
+                   "in none of them is a bug in the census",
+             b3_["closes_exactly"],
+             f"{b3_['transliterable']} + {b3_['covered_served']} + "
+             f"{b3_['covered_failed']} + {b3_[_MATHLIB]} + {b3_[_NO_ROW]} = "
+             f"{b3_['total']}"),
+        gate("B4", "the register is committed with its blocked_set_digest "
+                   "BEFORE anything is rendered",
+             True,
+             "frozen in commit 297d1ea, before scripts/foreign_voice.py existed; "
+             "checked against the git history by tests/git_ordering.py"),
+        gate("B5", "two full runs on one tree produce byte-identical artifacts",
+             result.get("b5", {}).get("byte_identical", False),
+             str(result.get("b5", {}))),
+        gate("B6", "nothing in the render path, the inverse, rule R or the "
+                   "register is learned",
+             not result["b6"]["learned_components"],
+             "no learned component; §9 closes the seat in writing"),
+        gate("B7", "every frozen digest revalidates, or the independence claim "
+                   "is void and no rate is published",
+             len(result["prereg_revalidated"]) > 0,
+             f"{len(result['prereg_revalidated'])} artifacts revalidated "
+             f"before anything was measured"),
+    ]
+
+    controls = [
+        control("C-V1",
+                "informative only if the true renderer's identity rate on the "
+                "same statement set is >= 20x the skeleton renderer's; if the "
+                "skeleton renderer clears 1%, the gate is not reading the words "
+                "and is void; if both are near zero, the gate is untested and "
+                "the reading is void",
+                cv1["voided"],
+                f"skeleton {cv1['rate']} vs true "
+                f"{cv1['contrast_on_the_same_statement_set']['true_renderer_identity_rate']} "
+                f"over {cv1['attempted']} statements, ratio "
+                f"{cv1['contrast_on_the_same_statement_set']['ratio']}; misses split "
+                f"{cv1['failure_modes']['elaborated_to_a_different_digest']} "
+                f"different-digest / "
+                f"{cv1['failure_modes']['scrambled_failed_to_elaborate']} "
+                f"failed-to-elaborate",
+                cv1["void_reason"]),
+        control("C-V2",
+                "if the null does not reach >= 99% identity, the harness — not "
+                "the renderer — is what the run measured, and every other "
+                "reading in the artifact is void",
+                cv2["voided"],
+                f"null over covered "
+                f"{cv2['over_covered']['identity_rate_over_elaborated']} "
+                f"({cv2['over_covered']['identity']} of "
+                f"{cv2['over_covered']['elaborated']} elaborated); over the "
+                f"transliterable {cv2['over_transliterable']['statements']}: "
+                f"elaboration {cv2['over_transliterable']['elaboration_rate']}, "
+                f"identity "
+                f"{cv2['over_transliterable']['identity_rate_over_elaborated']}"),
+        {
+            "control": "C-V3",
+            "sentence": "if the skeleton control is marked determinate at >= "
+                        "half the true renderer's rate, the voice claim is void",
+            "verdict": "ABSENT",
+            "reading": result["c_v3"]["consequence"],
+        },
+        control("C-V4",
+                "per-class floors at 0.90, registered before this instrument "
+                "existed, replacing §7's pooled 95%; drop_binder is blind by "
+                "construction and excluded from the voiding pool",
+                cv4["voided"],
+                "; ".join(
+                    f"{name} {row['rate']} ({row['differed']}/{row['sample_size']})"
+                    for name, row in sorted(cv4["per_class"].items())),
+                ", ".join(cv4["voided_classes"])),
+    ]
+
+    missed = [row["gate"] for row in rows if row["verdict"] == "MISSES"]
+    void = [row["control"] for row in controls if row["verdict"] == "VOID"]
+    if void:
+        overall = "VOID"
+        summary = (f"{', '.join(void)} fired a voiding sentence, so B1's rate "
+                   f"is not quotable regardless of its own floor")
+    elif missed:
+        overall = "MISSES"
+        summary = f"{', '.join(missed)} missed its floor"
+    else:
+        overall = "FIRES"
+        summary = ("every gate cleared its floor and no control fired a voiding "
+                   "sentence; C-V3 is ABSENT and the claim it alone licenses "
+                   "is not made")
+    return {"gates": rows, "controls": controls, "missed": missed,
+            "voided": void, "overall": overall, "summary": summary,
+            "how_to_read_this": (
+                "a VOID control voids the reading it gates, so a voided control "
+                "outranks a cleared B1 floor. A published miss is a result: the "
+                "artifact is committed either way and nothing is re-run or tuned"
+            )}
+
+
 def measure(batch_size: int = 300) -> dict:
     """Every gate and every control, as one deterministic dict.
 
@@ -853,6 +1087,8 @@ def measure(batch_size: int = 300) -> dict:
                  block["mutations"])
 
     b1_result = b1(oracle, lexicon, rule, rows, batch_size)
+    b1_identity = {receipt["statement_id"]: receipt["identity"]
+                   for receipt in b1_result["receipts"]}
     return {
         "run_id": RUN_ID,
         "design": "docs/DESIGN-foreign-voice.md",
@@ -874,7 +1110,8 @@ def measure(batch_size: int = 300) -> dict:
             ),
         },
         "b3": b3(preview, register, b1_result),
-        "c_v1": c_v1(oracle, lexicon, scrambled, moved, rule, rows, batch_size),
+        "c_v1": c_v1(oracle, lexicon, scrambled, moved, rule, rows,
+                     b1_identity, batch_size),
         "c_v2": c_v2(oracle, rule, rows, transliterable, batch_size),
         "c_v3": c_v3_absent(),
         "c_v4": c_v4(oracle, lexicon, rule, rows, block, plan, batch_size),
@@ -931,6 +1168,7 @@ def run(out: Path = DEFAULT_OUT, batch_size: int = 300,
                 "two runs on one tree produced different artifacts; the oracle "
                 "is not a function and no digest identity means anything")
     first["b5"] = b5
+    first["verdicts"] = verdicts(first)
     out.write_text(json.dumps(first, ensure_ascii=False, indent=1,
                               sort_keys=True) + "\n",
                    encoding="utf-8", newline="\n")
@@ -968,6 +1206,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"B1 {result['b1']['composition']['required_sentence']}")
     print(f"B3 closes: {result['b3']['closes_exactly']}")
+    print(f"OVERALL {result['verdicts']['overall']}: {result['verdicts']['summary']}")
     print(f"written to {args.out}")
     return 0
 

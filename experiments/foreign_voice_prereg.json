@@ -179,14 +179,14 @@
     {
       "path": "scripts/foreign_voice_oracle.py",
       "role": "serializer_driver",
-      "sha256_lf": "976991138dfe4de4056fe9beb66c9eacd4572e5d1b8af1720d72337e1fc8b5df",
+      "sha256_lf": "59a21dcc9dbd80929383fc35e8a55c462dc146a9fc53f0e94b990c99c4c4ad3a",
       "recorded": "2026-08-24, promoted from `pending` when B-P landed",
       "why": [
         "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's committed settings and returns sha256(serialize(elaborate(text))). The identity relation of §3.2 calls it twice per statement and compares.",
         "Hermetic by import rather than by re-decision: the toolchain name comes from the committed `lean-toolchain` file and is resolved through `external_verifier.toolchain_binary`, which returns None rather than downloading. An absent toolchain RAISES — B2, a refusal aborts the run and is not a data point.",
         "A parse error can swallow the commands that follow it, so a missing tag is RE-PROBED in a batch of its own before it is called a failure. A tag still missing when it is the only command in the file is genuinely unparseable; one that reappears was a bystander. Recorded here because 'silence is not a data point' is a rule this module implements rather than merely respects."
       ],
-      "re_recorded": "2026-08-24, re-recorded by corrections 4 and 6 (H4 return codes and sentinels; C2 unaccounted-diagnostic guard)"
+      "re_recorded": "2026-08-24, correction 11 (the whole-chunk guard removed; C-V1 found it)"
     },
     {
       "path": "scripts/foreign_voice_register.py",
@@ -232,13 +232,14 @@
     {
       "path": "scripts/measure_foreign_voice.py",
       "role": "registered_run",
-      "sha256_lf": "8dd42c3269f3efba5a7164c1a6d177a8b5ff6819ae6b51b77a5b065dcdc675ef",
+      "sha256_lf": "b5b17830c07d47d7da54ca8cf9b87a24da482516f8780dbb713fb6c5fe09378a",
       "recorded": "2026-08-24, written and dry-checked; NOT YET EXECUTED",
       "why": [
         "The runner for B0a-B0d, B1-B5 and every control. Frozen here so the artifact it eventually writes names the instrument that wrote it.",
         "It refuses to publish unless every digest in this file revalidates against the tree first, which is B7 with teeth: a run that had to move a frozen artifact does not get to publish a rate.",
         "It has NOT been run. Phase 2 was scoped to stop at the run boundary, and executing it requires `--perform-the-registered-run` — a long flag on purpose, because the registered run is a once-only act and a runner that executes by typing its name can spend the one run on a rehearsal."
-      ]
+      ],
+      "re_recorded": "2026-08-24, correction 12 (C-V1's failure-mode split and the per-gate verdicts block)"
     },
     {
       "path": "scripts/numeral_words.py",
@@ -458,6 +459,30 @@
       "what": "The numeral-literal regex no longer matches a digit run inside an identifier.",
       "why": [
         "`x_2`, `a1` and `v0` carry digit runs the numeral pair is never asked to spell. Harmless today - `2` is in the registered domain - and not harmless in principle: a slot spelled `v1000000000000000000` would have been filed as an out-of-domain literal and the statement registered as unrenderable for a reason that is not true of it."
+      ]
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "C-V1, before it ran",
+      "artifact": "scripts/foreign_voice_oracle.py",
+      "what": "The `_run_with_reprobe` guard that refused a batch in which EVERY tag failed to answer is removed. The batch sentinels are the sole authority on file-level failure.",
+      "why": [
+        "The guard read 'all tags missing' as 'the file broke'. C-V1 is the one control built to feed the oracle deliberate nonsense - statements inverted through a SCRAMBLED table - and a batch of that can legitimately have every tag fail to parse. The guard turned the control into a run abort, which is B2 backwards: a garbage input is a data point, a broken harness is a refusal.",
+        "The sentinels subsume it and are strictly better. They sit AFTER every statement, so a preamble that did not compile, or a parse error that swallowed the file to EOF, leaves them unanswered and the batch refuses. If they answered, the file was fine and the missing tags are genuine parse errors however many there are - which is exactly the distinction the removed guard could not draw.",
+        "Found by a smoke test of the run's own code paths on fifteen statements, BEFORE the registered run produced any number. The first attempt at the registered run was stopped for unrelated instrumentation gaps and had written nothing when it was stopped; no gate reading existed at any point during this fix."
+      ],
+      "not_a_b7_event": "No trusted artifact moved. The oracle is untrusted and measured (§4), and its digest is re-recorded here rather than amended in place."
+    },
+    {
+      "dated": "2026-08-24",
+      "finding": "the reporting requirements, before the run",
+      "artifact": "scripts/measure_foreign_voice.py",
+      "what": "C-V1 gains a four-way failure-mode split and a contrast computed on the SAME statement set; the artifact gains a `verdicts` block adjudicating every gate and control against the design's own §6/§7 sentence.",
+      "why": [
+        "C-V1's voiding sentence has three clauses and the third - 'if both are near zero, the gate is untested and the reading is void' - cannot be adjudicated from a rate alone. A skeleton rate of zero means the control worked if the misses are `elaborated_to_a_different_digest`, and means the gate never ran if they are `scrambled_failed_to_elaborate`. The runner recorded only the rate, so the control would have been unreadable in exactly the case §7 legislates for.",
+        "The contrast is now against the true renderer's rate ON THE SAME STATEMENTS, because §7 says so and because a ratio between two different denominators is not a ratio.",
+        "The verdicts block exists so the adjudication lives in the artifact rather than in whoever writes the release. A run that reports numbers and leaves FIRES/MISSES/VOID to prose is a run whose verdict can drift from its data. It also encodes the precedence: a VOID control outranks a cleared B1 floor, because a voided control voids the reading it gates.",
+        "Both gaps were found by reading the reporting requirements against the runner, before any number existed. The first attempt at the run was stopped with an empty log and no artifact."
       ]
     }
   ],
