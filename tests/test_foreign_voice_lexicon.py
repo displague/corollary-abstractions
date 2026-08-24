@@ -480,11 +480,25 @@ class PreregDigestTests(unittest.TestCase):
                         "B7 names an inverse-table digest; if there is no "
                         "separate file, the prereg has to say so in writing")
 
-    def test_the_serializer_row_is_pending_not_absent(self) -> None:
-        """The ordering IS the record: B-P has not landed in this commit."""
-        pending = {row["role"]: row for row in self.prereg["pending"]}
-        self.assertIn("serializer", pending)
-        self.assertEqual(pending["serializer"]["sha256_lf"], "pending")
+    def test_a_pending_row_is_pending_not_absent(self) -> None:
+        """The ordering IS the record: an artifact not yet written has a row.
+
+        Written for the preregistration commit, where the serializer was the
+        pending row. It is stated as the invariant rather than as that commit's
+        fact, because the roll-forward is the whole discipline: a row leaves
+        `pending` only when the file it names exists, and it leaves carrying a
+        `recorded` note saying it was promoted.
+        """
+        for row in self.prereg["pending"]:
+            with self.subTest(role=row["role"]):
+                self.assertEqual(row["sha256_lf"], "pending")
+                self.assertTrue(row.get("why"))
+
+    def test_every_frozen_row_carries_the_date_it_was_recorded(self) -> None:
+        """A digest with no date cannot be read against an ordering."""
+        for row in self.prereg["frozen"]:
+            with self.subTest(path=row["path"]):
+                self.assertTrue(row.get("recorded"))
 
     def test_no_pending_row_names_a_file_that_already_exists(self) -> None:
         for row in self.prereg["pending"]:

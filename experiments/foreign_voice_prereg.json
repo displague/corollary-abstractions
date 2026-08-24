@@ -171,21 +171,32 @@
         "Authored against R(s) rather than against the corpus source, because with autoImplicit off the surface must carry an explicit binder preamble (Correction 3), so the sentence a reader sees is the sentence for the statement under the declared interpretation.",
         "What was mechanically checked is stated in the file rather than implied: every word of every surface traces to a lexicon row or the registered numeral pair (v0.18's R2 sweep). The TOKEN SEQUENCE was not mechanically checked, because checking it means writing the literal inverse and the inverse is the implementation. Divergences at B0d time may therefore be authoring slips as well as grammar disagreements, and the run artifact must classify them rather than count them."
       ]
-    }
-  ],
-  "pending": [
+    },
     {
       "path": "prover/lean/normalizer/Serialize.lean",
       "role": "serializer",
-      "sha256_lf": "pending",
-      "why": "B-P's deliverable. Frozen in the B-P commit, with its digest recorded here and dated, exactly as v0.18's inverter row landed with the realizer rather than before it."
+      "sha256_lf": "a77d6b0229d55a57d0fc8da0cca2c9cd2fcc7ca16eee6a5e2dda705a9873c8ea",
+      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
+      "why": [
+        "B-P's deliverable and the identity witness of §3.2. It walks `Expr` and drops the `Name` field of every `forallE`, `lam` and `letE`, so binder-name independence is a property of the serializer's TYPE rather than of a normalization pass over text. Every `Expr` constructor is matched explicitly rather than through a catch-all, so a toolchain that adds one is a compile error here instead of a silently-dropped subterm.",
+        "Measured against the pinned v4.32.2 binary in this commit: the prototype's two retained pairs reproduce byte-identically at 475 and 2,627 characters, sha256 25ec23fb13b3312063d7b9754afbb2f3694775f83c5d7726d4925c7486dce3c3 and f89095af7546ebd1b61e2374119fa2e041d8c89af2ece93c6f11016c893bae7f. The design quotes the 16-hex prefixes of both; the full values are pinned by tests/test_foreign_voice_oracle.py.",
+        "It never becomes an `.olean` and is never imported: the driver concatenates it with the `#ser` commands into one temporary source file, so there is no build artifact that can go stale against this digest.",
+        "`#ser \"tag\" => term` answers under its own tag rather than by line number. That is a deliberate correction of how the B0 eligibility probe had to work — attribution by position is what let the frontend's 100-error cutoff report 2,982 eligible against a truth of 2,319 — and it means silence is never read as success."
+      ]
     },
     {
       "path": "scripts/foreign_voice_oracle.py",
       "role": "serializer_driver",
-      "sha256_lf": "pending",
-      "why": "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's settings, obtains the elaborated-term serialization, returns its digest. Frozen in the B-P commit."
-    },
+      "sha256_lf": "72e916d937f79d8f26c29b5676b38bab2c2682afcf28a98bc0e5e93e9a114fff",
+      "recorded": "2026-08-24, promoted from `pending` when B-P landed",
+      "why": [
+        "B-P's Python driver: submits foreign-dialect text to the pinned binary under rule R's committed settings and returns sha256(serialize(elaborate(text))). The identity relation of §3.2 calls it twice per statement and compares.",
+        "Hermetic by import rather than by re-decision: the toolchain name comes from the committed `lean-toolchain` file and is resolved through `external_verifier.toolchain_binary`, which returns None rather than downloading. An absent toolchain RAISES — B2, a refusal aborts the run and is not a data point.",
+        "A parse error can swallow the commands that follow it, so a missing tag is RE-PROBED in a batch of its own before it is called a failure. A tag still missing when it is the only command in the file is genuinely unparseable; one that reappears was a bystander. Recorded here because 'silence is not a data point' is a rule this module implements rather than merely respects."
+      ]
+    }
+  ],
+  "pending": [
     {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",

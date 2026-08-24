@@ -189,12 +189,23 @@ class SealOrderingTests(unittest.TestCase):
             sealed["id_selection_seed"],
             frozen["data/foreign_voice/lexicon.json"]["sha256_lf"])
 
-    def test_the_serializer_has_still_not_landed(self) -> None:
-        """B0d precedes B-P in the design's §10 order, and the file says so."""
-        pending = {row["role"]: row for row in self.prereg["pending"]}
-        self.assertEqual(pending["serializer"]["sha256_lf"], "pending")
-        self.assertFalse((ROOT / "prover" / "lean" / "normalizer" /
-                          "Serialize.lean").exists())
+    def test_the_seal_predates_the_serializer_in_the_record(self) -> None:
+        """B0d precedes B-P in the design's §10 order, and the record says so.
+
+        Written in the B0d commit, where `Serialize.lean` did not yet exist and
+        this asserted its absence. When B-P landed, the assertion was restated
+        as the durable form of the same fact: the serializer's row was PROMOTED
+        out of `pending`, and it says so. A row that had always been frozen
+        would carry no promotion note, and the ordering would be unrecorded.
+        """
+        rows = {row["role"]: row for row in
+                self.prereg["frozen"] + self.prereg["pending"]}
+        serializer = rows["serializer"]
+        if serializer["sha256_lf"] == "pending":
+            self.assertFalse((ROOT / "prover" / "lean" / "normalizer" /
+                              "Serialize.lean").exists())
+        else:
+            self.assertIn("promoted", serializer["recorded"])
 
     def test_no_renderer_exists_yet(self) -> None:
         """The seal is only a prediction if nothing has run against it."""
