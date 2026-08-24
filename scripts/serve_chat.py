@@ -150,6 +150,14 @@ BASELINE_MANIFEST = "experiments/throughput_baseline.json"
 #: that will, and the sheet is generated from live artifacts by §7's rule.
 REALIZATION_RUN = "experiments/realization_rate.json"
 
+#: The ONE registered foreign-voice run, and the register frozen before it.
+#: The sheet quotes BOTH: the run says why the surface is withheld, and the
+#: register says what shipped instead. Read at sheet-build time for the same
+#: reason `REALIZATION_RUN` is — a number restated in code is a number that
+#: goes stale, and this one states a miss, which is worse to get wrong.
+FOREIGN_VOICE_RUN = "experiments/foreign_voice_rate.json"
+FOREIGN_VOICE_REGISTER = "data/foreign_voice/register.json"
+
 #: A11, second half. `CoreSession.boot(offline=True)` costs ~415 ms on the
 #: reference host, of which ~405 ms is `UnifiedKnowledgeStore.load` re-parsing
 #: every committed `data/*/nodes.json` (the boot probes together are ~5 ms —
@@ -397,6 +405,84 @@ def realization_row(repo_root_str: str) -> dict:
     row["parseable_denominator"] = r1["denominator"]
     row["corpus_nodes"] = r0["nodes_total"]
     row["sentence"] = r1["sentence"]
+    return row
+
+
+@lru_cache(maxsize=8)
+def foreign_voice_row(repo_root_str: str) -> dict:
+    """The sheet's `foreign_voice` row: a surface WITHHELD, published as one.
+
+    §7's rule, and the reason this row exists at all: "Rows the profile
+    cannot serve (gloss under offline boot) appear with `served: false`
+    rather than disappearing." A withheld surface that simply is not in the
+    sheet is indistinguishable, to an attaching orchestrator, from a surface
+    this repository never attempted — which is exactly the difference the
+    cycle's own artifacts were written to record. The gloss row is the
+    precedent; this is the same rule applied to a control that voided.
+
+    Two things this row deliberately does NOT publish. **B1's identity
+    rate**, because the run's own verdict block says it is not quotable: "a
+    VOID control voids the reading it gates, so a voided control outranks a
+    cleared B1 floor" — a sheet that printed 1.0 beside the word VOID would
+    be laundering the miss through a field name. And **a single summed
+    blocked figure without its split**, because the run says those two
+    buckets are "reported separately: the first is a budget consequence the
+    maintainer can lift and the second is a design consequence this cycle
+    owns". The register publishes its own `blocked_total`, so that number is
+    read rather than computed, and both buckets ride beside it.
+    """
+
+    root = Path(repo_root_str)
+    row = {
+        "surface": "foreign voice",
+        "served": False,
+        "description": (
+            "statements rendered as invertible English sentences in a "
+            "non-notational register"
+        ),
+        "run": FOREIGN_VOICE_RUN,
+        "register": FOREIGN_VOICE_REGISTER,
+    }
+    try:
+        run = json.loads(
+            (root / FOREIGN_VOICE_RUN).read_text(encoding="utf-8")
+        )
+        register = json.loads(
+            (root / FOREIGN_VOICE_REGISTER).read_text(encoding="utf-8")
+        )
+        verdicts = run["verdicts"]
+        c_v4 = run["c_v4"]
+        voided_class = c_v4["voided_classes"][0]
+        measured = c_v4["per_class"][voided_class]
+        blocked_total = register["blocked_total"]
+        census = register["b3_census"]
+    except (OSError, ValueError, KeyError, TypeError, IndexError) as exc:
+        row["reason"] = (
+            f"the foreign-voice surface is withheld; its record could not be "
+            f"read from {FOREIGN_VOICE_RUN} and {FOREIGN_VOICE_REGISTER} "
+            f"({type(exc).__name__}: {exc})"
+        )
+        return row
+
+    row["verdict"] = verdicts["overall"]
+    row["voided_controls"] = list(verdicts["voided"])
+    row["reason"] = (
+        f"certification control voided (C-V4 {voided_class} "
+        f"{measured['rate']:.2f} vs {measured['threshold']:.2f}); the "
+        f"register of {blocked_total:,} unsayable statements ships instead; "
+        f"see {FOREIGN_VOICE_RUN}"
+    )
+    row["summary"] = verdicts["summary"]
+    row["register_id"] = register.get("register_id")
+    row["blocked_total"] = blocked_total
+    # Kept apart on the run's own instruction; see the docstring.
+    row["blocked_split"] = {
+        "registered_blocked_mathlib_head": census[
+            "registered_blocked_mathlib_head"
+        ],
+        "registered_blocked_no_row": census["registered_blocked_no_row"],
+        "reported_separately_because": run["b3"]["never_summed"],
+    }
     return row
 
 
@@ -1567,6 +1653,7 @@ class ChatEngine:
                 "skin_assigned": list(SKIN_ASSIGNED_STATUSES),
             },
             "realization": realization_row(str(self.repo_root)),
+            "foreign_voice": foreign_voice_row(str(self.repo_root)),
             "honesty": HONESTY_LINE,
             "replay": (
                 "every request replays its user turns into a fresh session; "

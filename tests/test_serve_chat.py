@@ -1318,6 +1318,119 @@ class CapabilitySheet(ServedSkin):
             for name in serve_chat.DEMO_NAMES:
                 self.assertNotIn(name, served)
 
+    def test_capability_sheet_publishes_the_withheld_foreign_voice_row(self):
+        """§7: a row the profile cannot serve appears with served:false.
+
+        The gloss row is the precedent — under the offline boot it publishes
+        `served: false` rather than vanishing. A withheld surface that is
+        simply absent from the sheet is indistinguishable, to a client, from
+        one this repository never attempted, and this cycle's whole record
+        is about that difference.
+        """
+
+        sheet, _text = self.served_sheet()
+        self.assertIn("foreign_voice", sheet)
+        row = sheet["foreign_voice"]
+        self.assertFalse(row["served"])
+        self.assertIn("reason", row)
+        self.assertEqual(row["run"], "experiments/foreign_voice_rate.json")
+        self.assertEqual(row["register"], "data/foreign_voice/register.json")
+
+    def test_the_foreign_voice_reason_quotes_the_artifacts_own_verdict(self):
+        """Read at build time, not restated: every number matches the record."""
+
+        sheet, _text = self.served_sheet()
+        row = sheet["foreign_voice"]
+        run = json.loads(
+            (REPO / "experiments" / "foreign_voice_rate.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        register = json.loads(
+            (REPO / "data" / "foreign_voice" / "register.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        self.assertEqual(row["verdict"], run["verdicts"]["overall"])
+        self.assertEqual(row["verdict"], "VOID")
+        self.assertEqual(row["voided_controls"], run["verdicts"]["voided"])
+        self.assertEqual(row["summary"], run["verdicts"]["summary"])
+        self.assertEqual(row["blocked_total"], register["blocked_total"])
+
+        # The voiding class and its two numbers come from C-V4 itself.
+        voided_class = run["c_v4"]["voided_classes"][0]
+        measured = run["c_v4"]["per_class"][voided_class]
+        reason = row["reason"]
+        self.assertIn(f"C-V4 {voided_class}", reason)
+        self.assertIn(f"{measured['rate']:.2f}", reason)
+        self.assertIn(f"{measured['threshold']:.2f}", reason)
+        self.assertIn(f"{register['blocked_total']:,}", reason)
+        self.assertIn("experiments/foreign_voice_rate.json", reason)
+        # The class that voided really is a voiding-pool member below floor.
+        self.assertTrue(measured["in_voiding_pool"])
+        self.assertLess(measured["rate"], measured["threshold"])
+
+    def test_the_foreign_voice_row_never_quotes_the_voided_identity_rate(self):
+        """A VOID control outranks a cleared floor; the sheet must not launder it.
+
+        The run says so itself: "a VOID control voids the reading it gates,
+        so a voided control outranks a cleared B1 floor". A sheet printing
+        B1's 1.0 beside the word VOID would be re-publishing the reading the
+        control just withdrew, under a field name that sounds like a result.
+        """
+
+        sheet, _text = self.served_sheet()
+        row = sheet["foreign_voice"]
+        run = json.loads(
+            (REPO / "experiments" / "foreign_voice_rate.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        served = json.dumps(row)
+        for banned in ("rate_over_covered", "rate_over_rendered", "identity"):
+            self.assertNotIn(banned, served)
+        self.assertNotIn(str(run["b1"]["rate_over_covered"]), served)
+
+    def test_the_foreign_voice_row_keeps_the_two_blocked_buckets_apart(self):
+        """The run forbids summing them into one reported figure."""
+
+        sheet, _text = self.served_sheet()
+        split = sheet["foreign_voice"]["blocked_split"]
+        register = json.loads(
+            (REPO / "data" / "foreign_voice" / "register.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        census = register["b3_census"]
+        self.assertEqual(
+            split["registered_blocked_mathlib_head"],
+            census["registered_blocked_mathlib_head"],
+        )
+        self.assertEqual(
+            split["registered_blocked_no_row"],
+            census["registered_blocked_no_row"],
+        )
+        self.assertIn("separately", split["reported_separately_because"])
+        # The published total is the register's OWN field, not a sum this
+        # sheet performed — the distinction the run's `never_summed` note
+        # exists to protect.
+        self.assertEqual(
+            sheet["foreign_voice"]["blocked_total"], register["blocked_total"]
+        )
+
+    def test_the_foreign_voice_row_stays_withheld_without_its_artifacts(self):
+        """A checkout without the record still publishes the withholding."""
+
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as empty:
+            row = serve_chat.foreign_voice_row(empty)
+        self.assertFalse(row["served"])
+        self.assertIn("reason", row)
+        self.assertNotIn("verdict", row)
+        self.assertNotIn("blocked_total", row)
+
     def test_capability_sheet_publishes_the_realization_row(self):
         """§5: the sheet gains a `realization` row, quoted from the live run."""
 
