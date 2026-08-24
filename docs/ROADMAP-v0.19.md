@@ -1,3 +1,37 @@
+> **CLOSED at v0.19.0.** Every item read out, and three of the four
+> readings are smaller than the plan hoped for. **Item 1** (the foreign
+> voice) shipped its full preregistration chain and its registered run, and
+> the run is **VOID**: every B-gate FIRES — B0a 4,191 residue, B0b+c 2,319
+> accepted, B0d **100 of 100 sealed hand-renderings reproduced
+> byte-identically with zero divergences**, B1 **1.0 (2,313 of 2,313)**, B3
+> closing exactly at 10,605, B5 byte-identical — and C-V1 and C-V2 both
+> HOLD, but **C-V4 voids on `drop_group`, 0.80 against its 0.90 floor**, so
+> the overall verdict is VOID and B1's 1.0 may not be quoted without it.
+> **The foreign `in words` line is therefore NOT wired**: serving under a
+> voided certification is exactly what the voiding sentence forbids. The
+> **register** is the headline artifact, as the design's own rule said it
+> would be. **Item 2** (the address-space probe) is **PARKED WITH THE
+> NUMBERS** by its own rule — 1 of 3 baselines beaten and it is the
+> pre-conceded one; the single question is answered *two existing objects
+> wearing one id space* (tag-bit ratio 0.9981). **Item 3a**
+> (transliteration) is the cycle's product number: **two glyphs take the
+> native voice from 17.0% to 67.2%**, 6,414 statements gained against a
+> floor of 6,000, round-trip 1.0000 over the newly-reached set, served diff
+> additive-only corpus-wide. **Item 3b** (TWO RIGHTS B0) landed as a
+> **narrow census and an unqualified registered negative**: 125 notational
+> candidates, **zero** mathematical convention forks, and the famous
+> clashes a clean zero — so the full direction parks with an empty
+> denominator. See [RELEASE-v0.19.0](RELEASE-v0.19.0.md) and ANALYSIS.
+> **Release-gate obligations**: B-P discharged before B0 froze; B0
+> published all four parts before implementation; the register shipped
+> frozen and digested; both registered probes committed their artifacts;
+> the v0.18 lesson debt was paid at that rotation; the re-freeze discipline
+> was executed whole (amendment before code, both prior rates declared
+> historical in writing, both old registered CLIs closed so neither can
+> mint a blended rate). The **v0.20 course is in flight** — see
+> [ROADMAP-v0.20](ROADMAP-v0.20.md). Full suite open at
+> `[SUITE-GATE-V19]`.
+
 # Roadmap v0.19 — say the part you cannot read, or say exactly why not
 
 v0.18 gave the kernel a voice and a receipt for every sentence it speaks.

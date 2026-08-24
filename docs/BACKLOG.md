@@ -3,6 +3,232 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.19 rotation (the foreign voice, and the probes)
+
+- **The parser stores numerals as `float`, and two served statements print
+  values that are wrong by 10^59 (2026-08-24, orchestrator's ruling —
+  SCHEDULED).** `match_signatures.Parser` builds numeric literals as
+  `("num", float(tok))` (`scripts/match_signatures.py:412`, and `:282` for
+  the identifier path). Every literal wider than a double's 53-bit
+  significand is destroyed at parse time, before any consumer sees it.
+  Measured over the committed tree: **7 destroyed literal occurrences
+  across 3 nodes — 5 distinct values, 4 lossy and 1 overflowing to
+  `inf`.** The `inf` is a 421-digit literal in
+  `leanworkbook.skel.lean_workbook_50397`. (A sixth scan hit, `05` in
+  `leanworkbook.skel.lean_workbook_plus_43423`, is a **leading-zero
+  round-trip artifact and not corruption** — the value survives; noted so a
+  future scan does not re-file it.)
+
+  **What makes this worse than a precision note: the wrong value is served
+  and it looks exact.** Two ground-class statements return the **right
+  verdict with wrong printed values** through the evaluate route today. For
+  `leanworkbook.ground.lean_workbook_37421` the served value is
+  `-4444444444444444000000000000000000000000000000000000000000000000000000000000`
+  against a true `-4444…4444` (76 fours): they agree for **17 characters**
+  and then diverge into zeros, an absolute error of **4.4 × 10^59** (a
+  60-digit number). It is returned as `Fraction(…, 1)` — an *exact*
+  rational type wrapping a value that is already destroyed, so nothing
+  downstream can tell. `leanworkbook.ground.lean_workbook_plus_68304`
+  (48-digit literals) is the second.
+
+  **The sharp part, and it is an argument for the fix rather than against
+  the design.** These are **the same two statements the v0.18 numeral pair
+  refuses** as `unsupported_numeral` in `experiments/realization_rate.json`'s
+  LOST block. On identical literals, one subsystem **refuses honestly** and
+  the other **silently prints a corrupted value**. The realizer's registered
+  numeral domain (`|n| < 10^15`) is the behaviour the evaluate path lacks;
+  the repository already knows what the right answer looks like.
+
+  **Mitigation, stated so the severity is not overread:** this is a
+  **display-only** defect — the verdicts are right, no `verified_by` link
+  rests on a printed value, and the server is loopback-only and
+  single-user. **Scheduled** into [ROADMAP-v0.20](ROADMAP-v0.20.md) §4's
+  batched re-seal as **DESIGN-statements-that-run E0's exact-literal
+  prerequisite**: an evaluator that decides statements cannot be built on a
+  parser that destroys their literals. **Closes when §4's batched re-seal
+  lands with its measurement.**
+
+- **`^` is unbounded on a served path, and no measure-relevant subprocess
+  call passes a timeout (2026-08-24, orchestrator's ruling — SCHEDULED).**
+  `scripts/evaluate.py:182` computes `base ** int(exponent)` with **no size
+  bound of any kind**. It is reachable from the typed line via
+  `scripts/harness.py:1799` and `:1813` (both `computed =
+  _route_evaluate(...)`) and therefore over HTTP through `serve_chat`.
+  Measured: `(100+1)^1000` produces a **2,005-digit** result in well under
+  a millisecond (0.007 ms here), and `2^200000` computes without complaint.
+
+  **The failure mode is not the one you would guess, so it is recorded
+  precisely.** The *computation* of a huge power succeeds; what fails is
+  **printing** it — Python 3.11+ caps int→str at 4,300 digits, so a
+  large-enough result raises an unhandled `ValueError` at render time
+  rather than hanging or returning a megabyte of digits. A served path
+  whose refusal is an uncaught exception is not refusing; it is crashing,
+  and the two are different products.
+
+  **Related, in the same batch:** **none** of the four `subprocess.run`
+  calls in `scripts/external_verifier.py` (lines **279, 287, 425, 462**)
+  passes a `timeout` — `grep -c timeout` over that file returns **0**. That
+  is the file the design cites for its external-verifier lane, so an
+  unbounded child process sits under the cost argument that lane rests on.
+
+  **Mitigation:** loopback-only, single user, and nothing untrusted reaches
+  either path today — which is exactly why HOSTILE DICTATION is parked with
+  a prohibition-shaped trigger (ROADMAP-v0.20 §5) rather than a wish.
+  **Scheduled** into §4's batched re-seal as **E0e's resource bound with a
+  typed refusal** — a bound that refuses by name, not an exception that
+  escapes. **Closes when §4's batched re-seal lands with its measurement.**
+
+- **C-V4 is mis-specified, and the re-specified control is scheduled rather
+  than retrofitted (2026-08-24).** C-V4 is C-R2's descendant and inherited
+  its mutation idea **without its load-bearing clause**: C-R2 verifies that
+  every mutation changes the canonical TERM *before* it is rendered,
+  discards the non-mutations, and counts the discards — v0.18 discarded 31
+  that way, and the reason it had to was itself a finding (`a < b` and
+  `b < a` share a skeleton, so an unverified near-miss set fills with
+  non-mutations, every one "fails" to break identity, and the control voids
+  a gate for behaving correctly). C-V4 mutates the rendered English and
+  requires the elaborated digest to move, but never establishes the
+  mutation *should* have moved it — so an unknown share of its
+  `did_not_differ` cases may be non-mutations, and `drop_group`'s **0.80
+  against a 0.90 floor** is scored against an uncleaned denominator.
+  **This does not re-score the v0.19 run**, which is committed as it read
+  and stays that way; C-V4′ is a **new preregistration with its own frozen
+  digests**, scheduled in [ROADMAP-v0.20](ROADMAP-v0.20.md) §2, and the
+  foreign `in words` wiring is gated behind it. Both branches are results:
+  a cleared C-V4′ ships a voice, a voided C-V4′ publishes a bound on what
+  digest-identity can certify at all. The transferable rule, worth applying
+  to any future ported control: **port the discard rule first** — it is
+  usually the part that was expensive to learn and the part that looks
+  optional. Evidence: `experiments/foreign_voice_rate.json` `c_v4`.
+
+- **`shift_group`'s `of_which_digest_moved` is wrong in a registered
+  artifact, and is deliberately not fixed (2026-08-24).** It reads **33**
+  where the true value is **0**: the field double-counts the 33 cases where
+  the inverse refused. The class's rate of **1.00 is correct** and the
+  verdict is unaffected — 49 differed = 33 inverse-refused + 16 elaboration
+  errors, and the sub-counts are published separately in the same block, so
+  a reader can derive the right number from the artifact itself. **Not
+  fixed because fixing means re-running a registered artifact**, and
+  re-running a registered run to make one accounting field prettier costs
+  more honesty than it buys. If C-V4′ (above) re-runs this measurement
+  under its own preregistration, the field is corrected there and this
+  entry closes; it must not be corrected in place in the v0.19 artifact.
+
+- **The release refresh masks its own steps' exit codes through a pipe
+  (2026-08-24).** The refresh runs each step piped to `tail`, and a
+  pipeline's exit status is the last command's — so when
+  `check_regeneration.py` exited **1** on an orphan corpus during the
+  v0.19 refresh, the non-zero status was swallowed and the failure was
+  visible only because its message happened to fall inside the tail
+  window. It was caught by luck, not by the pipeline. **A refresh that
+  reports a step's output without reporting its exit code is not checking
+  that step**, and the release skill's whole premise is that the refresh is
+  a gate. Wanted, and small: `set -o pipefail` or `${PIPESTATUS[0]}`
+  captured and printed per step, so a refusal is loud rather than
+  legible-if-you-happen-to-look. Filed on the same reasoning as the
+  register's two buckets: a check whose failure can go unread is a check
+  nobody is running. Evidence: the v0.19 refresh, first pass;
+  `docs/RELEASE-v0.19.0.md` "The refresh caught something, and it was not a
+  ledger".
+
+- **The capability sheet is silent about the withheld foreign voice, and
+  the repo's own convention says it should not be (2026-08-24).**
+  ROADMAP-v0.19 §1 planned a `foreign_voice` row quoting B1 from the
+  artifact, the way `scripts/serve_chat.py:356-374` quotes the realization
+  rate. The void meant the line was never wired, and the row was never
+  added — so the string `foreign_voice` does not appear in
+  `serve_chat.py` at all and the sheet's 13 `LINE_GRAMMAR` rows do not
+  mention the lane. **Absent, not published-as-off**, which is the
+  departure: the `gloss` row is the standing precedent for a capability
+  the boot turns off, and it ships `"served": false` with a reason rather
+  than vanishing. Consequence for the surface this project cares about: an
+  attaching orchestrator cannot learn from the sheet that a foreign voice
+  exists and is being withheld pending a control.
+
+  **RESOLVED (2026-08-24, orchestrator's ruling): publish the row.** The
+  sheet gains a `foreign_voice` row with `"served": false` whose reason is
+  **sourced from the artifact**, the way the `realization` row quotes its
+  rate rather than restating one in code. This is convention-following, not
+  a new policy — `docs/SPEC-chat-completions-skin.md` §7 already says
+  *"Rows the profile cannot serve (gloss under offline boot) appear with
+  `served: false` rather than disappearing"* — and `gloss` is the standing
+  precedent. A fix branch is in flight and merges before the gate. The rule
+  that survives for any future withheld lane: **a rate is never published
+  from a voided run; the void is.**
+
+- **`probe_convention_pairs.py` has no argparse and writes on every
+  invocation (2026-08-24).** `main()` takes no argv and calls
+  `write_report()` unconditionally, so
+  `python scripts/probe_convention_pairs.py --help` does not print help —
+  it **ignores the flag, runs the full probe, and overwrites
+  `experiments/convention_pairs_probe.json`**. Worse on Windows: without
+  `PYTHONIOENCODING=utf-8` it crashes on a `≥` in the
+  "top discriminator subterms" print and exits 1 **after** the file is
+  already written, so the failure looks like a refusal and is not one. The
+  probe is byte-reproducible (verified: a clean re-run leaves `git status`
+  clean), so nothing is lost today — but every other registered runner in
+  this repository has `--out`/`--no-write` and refuses rather than
+  clobbers, and this one is the exception. Wanted: `--out` with a default,
+  `--no-write`, and the print guarded. Small, and worth doing before
+  anyone treats a re-run as a read.
+
+- **`transliteration_served_diff.json`'s `digests.note` describes the
+  wrong scope (2026-08-24).** It reads "The two differ exactly because
+  lines were gained", but the two digests it annotates are **identical**
+  (`b838ab54…` both) because that block is scoped to the 30
+  `corpus_definition` task-book tasks, where `gained` is 0 — the book's
+  tasks carry neither glyph. The note was written for the
+  `corpus_wide_reading` block (6,414 gained) and sits beside the
+  task-scoped one. **No number in the artifact is wrong; the sentence
+  is**, and it invites a reader to quote `claim.gained: 0` as the lane's
+  result, which would be a category error. Reported and **not fixed**, on
+  the same rule as `shift_group`'s field: a registered artifact is not
+  edited to read better. Correct it in the successor artifact if this
+  measurement is ever re-run under its own preregistration.
+
+- **Should the renderer emit a canonical bracketing at all? (2026-08-24)**
+  The question `drop_group`'s void raises and that nobody has asked this
+  repository. Two readings that want different work, and the cycle must not
+  guess between them: either **the rendering is over-parenthesised**, in
+  which case `drop_group` is detecting real redundancy in the surface and
+  the fix is a minimal-bracketing rule with its own round-trip proof (the
+  shape v0.18's five-level ladder already uses on the native path); or
+  **the redundancy is load-bearing for a reader**, in which case a bracket
+  elaboration erases may still be what makes a sentence readable aloud, and
+  removing it makes the surface worse. **The honest first step is a
+  measurement, not a change**: over the covered set, count how many
+  grouping words the grammar emits that the term does not require, and
+  publish the distribution before anyone proposes a rule. Registered as a
+  probe in ROADMAP-v0.20 §3; both branches yield an artifact.
+
+- **1,706 of the register's 1,878 blocked statements are a budget, not a
+  design limit (2026-08-24).** The frozen register's two buckets are
+  reported separately and **never summed**, because they are different
+  kinds of fact: `registered_blocked_mathlib_head` (**1,706** — namespaced
+  and bare Mathlib heads, and the `√` notation) is a **budget consequence a
+  maintainer can lift** by paying for Mathlib coverage, while
+  `registered_blocked_no_row` (**172**, across six named construct classes)
+  is a **design consequence this cycle owns**. Filed rather than scheduled
+  because lifting the first is a resourcing decision, not an engineering
+  one — and filed at all so that a future reader does not find "1,878
+  unsupported" and conclude the ceiling is structural. Merging the two
+  numbers is the one thing this entry exists to prevent. Evidence:
+  `data/foreign_voice/register.json` (`blocked_set_digest` `e51e5675…`,
+  frozen in `297d1ea` before anything was rendered).
+
+- **A six-statement gap between oracle-eligibility and coverage, recorded
+  before someone finds it (2026-08-24).** B0b+c accepts **2,319**
+  statements by oracle-eligibility while B1 covers **2,313**, and the
+  register blocks **1,878** against B0b+c's **1,872** rejections. The
+  difference is the two filters being different questions: a statement the
+  oracle can *reach* may still carry a head with **no lexicon row**. The
+  published arithmetic closes on the coverage partition (2,313 + 1,706 +
+  172 = 4,191 residue; B3 closes at 10,605), which is the partition every
+  quoted number uses. Filed as a reading note rather than a defect — but
+  the artifact does not reconcile the two counts in place, so the next
+  cycle to touch this should either state the relationship in the artifact
+  or drop the eligibility count from the published gate line.
+
 ## Filed at the v0.18 rotation (sans-template rendering)
 
 - **The realized surface cannot say a variable's name, and that is the
@@ -67,6 +293,30 @@ or commit history. Each item names the evidence that motivated it.
   probe. Evidence: `docs/DESIGN-foreign-voice.md` §1 Correction 1 (a
   document under adversarial review at the v0.18 rotation — the figures may
   be restated with a dated correction).
+
+  **v0.19.0 status note (2026-08-24): RESOLVED by shipping, and the
+  discipline held.** The lane ran as a registered probe: parse rate
+  **2,172 → 8,586 of 12,777 (17.0% → 67.2%)**, 6,414 newly reached against
+  a pre-committed floor of 6,000, round-trip **6,414 of 6,414 (1.0000)**
+  over the newly-reached set. The grounding figures were confirmed exactly,
+  so the "may be restated" caveat above is discharged rather than
+  outstanding. **The warning this entry existed for was the load-bearing
+  part and it was answered**: the served-diff witness loaded the retired
+  parser out of git in its own interpreter and diffed every rendered line
+  over all 12,777 statements — **6,414 gained, 2,170 byte-identical, 0
+  changed, 0 lost**, corpus-wide additive-only, with the witness's `gained`
+  agreeing with the run's `newly_reached` at 6,414 exactly. The rest of the
+  discipline executed whole: the amendment landed **before** the code, both
+  parser pins were retired for future comparisons, both prior rates were
+  declared **historical in writing** (v0.18 was not re-run, with the reason
+  recorded), and **both old registered CLIs were closed** so neither can
+  mint a rate blended across two parsers. Kept here rather than pruned
+  because the witness-gap argument is the reusable part: the next cycle to
+  touch a parser inherits it. Composition caveat that travels with the
+  number: **one corpus, two distinct call heads** — it is not a
+  lexicon-coverage claim. Evidence:
+  `experiments/transliteration_rate.json`,
+  `experiments/transliteration_served_diff.json`.
 
 - **STRANGER — outside-asker gap-object intake, parked from the v0.19
   course (2026-08-23).** One of the fifteen round-one directions: outside
@@ -142,6 +392,30 @@ or commit history. Each item names the evidence that motivated it.
   cycle without either the fix or a written decision to stop caring is the
   shape this file exists to catch, and the ~3.4 s figure above still has no
   timing artifact behind it, so **measure before spending**.
+
+  **v0.19.0 status note (2026-08-24): third cycle, and DECIDED —
+  SCHEDULED.** The v0.18 note named this exact situation one rotation ago:
+  a third cycle without either the fix or a written decision is the shape
+  this file exists to catch. The orchestrator's ruling of **2026-08-24** is
+  **SCHEDULED**, not closed — the land-or-close clause is discharged by a
+  landing plan, written up as **[ROADMAP-v0.20](ROADMAP-v0.20.md) §4** and
+  carried in that roadmap's release gate.
+
+  The plan, so this entry and that one cannot drift apart: have
+  `_route_ownership` return the answer object (or its host set) in the
+  verdict dict alongside `"answer": render(answer)`, **matching the
+  convention `_route_twin` and `_route_reachable` already follow**, and
+  drop the `lru_cache`. It owes a **before/after measurement** — the
+  `~3.4 s` above has now been quoted across three release cycles without
+  ever acquiring a timing artifact, which is the small version of the drift
+  this file catches, so the fix either publishes a real number or retires
+  the claim — and it pays its **new-seal cost under the standing witness
+  rule**, since `harness.py` is a witnessed rendering module. Two cycles
+  have made that procedure routine (v0.18 retired the v0.17 witness; v0.19's
+  transliteration lane retired two parser pins), so the cost is known and
+  small. Placed early in v0.20 because it is small and because a fourth
+  cycle of carrying it is the outcome the ruling exists to prevent. This
+  entry closes when §4 lands with its measurement.
 
 - **The B-side correctness rule is notation-limited on session-derived
   kinds, and that asymmetry is scoring, not capability (2026-08-22).**

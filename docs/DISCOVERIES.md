@@ -13,6 +13,137 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+- **The gate's blind spot has a number now, and the number voided the gate
+  (v0.19, C-V4, measured).**  The foreign-voice gate certifies a rendering
+  by elaborating the English through a pinned external checker and
+  comparing the elaborated term's digest to the source's.  The design
+  wrote the limit of that method into its §3.2 as the claim's *shape*
+  rather than as a caveat: identity holds **up to what elaboration erases
+  and what the preamble rule regenerates**, and any rendering error
+  confined to either is invisible.  C-V4 was built to put a number under
+  that sentence — mutate the rendered English one mechanical step, invert,
+  elaborate, and require the digest to move.  Four classes behave:
+  `swap_binder` 1.00 (50/50), `shift_group` 1.00 (49/49),
+  `drop_ascription` 0.90 (45/50).  The fifth, **`drop_group`, measures
+  0.80 against a 0.90 floor frozen before the instrument existed** —
+  **deleting a semantically redundant bracket changes the sentence and not
+  the term** — and its voiding sentence voids the whole reading.  B1 had
+  measured 1.0 (2,313 of 2,313); the void outranks it, and the consequence
+  was taken rather than argued with: **the foreign `in words` line is not
+  wired**, because serving under a voided certification is what the
+  voiding sentence forbids.  Two readings make this a finding rather than
+  a setback.  First, **a control that can only confirm is not a control**,
+  and this one demonstrated it can do the other thing to the cycle that
+  built it.  Second, the excluded class is the sharper number:
+  `drop_binder` measures **0.18** and is **excluded from the voiding pool
+  by preregistration** because the preamble rule regenerates exactly what
+  it deletes — so 0.18 is not a miss, it is **the measured width of the
+  blind spot**, the non-claim made quantitative.  A fresh-eyes review had
+  put it at 1 of 24 by hand; the run re-measured rather than freezing a
+  threshold at the number this project's own instrument produced.  The
+  design's §7 binder-swap prediction was **refuted exactly as
+  pre-registered**, at 1.00, in the direction that makes the control
+  stronger.  Status: **measured**.  Evidence:
+  `experiments/foreign_voice_rate.json` `c_v4`, `verdicts.overall = VOID`.
+
+- **A control inherited without its load-bearing clause is a different
+  control (v0.19, construction).**  C-V4 is C-R2's descendant and took
+  C-R2's idea — mutate one step, require the identity to break — without
+  the clause that makes C-R2 sound: **every mutation is verified to change
+  the term BEFORE it is rendered**, with non-mutations discarded and the
+  discards counted.  v0.18 discarded 31 that way, and the reason it had to
+  was itself a finding: `a < b` and `b < a` share a skeleton, so a
+  near-miss set built without verification is full of non-mutations, every
+  one "fails" to break identity, and the control voids the gate **for
+  behaving correctly**.  C-V4 mutates the rendered English and requires the
+  digest to move, but never establishes the mutation *should* have moved
+  it — so an unknown share of its `did_not_differ` cases may be
+  non-mutations, and `drop_group`'s 0.80 is scored against an uncleaned
+  denominator.  The general shape, which is the transferable part: **when
+  a control is ported, port its discard rule first** — the discard rule is
+  usually the part that was expensive to learn and the part that looks
+  optional.  Recorded here rather than used to re-score: the v0.19 run is
+  committed as it read, and the re-specified control (C-V4′, with the
+  verification clause and its discards counted) is a **new
+  preregistration** scheduled in ROADMAP-v0.20 §2, with the foreign wiring
+  gated behind it.  Status: **construction**.
+
+- **Two glyphs were half the wall, and the measurement completes (v0.19,
+  measured).**  The v0.18 rotation measured, during a design grounding
+  pass, that 6,414 of the 10,605 mute statements parse after substituting
+  `≥`→`>=` and `≤`→`<=`.  This cycle executed it on the native path and
+  the prediction landed exactly: **the parse rate goes 2,172 → 8,586 of
+  12,777, from 17.0% to 67.2%**, with 6,414 newly reached against a
+  pre-committed floor of 6,000.  Over the newly-reached set the v0.18
+  realizer machinery — unchanged — round-trips **6,414 of 6,414
+  (1.0000)**, 0 refused and 0 failed.  Three things keep this from being
+  the flattering half of a story.  **The set is large and structurally
+  narrow**: one corpus, **two** distinct call heads, 4,733 occurrences of
+  `≥` and 1,681 of `≤` — numeric inequalities with almost no function
+  application in them — so the 1.0000 establishes that the statements two
+  glyphs unlock carry heads the lexicon already had, and explicitly **not**
+  that the lexicon covers the corpus.  **No floor was pre-committed on the
+  round-trip rate, deliberately and in writing beforehand**, because a low
+  rate would have been the more interesting finding (reach without voice)
+  and a floor is exactly what pressures a lane not to publish it.  And
+  **additivity was proven, not asserted**: the witness loaded the retired
+  parser out of git in its own interpreter and diffed every rendered line
+  over all 12,777 statements — **6,414 gained, 2,170 byte-identical, 0
+  changed, 0 lost**.  Status: **measured**.  Evidence:
+  `experiments/transliteration_rate.json`,
+  `experiments/transliteration_served_diff.json`.
+
+- **A park with numbers is what discharging an instruction looks like
+  (v0.19, pattern).**  A maintainer seeded `DESIGN-block-vocabulary` with a
+  no-silent-disposal instruction attached.  The v0.19 course could have
+  displaced it, or parked it with a paragraph; instead it was **adopted**
+  as a bounded roadmap item, scoped to one question its own census raised,
+  and measured against **three baselines taken from its own §4 falsifier
+  list and preregistered in their own commit before any measurement**.  It
+  then lost: retrieval **NOT BEATEN** on both legs at once (block channel
+  0.3256 coverage / 0.2059 claim-rate against the keyword channel's 0.9302
+  / 0.0294 **on the same rows in the same run**), term layer **NOT
+  BEATEN** (6.91× against 8.44×), and the single baseline it beat was
+  registered *in advance* as an arithmetic restatement of an existing
+  ledger rather than a new finding.  The single question — *is the unified
+  dictionary a real object, or two existing objects wearing one id space?*
+  — is answered **two existing objects wearing one id space**: unification
+  beats grep by 210,248× and a zstd-scan by 9,013× (which the prereg had
+  already declared is evidence that an index beats a scan, not evidence for
+  unification), and against two indexes carrying **one tag bit** it
+  measures **0.9981**.  The transferable pattern is the lifecycle, not the
+  outcome: **adopted → built → measured → parked by numbers**.  A park that
+  cites a measurement is a decision; a park that cites a preference is
+  drift.  One property survives untested for any future unpark — append-only,
+  path-independent growth, which no baseline here probed.  Status:
+  **measured**.  Evidence: `experiments/address_space_probe.json`;
+  `docs/DESIGN-block-vocabulary.md` §3e.
+
+- **Nobody in the authored graph disagrees about notation, and nobody had
+  written that down (v0.19, registered negative).**  A one-hour probe swept
+  the committed corpora for co-present statements saying the same
+  mathematics under two defensible conventions.  Of 2,493 co-present pairs
+  with differing canonical forms, 200 fork at a single discriminator
+  subterm and **125 are convention-pair candidates — every one of them
+  notational** (a glyph, a namespaced-versus-bare head spelling, or where
+  somebody put a parenthesis).  **Zero are mathematical convention forks.**
+  Inside the 26 hand-authored corpora the negative is unqualified: 1 of 125
+  candidates touches an authored corpus and **0 have both members
+  authored**.  The three famous clashes named in advance — sign
+  conventions, the 0-in-ℕ boundary, 2π placement — return **0, 0, 0**, with
+  the detectors proven live by injection so the zero is a reading rather
+  than a broken sweep.  Two riders travel with it.  The **125 are a fact
+  about an upstream dataset's ingestion**, not about a convention this
+  graph holds twice, and the two numbers must never be quoted apart.  And
+  the largest candidate class — **98 pairs forking `>=` against `≥`** — is
+  the transliteration lane's territory seen from the other side: two probes
+  aimed differently found one phenomenon, which is a fact about the corpus
+  and not a coincidence of method.  A further first measurement fell out:
+  the anonymized-template pass contributed **0** pairs the twin ledger did
+  not already carry, out of 1,015 template-sharing pairs — the twin ledger
+  is the stronger pool.  Status: **registered negative**.  Evidence:
+  `experiments/convention_pairs_probe.json`.
+
 - **Half the mute corpus was an alphabet problem, not a grammar problem
   (v0.19 grounding, measured).**  v0.18 shipped a voice for the 2,172
   parseable terms and named the silence honestly: **10,605 nodes (83.0%)**

@@ -1,0 +1,62 @@
+You are an outside advisor to a small research program you have never
+seen. Everything you know about it is in this message; no code or data
+will be provided. Your value here is precisely that you are outside it.
+
+The program's thesis: everything with a closed form belongs in
+inspectable code, with learned components carrying only a graded
+residual — and never the difference between refusing and answering. It
+maintains a graph of about thirteen thousand exact statements across
+twenty-seven subject areas, regenerating byte-identically from
+committed seed programs; structural ledgers find repeated skeletons
+across fields; a typed session answers with receipts, refuses what it
+cannot ground, and asks signed clarifying questions — served at a
+terminal and over the standard chat-completions HTTP API that coding
+agents attach to.
+
+Its last three cycles, each gate-adjudicated and published with
+receipts, reds included:
+- It measured itself against a small language model holding the very
+  same records in context: correct receipted answers at hundreds of
+  times the model's effective throughput; the model, told to quote,
+  could not reproduce exact content at speed.
+- It gave its statements a voice: formal terms render into English
+  sentences gated by re-parsing each back to the exact structure it
+  claims — 99.9 percent round-trip — then two glyph substitutions
+  turned out to unlock half the corpus (voice now covers two-thirds),
+  because half the "unreadable" layer was an alphabet problem, not a
+  grammar problem.
+- And this cycle it published three honest non-wins alongside: a
+  register of what cannot be said and why; a rendering gate VOIDED by
+  its own blind control (deleting a redundant bracket changes the
+  sentence but not the term, and the gate cannot see the difference —
+  now a measured boundary, not a hope); a maintainer-loved indexing
+  idea adopted, built, measured against pre-registered baselines, and
+  parked BY the numbers when it lost to the existing channel; and a
+  census showing its corpora contain notational forks only — the
+  authors never disagreed about mathematics, only spelling.
+
+The graph grows at runtime, append-only, through a proven-write gate.
+Measurement culture, all binding: preregistration before
+implementation; gates frozen before numbers; capability-blind controls
+with written voiding sentences; negatives published as first-class;
+receipts for failed runs. Constraints: one maintainer; a first slice
+fits one release cycle and yields a committed checkable artifact; no
+multi-hour training; learned components may rank among licensed
+candidates but never author structure or unlock an answer.
+
+The recurring failure mode this program polices in itself: headline
+drift toward instruments about its own evidence. Its standing product
+ambition: a person or agent converses with exact knowledge — asks,
+gets receipts at wire speed, watches the graph grow as knowledge is
+encountered — with small models handling only what is best left to
+small models.
+
+Propose FIVE distinct forward directions. For each, in under 150
+words: (a) the new kind of claim it would make true; (b) why the
+current shape cannot make that claim today; (c) a falsifiable
+construction gate — what, decided in advance, would count as the idea
+failing; (d) the cheapest honest failure. Do not propose: more corpus
+entries for their own sake, more twin matches, a model trained to
+imitate an exact capability, or another instrument that audits the
+program's own evidence trail. Range widely; at least one should feel
+risky to you. Number them with short memorable names.

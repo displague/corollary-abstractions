@@ -1,0 +1,123 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.20",
+  "status": "complete",
+  "requested_utc": "2026-08-24",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/forge20 -- empty non-git dir, no project name in path",
+    "denylist": "strict-mcp-config + disallowedTools over every file/shell/network/agent/skill tool",
+    "inherited_from": "reports/design-direction-v0.19.json, reused unchanged"
+  },
+  "brief_sha256_canonical_lf": "11c676b63bf0adbc1f95c1a55c6088631c14ce32d529552f2dd252db9fcdcc32",
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "11c676b63bf0adbc1f95c1a55c6088631c14ce32d529552f2dd252db9fcdcc32",
+      "r2": "59e33123516e4ecfccc812fbf8a696ce766bc250d13baf75318a8bbae0538ed9",
+      "r3": "037010e73fe910a017ab7b8f5be3f524efb7a4575806b2e2e9f6f0aecb4dea44"
+    },
+    "series_2": {
+      "r1": "cbc35df437b5a0c4ff5e2ad50def66fd1424390b7f7fa81428179657cbf64654",
+      "r2": "38fa5728d47eb8cb1c1d130404fdb51915c609a3bb66e67b2cbc29d40743c429",
+      "r3": "e6f123abb746c99b3f92636c040b6aafdee4adebe0e362c5a6c21c19d763631f"
+    },
+    "series_3": {
+      "r1": "500eeae822ad79e059b0ecb96617b0d6d7b8a3f819b109c38dee7d95a9bbdd59",
+      "r2": "dd589af297ce2dbbc33c232f12f0e4879939f22d74cb0585ec9bab5572a558ec",
+      "r3": "cc186bdb98650430934b1d3e218b95acf608676c096dc4423962fe202c015a75"
+    }
+  },
+  "exclusion_note": "series 2 r1 excluded series 1 round-one territory (five lines); series 3 excluded both (ten lines); embedded in hashed r1 prompts",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "2d29da48-e517-4f99-abb1-e6ae57543d16",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 1.085
+    },
+    {
+      "series": 2,
+      "session_id": "776e6c6c-ebc7-4afe-8ba9-1438d67f61bf",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 0.875
+    },
+    {
+      "series": 3,
+      "session_id": "7f3d2419-9cf7-4434-9d97-6862d62378e4",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "status": "complete",
+      "cost_usd": 1.163
+    }
+  ],
+  "round_one_funnel": {
+    "series_1": [
+      "DETACHED RECEIPT - offline-verifiable portable receipts",
+      "INBOUND - open English entering as structure",
+      "VERDICT - entailed/contradicted/not-grounded over third-party claims",
+      "HOLES - machine-enumerated skeleton gaps proposed and proven",
+      "DOWNSTREAM - controlled claim about an attached agent's work product"
+    ],
+    "series_2": [
+      "NIHIL - decision-procedure grounded negatives",
+      "EVAL - statements compiled to evaluators over user inputs",
+      "ROSETTA - certified dialect transport",
+      "HOSTILE DICTATION - red-teaming the write gate",
+      "UNSAY - withdrawal with computable blast radius over served receipts"
+    ],
+    "series_3": [
+      "ONE HOP - bounded licensed derivation with the ranker's one sanctioned job",
+      "DEBT NOTES - refusals naming their repair, flip-on-write replayed",
+      "BORROWED PREMISES - conditional answers under quarantined assumption sets",
+      "WORD OF HONOR - the attested layer, parameterize-never-unlock",
+      "SECOND VOICE - diagrams that re-parse, testing void transfer"
+    ]
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "VERDICT (typed CLAIM lines only; warrant register W1-W4; week-one warrant census informative pre-adjudicator; residual: sampling frame authored from the register outward)",
+      "runner_up": "COURIER (DETACHED RECEIPT narrowed to quotation+evaluation classes)",
+      "folds": [
+        "INBOUND -> the parked synonym layer + existing clarification loop, with the distractor precondition recorded",
+        "HOLES -> a counting-table free rider (revive-or-close FOUNDRY with a number)"
+      ]
+    },
+    "series_2": {
+      "lead": "EVAL (statements that decide themselves; NIHIL folded in as a second answer type; ~12,700 decidable candidates; residual: correlated interpretation)",
+      "runner_up": "HOSTILE DICTATION",
+      "folds": [
+        "NIHIL -> into EVAL (one mechanism)",
+        "ROSETTA -> out (98 of 125 forks already closed natively; residual ~27 pairs do not buy a transport layer)"
+      ]
+    },
+    "series_3": {
+      "lead": "WORD OF HONOR (attested layer; parameterize-never-unlock; census with two degenerate readings each given an artifact; residual: gate-insensitivity mislabeled as convention)",
+      "runner_up": "DEBT NOTES (+ the delete-K ground-truth rider)",
+      "folds": [
+        "ONE HOP -> surrendered to the prior course's excluded substitution chains; delete-K survives as a rider"
+      ]
+    }
+  },
+  "selection": {
+    "selected": "series 2 lead: EVAL -> docs/DESIGN-statements-that-run.md",
+    "lineage_note": "EVAL is RUNNABLE returned: proposed in the v0.19 course (series 1) and DROPPED at its round two; it returns on new evidence - the C-V4 void proved the error class an evaluator catches is invisible to every structural gate, and both cost discounts (exact rational arithmetic; the external-verifier lane) are measured facts. A dropped direction returning with new evidence is the funnel working, recorded as such.",
+    "declined": {
+      "WORD OF HONOR": "parked as the strongest thesis-level candidate; its first slice is seed-reading (instrument-shaped), which the governance record counsels against as a headline; the extraction-discipline census is named as an optional rider any cycle can run",
+      "VERDICT": "parked; its week-one warrant census (how much negation/mutual-exclusivity the corpus carries) is named as a cheap standalone probe",
+      "COURIER": "parked; quotation/evaluation receipts likely near-detached already - the probe is one day and may ride any cycle",
+      "DEBT NOTES": "parked with the strongest product-resonance note and its one-day hand-classification probe named; natural companion to any future intake lane",
+      "HOSTILE DICTATION": "parked with a named trigger: MUST run before any untrusted stream reaches the write gate",
+      "UNSAY": "parked; blast radius over served receipts is mechanical now that receipts are served objects - revisit when withdrawal has a driver",
+      "BORROWED PREMISES": "parked; likely the supposition frame's maturation - noted for when the API attaches callers with real premise sets",
+      "SECOND VOICE": "parked; the void-transfer question is well-formed and waits on a committed picture syntax",
+      "riders_accepted": [
+        "HOLES counting table (afternoon)",
+        "delete-K ground-truth table"
+      ]
+    },
+    "convergence_note": "every collision with prior-course or parked ground was disclosed by the advisors themselves (HOLES vs CONJECTURE FOUNDRY, UNSAY vs the voided retraction radius, ONE HOP vs substitution chains, NIHIL vs the grounded-negatives cut) - four honest disclosures across three series"
+  }
+}

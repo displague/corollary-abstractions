@@ -4876,3 +4876,352 @@ establish that slots speak their names; `canonicalize` erases slot identity
 and the surface says "variable zero". It says nothing about the 83% the
 parser cannot read, which is the next cycle's territory and, per the
 numbers above, is two different problems rather than one.
+
+
+# v0.19 - the foreign voice: every gate fired and the control voided it
+
+Design: `docs/DESIGN-foreign-voice.md`, selected by the v0.19 outside
+course (`reports/design-direction-v0.19.json`). Preregistration order,
+every artifact committed before the one that depends on it: the design;
+rule R (4 type substitutions, autoImplicit false, a deterministic
+preamble); the loanword lexicon (bijective, L1/L2 imported from v0.18,
+with a dated digraph correction); B0d's 100 SEALED hand-renderings; the
+B-P serializer (`prover/lean/normalizer/Serialize.lean`, binder-name
+independent, hermetic); the frozen register with its `blocked_set_digest`
+(commit `297d1ea`, before `scripts/foreign_voice.py` existed, ordering
+checked against git history); then `foreign_voice.py` and
+`measure_foreign_voice.py`; then the one registered run.
+
+Toolchain `leanprover/lean4:v4.32.2`. 22 frozen digests revalidated before
+anything was measured (B7).
+
+## Every gate
+
+| gate | verdict | deciding number |
+|---|---|---|
+| B-P serializer, binder-name independent, hermetic | FIRES | prototype's two retained pairs reproduce at 475 and 2,627 characters; two-run byte-identical |
+| B0a residue >= 2,000 | FIRES | 4,191 residue of 10,605 mute; 6,414 transliterable EXCLUDED |
+| B0b+c accepted >= 1,000 | FIRES | 2,319 accepted, 1,872 rejected |
+| B0d sealed hand-renderings >= 90 | FIRES | **100 of 100 reproduced byte-identically, 0 divergences** |
+| B1 identity >= 0.995 of covered | FIRES | **2,313 of 2,313 = 1.0**; 2,176 distinct elaborated terms; 99.87% lean_workbook |
+| B2 three outcomes, no silent drop | FIRES | outcomes {identity: 2313}; no refusal fired |
+| B3 the arithmetic closes at 10,605 | FIRES | 6,414 + 2,313 + 0 + 1,706 + 172 = 10,605 |
+| B4 register frozen first | FIRES | `297d1ea`, checked out of git history |
+| B5 / B6 / B7 | FIRE | two runs byte-identical; no learned component; 22 digests revalidated |
+
+**B0d deserves its own sentence.** 100 statements were hand-rendered and
+SEALED before the implementation existed, as a prediction about what the
+implementation would produce. The implementation reproduced all 100
+**byte-identically**, with zero divergences, zero elaboration failures and
+zero sealed-as-rendered statements that the renderer then refused. The
+artifact records the rule that made that meaningful: *divergences are
+reported, never repaired* - a divergence would have been a finding about
+the grammar or the authoring, and editing the seal to agree would delete
+it. None arose.
+
+## The controls, and the one that voided
+
+| control | verdict | reading |
+|---|---|---|
+| C-V1 skeleton renderer, one-sided | HOLDS | true 1.0 vs skeleton 0.0 over the same 2,313; misses split **983 elaborated-to-a-different-digest / 1,330 failed-to-elaborate** |
+| C-V2 transliteration null, positive control | HOLDS | 1.0 identity over covered; over the transliterable 6,414: elaboration 0.9938, identity 1.0 |
+| C-V3 determinacy sheet | **ABSENT** | the claim it alone licenses is NOT MADE |
+| C-V4 near-miss null | **VOID** | `drop_group` 0.80 against 0.90 |
+| **overall** | **VOID** | a voided control outranks a cleared floor |
+
+**C-V1's split matters and is reported separately for the v0.18 reason.**
+A skeleton rate of zero is only informative if the misses are
+*elaborated-to-a-different-digest* - 983 here. The 1,330 that failed to
+elaborate are cases where the pinned binary never got to compare two terms
+at all, and a control producing only those would be exercising the
+harness. One-sidedness is inherited deliberately from v0.18's C-R1 lesson:
+a two-sided scramble is a consistent renaming and round-trips
+near-perfectly.
+
+**C-V2 is the positive control and carries the discipline sentence.** The
+transliterable 6,414 are reported there and NOWHERE in B1. The artifact
+states the rule flatly: if they are ever counted inside a foreign-voice
+rate, that rate is wrong.
+
+**C-V4, per class:**
+
+| class | sample | differed | rate | floor | in voiding pool |
+|---|---:|---:|---:|---:|---|
+| swap_binder | 50 | 50 | **1.00** | 0.90 | yes |
+| shift_group | 49 | 49 | **1.00** | 0.90 | yes |
+| drop_ascription | 50 | 45 | 0.90 | 0.90 | yes |
+| **drop_group** | 50 | 40 | **0.80** | 0.90 | **yes - VOIDS** |
+| drop_binder | 50 | 9 | 0.18 | none | **no, blind by construction** |
+
+The mechanism of the void: **deleting a semantically redundant bracket
+changes the sentence and not the term**. That is §3.2's sentence -
+*identity holds up to what elaboration erases and what the preamble rule
+regenerates* - arriving with a number on it. The sentence was written as
+the claim's shape rather than as a caveat precisely so a control would be
+built to measure it. It was, and the measurement came back outside a floor
+frozen before the instrument existed.
+
+**drop_binder's 0.18 is not a miss.** It is excluded from the voiding pool
+by preregistration because the preamble rule regenerates exactly what the
+mutation deletes, so B1 structurally cannot see it. 0.18 IS the measured
+width of B1's blind spot. A fresh-eyes review had independently measured 1
+of 24 by hand; the registered run re-measured with this repository's own
+renderer rather than freezing a threshold at the number that review
+produced - the artifact records that reasoning in place, and a divergence
+from 1-of-24 was declared reportable rather than reconcilable in advance.
+
+**The §7 binder-swap prediction is REFUTED, exactly as pre-registered**, at
+1.00 (50/50) - in the direction that makes the control stronger.
+
+**Consequence, taken rather than argued with.** The foreign `in words`
+line is NOT wired. B1's 1.0 is not quotable without the VOID beside it,
+anywhere. The register is the headline artifact, which is what the design
+said before the run.
+
+## Two defects of this run's own instruments, both published
+
+**C-V4 is mis-specified.** It inherited C-R2's mutation idea without
+C-R2's load-bearing clause - every mutation verified to change the TERM
+before it is rendered, non-mutations discarded, discards counted (v0.18
+discarded 31). So an unknown share of C-V4's `did_not_differ` cases may be
+non-mutations, and drop_group's 0.80 is scored against an uncleaned
+denominator. The re-specified control is future work with its own
+preregistration (ROADMAP-v0.20 §2), NOT a re-score: this run stands as it
+read.
+
+**An artifact field is wrong and is not fixed.** `shift_group`'s
+`of_which_digest_moved` reads 33 where the true value is 0 - the field
+double-counts the 33 cases where the inverse refused. The class's 1.00 is
+correct and the verdict is unaffected: 49 differed = 33 inverse-refused +
+16 elaboration errors. Fixing it means re-running a registered artifact,
+which costs more than it buys. Reported here and in BACKLOG.
+
+**One reconciliation a reader will want.** B0b+c accepts 2,319 by
+oracle-eligibility while B1 covers 2,313, and the register blocks 1,878
+against B0b+c's 1,872 rejections. The six-statement difference is
+eligibility versus coverage: a statement the oracle can reach may still
+carry a head with no lexicon row. The B3 arithmetic closes on the coverage
+partition (2,313 + 1,706 + 172 = 4,191 residue), which is the partition
+every published number uses.
+
+## The register - the headline artifact
+
+Frozen with `blocked_set_digest` e51e5675... before anything was rendered.
+Seven entries, 1,878 statements, and the two buckets are reported
+separately and NEVER summed.
+
+| construct | bucket | statements |
+|---|---|---:|
+| namespaced and bare Mathlib heads, and the sqrt notation | mathlib_head | **1,706** |
+| propositional, modal, provability and set-theoretic statements | no_row | 75 |
+| house ASCII notation that is not Lean in any alphabet | no_row | 53 |
+| variable exponents and other terms core Lean cannot instantiate | no_row | 38 |
+| the coercion arrow | no_row | 4 |
+| a decimal literal the numeral pair cannot spell | no_row | 1 |
+| an integer literal outside the registered numeral domain | no_row | 1 |
+| total | | **1,878** |
+
+The 1,706 is a **budget consequence a maintainer can lift**; the 172 is a
+**design consequence this cycle owns**. Merging them into one
+"unsupported" figure would hide which is which, which is the shrug the
+register exists to prevent.
+
+
+# v0.19 - transliteration: two glyphs, and the native voice goes 17.0% -> 67.2%
+
+Lane: ROADMAP-v0.19 item 3a, a registered probe rather than a headline -
+deliberately, because the preview made it look easy.
+
+| | statements | rate |
+|---|---:|---:|
+| parseable under the retired parser (65fead2f...) | 2,172 | 0.1700 |
+| **parseable under the successor parser (f5b2abba...)** | **8,586** | **0.6720** |
+| newly reached | **6,414** | floor 6,000, MET |
+| newly reached that round-trip EXACTLY | **6,414 / 6,414** | **1.0000** (0 refused, 0 failed) |
+
+**The denominator's composition, stated before the rate is read**, per
+v0.18 R1's imported rule: the newly-reached set is **1 corpus and 2
+distinct call heads** over 6,414 statements, with 4,733 occurrences of the
+greater-or-equal glyph and 1,681 of less-or-equal. Numeric inequalities,
+overwhelmingly, with almost no function application. LARGE AND
+STRUCTURALLY NARROW.
+
+**What the 1.0000 does and does not establish.** ESTABLISHES: the
+statements two glyphs reach are the same grammar in every respect the
+realizer touches, not only at the tokenizer. DOES NOT ESTABLISH that the
+realization lexicon covers the corpus - it establishes that the newly
+reached statements carry the heads it already had, which is a fact about
+which statements two glyphs unlock.
+
+**No floor was pre-committed on the round-trip rate, and the reason is
+recorded before the reading.** A high rate is the dull finding; a LOW rate
+would have been the interesting one - parsing bought reach without buying
+voice - and a pre-committed floor is exactly what would have pressured
+this lane not to publish it. v0.18's R1 floor was explicitly NOT imported:
+it was frozen against a different denominator under a different prereg,
+and borrowing it would let one cycle's adjudicated number grade another
+cycle's work.
+
+**Additivity, proven not asserted - and the witness carries TWO scopes
+that a reader must not merge.** It loaded the RETIRED parser out of git in
+its own interpreter and ran `answer._in_words` - the exact function
+`render` uses to decide the line - before and after.
+
+| scope | gained | unchanged | changed | lost |
+|---|---:|---:|---:|---:|
+| **corpus-wide, 12,777 statements** (`corpus_wide_reading`) | **6,414** | **2,170** served + 4,193 silent | **0** | **0** |
+| the task book's 30 `corpus_definition` tasks (`claim`) | 0 | 30 | 0 | 0 |
+
+The corpus-wide row is the additive-only claim. The task-book row is 0
+gained because **the book's tasks carry neither glyph**, which is why the
+successor book's expected records were untouched by the widening and why
+that block's before/after digests are IDENTICAL. Quoting the `claim`
+block's `gained: 0` as the lane's result would be a category error, and
+the artifact's own `digests.note` invites exactly that error (see below).
+
+The generator REFUSES to write the file if `changed` or `lost` is
+non-zero, so additivity is enforced at write time rather than reported
+after the fact. The witness's corpus-wide `gained` agrees with the run's
+`newly_reached` at 6,414 exactly - the cross-check that keeps "newly
+reached" from resting on the argument that only two characters differ
+between the parsers.
+
+**A second artifact defect, reported not fixed.** In the same file,
+`digests.note` reads "The two differ exactly because lines were gained" -
+but the two digests it annotates are byte-identical, because that block is
+scoped to the 30 task-book tasks where `gained` is 0. The note was written
+for the corpus-wide reading and sits beside the task-scoped one. No number
+is wrong; the sentence is. Filed rather than corrected in place, on the
+same rule as `shift_group`: a registered artifact is not edited to read
+better.
+
+## The re-freeze discipline, executed whole
+
+ROADMAP-v0.19 §3a wrote this before the code existed, including the gap
+nothing else would catch: `match_signatures.py` is NOT in the task book's
+witness list, so widening the tokenizer moves **rendered output while every
+witnessed module digest stands still**.
+
+1. **The amendment landed BEFORE the code.** Both parser pins retired for
+   future comparisons in `experiments/realization_prereg.json` and
+   `experiments/foreign_voice_prereg.json`.
+2. **Both prior rates DECLARED HISTORICAL in writing.** v0.18's 0.9991 and
+   this cycle's foreign-voice run remain the artifacts of record for what
+   was measured under the retired parser. v0.18 was NOT re-run, and the
+   reason is recorded rather than inferred.
+3. **Both old registered CLIs now REFUSE, by two different mechanisms**,
+   and neither writes a file. `measure_realization` exits **4** with an
+   explicit `closed_by_amendment` refusal naming the amendment, declaring
+   `realization_rate.json` historical, pointing at the successor artifact,
+   and offering `--no-write` to read the old numbers without overwriting
+   the record. `measure_foreign_voice` exits **2** because its own **B7
+   control** catches the moved parser digest (f5b2abba... where the prereg
+   recorded 65fead2f...) and refuses to publish any rate. The second is the
+   stronger of the two: the preregistration machinery closed that CLI with
+   nobody having to remember to. Neither can mint a rate blended across two
+   parsers - a rate is a claim about the reader it was measured under.
+4. **The served diff is the gap's answer**, committed with the probe.
+5. Two downstream ledgers regenerated **provenance-only** - every measured
+   number identical.
+
+
+# v0.19 - the address-space probe: one baseline beaten, and it was conceded in advance
+
+Item 2. DESIGN-block-vocabulary was the maintainer-seeded incumbent the
+v0.19 course ADOPTED rather than displaced, scoped to one question, against
+three baselines taken from its own §4 falsifier list and preregistered in
+their own commit before any measurement (ordering asserted out of git).
+
+| baseline (the design's own) | floor | measured | verdict |
+|---|---|---|---|
+| retrieval - the resolver's keyword channel | 0.833 coverage / 0.030 FP | **0.3256 / 0.2059** | **NOT BEATEN** |
+| compression - zstd as an archive | 118,328 bits | 829,048 | **NOT BEATEN** (7.01x) |
+| compression - zstd separately addressable, shared dictionary | 5,182,024 bits | 829,048 | BEATEN (6.25x) |
+| term layer - canon tokens | 8.44x (32.10x same-population) | **6.91x** | **NOT BEATEN** |
+
+**Retrieval is not close, and both legs are required.** On the same rows in
+the same run the keyword channel reaches 0.9302 (80 of 86) where the block
+channel reaches 0.3256 (28 of 86), and claims 0.0294 of the rows it should
+refuse where the block channel claims 0.2059. The prereg registered the
+both-legs rule in advance so it could not be relaxed afterwards: a channel
+that refuses everything scores FP 0.000 and coverage 0.000 and is not a
+win; a channel that claims everything scores coverage 1.000 and is not a
+win either.
+
+This confirms DESIGN §3d correction 3 with a number: **MDL mints generator
+boilerplate, and boilerplate is what a person never types.** The design's
+§3 item 3 - that multi-word exact blocks are higher-precision retrieval
+keys than single keywords - is refuted as retrieval.
+
+**The one win was declared an arithmetic restatement in advance (E2).** The
+addressable-zstd comparison recomputes something `experiments/block_mdl.json`
+had already published; the prereg said so before the probe ran, so it could
+not be read as a new finding afterwards.
+
+**The single question, answered.** *Is the unified dictionary a real
+object, or two existing objects wearing one id space?*
+
+| comparison | ratio | reading |
+|---|---:|---|
+| unified vs grep over raw prose | 210,248x | an index beats a scan |
+| unified vs zstd-decompress-then-scan | 9,013x | an index beats a scan |
+| unified vs two separate indexes, both probed | 1.4408x | unification wins |
+| **unified vs two indexes with one tag bit** | **0.9981x** | **unification LOSES** |
+
+Workload: 50,401 queries, one per key in the unified space (217 block keys,
+50,184 subterm skeleton keys). **Answer: TWO EXISTING OBJECTS WEARING ONE
+ID SPACE.** A namespace bit sells dispatch fractionally cheaper than a
+merged directory. The prereg had already registered that the grep and zstd
+ratios are not evidence for unification - both existing indexes had that
+advantage separately.
+
+**Disposition: PARK WITH THE NUMBERS**, by the roadmap's own rule. One
+property survives untested by any baseline here and is named for a future
+unpark: append-only, path-independent growth.
+
+The **no-silent-disposal instruction is fully discharged**: adopted ->
+built -> measured -> parked by numbers, in the design's own §3e.
+
+
+# v0.19 - TWO RIGHTS B0: a census that landed narrow, and the narrow reading is the finding
+
+Item 3b, the one-hour probe adopted from the v0.19 course's series 3, with
+both branches committed in advance.
+
+| | count |
+|---|---:|
+| co-present pairs with differing canonical_ascii | 2,493 |
+| forking at a single discriminator subterm | 200 |
+| **convention-pair candidates** | **125** (213 distinct statements) |
+| of those, **mathematical** convention forks | **0** |
+| candidates touching an authored corpus | 1 |
+| candidates with BOTH members authored | **0** |
+
+Classification: notation_convention 114, commutation_reorder 41,
+alpha_variant 24, bracketing_convention 11, domain_fork 6,
+unclassified_difference 4. Verdicts: convention_pair_candidate 125,
+near_duplicate 65, different_statement 6, unclassified 4.
+
+**The famous clashes, swept with insertions allowed and detectors proven
+live by injection:** sign_convention **0**, nat_zero_boundary **0**,
+two_pi_placement **0**. Registered negative.
+
+**The narrow reading, which is the finding.** Inside the 26 hand-authored
+corpora the negative is unqualified: conventions were fixed by the author
+and never forked, and nobody had written that down. Everything else is an
+upstream dataset's authors writing one inequality two ways - a fact about
+the ingestion, not about a convention this graph holds twice. **The two
+halves must never be quoted apart.**
+
+**The two probes were looking at one thing.** The single largest candidate
+class is **98 pairs forking `>=` against the glyph**, which is item 3a's
+territory from the other side. That is a fact about the corpus, not a
+coincidence of method.
+
+**A first measurement fell out.** The anonymized-template pass contributed
+**0** pairs the twin ledger did not already carry, out of 1,015
+template-sharing pairs. The twin ledger is the stronger pool, and this is
+the first time that has been measured.
+
+**Consequence:** the full TWO RIGHTS direction parks with an empty
+mathematical denominator.

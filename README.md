@@ -6,15 +6,21 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.18.0](docs/RELEASE-v0.18.0.md) — the graph
-now **says its own structures in English**, in sentences no person wrote
-and no template contains, each one gated at render time by re-parsing it
-back through a parser byte-frozen before the writer existed: **2,170 of
-2,172 parseable terms round-trip (0.9991), out of 12,777 corpus nodes** —
-zero wrong sentences, zero invented words, two honest refusals. A
-shuffled-lexicon contrast scores 0.0000 and none of 3,722 one-word
-near-misses reads back as its source. See [the alphabet was half the
-wall](docs/blog/the-alphabet-was-half-the-wall.md).
+interface. Latest release: [v0.19.0](docs/RELEASE-v0.19.0.md) — two glyph
+equivalences took the **native voice from 17.0% to 67.2% of the corpus**
+(2,172 → **8,586 of 12,777** parseable; 6,414 gained, all 6,414
+round-tripping exactly, and the served diff proven additive-only: 0
+changed, 0 lost). The same cycle's foreign-dialect renderer scored
+**2,313 of 2,313** through an external Lean checker and is **not served**,
+because the control built to bound that score **voided** it —
+`drop_group` 0.80 against a 0.90 floor frozen beforehand, which is the
+measured fact that deleting a redundant bracket changes the sentence and
+not the term. The **register** — a frozen, counted inventory of the 1,878
+statements the system still cannot say — is what ships instead. See [the
+void that measured what the gate could not
+see](docs/blog/the-void-that-measured-what-the-gate-could-not-see.md).
+[v0.18.0](docs/RELEASE-v0.18.0.md) is the floor under it: sentences no
+person wrote, each gated by re-parsing back to the exact term it renders.
 [v0.17.0](docs/RELEASE-v0.17.0.md) still stands behind it: served over an
 OpenAI-compatible endpoint, 49/49 correct with receipts at a median 3,451
 useful tok/s against a grounded 4B model's 4/49 and a median of zero.
@@ -263,6 +269,10 @@ the graded residual.
 | Exact content does not survive a decoder | the contender is handed the source records verbatim and told to quote them, and still returns 0/16 corpus definitions and 0/5 twin lookups; the quote instruction did not move its score (5/45 before, 5/45 after) |
 | A composed sentence can carry its own proof | a realization grammar linearizes canonical terms into English and re-parses each sentence through a byte-frozen parser: 2,170 of 2,172 parseable terms round-trip exactly (0.9991 — of 12,777 corpus nodes), 0 wrong sentences, 0 words outside the lexicon and the registered numeral pair, 2 oversized numerals refusing rather than rounding. Shuffled lexicon scores 0.0000; none of 3,722 one-operator near-misses round-trips to its source |
 | A design's claims about a tree are checkable before they cost a run | five sentences in the governing design were corrected by measurement — an unmeasurable 90% floor (only 17.0% parse), a head inventory read off the wrong field (64 heads, not 95), a control that a two-sided scramble would have voided, an aliasing behaviour the canonicaliser does not have, and a receipt whose two slot numberings disagree on 5.07% of terms |
+| Two glyphs were half the wall | adding `≥`→`>=` and `≤`→`<=` to the tokenizer takes the parseable set 2,172 → 8,586 of 12,777 (17.0% → 67.2%); all 6,414 newly-reached statements round-trip exactly, and a witness running the retired parser out of git proves the change additive corpus-wide (0 changed, 0 lost). Caveat published with the rate: one corpus, two call heads — not a lexicon-coverage claim |
+| A gate's blind spot can be measured, and the measurement can void the gate | rendering the foreign dialect scored 2,313/2,313 identity through a pinned external checker, and the near-miss control voided it at `drop_group` 0.80 against a 0.90 floor — deleting a semantically redundant bracket changes the sentence and not the term. The line is not served; the excluded `drop_binder` class measures 0.18, which is the blind spot's published width |
+| A park with numbers is what discharging an instruction looks like | a maintainer-seeded design was adopted bounded, built, and measured against three of its own pre-registered baselines: retrieval NOT BEATEN on both legs (0.3256/0.2059 against the keyword channel's 0.9302/0.0294, same rows same run), term layer NOT BEATEN (6.91× vs 8.44×), and the one win conceded in advance as a restatement. Unified vs two indexes with one tag bit: 0.9981 — two objects wearing one id space |
+| This graph's authors never forked a convention | a census of 2,493 co-present differing pairs finds 125 convention-pair candidates, every one notational and zero mathematical; 0 have both members in a hand-authored corpus, and sign conventions, the 0-in-ℕ boundary and 2π placement return 0/0/0 with detectors proven live by injection |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -388,7 +398,15 @@ python scripts/retrieval.py --chain --observations path\to\notes note.tide_gauge
 python scripts/wordnet_eval.py data_sources\archives\english-wordnet-2025-json.zip
 python scripts/conversation.py              # two-turn golden-chicken clarification
 python scripts/theory_of_mind.py            # Sally looks in basket; world says box
-python scripts/realize_term.py --census     # R0: 2,172 of 12,777 parseable
+python scripts/realize_term.py --census     # 8,586 of 12,777 parseable (67.2%)
+                                            # -- 2,172 before the two glyphs
+PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "x >= 1"
+                                            # "variable zero is at least one";
+                                            # newly reachable since v0.19
+python -c "import json; v=json.load(open('experiments/foreign_voice_rate.json',encoding='utf-8'))['verdicts']; print(v['overall'], v['voided'])"
+                                            # VOID ['C-V4'] -- the foreign line
+                                            # is certified by nothing, so it is
+                                            # not served
 PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "1 + 1 = 2"
                                             # one sentence and its receipt
 python scripts/measure_realization.py --out realization_rate.repro.json
@@ -420,6 +438,11 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # pre-green runs, test_gate_v016/, test_gate_v015/). v0.18's new modules:
 # test_realize_term (44), test_realization_lexicon (37),
 # test_measure_realization (26); test_serve_chat 68 -> 74.
+# [SUITE-GATE-V19: refreshes to the v0.19 tip's numbers before the tag.
+# v0.19's 13 added/changed modules run 381 tests, 0 failures (measured at
+# rotation): foreign-voice x5, transliteration (44, 2 skipped),
+# address-probe (20), convention-pair (17), block-mdl (19), + realization
+# and skin modules they touch.]
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
@@ -479,28 +502,34 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
 - `docs/DESIGN-sans-template-rendering.md` — **measured at v0.18**: the
   kernel says its own structures in open English, each sentence gated by
   re-parsing back to the exact term it renders through a byte-frozen
-  parser that never saw the realizer. R1 fires at 0.9991 over the 2,172
-  parseable terms (17.0% of 12,777 — R0 makes that denominator
-  inseparable from the rate); R2 clean; all three controls read out. Five
-  of its own sentences were corrected by measurement, four before
-  implementation
-- `docs/DESIGN-foreign-voice.md` — the v0.19 direction, selected by the
-  outside course (`reports/design-direction-v0.19.json`): render the
-  statements the parser *cannot* read by borrowing a lexicon, and gate the
-  result with the already-pinned external Lean checker rather than a
-  parser this project owns. Its headline artifact is the **register** — a
-  frozen, digested inventory of what the system still cannot say, with the
-  blocking construct named and counted. Grounding already corrected it:
-  half the mute corpus (6,414 statements, 50.2% of the graph) is not
-  foreign at all, just two glyphs away from parseable, and is excluded
-  from the claim. *Under adversarial review at the v0.18 rotation*
-- `docs/DESIGN-block-vocabulary.md` — **adopted** as a bounded v0.19 item
-  rather than displaced by the course: one question — is the unified
-  dictionary a real object, or two existing objects wearing one id space?
-  — probed against three baselines pre-registered from its own concessions
-  (the keyword channel at its measured floors, zstd-with-shared-dictionary,
-  and the canon token encoding at 8.4×). Beat none of them and it parks
-  with the numbers
+  parser that never saw the realizer. R1 fired at 0.9991 over the 2,172
+  terms parseable **at v0.18**; R2 clean; all three controls read out.
+  Five of its own sentences were corrected by measurement, four before
+  implementation. The parseable denominator moved to 8,586 at v0.19 —
+  that 0.9991 is the artifact of record for what was measured under the
+  **retired** parser, declared historical in writing rather than re-run
+- `docs/DESIGN-foreign-voice.md` — **measured at v0.19, and VOID**: render
+  the statements the parser *cannot* read by borrowing a lexicon, and gate
+  the result with the already-pinned external Lean checker rather than a
+  parser this project owns. Every B-gate fired — including 100 of 100
+  sealed hand-renderings reproduced byte-identically, and identity 2,313
+  of 2,313 — and then **C-V4 voided the reading** at `drop_group` 0.80
+  against a 0.90 floor, so **the line is not wired** and that identity
+  rate never travels without the void. Its headline artifact is the
+  **register**: a frozen, digested inventory of the 1,878 statements the
+  system cannot say, in two buckets that are never summed — 1,706 a
+  budget a maintainer can lift, 172 a design consequence this cycle owns
+- `docs/DESIGN-block-vocabulary.md` — **adopted, built, measured, and
+  parked BY NUMBERS at v0.19** (§3e), which is the full lifecycle a
+  maintainer's no-silent-disposal instruction is owed. Scoped to one
+  question — is the unified dictionary a real object, or two existing
+  objects wearing one id space? — against three baselines pre-registered
+  from its own concessions. It beat one, and that one was declared in
+  advance to be an arithmetic restatement; retrieval lost on both legs at
+  once and the term layer read 6.91× against 8.44×. Answer: **two
+  existing objects wearing one id space** (0.9981 against two indexes
+  carrying one tag bit). Untested by any baseline and named for a future
+  unpark: append-only, path-independent growth
 - `docs/DESIGN-ledger-first-claims.md` — parked whole (course-chosen,
   review-hardened, preregistration-ready): claims are emitted, not
   written — published quantitative sentences become generated artifacts
