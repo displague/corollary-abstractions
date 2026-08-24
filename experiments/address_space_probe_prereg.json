@@ -1,0 +1,179 @@
+{
+  "schema": "address_space_probe_prereg.v1",
+  "design": "docs/DESIGN-block-vocabulary.md",
+  "roadmap": "docs/ROADMAP-v0.19.md",
+  "roadmap_item": "2 - The address space, probed (DESIGN-block-vocabulary, ADOPTED bounded)",
+  "written": "2026-08-24",
+  "status": "REGISTERED BEFORE MEASUREMENT. This file is committed in its own commit, and no measurement script and no result artifact exists in that commit or in any earlier one. tests/test_address_space_probe.py asserts that ordering against git history, so the claim is checkable rather than asserted.",
+
+  "single_question": {
+    "verbatim_from": "docs/ROADMAP-v0.19.md section 2, and docs/DESIGN-block-vocabulary.md section 4",
+    "question": "is the unified dictionary a real object, or two existing objects wearing one id space?",
+    "the_claim_under_test": "The honest answer may be that ONE ID SPACE IS THE CONTRIBUTION - addressability across layers - and this slice tests that claim rather than assuming it.",
+    "what_is_already_conceded_and_will_not_be_re-litigated": [
+      "DESIGN section 3d correction 4: the compression ratio headline is conceded to zstd. This probe does not try to win it back.",
+      "DESIGN section 3d correction 3: the recurrence yield lives in the generator. Every denominator below names its population.",
+      "DESIGN section 3d correction 1: MDL alone does not choose the rule count; the bit model does. The bit model is named in every arm."
+    ]
+  },
+
+  "populations": {
+    "note": "DESIGN section 3d correction 3 is binding: every denominator names its population. No number in the result artifact may be quoted without the population key it was computed over.",
+    "P-GRAPH": {
+      "definition": "data/ union data_holdout/, 14,830 statement nodes",
+      "why": "This is what scripts/resolver.py default_index() builds over and therefore the population the committed retrieval floors were measured on (experiments/text_resolution.json graph_nodes = 14830).",
+      "quarantine": "docs/DESIGN-holdout-quarantine.md section 2 permits a measurement to merge the holdout explicitly. This probe merges it explicitly, for the sole reason that the baseline it must beat was measured on the merged graph. Any figure computed on data/ alone is labelled P-MDL instead."
+    },
+    "P-MDL": {
+      "definition": "data/ only: 12,777 nodes, 25,554 prose surfaces, 268,527 slotted words",
+      "why": "The population experiments/block_mdl.json measured. Used wherever a figure must be comparable to that committed artifact."
+    },
+    "P-TERM": {
+      "definition": "the 12,777 rows of reports/compression.json",
+      "why": "The population the committed concept-token encoding is measured over today."
+    },
+    "P-RET-DEV": {
+      "definition": "experiments/text_resolution_queries.json - 40 queries, 28 expect=resolve, 12 expect=refuse",
+      "note": "Development set: the resolver was built against it. Reported, never headlined."
+    },
+    "P-RET-H1": {
+      "definition": "experiments/text_resolution_holdout.json - 18 expect=resolve, 10 expect=refuse",
+      "excluded_rows": "expect=compute (6) and expect=define (4) are dispatcher lanes, not resolver-retrieval rows, and are excluded from both arms."
+    },
+    "P-RET-H2": {
+      "definition": "experiments/text_resolution_holdout2.json - 16 expect=resolve, 12 expect=refuse",
+      "excluded_rows": "expect=compute (6) and expect=define (4), same reason as P-RET-H1."
+    },
+    "P-RET-H3": {
+      "definition": "experiments/text_resolution_holdout3.json - 24 rows, each carrying a committed target statement id",
+      "why": "The only committed query set with per-row targets, so it is the only one that can score target recall rather than reach."
+    },
+    "P-FP-CLAIMED": {
+      "definition": "the 25 committed claimed_samples rows of experiments/false_positive_rate_f3.json",
+      "one_sided_by_construction": "These are the keyword channel's OWN false positives - the sentences it claimed. A channel measured only on them can look arbitrarily good by refusing, and no rate computed over them is a false-positive rate.",
+      "why_not_the_1000": "F3's population is 1,000 sentences sampled from Open English WordNet with seed 20261103. The sampled sentences are NOT committed - only 25 of the 30 claimed ones are - and gloss.archive_path() returns None in this environment, so the archive that would regenerate the sample is absent. The 0.030 denominator therefore cannot be reproduced here. This is stated as a limitation of the probe, not worked around.",
+      "registered_rule": "The result artifact reports a COUNT out of 25 on this population and the string 'not a false-positive rate' beside it. It may never be quoted as FP."
+    },
+    "denominator_input_from_item_1": {
+      "source": "experiments/foreign_voice_rate.json b0a/b0bc, per the design's own sequencing bullet (section 4, 'R0's parse-rate table ... is input to any block-vocabulary denominator')",
+      "b0a_totals": {"nodes": 12777, "parseable": 2172, "mute": 10605, "transliterable": 6414, "residue": 4191},
+      "b0bc_accepted": 2319,
+      "what_it_constrains": "Only 2,172 of 12,777 (17.0%) formal statements are addressable by the committed parser at all, so any term-layer subterm addressability figure is bounded by that set and must say so. The prose layer is not so bounded: every node carries a title and a statement_meaning."
+    }
+  },
+
+  "the_three_pre_registered_baselines": {
+    "note": "Taken from DESIGN-block-vocabulary.md section 4's own falsifier bullet, not invented to be beatable. Each carries its measured floor and the committed source that floor is quoted from.",
+
+    "A_retrieval": {
+      "baseline": "the resolver's existing keyword channel at its measured floors",
+      "floors": {"in_corpus_coverage": 0.833, "false_positive_rate": 0.030},
+      "sources": {
+        "0.833": "docs/DESIGN-text-resolution.md section 5b, curve table row 'winner-support (ships) | 0.030 | 0.833' - the shipping code state's in-corpus coverage, also quoted as 'the v0.12 shipping figure of 0.833 on holdout 1' in docs/DESIGN-ambiguity-and-context.md line 102",
+        "0.030": "experiments/false_positive_rate_f3.json - seed 20261103, sampled 1000, claimed 30, false_positive_rate 0.03, F3 fired against a 0.04 threshold"
+      },
+      "win_condition": "BEATEN iff the block channel reaches coverage >= 0.833 AND false-positive behaviour <= 0.030 on the committed populations, with strict improvement on at least one leg.",
+      "the_leg_that_cannot_be_dropped": "BOTH legs are required and this is registered now so it cannot be relaxed later. A channel that refuses everything scores FP 0.000 and coverage 0.000; it is NOT a win, it is a channel that does not work. Equally, a channel that claims everything scores coverage 1.000 and is not a win either. Neither number is reportable alone.",
+      "measured_how": "coverage = reached (BIND or ASK) / expect=resolve rows, pooled over P-RET-DEV + P-RET-H1 + P-RET-H2 + P-RET-H3 and also reported per population; refusal behaviour = claimed / expect=refuse rows over P-RET-DEV + P-RET-H1 + P-RET-H2, plus the P-FP-CLAIMED count with its one-sidedness stated."
+    },
+
+    "B_compression": {
+      "baseline": "zstd-with-shared-dictionary over the same bytes",
+      "floors_quoted_from": "experiments/block_mdl.json, streams.prose (P-MDL)",
+      "numbers": {
+        "grammar_total_bits_model_a": 829048,
+        "zstd19_archive_bits": 118328,
+        "zstd19_separately_addressable_with_trained_shared_dictionary_bits": 5182024,
+        "zstd19_separately_addressable_no_dictionary_bits": 17277360,
+        "flat_word_baseline_bits": 3681748
+      },
+      "two_readings_both_registered_now_so_neither_can_be_chosen_after_the_fact": {
+        "archive_reading": {
+          "comparison": "829,048 against 118,328",
+          "expected_verdict": "NOT BEATEN - conceded in advance by DESIGN section 3d correction 4 and by the roadmap's own bullet. Recorded so the concession is in the artifact and not only in prose.",
+          "win_condition": "BEATEN iff grammar total_bits < 118,328."
+        },
+        "addressable_reading": {
+          "comparison": "829,048 against 5,182,024",
+          "why_this_is_the_registered_falsifier": "The design's section 4 falsifier says 'zstd-with-shared-dictionary over the same bytes'. A shared dictionary only means anything when the units are compressed SEPARATELY, which is what addressability requires; that arm is 5,182,024 bits (5,159,496 payload + 22,528 dictionary).",
+          "win_condition": "BEATEN iff grammar total_bits < 5,182,024."
+        }
+      },
+      "bit_model": "Model A of experiments/block_mdl.json: total_bits = terminal_lexicon_bits + encoded_bits + dictionary_bits, fixed-width w = ceil(log2(terminals+rules)), dictionary multiplier 1.0. Model B (2x dictionary price) is reported alongside so no conclusion rests on a generous dictionary price."
+    },
+
+    "C_term_layer": {
+      "baseline": "the canon token encoding at 8.4x",
+      "floor": 8.44,
+      "source": "experiments/ANALYSIS.md, 'Milestone 2 on the real corpus (67 nodes, 7 disciplines)' table: char 37.5, struct 13.6, concept 4.4, concept vs char = 8.44x",
+      "population_problem_stated_in_advance": "The 67-node list is NOT committed. reports/compression.json has since been regenerated over all 12,777 nodes, where the SAME concept encoding measures 32.10x (mean_char 115.85082570243407 / mean_concept 3.6093762229005244). The 8.4x figure and the 32.10x figure are the same encoding on two different populations.",
+      "registered_resolution": "Both comparisons are published. The roadmap's named baseline is 8.44x and the verdict is adjudicated against it. The same-population comparison against 32.10x on P-TERM is published beside it as the fair fight, and if the two verdicts disagree the artifact says so in the verdict block rather than quoting the convenient one.",
+      "measured_how": "Induce the same MDL-gated Re-Pair grammar (measure_block_mdl.Grammar, Model A) over the anonymized_template strings of P-TERM, count symbols per statement after induction, and report mean_char_tokens / mean_block_symbols, using scripts/measure_compression.py's own char_tokens definition (len of the template string).",
+      "win_condition": "BEATEN iff the block encoding's ratio vs char tokens exceeds 8.44x on the roadmap's named baseline. The P-TERM comparison against 32.10x is reported and adjudicated separately and both readings appear in the verdict."
+    }
+  },
+
+  "the_addressability_measurement": {
+    "why_it_is_not_a_fourth_baseline": "The three baselines above are the roadmap's falsifiers. This measurement is the probe's own question - it is what decides whether 'one id space IS the contribution' or refutes it - and it is registered with its own win condition so it cannot be graded loosely afterwards.",
+    "layers_in_the_unified_id_space": {
+      "prose_blocks": "the multi-word blocks minted by the MDL induction over P-GRAPH prose surfaces, namespace RULE_NS = 1 << 24, ids append-only within the namespace",
+      "subterm_skeletons": "the subterm skeleton keys that already exist in the committed ownership/decompose machinery - scripts/resolver.py GraphIndex.by_skeleton, built from decompose.subterms + match_signatures.skeleton - assigned a second namespace"
+    },
+    "the_query": "which statements contain block/subterm X",
+    "the_cost": "bytes touched to answer it, over a workload of every key in the unified space, reported as a total and a per-query mean",
+    "four_access_paths_all_measured_on_the_same_workload": {
+      "i_unified": "one on-disk index: a sorted directory of (namespaced_key, offset, length) plus a postings blob. Cost = binary search over the directory + the posting bytes.",
+      "ii_grep_raw_prose": "no index: every byte of the data/*/nodes.json and data_holdout/*/nodes.json surfaces is touched per query.",
+      "iii_zstd_decompress_then_scan": "zstd -19 archive of the same bytes: the compressed bytes are touched and the full decompressed stream is scanned, per query.",
+      "iv_two_separate_indexes_used_separately": "the same two posting structures serialized as two independent index files, each with its own directory, and BOTH probed per query because without namespace bits the caller does not know which index owns the key."
+    },
+    "cost_models_both_reported": {
+      "exact_bytes": "every byte the access path must read, counted exactly",
+      "page_model": "the same access counted in 4096-byte pages, because a real random access touches a page not a byte, and the page model is the one that decides whether a directory probe is cheap or free"
+    },
+    "win_condition": "The unified id space is a REAL OBJECT iff its bytes-touched is strictly lower than arm (iv), the two existing indexes used separately, on the same workload. Beating (ii) and (iii) proves only that an index beats a scan, which both existing indexes already did separately, and is registered here as NOT evidence for unification.",
+    "the_honest_alternative_outcome_named_in_advance": "If the unified space beats (iv) only by the cost of one directory probe - a small constant - then the finding is that unification buys dispatch, not addressability, and the artifact must say that in the verdict rather than quoting the (ii) and (iii) ratios."
+  },
+
+  "the_one_consumer": {
+    "what": "a resolver BLOCK CHANNEL prototype: MDL block id -> posting list of statement ids, used as exact retrieval keys",
+    "dictionary": "measure_block_mdl.Grammar, Model A (multiplier 1.0, fixed-width mode), prose stream, induced over P-GRAPH. Deterministic: no randomness, no wall clock, sorted corpus order. The data/-only induction (P-MDL) is rerun in the same artifact and must reproduce block_mdl.json's 186 rules, or the rebuild is not the same object and the probe says so.",
+    "query_encoding": "query text -> measure_block_mdl.to_template slotting -> words -> the dictionary's rules replayed in mint order over the query alone, exactly as Grammar.replay_rules does for a growth increment. The set of rule ids that survive is the query's blocks.",
+    "blocks_are_multi_word_only": "a rule whose expansion is a single word is not a block and is excluded from the channel, because a one-word key is the keyword channel wearing a different id.",
+    "two_arms_both_registered_now_so_neither_is_chosen_after_the_fact": {
+      "BC-strict": "candidates scored and filtered by the SAME rules the keyword channel is scored by, imported from scripts/resolver.py: KEYWORD_DF_CEILING for saturating keys, COVERAGE_FLOOR = 0.60 on the share of query words the matched blocks account for, corroboration (best >= 2 matched keys) unless the query is absorbed whole and is at most TERM_QUERY_WORDS words, ties are ASK not BIND.",
+      "BC-permissive": "no corroboration and no coverage floor: any block hit yields candidates. This is the upper bound on coverage and the honest reading of the design's claim that 'multi-word exact blocks are radically higher-precision retrieval keys'.",
+      "publication_rule": "BOTH arms are published in the result artifact with their full numbers. Neither may be dropped, and the verdict is adjudicated on whichever arm is BETTER, so the design gets its best case."
+    },
+    "declared_comparison_arm_imports": {
+      "rule": "This probe is an instrument, not the task book builder, so it MAY import engine machinery - but only for the comparison arm, and only what is declared here. tests/test_address_space_probe.py parses the script's AST and fails on any repo import not in this list.",
+      "from_scripts_resolver": ["BIND", "ASK", "PASS", "COVERAGE_FLOOR", "KEYWORD_DF_CEILING", "TERM_QUERY_WORDS", "GraphIndex", "build_index", "default_index", "reduce_text", "resolve"],
+      "from_scripts_measure_block_mdl": ["Grammar", "RULE_NS", "Surface", "code_width", "load_surfaces", "to_template"],
+      "why_resolver_is_allowed": "The registered baseline IS the resolver's keyword channel. Re-running it in the same process on the same populations is what makes the comparison same-run rather than quoted-from-memory; the quoted committed floors are reported beside it, and any drift between them is itself a reportable finding.",
+      "what_is_forbidden": "No import of scripts/answer.py, scripts/harness.py, scripts/controller.py, scripts/dispatcher.py or any other engine surface. No learned component anywhere. No network. No wall-clock in any output."
+    }
+  },
+
+  "the_verdict_rule": {
+    "verbatim_from_roadmap": "Beat none of them and it parks with the numbers.",
+    "how_it_is_applied": "Each of the three baselines gets BEATEN or NOT BEATEN with the number that decided it. No third verdict word exists. If all three read NOT BEATEN the artifact records disposition PARK WITH THE NUMBERS and the design is parked, not softened.",
+    "no_spin_either_way": "A baseline this probe beats is reported as beaten with the same plainness as one it loses. The addressability measurement is adjudicated separately and cannot rescue a park: it answers whether the id space is one object, not whether the design beat its falsifiers."
+  },
+
+  "registered_expectations": {
+    "note": "Written before the first run. Fired and missed are both results, and both land in the artifact.",
+    "E1": "The block channel will MISS the retrieval baseline badly, because DESIGN section 3d correction 3 already measured where the recurrence lives: the 524 person-authored surfaces run 1.035 words/symbol, essentially no block structure, while the committed query sets are human phrasings about exactly those curated nodes. Predicted pooled coverage under BC-strict: below 0.20.",
+    "E2": "The compression addressable reading will be BEATEN (829,048 < 5,182,024) and the archive reading NOT BEATEN (829,048 > 118,328), both by construction from block_mdl.json. This is registered as an arithmetic restatement of a committed result, not as a new finding, and the verdict block will say so.",
+    "E3": "The term layer will MISS 8.44x, because block_mdl.json already measured a second flat grammar over operator tokens losing to zstd 3x and DESIGN section 3d correction 4 already concluded it 'is not worth building'.",
+    "E4": "The unified id space will beat grep and zstd-scan by orders of magnitude and beat the two separate indexes by roughly the cost of one directory probe. If E4 fires, the answer to the roadmap's single question is: two existing objects wearing one id space, where the id space buys dispatch."
+  },
+
+  "determinism_and_regeneration": {
+    "rules": [
+      "No randomness, no timestamps, no wall-clock, no set or dict iteration order in any output.",
+      "Two runs of scripts/probe_address_space.py produce byte-identical experiments/address_space_probe.json.",
+      "The committed artifact regenerates byte-identically from the committed tree.",
+      "The result artifact carries this file's sha256 so the prereg it was adjudicated against is pinned, not merely referenced."
+    ]
+  }
+}
