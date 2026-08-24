@@ -284,9 +284,39 @@ def identity_terms(head: str) -> tuple[tuple, ...]:
 
 # `<=` / `>=` must stay earlier alternatives than standalone `<` / `>`
 # (docs/DESIGN-skeleton-emitter.md P-E1; BACKLOG TOKEN_RE hole).
+#
+# `≥` and `≤` are single characters and cannot collide with the two-character
+# alternatives, so they ride in the standalone-relation class.
 TOKEN_RE = re.compile(
-    r"\s*(=>_d|<=|>=|[<>]|[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[=+\-*/^()\[\],|]|±)"
+    r"\s*(=>_d|<=|>=|[<>≥≤]|[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[=+\-*/^()\[\],|]|±)"
 )
+
+#: ROADMAP-v0.19 item 3a — the transliteration lane. Two glyph equivalences and
+#: no others: `≥` (U+2265) and `≤` (U+2264) ARE the relations this grammar
+#: already spells `>=` and `<=`, written in a different alphabet.
+#:
+#: The equivalence is resolved here, at the token, rather than as new relation
+#: names carried into the tree, and that choice is load-bearing in three places:
+#:
+#:   * `RELATIONS`, `SYMMETRIC_RELATIONS`, `canonicalize`, `skeleton` and every
+#:     downstream consumer keep exactly the relation vocabulary they had. A new
+#:     relation name would have needed a row in each, and every one of those
+#:     rows is a place two spellings of one relation could drift apart.
+#:   * Two statements differing only in which alphabet spelled the relation
+#:     canonicalize to the SAME skeleton, which is what "the same grammar in a
+#:     different alphabet" has to mean if it means anything.
+#:   * `data/realization/lexicon.json` needs no new rows and gets none: the tree
+#:     carries `>=`, so "is at least" already realizes it. A `≥` row phrased
+#:     "is at least" is refused by the loader's B2 (not injective forward) and
+#:     by its B7 (the emitted token would no longer tokenize to itself), so the
+#:     alternative is one the committed gate rejects, not one it merely does not
+#:     need.
+#:
+#: The parser digest this change moves was retired for future comparisons by the
+#: dated amendment `realization.prereg.v1.amendment.transliteration-2026-08-24`
+#: in experiments/realization_prereg.json and experiments/foreign_voice_prereg
+#: .json; the successor pin is experiments/transliteration_prereg.json.
+GLYPH_EQUIVALENTS = {"≥": ">=", "≤": "<="}
 
 
 class TemplateParseError(ValueError):
@@ -300,7 +330,7 @@ def tokenize(text: str) -> list[str]:
         m = TOKEN_RE.match(text, pos)
         if not m:
             raise TemplateParseError(f"unexpected character at {text[pos:pos+10]!r}")
-        tokens.append(m.group(1))
+        tokens.append(GLYPH_EQUIVALENTS.get(m.group(1), m.group(1)))
         pos = m.end()
     return tokens
 

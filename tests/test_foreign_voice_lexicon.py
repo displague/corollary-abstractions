@@ -455,19 +455,62 @@ class PreregDigestTests(unittest.TestCase):
         self.assertEqual(self.prereg["prereg_id"], "foreign_voice.prereg.v1")
 
     def test_every_frozen_digest_matches_the_tree(self) -> None:
+        """B7's sweep, re-aimed 2026-08-24 for the one retired row.
+
+        The amendment is `foreign_voice.prereg.v1.amendment.transliteration-
+        2026-08-24` (ROADMAP-v0.19 item 3a). B7 froze the parser in its own
+        right — B0a's split and C-V2's contrast are computed with it — and that
+        freeze did its job: experiments/foreign_voice_rate.json was measured
+        under 65fead2f… and this amendment postdates the run. The parser did not
+        move while the claim was being made, which is precisely what B7 asks.
+
+        A retired row is checked against the successor pin the amendment names,
+        so the sweep still fails on any undeclared change; it does not become a
+        row nobody checks.
+        """
+        amendments = {entry["amendment_id"]: entry
+                      for entry in self.prereg.get("amendments", ())}
         for row in self.prereg["frozen"]:
             with self.subTest(path=row["path"]):
                 path = ROOT / row["path"]
                 self.assertTrue(path.is_file(), f"{row['path']} is not in the tree")
+                marker = row.get("retired_for_future_comparisons")
+                if marker is None:
+                    self.assertEqual(
+                        _sha256_lf(path), row["sha256_lf"],
+                        f"B7 VOID: {row['path']} changed after the "
+                        f"preregistration commit recorded it. If the change was "
+                        f"needed to make the oracle agree, the independence "
+                        f"claim is void and the change needs its own review "
+                        f"naming the reason.")
+                    continue
+                named = [entry for key, entry in amendments.items()
+                         if key.endswith(marker["amendment"])]
+                self.assertEqual(len(named), 1, marker["amendment"])
+                successor = json.loads(
+                    (ROOT / named[0]["successor_prereg"]["path"]).read_text(
+                        encoding="utf-8"))
+                live = {r["role"]: r for r in successor["frozen"]}[row["role"]]
                 self.assertEqual(
-                    _sha256_lf(path), row["sha256_lf"],
-                    f"B7 VOID: {row['path']} changed after the preregistration "
-                    f"commit recorded it. If the change was needed to make the "
-                    f"oracle agree, the independence claim is void and the "
-                    f"change needs its own review naming the reason.")
+                    _sha256_lf(path), live["sha256_lf"],
+                    f"{row['path']} matches neither its retired pin nor the "
+                    f"successor pin. A change past the amendment needs its own.")
 
     def test_the_frozen_parser_is_the_one_v018_froze(self) -> None:
-        """The same digest experiments/realization_prereg.json pinned, unmoved."""
+        """The same digest experiments/realization_prereg.json pinned.
+
+        Still 65fead2f… in BOTH files and still equal to each other, which is
+        the invariant this test was written for: the run recorded in
+        experiments/foreign_voice_rate.json read the corpus through the same
+        parser experiments/realization_rate.json did, so B0a's split and
+        C-V2's contrast sit on v0.18's denominator and not a moved one.
+
+        Since 2026-08-24 that digest is a HISTORICAL one in both files — both
+        rows carry `retired_for_future_comparisons` from the transliteration
+        amendment, and the tree no longer matches it. That is asserted here too,
+        so this test cannot be misread as saying the working parser is still
+        65fead2f…; the sweep above is what checks the tree.
+        """
         frozen = {row["role"]: row for row in self.prereg["frozen"]}
         v018 = json.loads(
             (ROOT / "experiments" / "realization_prereg.json").read_text(
@@ -475,6 +518,14 @@ class PreregDigestTests(unittest.TestCase):
         v018_parser = {row["role"]: row for row in v018["frozen"]}["parser"]
         self.assertEqual(frozen["parser"]["sha256_lf"], v018_parser["sha256_lf"])
         self.assertEqual(frozen["parser"]["sha256_lf"][:8], "65fead2f")
+        for row in (frozen["parser"], v018_parser):
+            self.assertIn(
+                "retired_for_future_comparisons", row,
+                "if one file retires the parser pin and the other does not, a "
+                "reader is told two different things about the same digest")
+            self.assertEqual(
+                row["retired_for_future_comparisons"]["amendment"],
+                "transliteration-2026-08-24")
 
     def test_b7s_four_named_artifacts_are_all_accounted_for(self) -> None:
         roles = {row["role"] for row in self.prereg["frozen"]}

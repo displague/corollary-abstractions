@@ -121,6 +121,44 @@ class PreregMismatch(RuntimeError):
     """C-R3 failed. The run does not get written."""
 
 
+def _successor_row(prereg: dict, row: dict) -> tuple[dict, str]:
+    """The live pin for a row retired by a dated amendment, and its file.
+
+    A row carrying `retired_for_future_comparisons` is history: it records what
+    the artifact that quoted it was measured under, and the tree has legitimately
+    moved past it. Checking such a row against the working tree would be asking
+    a closed question. Checking nothing would be worse — the freeze would have
+    silently become optional.
+
+    So the retirement is followed rather than skipped. The marker names the
+    amendment; the amendment names the successor prereg; the successor's row of
+    the same role is what the tree is checked against. Every hop is a fact
+    written down in a committed file, so a reader can walk the chain by hand and
+    a broken link raises instead of degrading to a pass.
+    """
+    marker = row["retired_for_future_comparisons"]
+    wanted = marker["amendment"]
+    for entry in prereg.get("amendments", ()):
+        if entry["amendment_id"].endswith(wanted):
+            successor_path = entry["successor_prereg"]["path"]
+            break
+    else:
+        raise PreregMismatch(
+            f"{row['path']} is marked retired by amendment {wanted!r}, but no "
+            f"such amendment is recorded in this file. A retirement marker "
+            f"without its amendment is a pin removed with no reason attached."
+        )
+    successor = json.loads(
+        (REPO_ROOT / successor_path).read_text(encoding="utf-8"))
+    for candidate in successor["frozen"]:
+        if candidate["role"] == row["role"]:
+            return candidate, successor_path
+    raise PreregMismatch(
+        f"{successor_path} is named as the successor pin for role "
+        f"{row['role']!r} but records no row for it."
+    )
+
+
 # --------------------------------------------------------------------------
 # C-R3 — revalidate the freeze before anything is measured
 # --------------------------------------------------------------------------
@@ -146,14 +184,31 @@ def revalidate_prereg(prereg_path: Path | None = None) -> dict:
     for row in prereg["frozen"]:
         path = REPO_ROOT / row["path"]
         actual = sha256_lf_file(path) if path.exists() else None
-        agrees = actual == row["sha256_lf"]
-        rows.append({
+        entry = {
             "path": row["path"],
             "role": row["role"],
             "recorded_sha256_lf": row["sha256_lf"],
             "observed_sha256_lf": actual,
-            "agrees": agrees,
-        })
+        }
+        if "retired_for_future_comparisons" in row:
+            successor, successor_path = _successor_row(prereg, row)
+            agrees = actual == successor["sha256_lf"]
+            entry["retired_for_future_comparisons"] = {
+                "amendment": row["retired_for_future_comparisons"]["amendment"],
+                "dated": row["retired_for_future_comparisons"]["dated"],
+                "checked_against": successor_path,
+                "successor_sha256_lf": successor["sha256_lf"],
+                "read_this_as": (
+                    "`recorded_sha256_lf` is the digest THIS file's artifact was "
+                    "measured under and is not expected to match the tree. The "
+                    "tree is checked against the successor pin named above, and "
+                    "`agrees` reports that check."
+                ),
+            }
+        else:
+            agrees = actual == row["sha256_lf"]
+        entry["agrees"] = agrees
+        rows.append(entry)
         if not agrees:
             drifted.append(row["path"])
     if drifted:
@@ -171,8 +226,11 @@ def revalidate_prereg(prereg_path: Path | None = None) -> dict:
         "what_it_means": (
             "Every artifact frozen before the realizer was written is "
             "byte-identical to what the preregistration commit recorded, so "
-            "stage 2 is the same reader that had never seen the realizer. If "
-            "any row disagreed this writer would refuse to emit the artifact."
+            "stage 2 is the same reader that had never seen the realizer — "
+            "EXCEPT for any row a dated amendment retired for future "
+            "comparisons, which is checked against the successor pin the "
+            "amendment names and says so in its own row. If any row disagreed "
+            "this writer would refuse to emit the artifact."
         ),
         "revalidated": rows,
     }

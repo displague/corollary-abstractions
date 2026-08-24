@@ -78,21 +78,84 @@ class PreregRevalidationTests(unittest.TestCase):
         for row in block["revalidated"]:
             self.assertTrue(row["agrees"], row["path"])
 
-    def test_a_drifted_digest_raises(self) -> None:
-        prereg = json.loads(
+    def _prereg(self) -> dict:
+        return json.loads(
             (ROOT / "experiments" / "realization_prereg.json").read_text(
                 encoding="utf-8")
         )
-        injured = copy.deepcopy(prereg)
-        for row in injured["frozen"]:
-            if row["role"] == "parser":
-                row["sha256_lf"] = "0" * 64
+
+    def test_a_drifted_digest_raises(self) -> None:
+        """Injure the LIVE pin, not the retired one.
+
+        Re-aimed 2026-08-24 by `realization.prereg.v1.amendment.
+        transliteration-2026-08-24`. The parser row's own digest is now history:
+        blanking it proves nothing, because the tree is checked against the
+        successor pin the amendment names. So the injury goes where the check
+        actually looks — a successor file whose parser row is wrong — and the
+        run must still refuse.
+
+        `lexicon` is injured in the same test as the unretired case, so the
+        original assertion (a plain frozen row that drifts raises) keeps a
+        witness of its own rather than being retired along with the parser.
+        """
         with tempfile.TemporaryDirectory() as tmp:
+            injured = copy.deepcopy(self._prereg())
+            for row in injured["frozen"]:
+                if row["role"] == "lexicon":
+                    row["sha256_lf"] = "0" * 64
             path = Path(tmp) / "prereg.json"
             path.write_text(json.dumps(injured), encoding="utf-8")
             with self.assertRaises(mr.PreregMismatch) as caught:
                 mr.revalidate_prereg(path)
-        self.assertIn("match_signatures.py", str(caught.exception))
+            self.assertIn("lexicon.json", str(caught.exception))
+
+            successor_path = (
+                self._prereg()["amendments"][0]["successor_prereg"]["path"])
+            successor = json.loads(
+                (ROOT / successor_path).read_text(encoding="utf-8"))
+            for row in successor["frozen"]:
+                if row["role"] == "parser":
+                    row["sha256_lf"] = "0" * 64
+            # The injured successor lives in the temp dir and the amendment is
+            # re-pointed at it, so the refusal is exercised without touching a
+            # committed file. `REPO_ROOT / <absolute>` is the absolute path.
+            bad = Path(tmp) / "successor.json"
+            bad.write_text(json.dumps(successor), encoding="utf-8")
+            injured = copy.deepcopy(self._prereg())
+            injured["amendments"][0]["successor_prereg"]["path"] = str(bad)
+            path = Path(tmp) / "prereg2.json"
+            path.write_text(json.dumps(injured), encoding="utf-8")
+            with self.assertRaises(mr.PreregMismatch) as caught:
+                mr.revalidate_prereg(path)
+            self.assertIn("match_signatures.py", str(caught.exception))
+
+    def test_a_retirement_whose_amendment_is_missing_raises(self) -> None:
+        """The retirement chain may not degrade into a skipped check.
+
+        A row marked retired names an amendment; the amendment names the
+        successor pin. If either link is missing the honest outcome is a
+        refusal, not a row nobody checks — otherwise "retired" would be a
+        one-word way to remove a pin with no reason attached.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            injured = copy.deepcopy(self._prereg())
+            injured["amendments"] = []
+            path = Path(tmp) / "prereg.json"
+            path.write_text(json.dumps(injured), encoding="utf-8")
+            with self.assertRaises(mr.PreregMismatch) as caught:
+                mr.revalidate_prereg(path)
+            self.assertIn("no such amendment", str(caught.exception))
+
+    def test_the_retired_row_reports_both_digests(self) -> None:
+        """A reader of the artifact must be able to see the substitution."""
+        block = mr.revalidate_prereg()
+        row = {r["role"]: r for r in block["revalidated"]}["parser"]
+        marker = row["retired_for_future_comparisons"]
+        self.assertEqual(marker["amendment"], "transliteration-2026-08-24")
+        self.assertEqual(row["recorded_sha256_lf"][:8], "65fead2f")
+        self.assertNotEqual(row["observed_sha256_lf"], row["recorded_sha256_lf"])
+        self.assertEqual(row["observed_sha256_lf"], marker["successor_sha256_lf"])
+        self.assertTrue(row["agrees"])
 
     def test_the_writer_refuses_to_write_on_mismatch(self) -> None:
         """Revalidating and then writing anyway would revalidate nothing."""
@@ -374,16 +437,42 @@ class ArtifactShapeTests(unittest.TestCase):
         )
 
     def test_the_surface_digest_still_describes_the_tree(self) -> None:
-        """R5/M2: a rendering change anywhere shows up as a digest mismatch."""
+        """R5/M2: a rendering change anywhere shows up as a digest mismatch.
+
+        Scoped 2026-08-24 by the dated amendment
+        `realization.prereg.v1.amendment.transliteration-2026-08-24`
+        (ROADMAP-v0.19 item 3a). experiments/realization_rate.json is a
+        HISTORICAL artifact measured under the retired parser, so its r5 digest
+        describes the terms THAT parser could reach — 2,172 of them — and cannot
+        describe the 8,586 the successor reaches. Comparing it to a sweep over
+        everything would fail for the one reason that is not a finding.
+
+        So the sweep is scoped to the retired pin's own reach, and the scoping
+        rule is mechanical rather than a hand-written id list: a statement whose
+        canonical_ascii carries neither `≥` nor `≤` is a statement the retired
+        tokenizer saw exactly as this one does. Restricted that way the digest
+        must be BYTE-IDENTICAL to the historical artifact's — which makes this
+        test a corpus-wide additive-only witness for the tokenizer change, and a
+        stronger one than it was before: every one of the 2,172 surfaces the
+        v0.18 run served is asserted unchanged, not merely the sampled 25.
+
+        If this goes red, a previously-served sentence MOVED, and the lane's
+        additive-only claim is false — see experiments/transliteration_served_
+        diff.json, which makes the same check over the task book's own tasks.
+        """
         import hashlib
 
         rows = []
+        skipped = 0
         for path in sorted((ROOT / "data").glob("*/nodes.json")):
             doc = json.loads(path.read_text(encoding="utf-8"))
             for node in doc.get("statement_nodes", []):
                 sid = node.get("statement_id", "<missing-id>")
                 source = ((node.get("formal_statement") or {})
                           .get("canonical_ascii") or "")
+                if "≥" in source or "≤" in source:
+                    skipped += 1
+                    continue
                 result = rt.realize(source, LEX, statement_id=sid)
                 if isinstance(result, rt.Realization) and result.served:
                     rows.append((sid, result.surface))
@@ -392,6 +481,12 @@ class ArtifactShapeTests(unittest.TestCase):
         self.assertEqual(len(rows), self.doc["r5"]["served_count"])
         self.assertEqual(hashlib.sha256(joined.encode("utf-8")).hexdigest(),
                          self.doc["r5"]["digest_over_all"])
+        self.assertGreater(
+            skipped, 0,
+            "the scoping is only honest while the tree actually carries the two "
+            "glyphs; if it stops carrying them, delete the scope, do not keep a "
+            "filter that filters nothing",
+        )
 
     def test_no_control_voided(self) -> None:
         for key in ("c_r1", "c_r2"):

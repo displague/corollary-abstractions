@@ -413,7 +413,22 @@ class TautologyProbeTests(unittest.TestCase):
         cls.prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
 
     def test_frozen_digests_match_the_tree(self) -> None:
-        """If implementing the realizer forced a parser change, this goes red."""
+        """If implementing the realizer forced a parser change, this goes red.
+
+        Re-aimed 2026-08-24 by the dated amendment
+        `realization.prereg.v1.amendment.transliteration-2026-08-24`
+        (ROADMAP-v0.19 item 3a, the transliteration lane). A row the amendment
+        retired for future comparisons is checked against the SUCCESSOR pin the
+        amendment names, not against its own historical digest: the row records
+        what experiments/realization_rate.json was measured under, the tree has
+        legitimately moved past it, and asking the tree to match it would be
+        asking a closed question.
+
+        The retirement is followed, never skipped. A retired row still has to
+        agree with a live pin somewhere, and a marker naming an amendment this
+        file does not record fails loudly rather than dropping the check. That
+        is the difference between a pin retired in writing and a pin deleted.
+        """
         self.assertEqual(self.prereg["prereg_id"], "realization.prereg.v1")
         frozen = {row["role"]: row for row in self.prereg["frozen"]}
         self.assertLessEqual(
@@ -421,15 +436,38 @@ class TautologyProbeTests(unittest.TestCase):
             set(frozen),
             "the four artifacts frozen before the realizer must all be recorded",
         )
+        amendments = {entry["amendment_id"]: entry
+                      for entry in self.prereg.get("amendments", ())}
         for role, row in frozen.items():
             with self.subTest(role=role):
                 path = ROOT / row["path"]
                 self.assertTrue(path.exists(), f"{role}: {row['path']} is missing")
+                marker = row.get("retired_for_future_comparisons")
+                if marker is None:
+                    self.assertEqual(
+                        _sha256_lf(path), row["sha256_lf"],
+                        f"C-R3 VOID: {row['path']} changed after the "
+                        f"preregistration commit. The independence claim needs "
+                        f"its own review naming the reason.",
+                    )
+                    continue
+                named = [entry for key, entry in amendments.items()
+                         if key.endswith(marker["amendment"])]
                 self.assertEqual(
-                    _sha256_lf(path), row["sha256_lf"],
-                    f"C-R3 VOID: {row['path']} changed after the preregistration "
-                    f"commit. The independence claim needs its own review naming "
-                    f"the reason.",
+                    len(named), 1,
+                    f"{row['path']} claims retirement by amendment "
+                    f"{marker['amendment']!r}, which this file does not record",
+                )
+                successor = json.loads(
+                    (ROOT / named[0]["successor_prereg"]["path"]).read_text(
+                        encoding="utf-8"))
+                live = {r["role"]: r for r in successor["frozen"]}[role]
+                self.assertEqual(live["path"], row["path"])
+                self.assertEqual(
+                    _sha256_lf(path), live["sha256_lf"],
+                    f"{row['path']} matches neither its retired pin nor the "
+                    f"successor pin in {named[0]['successor_prereg']['path']}. "
+                    f"A second undeclared change needs its own amendment.",
                 )
 
     def test_records_the_parser_by_name(self) -> None:

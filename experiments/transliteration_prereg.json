@@ -1,0 +1,134 @@
+{
+  "prereg_id": "transliteration.prereg.v1",
+  "registered": "2026-08-24",
+  "design": "docs/DESIGN-sans-template-rendering.md (the realizer path this lane re-uses unchanged) + docs/DESIGN-foreign-voice.md §5 (the ordering rule that gated this lane and has now been satisfied)",
+  "roadmap": "docs/ROADMAP-v0.19.md item 3a — the transliteration lane",
+  "control": "the re-freeze discipline itself (ROADMAP-v0.19 item 3a, rules 1-3), of which this file is rule 2 discharged",
+  "what_this_records": [
+    "ROADMAP-v0.19 item 3a rule 2, verbatim: \"A re-freeze is a preregistration act, not a fix-up. The new parser digest is recorded before the run that quotes it, exactly as ccac853 recorded the first five.\"",
+    "This file is that record. It is written in the commit that changes scripts/match_signatures.py and BEFORE scripts/measure_transliteration.py exists, which is why the registered-run row below is in `pending` rather than absent — the same shape realization_prereg.json used for its inverter row.",
+    "It is the SUCCESSOR to the parser pin retired by the dated amendment `realization.prereg.v1.amendment.transliteration-2026-08-24`, recorded in the previous commit in BOTH experiments/realization_prereg.json and experiments/foreign_voice_prereg.json. Retired FOR FUTURE COMPARISONS: this file is what a future comparison is read against; those two rows stay readable against the artifacts that quoted them.",
+    "tests/test_realization_lexicon.py, tests/test_realize_term.py, tests/test_measure_realization.py and tests/test_foreign_voice_lexicon.py assert the parser row below against the working tree. Those assertions used to read the retired pin; they were re-aimed here, in this commit, each citing the amendment by id at the assertion."
+  ],
+  "digest_algorithm": "sha256 over file bytes with CRLF normalized to LF (scripts/report_provenance.sha256_lf_file)",
+  "the_change": {
+    "file": "scripts/match_signatures.py",
+    "what": "TOKEN_RE gains two single-character alternatives and `tokenize` maps them onto the tokens the grammar already has: `≥` (U+2265) → `>=` and `≤` (U+2264) → `<=`. Nothing else changed in the file.",
+    "two_glyph_equivalences": {
+      "≥": ">=",
+      "≤": "<="
+    },
+    "scope_limit": [
+      "EXACTLY two glyphs. No other unicode is admitted by this change: not `≠`, not `∈`, not `∀`, not `√`, not the sub/superscripts, not the coercion arrow `↑`. Each of those is a different question and several of them are not spelling questions at all.",
+      "The limit is the probe's whole point. ROADMAP-v0.19 item 3a says the 6,414 are \"the same grammar in a different alphabet\"; that sentence is only checkable if the change admits nothing but a different alphabet for the same grammar. A tokenizer widened by twelve glyphs would have made a bigger number and a smaller claim."
+    ],
+    "resolved_at_the_token_not_in_the_tree": [
+      "`tokenize` returns `>=` for `≥`, so the canonical tree, the skeleton, `RELATIONS`, `SYMMETRIC_RELATIONS` and every downstream consumer keep exactly the vocabulary they had.",
+      "Consequence that matters for this lane's round-trip reading: two statements differing only in which alphabet spelled the relation canonicalize to the SAME skeleton, and data/realization/lexicon.json needs no new rows — the tree carries `>=`, and the committed row \"is at least\" already realizes it.",
+      "The alternative was checked, not assumed: a `≥` row phrased \"is at least\" is REFUSED by the loader's B2 (phrase maps to two keys — not injective forward) and by its B7 (the emitted token would no longer tokenize to itself, since tokenize now returns `>=`). Adding lexicon rows for the two glyphs is not merely unnecessary; the committed gate rejects it."
+    ],
+    "why_the_lexicon_is_therefore_untouched": "data/realization/lexicon.json is byte-unchanged by this lane, and its digest row in experiments/realization_prereg.json stays live and un-amended. The roadmap's step list anticipated a second dated amendment for lexicon rows; the measurement below is what makes it unnecessary, and it is recorded here rather than quietly skipped."
+  },
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+      "recorded": "2026-08-24",
+      "supersedes": {
+        "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+        "pinned_by": [
+          "experiments/realization_prereg.json (role `parser`, C-R3)",
+          "experiments/foreign_voice_prereg.json (role `parser`, B7)"
+        ],
+        "retired_by": "realization.prereg.v1.amendment.transliteration-2026-08-24 / foreign_voice.prereg.v1.amendment.transliteration-2026-08-24"
+      },
+      "why": "The post-amendment parser. It is recorded in the same commit that changes it and BEFORE any artifact quotes a rate measured through it, which is the whole content of rule 2. A digest recorded after the run it certifies certifies nothing."
+    },
+    {
+      "path": "data/realization/lexicon.json",
+      "role": "lexicon",
+      "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587",
+      "recorded": "2026-08-24",
+      "why": "Byte-identical to the digest realization_prereg.json froze on 2026-08-23 (f2c22a5c…), and re-recorded here so this lane's round-trip reading names the table it read through rather than pointing at another file's pin. If these two digests ever disagree, one of the two preregs is stale."
+    },
+    {
+      "path": "scripts/realize_term.py",
+      "role": "inverter",
+      "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac",
+      "recorded": "2026-08-24",
+      "why": "v0.18's realizer, re-used UNCHANGED. This lane writes no rendering code: the round-trip reading below is v0.18's machinery pointed at statements it could not previously reach, which is the only way the two rates are comparable at all."
+    },
+    {
+      "path": "scripts/realization_lexicon.py",
+      "role": "lexicon_loader",
+      "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea",
+      "recorded": "2026-08-24",
+      "why": "The load gate whose B2/B7 clauses are what make the no-new-lexicon-rows finding above a measurement and not an opinion. Frozen so that finding stays checkable."
+    },
+    {
+      "path": "scripts/numeral_words.py",
+      "role": "numeral_pair",
+      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+      "recorded": "2026-08-24",
+      "why": "The registered numeral pair, unchanged. R2's two permitted sources for a served word are this and the lexicon; both are pinned here so the newly-reached set's sentences are read under the same rule the v0.18 set's were."
+    }
+  ],
+  "pending": [
+    {
+      "path": "scripts/measure_transliteration.py",
+      "role": "registered_run",
+      "sha256_lf": "pending",
+      "why": [
+        "The lane's measurement script does not exist when this file is written, and could not: the floors below have to be frozen before the instrument that reads them, or they are not floors.",
+        "Its row moves into `frozen` with its own `recorded` date in the commit that writes it, exactly as realization_prereg.json's inverter row did."
+      ]
+    }
+  ],
+  "frozen_floors": {
+    "parse_gain": {
+      "floor": 6000,
+      "unit": "statements newly parseable under the successor pin that did not parse under the retired pin",
+      "measured_over": "every `formal_statement.canonical_ascii` in data/*/nodes.json (12,777 statement nodes)",
+      "preview_this_floor_was_set_against": {
+        "parseable_under_the_retired_pin": 2172,
+        "newly_parseable": 6414,
+        "parseable_under_the_successor_pin": 8586,
+        "of_total": 12777,
+        "rate_after": 0.672,
+        "measured": "2026-08-24, against the committed tree, before this file was written"
+      },
+      "why_a_floor_below_the_preview": [
+        "6,000 rather than 6,414 because a floor set AT the preview is a floor that can only be met by the exact run that produced it — any legitimate difference in how the registered run walks the corpus would read as a failure, and the temptation would be to make the walk agree rather than report the difference.",
+        "6,000 rather than something safely small because the lane's claim is that half the corpus was mute for want of two glyphs. A floor of 1,000 would be met by a change that did not support that sentence, and a probe whose floor does not discriminate is not a probe."
+      ],
+      "if_it_fails": "The artifact is written anyway with the number it read and the floor marked unmet. ROADMAP-v0.19 item 3: \"both branches commit their artifact.\""
+    },
+    "round_trip": {
+      "floor": null,
+      "no_floor_is_pre_committed": [
+        "DELIBERATE, and the reason is recorded before the reading rather than after it. This is a probe, not a headline: the artifact publishes whatever it reads and BOTH branches are results.",
+        "A high rate is the finding that the newly-reached statements are the same grammar in every respect that matters, not just at the tokenizer. A low rate is the more interesting finding — that parsing bought reach without buying voice — and it is exactly the finding a pre-committed floor would have pressured this lane to avoid publishing.",
+        "v0.18's R1 floor (≥ 90% of the parseable denominator) is NOT imported and does not govern this set. It was frozen against a different denominator under a different prereg, and borrowing it here would let a number adjudicated in one cycle grade another cycle's work."
+      ],
+      "measurement_rule": [
+        "v0.18's realizer machinery, unchanged, over the newly-reached set and nothing else: for each newly-parseable `canonical_ascii`, `realize_term.realize(source, lexicon)`, and the verdict is the one that module already computes — `round_trip == \"EXACT\"` (the sentence re-parses and canonicalizes to the source skeleton) is SERVED; a Refusal is REFUSED with its reason class; a Realization that is not EXACT is FAILED with its round-trip verdict.",
+        "served / refused / failed partition the newly-reached set exactly, and the three counts must sum to it. A statement in none of them is a construction failure, not a rounding detail.",
+        "Refusals are reported BY REASON CLASS WITH COUNTS, not aggregated into a single refusal number. An uncovered head is a different fact about the corpus than an unsupported numeral, and the lane's honest failure mode — the realization lexicon's head coverage not reaching the new set — is only visible if the classes are separate.",
+        "The rate is reported WITH ITS COMPOSITION, per DESIGN-sans-template-rendering R1's rule that a rate never travels without its denominator: per-corpus counts, and the distinct relation/head inventory the newly-reached set carries."
+      ],
+      "the_two_rates_are_not_averaged": "This lane's rate is over the 6,414 newly-reached statements. v0.18's 0.9991 is over its own 2,172. The artifact reports both denominators and does not blend them, because the blended figure is the one the amendment declined to produce by re-running."
+    }
+  },
+  "the_task_book_gap_this_lane_owes": [
+    "ROADMAP-v0.19 item 3a rule 3, named so nobody discovers it later: scripts/match_signatures.py is NOT among the task book's `rendering_module_digests` (that witness lists eleven modules and this is not one of them). Widening the tokenizer changes WHICH terms parse and therefore what `answer.render` emits on its `in words` line — rendered output moves while every witnessed digest stands still. The book's witness cannot catch it.",
+    "So this lane owes an explicit before/after diff of served answer lines over the task book's own corpus tasks, committed with the probe, rather than a green digest test read as reassurance. It lands as experiments/transliteration_served_diff.json in this same commit.",
+    "The claim that diff must support is ADDITIVE-ONLY: previously-served lines are byte-identical after the change, and the only difference is newly-parseable statements GAINING an `in words` line they did not have. If any previously-served line CHANGES rather than appears, this lane stops and reports rather than proceeding — a tokenizer widening that alters an existing rendering is not a widening."
+  ],
+  "non_claims": [
+    "This lane does not claim the 6,414 were ever hard. It claims they were mute, names the two rows of an ASCII-only TOKEN_RE that made them so, and publishes what the corpus reads like once they are not.",
+    "It does not claim anything about the 4,191-statement foreign residue. That is DESIGN-foreign-voice's territory, it is measured under a different gate, and the two sets are disjoint by construction.",
+    "It does not re-open, re-measure or re-interpret experiments/realization_rate.json or experiments/foreign_voice_rate.json. Both were declared historical artifacts by the amendment, in writing, in the previous commit.",
+    "Parse rate is not rendering rate, which is why both are reported. v0.18's own R0/R1 split is the reason this lane knows to separate them and the reason the round-trip reading is not optional even though the parse gain is the headline number."
+  ]
+}

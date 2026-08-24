@@ -1,0 +1,299 @@
+{
+  "artifact_id": "transliteration.served_diff.v1",
+  "produced": "2026-08-24",
+  "produced_by": "scripts/transliteration_served_diff.py",
+  "owed_by": "ROADMAP-v0.19 item 3a, re-freeze discipline rule 3",
+  "why_it_exists": [
+    "scripts/match_signatures.py is NOT among the task book's eleven `rendering_module_digests`, so widening the tokenizer moves what `answer.render` serves while every witnessed digest stands still. The book's seal cannot see this change.",
+    "A green digest test over the eleven witnessed modules would therefore be reassurance about the wrong thing. This artifact is the diff the seal cannot produce, committed with the probe."
+  ],
+  "the_witness_gap_named_concretely": {
+    "witnessed_modules": [
+      "scripts/answer.py",
+      "scripts/belief.py",
+      "scripts/closure_query.py",
+      "scripts/evaluate.py",
+      "scripts/gloss.py",
+      "scripts/harness.py",
+      "scripts/ownership.py",
+      "scripts/resolver.py",
+      "scripts/retrieval.py",
+      "scripts/story.py",
+      "scripts/supposition.py"
+    ],
+    "match_signatures_is_witnessed": false,
+    "reading": "eleven modules are witnessed and the parser is not one of them; every one of those eleven digests is unchanged by this lane."
+  },
+  "mechanism": {
+    "after": "this working tree, rendered by answer.compose + answer.render in a fresh interpreter",
+    "before": "the real file at HEAD~1:scripts/match_signatures.py, written to a scratch directory and bound into sys.modules as `match_signatures` before any other import, in a SECOND fresh interpreter",
+    "why_a_subprocess_and_not_a_monkeypatch": [
+      "realize_term and answer bind match_signatures at import time. Replacing the module after those imports leaves the old parser live in part of the call graph, and the resulting diff would be of neither version.",
+      "A fresh interpreter with the module pre-bound in sys.modules resolves every `from match_signatures import ...` in the call graph to the same one parser."
+    ],
+    "why_not_sys_path_ordering": [
+      "It does not work, and it fails SILENTLY. scripts/answer.py:47 and scripts/realize_term.py:112 each sys.path.insert(0, ...) their own directory at import time, jumping in front of any scratch directory the caller put first.",
+      "The first draft of this generator did exactly that and reported a confident, internally consistent diff of nothing. It was caught because the corpus sweep read 8,584 served lines on the BEFORE side — the post-change number — not because the code looked wrong."
+    ],
+    "why_the_committed_blob_and_not_an_in_memory_revert": [
+      "An in-memory revert re-types the old regex, and the digest check would then be checking the copy against itself. The blob from git IS the pre-amendment file.",
+      "It is verified before it is used: its LF sha256 must equal the retired pin, or no artifact is written."
+    ],
+    "each_child_reports_the_parser_it_loaded": {
+      "why": "A mechanism that can silently substitute nothing has to be made to prove it did not. Each of the four child interpreters hashes match_signatures.__file__ after import and returns it; the parent refuses to write this artifact if any of the four is not the digest that side claims.",
+      "book_before": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "book_after": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+      "corpus_before": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+      "corpus_after": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7"
+    },
+    "before_parser_sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
+    "before_parser_is_the_retired_pin": true,
+    "after_parser_sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+    "retired_by": "realization.prereg.v1.amendment.transliteration-2026-08-24"
+  },
+  "scope": {
+    "tasks": "every corpus_definition task in experiments/throughput_tasks.json",
+    "count": 30,
+    "note": "corpus_definition is the kind whose expected content is a rendered reference entry, so it is the kind whose served lines this change can move. The book's other 89 tasks are out of scope for a reason, not by omission."
+  },
+  "claim": {
+    "additive_only": true,
+    "what_it_means": "every line served before the change is served byte-identically after it; the only difference is newly-parseable statements gaining an `in words` line they did not have.",
+    "gained": 0,
+    "unchanged": 30,
+    "changed": 0,
+    "lost": 0,
+    "changed_must_be_zero": "a tokenizer widening that alters an existing rendering is not a widening; the generator refuses to write this file if `changed` or `lost` is non-zero"
+  },
+  "digests": {
+    "all_rendered_lines_before": "b838ab54b6e8279db2dc133d280d4d51bc495b131311b683d44979e6b780ef5f",
+    "all_rendered_lines_after": "b838ab54b6e8279db2dc133d280d4d51bc495b131311b683d44979e6b780ef5f",
+    "note": "sha256 over `<statement_id>\\t<rendered lines>` for every task in book order. The two differ exactly because lines were gained; the per-task rows below are what says nothing else moved."
+  },
+  "gained_statement_ids": [],
+  "changed_statement_ids": [],
+  "lost_statement_ids": [],
+  "tasks": [
+    {
+      "statement_id": "algebra.polynomial_equations.quadratic_formula",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "algtop.homology.betti_alternating_sum",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "algtop.homology.betti_number_rank",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "calculus.approximation.tangent_line_linearization",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "calculus.differentiation.average_rate_of_change",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "chemistry.acid_base.henderson_hasselbalch",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "chemistry.acid_base.ph_definition",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "diffgeo.curves.arc_length_functional",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "diffgeo.curves.circle_curvature",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "difftop.degree.brouwer_fixed_point",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "difftop.degree.degree_multiplicativity",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "economics.finance.capm_expected_return",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "geometry.area_formulas.circle_area_formula",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "geotop.measure.area_inclusion_exclusion",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "graphtheory.degree.average_degree_from_edge_count",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "infotheory.channel.channel_capacity",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "logic.boolean_laws.absorption",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "ml.adaptation.lora_low_rank_update",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "morphology.agreement.feature_percolation",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "narrative.belief.sally_marble_basket",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "numanalysis.error.relative_condition_number",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "numbertheory.ingested.lean_workbook_10202",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "physics.circuits.ohms_law",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    },
+    {
+      "statement_id": "probstat.limit.clt_iid_standardized_mean",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "programming.binexp.iterative",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "provability.consistency.consistency_definition",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "settheory.boolean_laws.absorption",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "temporal.induction.temporal_induction_axiom",
+      "verdict": "UNCHANGED",
+      "served_before": false,
+      "served_after": false
+    },
+    {
+      "statement_id": "trigonometry.definitions.tangent",
+      "verdict": "UNCHANGED",
+      "served_before": true,
+      "served_after": true
+    }
+  ],
+  "the_book_reading": [
+    "30 corpus_definition tasks, 0 gained, 30 unchanged, 0 changed, 0 lost.",
+    "ZERO GAINS, and that is a finding rather than a null result: NOT ONE statement the task book addresses carries `≥` or `≤`. The book reaches 32 statements by receipt id and every one of them parsed before this change and renders identically after it.",
+    "So the gap rule 3 named — rendered output moving while every witnessed digest stands still — did not bite for THIS change over THIS book. It could have: nothing in the book's construction excludes a glyph-carrying statement, and nothing in its seal would have reported one if it had been drawn. The diff is what turns that from a hope into a checked fact, which is exactly why the roadmap asked for a diff instead of a green digest test.",
+    "A diff over thirty tasks that carry no `≥` is thirty true rows and no evidence about the change itself, so the corpus-wide reading below asks the same question where the change can be seen."
+  ],
+  "corpus_wide_reading": {
+    "why": "The additive-only claim is about the corpus, not about 30 tasks. This is `answer._in_words` — the exact function `render` uses to decide the line — over every statement node in data/, before and after, by the same two-interpreter mechanism.",
+    "statements": 12777,
+    "gained": 6414,
+    "unchanged_served": 2170,
+    "unchanged_absent": 4193,
+    "changed": 0,
+    "lost": 0,
+    "additive_only": true,
+    "reading": "6414 statements gain an `in words` line; 2170 keep the byte-identical line they had; 4193 stay silent; 0 changed and 0 were lost.",
+    "changed_statement_ids": [],
+    "lost_statement_ids": [],
+    "sample_gained": [
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_10778",
+        "in_words": "nine hundred eighty-five divided by one hundred eight is at least nine hundred eighty-five divided by one hundred eight"
+      },
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_11349",
+        "in_words": "the quantity one plus one hundred end quantity to the power of one thousand is at least one thousand times one hundred to the power of one thousand"
+      },
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_12045",
+        "in_words": "twenty-seven divided by four plus sixty-four divided by twenty-seven is at least nine hundred eighty-five divided by one hundred eight"
+      },
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_20021",
+        "in_words": "nineteen is at most twenty"
+      },
+      {
+        "statement_id": "leanworkbook.ground.lean_workbook_27680",
+        "in_words": "one hundred times one hundred one times two hundred one divided by six plus two to the power of one hundred plus the opposite of one is at most one hundred one times one hundred two divided by six plus two to the power of one hundred one plus the opposite of twenty-four"
+      }
+    ]
+  }
+}

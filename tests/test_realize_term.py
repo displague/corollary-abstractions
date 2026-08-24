@@ -634,7 +634,22 @@ class StageOneTests(unittest.TestCase):
 class TautologyProbeTests(unittest.TestCase):
     """C-R3, aimed at this module's own risk."""
 
-    def test_the_parser_is_byte_unchanged_since_the_prereg_commit(self) -> None:
+    def test_the_parser_is_the_one_the_live_pin_names(self) -> None:
+        """C-R3's assertion, re-aimed at the pin that is currently live.
+
+        Renamed and re-aimed 2026-08-24 by the dated amendment
+        `realization.prereg.v1.amendment.transliteration-2026-08-24`
+        (ROADMAP-v0.19 item 3a). The old name — "byte-unchanged since the prereg
+        commit" — became a false description of what the assertion checks the
+        moment the amendment retired that pin, and a test whose name lies about
+        its own subject is worse than no test.
+
+        What C-R3 actually forbids is unchanged and still checked here: the
+        parser may not move to make THIS module agree. It moved for a reason
+        recorded in writing, dated, in a commit that touched no realizer code —
+        and the assertion now witnesses the post-amendment parser, so it goes
+        red on the next undeclared change exactly as it did on the last one.
+        """
         prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
         frozen = {row["role"]: row for row in prereg["frozen"]}
         parser = frozen["parser"]
@@ -642,10 +657,29 @@ class TautologyProbeTests(unittest.TestCase):
         digest = hashlib.sha256(
             (ROOT / parser["path"]).read_bytes().replace(b"\r\n", b"\n")
         ).hexdigest()
+        marker = parser.get("retired_for_future_comparisons")
+        if marker is None:
+            self.assertEqual(
+                digest, parser["sha256_lf"],
+                "C-R3 VOID: implementing the realizer changed the parser. The "
+                "independence claim needs its own review naming the reason.",
+            )
+            return
+        named = [entry for entry in prereg["amendments"]
+                 if entry["amendment_id"].endswith(marker["amendment"])]
+        self.assertEqual(len(named), 1, marker["amendment"])
+        successor_path = named[0]["successor_prereg"]["path"]
+        successor = json.loads(
+            (ROOT / successor_path).read_text(encoding="utf-8"))
+        live = {row["role"]: row for row in successor["frozen"]}["parser"]
+        self.assertEqual(live["path"], "scripts/match_signatures.py")
+        self.assertEqual(live["supersedes"]["sha256_lf"], parser["sha256_lf"],
+                         "the successor pin must name the digest it supersedes, "
+                         "or the chain from artifact to parser has a broken link")
         self.assertEqual(
-            digest, parser["sha256_lf"],
-            "C-R3 VOID: implementing the realizer changed the parser. The "
-            "independence claim needs its own review naming the reason.",
+            digest, live["sha256_lf"],
+            f"the parser matches neither its retired pin nor the live pin in "
+            f"{successor_path}. A change past the amendment needs its own.",
         )
 
     def test_the_inverter_digest_is_recorded_beside_the_parser(self) -> None:
