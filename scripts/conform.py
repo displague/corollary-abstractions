@@ -310,6 +310,14 @@ def compile_statement(node: dict, row, schema) -> Program:
     if declared is None:
         raise Refusal("domain_absent", row.corpus)
 
+    # An equality conjunct is measure-zero under sampling (E0d), and the
+    # register FROZE these as `guard_measure_zero` before this run. Refusing
+    # them here is what keeps E2's denominator the one E0c published: a rate
+    # quoted against a denominator the register did not name would be the
+    # thing E0c exists to prevent.
+    if row.guard.present and row.guard.has_equality:
+        raise Refusal("guard_measure_zero", "an equality conjunct in the guard")
+
     ascii_text = (
         (node.get("formal_statement") or {}).get("canonical_ascii") or ""
     )

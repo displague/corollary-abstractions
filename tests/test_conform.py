@@ -243,8 +243,11 @@ class TheRecordCountsAreNeverConflated(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.schema = conform_domain.load()
         cls.relations = census.evaluator_relations()
+        # An INEQUALITY-only guard: `10009` carries `a + b + c = 1`, which
+        # the compiler now refuses as `guard_measure_zero` to match the
+        # denominator E0c published.
         node, corpus_id = _node(
-            "lean_workbook", "leanworkbook.skel.lean_workbook_10009")
+            "lean_workbook", "leanworkbook.skel.lean_workbook_10012")
         row = census.classify(
             node, corpus_id, cls.relations, cls.schema.output_roles)
         cls.record = conform.run(
@@ -278,6 +281,27 @@ class TheRecordCountsAreNeverConflated(unittest.TestCase):
             self.assertIn("counterexample", self.record)
 
 
+class AnEqualityGuardRefusesRatherThanBeingSampled(unittest.TestCase):
+    """E0d/E2a: an equality conjunct is measure-zero under sampling.
+
+    The register FROZE these as `guard_measure_zero` before the run, so the
+    compiler refuses them and E2's denominator stays the one E0c published.
+    A rate quoted against a denominator the register did not name is exactly
+    what E0c exists to prevent.
+    """
+
+    def test_an_equality_guarded_statement_refuses_at_compile(self) -> None:
+        schema = conform_domain.load()
+        relations = census.evaluator_relations()
+        node, corpus_id = _node(
+            "lean_workbook", "leanworkbook.skel.lean_workbook_10009")
+        row = census.classify(node, corpus_id, relations, schema.output_roles)
+        self.assertTrue(row.guard.has_equality, "the fixture must carry one")
+        with self.assertRaises(conform.Refusal) as caught:
+            conform.compile_statement(node, row, schema)
+        self.assertEqual(caught.exception.construct, "guard_measure_zero")
+
+
 class TheRunIsDeterministic(unittest.TestCase):
     """E5: same statement, same schema, same seed -> byte-identical record."""
 
@@ -285,7 +309,7 @@ class TheRunIsDeterministic(unittest.TestCase):
         schema = conform_domain.load()
         relations = census.evaluator_relations()
         node, corpus_id = _node(
-            "lean_workbook", "leanworkbook.skel.lean_workbook_10009")
+            "lean_workbook", "leanworkbook.skel.lean_workbook_10012")
         row = census.classify(node, corpus_id, relations, schema.output_roles)
         program = conform.compile_statement(node, row, schema)
         first = conform.run(program, schema.digest, budget=128)
