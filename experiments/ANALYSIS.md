@@ -1,3 +1,54 @@
+# Conformance: the registered run reads out (2026-08-25)
+
+`experiments/conformance_run.json`, executed once at commit `c428cfb`.
+**Overall: VOID.** Two gates met, two missed, two controls void, and 775
+counterexamples that are not corpus errors.
+
+| gate | reading |
+|---|---|
+| C-E4 | **HOLDS** — the four E7-frozen artifacts are unmoved |
+| E0b | 8,017 statements compile (floor 5,000) |
+| E0d | 4,294 samplable; 4,287 after intersecting schema coverage |
+| E0f | 591 of 691 coupled guards admit a point (85.5%) |
+| E1 | **MISSED** — 297 ground: 257 TRUE, 15 FALSE, **25 REFUSED** (floor: zero) |
+| E2a | **MET** — 4,114 of 4,287 admit (96.0%, floor 80%) |
+| E2b | 775 counterexamples; 3,298 not falsified — *and see C-E1* |
+| E3 | **CLOSES** at 12,777 exactly |
+| E4 | **MET** — 110 of 110, `OUT_OF_CLASS` returned rather than guessed |
+| C-E1 | **VOID** — 0.650 flip rate against 0.99 |
+| C-E2 | **VOID** — guard-blind 1.75x the guarded arm, against 10x required |
+| C-E3 | no disagreement on the 12 counterexamples it could reach |
+
+**E1's miss decomposes, and none of it is a corpus defect.** 13
+`negation_outside_carrier` (the `Nat` row cannot read a negative literal), 8
+division-by-zero created by *truncating* division, 4
+`evaluation_budget_exceeded` (E0e's bound working). The design predicted zero
+refusals precisely so an introduced one would show; three introduced kinds
+showed, all of them consequences of the declared domain.
+
+**The 775 counterexamples are not 775 findings, and the numbers say why.**
+Zero were independently adjudicated — C-E3 attempted 27 and every one
+returned *"decide did not reduce"*, which is Correction 7's boundary
+measured. 46.2% were found at a statement admitting exactly **one** point,
+and the median admitted count is **two**. 33.2% have a falsifying side of
+exactly `0`, which is the declared `Nat` reading — truncating division and
+clamped subtraction — doing the work. Every one carries the
+correlated-interpretation label and **none is published as a corpus error**.
+
+**What did fire cleanly.** E4: the rational-root procedure decided all 110
+committed instances correctly, over a class whose key was built by factoring
+and by the rational root theorem rather than by the procedure under test. E3
+closes exactly. C-E4 holds, so nothing was measured through a moved
+instrument.
+
+**Named successors, sized by this run rather than guessed:** a
+carrier-matched sampler (78% of M is currently spent outside the carrier); a
+second discard clause for C-E1 (discard mutations that cannot move a point
+verdict on the carrier); the one-equation solve that would reach the
+equality-guarded statements this cycle refuses as measure-zero.
+
+---
+
 # Overnight experiment analysis — 2026-08-07 morning
 
 ## Setup

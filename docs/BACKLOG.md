@@ -3,6 +3,56 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.20 conformance run (2026-08-25)
+
+- **C-E1's floor cannot be met by a correct sampler, and the control needs a
+  second discard clause (2026-08-25).** The conformance lane's perturbation
+  control froze *"at least 99% of skeleton-changing mutations must flip at
+  least one point verdict"* and measured **0.650 over 1,027 surviving
+  mutations**, voiding every `NO_COUNTEREXAMPLE_FOUND` in the registered run.
+  The cause is in the specification rather than the instrument: a
+  skeleton-changing mutation need not be falsifiable *on the declared
+  carrier* — over `Nat`, `a^2 + b^2 >= 2*a*b` mutated to `>= -2*a*b` is true
+  at every point that exists. **The repair is a second discard clause**
+  (discard mutations that cannot move a point verdict on the carrier), and it
+  belongs to its own registration, because repairing a control after reading
+  its number is the chase the design's §8 forbids. Twelve non-flipping
+  witnesses are in the run artifact.
+
+- **The sampler is not carrier-matched, and 78% of M is spent outside the
+  carrier (2026-08-25).** Measured in E0f's pilot: of 691,000 candidate
+  points, **539,382 were rejected by the declared `Nat` carrier and 51,791 by
+  the guards**. The sampler draws from a rational pool with negatives. The
+  effective budget per statement is far below M = 1,000 — the registered
+  run's median admitted count across its counterexamples is **two**, and
+  46.2% of them came from a statement admitting exactly one point. **A
+  carrier-matched sampler is the named successor.** Not applied mid-cycle:
+  the sampler is E7-frozen and its own pilot had been read.
+
+- **A blanket `Nat` class row makes a quarter of the ground class decide at
+  `0 = 0` (2026-08-25).** Truncating subtraction takes 69 of the 297 ground
+  statements to `0 = 0`, honestly but uninformatively, and 13 more refuse
+  because `Nat` has no negation. The row is right for Correction 4's witness
+  and coarse for the class. **Per-statement or per-subclass domain rows are
+  the repair**, and they are review work — one row at a time, which is what
+  the schema's empty `statement_rows` records rather than hides.
+
+- **The one-equation solve, sized and not built (2026-08-25).** 3,426
+  statements are refused as `guard_measure_zero` because their guard carries
+  an equality conjunct that rejection sampling never satisfies. The design
+  sizes the reachable subset at 1,117 by a single additive rearrangement. It
+  is a solver, it changes what the sampler is, and it belongs to its own
+  registration.
+
+- **C-E3 reaches Nat and Int and reached none of the 775 (2026-08-25).**
+  Correction 7 predicted the boundary and the run measured it: 27 attempted
+  adjudications of sampled counterexamples all returned *"decide did not
+  reduce"*, while 12 of 13 ground `DECIDED_FALSE` verdicts were confirmed.
+  So every NONCONFORMANT verdict in the cycle carries the standing
+  correlated-interpretation label. **An adjudicator that reaches the sampled
+  class is what would discharge them**, and Mathlib is outside the hermetic
+  budget as design law.
+
 ## Filed at the v0.19 rotation (the foreign voice, and the probes)
 
 - **The parser stores numerals as `float`, and two served statements print

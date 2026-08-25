@@ -66,6 +66,43 @@ two call heads), **the foreign-voice VOID with its mechanism** — not the
 1.0 the void makes unquotable — the address-space park with its 1-of-3, and
 the convention-census negative. Three of those four took something away.
 
+### 1.1 Readout (2026-08-25) — the run is VOID, and that is the result
+
+`DESIGN-statements-that-run.md` shipped through its registered run,
+`experiments/conformance_run.json`, executed once on a committed tree. The
+preregistration order held: §4's batched item, then the design, then the
+domain schema with E7's frozen digests, then the frozen register, then
+`conform.py`, then E0f's pilot and its dated amendment freezing E2a, then the
+run, then the wiring.
+
+**Overall: VOID.** C-E1's own sentence governs — every
+`NO_COUNTEREXAMPLE_FOUND` in the run is void — so the lane's headline number
+is withdrawn by its own control before anyone quotes it.
+
+- **Met:** E2a (96.0% of 4,287 admit a point, floor 80%), E3 (closes at
+  12,777 exactly), E4 (110 of 110), C-E4 (nothing was measured through a
+  moved instrument).
+- **Missed:** E1 — 25 refusals in a ground class the design predicted would
+  have none, decomposing into 13 `negation_outside_carrier`, 8 truncating
+  division-by-zero and 4 `evaluation_budget_exceeded`. All three are
+  consequences of the *declared domain*, which is what the floor existed to
+  detect.
+- **Void:** C-E1 (0.650 against 0.99) and C-E2 (1.75x against 10x).
+
+**775 counterexamples, none published as a corpus error.** §3.5's clause 1
+was written before the run for exactly this: zero were independently
+adjudicated, 46.2% came from a statement admitting a single point, and 33.2%
+turn on a value the `Nat` reading clamped to zero.
+
+**The two transferable findings** are in `docs/DISCOVERIES.md`: a control
+whose floor no correct instrument could meet, and a declared domain that
+spends 78% of the sampling budget before any guard is consulted.
+
+**What is now live:** `conform <statement-id> <bindings>` on both skins,
+`tool.conform` registering through a committed-artifact probe, and a
+`conformance` sheet row that publishes the verdict vocabulary, the
+denominators and the run's own VOID — and no rate, by design.
+
 ## 2. The C-V4 successor, and the wiring gated behind it
 
 This is the cycle's most concrete debt, and it comes with its

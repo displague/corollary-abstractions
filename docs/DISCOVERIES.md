@@ -13,6 +13,58 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## A control whose floor no correct instrument could meet (2026-08-25)
+
+**Claim.** C-E1, the conformance lane's perturbation control, froze a floor
+of *"≥ 99% of skeleton-changing mutations must flip at least one point
+verdict"*. The registered run measured **0.650 over 1,027 surviving
+mutations** and the control voided every `NO_COUNTEREXAMPLE_FOUND` in the
+run. The finding is not that the sampler is bad — **it is that the floor
+cannot be met by a correct sampler either.**
+
+**Evidence.** A skeleton-changing mutation need not be falsifiable on the
+*declared carrier*. Over `Nat`, `a^2 + b^2 >= 2*a*b` mutated to `>= -2*a*b`
+is true at every point that exists, so no point set can flip it and no
+admission rate would help. `experiments/conformance_run.json` carries twelve
+non-flipping witnesses so the claim is checkable rather than argued.
+
+**Why it is the same lesson one level up.** v0.19's C-V4 inherited C-R2's
+mutation idea without the clause that made it sound, and `drop_group`'s 0.80
+was scored against a denominator that had never been cleaned. C-E1 ported
+that discard rule — it discards mutations whose canonical *skeleton* did not
+move, and counted the discards (0 on this tree). What it also needed, and
+did not have, is a second clause: **discard mutations that cannot move a
+point verdict on the carrier.** The transferable rule is now two sentences
+rather than one: *port the discard rule first, and check that what survives
+it is capable of the change you are about to require.*
+
+**Status: near-miss, kept deliberately.** Recorded rather than repaired —
+fixing a control after reading its number is the chase the design's §8
+forbids. The corrected control belongs to its own registration.
+
+## The declared domain spends the budget before the guard sees it (2026-08-25)
+
+**Claim.** In the conformance lane, **78% of the sampling budget is consumed
+by the declared carrier, not by the statements' guards.** Of 691,000
+candidate points offered to the coupled guards in E0f's pilot, **539,382 were
+rejected because they were not `Nat`** and only **51,791 by the guards
+themselves**.
+
+**Evidence.** `experiments/conformance_admission_pilot.json`. The sampler
+draws from a rational pool with negatives; the `lean_workbook` class row
+declares `Nat` on Correction 4's ground. The two gates are reported
+separately, and that is the only reason this was visible — summed into one
+admission number it would have been invisible.
+
+**Consequence.** The effective budget per statement is far below M = 1,000:
+the registered run's median admitted count across its 775 counterexamples is
+**two**. A carrier-matched sampler is the named successor; it was not applied
+mid-cycle because the sampler is E7-frozen and its own pilot had already been
+read.
+
+**Status: near-miss, kept deliberately.**
+
+
 - **The gate's blind spot has a number now, and the number voided the gate
   (v0.19, C-V4, measured).**  The foreign-voice gate certifies a rendering
   by elaborating the English through a pinned external checker and
