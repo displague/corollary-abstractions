@@ -15,18 +15,39 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ## A control whose floor no correct instrument could meet (2026-08-25)
 
-**Claim.** C-E1, the conformance lane's perturbation control, froze a floor
-of *"≥ 99% of skeleton-changing mutations must flip at least one point
-verdict"*. The registered run measured **0.650 over 1,027 surviving
-mutations** and the control voided every `NO_COUNTEREXAMPLE_FOUND` in the
-run. The finding is not that the sampler is bad — **it is that the floor
-cannot be met by a correct sampler either.**
+**Claim** (narrowed 2026-08-25 after adversarial review; the earlier wording
+claimed more than the run can support). C-E1, the conformance lane's
+perturbation control, froze a floor of *"≥ 99% of skeleton-changing mutations
+must flip at least one point verdict"*. The registered run measured **0.650
+over 1,027 surviving mutations** and the control voided every
+`NO_COUNTEREXAMPLE_FOUND` in the run. **Some mutation classes over `Nat` are
+structurally unflippable, so the floor as written cannot be met by a correct
+sampler *on those*.** What the run cannot do is say how much of the 0.650 is
+that and how much is the sampler missing points it should have found — and it
+found at least one of the latter.
 
-**Evidence.** A skeleton-changing mutation need not be falsifiable on the
-*declared carrier*. Over `Nat`, `a^2 + b^2 >= 2*a*b` mutated to `>= -2*a*b`
-is true at every point that exists, so no point set can flip it and no
-admission rate would help. `experiments/conformance_run.json` carries twelve
-non-flipping witnesses so the claim is checkable rather than argued.
+**Evidence, and its limit.** A skeleton-changing mutation need not be
+falsifiable on the *declared carrier*. Two of the twelve non-flipping
+witnesses in `experiments/conformance_run.json` are genuine:
+`leanworkbook.skel.lean_workbook_10012`'s `negate_a_coefficient` turns
+`>= 9*x/4` into `>= -9*x/4`, and under the declared reading a negative
+**numeral** evaluates while truncating division takes `1/4` to `0`, so the
+right side is `0` and the left is a sum of `Nat` quantities — true at every
+point that exists. `lean_workbook_10039`'s `negate_a_coefficient` (`60` →
+`-60`) is the same shape. No point set can flip either.
+
+**But `lean_workbook_10087` is a sampler miss, and it is in the same twelve.**
+Its source is `(a-b)^2 + (b-c)^2 + (c-a)^2 >= 0`, mutated to `>= 1`. That is
+flippable, at every point where `a = b = c`: the left side is `0`, and `0 >= 0`
+holds where `0 >= 1` does not. The sampler drew **73 admitted points** and hit
+no such point. That is precisely the failure the floor exists to catch, sitting
+in the list published as evidence that the floor was unmeetable.
+
+**So the honest partition is unmeasured.** The run reports one number, 0.650,
+over a population containing both structurally-unflippable mutations and
+sampler misses, and it has no instrument that separates them. The claim above
+is stated over the classes where the structural argument is exhibited, and not
+over the rate.
 
 **Why it is the same lesson one level up.** v0.19's C-V4 inherited C-R2's
 mutation idea without the clause that made it sound, and `drop_group`'s 0.80
@@ -40,7 +61,11 @@ it is capable of the change you are about to require.*
 
 **Status: near-miss, kept deliberately.** Recorded rather than repaired —
 fixing a control after reading its number is the chase the design's §8
-forbids. The corrected control belongs to its own registration.
+forbids. The corrected control belongs to its own registration, and it now
+owes two clauses rather than one: discard mutations that cannot move a point
+verdict on the carrier, **and** report the rate over a population that has
+been partitioned, so a sampler miss can never again be published as a
+specification defect.
 
 ## The declared domain spends the budget before the guard sees it (2026-08-25)
 
@@ -56,11 +81,28 @@ declares `Nat` on Correction 4's ground. The two gates are reported
 separately, and that is the only reason this was visible — summed into one
 admission number it would have been invisible.
 
-**Consequence.** The effective budget per statement is far below M = 1,000:
-the registered run's median admitted count across its 775 counterexamples is
-**two**. A carrier-matched sampler is the named successor; it was not applied
-mid-cycle because the sampler is E7-frozen and its own pilot had already been
-read.
+**Consequence** (rewritten 2026-08-25: the original rested on an inverted
+reading of a field, and the correction is worth more than the sentence it
+replaces). The finding is the **split**, and the split alone: of every 1,000
+candidate points offered, roughly 780 are spent before the statement's own
+hypothesis is ever consulted. That is a property of the sampler's pool against
+the schema's declared carrier, measured directly in the pilot, and it is why a
+carrier-matched sampler is the named successor.
+
+What this entry originally added — *"the effective budget per statement is far
+below M = 1,000: the registered run's median admitted count across its 775
+counterexamples is two"* — is **withdrawn**. `scripts/conform.py:497` breaks
+out of the point loop on the first counterexample, so on a NONCONFORMANT
+record `points_admitted` counts admitted points *up to and including the
+falsifying one*. A median of two means half of those statements were falsified
+within two admitted points; it is a measure of how **early** falsification
+happened and carries no information about how many points the statement could
+have been offered. Quoted as evidence of a thin budget it said the opposite of
+what it meant, and it was never needed: the pilot's 539,382-to-51,791 split is
+the whole finding on its own.
+
+The successor was not applied mid-cycle because the sampler is E7-frozen and
+its own pilot had already been read.
 
 **Status: near-miss, kept deliberately.**
 

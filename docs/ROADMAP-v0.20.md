@@ -70,10 +70,22 @@ the convention-census negative. Three of those four took something away.
 
 `DESIGN-statements-that-run.md` shipped through its registered run,
 `experiments/conformance_run.json`, executed once on a committed tree. The
-preregistration order held: §4's batched item, then the design, then the
-domain schema with E7's frozen digests, then the frozen register, then
-`conform.py`, then E0f's pilot and its dated amendment freezing E2a, then the
-run, then the wiring.
+preregistration order held **with one slip, which the slip's own commit
+confesses**: §4's batched item, then the design, then the domain schema with
+E7's frozen digests, then the frozen register, then `conform.py`, then E0f's
+pilot and its dated amendment freezing E2a, then the run, then the wiring —
+except that **E4's instance list was not frozen in the preregistration commit
+the design requires**. It landed in its own commit, `43061e2`, still before
+`conform.py` scored a single E4 instance and before any E4 number existed, and
+that commit records the slip in its message rather than presenting the order
+as clean. Naming it here too, because an order that "held" in one document and
+is confessed in another is not a record a reader can use.
+
+The class's `instance_set_digest` is now **recomputable rather than
+asserted**: `tests/test_conform.py::TheE4InstanceSetDigestIsRecomputable`
+rebuilds it from the committed coefficient lists. Before that test the writer
+copied the key verbatim (`measure_conformance.py:686`) and nothing in the tree
+could have detected a list edited after the freeze.
 
 **Overall: VOID.** C-E1's own sentence governs — every
 `NO_COUNTEREXAMPLE_FOUND` in the run is void — so the lane's headline number
@@ -88,11 +100,56 @@ is withdrawn by its own control before anyone quotes it.
   consequences of the *declared domain*, which is what the floor existed to
   detect.
 - **Void:** C-E1 (0.650 against 0.99) and C-E2 (1.75x against 10x).
+- **Unrun (a gap, not a void):** **E5**, the two-run byte-identity arm, and
+  **C-E1's second arm**, the false-alarm half (*0 of N unmutated statements
+  may change verdict across two runs*). Both were registered in §6/§7 and
+  neither was executed. A void is a control that ran and failed its own
+  condition; these have no voiding sentence to fire and are evidence in
+  neither direction. The consequence to keep in front: **this artifact has no
+  byte-reproduction proof**, so no sentence may call it reproduced. Filed in
+  `docs/BACKLOG.md` for the rotation rather than executed after the fact.
 
 **775 counterexamples, none published as a corpus error.** §3.5's clause 1
 was written before the run for exactly this: zero were independently
-adjudicated, 46.2% came from a statement admitting a single point, and 33.2%
-turn on a value the `Nat` reading clamped to zero.
+adjudicated.
+
+> **Corrected 2026-08-25, after adversarial review.** The two numbers this
+> paragraph used to lean on do not say what they were read as saying, and the
+> corrections are recorded in the run artifact's dated `post_run_corrections`
+> block and recomputed from its own rows by `tests/test_conform.py`.
+>
+> - **"Zero adjudicated" stands; its reason changes.** C-E3 attempted **25**
+>   sampled counterexamples (not 27 — two ground `DECIDED_FALSE` ids carry a
+>   `skel.` prefix and were mis-sorted), and every one failed because
+>   `measure_conformance.py:709-717` handed Lean the **raw universally
+>   quantified statement with its free variables unbound** instead of the
+>   instantiated counterexample. That is an elaboration failure on an open
+>   term — an **instrument gap** — and **not** Correction 7's carrier
+>   boundary, which this cycle did not measure. C-E3's 12 confirmations
+>   (of 15, not of 13) stand: ground statements have no free variables.
+> - **"46.2% admitted a single point" was read backwards.**
+>   `conform.py:497` breaks on the first counterexample, so
+>   `points_admitted` counts admitted points *up to and including the
+>   falsifying one*. `admitted == 1` means the **first** point falsified the
+>   statement — the sampler's best case. The number measures how early
+>   falsification happened, not how thin the sampling was. The thin-sampling
+>   finding is real and rests on E0f's pilot, not on these counts.
+> - **"33.2% turn on a value clamped to zero"** is `left == "0"` (257/775);
+>   the falsifying-side-zero figure is 278/775 = **35.9%**.
+> - **The label is on the verdicts, not on the artifact's rows.** Every
+>   NONCONFORMANT verdict carries the correlated-interpretation label at
+>   runtime and on the served answer; the 775 rows in the artifact omit it,
+>   because the writer's projection drops it. A writer defect, recorded — 775
+>   scored rows are not backfilled after the fact.
+> - Also corrected: C-E1 scores an **errored** mutant point as a flip, a bias
+>   *toward* the floor it missed anyway; its `per_class` table has four rows
+>   of a five-class generator, and the never-fired fifth class is the one
+>   whose mutants would have been discarded; and C-E2's "both arms over the
+>   identical admitted point set" is false of the code, which drops the guard
+>   and so admits a strict superset on the blind arm.
+>
+> Nothing was re-run. §8's no-chase rule governs: a measurement is not
+> re-executed to make a record come out better, so the record moved instead.
 
 **The two transferable findings** are in `docs/DISCOVERIES.md`: a control
 whose floor no correct instrument could meet, and a declared domain that

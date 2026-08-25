@@ -4,6 +4,17 @@
 **Overall: VOID.** Two gates met, two missed, two controls void, and 775
 counterexamples that are not corpus errors.
 
+> **Corrected 2026-08-25, after adversarial review.** The void below is
+> unchanged and every scored number stands. What changed is the *record*
+> around two of the controls: **C-E3 never adjudicated the sampled class at
+> all** (it was handed open terms, not instantiated counterexamples), and the
+> **admitted-count reading was inverted**. Both are corrected in place below
+> and in full in the run artifact's dated `post_run_corrections` block, which
+> is recomputed from the artifact's own rows by
+> `tests/test_conform.py::ThePostRunCorrectionsAreCheckableAgainstTheRows
+> TheyCorrect`. Nothing was re-run: §8's no-chase rule says a measurement is
+> not re-executed to make a record come out better.
+
 | gate | reading |
 |---|---|
 | C-E4 | **HOLDS** — the four E7-frozen artifacts are unmoved |
@@ -17,23 +28,73 @@ counterexamples that are not corpus errors.
 | E4 | **MET** — 110 of 110, `OUT_OF_CLASS` returned rather than guessed |
 | C-E1 | **VOID** — 0.650 flip rate against 0.99 |
 | C-E2 | **VOID** — guard-blind 1.75x the guarded arm, against 10x required |
-| C-E3 | no disagreement on the 12 counterexamples it could reach |
+| C-E3 | no disagreement on the 12 **ground** verdicts it reached; it reached **none** of the sampled class, for the reason below |
+| E5 | **UNRUN** — the two-run byte-identity arm was registered and never executed |
+| C-E1 (2nd arm) | **UNRUN** — the false-alarm arm (0 of N unmutated statements change verdict across two runs) was never executed |
 
 **E1's miss decomposes, and none of it is a corpus defect.** 13
-`negation_outside_carrier` (the `Nat` row cannot read a negative literal), 8
-division-by-zero created by *truncating* division, 4
-`evaluation_budget_exceeded` (E0e's bound working). The design predicted zero
-refusals precisely so an introduced one would show; three introduced kinds
-showed, all of them consequences of the declared domain.
+`negation_outside_carrier`, 8 division-by-zero created by *truncating*
+division, 4 `evaluation_budget_exceeded` (E0e's bound working). The design
+predicted zero refusals precisely so an introduced one would show; three
+introduced kinds showed, all of them consequences of the declared domain.
 
-**The 775 counterexamples are not 775 findings, and the numbers say why.**
-Zero were independently adjudicated — C-E3 attempted 27 and every one
-returned *"decide did not reduce"*, which is Correction 7's boundary
-measured. 46.2% were found at a statement admitting exactly **one** point,
-and the median admitted count is **two**. 33.2% have a falsifying side of
-exactly `0`, which is the declared `Nat` reading — truncating division and
-clamped subtraction — doing the work. Every one carries the
-correlated-interpretation label and **none is published as a corpus error**.
+*The `negation_outside_carrier` gloss, corrected 2026-08-25.* Earlier
+wordings here and in commit `a58d642` said the `Nat` row "cannot read a
+negative literal". That is backwards, and the direction matters. A negative
+**numeral** evaluates fine — `conform.py`'s `num` arm is `Fraction(str(...))`
+and never consults the carrier, which is why the C-E1 witness
+`lean_workbook_10012` reads `*(-9, ?0, inv(4))` without raising. What refuses
+is a **`neg` node**: unary negation of a positive quantity under a
+`truncated-at-zero` reading, at `conform.py:199-216`, because clamping it to
+zero would invent a value `Nat` does not have. Numeral: evaluates. Node:
+refuses.
+
+**Where the "76" lives.** The pre-fix figure — 76 of the 297 ground
+statements deciding with both sides at zero *under a clamping reading* —
+exists only in the comment at `scripts/conform.py:203-207` and in commit
+`a58d642`'s message, and it is not recomputable from the committed tree
+because the code that produced it was never committed. The **post-fix** figure
+is: `tests/test_conform.py::TheNatClampFigureIsRecomputable` recomputes **69
+of 297** ground statements deciding at `0 = 0` under the committed truncating
+reading, so the number the backlog quotes can be checked rather than trusted.
+
+**The 775 counterexamples are not 775 findings — and the reason is not the
+one first published.** None was independently adjudicated, and that stands.
+But C-E3 attempted **25** sampled counterexamples (not 27; two ground
+`DECIDED_FALSE` ids carry a `skel.` prefix and a prefix-based count mis-sorted
+them), and all 25 returned *"decide did not reduce"* because **the writer
+handed Lean the raw universally quantified statement with its free variables
+unbound** — `measure_conformance.py:709-717` and `:464` — rather than the
+instantiated counterexample the control is specified over. That is an
+elaboration failure on an open term: an **instrument gap**, not Correction 7's
+carrier boundary. Correction 7's boundary was **not measured this cycle**. The
+substitution step is still visible where it was dropped: `_lean_expression` at
+`:434-438` is dead code behind a literal `if False else`, and `:463` assigns
+`typed` and discards it. Both are left in place as the evidence.
+
+**And the admitted counts say the opposite of what was published.**
+`conform.py:497` **breaks on the first counterexample**, so on a NONCONFORMANT
+record `points_admitted` is not the statement's point budget — it is how many
+admitted points were tested *up to and including the falsifying one*. So the
+46.2% found at `admitted == 1` are statements the **first** admitted point
+falsified, and the median of two means half were settled within two points.
+That is a measure of how *early* falsification happened, and reading it as
+thin sampling is exactly backwards. The thin-sampling finding is real and it
+rests on **E0f's pilot** (539,382 of 691,000 candidate points rejected by
+`Nat` against 51,791 by the guards), which is where it always belonged.
+
+**The zero-side figure, restated.** 257 of 775 (**33.2%**) have
+`counterexample.left == "0"`; the figure for the side that makes the relation
+*fail* is 278 of 775 (**35.9%**). Two statistics were wearing one number.
+Either way it is the declared `Nat` reading — truncating division and clamped
+subtraction — doing the work.
+
+**None is published as a corpus error.** Every NONCONFORMANT *verdict* carries
+the correlated-interpretation label at runtime (`conform.py:518-526`) and on
+the served answer (`harness.py:2023`), but **the artifact's 775 rows do not**:
+the projection at `measure_conformance.py:626-631` selects four fields and
+drops it. A writer defect, recorded rather than backfilled — 775 scored rows
+are not editable after the fact.
 
 **What did fire cleanly.** E4: the rational-root procedure decided all 110
 committed instances correctly, over a class whose key was built by factoring
@@ -41,11 +102,30 @@ and by the rational root theorem rather than by the procedure under test. E3
 closes exactly. C-E4 holds, so nothing was measured through a moved
 instrument.
 
+*The E4 caveat, added 2026-08-25.* The 110 stand — re-checked against the
+fixed procedure by `tests/test_conform.py::TheE4ClassIsUnchangedByThe
+RefusalFix`, verdicts and enumeration counts both. What does **not** stand is
+the reach of the row's second half. `OUT_OF_CLASS returned rather than
+guessed` was certified by four probes — `[5]`, `[]`, `[0]`, `[7]` — that all
+trip the same degree check and never touch a *coefficient*, which is where the
+declared class actually lives. At the time of the run the procedure answered
+`rational_root_test([Fraction(1, 2), 1])` with **EXISTS and the witness "0"**,
+having silently truncated a non-integer coefficient, and raised `ValueError`
+on `['x', 1]`. The procedure is fixed and probed where it can fail; the
+writer's probe list is deliberately left alone, because it is the instrument
+that produced a scored gate. So the honest reading of E4's injection half is:
+true of those four probes, and of nothing wider.
+
 **Named successors, sized by this run rather than guessed:** a
 carrier-matched sampler (78% of M is currently spent outside the carrier); a
 second discard clause for C-E1 (discard mutations that cannot move a point
 verdict on the carrier); the one-equation solve that would reach the
-equality-guarded statements this cycle refuses as measure-zero.
+equality-guarded statements this cycle refuses as measure-zero. Added
+2026-08-25 by the review: **a C-E3 that substitutes the record's own bindings
+before it calls `decide`**, without which Correction 7's carrier boundary
+stays unmeasured, and the **two unexecuted determinism arms** (E5 and C-E1's
+false-alarm half), which have to run before any sentence calls this artifact
+reproducible.
 
 ---
 

@@ -5,34 +5,117 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Filed at the v0.20 conformance run (2026-08-25)
 
-- **C-E1's floor cannot be met by a correct sampler, and the control needs a
-  second discard clause (2026-08-25).** The conformance lane's perturbation
-  control froze *"at least 99% of skeleton-changing mutations must flip at
-  least one point verdict"* and measured **0.650 over 1,027 surviving
-  mutations**, voiding every `NO_COUNTEREXAMPLE_FOUND` in the registered run.
-  The cause is in the specification rather than the instrument: a
-  skeleton-changing mutation need not be falsifiable *on the declared
-  carrier* — over `Nat`, `a^2 + b^2 >= 2*a*b` mutated to `>= -2*a*b` is true
-  at every point that exists. **The repair is a second discard clause**
-  (discard mutations that cannot move a point verdict on the carrier), and it
-  belongs to its own registration, because repairing a control after reading
-  its number is the chase the design's §8 forbids. Twelve non-flipping
-  witnesses are in the run artifact.
+> **Reviewed 2026-08-25.** The four entries below were filed off the
+> registered run and three of them quoted the run's prose rather than its
+> rows. Corrections are inline and dated; the run artifact's
+> `post_run_corrections` block is the record of authority and
+> `tests/test_conform.py` recomputes it. Two further entries — the C-E3
+> adjudicator and the unexecuted determinism arms — are new debt the review
+> surfaced.
+
+- **C-E1's floor cannot be met by a correct sampler *on some mutation
+  classes*, and the control needs two clauses rather than one (2026-08-25,
+  narrowed the same day).** The conformance lane's perturbation control froze
+  *"at least 99% of skeleton-changing mutations must flip at least one point
+  verdict"* and measured **0.650 over 1,027 surviving mutations**, voiding
+  every `NO_COUNTEREXAMPLE_FOUND` in the registered run. Part of the cause is
+  in the specification: a skeleton-changing mutation need not be falsifiable
+  *on the declared carrier*, and `lean_workbook_10012` and `_10039`'s
+  `negate_a_coefficient` witnesses are unflippable over `Nat` for a reason no
+  sampler can fix. **But part is the instrument**, and it is in the same
+  published list: `lean_workbook_10087` mutates `(a-b)^2+(b-c)^2+(c-a)^2 >= 0`
+  to `>= 1`, which flips at `a = b = c`, and the sampler drew 73 admitted
+  points without finding one. The run has no instrument that partitions the
+  two, so **the 0.650 cannot be attributed**. Repairs, both owed to the
+  control's own registration: a second discard clause (discard mutations that
+  cannot move a point verdict on the carrier), and a partitioned denominator
+  so a sampler miss is never again published as a specification defect.
+  Also owed and cheaper: `measure_conformance.py:190-192` counts an **errored**
+  mutant point as a flip, which biased the 0.650 *upward* — the floor was
+  missed despite the bias, and a corrected count can only be lower.
 
 - **The sampler is not carrier-matched, and 78% of M is spent outside the
   carrier (2026-08-25).** Measured in E0f's pilot: of 691,000 candidate
   points, **539,382 were rejected by the declared `Nat` carrier and 51,791 by
-  the guards**. The sampler draws from a rational pool with negatives. The
-  effective budget per statement is far below M = 1,000 — the registered
-  run's median admitted count across its counterexamples is **two**, and
-  46.2% of them came from a statement admitting exactly one point. **A
+  the guards**. The sampler draws from a rational pool with negatives. **A
   carrier-matched sampler is the named successor.** Not applied mid-cycle:
   the sampler is E7-frozen and its own pilot had been read.
+
+  *Corrected 2026-08-25.* This entry originally added *"the effective budget
+  per statement is far below M = 1,000 — the registered run's median admitted
+  count across its counterexamples is two, and 46.2% of them came from a
+  statement admitting exactly one point"*. **Withdrawn.**
+  `scripts/conform.py:497` breaks on the first counterexample, so
+  `points_admitted` on a NONCONFORMANT record counts admitted points *up to
+  and including the falsifying one*; `admitted == 1` means the **first**
+  admitted point falsified the statement, which is the sampler's best case
+  rather than its worst. The finding stands on the pilot's split alone, which
+  is all it ever needed.
+
+- **C-E3 hands Lean an OPEN TERM, so the sampled class was never adjudicated
+  (2026-08-25, from review).** `measure_conformance.py:709-717` builds the
+  adjudication list out of each record's raw `canonical_ascii` and `:464`
+  passes it to `_lean_decide` unchanged; the record's own
+  `counterexample.bindings` are never substituted, so every sampled
+  proposition still carries free variables and fails at elaboration. **The
+  repair is the missing substitution step**, and the dropped code is still in
+  the file to start from: `_lean_expression` at `:434-438` (dead, behind a
+  literal `if False else`) and the discarded `typed` at `:463`. Until it
+  lands, **Correction 7's carrier boundary on the sampled class is
+  unmeasured** — the 25 attempted rows record an instrument gap, not a
+  boundary. Belongs to its own registration; running a control again after
+  its cycle's numbers were read is the chase §8 forbids.
+
+- **E5 and C-E1's second arm were registered and never executed
+  (2026-08-25, from review).** §6's E5 (*two full runs on one tree produce
+  byte-identical artifacts*) and §7's C-E1 false-alarm half (*0 of N unmutated
+  statements may change verdict across two runs*) have no results, in either
+  direction. **`experiments/conformance_run.json` therefore has no
+  byte-reproduction proof** and no sentence may call it reproduced;
+  `tests/test_conform.py::TheRunIsDeterministic` pins two runs of **one
+  statement**, which is a much smaller claim. Both arms are owed by the next
+  registration of this lane, and executing them now — after the cycle's
+  numbers are public — would not be the control they were specified as.
+
+- **E4's injection probes cannot exercise the boundary they certify
+  (2026-08-25, from review).** `scripts/measure_conformance.py:681` probes
+  `[5]`, `[]`, `[0]` and `[7]` — four degenerate constants that all trip the
+  same "degree >= 1" length check, and not one of them touches a
+  *coefficient*, which is where the declared class actually lives. They
+  therefore certified nothing about the defect they were pointed at: before
+  2026-08-25 `rational_root_test([Fraction(1, 2), 1])` returned EXISTS with
+  the witness `"0"` and `['x', 1]` raised, and the run's
+  `all_out_of_class: true` was true of the four probes and of nothing else.
+  The procedure is fixed and `tests/test_conform.py` now probes where it can
+  fail; **the writer's probe list is deliberately NOT edited**, because it is
+  the instrument that produced a scored gate and rewriting it after the fact
+  would make this artifact's E4 row unattributable to the code that wrote it.
+  Owed by the next registration: probes over the coefficient boundary, frozen
+  with the class.
+
+- **The artifact's 775 counterexample rows drop the
+  correlated-interpretation label (2026-08-25, from review).** The label is
+  emitted on every NONCONFORMANT runtime record
+  (`scripts/conform.py:518-526`) and printed on the served answer
+  (`scripts/harness.py:2023`), but the writer's projection at
+  `scripts/measure_conformance.py:626-631` selects four fields and drops it,
+  so `grep -c correlated_interpretation experiments/conformance_run.json`
+  over the scored gates returns 0. A **writer defect**: the verdicts were
+  labelled and the artifact's copy of them is not. Not backfilled — 775
+  scored rows are not editable after the fact — so the repair is in the
+  writer, for the next run.
 
 - **A blanket `Nat` class row makes a quarter of the ground class decide at
   `0 = 0` (2026-08-25).** Truncating subtraction takes 69 of the 297 ground
   statements to `0 = 0`, honestly but uninformatively, and 13 more refuse
-  because `Nat` has no negation. The row is right for Correction 4's witness
+  because `Nat` has no negation **node** — a negative *numeral* evaluates
+  fine, and the distinction is the one `scripts/conform.py:199-216` draws.
+  The 69 is recomputed from the committed tree by
+  `tests/test_conform.py::TheNatClampFigureIsRecomputable` (added 2026-08-25),
+  so this entry's number can be checked; the *pre-fix* 76 lives only in the
+  comment at `scripts/conform.py:202-207` and in commit `a58d642`'s message,
+  because the clamping code that produced it was never committed. The row is
+  right for Correction 4's witness
   and coarse for the class. **Per-statement or per-subclass domain rows are
   the repair**, and they are review work — one row at a time, which is what
   the schema's empty `statement_rows` records rather than hides.
@@ -44,13 +127,18 @@ or commit history. Each item names the evidence that motivated it.
   is a solver, it changes what the sampler is, and it belongs to its own
   registration.
 
-- **C-E3 reaches Nat and Int and reached none of the 775 (2026-08-25).**
-  Correction 7 predicted the boundary and the run measured it: 27 attempted
-  adjudications of sampled counterexamples all returned *"decide did not
-  reduce"*, while 12 of 13 ground `DECIDED_FALSE` verdicts were confirmed.
-  So every NONCONFORMANT verdict in the cycle carries the standing
-  correlated-interpretation label. **An adjudicator that reaches the sampled
-  class is what would discharge them**, and Mathlib is outside the hermetic
+- **C-E3 reached none of the 775 (2026-08-25; cause corrected the same day).**
+  **25** attempted adjudications of sampled counterexamples all returned
+  *"decide did not reduce"* — not 27; two of the ground `DECIDED_FALSE` ids
+  carry a `skel.` prefix and a prefix-based count sorted them onto the sampled
+  side. **12 of 15** ground `DECIDED_FALSE` verdicts were confirmed, not 12 of
+  13, for the same reason. And the cause is **not** Correction 7's predicted
+  carrier boundary: the writer passed open terms, per the entry above. So
+  every NONCONFORMANT verdict in the cycle carries the standing
+  correlated-interpretation label, for want of an independent domain rather
+  than for want of a decidable carrier. **An adjudicator that reaches the
+  sampled class is what would discharge them** — and the first thing it needs
+  is the substitution step, not Mathlib, which remains outside the hermetic
   budget as design law.
 
 ## Filed at the v0.19 rotation (the foreign voice, and the probes)
