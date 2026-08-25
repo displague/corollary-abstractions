@@ -1,0 +1,217 @@
+{
+  "distinct": {
+    "after": {
+      "commit": "8e1a3d1781ecd191f617618818e540d59b292b01",
+      "commit_subject": "Discharge the voice design's three landing obligations, and repair what they shifted",
+      "content_sha256": "460f8e3cff0a4013fc5a2c7551a1e8eb6cb487eafeeaa1c8fe208e680dedaf9c",
+      "hosts_cited": 0,
+      "max_ms": 3955.851,
+      "mean_ms": 3841.415,
+      "median_ms": 3901.462,
+      "min_ms": 3518.668,
+      "mode": "distinct",
+      "model": "corollary/kernel",
+      "pool_size": 0,
+      "queries": [
+        "owns x ^ 2",
+        "owns x + y",
+        "owns x * y",
+        "owns x / y",
+        "owns x - y",
+        "owns x ^ 3",
+        "owns sin ( x )",
+        "owns cos ( x )",
+        "owns sqrt ( x )",
+        "owns log ( x )"
+      ],
+      "receipt_keys": [],
+      "reps": 10,
+      "samples_ms": [
+        3518.668,
+        3796.446,
+        3764.859,
+        3912.866,
+        3903.552,
+        3802.33,
+        3920.538,
+        3899.372,
+        3955.851,
+        3939.67
+      ],
+      "searched": null,
+      "status": "exhausted",
+      "warmup_content_matches": false,
+      "warmup_reps": 1
+    },
+    "before": {
+      "commit": "8e1a3d1781ecd191f617618818e540d59b292b01",
+      "commit_subject": "Discharge the voice design's three landing obligations, and repair what they shifted",
+      "content_sha256": "460f8e3cff0a4013fc5a2c7551a1e8eb6cb487eafeeaa1c8fe208e680dedaf9c",
+      "hosts_cited": 0,
+      "max_ms": 7842.419,
+      "mean_ms": 6061.05,
+      "median_ms": 7208.849,
+      "min_ms": 3806.713,
+      "mode": "distinct",
+      "model": "corollary/kernel",
+      "pool_size": 0,
+      "queries": [
+        "owns x ^ 2",
+        "owns x + y",
+        "owns x * y",
+        "owns x / y",
+        "owns x - y",
+        "owns x ^ 3",
+        "owns sin ( x )",
+        "owns cos ( x )",
+        "owns sqrt ( x )",
+        "owns log ( x )"
+      ],
+      "receipt_keys": [],
+      "reps": 10,
+      "samples_ms": [
+        6913.91,
+        7503.788,
+        7515.393,
+        7842.419,
+        7660.815,
+        7580.461,
+        3899.311,
+        3806.713,
+        3945.21,
+        3942.479
+      ],
+      "searched": null,
+      "status": "exhausted",
+      "warmup_content_matches": false,
+      "warmup_reps": 1
+    },
+    "delta": {
+      "answer_unchanged": true,
+      "median_ms_after": 3901.462,
+      "median_ms_before": 7208.849,
+      "receipt_unchanged": true,
+      "removed_ms": 3307.387,
+      "speedup": 1.848
+    }
+  },
+  "gate": "ROADMAP-v0.20 §4a — the unmeasured claim, measured",
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.12"
+  },
+  "repeat": {
+    "after": {
+      "commit": "8e1a3d1781ecd191f617618818e540d59b292b01",
+      "commit_subject": "Discharge the voice design's three landing obligations, and repair what they shifted",
+      "content_sha256": "008d884f8429df8882aeb97cfbf571bb5aea1bfa7a5f567c02b474320b8b34f7",
+      "hosts_cited": 6884,
+      "max_ms": 3591.59,
+      "mean_ms": 3470.787,
+      "median_ms": 3450.63,
+      "min_ms": 3417.166,
+      "mode": "repeat",
+      "model": "corollary/kernel",
+      "pool_size": 0,
+      "queries": [
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2"
+      ],
+      "receipt_keys": [
+        "by_corpus",
+        "hosts",
+        "query_skeleton",
+        "searched"
+      ],
+      "reps": 10,
+      "samples_ms": [
+        3417.166,
+        3446.658,
+        3458.696,
+        3524.385,
+        3591.59,
+        3507.374,
+        3447.031,
+        3432.776,
+        3427.971,
+        3454.228
+      ],
+      "searched": 12777,
+      "status": "solved",
+      "warmup_content_matches": false,
+      "warmup_reps": 1
+    },
+    "before": {
+      "commit": "8e1a3d1781ecd191f617618818e540d59b292b01",
+      "commit_subject": "Discharge the voice design's three landing obligations, and repair what they shifted",
+      "content_sha256": "008d884f8429df8882aeb97cfbf571bb5aea1bfa7a5f567c02b474320b8b34f7",
+      "hosts_cited": 6884,
+      "max_ms": 6876.901,
+      "mean_ms": 3839.104,
+      "median_ms": 3531.189,
+      "min_ms": 3427.509,
+      "mode": "repeat",
+      "model": "corollary/kernel",
+      "pool_size": 0,
+      "queries": [
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2",
+        "owns x ^ 2"
+      ],
+      "receipt_keys": [
+        "by_corpus",
+        "hosts",
+        "query_skeleton",
+        "searched"
+      ],
+      "reps": 10,
+      "samples_ms": [
+        6876.901,
+        3529.885,
+        3468.222,
+        3427.509,
+        3444.758,
+        3467.081,
+        3562.969,
+        3539.027,
+        3532.492,
+        3542.201
+      ],
+      "searched": 12777,
+      "status": "solved",
+      "warmup_content_matches": false,
+      "warmup_reps": 1
+    },
+    "delta": {
+      "answer_unchanged": true,
+      "median_ms_after": 3450.63,
+      "median_ms_before": 3531.189,
+      "receipt_unchanged": true,
+      "removed_ms": 80.559,
+      "speedup": 1.023
+    }
+  },
+  "roadmap": "docs/ROADMAP-v0.20.md",
+  "run_id": "ownership.receipt.timing.v1",
+  "what_this_is": [
+    "The before/after reading §4a owes. The entry it closes had been quoted at ~3.4 s across three release cycles with no timing artifact behind it; this is that artifact.",
+    "Measured end-to-end over HTTP for 'owns x ^ 2' on corollary/kernel, session pool OFF, store memo warmed by one unmeasured request, median of ten with every sample kept.",
+    "NOT a performance claim (§4a). Published to close an unmeasured entry; a worse number would have been published too."
+  ],
+  "writer": "scripts/measure_ownership_receipt.py"
+}

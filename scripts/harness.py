@@ -1099,6 +1099,20 @@ def _route_ownership(repo_root: Path, session: "CoreSession", query: str) -> dic
             else f"no statement hosts {answer.query!r}"
         ),
         "answer": render(answer),
+        # The lookup's own result, carried the way `_route_twin` and
+        # `_route_reachable` already carry theirs (`:1589`, `:1769`). This
+        # route was the one that did not follow the convention: it ran the
+        # expensive lookup, rendered five witness hosts out of thousands,
+        # and dropped the object — so a renderer that had to cite the host
+        # set could only run the identical lookup a second time. Returning
+        # it is a convention alignment, not a new capability: every field
+        # here is `ownership.Ownership`'s own, unrenamed and unsummarised.
+        "receipt": {
+            "query_skeleton": answer.query_skeleton,
+            "hosts": list(answer.hosts),
+            "searched": answer.searched,
+            "by_corpus": [[corpus, count] for corpus, count in answer.by_corpus],
+        },
     }
 
 

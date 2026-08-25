@@ -799,51 +799,27 @@ def _resolution_receipt(repo_root: Path, verdict: dict) -> dict:
     return receipt
 
 
-@lru_cache(maxsize=128)
-def _ownership_lookup(query: str, data_root: str):
-    """`ownership.lookup`, memoized, because the receipt needs what the answer used.
+def _ownership_receipt(verdict: dict) -> dict:
+    """§6.1's `ownership` row, taken from the verdict the engine already built.
 
-    `route_line` hands the skin a rendered answer that names five witness
-    hosts, not the host set the receipt must cite, so the receipt has to run
-    the lookup a second time — and that lookup is the most expensive call on
-    the ownership route (~3.4 s for `owns x ^ 2` on the reference host, as
-    much again as routing the line). Memoizing the *pure* function removes
-    the duplicate work without the skin reaching into the engine to
-    monkeypatch it, which would be the renderer editing the record.
+    Until v0.20 this ran `ownership.lookup` a SECOND time, because
+    `_route_ownership` rendered five witness hosts and dropped the object
+    that knew the rest — the one route not following the convention
+    `_route_twin` and `_route_reachable` set. The skin mitigated with a
+    memo on the pure function rather than monkeypatching the engine, which
+    would have been the renderer editing the record. ROADMAP-v0.20 §4a
+    aligned the route instead, so the receipt is now a read.
 
-    Sound because the lookup is deterministic over committed files: the same
-    query against the same `data/` is the same answer, this run or the next.
-    `None` stands for the parse refusal, which an answering turn cannot hit.
+    `hosts` is still the WHOLE host set, not the five witnesses the answer
+    names: §6.1's "(top entries)" qualifies `by_corpus`, and a receipt
+    listing five of 6884 hosts without saying so would misrepresent what the
+    answer rests on.
     """
 
-    from ownership import QueryError, lookup  # noqa: PLC0415
-
-    try:
-        return lookup(query, Path(data_root))
-    except QueryError:
-        return None
-
-
-def _ownership_receipt(repo_root: Path, query: str) -> dict:
-    """§6.1's `ownership` row, re-read from the same deterministic lookup.
-
-    `hosts` is the WHOLE host set, not the five witnesses the answer names:
-    §6.1's "(top entries)" qualifies `by_corpus`, and a receipt that listed
-    five of 6884 hosts without saying so would misrepresent what the answer
-    rests on. A broad query therefore ships a large receipt; the metric counts
-    `content`, and truncating evidence to flatter a wall clock is the trade
-    this repository does not make.
-    """
-
-    found = _ownership_lookup(query, str(repo_root / "data"))
-    if found is None:  # pragma: no cover - an answering turn already parsed
+    receipt = verdict.get("receipt")
+    if not isinstance(receipt, dict):  # pragma: no cover - the route always carries it
         return {}
-    return {
-        "query_skeleton": found.query_skeleton,
-        "hosts": list(found.hosts),
-        "searched": found.searched,
-        "by_corpus": [[corpus, count] for corpus, count in found.by_corpus],
-    }
+    return dict(receipt)
 
 
 def _evaluate_receipt(text: str) -> dict:
@@ -917,7 +893,7 @@ def kernel_receipt(repo_root: Path, verdict: dict, eval_text: str) -> dict:
     if route in {"resolver", "resolver_context"}:
         return _resolution_receipt(repo_root, verdict)
     if route == "ownership":
-        return _ownership_receipt(repo_root, eval_text)
+        return _ownership_receipt(verdict)
     if route == "twin":
         return dict(verdict.get("receipt") or {})
     if route == "evaluate":
