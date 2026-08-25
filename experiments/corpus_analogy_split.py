@@ -238,7 +238,13 @@ def deserialize(tokens: list[str]) -> tuple:
 def _deserialize(tokens: list[str], pos: int) -> tuple[tuple, int]:
     tok = tokens[pos]
     if tok.startswith("#"):
-        return ("num", float(tok[1:])), pos + 1
+        # Mirror the serializer: an integer body reads back as the exact
+        # int the parser stored; anything else takes the float path.
+        body = tok[1:]
+        try:
+            return ("num", int(body)), pos + 1
+        except ValueError:
+            return ("num", float(body)), pos + 1
     if tok.endswith("("):
         head = tok[:-1]
         args: list[tuple] = []

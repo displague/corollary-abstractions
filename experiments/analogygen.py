@@ -51,6 +51,13 @@ def serialize(t: tuple) -> list[str]:
     position."""
     kind = t[0]
     if kind == "num":
+        # Exact integer literals (the stage-2 parser stores them as int
+        # since the v0.20 retirement) must not pass through float: a
+        # 76-digit literal would come back 4.444e+75 and the round trip
+        # would return a different term. str(int) and :g agree on every
+        # small integer, so curated spellings (`#2`) are unchanged.
+        if isinstance(t[1], int):
+            return [f"#{t[1]}"]
         value = float(t[1])
         text = f"{value:g}"
         # :g is 6 significant digits; ingested numerals (10112369,
