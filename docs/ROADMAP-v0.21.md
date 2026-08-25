@@ -163,6 +163,23 @@ about its sample. WITNESS replaces sampling with a **discharged
 obligation**: per-statement, checker-signed lemmas asserting that the
 compiled evaluator and the statement agree over a declared domain.
 
+**Named early rider — the C-E3 supplementary run, under §4.0's
+bug-not-result clause.** Before (or alongside) WITNESS's first slice:
+fix the substitution step `measure_conformance.py` never called (the
+dead code at `:434-438`/`:463` is the committed evidence), then run the
+adjudication **once** over the 25 sampled counterexamples the v0.20 run
+left unadjudicated — bindings substituted, ground propositions handed
+to the pinned checker's decision procedure — as a **supplementary
+registered run**: its own dated prereg amendment naming this rider, a
+new artifact (`experiments/conformance_ce3_supplement.json`), and
+`conformance_run.json` never edited. Whatever it reads is the answer
+the gap withheld: agreement strengthens the provisional labels'
+credibility, disagreement is the first mechanically-confirmed corpus
+error and files accordingly. It cannot un-void v0.20's run and does
+not claim to. The late determinism checks (E5's two-run byte-identity
+and C-E1's stability arm over the unmutated set) ride the same
+commit, each with its dated lateness disclosure per §4.0(2).
+
 **Its preregistration draft exists already**, recorded in the course
 receipt at `outcomes.series_1.preregistration_draft` before this roadmap
 was written, and quoted here rather than paraphrased:
@@ -296,6 +313,64 @@ the v0.22 rotation, it stops being a rider and either becomes an item or
 parks.
 
 ## 4. Governance
+
+### 4.0 Maintainer-directed relaxations (dated 2026-08-26)
+
+Three rules this project earned are hereby **narrowed to what their
+incidents actually proved**, by maintainer direction ("some of these are
+too restrictive and block progress" — the direction is quoted so the
+authority is visible, per house style). Each relaxation states what it
+replaces, what it keeps, and the incident that justified the narrowing.
+
+1. **The bug-not-result clause.** The no-chase rule (a voided control is
+   a result; do not repair it and re-run) applies to controls that RAN
+   and read unfavourably. It does **not** apply to a control that
+   provably **never executed** — an instrument gap is a bug, not a
+   reading. When the gap is mechanical and demonstrable (v0.20's C-E3:
+   the substitution step was never called; every invocation failed to
+   elaborate; the dead code is committed as the evidence), the fix plus
+   a **supplementary registered run** is permitted in the same or next
+   cycle, under the existing precedent for successor runs
+   (`foreign_voice_rate.json` → `foreign_voice_rate2.json`): its own
+   dated prereg amendment, a **new** artifact, the original never
+   edited or re-scored. What is kept: the original run's verdicts
+   stand; the supplementary run cannot retroactively un-void anything —
+   it answers the question the gap left unanswered, nothing more.
+   **Applied immediately: §2 carries the C-E3 supplementary run as a
+   named early rider.**
+2. **Determinism-plus-commit replaces execute-once ceremony.** v0.20's
+   voice run accidentally executed twice concurrently and reproduced
+   **byte-for-byte across three process invocations** — demonstrating
+   that for a deterministic runner the committed artifact and its
+   reproduction ARE the protection, and run-counting adds cost without
+   adding trust. Future preregs register "**artifact committed from a
+   deterministic runner; reproductions welcome and recorded**" instead
+   of "executed once." Late determinism checks (v0.20's unrun E5 and
+   C-E1 stability arm) may be run after first reading **with a dated
+   disclosure of the lateness** — a byte-identity check cannot be
+   gamed by when it runs. What is kept: non-deterministic measurements
+   (anything touching a model, a clock, or the network) remain
+   execute-once with the run pre-announced.
+3. **The meetable-floor rule.** Every frozen floor now ships with a
+   **meetability argument** — a pilot, a construction argument, or a
+   bounded-class analysis showing a *correct* instrument can reach it.
+   A floor without one is a **construction defect discovered at
+   registration time**, not a gate waiting to void. Origin: C-E1's
+   0.99 flip floor was unmeetable by any correct sampler over `Nat`
+   for whole mutation classes, and finding that out cost the cycle
+   its conformance claim. (The machine-reader pilot already modelled
+   the right shape: its floor was frozen **from a pilot**, before the
+   arm.) What is kept: floors still freeze before the instrument
+   exists — the meetability argument is part of the freeze, never a
+   post-hoc adjustment.
+
+**Explicitly not relaxed**, so this section cannot be read as a general
+loosening: denominator sealing before the scored party can move it;
+capability-blind controls with written voiding sentences; adversarial
+review before merge; the main-checkout freeze during suite gates;
+append-only corpora and seeds as source of truth; no-silent-disposal of
+maintainer-seeded designs; and the record-over-rerun rule for controls
+that ran and read unfavourably.
 
 - **The course gate was INVOKED strictly for the third consecutive
   cycle.** `reports/design-direction-v0.21.json` records three isolated
