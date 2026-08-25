@@ -1047,6 +1047,46 @@ Stated so that a later slice cannot approach it by accident.
     document**, because the R0 lesson is that a number frozen without
     justification is how a gate becomes a wish, and this is the one number in
     the design that cannot be justified before the sampler runs.
+
+    > **E0f's amendment (2026-08-25, after the pilot, before E2 was read).**
+    > The pilot ran the committed sampler at M = 1,000 over the **691**
+    > coupled guards this tree carries — the design predicted 720; the
+    > difference is Correction 2's typing rule, applied before the guard
+    > partition, and it is reconciled in `experiments/conformance_prereg.json`.
+    > Artifact: `experiments/conformance_admission_pilot.json`.
+    >
+    > **Measured: 591 of 691 coupled guards (85.5%) admit at least one point.
+    > Mean admission rate 3.4%, median 1.2%, best 435 of 1,000.**
+    >
+    > **E2a's floor is therefore frozen at: ≥ 80% of the samplable-and-
+    > schema-covered set must admit at least one point at M = 1,000.**
+    > Justified by the pilot rather than by preference: 80% sits 5.5 points
+    > below a number measured on the HARDEST slice, and the rest of the
+    > samplable set is box constraints and unguarded statements that admit
+    > more easily. **It is labelled a disclosed formality on E0b's model** —
+    > a floor the run could in principle miss is worth more than no floor,
+    > and retiring it silently after seeing the preview is the drift §6
+    > exists to prevent.
+    >
+    > **The floor is on the SHARE OF STATEMENTS ADMITTING, not on the
+    > admission rate**, and that choice is the pilot's doing. A median rate of
+    > 1.2% would make a rate-floor either vacuous or arbitrary, while the
+    > condition E2a actually cares about is whether a statement admits
+    > *anything* — because a statement admitting nothing must be `REFUSED`
+    > with `guard_measure_zero` rather than reported as not-falsified.
+    >
+    > **A finding the pilot produced that the design did not ask for, recorded
+    > because it bounds what M means.** Of the 691,000 candidates offered,
+    > **539,382 (78%) were rejected by the declared CARRIER and only 51,791 by
+    > the guards.** The sampler draws from a rational pool with negatives; the
+    > `lean_workbook` class row declares `Nat`. So most of M is spent on
+    > candidates the schema excludes before any guard is consulted, and the
+    > effective budget per statement is far below 1,000. The two gates are
+    > reported separately in the artifact for exactly this reason — summing
+    > them would have hidden which one did the work. **A carrier-matched
+    > sampler is a named successor**, not a fix applied mid-cycle: changing
+    > the sampler now would edit an E7-frozen artifact after its pilot had
+    > been read.
   - **E2b — the sentence, not a rate.** Every reported figure travels with
     its admitted-point denominator and its `certifies` sentence in the **same
     sentence**. **There is no floor on the counterexample rate, and freezing
