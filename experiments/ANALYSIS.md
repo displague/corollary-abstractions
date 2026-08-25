@@ -5525,3 +5525,190 @@ measurement.
 - **M3, M7, M8, L1, L3, L6, L8** — reviewed, judged not worth a commit at
   this stage. Recorded here so the record shows they were adjudicated rather
   than missed.
+
+---
+
+# v0.20 §4 — one witness retirement, five measured changes
+
+The batch ROADMAP-v0.20 §4 scheduled, recorded here because its five
+artifacts existed only in BACKLOG blockquotes and the roadmap's own
+sections until this rotation. Each change owes its own before/after
+evidence: **a shared seal is not a shared measurement.**
+
+**The retirement, verified structurally.** Against the pre-batch book,
+exactly three leaves moved in `experiments/throughput_tasks.json` —
+`/rendering_module_digests/scripts/answer.py`, `.../evaluate.py`,
+`.../harness.py` — with all **119** task ids, halves, turns and expected
+records byte-identical, the kind/half split reproduced (94 answerable,
+A=45, B=49) and `half_b_seal` unchanged. Three witnessed modules moved,
+not five: `match_signatures.py` (4b), `external_verifier.py` (4c) and
+`serve_chat.py` (4d) are not on the witness list and pay no seal, which
+is why 4b and 4d owe served-line diffs instead.
+
+**A second retirement followed, disclosed rather than absorbed.** Wiring
+`_route_conform` from refusing to answering had to follow the registered
+run, and it moves `harness.py`'s rendered bytes, so `4506f83` rebuilt the
+book again — one leaf, 119 records byte-identical, `half_b_seal`
+unchanged. §5's batching ruling had assumed one retirement would cover
+the cycle; it covered every change that landed before it.
+`DESIGN-statements-that-run.md` §8.1 carries the dated amendment. **No
+throughput claim is unlocked**: the book was rebuilt and not re-sealed
+against new timings, and nothing was measured through it.
+
+| # | artifact | reading |
+|---|---|---|
+| 4a | `experiments/ownership_receipt_timing.json` | **7,208.8 -> 3,901.5 ms median, 1.85x** on ten distinct `owns` lines (3,307 ms removed per turn); `answer_unchanged` and `receipt_unchanged` both true |
+| 4a (beside) | same file, `repeat.delta` | **3,531.2 -> 3,450.6 ms, 1.02x** on the same query ten times — run as §4a literally specified, which warms the very memo the fix removes |
+| 4b | `experiments/exact_literals_served_diff.json` | **0 of 14,830 answer lines moved**; **3 evaluate-route renderings moved**, all expected and named; skeletons and shape keys **0 moved of 25,554** terms |
+| 4c | `experiments/exponent_bound.json` | crashed while printing: **before 3 of 6 cases, after 0**; bound 4,300 digits, `evaluate.ResourceBound` |
+| 4d | `experiments/foreign_voice_wiring_served_diff.json` | armed **false on both sides**, **0 of 14,830** answer lines moved, `in words` 9,721 both sides — the absent/absent half |
+| 4e | `experiments/conform_route_before_after.json` | two `conform` lines move `dispatcher/exhausted` -> `conform/refused`; four control lines unchanged |
+
+**4a's two numbers are the entry, not a hedge.** The `~3.4 s` figure had
+been quoted across three release cycles with no timing artifact behind
+it. It turns out to have been roughly right about the *single* lookup
+(3.53 s measured), and the duplicate this entry was actually about cost
+**3.31 s on top of it**. Publishing only the 1.85x would describe the fix
+without describing the shipped server; publishing only the 1.02x would
+describe the memo rather than the fix. The artifact's own words: *not a
+performance claim* — a worse number would have been published too.
+
+**4b's own entry had the wrong nodes, and the diff said so.** Three
+served nodes are repaired, but not the three BACKLOG listed.
+`leanworkbook.skel.lean_workbook_50397` **cannot** be repaired by a
+parser change — its `inf` is frozen into the committed
+`anonymized_template` by the seed script and its `canonical_ascii` does
+not tokenize — so it is filed open as a seed regeneration, and
+`goedelpset.skel.goedel_pset_789185` took its place. Decimals stay
+`float`: `Fraction` was tried first and the served diff **refused it**,
+because 199 statements lost their `in words` line
+(`numeral_words.number_to_words` rejects a `Fraction` as "not a number").
+So `float("0.1")` is still not one tenth, filed and not fixed.
+
+**4c's bound moved after review, and the artifact records the corrected
+claim rather than replacing the old one.** v1 bounded the `^` node and
+asserted by construction that 4,300 was the only value at which
+*accepted* and *renderable* are the same set. The review escaped it in
+one line — `(10 ^ 4000) * (10 ^ 4000)`, two admissible powers multiplied,
+nothing exceeding a per-node bound, and the **print** raising the same
+uncaught `ValueError` the fix existed to abolish. The check now sits at
+the result-formatting boundary (`Evaluation.formatted`,
+`Verification._fmt`), so the set-equality holds **because of where the
+check sits, not because of the number's arithmetic**, and the file says
+so. The per-node check is kept and is not redundant: it refuses
+`2^200000` before the power is built. Both sides were executed in child
+interpreters rooted at their own git worktrees, each reporting the digest
+of the `evaluate.py` it loaded, and the writer refuses to record a
+comparison whose two sides loaded the same file. One divergence
+disclosed: `(100+1)^1000` at 2,005 digits is still served.
+
+**4d's second half is owed.** The absent/absent diff is committed and
+correct, but the artifact was written at batch time and still reads
+`armed: false`; the registered run landed afterwards and the surface is
+armed at HEAD. The **then-present** half of the diff §4d owes was never
+produced. The present side of v0.20 is witnessed by a live arming read
+and by `tests/test_answers.py`'s consistency assertion, not by a
+committed before/after artifact. Filed in BACKLOG as owed before the tag.
+
+---
+
+# The v0.21 design course — three series, one object, and an incumbent adjudicated
+
+**Run 2026-08-25**, receipt `reports/design-direction-v0.21.json`, brief
+on file at `reports/design-direction-v0.21-brief.txt` and hash-verified.
+Third consecutive strict invocation of the course gate.
+
+**Isolation, inherited unchanged from the v0.20 receipt.** Headless
+`claude -p` with cwd an empty non-git directory outside the repository
+and no project name in the path, under `strict-mcp-config` plus a
+disallowed-tools denylist over every file, shell, network, agent and
+skill tool. Session ids and per-round prompt hashes are committed.
+
+**Cost and shape.** Three isolated series, three rounds each — **nine
+rounds, fifteen round-one directions, $2.4076** (series 1 $0.8768,
+series 2 $0.7674, series 3 $0.7634).
+
+**One self-check worth keeping.** `round_prompt_sha256.series_1.r1`
+**equals** `brief_sha256_canonical_lf` by construction, because round one
+of series one *is* the brief. The receipt says so in its own note: *"the
+equality is the checkable form of that sentence."* Exclusion was layered
+and hashed into the prompts — series 2's round one excluded series 1's
+round-one territory (five lines), series 3 excluded both (ten lines) —
+and the incumbent was withheld from every round one and disclosed at each
+round two.
+
+## The funnel
+
+| series | lead | runner-up | folds |
+|---|---|---|---|
+| 1 — claim machinery | **WITNESS** | TRANSPLANT | FORK -> two probe artifacts *for the incumbent* (P1 finite bound, P2 separator expressibility); SPLICE -> WITNESS's commit lane |
+| 2 — relationships over time | **LEDGER** | RATCHET | RECALL -> the parked withdrawal lane, donating its exactness clause; HANDSHAKE -> RATCHET; LESSON -> GRAFT |
+| 3 — the library itself | ATLAS | DEMAND | TWINS -> ATLAS's probe-gated class; EXHIBIT declined in writing by its own series |
+
+**Selection: `docs/DESIGN-session-ledger.md`** — the session as a
+first-class object, a committed replayable per-turn journal whose answers
+cite the assumptions they consumed.
+
+**The incumbent was adjudicated explicitly: ADOPTED.** ROADMAP-v0.20 §5
+required it in writing — *silence is not a disposition* — and the
+evidence is in the receipt rather than in a preference. Series 1 folded
+its prose-ambiguity direction into **two probe artifacts for the
+incumbent**, and series 2's round-one text named the incumbent's gap
+before the incumbent was disclosed to it:
+
+> A conditional answer's condition lives in the person's head, not in any
+> artifact; there is no object called the session, so nothing about
+> continuity can go red.
+
+The convergence — an isolated advisor naming the same gap a withheld
+maintainer-seeded document names — is what the adjudication rests on.
+
+**Adopted second: WITNESS**, to the next roadmap as item 2, with its
+preregistration draft recorded **in the receipt** rather than invented at
+rotation time. It is the conformance void's claim-kind successor:
+checker-signed per-statement agreement lemmas over quantified linear
+arithmetic, against a manifest of 60 sealed names plus **10
+out-of-fragment decoys**. Three clauses in that draft are worth naming
+because they are this cycle's lesson turned into gate text — **B4**
+requires a self-comparison obligation to return `rejected_trivial` and
+*one discharge voids the instrument*; **B3** voids at 50/50 (too good is a
+failure); and the voiding sentence forbids a clean sweep outright.
+
+**Series 3's lead parked itself.** ATLAS is honest that it *"makes zero
+statements reachable"*, and the governance record counsels against an
+instrument-shaped headline. The counsel held, which is the second cycle
+running that it has.
+
+## The design's first draft failed its adversarial review
+
+Recorded because the discipline this repository applies to measurements
+applies to the orchestrator that plans them.
+
+The first draft claimed **no committed object for continuity existed** —
+in a repository holding `experiments/harness_session.json` (a recorded
+end-to-end session, v0.10 item 5), `scripts/conversation.py:335-438` (a
+durable session with a **keyed-MAC-per-binding** ledger, a monotone
+anti-rollback counter and ~40 tests), and a v0.10 adjudication (`P5`)
+that byte-exact session re-run had been registered once and came back
+**MISSED IN KIND** — *a session that mutates the corpus cannot re-run
+byte-identically, because the second run meets a different world.*
+
+The committed version stands on those precedents by name. Replay is P5's
+**corrected** guarantee, *re-verifying the record*, scoped to
+non-mutating turns only (frozen in P3 before any seal). Integrity reuses
+the committed `session_keys` MAC ring the first draft had unknowingly
+argued against. The corpus seal steals `throughput_tasks.json`'s
+hash-derived A/B half device verbatim, so the citer cannot author its own
+denominator and **half B's first execution is the registered run**.
+Citations are read-derived from a resolver read barrier and
+independently corroborated (B12), and a registered arm-blind 20-turn hand
+audit (B13, floor 16/20) decides whether the one unpriced risk —
+cited-but-inert assumptions — ships **named** or **measured**.
+
+The real gap, stated correctly in the committed version, is narrower than
+the first draft's: not *"no session object exists"* but **no per-turn
+journal of a served conversation with a digest chain over served answers
+and per-answer citations of the assumptions each answer consumed**.
+`scripts/supposition.py:96-107` builds a fresh executor per typed line and
+discards the state; the served supposition receipt is one key,
+`{"derivation": "session"}`.

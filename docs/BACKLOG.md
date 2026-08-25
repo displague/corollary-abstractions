@@ -3,6 +3,189 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.20 rotation (the voice completed, the course, the drift audit)
+
+- **`leanworkbook.skel.lean_workbook_50397` needs a seed regeneration, and no
+  parser change can reach it (2026-08-25, promoted out of §4b's entry).**
+  Filed as its own entry because it was the only live work left inside an
+  otherwise-shipped one, and a residue buried in a LANDED blockquote is a
+  residue nobody schedules. §4b made integer literals exact through the parse
+  path, but this node's `inf` is **frozen into the committed
+  `anonymized_template`** by `scripts/seed_lean_workbook.py`, and its
+  `canonical_ascii` does not tokenize — so the parser never sees the literal
+  that would be repaired. Unpark condition: a seed regeneration under
+  AGENTS.md's seeds-are-the-source-of-truth rule, with the five checkers
+  behind it re-run. Evidence: `experiments/exact_literals_prereg.json`
+  (`non_claims[1]`); the diff surfaced `goedelpset.skel.goedel_pset_789185` in
+  its place, so §4b repaired three served nodes but **not the three its own
+  entry had listed**.
+
+- **4d's served diff is half-produced, and the then-present half is owed
+  before the tag (2026-08-25, from the rotation's drift audit).**
+  ROADMAP-v0.20 §4d and the release gate both require the
+  **absent/absent-then-present** diff. The absent/absent half is committed and
+  correct. `experiments/foreign_voice_wiring_served_diff.json` was written at
+  **batch time** and still reads `sides.after.armed: false` with the reason
+  *"no registered run at experiments/foreign_voice_rate2.json"* — stale
+  against its own tree, because the registered run landed afterwards at
+  `2f882f0` and the surface is armed at HEAD. The present side of the release
+  is therefore witnessed by a **live arming read** and by
+  `tests/test_answers.py`'s consistency assertion, **not** by a committed
+  before/after artifact. Closes when regenerated:
+  `python scripts/foreign_voice_wiring_served_diff.py --before main`. Recorded
+  here rather than left implied, because the entry that closed 4d cited the
+  absent/absent file as *"the proof the design asks for"* without noting the
+  second half was outstanding.
+
+- **Load-bearing / premise-necessity — recovered after two cycles missing
+  (2026-08-25, from the rotation's drift audit).** A named row in
+  ROADMAP-v0.17 §3 and ROADMAP-v0.18 §3 (*"parked, travels with it"*), it is
+  **absent by name from ROADMAP-v0.19 §4, ROADMAP-v0.20 §5 and this file**. It
+  survived only inside `docs/DESIGN-ledger-first-claims.md`, which names it as
+  that lane's *"own most likely successor"*. It **travels with ledger-first**
+  and unparks with it, never separately. Named again in ROADMAP-v0.21 §3.3.
+  Evidence: the two roadmaps' tables, and the design section.
+
+- **Realization parameters as data: the unpark condition fired at v0.18 and
+  the roadmaps stopped quoting it (2026-08-25, from the rotation's drift
+  audit).** ROADMAP-v0.18 §3 parked it with *"becomes askable only if R1
+  fires."* **R1 fired at 0.9991 in that same release.** ROADMAP-v0.19 restated
+  the park **without the trigger sentence** and ROADMAP-v0.20 folded it into a
+  catch-all row reading only *"unchanged"*. The honest state: **askable since
+  v0.18, never scheduled, and askable is not scheduled.** Unpark condition,
+  restored and quoted: the linearization-rule row of
+  `docs/DESIGN-language-as-structure.md` §2's table, as a design saying what
+  the parameters buy over the committed grammar.
+
+- **Licensed variant generation — parked, after being carried twice with a
+  vanishing dependant (2026-08-25, from the rotation's drift audit).**
+  ROADMAP-v0.19 §4 named a dependant (*"item 2 of any future cycle that wants
+  a ranker"*); ROADMAP-v0.20 §5 named **none** and carried it anyway, which is
+  precisely what the carried-lane rule exists to catch. Parked here with its
+  trigger unchanged: the realization grammar emits exactly one surface per
+  term, so the preference seat has nothing to rank. **Unpark when a design
+  says what licenses a *second* passing surface for the same term and why that
+  is not decoration.** One new fact rides with it:
+  `docs/DESIGN-plain-input.md` argues the **input** side is where the ranker
+  seat finally has a denominator, because a plain utterance licenses several
+  candidate queries by construction — a candidate dependant, not a commitment.
+
+- **The ledger-first unpark trigger's article was edited from *the* to *a*
+  (2026-08-25, from the rotation's drift audit; AMENDED).** ROADMAP-v0.17,
+  v0.18 and v0.19 all wrote *"the first cycle after **the** throughput
+  readout"* — a definite, one-shot event that fired at v0.17, making every
+  cycle since a pass-over. ROADMAP-v0.20 §5 wrote *"**a** throughput
+  readout"*, which converts an overdue trigger into one that cannot come due
+  until a fresh throughput run happens — **in the same row that calls the rule
+  "intact and not weakened by repetition."** The original wording is restored
+  in ROADMAP-v0.21 §3.3 and the edit is recorded as an amendment rather than
+  allowed to ride as an unchanged rule. Under either reading the lane is
+  overdue: v0.20 produced **no new throughput readout** (three digest leaves
+  moved in `experiments/throughput_tasks.json`; no
+  `throughput_result*`/`throughput_trial_*`/`throughput_baseline` file changed
+  at all).
+
+- **The reader-determinacy question is empty on both sides and had no owner
+  (2026-08-25).** **C-V3 (human)** has been **ABSENT** for two cycles — a
+  single-maintainer repository has no non-maintainer to mark a determinacy
+  sheet blind — and **C-V3′ (machine)** ran this cycle and **VOIDED**: served
+  0.8417, skeleton 0.5000, ratio **0.594** against a 0.5 voiding threshold, so
+  the reader was substantially supplying the mathematics rather than reading
+  the words. Neither appeared in any carried table or in this file until now.
+  The consequence is stated rather than implied: the project serves English
+  sentences that are **provably faithful to the mathematics** and has **no
+  evidence anyone can read them**. Unpark needs a population of markers this
+  repository did not author — the same missing-population problem as
+  **STRANGER**. Evidence: `experiments/c_v3_prime_arm.json`,
+  `experiments/foreign_voice_rate2.json` (`c_v3`, `c_v3_prime`).
+
+- **Is canonical bracketing load-bearing for a reader? (2026-08-25, the
+  honest half of the grouping repair.)** `experiments/grouping_census.json`
+  published the **exposure** counts — 435 of 2,313 covered surfaces change
+  (18.81%), **151** statements lose **every** grouping word (the design's
+  read-only prototype had previewed 150) — and labelled them exposure and
+  **not readability**, in writing. One sealed surface canonicalizes to four
+  disjuncts with no grouping word anywhere. Whether that helps or hurts a
+  person is **not answered and not closed**; only a human determinacy sheet
+  could answer it, so this entry **parks behind C-V3 above** rather than
+  standing alone.
+
+- **The v0.19 course's two accepted riders were scheduled and never ran
+  (2026-08-25, from the rotation's drift audit).** ROADMAP-v0.20 §3 listed the
+  **HOLES counting table** (machine-enumerated skeleton gaps, counted, to
+  *"revive-or-close FOUNDRY with a number"*) and the **delete-K ground-truth
+  table** (survived from ONE HOP, which surrendered to the prior course's
+  excluded substitution chains) *"so they are **scheduled** rather than
+  remembered."* Neither produced an artifact and neither was filed anywhere.
+  They were remembered, not scheduled. **Stop rule, added here:** a rider is
+  cheap by construction, so an unrun rider is a scheduling fact and not a cost
+  finding — **if either is still unrun at the v0.22 rotation it stops being a
+  rider and either becomes an item or parks with a reason.** Evidence:
+  `reports/design-direction-v0.20.json`.
+
+### Parked from the v0.21 course, with their probes and triggers
+
+Quoted from `reports/design-direction-v0.21.json`
+(`selection.declined_with_lessons`) rather than summarised away, so a later
+cycle inherits the disposition and not a rumour.
+
+- **ATLAS — a total per-(statement × surface) obstruction map with witnesses
+  (2026-08-25).** Series 3's lead, **parked as a named instrument probe**
+  respecting the standing counsel against instrument-shaped headlines — and
+  the direction was honest about it in its own words: it *"makes zero
+  statements reachable."* Its **TWINS 500-pair probe** is listed standalone:
+  under 10 hits collapses TWINS to *duplicate-of*, **and the near-zero is the
+  result**. Residual to carry into any unpark: **first-blocker bias** — cells
+  record the first cause a surface tripped on, so stacked obstructions are
+  under-reported.
+
+- **DEMAND — an obstruction ledger against a question dump the program did
+  not author (2026-08-25).** Series 3's runner-up, **parked as a named probe
+  with its licence and pin rule attached**: a static CC BY-SA question dump,
+  **titles only**, digest-pinned, with the **drawing rule committed before
+  decompression**. That rule is the park's value: it is the STRANGER problem
+  with a licence-clean population attached, and the drawing rule is what stops
+  the population being chosen after the answers are seen.
+
+- **ABSENCE — snapshot-relative library-absence certificates (2026-08-25).**
+  Parked **behind DEMAND**; let demand aim it. Unparking ABSENCE first would
+  certify absences nobody asked about.
+
+- **RATCHET — archive-wide monotone-service replay (2026-08-25).** Parked;
+  its **pin audit is named as a cheap rider any cycle can run**. HANDSHAKE
+  (consumer trust contracts after offline verification) merged into it, and
+  donated its refusal-receipt clause to the session-ledger lane.
+
+- **GRAFT — person-taught macros over the registered grammar, reserved
+  namespace (2026-08-25).** Parked, and the **transformation is the record**:
+  LESSON (refusals that teach) was narrowed under round-two constraints, its
+  human-teaching arm cut because it needs strangers, and its **stateless
+  half** — macros verified before serving — survived under a new name. Unpark
+  alongside a stranger population, i.e. behind STRANGER or DEMAND.
+
+- **IF — checker-signed conditional reductions with a typed null
+  (2026-08-25).** Parked; **build the anti-triviality predicate first when its
+  turn comes.** Without it every reduction discharges and the instrument
+  confirms itself — the same shape as WITNESS's self-comparison clause.
+
+- **TRANSPLANT — a second exact non-math domain port scored by core edits
+  (2026-08-25).** Series 1's runner-up, parked **with its one-week core-edit
+  probe recorded**: the probe is the cheap version of the whole claim, and
+  counting core edits is what makes "it ported" falsifiable.
+
+- **EXHIBIT — meaning by discriminating instance (2026-08-25, declined in
+  writing by its own series).** Not parked on a preference: it **builds
+  meaning on the layer whose conformance run voided**. Its revival condition
+  is recorded and is a schedule item rather than a mood — **a non-void
+  conformance instrument ships first**, which is ROADMAP-v0.21 §2 (WITNESS).
+  If WITNESS voids, EXHIBIT stays declined with a second reason.
+
+- **RECALL — retraction with exact blast radius.** Not filed separately: it
+  **folded back into the twice-parked withdrawal lane** (UNSAY), donating one
+  clause to that lane's trigger — **an over-broad impact set counts as
+  failure, not caution.** A blast radius that over-reports is not a safe
+  default; it is a wrong answer.
+
 ## Filed at the v0.20 conformance run (2026-08-25)
 
 > **Reviewed 2026-08-25.** The four entries below were filed off the
@@ -145,7 +328,8 @@ or commit history. Each item names the evidence that motivated it.
 
 - **The parser stores numerals as `float`, and two served statements print
   values that are wrong by 10^59 (2026-08-24, orchestrator's ruling —
-  SCHEDULED).** `match_signatures.Parser` builds numeric literals as
+  SCHEDULED; **LANDED 2026-08-24 as §4b, CLOSED 2026-08-25 with one residue
+  refiled**).** `match_signatures.Parser` builds numeric literals as
   `("num", float(tok))` (`scripts/match_signatures.py:412`, and `:282` for
   the identifier path). Every literal wider than a double's 53-bit
   significand is destroyed at parse time, before any consumer sees it.
@@ -197,6 +381,10 @@ or commit history. Each item names the evidence that motivated it.
   > smuggled into a parser commit. In its place the served diff surfaced
   > `goedelpset.skel.goedel_pset_789185`, whose served `right` printed as a
   > rounded `1e64`. Three served nodes repaired; not the same three.
+  > *(**Promoted 2026-08-25** to its own top-level entry in "Filed at the
+  > v0.20 rotation" above. It was the only live work left inside an otherwise
+  > shipped entry, and a residue buried in a LANDED blockquote is a residue
+  > nobody schedules.)*
   >
   > **Correction 2 — decimals stay `float`, and the reason is measured.**
   > Making them `Fraction` was tried first and the served-line diff refused
@@ -226,7 +414,8 @@ or commit history. Each item names the evidence that motivated it.
   lands with its measurement.**
 
 - **`^` is unbounded on a served path, and no measure-relevant subprocess
-  call passes a timeout (2026-08-24, orchestrator's ruling — SCHEDULED).**
+  call passes a timeout (2026-08-24, orchestrator's ruling — SCHEDULED;
+  **LANDED 2026-08-24 as §4c, corrected 2026-08-25, CLOSED**).**
   `scripts/evaluate.py:182` computes `base ** int(exponent)` with **no size
   bound of any kind**. It is reachable from the typed line via
   `scripts/harness.py:1799` and `:1813` (both `computed =
@@ -314,6 +503,21 @@ or commit history. Each item names the evidence that motivated it.
   grouping-pair deletion rather than fifty. Its wiring rides
   [ROADMAP-v0.20](ROADMAP-v0.20.md) §4 as **4d**.
 
+  > **CLOSED 2026-08-25 by the v0.20 registered run.** C-V4′ ran on its own
+  > preregistration and **holds in every voiding class**;
+  > `drop_group` reads **42 of 42** against a floor *raised* from 0.90 to
+  > 0.95. **And the entry's own transferable rule was confirmed by
+  > falsifying its author's prediction**: `drop_ascription` was
+  > pre-registered at *"45 of 50 — exactly v0.19's reading"* and measured
+  > **45 detected of 45 scored, with 5 discarded as non-mutations.** The
+  > numerator held exactly; the **denominator** moved. So v0.19's 0.90 was
+  > not five missed near-misses — it was **five mutations that were never
+  > mutations**, exactly the failure mode this entry predicted the missing
+  > clause would produce. v0.19's artifact is **not re-scored**; it stays
+  > committed as it read. Evidence:
+  > `experiments/foreign_voice_rate2.json` (`c_v4_prime.per_class`,
+  > `c_v4_prime.point_prediction`).
+
 - **`shift_group`'s `of_which_digest_moved` is wrong in a registered
   artifact, and is deliberately not fixed (2026-08-24).** It reads **33**
   where the true value is **0**: the field double-counts the 33 cases where
@@ -326,6 +530,16 @@ or commit history. Each item names the evidence that motivated it.
   more honesty than it buys. If C-V4′ (above) re-runs this measurement
   under its own preregistration, the field is corrected there and this
   entry closes; it must not be corrected in place in the v0.19 artifact.
+
+  > **CLOSED 2026-08-25 on exactly the trigger this entry wrote.** C-V4′
+  > re-measured the class under its own preregistration, and the successor
+  > artifact carries **no `of_which_digest_moved` field to be wrong**: it
+  > publishes an `outcome_histogram` instead — `shift_group` **42 of 42
+  > detected, 18 `digest_moved` + 24 `fverr`**, the two sub-counts side by
+  > side with nothing summed on the reader's behalf. The v0.19 artifact's
+  > field is **not touched**, per this entry's own last sentence. Evidence:
+  > `experiments/foreign_voice_rate2.json`
+  > (`c_v4_prime.per_class.shift_group`).
 
 - **The release refresh masks its own steps' exit codes through a pipe
   (2026-08-24).** The refresh runs each step piped to `tail`, and a
@@ -470,6 +684,22 @@ or commit history. Each item names the evidence that motivated it.
   grouping words the grammar emits that the term does not require, and
   publish the distribution before anyone proposes a rule. Registered as a
   probe in ROADMAP-v0.20 §3; both branches yield an artifact.
+
+  > **CLOSED 2026-08-25 — the first reading, measured, and the second one
+  > split out rather than absorbed.** The probe ran and published **before**
+  > any rule was proposed, and git proves the ordering:
+  > `experiments/grouping_census.json` landed at `4d09d95`, the canonical
+  > renderer at `4fbcfb2`. It reads **604 redundant grouping pairs of 5,832
+  > source pairs** (620 of 6,063 counting the 16 binder-group pairs stripped),
+  > **1,208 of 11,664 emitted grouping words removed (10.36%)**, and **435 of
+  > 2,313 covered surfaces change**. The over-parenthesised reading was true, and
+  > the repair followed: `experiments/grouping_agreement.json` turns the
+  > sampled question into an exhaustive one — **G1b, 5,228 of 5,228
+  > grouping-pair deletions detected, zero blind**. **The second reading is
+  > not closed with it**: whether the redundancy is load-bearing for a
+  > *reader* is unanswered, and it is refiled as its own entry parked behind
+  > C-V3 (above), because closing a two-branch question on one branch is how
+  > the other branch disappears.
 
 - **1,706 of the register's 1,878 blocked statements are a budget, not a
   design limit (2026-08-24).** The frozen register's two buckets are
@@ -710,6 +940,16 @@ or commit history. Each item names the evidence that motivated it.
   small. Placed early in v0.20 because it is small and because a fourth
   cycle of carrying it is the outcome the ruling exists to prevent. This
   entry closes when §4 lands with its measurement.
+
+  > **CLOSED 2026-08-25 at the v0.20 rotation.** §4 landed with its
+  > measurement — the LANDED note above is that measurement — so the
+  > condition this entry set for itself is discharged and the entry stops
+  > carrying. Three cycles from *"roughly doubling the cost of the most
+  > expensive route"* to a committed artifact, and what closes it is not the
+  > speedup: it is that **an unmeasured number quoted across three releases
+  > now has a file behind it**, with the honest 1.02× arm published beside
+  > the 1.85× one so neither can be quoted alone. Not a performance claim,
+  > by the artifact's own words.
 
 - **The B-side correctness rule is notation-limited on session-derived
   kinds, and that asymmetry is scoring, not capability (2026-08-22).**

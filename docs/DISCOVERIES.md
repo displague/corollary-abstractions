@@ -13,6 +13,76 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## A restored clause moved the denominator, not the numerator (2026-08-25)
+
+**Claim.** When a control that scores "did the gate notice this break?"
+inherits its mutation idea from an ancestor **without the ancestor's
+verify-the-break-was-real clause**, its shortfall is not evidence about the
+gate at all. It is evidence that some of its "breaks" were never breaks.
+
+**Evidence.** v0.19's `drop_ascription` read **0.90 against a 0.90 floor** and
+was reported as five near-misses the identity gate failed to catch. v0.20's
+re-specified control restored the clause — construct the mutation, elaborate
+the mutated **term** first, discard any mutation whose term did not change,
+count the discards — and pre-registered a point prediction of **"45 of 50,
+exactly v0.19's reading"**. Measured: **45 detected of 45 scored, with 5
+discarded as non-mutations** (`experiments/foreign_voice_rate2.json`,
+`c_v4_prime.per_class.drop_ascription`; `c_v4_prime.point_prediction` records
+`held: false`).
+
+**The numerator held exactly. The denominator moved.** So the earlier 0.90 was
+not a gate missing five things — it was **five mutations that were never
+mutations**, filling the denominator of a control about near-misses with
+sentences that were not near-misses. The prediction was made by the same
+person who restored the clause, and it was the clause that falsified it.
+
+**The transferable rule, stated for any future ported control: port the
+discard rule first.** It is usually the part that was expensive to learn and
+the part that looks optional. Status: **measured**. Evidence:
+`experiments/foreign_voice_rate2.json`, `experiments/foreign_voice_rate.json`
+(`c_v4`, committed as it read and not re-scored).
+
+## A green assertion that could not have gone red is not evidence (2026-08-25)
+
+**Claim.** Two independent adversarial reviews and one merge, across two
+unrelated lanes in one cycle, found **zero wrong digests** and a recurring
+class of defect underneath them: **gates true in substance, enforced by
+assertions that were incapable of failing.** The defect is not in what the
+checks concluded — every conclusion held on re-derivation — but in whether
+anything could have told the difference.
+
+**Evidence**, five instances, each from a different mechanism:
+
+- A gate asserting *"no cross-kind mutation record appears in these two
+  classes"* computed each record's kind from a **dict literal keyed by class
+  name**, so it would have read true whatever the mutations touched — and a
+  cross-kind record is the one thing that gate exists to find. The real kind
+  was already being returned by the selector and then discarded.
+- A test comparing *"the 85 unchanged sealed renderings"* read the seal **at
+  HEAD** and compared it to the same file in a clean worktree: a file compared
+  to itself. It now locates the re-seal commit, reads its **parent's** blob,
+  and is **proven** falsifiable by perturbing one of the 85.
+- A pin file's **prose** carried a reader's full authority while its machine
+  check covered exactly one field — so a freeze list shipped a **correct
+  digest beside a false sentence** (*"Still 65fead2f…"* when the file was
+  already `f5b2abba…`), and only a human ever reads the sentence.
+- A claimed derivation was **enforced by nobody**: the replay script refused
+  on the branch tip and no collected test ever performed the replay, so the
+  strongest claim in the pin file rested on a program that could not run.
+- A test asserted *"the repository as it stands is dark"* — true the day it
+  was written, and destined to go **red for the system working**. Re-aimed at
+  consistency: the served line appears exactly when the arming read says it
+  should, on both branches.
+
+**Consequence, adopted as a standing review question rather than a cycle's
+anecdote.** Asking *"is this assertion true?"* is not enough; the question is
+*"could this assertion have been false?"* — and where the answer is no, the
+green is decoration. The next cycle's instrument turns it into gate text: a
+**self-comparison obligation must be rejected as trivial, and a single
+discharge voids the instrument**. Status: **measured**. Evidence: commits
+`c0c3e94`, `bd08f45`, `416e97c`; `experiments/ANALYSIS.md`, "Adversarial
+review of the v0.20 voice lane".
+
 ## A control whose floor no correct instrument could meet (2026-08-25)
 
 **Claim** (narrowed 2026-08-25 after adversarial review; the earlier wording
