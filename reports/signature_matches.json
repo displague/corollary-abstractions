@@ -1,7 +1,7 @@
 {
   "provenance": {
     "writer": "scripts/match_signatures.py",
-    "writer_sha256_lf": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+    "writer_sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
     "inputs": [
       {
         "path": "data/algebra/nodes.json",

@@ -266,6 +266,39 @@ COMMUTATIVE_CALL_HEADS = {
 }
 
 
+def format_num(value: int | float) -> str:
+    """A numeric node's key text, byte-identical to what the float path emitted.
+
+    ROADMAP-v0.20 §4b made literals exact `int`s, and that put an **uncaught
+    `OverflowError` on a served route** (adversarial review, H1). The three
+    key builders below format numeric nodes with `f"{value:g}"`. On a `float`
+    that never raises — a literal too wide for a double had already become
+    `inf` back at `float(tok)`, and `f"{inf:g}"` is `'inf'`. On an `int` past
+    a double's range, `:g` must convert to float first and **raises**, so
+    `owns x + <421 nines>` traced back out of `route_line` instead of
+    returning a verdict, and dropped the HTTP connection.
+
+    The guard emits exactly what the float path emitted, which is what keeps
+    every committed skeleton and served-diff artifact byte-identical rather
+    than merely close: `float("9" * 421)` is `inf` (string overflow saturates
+    where int conversion raises), so `'inf'` is not a chosen sentinel — it is
+    the reproduction of the prior behaviour at the only point where the two
+    paths could differ.
+
+    Note the asymmetry this preserves and does not fix: a node keyed `inf` is
+    a node whose literal was already unrecoverable in the KEY, even though
+    the parsed value is now exact. Skeletons are a structural index, not a
+    value channel, and widening them is a corpus-wide change with its own
+    seal. What §4b fixed is the value; what this keeps is the key.
+    """
+
+    try:
+        return f"{value:g}"
+    except (OverflowError, ValueError):
+        # Reproduces `f"{float('9'*421):g}"` == 'inf' exactly, sign included.
+        return "-inf" if value < 0 else "inf"
+
+
 def exact_literal(tok: str) -> int | float:
     """One numeric literal, exactly, from the surface the tokenizer matched.
 
@@ -300,10 +333,16 @@ def exact_literal(tok: str) -> int | float:
     `0.1 + 0.2 = 0.3` will need the numeral domain widened first. That is a
     filed limitation of this change, not a claim it makes.
 
-    `int` formats under `:g` exactly as `float` did, which is what keeps every
-    skeleton in the corpus byte-identical across this change — verified over
-    all 25,554 committed terms rather than assumed
-    (`experiments/exact_literals_served_diff.json`).
+    `int` formats under `:g` the same way `float` did **for every value a
+    double can hold**, which is what keeps every skeleton in the corpus
+    byte-identical across this change — verified over all 25,554 committed
+    terms rather than assumed
+    (`experiments/exact_literals_served_diff.json`). Past that range the two
+    diverge and `:g` RAISES on an int, which was H1: see :func:`format_num`,
+    which restores the float path's output at the three key builders. The
+    corpus never reached that range (its one 421-digit literal fails
+    template-parse first), so the byte-identity above is honest — the
+    exposure was typed and HTTP input, not committed data.
     """
 
     return int(tok) if "." not in tok else float(tok)
@@ -534,7 +573,7 @@ def shape_key(node: tuple) -> str:
     if kind == "slot":
         return "?"
     if kind == "num":
-        return f"#{node[1]:g}"
+        return f"#{format_num(node[1])}"
     head = node[1]
     return f"{kind}:{head}({','.join(shape_key(a) for a in node[2])})"
 
@@ -551,7 +590,7 @@ def typed_resort(node: tuple, slot_class: dict[str, str],
         if n[0] == "slot":
             return f"?{slot_class.get(n[1], 'V')}"
         if n[0] == "num":
-            return f"#{n[1]:g}"
+            return f"#{format_num(n[1])}"
         return f"{n[0]}:{n[1]}({','.join(typed_key(a) for a in n[2])})"
 
     kind = node[0]
@@ -712,7 +751,7 @@ def render_skeleton(node: tuple, slot_class: dict[str, str] | None = None) -> st
     def render(n: tuple) -> str:
         kind = n[0]
         if kind == "num":
-            return f"{n[1]:g}"
+            return f"{format_num(n[1])}"
         if kind == "slot":
             idx = indices.setdefault(n[1], len(indices))
             if slot_class is None:

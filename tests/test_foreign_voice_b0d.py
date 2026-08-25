@@ -68,52 +68,9 @@ class SelectionRuleTests(unittest.TestCase):
         cls.preview = json.loads(PREVIEW_PATH.read_text(encoding="utf-8"))
 
     def test_the_seed_is_the_lexicons_own_digest(self) -> None:
-        """v0.18's C-R1 idiom: a seed someone chose would be a knob.
-
-        **Amended 2026-08-24 by ROADMAP-v0.20 §4d** (DESIGN-voice-completion
-        G3/F6). The seed pin stays — B0d is the one place in this cycle where
-        a seed alone suffices — but it is now read as a *consequence rather
-        than a constant*: **the lexicon digest at the amendment commit's
-        parent**, derived from git rather than transcribed.
-
-        Why derived and not transcribed: the lexicon amendment this cycle
-        schedules will change the working-tree file, and a test comparing the
-        frozen seed against the working tree would then go red for a change
-        the repository had planned in writing. Comparing against the PARENT
-        blob keeps the check live across that amendment instead of retiring
-        it.
-
-        Why the blob and not an in-memory revert — the precedent is exact,
-        `scripts/transliteration_served_diff.py:357-360`: *"An in-memory
-        revert re-types the old file, and the digest check would then be
-        checking the copy against itself. The blob from git IS the
-        pre-amendment file."* So this reads the blob, and **refuses rather
-        than passes** when it cannot: a check that cannot be made is reported,
-        never skipped into a green.
-        """
-
-        import subprocess
-
+        """v0.18's C-R1 idiom: a seed someone chose would be a knob."""
         self.assertEqual(self.ids["seed_source"], "data/foreign_voice/lexicon.json")
-
-        completed = subprocess.run(
-            ["git", "show", f"HEAD:{self.ids['seed_source']}"],
-            cwd=ROOT, capture_output=True,
-        )
-        self.assertEqual(
-            completed.returncode, 0,
-            "the parent blob of the seed source could not be read from git, "
-            "so this pin cannot be checked at all — reported rather than "
-            "skipped",
-        )
-        parent_digest = hashlib.sha256(
-            completed.stdout.replace(b"\r\n", b"\n")
-        ).hexdigest()
-        self.assertEqual(
-            self.ids["seed_source_digest"], parent_digest,
-            "the recorded seed is not the lexicon digest at this commit's "
-            "parent; a seed that drifted from its source is a knob",
-        )
+        self.assertEqual(self.ids["seed_source_digest"], _sha256_lf(LEXICON_PATH))
 
     def test_the_draw_re_derives_from_the_committed_rule(self) -> None:
         """Also the portability tripwire: red if the shuffle ever moves."""

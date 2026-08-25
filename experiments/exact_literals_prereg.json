@@ -23,7 +23,7 @@
     {
       "path": "scripts/match_signatures.py",
       "role": "parser",
-      "sha256_lf": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+      "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
       "recorded": "2026-08-24",
       "supersedes": {
         "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
@@ -34,7 +34,19 @@
           "experiments/transliteration_served_diff.json (measured under it; left untouched)"
         ]
       },
-      "why": "The parse path DESIGN-statements-that-run E0 stands on. An evaluator that decides statements cannot be built on a parser that destroys their literals, so the exact-literal change precedes the slice that needs it."
+      "why": "The parse path DESIGN-statements-that-run E0 stands on. An evaluator that decides statements cannot be built on a parser that destroys their literals, so the exact-literal change precedes the slice that needs it.",
+      "amendments_within_this_prereg": [
+        {
+          "dated": "2026-08-25",
+          "reason": "H1 (adversarial review): §4b's exact integer literals put an uncaught OverflowError on a served route. `f\"{value:g}\"` never raises on a float but must convert an int to float first, so a literal past a double's range traced out of route_line instead of returning a verdict, and the HTTP skin dropped the connection. `match_signatures.format_num` guards the three key builders and emits exactly what the float path emitted.",
+          "supersedes_within_prereg": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+          "why_the_pin_moves_rather_than_a_new_prereg": "The retirement this file records is unchanged — the parser is still the successor pin for the row transliteration_prereg retired. This is a correction to the successor's own bytes, dated inside the successor rather than pretending the original pin was always this value.",
+          "verified_unchanged_by_the_move": [
+            "skeleton and shape_key byte-identical over all 25,554 committed terms (re-run after the guard)",
+            "experiments/exact_literals_served_diff.json findings byte-identical: answer lines moved 0 of 14,830, evaluate route moved 3, same three statement ids. Only the recorded parser digest and the before-blob provenance string differ."
+          ]
+        }
+      ]
     },
     {
       "path": "scripts/measure_transliteration.py",
@@ -53,7 +65,8 @@
     "Not a claim that every literal is exact END TO END. It fixes destruction AT PARSE TIME for integers. float('0.1') is still not exactly one tenth, so an evaluator that must decide 0.1 + 0.2 = 0.3 needs the numeral domain widened first. Filed, not fixed here.",
     "Not a claim that BACKLOG's node list was right. Its 3 nodes included leanworkbook.skel.lean_workbook_50397, whose `inf` is frozen into the committed anonymized_template by scripts/seed_lean_workbook.py and whose canonical_ascii does not tokenize — the parser never sees it, so this change cannot repair it. That node needs a seed regeneration under AGENTS.md's seeds-are-the-source-of-truth rule and is filed rather than smuggled into a parser commit. In its place the served diff surfaced goedelpset.skel.goedel_pset_789185. Three served nodes are repaired, but not the same three.",
     "Not a security fix. Loopback-only, single user, nothing untrusted reaches the path (ROADMAP-v0.20 §4's own note).",
-    "Not a performance claim of any kind."
+    "Not a performance claim of any kind.",
+    "Not a claim that a skeleton KEY can represent a literal past a double's range. A node keyed `inf` is a node whose literal is unrecoverable IN THE KEY, even though §4b made the parsed value exact. Skeletons are a structural index, not a value channel; widening them is a corpus-wide change with its own seal, and format_num deliberately reproduces the prior key rather than improving it."
   ],
   "evidence": {
     "served_diff": "experiments/exact_literals_served_diff.json",

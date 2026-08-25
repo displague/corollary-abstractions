@@ -24,11 +24,11 @@
     "verdict": "AS EXPECTED"
   },
   "mechanism": {
-    "after_parser_sha256_lf": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
-    "before_blob_from": "git show HEAD:scripts/match_signatures.py",
+    "after_parser_sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
+    "before_blob_from": "git show main:scripts/match_signatures.py",
     "before_parser_sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
     "each_child_reports_the_parser_it_loaded": {
-      "after": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+      "after": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
       "after_module_is_the_one_answer_used": true,
       "before": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
       "before_module_is_the_one_answer_used": true,
