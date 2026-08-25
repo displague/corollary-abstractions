@@ -1475,27 +1475,79 @@ class CapabilitySheet(ServedSkin):
         self.assertNotIn("verdict", row)
         self.assertNotIn("blocked_total", row)
 
-    def test_the_conformance_row_is_published_unserved_not_hidden(self):
-        """4e / §7: a registered line that is not yet answerable is declared."""
+    def test_the_conformance_row_is_served_and_quotes_no_rate(self):
+        """§5: the vocabulary, the denominators and the sentence — never a rate.
+
+        Re-aimed 2026-08-25: the row published `served: false` while the
+        compiler did not exist. The registered run has been executed, so it
+        serves — and the property that matters is not that it serves but that
+        it still refuses to publish a number. §5: a row reading
+        `conformance: 0.98` would be "the single most misleading object this
+        design could ship".
+        """
 
         sheet, _text = self.served_sheet()
-        rows = {row["route"]: row for row in sheet["line_grammar"]}
-        self.assertIn("conform", rows)
-        row = rows["conform"]
-        self.assertFalse(row["served"])
-        self.assertEqual(row["requires"], ["tool.conform"])
-        self.assertEqual(row["statuses"], ["refused"])
-        # And the status it publishes is one the frozen alphabet already has.
-        self.assertIn("refused", sheet["statuses"]["engine"])
+        row = sheet["conformance"]
+        self.assertTrue(row["served"])
+        self.assertEqual(row["run"], "experiments/conformance_run.json")
+
+        # The verdict vocabulary is the closed table, whole.
+        self.assertEqual(
+            set(row["verdict_vocabulary"]),
+            {"DECIDED_TRUE", "DECIDED_FALSE", "NONCONFORMANT",
+             "NO_COUNTEREXAMPLE_FOUND", "UNDECLARED_DOMAIN", "REFUSED"},
+        )
+        self.assertIn(
+            "certifies nothing universally",
+            row["verdict_vocabulary"]["NO_COUNTEREXAMPLE_FOUND"],
+        )
+        # Denominators travel with it.
+        self.assertEqual(row["denominators"]["corpus_statements"], 12777)
+        self.assertEqual(row["denominators"]["M_points_per_statement"], 1000)
+
+    def test_the_conformance_row_publishes_no_rate_at_all(self):
+        """The habit the realization row set is deliberately suspended (§8.1)."""
+        import re
+
+        sheet, _text = self.served_sheet()
+        blob = json.dumps(sheet["conformance"])
+        self.assertIsNone(
+            re.search(r"0\.\d+|\d+\s?%", blob),
+            "the conformance row must carry no rate, ratio or percentage",
+        )
+        self.assertIn("no_rate_is_published_here", sheet["conformance"])
+
+    def test_the_row_publishes_the_registered_runs_own_verdict(self):
+        """A served surface must not be quieter than the run that authorised it."""
+        sheet, _text = self.served_sheet()
+        row = sheet["conformance"]
+        run = json.loads(
+            (REPO / "experiments" / "conformance_run.json").read_text(
+                encoding="utf-8"))
+        self.assertEqual(row["registered_run_verdict"],
+                         run["verdicts"]["overall"])
+        self.assertIn("VOID", row["registered_run_verdict"])
+
+    def test_a_conform_line_answers_over_the_wire_with_its_sentence(self):
+        body = self.one(KERNEL, "conform leanworkbook.skel.lean_workbook_10012")
+        extension = self.x(body)
+        self.assertEqual(extension["route"], "conform")
+        self.assertEqual(extension["status"], "found")
+        content = self.content(body)
+        self.assertIn("certifies nothing universally", content)
+        self.assertIn("admitted of", content)
+        # C-E1 voided the agreement reading; the served answer says so.
+        self.assertIn("run void", content)
 
     def test_a_conform_line_refuses_over_the_wire_by_name(self):
-        body = self.one(KERNEL, "conform some.statement.id x=1")
+        """Re-aimed: the route answers now, so the refusal arm needs a
+        statement a register construct actually blocks."""
+        body = self.one(
+            KERNEL, "conform geometry.area_formulas.circle_area_formula")
         extension = self.x(body)
         self.assertEqual(extension["route"], "conform")
         self.assertEqual(extension["status"], "refused")
-        # §6.1: a non-answering status with a named missing capability.
-        self.assertEqual(
-            extension["receipt"], {"missing_capability": "tool.conform"})
+        self.assertIn("not a negative result", extension["detail"])
 
     def test_capability_sheet_publishes_the_realization_row(self):
         """§5: the sheet gains a `realization` row, quoted from the live run."""

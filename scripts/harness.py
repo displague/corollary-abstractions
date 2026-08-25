@@ -97,7 +97,7 @@ OPTIONAL_SUBSYSTEMS = ("retrieve.wordnet", "prover.lean_live", "tool.torch")
 #: non-optional so a green offline matrix keeps meaning what P-IH1 says it
 #: means; the probe can never FAIL, so it can never block boot the way a
 #: required FAIL does.
-COMMITTED_ARTIFACT_SUBSYSTEMS = ("closure.worlds",)
+COMMITTED_ARTIFACT_SUBSYSTEMS = ("closure.worlds", "tool.conform")
 
 
 @dataclass(frozen=True)
@@ -371,6 +371,38 @@ def probe_closure_worlds(repo_root: Path) -> CapabilityRecord:
     )
 
 
+def probe_conform(repo_root: Path) -> CapabilityRecord:
+    """OK when the conformance lane's committed artifacts are all present.
+
+    DESIGN-statements-that-run §5's route needs three committed things: the
+    reviewed domain schema, the frozen register, and the one registered run
+    whose `certifies` vocabulary the served record quotes. Any of them
+    missing means the route has nothing to answer FROM, and it refuses by
+    name rather than computing a verdict nobody registered.
+
+    Never FAIL, on `probe_closure_worlds`' shape: absent committed artifacts
+    are an absent capability, not a broken session. A committed-artifact
+    probe with `optional=False` — the offline boot must still serve it,
+    because `offline` names an absent dependency FAMILY and committed files
+    are not one.
+    """
+
+    required = (
+        repo_root / "data" / "domains" / "domain_schema.json",
+        repo_root / "experiments" / "conformance_register.json",
+        repo_root / "experiments" / "conformance_run.json",
+    )
+    missing = [p.name for p in required if not p.is_file()]
+    if missing:
+        return CapabilityRecord(
+            "tool.conform", Liveness.OFF,
+            "missing: " + ", ".join(missing), False,
+        )
+    return CapabilityRecord(
+        "tool.conform", Liveness.OK, "schema, register and run present", False,
+    )
+
+
 def probe_belief() -> CapabilityRecord:
     """Required. FrameExecutor opens an owned belief frame smoke."""
 
@@ -584,6 +616,7 @@ class CoreSession:
             probe_narrative(),
             probe_belief(),
             probe_closure_worlds(repo_root),
+            probe_conform(repo_root),
             probe_wordnet(offline=offline, env=wordnet_env),
             probe_lean(offline=offline),
             probe_torch(offline=offline),
@@ -1836,6 +1869,24 @@ CONFORM_COMMAND = "conform"
 CONFORM_SUBSYSTEM = "tool.conform"
 
 
+def _conformance_run_note(repo_root: Path) -> str:
+    """The registered run's overall verdict, or "" when it cannot be read.
+
+    Read per call rather than cached: the artifact is committed, and a served
+    verdict that quoted a stale reading would be the opposite of the point.
+    """
+
+    import json as _json  # noqa: PLC0415
+
+    try:
+        run = _json.loads(
+            (repo_root / "experiments" / "conformance_run.json").read_text(
+                encoding="utf-8"))
+        return str(run["verdicts"]["overall"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return ""
+
+
 def _route_conform(repo_root: Path, session: "CoreSession", rest: str) -> dict:
     """`conform <statement-id> <bindings>` — registered, and refusing for now.
 
@@ -1860,12 +1911,18 @@ def _route_conform(repo_root: Path, session: "CoreSession", rest: str) -> dict:
     caution got lost.
     """
 
-    if CONFORM_SUBSYSTEM in session.matrix.registered_ids():  # pragma: no cover
-        # Reachable only once item 1 registers the subsystem; the compiler
-        # is its deliverable, not this stub's.
-        raise NotImplementedError(
-            "conform: the subsystem registered but no compiler is wired"
-        )
+    if CONFORM_SUBSYSTEM not in session.matrix.registered_ids():
+        return {
+            "route": "conform",
+            "status": "refused",
+            "detail": (
+                f"{CONFORM_SUBSYSTEM} did not register on this boot; a "
+                f"conformance verdict is read out of a committed schema, a "
+                f"frozen register and one registered run, and there is "
+                f"nowhere else to read them from"
+            ),
+            "missing_capability": CONFORM_SUBSYSTEM,
+        }
     if not rest.strip():
         return {
             "route": "conform",
@@ -1875,17 +1932,130 @@ def _route_conform(repo_root: Path, session: "CoreSession", rest: str) -> dict:
                 f"bindings to test it at"
             ),
         }
+
+    from conform import (  # noqa: PLC0415
+        CERTIFIES, NONCONFORMANT, NO_COUNTEREXAMPLE_FOUND, REFUSED, Refusal,
+        compile_statement, run,
+    )
+    from conform_census import classify, evaluator_relations  # noqa: PLC0415
+    from conform_domain import load as load_schema  # noqa: PLC0415
+    from evaluate import find_bindings  # noqa: PLC0415
+
+    statement_id = rest.split()[0]
+    # §8: bindings are read by the COMMITTED `BINDING` regex — a name, an
+    # equals sign and a literal number, "nothing that could itself need
+    # evaluating, so a binding can never smuggle in a computation". The
+    # input side stays where DESIGN-text-resolution left it.
+    asked = find_bindings(rest[len(statement_id):])
+
+    from answer import records  # noqa: PLC0415
+
+    found = records().get(statement_id)
+    if found is None:
+        return {
+            "route": "conform",
+            "status": "refused",
+            "detail": (
+                f"no committed statement {statement_id!r}; conformance "
+                f"answers about the corpus's rows, not about arbitrary text"
+            ),
+        }
+    node, corpus = found
+
+    try:
+        schema = load_schema()
+    except Exception as exc:  # pragma: no cover - the probe already gated this
+        return {"route": "conform", "status": "refused",
+                "detail": f"domain schema will not load: {exc}"}
+
+    row = classify(node, corpus, evaluator_relations(), schema.output_roles)
+    try:
+        program = compile_statement(node, row, schema)
+    except Refusal as exc:
+        return {
+            "route": "conform",
+            "status": "refused",
+            "detail": (
+                f"{exc.construct}: nothing was computed, and the named "
+                f"construct says why. A refusal is not a negative result "
+                f"about the statement"
+            ),
+            "missing_capability": exc.construct,
+        }
+
+    record = run(program, schema.digest)
+    verdict = record["verdict"]
+    # The RECORD's sentence, not the table's: the record substitutes the
+    # admitted-point count into it, and §3.4 requires the figure and its
+    # denominator to travel in the same sentence.
+    certifies = record.get("certifies", CERTIFIES[verdict])
+
+    # The asker's own numbers, when they gave any. A binding for a slot the
+    # statement does not carry is reported rather than ignored: answering a
+    # question about `x` when the statement has no `x` would be answering a
+    # different question.
+    unknown = sorted(set(asked) - set(program.variables))
+    lines = [
+        f"statement  : {statement_id}",
+        f"verdict    : {verdict}",
+        f"domain     : {program.carrier}, / is {program.division}, "
+        f"- is {program.subtraction}",
+        f"certifies  : {certifies}",
+    ]
+    if record.get("left") is not None:
+        lines.append(f"left       : {record['left']}")
+        lines.append(f"right      : {record['right']}")
+    if record.get("points_admitted") is not None:
+        lines.append(
+            f"points     : {record['points_admitted']} admitted of "
+            f"{record['points_sampled']} sampled "
+            f"({record.get('points_rejected', 0)} guard-rejected, "
+            f"{record.get('points_domain_rejected', 0)} outside the carrier, "
+            f"{record.get('points_errored', 0)} errored)"
+        )
+    if verdict == NONCONFORMANT:
+        counterexample = record["counterexample"]
+        lines.append(f"falsified  : {counterexample['bindings']}")
+        lines.append(
+            f"             {counterexample['left']} "
+            f"{counterexample['relation']} {counterexample['right']}"
+        )
+        lines.append(f"provisional: {record['correlated_interpretation']}")
+    if unknown:
+        lines.append(
+            f"ignored    : {', '.join(unknown)} — not a free variable of "
+            f"this statement"
+        )
+    # The run that authorised this surface VOIDED two of its controls, and a
+    # served verdict must say so where it is read rather than only in an
+    # artifact nobody opened. C-E1's own sentence is that every
+    # NO_COUNTEREXAMPLE_FOUND in that run is void; serving one without the
+    # note would be quoting a reading the cycle withdrew.
+    run_note = _conformance_run_note(repo_root)
+    if run_note and verdict in {NO_COUNTEREXAMPLE_FOUND}:
+        lines.append(f"run void   : {run_note}")
+
     return {
         "route": "conform",
-        "status": "refused",
-        "detail": (
-            f"{CONFORM_SUBSYSTEM} is not built on this tree; conformance "
-            f"compiles a statement to an evaluator and there is nothing here "
-            f"to compile it with. The line is registered and the capability "
-            f"is not, which is a different thing from the corpus not "
-            f"grounding it"
-        ),
-        "missing_capability": CONFORM_SUBSYSTEM,
+        # `solved` is reserved for exact computation and exact lookup. A
+        # conformance verdict is neither: `found` is what resolution and the
+        # twin ledger use for "here is a record", and this is a record.
+        "status": "refused" if verdict == REFUSED else "found",
+        "detail": f"{verdict}: {certifies}",
+        "answer": tuple(lines),
+        "receipt": {
+            "statement_id": statement_id,
+            "verdict": verdict,
+            "registered_run_verdict": _conformance_run_note(repo_root),
+            "certifies": certifies,
+            "domain": record["domain"],
+            "points_admitted": record.get("points_admitted"),
+            "points_sampled": record.get("points_sampled"),
+            "sampler_seed": record.get("sampler_seed"),
+            "schema_digest": schema.digest,
+            "counterexample": record.get("counterexample"),
+            "registered_run": "experiments/conformance_run.json",
+        },
     }
 
 

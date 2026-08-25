@@ -86,7 +86,7 @@
     "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
     "scripts/evaluate.py": "09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041",
     "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
-    "scripts/harness.py": "e693a5dee841b4e4244318a0f07c74ed3ff192e04573ced0c132d063f4d10aa5",
+    "scripts/harness.py": "108a8471ef311bdd31d07386189efa7a8f4356cb182e63b37781a4041e45bd66",
     "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
     "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
     "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",

@@ -155,6 +155,8 @@ REALIZATION_RUN = "experiments/realization_rate.json"
 #: register says what shipped instead. Read at sheet-build time for the same
 #: reason `REALIZATION_RUN` is — a number restated in code is a number that
 #: goes stale, and this one states a miss, which is worse to get wrong.
+CONFORMANCE_RUN = "experiments/conformance_run.json"
+
 FOREIGN_VOICE_RUN = "experiments/foreign_voice_rate.json"
 FOREIGN_VOICE_REGISTER = "data/foreign_voice/register.json"
 
@@ -272,15 +274,14 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         "form": "conform <statement-id> <bindings>",
         "route": "conform",
         "example": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
-        "statuses": ["refused"],
+        "statuses": ["found", "refused"],
         "requires": ("tool.conform",),
         "note": (
-            "DESIGN-statements-that-run §5's wiring step, landed with "
-            "ROADMAP-v0.20 §4's retirement so item 1's slice need not retouch "
-            "harness.py. The compiler (scripts/conform.py) is not built, so "
-            "the route refuses by name — published `served: false` on §7's "
-            "rule rather than hidden, because a registered line that is not "
-            "yet answerable is a different fact from an unregistered one"
+            "DESIGN-statements-that-run §5's route, live since the registered "
+            "run. `found` carries a conformance record whose `certifies` "
+            "sentence says exactly what the verdict is worth; `refused` names "
+            "the register construct that blocked it. Never `solved` — a "
+            "conformance verdict is not an exact lookup"
         ),
     },
     {
@@ -549,6 +550,83 @@ def foreign_voice_row(repo_root_str: str) -> dict:
                 "owns"
             ),
         }
+    return row
+
+
+@lru_cache(maxsize=8)
+def conformance_row(repo_root_str: str) -> dict:
+    """The sheet's `conformance` row — the vocabulary and the sentence, NEVER a rate.
+
+    DESIGN-statements-that-run §5 is unusually explicit about this, and the
+    reason is worth keeping in front of the code: *"A sheet row reading
+    `conformance: 0.98` would be the single most misleading object this
+    design could ship, because the number it invites a reader to form is the
+    universal claim §3.4 spends its whole length refusing."*
+
+    So the row carries the verdict VOCABULARY, the denominators, and the
+    `certifies` sentences — and no rate, no percentage, no ratio. The habit
+    the `realization` row set (quote the registered run's headline number) is
+    deliberately suspended here, and §8.1 records that suspension.
+
+    A missing artifact publishes `served: false` with the reason, on the
+    existing precedent.
+    """
+
+    run, error = _read_json(Path(repo_root_str) / CONFORMANCE_RUN)
+    row = {
+        "surface": "conform <statement-id> <bindings>",
+        "run": CONFORMANCE_RUN,
+        "description": (
+            "a committed statement compiled to an exact evaluator over the "
+            "asker's own numbers, answering with a conformance record"
+        ),
+        "no_rate_is_published_here": (
+            "by design, not by omission. A conformance figure invites a "
+            "universal reading that no verdict in this lane supports; the "
+            "sheet quotes the certifies sentence instead."
+        ),
+    }
+    if not isinstance(run, dict):
+        row["served"] = False
+        row["reason"] = f"no readable registered run at {CONFORMANCE_RUN}: {error}"
+        return row
+
+    try:
+        from conform import CERTIFIES, NIHIL_CERTIFIES  # noqa: PLC0415
+    except ImportError as exc:  # pragma: no cover
+        row["served"] = False
+        row["reason"] = f"the compiler is not importable: {exc}"
+        return row
+
+    verdicts = run.get("verdicts") or {}
+    row["served"] = True
+    row["verdict_vocabulary"] = {
+        verdict: sentence for verdict, sentence in sorted(CERTIFIES.items())
+    }
+    row["nihil_vocabulary"] = {
+        verdict: sentence for verdict, sentence in sorted(NIHIL_CERTIFIES.items())
+    }
+    row["denominators"] = {
+        "ground_decided": run.get("e1", {}).get("ground_statements"),
+        "samplable_and_schema_covered": run.get("e2", {}).get("denominator"),
+        "M_points_per_statement": run.get("e2", {}).get("M"),
+        "corpus_statements": 12777,
+        "never_summed_into_one_supported_number": (
+            "The refused buckets are reported separately: some are "
+            "consequences a maintainer can lift by authoring schema rows and "
+            "some are consequences this design owns."
+        ),
+    }
+    row["registered_run_verdict"] = verdicts.get("overall")
+    row["voided_controls"] = [
+        gate.get("gate") for gate in verdicts.get("gates", [])
+        if gate.get("met") is False
+    ]
+    row["read_the_run_before_reading_a_verdict"] = (
+        "The registered run's own overall verdict is published above. Where "
+        "it reads VOID, a served NO_COUNTEREXAMPLE_FOUND carries that void "
+        "in its own answer lines rather than only here."
+    )
     return row
 
 
@@ -1695,6 +1773,7 @@ class ChatEngine:
                 "skin_assigned": list(SKIN_ASSIGNED_STATUSES),
             },
             "realization": realization_row(str(self.repo_root)),
+            "conformance": conformance_row(str(self.repo_root)),
             "foreign_voice": foreign_voice_row(str(self.repo_root)),
             "honesty": HONESTY_LINE,
             "replay": (
