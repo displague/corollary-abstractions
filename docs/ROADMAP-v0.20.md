@@ -158,7 +158,26 @@ spends 78% of the sampling budget before any guard is consulted.
 **What is now live:** `conform <statement-id> <bindings>` on both skins,
 `tool.conform` registering through a committed-artifact probe, and a
 `conformance` sheet row that publishes the verdict vocabulary, the
-denominators and the run's own VOID — and no rate, by design.
+denominators and the run's own VOID — and no rate, by design. *(Corrected
+2026-08-25: the row published `['E1', 'C-E1']` under `voided_controls`,
+which named a missed gate as a retraction and dropped C-E2 entirely. It now
+lists the two voided controls and the missed gate separately.)*
+
+**And the slice did touch the witness book, contrary to §5's expectation.**
+Wiring `_route_conform` from refusing to answering had to follow the
+registered run, by which point §4's batched retirement was already behind it,
+and the change moves `harness.py`'s rendered bytes. So commit `4506f83`
+rebuilt `experiments/throughput_tasks.json` — **one leaf**,
+`/rendering_module_digests/scripts/harness.py`, with all 119 task ids,
+halves, turns and expected records byte-identical and `half_b_seal`
+unchanged. `docs/SPEC-chat-completions-skin.md:237–258` outranks the design's
+convenience here and the rebuild was correct; what was wrong is that
+`DESIGN-statements-that-run.md` §8.1 kept saying *"this slice does not seal
+its own witness book"* for a day after the commit disclosed that it had. §8.1
+now carries the dated amendment, and the backlog entry that held the wiring
+open is closed against both of its conditions. **No throughput claim is
+unlocked by any of this** — a timed comparison still starts a fresh seal
+cycle, and the cost ledger stays parked for a fifth rotation.
 
 ## 2. The C-V4 successor, and the wiring gated behind it
 

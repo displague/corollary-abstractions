@@ -395,7 +395,8 @@ or commit history. Each item names the evidence that motivated it.
   > lines moved of 14,830, the absent/absent proof the design asks for.
 
 - **`_route_conform` is registered and refusing, and item 1 must not
-  reopen the seal to use it (LANDED 2026-08-24, ROADMAP-v0.20 §4e).**
+  reopen the seal to use it (LANDED 2026-08-24, ROADMAP-v0.20 §4e;
+  **CLOSED 2026-08-25**).**
   DESIGN-statements-that-run §5's wiring step landed with §4's batched
   retirement so item 1's slice never has to retouch `harness.py`. A
   `conform <statement-id> <bindings>` line is claimed by its own route and
@@ -407,8 +408,23 @@ or commit history. Each item names the evidence that motivated it.
   does NOT sketch the conformance record: the design spends its length
   refusing the universal reading such a verdict invites, and a stub that
   guessed at the shape would be the first place that caution got lost.
-  **Open until `scripts/conform.py` lands and the sheet row flips to
-  served.**
+
+  **Closed 2026-08-25. Both conditions are discharged, and the second half
+  of this entry's title did not survive.** `scripts/conform.py` landed
+  (commit `a58d642`) and the sheet row flips to `served: true` against the
+  registered run (commit `4506f83`; pinned by
+  `tests/test_serve_chat.py::test_the_conformance_row_is_served_and_quotes
+  _no_rate`). But the seal *was* reopened: moving `_route_conform` from
+  refusing to answering changes `harness.py`'s rendered bytes, so `4506f83`
+  rebuilt `experiments/throughput_tasks.json` — one leaf,
+  `/rendering_module_digests/scripts/harness.py`, everything else
+  byte-identical. This entry's hope that the batched retirement would make
+  that unnecessary was wrong on the timing: the wiring had to follow the
+  registered run, and §4's retirement was already behind it.
+  `docs/SPEC-chat-completions-skin.md:237–258` governs and outranks the
+  convenience, `DESIGN-statements-that-run.md` §8.1 now carries the dated
+  amendment saying so, and §8's "no throughput claim" is unweakened — a
+  timed comparison still starts a fresh seal cycle.
 
 - **`probe_convention_pairs.py` has no argparse and writes on every
   invocation (2026-08-24).** `main()` takes no argv and calls

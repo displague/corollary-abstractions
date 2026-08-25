@@ -1366,6 +1366,35 @@ following, so that a reader does not read an omission as an oversight. Four:
   Suspended by the orchestrator's batching ruling (§5): **one retirement for
   the cycle**, owned by ROADMAP-v0.20 §4, with this design's ordering
   requirement stated instead.
+
+  > **Amendment (2026-08-25, after the slice shipped): the sentence above did
+  > not hold, and the rule that overrode it is the right one.** The wiring
+  > commit `4506f83` **rebuilt `experiments/throughput_tasks.json`** — one
+  > leaf, `/rendering_module_digests/scripts/harness.py`, with all 119 task
+  > ids, halves, turns and expected records byte-identical and `half_b_seal`
+  > unchanged. It was disclosed in that commit's own seal note and this
+  > document was not amended to match, which is the defect being corrected
+  > here: a design that says it did not touch the book, beside a commit that
+  > says it rebuilt the book, leaves a reader to guess which document is
+  > current.
+  >
+  > **Why it happened.** §5's batching ruling assumed §4's single retirement
+  > could cover every witnessed-module change in the cycle, and it covered
+  > every one that landed *before* it. But `_route_conform` had to move from
+  > refusing to answering **after** the registered run, and that change moves
+  > `harness.py`'s rendered bytes — a witnessed module under
+  > `docs/SPEC-chat-completions-skin.md:237–258`. The seal rule there is not a
+  > habit this design gets to suspend: it is the mechanism that makes the
+  > throughput void condition checkable rather than honor-system, and a
+  > design's own convenience does not outrank it. The rebuild was the correct
+  > action; the unamended sentence was the error.
+  >
+  > **What it does and does not license.** The book was rebuilt, not
+  > re-sealed against new timings: nothing was measured through it, and §8's
+  > "no throughput claim" stands unweakened — this cycle still owes a fresh
+  > seal cycle before any timed comparison. The batching ruling's intent
+  > survives too: **one** retirement, one book, one dated reason. What is
+  > corrected is the claim that this slice contributed nothing to it.
 - **One gate number is deliberately absent from this document.** The habit is
   that §6 freezes every floor before implementation. E2a's admission floor is
   not frozen here; E0f measures it first and a dated amendment freezes it
