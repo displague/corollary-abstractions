@@ -269,6 +269,21 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         "note": "wiring step W2; targets must be listed in the committed manifest",
     },
     {
+        "form": "conform <statement-id> <bindings>",
+        "route": "conform",
+        "example": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
+        "statuses": ["refused"],
+        "requires": ("tool.conform",),
+        "note": (
+            "DESIGN-statements-that-run §5's wiring step, landed with "
+            "ROADMAP-v0.20 §4's retirement so item 1's slice need not retouch "
+            "harness.py. The compiler (scripts/conform.py) is not built, so "
+            "the route refuses by name — published `served: false` on §7's "
+            "rule rather than hidden, because a registered line that is not "
+            "yet answerable is a different fact from an unregistered one"
+        ),
+    },
+    {
         "form": "<story request>",
         "route": "story",
         "example": "tell me a story",

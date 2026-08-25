@@ -1431,6 +1431,28 @@ class CapabilitySheet(ServedSkin):
         self.assertNotIn("verdict", row)
         self.assertNotIn("blocked_total", row)
 
+    def test_the_conformance_row_is_published_unserved_not_hidden(self):
+        """4e / §7: a registered line that is not yet answerable is declared."""
+
+        sheet, _text = self.served_sheet()
+        rows = {row["route"]: row for row in sheet["line_grammar"]}
+        self.assertIn("conform", rows)
+        row = rows["conform"]
+        self.assertFalse(row["served"])
+        self.assertEqual(row["requires"], ["tool.conform"])
+        self.assertEqual(row["statuses"], ["refused"])
+        # And the status it publishes is one the frozen alphabet already has.
+        self.assertIn("refused", sheet["statuses"]["engine"])
+
+    def test_a_conform_line_refuses_over_the_wire_by_name(self):
+        body = self.one(KERNEL, "conform some.statement.id x=1")
+        extension = self.x(body)
+        self.assertEqual(extension["route"], "conform")
+        self.assertEqual(extension["status"], "refused")
+        # §6.1: a non-answering status with a named missing capability.
+        self.assertEqual(
+            extension["receipt"], {"missing_capability": "tool.conform"})
+
     def test_capability_sheet_publishes_the_realization_row(self):
         """§5: the sheet gains a `realization` row, quoted from the live run."""
 

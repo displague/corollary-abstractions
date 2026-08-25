@@ -292,6 +292,49 @@ class UnregisteredTextNeverVerifies(BootedSession):
         self.assertIn("register", verdict["detail"].lower())
 
 
+class ConformIsRegisteredAndRefuses(BootedSession):
+    """4e: DESIGN-statements-that-run §5's route, landed before its compiler.
+
+    The point of landing it early is not the branch — it is that a line this
+    repository INTENDS to answer says "that capability is not built yet"
+    rather than "the corpus does not ground this". Those are different
+    statements about the same line, and only one of them is true.
+    """
+
+    def test_a_conform_line_is_claimed_by_its_own_route(self) -> None:
+        verdict = route_line(
+            REPO, self.session,
+            "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3",
+        )
+        self.assertEqual(verdict["route"], "conform")
+        self.assertEqual(verdict["status"], "refused")
+
+    def test_it_refuses_by_naming_the_capability_it_lacks(self) -> None:
+        """Not a dispatcher abstention wearing a different word."""
+        verdict = route_line(REPO, self.session, "conform some.statement.id x=1")
+        self.assertEqual(verdict["missing_capability"], "tool.conform")
+        self.assertNotIn("corpus does not ground", verdict["detail"])
+        self.assertIn("registered", verdict["detail"])
+
+    def test_a_bare_command_says_what_it_needs(self) -> None:
+        verdict = route_line(REPO, self.session, "conform")
+        self.assertEqual(verdict["route"], "conform")
+        self.assertEqual(verdict["status"], "refused")
+        self.assertIn("statement id", verdict["detail"])
+
+    def test_the_head_guard_is_exact_and_claims_nothing_else(self) -> None:
+        """`conformity` is a word, not this command."""
+        verdict = route_line(REPO, self.session, "conformity is not a command")
+        self.assertNotEqual(verdict["route"], "conform")
+
+    def test_it_never_answers_and_never_claims_grounding(self) -> None:
+        """A stub that invented a conformance record is the failure mode."""
+        verdict = route_line(REPO, self.session, "conform some.statement.id x=1")
+        self.assertNotIn("answer", verdict)
+        self.assertNotIn("receipt", verdict)
+        self.assertNotIn(verdict["status"], {"solved", "found", "held"})
+
+
 class TypedPathReachesTheWriteGate(BootedSession):
     """P-LS3 — seed_ownership, and a byte-identical tree."""
 
