@@ -1,0 +1,23 @@
+{
+  "answer_lines_moved": 0,
+  "design": "docs/DESIGN-voice-completion.md §5.1",
+  "in_words_lines_present": {
+    "after": 9721,
+    "before": 9721,
+    "note": "v0.18's realizer line; unchanged by 4d"
+  },
+  "moved_statement_ids": [],
+  "roadmap": "docs/ROADMAP-v0.20.md §4d",
+  "run_id": "foreign_voice_wiring.served_diff.v1",
+  "sides": {
+    "after": "the working tree, foreign wiring present and DARK",
+    "before": "HEAD (4c), no foreign wiring present"
+  },
+  "statements_rendered": 14830,
+  "verdict": "AS EXPECTED (no served byte moved)",
+  "what_this_is": [
+    "The absent/absent half of 4d's evidence obligation, stated precisely by the design because it is unusual: the foreign `in words` line shown ABSENT ON BOTH SIDES at batch time, because no run has armed it yet.",
+    "This is NOT a null result. It is the proof that a witnessed-module change moved no served byte — exactly what the seal discipline asks a witnessed change to demonstrate. The present-after-a-clean-run half lands with the run, or never."
+  ],
+  "why_absent": "experiments/foreign_voice_rate2.json does not exist, so foreign_voice_arming.arming_state reports armed=false and answer.render emits nothing"
+}

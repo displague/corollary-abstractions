@@ -343,6 +343,15 @@ HONESTY_LINE = (
 )
 
 
+def _read_json(path: Path):
+    """One committed artifact, or (None, reason). Never raises at a caller."""
+
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8")), None
+    except (OSError, ValueError) as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
 def assert_no_demo_name(payload: dict, where: str) -> str:
     """P-IH3, enforced where the bytes are built rather than only in a test.
 
@@ -415,79 +424,89 @@ def realization_row(repo_root_str: str) -> dict:
 
 @lru_cache(maxsize=8)
 def foreign_voice_row(repo_root_str: str) -> dict:
-    """The sheet's `foreign_voice` row: a surface WITHHELD, published as one.
+    """The sheet's `foreign_voice` row — armed or dark, and never a lie.
 
-    §7's rule, and the reason this row exists at all: "Rows the profile
-    cannot serve (gloss under offline boot) appear with `served: false`
-    rather than disappearing." A withheld surface that simply is not in the
-    sheet is indistinguishable, to an attaching orchestrator, from a surface
-    this repository never attempted — which is exactly the difference the
-    cycle's own artifacts were written to record. The gloss row is the
-    precedent; this is the same rule applied to a control that voided.
+    §7's rule: "Rows the profile cannot serve (gloss under offline boot)
+    appear with `served: false` rather than disappearing." A withheld surface
+    absent from the sheet is indistinguishable, to a client, from one this
+    repository never attempted, and that difference is what this cycle's
+    artifacts exist to record.
 
-    Two things this row deliberately does NOT publish. **B1's identity
-    rate**, because the run's own verdict block says it is not quotable: "a
-    VOID control voids the reading it gates, so a voided control outranks a
-    cleared B1 floor" — a sheet that printed 1.0 beside the word VOID would
-    be laundering the miss through a field name. And **a single summed
-    blocked figure without its split**, because the run says those two
-    buckets are "reported separately: the first is a budget consequence the
-    maintainer can lift and the second is a design consequence this cycle
-    owns". The register publishes its own `blocked_total`, so that number is
-    read rather than computed, and both buckets ride beside it.
+    **Rewritten by ROADMAP-v0.20 §4d, which inherited three defects from the
+    v0.19 version of this function** (DESIGN-voice-completion Correction 7,
+    all three confirmed in the tree before rewriting):
+
+    (a) *There was no code path that set `served: true` at all.* `served` was
+    assigned once, to `False`. Flipping the row was never a matter of
+    removing a guard — the true branch did not exist, and 4d writes it.
+
+    (b) *The empty-list read was caught, so the failure was a plausible lie.*
+    It indexed `c_v4["voided_classes"][0]` on a list that is EMPTY when
+    nothing voided, and the `except` tuple named `IndexError` — so an
+    all-clear run returned early with `served: false` and the words "its
+    record could not be read", on exactly the branch the voice design exists
+    to produce. A clean run would have been published as a corrupt file.
+
+    (c) *The guard keyed off the wrong field.* `c_v4["voided_classes"]` is
+    one control's internal detail; the run's own verdict is
+    `verdicts["voided"]`. They agree in the shipped artifact and would both
+    be empty on an all-clear run — but only the wrong one was consulted, so
+    the row's behaviour was decided by a field that is not the verdict.
+
+    All three are gone: the arming decision now comes from
+    `foreign_voice_arming.arming_state`, the SAME read `answer.render` uses,
+    so the row and the line cannot disagree about whether a surface exists.
+    The C-V4 detail is still quoted when a run carries it, but as
+    description rather than as the gate.
+
+    Two things the row still refuses to say, unchanged from v0.19 and
+    restated because they are easy to lose in a rewrite: it does not quote
+    B1's identity rate (a VOID control outranks a cleared floor, and printing
+    1.0 beside VOID would re-publish a withdrawn reading), and it does not
+    present one summed blocked figure without its split (the run says those
+    buckets are reported separately; the total is the register's own field,
+    read rather than computed).
     """
 
+    from foreign_voice_arming import arming_state  # noqa: PLC0415
+
     root = Path(repo_root_str)
+    state = arming_state(root)
     row = {
         "surface": "foreign voice",
-        "served": False,
+        "served": bool(state["armed"]),
         "description": (
             "statements rendered as invertible English sentences in a "
             "non-notational register"
         ),
-        "run": FOREIGN_VOICE_RUN,
+        "run": state["run"],
         "register": FOREIGN_VOICE_REGISTER,
+        "arming_rule": state["arming_rule"],
+        "reason": state["reason"],
     }
-    try:
-        run = json.loads(
-            (root / FOREIGN_VOICE_RUN).read_text(encoding="utf-8")
-        )
-        register = json.loads(
-            (root / FOREIGN_VOICE_REGISTER).read_text(encoding="utf-8")
-        )
-        verdicts = run["verdicts"]
-        c_v4 = run["c_v4"]
-        voided_class = c_v4["voided_classes"][0]
-        measured = c_v4["per_class"][voided_class]
-        blocked_total = register["blocked_total"]
-        census = register["b3_census"]
-    except (OSError, ValueError, KeyError, TypeError, IndexError) as exc:
-        row["reason"] = (
-            f"the foreign-voice surface is withheld; its record could not be "
-            f"read from {FOREIGN_VOICE_RUN} and {FOREIGN_VOICE_REGISTER} "
-            f"({type(exc).__name__}: {exc})"
-        )
-        return row
+    for field in ("verdict", "voided", "summary", "prior_run"):
+        if field in state:
+            row[field] = state[field]
 
-    row["verdict"] = verdicts["overall"]
-    row["voided_controls"] = list(verdicts["voided"])
-    row["reason"] = (
-        f"certification control voided (C-V4 {voided_class} "
-        f"{measured['rate']:.2f} vs {measured['threshold']:.2f}); the "
-        f"register of {blocked_total:,} unsayable statements ships instead; "
-        f"see {FOREIGN_VOICE_RUN}"
-    )
-    row["summary"] = verdicts["summary"]
-    row["register_id"] = register.get("register_id")
-    row["blocked_total"] = blocked_total
-    # Kept apart on the run's own instruction; see the docstring.
-    row["blocked_split"] = {
-        "registered_blocked_mathlib_head": census[
-            "registered_blocked_mathlib_head"
-        ],
-        "registered_blocked_no_row": census["registered_blocked_no_row"],
-        "reported_separately_because": run["b3"]["never_summed"],
-    }
+    # The register ships whether or not the voice does: it is the inventory
+    # of what this cycle's graph cannot say, and it is a result either way.
+    register, _error = _read_json(root / FOREIGN_VOICE_REGISTER)
+    if isinstance(register, dict):
+        census = register.get("b3_census") or {}
+        row["register_id"] = register.get("register_id")
+        row["blocked_total"] = register.get("blocked_total")
+        row["blocked_split"] = {
+            "registered_blocked_mathlib_head": census.get(
+                "registered_blocked_mathlib_head"),
+            "registered_blocked_no_row": census.get(
+                "registered_blocked_no_row"),
+            "reported_separately_because": (
+                "the two registered_blocked_* buckets are reported "
+                "separately: the first is a budget consequence the maintainer "
+                "can lift and the second is a design consequence this cycle "
+                "owns"
+            ),
+        }
     return row
 
 
