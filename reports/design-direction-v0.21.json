@@ -1,0 +1,136 @@
+{
+ "schema": "design_direction_receipt.v1",
+ "cycle": "v0.21",
+ "status": "complete",
+ "requested_utc": "2026-08-25",
+ "enforced_isolation_mode": {
+  "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/forge21 -- empty non-git dir, no project name in path",
+  "denylist": "strict-mcp-config + disallowedTools over every file/shell/network/agent/skill tool",
+  "inherited_from": "reports/design-direction-v0.20.json, reused unchanged"
+ },
+ "brief_sha256_canonical_lf": "7c00f0544d7a7240d585d9936793a6383cb309ab34e4b9550b0b40f857e46e53",
+ "brief_on_file": "reports/design-direction-v0.21-brief.txt",
+ "round_prompt_sha256_canonical_lf": {
+  "series_1": {
+   "r1": "7c00f0544d7a7240d585d9936793a6383cb309ab34e4b9550b0b40f857e46e53",
+   "r2": "1fb072676a322bdf6adf6abf3bd07ba64e02cd4950060df15c9f5bf67414893b",
+   "r3": "962adce1c70368795441a1deadec9154133ae155052ec0b4da6ffdb820e220ac"
+  },
+  "series_2": {
+   "r1": "cae8d45b3904e502472ef8b757d854fba89894c13d250e1cc6650087c95f5484",
+   "r2": "0d9195c8fe43b3e755dc64c40315af8e48f9e4c4af67608ba917213d75b557b6",
+   "r3": "c6eae21f38dc80fff5eb98b5a91869fd91d701ddb99ace4cd0976653de459639"
+  },
+  "series_3": {
+   "r1": "11de126c7d85aa2aef948e665909935db220ba54ebc4ca0b08cf7ecf01496137",
+   "r2": "18ff7c39c878f462f25ef66b2eb2ade23593f6811d1223bb25de1d7fb17b64fc",
+   "r3": "e01de9d2c532717e3fb8c5c2c21465c59e700fe2c89009bc74704a3380b2cb66"
+  },
+  "note": "series_1.r1 equals brief_sha256_canonical_lf by construction -- round one of series one IS the brief; the equality is the checkable form of that sentence"
+ },
+ "exclusion_note": "series 2 r1 excluded series 1 round-one territory (five lines); series 3 excluded both (ten lines); embedded in hashed round-1 prompts. Incumbent (DESIGN-plain-input) withheld from all round ones, disclosed at each round two per skill.",
+ "contexts": [
+  {
+   "series": 1,
+   "session_id": "52544525-864c-41c1-a7b0-b8da6703e79e",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 0.8768
+  },
+  {
+   "series": 2,
+   "session_id": "098640a8-7b8a-4da0-b16d-10bd3c61a05c",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 0.7674
+  },
+  {
+   "series": 3,
+   "session_id": "36c9436f-51ce-4616-9602-6f2940dcf03a",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 0.7634
+  }
+ ],
+ "round_one_funnel": {
+  "series_1": [
+   "FORK — enumerate all admitted readings + serve the discriminating fact",
+   "IF — checker-signed conditional reductions with typed null",
+   "WITNESS — per-statement checker-signed evaluator-agreement lemmas",
+   "SPLICE — bounded query-time derivation committing receipted answers",
+   "TRANSPLANT — second exact non-math domain port scored by core edits"
+  ],
+  "series_2": [
+   "LEDGER — the session as replayable object with binding receipts",
+   "RATCHET — archive-wide monotone-service replay + pin audit",
+   "HANDSHAKE — consumer trust contracts after offline verification",
+   "RECALL — retraction with exact blast radius (collided with twice-parked lane)",
+   "LESSON — refusals that teach; person-taught macros"
+  ],
+  "series_3": [
+   "ATLAS — total per-(statement x surface) obstruction map with witnesses",
+   "ABSENCE — snapshot-relative library-absence certificates in a closed language",
+   "DEMAND — obstruction ledger vs a question dump the program did not author",
+   "TWINS — checker-signed equivalence classes (folded to a probe-gated class)",
+   "EXHIBIT — meaning by discriminating instance (declined by its own series)"
+  ]
+ },
+ "outcomes": {
+  "series_1": {
+   "lead": "WITNESS",
+   "runner_up": "TRANSPLANT",
+   "folds": [
+    "FORK -> two probe artifacts handed to the incumbent (P1 finite bound, P2 separator expressibility)",
+    "SPLICE -> WITNESS's commit lane"
+   ],
+   "residual_risk": "obligation built from the compiler's own front-end reading of S — self-comparison one level up",
+   "preregistration_draft": {
+    "lead": "WITNESS",
+    "fragment": "quantified linear arithmetic over Z and Q (decidable)",
+    "artifact": "target_manifest (60 sealed names + 10 out-of-fragment decoys, selection-predicate hash, checker pins) + agreement_lemma records (obligation forall x in D: eval(S)(x) <-> S(x); verdict in {discharged, not_discharged, rejected_trivial}; nontriviality_witness; proof + sandbox receipts) + mutant_ledger",
+    "gate": "B1 manifest sealed first; B2 >=40/60 discharge, all 60 published; B3 50/50 seeded mutants of DISCHARGED parents rejected (49/50 voids); B4 self-comparison obligation must return rejected_trivial (one discharge voids the instrument); B5 nontriviality witness required; B6 sandbox >=1000 points per discharged evaluator, any disagreement voids the slice; B7 cold-machine replay; B8 both receipts or nothing; B9 one cycle, partials published",
+    "voiding_sentence": "If all 60 targets discharge and all 50 mutants are rejected on first attempt, or if any decoy discharges, the run is void and reports an instrument failure, not a capability",
+    "residual_risk": "the obligation is built from the compiler's own front-end reading of S -- a uniform front-end misreading survives every clause; only an independent re-reading (second front-end or human transcription) prices it, and that is not in the slice"
+   }
+  },
+  "series_2": {
+   "lead": "LEDGER",
+   "runner_up": "RATCHET",
+   "folds": [
+    "RECALL -> back into the parked withdrawal lane, donating the exactness clause (over-broad impact set counts as failure)",
+    "HANDSHAKE -> RATCHET, its refusal-receipt clause to LEDGER",
+    "LESSON -> GRAFT: under the round-two constraints LESSON's human-teaching arm (which needs strangers) was cut and its stranger-free half -- person-taught macros over the registered grammar, reserved namespace, verified before serving -- survived renamed GRAFT; the transformation is this line"
+   ],
+   "residual_risk": "cited-but-inert bindings — byte echo without semantic dependence",
+   "round_one_quote": "LEDGER round one, verbatim: 'A conditional answer's condition lives in the person's head, not in any artifact; there is no object called the session, so nothing about continuity can go red.' Recorded because the incumbent (withheld until round two) documents the same gap; the convergence is the adjudication's evidence."
+  },
+  "series_3": {
+   "lead": "ATLAS",
+   "runner_up": "DEMAND",
+   "folds": [
+    "TWINS -> ATLAS probe-gated class (500-pair probe; <10 hits collapses it to duplicate-of and the near-zero is the result)",
+    "EXHIBIT declined in writing: rides the voided layer; revival condition = a non-void conformance instrument ships first"
+   ],
+   "residual_risk": "first-blocker bias — cells record the first cause a surface tripped on; stacked obstructions under-reported"
+  }
+ },
+ "selection": {
+  "selected": "docs/DESIGN-session-ledger.md — the incumbent DESIGN-plain-input ADOPTED and completed by series 2's LEDGER (the session as the first-class object plain conversation was missing)",
+  "incumbent_adjudication": "ADOPTED -- explicit, per ROADMAP-v0.20 section 5's silence-is-not-a-disposition clause. Evidence carried in this receipt: series 1 folded its prose-ambiguity direction into two probe artifacts FOR the incumbent (P1 finite bound, P2 separator expressibility), and series 2's round-one quote (outcomes.series_2.round_one_quote) names the incumbent's recorded state gap before the incumbent was disclosed.",
+  "adopted_second": "WITNESS -> next roadmap item 2 (the conformance void's claim-kind successor); its preregistration draft is recorded ABOVE in outcomes.series_1.preregistration_draft; its compact design lands before its slice",
+  "declined_with_lessons": {
+   "ATLAS": "parked as named instrument probe (respecting the instrument-headline counsel); its TWINS 500-pair probe listed standalone",
+   "DEMAND": "parked as named probe with its license/pin rule (static CC BY-SA question dump, titles only, digest-pinned, drawing rule committed before decompression)",
+   "ABSENCE": "parked behind DEMAND (let demand aim it)",
+   "RATCHET": "parked; its pin audit named as a cheap rider any cycle can run",
+   "GRAFT": "parked (macros over registered grammar, reserved namespace); the teaching lane's stateless half",
+   "IF": "parked; build the anti-triviality predicate first when its turn comes",
+   "TRANSPLANT": "parked with the one-week core-edit probe recorded",
+   "RECALL_clause": "appended to the withdrawal park's trigger: an over-broad impact set counts as failure, not caution"
+  }
+ },
+ "total_cost_usd": 2.4076
+}
