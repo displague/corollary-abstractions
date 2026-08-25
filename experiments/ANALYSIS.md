@@ -5225,3 +5225,78 @@ the first time that has been measured.
 
 **Consequence:** the full TWO RIGHTS direction parks with an empty
 mathematical denominator.
+
+---
+
+# v0.20 — the foreign voice completed (`experiments/foreign_voice_rate2.json`)
+
+**Registered run, 2026-08-25.** Canonical grouping, C-V4′, C-G1, C-V3′.
+Governing design: `docs/DESIGN-voice-completion.md`. Prereg:
+`experiments/foreign_voice_prereg2.json` (24 frozen digests, all revalidated
+before anything was measured).
+
+**Artifact digest (LF sha256):**
+`acb01a5f42c7bcdd5000aa9ca8e47981310fb955892907cef2d25ef4dfceeeca`,
+6,741,627 bytes.
+
+## The reading
+
+**OVERALL FIRES.** B1 is **2,313 of 2,313 covered statements, holding 2,176
+distinct elaborated terms, of which 99.9% is `lean_workbook.ground.v1`** —
+the composition sentence travels with every quotation of that rate, all three
+parts. B3 closes exactly at the current mute total: `0 + 2,313 + 0 + 1,706 +
+172 = 4,191`.
+
+**C-G1 cleared both floors.** The aggregate moved from v0.19's 0.80 to
+**1.00** (42/42, floor 0.95), and the ten blind cases named by id *before the
+canonical renderer existed* are **10 of 10 cleared** — seven detected, three
+no-longer-admitting because canonicalization left them with no grouping pair
+at all.
+
+**C-V4′ holds in every voiding class**, and the point prediction was wrong in
+the way that proves the restored C-R2 clause was worth restoring. It was
+pre-registered at "45 of 50 — exactly v0.19's reading". Measured: **45
+detected of 45 scored**, because the clause **discarded five**. The numerator
+held exactly; the five that left the denominator are precisely the mutations
+whose term never changed. `drop_ascription` read 0.90 in v0.19 not because
+the gate missed five near-misses but because five of its "mutations" were not
+mutations.
+
+**C-V3′ (MACHINE-reader) VOID**: served 0.8417, skeleton 0.5000, ratio 0.594
+against the inherited 0.5 threshold. It does not stop the cycle; the
+machine-reader claim is simply not made. **C-V3 (human) stays ABSENT** and
+the human-reader claim stays not-made.
+
+## Provenance of the run itself — three executions, one reading
+
+Recorded here rather than in the scored artifact, because the artifact's
+**byte-identity is now the proof** and adding a note to it would destroy the
+thing being proved.
+
+1. **First attempt — REFUSED before scoring.** Its own guard fired:
+   *"B0a recomputed differently; the denominator moved."* It wrote nothing.
+   The cause was real and is a finding in its own right: commit `b1c9440` had
+   already widened `TOKEN_RE` so `≥` and `≤` read natively — v0.19 §5's item
+   3a, which that section ordered to land *after* v0.19's run, and which did.
+   `match_signatures.py` is `f5b2abba…`, not v0.19's `65fead2f…`. The
+   prereg's frozen row for it carried the **correct digest beside a false
+   sentence** ("Still 65fead2f…"), which only a human reads and no machine
+   compares. Fixed, dated, and the artifacts regenerated under the current
+   parser — with the residue verified to be the same 4,191 statement ids, the
+   eligible set the same 2,319, and **zero of 4,191 per-statement records
+   differing**.
+2. **Second attempt — executed TWICE, concurrently, by my error.** I read an
+   empty log and a missing artifact as evidence the first launch had died and
+   relaunched over it. The runner writes nothing until both passes finish —
+   the property I built into it — so absence of output was the expected
+   mid-run state, not a death. Both completed and both wrote identical bytes.
+3. **Third execution — the clean registered one.** Single process, nothing
+   else running, waited on directly. It reproduced the committed artifact
+   **byte for byte**: same 6,741,627 bytes, same `acb01a5f…`, and `git
+   status` reported no change to the working tree.
+
+**All scoring executions were byte-identical.** That is a stronger statement
+than B5's own gate, which compares two passes *inside* one process: this
+compares across three separate process invocations, on two different days,
+and gets the same file. The reading was never in doubt; the discipline was,
+and "executed once" was the instruction.
