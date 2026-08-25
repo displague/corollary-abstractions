@@ -258,11 +258,13 @@
     {
       "path": "scripts/machine_reader.py",
       "role": "c_v3_prime_reader",
-      "sha256_lf": "bed9229e90d32cf661c61c8aa4aec27b972608c719c3ef90dbd312b85c7a9768",
+      "sha256_lf": "6a74451baaabb59b6c122472512a8804e52f5f1d4aa649377bc8a5d43f8d13fe",
       "recorded": "2026-08-25",
       "why": [
-        "C-V3′'s reader. Its weights-digest refusal is BUILT here, not inherited: weights_blob_sha256 appears once in the whole tree and nothing read it at run time. The blob's BYTES are hashed, not its filename trusted."
-      ]
+        "C-V3′'s reader. Its weights-digest refusal is BUILT here, not inherited: weights_blob_sha256 appears once in the whole tree and nothing read it at run time. The blob's BYTES are hashed, not its filename trusted.",
+        "The grader change: it had scanned for the first A-D character anywhere in a reply, so 'I am not sure' graded as A — a refusal counted as a guess. A reply is now an answer only if it IS a letter. The pilot's answers were all bare letters, so no pilot number moved, and the arm ran under the tightened grader."
+      ],
+      "re_recorded": "2026-08-25 — the grader was tightened and the --full arm mode added AFTER the first freeze and BEFORE the arm ran. B7's revalidation is what caught the stale digest."
     },
     {
       "path": "scripts/match_signatures.py",
@@ -272,6 +274,15 @@
       "why": "B7's freeze list, inherited unchanged. Still 65fead2f… — the byte-frozen parser this cycle does not touch and which lives in another lane's scope entirely."
     },
     {
+      "path": "scripts/measure_foreign_voice2.py",
+      "role": "registered_run",
+      "sha256_lf": "8f36250f62289b4e9c6fc070020dd58b1d9eb1e22f3a3429bf371c4c4382452a",
+      "recorded": "2026-08-25",
+      "why": [
+        "The fresh run. It refuses to publish unless every digest here revalidates."
+      ]
+    },
+    {
       "path": "scripts/numeral_words.py",
       "role": "numeral_pair",
       "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
@@ -279,14 +290,7 @@
       "why": "The registered pair, unchanged. L2 is defined against its vocabulary and the two numeral refusal classes are consequences of its registered domain."
     }
   ],
-  "pending": [
-    {
-      "path": "scripts/measure_foreign_voice2.py",
-      "role": "registered_run",
-      "sha256_lf": "pending",
-      "why": "The fresh run. Frozen when it lands, and it refuses to publish unless every digest here revalidates."
-    }
-  ],
+  "pending": [],
   "c_v3_human_still_absent": {
     "control": "C-V3 (human) — the determinacy sheet",
     "status": "ABSENT",
