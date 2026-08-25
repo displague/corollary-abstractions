@@ -52,13 +52,14 @@
     {
       "path": "data/foreign_voice/b0d_sealed_renderings.json",
       "role": "b0d_sealed_prediction",
-      "sha256_lf": "72d620eceb234ef4cfcb0fc9a0dbab1aeeecc2be6a289924862066cd85b72e4b",
+      "sha256_lf": "7442f193dbd03594e2f0bb6943521c35a48a131d8933a17bf31ec271e7fb7a90",
       "recorded": "2026-08-24",
       "why": [
         "The 100 hand-renderings, committed verbatim as the sealed prediction scripts/foreign_voice.py must later reproduce BYTE-IDENTICALLY, with every divergence reported in the run artifact and never repaired.",
         "Authored against R(s) rather than against the corpus source, because with autoImplicit off the surface must carry an explicit binder preamble (Correction 3), so the sentence a reader sees is the sentence for the statement under the declared interpretation.",
         "What was mechanically checked is stated in the file rather than implied: every word of every surface traces to a lexicon row or the registered numeral pair (v0.18's R2 sweep). The TOKEN SEQUENCE was not mechanically checked, because checking it means writing the literal inverse and the inverse is the implementation. Divergences at B0d time may therefore be authoring slips as well as grammar disagreements, and the run artifact must classify them rather than count them."
-      ]
+      ],
+      "re_recorded": "2026-08-25, v0.20 correction 1 — the dated re-seal of the 15 whose bracketing moved; 85 unchanged"
     },
     {
       "path": "data/foreign_voice/eligibility_preview.json",
@@ -72,11 +73,22 @@
       "re_recorded": "2026-08-24, re-recorded by correction 3 (eight rows moved when the four predicate heads were frozen)"
     },
     {
+      "path": "data/foreign_voice/grouping.json",
+      "role": "grouping_rule",
+      "sha256_lf": "3cdd7db805f741aab058d0aea9817e5228538416b496feb4666ce4c2a3a2815c",
+      "recorded": "2026-08-25",
+      "why": [
+        "The canonical grouping rule of DESIGN-voice-completion §3.1, frozen and digested BEFORE the renderer changed. It joins rule R and the lexicon as a TRUSTED, REVIEWED artifact whose correctness is carried by review and not by an independent check.",
+        "Every precedence and associativity in it was MEASURED against the pinned binary before the file was written, by elaborating `a OP1 b OP2 c` against its two bracketings and comparing serialized Expr digests. The table is what the toolchain does.",
+        "The independent check remains the pinned binary, which has never seen this file, rule R or the lexicon."
+      ]
+    },
+    {
       "path": "data/foreign_voice/lexicon.json",
       "role": "lexicon_and_inverse_table",
-      "sha256_lf": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+      "sha256_lf": "400c9f62058d33eee2ae27aa8be4110a0fbdc35838019d95ef8615ec8eab4c1b",
       "recorded": "2026-08-24",
-      "re_recorded": "2026-08-24, correction 1 below (the `>=` / `<=` rows)",
+      "re_recorded": "2026-08-25, v0.20 correction 1 — the canonical grouping amendment (v0.20 correction 1); no row, phrase or token moved",
       "why": [
         "B7's `the lexicon digest` AND `the inverse-table digest` — see `there_is_no_separate_inverse_table` above. This is also the digest B0d's id-selection rule is seeded from, and it is frozen in THIS commit, before the 100 hand-renderings exist, which is the three-line separation the design's review required."
       ]
@@ -84,13 +96,13 @@
     {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",
-      "sha256_lf": "5166f8013691ae59b12726ab5001865a445c7a4b892ad7cd08d0738401ce70e2",
+      "sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
       "recorded": "2026-08-24, promoted from `pending` when B4 landed",
       "why": [
         "B4: committed with its blocked_set_digest BEFORE scripts/foreign_voice.py renders anything. Seven entries, 1,878 statements registered exhaustively by id, each entry carrying its own blocked_statement_set_digest, its surface witness with what the oracle actually said, its per-corpus split, and its revisit trigger.",
         "A post-freeze entry is permitted only as a dated amendment commit that RE-RUNS B1 FROM SCRATCH. An amendment chased after reading B1 is §8's stop condition."
       ],
-      "re_recorded": "2026-08-24, re-recorded by corrections 3 and 8"
+      "re_recorded": "2026-08-25, v0.20 correction 1 — re-frozen against the amended lexicon; G4 verified the entry set and all five B3 buckets byte-identical"
     },
     {
       "path": "data/foreign_voice/rule_r.json",
@@ -101,6 +113,26 @@
         "B7's `rule R's digest`. R is a trusted, reviewed artifact applied IDENTICALLY to both sides of the identity relation; extending it is a diff with tests and a re-run. Frozen before the lexicon's hand-renderings and before the serializer exist, which is §5's ordering."
       ],
       "re_recorded": "2026-08-24, re-recorded by correction 3 (H3: Even/Odd/Prime/Irrational frozen)"
+    },
+    {
+      "path": "experiments/grouping_agreement.json",
+      "role": "g1_and_g1b",
+      "sha256_lf": "d3d0215b7992dd2c3366850aea440d9a11bf8c1e5c6f95d437b8c8ab4fcab812",
+      "recorded": "2026-08-25",
+      "why": [
+        "G1: 2,313 of 2,313 statements agree — R(s) and canon(R(s)) elaborate to byte-identical serializations. No allowance; one disagreement would mean grouping.json states a precedence the toolchain does not use.",
+        "G1b: 5,228 of 5,228 canonical grouping pairs detected when deleted, zero blind. This is what demotes C-V4′'s drop_group to a confirmation — a 50-statement sample cannot establish what a 5,228-pair census establishes, and the design says in advance that the census governs."
+      ]
+    },
+    {
+      "path": "experiments/grouping_census.json",
+      "role": "g0_probe",
+      "sha256_lf": "62694b54468548d675d77bc64f6acc9393ede81371acee38fc6fea43947286a3",
+      "recorded": "2026-08-25",
+      "why": [
+        "G0, the ROADMAP §3 probe, published BEFORE the bracketing rule was proposed. No floor — a probe with a floor is an item, and its ordering is the gate.",
+        "Its exposure counts are labelled exposure, not readability: they say how much surface changes and nothing about whether the change helps a reader. Only C-V3 could say that, and it is ABSENT."
+      ]
     },
     {
       "path": "prover/lean/normalizer/Serialize.lean",
@@ -220,6 +252,16 @@
       ]
     },
     {
+      "path": "scripts/grouping_canonical_probe.py",
+      "role": "canonicalizer",
+      "sha256_lf": "b097ae66890b30a2af3394a3927e0512d8a0aed9addfdad8cd540b5c62f41b9b",
+      "recorded": "2026-08-25",
+      "why": [
+        "G-P's deliverable: the precedence-aware parser and canonical re-emitter Correction 1 shows the v0.19 renderer never had. It is the design's own §6 evidence promoted into the tree, so the numbers in that section became this code's first test rather than a claim nobody could re-run.",
+        "UNTRUSTED and measured: G1 checks its agreement with the pinned parser over all 2,313 covered statements, and G1b checks the completeness of its no-redundant-bracket claim over all 5,228 surviving pairs."
+      ]
+    },
+    {
       "path": "scripts/match_signatures.py",
       "role": "parser",
       "sha256_lf": "65fead2f47b6a2cea068cf2ee76db89e6e1bf0fcc7ab57220cdac328be05b599",
@@ -250,6 +292,15 @@
         "It has NOT been run. Phase 2 was scoped to stop at the run boundary, and executing it requires `--perform-the-registered-run` — a long flag on purpose, because the registered run is a once-only act and a runner that executes by typing its name can spend the one run on a rehearsal."
       ],
       "re_recorded": "2026-08-24, correction 12 (C-V1's failure-mode split and the per-gate verdicts block)"
+    },
+    {
+      "path": "scripts/measure_grouping_agreement.py",
+      "role": "g1_g1b_harness",
+      "sha256_lf": "fd1cee446ee31b87d19b7ec725ba2554b0745e96128ac0360606765e621770fd",
+      "recorded": "2026-08-25",
+      "why": [
+        "Frozen because the two prerequisites it measures are the ones a miss stops the cycle on."
+      ]
     },
     {
       "path": "scripts/numeral_words.py",
@@ -494,6 +545,47 @@
         "The verdicts block exists so the adjudication lives in the artifact rather than in whoever writes the release. A run that reports numbers and leaves FIRES/MISSES/VOID to prose is a run whose verdict can drift from its data. It also encodes the precedence: a VOID control outranks a cleared B1 floor, because a voided control voids the reading it gates.",
         "Both gaps were found by reading the reporting requirements against the runner, before any number existed. The first attempt at the run was stopped with an empty log and no artifact."
       ]
+    },
+    {
+      "dated": "2026-08-25",
+      "finding": "v0.20 correction 1 — DESIGN-voice-completion's canonical grouping",
+      "artifact": "data/foreign_voice/lexicon.json, register.json, b0d_sealed_renderings.json",
+      "what": "Three frozen digests move. The live values above are updated and the v0.19 values are recorded here.",
+      "digests_retired": [
+        {
+          "path": "data/foreign_voice/lexicon.json",
+          "v019_sha256_lf": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+          "v020_sha256_lf": "400c9f62058d33eee2ae27aa8be4110a0fbdc35838019d95ef8615ec8eab4c1b",
+          "why": "the canonical grouping amendment (v0.20 correction 1); no row, phrase or token moved"
+        },
+        {
+          "path": "data/foreign_voice/register.json",
+          "v019_sha256_lf": "5166f8013691ae59b12726ab5001865a445c7a4b892ad7cd08d0738401ce70e2",
+          "v020_sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
+          "why": "re-frozen against the amended lexicon; G4 verified the entry set and all five B3 buckets byte-identical"
+        },
+        {
+          "path": "data/foreign_voice/b0d_sealed_renderings.json",
+          "v019_sha256_lf": "72d620eceb234ef4cfcb0fc9a0dbab1aeeecc2be6a289924862066cd85b72e4b",
+          "v020_sha256_lf": "7442f193dbd03594e2f0bb6943521c35a48a131d8933a17bf31ec271e7fb7a90",
+          "why": "the dated re-seal of the 15 whose bracketing moved; 85 unchanged"
+        }
+      ],
+      "why": [
+        "v0.19 fired every gate and voided on C-V4.drop_group at 0.80 against a 0.90 floor: deleting a semantically redundant bracket changes the sentence and not the term. DESIGN-voice-completion repairs it structurally — the renderer emits a grouping word only where precedence demands one — and that changes the emitted grammar, so the lexicon's reading rule, the register's lexicon digest and the sealed hundred's affected 15 all move with it.",
+        "The measurement that justified the move was taken BEFORE it: G1 (2,313/2,313 agreement) and G1b (5,228/5,228 detected, zero blind) are both in the tree and both were measured against the pinned binary, which has never seen any of these files."
+      ],
+      "nothing_historical_is_lost": [
+        "experiments/foreign_voice_rate.json's `prereg_revalidated` block preserves all 22 digests AS THE v0.19 RUN MEASURED THEM, permanently and untouched. That artifact is the record of what was measured; this file is the record of what the artifacts currently are.",
+        "v0.19's numbers are not restated anywhere. foreign_voice_rate.json stays committed as it read, VOID and all, and the fresh run's rate will be a different number over a different grammar."
+      ],
+      "what_did_not_move": [
+        "scripts/match_signatures.py — still 65fead2f…, the byte-frozen parser, untouched by this cycle and in another lane's scope entirely.",
+        "data/foreign_voice/rule_r.json — the declared interpretation is unchanged; canonical grouping is a rendering rule, not an interpretation.",
+        "The lexicon's rows: every section (binders, connectives, relations, operators, types, structural, slot_marker, refusals, refusal_reasons) is byte-identical. Only `reading_rules` prose changed.",
+        "The register's entry set, blocked_set_digest and all five B3 buckets — G4's floor, verified."
+      ],
+      "not_a_b7_event": "B7 is a claim about the parser and the interpretation. Both are byte-unchanged, and neither moved to make an oracle agree."
     }
   ],
   "amendments": [

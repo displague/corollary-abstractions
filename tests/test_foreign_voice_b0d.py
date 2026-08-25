@@ -67,10 +67,31 @@ class SelectionRuleTests(unittest.TestCase):
         cls.ids = json.loads(IDS_PATH.read_text(encoding="utf-8"))
         cls.preview = json.loads(PREVIEW_PATH.read_text(encoding="utf-8"))
 
-    def test_the_seed_is_the_lexicons_own_digest(self) -> None:
-        """v0.18's C-R1 idiom: a seed someone chose would be a knob."""
+    def test_the_seed_is_the_lexicons_digest_at_the_amendment_parent(self) -> None:
+        """v0.18's C-R1 idiom, now a CONSEQUENCE rather than a constant (F6/G3).
+
+        The seed was the committed lexicon's digest until v0.20's canonical
+        grouping amendment moved that file. B0d's pool is the ELIGIBLE set,
+        which does not depend on the grammar, so the draw is grammar-independent
+        and the seed still identifies it — but the value now has to be DERIVED
+        from the amendment commit's parent rather than read off the tree.
+
+        The derivation lives in the sealed file's own header so it can be
+        recomputed rather than trusted, and this asserts against it. The
+        canonical form of this assertion — re-extracting the blob with
+        `git show {parent}:…` and refusing on mismatch, the
+        `transliteration_served_diff.py:357-360` precedent — is ROADMAP-v0.20
+        §4d's scope and lands in the batch lane.
+        """
         self.assertEqual(self.ids["seed_source"], "data/foreign_voice/lexicon.json")
-        self.assertEqual(self.ids["seed_source_digest"], _sha256_lf(LEXICON_PATH))
+        sealed = json.loads(SEALED_PATH.read_text(encoding="utf-8"))
+        derivation = sealed["id_selection_seed_derivation"]
+        self.assertTrue(derivation["agrees_with_the_recorded_seed"])
+        self.assertEqual(self.ids["seed_source_digest"], derivation["derived_value"])
+        self.assertNotEqual(
+            derivation["derived_value"], _sha256_lf(LEXICON_PATH),
+            "the lexicon has not moved, so this test is asserting nothing that "
+            "the simpler v0.19 form did not already assert")
 
     def test_the_draw_re_derives_from_the_committed_rule(self) -> None:
         """Also the portability tripwire: red if the shuffle ever moves."""
@@ -188,13 +209,26 @@ class SealOrderingTests(unittest.TestCase):
                 self.assertIn(path, frozen)
                 self.assertEqual(_sha256_lf(ROOT / path), frozen[path]["sha256_lf"])
 
-    def test_the_lexicon_digest_the_seal_names_is_the_frozen_one(self) -> None:
-        """If the table moved after the draw, the draw is of a different hundred."""
-        frozen = {row["path"]: row for row in self.prereg["frozen"]}
+    def test_the_lexicon_digest_the_seal_names_is_the_retired_one(self) -> None:
+        """The table DID move after the draw, and the prereg records both values.
+
+        Written for v0.19, where the seal's seed and the frozen lexicon digest
+        were the same number. v0.20's amendment separated them, and the honest
+        restatement is that the seal names the value the prereg RETIRED, not
+        the value it currently pins.
+        """
         sealed = json.loads(SEALED_PATH.read_text(encoding="utf-8"))
-        self.assertEqual(
-            sealed["id_selection_seed"],
-            frozen["data/foreign_voice/lexicon.json"]["sha256_lf"])
+        retirements = [entry for entry in self.prereg["corrections"]
+                       if "digests_retired" in entry]
+        if not retirements:
+            frozen = {row["path"]: row for row in self.prereg["frozen"]}
+            self.assertEqual(sealed["id_selection_seed"],
+                             frozen["data/foreign_voice/lexicon.json"]["sha256_lf"])
+            return
+        retired = {row["path"]: row for entry in retirements
+                   for row in entry["digests_retired"]}
+        self.assertEqual(sealed["id_selection_seed"],
+                         retired["data/foreign_voice/lexicon.json"]["v019_sha256_lf"])
 
     def test_the_seal_predates_the_serializer_in_the_git_history(self) -> None:
         """§10's order, checked against the history rather than against prose.

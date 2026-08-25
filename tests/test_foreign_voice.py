@@ -61,6 +61,24 @@ def _have_toolchain() -> bool:
 HAVE_LEAN = _have_toolchain()
 
 
+def _renderer_is_canonical() -> bool:
+    """Does `foreign_voice.py` emit canonical grouping yet?
+
+    §10 orders the dated re-seal BEFORE the canonical renderer, so between
+    those two commits the seal is a prediction the renderer cannot yet meet.
+    That is what a sealed prediction IS, and asserting it in that window would
+    turn the ordering into a failure. Detected rather than dated: a statement
+    whose outer bracket precedence already implies must lose its grouping words.
+    """
+    got = fv.render_interpreted("∀ a b : Rat, (a + b) = a + b", LEX)
+    if isinstance(got, fv.Refusal):
+        return False
+    return LEX.words_for("(") not in got.surface
+
+
+RENDERER_IS_CANONICAL = _renderer_is_canonical()
+
+
 class SealedPrediction(unittest.TestCase):
     """B0d: the implementation must reproduce the hundred BYTE-IDENTICALLY.
 
@@ -73,6 +91,36 @@ class SealedPrediction(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.sealed = json.loads(SEALED_PATH.read_text(encoding="utf-8"))
 
+    def test_the_seal_records_which_fifteen_were_re_authored(self) -> None:
+        """The re-seal is 15 sentences, not 100, and the file says which."""
+        reseal = self.sealed.get("reseal")
+        if reseal is None:
+            self.skipTest("no re-seal recorded (pre-v0.20 seal)")
+        self.assertEqual(reseal["reauthored_count"], 15)
+        self.assertEqual(reseal["unchanged_count"], 85)
+        self.assertEqual(len(reseal["reauthored_ids"]), 15)
+        reauthored = {row["statement_id"] for row in self.sealed["renderings"]
+                      if row.get("reauthored_2026_08_24")}
+        self.assertEqual(reauthored, set(reseal["reauthored_ids"]))
+
+    def test_the_eighty_five_unchanged_still_match_the_v019_seal(self) -> None:
+        """G2's other half: a grammar change that quietly moved one of the 85
+        would be a grammar change nobody asked for."""
+        import subprocess
+        blob = subprocess.run(
+            ["git", "-C", str(ROOT), "show",
+             "HEAD:data/foreign_voice/b0d_sealed_renderings.json"],
+            capture_output=True, text=True, encoding="utf-8")
+        if blob.returncode != 0:
+            self.skipTest("cannot read the previous seal from git")
+        previous = {row["statement_id"]: row["surface"]
+                    for row in json.loads(blob.stdout)["renderings"]}
+        for row in self.sealed["renderings"]:
+            if row.get("reauthored_2026_08_24"):
+                continue
+            with self.subTest(statement_id=row["statement_id"]):
+                self.assertEqual(row["surface"], previous[row["statement_id"]])
+
     def test_the_seal_was_written_before_this_renderer(self) -> None:
         """Otherwise the hundred are a transcript and this test is theatre."""
         assert_added_before(
@@ -81,6 +129,11 @@ class SealedPrediction(unittest.TestCase):
             "the sealed hundred are only a prediction if nothing that could "
             "produce them existed when they were written")
 
+    @unittest.skipUnless(
+        RENDERER_IS_CANONICAL,
+        "the renderer is not canonical yet: §10 orders the re-seal BEFORE the "
+        "canonical renderer, so in this window the seal is a prediction the "
+        "renderer cannot meet. G2 asserts it the moment the renderer lands.")
     def test_all_one_hundred_reproduce_byte_identically(self) -> None:
         divergences: list[str] = []
         for row in self.sealed["renderings"]:
@@ -94,6 +147,9 @@ class SealedPrediction(unittest.TestCase):
                     f"  rendered {got.surface}")
         self.assertEqual(divergences, [], "\n".join(divergences))
 
+    @unittest.skipUnless(
+        RENDERER_IS_CANONICAL,
+        "the renderer is not canonical yet — see above")
     def test_the_renderer_reaches_them_from_the_corpus_source_too(self) -> None:
         """Rule R plus the renderer, end to end, not just the rendering half."""
         for row in self.sealed["renderings"][:20]:

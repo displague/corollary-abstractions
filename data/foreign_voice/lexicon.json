@@ -1,9 +1,542 @@
 {
-  "lexicon_id": "foreign_voice.lexicon.v1",
-  "registered": "2026-08-24",
+  "binders": {
+    "∀": "for every",
+    "∃": "for some"
+  },
+  "connectives": {
+    "¬": "it fails that",
+    "→": "implies that",
+    "↔": "exactly when",
+    "∧": "and also",
+    "∨": "or else"
+  },
+  "corrections": [
+    {
+      "dated": "2026-08-24",
+      "found_by": "the B0d authoring pass, before any hand-rendering was written",
+      "what": "Added the `>=` and `<=` rows and the `operator_runs` inventory. The lexicon digest is re-recorded in experiments/foreign_voice_prereg.json with a dated correction; rule R and the frozen parser are byte-unchanged.",
+      "why": [
+        "The first version of this file had rows for `≥` and `≤` and none for the",
+        "ASCII spellings `>=` and `<=`, which the residue also carries -- 55",
+        "statements and 13 statements of the eligible set respectively.",
+        "The constructive coverage check did not catch it because the check was",
+        "at the CHARACTER level: `>` is a row and `=` is a row, so `>=` reports",
+        "no leftover character while the renderer would say `is greater than",
+        "equals` and the inverse would hand the pinned binary `> =`. That is the",
+        "same shape as v0.18's commit 8910138 -- a fluent sentence that re-reads",
+        "as something else -- arriving through a check that looked at the wrong",
+        "granularity rather than through a missing check.",
+        "Corrected in the table AND in the check: `operator_runs` pins every",
+        "maximal operator run in the eligible set, so coverage is now asserted",
+        "over tokens.",
+        "Recorded here and dated rather than folded into the preregistration",
+        "commit, because a silently-fixed prereg artifact is worth less than a",
+        "dated one (v0.18's own rule, imported).",
+        "Consequence for B0d, stated because it matters: the id-selection rule is",
+        "seeded from THIS file's digest, so the correction moves the hundred",
+        "drawn statements. The draw had not been taken when the correction",
+        "landed, and the sealed renderings are authored against the corrected",
+        "draw. A correction taken AFTER a draw would need the draw re-taken and",
+        "both recorded."
+      ]
+    },
+    {
+      "artifact": "data/foreign_voice/lexicon.json (`reading_rules`)",
+      "dated": "2026-08-24",
+      "finding": "DESIGN-voice-completion Correction 4, and the v0.19 void it repairs",
+      "not_a_b7_event": "scripts/match_signatures.py and data/foreign_voice/rule_r.json are byte-unchanged. The lexicon is a TRUSTED artifact whose correctness is carried by review, and this is a reviewed diff with tests -- the same standing the v0.19 `>=` / `<=` correction had. It moved because the grammar it describes moved, not to make an oracle agree: G1 and G1b were both measured before it moved.",
+      "what": "The precedence reading rule is replaced: rendering is now CANONICAL rather than carried, per data/foreign_voice/grouping.json. No row, phrase or token changes -- the table itself is byte-identical in every section.",
+      "what_this_costs_and_who_pays_it": [
+        "The emitted grammar changes, so EVERY covered surface is regenerated -- 435 of 2,313 actually move.",
+        "B0d's sealed hundred move with them: 15 of the 100 change and 85 stay byte-identical. Those 15 are re-authored by hand and re-sealed in a dated amendment; the other 85 must still match the v0.19 seal, and G2 asserts both halves.",
+        "This file's digest moves, which moves every seeded sample in the cycle. B0d's pool is grammar-independent so its seed pin survives -- recorded as a PARENT-COMMIT-DERIVED CONSEQUENCE rather than a transcribed constant. C-V4's three grammar-dependent pools do not survive, and the drawn id lists are pinned instead (cv4_replay_ids.json)."
+      ],
+      "why": [
+        "v0.19 fired every gate and voided on C-V4.drop_group at 0.80 against a 0.90 floor, for one mechanical reason: deleting a semantically redundant bracket changes the sentence and not the term. The carried-precedence rule is what made those redundant brackets constructible.",
+        "A measured bound is adequate for a number in an artifact and inadequate for a SERVED surface. Once the line is wired a reader is handed one sentence with no way to know a differently-bracketed one would have certified identically, and the bound lives in a file they are not reading.",
+        "So the repair is structural elimination, not a tighter bound. G1b tested every one of the 5,228 surviving canonical grouping pairs by deleting it: 5,228 detected, zero blind."
+      ]
+    }
+  ],
+  "coverage": {
+    "constructive_check": [
+      "Every one of the 2,319 oracle-eligible statements was tokenized under R",
+      "with exactly this table's tokens, longest first, the identifier grammar of",
+      "rule_r.json and the registered numeral pair. Leftover: ONE construct -- the",
+      "coercion arrow, 7 runs across 4 statements, which has a refusal row above.",
+      "Nothing else in the eligible set is outside this table.",
+      "This is the whole-table check v0.18's `head_coverage` block does for the",
+      "realization lexicon, done constructively rather than by head census,",
+      "because this dialect's vocabulary is closed and small enough to enumerate",
+      "exhaustively.",
+      "`operator_runs` below is the second half of that check and the half the",
+      "first version of this file did not have. A character-level sweep reports",
+      "no leftover for `>=` -- because `>` and `=` are BOTH rows -- while the",
+      "renderer would emit `is greater than equals` and the inverse would hand",
+      "the pinned binary `> =`, which is not a term at all. The runs are",
+      "enumerated so the check is about TOKENS rather than characters."
+    ],
+    "constructor_occurrences": {
+      "%": 3,
+      "(": 6069,
+      ")": 6069,
+      "*": 7974,
+      "+": 10041,
+      ",": 2367,
+      "-": 2575,
+      "/": 3096,
+      ":": 2561,
+      "<": 339,
+      "=": 2518,
+      ">": 834,
+      "^": 6982,
+      "¬": 95,
+      "→": 688,
+      "↔": 363,
+      "∀": 2184,
+      "∃": 183,
+      "∧": 2062,
+      "∨": 280,
+      "≠": 42,
+      "≤": 950,
+      "≥": 1134
+    },
+    "constructor_statements": {
+      "%": 2,
+      "(": 1551,
+      "*": 1658,
+      "+": 1876,
+      ",": 2258,
+      "-": 965,
+      "/": 980,
+      ":": 2291,
+      "<": 188,
+      "=": 1132,
+      ">": 331,
+      "^": 1461,
+      "¬": 95,
+      "→": 656,
+      "↔": 363,
+      "∀": 2168,
+      "∃": 174,
+      "∧": 1066,
+      "∨": 168,
+      "≠": 26,
+      "≤": 577,
+      "≥": 772
+    },
+    "denominator": {
+      "corpus_nodes": 12777,
+      "foreign_residue": 4191,
+      "mute": 10605,
+      "oracle_eligible": 2319,
+      "parseable_v018": 2172,
+      "transliterable": 6414
+    },
+    "identifiers": {
+      "distinct_in_eligible_set": 86,
+      "max_distinct_in_one_statement": 16,
+      "note": "All opaque variable names, all erased to `variable <index>` by the slot marker; none of them needs a row."
+    },
+    "measured": "2026-08-24, against the committed tree",
+    "numerals": {
+      "decimals": 34,
+      "distinct_literals": 287,
+      "noncanonical_spelling": 1,
+      "note": [
+        "One lean_workbook statement carries a 433-digit integer, which is outside",
+        "scripts/numeral_words' registered domain (abs < 10^15) and refuses as",
+        "`unsupported_numeral`. One carries the literals `23.50` and `39.50`,",
+        "whose canonical decimal spellings are `23.5` and `39.5`; the numeral",
+        "pair is exact rather than approximately exact, so it cannot reproduce a",
+        "trailing zero, and `23.50` and `23.5` are DIFFERENT `OfScientific`",
+        "terms to the elaborator. That statement refuses as",
+        "`noncanonical_numeral` rather than round-tripping to a term the corpus",
+        "did not write. Both are register entries."
+      ],
+      "outside_registered_domain": 1
+    },
+    "operator_runs": [
+      [
+        "%",
+        3,
+        2
+      ],
+      [
+        "(",
+        5466,
+        1461
+      ],
+      [
+        "((",
+        98,
+        70
+      ],
+      [
+        "(((-",
+        1,
+        1
+      ],
+      [
+        "((-",
+        5,
+        2
+      ],
+      [
+        "((↑",
+        1,
+        1
+      ],
+      [
+        "(-",
+        55,
+        35
+      ],
+      [
+        "(-(",
+        3,
+        3
+      ],
+      [
+        "(↑",
+        1,
+        1
+      ],
+      [
+        "(∃",
+        52,
+        51
+      ],
+      [
+        ")",
+        4924,
+        1451
+      ],
+      [
+        "))",
+        250,
+        159
+      ],
+      [
+        ")))",
+        14,
+        10
+      ],
+      [
+        "))^",
+        8,
+        5
+      ],
+      [
+        ")*",
+        10,
+        7
+      ],
+      [
+        ")*(",
+        63,
+        39
+      ],
+      [
+        ")*((",
+        4,
+        4
+      ],
+      [
+        ")+",
+        2,
+        2
+      ],
+      [
+        "),",
+        16,
+        16
+      ],
+      [
+        ")-",
+        1,
+        1
+      ],
+      [
+        ")/",
+        23,
+        12
+      ],
+      [
+        ")/(",
+        16,
+        7
+      ],
+      [
+        ")/((",
+        3,
+        1
+      ],
+      [
+        "):",
+        2,
+        2
+      ],
+      [
+        ")<",
+        1,
+        1
+      ],
+      [
+        ")=(",
+        1,
+        1
+      ],
+      [
+        ")^",
+        434,
+        224
+      ],
+      [
+        ")^(",
+        7,
+        4
+      ],
+      [
+        ")^(-",
+        4,
+        3
+      ],
+      [
+        "*",
+        7863,
+        1640
+      ],
+      [
+        "*(",
+        33,
+        18
+      ],
+      [
+        "*(-",
+        1,
+        1
+      ],
+      [
+        "+",
+        10026,
+        1876
+      ],
+      [
+        "+(",
+        13,
+        5
+      ],
+      [
+        ",",
+        2351,
+        2242
+      ],
+      [
+        "-",
+        2456,
+        925
+      ],
+      [
+        "-(",
+        25,
+        18
+      ],
+      [
+        "-((",
+        1,
+        1
+      ],
+      [
+        ".",
+        34,
+        20
+      ],
+      [
+        "/",
+        2998,
+        961
+      ],
+      [
+        "/(",
+        55,
+        22
+      ],
+      [
+        "/((",
+        1,
+        1
+      ],
+      [
+        ":",
+        2559,
+        2289
+      ],
+      [
+        "<",
+        319,
+        175
+      ],
+      [
+        "<=",
+        19,
+        13
+      ],
+      [
+        "=",
+        2409,
+        1090
+      ],
+      [
+        "=-",
+        3,
+        2
+      ],
+      [
+        ">",
+        748,
+        283
+      ],
+      [
+        ">=",
+        86,
+        55
+      ],
+      [
+        "^",
+        6493,
+        1416
+      ],
+      [
+        "^(",
+        16,
+        7
+      ],
+      [
+        "^(-",
+        20,
+        3
+      ],
+      [
+        "¬",
+        71,
+        71
+      ],
+      [
+        "¬(",
+        6,
+        6
+      ],
+      [
+        "¬∃",
+        18,
+        18
+      ],
+      [
+        "↑",
+        7,
+        4
+      ],
+      [
+        "→",
+        688,
+        656
+      ],
+      [
+        "↔",
+        363,
+        363
+      ],
+      [
+        "∀",
+        2184,
+        2168
+      ],
+      [
+        "∃",
+        113,
+        110
+      ],
+      [
+        "∧",
+        2062,
+        1066
+      ],
+      [
+        "∨",
+        280,
+        168
+      ],
+      [
+        "≠",
+        42,
+        26
+      ],
+      [
+        "≤",
+        950,
+        577
+      ],
+      [
+        "≥",
+        1134,
+        772
+      ]
+    ],
+    "operator_runs_note": [
+      "Every maximal run of non-identifier, non-digit, non-space characters in",
+      "the 2,319 rule-R surfaces, with its occurrence and statement counts. Each",
+      "run must decompose under longest-first munch into rows of this table; the",
+      "only exception is the coercion arrow, which has a refusal row. Pinning the",
+      "runs means a NEW run shape -- a dialect construct nobody expected, or a",
+      "corpus that grew one -- turns a test red instead of rendering to something",
+      "the inverse cannot say. `.` is the decimal point of the 34 decimal",
+      "literals; the registered numeral pair owns it, not this table."
+    ],
+    "type_ascriptions": {
+      "Int": 176,
+      "Nat": 53,
+      "Rat": 2332
+    }
+  },
   "design": "docs/DESIGN-foreign-voice.md",
   "interpretation": "data/foreign_voice/rule_r.json",
-
+  "lexicon_id": "foreign_voice.lexicon.v1",
+  "naming_conventions": [
+    "Every phrase is lowercase ASCII words separated by single spaces.",
+    "The connectives read as sentence glue rather than as symbol names -- `and",
+    "also`, `or else`, `implies that`, `exactly when`, `it fails that` -- because",
+    "the surface has to be one readable sentence for C-V3's determinacy sheet to",
+    "be answerable at all, and because a phrase like `logical and` would put the",
+    "word `and` in a position where L1 has to work harder than it needs to.",
+    "The two binder phrases share a first word (`for every` / `for some`) and the",
+    "two `it ...` connectives share theirs; both pairs differ at the second word,",
+    "so L1 holds with room to spare. This is checked by the loader, not by the",
+    "reader of this note.",
+    "`divided by` rather than `over`, and `minus` rather than `negative`, because",
+    "`over` and `negative` are both words the registered numeral pair emits and",
+    "L2 would refuse the table at load. The gate caught both spellings during",
+    "authoring, which is the gate working."
+  ],
+  "not_claimed": [
+    "Not fluency, and not translation quality. The sentences are invertible;",
+    "their style is whatever this table produces. C-V3 is the only instrument",
+    "that touches readability.",
+    "No internal-grammar reading capability is gained. scripts/match_signatures.py",
+    "reads exactly what it read before. The inverse reads only strings this",
+    "cycle's own renderer produced; it is not offered on the input side and no",
+    "request route calls it.",
+    "No truth claim and no verified_by links. scripts/external_verifier.py:6-7",
+    "and :35-40 govern, unweakened."
+  ],
+  "operators": {
+    "%": "modulo",
+    "*": "times",
+    "+": "plus",
+    "-": "minus",
+    "/": "divided by",
+    "^": "to the power of"
+  },
   "purpose": [
     "The trusted half of the foreign-voice gate (design 3.1). Each row maps one",
     "constructor of the FOREIGN DIALECT -- a binder, a connective, a relation, an",
@@ -18,17 +551,6 @@
     "scripts/realization_lexicon.py:30-38, which :39-41 explains are together",
     "what make stage one 'a table lookup with no lookahead policy of its own'."
   ],
-
-  "what_is_rendered": [
-    "THE RENDERER RENDERS R(s), NOT s. Correction 3 of the design is why: with",
-    "autoImplicit off -- and it must be off -- the surface handed to the oracle",
-    "has to carry an explicit binder preamble, so the sentence a reader sees is",
-    "the sentence for the statement UNDER THE DECLARED INTERPRETATION. Every",
-    "receipt carries `interpretation_shift` naming each substitution rule R",
-    "applied. A rate quoted without that field beside it is a number pretending",
-    "to be a fact."
-  ],
-
   "reading_rules": [
     "LONGEST MATCH: reading a surface left to right, take the longest phrase in",
     "this table that matches the upcoming words; if none matches, expect a",
@@ -59,30 +581,56 @@
     "its word `negative` never appears in a foreign-voice surface. This is what",
     "removes v0.18's neg/sub collision at the root instead of legislating around",
     "it: there is exactly one `-` row and it emits exactly one token.",
-    "PRECEDENCE IS CARRIED, NOT REBUILT. The rendering keeps R(s)'s own",
-    "parentheses as `the quantity` / `end quantity` rows and adds none, because",
-    "the inverse feeds the result back to the SAME grammar it came from -- Lean's",
-    "-- so the source's bracketing is already exactly the bracketing the reader",
-    "needs. This is narrower than v0.18's realizer, which had to re-bracket for a",
-    "different grammar, and the narrowing is stated rather than discovered: a",
-    "renderer that added minimal brackets here would be adding surface outside",
-    "this table.",
+    "PRECEDENCE IS CANONICAL, NOT CARRIED (amended 2026-08-24, correction 2",
+    "below). The rendering emits a grouping word ONLY where precedence demands",
+    "one, per data/foreign_voice/grouping.json. R(s)'s own parentheses are",
+    "re-derived rather than copied: a bracket the precedence table already",
+    "implies is not emitted, a parenthesised binder group is stripped, and an",
+    "ascription's brackets are syntax and always kept.",
+    "This REPLACES the v0.19 rule, which read 'PRECEDENCE IS CARRIED, NOT",
+    "REBUILT -- the rendering keeps R(s)'s own parentheses as `the quantity` /",
+    "`end quantity` rows and adds none'. That rule is why v0.19 voided: it let",
+    "a served sentence have a redundant-bracket variant that reads differently",
+    "and certifies identically, so a reader could not tell which one the graph",
+    "meant. C-V4.drop_group measured it at 0.80 against a 0.90 floor.",
+    "The repair is structural rather than a tighter bound. After it the variant",
+    "is not rare, it is UNGRAMMATICAL, and G1b establishes that over every one",
+    "of the 5,228 surviving grouping pairs rather than over a sample.",
+    "The rule still NEVER ADDS a bracket the source omitted: a parsing source",
+    "already follows precedence, so the canonical form can only remove. The",
+    "census publishes the per-statement delta and there is no negative bucket.",
     "NO ROW IS IMPROVISED. A dialect construct with no row REFUSES AT THE",
     "SURFACE, with a reason from `refusal_reasons`, and the statement lands in",
     "the frozen register instead of in a rendering."
   ],
-
-  "binders": {
-    "∀": "for every",
-    "∃": "for some"
+  "refusal_reasons": [
+    "no_lexicon_row",
+    "unsupported_numeral",
+    "noncanonical_numeral",
+    "interpretation_absent",
+    "oracle_rejected"
+  ],
+  "refusal_reasons_note": [
+    "A closed vocabulary, in the spirit of v0.18's nine reasons",
+    "(scripts/realize_term.py:134-145). `oracle_rejected` and",
+    "`interpretation_absent` are decided before rendering; the other three are",
+    "decided by this table and the registered numeral pair."
+  ],
+  "refusals": {
+    "↑": {
+      "construct": "coercion arrow",
+      "reason": "no_lexicon_row",
+      "why": [
+        "An up-arrow is a request to insert a coercion whose target type the",
+        "elaborator chooses. Rendering it as a word would put a phrase in the",
+        "sentence whose meaning depends on an elaboration decision the reader",
+        "cannot see, and inverting that phrase would name a coercion this table",
+        "cannot commit to. Measured on the eligible set: 9 occurrences across 4",
+        "statements. They are registered, not rendered."
+      ]
+    }
   },
-  "connectives": {
-    "¬": "it fails that",
-    "→": "implies that",
-    "↔": "exactly when",
-    "∧": "and also",
-    "∨": "or else"
-  },
+  "registered": "2026-08-24",
   "relations": {
     "<": "is less than",
     "<=": "at most equals",
@@ -106,18 +654,9 @@
     "the `>` row and would be a proper word-prefix of it. L1 refuses that at",
     "load, which is how the spelling was chosen."
   ],
-  "operators": {
-    "%": "modulo",
-    "*": "times",
-    "+": "plus",
-    "-": "minus",
-    "/": "divided by",
-    "^": "to the power of"
-  },
-  "types": {
-    "Int": "integer",
-    "Nat": "natural",
-    "Rat": "rational"
+  "slot_marker": {
+    "token_prefix": "v",
+    "word": "variable"
   },
   "structural": {
     "(": "the quantity",
@@ -125,214 +664,18 @@
     ",": "it holds that",
     ":": "of type"
   },
-  "slot_marker": {
-    "token_prefix": "v",
-    "word": "variable"
+  "types": {
+    "Int": "integer",
+    "Nat": "natural",
+    "Rat": "rational"
   },
-
-  "refusal_reasons": [
-    "no_lexicon_row",
-    "unsupported_numeral",
-    "noncanonical_numeral",
-    "interpretation_absent",
-    "oracle_rejected"
-  ],
-  "refusal_reasons_note": [
-    "A closed vocabulary, in the spirit of v0.18's nine reasons",
-    "(scripts/realize_term.py:134-145). `oracle_rejected` and",
-    "`interpretation_absent` are decided before rendering; the other three are",
-    "decided by this table and the registered numeral pair."
-  ],
-
-  "refusals": {
-    "↑": {
-      "construct": "coercion arrow",
-      "reason": "no_lexicon_row",
-      "why": [
-        "An up-arrow is a request to insert a coercion whose target type the",
-        "elaborator chooses. Rendering it as a word would put a phrase in the",
-        "sentence whose meaning depends on an elaboration decision the reader",
-        "cannot see, and inverting that phrase would name a coercion this table",
-        "cannot commit to. Measured on the eligible set: 9 occurrences across 4",
-        "statements. They are registered, not rendered."
-      ]
-    }
-  },
-
-  "naming_conventions": [
-    "Every phrase is lowercase ASCII words separated by single spaces.",
-    "The connectives read as sentence glue rather than as symbol names -- `and",
-    "also`, `or else`, `implies that`, `exactly when`, `it fails that` -- because",
-    "the surface has to be one readable sentence for C-V3's determinacy sheet to",
-    "be answerable at all, and because a phrase like `logical and` would put the",
-    "word `and` in a position where L1 has to work harder than it needs to.",
-    "The two binder phrases share a first word (`for every` / `for some`) and the",
-    "two `it ...` connectives share theirs; both pairs differ at the second word,",
-    "so L1 holds with room to spare. This is checked by the loader, not by the",
-    "reader of this note.",
-    "`divided by` rather than `over`, and `minus` rather than `negative`, because",
-    "`over` and `negative` are both words the registered numeral pair emits and",
-    "L2 would refuse the table at load. The gate caught both spellings during",
-    "authoring, which is the gate working."
-  ],
-
-  "coverage": {
-    "measured": "2026-08-24, against the committed tree",
-    "denominator": {
-      "corpus_nodes": 12777,
-      "parseable_v018": 2172,
-      "mute": 10605,
-      "transliterable": 6414,
-      "foreign_residue": 4191,
-      "oracle_eligible": 2319
-    },
-    "constructive_check": [
-      "Every one of the 2,319 oracle-eligible statements was tokenized under R",
-      "with exactly this table's tokens, longest first, the identifier grammar of",
-      "rule_r.json and the registered numeral pair. Leftover: ONE construct -- the",
-      "coercion arrow, 7 runs across 4 statements, which has a refusal row above.",
-      "Nothing else in the eligible set is outside this table.",
-      "This is the whole-table check v0.18's `head_coverage` block does for the",
-      "realization lexicon, done constructively rather than by head census,",
-      "because this dialect's vocabulary is closed and small enough to enumerate",
-      "exhaustively.",
-      "`operator_runs` below is the second half of that check and the half the",
-      "first version of this file did not have. A character-level sweep reports",
-      "no leftover for `>=` -- because `>` and `=` are BOTH rows -- while the",
-      "renderer would emit `is greater than equals` and the inverse would hand",
-      "the pinned binary `> =`, which is not a term at all. The runs are",
-      "enumerated so the check is about TOKENS rather than characters."
-    ],
-    "operator_runs_note": [
-      "Every maximal run of non-identifier, non-digit, non-space characters in",
-      "the 2,319 rule-R surfaces, with its occurrence and statement counts. Each",
-      "run must decompose under longest-first munch into rows of this table; the",
-      "only exception is the coercion arrow, which has a refusal row. Pinning the",
-      "runs means a NEW run shape -- a dialect construct nobody expected, or a",
-      "corpus that grew one -- turns a test red instead of rendering to something",
-      "the inverse cannot say. `.` is the decimal point of the 34 decimal",
-      "literals; the registered numeral pair owns it, not this table."
-    ],
-    "operator_runs": [["%", 3, 2], ["(", 5466, 1461], ["((", 98, 70], ["(((-", 1, 1], ["((-", 5, 2], ["((↑", 1, 1], ["(-", 55, 35], ["(-(", 3, 3], ["(↑", 1, 1], ["(∃", 52, 51], [")", 4924, 1451], ["))", 250, 159], [")))", 14, 10], ["))^", 8, 5], [")*", 10, 7], [")*(", 63, 39], [")*((", 4, 4], [")+", 2, 2], ["),", 16, 16], [")-", 1, 1], [")/", 23, 12], [")/(", 16, 7], [")/((", 3, 1], ["):", 2, 2], [")<", 1, 1], [")=(", 1, 1], [")^", 434, 224], [")^(", 7, 4], [")^(-", 4, 3], ["*", 7863, 1640], ["*(", 33, 18], ["*(-", 1, 1], ["+", 10026, 1876], ["+(", 13, 5], [",", 2351, 2242], ["-", 2456, 925], ["-(", 25, 18], ["-((", 1, 1], [".", 34, 20], ["/", 2998, 961], ["/(", 55, 22], ["/((", 1, 1], [":", 2559, 2289], ["<", 319, 175], ["<=", 19, 13], ["=", 2409, 1090], ["=-", 3, 2], [">", 748, 283], [">=", 86, 55], ["^", 6493, 1416], ["^(", 16, 7], ["^(-", 20, 3], ["¬", 71, 71], ["¬(", 6, 6], ["¬∃", 18, 18], ["↑", 7, 4], ["→", 688, 656], ["↔", 363, 363], ["∀", 2184, 2168], ["∃", 113, 110], ["∧", 2062, 1066], ["∨", 280, 168], ["≠", 42, 26], ["≤", 950, 577], ["≥", 1134, 772]],
-    "constructor_occurrences": {
-      "(": 6069,
-      ")": 6069,
-      "*": 7974,
-      "+": 10041,
-      ",": 2367,
-      "-": 2575,
-      "/": 3096,
-      ":": 2561,
-      "<": 339,
-      "=": 2518,
-      ">": 834,
-      "%": 3,
-      "^": 6982,
-      "¬": 95,
-      "→": 688,
-      "↔": 363,
-      "∀": 2184,
-      "∃": 183,
-      "∧": 2062,
-      "∨": 280,
-      "≠": 42,
-      "≤": 950,
-      "≥": 1134
-    },
-    "constructor_statements": {
-      "(": 1551,
-      "*": 1658,
-      "+": 1876,
-      ",": 2258,
-      "-": 965,
-      "/": 980,
-      ":": 2291,
-      "<": 188,
-      "=": 1132,
-      ">": 331,
-      "%": 2,
-      "^": 1461,
-      "¬": 95,
-      "→": 656,
-      "↔": 363,
-      "∀": 2168,
-      "∃": 174,
-      "∧": 1066,
-      "∨": 168,
-      "≠": 26,
-      "≤": 577,
-      "≥": 772
-    },
-    "type_ascriptions": {
-      "Int": 176,
-      "Nat": 53,
-      "Rat": 2332
-    },
-    "identifiers": {
-      "distinct_in_eligible_set": 86,
-      "max_distinct_in_one_statement": 16,
-      "note": "All opaque variable names, all erased to `variable <index>` by the slot marker; none of them needs a row."
-    },
-    "numerals": {
-      "distinct_literals": 287,
-      "decimals": 34,
-      "outside_registered_domain": 1,
-      "noncanonical_spelling": 1,
-      "note": [
-        "One lean_workbook statement carries a 433-digit integer, which is outside",
-        "scripts/numeral_words' registered domain (abs < 10^15) and refuses as",
-        "`unsupported_numeral`. One carries the literals `23.50` and `39.50`,",
-        "whose canonical decimal spellings are `23.5` and `39.5`; the numeral",
-        "pair is exact rather than approximately exact, so it cannot reproduce a",
-        "trailing zero, and `23.50` and `23.5` are DIFFERENT `OfScientific`",
-        "terms to the elaborator. That statement refuses as",
-        "`noncanonical_numeral` rather than round-tripping to a term the corpus",
-        "did not write. Both are register entries."
-      ]
-    }
-  },
-
-  "corrections": [
-    {
-      "dated": "2026-08-24",
-      "found_by": "the B0d authoring pass, before any hand-rendering was written",
-      "what": "Added the `>=` and `<=` rows and the `operator_runs` inventory. The lexicon digest is re-recorded in experiments/foreign_voice_prereg.json with a dated correction; rule R and the frozen parser are byte-unchanged.",
-      "why": [
-        "The first version of this file had rows for `≥` and `≤` and none for the",
-        "ASCII spellings `>=` and `<=`, which the residue also carries -- 55",
-        "statements and 13 statements of the eligible set respectively.",
-        "The constructive coverage check did not catch it because the check was",
-        "at the CHARACTER level: `>` is a row and `=` is a row, so `>=` reports",
-        "no leftover character while the renderer would say `is greater than",
-        "equals` and the inverse would hand the pinned binary `> =`. That is the",
-        "same shape as v0.18's commit 8910138 -- a fluent sentence that re-reads",
-        "as something else -- arriving through a check that looked at the wrong",
-        "granularity rather than through a missing check.",
-        "Corrected in the table AND in the check: `operator_runs` pins every",
-        "maximal operator run in the eligible set, so coverage is now asserted",
-        "over tokens.",
-        "Recorded here and dated rather than folded into the preregistration",
-        "commit, because a silently-fixed prereg artifact is worth less than a",
-        "dated one (v0.18's own rule, imported).",
-        "Consequence for B0d, stated because it matters: the id-selection rule is",
-        "seeded from THIS file's digest, so the correction moves the hundred",
-        "drawn statements. The draw had not been taken when the correction",
-        "landed, and the sealed renderings are authored against the corrected",
-        "draw. A correction taken AFTER a draw would need the draw re-taken and",
-        "both recorded."
-      ]
-    }
-  ],
-
-  "not_claimed": [
-    "Not fluency, and not translation quality. The sentences are invertible;",
-    "their style is whatever this table produces. C-V3 is the only instrument",
-    "that touches readability.",
-    "No internal-grammar reading capability is gained. scripts/match_signatures.py",
-    "reads exactly what it read before. The inverse reads only strings this",
-    "cycle's own renderer produced; it is not offered on the input side and no",
-    "request route calls it.",
-    "No truth claim and no verified_by links. scripts/external_verifier.py:6-7",
-    "and :35-40 govern, unweakened."
+  "what_is_rendered": [
+    "THE RENDERER RENDERS R(s), NOT s. Correction 3 of the design is why: with",
+    "autoImplicit off -- and it must be off -- the surface handed to the oracle",
+    "has to carry an explicit binder preamble, so the sentence a reader sees is",
+    "the sentence for the statement UNDER THE DECLARED INTERPRETATION. Every",
+    "receipt carries `interpretation_shift` naming each substitution rule R",
+    "applied. A rate quoted without that field beside it is a number pretending",
+    "to be a fact."
   ]
 }
