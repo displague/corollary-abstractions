@@ -2,8 +2,8 @@
   "answer_lines_moved": 0,
   "design": "docs/DESIGN-voice-completion.md §5.1",
   "in_words_lines_present": {
-    "after": 9721,
-    "before": 9721,
+    "after": 12689,
+    "before": 12689,
     "note": "v0.18's realizer line. 4d adds a SECOND voice under the same label, tried only where the committed realizer produced nothing, so while the surface is dark this count is unchanged by construction."
   },
   "moved_statement_ids": [],
@@ -12,13 +12,13 @@
   "run_id": "foreign_voice_wiring.served_diff.v2",
   "sides": {
     "after": {
-      "armed": false,
-      "arming_reason": "no registered run at experiments/foreign_voice_rate2.json; the foreign voice stays dark until one lands",
+      "armed": true,
+      "arming_reason": "experiments/foreign_voice_rate2.json reads FIRES and every cycle-stopping control cleared; C-V3′ voided without blocking, and that void is published rather than hidden",
       "commit": "working tree"
     },
     "before": {
-      "armed": false,
-      "arming_reason": "no arming module on this side (ModuleNotFoundError)",
+      "armed": true,
+      "arming_reason": "experiments/foreign_voice_rate2.json reads FIRES and every cycle-stopping control cleared; C-V3′ voided without blocking, and that void is published rather than hidden",
       "commit": "main"
     }
   },
@@ -28,6 +28,6 @@
     "The absent/absent half of 4d's evidence obligation, stated precisely by the design because it is unusual: the foreign `in words` line shown ABSENT ON BOTH SIDES at batch time, because no run has armed it yet.",
     "NOT a null result. It is the proof that a witnessed-module change moved no served byte — exactly what the seal discipline asks a witnessed change to demonstrate. The present-after-a-clean-run half lands with the run, or never."
   ],
-  "why_absent": "no registered run at experiments/foreign_voice_rate2.json; the foreign voice stays dark until one lands",
+  "why_absent": "the surface is ARMED on this tree; re-read the verdict above",
   "writer": "scripts/foreign_voice_wiring_served_diff.py"
 }

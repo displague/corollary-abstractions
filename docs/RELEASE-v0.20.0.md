@@ -456,18 +456,23 @@ a null result: it is the proof that a witnessed-module change moved **no
 served byte**. The run landed afterwards, at `2f882f0`, and the surface moved
 with the evidence rather than with a second commit.
 
-**The present side is a live read, and this release does not pretend it is a
-committed diff.** `foreign_voice_arming.arming_state()` on this tree reports
-`armed: true`, `verdict: FIRES`, all five blocking checks true, and
-`non_blocking_voids: ["C-V3′"]`; **`tests/test_answers.py` asserts the served
-line appears exactly when the arming read says it should**, on both branches —
-replacing a test that had hard-coded *"the repository as it stands is dark"*,
-which was true the day it was written and would have gone **red for the system
-working**. But the committed `foreign_voice_wiring_served_diff.json` is the
-**batch-time** file and still says `armed: false`, so the **then-present half
-of the diff §4d owes was never produced**. That is a half-discharged gate
-obligation, it is named in the drift audit rather than filed as complete, and
-regenerating it is one command.
+**The present side, discharged at this rotation.** The committed
+`foreign_voice_wiring_served_diff.json` was regenerated on the armed tree:
+`armed: true` on both sides, **0 of 14,830 answer lines moved**, `in words`
+on **12,689** statements both sides — the surface is stable at its armed
+state. The **transition itself** was measured once and is reproducible
+rather than committed, because the artifact's schema was built to prove
+the dark state and marks *any* movement STOP:
+`python scripts/foreign_voice_wiring_served_diff.py --before 8e1a3d1`
+(the commit v0.20 opened at) reads **2,968 statements' answers moved,
+`in words` 9,721 → 12,689, armed false → true** — the in-words count rose
+by exactly the moved count, which is the arming event and nothing else.
+Beside it, `foreign_voice_arming.arming_state()` reports `armed: true`,
+`verdict: FIRES`, all five blocking checks true, `non_blocking_voids:
+["C-V3′"]`; **`tests/test_answers.py` asserts the served line appears
+exactly when the arming read says it should** — replacing a test that had
+hard-coded *"the repository as it stands is dark"*, which was true the day
+it was written and would have gone **red for the system working**.
 
 Four defects in the first version of that row were fixed before it shipped: a
 valid-JSON-wrong-shape artifact raised `AttributeError` out of **a served
@@ -727,22 +732,21 @@ served. But the audit found six things, and four of them are genuine drift.)*
    v0.21 receipt. They were remembered, not scheduled. **Both carry forward in
    ROADMAP-v0.21 §3.5 with a stop rule**: unrun at the v0.22 rotation, a rider
    stops being a rider and either becomes an item or parks.
-6. **4d's served diff is half-produced, and the record said it was complete.**
+6. **4d's served diff was half-produced, and the record said it was
+   complete — found by this audit, discharged before the tag.**
    ROADMAP-v0.20 §4d and the release gate both require the
-   **absent/absent-then-present** diff — the foreign line shown absent on both
-   sides at batch time, and **present only after the clean run lands**. The
-   absent/absent half is committed and correct.
-   `experiments/foreign_voice_wiring_served_diff.json` was written at **batch
-   time** and still reads `armed: false` with the reason *"no registered run
-   at experiments/foreign_voice_rate2.json"* — which is **stale against its own
-   tree**, because the run landed afterwards. **The then-present half was
-   never produced as a committed artifact**, and the BACKLOG entry closed
-   citing the absent/absent file without noting the second half was owed.
-   **Stated rather than smoothed over**: the present side of this release is
-   witnessed by a **live read** (`foreign_voice_arming.arming_state`) and by
-   `tests/test_answers.py`'s consistency assertion, **not** by a committed
-   before/after diff. Filed as owed before the tag; regenerating it is
-   `python scripts/foreign_voice_wiring_served_diff.py --before main`.
+   **absent/absent-then-present** diff. The absent/absent half was committed
+   and correct, but `experiments/foreign_voice_wiring_served_diff.json` was
+   written at **batch time**, still read `armed: false`, and was **stale
+   against its own tree** — the run had landed afterwards, and the BACKLOG
+   entry had closed citing the first half without noting the second was
+   owed. Discharged at this rotation: the artifact is regenerated on the
+   armed tree (`armed: true` both sides, 0 moved, `in words` 12,689 both
+   sides), and the transition reading — **2,968 answers moved, 9,721 →
+   12,689, armed false → true** against the cycle's opening commit — is
+   recorded in the wiring section above with its reproduce command, kept
+   out of the committed artifact because that schema deliberately marks
+   any movement STOP (it exists to prove the dark state).
 
 **And one more, which is a finding rather than drift.** The reader-determinacy
 question is now empty on **both** sides — C-V3 (human) **ABSENT** for a second
