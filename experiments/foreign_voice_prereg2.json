@@ -1,0 +1,281 @@
+{
+  "prereg_id": "foreign_voice.prereg2.v1",
+  "registered": "2026-08-25",
+  "design": "docs/DESIGN-voice-completion.md",
+  "supersedes_for_the_fresh_run": "experiments/foreign_voice_prereg.json",
+  "what_this_is": [
+    "The fresh registered run's OWN preregistration with its OWN frozen digests, per DESIGN-voice-completion §5. It is not an amendment of v0.19's prereg and it does not re-score v0.19's run.",
+    "v0.19's numbers are not restated. experiments/foreign_voice_rate.json stays committed as it read, VOID and all, and its `prereg_revalidated` block preserves the 22 digests as that run measured them.",
+    "The fresh run's rate is a DIFFERENT NUMBER OVER A DIFFERENT GRAMMAR and every quotation of it says so."
+  ],
+  "b0d_seed_is_derived": {
+    "finding": "F6 / G3",
+    "rule": "seed = sha256_lf( git show {parent}:data/foreign_voice/lexicon.json ), {parent} = the amendment commit's parent",
+    "value": "3a3459d6edf903b9f0181f5617d478ba124209bde434fbc51988168402e81d16",
+    "why": "B0d's pool is the ELIGIBLE set and is grammar-independent, so the seed still identifies its draw — but the lexicon moved, so the value is a consequence to be recomputed rather than a constant to be read off the tree. The derivation is in the sealed file's own header.",
+    "everywhere_else_the_id_list_is_the_pin": "data/foreign_voice/cv4_replay_ids.json"
+  },
+  "pre_run_prerequisites": {
+    "note": "Discharged BEFORE the registered run starts; a miss stops the cycle and publishes.",
+    "G-P": {
+      "status": "discharged",
+      "evidence": "tests/test_grouping_canonical.py — parse→emit→parse to the same tree and idempotence, over all 2,313"
+    },
+    "G0": {
+      "status": "discharged",
+      "evidence": "experiments/grouping_census.json, published before the rule was proposed, no floor"
+    },
+    "G1": {
+      "status": "discharged",
+      "reading": "2,313 of 2,313 agree",
+      "floor": 2313
+    },
+    "G1b": {
+      "status": "discharged",
+      "reading": "5,228 of 5,228 detected, zero blind",
+      "floor": 5228
+    },
+    "G2": {
+      "status": "discharged",
+      "reading": "100 of 100 reproduced byte-identically; the 85 unchanged also byte-identical to the v0.19 seal",
+      "floor": 100
+    },
+    "G3": {
+      "status": "discharged",
+      "reading": "all five admitting counts reproduce the shipped artifact"
+    },
+    "G4": {
+      "status": "discharged",
+      "reading": "register re-frozen; only lexicon_digest_at_freeze moved; B3 still 6,414 + 2,313 + 0 + 1,706 + 172 = 10,605"
+    },
+    "G7": {
+      "status": "not this lane",
+      "note": "the surface is armed by the artifact and a test says so — ROADMAP-v0.20 §4d, the batch lane"
+    }
+  },
+  "c_v4_prime": {
+    "control": "C-V4′ — the re-specified near-miss null",
+    "registered": "2026-08-25, before the run",
+    "it_is_a_new_preregistration": "not a re-score of v0.19's run, and not a re-reading of its artifact",
+    "the_c_r2_clause_restored": [
+      "Construct each mutation, ELABORATE THE MUTATED TERM FIRST, discard any mutation whose term did not change, COUNT THE DISCARDS, and only then score the survivors.",
+      "That is the clause C-V4 inherited the idea from and left behind. A mutation that does not change the term is not a near miss the gate failed to catch — it is not a near miss at all, and scoring it as one is how a control talks itself into a bad number as readily as a good one."
+    ],
+    "id_source": "data/foreign_voice/cv4_replay_ids.json — the drawn ids, not a seed",
+    "deletion_is_by_matched_pair": "by index, from the parse the rule already computed. v0.19 deleted the first opening and the first closing independently; those coincide only when the first bracket contains no nested bracket, and 3 of its sampled 50 nest.",
+    "mutation_record_fields": [
+      "statement_id",
+      "class",
+      "sample_index",
+      "pair_kind",
+      "surface_before",
+      "surface_after",
+      "term_before_digest",
+      "term_after_digest",
+      "verified_to_change_the_term",
+      "discarded",
+      "discard_reason",
+      "scored_outcome"
+    ],
+    "classes": {
+      "drop_ascription": {
+        "floor": 0.9,
+        "in_voiding_pool": true,
+        "pool": 2285,
+        "note": "unchanged by this design; read exactly 0.90 in v0.19"
+      },
+      "swap_binder": {
+        "floor": 0.9,
+        "in_voiding_pool": true,
+        "pool": 1764,
+        "note": "unchanged; read 1.00"
+      },
+      "shift_group": {
+        "floor": 0.9,
+        "in_voiding_pool": true,
+        "pool": 1399,
+        "note": "pool moves with the grammar"
+      },
+      "drop_group": {
+        "floor": 0.95,
+        "in_voiding_pool": true,
+        "pool": 1399,
+        "note": "RAISED from 0.90. The population of redundant pairs is empty by construction, and a mutation that cannot be a no-op should not carry a 10% allowance for being one. Demoted to a confirmation by G1b."
+      },
+      "drop_binder": {
+        "floor": null,
+        "in_voiding_pool": false,
+        "pool": 2162,
+        "note": "blind by construction; measured, never scored. Canonical grouping does nothing for this class and is not claimed to."
+      }
+    },
+    "margin_to_floor": "published per class, signed, always — so the margin is READ rather than inferred",
+    "the_point_prediction": {
+      "class": "drop_ascription",
+      "predicted": "45 of 50 — exactly v0.19's reading",
+      "why": "its pool (2,285) does not move with the grammar and its drawn 50 are unchanged",
+      "measured_correction_to_the_movers_named_at_review": "ZERO of the 16 binder-group statements fall in drop_ascription's drawn 50 (or in drop_group's), so binder-group stripping cannot move it; the only candidate movers are the 6 of its 50 whose grouping changes, and oracle nondeterminism",
+      "the_direction_is_pre_registered_too": "a C-R2-clause discard in any of the five classes means that class clears with REAL MARGIN rather than by luck, and that is the finding"
+    },
+    "the_class_most_likely_to_void_named_now": {
+      "class": "drop_ascription",
+      "why": "it read EXACTLY 0.90 against a 0.90 floor in v0.19 and this design does nothing for it. Its floor is neither raised nor lowered. If it voids, it voids on a boundary that was visible before the run."
+    },
+    "voiding_sentence": "any class in the voiding pool below its floor voids the C-V4′ reading and, through it, the sentence B1 is allowed to make"
+  },
+  "c_g1": {
+    "control": "C-G1 — the aiming test",
+    "specification": "data/foreign_voice/cv4_replay_ids.json, `c_g1`",
+    "aggregate_floor": 0.95,
+    "per_id_floor": "10 of 10 named cases not still blind",
+    "both_must_clear": "if any of the ten is still blind, C-G1 voids REGARDLESS of the aggregate"
+  },
+  "frozen": [
+    {
+      "path": "data/foreign_voice/b0d_sealed_renderings.json",
+      "role": "b0d_sealed_prediction",
+      "sha256_lf": "7442f193dbd03594e2f0bb6943521c35a48a131d8933a17bf31ec271e7fb7a90",
+      "recorded": "2026-08-25",
+      "why": "Re-sealed: 15 re-authored by hand against the canonical grammar, 85 byte-identical to the v0.19 seal."
+    },
+    {
+      "path": "data/foreign_voice/cv4_replay_ids.json",
+      "role": "cv4_id_pins",
+      "sha256_lf": "3bb58748a3a6bfc3f359f2004615b20b3dc0583aa95f14daeba218450b206f47",
+      "recorded": "2026-08-25",
+      "why": "G3. The id list IS the pin now: three of C-V4's five pools move with the grammar, so a seed cannot carry them. All five `admitting` counts reproduce the shipped v0.19 artifact exactly, and the ten C-G1 cases are named here before the canonical renderer existed."
+    },
+    {
+      "path": "data/foreign_voice/grouping.json",
+      "role": "grouping_rule",
+      "sha256_lf": "3cdd7db805f741aab058d0aea9817e5228538416b496feb4666ce4c2a3a2815c",
+      "recorded": "2026-08-25",
+      "why": "NEW this cycle, and the third TRUSTED artifact. Every level in it was measured against the pinned binary before it was written; G1 re-checks all of it over 2,313 statements."
+    },
+    {
+      "path": "data/foreign_voice/lexicon.json",
+      "role": "lexicon_and_inverse_table",
+      "sha256_lf": "400c9f62058d33eee2ae27aa8be4110a0fbdc35838019d95ef8615ec8eab4c1b",
+      "recorded": "2026-08-25",
+      "why": "Amended by v0.20 correction 1: `reading_rules` now says precedence is CANONICAL. Every row, phrase and token is byte-identical and the table still loads through F1-F8. Its digest is no longer the B0d seed — see `b0d_seed_is_derived`."
+    },
+    {
+      "path": "data/foreign_voice/register.json",
+      "role": "frozen_register",
+      "sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
+      "recorded": "2026-08-25",
+      "why": "Re-frozen against the amended lexicon. G4: only `lexicon_digest_at_freeze` moved; entry set, blocked_set_digest and all five B3 buckets byte-identical."
+    },
+    {
+      "path": "data/foreign_voice/rule_r.json",
+      "role": "interpretation",
+      "sha256_lf": "1fc087c8374b6390a3b65679cec5b84255dcccd920ca8bc92889277e40408940",
+      "recorded": "2026-08-25",
+      "why": "The declared interpretation, BYTE-UNCHANGED by this cycle. Canonical grouping is a rendering rule, not an interpretation: R(s) is the same string it always was, and only its re-emission moved."
+    },
+    {
+      "path": "experiments/grouping_agreement.json",
+      "role": "g1_g1b",
+      "sha256_lf": "d3d0215b7992dd2c3366850aea440d9a11bf8c1e5c6f95d437b8c8ab4fcab812",
+      "recorded": "2026-08-25",
+      "why": "G1 2,313/2,313 and G1b 5,228/5,228 with zero blind, both measured BEFORE the renderer changed."
+    },
+    {
+      "path": "experiments/grouping_census.json",
+      "role": "g0",
+      "sha256_lf": "62694b54468548d675d77bc64f6acc9393ede81371acee38fc6fea43947286a3",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "prover/lean/normalizer/Serialize.lean",
+      "role": "serializer",
+      "sha256_lf": "9ba3ad7625323f924fa1b76107c917f1bab64a196fd007943bd86258b3551a5e",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "prover/lean/normalizer/lean-toolchain",
+      "role": "toolchain_pin",
+      "sha256_lf": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "scripts/cv4_replay.py",
+      "role": "cv4_replay_program",
+      "sha256_lf": "1025c40c3de2d42e893830e1e1fcf2ca9dc40fd29bf126e4ac2e5013c0a7d70e",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "scripts/foreign_voice.py",
+      "role": "renderer_and_inverse",
+      "sha256_lf": "759f24a71467c9a74222b61227e6a7956f8e232671d8a7c535dbebb71757a550",
+      "recorded": "2026-08-25",
+      "why": "v2-canonical. The ONE change to the forward path: R(s) is re-emitted under grouping.json before tokenizing. The inverse and the oracle are byte-for-byte the v0.19 path."
+    },
+    {
+      "path": "scripts/foreign_voice_lexicon.py",
+      "role": "lexicon_gate",
+      "sha256_lf": "38c7f3d7e1c14928ee6413f8f637112f9400edd2440ae2f7e65752cc4657a3be",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "scripts/foreign_voice_oracle.py",
+      "role": "serializer_driver",
+      "sha256_lf": "59a21dcc9dbd80929383fc35e8a55c462dc146a9fc53f0e94b990c99c4c4ad3a",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "scripts/foreign_voice_rule_r.py",
+      "role": "interpretation_applier",
+      "sha256_lf": "3ca7a5ba25c69e7fb06fb3c04ebb274d8824ee158e0fe4f72dc73b919bb5eb20",
+      "recorded": "2026-08-25"
+    },
+    {
+      "path": "scripts/grouping_canonical_probe.py",
+      "role": "canonicalizer",
+      "sha256_lf": "b097ae66890b30a2af3394a3927e0512d8a0aed9addfdad8cd540b5c62f41b9b",
+      "recorded": "2026-08-25",
+      "why": "G-P's deliverable. UNTRUSTED and measured by G1 and G1b."
+    },
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+      "recorded": "2026-08-25",
+      "why": "B7's freeze list, inherited unchanged. Still 65fead2f… — the byte-frozen parser this cycle does not touch and which lives in another lane's scope entirely."
+    },
+    {
+      "path": "scripts/numeral_words.py",
+      "role": "numeral_pair",
+      "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4",
+      "recorded": "2026-08-25",
+      "why": "The registered pair, unchanged. L2 is defined against its vocabulary and the two numeral refusal classes are consequences of its registered domain."
+    }
+  ],
+  "pending": [
+    {
+      "path": "scripts/machine_reader.py",
+      "role": "c_v3_prime_reader",
+      "sha256_lf": "pending",
+      "why": "C-V3′'s pinned local reader. Its weights-digest refusal is a CONSTRUCTION PREREQUISITE (Correction 9): weights_blob_sha256 appears exactly once in the whole tree and nothing reads it at run time, so this control must BUILD the model-side refusal, not inherit it."
+    },
+    {
+      "path": "experiments/c_v3_prime_pilot.json",
+      "role": "c_v3_prime_pilot",
+      "sha256_lf": "pending",
+      "why": "The pilot that must establish reproducibility BEFORE any floor is frozen. There is no seed field in any manifest or request body in the tree, so temperature-0 determinism is an assumption this repository has never tested. If reproducibility fails, C-V3′ publishes that failure as its result and reverts to ABSENT."
+    },
+    {
+      "path": "scripts/measure_foreign_voice2.py",
+      "role": "registered_run",
+      "sha256_lf": "pending",
+      "why": "The fresh run. Frozen when it lands, and it refuses to publish unless every digest here revalidates."
+    }
+  ],
+  "c_v3_human_still_absent": {
+    "control": "C-V3 (human) — the determinacy sheet",
+    "status": "ABSENT",
+    "reason": "no determinacy sheet, no non-maintainer marking",
+    "consequence": "NO CLAIM that a PERSON can recover the mathematics determinately from the English, here or in the release",
+    "c_v3_prime_does_not_substitute": "a machine reader measures whether the sentence determines the term TO THAT MACHINE, which is a fact about a model and not about a reader. Saying so is load-bearing precisely because a measured machine number is the most tempting thing in this design to over-read."
+  }
+}

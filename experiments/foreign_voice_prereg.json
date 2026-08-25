@@ -180,13 +180,14 @@
     {
       "path": "scripts/foreign_voice.py",
       "role": "renderer_and_inverse",
-      "sha256_lf": "c8247678c0ec0f92229fb97ee4948115cffdd2a6a64bbabe40ba86ccf2cddf3d",
+      "sha256_lf": "759f24a71467c9a74222b61227e6a7956f8e232671d8a7c535dbebb71757a550",
       "recorded": "2026-08-24, with the artifact rather than before it",
       "why": [
         "C-R3's discipline, imported from v0.18: 'the inverter's digest is recorded beside them.' It could not be in the commit that froze the parser BEFORE the renderer existed, so it lands with the renderer and carries its own date. The ordering is itself the record, and tests/git_ordering.py checks it against the history rather than against this sentence.",
         "This module is UNTRUSTED and measured (§4): the renderer, the literal inverse and the two-stage gate. Recording its digest is not a claim that it is correct; it is what makes 'the run measured THIS renderer' a checkable statement.",
         "Its first obligation was discharged before this row existed: it reproduces B0d's hundred sealed surfaces byte-identically, 100 of 100, and the five appendix rows 5 of 5."
-      ]
+      ],
+      "re_recorded": "2026-08-25, v0.20 correction 2 — the renderer emits canonical grouping"
     },
     {
       "path": "scripts/foreign_voice_eligibility.py",
@@ -586,6 +587,26 @@
         "The register's entry set, blocked_set_digest and all five B3 buckets — G4's floor, verified."
       ],
       "not_a_b7_event": "B7 is a claim about the parser and the interpretation. Both are byte-unchanged, and neither moved to make an oracle agree."
+    },
+    {
+      "dated": "2026-08-25",
+      "finding": "v0.20 correction 2 — the canonical renderer",
+      "artifact": "scripts/foreign_voice.py",
+      "what": "The forward path re-emits R(s) under data/foreign_voice/grouping.json before tokenizing. RENDERER_ID becomes foreign_voice.renderer.v2-canonical.",
+      "digests_retired": [
+        {
+          "path": "scripts/foreign_voice.py",
+          "v019_sha256_lf": "c8247678c0ec0f92229fb97ee4948115cffdd2a6a64bbabe40ba86ccf2cddf3d",
+          "v020_sha256_lf": "759f24a71467c9a74222b61227e6a7956f8e232671d8a7c535dbebb71757a550",
+          "why": "canonical grouping in the forward path"
+        }
+      ],
+      "why": [
+        "This is the ONE change to the forward path. The literal inverse and the oracle driver are byte-for-byte the v0.19 path, which matters because the inverse is what B1's identity relation depends on and changing it would change what the gate means.",
+        "v0.19 rendered the source's own brackets verbatim, which is why a served sentence could have a redundant-bracket variant that read differently and certified identically. C-V4.drop_group measured that at 0.80 against a 0.90 floor and voided the run.",
+        "G2 was measured immediately after: the renderer reproduces all 100 re-sealed hand-authored sentences byte-identically, which is the sealed prediction meeting the implementation rather than the other way round."
+      ],
+      "not_a_b7_event": "match_signatures.py and rule_r.json are byte-unchanged. The renderer is UNTRUSTED and measured (§4); recording its digest is not a claim it is correct."
     }
   ],
   "amendments": [

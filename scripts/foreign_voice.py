@@ -81,9 +81,15 @@ if __package__ in {None, ""}:  # pragma: no cover - CLI import shim
 import foreign_voice_lexicon as fvl  # noqa: E402
 import foreign_voice_oracle as fvo  # noqa: E402
 import foreign_voice_rule_r as fvr  # noqa: E402
+import grouping_canonical_probe as gp  # noqa: E402
 import numeral_words as nw  # noqa: E402
 
-RENDERER_ID = "foreign_voice.renderer.v1"
+RENDERER_ID = "foreign_voice.renderer.v2-canonical"
+
+#: The canonical grouping rule, loaded once. A TRUSTED, reviewed artifact with
+#: its own digest, exactly as rule R and the lexicon are — see
+#: `data/foreign_voice/grouping.json`.
+GROUPING_RULE = gp.Rule.load()
 
 #: Rule R's identifier grammar, mirrored. A name is read here exactly as the
 #: interpretation reads it, so the two cannot disagree about what a token is.
@@ -126,6 +132,9 @@ class Rendering:
     interpreted: str
     interpretation_shift: tuple[str, ...]
     surface: str
+    #: `R(s)` re-emitted under the canonical grouping rule — what the sentence
+    #: is actually a rendering OF.
+    canonical: str
     slot_names: dict[str, int]
     numerals_used: tuple[str, ...]
     lexicon_entries: tuple[tuple[str, str], ...]
@@ -148,11 +157,13 @@ class Rendering:
             "statement_id": self.statement_id,
             "source": self.source,
             "interpreted": self.interpreted,
+            "canonical": self.canonical,
             "interpretation_shift": list(self.interpretation_shift),
             "surface": self.surface,
             "parameters": {
                 "order": "canonical",
-                "grouping": "carried, not rebuilt",
+                "grouping": "canonical — emitted only where precedence demands",
+                "grouping_rule": GROUPING_RULE.rule_id,
                 "surface_slot_names": dict(self.slot_names),
                 "slot_index_basis": (
                     "first occurrence in R(s), left to right, from zero. There "
@@ -286,9 +297,32 @@ def render_interpreted(interpreted: str, lexicon: fvl.ForeignLexicon,
                        interpretation_shift: tuple[str, ...] = (),
                        preamble_binders: tuple[str, ...] = ()
                        ) -> Rendering | Refusal:
-    """Render an already-interpreted `R(s)`. Never raises on corpus input."""
+    """Render an already-interpreted `R(s)`. Never raises on corpus input.
+
+    **The one change v0.20 makes to the forward path.** `R(s)` is re-emitted
+    under `grouping.json` before it is tokenized, so a grouping word appears
+    only where precedence demands one. Everything downstream — the slot
+    marker, the numeral pair, the phrase lookup, the literal inverse and the
+    oracle — is byte-for-byte the v0.19 path.
+
+    v0.19 rendered the source's own brackets verbatim, which is why a served
+    sentence could have a redundant-bracket variant that read differently and
+    certified identically. That variant is now not rare but *ungrammatical*,
+    and G1b establishes it over all 5,228 surviving pairs rather than a sample.
+    """
     try:
-        tokens = tokenize(interpreted, lexicon)
+        canonical = gp.canon(interpreted, GROUPING_RULE)
+    except gp.GroupingError as exc:
+        # Unreachable over the covered set — G-P parses all 2,313 — so this is
+        # a guard, not a class. It is mapped onto the CLOSED refusal vocabulary
+        # rather than widening it: a construct the grouping rule has no clause
+        # for is a construct with no row, and widening the vocabulary would
+        # move the lexicon digest that the B0d seed derivation now depends on.
+        return Refusal(statement_id, source or interpreted, interpreted,
+                       "no_lexicon_row",
+                       f"the grouping rule cannot read this statement: {exc}")
+    try:
+        tokens = tokenize(canonical, lexicon)
     except ForeignVoiceError as exc:
         reason, _, detail = str(exc).partition(": ")
         return Refusal(statement_id, source or interpreted, interpreted,
@@ -324,6 +358,7 @@ def render_interpreted(interpreted: str, lexicon: fvl.ForeignLexicon,
         interpreted=interpreted,
         interpretation_shift=interpretation_shift,
         surface=" ".join(words),
+        canonical=canonical,
         slot_names=slots,
         numerals_used=tuple(numerals),
         lexicon_entries=tuple(sorted(used.items())),

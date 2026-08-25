@@ -397,7 +397,7 @@ class TheGate(unittest.TestCase):
             statement_id="mutant", source=good.source,
             interpreted=good.interpreted,
             interpretation_shift=good.interpretation_shift,
-            surface=moved,
+            surface=moved, canonical=good.canonical,
             slot_names=good.slot_names, numerals_used=good.numerals_used,
             lexicon_entries=good.lexicon_entries,
             preamble_binders=good.preamble_binders)
