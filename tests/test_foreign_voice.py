@@ -105,21 +105,61 @@ class SealedPrediction(unittest.TestCase):
 
     def test_the_eighty_five_unchanged_still_match_the_v019_seal(self) -> None:
         """G2's other half: a grammar change that quietly moved one of the 85
-        would be a grammar change nobody asked for."""
+        would be a grammar change nobody asked for.
+
+        The first version of this test read the seal at **HEAD** and compared
+        it to the worktree. On a clean tree those are the same bytes, so it
+        compared the file to itself and could not have gone red. Reviewer
+        finding H2.
+
+        It now reads the seal as it stood **before the re-seal commit** — the
+        parent of the commit that re-authored the fifteen — which is the only
+        blob that can falsify the claim. A tree where that blob is unreadable
+        cannot check G2's other half at all, so it FAILS rather than skipping:
+        an unrunnable check reported as a pass is the failure mode this whole
+        file exists to avoid.
+        """
         import subprocess
+
+        reseal = subprocess.run(
+            ["git", "-C", str(ROOT), "log", "--diff-filter=M", "--format=%H",
+             "-1", "--", "data/foreign_voice/b0d_sealed_renderings.json"],
+            capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(reseal.returncode, 0,
+                         f"cannot locate the re-seal commit: {reseal.stderr}")
+        commit = reseal.stdout.strip().split("\n")[0]
+        self.assertTrue(commit, "no modifying commit found for the sealed file")
+
         blob = subprocess.run(
             ["git", "-C", str(ROOT), "show",
-             "HEAD:data/foreign_voice/b0d_sealed_renderings.json"],
+             f"{commit}~1:data/foreign_voice/b0d_sealed_renderings.json"],
             capture_output=True, text=True, encoding="utf-8")
-        if blob.returncode != 0:
-            self.skipTest("cannot read the previous seal from git")
+        self.assertEqual(
+            blob.returncode, 0,
+            f"cannot read the PRE-RE-SEAL blob at {commit[:8]}~1 — G2's other "
+            f"half is unverifiable here, and an unrunnable check must not "
+            f"report as a pass: {blob.stderr}")
+
         previous = {row["statement_id"]: row["surface"]
                     for row in json.loads(blob.stdout)["renderings"]}
+        # The comparison is only meaningful if the blob really is the older
+        # one: it must NOT already carry the re-seal marker.
+        self.assertNotIn(
+            "reseal", json.loads(blob.stdout),
+            f"the blob at {commit[:8]}~1 already carries a re-seal block, so "
+            f"it is not the pre-re-seal seal and this test would be comparing "
+            f"the new file to itself")
+
+        compared = 0
         for row in self.sealed["renderings"]:
             if row.get("reauthored_2026_08_24"):
                 continue
             with self.subTest(statement_id=row["statement_id"]):
                 self.assertEqual(row["surface"], previous[row["statement_id"]])
+            compared += 1
+        self.assertEqual(compared, 85,
+                         "G2's other half must compare exactly the 85 the "
+                         "re-seal claims it left alone")
 
     def test_the_seal_was_written_before_this_renderer(self) -> None:
         """Otherwise the hundred are a transcript and this test is theatre."""

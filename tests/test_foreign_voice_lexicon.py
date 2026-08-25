@@ -406,16 +406,32 @@ class ConstructiveCoverageTests(unittest.TestCase):
         self.assertEqual(len(self.eligible), 2319)
         self.assertEqual(self.preview["b0bc"]["accepted"], 2319)
         self.assertEqual(self.preview["b0a"]["totals"]["residue"], 4191)
-        # NOT hardcoded at 6,414 / 10,605 any more. Commit b1c9440 widened
-        # TOKEN_RE so the two glyphs read natively, which emptied the
-        # transliterable bucket and shrank `mute` to the residue. Those were
-        # facts about one parser; the INVARIANT is that the mute set is exactly
-        # the transliterable half plus the foreign residue, whichever parser is
-        # in the tree.
+        # Two BOOKKEEPING IDENTITIES and one PINNED CONSTANT, and the
+        # difference matters. Reviewer finding M2: an earlier version of this
+        # block called the identities "stronger" than the constants they
+        # replaced, which they are not — they are true of any consistent
+        # split, so they cannot detect a corpus or parser change at all. They
+        # are kept because a violated identity means the census is internally
+        # broken, and that IS worth catching; they are not kept as a
+        # denominator guard.
         totals = self.preview["b0a"]["totals"]
         self.assertEqual(totals["mute"],
-                         totals["transliterable"] + totals["residue"])
-        self.assertEqual(totals["nodes"], totals["parseable"] + totals["mute"])
+                         totals["transliterable"] + totals["residue"],
+                         "bookkeeping identity: the mute set is the "
+                         "transliterable half plus the foreign residue")
+        self.assertEqual(totals["nodes"], totals["parseable"] + totals["mute"],
+                         "bookkeeping identity: every node is parseable or mute")
+
+        # THE ACTUAL GUARD, pinned 2026-08-25 under the post-b1c9440 tokenizer.
+        # 6,414 / 10,605 were facts about the pre-widening parser and are
+        # recorded as history in the prereg; these are facts about this one. A
+        # move here is a real event and must be a dated amendment, not a
+        # silently-passing identity.
+        self.assertEqual(totals["nodes"], 12777)
+        self.assertEqual(totals["residue"], 4191)
+        self.assertEqual(totals["mute"], 4191)
+        self.assertEqual(totals["transliterable"], 0)
+        self.assertEqual(totals["parseable"], 8586)
 
     def test_the_only_uncovered_construct_is_the_one_with_a_refusal_row(self) -> None:
         leftovers: set[str] = set()

@@ -582,10 +582,10 @@
         "v0.19's numbers are not restated anywhere. foreign_voice_rate.json stays committed as it read, VOID and all, and the fresh run's rate will be a different number over a different grammar."
       ],
       "what_did_not_move": [
-        "scripts/match_signatures.py — still 65fead2f…, the byte-frozen parser, untouched by this cycle and in another lane's scope entirely.",
+        "scripts/match_signatures.py — UNTOUCHED BY THIS CYCLE, but NOT still 65fead2f…. Corrected 2026-08-25 (reviewer finding L4): an earlier version of this line said 'still 65fead2f…', which was false when written. The file is f5b2abba… and has been since commit b1c9440, which is an ancestor of this branch's base. The frozen row above deliberately keeps the 65fead2f… digest as the value v0.18/v0.19 measured under, marked `retired_for_future_comparisons`; that is history, and this line was describing the tree.",
         "data/foreign_voice/rule_r.json — the declared interpretation is unchanged; canonical grouping is a rendering rule, not an interpretation.",
         "The lexicon's rows: every section (binders, connectives, relations, operators, types, structural, slot_marker, refusals, refusal_reasons) is byte-identical. Only `reading_rules` prose changed.",
-        "The register's entry set, blocked_set_digest and all five B3 buckets — G4's floor, verified."
+        "The register's entry set and blocked_set_digest — G4's floor, verified byte-identical. Corrected 2026-08-25 (reviewer finding M1): this line also claimed 'all five B3 buckets', which is FALSE. The transliterable bucket moved 6,414 -> 0 when b1c9440's tokenizer widening reached this cycle, and the total moved 10,605 -> 4,191. What G4 actually asserts — that canonical grouping moves no register ENTRY — holds; the bucket totals moved for an unrelated reason in another lane."
       ],
       "not_a_b7_event": "B7 is a claim about the parser and the interpretation. Both are byte-unchanged, and neither moved to make an oracle agree."
     },
@@ -639,6 +639,25 @@
         "B0a's bookkeeping only: parseable 2,172 -> 8,586, mute 10,605 -> 4,191, transliterable 6,414 -> 0.",
         "The residue is the SAME 4,191 statement ids, the eligible set the same 2,319, zero per-statement records differ, and the register's entry set and blocked_set_digest are byte-identical."
       ]
+    },
+    {
+      "dated": "2026-08-25",
+      "finding": "adversarial review, findings L4 / L5 / M1 — stale sentences beside correct digests",
+      "artifact": "experiments/foreign_voice_prereg.json (prose only; no digest field changes)",
+      "what": [
+        "L4: v0.20 correction 1's `what_did_not_move` said scripts/match_signatures.py was 'still 65fead2f…'. It was not, and had not been since b1c9440. Corrected in place with the correction dated and named.",
+        "M1: the same list claimed 'all five B3 buckets' were byte-identical. The transliterable bucket moved 6,414 -> 0 and the total 10,605 -> 4,191. Corrected to what G4 actually asserts.",
+        "L5: the register appears TWICE in `digests_retired` — 5166f801… -> d4b971e7… (the lexicon amendment) and d4b971e7… -> 1b8d5c2d… (the parser regeneration). Both hops are real committed states and the chain is accurate, but reading either row alone suggests its `v020_sha256_lf` is current. The CURRENT register digest is 1b8d5c2d…; the middle value is an intermediate."
+      ],
+      "why_this_matters_more_than_the_numbers": [
+        "None of these was a wrong digest. Every digest field in this file was correct when written and is correct now. What was wrong was the PROSE BESIDE the digests — and prose is the half no test compares.",
+        "That is the general lesson the review surfaced and it is worth stating once, plainly: a freeze list is machine-checked on exactly one field. Every other sentence in it is an assertion carrying the same authority to a reader and none of the verification."
+      ],
+      "register_digest_chain": {
+        "v019_as_measured": "5166f8013691ae59",
+        "after_the_lexicon_amendment": "d4b971e79f1270da",
+        "current_after_the_parser_regeneration": "1b8d5c2dbc221df1"
+      }
     }
   ],
   "amendments": [

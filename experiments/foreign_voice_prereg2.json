@@ -46,11 +46,11 @@
     },
     "G4": {
       "status": "discharged",
-      "reading": "register re-frozen; only lexicon_digest_at_freeze moved; B3 still 6,414 + 2,313 + 0 + 1,706 + 172 = 10,605"
+      "reading": "register re-frozen; entry set and blocked_set_digest byte-identical. CORRECTED 2026-08-25 (reviewer finding M1): the earlier reading said 'B3 still 6,414 + 2,313 + 0 + 1,706 + 172 = 10,605', which is FALSE. The transliterable bucket moved 6,414 -> 0 and the total 10,605 -> 4,191 when b1c9440's tokenizer widening reached this cycle. The current census is 0 + 2,313 + 0 + 1,706 + 172 = 4,191. G4's actual claim — that canonical grouping moves no register ENTRY — holds."
     },
     "G7": {
       "status": "not this lane",
-      "note": "the surface is armed by the artifact and a test says so — ROADMAP-v0.20 §4d, the batch lane"
+      "note": "OWED, NOT CLEARED. The surface is armed by the artifact and a test says so — ROADMAP-v0.20 §4d, the batch lane. Nothing in this lane touches answer.py or serve_chat.py, so this run cannot discharge it, and a consumer must not read 'not this lane' as satisfied."
     }
   },
   "c_v4_prime": {
@@ -295,14 +295,24 @@
       "why": "B7's freeze list, inherited. THE PIN MOVED BEFORE THIS LANE STARTED and an earlier version of this row claimed otherwise — see corrections. It is f5b2abba… here, not v0.19's 65fead2f…, because commit b1c9440 ('Two glyphs, and everything the seal cannot see about them') widened TOKEN_RE so `≥` and `≤` read natively. That is v0.19 §5's item 3a / ROADMAP-v0.20 §4b, and it is an ancestor of this branch's base. This lane never touched the file."
     },
     {
+      "path": "scripts/measure_foreign_voice.py",
+      "role": "measurement_supplier",
+      "sha256_lf": "b5b17830c07d47d7da54ca8cf9b87a24da482516f8780dbb713fb6c5fe09378a",
+      "recorded": "2026-08-25, reviewer finding H6",
+      "why": [
+        "OMITTED FROM THE ORIGINAL FREEZE LIST, which was a real gap: this module supplies b1, b3, c_v1, c_v2, `_plan`, `_admits`, `mutate`, `scrambled_lexicon`, `covered_rows` and `c_v3_absent` to the run. More than half of what foreign_voice_rate2.json reports was computed by code the record did not cover.",
+        "The digest recorded here is b5b17830c07d47d7da54ca8cf9b87a24da482516f8780dbb713fb6c5fe09378a, VERIFIED UNCHANGED across the entire run chain — identical at 4d09d95, 8c52dfd and 2f882f0 — so this addition records what the run actually executed rather than a value that drifted afterwards."
+      ]
+    },
+    {
       "path": "scripts/measure_foreign_voice2.py",
       "role": "registered_run",
-      "sha256_lf": "c1ab18a1b9d10e52715d518d7073642d109c112f296ce484fd7bb04b788590de",
+      "sha256_lf": "51889e74b208a9e6a4c346872cc4eaab25870f5eacd8e67952cfb3d88ba2df35",
       "recorded": "2026-08-25",
       "why": [
         "The fresh run. It refuses to publish unless every digest here revalidates."
       ],
-      "re_recorded": "2026-08-25, correction 3 — the B0a guard now checks the residue ID SET first, because that is what the claim is over"
+      "re_recorded": "2026-08-25, POST-RUN, reviewer finding H1 — the digest moves for FUTURE runs; experiments/foreign_voice_rate2.json stands exactly as measured under the previous digest, and is neither re-run nor edited"
     },
     {
       "path": "scripts/numeral_words.py",
@@ -422,6 +432,41 @@
         "G4's SUBSTANCE — canonical grouping changes how a statement is said, never whether — is unaffected and holds."
       ],
       "not_a_b7_event_but_it_is_a_b7_lesson": "No trusted artifact was edited to make anything agree, and the run had scored nothing when it refused. What this exposes is that a freeze list can carry a true digest beside a false sentence, and only the digest is machine-checked."
+    },
+    {
+      "dated": "2026-08-25",
+      "finding": "adversarial review — H1, H5, H6, M1, L2, L7",
+      "the_hard_constraint": "experiments/foreign_voice_rate2.json is NOT edited by any of this. Its byte-identity across three separate process invocations is the reproduction proof, and a note added to it would destroy the thing being proved. Every fix is either PROSPECTIVE (code, for future runs) or DOCUMENTARY (here and in ANALYSIS.md).",
+      "H1_g5b_was_true_by_construction": {
+        "what": "measure_foreign_voice2.py computed each mutation record's `pair_kind` from a dict literal keyed by CLASS NAME, so G5b — 'no cross-kind record in drop_group or shift_group' — could not have gone red whatever the mutations touched.",
+        "the_data_existed_all_along": "`_mutate_tokens` selects the pair through `gp.grouping_pair_spans`, which filters on the emission's real `pair_kinds`, and it already RETURNED the kind. The return value was being discarded and overwritten.",
+        "fixed": "the kind is carried from the mutation site to the record; a dead `... if False else (None, '')` branch beside it is deleted.",
+        "the_substance_was_true_the_evidence_was_not": "drop_group and shift_group really do touch only grouping pairs, because the span selector only ever offers grouping pairs. G5b's FINDING is unaffected. What was broken was its evidence — and a gate whose evidence cannot fail is not a gate.",
+        "prospective": "the artifact was measured under the pre-fix digest and stands as measured; the next run's G5b is adjudicated from measured data."
+      },
+      "H5_the_c_g1_denominator_is_a_CHOICE_registered_as_one": {
+        "what_was_done": "C-G1 removed the 8 statements that NO LONGER ADMIT the mutation from BOTH numerator and denominator, giving 42/42 = 1.00 against a 0.95 floor.",
+        "the_alternative_published_beside_it": "keeping them in gives 42/50 = 0.84 — BELOW the floor.",
+        "why_it_matters": "1.00 versus 0.84 is ship-versus-withhold. The treatment was pre-registered in cv4_replay_ids.json before the canonical renderer existed and it is defensible, but it is a CHOICE about what the denominator means, not a fact that fell out.",
+        "the_argument_for": "a statement whose redundant bracket canonicalization REMOVED has had its blind spot closed in the strongest possible way — the variant is ungrammatical, not merely detected. Scoring it as a miss counts the repair as a failure.",
+        "the_argument_against": "it makes the headline depend on a denominator the intervention itself shrank, and 8 of 50 is 16% of the set.",
+        "release_obligations": [
+          "NO release sentence may say 'all ten detected'. The ten named cases are 7 DETECTED and 3 NO LONGER ADMIT, and those are different facts.",
+          "NO release sentence may present C-G1's 1.00 as the same quantity as v0.19's 0.80. C-G1 measures the TERM path — delete a pair from the canonical token stream and elaborate. v0.19's 0.80 measured the SURFACE path — mutate the English, invert, elaborate (reviewer finding H4).",
+          "The commensurable surface-path repair number is C-V4′'s drop_group: 42 of 42 on the RAISED 0.95 floor. That is what release language should use to say the hole closed.",
+          "Any quotation of 1.00 carries the 42/50 = 0.84 alternative in the same breath, or names the denominator treatment."
+        ]
+      },
+      "H6_supplier_module_now_frozen": "scripts/measure_foreign_voice.py added to the freeze list at its as-was-at-run digest, verified unchanged across the whole run chain.",
+      "M1_stale_registered_sentences": {
+        "what": "Sentence STRINGS say 'close at 10,605' or 'B3 buckets byte-identical'. The measured NUMBERS beside them are correct; the prose is design text from before the tokenizer widening.",
+        "in_the_committed_artifact": "foreign_voice_rate2.json's B3 gate sentence and its G4 reading carry that stale prose and ARE NOT EDITED. The artifact's measured fields are right — B3 reports 0 + 2,313 + 0 + 1,706 + 172 = 4,191, must_equal 4,191, closes_exactly true — so a reader comparing sentence to numbers sees the numbers win. ANALYSIS.md carries a dated note saying exactly that.",
+        "in_the_code": "the B3 gate sentence now reads 'the five buckets close at the mute set exactly', for future runs.",
+        "in_this_file": "pre_run_prerequisites.G4's reading is corrected above."
+      },
+      "L2_g7_is_owed_not_cleared": "recorded in pre_run_prerequisites.G7 above.",
+      "L7_a_missed_prediction": "DESIGN-voice-completion §7's C-G1 preview predicted '2 no longer admitting' over the re-derived fifty. Measured: 8 — the direction right, the magnitude four times off. The preview was labelled a preview and its proxy was 'its own canonical form, not the oracle's serialized Expr', which is exactly the gap that would produce this. A missed prediction is recorded, not rounded off.",
+      "the_general_lesson_the_review_surfaced": "None of H1, M1, L4 or L5 was a wrong digest. Every digest field was correct. What was wrong was the PROSE BESIDE the digests, and the assertions that were true in substance but written so they could not go red. A freeze list is machine-checked on exactly one field; every other sentence in it carries the same authority to a reader and none of the verification."
     }
   ]
 }

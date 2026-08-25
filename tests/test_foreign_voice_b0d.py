@@ -86,10 +86,44 @@ class SelectionRuleTests(unittest.TestCase):
         self.assertEqual(self.ids["seed_source"], "data/foreign_voice/lexicon.json")
         sealed = json.loads(SEALED_PATH.read_text(encoding="utf-8"))
         derivation = sealed["id_selection_seed_derivation"]
+
+        # RECOMPUTED, not compared literal-to-literal. The first version of
+        # this assertion checked the artifact's `derived_value` against the id
+        # file's `seed_source_digest` — two strings written by the same script
+        # in the same breath, so it could not have caught a wrong derivation.
+        # Reviewer finding M9. This runs the derivation the header describes:
+        # find the commit that re-sealed the file, take its PARENT's lexicon
+        # blob, and hash it.
+        import subprocess
+
+        reseal = subprocess.run(
+            ["git", "-C", str(ROOT), "log", "--diff-filter=M", "--format=%H",
+             "-1", "--", "data/foreign_voice/b0d_sealed_renderings.json"],
+            capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(reseal.returncode, 0, reseal.stderr)
+        commit = reseal.stdout.strip().split("\n")[0]
+        self.assertTrue(commit, "no re-seal commit found")
+
+        blob = subprocess.run(
+            ["git", "-C", str(ROOT), "show",
+             f"{commit}~1:data/foreign_voice/lexicon.json"],
+            capture_output=True)
+        self.assertEqual(
+            blob.returncode, 0,
+            f"cannot read the parent's lexicon blob at {commit[:8]}~1 — the "
+            f"seed derivation is unverifiable here, and that is a FAILURE")
+        recomputed = hashlib.sha256(
+            blob.stdout.replace(b"\r\n", b"\n")).hexdigest()
+
+        self.assertEqual(recomputed, derivation["derived_value"],
+                         "the header's derived_value is not what the "
+                         "derivation it describes actually produces")
+        self.assertEqual(recomputed, self.ids["seed_source_digest"],
+                         "the drawn ids were not seeded from the parent "
+                         "commit's lexicon")
         self.assertTrue(derivation["agrees_with_the_recorded_seed"])
-        self.assertEqual(self.ids["seed_source_digest"], derivation["derived_value"])
         self.assertNotEqual(
-            derivation["derived_value"], _sha256_lf(LEXICON_PATH),
+            recomputed, _sha256_lf(LEXICON_PATH),
             "the lexicon has not moved, so this test is asserting nothing that "
             "the simpler v0.19 form did not already assert")
 

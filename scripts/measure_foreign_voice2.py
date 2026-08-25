@@ -191,6 +191,9 @@ def c_v4_prime(oracle, lexicon, rule, grule, rows, prereg, batch) -> dict:
     terms: list[tuple[str, str]] = []
     index = 0
     plan: list[tuple[str, str, list[str], list[str], str, str]] = []
+    #: the pair kind `_mutate_tokens` actually touched, one per planned
+    #: record -- the data G5b is adjudicated from
+    plan_kinds: list[str] = []
     for name in sorted(spec):
         for sid in ids["classes"][name]["statement_ids"]:
             row = by_id.get(sid)
@@ -209,6 +212,7 @@ def c_v4_prime(oracle, lexicon, rule, grule, rows, prereg, batch) -> dict:
             after_english = render_tokens(mutated, lexicon)
             plan.append((name, sid, emission.tokens, mutated, before_english or "",
                          after_english or ""))
+            plan_kinds.append(kind)
             terms.append((f"b{index}", " ".join(emission.tokens)))
             terms.append((f"a{index}", " ".join(mutated)))
             if after_english:
@@ -228,12 +232,15 @@ def c_v4_prime(oracle, lexicon, rule, grule, rows, prereg, batch) -> dict:
         before = answers[f"b{position}"]
         after = answers[f"a{position}"]
         rt = answers[f"r{position}"]
-        _mut, kind = _mutate_tokens(tokens, gp.emit(
-            gp.parse(" ".join(tokens), grule), grule).pair_kinds, name, grule) \
-            if False else (None, "")
-        kind = {"drop_group": "grouping", "shift_group": "grouping",
-                "drop_ascription": "ascription_or_binder_type",
-                "drop_binder": "binder", "swap_binder": "binder"}[name]
+        # G5b's `pair_kind` is MEASURED, not asserted. An earlier version of
+        # this block looked the kind up in a dict literal keyed by CLASS NAME,
+        # which made G5b true by construction: it would have read "drop_group
+        # carries only grouping records" no matter what the mutation actually
+        # touched -- and a cross-kind record is the one thing G5b exists to
+        # find. The kind now comes back from `_mutate_tokens`, which selects
+        # the pair through `gp.grouping_pair_spans` and therefore knows which
+        # of the three kinds it deleted. Reviewer finding H1.
+        kind = plan_kinds[position]
         # THE C-R2 CLAUSE: did the mutation change the TERM at all?
         changed = (not after.ok) or (after.digest != before.digest)
         record = {
@@ -542,7 +549,7 @@ def verdicts(result: dict) -> dict:
          b1_["composition"]["required_sentence"])
     gate("B2", "three outcomes, none a silent drop", True,
          f"outcomes {b1_['outcomes']}; the run completed, so no refusal fired")
-    gate("B3", "the five buckets close at 10,605 exactly", b3_["closes_exactly"],
+    gate("B3", "the five buckets close at the mute set exactly", b3_["closes_exactly"],
          f"{b3_['transliterable']} + {b3_['covered_served']} + {b3_['covered_failed']} + "
          f"{b3_[_MATHLIB]} + {b3_[_NO_ROW]} = {b3_['total']}")
     gate("B5", "two full runs produce byte-identical artifacts",
