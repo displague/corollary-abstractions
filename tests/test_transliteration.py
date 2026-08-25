@@ -179,9 +179,27 @@ class SuccessorPreregTests(unittest.TestCase):
         cls.retired = json.loads(RETIRED_PREREG.read_text(encoding="utf-8"))
 
     def test_the_parser_row_matches_the_tree(self) -> None:
+        """Re-aimed 2026-08-24 by `transliteration.prereg.v1.amendment.exact-literals-2026-08-24`.
+
+        This file was the successor pin until ROADMAP-v0.20 §4b retired its
+        parser row in turn — two cycles have now touched one file, which is
+        exactly the case a single hop gets wrong. The row is checked against
+        whatever the declared chain ends at, and the chain must be complete:
+        `resolve_pin` raises on a marker naming an amendment this file does
+        not record, so a retirement cannot become a way to stop checking.
+        """
+        import prereg_pins
+
         row = {r["role"]: r for r in self.doc["frozen"]}["parser"]
         self.assertEqual(row["path"], "scripts/match_signatures.py")
-        self.assertEqual(_sha256_lf(ROOT / row["path"]), row["sha256_lf"])
+        live = prereg_pins.resolve_pin(
+            self.doc, row, prereg_path="experiments/transliteration_prereg.json"
+        )
+        self.assertEqual(_sha256_lf(ROOT / row["path"]), live["sha256_lf"])
+        self.assertEqual(
+            live["source"], "experiments/exact_literals_prereg.json",
+            "the parser chain must end at the pin §4b's amendment named",
+        )
 
     def test_it_names_the_digest_it_supersedes(self) -> None:
         row = {r["role"]: r for r in self.doc["frozen"]}["parser"]
@@ -260,7 +278,15 @@ class ServedDiffTests(unittest.TestCase):
         self.assertEqual(used["book_after"], after)
         self.assertEqual(used["corpus_after"], after)
         self.assertNotEqual(after, RETIRED_DIGEST)
-        self.assertEqual(after, _sha256_lf(ROOT / "scripts/match_signatures.py"))
+        # Re-aimed 2026-08-24 by `…amendment.exact-literals-2026-08-24`: the
+        # `after` side of THIS diff is the v0.19 transliteration parser, which
+        # §4b has since superseded. The artifact records what it compared; the
+        # tree has legitimately moved past both of its sides.
+        self.assertNotEqual(
+            after, _sha256_lf(ROOT / "scripts/match_signatures.py"),
+            "this diff's `after` parser is itself retired now; agreeing with "
+            "the tree would mean the record moved with it",
+        )
 
     def test_the_witness_gap_is_real_and_the_eleven_are_unmoved(self) -> None:
         """Rule 3's premise, checked instead of quoted.
@@ -451,12 +477,28 @@ class RegisteredRunTests(unittest.TestCase):
                       self.doc["round_trip"]["not_averaged_with_v018"])
 
     def test_the_prereg_revalidation_holds_and_names_the_parser(self) -> None:
+        """Re-aimed 2026-08-24 by `…amendment.exact-literals-2026-08-24`.
+
+        This artifact is a RECORD OF A MEASUREMENT, not a live gate. It used
+        to be checked against the tree, which was right while the tree still
+        carried the parser it ran under. ROADMAP-v0.20 §4b moved that parser,
+        so asking this artifact to match the tree would be asking a closed
+        question — and worse, passing it would mean the record had been
+        edited underneath the number it reports.
+
+        What stays checkable is the identity the run declared: the digest it
+        names is the one the amendment retired, and it is NOT the tree's.
+        """
         gate = self.doc["prereg_revalidated"]
         self.assertEqual(gate["verdict"], "HOLDS")
         used = gate["the_parser_this_run_used"]
         self.assertEqual(used["supersedes"], RETIRED_DIGEST)
-        self.assertEqual(used["sha256_lf"],
-                         _sha256_lf(ROOT / "scripts" / "match_signatures.py"))
+        live = _sha256_lf(ROOT / "scripts" / "match_signatures.py")
+        self.assertNotEqual(
+            used["sha256_lf"], live,
+            "the tree has moved past this run's parser; if these agree the "
+            "record was edited under the number it reports",
+        )
         for row in gate["revalidated"]:
             self.assertTrue(row["agrees"], row["path"])
 
@@ -470,17 +512,83 @@ class RegisteredRunRefusalTests(unittest.TestCase):
 
         cls.mt = mt
 
-    def test_a_drifted_pin_refuses_to_write(self) -> None:
-        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
-        for row in prereg["frozen"]:
-            if row["role"] == "parser":
-                row["sha256_lf"] = "0" * 64
+    def _refuses(self, prereg: dict) -> str:
         with tempfile.TemporaryDirectory() as tmp:
             injured = Path(tmp) / "prereg.json"
             injured.write_text(json.dumps(prereg), encoding="utf-8")
             with self.assertRaises(self.mt.PreregMismatch) as caught:
                 self.mt.revalidate_prereg(injured)
-        self.assertIn("match_signatures.py", str(caught.exception))
+        return str(caught.exception)
+
+    def test_a_drifted_pin_refuses_to_write(self) -> None:
+        """Re-aimed 2026-08-24: corrupt a LIVE pin, not a retired one.
+
+        This used to corrupt the `parser` row, which §4b has since retired —
+        and a retired row's own digest is deliberately no longer what the
+        tree is checked against, so corrupting it now proves nothing. The
+        lexicon row carries a live pin and makes the same point.
+        """
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        for row in prereg["frozen"]:
+            if row["role"] == "lexicon":
+                self.assertNotIn("retired_for_future_comparisons", row)
+                row["sha256_lf"] = "0" * 64
+        self.assertIn("lexicon.json", self._refuses(prereg))
+
+    def test_retiring_a_pin_is_not_a_way_to_stop_checking_it(self) -> None:
+        """The escape hatch this amendment must not have opened.
+
+        A retired row is checked against the SUCCESSOR pin. So corrupting the
+        successor must still refuse — otherwise "retired in writing" would be
+        a way to launder a file out of every check it was under.
+        """
+        import prereg_pins
+
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        successor = json.loads(
+            (ROOT / "experiments" / "exact_literals_prereg.json").read_text(
+                encoding="utf-8"))
+        row = {r["role"]: r for r in prereg["frozen"]}["parser"]
+        self.assertIn("retired_for_future_comparisons", row)
+
+        # A successor whose parser pin is corrupt. Resolution must follow the
+        # chain TO it, so the tree is then compared against a digest that
+        # cannot match — i.e. the retirement did not stop the check.
+        for live in successor["frozen"]:
+            if live["role"] == "parser":
+                live["sha256_lf"] = "0" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "experiments").mkdir()
+            (root / "experiments" / "corrupt_successor.json").write_text(
+                json.dumps(successor), encoding="utf-8")
+            prereg["amendments"][0]["successor_prereg"]["path"] = (
+                "experiments/corrupt_successor.json")
+            resolved = prereg_pins.resolve_pin(
+                prereg, row,
+                prereg_path="experiments/transliteration_prereg.json",
+                repo_root=root,
+            )
+        self.assertEqual(
+            resolved["sha256_lf"], "0" * 64,
+            "resolution did not follow the retirement to the successor pin",
+        )
+        self.assertNotEqual(
+            resolved["sha256_lf"], _sha256_lf(ROOT / row["path"]),
+            "a corrupted successor pin must disagree with the tree; if it "
+            "agreed, retiring a row would be a way to launder a file out of "
+            "every check it was under",
+        )
+
+    def test_a_retirement_naming_an_unrecorded_amendment_fails_loudly(self):
+        """A pin deleted and a pin retired in writing are different things."""
+        import prereg_pins
+
+        prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
+        row = {r["role"]: r for r in prereg["frozen"]}["parser"]
+        row["retired_for_future_comparisons"]["amendment"] = "no-such-amendment"
+        with self.assertRaises(prereg_pins.PinChainError):
+            prereg_pins.resolve_pin(prereg, row, prereg_path="<test>")
 
     def test_a_pending_row_whose_file_exists_refuses_to_write(self) -> None:
         """A freeze written after the thing it froze is not a freeze."""

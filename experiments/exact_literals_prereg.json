@@ -1,0 +1,80 @@
+{
+  "prereg_id": "exact_literals.prereg.v1",
+  "registered": "2026-08-24",
+  "roadmap": "docs/ROADMAP-v0.20.md §4b",
+  "design": "docs/DESIGN-statements-that-run.md (E0's exact-literal prerequisite)",
+  "digest_algorithm": "sha256 over the file's bytes with CRLF normalised to LF",
+  "what_this_records": [
+    "The successor pin for scripts/match_signatures.py, recorded by the dated amendment `transliteration.prereg.v1.amendment.exact-literals-2026-08-24` in the SAME commit that changes the parser.",
+    "It exists because a pin cannot be edited underneath the artifacts that quoted it. experiments/transliteration_prereg.json keeps the digest the v0.19 transliteration run was measured under; this file carries the digest every FUTURE comparison is read against.",
+    "A revalidator resolves a retired row by following its amendment to this file. The chain is followed, never skipped: a marker naming an amendment its own prereg does not record fails loudly."
+  ],
+  "the_change": {
+    "what": "match_signatures.Parser built numeric literals as ('num', float(tok)); an INTEGER surface is now ('num', int(tok)) through match_signatures.exact_literal. A decimal surface stays float.",
+    "why": "Every literal wider than a double's 53-bit significand was destroyed at parse time. Two ground statements were served the right verdict with printed values wrong by 4.4e59, returned as an exact Fraction so nothing downstream could tell — while v0.18's numeral pair refused those same two statements by name. One subsystem refused honestly; the other silently corrupted.",
+    "scope_verified_not_assumed": "Skeletons and shape keys are byte-identical across the change for all 25,554 committed terms (both canonical_ascii and anonymized_template, every corpus). int and Fraction format under ':g' exactly as float did, which is why no twin group, decomposition or specialization moves. The evidence is experiments/exact_literals_served_diff.json.",
+    "why_decimals_stay_float": [
+      "Every destroyed literal measured is an integer; a decimal under this tokenizer is short enough for a double.",
+      "Making decimals Fraction was tried first and the served-line diff REFUSED it: 199 statements lost their `in words` line, because numeral_words.number_to_words accepts int and float and rejects a Fraction as 'not a number'.",
+      "Widening that would retire the pinned numeral pair as well and move R2's registered numeral domain — a separate decision needing its own registration, not something to smuggle into this one."
+    ]
+  },
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
+      "recorded": "2026-08-24",
+      "supersedes": {
+        "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+        "retired_by": "transliteration.prereg.v1.amendment.exact-literals-2026-08-24",
+        "pinned_by": [
+          "experiments/transliteration_prereg.json (frozen, role `parser` — retired in writing, digest left unchanged)",
+          "experiments/transliteration_rate.json (measured under it; left untouched)",
+          "experiments/transliteration_served_diff.json (measured under it; left untouched)"
+        ]
+      },
+      "why": "The parse path DESIGN-statements-that-run E0 stands on. An evaluator that decides statements cannot be built on a parser that destroys their literals, so the exact-literal change precedes the slice that needs it.",
+      "amendments_within_this_prereg": [
+        {
+          "dated": "2026-08-25",
+          "reason": "H1 (adversarial review): §4b's exact integer literals put an uncaught OverflowError on a served route. `f\"{value:g}\"` never raises on a float but must convert an int to float first, so a literal past a double's range traced out of route_line instead of returning a verdict, and the HTTP skin dropped the connection. `match_signatures.format_num` guards the three key builders and emits exactly what the float path emitted.",
+          "supersedes_within_prereg": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+          "why_the_pin_moves_rather_than_a_new_prereg": "The retirement this file records is unchanged — the parser is still the successor pin for the row transliteration_prereg retired. This is a correction to the successor's own bytes, dated inside the successor rather than pretending the original pin was always this value.",
+          "verified_unchanged_by_the_move": [
+            "skeleton and shape_key byte-identical over all 25,554 committed terms (re-run after the guard)",
+            "experiments/exact_literals_served_diff.json findings byte-identical: answer lines moved 0 of 14,830, evaluate route moved 3, same three statement ids. Only the recorded parser digest and the before-blob provenance string differ."
+          ]
+        }
+      ]
+    },
+    {
+      "path": "scripts/measure_transliteration.py",
+      "role": "registered_run",
+      "sha256_lf": "0126490a078c0c8cd0eee5e6ed50a7f5e58c25d8b8b6e4c8edb9c931ce9b13e3",
+      "recorded": "2026-08-24",
+      "supersedes": {
+        "sha256_lf": "58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d",
+        "retired_by": "transliteration.prereg.v1.amendment.exact-literals-2026-08-24"
+      },
+      "why": "Re-pinned because the amendment taught it to follow declared retirements (scripts/prereg_pins.check_frozen). Pin-resolution only: no floor, rate or reading in the transliteration lane moved."
+    }
+  ],
+  "pending": [],
+  "non_claims": [
+    "Not a claim that every literal is exact END TO END. It fixes destruction AT PARSE TIME for integers. float('0.1') is still not exactly one tenth, so an evaluator that must decide 0.1 + 0.2 = 0.3 needs the numeral domain widened first. Filed, not fixed here.",
+    "Not a claim that BACKLOG's node list was right. Its 3 nodes included leanworkbook.skel.lean_workbook_50397, whose `inf` is frozen into the committed anonymized_template by scripts/seed_lean_workbook.py and whose canonical_ascii does not tokenize — the parser never sees it, so this change cannot repair it. That node needs a seed regeneration under AGENTS.md's seeds-are-the-source-of-truth rule and is filed rather than smuggled into a parser commit. In its place the served diff surfaced goedelpset.skel.goedel_pset_789185. Three served nodes are repaired, but not the same three.",
+    "Not a security fix. Loopback-only, single user, nothing untrusted reaches the path (ROADMAP-v0.20 §4's own note).",
+    "Not a performance claim of any kind.",
+    "Not a claim that a skeleton KEY can represent a literal past a double's range. A node keyed `inf` is a node whose literal is unrecoverable IN THE KEY, even though §4b made the parsed value exact. Skeletons are a structural index, not a value channel; widening them is a corpus-wide change with its own seal, and format_num deliberately reproduces the prior key rather than improving it."
+  ],
+  "evidence": {
+    "served_diff": "experiments/exact_literals_served_diff.json",
+    "answer_lines_moved": 0,
+    "evaluate_route_moved": 3,
+    "skeletons_and_shape_keys_moved": 0,
+    "terms_compared_for_skeleton_stability": 25554,
+    "twin_ledger": "reports/signature_matches.json regenerated; only provenance.writer_sha256_lf moved, every twin group byte-identical",
+    "ambiguity_rate": "experiments/ambiguity_rate.json regenerated; only the two provenance digest fields moved, every rate identical"
+  }
+}

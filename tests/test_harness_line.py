@@ -292,6 +292,104 @@ class UnregisteredTextNeverVerifies(BootedSession):
         self.assertIn("register", verdict["detail"].lower())
 
 
+class AWideLiteralReturnsAVerdictAndNeverRaises(BootedSession):
+    """H1: §4b's exact literals put an uncaught OverflowError on a served route.
+
+    `f"{value:g}"` never raises on a float — a literal too wide for a double
+    had already become `inf` at `float(tok)`. On an exact `int` past that
+    range it must convert to float first and RAISES, so the three key
+    builders in `match_signatures` traced back out of `route_line` instead of
+    returning a verdict, and the HTTP skin dropped the connection.
+
+    The corpus never reaches that range — its one 421-digit literal fails
+    template-parse first — so the 25,554-term skeleton byte-identity §4b
+    published is honest. The exposure was typed and HTTP input, which is
+    exactly what this class sends.
+    """
+
+    WIDE = "9" * 421
+
+    def test_a_literal_past_the_float_range_still_returns_a_verdict(self):
+        verdict = route_line(REPO, self.session, f"owns x + {self.WIDE}")
+        self.assertEqual(verdict["route"], "ownership")
+        self.assertIn("status", verdict)
+
+    def test_the_key_builders_emit_what_the_float_path_emitted(self):
+        """Byte-identity is the point, not merely not-crashing.
+
+        `float("9" * 421)` is `inf` — string overflow saturates where int
+        conversion raises — so 'inf' is not a chosen sentinel; it is the
+        reproduction of the prior behaviour at the only point the two paths
+        could differ.
+        """
+        import match_signatures as ms
+
+        wide = int(self.WIDE)
+        self.assertEqual(ms.format_num(wide), f"{float(self.WIDE):g}")
+        self.assertEqual(ms.format_num(wide), "inf")
+        self.assertEqual(ms.format_num(-wide), "-inf")
+
+    def test_values_a_double_can_hold_are_unchanged(self):
+        """The guard must not perturb anything the corpus actually contains."""
+        import match_signatures as ms
+
+        for literal in ("2", "0.5", "12", "4" * 76):
+            with self.subTest(literal=literal):
+                value = int(literal) if "." not in literal else float(literal)
+                self.assertEqual(ms.format_num(value), f"{float(literal):g}")
+
+    def test_a_wide_literal_does_not_raise_through_any_key_builder(self):
+        import match_signatures as ms
+
+        tree = ms.canonicalize(ms.Parser(ms.tokenize(f"x + {self.WIDE}")).parse())
+        self.assertIsInstance(ms.shape_key(tree), str)
+        self.assertIsInstance(ms.render_skeleton(tree), str)
+        self.assertIsInstance(ms.typed_resort(tree, {}), tuple)
+
+
+class ConformIsRegisteredAndRefuses(BootedSession):
+    """4e: DESIGN-statements-that-run §5's route, landed before its compiler.
+
+    The point of landing it early is not the branch — it is that a line this
+    repository INTENDS to answer says "that capability is not built yet"
+    rather than "the corpus does not ground this". Those are different
+    statements about the same line, and only one of them is true.
+    """
+
+    def test_a_conform_line_is_claimed_by_its_own_route(self) -> None:
+        verdict = route_line(
+            REPO, self.session,
+            "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3",
+        )
+        self.assertEqual(verdict["route"], "conform")
+        self.assertEqual(verdict["status"], "refused")
+
+    def test_it_refuses_by_naming_the_capability_it_lacks(self) -> None:
+        """Not a dispatcher abstention wearing a different word."""
+        verdict = route_line(REPO, self.session, "conform some.statement.id x=1")
+        self.assertEqual(verdict["missing_capability"], "tool.conform")
+        self.assertNotIn("corpus does not ground", verdict["detail"])
+        self.assertIn("registered", verdict["detail"])
+
+    def test_a_bare_command_says_what_it_needs(self) -> None:
+        verdict = route_line(REPO, self.session, "conform")
+        self.assertEqual(verdict["route"], "conform")
+        self.assertEqual(verdict["status"], "refused")
+        self.assertIn("statement id", verdict["detail"])
+
+    def test_the_head_guard_is_exact_and_claims_nothing_else(self) -> None:
+        """`conformity` is a word, not this command."""
+        verdict = route_line(REPO, self.session, "conformity is not a command")
+        self.assertNotEqual(verdict["route"], "conform")
+
+    def test_it_never_answers_and_never_claims_grounding(self) -> None:
+        """A stub that invented a conformance record is the failure mode."""
+        verdict = route_line(REPO, self.session, "conform some.statement.id x=1")
+        self.assertNotIn("answer", verdict)
+        self.assertNotIn("receipt", verdict)
+        self.assertNotIn(verdict["status"], {"solved", "found", "held"})
+
+
 class TypedPathReachesTheWriteGate(BootedSession):
     """P-LS3 — seed_ownership, and a byte-identical tree."""
 

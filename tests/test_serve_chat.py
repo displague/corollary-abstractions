@@ -30,6 +30,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import tempfile
 import threading
 import time
 import unittest
@@ -607,6 +608,24 @@ class T2AdversarialProbe(ServedSkin):
             self.assertEqual(
                 self.content(self.one(KERNEL, REALIZED_DEFINITION_LINE)), first
             )
+
+    def test_H2_an_oversized_result_refuses_over_the_wire(self):
+        """H2 at the served surface: HTTP 200 with a refusal, not a drop."""
+
+        body = self.one(KERNEL, "(10 ^ 4000) * (10 ^ 4000)")
+        extension = self.x(body)
+        self.assertEqual(extension["route"], "evaluate")
+        self.assertEqual(extension["status"], "refused")
+        self.assertIn("digits", extension["detail"])
+        # A non-answering status claims no grounding.
+        self.assertEqual(extension["receipt"], {})
+
+    def test_H1_a_literal_past_the_float_range_answers_over_the_wire(self):
+        """H1 at the served surface: the connection is not dropped."""
+
+        body = self.one(KERNEL, "owns x + " + "9" * 421)
+        self.assertEqual(self.x(body)["route"], "ownership")
+        self.assertIn("status", self.x(body))
 
     def test_T2_conversation_profile_never_emits_unsent_prose(self):
         """The conversation profile's whole content surface is three shapes."""
@@ -1318,58 +1337,83 @@ class CapabilitySheet(ServedSkin):
             for name in serve_chat.DEMO_NAMES:
                 self.assertNotIn(name, served)
 
-    def test_capability_sheet_publishes_the_withheld_foreign_voice_row(self):
-        """§7: a row the profile cannot serve appears with served:false.
+    def test_the_capability_sheet_publishes_the_foreign_voice_row(self):
+        """§7: the row is present and CONSISTENT with the arming state.
 
-        The gloss row is the precedent — under the offline boot it publishes
-        `served: false` rather than vanishing. A withheld surface that is
-        simply absent from the sheet is indistinguishable, to a client, from
-        one this repository never attempted, and this cycle's whole record
-        is about that difference.
+        Re-aimed 2026-08-25 (adversarial review, M4). This asserted "dark",
+        which is true on this branch and false the moment the voice lane
+        merges and a cleared run lands — so it would have gone red for the
+        system working. The invariant that does not depend on the state is
+        that the row exists and agrees with the arming read; the two arms are
+        then asserted separately.
+
+        The gloss row is the precedent for publishing rather than hiding: a
+        withheld surface absent from the sheet is indistinguishable, to a
+        client, from one this repository never attempted.
         """
+
+        import foreign_voice_arming as arming
 
         sheet, _text = self.served_sheet()
         self.assertIn("foreign_voice", sheet)
         row = sheet["foreign_voice"]
-        self.assertFalse(row["served"])
+        state = arming.arming_state(REPO)
+
+        self.assertEqual(row["served"], state["armed"])
         self.assertIn("reason", row)
-        self.assertEqual(row["run"], "experiments/foreign_voice_rate.json")
+        self.assertEqual(row["run"], "experiments/foreign_voice_rate2.json")
         self.assertEqual(row["register"], "data/foreign_voice/register.json")
 
-    def test_the_foreign_voice_reason_quotes_the_artifacts_own_verdict(self):
-        """Read at build time, not restated: every number matches the record."""
+        if state["armed"]:
+            self.assertEqual(row["verdict"], "FIRES")
+            self.assertTrue(all(row["blocking_checks"].values()))
+            for entry in row.get("reader_claim", {}).values():
+                self.assertIsNone(entry["claims"])
+        else:
+            # A dark row says WHY, not only THAT.
+            self.assertTrue(row["reason"])
+            self.assertIn("arming_rule", row)
+            if "prior_run" in row:
+                self.assertEqual(
+                    row["prior_run"]["path"],
+                    "experiments/foreign_voice_rate.json")
+
+    def test_whatever_the_row_says_about_a_run_it_read_from_the_artifact(self):
+        """Read at build time, never restated — in whichever state we are in.
+
+        Re-aimed 2026-08-25 (M4). While the surface is dark the row quotes
+        the v0.19 run under `prior_run`; once armed it quotes the v0.20 run
+        directly. Either way every value must come from the artifact rather
+        than from prose pasted into the module, and that is what is asserted.
+        """
+
+        import foreign_voice_arming as arming
 
         sheet, _text = self.served_sheet()
         row = sheet["foreign_voice"]
-        run = json.loads(
-            (REPO / "experiments" / "foreign_voice_rate.json").read_text(
-                encoding="utf-8"
-            )
-        )
+        state = arming.arming_state(REPO)
         register = json.loads(
             (REPO / "data" / "foreign_voice" / "register.json").read_text(
-                encoding="utf-8"
-            )
-        )
-
-        self.assertEqual(row["verdict"], run["verdicts"]["overall"])
-        self.assertEqual(row["verdict"], "VOID")
-        self.assertEqual(row["voided_controls"], run["verdicts"]["voided"])
-        self.assertEqual(row["summary"], run["verdicts"]["summary"])
+                encoding="utf-8"))
+        # The register ships in either state; it is a result on its own.
         self.assertEqual(row["blocked_total"], register["blocked_total"])
 
-        # The voiding class and its two numbers come from C-V4 itself.
-        voided_class = run["c_v4"]["voided_classes"][0]
-        measured = run["c_v4"]["per_class"][voided_class]
-        reason = row["reason"]
-        self.assertIn(f"C-V4 {voided_class}", reason)
-        self.assertIn(f"{measured['rate']:.2f}", reason)
-        self.assertIn(f"{measured['threshold']:.2f}", reason)
-        self.assertIn(f"{register['blocked_total']:,}", reason)
-        self.assertIn("experiments/foreign_voice_rate.json", reason)
-        # The class that voided really is a voiding-pool member below floor.
-        self.assertTrue(measured["in_voiding_pool"])
-        self.assertLess(measured["rate"], measured["threshold"])
+        quoted_path = (
+            row["prior_run"]["path"] if "prior_run" in row else row["run"])
+        quoted = row["prior_run"] if "prior_run" in row else row
+        run = json.loads(
+            (REPO / quoted_path).read_text(encoding="utf-8"))
+        self.assertEqual(quoted["verdict"], run["verdicts"]["overall"])
+        self.assertEqual(quoted["voided"], run["verdicts"]["voided"])
+        self.assertEqual(quoted["summary"], run["verdicts"]["summary"])
+
+        if not state["armed"] and "c_v4" in run:
+            # While dark, the v0.19 class that voided really is a
+            # voiding-pool member below its floor.
+            voided_class = run["c_v4"]["voided_classes"][0]
+            measured = run["c_v4"]["per_class"][voided_class]
+            self.assertTrue(measured["in_voiding_pool"])
+            self.assertLess(measured["rate"], measured["threshold"])
 
     def test_the_foreign_voice_row_never_quotes_the_voided_identity_rate(self):
         """A VOID control outranks a cleared floor; the sheet must not launder it.
@@ -1431,6 +1475,28 @@ class CapabilitySheet(ServedSkin):
         self.assertNotIn("verdict", row)
         self.assertNotIn("blocked_total", row)
 
+    def test_the_conformance_row_is_published_unserved_not_hidden(self):
+        """4e / §7: a registered line that is not yet answerable is declared."""
+
+        sheet, _text = self.served_sheet()
+        rows = {row["route"]: row for row in sheet["line_grammar"]}
+        self.assertIn("conform", rows)
+        row = rows["conform"]
+        self.assertFalse(row["served"])
+        self.assertEqual(row["requires"], ["tool.conform"])
+        self.assertEqual(row["statuses"], ["refused"])
+        # And the status it publishes is one the frozen alphabet already has.
+        self.assertIn("refused", sheet["statuses"]["engine"])
+
+    def test_a_conform_line_refuses_over_the_wire_by_name(self):
+        body = self.one(KERNEL, "conform some.statement.id x=1")
+        extension = self.x(body)
+        self.assertEqual(extension["route"], "conform")
+        self.assertEqual(extension["status"], "refused")
+        # §6.1: a non-answering status with a named missing capability.
+        self.assertEqual(
+            extension["receipt"], {"missing_capability": "tool.conform"})
+
     def test_capability_sheet_publishes_the_realization_row(self):
         """§5: the sheet gains a `realization` row, quoted from the live run."""
 
@@ -1464,6 +1530,207 @@ class CapabilitySheet(ServedSkin):
         self.assertFalse(row["served"])
         self.assertIn("detail", row)
         self.assertNotIn("round_trip_rate", row)
+
+    def test_the_live_row_agrees_with_the_live_arming_state(self):
+        """The row and the line cannot disagree, in EITHER state.
+
+        Re-aimed 2026-08-25 (M4): this hard-coded "dark today" and would have
+        gone red on the merged tree for the surface working as designed.
+        """
+
+        import answer as answer_module
+        import foreign_voice_arming as arming
+
+        sheet, _text = self.served_sheet()
+        row = sheet["foreign_voice"]
+        state = arming.arming_state(REPO)
+        answer_module._foreign_voice_armed.cache_clear()
+
+        self.assertEqual(row["served"], state["armed"])
+        self.assertEqual(
+            answer_module._foreign_voice_armed(), state["armed"],
+            "the answer line and the sheet row read one arming state",
+        )
+        self.assertEqual(row["reason"], state["reason"])
+        if state["armed"]:
+            self.assertIn("blocking_checks", row)
+        else:
+            self.assertIn("foreign_voice_rate2.json", row["reason"])
+
+    @staticmethod
+    def _cleared_run(**overrides) -> dict:
+        """A run shaped like the real `foreign_voice_rate2.json`.
+
+        The field names are the artifact's own: `verdicts.overall` reads
+        `FIRES`, and `verdicts.voided` is NON-EMPTY because C-V3' — the
+        machine-reader claim — is voided deliberately and non-blockingly by
+        §8. A fixture that made `voided` empty would test a run this
+        repository will never produce, and would have hidden the arming bug
+        this shape exposes.
+        """
+
+        run = {
+            "verdicts": {
+                "overall": "FIRES",
+                "voided": ["C-V3'"],
+                "summary": "the floors were met; C-V3' voided without blocking",
+            },
+            "c_g1": {"voided": False, "named_floor_met": True},
+            "c_v4_prime": {"voided": False, "voided_classes": []},
+            "b1": {"floor_met": True},
+            "b3": {"closes_exactly": True},
+            "b5": {"byte_identical": True},
+            "c_v3": {"status": "absent"},
+            "c_v3_prime": {"verdict": "VOID"},
+        }
+        run.update(overrides)
+        return run
+
+    def _row_for(self, run: dict) -> tuple[dict, dict]:
+        import foreign_voice_arming as arming
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "experiments").mkdir()
+            (root / "experiments" / "foreign_voice_rate2.json").write_text(
+                json.dumps(run), encoding="utf-8")
+            return (
+                arming.arming_state(root),
+                serve_chat.foreign_voice_row(str(root)),
+            )
+
+    def test_the_foreign_voice_row_arms_when_a_cleared_run_lands(self):
+        """4d, Correction 7(a): the true branch exists and is exercised.
+
+        The v0.19 row had NO code path that set `served: true` — it was
+        assigned `False` exactly once — so this is the branch that did not
+        exist. Tested against a run shaped like the real one rather than
+        waiting for the merge, because a branch nothing can reach is a branch
+        nobody has checked.
+        """
+
+        state, row = self._row_for(self._cleared_run())
+        self.assertTrue(state["armed"], state.get("reason"))
+        self.assertTrue(row["served"])
+        self.assertEqual(row["verdict"], "FIRES")
+
+    def test_a_deliberate_non_blocking_void_does_not_darken_the_voice(self):
+        """The arming bug this shape exposes, pinned so it cannot return.
+
+        `verdicts.voided` is NOT empty on a cleared run: C-V3' is voided on
+        purpose and marked non-blocking by §8, because the design declines to
+        claim a reader recovers the mathematics determinately from the
+        English. A gate keyed on "nothing voided" reads that published
+        non-claim as a failure and leaves the voice dark forever. The gate is
+        the cycle-stopping controls instead.
+        """
+
+        state, row = self._row_for(self._cleared_run())
+        self.assertTrue(state["armed"], state.get("reason"))
+        self.assertIn("C-V3'", state["voided"])
+        self.assertEqual(state["non_blocking_voids"], ["C-V3'"])
+        self.assertIn("C-V3'", row["non_blocking_voids"])
+        self.assertTrue(all(row["blocking_checks"].values()))
+
+    def test_every_cycle_stopping_control_can_darken_the_voice_alone(self):
+        """Each blocking control is load-bearing, asserted one at a time."""
+
+        failures = {
+            "c_g1": {"voided": True, "named_floor_met": True},
+            "c_v4_prime": {"voided": False, "voided_classes": ["drop_group"]},
+            "b1": {"floor_met": False},
+            "b3": {"closes_exactly": False},
+            "b5": {"byte_identical": False},
+        }
+        for key, broken in failures.items():
+            with self.subTest(control=key):
+                state, row = self._row_for(self._cleared_run(**{key: broken}))
+                self.assertFalse(state["armed"])
+                self.assertFalse(row["served"])
+        state, _row = self._row_for(
+            self._cleared_run(verdicts={"overall": "MISSED", "voided": []}))
+        self.assertFalse(state["armed"])
+
+    def test_the_arming_gate_reads_the_controls_not_one_controls_detail(self):
+        """4d, Correction 7(c): the guard keyed off the wrong field.
+
+        The v0.19 row indexed `c_v4["voided_classes"]` — one control's
+        internal detail — while the run's verdict lived elsewhere. Here a run
+        whose `c_v4_prime` says a class voided must darken the surface even
+        though the top-level `voided` list is empty: the opposite arrangement
+        from the one that used to fool it.
+        """
+
+        state, row = self._row_for(self._cleared_run(
+            verdicts={"overall": "FIRES", "voided": []},
+            c_v4_prime={"voided": False, "voided_classes": ["drop_group"]},
+        ))
+        self.assertFalse(state["armed"])
+        self.assertFalse(row["served"])
+        # U+2032 PRIME, the character the artifacts actually write. L1: the
+        # label was ASCII "'" while every artifact writes C-V4′, and
+        # `non_blocking_voids` filters by startswith against that label — so a
+        # real C-V4′ void would have been published as non-blocking.
+        self.assertIn("C-V4′", row["reason"])
+
+    def test_the_reader_claim_is_published_as_a_void_never_as_a_number(self):
+        """§8's non-claim survives the sheet.
+
+        C-V3 is absent and C-V3' is VOID. A row showing a rate beside either
+        would make exactly the claim the void withdrew.
+        """
+
+        _state, row = self._row_for(self._cleared_run())
+        self.assertEqual(row["reader_claim"]["C-V3"]["status"], "absent")
+        self.assertEqual(row["reader_claim"]["C-V3'"]["verdict"], "VOID")
+        for entry in row["reader_claim"].values():
+            self.assertIsNone(entry["claims"])
+
+    def test_an_all_clear_run_is_not_reported_as_an_unreadable_file(self):
+        """4d, Correction 7(b): the defect that made a clean run a lie.
+
+        The v0.19 row read `c_v4["voided_classes"][0]` on a list that is
+        EMPTY when nothing voided, and its `except` tuple named `IndexError`
+        — so an all-clear run returned `served: false` with the words "its
+        record could not be read", on exactly the branch the voice design
+        exists to produce.
+        """
+
+        _state, row = self._row_for(self._cleared_run())
+        self.assertTrue(row["served"])
+        self.assertNotIn("could not be read", row["reason"])
+
+    def test_an_unreadable_run_is_not_rounded_to_an_absent_one(self):
+        """Two different facts, and the row keeps them apart."""
+
+        import foreign_voice_arming as arming
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "experiments").mkdir()
+            (root / "experiments" / "foreign_voice_rate2.json").write_text(
+                "{not json", encoding="utf-8")
+            state = arming.arming_state(root)
+        self.assertFalse(state["armed"])
+        self.assertIn("could not be read", state["reason"])
+        self.assertNotIn("stays dark until one lands", state["reason"])
+
+    def test_the_sheet_row_and_the_answer_line_share_one_arming_read(self):
+        """They cannot disagree about whether a surface exists."""
+
+        import answer as answer_module
+        import foreign_voice_arming as arming
+
+        sheet, _text = self.served_sheet()
+        answer_module._foreign_voice_armed.cache_clear()
+        self.assertEqual(
+            sheet["foreign_voice"]["served"],
+            answer_module._foreign_voice_armed(),
+        )
+        self.assertEqual(
+            answer_module._foreign_voice_armed(),
+            arming.arming_state(REPO)["armed"],
+        )
 
     def test_demo_name_lint_is_enforced_when_the_sheet_is_built(self):
         """L7: the lint lives in the server, not only in this file.

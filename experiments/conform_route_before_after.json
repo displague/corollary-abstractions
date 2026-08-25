@@ -1,0 +1,71 @@
+{
+  "design": "docs/DESIGN-statements-that-run.md §5 (the wiring step)",
+  "lines_moved": 2,
+  "moved": {
+    "conform": {
+      "after": {
+        "detail": "'conform' needs a statement id, and then the bindings to test it at",
+        "missing_capability": null,
+        "route": "conform",
+        "status": "refused"
+      },
+      "before": {
+        "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
+        "missing_capability": "tool.freeform_answer",
+        "route": "dispatcher",
+        "status": "exhausted"
+      }
+    },
+    "conform some.statement.id x=1": {
+      "after": {
+        "detail": "tool.conform is not built on this tree; conformance compiles a statement to an evaluator and there is nothing here to compile it with. The line is registered and the capability is not, which is a diff",
+        "missing_capability": "tool.conform",
+        "route": "conform",
+        "status": "refused"
+      },
+      "before": {
+        "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
+        "missing_capability": "tool.freeform_answer",
+        "route": "dispatcher",
+        "status": "exhausted"
+      }
+    }
+  },
+  "roadmap": "docs/ROADMAP-v0.20.md §4e",
+  "run_id": "conform_route.before_after.v1",
+  "sides": {
+    "after": "working tree",
+    "before": "HEAD (4d)"
+  },
+  "the_change_in_one_line": "a line this repository intends to answer stops saying 'the corpus does not ground this' and starts saying 'that capability is not built yet' — different statements about the same line, and only one is true",
+  "unmoved": {
+    "2 + 2": {
+      "detail": "2 + 2 = 4",
+      "missing_capability": null,
+      "route": "evaluate",
+      "status": "solved"
+    },
+    "conformity is not a command": {
+      "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
+      "missing_capability": "tool.freeform_answer",
+      "route": "dispatcher",
+      "status": "exhausted"
+    },
+    "owns x ^ 2": {
+      "detail": "6884 of 12777 statements host 'x ^ 2'",
+      "missing_capability": null,
+      "route": "ownership",
+      "status": "solved"
+    },
+    "twin programming.dfactorial.recursive": {
+      "detail": "typed twin group 214: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
+      "missing_capability": null,
+      "route": "twin",
+      "status": "found"
+    }
+  },
+  "what_this_is": [
+    "4e's own before/after — one seal is not one measurement, so the route carries its evidence like every other member of the batch.",
+    "BEFORE is HEAD (4d), where no `conform` route exists and the line falls to the dispatcher. AFTER is the working tree, where it is claimed and refused by name."
+  ]
+}

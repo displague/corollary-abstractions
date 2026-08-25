@@ -68,6 +68,21 @@ SCHEMA_VERSION = 1
 PASS = "pass"
 FAIL = "fail"
 REFUSED = "refused"
+
+#: Wall-clock ceilings for every child this module starts (ROADMAP-v0.20 §4c;
+#: BACKLOG measured `grep -c timeout` over this file at 0). An unbounded child
+#: sits directly under the cost argument the external-verifier lane rests on:
+#: a prover or a test run that never returns does not fail the candidate, it
+#: hangs the caller — and a lane whose refusal is a hang is not refusing.
+#:
+#: Generous on purpose. These are real compilers and real test runs, not smoke
+#: calls, so the ceiling is there to stop a hang rather than to police a slow
+#: machine. A child that hits one raises `subprocess.TimeoutExpired`, which is
+#: the named failure it is; nothing here converts a timeout into a pass.
+PROVER_TIMEOUT_SECONDS = 600
+VERSION_TIMEOUT_SECONDS = 60
+TYPECHECK_TIMEOUT_SECONDS = 300
+TESTS_TIMEOUT_SECONDS = 300
 VERDICTS = (PASS, FAIL, REFUSED)
 
 VERDICT_DIR = "prover/verifier-verdicts"
@@ -283,6 +298,7 @@ def check_lean4(
             text=True,
             encoding="utf-8",
             errors="replace",
+            timeout=PROVER_TIMEOUT_SECONDS,
         )
         version = subprocess.run(
             [str(binary), "--version"],
@@ -291,6 +307,7 @@ def check_lean4(
             text=True,
             encoding="utf-8",
             errors="replace",
+            timeout=VERSION_TIMEOUT_SECONDS,
         ).stdout.strip()
 
     output = (completed.stdout or "") + (completed.stderr or "")
@@ -438,6 +455,7 @@ def check_python_tests(
                 text=True,
                 encoding="utf-8",
                 errors="replace",
+                timeout=TYPECHECK_TIMEOUT_SECONDS,
             )
             stage_results["mypy"] = mypy_run.returncode
 
@@ -478,6 +496,7 @@ def check_python_tests(
                 text=True,
                 encoding="utf-8",
                 errors="replace",
+                timeout=TESTS_TIMEOUT_SECONDS,
             )
             stage_results["tests"] = test_run.returncode
             test_output = portable(

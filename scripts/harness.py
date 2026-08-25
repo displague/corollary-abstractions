@@ -1099,6 +1099,20 @@ def _route_ownership(repo_root: Path, session: "CoreSession", query: str) -> dic
             else f"no statement hosts {answer.query!r}"
         ),
         "answer": render(answer),
+        # The lookup's own result, carried the way `_route_twin` and
+        # `_route_reachable` already carry theirs (`:1589`, `:1769`). This
+        # route was the one that did not follow the convention: it ran the
+        # expensive lookup, rendered five witness hosts out of thousands,
+        # and dropped the object — so a renderer that had to cite the host
+        # set could only run the identical lookup a second time. Returning
+        # it is a convention alignment, not a new capability: every field
+        # here is `ownership.Ownership`'s own, unrenamed and unsummarised.
+        "receipt": {
+            "query_skeleton": answer.query_skeleton,
+            "hosts": list(answer.hosts),
+            "searched": answer.searched,
+            "by_corpus": [[corpus, count] for corpus, count in answer.by_corpus],
+        },
     }
 
 
@@ -1440,33 +1454,71 @@ def _route_evaluate(text: str) -> dict | None:
     Only wins when it can actually produce a value: an expression with an
     unbound variable, or no expression at all, falls through to the rest of
     the chain rather than refusing on everyone else's behalf.
+
+    **A registered bound is the one exception (E0e, ROADMAP-v0.20 §4c).**
+    `ResourceBound` means this route READ the line, understood it, and
+    refuses it — so it returns a `refused` verdict naming the bound instead
+    of `None`. Falling through would send `2^200000` to the dispatcher and
+    end in a generic abstention, which tells the person the corpus does not
+    ground their line when the truth is that this evaluator declines to
+    render a number that wide.
     """
 
-    from evaluate import EvalError, evaluate, verify  # noqa: PLC0415
+    from evaluate import EvalError, ResourceBound, evaluate, verify  # noqa: PLC0415
     from evaluate import render as render_eval  # noqa: PLC0415
+
+    def _refusal(exc: Exception) -> dict:
+        return {
+            "route": "evaluate",
+            "status": "refused",
+            "detail": str(exc),
+        }
 
     # A typed relation ("does 2+2=4?") is a question with an exact answer,
     # so it is decided before falling back to computing a value.
+    #
+    # RENDERING is inside these guards, not after them. The bound that
+    # actually holds lives at the formatting boundary (H2: a per-node bound
+    # is escapable by multiplying two admissible powers), so `rendered()` and
+    # `formatted()` are themselves refusal sites. Catching only around the
+    # evaluation would have let the refusal escape from the very call that
+    # raises it.
     try:
         checked = verify(text)
+    except ResourceBound as exc:
+        return _refusal(exc)
     except EvalError:
         pass
     else:
+        try:
+            answer = checked.rendered()
+            detail = (
+                f"{checked.relation} holds: {'yes' if checked.holds else 'no'}"
+            )
+        except ResourceBound as exc:
+            return _refusal(exc)
         return {
             "route": "evaluate",
             "status": "solved",
-            "detail": f"{checked.relation} holds: {'yes' if checked.holds else 'no'}",
-            "answer": checked.rendered(),
+            "detail": detail,
+            "answer": answer,
         }
     try:
         result = evaluate(text)
+    except ResourceBound as exc:
+        return _refusal(exc)
     except EvalError:
         return None
+    try:
+        detail = f"{result.expression} = {result.formatted()}"
+        answer = render_eval(result)
+    except ResourceBound as exc:
+        return _refusal(exc)
     return {
         "route": "evaluate",
         "status": "solved",
-        "detail": f"{result.expression} = {result.formatted()}",
-        "answer": render_eval(result),
+        "detail": detail,
+        "answer": answer,
     }
 
 
@@ -1770,6 +1822,73 @@ def _route_reachable(repo_root: Path, session: "CoreSession", rest: str) -> dict
     }
 
 
+#: Wiring step for DESIGN-statements-that-run §5. The route lands NOW, with
+#: ROADMAP-v0.20 §4's batched retirement, so item 1's slice never has to
+#: retouch `harness.py` and open a second retirement for one new branch. Its
+#: own design states the dependency: the route, the exact-numeral path and the
+#: resource bound "all ride §4's retirement rather than opening one".
+CONFORM_COMMAND = "conform"
+
+#: The capability `conform` needs and does not have. `scripts/conform.py` —
+#: the compiler that turns a statement node into a conformance program — is
+#: item 1's deliverable and does not exist yet, so the route refuses BY NAME
+#: rather than pretending the line was never registered.
+CONFORM_SUBSYSTEM = "tool.conform"
+
+
+def _route_conform(repo_root: Path, session: "CoreSession", rest: str) -> dict:
+    """`conform <statement-id> <bindings>` — registered, and refusing for now.
+
+    A stub, and deliberately a *refusing* one rather than an absent one. The
+    distinction is the whole reason it lands early: a line this repository
+    intends to answer should say "that capability is not built yet" instead
+    of falling through to the dispatcher's "the corpus does not ground this",
+    which is a different and false statement about the same line.
+
+    Shaped on `_route_twin` rather than on `_route_evaluate`, because the two
+    routes answer different questions about a line. `_route_evaluate` returns
+    `None` when it cannot READ the text, so an expression it does not
+    recognise falls through to the rest of the chain rather than refusing on
+    everyone else's behalf. `conform` is head-guarded: a line starting with
+    the command word is unambiguously addressed to this route, so nothing
+    else could claim it and falling through would only lose the reason.
+
+    What it will do when `scripts/conform.py` lands is NOT sketched here.
+    The design is explicit that a conformance verdict is about the asker's
+    numbers and is worth exactly what its sampled points are worth, and a
+    stub that guessed at the record shape would be the first place that
+    caution got lost.
+    """
+
+    if CONFORM_SUBSYSTEM in session.matrix.registered_ids():  # pragma: no cover
+        # Reachable only once item 1 registers the subsystem; the compiler
+        # is its deliverable, not this stub's.
+        raise NotImplementedError(
+            "conform: the subsystem registered but no compiler is wired"
+        )
+    if not rest.strip():
+        return {
+            "route": "conform",
+            "status": "refused",
+            "detail": (
+                f"{CONFORM_COMMAND!r} needs a statement id, and then the "
+                f"bindings to test it at"
+            ),
+        }
+    return {
+        "route": "conform",
+        "status": "refused",
+        "detail": (
+            f"{CONFORM_SUBSYSTEM} is not built on this tree; conformance "
+            f"compiles a statement to an evaluator and there is nothing here "
+            f"to compile it with. The line is registered and the capability "
+            f"is not, which is a different thing from the corpus not "
+            f"grounding it"
+        ),
+        "missing_capability": CONFORM_SUBSYSTEM,
+    }
+
+
 def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dict:
     """The whole decision, as data, so a test can assert on it."""
 
@@ -1804,6 +1923,8 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         return {"line": line, **_route_twin(session, rest.strip())}
     if head.lower() == REACHABLE_COMMAND:
         return {"line": line, **_route_reachable(repo_root, session, rest)}
+    if head.lower() == CONFORM_COMMAND:
+        return {"line": line, **_route_conform(repo_root, session, rest)}
     told = _route_story(session, line)
     if told is not None:
         return {"line": line, **told}

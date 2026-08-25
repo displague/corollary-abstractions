@@ -196,6 +196,67 @@ def _in_words(formal: str, statement_id: str) -> str | None:
     return result.surface if result.served else None
 
 
+@lru_cache(maxsize=4)
+def _foreign_voice_armed(repo_root: Path | None = None) -> bool:
+    """Whether the foreign `in words` line may be emitted at all (4d).
+
+    **This is `answer.py`'s first read of an `experiments/` artifact, and it
+    is named as such rather than smuggled in as "the existing pattern".**
+    `_in_words` gates on its own round trip and consults no run file; arming
+    a served line from a registered artifact is a new mechanism in this
+    module. DESIGN-voice-completion §5.1 is why it lands this way: 4d's code
+    ships with §4's batch and the surface moves only when the evidence says
+    so, which means the code must be able to look at the evidence.
+
+    Read once per process — the run is a committed artifact and a process
+    treats it as static for its lifetime, the same assumption every other
+    committed read here makes. Today the artifact is absent, so this is
+    False, so the line is absent, so no served byte moves.
+    """
+
+    try:
+        from foreign_voice_arming import arming_state  # noqa: PLC0415
+
+        return bool(arming_state(repo_root or REPO)["armed"])
+    except (ImportError, OSError, ValueError, TypeError, AttributeError):
+        # Fail closed. A malformed artifact leaves the surface dark; it never
+        # arms it and never escapes into a served render (M1's rule, applied
+        # at the caller as well as inside the reader).
+        return False
+
+
+def _foreign_in_words(
+    source: str, statement_id: str, repo_root: Path | None = None
+) -> str | None:
+    """The foreign-register sentence for one statement, or None.
+
+    Two gates, and the line needs both. The **run** must have armed the
+    surface (above), and the **rendering** must have been served — the same
+    `.served` property `realize_term` uses, so a refusal here is absence
+    exactly as R3 requires and never an error string.
+
+    The order matters: the arming check comes first and is cheap, so a dark
+    surface costs one cached boolean rather than a rendering attempt per
+    answer.
+
+    `repo_root` exists so the ARMED branch is reachable from a test against a
+    fixture artifact (adversarial review, M2: it had no test, because nothing
+    could reach it without the real run). Production passes nothing and gets
+    the cached default-root answer, so the parameter costs the served path
+    nothing. `foreign_voice_row` already took a root for the same reason.
+    """
+
+    if not source or not _foreign_voice_armed(repo_root):
+        return None
+    try:
+        from foreign_voice import render as render_foreign  # noqa: PLC0415
+
+        result = render_foreign(source, statement_id=statement_id)
+    except (ImportError, OSError, ValueError):
+        return None
+    return result.surface if result.served else None
+
+
 def render(answer: Answer, *, links: bool = True) -> list[str]:
     """A reference entry. Labels are mine; every sentence is the corpus's."""
     out: list[str] = []
@@ -213,6 +274,15 @@ def render(answer: Answer, *, links: bool = True) -> list[str]:
         surface = _in_words(answer.formal, answer.statement_id)
         if surface is not None:
             out.append(f"in words   : {surface}")
+        else:
+            # The foreign register (4d), tried only where v0.18's realizer
+            # produced nothing: the two are different voices for the same
+            # statement, and printing both under one label would make a
+            # reference entry look like it disagreed with itself. Dark until
+            # a clean registered run arms it, so today this adds no line.
+            foreign = _foreign_in_words(answer.formal, answer.statement_id)
+            if foreign is not None:
+                out.append(f"in words   : {foreign}")
     if answer.status:
         out.append(f"held as    : {answer.status}")
     if answer.disciplines:

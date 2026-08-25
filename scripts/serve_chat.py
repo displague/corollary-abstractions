@@ -269,6 +269,21 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         "note": "wiring step W2; targets must be listed in the committed manifest",
     },
     {
+        "form": "conform <statement-id> <bindings>",
+        "route": "conform",
+        "example": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
+        "statuses": ["refused"],
+        "requires": ("tool.conform",),
+        "note": (
+            "DESIGN-statements-that-run §5's wiring step, landed with "
+            "ROADMAP-v0.20 §4's retirement so item 1's slice need not retouch "
+            "harness.py. The compiler (scripts/conform.py) is not built, so "
+            "the route refuses by name — published `served: false` on §7's "
+            "rule rather than hidden, because a registered line that is not "
+            "yet answerable is a different fact from an unregistered one"
+        ),
+    },
+    {
         "form": "<story request>",
         "route": "story",
         "example": "tell me a story",
@@ -286,8 +301,13 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         "form": "<computable relation or expression>",
         "route": "evaluate",
         "example": "x = 5, x ^ 2",
-        "statuses": ["solved"],
+        "statuses": ["solved", "refused"],
         "requires": (),
+        "note": (
+            "refused only by a registered resource bound (E0e): a power wider "
+            "than evaluate.MAX_RESULT_DIGITS is declined by name rather than "
+            "computed into something that cannot be rendered"
+        ),
     },
     {
         "form": "<repo-relative path>",
@@ -336,6 +356,15 @@ PROFILE_DESCRIPTIONS = {
 HONESTY_LINE = (
     "offline boot; unregistered paths abstain (P-IH4); no generative path"
 )
+
+
+def _read_json(path: Path):
+    """One committed artifact, or (None, reason). Never raises at a caller."""
+
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8")), None
+    except (OSError, ValueError) as exc:
+        return None, f"{type(exc).__name__}: {exc}"
 
 
 def assert_no_demo_name(payload: dict, where: str) -> str:
@@ -410,79 +439,116 @@ def realization_row(repo_root_str: str) -> dict:
 
 @lru_cache(maxsize=8)
 def foreign_voice_row(repo_root_str: str) -> dict:
-    """The sheet's `foreign_voice` row: a surface WITHHELD, published as one.
+    """The sheet's `foreign_voice` row — armed or dark, and never a lie.
 
-    §7's rule, and the reason this row exists at all: "Rows the profile
-    cannot serve (gloss under offline boot) appear with `served: false`
-    rather than disappearing." A withheld surface that simply is not in the
-    sheet is indistinguishable, to an attaching orchestrator, from a surface
-    this repository never attempted — which is exactly the difference the
-    cycle's own artifacts were written to record. The gloss row is the
-    precedent; this is the same rule applied to a control that voided.
+    §7's rule: "Rows the profile cannot serve (gloss under offline boot)
+    appear with `served: false` rather than disappearing." A withheld surface
+    absent from the sheet is indistinguishable, to a client, from one this
+    repository never attempted, and that difference is what this cycle's
+    artifacts exist to record.
 
-    Two things this row deliberately does NOT publish. **B1's identity
-    rate**, because the run's own verdict block says it is not quotable: "a
-    VOID control voids the reading it gates, so a voided control outranks a
-    cleared B1 floor" — a sheet that printed 1.0 beside the word VOID would
-    be laundering the miss through a field name. And **a single summed
-    blocked figure without its split**, because the run says those two
-    buckets are "reported separately: the first is a budget consequence the
-    maintainer can lift and the second is a design consequence this cycle
-    owns". The register publishes its own `blocked_total`, so that number is
-    read rather than computed, and both buckets ride beside it.
+    **Rewritten by ROADMAP-v0.20 §4d, which inherited three defects from the
+    v0.19 version of this function** (DESIGN-voice-completion Correction 7,
+    all three confirmed in the tree before rewriting):
+
+    (a) *There was no code path that set `served: true` at all.* `served` was
+    assigned once, to `False`. Flipping the row was never a matter of
+    removing a guard — the true branch did not exist, and 4d writes it.
+
+    (b) *The empty-list read was caught, so the failure was a plausible lie.*
+    It indexed `c_v4["voided_classes"][0]` on a list that is EMPTY when
+    nothing voided, and the `except` tuple named `IndexError` — so an
+    all-clear run returned early with `served: false` and the words "its
+    record could not be read", on exactly the branch the voice design exists
+    to produce. A clean run would have been published as a corrupt file.
+
+    (c) *The guard keyed off the wrong field.* `c_v4["voided_classes"]` is
+    one control's internal detail; the run's own verdict is
+    `verdicts["voided"]`. They agree in the shipped artifact and would both
+    be empty on an all-clear run — but only the wrong one was consulted, so
+    the row's behaviour was decided by a field that is not the verdict.
+
+    All three are gone: the arming decision now comes from
+    `foreign_voice_arming.arming_state`, the SAME read `answer.render` uses,
+    so the row and the line cannot disagree about whether a surface exists.
+    The C-V4 detail is still quoted when a run carries it, but as
+    description rather than as the gate.
+
+    Two things the row still refuses to say, unchanged from v0.19 and
+    restated because they are easy to lose in a rewrite: it does not quote
+    B1's identity rate (a VOID control outranks a cleared floor, and printing
+    1.0 beside VOID would re-publish a withdrawn reading), and it does not
+    present one summed blocked figure without its split (the run says those
+    buckets are reported separately; the total is the register's own field,
+    read rather than computed).
     """
 
+    from foreign_voice_arming import arming_state  # noqa: PLC0415
+
     root = Path(repo_root_str)
+    state = arming_state(root)
     row = {
         "surface": "foreign voice",
-        "served": False,
+        "served": bool(state["armed"]),
         "description": (
             "statements rendered as invertible English sentences in a "
             "non-notational register"
         ),
-        "run": FOREIGN_VOICE_RUN,
+        "run": state["run"],
         "register": FOREIGN_VOICE_REGISTER,
+        "arming_rule": state["arming_rule"],
+        "reason": state["reason"],
     }
-    try:
-        run = json.loads(
-            (root / FOREIGN_VOICE_RUN).read_text(encoding="utf-8")
-        )
-        register = json.loads(
-            (root / FOREIGN_VOICE_REGISTER).read_text(encoding="utf-8")
-        )
-        verdicts = run["verdicts"]
-        c_v4 = run["c_v4"]
-        voided_class = c_v4["voided_classes"][0]
-        measured = c_v4["per_class"][voided_class]
-        blocked_total = register["blocked_total"]
-        census = register["b3_census"]
-    except (OSError, ValueError, KeyError, TypeError, IndexError) as exc:
-        row["reason"] = (
-            f"the foreign-voice surface is withheld; its record could not be "
-            f"read from {FOREIGN_VOICE_RUN} and {FOREIGN_VOICE_REGISTER} "
-            f"({type(exc).__name__}: {exc})"
-        )
-        return row
+    for field in (
+        "verdict", "voided", "summary", "prior_run",
+        "blocking_checks", "non_blocking_voids",
+    ):
+        if field in state:
+            row[field] = state[field]
 
-    row["verdict"] = verdicts["overall"]
-    row["voided_controls"] = list(verdicts["voided"])
-    row["reason"] = (
-        f"certification control voided (C-V4 {voided_class} "
-        f"{measured['rate']:.2f} vs {measured['threshold']:.2f}); the "
-        f"register of {blocked_total:,} unsayable statements ships instead; "
-        f"see {FOREIGN_VOICE_RUN}"
-    )
-    row["summary"] = verdicts["summary"]
-    row["register_id"] = register.get("register_id")
-    row["blocked_total"] = blocked_total
-    # Kept apart on the run's own instruction; see the docstring.
-    row["blocked_split"] = {
-        "registered_blocked_mathlib_head": census[
-            "registered_blocked_mathlib_head"
-        ],
-        "registered_blocked_no_row": census["registered_blocked_no_row"],
-        "reported_separately_because": run["b3"]["never_summed"],
-    }
+    # C-V3' is published as a VOID and never as a number. The design spends
+    # §8 refusing the claim that control would license — that a reader can
+    # recover the mathematics determinately from the English — so a row that
+    # showed a rate beside it would make exactly the claim the void withdrew.
+    # The absent C-V3 stays absent for the same reason: an un-run control is
+    # not a passed one.
+    run, _run_error = _read_json(root / state["run"])
+    if isinstance(run, dict):
+        for key, label in (("c_v3", "C-V3"), ("c_v3_prime", "C-V3'")):
+            block = run.get(key)
+            if not isinstance(block, dict):
+                continue
+            row.setdefault("reader_claim", {})[label] = {
+                "status": block.get("status"),
+                "verdict": block.get("verdict"),
+                "claims": None,
+                "read_this_as": (
+                    "published as a void or an absence, never as a rate. The "
+                    "claim this control alone could license — that a reader "
+                    "recovers the mathematics determinately from the English "
+                    "— is NOT made here or anywhere this cycle."
+                ),
+            }
+
+    # The register ships whether or not the voice does: it is the inventory
+    # of what this cycle's graph cannot say, and it is a result either way.
+    register, _error = _read_json(root / FOREIGN_VOICE_REGISTER)
+    if isinstance(register, dict):
+        census = register.get("b3_census") or {}
+        row["register_id"] = register.get("register_id")
+        row["blocked_total"] = register.get("blocked_total")
+        row["blocked_split"] = {
+            "registered_blocked_mathlib_head": census.get(
+                "registered_blocked_mathlib_head"),
+            "registered_blocked_no_row": census.get(
+                "registered_blocked_no_row"),
+            "reported_separately_because": (
+                "the two registered_blocked_* buckets are reported "
+                "separately: the first is a budget consequence the maintainer "
+                "can lift and the second is a design consequence this cycle "
+                "owns"
+            ),
+        }
     return row
 
 
@@ -799,51 +865,27 @@ def _resolution_receipt(repo_root: Path, verdict: dict) -> dict:
     return receipt
 
 
-@lru_cache(maxsize=128)
-def _ownership_lookup(query: str, data_root: str):
-    """`ownership.lookup`, memoized, because the receipt needs what the answer used.
+def _ownership_receipt(verdict: dict) -> dict:
+    """§6.1's `ownership` row, taken from the verdict the engine already built.
 
-    `route_line` hands the skin a rendered answer that names five witness
-    hosts, not the host set the receipt must cite, so the receipt has to run
-    the lookup a second time — and that lookup is the most expensive call on
-    the ownership route (~3.4 s for `owns x ^ 2` on the reference host, as
-    much again as routing the line). Memoizing the *pure* function removes
-    the duplicate work without the skin reaching into the engine to
-    monkeypatch it, which would be the renderer editing the record.
+    Until v0.20 this ran `ownership.lookup` a SECOND time, because
+    `_route_ownership` rendered five witness hosts and dropped the object
+    that knew the rest — the one route not following the convention
+    `_route_twin` and `_route_reachable` set. The skin mitigated with a
+    memo on the pure function rather than monkeypatching the engine, which
+    would have been the renderer editing the record. ROADMAP-v0.20 §4a
+    aligned the route instead, so the receipt is now a read.
 
-    Sound because the lookup is deterministic over committed files: the same
-    query against the same `data/` is the same answer, this run or the next.
-    `None` stands for the parse refusal, which an answering turn cannot hit.
+    `hosts` is still the WHOLE host set, not the five witnesses the answer
+    names: §6.1's "(top entries)" qualifies `by_corpus`, and a receipt
+    listing five of 6884 hosts without saying so would misrepresent what the
+    answer rests on.
     """
 
-    from ownership import QueryError, lookup  # noqa: PLC0415
-
-    try:
-        return lookup(query, Path(data_root))
-    except QueryError:
-        return None
-
-
-def _ownership_receipt(repo_root: Path, query: str) -> dict:
-    """§6.1's `ownership` row, re-read from the same deterministic lookup.
-
-    `hosts` is the WHOLE host set, not the five witnesses the answer names:
-    §6.1's "(top entries)" qualifies `by_corpus`, and a receipt that listed
-    five of 6884 hosts without saying so would misrepresent what the answer
-    rests on. A broad query therefore ships a large receipt; the metric counts
-    `content`, and truncating evidence to flatter a wall clock is the trade
-    this repository does not make.
-    """
-
-    found = _ownership_lookup(query, str(repo_root / "data"))
-    if found is None:  # pragma: no cover - an answering turn already parsed
+    receipt = verdict.get("receipt")
+    if not isinstance(receipt, dict):  # pragma: no cover - the route always carries it
         return {}
-    return {
-        "query_skeleton": found.query_skeleton,
-        "hosts": list(found.hosts),
-        "searched": found.searched,
-        "by_corpus": [[corpus, count] for corpus, count in found.by_corpus],
-    }
+    return dict(receipt)
 
 
 def _evaluate_receipt(text: str) -> dict:
@@ -917,7 +959,7 @@ def kernel_receipt(repo_root: Path, verdict: dict, eval_text: str) -> dict:
     if route in {"resolver", "resolver_context"}:
         return _resolution_receipt(repo_root, verdict)
     if route == "ownership":
-        return _ownership_receipt(repo_root, eval_text)
+        return _ownership_receipt(verdict)
     if route == "twin":
         return dict(verdict.get("receipt") or {})
     if route == "evaluate":

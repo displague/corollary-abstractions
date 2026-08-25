@@ -676,10 +676,18 @@ class TautologyProbeTests(unittest.TestCase):
         self.assertEqual(live["supersedes"]["sha256_lf"], parser["sha256_lf"],
                          "the successor pin must name the digest it supersedes, "
                          "or the chain from artifact to parser has a broken link")
+        # Re-aimed 2026-08-24 by ROADMAP-v0.20 §4b: that successor's own parser
+        # row has since been retired in turn, so the live pin is at the END of
+        # the chain, not one hop along it.
+        import prereg_pins
+
+        resolved = prereg_pins.resolve_pin(
+            prereg, parser, prereg_path="experiments/realization_prereg.json")
         self.assertEqual(
-            digest, live["sha256_lf"],
-            f"the parser matches neither its retired pin nor the live pin in "
-            f"{successor_path}. A change past the amendment needs its own.",
+            digest, resolved["sha256_lf"],
+            f"the parser matches neither its retired pin nor the live pin at "
+            f"the end of its declared chain ({resolved['source']}, hops "
+            f"{resolved['hops']}). A change past the amendment needs its own.",
         )
 
     def test_the_inverter_digest_is_recorded_beside_the_parser(self) -> None:

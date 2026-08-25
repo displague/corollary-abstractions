@@ -1,0 +1,161 @@
+{
+  "a_divergence_from_the_brief_stated_rather_than_quietly_taken": {
+    "the_brief_expected": "§4c's landing note expected BOTH `(100+1)^1000` and the 4,300-digit print-crash case to refuse cleanly.",
+    "what_this_implementation_does": "`(100+1)^1000` is 2,005 digits — under the bound — so it is still SERVED, exactly and correctly. Only results past the bound refuse.",
+    "why": "BACKLOG cites `(100+1)^1000` as EVIDENCE OF UNBOUNDEDNESS, not as a defect: it computes, it prints, and its value is right. A bound that refused it would be declining exact arithmetic this evaluator can do and render."
+  },
+  "corrected_claim": {
+    "v1_said": "'4,300 is the only value at which accepted and renderable are the same set' — asserted as true BY CONSTRUCTION.",
+    "why_that_was_wrong": "It was true of the `^` node and false of the evaluator: multiplication could build a value the bound had never seen. The set-equality claim is now true because the check sits at the rendering boundary — earned by where the check is, not by the number's arithmetic."
+  },
+  "crashed_while_printing": {
+    "after": [],
+    "before": [
+      "(10 ^ 4000) * (10 ^ 4000)",
+      "2^20000",
+      "2^200000"
+    ],
+    "read_this_as": "The defect, counted. A served path whose refusal is an uncaught exception is not refusing; it is crashing, and the two are different products."
+  },
+  "design": "docs/DESIGN-statements-that-run.md E0e",
+  "external_verifier_timeouts": {
+    "now": {
+      "PROVER_TIMEOUT_SECONDS": 600,
+      "TESTS_TIMEOUT_SECONDS": 300,
+      "TYPECHECK_TIMEOUT_SECONDS": 300,
+      "VERSION_TIMEOUT_SECONDS": 60
+    },
+    "why": "BACKLOG: `grep -c timeout` over scripts/external_verifier.py returned 0, across four subprocess.run calls, under the cost argument the external-verifier lane rests on."
+  },
+  "measured": {
+    "after": {
+      "(10 ^ 4000) * (10 ^ 4000)": {
+        "detail": "that result is about 8,001 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. The value was computed exactly and is not being shown, because showing it is what this interpreter cannot do.",
+        "ms": 0.143,
+        "outcome": "refused_by_name",
+        "refusal": "ResourceBound",
+        "route": "evaluate",
+        "status": "refused"
+      },
+      "(100+1)^1000": {
+        "digits": 2005,
+        "ms": 0.586,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      },
+      "2^100": {
+        "digits": 31,
+        "ms": 0.025,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      },
+      "2^20000": {
+        "detail": "that power is about 6,021 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was computed and nothing is claimed.",
+        "ms": 0.035,
+        "outcome": "refused_by_name",
+        "refusal": "ResourceBound",
+        "route": "evaluate",
+        "status": "refused"
+      },
+      "2^200000": {
+        "detail": "that power is about 60,206 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was computed and nothing is claimed.",
+        "ms": 0.024,
+        "outcome": "refused_by_name",
+        "refusal": "ResourceBound",
+        "route": "evaluate",
+        "status": "refused"
+      },
+      "3^5": {
+        "digits": 3,
+        "ms": 0.021,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      }
+    },
+    "before": {
+      "(10 ^ 4000) * (10 ^ 4000)": {
+        "detail": "Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit",
+        "exception": "ValueError",
+        "ms": 0.141,
+        "outcome": "CRASHED_WHILE_PRINTING",
+        "route": "RAISED OUT OF route_line",
+        "status": "ValueError"
+      },
+      "(100+1)^1000": {
+        "digits": 2005,
+        "ms": 0.612,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      },
+      "2^100": {
+        "digits": 31,
+        "ms": 0.023,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      },
+      "2^20000": {
+        "detail": "Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit",
+        "exception": "ValueError",
+        "ms": 0.057,
+        "outcome": "CRASHED_WHILE_PRINTING",
+        "route": "RAISED OUT OF route_line",
+        "status": "ValueError"
+      },
+      "2^200000": {
+        "detail": "Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit",
+        "exception": "ValueError",
+        "ms": 0.315,
+        "outcome": "CRASHED_WHILE_PRINTING",
+        "route": "RAISED OUT OF route_line",
+        "status": "ValueError"
+      },
+      "3^5": {
+        "digits": 3,
+        "ms": 0.02,
+        "outcome": "served",
+        "route": "evaluate",
+        "status": "solved"
+      }
+    }
+  },
+  "non_claims": [
+    "Not a security fix. Loopback-only, single user; ROADMAP-v0.20 §4 says so in as many words.",
+    "Not a performance claim."
+  ],
+  "regenerate_with": "python scripts/measure_exponent_bound.py --before main",
+  "roadmap": "docs/ROADMAP-v0.20.md §4c",
+  "run_id": "exponent_bound.v2",
+  "sides": {
+    "after": {
+      "bound": 4300,
+      "commit": "working tree",
+      "evaluate_sha256_lf": "09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041",
+      "has_resource_bound_type": true
+    },
+    "before": {
+      "bound": null,
+      "commit": "main",
+      "evaluate_sha256_lf": "4e2f7757380e2c1a6d59a3423ffd2a71d20d47ba7b42af256f1733a99c5eae25",
+      "has_resource_bound_type": false
+    }
+  },
+  "the_bound": {
+    "checked_where": "At the RESULT-FORMATTING boundary (Evaluation.formatted, Verification._fmt), plus an early per-node check on `^`.",
+    "constant": "evaluate.MAX_RESULT_DIGITS",
+    "refusal_type": "evaluate.ResourceBound, a distinct subclass of EvalError",
+    "value": 4300,
+    "why_a_distinct_type": "A plain EvalError means the route cannot READ the line, and the router returns None so it falls through the chain. ResourceBound means the route read it, understood it, and refuses — so `_route_evaluate` returns a `refused` verdict naming the bound instead of ending in a generic dispatcher abstention.",
+    "why_both": "H2: §4c bounded the `^` NODE, and the adversarial review escaped it in one line — `(10 ^ 4000) * (10 ^ 4000)` builds two admissible powers and multiplies them, so nothing exceeded a per-node bound and the PRINT raised the same uncaught ValueError §4c existed to abolish. A bound on one operator is a bound on one operator. The formatting boundary is the one every served value passes through by construction, so that is where the bound that HOLDS lives. The per-node check is kept and is not redundant: it refuses 2^200000 before the power is built, so an unrenderable request costs a comparison rather than the arithmetic.",
+    "why_this_number": "It is CPython's own int->str limit (sys.get_int_max_str_digits(), 4,300 by default). A bound BELOW it is a display policy about how long an answer may be — a different decision, arguable on its own terms. A bound ABOVE it still crashes on exactly the input the fix exists for. Registered as a constant rather than read live, so the refusal reproduces on a process that moved the cap."
+  },
+  "what_this_is": [
+    "The before/after §4c owes, both sides EXECUTED. v1 of this file recorded `before` as null while two commit messages claimed 'five cases before and after'; the adversarial review was right to call that a gap, and this is the repair.",
+    "Each side runs in a child interpreter rooted at its own git worktree, so 'before' is the committed evaluator rather than this one with a flag flipped. Each child reports the digest of the evaluate.py it loaded and the writer refuses to record a comparison whose two sides loaded the same file."
+  ],
+  "writer": "scripts/measure_exponent_bound.py"
+}

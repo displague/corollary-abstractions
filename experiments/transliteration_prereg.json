@@ -50,7 +50,17 @@
         ],
         "retired_by": "realization.prereg.v1.amendment.transliteration-2026-08-24 / foreign_voice.prereg.v1.amendment.transliteration-2026-08-24"
       },
-      "why": "The post-amendment parser. It is recorded in the same commit that changes it and BEFORE any artifact quotes a rate measured through it, which is the whole content of rule 2. A digest recorded after the run it certifies certifies nothing."
+      "why": "The post-amendment parser. It is recorded in the same commit that changes it and BEFORE any artifact quotes a rate measured through it, which is the whole content of rule 2. A digest recorded after the run it certifies certifies nothing.",
+      "retired_for_future_comparisons": {
+        "amendment": "exact-literals-2026-08-24",
+        "status": "retired for future comparisons",
+        "dated": "2026-08-24",
+        "read_this_row_as": [
+          "The digest this row records is the parser AS THE v0.19 TRANSLITERATION RUN MEASURED IT, and it is left byte-unchanged for exactly that reason: experiments/transliteration_rate.json and experiments/transliteration_served_diff.json quote rates measured through it, and a pin edited underneath an artifact cannot be checked at all.",
+          "It is no longer the pin a FUTURE comparison is read against. The successor pin is the `parser` row of experiments/exact_literals_prereg.json, recorded by the amendment named above in the SAME commit that changes the parser and BEFORE any artifact quotes a number measured through it.",
+          "So this row is history, not a live gate: a revalidator checks the successor pin against the tree and this one against the artifacts that quoted it."
+        ]
+      }
     },
     {
       "path": "scripts/measure_transliteration.py",
@@ -60,7 +70,16 @@
       "why": [
         "The lane's measurement script. It could not be in the commit that froze the floors above, because a floor recorded after the instrument that reads it is not a floor - so it lands with the run and carries its own `recorded` date, exactly as realization_prereg.json's inverter row did.",
         "Recorded, not sealed shut: a later commit that must change this file re-records the digest with a dated entry saying why."
-      ]
+      ],
+      "retired_for_future_comparisons": {
+        "amendment": "exact-literals-2026-08-24",
+        "status": "retired for future comparisons",
+        "dated": "2026-08-24",
+        "read_this_row_as": [
+          "The lane's run-writer AS THE v0.19 RUN USED IT. It changed in the amendment commit for one reason, stated so it is not mistaken for a measurement change: `revalidate_prereg` now FOLLOWS a declared retirement instead of reading it as drift. Without that, a pin this repository had already retired in writing would have stopped the writer for a reason it had itself recorded.",
+          "No floor, no rate and no reading in this lane moved. The successor pin is the `registered_run` row of experiments/exact_literals_prereg.json."
+        ]
+      }
     },
     {
       "path": "scripts/numeral_words.py",
@@ -131,5 +150,50 @@
     "It does not re-open, re-measure or re-interpret experiments/realization_rate.json or experiments/foreign_voice_rate.json. Both were declared historical artifacts by the amendment, in writing, in the previous commit.",
     "Parse rate is not rendering rate, which is why both are reported. v0.18's own R0/R1 split is the reason this lane knows to separate them and the reason the round-trip reading is not optional even though the parse gain is the headline number."
   ],
-  "pending_note": "Empty since 2026-08-24: the registered-run row moved into `frozen` when scripts/measure_transliteration.py was written. The floors it reads were frozen one commit earlier, which is the ordering the row exists to record."
+  "pending_note": "Empty since 2026-08-24: the registered-run row moved into `frozen` when scripts/measure_transliteration.py was written. The floors it reads were frozen one commit earlier, which is the ordering the row exists to record.",
+  "amendments": [
+    {
+      "amendment_id": "transliteration.prereg.v1.amendment.exact-literals-2026-08-24",
+      "dated": "2026-08-24",
+      "roadmap": "docs/ROADMAP-v0.20.md §4b",
+      "design": "docs/DESIGN-statements-that-run.md (E0's exact-literal prerequisite)",
+      "why": [
+        "match_signatures.Parser stored numeric literals as float, destroying every literal wider than a double's 53-bit significand at parse time. Two ground statements were served the right verdict with printed values wrong by 4.4e59, returned as an exact Fraction so nothing downstream could tell.",
+        "The asymmetry that made it a defect rather than a precision note: v0.18's registered numeral pair REFUSES those same two statements by name. One subsystem refused honestly while the other silently corrupted.",
+        "E0 requires exact literals before an evaluator can decide statements over them, so the fix precedes the slice that needs it."
+      ],
+      "what_this_retires": [
+        "The `parser` row — role `parser`, scripts/match_signatures.py, LF sha256 f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7 — is RETIRED FOR FUTURE COMPARISONS as of this dated amendment.",
+        "Retired, not deleted and not overwritten. The row keeps its original digest because it is the record of what the v0.19 transliteration run was measured under.",
+        "The `registered_run` row — scripts/measure_transliteration.py, LF sha256 58247ff12a2711cda023a2cb51ea5887913f78272713aa442180ad0ceb0e053d — is retired by the SAME amendment, because following a retirement had to be taught to the writer as well as to the tests. The change is to pin-resolution only; no floor or rate moved."
+      ],
+      "artifacts_measured_under_the_retired_pin": {
+        "note": "Declared rather than left to a reader's grep. These quote numbers measured through the retired parser and are LEFT UNTOUCHED; they stay readable against the row above.",
+        "paths": [
+          "experiments/transliteration_rate.json (provenance.inputs, prereg_revalidated.the_parser_this_run_used, prereg_revalidated.revalidated)",
+          "experiments/transliteration_served_diff.json (mechanism.after_parser_sha256_lf, mechanism.each_child_reports_the_parser_it_loaded.book_after / .corpus_after)"
+        ]
+      },
+      "artifacts_regenerated_because_they_track_the_tree": {
+        "note": "These record the CURRENT writer/source rather than a historical measurement, so they are regenerated in this commit and their digests move to the successor pin.",
+        "paths": [
+          "reports/signature_matches.json (provenance.writer_sha256_lf)",
+          "experiments/ambiguity_rate.json (provenance.resolver_sources)"
+        ]
+      },
+      "successor_prereg": {
+        "path": "experiments/exact_literals_prereg.json",
+        "recorded_in": "this commit, which is also the commit that changes the parser",
+        "carries": [
+          "the post-amendment LF sha256 of scripts/match_signatures.py",
+          "the before/after served-line evidence this change owes"
+        ]
+      },
+      "how_the_tests_change": [
+        "The digest assertions that read this file's `parser` row against the working tree are RE-AIMED at the successor pin, in this commit, each citing this amendment by id at the assertion.",
+        "The retirement is followed, never skipped: a marker naming an amendment this file does not record fails loudly rather than dropping the check.",
+        "A test re-aimed without an amendment to cite would be a test edited to make a change pass."
+      ]
+    }
+  ]
 }
