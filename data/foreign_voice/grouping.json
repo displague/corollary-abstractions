@@ -1,0 +1,185 @@
+{
+  "rule_id": "foreign_voice.grouping.v1",
+  "registered": "2026-08-24",
+  "design": "docs/DESIGN-voice-completion.md",
+  "supersedes_prose_in": "data/foreign_voice/lexicon.json reading_rules ('PRECEDENCE IS CARRIED, NOT REBUILT')",
+
+  "purpose": [
+    "The canonical grouping rule of DESIGN-voice-completion 3.1, frozen and",
+    "digested BEFORE the renderer changes, and carrying the same status rule R",
+    "and the lexicon carry: a TRUSTED, REVIEWED ARTIFACT, not renderer logic.",
+    "It exists because v0.19 voided on C-V4.drop_group at 0.80 against a 0.90",
+    "floor, for one mechanical reason: deleting a semantically redundant",
+    "bracket changes the sentence and not the term. A served sentence could",
+    "therefore have a variant that reads differently and certifies identically,",
+    "and a reader could not tell which one the graph meant.",
+    "The repair is structural. After this rule a redundant grouping variant is",
+    "not rare, it is UNGRAMMATICAL -- and G1b says so over every surviving pair",
+    "rather than over a sample."
+  ],
+
+  "why_an_artifact_and_not_code": [
+    "The rule is a claim about a parser this repository did not write. If it is",
+    "wrong, the inverse hands the pinned binary a term that re-associates and B1",
+    "fails loudly, everywhere -- the good failure mode.",
+    "A digested file makes widening it a diff with a review, which is rule R's",
+    "3.2 discipline, and it is what the per-statement pair classification is",
+    "recorded against."
+  ],
+
+  "how_the_levels_were_obtained": [
+    "MEASURED against the pinned toolchain (leanprover/lean4:v4.32.2) on",
+    "2026-08-24, before this file was written and before any renderer changed.",
+    "For each ordered pair of operators the probe elaborated `a OP1 b OP2 c`",
+    "and its two bracketings and compared the serialized Expr digests through",
+    "scripts/foreign_voice_oracle.py; the bracketing whose digest matched the",
+    "flat form is the one the toolchain builds.",
+    "Associativity was read the same way from `a OP b OP c`, and the",
+    "non-associative operators were confirmed by the flat form FAILING to",
+    "elaborate -- `a = b = c` and `P ↔ Q ↔ R` are not terms in this toolchain.",
+    "This table is therefore what the binary does, not what a manual says. G1",
+    "re-checks all of it over 2,313 covered statements, because one wrong level",
+    "is wrong everywhere and a single disagreement stops the cycle."
+  ],
+
+  "levels": [
+    {"token": "↔", "precedence": 20, "associativity": "none",
+     "note": "loosest. Chaining rejected by the toolchain: `P ↔ Q ↔ R` fails."},
+    {"token": "→", "precedence": 25, "associativity": "right"},
+    {"token": "∨", "precedence": 30, "associativity": "right"},
+    {"token": "∧", "precedence": 35, "associativity": "right"},
+    {"token": "=", "precedence": 50, "associativity": "none"},
+    {"token": "≠", "precedence": 50, "associativity": "none"},
+    {"token": "<", "precedence": 50, "associativity": "none"},
+    {"token": ">", "precedence": 50, "associativity": "none"},
+    {"token": "≤", "precedence": 50, "associativity": "none"},
+    {"token": "≥", "precedence": 50, "associativity": "none"},
+    {"token": "<=", "precedence": 50, "associativity": "none",
+     "note": "the ASCII spelling the residue also carries; same relation, same level"},
+    {"token": ">=", "precedence": 50, "associativity": "none",
+     "note": "55 covered statements spell it this way; the v0.19 lexicon gained a row for it by dated correction"},
+    {"token": "+", "precedence": 65, "associativity": "left"},
+    {"token": "-", "precedence": 65, "associativity": "left"},
+    {"token": "*", "precedence": 70, "associativity": "left"},
+    {"token": "/", "precedence": 70, "associativity": "left"},
+    {"token": "%", "precedence": 70, "associativity": "left"},
+    {"token": "^", "precedence": 75, "associativity": "right"}
+  ],
+
+  "prefix": [
+    {"token": "¬", "argument_precedence": 40,
+     "measured": "`¬ a = b` elaborates as `¬ (a = b)` and `¬ P ∧ Q` as `(¬ P) ∧ Q`, so ¬ binds looser than a relation and tighter than a connective"},
+    {"token": "-", "argument_precedence": 75,
+     "measured": "`-a * b` elaborates as `(-a) * b` and `-a ^ 2` as `-(a ^ 2)`, so unary minus binds tighter than `*` and looser than `^`"}
+  ],
+
+  "binders": ["∀", "∃"],
+
+  "binder_tail_rule": {
+    "statement": "a binder body extends maximally right, so a binder needs brackets IFF it is not in tail position",
+    "tail_propagates_through": [
+      "the right operand of an infix operator, when that operator is itself in tail position",
+      "the argument of a prefix operator, when the prefix is itself in tail position",
+      "the body of a binder (always tail within the binder's extent)",
+      "the inside of any bracket pair, which re-establishes tail position"
+    ],
+    "tail_is_lost_at": [
+      "the left operand of any infix operator, and nothing else"
+    ],
+    "a_bracket_restores_tail": {
+      "statement": "inside a bracket the extent ends at the matching `)`, so whatever sits rightmost inside it IS in tail position there",
+      "why_it_is_called_out": [
+        "The first transcription of this clause said the opposite -- that a node",
+        "which had to be bracketed loses tail position inside its own bracket --",
+        "and the two halves of the rule then contradicted each other.",
+        "It cost exactly ONE statement in 2,313: lean_workbook_plus_82031's",
+        "`(B → ∀ x y z : Rat, body)` was re-emitted as",
+        "`(B → (∀ x y z : Rat, body))`, a bracket the source did not write.",
+        "The census's `it_can_only_remove` check is what caught it, which is the",
+        "whole reason that check exists: a rule that can add a bracket is not a",
+        "canonicalization, and one counterexample refutes the claim as",
+        "thoroughly as a thousand would."
+      ]
+    },
+    "measured": [
+      "`∀ x : Rat, x = x ∧ x = x` elaborates identically to `∀ x : Rat, (x = x ∧ x = x)` -- the body swallows the conjunction.",
+      "`¬ ∃ x : Rat, x = x` elaborates identically to `¬ (∃ x : Rat, x = x)`, so a binder under a prefix in tail position needs no bracket and `¬ ∃ x : Rat, p` is ALREADY canonical.",
+      "`(∀ x : Rat, x = x) ∧ z = z` needs its bracket: the left operand of `∧` is not tail position."
+    ],
+    "why_it_is_a_clause_and_not_an_emergent_property": [
+      "Correction 3: this is a rule someone had to supply. It is not derivable",
+      "from a precedence table, because a binder has no precedence -- it is",
+      "bracketed by POSITION. A reader reproducing this design must not have to",
+      "reverse-engineer it from a program."
+    ]
+  },
+
+  "binder_group_rule": {
+    "strip": true,
+    "statement": "a parenthesised binder group `∃ (x y z : Rat),` is re-emitted WITHOUT its brackets as `∃ x y z : Rat,`",
+    "measured": "`∃ (x y : Rat), x = y` and `∃ x y : Rat, x = y` elaborate to byte-identical serializations",
+    "scope": "16 covered statements carry a binder-group bracket, 16 brackets in all; one of them, lean_workbook_54220, is in the sealed hundred",
+    "why_it_is_a_clause": [
+      "Correction 3: this is a real change to 16 surfaces that NO precedence",
+      "argument produces. The bracketed form is the one the corpus wrote, and",
+      "both forms mean the same thing, so the rule has to choose -- and a rule",
+      "that chooses has to say so out loud rather than leave the choice inside",
+      "an implementation."
+    ]
+  },
+
+  "ascription_rule": {
+    "never_a_grouping_pair": true,
+    "statement": "`(e : T)` is SYNTAX. Its brackets are the ascription; they are never a grouping pair, never counted in a grouping census, never mutated, and never removed",
+    "scope": "149 covered statements carry at least one ascription, 215 ascription brackets in all; after canonicalization 42 statements' only remaining bracket pair is an ascription",
+    "why_it_matters_beyond_correctness": [
+      "All three kinds render through the SAME two lexicon rows -- `the",
+      "quantity` and `end quantity` -- so a mutation pool that admits on the",
+      "phrase appearing in a surface cannot tell them apart. v0.19's drop_group",
+      "pool did exactly that: G5b measures 1,518 of its 1,549 admitting through",
+      "a real grouping pair, so 31 were padding the denominator of a control",
+      "about grouping with statements that had no grouping bracket at all."
+    ]
+  },
+
+  "emit_rule": {
+    "statement": "bracket a child IFF the child's level is below the position's minimum for that operand side",
+    "operand_minimums": {
+      "left_of_left_associative": "the operator's own precedence",
+      "right_of_left_associative": "the operator's precedence + 1",
+      "left_of_right_associative": "the operator's precedence + 1",
+      "right_of_right_associative": "the operator's own precedence",
+      "either_side_of_non_associative": "the operator's precedence + 1",
+      "argument_of_a_prefix": "the prefix's declared argument_precedence"
+    },
+    "atoms": "an identifier or numeral binds tighter than every operator and is never bracketed",
+    "binders": "bracketed by POSITION under binder_tail_rule, never by level"
+  },
+
+  "it_can_only_remove": {
+    "claim": "this rule never ADDS a bracket the source omitted",
+    "argument": "a source statement parses, so the structure it denotes already follows precedence, and the canonical form of a parsing source can only remove",
+    "checked_not_assumed": "experiments/grouping_census.json publishes the per-statement delta distribution; there is no negative bucket across 2,313 statements"
+  },
+
+  "pair_kinds": {
+    "values": ["grouping", "ascription", "binder_group"],
+    "recorded_in": "experiments/grouping_census.json, per statement",
+    "used_by": [
+      "G1b, whose 5,228-pair census is over grouping pairs only",
+      "G5b, whose floor is zero cross-kind mutation records in drop_group and shift_group",
+      "C-V4-prime's mutation_record.pair_kind field"
+    ]
+  },
+
+  "not_claimed": [
+    "No readability claim. The rule says how much surface changes, not whether",
+    "the change helps a reader. DESIGN-voice-completion 8 keeps that open with",
+    "a live example: lean_workbook_20627 canonicalizes to four disjuncts with",
+    "no grouping word anywhere, and only C-V3 could say whether that helped.",
+    "C-V3 is ABSENT.",
+    "No claim that the levels are Lean's documented levels. They are the levels",
+    "the PINNED BINARY was measured to use, which is the only thing the inverse",
+    "will be handed back to."
+  ]
+}

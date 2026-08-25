@@ -1,0 +1,39 @@
+{
+ "design": "docs/DESIGN-voice-completion.md",
+ "g1": {
+  "agree": 2313,
+  "disagreements": [],
+  "floor": 2313,
+  "floor_met": true,
+  "gate": "G1 — the canonicalizer agrees with the pinned parser",
+  "statements": 2313,
+  "why_no_allowance": "one disagreement means grouping.json states a precedence the toolchain does not use, and one wrong level is wrong everywhere"
+ },
+ "g1b": {
+  "blind": 0,
+  "blind_cases": [],
+  "deletion_is_by_matched_pair": "deleted by INDEX from the emission the rule computed, not by two independent str.replace calls. v0.19's drop_group deleted the first opening and the first closing, which coincide only when the first bracket contains no nested bracket — 3 of its sampled 50 nest",
+  "detected": 5228,
+  "detected_by_digest_change": 5227,
+  "detected_by_failing_to_elaborate": 1,
+  "excluded_by_pair_kind": {
+   "ascription": 215,
+   "binder_group": 16,
+   "why": "an ascription bracket is syntax and a binder-group bracket is stripped by the rule; neither is a grouping pair, and a census about grouping that counted them would be counting the wrong thing"
+  },
+  "floor": 5228,
+  "floor_met": true,
+  "gate": "G1b — no redundant grouping bracket survives, over the whole set",
+  "it_demotes_the_sample": "a 50-statement sample cannot establish what a 5228-pair census establishes. If C-V4′'s drop_group and this census disagree, THE CENSUS GOVERNS and the disagreement is the finding",
+  "pairs_tested": 5228
+ },
+ "inputs": {
+  "grouping_rule": "data/foreign_voice/grouping.json",
+  "grouping_rule_sha256_lf": "3cdd7db805f741aab058d0aea9817e5228538416b496feb4666ce4c2a3a2815c",
+  "probe": "scripts/grouping_canonical_probe.py",
+  "probe_sha256_lf": "b097ae66890b30a2af3394a3927e0512d8a0aed9addfdad8cd540b5c62f41b9b"
+ },
+ "measure_id": "foreign_voice.grouping_agreement.v1",
+ "measured": "2026-08-24",
+ "toolchain": "leanprover/lean4:v4.32.2"
+}
