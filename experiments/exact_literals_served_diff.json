@@ -1,0 +1,67 @@
+{
+  "amendment": "transliteration.prereg.v1.amendment.exact-literals-2026-08-24",
+  "answer_lines_moved": {
+    "count": 0,
+    "statement_ids": [],
+    "why_zero_is_the_right_answer_here": "answer.render's `in words` line is gated by v0.18's numeral pair, which REFUSES these statements' literals (|n| < 10^15) on BOTH sides. The corruption never reached this surface; it reached the evaluate route below. Zero here is the seal-shaped half of the evidence: an unwitnessed rendering-adjacent change that moved no rendered answer byte."
+  },
+  "evaluate_route_moved": {
+    "count": 3,
+    "statement_ids": [
+      "goedelpset.skel.goedel_pset_789185",
+      "leanworkbook.ground.lean_workbook_37421",
+      "leanworkbook.ground.lean_workbook_plus_68304"
+    ],
+    "this_is_the_defect_being_fixed": "BACKLOG: two ground statements returned the RIGHT verdict with printed values wrong by 4.4e59, handed back as an exact Fraction so nothing downstream could tell."
+  },
+  "lines_moved": {
+    "expected": [
+      "goedelpset.skel.goedel_pset_789185",
+      "leanworkbook.ground.lean_workbook_37421",
+      "leanworkbook.ground.lean_workbook_plus_68304"
+    ],
+    "unexpected": [],
+    "verdict": "AS EXPECTED"
+  },
+  "mechanism": {
+    "after_parser_sha256_lf": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+    "before_blob_from": "git show HEAD:scripts/match_signatures.py",
+    "before_parser_sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+    "each_child_reports_the_parser_it_loaded": {
+      "after": "9602dfa182dd1e0ae880f1736bdd9c4112165d16864215ed7b51a729a00d7c31",
+      "after_module_is_the_one_answer_used": true,
+      "before": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
+      "before_module_is_the_one_answer_used": true,
+      "why": "sys.path ordering alone is defeated by answer.py inserting scripts/ at import; the precedent's first draft produced a clean diff in which both sides were the NEW parser. Each side installs its parser into sys.modules first and reports what it loaded."
+    },
+    "why_the_committed_blob_and_not_an_in_memory_revert": "An in-memory revert re-types the old code, and the digest check would then be checking the copy against itself. The blob from git IS the pre-amendment file."
+  },
+  "roadmap": "docs/ROADMAP-v0.20.md §4b",
+  "run_id": "exact_literals.served_diff.v1",
+  "samples": {
+    "goedelpset.skel.goedel_pset_789185": {
+      "answer_after": "Goedel-Pset-789185 (Goedel-Pset, Emitted Skeleton, Formal Without Bridge)\n\nThe covered Goedel-Pset claim stated by problem Goedel-Pset-789185, emitted as a matcher template (docs/DESIGN-skeleton-emitter.md).\n\nformally   : (10^20 - 1)^3 = 9999999999999999999700000000000000000000000299999999999999999999\nheld as    : formal\ndiscipline : mathematics\nsource     : goedelpset.skel.goedel_pset_789185  [goedel_pset.skel.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "answer_before": "Goedel-Pset-789185 (Goedel-Pset, Emitted Skeleton, Formal Without Bridge)\n\nThe covered Goedel-Pset claim stated by problem Goedel-Pset-789185, emitted as a matcher template (docs/DESIGN-skeleton-emitter.md).\n\nformally   : (10^20 - 1)^3 = 9999999999999999999700000000000000000000000299999999999999999999\nheld as    : formal\ndiscipline : mathematics\nsource     : goedelpset.skel.goedel_pset_789185  [goedel_pset.skel.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "evaluate_after": "relation   : (10^20 - 1)^3 = 9999999999999999999700000000000000000000000299999999999999999999\nleft       : 999999999999999999970000000000000000000299999999999999999999\nright      : 9999999999999999999700000000000000000000000299999999999999999999\nholds      : no\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed",
+      "evaluate_before": "relation   : (10^20 - 1)^3 = 9999999999999999999700000000000000000000000299999999999999999999\nleft       : 999999999999999999970000000000000000000299999999999999999999\nright      : 10000000000000000000000000000000000000000000000000000000000000000\nholds      : no\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed"
+    },
+    "leanworkbook.ground.lean_workbook_37421": {
+      "answer_after": "lean_workbook_37421 (Ingested, Formal Without Bridge)\n\nThe ground arithmetic claim stated by Lean-workbook problem lean_workbook_37421, restated from the pinned extract.\n\nformally   : (4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888888888888888888888888888888888888888) = -4444444444444444444444444444444444444444444444444444444444444444444444444444\nheld as    : formal\ndiscipline : number_theory\nsource     : leanworkbook.ground.lean_workbook_37421  [lean_workbook.ground.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "answer_before": "lean_workbook_37421 (Ingested, Formal Without Bridge)\n\nThe ground arithmetic claim stated by Lean-workbook problem lean_workbook_37421, restated from the pinned extract.\n\nformally   : (4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888888888888888888888888888888888888888) = -4444444444444444444444444444444444444444444444444444444444444444444444444444\nheld as    : formal\ndiscipline : number_theory\nsource     : leanworkbook.ground.lean_workbook_37421  [lean_workbook.ground.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "evaluate_after": "relation   : (4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888888888888888888888888888888888888888) = -4444444444444444444444444444444444444444444444444444444444444444444444444444\nleft       : -4444444444444444444444444444444444444444444444444444444444444444444444444444\nright      : -4444444444444444444444444444444444444444444444444444444444444444444444444444\nholds      : yes\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed",
+      "evaluate_before": "relation   : (4444444444444444444444444444444444444444444444444444444444444444444444444444 - 8888888888888888888888888888888888888888888888888888888888888888888888888888) = -4444444444444444444444444444444444444444444444444444444444444444444444444444\nleft       : -4444444444444444000000000000000000000000000000000000000000000000000000000000\nright      : -4444444444444444000000000000000000000000000000000000000000000000000000000000\nholds      : yes\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed"
+    },
+    "leanworkbook.ground.lean_workbook_plus_68304": {
+      "answer_after": "lean_workbook_plus_68304 (Ingested, Formal Without Bridge)\n\nThe ground arithmetic claim stated by Lean-workbook problem lean_workbook_plus_68304, restated from the pinned extract.\n\nformally   : (444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444444444444444444444444444444444444\nheld as    : formal\ndiscipline : number_theory\nsource     : leanworkbook.ground.lean_workbook_plus_68304  [lean_workbook.ground.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "answer_before": "lean_workbook_plus_68304 (Ingested, Formal Without Bridge)\n\nThe ground arithmetic claim stated by Lean-workbook problem lean_workbook_plus_68304, restated from the pinned extract.\n\nformally   : (444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444444444444444444444444444444444444\nheld as    : formal\ndiscipline : number_theory\nsource     : leanworkbook.ground.lean_workbook_plus_68304  [lean_workbook.ground.v1]\nnote       : this text is an ingestion record, not an explanation a person wrote",
+      "evaluate_after": "relation   : (444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444444444444444444444444444444444444\nleft       : -444444444444444444444444444444444444444444444444\nright      : -444444444444444444444444444444444444444444444444\nholds      : yes\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed",
+      "evaluate_before": "relation   : (444444444444444444444444444444444444444444444444 - 888888888888888888888888888888888888888888888888) = -444444444444444444444444444444444444444444444444\nleft       : -444444444444444450000000000000000000000000000000\nright      : -444444444444444450000000000000000000000000000000\nholds      : yes\ndecided by exact arithmetic on what you typed; no corpus statement was consulted and none is claimed"
+    }
+  },
+  "statements_evaluated": 1115,
+  "statements_rendered": 14830,
+  "what_this_is": [
+    "The served-answer-line diff an UNWITNESSED rendering-adjacent change owes in place of a seal (DESIGN-foreign-voice §5).",
+    "Every committed statement's full answer.render output, rendered twice: once under the parser the amendment retired and once under its successor."
+  ]
+}

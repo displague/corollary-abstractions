@@ -109,13 +109,31 @@ class PreregRevalidationTests(unittest.TestCase):
                 mr.revalidate_prereg(path)
             self.assertIn("lexicon.json", str(caught.exception))
 
-            successor_path = (
+            # Re-aimed 2026-08-24 by ROADMAP-v0.20 §4b: the first hop's parser
+            # row is itself retired now, so injuring it proves nothing — the
+            # tree is checked against the pin at the END of the chain. Walk to
+            # that file and injure THAT, which is the pin actually in force.
+            import prereg_pins
+
+            first_hop = (
                 self._prereg()["amendments"][0]["successor_prereg"]["path"])
+            hop_doc = json.loads((ROOT / first_hop).read_text(encoding="utf-8"))
+            hop_row = {r["role"]: r for r in hop_doc["frozen"]}["parser"]
+            live_source = prereg_pins.resolve_pin(
+                hop_doc, hop_row, prereg_path=first_hop)["source"]
+            successor_path = first_hop
             successor = json.loads(
-                (ROOT / successor_path).read_text(encoding="utf-8"))
+                (ROOT / first_hop).read_text(encoding="utf-8"))
+            if live_source != first_hop:
+                # The chain runs on; injure the end of it and short-circuit
+                # this prereg's amendment straight there.
+                successor = json.loads(
+                    (ROOT / live_source).read_text(encoding="utf-8"))
+                successor_path = live_source
             for row in successor["frozen"]:
                 if row["role"] == "parser":
                     row["sha256_lf"] = "0" * 64
+                    row.pop("retired_for_future_comparisons", None)
             # The injured successor lives in the temp dir and the amendment is
             # re-pointed at it, so the refusal is exercised without touching a
             # committed file. `REPO_ROOT / <absolute>` is the absolute path.

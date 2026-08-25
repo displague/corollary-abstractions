@@ -234,13 +234,26 @@ def revalidate_prereg(prereg_path: Path | None = None) -> dict:
             "observed_sha256_lf": actual,
         }
         if "retired_for_future_comparisons" in row:
+            # Follow the chain to its END, not one hop. ROADMAP-v0.20 §4b
+            # retired the parser row of the very file this amendment named as
+            # successor — two cycles touching one file — so a single hop now
+            # stops at a digest the tree has legitimately moved past and
+            # reports that as drift. `prereg_pins` is the shared walk; the
+            # one-hop `_successor_row` is kept for the reporting fields it
+            # still supplies.
+            from prereg_pins import resolve_pin  # noqa: PLC0415
+
             successor, successor_path = _successor_row(prereg, row)
-            agrees = actual == successor["sha256_lf"]
+            resolved = resolve_pin(
+                prereg, row, prereg_path=str(prereg_path))
+            agrees = actual == resolved["sha256_lf"]
             entry["retired_for_future_comparisons"] = {
                 "amendment": row["retired_for_future_comparisons"]["amendment"],
                 "dated": row["retired_for_future_comparisons"]["dated"],
-                "checked_against": successor_path,
-                "successor_sha256_lf": successor["sha256_lf"],
+                "checked_against": resolved["source"],
+                "retirement_hops": resolved["hops"],
+                "first_hop_was": successor_path,
+                "successor_sha256_lf": resolved["sha256_lf"],
                 "read_this_as": (
                     "`recorded_sha256_lf` is the digest THIS file's artifact was "
                     "measured under and is not expected to match the tree. The "

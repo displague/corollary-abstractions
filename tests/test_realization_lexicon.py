@@ -451,22 +451,24 @@ class TautologyProbeTests(unittest.TestCase):
                         f"its own review naming the reason.",
                     )
                     continue
-                named = [entry for key, entry in amendments.items()
-                         if key.endswith(marker["amendment"])]
-                self.assertEqual(
-                    len(named), 1,
-                    f"{row['path']} claims retirement by amendment "
-                    f"{marker['amendment']!r}, which this file does not record",
+                # Re-aimed 2026-08-24 by ROADMAP-v0.20 §4b: the walk follows
+                # the chain to its END rather than one hop. The successor this
+                # amendment names has since had its own parser row retired, so
+                # a single hop would now stop at a digest the tree has
+                # legitimately moved past — and would report that as the file
+                # matching "neither pin", which is the opposite of the truth.
+                # `prereg_pins` is the one implementation the run-writer uses
+                # too, so both follow retirements the same way.
+                import prereg_pins
+
+                resolved = prereg_pins.resolve_pin(
+                    self.prereg, row, prereg_path="experiments/realization_prereg.json"
                 )
-                successor = json.loads(
-                    (ROOT / named[0]["successor_prereg"]["path"]).read_text(
-                        encoding="utf-8"))
-                live = {r["role"]: r for r in successor["frozen"]}[role]
-                self.assertEqual(live["path"], row["path"])
                 self.assertEqual(
-                    _sha256_lf(path), live["sha256_lf"],
+                    _sha256_lf(path), resolved["sha256_lf"],
                     f"{row['path']} matches neither its retired pin nor the "
-                    f"successor pin in {named[0]['successor_prereg']['path']}. "
+                    f"live pin at the end of its declared retirement chain "
+                    f"({resolved['source']}, hops {resolved['hops']}). "
                     f"A second undeclared change needs its own amendment.",
                 )
 

@@ -266,6 +266,49 @@ COMMUTATIVE_CALL_HEADS = {
 }
 
 
+def exact_literal(tok: str) -> int | float:
+    """One numeric literal, exactly, from the surface the tokenizer matched.
+
+    ROADMAP-v0.20 §4b / DESIGN-statements-that-run E0's prerequisite. This
+    used to be `float(tok)`, which destroys every literal wider than a
+    double's 53-bit significand **at parse time**, before any consumer can
+    see it: measured over the committed tree, 7 destroyed occurrences across
+    3 nodes, one of them a 421-digit literal overflowing to `inf`. Two ground
+    statements were served the RIGHT verdict with printed values wrong by
+    4.4 x 10^59, handed back as an `exact` `Fraction` so nothing downstream
+    could tell.
+
+    The asymmetry that made this a defect rather than a precision note: the
+    v0.18 numeral pair REFUSES those same two statements by name
+    (`unsupported_numeral`, `|n| < 10^15`). One subsystem refused honestly
+    while the other silently corrupted. An evaluator that decides statements
+    cannot be built on a parser that destroys their literals.
+
+    **Integers become `int`; a decimal surface stays `float`, and that line is
+    drawn deliberately rather than for convenience.** Every destroyed literal
+    BACKLOG measured is an integer — a decimal written under this tokenizer's
+    own digit-dot-digit numeral token is short enough for a double. Making
+    decimals `Fraction` was tried first and the served-line diff refused it:
+    199 statements LOST their `in words` line, because
+    `numeral_words.number_to_words` accepts `int` and `float` and rejects a
+    `Fraction` as "not a number". Widening it would retire the pinned numeral
+    pair as well and move R2's registered numeral domain — a separate
+    decision needing its own registration, not something to smuggle in here.
+
+    So what stays unfixed is named rather than implied: `float("0.1")` is
+    still not exactly one tenth, and an evaluator that must decide
+    `0.1 + 0.2 = 0.3` will need the numeral domain widened first. That is a
+    filed limitation of this change, not a claim it makes.
+
+    `int` formats under `:g` exactly as `float` did, which is what keeps every
+    skeleton in the corpus byte-identical across this change — verified over
+    all 25,554 committed terms rather than assumed
+    (`experiments/exact_literals_served_diff.json`).
+    """
+
+    return int(tok) if "." not in tok else float(tok)
+
+
 def identity_terms(head: str) -> tuple[tuple, ...]:
     """Expression-tree spellings of `head`'s declared identity element.
 
@@ -279,7 +322,7 @@ def identity_terms(head: str) -> tuple[tuple, ...]:
     if ident is None:
         return ()
     if isinstance(ident, (int, float)):
-        return (("num", float(ident)),)
+        return (("num", exact_literal(str(ident))),)
     return tuple(("slot", name) for name in ident)
 
 # `<=` / `>=` must stay earlier alternatives than standalone `<` / `>`
@@ -409,7 +452,7 @@ class Parser:
         if tok == "-":
             return ("op", "neg", (self.parse_atom(),))
         if re.fullmatch(r"\d+(?:\.\d+)?", tok):
-            return ("num", float(tok))
+            return ("num", exact_literal(tok))
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", tok):
             raise TemplateParseError(f"unexpected token {tok!r}")
 

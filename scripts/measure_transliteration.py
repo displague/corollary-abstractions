@@ -103,20 +103,20 @@ def revalidate_prereg(prereg_path: Path | None = None) -> dict:
     """
     prereg_path = Path(prereg_path) if prereg_path is not None else PREREG_PATH
     prereg = json.loads(prereg_path.read_text(encoding="utf-8"))
+    # Retirements declared against this prereg are FOLLOWED, not treated as
+    # drift (ROADMAP-v0.20 §4b). A row the amendments retired is checked
+    # against the successor pin they name; a row with no marker is checked
+    # against itself, exactly as before. The walk is `prereg_pins`, shared
+    # with the tests so both follow the chain the same way — a writer that
+    # read a declared retirement as undeclared drift would refuse to produce
+    # a run for a reason the repository had already written down.
+    from prereg_pins import check_frozen  # noqa: PLC0415
+
     rows, drifted = [], []
-    for row in prereg["frozen"]:
-        path = REPO_ROOT / row["path"]
-        actual = sha256_lf_file(path) if path.exists() else None
-        agrees = actual == row["sha256_lf"]
-        rows.append({
-            "path": row["path"],
-            "role": row["role"],
-            "recorded_sha256_lf": row["sha256_lf"],
-            "observed_sha256_lf": actual,
-            "agrees": agrees,
-        })
-        if not agrees:
-            drifted.append(row["path"])
+    for record in check_frozen(prereg, prereg_path=str(prereg_path)):
+        rows.append(record)
+        if not record["agrees"]:
+            drifted.append(record["path"])
     premature = [row["path"] for row in prereg.get("pending", ())
                  if (REPO_ROOT / row["path"]).exists()]
     if drifted:
@@ -134,7 +134,16 @@ def revalidate_prereg(prereg_path: Path | None = None) -> dict:
             "row moves to `frozen` with its own recorded date when it is."
         )
     return {
-        "prereg": str(prereg_path.relative_to(REPO_ROOT)).replace("\\", "/"),
+        # A prereg handed in from outside the tree (a test's injured copy)
+        # has no repo-relative form; reporting its bare name is honest where
+        # `relative_to` would raise. Reachable only since retirements began
+        # resolving, which is what let this function get this far on a
+        # temp-dir prereg at all.
+        "prereg": (
+            str(prereg_path.relative_to(REPO_ROOT)).replace("\\", "/")
+            if prereg_path.is_relative_to(REPO_ROOT)
+            else prereg_path.name
+        ),
         "prereg_sha256_lf": sha256_lf_file(prereg_path),
         "verdict": "HOLDS",
         "what_it_means": (
