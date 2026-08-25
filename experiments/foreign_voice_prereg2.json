@@ -174,6 +174,25 @@
       "why": "The declared interpretation, BYTE-UNCHANGED by this cycle. Canonical grouping is a rendering rule, not an interpretation: R(s) is the same string it always was, and only its re-emission moved."
     },
     {
+      "path": "experiments/c_v3_prime_arm.json",
+      "role": "c_v3_prime_arm",
+      "sha256_lf": "eacb1ef6fea7155c577a4c0a5f145f658a967b60b8a3af0cf7c0b56419392a3c",
+      "recorded": "2026-08-25",
+      "why": [
+        "The full arm, run after the floor was frozen and after the pilot's own reading was recorded. 160 items, one pass — reproducibility was settled by the pilot's two.",
+        "Served 101/120 = 0.8417, skeleton 20/40 = 0.5, ratio 0.594. VOID by the inherited voiding sentence."
+      ]
+    },
+    {
+      "path": "experiments/c_v3_prime_pilot.json",
+      "role": "c_v3_prime_pilot",
+      "sha256_lf": "234960a23109e98d3431e35bb05db4bfc43bc33a821c25ebaca541853eb66128",
+      "recorded": "2026-08-25",
+      "why": [
+        "The pilot that settled reproducibility before any floor was frozen, and that fired the inherited voiding sentence before the full arm ran."
+      ]
+    },
+    {
       "path": "experiments/grouping_agreement.json",
       "role": "g1_g1b",
       "sha256_lf": "d3d0215b7992dd2c3366850aea440d9a11bf8c1e5c6f95d437b8c8ab4fcab812",
@@ -237,6 +256,15 @@
       "why": "G-P's deliverable. UNTRUSTED and measured by G1 and G1b."
     },
     {
+      "path": "scripts/machine_reader.py",
+      "role": "c_v3_prime_reader",
+      "sha256_lf": "bed9229e90d32cf661c61c8aa4aec27b972608c719c3ef90dbd312b85c7a9768",
+      "recorded": "2026-08-25",
+      "why": [
+        "C-V3′'s reader. Its weights-digest refusal is BUILT here, not inherited: weights_blob_sha256 appears once in the whole tree and nothing read it at run time. The blob's BYTES are hashed, not its filename trusted."
+      ]
+    },
+    {
       "path": "scripts/match_signatures.py",
       "role": "parser",
       "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
@@ -253,18 +281,6 @@
   ],
   "pending": [
     {
-      "path": "scripts/machine_reader.py",
-      "role": "c_v3_prime_reader",
-      "sha256_lf": "pending",
-      "why": "C-V3′'s pinned local reader. Its weights-digest refusal is a CONSTRUCTION PREREQUISITE (Correction 9): weights_blob_sha256 appears exactly once in the whole tree and nothing reads it at run time, so this control must BUILD the model-side refusal, not inherit it."
-    },
-    {
-      "path": "experiments/c_v3_prime_pilot.json",
-      "role": "c_v3_prime_pilot",
-      "sha256_lf": "pending",
-      "why": "The pilot that must establish reproducibility BEFORE any floor is frozen. There is no seed field in any manifest or request body in the tree, so temperature-0 determinism is an assumption this repository has never tested. If reproducibility fails, C-V3′ publishes that failure as its result and reverts to ABSENT."
-    },
-    {
       "path": "scripts/measure_foreign_voice2.py",
       "role": "registered_run",
       "sha256_lf": "pending",
@@ -277,5 +293,86 @@
     "reason": "no determinacy sheet, no non-maintainer marking",
     "consequence": "NO CLAIM that a PERSON can recover the mathematics determinately from the English, here or in the release",
     "c_v3_prime_does_not_substitute": "a machine reader measures whether the sentence determines the term TO THAT MACHINE, which is a fact about a model and not about a reader. Saying so is load-bearing precisely because a measured machine number is the most tempting thing in this design to over-read."
+  },
+  "c_v3_prime": {
+    "control": "C-V3′ — the machine blind reader",
+    "labelled": "MACHINE-reader, never human, in the artifact and in every sentence that quotes it",
+    "floor_frozen": "2026-08-25, from the pilot, BEFORE the full arm ran",
+    "pilot": "experiments/c_v3_prime_pilot.json",
+    "pilot_sha256_lf": "234960a23109e98d3431e35bb05db4bfc43bc33a821c25ebaca541853eb66128",
+    "reproducibility_settled_first": {
+      "question": "same inputs, same model, temperature 0 — byte-identical across two passes? No seed field exists anywhere in this tree, so it had never been tested.",
+      "measured": "50 items, two passes, 0 disagreements — BYTE-IDENTICAL",
+      "consequence": "the instrument repeats, so it is allowed to confirm as well as void. Had it failed, C-V3′ would have published that and reverted to ABSENT."
+    },
+    "served_arm_floor": 0.5,
+    "served_arm_floor_reasoning": [
+      "Chance is 0.25 with four candidates. A floor of 0.50 is twice chance: high enough that clearing it means the reader is doing something, low enough that it was not set where the pilot's arrow landed (0.7714 on 35 items).",
+      "The floor is on the SERVED arm only. C-V3′'s voiding is not governed by it — it is governed by the sentence inherited from C-V3, which compares the two arms."
+    ],
+    "inherited_voiding_sentence": {
+      "text": "if the skeleton arm is marked determinate at >= half the served arm's rate, the voice claim is void — the sheet is measuring the reader's mathematical guesswork, not the rendering",
+      "inherited_from": "docs/DESIGN-foreign-voice.md §7 C-V3, unchanged, per the supersession block's reconciliation in favour of the seed",
+      "threshold_ratio": 0.5
+    },
+    "the_pilot_already_fires_it_and_that_is_recorded_before_the_arm_runs": {
+      "served": {
+        "correct": 27,
+        "n": 35,
+        "rate": 0.7714,
+        "unparsed": 0
+      },
+      "skeleton": {
+        "correct": 8,
+        "n": 15,
+        "rate": 0.5333,
+        "unparsed": 0
+      },
+      "skeleton_over_served": 0.6913,
+      "fires": true,
+      "what_it_means": "the reader picks the true term from a SCRAMBLED sentence at 0.53 against 0.77 from the real one. It is substantially not reading the words.",
+      "the_mechanism_is_identifiable_and_is_the_finding": [
+        "The distractors are STRUCTURAL mutations — a deleted grouping pair, a shifted group, a swapped binder — so the four candidates differ in bracket shape and binder order.",
+        "C-V1's scramble DELIBERATELY LEAVES GROUPING WORDS UNTOUCHED. That is v0.18's measured lesson, not an oversight: a scramble that also broke parenthesisation would fail in the parser and prove nothing about whether the gate reads the words.",
+        "So a skeleton sentence still carries the true bracket structure and the true numerals — exactly enough to pick a structural distractor apart without reading one content word. Two instruments that are each correct alone interact badly when composed.",
+        "This is reported as the finding rather than repaired by redesigning the sheet after seeing the number. Tuning a control to flatter itself is the failure C-V4 taught this project to name."
+      ],
+      "why_it_is_recorded_now": "the pilot's numbers are in the tree before the full arm runs, so nobody can later mistake a redesign for a discovery"
+    },
+    "full_arm": {
+      "served": 120,
+      "skeleton": 40,
+      "sampling_rule": "the same seeded rule as the pilot, over the covered set, with the sample size fixed here before it runs"
+    },
+    "it_does_not_stop_the_cycle": "DESIGN-voice-completion §8: C-V3′ is an instrument this cycle is buying, not a gate the voice hangs on. A voided C-V3′ reading means the machine-reader claim is NOT MADE; the voice's fate rests on C-G1 and C-V4′.",
+    "what_is_not_claimed_either_way": [
+      "No human-reader claim. C-V3 stays ABSENT.",
+      "No readability claim. A machine reader measures whether the sentence determines the term TO THAT MACHINE.",
+      "With the voiding sentence fired, not even the machine claim is made."
+    ],
+    "arm_result": {
+      "artifact": "experiments/c_v3_prime_arm.json",
+      "served": {
+        "correct": 101,
+        "n": 120,
+        "rate": 0.8417,
+        "unparsed": 0
+      },
+      "skeleton": {
+        "correct": 20,
+        "n": 40,
+        "rate": 0.5,
+        "unparsed": 0
+      },
+      "skeleton_over_served": 0.594,
+      "served_arm_floor_met": true,
+      "verdict": "VOID",
+      "the_pilot_predicted_it": "the pilot's ratio was 0.6913 on 50 items; the arm's is 0.594 on 160. Both fire the inherited voiding sentence, and the pilot's was recorded before the arm ran.",
+      "reading": [
+        "The reader is good at the served sentences — 0.8417, far above the 0.50 floor and the 0.25 chance rate. Taken alone that would look like a strong result.",
+        "It is also right half the time when the words are SCRAMBLED. So a large share of that 0.84 is not word-reading; it is recovering the term from what the scramble leaves intact — the bracket structure and the numerals — against distractors that differ precisely in bracket structure and binder order.",
+        "That is the failure C-V3's voiding sentence was written to catch, caught. The instrument worked; the claim does not survive it."
+      ]
+    }
   }
 }

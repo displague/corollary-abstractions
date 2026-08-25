@@ -1,0 +1,2146 @@
+{
+ "answers": [
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_27615"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_30160"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_37608"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_71442"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_6542"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_29604"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_2002"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_50035"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_53058"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_29498"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_23555"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_11717"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_43290"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_1169"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_71232"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_28318"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_52916"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_31863"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_22890"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_49776"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_207"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_36841"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_27780"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_70455"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_21748"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_43729"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_23859"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4417"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_12030"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_3710"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_62114"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_53258"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_52596"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_8132"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_35718"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_8935"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_46352"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_10574"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_24271"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_35263"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_43303"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_13514"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_54780"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_4962"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_9579"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_61410"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_11348"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_21736"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_10063"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_47216"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_23796"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_39381"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_40509"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_19203"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_25399"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_49284"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_60924"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_14249"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_19194"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_20174"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_15240"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_52113"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_19982"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_59041"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34773"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_64019"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_44864"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_29732"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_21227"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_13193"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_46279"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_41330"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_29792"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_23024"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_54808"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_10870"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_7453"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_51420"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_12011"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_50831"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_3641"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_9107"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_15543"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_42879"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_19693"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_52635"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_22573"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_45825"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_1897"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_17704"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_28047"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_1655"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_66269"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_67342"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_38082"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_36024"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_7622"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_3193"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_60423"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_6590"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_29773"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_42875"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_36313"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_16219"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_42032"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_16979"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_52097"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_6981"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_20868"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_51871"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_71624"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_20452"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_3895"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_34693"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_63911"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_60537"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_3126"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_74066"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_43014"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_53"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_43939"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_56317"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_12528"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_3147"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_16078"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_4588"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_47730"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_1805"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_11192"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_6635"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_23908"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_45451"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_49565"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_5766"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_13299"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34709"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_72145"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_23019"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_17101"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_34159"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_3458"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_12965"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_52056"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_36154"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_28747"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_7666"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_31436"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_30982"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_53751"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_56306"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_6302"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_31544"
+  },
+  {
+   "arm": "served",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_29916"
+  },
+  {
+   "arm": "skeleton",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_52653"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "D",
+   "letter": "D",
+   "raw": "D",
+   "statement_id": "leanworkbook.skel.lean_workbook_54462"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "C",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_18952"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_837"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "B",
+   "letter": "B",
+   "raw": "B",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_11839"
+  },
+  {
+   "arm": "served",
+   "correct": true,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "A",
+   "raw": "A",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_22219"
+  },
+  {
+   "arm": "skeleton",
+   "correct": false,
+   "distractor_classes": [
+    "drop_group",
+    "shift_group",
+    "swap_binder"
+   ],
+   "expected": "A",
+   "letter": "C",
+   "raw": "C",
+   "statement_id": "leanworkbook.skel.lean_workbook_plus_34264"
+  }
+ ],
+ "arm_id": "foreign_voice.c_v3_prime_arm.v1",
+ "c_v3_human_is_still_absent": "and the human-reader claim stays not-made regardless of anything measured here",
+ "chance_rate": 0.25,
+ "control": "C-V3′ — the machine blind reader (THE ARM)",
+ "inherited_voiding_sentence": "if the skeleton arm is marked determinate at >= half the served arm's rate, the voice claim is void — the sheet is measuring the reader's mathematical guesswork, not the rendering",
+ "items": 160,
+ "labelled": "MACHINE-reader throughout. Never a human-reader number.",
+ "manifest": {
+  "control": "C-V3′ — the machine blind reader",
+  "it_grades_only": "no output reaches a served answer, gates a rendering, ranks anything or mints a receipt",
+  "labelled": "MACHINE-reader, never human",
+  "model": {
+   "name": "Qwen3-4B-Instruct-2507",
+   "provider_tag": "ollama:qwen3:4b-instruct",
+   "quantization": "Q4_K_M",
+   "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9"
+  },
+  "runtime": {
+   "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+   "engine": "ollama",
+   "loopback_only": true,
+   "version": "0.32.15"
+  },
+  "sampling": {
+   "no_seed_field_exists_anywhere_in_this_tree": "so temperature-0 determinism is an assumption this repository has never tested, and the pilot is what settles it",
+   "not_settings_that_took_effect": "ollama's /v1 layer ignores top_k and repeat_penalty (verified live 2026-08-22), so this block records what was REQUESTED and never claims what took effect — the wording scripts/measure_throughput.py:669-677 already uses",
+   "sampling_requested": {
+    "temperature": 0
+   },
+   "sampling_source": "declared by this control, NOT inherited from the throughput baseline, which runs at temperature 0.7 with vendor defaults",
+   "temperature": 0
+  }
+ },
+ "measured": "2026-08-25",
+ "reading": {
+  "served": {
+   "correct": 101,
+   "n": 120,
+   "rate": 0.8417,
+   "unparsed": 0
+  },
+  "skeleton": {
+   "correct": 20,
+   "n": 40,
+   "rate": 0.5,
+   "unparsed": 0
+  }
+ },
+ "seconds": 22.3,
+ "served_arm_floor": 0.5,
+ "served_arm_floor_met": true,
+ "skeleton_over_served": 0.594,
+ "verdict": "VOID",
+ "voided": true,
+ "voiding_threshold_ratio": 0.5,
+ "weights": {
+  "bytes": 2497280480,
+  "path_relative_to_home": ".ollama/models/blobs/sha256-85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+  "sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+  "verified": true
+ },
+ "what_a_void_means_here": "the machine-reader claim is NOT MADE. It does not stop the cycle: C-V3′ is an instrument this cycle bought, not a gate the voice hangs on, and the voice's fate rests on C-G1 and C-V4′."
+}
