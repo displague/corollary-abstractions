@@ -53,3 +53,4 @@ prover/lean/normalizer/** text eol=lf
 experiments/transliteration_prereg.json text eol=lf
 experiments/transliteration_rate.json text eol=lf
 experiments/transliteration_served_diff.json text eol=lf
+reports/test_gate_v019/** text eol=lf

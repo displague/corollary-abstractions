@@ -28,9 +28,9 @@
 > the v0.18 lesson debt was paid at that rotation; the re-freeze discipline
 > was executed whole (amendment before code, both prior rates declared
 > historical in writing, both old registered CLIs closed so neither can
-> mint a blended rate). The **v0.20 course is in flight** — see
-> [ROADMAP-v0.20](ROADMAP-v0.20.md). Full suite open at
-> `[SUITE-GATE-V19]`.
+> mint a blended rate). The **v0.20 course ran and selected** — see
+> [ROADMAP-v0.20](ROADMAP-v0.20.md). Full suite: **2,106 green
+> (5 skips) at 67a1506, first run** — reports/test_gate_v019/.
 
 # Roadmap v0.19 — say the part you cannot read, or say exactly why not
 

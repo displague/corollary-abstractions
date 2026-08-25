@@ -438,11 +438,12 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # pre-green runs, test_gate_v016/, test_gate_v015/). v0.18's new modules:
 # test_realize_term (44), test_realization_lexicon (37),
 # test_measure_realization (26); test_serve_chat 68 -> 74.
-# [SUITE-GATE-V19: refreshes to the v0.19 tip's numbers before the tag.
-# v0.19's 13 added/changed modules run 381 tests, 0 failures (measured at
-# rotation): foreign-voice x5, transliteration (44, 2 skipped),
-# address-probe (20), convention-pair (17), block-mdl (19), + realization
-# and skin modules they touch.]
+# 2,106 tests, 0 failures, 5 skipped at v0.19.0 -- 6h03m serial (21,767.5s),
+# green on the first run, second cycle in a row. Receipts:
+# reports/test_gate_v019/ (baselines: test_gate_v018/, test_gate_v017/
+# incl. its five pre-green runs). The 5 skips: 3 standing environment
+# skips + test_transliteration's 2 slow-regeneration cases, hand-run
+# green (44/44, 180s) before the gate.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

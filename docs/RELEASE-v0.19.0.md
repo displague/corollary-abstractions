@@ -537,20 +537,17 @@ failure can go unread is a check nobody is running.
 
 ## The suite at the tip
 
-[SUITE-GATE-V19: full-suite verdict and timing at the frozen v0.19 tip land
-here before the tag. The baseline is v0.18.0's gate — **1,827 tests, 0
-failures, 3 skipped, 24,117.3 s (6 h 42 m), green on the first run**,
-receipt in `reports/test_gate_v018/`. Measured for this rotation: the **13
-test modules this cycle added or changed run 381 tests, 0 failures**
-(`test_foreign_voice` 34, `test_foreign_voice_lexicon` 47,
-`test_foreign_voice_oracle` 24, `test_foreign_voice_register` 22,
-`test_foreign_voice_b0d` 17, `test_measure_foreign_voice` 26,
-`test_transliteration` 44 with 2 skipped, `test_address_space_probe` 20,
-`test_convention_probe` 17, `test_block_mdl` 19, plus the realization and
-skin modules they touch). `tests/git_ordering.py` defines TestCases but has
-no `test_` prefix, so discovery does not collect it — worth confirming that
-is intentional at the gate. The 2 skips in `test_transliteration` and any
-Lean-dependent skips are the ones to account for.]
+**2,106 tests, OK (5 skips), 21,767.5 s (6 h 03 m) at the frozen tip
+`67a1506` — green on the first run, the second cycle in a row**
+(`reports/test_gate_v019/run1-green.log`, story in `runs.md`). Up from
+v0.18.0's 1,827 by this cycle's nine new modules (the five foreign-voice
+suites, transliteration, the convention probe, the address-space probe,
+and the MDL experiment). The five skips are the three standing
+environment skips plus `test_transliteration`'s two slow-regeneration
+cases — both run by hand during the cycle, green (44/44 in 180 s), and
+flagged in these notes before the gate ran. The rotation-time
+measurement of the 13 added/changed modules (381 tests, 0 failures)
+held unchanged inside the full run.
 
 ## Reproduce
 
