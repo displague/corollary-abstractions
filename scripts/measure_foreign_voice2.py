@@ -445,8 +445,27 @@ def measure(batch: int = 300) -> dict:
                               batch_size=150)
     preview = json.loads((DATA / "eligibility_preview.json").read_text(encoding="utf-8"))
     register = json.loads((DATA / "register.json").read_text(encoding="utf-8"))
+    # The claim is over the RESIDUE, so that is what must not move. The totals
+    # are checked too, but the residue id set is the load-bearing one: when
+    # b1c9440 widened the tokenizer, the totals moved (transliterable 6,414 to
+    # 0) while every one of the 4,191 residue ids stayed put, and only one of
+    # those two facts is about this cycle's territory.
+    now_ids = sorted(row["statement_id"] for row in preview_now["statements"])
+    committed_ids = sorted(row["statement_id"] for row in preview["statements"])
+    if now_ids != committed_ids:
+        raise RunRefusal(
+            f"the foreign residue moved: {len(now_ids)} statements recomputed "
+            f"against {len(committed_ids)} committed. The claim is over that "
+            f"set, so no rate is published.")
     if preview_now["b0a"]["totals"] != preview["b0a"]["totals"]:
-        raise RunRefusal("B0a recomputed differently; the denominator moved")
+        raise RunRefusal(
+            f"B0a's totals moved under the committed preview: "
+            f"{preview_now['b0a']['totals']} against "
+            f"{preview['b0a']['totals']}. The residue is unchanged, so this is "
+            f"a bookkeeping move rather than a territory move — but the preview "
+            f"is a frozen artifact and it must be regenerated and re-frozen "
+            f"with the reason recorded, not silently outvoted by a fresh "
+            f"measurement.")
     rows = mfv.covered_rows(preview, register)
     transliterable = mfv._transliterable_rows()
     raw = json.loads((DATA / "lexicon.json").read_text(encoding="utf-8"))

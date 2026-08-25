@@ -18,7 +18,7 @@
  "b3_census": {
   "closes_exactly": true,
   "covered": 2313,
-  "must_equal": 10605,
+  "must_equal": 4191,
   "note": [
    "The two registered_blocked_* buckets are reported separately and",
    "NEVER summed: the first is a budget consequence the maintainer",
@@ -31,13 +31,13 @@
   ],
   "registered_blocked_mathlib_head": 1706,
   "registered_blocked_no_row": 172,
-  "total": 10605,
-  "transliterable": 6414
+  "total": 4191,
+  "transliterable": 0
  },
  "blocked_set_digest": "e51e56751515e55006fa64f2e77924f9cdcea340de8ba72f9151d9ae13d80871",
  "blocked_total": 1878,
  "design": "docs/DESIGN-foreign-voice.md",
- "eligibility_preview_digest_at_freeze": "d2892203e106ad8cf72d221f193e9a3ec50c79ff8a64476793d3c4ab620e2787",
+ "eligibility_preview_digest_at_freeze": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f",
  "entries": [
   {
    "blocked_statement_set_digest": "615af4f6860f35e7bb5d8f27e93ed5556e98ff2930eb4f97179b96a1bfbd847c",

@@ -146,6 +146,16 @@
       "why": "G3. The id list IS the pin now: three of C-V4's five pools move with the grammar, so a seed cannot carry them. All five `admitting` counts reproduce the shipped v0.19 artifact exactly, and the ten C-G1 cases are named here before the canonical renderer existed."
     },
     {
+      "path": "data/foreign_voice/eligibility_preview.json",
+      "role": "b0_preview",
+      "sha256_lf": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f",
+      "recorded": "2026-08-25",
+      "why": [
+        "NEWLY FROZEN by correction 3. It was missing from this list, which was a real gap: this file DEFINES the covered set every number in the run is measured over, and an unfrozen definition is a denominator nobody is checking.",
+        "Regenerated 2026-08-25 under the current parser. Verified before keeping: the residue id set is identical to the pre-regeneration one, the accepted id set is identical, and ZERO of the 4,191 per-statement records differ."
+      ]
+    },
+    {
       "path": "data/foreign_voice/grouping.json",
       "role": "grouping_rule",
       "sha256_lf": "3cdd7db805f741aab058d0aea9817e5228538416b496feb4666ce4c2a3a2815c",
@@ -162,9 +172,10 @@
     {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",
-      "sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
+      "sha256_lf": "1b8d5c2dbc221df1b4c6894a0e7e4a8bc558182cba655f9dbdddaa6b11e3f857",
       "recorded": "2026-08-25",
-      "why": "Re-frozen against the amended lexicon. G4: only `lexicon_digest_at_freeze` moved; entry set, blocked_set_digest and all five B3 buckets byte-identical."
+      "why": "Re-frozen against the amended lexicon. G4: only `lexicon_digest_at_freeze` moved; entry set, blocked_set_digest and all five B3 buckets byte-identical.",
+      "re_recorded": "2026-08-25, v0.20 correction 3 — re-frozen under the current parser; entry set and blocked_set_digest byte-identical, only b3_census's transliterable bucket emptied"
     },
     {
       "path": "data/foreign_voice/rule_r.json",
@@ -231,6 +242,16 @@
       "why": "v2-canonical. The ONE change to the forward path: R(s) is re-emitted under grouping.json before tokenizing. The inverse and the oracle are byte-for-byte the v0.19 path."
     },
     {
+      "path": "scripts/foreign_voice_eligibility.py",
+      "role": "b0_probe",
+      "sha256_lf": "3b0bca9b943880dd489a670e78f22fc7b1c7e7382166ec9e37efb5e8787011c6",
+      "recorded": "2026-08-25",
+      "why": [
+        "NEWLY FROZEN by correction 3, and amended by it: its totals were built from a Counter whose keys depend on the data, so an EMPTY bucket vanished instead of reading zero. The tokenizer widening emptied the transliterable bucket and the CLI crashed on the missing key.",
+        "All five buckets now start at zero and stay in the dict. A zero is a measurement; a missing key is a guess about what the reader will assume."
+      ]
+    },
+    {
       "path": "scripts/foreign_voice_lexicon.py",
       "role": "lexicon_gate",
       "sha256_lf": "38c7f3d7e1c14928ee6413f8f637112f9400edd2440ae2f7e65752cc4657a3be",
@@ -271,16 +292,17 @@
       "role": "parser",
       "sha256_lf": "f5b2abba6f5df4625d0816a71778aaffe46d07504dd34ae65ad0cef6d70376b7",
       "recorded": "2026-08-25",
-      "why": "B7's freeze list, inherited unchanged. Still 65fead2f… — the byte-frozen parser this cycle does not touch and which lives in another lane's scope entirely."
+      "why": "B7's freeze list, inherited. THE PIN MOVED BEFORE THIS LANE STARTED and an earlier version of this row claimed otherwise — see corrections. It is f5b2abba… here, not v0.19's 65fead2f…, because commit b1c9440 ('Two glyphs, and everything the seal cannot see about them') widened TOKEN_RE so `≥` and `≤` read natively. That is v0.19 §5's item 3a / ROADMAP-v0.20 §4b, and it is an ancestor of this branch's base. This lane never touched the file."
     },
     {
       "path": "scripts/measure_foreign_voice2.py",
       "role": "registered_run",
-      "sha256_lf": "8f36250f62289b4e9c6fc070020dd58b1d9eb1e22f3a3429bf371c4c4382452a",
+      "sha256_lf": "c1ab18a1b9d10e52715d518d7073642d109c112f296ce484fd7bb04b788590de",
       "recorded": "2026-08-25",
       "why": [
         "The fresh run. It refuses to publish unless every digest here revalidates."
-      ]
+      ],
+      "re_recorded": "2026-08-25, correction 3 — the B0a guard now checks the residue ID SET first, because that is what the claim is over"
     },
     {
       "path": "scripts/numeral_words.py",
@@ -378,5 +400,28 @@
         "That is the failure C-V3's voiding sentence was written to catch, caught. The instrument worked; the claim does not survive it."
       ]
     }
-  }
+  },
+  "corrections": [
+    {
+      "dated": "2026-08-25",
+      "finding": "v0.20 correction 3 — the frozen parser had already moved, and this file said it had not",
+      "how_it_surfaced": "the registered run REFUSED on its own guard — 'B0a recomputed differently; the denominator moved'. It scored nothing and wrote nothing.",
+      "two_findings_one_of_them_mine": [
+        "FIRST, THE TREE: scripts/match_signatures.py is f5b2abba…, not v0.19's 65fead2f…. Commit b1c9440 widened TOKEN_RE so the two glyphs read natively — the transliteration lane v0.19 §5 explicitly ordered to land AFTER v0.19's run, and it did. It is an ancestor of this branch's base, so this lane inherited it and never touched it.",
+        "SECOND, MINE: the frozen row for that file recorded the CORRECT digest — I hashed the tree — but carried the prose 'Still 65fead2f… — the byte-frozen parser this cycle does not touch'. The digest was measured; the sentence beside it was asserted. Asserting a value I had not checked, inside the artifact whose entire job is to record checked values, is the error here, and it is worse than the number being different."
+      ],
+      "what_moved_and_what_did_not": [
+        "MOVED: B0a's bookkeeping. parseable 2,172 -> 8,586, mute 10,605 -> 4,191, transliterable 6,414 -> 0. The easy half is no longer excluded from the claim by being 'transliterable'; it is excluded by being natively parseable, and therefore v0.18's realizer's business.",
+        "DID NOT MOVE: the foreign residue is the SAME 4,191 statement ids, the oracle-eligible set the same 2,319, and ZERO of the 4,191 per-statement records differ. Every number this cycle measures is over that residue.",
+        "DID NOT MOVE: the register's entry set and blocked_set_digest are byte-identical across the parser change — G4 holding against a stronger perturbation than it was written for.",
+        "B3 still closes EXACTLY, against the new mute total: 0 + 2,313 + 0 + 1,706 + 172 = 4,191."
+      ],
+      "the_designs_10605_is_now_historical": [
+        "DESIGN-voice-completion §6 G4 states the buckets 'close at 10,605 with the same five numbers (6,414 + 2,313 + 0 + 1,706 + 172)'. That was true of the tree the design was written against and is not true of this one.",
+        "The run publishes 4,191 with transliterable at 0, because a run is a measurement of the tree as it is. Publishing 6,414 today would publish a number that is false about the code.",
+        "G4's SUBSTANCE — canonical grouping changes how a statement is said, never whether — is unaffected and holds."
+      ],
+      "not_a_b7_event_but_it_is_a_b7_lesson": "No trusted artifact was edited to make anything agree, and the run had scored nothing when it refused. What this exposes is that a freeze list can carry a true digest beside a false sentence, and only the digest is machine-checked."
+    }
+  ]
 }

@@ -406,8 +406,16 @@ class ConstructiveCoverageTests(unittest.TestCase):
         self.assertEqual(len(self.eligible), 2319)
         self.assertEqual(self.preview["b0bc"]["accepted"], 2319)
         self.assertEqual(self.preview["b0a"]["totals"]["residue"], 4191)
-        self.assertEqual(self.preview["b0a"]["totals"]["transliterable"], 6414)
-        self.assertEqual(self.preview["b0a"]["totals"]["mute"], 10605)
+        # NOT hardcoded at 6,414 / 10,605 any more. Commit b1c9440 widened
+        # TOKEN_RE so the two glyphs read natively, which emptied the
+        # transliterable bucket and shrank `mute` to the residue. Those were
+        # facts about one parser; the INVARIANT is that the mute set is exactly
+        # the transliterable half plus the foreign residue, whichever parser is
+        # in the tree.
+        totals = self.preview["b0a"]["totals"]
+        self.assertEqual(totals["mute"],
+                         totals["transliterable"] + totals["residue"])
+        self.assertEqual(totals["nodes"], totals["parseable"] + totals["mute"])
 
     def test_the_only_uncovered_construct_is_the_one_with_a_refusal_row(self) -> None:
         leftovers: set[str] = set()

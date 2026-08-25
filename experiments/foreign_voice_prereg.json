@@ -64,13 +64,13 @@
     {
       "path": "data/foreign_voice/eligibility_preview.json",
       "role": "b0_preview",
-      "sha256_lf": "d2892203e106ad8cf72d221f193e9a3ec50c79ff8a64476793d3c4ab620e2787",
+      "sha256_lf": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f",
       "recorded": "2026-08-24",
       "why": [
         "The committed output of the probe above, so B0d's id selection is reproducible WITHOUT re-running the pinned binary, and so a reader can recompute every number in the lexicon's `coverage` block and in the register.",
         "It is a PREVIEW recorded in the preregistration commit, not the registered run. B0a and B0b+B0c remain the registered probes and the registered run recomputes them."
       ],
-      "re_recorded": "2026-08-24, re-recorded by correction 3 (eight rows moved when the four predicate heads were frozen)"
+      "re_recorded": "2026-08-25, v0.20 correction 3 — regenerated under the widened tokenizer"
     },
     {
       "path": "data/foreign_voice/grouping.json",
@@ -96,13 +96,13 @@
     {
       "path": "data/foreign_voice/register.json",
       "role": "frozen_register",
-      "sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
+      "sha256_lf": "1b8d5c2dbc221df1b4c6894a0e7e4a8bc558182cba655f9dbdddaa6b11e3f857",
       "recorded": "2026-08-24, promoted from `pending` when B4 landed",
       "why": [
         "B4: committed with its blocked_set_digest BEFORE scripts/foreign_voice.py renders anything. Seven entries, 1,878 statements registered exhaustively by id, each entry carrying its own blocked_statement_set_digest, its surface witness with what the oracle actually said, its per-corpus split, and its revisit trigger.",
         "A post-freeze entry is permitted only as a dated amendment commit that RE-RUNS B1 FROM SCRATCH. An amendment chased after reading B1 is §8's stop condition."
       ],
-      "re_recorded": "2026-08-25, v0.20 correction 1 — re-frozen against the amended lexicon; G4 verified the entry set and all five B3 buckets byte-identical"
+      "re_recorded": "2026-08-25, v0.20 correction 3 — regenerated under the widened tokenizer"
     },
     {
       "path": "data/foreign_voice/rule_r.json",
@@ -192,12 +192,12 @@
     {
       "path": "scripts/foreign_voice_eligibility.py",
       "role": "b0_probe",
-      "sha256_lf": "6d7a5f208b015701d18205e808bbcf1e29337e76a0792836d779e4071de9d3fe",
+      "sha256_lf": "3b0bca9b943880dd489a670e78f22fc7b1c7e7382166ec9e37efb5e8787011c6",
       "recorded": "2026-08-24",
       "why": [
         "B0a's split and B0b+B0c's eligibility are computed by this module. It is frozen because the preview numbers the lexicon and the register were authored against are only reproducible if the thing that produced them is pinned."
       ],
-      "re_recorded": "2026-08-24, re-recorded by correction 4 (H4: return-code guard and batch sentinels)"
+      "re_recorded": "2026-08-25, v0.20 correction 3 — regenerated under the widened tokenizer"
     },
     {
       "path": "scripts/foreign_voice_lexicon.py",
@@ -372,7 +372,8 @@
         "other_corpora": 3,
         "lean_workbook_share": 0.9987
       },
-      "superseded_note": "Two dated moves. The preregistration commit recorded 1,698 / 180, computed during authoring by scanning statement SOURCES with a regex over the Mathlib head names; B4 replaced that with the outcome-derived rule (corrections 2). Review finding H3 then froze `Even`, `Odd`, `Prime` and `Irrational` in rule R, moving seven more statements out of a class about this repository's own notation and into the Mathlib budget where they belong (corrections 3). The total is unchanged through both and still closes at 10,605."
+      "superseded_note": "Two dated moves. The preregistration commit recorded 1,698 / 180, computed during authoring by scanning statement SOURCES with a regex over the Mathlib head names; B4 replaced that with the outcome-derived rule (corrections 2). Review finding H3 then froze `Even`, `Odd`, `Prime` and `Irrational` in rule R, moving seven more statements out of a class about this repository's own notation and into the Mathlib budget where they belong (corrections 3). The total is unchanged through both and still closes at 10,605.",
+      "superseded_2026_08_25": "HISTORICAL. These are the preview figures as of 2026-08-24, under the pre-widening parser (match_signatures.py at 65fead2f…). Commit b1c9440 widened TOKEN_RE afterwards, emptying the transliterable bucket, and the CURRENT census lives in data/foreign_voice/register.json's b3_census: 0 + 2,313 + 0 + 1,706 + 172 = 4,191. This block is not updated, because it records what was previewed on its date and v0.19's run was measured against it."
     }
   },
   "prop_branch": {
@@ -607,6 +608,37 @@
         "G2 was measured immediately after: the renderer reproduces all 100 re-sealed hand-authored sentences byte-identically, which is the sealed prediction meeting the implementation rather than the other way round."
       ],
       "not_a_b7_event": "match_signatures.py and rule_r.json are byte-unchanged. The renderer is UNTRUSTED and measured (§4); recording its digest is not a claim it is correct."
+    },
+    {
+      "dated": "2026-08-25",
+      "finding": "v0.20 correction 3 — the tokenizer widening reached these artifacts",
+      "artifact": "eligibility_preview.json, register.json, foreign_voice_eligibility.py",
+      "digests_retired": [
+        {
+          "path": "data/foreign_voice/eligibility_preview.json",
+          "v019_sha256_lf": "d2892203e106ad8cf72d221f193e9a3ec50c79ff8a64476793d3c4ab620e2787",
+          "v020_sha256_lf": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f"
+        },
+        {
+          "path": "data/foreign_voice/register.json",
+          "v019_sha256_lf": "d4b971e79f1270da94eff32bf034d0f5e9ab19098f32336c155953fe119cf8f8",
+          "v020_sha256_lf": "1b8d5c2dbc221df1b4c6894a0e7e4a8bc558182cba655f9dbdddaa6b11e3f857"
+        },
+        {
+          "path": "scripts/foreign_voice_eligibility.py",
+          "v019_sha256_lf": "6d7a5f208b015701d18205e808bbcf1e29337e76a0792836d779e4071de9d3fe",
+          "v020_sha256_lf": "3b0bca9b943880dd489a670e78f22fc7b1c7e7382166ec9e37efb5e8787011c6"
+        }
+      ],
+      "what": "Commit b1c9440 widened TOKEN_RE so `≥` and `≤` read natively — v0.19 §5's item 3a, which that section explicitly ordered to land AFTER v0.19's run. It did. These three artifacts were regenerated under the current parser.",
+      "why_v019s_numbers_are_untouched": [
+        "v0.19's registered run measured under the pre-widening parser and its artifact preserves what it measured, including all 22 digests as of that run. Nothing about experiments/foreign_voice_rate.json changes.",
+        "This is exactly the discipline v0.19 §5 wrote for this moment: 'when the change lands it retires that pin for future comparisons only by dated amendment; it does not amend realization_rate.json. Any new rate is a new registered run with its own prereg and its own frozen digests.' The new run has one: experiments/foreign_voice_prereg2.json."
+      ],
+      "what_the_regeneration_changed": [
+        "B0a's bookkeeping only: parseable 2,172 -> 8,586, mute 10,605 -> 4,191, transliterable 6,414 -> 0.",
+        "The residue is the SAME 4,191 statement ids, the eligible set the same 2,319, zero per-statement records differ, and the register's entry set and blocked_set_digest are byte-identical."
+      ]
     }
   ],
   "amendments": [

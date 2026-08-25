@@ -124,8 +124,11 @@ class B3Arithmetic(unittest.TestCase):
         total = (self.census["transliterable"] + self.census["covered"]
                  + self.census[fvreg.MATHLIB_BUCKET]
                  + self.census[fvreg.NO_ROW_BUCKET])
+        # The closure is the claim; 10,605 was a fact about the pre-widening
+        # parser. It closes at whatever the mute set is, and that is stronger:
+        # it held at 10,605 under one tokenizer and at 4,191 under the next,
+        # with the same five buckets and the transliterable one emptied.
         self.assertEqual(total, self.preview["b0a"]["totals"]["mute"])
-        self.assertEqual(total, 10605)
         self.assertEqual(total, self.census["total"])
 
     def test_the_two_blocked_buckets_are_two_numbers(self) -> None:
@@ -156,6 +159,17 @@ class B3Arithmetic(unittest.TestCase):
         """The prereg's preview and the register cannot disagree in silence."""
         prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
         b3 = prereg["b0_preview_2026_08_24"]["b3_preview"]
+        if "superseded_2026_08_25" in b3:
+            # The prereg block is a DATED RECORD of what was previewed on
+            # 2026-08-24, under the pre-widening parser, and v0.19's run was
+            # measured against it. It is not updated when the tree moves; it is
+            # marked. What must still agree are the buckets the parser cannot
+            # touch — everything except the transliterable half and the total.
+            for field in ("covered", fvreg.MATHLIB_BUCKET, fvreg.NO_ROW_BUCKET):
+                with self.subTest(field=field):
+                    self.assertEqual(b3[field], self.census[field])
+            self.assertIn("HISTORICAL", b3["superseded_2026_08_25"])
+            return
         for field in ("transliterable", "covered", fvreg.MATHLIB_BUCKET,
                       fvreg.NO_ROW_BUCKET, "total"):
             with self.subTest(field=field):

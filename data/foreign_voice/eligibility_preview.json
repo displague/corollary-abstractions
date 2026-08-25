@@ -6,162 +6,199 @@
    "algebra": {
     "mute": 1,
     "nodes": 1,
-    "residue": 1
+    "parseable": 0,
+    "residue": 1,
+    "transliterable": 0
    },
    "algebraic_topology": {
     "mute": 4,
     "nodes": 8,
     "parseable": 4,
-    "residue": 4
+    "residue": 4,
+    "transliterable": 0
    },
    "calculus": {
     "mute": 2,
     "nodes": 11,
     "parseable": 9,
-    "residue": 2
+    "residue": 2,
+    "transliterable": 0
    },
    "chemistry": {
     "mute": 2,
     "nodes": 10,
     "parseable": 8,
-    "residue": 2
+    "residue": 2,
+    "transliterable": 0
    },
    "differential_geometry": {
     "mute": 2,
     "nodes": 9,
     "parseable": 7,
-    "residue": 2
+    "residue": 2,
+    "transliterable": 0
    },
    "differential_topology": {
     "mute": 4,
     "nodes": 7,
     "parseable": 3,
-    "residue": 4
+    "residue": 4,
+    "transliterable": 0
    },
    "economics": {
+    "mute": 0,
     "nodes": 11,
-    "parseable": 11
+    "parseable": 11,
+    "residue": 0,
+    "transliterable": 0
    },
    "geometric_modeling": {
     "mute": 5,
     "nodes": 8,
     "parseable": 3,
-    "residue": 5
+    "residue": 5,
+    "transliterable": 0
    },
    "geometry": {
     "mute": 1,
     "nodes": 15,
     "parseable": 14,
-    "residue": 1
+    "residue": 1,
+    "transliterable": 0
    },
    "geospatial_topology": {
     "mute": 6,
     "nodes": 7,
     "parseable": 1,
-    "residue": 6
+    "residue": 6,
+    "transliterable": 0
    },
    "graph_theory": {
     "mute": 7,
     "nodes": 8,
     "parseable": 1,
-    "residue": 7
+    "residue": 7,
+    "transliterable": 0
    },
    "information_theory": {
     "mute": 3,
     "nodes": 10,
     "parseable": 7,
-    "residue": 3
+    "residue": 3,
+    "transliterable": 0
    },
    "ingested_arithmetic": {
     "mute": 1,
     "nodes": 1,
-    "residue": 1
+    "parseable": 0,
+    "residue": 1,
+    "transliterable": 0
    },
    "lean_workbook": {
-    "mute": 10474,
+    "mute": 4060,
     "nodes": 12514,
-    "parseable": 2040,
+    "parseable": 8454,
     "residue": 4060,
-    "transliterable": 6414
+    "transliterable": 0
    },
    "logic": {
     "mute": 20,
     "nodes": 20,
-    "residue": 20
+    "parseable": 0,
+    "residue": 20,
+    "transliterable": 0
    },
    "machine_learning": {
+    "mute": 0,
     "nodes": 14,
-    "parseable": 14
+    "parseable": 14,
+    "residue": 0,
+    "transliterable": 0
    },
    "morphology": {
     "mute": 1,
     "nodes": 11,
     "parseable": 10,
-    "residue": 1
+    "residue": 1,
+    "transliterable": 0
    },
    "narrative": {
     "mute": 9,
     "nodes": 13,
     "parseable": 4,
-    "residue": 9
+    "residue": 9,
+    "transliterable": 0
    },
    "number_theory": {
     "mute": 12,
     "nodes": 16,
     "parseable": 4,
-    "residue": 12
+    "residue": 12,
+    "transliterable": 0
    },
    "numerical_analysis": {
     "mute": 5,
     "nodes": 8,
     "parseable": 3,
-    "residue": 5
+    "residue": 5,
+    "transliterable": 0
    },
    "physics": {
     "mute": 1,
     "nodes": 15,
     "parseable": 14,
-    "residue": 1
+    "residue": 1,
+    "transliterable": 0
    },
    "programming": {
     "mute": 9,
     "nodes": 9,
-    "residue": 9
+    "parseable": 0,
+    "residue": 9,
+    "transliterable": 0
    },
    "provability": {
     "mute": 6,
     "nodes": 6,
-    "residue": 6
+    "parseable": 0,
+    "residue": 6,
+    "transliterable": 0
    },
    "set_theory": {
     "mute": 9,
     "nodes": 10,
     "parseable": 1,
-    "residue": 9
+    "residue": 9,
+    "transliterable": 0
    },
    "statistics": {
     "mute": 6,
     "nodes": 11,
     "parseable": 5,
-    "residue": 6
+    "residue": 6,
+    "transliterable": 0
    },
    "temporal_logic": {
     "mute": 15,
     "nodes": 16,
     "parseable": 1,
-    "residue": 15
+    "residue": 15,
+    "transliterable": 0
    },
    "trigonometry": {
+    "mute": 0,
     "nodes": 8,
-    "parseable": 8
+    "parseable": 8,
+    "residue": 0,
+    "transliterable": 0
    }
   },
   "totals": {
-   "mute": 10605,
+   "mute": 4191,
    "nodes": 12777,
-   "parseable": 2172,
+   "parseable": 8586,
    "residue": 4191,
-   "transliterable": 6414
+   "transliterable": 0
   },
   "transliteration": [
    [

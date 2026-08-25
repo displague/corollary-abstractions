@@ -141,10 +141,17 @@ def split(data_dir: Path) -> dict:
 
     rows: list[dict] = []
     per_corpus: dict[str, Counter] = {}
+    #: Every bucket starts at zero and stays in the dict. A totals map whose
+    #: KEYS depend on the data cannot report an EMPTY bucket — and when
+    #: `b1c9440` widened the tokenizer so the two glyphs read natively, the
+    #: transliterable bucket emptied and this function silently dropped the key
+    #: while the CLI crashed on it. A zero is a measurement; a missing key is a
+    #: guess about what the reader will assume.
+    BUCKETS = ("nodes", "parseable", "mute", "transliterable", "residue")
     for path in paths:
         doc = json.loads(path.read_text(encoding="utf-8"))
         corpus = doc.get("discipline", path.parent.name)
-        counts = per_corpus.setdefault(corpus, Counter())
+        counts = per_corpus.setdefault(corpus, Counter({b: 0 for b in BUCKETS}))
         for node in doc.get("statement_nodes", []):
             sid = node.get("statement_id", "<missing-id>")
             source = ((node.get("formal_statement") or {})
@@ -160,7 +167,7 @@ def split(data_dir: Path) -> dict:
             counts["residue"] += 1
             rows.append({"statement_id": sid, "corpus": corpus, "source": source})
 
-    totals = Counter()
+    totals = Counter({bucket: 0 for bucket in BUCKETS})
     for counts in per_corpus.values():
         totals.update(counts)
     return {
