@@ -1,0 +1,106 @@
+{
+  "schema_id": "conformance.domain_schema.v1",
+  "frozen_at": "2026-08-25",
+  "design": "docs/DESIGN-statements-that-run.md",
+  "roadmap": "docs/ROADMAP-v0.20.md",
+  "what_this_is": [
+    "The frozen, hand-authored, reviewed table DESIGN-statements-that-run §3.3 requires. It declares, for a statement class or a statement id, the carrier, the reading of `/` and `-`, and the branch cuts the evaluator must refuse rather than choose.",
+    "It lives by v0.19's lexicon rules: a table that fails its load gate RAISES rather than degrading (scripts/realization_lexicon.py:30-38). It is extended only by a diff with tests, never inferred at runtime.",
+    "Correction 4 is why it exists at all: a conformance engine without a domain does not produce wrong answers occasionally, it produces a verdict whose meaning is undefined. Eight of ten apparent ground-class errors were domain disagreements, not corpus errors."
+  ],
+  "domain_is_a_declaration_not_a_discovery": "Where this table reads a statement over Nat that its Lean source wrote over the reals, the record says so in its `domain` field and every sentence quoting a rate names it. A rate measured under a substituted domain that does not say so is a number pretending to be a fact.",
+  "carriers": [
+    "Nat",
+    "Int",
+    "Rat"
+  ],
+  "class_rows": [
+    {
+      "class_id": "lean_workbook.ground.v1",
+      "applies_to": "corpus_id",
+      "carrier": "Nat",
+      "division": "truncating",
+      "subtraction": "truncated-at-zero",
+      "covers_statements": 12514,
+      "why_one_row_and_not_twelve_thousand": [
+        "These statements are restatements of Lean-workbook problems whose source semantics Correction 4 measured directly: `leanworkbook.ground.lean_workbook_plus_26988` states `2017 - (2017 / 3) = 1345`, exactly right over Nat (2017/3 = 672) and exactly wrong over Rat (4034/3).",
+        "Adjudicated against the pinned toolchain v4.32.2 by `decide` over Nat, 8 of the 10 ground disagreements hold and only 2 fail under both readings.",
+        "One reviewed row covers 98% of the corpus. Inventing 12,514 per-statement rows to express one fact would be bookkeeping theatre, and the design says so."
+      ],
+      "what_this_row_does_not_claim": "It does not claim the Lean source wrote these over Nat. It declares the carrier THIS REPOSITORY reads them under, which is what makes the verdict interpretable rather than undefined."
+    }
+  ],
+  "statement_rows": [],
+  "statement_rows_note": [
+    "Deliberately empty, and that emptiness is the measurement rather than an omission.",
+    "`domain_absent` is scoped to the AUTHORED corpora, where the domain genuinely varies statement by statement and where `semantic_interpretation.regularity_conditions[]` carries it in free English that no row yet formalises — 'Integer argument: parity is a property of the ring of integers', 'a != 0 (otherwise not quadratic)', 'Nonzero volume'.",
+    "Turning those sentences into rows is review work, one row at a time, and this cycle does not pretend to have done it. The register is where those statements land, and the register is the artifact."
+  ],
+  "branch_cuts": [
+    {
+      "cut_id": "division_by_zero",
+      "rule": "refuse",
+      "already_enforced_at": "scripts/evaluate.py `inv` raises EvalError('division by zero')",
+      "why_refuse_rather_than_choose": "A branch cut the evaluator picks silently is a semantic decision the sampler has no authority to make. An admitted point whose conclusion divides by zero is `evaluation_error` — the third outcome — and is excluded from both numerators."
+    },
+    {
+      "cut_id": "zero_pow_zero",
+      "rule": "refuse",
+      "why": "0^0 is 1 in some conventions and undefined in others; the corpus declares neither, so a point that reaches it errors rather than resolving to whichever the host language chose."
+    },
+    {
+      "cut_id": "rational_exponent",
+      "rule": "refuse",
+      "already_enforced_at": "scripts/evaluate.py `^` raises on a non-integer exponent",
+      "why": "The evaluator refuses it already; the schema records that this is a declared refusal rather than a gap someone might close by reaching for floats."
+    },
+    {
+      "cut_id": "evaluation_budget_exceeded",
+      "rule": "refuse",
+      "already_enforced_at": "scripts/evaluate.py MAX_RESULT_DIGITS = 4300, raising ResourceBound",
+      "why": "E0e's bound, discharged by ROADMAP-v0.20 §4c. A bound the compiler hits emits REFUSED with `evaluation_budget_exceeded`, never a truncated answer."
+    }
+  ],
+  "reviewed_output_roles": {
+    "what_this_is": [
+      "§3.2.1's reviewed output-role list. Where the top-level relation is `=` AND one side is a single slot whose declared `semantic_role` appears here, the statement is a DEFINITION and this cycle does not test it.",
+      "The design is explicit that this must be a reviewed artifact and never a regex over role strings, because the role vocabulary is not closed in the corpus. Every role below was read off the committed nodes, listed with the statement that carries it, and included or excluded by hand.",
+      "The rule is scoped to `=`. An inequality is unaffected however its slots are named, which is why `difftop.morse.weak_morse_inequality` (the corpus's single `>=` candidate) survives with roles `analytic_count` / `topological_count` that are deliberately NOT listed here."
+    ],
+    "why_this_matters": "Correction 2's pilot sampled both sides of `A = s^2` independently and falsified it. The statement is not wrong; the sampler was. A lane that reported 51 counterexamples across twelve authored corpora would be publishing its own misreading as a corpus finding.",
+    "roles": [
+      {"role": "output", "occurrences": 21, "witness": "chemistry.solutions.molarity_definition (c = n/V)"},
+      {"role": "area_measure", "occurrences": 3, "witness": "geometry.area_formulas.circle_area_formula (A = pi*r^2)"},
+      {"role": "volume_measure", "occurrences": 2, "witness": "geometry.volume_formulas.cube_volume_formula (V = s^3)"},
+      {"role": "topological_invariant", "occurrences": 1, "witness": "algtop.invariants.euler_characteristic_complex (chi = V - E + F)"},
+      {"role": "objective_value", "occurrences": 1, "witness": "ml.objective.kl_regularized_rl_objective (J = R - beta*D)"},
+      {"role": "relative_measure", "occurrences": 1, "witness": "ml.policy.policy_probability_ratio (rho = pi_new/pi_old)"},
+      {"role": "velocity_in_base_frame", "occurrences": 1, "witness": "physics.frames.galilean_velocity_addition"},
+      {"role": "moving_frame_measurement", "occurrences": 1, "witness": "physics.frames.galilean_acceleration_invariance"},
+      {"role": "base_frame_measurement", "occurrences": 1, "witness": "physics.frames.galilean_acceleration_invariance"},
+      {"role": "rotating_frame_measurement", "occurrences": 1, "witness": "physics.frames.rotating_frame"},
+      {"role": "response", "occurrences": 1, "witness": "probstat.regression.slr_stochastic_specification"},
+      {"role": "standardized_variable", "occurrences": 1, "witness": "probstat.transform.z_standardization (Z = (X-mu)/sigma)"}
+    ],
+    "deliberately_excluded": [
+      {
+        "role": "analytic_count / topological_count",
+        "witness": "difftop.morse.weak_morse_inequality (c_k >= b_k)",
+        "why": "Its relation is `>=`, not `=`, so the definitional rule does not reach it either way. Listing these roles would have no effect and would misdescribe them as output roles; excluding them is recorded so the omission reads as a decision."
+      },
+      {
+        "role": "the three frame-measurement roles, considered twice",
+        "why": "`moving_frame_acceleration = base_frame_acceleration` is an INVARIANCE claim rather than a definition — neither side defines the other. It is listed anyway, and the reason is stated rather than smuggled: independent sampling of two symbols that denote one physical quantity under two frames refutes it for the same category-error reason a definition is refuted. Refusing it is honest; sampling it would manufacture a counterexample that is not one."
+      }
+    ]
+  },
+  "load_gate": {
+    "rules": [
+      "Every class row declares a carrier in `carriers`, a division reading and a subtraction reading.",
+      "No statement id may appear in more than one row.",
+      "A class row's `applies_to` must be a field this repository indexes by.",
+      "Every reviewed output role carries a witness statement id.",
+      "A table that violates any of these raises rather than degrading to a partial schema."
+    ]
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "census": {
+    "buckets": {
+      "ground": 297,
+      "guarded": 6120,
+      "not_evaluable_shaped": 4301,
+      "refused_guard_unevaluable": 221,
+      "refused_numeral_beyond_exact_parse": 2,
+      "refused_typed_slot": 236,
+      "unguarded": 1600
+    },
+    "e0b_guard_recovery_table": {
+      "floor": 5000,
+      "floor_is_a_disclosed_formality": "The design labels it one: the preview sat 39% above the floor. It is kept because a floor the run could in principle miss is worth more than no floor.",
+      "floor_met": true,
+      "ground": 297,
+      "guarded_and_recoverable": 6120,
+      "guarded_but_unevaluable": 221,
+      "total_compiling": 8017,
+      "unguarded": 1600
+    },
+    "e0d_samplable_denominator": {
+      "equality_guarded_measure_zero": 3426,
+      "ground_is_not_in_it": "The 297 ground statements are decided by E1 and carry no free variable to sample; adding them would inflate the sampling denominator with statements no sampler touches.",
+      "inequality_only": 2694,
+      "of_which_box_constraints_only": 2003,
+      "of_which_couple_variables": 691,
+      "samplable": 4294,
+      "unguarded": 1600
+    },
+    "measured_on": "416e97cfd158a249fc3537a3f6527a8b68b18620",
+    "reconciliation_with_the_designs_preview": {
+      "design_preview": {
+        "box_only": 2061,
+        "coupled": 720,
+        "equality_guarded": 3476,
+        "guarded": 6490,
+        "inequality_only": 2781,
+        "samplable": 4470,
+        "total_compiling": 8243,
+        "unguarded": 1689
+      },
+      "why_the_numbers_differ": "The design's preview predates its own Correction 2, whose typing rule this census applies BEFORE reading the guard. Statements refused for a typed slot therefore never reach the guard partition, which is where the difference comes from. The shape walk — 12,777 / 4,191 / 8,586 / 8,476 / 297 / 8,179 — reproduces the design exactly."
+    },
+    "shape_exclusions": {
+      "does_not_parse": 4191,
+      "head_outside_evaluator": 98,
+      "nested_relation": 1,
+      "not_a_top_level_relation": 10,
+      "relation_undecidable": 1
+    },
+    "statement_nodes": 12777,
+    "two_corrections_this_census_made_to_itself": [
+      {
+        "correction": "slot ids are anonymized; the ascii tree carries surface identifiers",
+        "effect_before_fix": "zero authored slots typed — every declaration in the corpus unread, which is the sampler Correction 2 was written to prevent",
+        "fix": "positional alignment between the ascii tree and the template's consequent, refusing when the shapes diverge rather than typing by proximity",
+        "found": "while writing the census"
+      },
+      {
+        "correction": "alignment must target the template's CONSEQUENT, not the whole template",
+        "effect_before_fix": "an IMPLIES-topped template cannot align with a bare conclusion, so the largest corpus went untyped",
+        "fix": "align against template_conclusion(); failures fell to 128, all of which now refuse rather than defaulting to sampled",
+        "found": "measured: 6,535 alignment failures, 6,525 of them lean_workbook"
+      }
+    ],
+    "typed_refusals": {
+      "category_outside_typing_rule": 1,
+      "defined_output": 29,
+      "exponent_variable": 73,
+      "named_constant": 5,
+      "slot_alignment_failed": 128
+    }
+  },
+  "commit_at_freeze": "416e97cfd158a249fc3537a3f6527a8b68b18620",
+  "design": "docs/DESIGN-statements-that-run.md",
+  "digest_algorithm": "sha256 over the file's bytes with CRLF normalised to LF",
+  "e0_series_adjudication": {
+    "E0": {
+      "clause": "exact numerals",
+      "evidence": [
+        "scripts/match_signatures.exact_literal stores an integer surface as int; verified present on this tree.",
+        "experiments/exact_literals_served_diff.json: 0 answer lines moved of 14,830, 3 evaluate-route renderings moved, 0 skeletons moved of 25,554 terms.",
+        "The three named nodes: leanworkbook.ground.lean_workbook_37421 and lean_workbook_plus_68304 now print exact digits; goedelpset.skel.goedel_pset_789185 was found by that lane's served diff."
+      ],
+      "owner": "ROADMAP-v0.20 §4b (batched witness item)",
+      "status": "DISCHARGED",
+      "this_lanes_obligation": "No conformance record prints a `left` or `right` value where the exact path did not reach; such a point is `evaluation_error`, the third outcome, never a silent rounding.",
+      "what_remains_true_and_is_carried_here": "leanworkbook.skel.lean_workbook_50397's `inf` is frozen into its committed anonymized_template by the seed script and its canonical_ascii does not tokenize, so no parser change reaches it. It is BACKLOG-filed as a seed regeneration and lands in this lane's register rather than being silently absent."
+    },
+    "E0b": {
+      "clause": "the guard-recovery table, floor >= 5,000 compiling",
+      "owner": "this slice",
+      "status": "MEASURED — see census below"
+    },
+    "E0c": {
+      "clause": "the domain schema, frozen before any verdict",
+      "owner": "this slice",
+      "status": "FROZEN by this commit"
+    },
+    "E0d": {
+      "clause": "the samplable denominator",
+      "owner": "this slice",
+      "status": "MEASURED — see census below"
+    },
+    "E0e": {
+      "clause": "the resource bound, refusing by name",
+      "evidence": [
+        "evaluate.MAX_RESULT_DIGITS = 4300 and evaluate.ResourceBound exist on this tree.",
+        "The bound sits at the result-formatting boundary after the review found a per-node bound escapable by `(10^4000)*(10^4000)`.",
+        "experiments/exponent_bound.json: 3 of 6 cases crashed while printing before, 0 after."
+      ],
+      "owner": "ROADMAP-v0.20 §4c (batched witness item)",
+      "status": "DISCHARGED",
+      "this_lanes_obligation": "The refusal VOCABULARY is this design's: a bound the compiler hits emits REFUSED with `evaluation_budget_exceeded`, never a truncated answer. The domain schema declares it as a branch cut so the mapping from ResourceBound to the register construct is recorded rather than improvised in the compiler."
+    },
+    "E0f": {
+      "clause": "the admission pilot over the coupled guards",
+      "owner": "this slice",
+      "status": "PENDING — runs after conform.py, freezes E2a by dated amendment"
+    },
+    "how_to_read_this": "Four E0-series clauses are construction prerequisites rather than frozen floors, and two of them are discharged by ROADMAP-v0.20 §4's batched witness item rather than by this slice. Adjudicated here, in writing, before the slice — re-doing a discharged prerequisite would be work the batch already paid for."
+  },
+  "e7_voiding_sentence": "If making a conformance verdict come out right requires editing the parser, the arithmetic, or the schema, the independence claim is void and the change needs its own review naming the reason.",
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "recorded": "2026-08-25",
+      "role": "parser",
+      "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf"
+    },
+    {
+      "path": "scripts/evaluate.py",
+      "recorded": "2026-08-25",
+      "role": "evaluator",
+      "sha256_lf": "09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041"
+    },
+    {
+      "path": "data/domains/domain_schema.json",
+      "recorded": "2026-08-25",
+      "role": "domain_schema",
+      "sha256_lf": "9a23202dcc5fe793326a48c8ecc066ba0b46577a9f79982b4c89605e7a561861"
+    },
+    {
+      "path": "scripts/conform_sampler.py",
+      "recorded": "2026-08-25",
+      "role": "sampler",
+      "sha256_lf": "2c89b8472089443632c149825be8151d9c7e8ebd3920b80df3147bc1bd520208"
+    },
+    {
+      "path": "scripts/conform_census.py",
+      "recorded": "2026-08-25",
+      "role": "census",
+      "sha256_lf": "c77122c6110e72380186de3135e9d8c0251be1ab8b99563c14279e0bc58388be"
+    },
+    {
+      "path": "scripts/conform_domain.py",
+      "recorded": "2026-08-25",
+      "role": "schema_loader",
+      "sha256_lf": "a50f4c62c3e7047128a1a04582d18ab193002ab7e640322c7e78c8c03cddf467"
+    }
+  ],
+  "non_claims": [
+    "This artifact computes no verdict and samples no point. It freezes digests and publishes a census.",
+    "The census is a classification, not a result. Which statements CONFORM is E1/E2's business and is not knowable from this file."
+  ],
+  "prereg_id": "conformance.prereg.v1",
+  "registered": "2026-08-25",
+  "roadmap": "docs/ROADMAP-v0.20.md §1",
+  "what_this_records": [
+    "E7's freeze: the digests of the parser, the evaluator, the domain schema and the sampler, recorded BEFORE scripts/conform.py exists.",
+    "The E0-series adjudication this lane owes in writing: which prerequisites ROADMAP-v0.20 §4 discharged and with what evidence, and which remain this slice's to measure.",
+    "The census as measured on this tree. The design's own figures are the reviewer's preview; these are the run's, and where they differ the difference is reconciled rather than rounded."
+  ],
+  "writer": "scripts/write_conformance_prereg.py"
+}
