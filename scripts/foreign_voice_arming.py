@@ -82,7 +82,7 @@ BLOCKING_CHECKS = (
      lambda block: block.get("voided") is False
      and block.get("named_floor_met") is True,
      "the grouping control voided or missed its named floor"),
-    ("C-V4'", "c_v4_prime",
+    ("C-V4′", "c_v4_prime",
      lambda block: block.get("voided") is False
      and list(block.get("voided_classes") or ()) == [],
      "the re-specified near-miss control voided, or a mutation class fell "
@@ -97,10 +97,29 @@ BLOCKING_CHECKS = (
 
 
 def _read(root: Path, relative: str):
+    """One artifact as a MAPPING, or (None, reason). Never raises at a caller.
+
+    The shape check is the point, not decoration (adversarial review, M1).
+    `json.loads` happily returns a list, a string or a number, and every read
+    below then did `.get(...)` on it — so a file containing `[]` raised an
+    `AttributeError` straight through BOTH callers: out of `answer.render`,
+    which is a served path, and out of the sheet build. A malformed artifact
+    must leave the surface dark with the reason recorded, exactly as an
+    absent one does. Failing open on a file this module cannot understand
+    would be the arming gate deciding by accident.
+    """
+
     try:
-        return json.loads((root / relative).read_text(encoding="utf-8")), None
+        loaded = json.loads((root / relative).read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         return None, f"{type(exc).__name__}: {exc}"
+    if not isinstance(loaded, dict):
+        return None, (
+            f"the file is valid JSON but not an object "
+            f"({type(loaded).__name__}); an arming decision cannot be read "
+            f"from it"
+        )
+    return loaded, None
 
 
 def arming_state(repo_root: Path | str) -> dict:
@@ -140,7 +159,8 @@ def arming_state(repo_root: Path | str) -> dict:
                 f"read ({error}); the foreign voice stays dark"
             )
         if isinstance(prior, dict):
-            verdicts = prior.get("verdicts") or {}
+            verdicts = prior.get("verdicts")
+            verdicts = verdicts if isinstance(verdicts, dict) else {}
             state["prior_run"] = {
                 "path": FOREIGN_VOICE_RUN1,
                 "verdict": verdicts.get("overall"),
@@ -154,9 +174,16 @@ def arming_state(repo_root: Path | str) -> dict:
             }
         return state
 
-    verdicts = run2.get("verdicts") or {}
+    verdicts = run2.get("verdicts")
+    if not isinstance(verdicts, dict):
+        state["reason"] = (
+            f"{FOREIGN_VOICE_RUN2} carries no readable `verdicts` object "
+            f"({type(verdicts).__name__}); the foreign voice stays dark"
+        )
+        return state
     overall = verdicts.get("overall")
-    voided = list(verdicts.get("voided") or ())
+    raw_voided = verdicts.get("voided")
+    voided = list(raw_voided) if isinstance(raw_voided, (list, tuple)) else []
     state["verdict"] = overall
     state["voided"] = voided
     state["summary"] = verdicts.get("summary")
@@ -182,7 +209,8 @@ def arming_state(repo_root: Path | str) -> dict:
     blocking_labels = {label for label, _, _, _ in BLOCKING_CHECKS}
     state["non_blocking_voids"] = [
         name for name in voided
-        if not any(name.startswith(label) for label in blocking_labels)
+        if isinstance(name, str)
+        and not any(name.startswith(label) for label in blocking_labels)
     ]
 
     if failures:

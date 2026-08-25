@@ -196,8 +196,8 @@ def _in_words(formal: str, statement_id: str) -> str | None:
     return result.surface if result.served else None
 
 
-@lru_cache(maxsize=1)
-def _foreign_voice_armed() -> bool:
+@lru_cache(maxsize=4)
+def _foreign_voice_armed(repo_root: Path | None = None) -> bool:
     """Whether the foreign `in words` line may be emitted at all (4d).
 
     **This is `answer.py`'s first read of an `experiments/` artifact, and it
@@ -217,12 +217,17 @@ def _foreign_voice_armed() -> bool:
     try:
         from foreign_voice_arming import arming_state  # noqa: PLC0415
 
-        return bool(arming_state(REPO)["armed"])
-    except (ImportError, OSError, ValueError):
+        return bool(arming_state(repo_root or REPO)["armed"])
+    except (ImportError, OSError, ValueError, TypeError, AttributeError):
+        # Fail closed. A malformed artifact leaves the surface dark; it never
+        # arms it and never escapes into a served render (M1's rule, applied
+        # at the caller as well as inside the reader).
         return False
 
 
-def _foreign_in_words(source: str, statement_id: str) -> str | None:
+def _foreign_in_words(
+    source: str, statement_id: str, repo_root: Path | None = None
+) -> str | None:
     """The foreign-register sentence for one statement, or None.
 
     Two gates, and the line needs both. The **run** must have armed the
@@ -233,9 +238,15 @@ def _foreign_in_words(source: str, statement_id: str) -> str | None:
     The order matters: the arming check comes first and is cheap, so a dark
     surface costs one cached boolean rather than a rendering attempt per
     answer.
+
+    `repo_root` exists so the ARMED branch is reachable from a test against a
+    fixture artifact (adversarial review, M2: it had no test, because nothing
+    could reach it without the real run). Production passes nothing and gets
+    the cached default-root answer, so the parameter costs the served path
+    nothing. `foreign_voice_row` already took a root for the same reason.
     """
 
-    if not source or not _foreign_voice_armed():
+    if not source or not _foreign_voice_armed(repo_root):
         return None
     try:
         from foreign_voice import render as render_foreign  # noqa: PLC0415

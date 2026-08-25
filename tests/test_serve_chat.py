@@ -1337,57 +1337,83 @@ class CapabilitySheet(ServedSkin):
             for name in serve_chat.DEMO_NAMES:
                 self.assertNotIn(name, served)
 
-    def test_capability_sheet_publishes_the_withheld_foreign_voice_row(self):
-        """§7: a row the profile cannot serve appears with served:false.
+    def test_the_capability_sheet_publishes_the_foreign_voice_row(self):
+        """§7: the row is present and CONSISTENT with the arming state.
 
-        The gloss row is the precedent — under the offline boot it publishes
-        `served: false` rather than vanishing. A withheld surface that is
-        simply absent from the sheet is indistinguishable, to a client, from
-        one this repository never attempted, and this cycle's whole record
-        is about that difference.
+        Re-aimed 2026-08-25 (adversarial review, M4). This asserted "dark",
+        which is true on this branch and false the moment the voice lane
+        merges and a cleared run lands — so it would have gone red for the
+        system working. The invariant that does not depend on the state is
+        that the row exists and agrees with the arming read; the two arms are
+        then asserted separately.
+
+        The gloss row is the precedent for publishing rather than hiding: a
+        withheld surface absent from the sheet is indistinguishable, to a
+        client, from one this repository never attempted.
         """
+
+        import foreign_voice_arming as arming
 
         sheet, _text = self.served_sheet()
         self.assertIn("foreign_voice", sheet)
         row = sheet["foreign_voice"]
-        self.assertFalse(row["served"])
+        state = arming.arming_state(REPO)
+
+        self.assertEqual(row["served"], state["armed"])
         self.assertIn("reason", row)
-        # Re-aimed 2026-08-24 by §4d: the row now names the run that CAN arm
-        # it (rate2), not the v0.19 run that recorded a VOID. That one is
-        # quoted under `prior_run`, because a dark row should say why.
         self.assertEqual(row["run"], "experiments/foreign_voice_rate2.json")
-        self.assertEqual(
-            row["prior_run"]["path"], "experiments/foreign_voice_rate.json")
         self.assertEqual(row["register"], "data/foreign_voice/register.json")
 
-    def test_the_dark_reason_quotes_the_prior_runs_own_verdict(self):
-        """Re-aimed 2026-08-24 by §4d: read at build time, never restated.
+        if state["armed"]:
+            self.assertEqual(row["verdict"], "FIRES")
+            self.assertTrue(all(row["blocking_checks"].values()))
+            for entry in row.get("reader_claim", {}).values():
+                self.assertIsNone(entry["claims"])
+        else:
+            # A dark row says WHY, not only THAT.
+            self.assertTrue(row["reason"])
+            self.assertIn("arming_rule", row)
+            if "prior_run" in row:
+                self.assertEqual(
+                    row["prior_run"]["path"],
+                    "experiments/foreign_voice_rate.json")
 
-        The v0.19 version asserted the reason carried C-V4's rate and floor.
-        Those belong to the run that VOIDED, which no longer decides whether
-        the surface is served — the arming gate reads `verdicts.voided`. What
-        must still hold is that every value the row publishes about that run
-        comes from the artifact rather than from prose pasted into the
-        module.
+    def test_whatever_the_row_says_about_a_run_it_read_from_the_artifact(self):
+        """Read at build time, never restated — in whichever state we are in.
+
+        Re-aimed 2026-08-25 (M4). While the surface is dark the row quotes
+        the v0.19 run under `prior_run`; once armed it quotes the v0.20 run
+        directly. Either way every value must come from the artifact rather
+        than from prose pasted into the module, and that is what is asserted.
         """
+
+        import foreign_voice_arming as arming
 
         sheet, _text = self.served_sheet()
         row = sheet["foreign_voice"]
-        run = json.loads(
-            (REPO / "experiments" / "foreign_voice_rate.json").read_text(
-                encoding="utf-8"))
+        state = arming.arming_state(REPO)
         register = json.loads(
             (REPO / "data" / "foreign_voice" / "register.json").read_text(
                 encoding="utf-8"))
-        self.assertEqual(row["prior_run"]["verdict"], run["verdicts"]["overall"])
-        self.assertEqual(row["prior_run"]["voided"], run["verdicts"]["voided"])
-        self.assertEqual(row["prior_run"]["summary"], run["verdicts"]["summary"])
+        # The register ships in either state; it is a result on its own.
         self.assertEqual(row["blocked_total"], register["blocked_total"])
-        # The class that voided really is a voiding-pool member below floor.
-        voided_class = run["c_v4"]["voided_classes"][0]
-        measured = run["c_v4"]["per_class"][voided_class]
-        self.assertTrue(measured["in_voiding_pool"])
-        self.assertLess(measured["rate"], measured["threshold"])
+
+        quoted_path = (
+            row["prior_run"]["path"] if "prior_run" in row else row["run"])
+        quoted = row["prior_run"] if "prior_run" in row else row
+        run = json.loads(
+            (REPO / quoted_path).read_text(encoding="utf-8"))
+        self.assertEqual(quoted["verdict"], run["verdicts"]["overall"])
+        self.assertEqual(quoted["voided"], run["verdicts"]["voided"])
+        self.assertEqual(quoted["summary"], run["verdicts"]["summary"])
+
+        if not state["armed"] and "c_v4" in run:
+            # While dark, the v0.19 class that voided really is a
+            # voiding-pool member below its floor.
+            voided_class = run["c_v4"]["voided_classes"][0]
+            measured = run["c_v4"]["per_class"][voided_class]
+            self.assertTrue(measured["in_voiding_pool"])
+            self.assertLess(measured["rate"], measured["threshold"])
 
     def test_the_foreign_voice_row_never_quotes_the_voided_identity_rate(self):
         """A VOID control outranks a cleared floor; the sheet must not launder it.
@@ -1505,19 +1531,31 @@ class CapabilitySheet(ServedSkin):
         self.assertIn("detail", row)
         self.assertNotIn("round_trip_rate", row)
 
-    def test_the_foreign_voice_row_is_dark_today_and_says_why(self):
-        """4d: the row this repository actually serves right now."""
+    def test_the_live_row_agrees_with_the_live_arming_state(self):
+        """The row and the line cannot disagree, in EITHER state.
+
+        Re-aimed 2026-08-25 (M4): this hard-coded "dark today" and would have
+        gone red on the merged tree for the surface working as designed.
+        """
+
+        import answer as answer_module
+        import foreign_voice_arming as arming
 
         sheet, _text = self.served_sheet()
         row = sheet["foreign_voice"]
-        self.assertFalse(row["served"])
-        self.assertIn("foreign_voice_rate2.json", row["reason"])
-        self.assertIn("arming_rule", row)
-        # The dark row says WHY, not only THAT: the v0.19 VOID is quoted.
-        self.assertEqual(row["prior_run"]["verdict"], "VOID")
-        self.assertEqual(row["prior_run"]["voided"], ["C-V4"])
-        # The register ships either way; it is a result on its own.
-        self.assertEqual(row["blocked_total"], 1878)
+        state = arming.arming_state(REPO)
+        answer_module._foreign_voice_armed.cache_clear()
+
+        self.assertEqual(row["served"], state["armed"])
+        self.assertEqual(
+            answer_module._foreign_voice_armed(), state["armed"],
+            "the answer line and the sheet row read one arming state",
+        )
+        self.assertEqual(row["reason"], state["reason"])
+        if state["armed"]:
+            self.assertIn("blocking_checks", row)
+        else:
+            self.assertIn("foreign_voice_rate2.json", row["reason"])
 
     @staticmethod
     def _cleared_run(**overrides) -> dict:
@@ -1629,7 +1667,11 @@ class CapabilitySheet(ServedSkin):
         ))
         self.assertFalse(state["armed"])
         self.assertFalse(row["served"])
-        self.assertIn("C-V4'", row["reason"])
+        # U+2032 PRIME, the character the artifacts actually write. L1: the
+        # label was ASCII "'" while every artifact writes C-V4′, and
+        # `non_blocking_voids` filters by startswith against that label — so a
+        # real C-V4′ void would have been published as non-blocking.
+        self.assertIn("C-V4′", row["reason"])
 
     def test_the_reader_claim_is_published_as_a_void_never_as_a_number(self):
         """§8's non-claim survives the sheet.
