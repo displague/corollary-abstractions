@@ -81,12 +81,12 @@
     "waiting_marked_turns": 10
   },
   "rendering_module_digests": {
-    "scripts/answer.py": "434b10dfd47eeea4eff9ef9f4873c41b683ef3eae55ea3c7645169212a380cfb",
+    "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
     "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
     "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
-    "scripts/evaluate.py": "99db5d389c61f5db5b16c8a8ec07569aa27c3372f8fd06a719b985cff233d1e5",
+    "scripts/evaluate.py": "09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041",
     "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
-    "scripts/harness.py": "3eee35c1dd59ea8f4c4a7a7f0bb19eb9ccc1545c6d88ee987dab414945834618",
+    "scripts/harness.py": "e693a5dee841b4e4244318a0f07c74ed3ff192e04573ced0c132d063f4d10aa5",
     "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
     "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
     "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
