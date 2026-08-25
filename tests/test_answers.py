@@ -370,5 +370,63 @@ class TheForeignVoiceLineArmsFromEvidence(unittest.TestCase):
             self.assertNotIn("in words", rendered)
 
 
+class TheReferenceEntryCarriesNoConformanceLine(unittest.TestCase):
+    """DESIGN-statements-that-run §8.1, first suspension — pinned at last.
+
+    The habit since v0.18 is that a new engine capability surfaces as a line
+    under `formally`. The conformance lane deliberately does NOT take it, and
+    the design's reasoning is specific: *"a conformance verdict is about the
+    asker's numbers, and a reference entry that carried one would be claiming
+    something about the statement that no verdict in §3.4 supports."*
+
+    That suspension was declared and then left untested on this side. A
+    suspension nothing checks is a suspension a later cycle re-adopts by
+    accident — which is exactly how a `NO_COUNTEREXAMPLE_FOUND` would end up
+    printed under a statement as though it were a property of the statement,
+    the single reading §3.4 spends its length refusing. So it is asserted
+    here, over the same statements the rest of this file renders: a curated
+    node, an ingested node, and one the conformance lane can actually compile.
+    """
+
+    #: A `lean_workbook` skeleton the conformance lane compiles and samples —
+    #: the case where a stray verdict line is likeliest to appear.
+    COMPILED = "leanworkbook.skel.lean_workbook_10012"
+
+    def _rendered(self, statement_id: str) -> str:
+        answer = compose(statement_id)
+        self.assertIsNotNone(answer, f"{statement_id} did not compose")
+        return "\n".join(render_answer(answer))
+
+    def test_no_rendered_entry_carries_a_verdict_label(self) -> None:
+        for statement_id in (CURATED, INGESTED, REALIZED, self.COMPILED):
+            with self.subTest(statement_id=statement_id):
+                rendered = self._rendered(statement_id)
+                for label in ("conform", "verdict", "certifies",
+                              "points     :", "NO_COUNTEREXAMPLE_FOUND",
+                              "NONCONFORMANT", "DECIDED_TRUE"):
+                    self.assertNotIn(label, rendered)
+
+    def test_the_renderer_emits_only_the_labels_it_declares(self) -> None:
+        """Belt and braces: the label set is closed, so a new one is caught."""
+        allowed = {"formally", "in words", "held as", "discipline", "source",
+                   "checked by", "note"}
+        for statement_id in (CURATED, INGESTED, REALIZED, self.COMPILED):
+            with self.subTest(statement_id=statement_id):
+                for line in self._rendered(statement_id).splitlines():
+                    if " : " not in line or line.startswith(" "):
+                        continue
+                    label = line.split(" : ", 1)[0].strip()
+                    self.assertIn(label, allowed,
+                                  f"{statement_id} grew an undeclared label")
+
+    def test_the_conform_surface_is_a_route_and_not_a_reference_line(self):
+        """Where the verdict DOES live, so this is a boundary and not a ban."""
+        from harness import CONFORM_COMMAND  # noqa: PLC0415
+
+        self.assertEqual(CONFORM_COMMAND, "conform")
+        source = (REPO / "scripts" / "answer.py").read_text(encoding="utf-8")
+        self.assertNotIn("conform", source)
+
+
 if __name__ == "__main__":
     unittest.main()

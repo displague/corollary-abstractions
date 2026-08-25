@@ -221,7 +221,29 @@ def eval_under_domain(tree, bindings: dict, carrier: str, division: str,
         if inner == 0:
             raise ev.EvalError("division by zero")
         if division == "truncating":
-            return Fraction(1 // inner) if inner != 0 else Fraction(0)
+            # DECLARED READING (recorded 2026-08-25, after review found this
+            # branch undeclared): a bare `inv` node under a `truncating`
+            # division is `1 / inner` in the carrier's own division, i.e.
+            # FLOOR division, so `inv(4)` is 0 and `inv(1)` is 1. This is the
+            # same operator the `*` node above applies to a whole quotient
+            # (Correction 4: floor division is Lean's `/` on Nat) and it is
+            # why the C-E1 witness `lean_workbook_10012` reads `9*x*inv(4)`
+            # as 0 rather than as `9x/4`.
+            #
+            # WHERE THE DECLARATION STOPS, said rather than hidden: for a
+            # NEGATIVE `inner` Python's `//` floors and Lean's `Int.div`
+            # truncates toward zero, so `inv(-3)` is -1 here and 0 there.
+            # A negative value reaches this branch only through a negative
+            # NUMERAL (a `neg` node refuses above), and the declared carrier
+            # for every row that uses `truncating` is `Nat`, where no such
+            # value is in the carrier and `in_carrier` rejects the point
+            # before the guard is consulted. The divergence is therefore
+            # unreachable from a declared point, and it is written down here
+            # instead of being left for a future schema row to discover.
+            #
+            # The `else Fraction(0)` this line used to carry was dead: the
+            # `inner == 0` raise two lines above is the only zero path.
+            return Fraction(1 // inner)
         return Fraction(1) / inner
     if op == "^":
         base = eval_under_domain(
@@ -538,7 +560,56 @@ def rational_root_test(coefficients) -> dict:
     by this cycle's machinery. **No corpus-coverage number is quoted.**
     """
 
-    coefficients = [int(c) for c in coefficients]
+    # THE CLASS BOUNDARY IS CHECKED BEFORE ANYTHING IS COERCED (fixed
+    # 2026-08-25, after review). This line used to be `[int(c) for c in
+    # coefficients]`, which is not a membership test but a coercion, and it
+    # failed the answer type in both directions: `[Fraction(1, 2), 1]` — a
+    # polynomial with a non-integer coefficient, plainly outside the declared
+    # class — was silently truncated to `[0, 1]` and answered EXISTS with the
+    # witness "0", a confident wrong answer about a polynomial nobody asked
+    # about; and `['x', 1]` raised `ValueError` out of a procedure whose whole
+    # contract is that it RETURNS `OUT_OF_CLASS` rather than failing.
+    #
+    # §3.4's vocabulary is the reason this matters more than a type check
+    # would: NIHIL's answer type is a DECIDED negative, and a decided negative
+    # is worth nothing if the procedure will also decide things outside the
+    # class it declared. `OUT_OF_CLASS` is the refusal, and it has to be
+    # reachable for every way of being out of the class.
+    #
+    # E4's 110 committed instances STAND AS MEASURED. Every one is integral by
+    # construction, so none of them takes this path;
+    # `tests/test_conform.py::TheE4ClassIsUnchangedByTheRefusalFix` re-checks
+    # all 110 against the fixed procedure and pins that the verdicts are
+    # identical. The registered run is not re-scored and its number does not
+    # move.
+    integral: list[int] = []
+    for coefficient in coefficients:
+        try:
+            value = Fraction(coefficient)
+        except (TypeError, ValueError, ZeroDivisionError):
+            return {
+                "class_id": "rational_root_univariate",
+                "verdict": OUT_OF_CLASS,
+                "certifies": NIHIL_CERTIFIES[OUT_OF_CLASS],
+                "reason": (
+                    f"coefficient {coefficient!r} is not a number; the "
+                    f"declared class is integer-coefficient univariate "
+                    f"polynomials"
+                ),
+            }
+        if value.denominator != 1:
+            return {
+                "class_id": "rational_root_univariate",
+                "verdict": OUT_OF_CLASS,
+                "certifies": NIHIL_CERTIFIES[OUT_OF_CLASS],
+                "reason": (
+                    f"coefficient {value} is not an integer; the declared "
+                    f"class is integer-coefficient univariate polynomials"
+                ),
+            }
+        integral.append(int(value))
+
+    coefficients = integral
     while coefficients and coefficients[-1] == 0:
         coefficients.pop()
     if len(coefficients) < 2:

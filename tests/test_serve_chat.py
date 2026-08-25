@@ -1528,6 +1528,46 @@ class CapabilitySheet(ServedSkin):
                          run["verdicts"]["overall"])
         self.assertIn("VOID", row["registered_run_verdict"])
 
+    def test_the_row_separates_voided_controls_from_missed_gates(self):
+        """A control and a gate are different objects (fixed 2026-08-25).
+
+        The old filter was `gate.get("met") is False` over every row in
+        `verdicts.gates`, and on the live artifact it got both halves wrong:
+        it published E1 — a MISSED GATE, and a finding — as a voided control,
+        and it dropped C-E2 entirely, because C-E2's row carries the key
+        `informative` rather than `met`. It served `['E1', 'C-E1']` where the
+        truth is two voided controls and one missed gate.
+
+        Asserted against the live artifact rather than a fixture, because the
+        shape it got wrong is the shape the writer actually emits.
+        """
+
+        sheet, _text = self.served_sheet()
+        row = sheet["conformance"]
+        self.assertEqual(row["voided_controls"], ["C-E1", "C-E2"])
+        self.assertEqual(row["missed_gates"], ["E1"])
+        self.assertNotIn("E1", row["voided_controls"])
+        self.assertIn("a_missed_gate_is_not_a_voided_control", row)
+
+    def test_every_control_shape_the_writer_emits_is_read_correctly(self):
+        """C-E2 votes with a sentence and C-E3 with a list, not with `met`."""
+        run = json.loads(
+            (REPO / "experiments" / "conformance_run.json").read_text(
+                encoding="utf-8"))
+        gates = {gate["gate"]: gate for gate in run["verdicts"]["gates"]}
+        # The three shapes, named so a future writer change is caught here.
+        self.assertIn("met", gates["C-E1"])
+        self.assertIn("informative", gates["C-E2"])
+        self.assertIn("disagreements", gates["C-E3"])
+
+        sheet, _text = self.served_sheet()
+        voided = sheet["conformance"]["voided_controls"]
+        self.assertIn("C-E2", voided, "the sentence-shaped control was dropped")
+        # C-E3 voids by DISAGREEING; an empty list is the cleared reading and
+        # must never be read as a missing one.
+        self.assertEqual(gates["C-E3"]["disagreements"], [])
+        self.assertNotIn("C-E3", voided)
+
     def test_a_conform_line_answers_over_the_wire_with_its_sentence(self):
         body = self.one(KERNEL, "conform leanworkbook.skel.lean_workbook_10012")
         extension = self.x(body)

@@ -341,6 +341,206 @@ def _corrections() -> dict:
     return _run_artifact()["post_run_corrections"]
 
 
+class NihilRefusesEveryWayOfBeingOutOfTheClass(unittest.TestCase):
+    """§3.4: `OUT_OF_CLASS` is a RETURN, and it has to be reachable.
+
+    The existing injection test probes `[5]`, `[]`, `[0]` and `[7]` — four
+    degenerate constants that all fail the same length check. None of them can
+    exercise the class boundary that actually matters, which is the
+    *coefficients*: the declared class is integer-coefficient univariate
+    polynomials, and before 2026-08-25 the procedure coerced with `int(c)`
+    rather than testing membership. So `[Fraction(1, 2), 1]` was truncated to
+    `[0, 1]` and answered EXISTS with the witness "0" — a confident wrong
+    answer about a different polynomial — and `['x', 1]` raised `ValueError`
+    out of a procedure whose contract is that it returns rather than fails.
+
+    These are the injection probes aimed where it CAN fail.
+    """
+
+    def test_a_non_integer_coefficient_is_out_of_class_not_truncated(self):
+        record = conform.rational_root_test([Fraction(1, 2), 1])
+        self.assertEqual(record["verdict"], conform.OUT_OF_CLASS)
+        self.assertNotIn("witness", record)
+        self.assertIn("not an integer", record["reason"])
+
+    def test_a_float_coefficient_with_a_fractional_part_is_out_of_class(self):
+        self.assertEqual(
+            conform.rational_root_test([2.5, 1])["verdict"],
+            conform.OUT_OF_CLASS,
+        )
+
+    def test_a_non_numeric_coefficient_returns_rather_than_raising(self) -> None:
+        for probe in (["x", 1], [None, 1], [[], 1]):
+            with self.subTest(probe=probe):
+                record = conform.rational_root_test(probe)
+                self.assertEqual(record["verdict"], conform.OUT_OF_CLASS)
+                self.assertIn("not a number", record["reason"])
+
+    def test_an_out_of_class_answer_carries_the_refusal_sentence(self) -> None:
+        record = conform.rational_root_test([Fraction(1, 3), 2])
+        self.assertEqual(record["certifies"],
+                         conform.NIHIL_CERTIFIES[conform.OUT_OF_CLASS])
+
+    def test_integer_valued_coefficients_stay_in_class(self) -> None:
+        """The fix must not narrow the class it is protecting."""
+        for probe in ([-1, 2], [Fraction(-1), 2], [-1.0, 2.0], ["-1", "2"]):
+            with self.subTest(probe=probe):
+                record = conform.rational_root_test(probe)
+                self.assertEqual(record["verdict"], conform.EXISTS)
+                self.assertEqual(record["witness"], "1/2")
+
+
+class TheE4ClassIsUnchangedByTheRefusalFix(unittest.TestCase):
+    """E4's 110 stand as measured: the fix moved nothing inside the class.
+
+    `scripts/conform.py` is NOT among E7's frozen artifacts — E7 freezes the
+    parser, the evaluator, the domain schema and the sampler — so the refusal
+    path was repairable. What is not permitted is a repair that quietly
+    re-scores a registered gate, so every committed instance is re-checked
+    against the fixed procedure here and pinned to the artifact's own row.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.klass = json.loads(
+            (ROOT / "data" / "domains" / "nihil_class.json").read_text(
+                encoding="utf-8"))
+        cls.e4 = _run_artifact()["e4"]
+
+    def test_all_110_committed_instances_still_decide_as_registered(self) -> None:
+        instances = self.klass["instances"]
+        self.assertEqual(len(instances), 110)
+        wrong = []
+        for instance in instances:
+            record = conform.rational_root_test(instance["coefficients"])
+            if record["verdict"] != instance["expected"]:
+                wrong.append(instance["coefficients"])
+        self.assertEqual(wrong, [], "the fix moved an in-class verdict")
+        self.assertEqual(self.e4["instances"], 110)
+        self.assertEqual(self.e4["correct"], 110)
+        self.assertEqual(self.e4["incorrect"], [])
+
+    def test_the_enumeration_counts_are_identical_to_the_registered_run(self):
+        """Not just the verdicts — the printed enumeration behind each one."""
+        registered = {tuple(row["coefficients"]): row["candidates_enumerated"]
+                      for row in self.e4["per_instance"]}
+        self.assertEqual(len(registered), 110)
+        for instance in self.klass["instances"]:
+            coefficients = tuple(instance["coefficients"])
+            with self.subTest(coefficients=coefficients):
+                record = conform.rational_root_test(list(coefficients))
+                self.assertEqual(record.get("candidates_enumerated"),
+                                 registered[coefficients])
+
+    def test_the_registered_injection_probes_still_return_out_of_class(self):
+        for probe in ([5], [], [0], [7]):
+            with self.subTest(probe=probe):
+                self.assertEqual(
+                    conform.rational_root_test(probe)["verdict"],
+                    conform.OUT_OF_CLASS,
+                )
+
+
+class TheE4InstanceSetDigestIsRecomputable(unittest.TestCase):
+    """H5: the freeze key was copied, never checked.
+
+    `measure_conformance.py:686` lifts `instance_set_digest` out of the
+    committed class file verbatim, so nothing in the tree could have noticed
+    an instance list edited after its freeze — the word "frozen" was doing
+    work no code backed. The recipe is recovered and pinned here instead.
+    """
+
+    def test_the_digest_is_sha256_over_the_committed_coefficient_lists(self):
+        import hashlib
+
+        klass = json.loads(
+            (ROOT / "data" / "domains" / "nihil_class.json").read_text(
+                encoding="utf-8"))
+        payload = json.dumps([i["coefficients"] for i in klass["instances"]])
+        self.assertEqual(
+            hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+            klass["instance_set_digest"],
+        )
+
+    def test_the_registered_run_quotes_the_same_digest(self) -> None:
+        klass = json.loads(
+            (ROOT / "data" / "domains" / "nihil_class.json").read_text(
+                encoding="utf-8"))
+        self.assertEqual(_run_artifact()["e4"]["instance_set_digest"],
+                         klass["instance_set_digest"])
+
+
+class TheNatClampFigureIsRecomputable(unittest.TestCase):
+    """M6: the backlog's `69 of 297` had lived only in commit prose.
+
+    The pre-fix figure — 76 ground statements deciding at `0 = 0` under a
+    CLAMPING reading — is not recomputable and never will be: the clamping
+    code was replaced before it was committed, and it survives only in the
+    comment at `scripts/conform.py:202-207` and in commit `a58d642`'s
+    message. That is recorded where the 76 is quoted. The POST-fix figure is
+    recomputable, and a reader who wants to check the backlog's claim about
+    the blanket `Nat` row should not have to take it on trust.
+    """
+
+    def test_69_of_the_297_ground_statements_decide_at_zero_equals_zero(self):
+        schema = conform_domain.load()
+        relations = census.evaluator_relations()
+        ground, at_zero = 0, 0
+        for path in census.corpora():
+            document = json.loads(path.read_text(encoding="utf-8"))
+            corpus = document.get("corpus_id", path.parent.name)
+            for node in document.get("statement_nodes", []):
+                row = census.classify(node, corpus, relations,
+                                      schema.output_roles)
+                try:
+                    program = conform.compile_statement(node, row, schema)
+                except conform.Refusal:
+                    continue
+                if program.variables:
+                    continue
+                record = conform.run(program, schema.digest, budget=0)
+                ground += 1
+                if record.get("left") == "0" and record.get("right") == "0":
+                    at_zero += 1
+        self.assertEqual(ground, 297)
+        self.assertEqual(at_zero, 69)
+        self.assertEqual(_run_artifact()["e1"]["ground_statements"], 297)
+
+
+class TheTruncatingInverseHasADeclaredReading(unittest.TestCase):
+    """L2: `inv` under truncating division was applying an undeclared rule.
+
+    The schema is E7-frozen, so the declaration lives in the branch's own
+    comment. What is pinned here is that the reading the comment declares is
+    the reading the code applies, and that the reading is the same operator
+    the `*` node uses rather than a second, quieter one.
+    """
+
+    def test_a_bare_inverse_floors_like_the_carriers_own_division(self) -> None:
+        tree = census.parse("1 / 4")
+        self.assertEqual(
+            conform.eval_under_domain(
+                tree, {}, "Nat", "truncating", "truncated-at-zero"),
+            Fraction(0),
+        )
+        self.assertEqual(
+            conform.eval_under_domain(tree, {}, "Rat", "exact", "signed"),
+            Fraction(1, 4),
+        )
+
+    def test_the_declaration_is_written_where_the_rule_is_applied(self) -> None:
+        source = (ROOT / "scripts" / "conform.py").read_text(encoding="utf-8")
+        branch = source.split('if op == "inv":', 1)[1].split('if op == "^"')[0]
+        self.assertIn("DECLARED READING", branch)
+        self.assertIn("WHERE THE DECLARATION STOPS", branch)
+        returns = [line.strip() for line in branch.splitlines()
+                   if line.strip().startswith("return")]
+        self.assertEqual(returns,
+                         ["return Fraction(1 // inner)",
+                          "return Fraction(1) / inner"],
+                         "the dead zero arm should be gone with the fix")
+
+
 class ThePostRunCorrectionsAreCheckableAgainstTheRowsTheyCorrect(
         unittest.TestCase):
     """The dated block in `conformance_run.json`, recomputed rather than read.

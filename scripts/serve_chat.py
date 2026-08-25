@@ -150,13 +150,18 @@ BASELINE_MANIFEST = "experiments/throughput_baseline.json"
 #: that will, and the sheet is generated from live artifacts by §7's rule.
 REALIZATION_RUN = "experiments/realization_rate.json"
 
+#: The ONE registered conformance run (DESIGN-statements-that-run §10). The
+#: sheet reads it live rather than restating any of it here: the run's own
+#: overall verdict is VOID and its controls are published beside it, and a
+#: verdict restated in a docstring is a verdict that goes stale — which is
+#: worse for a miss than for a rate.
+CONFORMANCE_RUN = "experiments/conformance_run.json"
+
 #: The ONE registered foreign-voice run, and the register frozen before it.
 #: The sheet quotes BOTH: the run says why the surface is withheld, and the
 #: register says what shipped instead. Read at sheet-build time for the same
 #: reason `REALIZATION_RUN` is — a number restated in code is a number that
 #: goes stale, and this one states a miss, which is worse to get wrong.
-CONFORMANCE_RUN = "experiments/conformance_run.json"
-
 FOREIGN_VOICE_RUN = "experiments/foreign_voice_rate.json"
 FOREIGN_VOICE_REGISTER = "data/foreign_voice/register.json"
 
@@ -618,10 +623,49 @@ def conformance_row(repo_root_str: str) -> dict:
         ),
     }
     row["registered_run_verdict"] = verdicts.get("overall")
-    row["voided_controls"] = [
-        gate.get("gate") for gate in verdicts.get("gates", [])
-        if gate.get("met") is False
-    ]
+
+    # A CONTROL AND A GATE ARE NOT THE SAME OBJECT, and this row used to
+    # publish them as one (fixed 2026-08-25, after review). The old filter was
+    # `gate.get("met") is False` over every row in `verdicts.gates`, which got
+    # BOTH halves wrong on the live artifact: it named E1 — a MISSED GATE, a
+    # finding about the corpus under the declared domain — as a voided
+    # control, and it silently dropped C-E2, whose row carries the key
+    # `informative` rather than `met` and so never matched. It published
+    # `['E1', 'C-E1']` where the truth is two voided controls, `C-E1` and
+    # `C-E2`, and one missed gate, `E1`.
+    #
+    # The distinction is the whole reason both are published: a voided control
+    # withdraws a reading (C-E1's own sentence voids every
+    # NO_COUNTEREXAMPLE_FOUND in the run), while a missed gate IS a reading —
+    # E1's 25 refusals are what the floor existed to surface. Merging them
+    # tells a reader that a result was retracted when it was published, and
+    # that a retraction did not happen when it did.
+    controls, missed_gates = [], []
+    for gate in verdicts.get("gates", []):
+        name = gate.get("gate")
+        if not name:
+            continue
+        is_control = str(name).startswith("C-")
+        if "informative" in gate:
+            # C-E2's shape: the verdict is a sentence, not a boolean.
+            voided = "VOID" in str(gate["informative"]).upper()
+        elif "disagreements" in gate:
+            # C-E3's shape: it voids by DISAGREEING, so an empty list is the
+            # cleared reading and not a missing one.
+            voided = bool(gate["disagreements"])
+        else:
+            voided = gate.get("met") is False
+        if not voided:
+            continue
+        (controls if is_control else missed_gates).append(name)
+    row["voided_controls"] = controls
+    row["missed_gates"] = missed_gates
+    row["a_missed_gate_is_not_a_voided_control"] = (
+        "A voided control WITHDRAWS a reading this run would otherwise have "
+        "published. A missed gate IS a reading: the floor existed to surface "
+        "exactly what it surfaced. They are listed separately because a "
+        "reader who sees them merged learns the wrong thing about both."
+    )
     row["read_the_run_before_reading_a_verdict"] = (
         "The registered run's own overall verdict is published above. Where "
         "it reads VOID, a served NO_COUNTEREXAMPLE_FOUND carries that void "
