@@ -499,9 +499,36 @@ def foreign_voice_row(repo_root_str: str) -> dict:
         "arming_rule": state["arming_rule"],
         "reason": state["reason"],
     }
-    for field in ("verdict", "voided", "summary", "prior_run"):
+    for field in (
+        "verdict", "voided", "summary", "prior_run",
+        "blocking_checks", "non_blocking_voids",
+    ):
         if field in state:
             row[field] = state[field]
+
+    # C-V3' is published as a VOID and never as a number. The design spends
+    # §8 refusing the claim that control would license — that a reader can
+    # recover the mathematics determinately from the English — so a row that
+    # showed a rate beside it would make exactly the claim the void withdrew.
+    # The absent C-V3 stays absent for the same reason: an un-run control is
+    # not a passed one.
+    run, _run_error = _read_json(root / state["run"])
+    if isinstance(run, dict):
+        for key, label in (("c_v3", "C-V3"), ("c_v3_prime", "C-V3'")):
+            block = run.get(key)
+            if not isinstance(block, dict):
+                continue
+            row.setdefault("reader_claim", {})[label] = {
+                "status": block.get("status"),
+                "verdict": block.get("verdict"),
+                "claims": None,
+                "read_this_as": (
+                    "published as a void or an absence, never as a rate. The "
+                    "claim this control alone could license — that a reader "
+                    "recovers the mathematics determinately from the English "
+                    "— is NOT made here or anywhere this cycle."
+                ),
+            }
 
     # The register ships whether or not the voice does: it is the inventory
     # of what this cycle's graph cannot say, and it is a result either way.

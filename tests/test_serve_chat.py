@@ -1501,31 +1501,130 @@ class CapabilitySheet(ServedSkin):
         # The register ships either way; it is a result on its own.
         self.assertEqual(row["blocked_total"], 1878)
 
-    def test_the_foreign_voice_row_arms_when_a_clean_run_lands(self):
-        """4d, Correction 7(a): the true branch exists and is exercised.
+    @staticmethod
+    def _cleared_run(**overrides) -> dict:
+        """A run shaped like the real `foreign_voice_rate2.json`.
 
-        The v0.19 row had NO code path that set `served: true` — it was
-        assigned `False` exactly once — so this is the branch that did not
-        exist. It is tested against a synthetic all-clear run rather than
-        waiting for the real one, because a branch nothing can reach is a
-        branch nobody has checked.
+        The field names are the artifact's own: `verdicts.overall` reads
+        `FIRES`, and `verdicts.voided` is NON-EMPTY because C-V3' — the
+        machine-reader claim — is voided deliberately and non-blockingly by
+        §8. A fixture that made `voided` empty would test a run this
+        repository will never produce, and would have hidden the arming bug
+        this shape exposes.
         """
 
+        run = {
+            "verdicts": {
+                "overall": "FIRES",
+                "voided": ["C-V3'"],
+                "summary": "the floors were met; C-V3' voided without blocking",
+            },
+            "c_g1": {"voided": False, "named_floor_met": True},
+            "c_v4_prime": {"voided": False, "voided_classes": []},
+            "b1": {"floor_met": True},
+            "b3": {"closes_exactly": True},
+            "b5": {"byte_identical": True},
+            "c_v3": {"status": "absent"},
+            "c_v3_prime": {"verdict": "VOID"},
+        }
+        run.update(overrides)
+        return run
+
+    def _row_for(self, run: dict) -> tuple[dict, dict]:
         import foreign_voice_arming as arming
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "experiments").mkdir()
             (root / "experiments" / "foreign_voice_rate2.json").write_text(
-                json.dumps({"verdicts": {"overall": "HOLDS", "voided": [],
-                                         "summary": "everything cleared"}}),
-                encoding="utf-8")
-            state = arming.arming_state(root)
-            row = serve_chat.foreign_voice_row(str(root))
-        self.assertTrue(state["armed"])
+                json.dumps(run), encoding="utf-8")
+            return (
+                arming.arming_state(root),
+                serve_chat.foreign_voice_row(str(root)),
+            )
+
+    def test_the_foreign_voice_row_arms_when_a_cleared_run_lands(self):
+        """4d, Correction 7(a): the true branch exists and is exercised.
+
+        The v0.19 row had NO code path that set `served: true` — it was
+        assigned `False` exactly once — so this is the branch that did not
+        exist. Tested against a run shaped like the real one rather than
+        waiting for the merge, because a branch nothing can reach is a branch
+        nobody has checked.
+        """
+
+        state, row = self._row_for(self._cleared_run())
+        self.assertTrue(state["armed"], state.get("reason"))
         self.assertTrue(row["served"])
-        self.assertEqual(row["verdict"], "HOLDS")
-        self.assertEqual(row["voided"], [])
+        self.assertEqual(row["verdict"], "FIRES")
+
+    def test_a_deliberate_non_blocking_void_does_not_darken_the_voice(self):
+        """The arming bug this shape exposes, pinned so it cannot return.
+
+        `verdicts.voided` is NOT empty on a cleared run: C-V3' is voided on
+        purpose and marked non-blocking by §8, because the design declines to
+        claim a reader recovers the mathematics determinately from the
+        English. A gate keyed on "nothing voided" reads that published
+        non-claim as a failure and leaves the voice dark forever. The gate is
+        the cycle-stopping controls instead.
+        """
+
+        state, row = self._row_for(self._cleared_run())
+        self.assertTrue(state["armed"], state.get("reason"))
+        self.assertIn("C-V3'", state["voided"])
+        self.assertEqual(state["non_blocking_voids"], ["C-V3'"])
+        self.assertIn("C-V3'", row["non_blocking_voids"])
+        self.assertTrue(all(row["blocking_checks"].values()))
+
+    def test_every_cycle_stopping_control_can_darken_the_voice_alone(self):
+        """Each blocking control is load-bearing, asserted one at a time."""
+
+        failures = {
+            "c_g1": {"voided": True, "named_floor_met": True},
+            "c_v4_prime": {"voided": False, "voided_classes": ["drop_group"]},
+            "b1": {"floor_met": False},
+            "b3": {"closes_exactly": False},
+            "b5": {"byte_identical": False},
+        }
+        for key, broken in failures.items():
+            with self.subTest(control=key):
+                state, row = self._row_for(self._cleared_run(**{key: broken}))
+                self.assertFalse(state["armed"])
+                self.assertFalse(row["served"])
+        state, _row = self._row_for(
+            self._cleared_run(verdicts={"overall": "MISSED", "voided": []}))
+        self.assertFalse(state["armed"])
+
+    def test_the_arming_gate_reads_the_controls_not_one_controls_detail(self):
+        """4d, Correction 7(c): the guard keyed off the wrong field.
+
+        The v0.19 row indexed `c_v4["voided_classes"]` — one control's
+        internal detail — while the run's verdict lived elsewhere. Here a run
+        whose `c_v4_prime` says a class voided must darken the surface even
+        though the top-level `voided` list is empty: the opposite arrangement
+        from the one that used to fool it.
+        """
+
+        state, row = self._row_for(self._cleared_run(
+            verdicts={"overall": "FIRES", "voided": []},
+            c_v4_prime={"voided": False, "voided_classes": ["drop_group"]},
+        ))
+        self.assertFalse(state["armed"])
+        self.assertFalse(row["served"])
+        self.assertIn("C-V4'", row["reason"])
+
+    def test_the_reader_claim_is_published_as_a_void_never_as_a_number(self):
+        """§8's non-claim survives the sheet.
+
+        C-V3 is absent and C-V3' is VOID. A row showing a rate beside either
+        would make exactly the claim the void withdrew.
+        """
+
+        _state, row = self._row_for(self._cleared_run())
+        self.assertEqual(row["reader_claim"]["C-V3"]["status"], "absent")
+        self.assertEqual(row["reader_claim"]["C-V3'"]["verdict"], "VOID")
+        for entry in row["reader_claim"].values():
+            self.assertIsNone(entry["claims"])
 
     def test_an_all_clear_run_is_not_reported_as_an_unreadable_file(self):
         """4d, Correction 7(b): the defect that made a clean run a lie.
@@ -1534,52 +1633,12 @@ class CapabilitySheet(ServedSkin):
         EMPTY when nothing voided, and its `except` tuple named `IndexError`
         — so an all-clear run returned `served: false` with the words "its
         record could not be read", on exactly the branch the voice design
-        exists to produce. This asserts that prose can no longer appear on a
-        run that is simply clean.
+        exists to produce.
         """
 
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "experiments").mkdir()
-            # An all-clear run WITH an empty c_v4.voided_classes — the exact
-            # shape that used to be misreported.
-            (root / "experiments" / "foreign_voice_rate2.json").write_text(
-                json.dumps({
-                    "verdicts": {"overall": "HOLDS", "voided": [],
-                                 "summary": "cleared"},
-                    "c_v4": {"voided_classes": [], "per_class": {}},
-                }), encoding="utf-8")
-            row = serve_chat.foreign_voice_row(str(root))
+        _state, row = self._row_for(self._cleared_run())
         self.assertTrue(row["served"])
         self.assertNotIn("could not be read", row["reason"])
-
-    def test_the_arming_gate_reads_the_runs_verdict_not_one_controls_detail(self):
-        """4d, Correction 7(c): the guard keyed off the wrong field.
-
-        `c_v4["voided_classes"]` is one control's internal detail; the run's
-        own verdict is `verdicts["voided"]`. They agree in the shipped
-        artifact, which is what let the wrong one go unnoticed. Here they
-        DISAGREE, and the verdict must win.
-        """
-
-        import foreign_voice_arming as arming
-
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "experiments").mkdir()
-            (root / "experiments" / "foreign_voice_rate2.json").write_text(
-                json.dumps({
-                    "verdicts": {"overall": "VOID", "voided": ["C-V4"],
-                                 "summary": "a control voided"},
-                    # The detail field says nothing voided. The verdict says
-                    # otherwise, and the verdict is the verdict.
-                    "c_v4": {"voided_classes": [], "per_class": {}},
-                }), encoding="utf-8")
-            state = arming.arming_state(root)
-            row = serve_chat.foreign_voice_row(str(root))
-        self.assertFalse(state["armed"])
-        self.assertFalse(row["served"])
-        self.assertIn("C-V4", row["reason"])
 
     def test_an_unreadable_run_is_not_rounded_to_an_absent_one(self):
         """Two different facts, and the row keeps them apart."""

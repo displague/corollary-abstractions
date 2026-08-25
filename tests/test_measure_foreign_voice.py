@@ -75,8 +75,40 @@ class RevalidationGate(unittest.TestCase):
             mfv.revalidate()
         message = str(caught.exception)
         self.assertIn("B7 VOID", message)
-        self.assertIn("match_signatures.py", message)
         self.assertIn("No rate is published", message)
+
+        # Amended 2026-08-24 by ROADMAP-v0.20 §4c. The refusal names ONE
+        # drifted pin, and it is no longer necessarily the parser: 4c gave
+        # `scripts/external_verifier.py` the four timeouts BACKLOG measured
+        # as absent, and that file is pinned by this same preregistration.
+        # So the message may lead with either. What this test actually asks
+        # is unchanged — may this run be executed? — and the answer is still
+        # no. The original closure reason is asserted directly rather than
+        # through whichever name the message happened to reach first.
+        import json
+
+        prereg = json.loads(
+            (ROOT / "experiments" / "foreign_voice_prereg.json").read_text(
+                encoding="utf-8"))
+        pinned = (
+            prereg["prereg_revalidated"]
+            if "prereg_revalidated" in prereg
+            else prereg.get("frozen_digests", prereg.get("frozen"))
+        )
+        if isinstance(pinned, dict):
+            recorded = pinned.get("scripts/match_signatures.py")
+        else:
+            recorded = {row["path"]: row["sha256_lf"]
+                        for row in pinned}.get("scripts/match_signatures.py")
+        self.assertIsNotNone(
+            recorded, "this prereg must pin the parser for the note above")
+        live = mfv._sha256_lf(ROOT / "scripts" / "match_signatures.py")
+        self.assertNotEqual(
+            live, recorded,
+            "the parser pin that closed this run must still be drifted; if it "
+            "agrees again, the run stopped being closed for the reason "
+            "recorded",
+        )
 
     def test_the_retirement_that_closed_it_is_recorded_in_the_prereg(self) -> None:
         """A run closed by a refusal must be closed by a written reason.

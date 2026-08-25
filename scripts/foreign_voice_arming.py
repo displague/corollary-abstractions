@@ -17,13 +17,23 @@ v0.19 row keyed its behaviour off `c_v4["voided_classes"]` while the run's
 own verdict lives at `verdicts["voided"]`, and the two are different fields
 that merely happened to agree. One read, one answer, both callers.
 
-**The arming rule, stated once.** The voice is armed when the registered run
-exists AND its own verdict block says nothing voided. `verdicts["voided"]`
-is the field, because it is the field the run calls its verdict —
-`c_v4["voided_classes"]` is one control's internal detail that happened to
-agree in the shipped artifact. Anything else — absent file, unreadable file,
-a non-empty `voided` list, an `overall` that is not the all-clear — leaves
-the surface dark with the reason recorded.
+**The arming rule, stated once — and it is NOT "nothing voided".** That was
+this module's first rule and it was wrong in a way worth recording, because
+the mistake is the natural one. The registered run reads `FIRES` with a
+NON-EMPTY `voided` list: it contains `C-V3′`, the machine-reader claim,
+which §8 voids **deliberately** and marks explicitly non-blocking. The design
+declines to claim that a reader can recover the mathematics determinately
+from the English, and it says so by voiding that control rather than by
+omitting it. A gate keyed on an empty `voided` list would therefore read a
+deliberate, published non-claim as a failure and leave the voice dark
+forever — withholding a surface whose evidence had actually cleared.
+
+So the gate asks the narrower question the design poses: **did every control
+that can STOP the cycle clear?** That list is :data:`BLOCKING_CHECKS`, and a
+run must also read `FIRES` overall. Anything else — absent file, unreadable
+file, a failed blocking control, an `overall` that is not `FIRES` — leaves
+the surface dark with the reason recorded. A non-blocking void is published
+beside the armed surface, never hidden and never counted against it.
 
 **What "dark" means, and what it does not.** Dark is not an error. It is the
 honest state of a surface whose evidence has not landed: the `in words` line
@@ -47,10 +57,43 @@ FOREIGN_VOICE_RUN1 = "experiments/foreign_voice_rate.json"
 
 FOREIGN_VOICE_REGISTER = "data/foreign_voice/register.json"
 
-#: The verdict string a run must carry for the surface to arm. Anything else
-#: — including a string this module does not recognise — leaves it dark,
-#: because an unrecognised verdict is not an all-clear.
-ALL_CLEAR = "HOLDS"
+#: The verdict a cleared run carries. `FIRES` is the gate's own word for a
+#: floor that was met; it is not `HOLDS`, which is what a *control* reports.
+FIRES = "FIRES"
+
+
+#: The controls that STOP the cycle, each with the fields that decide it.
+#:
+#: **This list, and not `verdicts.voided`, is the arming gate — and the
+#: distinction is load-bearing rather than pedantic.** The registered run
+#: carries a non-empty `voided` list containing `C-V3′`, the machine-reader
+#: claim, which §8 voids DELIBERATELY and marks explicitly non-blocking: the
+#: design declines to claim a reader can recover the mathematics
+#: determinately from the English, and says so by voiding that control rather
+#: than by omitting it. A gate keyed on "nothing voided" would therefore read
+#: a deliberate, published non-claim as a failure and leave the voice dark
+#: forever — refusing to serve a surface whose evidence had actually cleared.
+#:
+#: So arming asks the narrower question the design actually poses: did every
+#: control that can stop the cycle clear? Each entry is
+#: (label, path-into-the-run, predicate, what-failure-means).
+BLOCKING_CHECKS = (
+    ("C-G1", "c_g1",
+     lambda block: block.get("voided") is False
+     and block.get("named_floor_met") is True,
+     "the grouping control voided or missed its named floor"),
+    ("C-V4'", "c_v4_prime",
+     lambda block: block.get("voided") is False
+     and list(block.get("voided_classes") or ()) == [],
+     "the re-specified near-miss control voided, or a mutation class fell "
+     "below its floor"),
+    ("B1", "b1", lambda block: block.get("floor_met") is True,
+     "the identity floor was not met"),
+    ("B3", "b3", lambda block: block.get("closes_exactly") is True,
+     "the rendered/registered arithmetic does not close"),
+    ("B5", "b5", lambda block: block.get("byte_identical") is True,
+     "two runs over one tree were not byte-identical"),
+)
 
 
 def _read(root: Path, relative: str):
@@ -64,7 +107,9 @@ def arming_state(repo_root: Path | str) -> dict:
     """Whether the foreign voice may be served, and why not when it may not.
 
     Returns a plain record so both callers branch on one field: `armed`.
-    Everything else is for the sheet to publish and for a person to read.
+    Everything else is for the sheet to publish and for a person to read —
+    including `non_blocking_voids`, because a void this design took on
+    purpose should be visible beside the surface it did not stop.
     """
 
     root = Path(repo_root)
@@ -72,14 +117,16 @@ def arming_state(repo_root: Path | str) -> dict:
         "armed": False,
         "run": FOREIGN_VOICE_RUN2,
         "arming_rule": (
-            "armed only when the registered run exists and its own "
-            "verdicts.voided list is empty with an all-clear overall"
+            "armed when the registered run reads FIRES and every "
+            "cycle-stopping control cleared: "
+            + ", ".join(label for label, _, _, _ in BLOCKING_CHECKS)
+            + ". A void that the design marks non-blocking (C-V3', the "
+            "machine-reader claim) is published, not treated as a failure."
         ),
     }
 
     run2, error = _read(root, FOREIGN_VOICE_RUN2)
     if run2 is None:
-        # The state this repository is actually in at §4's batch.
         prior, _ = _read(root, FOREIGN_VOICE_RUN1)
         state["reason"] = (
             f"no registered run at {FOREIGN_VOICE_RUN2}; the foreign voice "
@@ -108,22 +155,50 @@ def arming_state(repo_root: Path | str) -> dict:
         return state
 
     verdicts = run2.get("verdicts") or {}
-    voided = list(verdicts.get("voided") or ())
     overall = verdicts.get("overall")
+    voided = list(verdicts.get("voided") or ())
     state["verdict"] = overall
     state["voided"] = voided
     state["summary"] = verdicts.get("summary")
-    if voided or overall != ALL_CLEAR:
+
+    failures: list[str] = []
+    checks: dict[str, bool] = {}
+    if overall != FIRES:
+        failures.append(f"the run reads {overall!r} rather than {FIRES!r}")
+    for label, key, predicate, meaning in BLOCKING_CHECKS:
+        block = run2.get(key)
+        passed = isinstance(block, dict) and bool(predicate(block))
+        checks[label] = passed
+        if not passed:
+            failures.append(
+                f"{label}: {meaning}" if isinstance(block, dict)
+                else f"{label}: the run carries no {key!r} block to read"
+            )
+    state["blocking_checks"] = checks
+
+    # Published, never silently dropped: a void the design took on purpose is
+    # part of what this surface is worth, and hiding it would make the row
+    # claim more than the run does.
+    blocking_labels = {label for label, _, _, _ in BLOCKING_CHECKS}
+    state["non_blocking_voids"] = [
+        name for name in voided
+        if not any(name.startswith(label) for label in blocking_labels)
+    ]
+
+    if failures:
         state["reason"] = (
-            f"{FOREIGN_VOICE_RUN2} reads {overall!r}"
-            + (f" with {', '.join(voided)} voided" if voided else "")
-            + "; a voided control outranks any floor it gates, so the "
-            "foreign voice stays dark"
+            "the foreign voice stays dark: " + "; ".join(failures)
         )
         return state
 
     state["armed"] = True
     state["reason"] = (
-        f"{FOREIGN_VOICE_RUN2} reads {overall!r} with nothing voided"
+        f"{FOREIGN_VOICE_RUN2} reads {overall} and every cycle-stopping "
+        f"control cleared"
+        + (
+            f"; {', '.join(state['non_blocking_voids'])} voided without "
+            f"blocking, and that void is published rather than hidden"
+            if state["non_blocking_voids"] else ""
+        )
     )
     return state
