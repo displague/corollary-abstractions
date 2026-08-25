@@ -351,11 +351,23 @@ class TheForeignVoiceLineArmsFromEvidence(unittest.TestCase):
                 finally:
                     self._tmp.cleanup()
 
-    def test_the_repository_as_it_stands_is_dark(self) -> None:
-        """Production behaviour, asserted beside the fixture behaviour."""
-        self.assertFalse(self.answer_module._foreign_voice_armed())
+    def test_production_state_and_served_line_agree(self) -> None:
+        """Production behaviour, asserted beside the fixture behaviour.
+
+        Written 2026-08-24 as `test_the_repository_as_it_stands_is_dark`,
+        when the arming artifact did not exist; re-aimed 2026-08-25 at the
+        merge that landed experiments/foreign_voice_rate2.json, because a
+        test that hard-codes either state is a test that goes red the day
+        the repository honestly changes state. The fixture tests above pin
+        both branches; this one pins CONSISTENCY: the served line appears
+        exactly when the arming read says it should.
+        """
+        armed = self.answer_module._foreign_voice_armed()
         rendered = "\n".join(render_answer(compose(self.FOREIGN_ONLY)))
-        self.assertNotIn("in words", rendered)
+        if armed:
+            self.assertIn("in words", rendered)
+        else:
+            self.assertNotIn("in words", rendered)
 
 
 if __name__ == "__main__":

@@ -479,46 +479,43 @@ class PreregDigestTests(unittest.TestCase):
         self.assertEqual(self.prereg["prereg_id"], "foreign_voice.prereg.v1")
 
     def test_every_frozen_digest_matches_the_tree(self) -> None:
-        """B7's sweep, re-aimed 2026-08-24 for the one retired row.
+        """B7's sweep, re-aimed 2026-08-24 for the first retired row and again
+        2026-08-25 for the chain that retirement became.
 
-        The amendment is `foreign_voice.prereg.v1.amendment.transliteration-
-        2026-08-24` (ROADMAP-v0.19 item 3a). B7 froze the parser in its own
-        right — B0a's split and C-V2's contrast are computed with it — and that
-        freeze did its job: experiments/foreign_voice_rate.json was measured
-        under 65fead2f… and this amendment postdates the run. The parser did not
-        move while the claim was being made, which is precisely what B7 asks.
+        The first amendment is `foreign_voice.prereg.v1.amendment.
+        transliteration-2026-08-24` (ROADMAP-v0.19 item 3a). B7 froze the
+        parser in its own right — B0a's split and C-V2's contrast are computed
+        with it — and that freeze did its job: experiments/foreign_voice_rate.
+        json was measured under 65fead2f… and the amendment postdates the run.
+        The parser did not move while the claim was being made, which is
+        precisely what B7 asks.
 
-        A retired row is checked against the successor pin the amendment names,
-        so the sweep still fails on any undeclared change; it does not become a
-        row nobody checks.
+        ROADMAP-v0.20 §4b then retired the SUCCESSOR pin too (exact literals),
+        so the walk here is the shared transitive one in scripts/prereg_pins.py
+        rather than this module's own single hop — the 2026-08-25 lesson being
+        exactly that a one-hop walk reads a two-hop chain as an undeclared
+        change. A retired row is checked against the pin at the END of its
+        chain, so the sweep still fails on any change past the last amendment;
+        it does not become a row nobody checks.
         """
-        amendments = {entry["amendment_id"]: entry
-                      for entry in self.prereg.get("amendments", ())}
-        for row in self.prereg["frozen"]:
-            with self.subTest(path=row["path"]):
-                path = ROOT / row["path"]
-                self.assertTrue(path.is_file(), f"{row['path']} is not in the tree")
-                marker = row.get("retired_for_future_comparisons")
-                if marker is None:
-                    self.assertEqual(
-                        _sha256_lf(path), row["sha256_lf"],
-                        f"B7 VOID: {row['path']} changed after the "
-                        f"preregistration commit recorded it. If the change was "
-                        f"needed to make the oracle agree, the independence "
-                        f"claim is void and the change needs its own review "
-                        f"naming the reason.")
-                    continue
-                named = [entry for key, entry in amendments.items()
-                         if key.endswith(marker["amendment"])]
-                self.assertEqual(len(named), 1, marker["amendment"])
-                successor = json.loads(
-                    (ROOT / named[0]["successor_prereg"]["path"]).read_text(
-                        encoding="utf-8"))
-                live = {r["role"]: r for r in successor["frozen"]}[row["role"]]
-                self.assertEqual(
-                    _sha256_lf(path), live["sha256_lf"],
-                    f"{row['path']} matches neither its retired pin nor the "
-                    f"successor pin. A change past the amendment needs its own.")
+        from prereg_pins import check_frozen
+        for record in check_frozen(
+                self.prereg,
+                prereg_path="experiments/foreign_voice_prereg.json",
+                repo_root=ROOT):
+            with self.subTest(path=record["path"]):
+                self.assertIsNotNone(
+                    record["observed_sha256_lf"],
+                    f"{record['path']} is not in the tree")
+                self.assertTrue(
+                    record["agrees"],
+                    f"B7 VOID: {record['path']} matches neither its recorded "
+                    f"pin nor the pin at the end of its retirement chain "
+                    f"(live pin from {record['live_pin_source']}, walked via "
+                    f"{record['retirement_hops'] or 'no amendments'}). A "
+                    f"change past the last amendment needs its own; if the "
+                    f"change was needed to make the oracle agree, the "
+                    f"independence claim is void.")
 
     def test_the_frozen_parser_is_the_one_v018_froze(self) -> None:
         """The same digest experiments/realization_prereg.json pinned.

@@ -172,6 +172,10 @@
       "role": "hermetic_rule",
       "sha256_lf": "0db59b36f2a5db6b52fa2b8be0fa07ae937a375d67a3eb4299173a5c7e6de16c",
       "recorded": "2026-08-24",
+      "retired_for_future_comparisons": {
+        "amendment": "resource-bound-2026-08-25",
+        "note": "retired by the dated amendment below; the original digest stays because experiments/foreign_voice_rate.json was measured under it"
+      },
       "why": [
         "Two things this cycle takes from it and must not re-decide: `toolchain_binary`, which resolves the pinned binary BY PATH and returns None rather than downloading (:14-17, :181-205), and the authority boundary at :6-7 — 'a passing check certifies what it checks, not correctness in general' — with :35-40 governing the output, so a verdict alone never mints a `verified_by` link and this cycle mints none.",
         "Frozen rather than merely cited because the eligibility probe and the B-P driver both import from it, so a change here changes what 'hermetic' means for every number this cycle publishes."
@@ -733,6 +737,29 @@
         "The parser did NOT move mid-cycle for this run: commit 46edefd's registered run was computed under 65fead2f… and this amendment postdates it. B7's independence claim is intact and the denominator under foreign_voice_rate.json did not move while the claim was being made.",
         "tests/test_foreign_voice_lexicon.py's frozen-digest sweep and its test_the_frozen_parser_is_the_one_v018_froze read this row, so both are re-aimed by the same amendment in the same commit as the code."
       ]
+    },
+    {
+      "amendment_id": "foreign_voice.prereg.v1.amendment.resource-bound-2026-08-25",
+      "dated": "2026-08-25",
+      "cycle": "v0.20",
+      "lane": "ROADMAP-v0.20 4c -- the exponent resource bound",
+      "authority": [
+        "ROADMAP-v0.20 4's batched retirement, which moved scripts/external_verifier.py's subprocess timeouts as part of the bound work.",
+        "The batch adversarial review's M6: an inherited undeclared drift must be recorded in the preregistration that froze the pin, in the transliteration amendment's own form."
+      ],
+      "ordering": [
+        "RETROSPECTIVE BY ONE STEP, and stated so rather than dressed as foresight: the timeout change landed in the batch lane before this entry was written, and the review is what ordered the record. The precedent amendment (transliteration-2026-08-24) was a preregistration act recorded before its change; this one is a declaration recorded at the merge that inherited the change.",
+        "What makes that honest rather than convenient: no run is open against this pin. experiments/foreign_voice_rate.json was measured and closed under 0db59b36 (its B7 verdict is unchanged and still checked), and experiments/foreign_voice_rate2.json's own prereg never froze this file. The window in which a drift could have silently moved a claim is empty."
+      ],
+      "what_this_retires": [
+        "The hermetic_rule row -- scripts/external_verifier.py, LF sha256 0db59b36f2a5db6b52fa2b8be0fa07ae937a375d67a3eb4299173a5c7e6de16c -- is RETIRED FOR FUTURE COMPARISONS as of this dated amendment.",
+        "Retired, not deleted and not overwritten: the row stays with its original digest because it is the record of what v0.19's registered run was measured under.",
+        "The successor pin lives in experiments/exact_literals_prereg.json, the same terminal registry that carries the parser's successor -- one section-4 batch, one registry."
+      ],
+      "successor_prereg": {
+        "path": "experiments/exact_literals_prereg.json",
+        "recorded_in": "the same integration commit as this amendment"
+      }
     }
   ],
   "c_v4": {

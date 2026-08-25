@@ -58,6 +58,16 @@
         "retired_by": "transliteration.prereg.v1.amendment.exact-literals-2026-08-24"
       },
       "why": "Re-pinned because the amendment taught it to follow declared retirements (scripts/prereg_pins.check_frozen). Pin-resolution only: no floor, rate or reading in the transliteration lane moved."
+    },
+    {
+      "path": "scripts/external_verifier.py",
+      "role": "hermetic_rule",
+      "sha256_lf": "36f6ad64d06deb5d6a69be165e113591397276f445224020ee4ea464c1759b5f",
+      "recorded": "2026-08-25",
+      "why": [
+        "ROADMAP-v0.20 4c moved this file's subprocess timeouts, which drifted the pin foreign_voice.prereg.v1 froze at 0db59b36. The batch review's M6 ordered the drift declared rather than inherited, so this registry -- already the terminal book for the parser the same batch moved -- carries the successor pin for the second moved file too. One retirement batch, one terminal registry.",
+        "The v0.19 foreign run that pin protected was measured under 0db59b36 and stays closed; the v0.20 run's prereg (foreign_voice_prereg2.json) never froze this file. No committed number was measured under the digest recorded here."
+      ]
     }
   ],
   "pending": [],
