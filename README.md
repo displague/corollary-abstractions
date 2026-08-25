@@ -520,6 +520,26 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   **register**: a frozen, digested inventory of the 1,878 statements the
   system cannot say, in two buckets that are never summed — 1,706 a
   budget a maintainer can lift, 172 a design consequence this cycle owns
+- `docs/DESIGN-voice-completion.md` — **v0.20 item 2, maintainer-directed**
+  (2026-08-24): the withheld voice ships, and the repair is structural
+  rather than tighter bookkeeping. The renderer emits a grouping word only
+  where precedence demands one, so the redundant-bracket variant that voided
+  C-V4 **stops being constructible** — measured read-only before being
+  chosen: 620 of 6,063 bracket pairs are redundant, 15 of the 100 sealed
+  renderings change, and every grouping-pair deletion over the whole covered
+  set is detected, 5,228 of 5,228. C-V4′ is re-specified with C-R2's missing
+  clause, its drawn **id lists** pinned rather than its seed, and **C-V3′,
+  a machine blind reader**, replaces a control that was ABSENT because a
+  single-maintainer repository has no non-maintainer. The human-reader claim
+  stays not-made. If the fresh run voids again, the voice stays withheld and
+  v0.21 inherits it
+- `docs/DESIGN-plain-input.md` — **maintainer-seeded candidate for v0.21**
+  (2026-08-24), pre-course: plain text enters, a small model proposes
+  candidate interpretations, the kernel verifies them, and the **hidden
+  variable** — the assumption an answer is predicated on — is named rather
+  than silently assumed. The v0.21 course must adjudicate it explicitly;
+  **silence is not a disposition**. Its §6 carries the cross-design machine
+  blind reader definition and hands it to the voice design's run
 - `docs/DESIGN-block-vocabulary.md` — **adopted, built, measured, and
   parked BY NUMBERS at v0.19** (§3e), which is the full lifecycle a
   maintainer's no-silent-disposal instruction is owed. Scoped to one

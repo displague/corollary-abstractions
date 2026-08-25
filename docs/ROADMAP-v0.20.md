@@ -71,6 +71,34 @@ the convention-census negative. Three of those four took something away.
 This is the cycle's most concrete debt, and it comes with its
 specification already written.
 
+> **Status note (2026-08-24, after rotation).** This lane now has a design:
+> [DESIGN-voice-completion](DESIGN-voice-completion.md), which landed and was
+> adversarially reviewed during this rotation and carries
+> `Status: design only`. It is **maintainer-directed**, and the directive is
+> quoted rather than summarised — the ruling of **2026-08-24** is that *the
+> withheld foreign voice **ships in v0.20***. A second directive of the same
+> date adds **C-V3′, the machine blind reader**, whose cross-design definition
+> was written down in [DESIGN-plain-input](DESIGN-plain-input.md) §6 and which
+> that seed explicitly hands to **this** lane's run: *"it belongs to the voice
+> design's run, not to this one"*.
+>
+> **What the directive does and does not do.** It chooses which of two honest
+> repairs the cycle takes — canonical-grouping rendering over accepting the
+> measured blind spot as a permanent non-claim — and it **does not adjudicate
+> the control**. The design says so in the plain form this roadmap should
+> inherit: *if the fresh run voids again, the voice stays withheld and v0.21
+> inherits it.* The gate below is unchanged by the directive.
+>
+> **What moved in the design that this section predates.** Its review turned
+> the grouping-canonical question from §3's probe into a **census** — every
+> grouping-pair deletion over every canonical surface, floor 5,228 of 5,228 —
+> which **demotes C-V4′'s `drop_group` to a confirmation** rather than
+> replacing it. And the sample pins moved: three of the five C-V4 pools change
+> with the grammar, so the drawn **id lists** are pinned rather than the seed.
+> Every sentence in this section describing the *design* rather than the
+> *v0.19 record* is therefore superseded by that document where the two
+> differ, on the same convention §1 uses for DESIGN-statements-that-run.
+
 **What went wrong, precisely.** C-V4 inherited C-R2's mutation idea and
 left behind C-R2's load-bearing clause: **every mutation is verified to
 change the term *before* it is rendered**, with non-mutations discarded and
@@ -162,30 +190,54 @@ one; none is scheduled here, and that is the point of naming them:
   as an optional rider **any cycle can run**, which is how a parked
   thesis-level candidate keeps a pulse without becoming a headline.
 
-## 4. One witness retirement, three fixes — and it lands before item 1
+## 4. One witness retirement, five named changes — and it lands before item 1
 
-**This section is one commit's worth of witness retirement carrying three
-fixes, and it is ordered BEFORE item 1's first slice.** All three touch
-`harness.py` or the evaluate path — modules the task book witnesses — so
-done separately they would cost three retirements and three successor
-books. Batched, they cost **one**. The design requires the ordering
+> **Dated correction (2026-08-24, after both design reviews closed).** This
+> section was written as *"one witness retirement, three fixes"*. Two more
+> witnessed-module changes were scheduled after it was written — **4d**, the
+> foreign-voice wiring from [DESIGN-voice-completion](DESIGN-voice-completion.md)
+> §5.1, and **4e**, `_route_conform` from
+> [DESIGN-statements-that-run](DESIGN-statements-that-run.md) §5 — and both
+> ride this retirement rather than opening their own. The batching rule below
+> is what forces that, so the numeral is corrected here and everywhere it
+> appears rather than left to read as a third count. **The retirement is still
+> ONE; only the number of changes it carries moved.**
+
+**This section is one commit's worth of witness retirement carrying five
+named changes, and it is ordered BEFORE item 1's first slice.** All five
+touch `harness.py`, `answer.py` or the evaluate path — modules the task book
+witnesses — so done separately they would cost five retirements and five
+successor books. Batched, they cost **one**. The design requires the ordering
 independently: an evaluator that decides statements cannot be built on a
 parser that destroys their literals, so E0's exact-literal prerequisite has
 to be true before item 1 has anything sound to stand on.
 
-| # | fix | why it is in this batch |
-|---|---|---|
-| 4a | `_route_ownership` returns its receipt in the verdict dict | third-cycle friction; the land-or-close clause discharged by a landing plan |
-| 4b | **exact literals** — the parser stops storing numerals as `float` | **E0's prerequisite.** 7 destroyed literal occurrences across 3 nodes; two served statements print values wrong by 4.4 × 10^59 while looking exact |
-| 4c | **a resource bound on `^`, refusing by name** | **E0e.** `base ** int(exponent)` is unbounded on a served path, and its current failure mode is an uncaught `ValueError` at print time rather than a refusal |
+**Three witnessed modules move, not five.** `harness.py` (4a, 4e),
+`evaluate.py` (4c) and `answer.py` (4d) are on the witness list;
+`match_signatures.py` (4b), `external_verifier.py` (4c's timeouts) and
+`serve_chat.py` (4d's sheet row) are **not**
+(`tests/test_throughput_tasks.py:52–66`, tied to the book at `:532`). The
+unwitnessed ones pay no seal and owe a **served-answer-line diff** instead —
+the discipline `docs/DESIGN-foreign-voice.md` §5 already named, with
+`scripts/transliteration_served_diff.py` as the working precedent.
+
+| # | change | module | witnessed? | why it is in this batch |
+|---|---|---|---|---|
+| 4a | `_route_ownership` returns its receipt in the verdict dict | `harness.py` | yes | third-cycle friction; the land-or-close clause discharged by a landing plan |
+| 4b | **exact literals** — the parser stops storing numerals as `float` | `match_signatures.py` | no | **E0's prerequisite.** 7 destroyed literal occurrences across 3 nodes; two served statements print values wrong by 4.4 × 10^59 while looking exact |
+| 4c | **a resource bound on `^`, refusing by name** | `evaluate.py` / `external_verifier.py` | yes / no | **E0e.** `base ** int(exponent)` is unbounded on a served path, and its current failure mode is an uncaught `ValueError` at print time rather than a refusal |
+| 4d | **the foreign `in words` line, the sheet row, and the b0d seed-pin test** | `answer.py` / `serve_chat.py` | yes / no | **DESIGN-voice-completion §5.1.** The line arms itself from the registered artifact, so the code lands with the batch and the surface moves only when the evidence says so |
+| 4e | **`_route_conform`** | `harness.py` | yes | **DESIGN-statements-that-run §5.** Its own slice states the dependency: the route rides this retirement rather than opening one |
 
 **Batching rule, stated so a later cycle inherits it rather than
 rediscovers it:** witnessed-module changes that are individually small
 should ride **one** retirement per cycle. The seal discipline prices a
-retirement, not a diff, so three separate small commits pay three times for
-the same thing. What the batch owes in exchange is that each fix carries
+retirement, not a diff, so five separate small commits pay five times for
+the same thing. What the batch owes in exchange is that each change carries
 its **own** before/after evidence — a shared seal is not a shared excuse
-for a shared measurement.
+for a shared measurement. **This batch grew from three changes to five
+without growing its retirement, which is the rule working rather than the
+rule bending.**
 
 Third-cycle friction opened this section, and this rotation **decides it
 rather than carrying it again**. The v0.18 note said a third cycle without
@@ -266,6 +318,60 @@ four untimed `subprocess.run` calls in `scripts/external_verifier.py`
 since that file carries the external-verifier lane the design's cost
 argument rests on.
 
+### 4d — the foreign voice wiring (DESIGN-voice-completion §5.1)
+
+**The change.** One new line in `answer.render` — `in words   : <surface>`
+for the foreign path, beside v0.18's — plus the `foreign_voice` sheet row
+flipping to `served: true`, and the `tests/test_foreign_voice_b0d.py`
+amendment that reads the seed pin as a git-derived value rather than a
+transcribed constant.
+
+**Why it can land before the run that authorises it.** The line **arms itself
+from the registered artifact**: with `experiments/foreign_voice_rate2.json`
+absent or voided it emits nothing. So the code moves once, with this batch,
+and the surface moves later — or never — without a second commit. The
+precedent is `realization_row` (`scripts/serve_chat.py:363–408`), which reads
+the registered run and publishes `served: false` with a reason when the
+artifact is unreadable. What is genuinely new is named rather than smuggled:
+**4d adds `answer.py`'s first read of an `experiments/` artifact**, since
+`_in_words` gates on its own round trip and not on a run file.
+
+**A pre-existing defect 4d must fix, and it is a silent corruption rather
+than a crash.** `foreign_voice_row` reads `c_v4["voided_classes"][0]`
+(`scripts/serve_chat.py:455`) on a list that is **empty** when nothing voided.
+The `except` tuple at `:459` **catches** `IndexError`, so an all-clear run is
+not a traceback — it is published with the same *"its record could not be
+read"* prose as a corrupt or missing file, on exactly the branch the voice
+design exists to produce. Worse, the row has **no code path that sets
+`served: true` at all** (`row["served"]` is assigned `False` once, at `:438`),
+and it keys off `c_v4["voided_classes"]` rather than the run's own
+`verdicts["voided"]`. **Neither `foreign_voice_row` nor `realization_row` is
+covered by any test.** 4d writes the true branch, corrects the field, and adds
+the both-branch test.
+
+**Owes:** the **absent/absent-then-present served diff** — the foreign line
+shown **absent on both sides at batch time**, because no run has armed it yet,
+and **present only after the clean run lands**. The absent/absent half is not
+a null result; it is the proof that a witnessed-module change moved no served
+byte, which is exactly what the seal discipline asks a witnessed change to
+demonstrate.
+
+### 4e — `_route_conform` (DESIGN-statements-that-run §5)
+
+**The change.** One new route in `scripts/harness.py`, beside the existing
+`_route_evaluate` and following its shape exactly, returning `None` on a
+refusal so the line falls through the chain rather than refusing on everyone
+else's behalf.
+
+**Why it is here rather than in item 1's slice.** Its own design says so:
+the route, the exact-numeral path and the resource bound *"all ride §4's
+retirement rather than opening one"*, and that slice **depends** on this
+section landing first. Listing it here is what makes that dependency a
+schedule rather than an intention.
+
+**Owes:** its own before/after evidence, on the same rule as every other
+member of this batch — one seal is not one measurement.
+
 **Both 4b and 4c are display-and-liveness fixes on a loopback-only,
 single-user server, and neither is a security claim.** They are scheduled
 because item 1 needs them true, and because HOSTILE DICTATION is parked
@@ -276,8 +382,9 @@ paths (§5) — not because anything untrusted reaches them today.
 
 | lane | named dependant | disposition |
 |---|---|---|
-| **C-V4′ and the foreign wiring** | **§2 — this cycle** | not carried, **scheduled**; it is the named successor to a void and the run that voided wrote its specification |
-| **The grouping-canonical question** | §3's probe | registered probe; measure before repairing |
+| **C-V4′ and the foreign wiring** | **§2 — this cycle** | not carried, **scheduled**; it is the named successor to a void and the run that voided wrote its specification. **Designed at [DESIGN-voice-completion](DESIGN-voice-completion.md)** (maintainer-directed, 2026-08-24; §2's status note); its wiring rides §4 as **4d** |
+| **The grouping-canonical question** | §3's probe | registered probe; measure before repairing. **The probe kept its ordering and the repair now has a design** — [DESIGN-voice-completion](DESIGN-voice-completion.md) §6 publishes the census *before* proposing the rule, and its G1b turns the question into an exhaustive gate rather than a sample |
+| **[DESIGN-plain-input](DESIGN-plain-input.md)** — plain text in, propose-and-verify, hidden variables named | **the v0.21 course** | **maintainer-seeded candidate, pre-course** (2026-08-24). Not scheduled this cycle and not parked: it is the **named candidate the v0.21 course must adjudicate explicitly** — adopted, superseded by something measurably better-fitting, or parked with the measurement that parked it. **Silence is not a disposition.** Its §6 also carries the cross-design **machine blind reader** definition, which it hands to §2's run rather than keeping |
 | **The register's `mathlib_head` budget** | *none* | carried. 1,706 of the 1,878 blocked statements are blocked by a **budget a maintainer can lift**, not by a design limit. It is filed rather than scheduled because lifting it is a resourcing decision, and the register's whole point is that the two buckets never merge into one "unsupported" number |
 | **Licensed variant generation** | *none* | carried unchanged from v0.19 §4: the realization grammar emits exactly one surface per term, so the learned preference seat has nothing to rank. Unpark when a design says what licenses a *second* passing surface and why that is not decoration |
 | **`_route_ownership` receipt duplication** | **§4 — this cycle** | not carried, **SCHEDULED** by the orchestrator's ruling of 2026-08-24. The land-or-close clause is discharged by a landing plan rather than by a fourth pass; §4 carries the fix, the before/after measurement the entry has owed for three cycles, and its new-seal cost |
@@ -297,6 +404,18 @@ paths (§5) — not because anything untrusted reaches them today.
 | **BORROWED PREMISES** — conditional answers under quarantined assumption sets | *none* | parked; **likely the supposition frame's maturation** — noted for when the API attaches callers with real premise sets |
 | **SECOND VOICE** — diagrams that re-parse, testing void transfer | *none* | parked; the **void-transfer question is well-formed** and waits on a committed picture syntax |
 | Realization parameters as data; unless-receipts, detached receipt, residual ledger, antibody, two referees, wild text, negative space; resolver coverage lane, A3–A5, verified-ambiguity, range certification, W1–W3 | *none* | unchanged |
+
+**The seeded candidate, recorded here so the v0.21 course cannot inherit it
+as a rumour.** [DESIGN-plain-input](DESIGN-plain-input.md) was seeded by
+maintainer direction during this rotation, with the direction quoted verbatim
+in the document rather than paraphrased. It is **pre-course by construction**:
+it does not compete for v0.20 and it is not parked, because a park needs a
+measurement and none has been taken. The instruction it carries is the one
+§6 records as fully discharged for the last seed — *"a park that cites a
+measurement is a decision; a park that cites a preference is drift"* — and the
+lifecycle that discharged it, **adopted → built → measured → parked by
+numbers**, is the standard this one is owed too. The v0.21 course adjudicates
+it **explicitly**, and **silence is not a disposition**.
 
 ## 6. Governance
 
@@ -367,7 +486,8 @@ v0.20 is ready only if:
   with the register shipping either way;
 - the grouping-canonical probe publishes its distribution, whichever way it
   reads, **before** any bracketing rule is proposed;
-- **§4 lands FIRST, as one witness retirement carrying three fixes**, and
+- **§4 lands FIRST, as one witness retirement carrying five named changes**
+  (corrected 2026-08-24 from three; the retirement is still one), and
   before item 1's first slice: **4a** `_route_ownership` returns its
   receipt in the verdict dict (the convention `_route_twin` and
   `_route_reachable` already follow), cache dropped, with the
@@ -375,8 +495,11 @@ v0.20 is ready only if:
   **4b** exact literals through the parse path, with the two corrupted
   served statements shown right; **4c** a registered bound on `^` that
   **refuses by name rather than raising**, plus timeouts on the four
-  untimed `subprocess.run` calls. Each fix carries its own evidence — one
-  seal is not one measurement;
+  untimed `subprocess.run` calls; **4d** the foreign `in words` line and
+  its sheet row, arming themselves from the registered artifact, with the
+  **absent/absent-then-present served diff** and the silent-corruption
+  defect in `foreign_voice_row` fixed; **4e** `_route_conform`. Each
+  change carries its own evidence — one seal is not one measurement;
 - `check_report_regeneration.py` runs in the release refresh with its
   verdicts in the notes;
 - the full suite is green on a frozen tip with retained receipts;

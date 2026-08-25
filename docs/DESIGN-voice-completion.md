@@ -26,7 +26,7 @@ than hiding it (`scripts/serve_chat.py:412–487`) — right behaviour, and not 
 substitute for the surface.
 
 `drop_group` voids for one mechanical reason, stated exactly at
-[ROADMAP-v0.20](ROADMAP-v0.20.md):105–106: **deleting a semantically redundant
+[ROADMAP-v0.20](ROADMAP-v0.20.md):133–134: **deleting a semantically redundant
 bracket changes the sentence and not the term.** So a served sentence could
 have a variant that reads differently and certifies identically, and a reader
 could not tell which one the graph meant.
@@ -580,6 +580,27 @@ G7**. **Run-carried** — adjudicated inside `foreign_voice_rate2.json`:
   operator. A reader that cannot tell a served sentence from its near-miss is
   not reading it.
 
+  > **Correction 8 (2026-08-24, grounding): the shared definition does not
+  > **SUPERSEDED (2026-08-24, at the v0.19 tag).** Correction 8 was true when
+  > written and is false now: `docs/DESIGN-plain-input.md` **merged to `main`
+  > in `b6535e9`**, and its **§6 "The machine blind reader"** is the shared
+  > definition this section was forced to supply for itself. The two agree on
+  > every load-bearing term — pinned to `weights_blob_sha256`, labelled
+  > machine-reader and never human, **grades only, never serves** — and the
+  > seed hands the instrument here explicitly: *"it belongs to the voice
+  > design's run, not to this one"*, adding that *"no `C-V3′` exists in the
+  > tree today … so naming it is itself an act the voice design must ratify."*
+  > **This section is that ratification.** Two differences are reconciled in
+  > favour of the seed, because both make the control stricter: it inherits
+  > **C-V3's voiding sentence unchanged** and keeps **the interleaved skeleton
+  > arm**, which this section had replaced with mutation-class distractors —
+  > the arm and the distractors are complementary and C-V3′ runs both. Its
+  > third point is the seed's own and does not bind this run: a proposer and a
+  > blind reader that are the same pinned model are not independent, which is
+  > a hazard for *that* design's answers, not for a rendering this design
+  > produced without a model. The original correction is kept below because a
+  > dated finding that was acted on is not deleted when it expires.
+  >
   > **Correction 8 (2026-08-24, grounding): the shared definition does not
   > exist yet, so this design cannot cite it as though it did.** The directive
   > names `docs/DESIGN-plain-input.md`'s machine-blind-reader section as the

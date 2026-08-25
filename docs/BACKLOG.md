@@ -100,6 +100,13 @@ or commit history. Each item names the evidence that motivated it.
   to any future ported control: **port the discard rule first** — it is
   usually the part that was expensive to learn and the part that looks
   optional. Evidence: `experiments/foreign_voice_rate.json` `c_v4`.
+  **Designed (2026-08-24):** [DESIGN-voice-completion](DESIGN-voice-completion.md)
+  carries C-V4′ in full — the discard rule restored per mutation, the drawn
+  **id lists** pinned rather than the seed (three of the five pools move with
+  the grammar), `margin_to_floor` published per class, and `drop_group`
+  **demoted to a confirmation** by an exhaustive census that tests every
+  grouping-pair deletion rather than fifty. Its wiring rides
+  [ROADMAP-v0.20](ROADMAP-v0.20.md) §4 as **4d**.
 
 - **`shift_group`'s `of_which_digest_moved` is wrong in a registered
   artifact, and is deliberately not fixed (2026-08-24).** It reads **33**

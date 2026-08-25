@@ -21,10 +21,10 @@ better-fitting, or parked with the measurement that parked it. **Silence
 is not a disposition.** The rule is the one ROADMAP-v0.20 §6 recorded
 after the last seed completed its lifecycle: *"a park that cites a
 measurement is a decision; a park that cites a preference is drift"*
-(`docs/ROADMAP-v0.20.md:330-337`).
+(`docs/ROADMAP-v0.20.md:449-456`).
 
 This seed also arrives with a lineage it must not hide. **Open-English
-input is parked** (`docs/ROADMAP-v0.20.md:286`), and **INBOUND** — "open
+input is parked** (`docs/ROADMAP-v0.20.md:393`), and **INBOUND** — "open
 English entering as structure" — was proposed in the v0.20 course and
 **folded**, not adopted: `reports/design-direction-v0.20.json`
 `outcomes.series_1.folds[0]` reads *"INBOUND -> the parked synonym layer
@@ -32,7 +32,7 @@ English entering as structure" — was proposed in the v0.20 course and
 recorded"*. Re-entry is legitimate in this repository, but only on the
 terms ROADMAP-v0.20 §6 set for EVAL's return: **"Re-entry is legitimate
 when it is evidenced and recorded; it is drift when it is neither"**
-(`docs/ROADMAP-v0.20.md:319-323`). §3d names the evidence.
+(`docs/ROADMAP-v0.20.md:438-442`). §3d names the evidence.
 
 ## 1. The idea, as directed
 
@@ -264,7 +264,7 @@ New, and worth a design:
 5. **Revocability is a surface, not a hope.** The person can say the
    supposition is wrong, and the answer that stood on it is withdrawn
    with the supposition. (This is where **UNSAY**'s parked blast-radius
-   work becomes relevant — `docs/ROADMAP-v0.20.md:296` records it waiting
+   work becomes relevant — `docs/ROADMAP-v0.20.md:403` records it waiting
    for *"a driver"*. This design is a driver. Named, not claimed.)
 
 ### 3b. The conditional answer as a first-class object
@@ -414,7 +414,7 @@ assumption sets"* — appears twice in the receipt and nowhere else:
 (`selection.declined["BORROWED PREMISES"]`), the latter reading *"parked;
 likely the supposition frame's maturation - noted for when the API
 attaches callers with real premise sets."* Restated at
-`docs/ROADMAP-v0.20.md:297`, and given its fuller disposition in the
+`docs/ROADMAP-v0.20.md:404`, and given its fuller disposition in the
 adopted design: `docs/DESIGN-statements-that-run.md:183-186` calls it
 *"the closest of all parked directions to §3.3's guard object"*, with the
 hand-off at `:1425-1428` — *"the same guard object seen from the asker's
@@ -466,14 +466,14 @@ Also touching this seed and named rather than left to be discovered:
 
 - **HOSTILE DICTATION** is parked with *"the one trigger in this table
   that is a prohibition: it MUST run before any untrusted stream reaches
-  the write gate"* (`docs/ROADMAP-v0.20.md:294`). **This design opens no
+  the write gate"* (`docs/ROADMAP-v0.20.md:401`). **This design opens no
   such stream** — suppositions never reach the write gate, by §3 item 4 —
   and the course owes an explicit statement to that effect, because a
   plain-text intake surface is exactly what a later reader will suspect.
 - **Licensed variant generation** is carried, three cycles running,
   because *"the realization grammar emits exactly one surface per term,
   so the learned preference seat has nothing to rank"*
-  (`docs/ROADMAP-v0.20.md:282`; `docs/ROADMAP-v0.19.md:224` puts it
+  (`docs/ROADMAP-v0.20.md:389`; `docs/ROADMAP-v0.19.md:224` puts it
   sharpest: **"A ranker is not blocked by the admission bar — it is
   blocked by the absence of anything to rank."**). On the *input* side
   the opposite is true: a plain utterance licenses several candidate
@@ -542,7 +542,7 @@ preregistration commit, and its own digests.
   (`docs/DESIGN-block-vocabulary.md:253`, after its headline number turned
   out to measure one generator script's boilerplate). Questions a
   maintainer wrote about this corpus are not questions a stranger asks;
-  **STRANGER**'s park (`docs/ROADMAP-v0.20.md:287`) is the same fresh-half
+  **STRANGER**'s park (`docs/ROADMAP-v0.20.md:394`) is the same fresh-half
   problem and should be cited, not re-encountered.
 - **G2 — zero silent binds.** Every served interpretation is either
   verifier-confirmed **or** supposition-labelled. Not a rate: **any
@@ -558,7 +558,7 @@ preregistration commit, and its own digests.
   tolerance and not the proposal, and the reading is void.* And C-V4's own
   failure mode is the warning: C-V4′ exists because C-V4 *"never
   establishes that the mutation should have moved"* what it measured
-  (`docs/ROADMAP-v0.20.md:74-82`). **G3 must verify that its distractors
+  (`docs/ROADMAP-v0.20.md:102-110`). **G3 must verify that its distractors
   really denote different registered queries before scoring** — the clause
   C-V4 dropped.
 - **G4 — the quarantine invariant.** Unconditional answers **never
@@ -638,7 +638,7 @@ across **all** rendering designs. Its terms:
 
 **Disposition.** This unblocks **C-V3′ this cycle**, which belongs to
 `docs/DESIGN-foreign-voice.md` §7 alongside C-V4′
-(`docs/ROADMAP-v0.20.md:84-97`), not here. Recorded only so the directive
+(`docs/ROADMAP-v0.20.md:112-125`), not here. Recorded only so the directive
 is not lost. Note that no `C-V3′` exists in the tree today — only `C-V4′`
 is primed — so naming it is itself an act the voice design must ratify.
 
