@@ -286,8 +286,13 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         "form": "<computable relation or expression>",
         "route": "evaluate",
         "example": "x = 5, x ^ 2",
-        "statuses": ["solved"],
+        "statuses": ["solved", "refused"],
         "requires": (),
+        "note": (
+            "refused only by a registered resource bound (E0e): a power wider "
+            "than evaluate.MAX_RESULT_DIGITS is declined by name rather than "
+            "computed into something that cannot be rendered"
+        ),
     },
     {
         "form": "<repo-relative path>",

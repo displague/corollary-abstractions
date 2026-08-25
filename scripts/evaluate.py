@@ -41,6 +41,7 @@ decides what to offer it.
 
 from __future__ import annotations
 
+import math
 import re
 import sys
 from dataclasses import dataclass
@@ -65,6 +66,73 @@ _NAMED_POWERS = {"square": 2, "squared": 2, "cube": 3, "cubed": 3}
 
 class EvalError(ValueError):
     """The expression cannot be evaluated exactly."""
+
+
+class ResourceBound(EvalError):
+    """A registered bound refused this computation BY NAME (E0e).
+
+    Distinct from `EvalError` on purpose, and the distinction is the whole
+    point of ROADMAP-v0.20 §4c. A plain `EvalError` means *this route cannot
+    read that line*, and the router answers by returning `None` so the line
+    falls through the chain rather than refusing on everyone else's behalf.
+    A `ResourceBound` means *this route read the line, understood it, and
+    refuses it* — which must reach the person as a refusal naming the bound,
+    not as a fall-through that ends in a generic abstention.
+    """
+
+
+#: The largest decimal result this evaluator will produce, and it is not an
+#: arbitrary round number: CPython refuses to convert an int wider than
+#: `sys.get_int_max_str_digits()` (4,300 by default) to a string. Above that
+#: the computation SUCCEEDS and the *printing* raises an uncaught ValueError
+#: — which is what §4c calls crashing rather than refusing, and the two are
+#: different products.
+#:
+#: Setting the bound to the interpreter's own printing limit makes the
+#: accept/refuse boundary and the can-it-be-rendered boundary the same number
+#: by construction rather than by coincidence. A registered constant rather
+#: than a live `sys.get_int_max_str_digits()` read, so the refusal is
+#: reproducible on a process that moved the cap.
+MAX_RESULT_DIGITS = 4300
+
+#: log10(2), the fallback scale when a magnitude is too large to take
+#: `math.log10` of at all. `len(str(n))` would be the obvious way to count
+#: digits and is exactly the operation the bound exists to prevent, so the
+#: estimate never stringifies anything.
+_LOG10_2 = 0.30102999566398119521
+
+
+def _log10_magnitude(n: int) -> float:
+    """log10 of a positive int, accurately where floats reach and safely above.
+
+    `bit_length() * log10(2)` alone was tried and over-refused by about a
+    fifth: `10 ** 4000` is 4,001 digits and that estimate called it 4,817, so
+    a renderable answer near the edge was declined. Bit length bounds log2,
+    not log10, and the slack compounds with the exponent. `math.log10` is
+    exact enough wherever it works; the bit-length form is kept only for
+    magnitudes past a float's reach, which are far beyond the bound anyway.
+    """
+
+    try:
+        return math.log10(n)
+    except (OverflowError, ValueError):  # pragma: no cover - astronomically rare
+        return n.bit_length() * _LOG10_2
+
+
+def _power_digit_estimate(base: "Fraction", power: int) -> float:
+    """The decimal width of `base ** power`, without building it.
+
+    Never stringifies and never computes the power, because both are the
+    operations the bound exists to prevent. The estimate is tight enough that
+    everything it admits renders and nothing renderable is refused near the
+    edge — `test_everything_the_bound_admits_can_actually_be_rendered` is the
+    assertion of the first half.
+    """
+
+    magnitude = max(abs(base.numerator), base.denominator)
+    if magnitude <= 1 or power == 0:
+        return 1.0
+    return abs(power) * _log10_magnitude(magnitude) + 1.0
 
 
 @dataclass(frozen=True)
@@ -179,7 +247,20 @@ def _eval_tree(tree: tuple, bindings: dict[str, Fraction],
             base, exponent = args
             if exponent.denominator != 1:
                 raise EvalError("only integer exponents are exact here")
-            return base ** int(exponent)
+            power = int(exponent)
+            # E0e: refuse BEFORE computing. `2^200000` computes in
+            # microseconds and then cannot be printed, so a bound checked
+            # after the fact would still have done the work and still have
+            # nothing to show for it.
+            estimate = _power_digit_estimate(base, power)
+            if estimate > MAX_RESULT_DIGITS:
+                raise ResourceBound(
+                    f"that power is about {int(estimate):,} digits wide; this "
+                    f"evaluator is bounded at {MAX_RESULT_DIGITS:,} digits, "
+                    f"which is the widest integer this interpreter will "
+                    f"render. Nothing was computed and nothing is claimed."
+                )
+            return base ** power
         raise EvalError(f"no exact rule for operator {op!r}")
     if kind == "rel":
         raise EvalError(

@@ -1454,15 +1454,32 @@ def _route_evaluate(text: str) -> dict | None:
     Only wins when it can actually produce a value: an expression with an
     unbound variable, or no expression at all, falls through to the rest of
     the chain rather than refusing on everyone else's behalf.
+
+    **A registered bound is the one exception (E0e, ROADMAP-v0.20 §4c).**
+    `ResourceBound` means this route READ the line, understood it, and
+    refuses it — so it returns a `refused` verdict naming the bound instead
+    of `None`. Falling through would send `2^200000` to the dispatcher and
+    end in a generic abstention, which tells the person the corpus does not
+    ground their line when the truth is that this evaluator declines to
+    render a number that wide.
     """
 
-    from evaluate import EvalError, evaluate, verify  # noqa: PLC0415
+    from evaluate import EvalError, ResourceBound, evaluate, verify  # noqa: PLC0415
     from evaluate import render as render_eval  # noqa: PLC0415
+
+    def _refusal(exc: Exception) -> dict:
+        return {
+            "route": "evaluate",
+            "status": "refused",
+            "detail": str(exc),
+        }
 
     # A typed relation ("does 2+2=4?") is a question with an exact answer,
     # so it is decided before falling back to computing a value.
     try:
         checked = verify(text)
+    except ResourceBound as exc:
+        return _refusal(exc)
     except EvalError:
         pass
     else:
@@ -1474,6 +1491,8 @@ def _route_evaluate(text: str) -> dict | None:
         }
     try:
         result = evaluate(text)
+    except ResourceBound as exc:
+        return _refusal(exc)
     except EvalError:
         return None
     return {

@@ -17,7 +17,9 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 
 from evaluate import (  # noqa: E402
+    MAX_RESULT_DIGITS,
     EvalError,
+    ResourceBound,
     evaluate,
     find_bindings,
     find_expression,
@@ -83,6 +85,72 @@ class ComputationIsNotALookup(unittest.TestCase):
         result = evaluate("x = 7, x ^ 2")
         self.assertEqual(result.value, Fraction(49))
         self.assertEqual(result.bindings, {"x": Fraction(7)})
+
+
+class TheExponentBoundRefusesByName(unittest.TestCase):
+    """E0e (ROADMAP-v0.20 §4c): a bound that refuses, not an exception that escapes.
+
+    The defect this pins was specific and easy to misread as a hang: the
+    computation SUCCEEDED and the printing raised an uncaught `ValueError`,
+    because CPython caps `int` -> `str` at 4,300 digits. A served path whose
+    refusal is an uncaught exception is not refusing.
+    """
+
+    def test_a_power_too_wide_to_render_refuses_by_name(self) -> None:
+        with self.assertRaises(ResourceBound) as caught:
+            evaluate("2 ^ 20000")
+        message = str(caught.exception)
+        self.assertIn("digits", message)
+        self.assertIn(f"{MAX_RESULT_DIGITS:,}", message)
+        self.assertIn("Nothing was computed", message)
+
+    def test_the_refusal_is_a_subclass_so_old_callers_still_catch_it(self):
+        """A caller that only knows `EvalError` must not start crashing."""
+        self.assertTrue(issubclass(ResourceBound, EvalError))
+        with self.assertRaises(EvalError):
+            evaluate("2 ^ 20000")
+
+    def test_it_refuses_before_computing_rather_than_after(self) -> None:
+        """`2^200000` computes in microseconds; the cost is the rendering.
+
+        A bound checked after the fact would still have done the work. This
+        asserts the refusal is fast enough that no such power was built.
+        """
+        import time
+
+        started = time.perf_counter()
+        with self.assertRaises(ResourceBound):
+            evaluate("2 ^ 2000000")
+        self.assertLess(time.perf_counter() - started, 0.5)
+
+    def test_a_wide_but_renderable_power_is_still_served_exactly(self) -> None:
+        """The bound is printability, not a dislike of long answers.
+
+        BACKLOG cites `(100+1)^1000` as evidence of unboundedness, not as a
+        defect: it is 2,005 digits, it renders, and its value is right.
+        Refusing it would be declining arithmetic this evaluator can do.
+        """
+        result = evaluate("(100+1)^1000")
+        rendered = result.formatted()
+        self.assertEqual(len(rendered.lstrip("-")), 2005)
+        self.assertLess(len(rendered.lstrip("-")), MAX_RESULT_DIGITS)
+        self.assertEqual(result.value, Fraction(101) ** 1000)
+
+    def test_everything_the_bound_admits_can_actually_be_rendered(self) -> None:
+        """The property the bound exists to guarantee, asserted directly."""
+        for expression in ("2 ^ 100", "3 ^ 5", "(100+1)^1000", "10 ^ 4000"):
+            with self.subTest(expression=expression):
+                result = evaluate(expression)
+                self.assertIsInstance(result.formatted(), str)
+
+    def test_a_negative_exponent_is_bounded_on_the_same_estimate(self) -> None:
+        with self.assertRaises(ResourceBound):
+            evaluate("2 ^ (0 - 20000)")
+
+    def test_small_bases_do_not_trip_the_bound(self) -> None:
+        """1 and 0 stay cheap at any exponent; the estimate must know that."""
+        self.assertEqual(evaluate("1 ^ 100000").value, Fraction(1))
+        self.assertEqual(evaluate("0 ^ 100000").value, Fraction(0))
 
 
 if __name__ == "__main__":

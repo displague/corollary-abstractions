@@ -1,0 +1,87 @@
+{
+  "a_divergence_from_the_brief_stated_rather_than_quietly_taken": {
+    "if_a_shorter_answer_ceiling_is_wanted": "It is a separate, registerable decision — a display policy, not a resource bound — and should be argued on its own terms rather than folded into E0e.",
+    "the_brief_expected": "ROADMAP-v0.20 §4c's landing note expected BOTH `(100+1)^1000` and the 4,300-digit print-crash case to refuse cleanly.",
+    "what_this_implementation_does": "`(100+1)^1000` is 2,005 digits — comfortably UNDER the bound — so it is still SERVED, exactly and correctly. Only the print-crash case refuses.",
+    "why": [
+      "BACKLOG cites `(100+1)^1000` as EVIDENCE OF UNBOUNDEDNESS (2,005 digits in under a millisecond), not as a defect in itself. It computes, it prints, and its value is right.",
+      "The defect §4c names is precise: 'the computation succeeds and the PRINTING raises an uncaught ValueError'. A bound that refused a 2,005-digit answer would not be fixing that; it would be declining to do exact arithmetic the evaluator can do and render.",
+      "Any bound BELOW CPython's 4,300-digit int->str limit is a policy choice about how long an answer may be, which is a different decision needing its own justification. Any bound ABOVE it still crashes. 4,300 is the only value at which 'accepted' and 'renderable' are the same set."
+    ]
+  },
+  "design": "docs/DESIGN-statements-that-run.md E0e",
+  "external_verifier_timeouts": {
+    "grep_c_timeout_after": 4,
+    "now": {
+      "PROVER_TIMEOUT_SECONDS": 600,
+      "TESTS_TIMEOUT_SECONDS": 300,
+      "TYPECHECK_TIMEOUT_SECONDS": 300,
+      "VERSION_TIMEOUT_SECONDS": 60
+    },
+    "why": "BACKLOG: `grep -c timeout` over scripts/external_verifier.py returned 0, across four subprocess.run calls, under the cost argument the external-verifier lane rests on."
+  },
+  "measured": {
+    "after": {
+      "(100+1)^1000": {
+        "digits": 2005,
+        "ms": 0.668,
+        "outcome": "served",
+        "route": "evaluate",
+        "route_detail": "(100+1)^1000 = 2095915563781366006444124578894489077192494600021917078938624236405095656851873195574041580292587480557489055272162694277195549947275581027535498",
+        "status": "solved"
+      },
+      "2^100": {
+        "digits": 31,
+        "ms": 0.018,
+        "outcome": "served",
+        "route": "evaluate",
+        "route_detail": "2^100 = 1267650600228229401496703205376",
+        "status": "solved"
+      },
+      "2^20000": {
+        "detail": "that power is about 12,042 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was computed and nothing is claimed.",
+        "ms": 0.045,
+        "outcome": "refused_by_name",
+        "refusal": "ResourceBound",
+        "route": "evaluate",
+        "route_detail": "that power is about 12,042 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was compute",
+        "status": "refused"
+      },
+      "2^200000": {
+        "detail": "that power is about 120,412 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was computed and nothing is claimed.",
+        "ms": 0.019,
+        "outcome": "refused_by_name",
+        "refusal": "ResourceBound",
+        "route": "evaluate",
+        "route_detail": "that power is about 120,412 digits wide; this evaluator is bounded at 4,300 digits, which is the widest integer this interpreter will render. Nothing was comput",
+        "status": "refused"
+      },
+      "3^5": {
+        "digits": 3,
+        "ms": 0.016,
+        "outcome": "served",
+        "route": "evaluate",
+        "route_detail": "3^5 = 243",
+        "status": "solved"
+      }
+    },
+    "before": null
+  },
+  "non_claims": [
+    "Not a security fix. Loopback-only, single user; ROADMAP-v0.20 §4 says so in as many words."
+  ],
+  "roadmap": "docs/ROADMAP-v0.20.md §4c",
+  "run_id": "exponent_bound.v1",
+  "the_bound": {
+    "checked_before_computing": "The width is estimated from bit lengths and refused BEFORE the power is evaluated; `2^200000` computes in microseconds and then cannot be printed, so a bound checked afterwards would still have done the work.",
+    "constant": "evaluate.MAX_RESULT_DIGITS",
+    "refusal_type": "evaluate.ResourceBound, a distinct subclass of EvalError",
+    "value": 4300,
+    "why_a_distinct_type": "A plain EvalError means the route cannot READ the line, and the router returns None so it falls through the chain. ResourceBound means the route read it, understood it, and refuses — so `_route_evaluate` returns a `refused` verdict naming the bound instead of letting the line end in a generic dispatcher abstention.",
+    "why_this_number": "It is CPython's own int->str limit (sys.get_int_max_str_digits(), 4,300 by default), so the accept/refuse boundary and the can-it-be-rendered boundary are the same number by construction rather than by coincidence. A registered constant rather than a live read, so the refusal reproduces on a process that moved the cap."
+  },
+  "what_this_is": [
+    "The before/after §4c owes. `scripts/evaluate.py` computed `base ** int(exponent)` with no bound, reachable from the typed line and over HTTP.",
+    "The failure mode was not a hang and not a megabyte of digits: the COMPUTATION succeeded and the PRINTING raised an uncaught ValueError, because CPython caps int->str at 4,300 digits. A served path whose refusal is an uncaught exception is not refusing."
+  ]
+}
