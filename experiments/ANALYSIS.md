@@ -5300,3 +5300,97 @@ than B5's own gate, which compares two passes *inside* one process: this
 compares across three separate process invocations, on two different days,
 and gets the same file. The reading was never in doubt; the discipline was,
 and "executed once" was the instruction.
+
+## Adversarial review of the v0.20 voice lane — 2026-08-25
+
+**No Critical.** The review independently re-derived the C-V4 id pins, the
+4,191-statement residue set, the B0d seed pin, the lexicon rows and the
+85-unchanged claim, and all were exact. What it found instead was a class of
+defect worth naming: **gates that are true in substance but enforced by
+assertions that could not have gone red.** The findings and their disposition
+are below. `experiments/foreign_voice_rate2.json` was **not edited** — its
+byte-identity is the reproduction proof — so everything here is either a
+prospective code fix or a dated note.
+
+### The committed artifact contains stale sentence strings beside correct numbers
+
+`foreign_voice_rate2.json`'s **B3 gate sentence** reads *"the five buckets
+close at 10,605 exactly"*, and its **G4 reading** reads *"B3 still 6,414 +
+2,313 + 0 + 1,706 + 172 = 10,605"*. **Both strings are false about the tree
+the run measured.** They are design prose from before `b1c9440` widened the
+tokenizer.
+
+**The measured fields beside them are correct.** B3 reports
+`0 + 2,313 + 0 + 1,706 + 172 = 4,191` with `must_equal: 4191` and
+`closes_exactly: true`. A reader comparing the sentence to the numbers sees
+the numbers win, and the numbers are what the gate was adjudicated on. The
+strings are not edited because the file's byte-identity is load-bearing; the
+code string is fixed for future runs, and prereg2's copy is corrected by a
+dated block.
+
+### C-G1's denominator is a choice, and the alternative number
+
+C-G1 removed the **8 statements that no longer admit** the mutation from both
+sides, giving **42/42 = 1.00** against a 0.95 floor. **Keeping them in gives
+42/50 = 0.84 — below the floor.** That is ship-versus-withhold, so the
+treatment is registered in prereg2 as the choice it was, with obligations:
+
+- **No release sentence may say "all ten detected."** The ten named cases are
+  **7 detected and 3 no-longer-admit**, which are different facts.
+- **C-G1's 1.00 is not the same quantity as v0.19's 0.80.** C-G1 measures the
+  **term path** — delete a pair from the canonical token stream, elaborate.
+  v0.19's 0.80 measured the **surface path** — mutate the English, invert,
+  elaborate. The commensurable surface-path repair number is **C-V4-prime's
+  `drop_group`: 42 of 42 on the raised 0.95 floor**, and that is the number
+  release language should use to say the hole closed.
+
+### A cost of canonical grouping, in C-V1's own numbers
+
+C-V1's skeleton rate is 0.0 in both runs, but **what the misses are made of
+shifted**: v0.19 had **983 elaborating to a different term and 1,330 failing
+to elaborate** (57.5% in the failure bucket); v0.20 has **517 and 1,796**
+(**77.6%**). Canonical rendering removes grouping words, so a scrambled
+surface has less structure left to survive the trip back, and more of it now
+dies at the parser instead of reaching a comparison. The artifact's own
+caution names that bucket as the one where the gate never got to compare two
+terms — so **the fraction of C-V1 that is actually testing the gate went
+down**, from 42.5% of misses to 22.4%. The control still holds (517 genuine
+different-term detections is not a small number), but it is doing less work
+than it was, and that is a cost of the repair rather than a free improvement.
+
+### C-V2's transliterable arm is now empty
+
+`over_transliterable` reports **0 statements, elaboration 0.0, identity 0.0**
+— not a failure, an empty set: the tokenizer widening absorbed those 6,414
+into the natively parseable half. **C-V2's floor is met on the covered arm
+alone (1.0 over 2,313).** The "easy half reported beside the residue" clause
+of the design is now vacuous, and a reader must not read `0.0` there as a
+measurement.
+
+### Two smaller records
+
+- **G7 is OWED, not cleared.** The arming artifact adjudicates it `NOT THIS
+  LANE`, which is accurate — nothing in this lane touches `answer.py` or
+  `serve_chat.py` — but a consumer must not read that as satisfied. It
+  belongs to ROADMAP-v0.20 §4d.
+- **A missed prediction.** DESIGN-voice-completion §7's C-G1 preview
+  predicted **2** no-longer-admitting over the re-derived fifty. Measured:
+  **8**. Direction right, magnitude four times off. The preview was labelled a
+  preview and its proxy was *"its own canonical form, not the oracle's
+  serialized `Expr`"*, which is exactly the gap that produces this — but a
+  missed prediction is recorded, not rounded off.
+
+### REVIEW-NOTES — adjudicated and deliberately not fixed
+
+- **M6** — G2's tests exercise the wiring rather than the grammar. Accepted:
+  **G1 is the independent grammar check** (2,313/2,313 against the pinned
+  binary), and G2's job is that the seal and the renderer agree. Noted so the
+  division of labour is explicit rather than assumed.
+- **M10** — an FVERR counts as "detected" in C-V4-prime. Inherited from
+  v0.19's C-V4 and published there and here as its own sub-count;
+  `shift_group`'s 1.00 is 18 digest-moved and 24 FVERR, and the artifact says
+  so.
+- **M11** — already honestly reported in the commit record.
+- **M3, M7, M8, L1, L3, L6, L8** — reviewed, judged not worth a commit at
+  this stage. Recorded here so the record shows they were adjudicated rather
+  than missed.
