@@ -6,20 +6,25 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.19.0](docs/RELEASE-v0.19.0.md) — two glyph
+interface. Latest release: [v0.20.0](docs/RELEASE-v0.20.0.md) — **two
+registered runs, opposite verdicts, both published.** The foreign-dialect
+renderer that v0.19 withheld now **clears and is served**: the grammar emits
+a **canonical bracketing**, so the blind spot that voided last cycle is gone
+rather than bounded — **5,228 of 5,228** grouping-pair deletions detected with
+**zero blind**, and the control that had read 0.80 reads **42 of 42 on a floor
+raised to 0.95**. In the same cycle a brand-new capability — statements that
+compile into something you can **run** against your own numbers, 8,017 of
+them — **voided on its own controls** and ships with the void published on
+every answer it gives. **No conformance rate exists anywhere**, because a
+control whose floor no correct instrument could meet took it away. See [the
+floor no instrument could
+meet](docs/blog/the-floor-no-instrument-could-meet.md).
+[v0.19.0](docs/RELEASE-v0.19.0.md) is the floor under it: two glyph
 equivalences took the **native voice from 17.0% to 67.2% of the corpus**
-(2,172 → **8,586 of 12,777** parseable; 6,414 gained, all 6,414
-round-tripping exactly, and the served diff proven additive-only: 0
-changed, 0 lost). The same cycle's foreign-dialect renderer scored
-**2,313 of 2,313** through an external Lean checker and is **not served**,
-because the control built to bound that score **voided** it —
-`drop_group` 0.80 against a 0.90 floor frozen beforehand, which is the
-measured fact that deleting a redundant bracket changes the sentence and
-not the term. The **register** — a frozen, counted inventory of the 1,878
-statements the system still cannot say — is what ships instead. See [the
-void that measured what the gate could not
-see](docs/blog/the-void-that-measured-what-the-gate-could-not-see.md).
-[v0.18.0](docs/RELEASE-v0.18.0.md) is the floor under it: sentences no
+(2,172 → **8,586 of 12,777** parseable, additive-only: 0 changed, 0 lost),
+and the **register** — a frozen, counted inventory of the 1,878 statements
+the system still cannot say — ships beside the voice rather than instead of
+it. [v0.18.0](docs/RELEASE-v0.18.0.md) is the floor under *that*: sentences no
 person wrote, each gated by re-parsing back to the exact term it renders.
 [v0.17.0](docs/RELEASE-v0.17.0.md) still stands behind it: served over an
 OpenAI-compatible endpoint, 49/49 correct with receipts at a median 3,451
@@ -97,6 +102,56 @@ $ PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "1 + 1 = 2"
   "surface": "two equals one plus one",
   "round_trip": "EXACT",
 ```
+
+**Since v0.20 there is a second `in words` line, for statements the native
+grammar cannot read at all.** Those come from an external prover's dialect,
+and they are rendered by borrowing — then checked by handing the English back
+to the **external proof assistant that produced the original** and requiring
+it to elaborate to the identical term:
+
+```
+$ PYTHONIOENCODING=utf-8 python scripts/answer.py leanworkbook.skel.lean_workbook_7992
+formally   : 2*x+1 >= 0 ↔ x >= -1/2
+in words   : for every variable zero of type rational it holds that two times
+             variable zero plus one at least equals zero exactly when variable
+             zero at least equals minus one divided by two
+```
+
+That line **arms itself from evidence**: `scripts/answer.py` reads the
+registered run and emits nothing unless five named controls cleared. Voided or
+absent artifact, no line — and the capability sheet says so with its reason.
+It is served today because the run reads `FIRES`; you can check that yourself
+in one command, and the answer is the same one the renderer asked:
+
+```
+$ PYTHONIOENCODING=utf-8 python -c "import sys; sys.path.insert(0,'scripts'); \
+    import foreign_voice_arming as a; s=a.arming_state('.'); \
+    print(s['armed'], s['verdict'], s['non_blocking_voids'])"
+True FIRES ['C-V3′']
+```
+
+**And since v0.20 a statement can be run rather than only looked up.** `conform`
+compiles a statement into a program over its declared domain and searches for a
+counterexample. It publishes what it can and cannot certify, in the answer:
+
+```
+$ echo "conform leanworkbook.skel.lean_workbook_10012" | PYTHONIOENCODING=utf-8 python scripts/harness.py
+  statement  : leanworkbook.skel.lean_workbook_10012
+  verdict    : NO_COUNTEREXAMPLE_FOUND
+  domain     : Nat, / is truncating, - is truncated-at-zero
+  certifies  : tested at 37 admitted points and not falsified; this certifies
+               nothing universally and is not evidence the statement is true
+  points     : 37 admitted of 1000 sampled (159 guard-rejected, 804 outside the
+               carrier, 0 errored)
+  run void   : VOID — C-E1 missed its floor; every NO_COUNTEREXAMPLE_FOUND is void
+```
+
+The last line is not a bug report; it is the registered run's own verdict,
+read off the artifact on every call. A ground statement decides outright —
+`conform leanworkbook.ground.lean_workbook_plus_16115` returns `DECIDED_FALSE`
+with the two sides printed. **There is no conformance rate**, here or
+anywhere: the control that would have licensed one voided, and the reason is
+worth reading, because it is a floor no correct instrument could have met.
 
 Ask it something the corpus does not contain and it says so: on 1,000
 sentences sampled from a dictionary the shipping resolver wrongly claims 3.0%
@@ -273,6 +328,10 @@ the graded residual.
 | A gate's blind spot can be measured, and the measurement can void the gate | rendering the foreign dialect scored 2,313/2,313 identity through a pinned external checker, and the near-miss control voided it at `drop_group` 0.80 against a 0.90 floor — deleting a semantically redundant bracket changes the sentence and not the term. The line is not served; the excluded `drop_binder` class measures 0.18, which is the blind spot's published width |
 | A park with numbers is what discharging an instruction looks like | a maintainer-seeded design was adopted bounded, built, and measured against three of its own pre-registered baselines: retrieval NOT BEATEN on both legs (0.3256/0.2059 against the keyword channel's 0.9302/0.0294, same rows same run), term layer NOT BEATEN (6.91× vs 8.44×), and the one win conceded in advance as a restatement. Unified vs two indexes with one tag bit: 0.9981 — two objects wearing one id space |
 | This graph's authors never forked a convention | a census of 2,493 co-present differing pairs finds 125 convention-pair candidates, every one notational and zero mathematical; 0 have both members in a hand-authored corpus, and sign conventions, the 0-in-ℕ boundary and 2π placement return 0/0/0 with detectors proven live by injection |
+| A blind spot can be removed from the grammar rather than bounded | canonical bracketing means a rendered bracket the mathematics does not need is never emitted, so deleting one must change the term: **5,228 of 5,228** grouping-pair deletions detected across every canonical surface, zero blind. The control that read 0.80 last cycle reads **42 of 42 on a floor raised to 0.95**, the foreign `in words` line is served, and the price is published too — the share of the skeleton control's misses that exercise the gate fell 42.5% → 22.4% |
+| A restored clause moves the denominator, not the numerator | the re-specified control verified each mutation changed the term *before* rendering it, and discarded five: `drop_ascription` reads **45 detected of 45 scored**, falsifying its own pre-registered 45-of-50 prediction. Last cycle's 0.90 was not five missed near-misses — it was five mutations that were never mutations |
+| A control's floor can be unmeetable by a correct instrument | the conformance run's perturbation control froze a 99% flip floor and measured **0.650**, voiding every `NO_COUNTEREXAMPLE_FOUND` in the run. Part is the floor — mutations that cannot be made false over the declared `Nat` carrier — and part is a real sampler miss in the same published list, and **the run has no instrument that partitions them**. 8,017 statements compile and the route serves with the void on every answer; no conformance rate exists anywhere |
+| A reader that scores half as well on nonsense is not reading | a pinned local model read served sentences blind and reconstructed the term at 0.8417 — and scored 0.5000 on scrambled surfaces, ratio 0.594 against a 0.5 voiding threshold frozen in advance. The machine-reader claim is not made; the human-reader claim has never been attempted, because a one-maintainer repository has no non-maintainer to mark a sheet blind |
 
 Two retractions are part of the record (a too-easy test caught by external
 audit; a mid-run misreading) — see ANALYSIS.md. House rule: every split
@@ -444,6 +503,15 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # incl. its five pre-green runs). The 5 skips: 3 standing environment
 # skips + test_transliteration's 2 slow-regeneration cases, hand-run
 # green (44/44, 180s) before the gate.
+# [SUITE-GATE-V20] v0.20.0's full-suite count, timing and skip list land
+# here when the gate runs on the frozen tip; receipts to
+# reports/test_gate_v020/. This cycle adds seven new modules
+# (test_conform, test_conform_prereg, test_conform_register,
+# test_cv4_replay, test_grouping_agreement, test_grouping_canonical,
+# test_machine_reader) and grows thirteen existing ones. Rotation-time
+# targeted runs on the merged tree: 386 green across the nine
+# conform-adjacent modules, 512 green across the fourteen batch-adjacent
+# ones.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
