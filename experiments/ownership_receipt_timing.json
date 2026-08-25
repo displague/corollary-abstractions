@@ -206,6 +206,38 @@
       "speedup": 1.023
     }
   },
+  "review_notes_2026_08_25": {
+    "handled_elsewhere": [
+      {
+        "decision": "deferred to integration by the coordinator",
+        "finding": "M6 — a successor amendment for the parser row in the voice lane's prereg2",
+        "why": "It is a MERGE-time fact: it depends on both branches being in one tree, and writing it on this branch would record a state that does not exist yet."
+      },
+      {
+        "decision": "flagged for the voice lane",
+        "finding": "4c drifted a second pin in foreign_voice_prereg.json (scripts/external_verifier.py, via its four timeouts)",
+        "why": "The v0.19 foreign run is already closed and will not be re-executed, so nothing is unsound today. The v0.20 foreign preregistration should record the retirement rather than inherit an undeclared drift."
+      }
+    ],
+    "recorded_not_fixed": [
+      {
+        "decision": "not fixed",
+        "finding": "L2 — date form",
+        "why": "Cosmetic. The dated notes across this batch are readable and consistent with the surrounding files; changing the form would touch more lines than it clarifies."
+      },
+      {
+        "decision": "not fixed",
+        "finding": "L3 — shallow copy",
+        "why": "No caller mutates the returned structure, so the shallow copy is not reachable as a defect today. Naming it here is cheaper and more honest than a defensive deep copy that would imply a hazard the code does not have."
+      },
+      {
+        "decision": "verified free — no change needed",
+        "finding": "L4",
+        "why": "The review's own verdict; nothing to carry."
+      }
+    ],
+    "what_this_is": "The adversarial review of feature/v020-batch returned 1 Critical, 3 High and 6 Medium, all fixed in dated commits on the branch, plus three Low findings recorded here rather than fixed. Recorded, because a finding dropped without a written decision is the drift this repository keeps catching in itself."
+  },
   "roadmap": "docs/ROADMAP-v0.20.md",
   "run_id": "ownership.receipt.timing.v1",
   "what_this_is": [

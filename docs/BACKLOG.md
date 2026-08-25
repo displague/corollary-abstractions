@@ -39,6 +39,45 @@ or commit history. Each item names the evidence that motivated it.
   numeral domain (`|n| < 10^15`) is the behaviour the evaluate path lacks;
   the repository already knows what the right answer looks like.
 
+  > **LANDED 2026-08-24 (§4b), with two corrections to this entry's own
+  > numbers.** `match_signatures.Parser` stores INTEGER literals exactly;
+  > the three served nodes now print their exact digits
+  > (`experiments/exact_literals_served_diff.json`: 0 answer lines moved of
+  > 14,830, 3 evaluate-route renderings moved, 0 skeletons moved of 25,554
+  > terms).
+  >
+  > **Correction 1 — the three nodes are not these three nodes.**
+  > `leanworkbook.skel.lean_workbook_50397` cannot be repaired by a parser
+  > change at all: its `inf` is frozen into the committed
+  > `anonymized_template` by `scripts/seed_lean_workbook.py` at seed time,
+  > and its `canonical_ascii` does not tokenize (it carries ` : Z)`), so the
+  > parser never sees it. **FILED, still open: that node needs a seed
+  > regeneration** under AGENTS.md's seeds-are-the-source-of-truth rule —
+  > edit `scripts/seed_lean_workbook.py` and regenerate, with
+  > `check_regeneration.py`, `validate_nodes.py`, `match_signatures.py`,
+  > `decompose.py`, `specialize.py` behind it. It was deliberately NOT
+  > smuggled into a parser commit. In its place the served diff surfaced
+  > `goedelpset.skel.goedel_pset_789185`, whose served `right` printed as a
+  > rounded `1e64`. Three served nodes repaired; not the same three.
+  >
+  > **Correction 2 — decimals stay `float`, and the reason is measured.**
+  > Making them `Fraction` was tried first and the served-line diff refused
+  > it: **199 statements LOST their `in words` line**, because
+  > `numeral_words.number_to_words` accepts int and float and rejects a
+  > Fraction as "not a number". Widening that retires the pinned numeral
+  > pair and moves R2's registered numeral domain — a separate decision
+  > needing its own registration. **So `float("0.1")` is still not exactly
+  > one tenth: an evaluator that must decide `0.1 + 0.2 = 0.3` needs the
+  > numeral domain widened first. Filed, not fixed.**
+  >
+  > **Follow-on (H1, 2026-08-25):** exact ints put an uncaught
+  > `OverflowError` on a served route — `f"{value:g}"` raises above a
+  > double's range where the float path had already saturated to `inf`.
+  > `match_signatures.format_num` guards the three key builders and emits
+  > what the float path emitted. A node keyed `inf` still has an
+  > unrecoverable literal IN THE KEY; skeletons are a structural index, and
+  > widening them is a corpus-wide change with its own seal.
+
   **Mitigation, stated so the severity is not overread:** this is a
   **display-only** defect — the verdicts are right, no `verified_by` link
   rests on a printed value, and the server is loopback-only and
@@ -70,6 +109,35 @@ or commit history. Each item names the evidence that motivated it.
   passes a `timeout` — `grep -c timeout` over that file returns **0**. That
   is the file the design cites for its external-verifier lane, so an
   unbounded child process sits under the cost argument that lane rests on.
+
+  > **LANDED 2026-08-24 (§4c), corrected 2026-08-25 after adversarial
+  > review.** `evaluate.MAX_RESULT_DIGITS` is 4,300 — CPython's own
+  > `sys.get_int_max_str_digits()` — and an oversized result raises
+  > `evaluate.ResourceBound`, a named refusal the router serves as a
+  > `refused` verdict rather than letting it fall through to a dispatcher
+  > abstention.
+  >
+  > **The first fix did not hold, and the review found it.** §4c bounded the
+  > `^` NODE, which is escapable in one line: `(10 ^ 4000) * (10 ^ 4000)`
+  > builds two admissible powers and multiplies them, so nothing exceeded a
+  > per-node bound and the PRINT raised the same uncaught `ValueError`. The
+  > bound now sits at the **result-formatting boundary**
+  > (`Evaluation.formatted`, `Verification._fmt`), which every served value
+  > passes through by construction; the per-node check is kept so
+  > `2^200000` still refuses before the power is built.
+  > `experiments/exponent_bound.json` (writer:
+  > `scripts/measure_exponent_bound.py`) records both sides EXECUTED:
+  > **3 of 6 cases crashed while printing before, 0 after.**
+  >
+  > `(100+1)^1000` deliberately still SERVES: 2,005 digits, renders, value
+  > right. This entry cites it as evidence of unboundedness, not as a
+  > defect, and a bound that refused it would decline arithmetic the
+  > evaluator can do.
+  >
+  > The four `external_verifier.py` subprocess calls carry named timeouts
+  > (600/60/300/300 s); `grep -c timeout` returns 4. **Side effect worth
+  > naming: that moved a digest pinned by `foreign_voice_prereg.json`, so
+  > the v0.20 foreign preregistration should record it.**
 
   **Mitigation:** loopback-only, single user, and nothing untrusted reaches
   either path today — which is exactly why HOSTILE DICTATION is parked with
@@ -162,6 +230,47 @@ or commit history. Each item names the evidence that motivated it.
   precedent. A fix branch is in flight and merges before the gate. The rule
   that survives for any future withheld lane: **a rate is never published
   from a voided run; the void is.**
+
+
+  > **LANDED — twice, and the second time is the interesting one.** v0.19
+  > added the row `served: false` quoting the C-V4 void (fix/v019-sheet-row).
+  > **ROADMAP-v0.20 §4d then found three defects in that row**
+  > (DESIGN-voice-completion Correction 7, all confirmed in the tree): it had
+  > no code path that set `served: true` AT ALL; it indexed
+  > `c_v4["voided_classes"][0]` on a list that is empty when nothing voided,
+  > and caught the `IndexError` — so an all-clear run would have been
+  > published with the words "its record could not be read"; and it keyed off
+  > that control's internal detail rather than the run's own verdict. None of
+  > it was tested.
+  >
+  > 4d rewrote the row around `scripts/foreign_voice_arming.py`, the SAME
+  > read `answer.render` uses, so the row and the line cannot disagree about
+  > whether a surface exists. **Amended 2026-08-25:** the first arming rule
+  > was `overall == "HOLDS" and not voided`, which returns False against the
+  > real artifact — the run reads `FIRES` with C-V3′ voided deliberately and
+  > non-blockingly by §8 — so the voice would have stayed dark forever,
+  > reading a published non-claim as a failure. The gate is now the five
+  > cycle-stopping controls (C-G1, C-V4′, B1, B3, B5) plus `FIRES`, and a
+  > non-blocking void is published beside the armed surface rather than
+  > counted against it. C-V3′ is published as a VOID and never as a number.
+  > Evidence: `experiments/foreign_voice_wiring_served_diff.json` — 0 answer
+  > lines moved of 14,830, the absent/absent proof the design asks for.
+
+- **`_route_conform` is registered and refusing, and item 1 must not
+  reopen the seal to use it (LANDED 2026-08-24, ROADMAP-v0.20 §4e).**
+  DESIGN-statements-that-run §5's wiring step landed with §4's batched
+  retirement so item 1's slice never has to retouch `harness.py`. A
+  `conform <statement-id> <bindings>` line is claimed by its own route and
+  refused with `missing_capability: tool.conform` until
+  `scripts/conform.py` exists — which is a different statement from the
+  dispatcher's "the corpus does not ground this", and only one of them is
+  true. Measured both sides in
+  `experiments/conform_route_before_after.json`. The stub deliberately
+  does NOT sketch the conformance record: the design spends its length
+  refusing the universal reading such a verdict invites, and a stub that
+  guessed at the shape would be the first place that caution got lost.
+  **Open until `scripts/conform.py` lands and the sheet row flips to
+  served.**
 
 - **`probe_convention_pairs.py` has no argparse and writes on every
   invocation (2026-08-24).** `main()` takes no argv and calls
@@ -369,9 +478,9 @@ or commit history. Each item names the evidence that motivated it.
   `ownership.lookup`, renders it, and returns only the rendered string — so
   `serve_chat._ownership_receipt` must run the identical lookup a second
   time to cite the host set, roughly doubling the cost of the most
-  expensive route on the surface (~3.4 s for `owns x ^ 2` — **per a source
-  comment in `serve_chat.py`, not a committed timing artifact**; if this
-  entry is ever used to justify effort, measure it first). The skin
+  expensive route on the surface (~3.4 s for `owns x ^ 2` — **measured
+  2026-08-24, see the LANDED note below; this sentence used to say "not a
+  committed timing artifact" and that is no longer true**). The skin
   mitigates with an
   `lru_cache` on the pure function rather than monkeypatching the engine,
   which would be the renderer editing the record. **Why the real fix was
@@ -407,6 +516,30 @@ or commit history. Each item names the evidence that motivated it.
   **SCHEDULED**, not closed — the land-or-close clause is discharged by a
   landing plan, written up as **[ROADMAP-v0.20](ROADMAP-v0.20.md) §4** and
   carried in that roadmap's release gate.
+
+  > **LANDED 2026-08-24 (ROADMAP-v0.20 §4a, `feature/v020-batch`), and the
+  > three-cycle claim is now measured.** `_route_ownership` returns its
+  > receipt in the verdict dict, matching `_route_twin` and
+  > `_route_reachable`; the skin's `lru_cache` is gone. The artifact is
+  > `experiments/ownership_receipt_timing.json`, written by
+  > `scripts/measure_ownership_receipt.py`, and it carries **two** numbers
+  > because the obvious measurement measures the wrong thing:
+  >
+  > - **distinct queries — the number the entry was about: 7208.8 ms ->
+  >   3901.5 ms (1.85x, 3307 ms removed per turn).** Ten different `owns`
+  >   lines, so the memo can never hit; this isolates the duplicate lookup.
+  > - **the same query ten times: 3531.2 ms -> 3450.6 ms (1.02x).** Run as
+  >   §4a literally specified, this warms the very `lru_cache` the fix
+  >   removes, so nine of ten reps never paid the second lookup even before
+  >   the fix. Kept, because it is a true statement about the shipped
+  >   server — and reported beside the other, because quoting either alone
+  >   misdescribes the fix.
+  >
+  > So the `~3.4 s` was roughly right about the SINGLE lookup (3.53 s
+  > measured) and the cost this entry was really about — the duplicate —
+  > was 3.31 s on top of it. Answer bytes and receipt contents are
+  > identical on both sides, which is the part that would have made a
+  > faster number worthless. Seal paid in §4's one batched retirement.
 
   The plan, so this entry and that one cannot drift apart: have
   `_route_ownership` return the answer object (or its host set) in the

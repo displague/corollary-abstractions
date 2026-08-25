@@ -4,20 +4,30 @@
   "in_words_lines_present": {
     "after": 9721,
     "before": 9721,
-    "note": "v0.18's realizer line; unchanged by 4d"
+    "note": "v0.18's realizer line. 4d adds a SECOND voice under the same label, tried only where the committed realizer produced nothing, so while the surface is dark this count is unchanged by construction."
   },
   "moved_statement_ids": [],
+  "regenerate_with": "python scripts/foreign_voice_wiring_served_diff.py --before main",
   "roadmap": "docs/ROADMAP-v0.20.md §4d",
-  "run_id": "foreign_voice_wiring.served_diff.v1",
+  "run_id": "foreign_voice_wiring.served_diff.v2",
   "sides": {
-    "after": "the working tree, foreign wiring present and DARK",
-    "before": "HEAD (4c), no foreign wiring present"
+    "after": {
+      "armed": false,
+      "arming_reason": "no registered run at experiments/foreign_voice_rate2.json; the foreign voice stays dark until one lands",
+      "commit": "working tree"
+    },
+    "before": {
+      "armed": false,
+      "arming_reason": "no arming module on this side (ModuleNotFoundError)",
+      "commit": "main"
+    }
   },
   "statements_rendered": 14830,
   "verdict": "AS EXPECTED (no served byte moved)",
   "what_this_is": [
     "The absent/absent half of 4d's evidence obligation, stated precisely by the design because it is unusual: the foreign `in words` line shown ABSENT ON BOTH SIDES at batch time, because no run has armed it yet.",
-    "This is NOT a null result. It is the proof that a witnessed-module change moved no served byte — exactly what the seal discipline asks a witnessed change to demonstrate. The present-after-a-clean-run half lands with the run, or never."
+    "NOT a null result. It is the proof that a witnessed-module change moved no served byte — exactly what the seal discipline asks a witnessed change to demonstrate. The present-after-a-clean-run half lands with the run, or never."
   ],
-  "why_absent": "experiments/foreign_voice_rate2.json does not exist, so foreign_voice_arming.arming_state reports armed=false and answer.render emits nothing"
+  "why_absent": "no registered run at experiments/foreign_voice_rate2.json; the foreign voice stays dark until one lands",
+  "writer": "scripts/foreign_voice_wiring_served_diff.py"
 }
