@@ -317,6 +317,183 @@ class TheRunIsDeterministic(unittest.TestCase):
         self.assertEqual(json.dumps(first, sort_keys=True),
                          json.dumps(second, sort_keys=True))
 
+    def test_the_artifact_scale_arm_of_e5_is_recorded_as_unrun(self) -> None:
+        """The test above is ONE STATEMENT; E5 registered two full runs.
+
+        Pinned so the smaller claim can never be mistaken for the larger
+        one. `experiments/conformance_run.json` has no byte-reproduction
+        proof, and the artifact must keep saying so.
+        """
+
+        block = _corrections()["e5_and_c_e1_second_arm_were_never_executed"]
+        self.assertIn("UNRUN", block["status"])
+        self.assertIn("NO byte-reproduction proof", block["e5"])
+        self.assertIn("second", block["c_e1_second_arm"])
+
+
+def _run_artifact() -> dict:
+    return json.loads(
+        (ROOT / "experiments" / "conformance_run.json").read_text(
+            encoding="utf-8"))
+
+
+def _corrections() -> dict:
+    return _run_artifact()["post_run_corrections"]
+
+
+class ThePostRunCorrectionsAreCheckableAgainstTheRowsTheyCorrect(
+        unittest.TestCase):
+    """The dated block in `conformance_run.json`, recomputed rather than read.
+
+    A correction that only asserts something is worth no more than the claim
+    it replaced. Every arithmetic sentence in `post_run_corrections` that can
+    be recomputed from the artifact's own scored rows is recomputed here, so
+    a reader who doubts the block can run this file instead of trusting it.
+
+    The scored rows are NEVER edited by that block or by this test; the
+    review rule for this branch is that the void stands and only the record
+    around it moves.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.artifact = _run_artifact()
+        cls.block = cls.artifact["post_run_corrections"]
+
+    def test_the_block_is_dated_and_says_it_re_ran_nothing(self) -> None:
+        self.assertEqual(self.block["dated"], "2026-08-25")
+        self.assertIn("re-scored", self.block["nothing_below_re_runs_anything"])
+
+    def test_c_e3_attempted_25_sampled_counterexamples_and_not_27(self) -> None:
+        """M5: the 27 counted two ground `DECIDED_FALSE` ids as sampled."""
+        adjudicated = self.artifact["c_e3"]["adjudicated"]
+        ground = {row["statement_id"]
+                  for row in self.artifact["e1"]["decided_false_exhaustively"]}
+        self.assertEqual(len(ground), 15)
+        sampled = [row for row in adjudicated
+                   if row["statement_id"] not in ground]
+        self.assertEqual(len(sampled), 25)
+        # And every one of them is the instrument gap, not an adjudication.
+        self.assertEqual(
+            {row["reason"] for row in sampled},
+            {"decide did not reduce in either direction"},
+        )
+        # Two of the fifteen ground ids carry a `skel.` prefix, which is what
+        # a prefix-based count sorted onto the sampled side.
+        self.assertEqual(
+            sum(1 for sid in ground if ".ground." not in sid), 2)
+
+    def test_twelve_of_fifteen_ground_verdicts_were_confirmed(self) -> None:
+        adjudicated = self.artifact["c_e3"]["adjudicated"]
+        confirmed = [row for row in adjudicated if row.get("available")]
+        self.assertEqual(len(confirmed), 12)
+        self.assertTrue(all(row["agrees"] for row in confirmed))
+        self.assertEqual(self.artifact["e1"]["decided_false"], 15)
+
+    def test_no_scored_counterexample_row_carries_the_provisional_label(self):
+        """H2: the label is real at runtime and absent from the artifact."""
+        rows = self.artifact["e2"]["counterexamples_exhaustively"]
+        self.assertEqual(len(rows), 775)
+        self.assertEqual(
+            [row for row in rows if "correlated_interpretation" in row], [])
+        # Not one appears anywhere under the scored gates either — the only
+        # occurrences in the file are inside `post_run_corrections`, where
+        # this correction names the field it is about.
+        scored = {key: value for key, value in self.artifact.items()
+                  if key != "post_run_corrections"}
+        self.assertNotIn("correlated_interpretation", json.dumps(scored))
+        # ...and it IS emitted where the design says it must be. The
+        # existing runtime assertion is
+        # `TheRecordCountsAreNeverConflated.test_a_nonconformant_verdict
+        # _carries_the_provisional_label`; this half only fixes which of the
+        # two objects carries it, so a reader is not left believing both do.
+        self.assertIn(
+            "WRITER DEFECT",
+            self.block["the_exhaustive_counterexample_rows_carry_no"
+                       "_correlated_interpretation_label"]["what_went_wrong"],
+        )
+
+    def test_the_two_zero_side_figures_are_different_statistics(self) -> None:
+        """M5: 33.2% is `left == "0"`; the falsifying side is 35.9%."""
+        rows = self.artifact["e2"]["counterexamples_exhaustively"]
+        left_zero = sum(1 for r in rows if r["counterexample"]["left"] == "0")
+        self.assertEqual(left_zero, 257)
+        self.assertEqual(round(left_zero / len(rows) * 100, 1), 33.2)
+
+        def falsifying(row):
+            cx = row["counterexample"]
+            if cx["relation"] in {">=", ">"}:
+                return cx["left"]
+            if cx["relation"] in {"<=", "<"}:
+                return cx["right"]
+            return None
+
+        side_zero = sum(1 for r in rows if falsifying(r) == "0")
+        self.assertEqual(side_zero, 278)
+        self.assertEqual(round(side_zero / len(rows) * 100, 1), 35.9)
+
+    def test_the_admitted_count_is_a_break_on_first_count(self) -> None:
+        """H3: `admitted == 1` is the sampler's best case, not its worst."""
+        rows = self.artifact["e2"]["counterexamples_exhaustively"]
+        first_point = sum(1 for r in rows if r["admitted"] == 1)
+        self.assertEqual(first_point, 358)
+        self.assertEqual(round(first_point / len(rows) * 100, 1), 46.2)
+        source = (ROOT / "scripts" / "conform.py").read_text(encoding="utf-8")
+        # The `break` that gives the field this meaning, quoted from source.
+        counterexample_arm = source.split("counterexample = {", 1)[1]
+        self.assertIn("break", counterexample_arm.split("record.update", 1)[0])
+        self.assertIn("BREAKS out of the point loop",
+                      self.block["the_admitted_count_inference_was_inverted"]
+                      ["the_semantics"])
+
+    def test_the_perturbation_table_has_four_rows_of_a_five_class_generator(
+            self) -> None:
+        """M2: `reassociate_an_operator` never fired, and that explains the 0."""
+        per_class = self.artifact["c_e1"]["per_class"]
+        self.assertEqual(len(per_class), 4)
+        self.assertNotIn("reassociate_an_operator", per_class)
+        published = self.block[
+            "c_e1_per_class_is_a_four_row_table_of_a_five_class_generator"][
+                "the_five_class_table_as_published_plus_the_zero_row"]
+        self.assertEqual(len(published), 5)
+        for name, row in per_class.items():
+            for field in ("discarded", "flipped", "generated", "surviving"):
+                self.assertEqual(published[name][field], row[field],
+                                 f"{name}.{field} was republished wrong")
+        self.assertEqual(published["reassociate_an_operator"]["generated"], 0)
+        self.assertEqual(self.artifact["c_e1"]["discarded_as_non_mutations"], 0)
+
+    def test_the_samplable_refused_split_is_derivable_from_the_rows(self) -> None:
+        """M9: 214 = 173 `guard_measure_zero` + 41 all-points-errored."""
+        e2, e3 = self.artifact["e2"], self.artifact["e3"]
+        admitted_nothing = (e2["denominator"]
+                            - e2["statements_admitting_at_least_one_point"])
+        self.assertEqual(admitted_nothing, 173)
+        self.assertEqual(e3["buckets"]["samplable_refused"], 214)
+        self.assertEqual(214 - admitted_nothing, 41)
+        derived = self.block[
+            "samplable_refused_214_has_no_per_statement_breakdown_but_the"
+            "_split_is_derivable"]["derivable_from_this_artifact_alone"]
+        self.assertIn("173", derived)
+        self.assertIn("41", derived)
+
+    def test_the_block_is_the_only_thing_that_moved(self) -> None:
+        """The artifact still round-trips through its own writer, unchanged.
+
+        `scripts/measure_conformance.py` writes with `indent=2`,
+        `ensure_ascii=False` and `sort_keys=True`. If the correction block
+        had been pasted in at the end of the file, or with a different
+        indent, this would fail — which is the point: an append that breaks
+        the writer's conventions is an edit to the artifact's format, and
+        this branch is not permitted one.
+        """
+
+        raw = (ROOT / "experiments" / "conformance_run.json").read_text(
+            encoding="utf-8")
+        rendered = json.dumps(json.loads(raw), indent=2, ensure_ascii=False,
+                              sort_keys=True) + "\n"
+        self.assertEqual(rendered, raw)
+
 
 if __name__ == "__main__":
     unittest.main()

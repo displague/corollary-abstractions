@@ -16808,6 +16808,103 @@
     "The declared domain is a declaration, not a discovery."
   ],
   "pilot": "experiments/conformance_admission_pilot.json",
+  "post_run_corrections": {
+    "c_e1_counts_an_errored_mutant_point_as_a_flip": {
+      "measured": "`scripts/measure_conformance.py:190-192`. When the mutant raises, `outcomes[1]` is `None`, and the test is `outcomes[0] is not None and outcomes[0] != outcomes[1]` — so a source point that decided and a mutant point that ERRORED score as a flip.",
+      "not_recounted": "Re-scoring C-E1 after reading 0.650 is the chase. Filed for the control's own re-registration, alongside the second discard clause the run already named.",
+      "the_direction_of_the_bias": "TOWARD meeting the floor. Every errored mutant point that would otherwise have been inert is counted in the numerator of the 0.650. This matters most for `negate_a_coefficient`, whose mutants are the likeliest to raise `negation_outside_carrier` on `Nat`.",
+      "why_it_makes_the_miss_stronger": "The floor was missed at 0.650 against 0.99 DESPITE a bias in its favour. A corrected count could only be lower. The finding the run reports — that this floor cannot be met by a correct sampler on this carrier — survives the correction and is sharpened by it."
+    },
+    "c_e1_per_class_is_a_four_row_table_of_a_five_class_generator": {
+      "the_five_class_table_as_published_plus_the_zero_row": {
+        "drop_a_summand": {
+          "discarded": 0,
+          "flipped": 111,
+          "generated": 187,
+          "surviving": 187
+        },
+        "flip_the_relation": {
+          "discarded": 0,
+          "flipped": 297,
+          "generated": 300,
+          "surviving": 300
+        },
+        "negate_a_coefficient": {
+          "discarded": 0,
+          "flipped": 159,
+          "generated": 270,
+          "surviving": 270
+        },
+        "perturb_a_literal": {
+          "discarded": 0,
+          "flipped": 101,
+          "generated": 270,
+          "surviving": 270
+        },
+        "reassociate_an_operator": {
+          "discarded": 0,
+          "flipped": 0,
+          "generated": 0,
+          "note": "NEVER FIRED. `scripts/measure_conformance.py:152-155` emits this class only when the conclusion's left-hand side is itself an `op *` node with more than two arguments; no statement among the 300 examined had one. Absent from `c_e1.per_class` entirely, which is why a reader counting rows finds four where §7 declared five.",
+          "surviving": 0
+        }
+      },
+      "the_scored_field_is_unchanged": "`c_e1.per_class` is scored and is not edited. This row is published here so the five-class declaration in §7 and the four-row table in the artifact can be reconciled without touching either.",
+      "why_this_matters_for_the_discard_count": "`discarded_as_non_mutations: 0` reads as 'the ported discard rule found nothing to discard'. The likelier reading is that the one class built to produce canonicalization no-ops NEVER FIRED. `reassociate_an_operator` rebrackets a `*` node, and canonicalization flattens `*`, so its mutants are precisely the ones that would have canonicalized back to their source and been discarded. A zero discard count over a generator that never emitted the discardable class is not evidence the discard rule was unnecessary."
+    },
+    "c_e2s_comparison_set_sentence_is_false_of_the_code": {
+      "supersedes": "c_e2.comparison_set",
+      "the_field_says": "...both arms over the identical admitted point set.",
+      "the_void_is_unaffected": "C-E2 voided at 1.75x against a 10x floor. Nothing in this correction moves it, and the correction does not soften it: a blind arm that also sees MORE points and still manufactures only 1.75x the counterexamples is, if anything, a weaker showing for the guard apparatus than the sentence implied.",
+      "what_the_1_75x_therefore_is": "A contrast between two arms over DIFFERENT point sets. That is a defensible design for a capability-blind baseline — removing the capability necessarily changes what it admits — but it is not what the artifact's sentence claims, and §7's 'so that the two numbers differ by the guard and by nothing else' does not hold: they also differ by the point set.",
+      "what_the_code_actually_did": "`scripts/measure_conformance.py:335-337` constructs the blind arm as the same `Program` with `guard_conjuncts=()`. Dropping the guard is exactly what makes the blind arm admit points the guarded arm rejected, so the blind arm's admitted set is a STRICT SUPERSET of the guarded arm's on every statement whose guard rejected anything — which is every statement in the comparison set, since that is what a guard is for."
+    },
+    "c_e3_never_adjudicated_the_sampled_counterexample_class": {
+      "cause_the_substitution_step_is_missing": "The step that would have closed the proposition was written and then dropped, and the drop is fossilized in the file. `_lean_expression` at `:434-438` is dead code — nothing calls it, and its one `return` is guarded by a literal `if False else` whose live branch is `body.replace(\"^\", \"^\")`, a no-op replacing a character with itself. At `:463` a `typed` expression is assigned and then discarded on the next line. Both are left in place: they are the evidence for this correction, and deleting the evidence for a correction while filing it is the wrong order.",
+      "correction_7s_carrier_boundary_was_NOT_measured_this_cycle": "Correction 7 predicted that `decide` reaches Nat and Int and gets stuck on Rat without Mathlib's `norm_num`. This run does not test that prediction on the sampled class at all, because it never presented the sampled class to `decide` in a form `decide` could refuse for that reason. The prediction is neither confirmed nor refuted here. `c_e3.reaches` describes the toolchain, not a measurement this run made.",
+      "not_repaired_here": "Substituting the bindings and re-running C-E3 would be measuring a control after reading its number, which §8 forbids. An adjudicator that closes the proposition from the record's own bindings belongs to its own registration, and it is filed in docs/BACKLOG.md.",
+      "so_what_the_25_rows_mean": "All 25 sampled rows in `c_e3.adjudicated` (indices 15-39) read `decide did not reduce in either direction`. That string is this writer's own label for `returncode != 0` on BOTH probes, and on an open term Lean fails at ELABORATION with an unknown identifier long before `decide` is reached. The 25 rows record an INSTRUMENT GAP, not a decision procedure meeting its boundary.",
+      "supersedes": "c_e3.what_is_adjudicated",
+      "the_commit_message_is_wrong_on_this_point": "Commit 5df0579 ('The registered run: two gates met, two missed, two controls void — and 775 non-findings') presents the C-E3 non-adjudication as Correction 7's boundary measured. It is not, for the reason above. The commit is history and stays as written; this sentence is the correction of record.",
+      "the_field_says": "the INSTANTIATED counterexample, not the statement. A universally quantified statement cannot be handed to `decide`, but a counterexample is a closed proposition.",
+      "what_still_stands": "The 12 agreements stand exactly as scored. They are GROUND statements, which have no free variables, so for them the raw `canonical_ascii` IS the closed proposition and the substitution step was never needed. `disagreements: []` stands over those 12. And the headline non-claim stands unchanged — none of the 775 counterexamples was independently adjudicated — but its REASON changes from 'the adjudicator reached its carrier boundary, measured' to 'the adjudicator was handed an open term, recorded'. Every NONCONFORMANT verdict in the cycle still carries the standing correlated-interpretation label, and still for want of an independent domain.",
+      "what_the_code_actually_did": "`scripts/measure_conformance.py:709-717` builds the adjudication list out of each record's raw `formal_statement.canonical_ascii` and NOTHING ELSE, and `:464` hands that raw text straight to `_lean_decide`. The record's own `counterexample.bindings` — {'x': '2', 'y': '7', 'z': '1'} and its 774 siblings — are never substituted. For a sampled statement the text handed to Lean therefore still carries FREE VARIABLES: it is not a closed proposition and never was one."
+    },
+    "dated": "2026-08-25",
+    "e5_and_c_e1_second_arm_were_never_executed": {
+      "c_e1_second_arm": "§7's C-E1 carries a second, false-alarm arm — '0 of N unmutated statements may change verdict across two runs' — and `run_ce1` implements only the first. No unmutated statement was run twice. The 0.650 flip rate is the first arm alone.",
+      "e5": "§6's E5 ('two full runs on one tree produce byte-identical artifacts') was registered and never executed. There is one run. This artifact therefore has NO byte-reproduction proof, and no sentence anywhere may describe it as reproduced. `tests/test_conform.py::TheRunIsDeterministic` pins two runs of ONE STATEMENT to be byte-identical, which is a different and much smaller claim than the artifact-level one E5 registered.",
+      "status": "UNRUN — a gap in the run, not a void of it",
+      "why_this_is_a_gap_and_not_a_void": "A void is a control that ran and failed its own condition, and its voiding sentence then governs. These two never ran, so neither has a voiding sentence to fire and neither can be counted as evidence in either direction. The honest reading is that the run's determinism claim is UNTESTED at artifact scale. Filed as debt for the rotation rather than executed now: executing a registered control after its cycle's numbers have been read is the chase §8 forbids."
+    },
+    "nothing_below_re_runs_anything": "No gate was re-scored, no control re-executed, no counterexample re-sampled. Where a fix to the instrument is obvious it is named and NOT applied to this cycle's numbers; it belongs to a later registration.",
+    "numbers_corrected": {
+      "c_e3_attempted_25_sampled_counterexamples_not_27": "`c_e3.adjudicated` holds 40 rows. Rows 0-14 are the 15 ground `DECIDED_FALSE` verdicts and rows 15-39 are 25 sampled counterexamples. The '27' figure counted by id prefix, and two of the 15 ground rows carry `leanworkbook.skel.` ids (`...plus_69269`, `...plus_75463`), so they were sorted into the sampled side. 25 is the number of sampled counterexamples C-E3 attempted.",
+      "the_33_2_percent_figure_is_left_equals_zero_not_falsifying_side_zero": "257 of 775 (33.2%) have `counterexample.left == \"0\"`. The figure for the side that makes the relation FAIL — left for `>=` and `>`, right for `<=` and `<`, and neither for the 152 `=` rows — is 278 of 775 (35.9%). Both are recomputable from `e2.counterexamples_exhaustively`; the readouts quoted 33.2% under the falsifying-side description, which is two different statistics wearing one number.",
+      "twelve_of_fifteen_ground_decided_false_confirmed_not_twelve_of_thirteen": "Same cause. `e1.decided_false` is 15, all 15 were handed to C-E3, 12 were confirmed and 3 returned unavailable (`...ground.lean_workbook_plus_69250`, `...skel.lean_workbook_plus_69269`, `...skel.lean_workbook_plus_75463`). 12 of 15."
+    },
+    "samplable_refused_214_has_no_per_statement_breakdown_but_the_split_is_derivable": {
+      "derivable_from_this_artifact_alone": "`e2.denominator` is 4287 and `e2.statements_admitting_at_least_one_point` is 4114, so 173 sampled statements admitted no point at all. In `scripts/conform.py` a sampled record with `admitted == 0` and no counterexample is REFUSED with `guard_measure_zero` and nothing else, and a record with a counterexample necessarily admitted a point. So the 214 split is 173 `guard_measure_zero` and 41 `all_admitted_points_errored`.",
+      "the_bucket": "`e3.buckets.samplable_refused` is 214 and the artifact records no reason for any of them: `scripts/measure_conformance.py:645` computes it by subtraction and keeps no rows.",
+      "what_is_not_derivable": "WHICH 41, and what raised in each. Those statement ids and refusal details are not in this artifact and cannot be recovered from it. Recorded as absent."
+    },
+    "the_admitted_count_inference_was_inverted": {
+      "not_a_bug": "Breaking on the first counterexample is correct: one falsifying point settles a statement. The defect was in reading the field, not in writing it.",
+      "so_the_reading_reverses": "`admitted == 1` means the FIRST admitted point falsified the statement — the sampler's best possible outcome, not its worst. 358 of 775 (46.2%) fell on the first admitted point and the median is 2, which measures HOW EARLY falsification happened and says nothing whatever about how many points the sampler could have offered. Read as thinness it is exactly backwards.",
+      "supersedes": "every quotation of '46.2% came from a statement admitting a single point' and 'the median admitted count is two' as evidence of THIN SAMPLING",
+      "the_semantics": "`scripts/conform.py:475` BREAKS out of the point loop on the first counterexample. So on a NONCONFORMANT record `points_admitted` is not how many points the statement got — it is how many admitted points were tested UP TO AND INCLUDING the falsifying one. The loop stopped because it succeeded.",
+      "the_thin_sampling_claim_has_a_different_source": "The budget really is spent outside the carrier — E0f's pilot measured 539,382 of 691,000 candidate points rejected by `Nat` against 51,791 by the guards — and THAT is the evidence for a carrier-matched sampler. It stands on the pilot. It never stood on these 775 admitted counts, and the two were conflated.",
+      "what_the_number_can_still_say": "That falsification, where it happened at all, happened almost immediately: half the counterexamples were found within two admitted points. That is a fact about how far from holding these statements are under the declared `Nat` reading, and it is a REASON TO DOUBT THE DECLARED DOMAIN rather than the sampler."
+    },
+    "the_exhaustive_counterexample_rows_carry_no_correlated_interpretation_label": {
+      "measured": "`grep -c correlated_interpretation experiments/conformance_run.json` returns 0. Not one of the 775 rows in `e2.counterexamples_exhaustively` carries the field.",
+      "not_backfilled": "Writing the label into 775 scored rows after the fact would make the artifact's rows disagree with the run that produced them, and a scored row is not editable by this block's rule. The claim is corrected instead, here and in every readout.",
+      "supersedes": "commit 5df0579's claim that every one of the 775 carries the label",
+      "what_went_wrong": "A WRITER DEFECT, and only that. The projection at `scripts/measure_conformance.py:626-631` selects four fields (`statement_id`, `counterexample`, `admitted`, `domain`) out of each record and drops the rest, the label among them. The verdicts were labelled; the artifact's copy of them is not.",
+      "where_the_label_actually_is": "It is emitted on the RUNTIME record by `scripts/conform.py:496-504`, on every NONCONFORMANT verdict without exception, and it is printed on the served answer by `scripts/harness.py:2023` as the `provisional:` line — verified live against the running surface. The label is real and it reaches a reader."
+    },
+    "what_this_block_is": "Corrections to this artifact's PROSE, filed after an adversarial review of the run that produced it. Not one scored row moved: the void stands, every count stands, and every correction below is a statement about what the code that produced a number actually did. The rule the design's §8 sets is that a measurement is not re-run to make a record come out better, so the record is corrected instead. This block lives IN the artifact rather than beside it because this artifact has no byte-reproduction proof — E5 was never executed, see `e5_and_c_e1_second_arm_were_never_executed` — and a false sentence in a canonical artifact cannot be repaired by an external note that a reader may never open."
+  },
   "prereg": "experiments/conformance_prereg.json",
   "register": "experiments/conformance_register.json",
   "registered": "2026-08-25",
