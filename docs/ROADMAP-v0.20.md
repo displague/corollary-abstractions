@@ -1,3 +1,96 @@
+> **CLOSED at v0.20.0.** Two registered runs, opposite verdicts, both
+> published. Where each item went:
+>
+> **Item 1 (EVAL — statements that decide themselves)** — **SHIPPED AS A
+> VOID, AND SERVED.** `experiments/conformance_run.json` executed once;
+> **8,017** statements compile against a 5,000 floor; **E2a 96.0%**, **E3
+> closes at 12,777 exactly**, **E4 110 of 110** against an independently
+> keyed constructed class; **E1 MISSED** (297 ground = 257 true / 15 false /
+> **25 refused** against a zero-refusal floor, all three kinds consequences
+> of the declared domain); **C-E1 VOID** at 0.650 vs 0.99 and **C-E2 VOID**
+> at 1.75× vs 10×; **C-E3 did not execute** on the sampled class (a missing
+> substitution step — an instrument gap, not the predicted boundary; the
+> ground half agreed 12 of 15); **E5 and C-E1's second arm UNRUN** and
+> recorded, so **this artifact has no byte-reproduction proof**. Overall
+> **VOID** by C-E1's own sentence. **No conformance rate exists anywhere**,
+> and the `conform <id> <bindings>` route is **live on both skins with the
+> void published on every answer**. 775 counterexamples, **none published as
+> a corpus error**. NIHIL's E4 certifies a **procedure**; **no corpus-coverage
+> number is quoted, because the honest one is zero**.
+> **Item 2 (C-V4′ and the foreign wiring)** — **SHIPPED, CLEARED, SERVED.**
+> `experiments/foreign_voice_rate2.json` reads **OVERALL FIRES**: G1
+> 2,313/2,313, **G1b 5,228 of 5,228 grouping-pair deletions detected with
+> zero blind**, G2 100/100, B1 2,313/2,313 (2,176 distinct terms, 99.9%
+> `lean_workbook`), B3 closing at **4,191**; **C-G1 42/42 = 1.00** on a 0.95
+> floor with **42/50 = 0.84 published beside it**, and the ten named blind
+> cases **7 detected / 3 no-longer-admitting** (never "all ten detected");
+> **C-V4′ holds in every voiding class**, `drop_group` **42/42 on a floor
+> raised to 0.95** — the commensurable repair number; `drop_ascription`
+> **45/45 with 5 discards**, falsifying its own 45-of-50 point prediction and
+> proving the restored clause was worth restoring. **C-V3′ (machine reader)
+> VOID** (ratio 0.594 ≥ 0.5), non-blocking; **C-V3 (human) still ABSENT**;
+> **neither reader claim is made.** The foreign `in words` line is **armed
+> from the artifact and served**.
+> **Item 3 (the grouping-canonical question)** — **MEASURED FIRST, THEN
+> REPAIRED**, in that order and provably: `experiments/grouping_census.json`
+> published the distribution — 435 of 2,313 covered surfaces change, 620 of
+> 6,063 pairs redundant-or-stripped, exposure labelled *not* readability —
+> **before** the bracketing rule was proposed. Its unanswered half (*is the
+> redundancy load-bearing for a **reader**?*) parks with C-V3 in
+> [ROADMAP-v0.21](ROADMAP-v0.21.md) §3.3. **The section's two accepted
+> riders — the HOLES counting table and the delete-K ground-truth table —
+> DID NOT RUN**, produced no artifact and were filed nowhere; they carry to
+> ROADMAP-v0.21 §3.5 **with a stop rule**. The named standalone probes
+> (VERDICT, DEBT NOTES, COURIER, WORD OF HONOR) carry unchanged.
+> **Item 4 (one witness retirement, five named changes)** — **SHIPPED, and
+> it landed before item 1's first slice.** Exactly **three digest leaves**
+> moved in `experiments/throughput_tasks.json` (`answer.py`, `evaluate.py`,
+> `harness.py`), **all 119 task records byte-identical**, `half_b_seal`
+> unchanged. Each change carries its own evidence: **4a** 1.85× on distinct
+> queries (7,208.8 → 3,901.5 ms) with the honest 1.02× warmed-repeat number
+> beside it, closing a claim quoted unmeasured for three cycles; **4b** exact
+> integer literals, 0 of 14,830 answer lines moved and 3 expected
+> evaluate-route renderings, with `Fraction`-for-decimals **refused** after it
+> cost 199 statements their `in words` line; **4c** a 4,300-digit bound
+> refusing by name, **moved to the result-formatting boundary** after review
+> escaped the per-node version (before: 3 of 6 cases crashed while printing;
+> after: 0); **4d** the voice wired dark and armed by the run; **4e**
+> `_route_conform` landing refused. **One deviation, disclosed:** the
+> retirement was not the cycle's only one — wiring `_route_conform` live after
+> the registered run moved `harness.py`'s bytes and rebuilt the book a second
+> time (`4506f83`, one leaf), and the design's §8.1 carries the dated
+> amendment. **No throughput claim is unlocked by any of it.**
+> **Item 5 (carried, with dependants named)** — processed row by row into
+> ROADMAP-v0.21 §3: four lanes **closed by shipping**, three re-ordered as
+> **prerequisites** with named dependants, the rest **parked with triggers**.
+> **DESIGN-plain-input was adjudicated explicitly — ADOPTED** — discharging
+> this section's *silence is not a disposition* clause.
+> **Item 6 (governance)** — the course gate was **INVOKED strictly for the
+> third consecutive cycle** (`reports/design-direction-v0.21.json`: nine
+> rounds, fifteen directions, $2.41, brief on file and hash-verified).
+> **Release-gate obligations, clause by clause:** EVAL shipped its registered
+> run with every gate adjudicated *(met, with E5 and C-E1's second arm
+> recorded UNRUN)*; the correlated-interpretation residual is answered by a
+> control that **did not reach the sampled class**, so the gate's fallback
+> disjunct carries it — the residual bounds every NONCONFORMANT verdict, which
+> is why none of the 775 is published as a corpus error *(partially met, and
+> named as such)*; C-V4′ read out on a new preregistration with counted
+> discards and the line shipped **only** because it cleared, register shipping
+> either way *(met)*; the grouping probe published before any rule *(met,
+> ordering provable in git)*; §4 landed first as one retirement carrying five
+> changes, each with its own evidence *(met; the second post-run retirement
+> disclosed, and **4d's then-present served diff was never produced** — named
+> in the release notes' drift audit rather than filed as complete)*; the
+> outside inquiry invoked for v0.21 with the receipt named and the brief
+> carrying this cycle's voids *(met)*. The refresh, the full-suite clause and
+> the ships-or-parks clause are open at `[SUITE-GATE-V20]` in
+> [RELEASE-v0.20.0](RELEASE-v0.20.0.md) until the gate runs on the frozen tip.
+> **Drift audit** (v0.18 and v0.19 re-read): four lanes found drifting and
+> recovered in ROADMAP-v0.21 §3.3 — the ledger-first trigger's article, the
+> lost *load-bearing / premise-necessity* row, *realization parameters as
+> data*'s fired-and-forgotten trigger, and *licensed variant generation*'s
+> missing dependant. See [RELEASE-v0.20.0](RELEASE-v0.20.0.md) and ANALYSIS.
+
 # Roadmap v0.20 — the headline is pending; the debts are not
 
 v0.19 was the cycle where three of four readouts made the claims smaller.
