@@ -119,6 +119,41 @@ def _log10_magnitude(n: int) -> float:
         return n.bit_length() * _LOG10_2
 
 
+def refuse_if_unrenderable(value: "Fraction") -> None:
+    """The bound that actually holds, checked where every result must pass.
+
+    §4c bounded the `^` NODE, which the adversarial review escaped in one
+    line: `(10 ^ 4000) * (10 ^ 4000)` builds two admissible powers and
+    multiplies them, so nothing exceeded a per-node bound and the PRINT
+    raised the same uncaught `ValueError` §4c existed to abolish. A bound on
+    one operator is a bound on one operator; a bound on the result is a bound.
+
+    So this is checked at the rendering boundary, which every served value
+    passes through by construction — `Evaluation.formatted` and
+    `Verification._fmt` are the only ways a number reaches a person. The
+    per-node check upstream is kept and is NOT redundant: it refuses
+    `2^200000` before the power is built, so an unrenderable request costs a
+    comparison rather than the arithmetic. This one guarantees that whatever
+    is built can be shown.
+
+    Measured from bit lengths, never from `str`, because stringifying is the
+    operation that raises.
+    """
+
+    widest = max(abs(value.numerator), abs(value.denominator))
+    if widest <= 1:
+        return
+    digits = _log10_magnitude(widest) + 1.0
+    if digits > MAX_RESULT_DIGITS:
+        raise ResourceBound(
+            f"that result is about {int(digits):,} digits wide; this "
+            f"evaluator is bounded at {MAX_RESULT_DIGITS:,} digits, which is "
+            f"the widest integer this interpreter will render. The value was "
+            f"computed exactly and is not being shown, because showing it is "
+            f"what this interpreter cannot do."
+        )
+
+
 def _power_digit_estimate(base: "Fraction", power: int) -> float:
     """The decimal width of `base ** power`, without building it.
 
@@ -143,6 +178,7 @@ class Evaluation:
     free_variables: tuple[str, ...] = ()
 
     def formatted(self) -> str:
+        refuse_if_unrenderable(self.value)
         if self.value.denominator == 1:
             return str(self.value.numerator)
         return f"{self.value.numerator}/{self.value.denominator}"
@@ -291,6 +327,7 @@ class Verification:
     bindings: dict[str, Fraction]
 
     def _fmt(self, value: Fraction) -> str:
+        refuse_if_unrenderable(value)
         return (
             str(value.numerator) if value.denominator == 1
             else f"{value.numerator}/{value.denominator}"

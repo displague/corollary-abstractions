@@ -609,6 +609,24 @@ class T2AdversarialProbe(ServedSkin):
                 self.content(self.one(KERNEL, REALIZED_DEFINITION_LINE)), first
             )
 
+    def test_H2_an_oversized_result_refuses_over_the_wire(self):
+        """H2 at the served surface: HTTP 200 with a refusal, not a drop."""
+
+        body = self.one(KERNEL, "(10 ^ 4000) * (10 ^ 4000)")
+        extension = self.x(body)
+        self.assertEqual(extension["route"], "evaluate")
+        self.assertEqual(extension["status"], "refused")
+        self.assertIn("digits", extension["detail"])
+        # A non-answering status claims no grounding.
+        self.assertEqual(extension["receipt"], {})
+
+    def test_H1_a_literal_past_the_float_range_answers_over_the_wire(self):
+        """H1 at the served surface: the connection is not dropped."""
+
+        body = self.one(KERNEL, "owns x + " + "9" * 421)
+        self.assertEqual(self.x(body)["route"], "ownership")
+        self.assertIn("status", self.x(body))
+
     def test_T2_conversation_profile_never_emits_unsent_prose(self):
         """The conversation profile's whole content surface is three shapes."""
 

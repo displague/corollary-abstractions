@@ -1476,6 +1476,13 @@ def _route_evaluate(text: str) -> dict | None:
 
     # A typed relation ("does 2+2=4?") is a question with an exact answer,
     # so it is decided before falling back to computing a value.
+    #
+    # RENDERING is inside these guards, not after them. The bound that
+    # actually holds lives at the formatting boundary (H2: a per-node bound
+    # is escapable by multiplying two admissible powers), so `rendered()` and
+    # `formatted()` are themselves refusal sites. Catching only around the
+    # evaluation would have let the refusal escape from the very call that
+    # raises it.
     try:
         checked = verify(text)
     except ResourceBound as exc:
@@ -1483,11 +1490,18 @@ def _route_evaluate(text: str) -> dict | None:
     except EvalError:
         pass
     else:
+        try:
+            answer = checked.rendered()
+            detail = (
+                f"{checked.relation} holds: {'yes' if checked.holds else 'no'}"
+            )
+        except ResourceBound as exc:
+            return _refusal(exc)
         return {
             "route": "evaluate",
             "status": "solved",
-            "detail": f"{checked.relation} holds: {'yes' if checked.holds else 'no'}",
-            "answer": checked.rendered(),
+            "detail": detail,
+            "answer": answer,
         }
     try:
         result = evaluate(text)
@@ -1495,11 +1509,16 @@ def _route_evaluate(text: str) -> dict | None:
         return _refusal(exc)
     except EvalError:
         return None
+    try:
+        detail = f"{result.expression} = {result.formatted()}"
+        answer = render_eval(result)
+    except ResourceBound as exc:
+        return _refusal(exc)
     return {
         "route": "evaluate",
         "status": "solved",
-        "detail": f"{result.expression} = {result.formatted()}",
-        "answer": render_eval(result),
+        "detail": detail,
+        "answer": answer,
     }
 
 

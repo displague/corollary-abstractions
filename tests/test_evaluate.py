@@ -23,6 +23,8 @@ from evaluate import (  # noqa: E402
     evaluate,
     find_bindings,
     find_expression,
+    refuse_if_unrenderable,
+    verify,
 )
 
 
@@ -151,6 +153,58 @@ class TheExponentBoundRefusesByName(unittest.TestCase):
         """1 and 0 stay cheap at any exponent; the estimate must know that."""
         self.assertEqual(evaluate("1 ^ 100000").value, Fraction(1))
         self.assertEqual(evaluate("0 ^ 100000").value, Fraction(0))
+
+
+class TheBoundHoldsWhereEveryResultPasses(unittest.TestCase):
+    """H2: a per-node bound is a bound on one operator, not a bound.
+
+    §4c checked the `^` node, and the adversarial review escaped it in one
+    line: two admissible powers multiplied together build a value the check
+    never saw, and the PRINT raised the same uncaught `ValueError` §4c
+    existed to abolish. The check now sits at the rendering boundary, which
+    every served value passes through by construction.
+    """
+
+    ESCAPE = "(10 ^ 4000) * (10 ^ 4000)"
+
+    def test_multiplied_powers_refuse_by_name(self) -> None:
+        result = evaluate(self.ESCAPE)          # the value builds fine
+        with self.assertRaises(ResourceBound) as caught:
+            result.formatted()                  # showing it is what refuses
+        self.assertIn(f"{MAX_RESULT_DIGITS:,}", str(caught.exception))
+
+    def test_the_escape_never_raises_an_uncaught_valueerror(self) -> None:
+        """The exact failure mode: computed, then crashed while printing."""
+        try:
+            evaluate(self.ESCAPE).formatted()
+        except ResourceBound:
+            pass
+        except ValueError as exc:  # pragma: no cover - the defect returning
+            self.assertIsInstance(
+                exc, ResourceBound,
+                f"an uncaught ValueError escaped again: {exc}",
+            )
+
+    def test_a_relation_over_oversized_values_refuses_too(self) -> None:
+        """`Verification._fmt` is the other way a number reaches a person."""
+        checked = verify(f"{self.ESCAPE} = 1")
+        with self.assertRaises(ResourceBound):
+            checked.rendered()
+
+    def test_the_guard_admits_everything_it_can_render(self) -> None:
+        for expression in ("2 ^ 100", "3 ^ 5", "(100+1)^1000", "10 ^ 4000"):
+            with self.subTest(expression=expression):
+                self.assertIsInstance(evaluate(expression).formatted(), str)
+
+    def test_the_result_guard_is_callable_on_its_own(self) -> None:
+        from fractions import Fraction as F
+
+        refuse_if_unrenderable(F(10) ** 4000)      # renderable
+        with self.assertRaises(ResourceBound):
+            refuse_if_unrenderable(F(10) ** 8000)  # not
+        # A wide DENOMINATOR is just as unrenderable as a wide numerator.
+        with self.assertRaises(ResourceBound):
+            refuse_if_unrenderable(F(1, 10 ** 8000))
 
 
 if __name__ == "__main__":
