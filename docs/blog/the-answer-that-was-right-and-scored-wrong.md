@@ -93,11 +93,18 @@ answers in their list, and some have short lists. Compute the actual expected
 score of a blind guesser over these exact lists and you get **20.62 out of 30**
 — about seven times in ten, not one in eight.
 
-Which means the bar — *the blind arm must score at most 8.5* — **was not
-reachable by any honest instrument.** A perfect selector that answered
-everything correctly and refused nothing would not have moved the blind arm's
-score at all, because the blind arm's score is a property of the lists, not of
-the model.
+Now do the arithmetic on the rule itself. It says *the blind guesser must score
+at most half what the model scores.* The model cannot lower the guesser's
+score — that number is a property of the lists, not of the model — so the only
+way to satisfy the rule is to raise its own. Against the guesser's expected
+20.62, the model would have needed **at least 41 correct picks.** There are
+**thirty questions**, and only twenty-four of them have an acceptable answer in
+their list at all.
+
+**No system could have passed that rule.** Not a better model, not a perfect
+one. The bar was written down before anyone worked out what the blind guesser
+would actually score, and once you do the sum it is unreachable by
+construction.
 
 If that sounds familiar, it is because [the previous
 chapter](the-floor-no-instrument-could-meet.md) was entirely about a different

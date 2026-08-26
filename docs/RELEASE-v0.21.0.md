@@ -74,10 +74,18 @@ wanted from it.
 **The floor itself was mis-derived, and that is the second incident of a rule
 this cycle wrote.** The preregistration froze the blind arm's chance rate at
 `1/8 = 0.125` — the reciprocal of the candidate limit. The measured
-expectation is **20.62 / 30 ≈ 0.687**. A frozen floor of 8.5 against an
-instrument whose honest baseline is ~20.6 is **unmeetable by any correct
-proposer**, which is precisely what ROADMAP-v0.21 §4.0(3)'s meetable-floor
-rule was written to prevent — after C-E1's 0.99 flip floor cost v0.20 its
+expectation is **20.62 / 30 ≈ 0.687**.
+
+**And that makes the rule arithmetically unsatisfiable, which is the sharpest
+form of the finding.** The clause is *blind ≤ proposer ÷ 2*. The proposer
+cannot lower the blind arm's score — that is a property of the candidate lists
+— so the only way to satisfy the clause is to **raise the proposer's**. Against
+the blind arm's own expectation of 20.62 the proposer would need **≥ 41.24
+verified selections**; against the observed 22 it would need **44**. There are
+**thirty questions**, of which only **24** yield a verified candidate at all
+and the sealed ceiling is **21**. **No proposer, however good, could have
+passed this clause.** That is precisely what ROADMAP-v0.21 §4.0(3)'s
+meetable-floor rule was written to prevent — after C-E1's 0.99 flip floor cost v0.20 its
 conformance claim. **§4.0(3) now has its second incident, and it is inside
 the cycle that authored the rule.**
 

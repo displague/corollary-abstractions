@@ -49,8 +49,11 @@
 > all had verified candidates the blind arm — which has no `NONE` — took;
 > on the **nine questions authored to exhaust the model selected for zero**
 > and the blind arm for five. The frozen chance rate (`1/8 = 0.125`) was
-> **mis-derived** — the measured expectation is **0.687** — making the floor
-> unmeetable by an honest instrument, which is **§4.0(3)'s second incident,
+> **mis-derived** — the measured expectation is **0.687** — and the clause is
+> therefore **arithmetically unsatisfiable**: *blind ≤ proposer ÷ 2* against a
+> blind expectation of 20.62 would need **≥ 41 verified selections out of
+> thirty questions**, of which only 24 yield a verified candidate at all.
+> **No proposer could have passed it**, which is **§4.0(3)'s second incident,
 > inside the cycle that wrote the rule**. **G9 NOT MET by orchestrator
 > ruling**: the silent binding lives in the **RESOLVER**, one row upstream —
 > **13 of 30** sealed questions bind at `found` before the proposer is

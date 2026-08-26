@@ -199,6 +199,16 @@ from the candidate set that question actually produced**, and it scores a
 correct absent-target refusal as a hit. Neither change was available to G5
 after the fact; both are frozen here before any arm runs.
 
+**And §1.5's voiding sentence adds the check G5 had no version of at all: an
+arithmetic test the run performs on its own clause before any arm runs.** G5's
+clause was *blind ≤ proposer ÷ 2*, and against the blind arm's real expectation
+of 20.62 that required **≥ 41 verified selections out of thirty questions** —
+unsatisfiable by construction, and discoverable by one sum nobody did. §1.5
+publishes **E** and **σ** first and **voids the run as unconstructable** if
+E ≥ 2.5. A gate that can refuse its own design at registration time is the only
+form of the meetable-floor rule that does not depend on somebody remembering
+to apply it.
+
 ### 1.5 Blind control, vacuity control, and the voiding sentence
 
 **Permuted control.** The identical handle multiset reassigned across
@@ -522,7 +532,10 @@ rumours:
   3. **The meetable-floor rule — and its second incident is inside the cycle
      that wrote it.** G5 froze a chance rate of `1/8 = 0.125` when the measured
      expectation over the same candidate sets was **20.62/30 ≈ 0.687**,
-     producing a floor no honest proposer could meet. The rule was written
+     making the clause **arithmetically unsatisfiable**: *blind ≤ proposer
+     ÷ 2* would have needed **≥ 41 verified selections out of thirty
+     questions**, of which only 24 yield a verified candidate at all. No
+     proposer could have passed it. The rule was written
      because of C-E1's 0.99 flip floor; its second instance arrived one cycle
      later, in a lane that had read the rule. **A rule that has to catch the
      same defect twice in two cycles is not yet a habit**, which is why §1's

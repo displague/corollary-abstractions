@@ -43,10 +43,15 @@ exactly the behaviour the design calls inventing.*
 
 **A second defect in the same number, and it is the transferable one.** The
 frozen chance rate was `1/8 = 0.125`, the reciprocal of the candidate limit.
-The measured expectation is **0.687**. A floor of 8.5 against an honest
-baseline near 20.6 is **unmeetable by a correct instrument** — which is the
-same disease as C-E1's 0.99 flip floor one cycle earlier, and therefore the
-**second incident** of the rule written to prevent it.
+The measured expectation is **0.687** — and the clause is therefore
+**arithmetically unsatisfiable**. It reads *blind ≤ proposer ÷ 2*; the
+proposer cannot lower the blind arm's score, so the only way to satisfy it is
+to raise its own, and against a blind expectation of **20.62** that needs
+**≥ 41.24 verified selections out of thirty questions** — of which only **24**
+yield a verified candidate at all and the sealed ceiling is **21**. **No
+proposer, however good, could have passed this clause.** Same disease as
+C-E1's 0.99 flip floor one cycle earlier, and therefore the **second
+incident** of the rule written to prevent it.
 
 **Nothing was rewritten.** The rule was frozen before the proposer existed and
 was scored as frozen: *"A rule rewritten because its instrument surprised its
